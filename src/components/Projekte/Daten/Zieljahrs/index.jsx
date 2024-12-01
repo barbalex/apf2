@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import union from 'lodash/union'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createZielsQuery } from '../../../../modules/createZielsQuery.js'
+import { useZieljahrsNavData } from '../../../../modules/useZieljahrsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -19,28 +19,7 @@ export const Component = memo(
     const store = useContext(StoreContext)
     const { zielGqlFilterForTree, nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createZielsQuery({
-        apId,
-        zielGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-
-    const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
-    const zieljahreItems = useMemo(
-      () =>
-        ziels
-          // reduce to distinct years
-          .reduce((a, el) => union(a, [el.jahr]), [])
-          .sort((a, b) => a - b)
-          .map((z) => ({
-            id: z,
-            label: z,
-          })),
-      [ziels],
-    )
-    const count = zieljahreItems.length
+    const { navData, isLoading, error } = useZieljahrsNavData()
 
     if (isLoading) return <Spinner />
 
@@ -48,8 +27,8 @@ export const Component = memo(
 
     return (
       <List
-        items={zieljahreItems}
-        title={`AP-Ziele Jahre (${isLoading ? '...' : count})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ziel}
       />
