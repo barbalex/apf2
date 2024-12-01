@@ -4,12 +4,19 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../storeContext.js'
 import { ZielberFolder } from './Zielber/index.jsx'
+import { useZielsOfJahrNavData } from '../../../../../../../../../../../../modules/useZielsOfJahrNavData.js'
 
 export const Ziel = memo(
   observer(({ projekt, ap, jahr, ziels }) => {
     const store = useContext(StoreContext)
 
-    return ziels.map((ziel) => {
+    const { navData, isLoading, error } = useZielsOfJahrNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      jahr,
+    })
+
+    return navData.menus.map((menu) => {
       const isOpen =
         store.tree.openNodes.filter(
           (n) =>
@@ -18,38 +25,38 @@ export const Ziel = memo(
             n[3] === ap.id &&
             n[4] === 'AP-Ziele' &&
             n[5] === jahr &&
-            n[6] === ziel.id,
+            n[6] === menu.id,
         ).length > 0
 
       const node = {
         nodeType: 'table',
         menuType: 'ziel',
-        id: ziel.id,
+        id: menu.id,
         parentId: ap.id,
         parentTableId: ap.id,
-        urlLabel: ziel.id,
-        label: ziel.label,
+        urlLabel: menu.id,
+        label: menu.label,
         url: [
           'Projekte',
           projekt.id,
           'Arten',
           ap.id,
           'AP-Ziele',
-          ziel.jahr,
-          ziel.id,
+          jahr,
+          menu.id,
         ],
         hasChildren: true,
       }
 
       return (
-        <div key={ziel.id}>
+        <div key={menu.id}>
           <Row node={node} />
           {isOpen && (
             <ZielberFolder
               projekt={projekt}
               ap={ap}
               jahr={jahr}
-              ziel={ziel}
+              ziel={menu}
             />
           )}
         </div>
