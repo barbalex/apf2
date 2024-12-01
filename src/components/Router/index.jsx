@@ -156,6 +156,14 @@ const popsHandle = {
   bookmarkFetcher: popsBookmarkFetcher,
   bookmarkFetcherName: 'usePopsNavData',
 }
+const zielJahrsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useZieljahrsNavData.js'))
+    .useZieljahrsNavData,
+}))
+const zielJahrsHandle = {
+  bookmarkFetcher: zielJahrsBookmarkFetcher,
+  bookmarkFetcherName: 'useZieljahrsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -392,7 +400,10 @@ export const Router = () => {
                         }
                       />
                     </Route>
-                    <Route path="AP-Ziele">
+                    <Route
+                      path="AP-Ziele"
+                      handle={zielJahrsHandle}
+                    >
                       <Route
                         path="*"
                         lazy={() =>
