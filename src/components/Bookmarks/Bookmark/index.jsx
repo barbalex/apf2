@@ -47,9 +47,9 @@ export const Bookmark = memo(({ navData }) => {
       <Tooltip title={navData.label}>
         {linksToSomewhereElse ?
           <StyledLink to={{ pathname: navData.url, search }}>
-            {navData.label}
+            {navData.labelShort ?? navData.label}
           </StyledLink>
-        : <StyledText>{navData.label}</StyledText>}
+        : <StyledText>{navData.labelShort ?? navData.label}</StyledText>}
       </Tooltip>
       {!!navData.menus && <Menu navData={navData} />}
     </Container>

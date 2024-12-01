@@ -20,10 +20,14 @@ export const useZielsOfJahrNavData = (props) => {
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeZielsOfJahrQuery($zielsFilter: ZielFilter!, $apId: UUID!) {
+          query TreeZielsOfJahrQuery(
+            $zielsFilter: ZielFilter!
+            $jahrFilter: ZielFilter!
+            $apId: UUID!
+          ) {
             apById(id: $apId) {
               id
-              zielsByApId {
+              zielsByApId(filter: $jahrFilter) {
                 totalCount
               }
               filteredZiels: zielsByApId(
@@ -40,6 +44,9 @@ export const useZielsOfJahrNavData = (props) => {
           }
         `,
         variables: {
+          jahrFilter: {
+            jahr: { equalTo: +jahr },
+          },
           zielsFilter: {
             ...store.tree.zielGqlFilterForTree,
             jahr: { equalTo: +jahr },
@@ -68,7 +75,8 @@ export const useZielsOfJahrNavData = (props) => {
     () => ({
       id: 'AP-Ziele',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}`,
-      label: `Ziele für das Jahr ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
+      label: `Ziele für ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
+      labelShort: `${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
       menus: filteredZiels.map((p) => ({
         id: p.id,
         label: p.label,
