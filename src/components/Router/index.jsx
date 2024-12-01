@@ -556,7 +556,9 @@ export const Router = () => {
                       <Route
                         path="*"
                         lazy={() =>
-                          import('../Projekte/Daten/Beobzuordnungs/index.jsx')
+                          import(
+                            '../Projekte/Daten/BeobNichtBeurteilts/index.jsx'
+                          )
                         }
                       />
                       <Route
@@ -573,7 +575,9 @@ export const Router = () => {
                       <Route
                         path="*"
                         lazy={() =>
-                          import('../Projekte/Daten/Beobzuordnungs/index.jsx')
+                          import(
+                            '../Projekte/Daten/BeobNichtZuzuordnens/index.jsx'
+                          )
                         }
                       />
                       <Route
