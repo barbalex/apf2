@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { StoreContext } from '../../../../storeContext.js'
 import { useBeobZugeordnetsNavData } from '../../../../modules/useBeobZugeordnetsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
-import { Menu } from '../Beobzuordnungs/Menu.jsx'
+import { Menu } from '../BeobNichtBeurteilts/Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 
