@@ -22,7 +22,7 @@ export const useWertesNavData = (props) => {
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query NavRootQuery(
+          query NavWertesQuery(
             $adressesFilter: AdresseFilter!
             $tpopApberrelevantGrundWerteFilter: TpopApberrelevantGrundWerteFilter!
             $ekAbrechnungstypWerteFilter: EkAbrechnungstypWerteFilter!
