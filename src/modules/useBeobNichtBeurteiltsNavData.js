@@ -58,17 +58,12 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
           query NavApQuery(
             $beobNichtBeurteiltFilter: BeobFilter!
             $allBeobNichtBeurteiltFilter: BeobFilter! # $beobNichtZuzuordnenFilter: BeobFilter!
-            # $allBeobNichtZuzuordnenFilter: BeobFilter!
-          ) {
+          ) # $allBeobNichtZuzuordnenFilter: BeobFilter!
+          {
             beobsNichtBeurteilt: allBeobs(
               filter: $allBeobNichtBeurteiltFilter
-              orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
               totalCount
-              nodes {
-                id
-                label
-              }
             }
             filteredBeobsNichtBeurteilt: allBeobs(
               filter: $beobNichtBeurteiltFilter
