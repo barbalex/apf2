@@ -125,6 +125,14 @@ const apHandle = {
   bookmarkFetcher: apBookmarkFetcher,
   bookmarkFetcherName: 'useApNavData',
 }
+const beobNichtBeurteiltsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useBeobNichtBeurteiltsNavData.js'))
+    .useBeobNichtbeurteiltsNavData,
+}))
+const beobNichtBeurteiltHandle = {
+  bookmarkFetcher: beobNichtBeurteiltsBookmarkFetcher,
+  bookmarkFetcherName: 'useBeobNichtBeurteiltsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -533,7 +541,10 @@ export const Router = () => {
                         }
                       />
                     </Route>
-                    <Route path="nicht-beurteilte-Beobachtungen">
+                    <Route
+                      path="nicht-beurteilte-Beobachtungen"
+                      handle={beobNichtBeurteiltHandle}
+                    >
                       <Route
                         path="*"
                         lazy={() =>
