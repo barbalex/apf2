@@ -4,7 +4,7 @@ import { Row } from '../../../../../../Row.jsx'
 import { useBeobNichtZuzuordnensNavData } from '../../../../../../../../../../modules/useBeobNichtzuzuordnensNavData.js'
 
 export const BeobNichtZuzuordnens = memo(({ projekt, ap }) => {
-  const { navData } = useBeobNichtZuzuordnensNavData()
+  const { navData } = useBeobNichtZuzuordnensNavData({ apId: ap.id })
 
   return navData.menus.map((el) => {
     const node = {
