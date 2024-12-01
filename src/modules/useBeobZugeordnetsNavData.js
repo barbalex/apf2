@@ -8,17 +8,13 @@ import { StoreContext } from '../storeContext.js'
 
 export const useBeobZugeordnetsNavData = (props) => {
   const apolloClient = useApolloClient()
-  const {
-    projId,
-    apId: apIdFromParams,
-    popId: popIdFromParams,
-    tpopId: tpopIdFromParams,
-  } = useParams()
-  const apId = props?.apId ?? apIdFromParams
-  const popId = props?.popId ?? popIdFromParams
-  const tpopId = props?.tpopId ?? tpopIdFromParams
-
   const store = useContext(StoreContext)
+
+  const params = useParams()
+  const projId = props?.projId ?? params.projId
+  const apId = props?.apId ?? params.apId
+  const popId = props?.popId ?? params.popId
+  const tpopId = props?.tpopId ?? params.tpopId
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [

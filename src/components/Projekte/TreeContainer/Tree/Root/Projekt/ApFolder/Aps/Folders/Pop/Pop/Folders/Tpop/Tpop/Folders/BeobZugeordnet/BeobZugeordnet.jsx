@@ -4,7 +4,12 @@ import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { useBeobZugeordnetsNavData } from '../../../../../../../../../../../../../../../../modules/useBeobZugeordnetsNavData.js'
 
 export const BeobZugeordnet = memo(({ projekt, ap, pop, tpop }) => {
-  const { navData } = useBeobZugeordnetsNavData({ tpopId: tpop.id })
+  const { navData } = useBeobZugeordnetsNavData({
+    projId: projekt.id,
+    apId: ap.id,
+    popId: pop.id,
+    tpopId: tpop.id,
+  })
 
   return navData.menus.map((el) => {
     const node = {
