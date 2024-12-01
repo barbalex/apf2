@@ -6,32 +6,16 @@ import { reaction } from 'mobx'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useBeobNichtBeurteiltsNavData = (props) => {
+export const useBeobNichtZuzuordnensNavData = (props) => {
   const apolloClient = useApolloClient()
   const { projId, apId: apIdFromParams } = useParams()
   const apId = props?.apId ?? apIdFromParams
 
   const store = useContext(StoreContext)
 
-  // const allBeobNichtZuzuordnenFilter = useMemo(
-  //   () => ({
-  //     nichtZuordnen: { equalTo: true },
-  //     aeTaxonomyByArtId: {
-  //       apartsByArtId: {
-  //         some: {
-  //           apByApId: {
-  //             id: { equalTo: apId },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   }),
-  //   [apId],
-  // )
-  const allBeobNichtBeurteiltFilter = useMemo(
+  const allBeobNichtZuzuordnenFilter = useMemo(
     () => ({
-      tpopId: { isNull: true },
-      nichtZuordnen: { equalTo: false },
+      nichtZuordnen: { equalTo: true },
       aeTaxonomyByArtId: {
         apartsByArtId: {
           some: {
@@ -47,25 +31,28 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeBeobNichtBeurteilts',
+      'treeBeobNichtZuzuordnens',
       apId,
-      store.tree.beobNichtBeurteiltGqlFilterForTree,
+      store.tree.beobNichtZuzuordnenGqlFilterForTree,
     ],
     queryFn: () =>
       apolloClient.query({
         query: gql`
           query NavApQuery(
-            $beobNichtBeurteiltFilter: BeobFilter!
-            $allBeobNichtBeurteiltFilter: BeobFilter!
+            $beobNichtZuzuordnenFilter: BeobFilter!
+            $allBeobNichtZuzuordnenFilter: BeobFilter!
           ) {
-            beobsNichtBeurteilt: allBeobs(
-              filter: $allBeobNichtBeurteiltFilter
+            beobsNichtZuzuordnen: allBeobs(
+              filter: $allBeobNichtZuzuordnenFilter
             ) {
               totalCount
+              nodes {
+                id
+                label
+              }
             }
-            filteredBeobsNichtBeurteilt: allBeobs(
-              filter: $beobNichtBeurteiltFilter
-              orderBy: [DATUM_DESC, AUTOR_ASC]
+            filteredBeobsNichtZuzuordnen: allBeobs(
+              filter: $beobNichtZuzuordnenFilter
             ) {
               totalCount
               nodes {
@@ -76,8 +63,8 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
           }
         `,
         variables: {
-          beobNichtBeurteiltFilter: {
-            ...store.tree.beobNichtBeurteiltGqlFilterForTree,
+          beobNichtZuzuordnenFilter: {
+            ...store.tree.beobNichtZuzuordnenGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -88,29 +75,30 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
               },
             },
           },
-          allBeobNichtBeurteiltFilter,
+          allBeobNichtZuzuordnenFilter,
         },
         fetchPolicy: 'no-cache',
       }),
   })
   useEffect(
     () =>
-      reaction(() => store.tree.beobNichtBeurteiltGqlFilterForTree, refetch),
+      reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
-  const count = data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
-  const filteredCount = data?.data?.filteredBeobsNichtBeurteilt?.totalCount ?? 0
+  const count = data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
+  const filteredCount =
+    data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
-      id: 'nicht-beurteilte-Beobachtungen',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen`,
-      label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+      id: 'nicht-zuzuordnende-Beobachtungen',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen`,
+      label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       // leave totalCount undefined as the menus are folders
       menus:
-        data?.data?.filteredBeobsNichtBeurteilt?.nodes?.map((p) => ({
+        data?.data?.filteredBeobsNichtZuzuordnen?.nodes?.map((p) => ({
           id: p.id,
           label: p.label,
         })) ?? [],
@@ -118,7 +106,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     [
       apId,
       count,
-      data?.data?.filteredBeobsNichtBeurteilt?.nodes,
+      data?.data?.filteredBeobsNichtZuzuordnen?.nodes,
       filteredCount,
       isLoading,
       projId,
