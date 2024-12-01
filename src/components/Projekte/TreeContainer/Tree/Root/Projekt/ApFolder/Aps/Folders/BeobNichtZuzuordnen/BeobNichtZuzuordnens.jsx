@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import { Row } from '../../../../../../Row.jsx'
-import { useBeobNichtZuzuordnensNavData } from '../../../../../../../../../../modules/useBeobNichtzuzuordnensNavData.js'
+import { useBeobNichtZuzuordnensNavData } from '../../../../../../../../../../modules/useBeobNichtZuzuordnensNavData.js'
 
 export const BeobNichtZuzuordnens = memo(({ projekt, ap }) => {
   const { navData } = useBeobNichtZuzuordnensNavData({ apId: ap.id })
