@@ -50,7 +50,7 @@ export const useZielNavData = (props) => {
     [],
   )
 
-  const zielbersCount = data?.data?.zielById?.zielbersByApId?.totalCount ?? 0
+  const zielbersCount = data?.data?.zielById?.zielbersByZielId?.totalCount ?? 0
   const filteredZielbersCount =
     data?.data?.zielById?.filteredZielbers?.totalCount ?? 0
 

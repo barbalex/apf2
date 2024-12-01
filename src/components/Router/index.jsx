@@ -172,6 +172,13 @@ const zielsOfJahrHandle = {
   bookmarkFetcher: zielsOfJahrBookmarkFetcher,
   bookmarkFetcherName: 'useZielsOfJahrNavData',
 }
+const zielBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useZielNavData.js')).useZielNavData,
+}))
+const zielHandle = {
+  bookmarkFetcher: zielBookmarkFetcher,
+  bookmarkFetcherName: 'useZielNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -428,7 +435,10 @@ export const Router = () => {
                             import('../Projekte/Daten/Ziels/index.jsx')
                           }
                         />
-                        <Route path=":zielId">
+                        <Route
+                          path=":zielId"
+                          handle={zielHandle}
+                        >
                           <Route
                             path="*"
                             lazy={() =>
