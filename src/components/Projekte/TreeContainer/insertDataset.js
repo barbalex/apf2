@@ -272,4 +272,12 @@ export const insertDataset = async ({
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyFolder],
   })
+  if (table === 'ziel') {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeZieljahrs`],
+    })
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeZielsOfJahr`],
+    })
+  }
 }

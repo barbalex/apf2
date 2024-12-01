@@ -3,31 +3,28 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
-import union from 'lodash/union'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useZieljahrsNavData = (props) => {
+export const useZielsOfJahrNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
+  const jahr = props?.jahr ?? params.jahr
 
   const store = useContext(StoreContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeZieljahrs', apId, store.tree.zielGqlFilterForTree],
+    queryKey: ['treeZielsOfJahr', apId, jahr, store.tree.zielGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeZieljahrsQuery($zielsFilter: ZielFilter!, $apId: UUID!) {
+          query TreeZielsOfJahrQuery($zielsFilter: ZielFilter!, $apId: UUID!) {
             apById(id: $apId) {
               id
               zielsByApId {
-                nodes {
-                  id
-                  jahr
-                }
+                totalCount
               }
               filteredZiels: zielsByApId(
                 filter: $zielsFilter
@@ -43,7 +40,10 @@ export const useZieljahrsNavData = (props) => {
           }
         `,
         variables: {
-          zielsFilter: store.tree.zielGqlFilterForTree,
+          zielsFilter: {
+            ...store.tree.zielGqlFilterForTree,
+            jahr: { equalTo: +jahr },
+          },
           apId,
         },
         fetchPolicy: 'no-cache',
@@ -58,47 +58,23 @@ export const useZieljahrsNavData = (props) => {
     [],
   )
 
-  const ziels = useMemo(
-    () => data?.data?.apById?.zielsByApId?.nodes ?? [],
-    [data?.data?.apById?.zielsByApId?.nodes],
-  )
+  const count = data?.data?.apById?.zielsByApId?.totalCount ?? 0
   const filteredZiels = useMemo(
     () => data?.data?.apById?.filteredZiels?.nodes ?? [],
     [data?.data?.apById?.filteredZiels?.nodes],
-  )
-  const menus = useMemo(
-    () =>
-      ziels
-        // reduce to distinct years
-        .reduce((a, el) => union(a, [el.jahr]), [])
-        .sort((a, b) => a - b)
-        .map((z) => ({
-          id: z,
-          label: z,
-        })),
-    [ziels],
-  )
-  const filteredMenus = useMemo(
-    () =>
-      filteredZiels
-        // reduce to distinct years
-        .reduce((a, el) => union(a, [el.jahr]), [])
-        .sort((a, b) => a - b)
-        .map((z) => ({
-          id: z,
-          label: z,
-        })),
-    [filteredZiels],
   )
 
   const navData = useMemo(
     () => ({
       id: 'AP-Ziele',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
-      label: `AP-Ziele Jahre (${isLoading ? '...' : `${filteredMenus.length}/${menus.length}`})`,
-      menus: filteredMenus,
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}`,
+      label: `Ziele für das Jahr ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
+      menus: filteredZiels.map((p) => ({
+        id: p.id,
+        label: p.label,
+      })),
     }),
-    [apId, filteredMenus, isLoading, menus.length, projId],
+    [apId, count, filteredZiels, isLoading, jahr, projId],
   )
 
   return { isLoading, error, navData }

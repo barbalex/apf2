@@ -180,6 +180,14 @@ export const deleteModule = async ({ client, store, search }) => {
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyFolders],
   })
+  if (table === 'ziel') {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeZieljahrs`],
+    })
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeZielsOfJahr`],
+    })
+  }
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 

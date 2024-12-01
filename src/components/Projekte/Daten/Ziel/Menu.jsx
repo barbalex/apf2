@@ -54,6 +54,12 @@ export const Menu = memo(
       queryClient.invalidateQueries({
         queryKey: [`treeZiel`],
       })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZieljahrs`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZielsOfJahr`],
+      })
       const id = result?.data?.createZiel?.ziel?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${id}${search}`,
@@ -97,6 +103,12 @@ export const Menu = memo(
       // update tree query
       queryClient.invalidateQueries({
         queryKey: [`treeZiel`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZieljahrs`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZielsOfJahr`],
       })
       // navigate to parent
       navigate(

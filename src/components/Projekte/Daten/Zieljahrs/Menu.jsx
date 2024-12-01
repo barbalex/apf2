@@ -55,6 +55,12 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeZiel`],
       })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZieljahrs`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZielsOfJahr`],
+      })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })

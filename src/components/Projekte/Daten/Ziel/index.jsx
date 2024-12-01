@@ -113,6 +113,12 @@ export const Component = memo(
         queryClient.invalidateQueries({
           queryKey: [`treeZiel`],
         })
+        queryClient.invalidateQueries({
+          queryKey: [`treeZieljahrs`],
+        })
+        queryClient.invalidateQueries({
+          queryKey: [`treeZielsOfJahr`],
+        })
         // if jahr of ziel is updated, activeNodeArray und openNodes need to change
         if (field === 'jahr') {
           const newActiveNodeArray = [...aNA]
