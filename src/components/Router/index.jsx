@@ -1000,41 +1000,41 @@ export const Router = () => {
                               />
                             </Route>
                             {/* add other tpop routes here */}
-                          </Route>
-                          <Route path=":tpopId/Kontroll-Berichte">
+                            <Route path="Kontroll-Berichte">
+                              <Route
+                                path="*"
+                                lazy={() =>
+                                  import('../Projekte/Daten/Tpopbers/index.jsx')
+                                }
+                              />
+                              <Route
+                                path=":tpopberId"
+                                lazy={() =>
+                                  import('../Projekte/Daten/Tpopber/index.jsx')
+                                }
+                              />
+                            </Route>
                             <Route
-                              path="*"
-                              lazy={() =>
-                                import('../Projekte/Daten/Tpopbers/index.jsx')
-                              }
-                            />
-                            <Route
-                              path=":tpopberId"
-                              lazy={() =>
-                                import('../Projekte/Daten/Tpopber/index.jsx')
-                              }
-                            />
-                          </Route>
-                          <Route
-                            path=":tpopId/Beobachtungen"
-                            handle={beobZugeordnetHandle}
-                          >
-                            <Route
-                              path="*"
-                              lazy={() =>
-                                import(
-                                  '../Projekte/Daten/BeobZugeordnets/index.jsx'
-                                )
-                              }
-                            />
-                            <Route
-                              path=":beobId"
-                              lazy={() =>
-                                import(
-                                  '../Projekte/Daten/Beobzuordnung/index.jsx'
-                                )
-                              }
-                            />
+                              path="Beobachtungen"
+                              handle={beobZugeordnetHandle}
+                            >
+                              <Route
+                                path="*"
+                                lazy={() =>
+                                  import(
+                                    '../Projekte/Daten/BeobZugeordnets/index.jsx'
+                                  )
+                                }
+                              />
+                              <Route
+                                path=":beobId"
+                                lazy={() =>
+                                  import(
+                                    '../Projekte/Daten/Beobzuordnung/index.jsx'
+                                  )
+                                }
+                              />
+                            </Route>
                           </Route>
                           <Route path=":tpopId/Freiwilligen-Kontrollen">
                             <Route
