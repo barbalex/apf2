@@ -1,11 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createTpopmassnbersQuery } from '../../../../modules/createTpopmassnbersQuery.js'
+import { useTpopmassnbersNavData } from '../../../../modules/useTpopmassnbersNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -13,22 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const { tpopId } = useParams()
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { tpopmassnberGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createTpopmassnbersQuery({
-        tpopId,
-        tpopmassnberGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const tpopmassnbers =
-      data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []
-    const count = tpopmassnbers.length
-    const totalCount = data?.data?.tpopById?.tpopmassnbersCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useTpopmassnbersNavData()
 
     if (isLoading) return <Spinner />
 
@@ -36,8 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={tpopmassnbers}
-        title={`Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopmassnber}
       />
