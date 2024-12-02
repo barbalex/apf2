@@ -64,17 +64,10 @@ export const useEkfrequenzsNavData = (props) => {
     () =>
       rows.map((p) => ({
         id: p.id,
-        label: p.label,
+        label: p.label ?? '(kein Kürzel)',
       })) ?? [],
     [rows],
   )
-  console.log('useEkfrequenzsNavData', {
-    menus,
-    totalCount,
-    count,
-    rows,
-    data: data?.data?.apById,
-  })
 
   const navData = useMemo(
     () => ({

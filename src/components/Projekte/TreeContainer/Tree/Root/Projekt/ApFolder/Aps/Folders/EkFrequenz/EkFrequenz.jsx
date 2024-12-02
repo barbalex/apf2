@@ -1,45 +1,32 @@
-import { memo, useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useApolloClient, gql } from '@apollo/client'
-import { observer } from 'mobx-react-lite'
+import { memo } from 'react'
 
 import { Row } from '../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import { createEkfrequenzsQuery } from '../../../../../../../../../../modules/createEkfrequenzsQuery.js'
+import { useEkfrequenzsNavData } from '../../../../../../../../../../modules/useEkfrequenzsNavData.js'
 
-export const EkFrequenz = memo(
-  observer(({ projekt, ap }) => {
-    const apolloClient = useApolloClient()
-    const store = useContext(StoreContext)
-    const { ekfrequenzGqlFilterForTree } = store.tree
+export const EkFrequenz = memo(({ projekt, ap }) => {
+  const { navData } = useEkfrequenzsNavData({
+    projId: projekt.id,
+    apId: ap.id,
+  })
 
-    const { data } = useQuery(
-      createEkfrequenzsQuery({
-        apId: ap.id,
-        ekfrequenzGqlFilterForTree,
-        apolloClient,
-      }),
+  return navData.menus.map((el) => {
+    const node = {
+      nodeType: 'table',
+      menuType: 'ekfrequenz',
+      id: el.id,
+      parentId: ap.id,
+      parentTableId: ap.id,
+      urlLabel: el.id,
+      label: el.label,
+      url: ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Frequenzen', el.id],
+      hasChildren: false,
+    }
+
+    return (
+      <Row
+        key={el.id}
+        node={node}
+      />
     )
-
-    return (data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []).map((el) => {
-      const node = {
-        nodeType: 'table',
-        menuType: 'ekfrequenz',
-        id: el.id,
-        parentId: ap.id,
-        parentTableId: ap.id,
-        urlLabel: el.id,
-        label: el.code || '(kein Code)',
-        url: ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Frequenzen', el.id],
-        hasChildren: false,
-      }
-
-      return (
-        <Row
-          key={el.id}
-          node={node}
-        />
-      )
-    })
-  }),
-)
+  })
+})
