@@ -17,6 +17,7 @@ const Container = styled.nav`
   min-height: 40px;
   border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
   overflow-x: overlay;
+  overflow-y: hidden;
   scrollbar-width: thin;
 `
 

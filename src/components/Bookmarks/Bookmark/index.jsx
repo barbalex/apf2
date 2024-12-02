@@ -4,13 +4,18 @@ import Tooltip from '@mui/material/Tooltip'
 import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 
+const minWidth = 60
+const maxWidth = 160
+const menuWidth = 40
+
 const Container = styled.div`
   padding: 0 9px;
-  min-width: 80px;
-  max-width: 180px;
+  min-width: ${minWidth + menuWidth}px;
+  max-width: ${maxWidth + menuWidth}px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  overflow: hidden;
 `
 const StyledLink = styled(Link)`
   overflow: hidden;
@@ -24,8 +29,8 @@ const StyledLink = styled(Link)`
   }
 `
 const StyledText = styled.div`
-  min-width: 50px;
-  max-width: 150px;
+  min-width: ${minWidth}px;
+  max-width: ${maxWidth}px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
