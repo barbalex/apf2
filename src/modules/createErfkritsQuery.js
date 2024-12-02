@@ -5,7 +5,7 @@ export const createErfkritsQuery = ({
   erfkritGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
+  queryKey: ['treeErfkrits', apId, erfkritGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`

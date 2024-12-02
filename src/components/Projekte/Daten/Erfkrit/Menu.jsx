@@ -24,7 +24,7 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId, apId } = useParams()
+    const { projId, apId, erfkritId } = useParams()
     const store = useContext(StoreContext)
 
     const onClickAdd = useCallback(async () => {
@@ -52,7 +52,7 @@ export const Menu = memo(
         })
       }
       queryClient.invalidateQueries({
-        queryKey: [`treeErfkrit`],
+        queryKey: [`treeErfkrits`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
@@ -99,7 +99,7 @@ export const Menu = memo(
 
       // update tree query
       queryClient.invalidateQueries({
-        queryKey: [`treeErfkrit`],
+        queryKey: [`treeErfkrits`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],

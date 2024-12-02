@@ -53,7 +53,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeErfkrit`],
+        queryKey: [`treeErfkrits`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
