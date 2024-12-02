@@ -70,6 +70,15 @@ export const useZielsOfJahrNavData = (props) => {
     () => data?.data?.apById?.filteredZiels?.nodes ?? [],
     [data?.data?.apById?.filteredZiels?.nodes],
   )
+  const menus = useMemo(
+    () =>
+      filteredZiels.map((p) => ({
+        id: p.id,
+        label: p.label,
+        jahr: p.jahr,
+      })),
+    [filteredZiels],
+  )
 
   const navData = useMemo(
     () => ({
@@ -77,12 +86,9 @@ export const useZielsOfJahrNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}`,
       label: `Ziele für ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
       labelShort: `${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
-      menus: filteredZiels.map((p) => ({
-        id: p.id,
-        label: p.label,
-      })),
+      menus,
     }),
-    [apId, count, filteredZiels, isLoading, jahr, projId],
+    [apId, count, filteredZiels.length, isLoading, jahr, menus, projId],
   )
 
   return { isLoading, error, navData }

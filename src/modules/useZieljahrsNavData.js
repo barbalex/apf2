@@ -3,7 +3,6 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
-import union from 'lodash/union'
 import countBy from 'lodash/countBy'
 
 import { StoreContext } from '../storeContext.js'
@@ -78,8 +77,9 @@ export const useZieljahrsNavData = (props) => {
     const unfilteredCountByJahr = countBy(ziels, 'jahr')
     // convert into array of objects with id=jahr and count
     const jahre = Object.keys(countByJahr).map((jahr) => ({
-      id: jahr,
+      id: +jahr,
       label: `${jahr} (${countByJahr[jahr]}/${unfilteredCountByJahr[jahr]})`,
+      jahr: +jahr,
     }))
     return jahre
   }, [filteredZiels, ziels])

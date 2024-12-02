@@ -14,6 +14,8 @@ export const ZielberFolder = memo(
     const { zielberGqlFilterForTree, nodeLabelFilter } = store.tree
     const apolloClient = useApolloClient()
 
+    console.log('ZielberFolder', { ziel, jahr })
+
     const { data, isLoading } = useQuery(
       createZielbersQuery({
         zielId: ziel.id,

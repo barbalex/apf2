@@ -44,6 +44,7 @@ export const ApZielJahrs = memo(
         {isOpen &&
           navData.menus.map((menu) => (
             <ZielJahr
+              key={menu.id}
               projekt={projekt}
               ap={ap}
               menu={menu}

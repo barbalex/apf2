@@ -9,7 +9,7 @@ export const ZielJahr = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(StoreContext)
 
-    const { id, label } = menu
+    const { id, label, jahr } = menu
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -17,29 +17,29 @@ export const ZielJahr = memo(
           n[1] === projekt.id &&
           n[3] === ap.id &&
           n[4] === 'AP-Ziele' &&
-          n[5] === label,
+          n[5] === jahr,
       ).length > 0
 
     const node = {
       nodeType: 'folder',
       menuType: 'zieljahrFolder',
-      id: `${ap.id}Ziele${label ?? 'keinJahr'}`,
-      jahr: label,
+      id: `${ap.id}Ziele${jahr ?? 'keinJahr'}`,
+      jahr,
       parentId: ap.id,
-      urlLabel: `${label ?? 'kein Jahr'}`,
-      label: label,
-      url: ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele', label],
+      urlLabel: `${jahr ?? 'kein Jahr'}`,
+      label,
+      url: ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele', jahr],
       hasChildren: true,
     }
 
     return (
-      <div key={`${ap.id}/${label}`}>
+      <div key={`${ap.id}/${jahr}`}>
         <Row node={node} />
         {isOpen && (
           <Ziel
             projekt={projekt}
             ap={ap}
-            jahr={label}
+            jahr={jahr}
           />
         )}
       </div>
