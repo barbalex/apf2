@@ -1,12 +1,8 @@
-import { memo, useContext, useMemo } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router'
+import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createPopbersQuery } from '../../../../modules/createPopbersQuery.js'
+import { usePopbersNavData } from '../../../../modules/usePopbersNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -14,21 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const { popId } = useParams()
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { popberGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createPopbersQuery({
-        popId,
-        popberGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const popbers = data?.data?.popById?.popbersByPopId?.nodes ?? []
-    const count = popbers.length
-    const totalCount = data?.data?.popById?.popbersCount?.totalCount ?? 0
+    const { navData, isLoading, error } = usePopbersNavData()
 
     if (isLoading) return <Spinner />
 
@@ -36,8 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={popbers}
-        title={`Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.popber}
       />
