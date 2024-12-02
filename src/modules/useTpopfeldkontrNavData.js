@@ -32,7 +32,7 @@ export const useTpopfeldkontrNavData = (props) => {
           ) {
             tpopkontrById(id: $tpopkontrId) {
               id
-              label
+              label: labelEk
               tpopkontrzaehlsByTpopkontrId {
                 totalCount
               }

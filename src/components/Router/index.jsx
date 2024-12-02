@@ -1065,7 +1065,10 @@ export const Router = () => {
                                   )
                                 }
                               />
-                              <Route path=":tpopkontrId">
+                              <Route
+                                path=":tpopkontrId"
+                                handle={tpopfeldkontrHandle}
+                              >
                                 <Route
                                   lazy={() =>
                                     import(
@@ -1141,24 +1144,24 @@ export const Router = () => {
                                     </Route>
                                   </Route>
                                 </Route>
-                              </Route>
-                              <Route path=":tpopkontrId/Zaehlungen">
-                                <Route
-                                  path="*"
-                                  lazy={() =>
-                                    import(
-                                      '../Projekte/Daten/Tpopkontrzaehls/index.jsx'
-                                    )
-                                  }
-                                />
-                                <Route
-                                  path=":tpopkontrzaehlId"
-                                  lazy={() =>
-                                    import(
-                                      '../Projekte/Daten/Tpopkontrzaehl/index.jsx'
-                                    )
-                                  }
-                                />
+                                <Route path="Zaehlungen">
+                                  <Route
+                                    path="*"
+                                    lazy={() =>
+                                      import(
+                                        '../Projekte/Daten/Tpopkontrzaehls/index.jsx'
+                                      )
+                                    }
+                                  />
+                                  <Route
+                                    path=":tpopkontrzaehlId"
+                                    lazy={() =>
+                                      import(
+                                        '../Projekte/Daten/Tpopkontrzaehl/index.jsx'
+                                      )
+                                    }
+                                  />
+                                </Route>
                               </Route>
                             </Route>
                             <Route
