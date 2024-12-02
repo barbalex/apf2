@@ -4,8 +4,8 @@ import Tooltip from '@mui/material/Tooltip'
 import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 
-const minWidth = 60
-const maxWidth = 160
+const minWidth = 50
+const maxWidth = 150
 const menuWidth = 40
 
 const Container = styled.div`
