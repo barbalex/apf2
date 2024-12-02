@@ -1515,7 +1515,7 @@ export const Tree = types
       // 2. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add data filter
         const dataFilter = { ...filter }
@@ -1710,7 +1710,7 @@ export const Tree = types
       // 2. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add data filter
         const dataFilter = { ...filter }
@@ -1737,7 +1737,7 @@ export const Tree = types
             coveredBy: self.mapFilter,
           }
         }
-        // Object needt to filter by typ
+        // Object needs to filter by typ
         if (!singleFilter.typ) {
           singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
         }

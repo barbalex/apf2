@@ -1,28 +1,23 @@
 import { memo, useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../../storeContext.js'
 import { ZaehlFolder } from './Zaehl/index.jsx'
-import { createTpopfreiwkontrQuery } from '../../../../../../../../../../../../../../../../../modules/createTpopfreiwkontrQuery.js'
+import { useTpopfreiwkontrsNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrsNavData.js'
 
 export const TpopFreiwkontr = memo(
   observer(({ projekt, ap, pop, tpop }) => {
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekfGqlFilterForTree } = store.tree
 
-    const { data } = useQuery(
-      createTpopfreiwkontrQuery({
-        tpopId: tpop.id,
-        ekfGqlFilterForTree,
-        apolloClient,
-      }),
-    )
+    const { navData } = useTpopfreiwkontrsNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      popId: pop.id,
+      tpopId: tpop.id,
+    })
 
-    return (data?.data?.tpopById?.tpopfreiwkontrs?.nodes ?? []).map((el) => {
+    return navData.menus.map((el) => {
       const isOpen =
         store.tree.openNodes.filter(
           (n) =>
@@ -45,7 +40,7 @@ export const TpopFreiwkontr = memo(
         parentId: `${tpop.id}TpopfreiwkontrFolder`,
         parentTableId: tpop.id,
         urlLabel: el.id,
-        label: el.labelEkf,
+        label: el.label,
         url: [
           'Projekte',
           projekt.id,

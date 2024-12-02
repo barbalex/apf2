@@ -22,7 +22,8 @@ export const useTpopNavData = (props) => {
       tpopId,
       store.tree.tpopmassnGqlFilterForTree,
       store.tree.tpopmassnberGqlFilterForTree,
-      store.tree.tpopkontrGqlFilterForTree,
+      store.tree.ekGqlFilterForTree,
+      store.tree.ekfGqlFilterForTree,
       store.tree.tpopberGqlFilterForTree,
       store.tree.beobZugeordnetGqlFilterForTree,
     ],
@@ -101,14 +102,8 @@ export const useTpopNavData = (props) => {
           tpopId,
           tpopmassnFilter: store.tree.tpopmassnGqlFilterForTree,
           tpopmassnberFilter: store.tree.tpopmassnberGqlFilterForTree,
-          tpopfeldkontrFilter: {
-            ...store.tree.tpopkontrGqlFilterForTree,
-            typ: { distinctFrom: 'Freiwilligen-Erfolgskontrolle' },
-          },
-          tpopfreiwkontrFilter: {
-            ...store.tree.tpopkontrGqlFilterForTree,
-            typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' },
-          },
+          tpopfeldkontrFilter: store.tree.ekGqlFilterForTree,
+          tpopfreiwkontrFilter: store.tree.ekfGqlFilterForTree,
           tpopberFilter: store.tree.tpopberGqlFilterForTree,
           beobZugeordnetFilter: {
             ...store.tree.beobZugeordnetGqlFilterForTree,
@@ -129,7 +124,12 @@ export const useTpopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.tree.tpopkontrGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.ekGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.tree.ekfGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

@@ -231,7 +231,7 @@ export const insertDataset = async ({
     parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehl'
     : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontr'
-    : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontr'
+    : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontrs'
     : table === 'tpop_apberrelevant_grund_werte' ?
       'treeTpopApberrelevantGrundWerte'
     : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWertes'

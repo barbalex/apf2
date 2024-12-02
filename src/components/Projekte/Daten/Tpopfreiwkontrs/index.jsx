@@ -1,11 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createTpopfreiwkontrQuery } from '../../../../modules/createTpopfreiwkontrQuery.js'
+import { useTpopfreiwkontrsNavData } from '../../../../modules/useTpopfreiwkontrsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -13,22 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const { tpopId } = useParams()
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekfGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createTpopfreiwkontrQuery({
-        tpopId,
-        ekfGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const tpopfreiwkontrs = data?.data?.tpopById?.tpopfreiwkontrs?.nodes ?? []
-    const count = tpopfreiwkontrs.length
-    const totalCount =
-      data?.data?.tpopById?.tpopfreiwkontrsCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useTpopfreiwkontrsNavData()
 
     if (isLoading) return <Spinner />
 
@@ -36,8 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={tpopfreiwkontrs}
-        title={`Freiwilligen-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopkontr}
       />
