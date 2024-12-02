@@ -83,12 +83,14 @@ export const useTpopNavData = (props) => {
               filteredTpopbers: tpopbersByTpopId(filter: $tpopberFilter) {
                 totalCount
               }
-              beobZugeordnet: allBeobs(
-                filter: { tpopId: { equalTo: tpopId } }
+              beobZugeordnet: beobsByTpopId(
+                filter: { tpopId: { equalTo: $tpopId } }
               ) {
                 totalCount
               }
-              filteredBeobZugeordnet: allBeobs(filter: $beobZugeordnetFilter) {
+              filteredBeobZugeordnet: beobsByTpopId(
+                filter: $beobZugeordnetFilter
+              ) {
                 totalCount
               }
             }
@@ -173,32 +175,32 @@ export const useTpopNavData = (props) => {
         {
           id: 'Massnahmen',
           label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
-          count: massnCount,
+          // count: massnCount,
         },
         {
           id: 'Massnahmen-Berichte',
           label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredPopmassnbersCount}/${popmassnbersCount}`})`,
-          count: popmassnbersCount,
+          // count: popmassnbersCount,
         },
         {
           id: 'Feld-Kontrollen',
           label: `Feld-Kontrollen (${isLoading ? '...' : `${filteredFeldkontrCount}/${feldkontrCount}`})`,
-          count: feldkontrCount,
+          // count: feldkontrCount,
         },
         {
           id: 'Freiwilligen-Kontrollen',
           label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${filteredFreiwkontrCount}/${freiwkontrCount}`})`,
-          count: freiwkontrCount,
+          // count: freiwkontrCount,
         },
         {
           id: 'Kontroll-Berichte',
           label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredTpopbersCount}/${tpopbersCount}`})`,
-          count: tpopbersCount,
+          // count: tpopbersCount,
         },
         {
           id: 'Beobachtungen',
           label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
-          count: beobZugeordnetCount,
+          // count: beobZugeordnetCount,
         },
       ],
     }),
