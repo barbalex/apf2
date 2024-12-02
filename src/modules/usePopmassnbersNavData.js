@@ -61,7 +61,7 @@ export const usePopmassnbersNavData = (props) => {
     [],
   )
 
-  const count = data?.data?.popById?.popmassnbersByApId?.nodes?.length ?? 0
+  const count = data?.data?.popById?.popmassnbersByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
   const menus = useMemo(
     () =>
