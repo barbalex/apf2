@@ -1,11 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createErfkritsQuery } from '../../../../modules/createErfkritsQuery.js'
+import { useErfkritsNavData } from '../../../../modules/useErfkritsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -13,21 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const { apId } = useParams()
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { erfkritGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createErfkritsQuery({
-        apId,
-        erfkritGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const erfkrits = data?.data?.apById?.erfkritsByApId?.nodes ?? []
-    const count = erfkrits.length
-    const totalCount = data?.data?.apById?.erfkritsCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useErfkritsNavData()
 
     if (isLoading) return <Spinner />
 
@@ -35,8 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={erfkrits}
-        title={`AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.erfkrit}
       />
