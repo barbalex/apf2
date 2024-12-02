@@ -6,11 +6,12 @@ import { reaction } from 'mobx'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useApberuebersichtsNavData = () => {
+export const useApberuebersichtsNavData = (props) => {
   const apolloClient = useApolloClient()
   const store = useContext(StoreContext)
 
-  const { projId } = useParams()
+  const params = useParams()
+  const projId = props?.projId ?? params?.projId
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeApberuebersichts', projId],
@@ -57,10 +58,11 @@ export const useApberuebersichtsNavData = () => {
 
   const navData = useMemo(
     () => ({
-      id: 'projekte',
+      id: 'AP-Berichte',
       url: `/Daten/Projekte/${projId}/AP-Berichte`,
       label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
-      totalCount: data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0,
+      // TODO: needed?
+      totalCount,
       menus:
         data?.data?.projektById?.apberuebersichtsByProjId?.nodes.map((p) => ({
           id: p.id,
@@ -69,7 +71,6 @@ export const useApberuebersichtsNavData = () => {
     }),
     [
       count,
-      data?.data?.projektById?.allApberuebersichts?.totalCount,
       data?.data?.projektById?.apberuebersichtsByProjId?.nodes,
       isLoading,
       projId,

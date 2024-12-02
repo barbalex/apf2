@@ -5,33 +5,28 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../Row.jsx'
 import { StoreContext } from '../../../../../../../storeContext.js'
-import { createApberuebersichtsQuery } from '../../../../../../../modules/createApberuebersichtsQuery.js'
+import { useApberuebersichtsNavData } from '../../../../../../../modules/useApberuebersichtsNavData.js'
 
 export const Apberuebersichts = memo(
   observer(({ projekt }) => {
     const apolloClient = useApolloClient()
+    const projId = projekt.id
 
     const store = useContext(StoreContext)
     const { apberuebersichtGqlFilterForTree } = store.tree
 
-    const { data } = useQuery(
-      createApberuebersichtsQuery({
-        projId: projekt.id,
-        apberuebersichtGqlFilterForTree,
-        apolloClient,
-      }),
-    )
+    const { navData } = useApberuebersichtsNavData({ projId })
 
-    return (data?.data?.allApberuebersichts?.nodes ?? []).map((el) => {
+    return navData.menus.map((el) => {
       const node = {
         nodeType: 'table',
         menuType: 'apberuebersicht',
         id: el.id,
-        parentId: el.projId,
-        parentTableId: el.projId,
+        parentId: projId,
+        parentTableId: projId,
         urlLabel: el.label || '(kein Jahr)',
         label: el.label,
-        url: ['Projekte', el.projId, 'AP-Berichte', el.id],
+        url: ['Projekte', projId, 'AP-Berichte', el.id],
         hasChildren: false,
       }
 
