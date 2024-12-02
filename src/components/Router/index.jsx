@@ -202,6 +202,13 @@ const apbersHandle = {
   bookmarkFetcher: apbersBookmarkFetcher,
   bookmarkFetcherName: 'useApbersNavData',
 }
+const apartsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useApartsNavData.js')).useApartsNavData,
+}))
+const apartsHandle = {
+  bookmarkFetcher: apartsBookmarkFetcher,
+  bookmarkFetcherName: 'useApartsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -574,7 +581,10 @@ export const Router = () => {
                         </Route>
                       </Route>
                     </Route>
-                    <Route path="Taxa">
+                    <Route
+                      path="Taxa"
+                      handle={apartsHandle}
+                    >
                       <Route
                         path="*"
                         lazy={() =>

@@ -5,7 +5,7 @@ export const createApartsQuery = ({
   apartGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeApart', apId, apartGqlFilterForTree],
+  queryKey: ['treeAparts', apId, apartGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`

@@ -52,7 +52,7 @@ export const Menu = memo(
         })
       }
       queryClient.invalidateQueries({
-        queryKey: [`treeApart`],
+        queryKey: [`treeAparts`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
@@ -97,7 +97,7 @@ export const Menu = memo(
 
       // update tree query
       queryClient.invalidateQueries({
-        queryKey: [`treeApart`],
+        queryKey: [`treeAparts`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
