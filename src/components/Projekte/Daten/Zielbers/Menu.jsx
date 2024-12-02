@@ -50,7 +50,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeZielber`],
+        queryKey: [`treeZielbers`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeZielFolders`],

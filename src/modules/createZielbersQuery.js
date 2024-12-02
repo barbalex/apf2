@@ -5,7 +5,7 @@ export const createZielbersQuery = ({
   zielberGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeZielber', zielId, zielberGqlFilterForTree],
+  queryKey: ['treeZielbers', zielId, zielberGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`
