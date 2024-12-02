@@ -46,13 +46,6 @@ export const Bookmark = memo(({ navData }) => {
   const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
   const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
-  console.log('Bookmark', {
-    navData,
-    pathname,
-    linksToSomewhereElse,
-    pathnameWithoutLastSlash,
-  })
-
   return (
     <Container>
       <Tooltip title={navData.label}>
