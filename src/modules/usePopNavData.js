@@ -46,10 +46,6 @@ export const usePopNavData = (props) => {
               }
               filteredPopbers: popbersByPopId(filter: $popberFilter) {
                 totalCount
-                nodes {
-                  id
-                  jahr
-                }
               }
               popmassnbersByPopId {
                 totalCount
