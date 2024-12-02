@@ -59,7 +59,7 @@ export const useTpopfeldkontrNavData = (props) => {
 
   const label = data?.data?.tpopkontrById?.label
   const tpopkontrzaehlCount =
-    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopId?.totalCount ?? 0
+    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
   const filteredTpopkontrzaehlCount =
     data?.data?.tpopkontrById?.filteredTpopkontrzaehls?.totalCount ?? 0
 
