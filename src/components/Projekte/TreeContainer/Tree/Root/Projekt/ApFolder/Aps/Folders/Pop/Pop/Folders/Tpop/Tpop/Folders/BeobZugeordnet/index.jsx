@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../../../../../../../st
 import { BeobZugeordnet } from './BeobZugeordnet.jsx'
 
 export const BeobZugeordnetFolder = memo(
-  observer(({ projekt, ap, pop, tpop, isLoading, count }) => {
+  observer(({ projekt, ap, pop, tpop, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.beob ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = [
       'Projekte',
@@ -46,9 +39,9 @@ export const BeobZugeordnetFolder = memo(
       id: `${tpop.id}BeobZugeordnetFolder`,
       tableId: tpop.id,
       urlLabel: 'Beobachtungen',
-      label: `Beobachtungen zugeordnet (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: true,
     }
 
     return (

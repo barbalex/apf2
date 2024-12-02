@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../../../../../../../st
 import { TpopFeldkontr } from './TpopFeldkontr/index.jsx'
 
 export const TpopFeldkontrFolder = memo(
-  observer(({ projekt, ap, pop, tpop, isLoading, count }) => {
+  observer(({ projekt, ap, pop, tpop, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.tpopkontr ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = [
       'Projekte',
@@ -46,9 +39,9 @@ export const TpopFeldkontrFolder = memo(
       id: `${tpop.id}TpopfeldkontrFolder`,
       tableId: tpop.id,
       urlLabel: 'Feld-Kontrollen',
-      label: `Feld-Kontrollen (${message})`,
+      label: menu.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: true,
     }
 
     return (
