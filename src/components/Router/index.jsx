@@ -248,6 +248,14 @@ const popmassnbersHandle = {
   bookmarkFetcher: popmassnbersBookmarkFetcher,
   bookmarkFetcherName: 'usePopmassnbersNavData',
 }
+const popbersBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/usePopbersNavData.js'))
+    .usePopbersNavData,
+}))
+const popbersHandle = {
+  bookmarkFetcher: popbersBookmarkFetcher,
+  bookmarkFetcherName: 'usePopbersNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -1123,7 +1131,10 @@ export const Router = () => {
                             </Route>
                           </Route>
                         </Route>
-                        <Route path="Kontroll-Berichte">
+                        <Route
+                          path="Kontroll-Berichte"
+                          handle={popbersHandle}
+                        >
                           <Route
                             path="*"
                             lazy={() =>

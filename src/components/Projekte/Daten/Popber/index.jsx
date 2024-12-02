@@ -111,7 +111,7 @@ export const Component = memo(
         }
         if (['jahr', 'entwicklung'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treePopber`],
+            queryKey: [`treePopbers`],
           })
         }
       },
