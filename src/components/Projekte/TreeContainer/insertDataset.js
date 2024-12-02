@@ -230,7 +230,7 @@ export const insertDataset = async ({
   const queryKeyTable =
     parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehl'
-    : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontr'
+    : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontrs'
     : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontrs'
     : table === 'tpop_apberrelevant_grund_werte' ?
       'treeTpopApberrelevantGrundWerte'

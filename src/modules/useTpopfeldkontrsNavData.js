@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useTpopfreiwkontrsNavData = (props) => {
+export const useTpopfeldkontrsNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -17,28 +17,30 @@ export const useTpopfreiwkontrsNavData = (props) => {
   const store = useContext(StoreContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeTpopfreiwkontrs', tpopId, store.tree.ekfGqlFilterForTree],
+    queryKey: ['treeTpopfeldkontrs', tpopId, store.tree.ekGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeTpopfreiwkontrsQuery(
-            $ekfsFilter: TpopkontrFilter!
+          query TreeTpopfeldkontrsQuery(
+            $eksFilter: TpopkontrFilter!
             $tpopId: UUID!
           ) {
             tpopById(id: $tpopId) {
               id
               tpopkontrsByTpopId(
-                filter: $ekfsFilter
+                filter: $eksFilter
                 orderBy: [JAHR_ASC, DATUM_ASC]
               ) {
                 totalCount
                 nodes {
                   id
-                  label: labelEkf
+                  label: labelEk
                 }
               }
               totalCount: tpopkontrsByTpopId(
-                filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
+                filter: {
+                  typ: { distinctFrom: "Freiwilligen-Erfolgskontrolle" }
+                }
               ) {
                 totalCount
               }
@@ -46,7 +48,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
           }
         `,
         variables: {
-          ekfsFilter: store.tree.ekfGqlFilterForTree,
+          eksFilter: store.tree.ekGqlFilterForTree,
           tpopId,
         },
         fetchPolicy: 'no-cache',
@@ -56,7 +58,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.ekfGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.ekGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -74,10 +76,10 @@ export const useTpopfreiwkontrsNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: 'Freiwilligen-Kontrollen',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen`,
-      label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      labelShort: `EKF (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      id: 'Feld-Kontrollen',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
+      label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus,
     }),
     [apId, count, isLoading, menus, popId, projId, totalCount, tpopId],

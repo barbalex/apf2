@@ -1,11 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createTpopfeldkontrQuery } from '../../../../modules/createTpopfeldkontrQuery.js'
+import { useTpopfeldkontrsNavData } from '../../../../modules/useTpopfeldkontrsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -13,22 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const { tpopId } = useParams()
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createTpopfeldkontrQuery({
-        tpopId,
-        ekGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const tpopfeldkontrs = data?.data?.tpopById?.tpopfeldkontrs?.nodes ?? []
-    const count = tpopfeldkontrs.length
-    const totalCount =
-      data?.data?.tpopById?.tpopfeldkontrsCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useTpopfeldkontrsNavData()
 
     if (isLoading) return <Spinner />
 
@@ -36,8 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={tpopfeldkontrs}
-        title={`Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.tpopkontr}
       />

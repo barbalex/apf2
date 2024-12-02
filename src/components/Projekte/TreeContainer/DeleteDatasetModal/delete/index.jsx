@@ -147,7 +147,7 @@ export const deleteModule = async ({ client, store, search }) => {
   }
 
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontr'
+    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrs'
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrs'
     : table === 'tpop_apberrelevant_grund_werte' ?
       'treeTpopApberrelevantGrundWerte'

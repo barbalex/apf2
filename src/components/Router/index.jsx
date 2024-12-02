@@ -302,6 +302,14 @@ const tpopfreiwkontrsHandle = {
   bookmarkFetcher: tpopfreiwkontrsBookmarkFetcher,
   bookmarkFetcherName: 'useTpopfreiwkontrsNavData',
 }
+const tpopfeldkontrsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useTpopfeldkontrsNavData.js'))
+    .useTpopfeldkontrsNavData,
+}))
+const tpopfeldkontrsHandle = {
+  bookmarkFetcher: tpopfeldkontrsBookmarkFetcher,
+  bookmarkFetcherName: 'useTpopfeldkontrsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -1037,7 +1045,10 @@ export const Router = () => {
                                 }
                               />
                             </Route>
-                            <Route path="Feld-Kontrollen">
+                            <Route
+                              path="Feld-Kontrollen"
+                              handle={tpopfeldkontrsHandle}
+                            >
                               <Route
                                 path="*"
                                 lazy={() =>

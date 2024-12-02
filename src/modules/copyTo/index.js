@@ -286,7 +286,7 @@ export const copyTo = async ({
       tanstackQueryClient,
     })
     tanstackQueryClient.invalidateQueries({
-      queryKey: ['treeTpopfeldkontr'],
+      queryKey: ['treeTpopfeldkontrs'],
     })
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treeTpopFolders'],
