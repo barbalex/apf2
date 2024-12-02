@@ -1,0 +1,90 @@
+import { useMemo, useEffect, useContext } from 'react'
+import { useApolloClient, gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { reaction } from 'mobx'
+import { useParams } from 'react-router'
+
+import { StoreContext } from '../storeContext.js'
+
+export const useEkfrequenzsNavData = (props) => {
+  const apolloClient = useApolloClient()
+  const params = useParams()
+  const projId = props?.projId ?? params.projId
+  const apId = props?.apId ?? params.apId
+
+  const store = useContext(StoreContext)
+
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['treeEkfrequenzs', apId, store.tree.ekfrequenzGqlFilterForTree],
+    queryFn: () =>
+      apolloClient.query({
+        query: gql`
+          query TreeEkfrequenzsQuery(
+            $ekfrequenzsFilter: EkfrequenzFilter!
+            $apId: UUID!
+          ) {
+            apById(id: $apId) {
+              id
+              ekfrequenzsByApId(filter: $ekfrequenzsFilter, orderBy: SORT_ASC) {
+                nodes {
+                  id
+                  code
+                  label: code
+                }
+              }
+              totalCount: ekfrequenzsByApId {
+                totalCount
+              }
+            }
+          }
+        `,
+        variables: {
+          ekfrequenzsFilter: store.tree.ekfrequenzGqlFilterForTree,
+          apId,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+  // this is how to make the filter reactive in a hook
+  // see: https://stackoverflow.com/a/72229014/712005
+  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
+  useEffect(
+    () => reaction(() => store.tree.ekfrequenzGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+
+  const rows = useMemo(
+    () => data?.data?.apById?.ekfrequenzsByApId?.nodes ?? [],
+    [data],
+  )
+  const count = rows.length
+  const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
+  const menus = useMemo(
+    () =>
+      rows.map((p) => ({
+        id: p.id,
+        label: p.label,
+      })) ?? [],
+    [rows],
+  )
+  console.log('useEkfrequenzsNavData', {
+    menus,
+    totalCount,
+    count,
+    rows,
+    data: data?.data?.apById,
+  })
+
+  const navData = useMemo(
+    () => ({
+      id: 'EK-Frequenzen',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
+      label: `EK-Frequenzen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      menus,
+    }),
+    [apId, count, isLoading, menus, projId, totalCount],
+  )
+
+  return { isLoading, error, navData }
+}

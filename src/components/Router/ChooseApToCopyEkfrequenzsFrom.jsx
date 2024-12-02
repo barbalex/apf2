@@ -272,7 +272,7 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
             variant: 'info',
           },
         })
-        tanstackClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
+        tanstackClient.invalidateQueries({ queryKey: [`treeEkfrequenzs`] })
         tanstackClient.invalidateQueries({ queryKey: [`treeApFolders`] })
       },
       [

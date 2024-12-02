@@ -5,11 +5,11 @@ export const createEkfrequenzsQuery = ({
   ekfrequenzGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeEkfrequenz', apId, ekfrequenzGqlFilterForTree],
+  queryKey: ['treeEkfrequenzs2', apId, ekfrequenzGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`
-        query TreeEkfrequenzsQuery(
+        query TreeEkfrequenzsQuery2(
           $apId: UUID!
           $ekfrequenzsFilter: EkfrequenzFilter!
         ) {

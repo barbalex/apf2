@@ -144,7 +144,7 @@ export const Component = memo(
         setFieldErrors({})
         if (field === 'code') {
           queryClient.invalidateQueries({
-            queryKey: [`treeEkfrequenz`],
+            queryKey: [`treeEkfrequenzs`],
           })
         }
         return

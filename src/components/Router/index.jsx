@@ -217,6 +217,14 @@ const assozartsHandle = {
   bookmarkFetcher: assozartsBookmarkFetcher,
   bookmarkFetcherName: 'useAssozartsNavData',
 }
+const ekfrequenzsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useEkfrequenzsNavData.js'))
+    .useEkfrequenzNavData,
+}))
+const ekfrequenzsHandle = {
+  bookmarkFetcher: ekfrequenzsBookmarkFetcher,
+  bookmarkFetcherName: 'useEkfrequenzsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -621,7 +629,10 @@ export const Router = () => {
                         }
                       />
                     </Route>
-                    <Route path="EK-Frequenzen">
+                    <Route
+                      path="EK-Frequenzen"
+                      handle={ekfrequenzsHandle}
+                    >
                       <Route
                         path="*"
                         lazy={() =>
