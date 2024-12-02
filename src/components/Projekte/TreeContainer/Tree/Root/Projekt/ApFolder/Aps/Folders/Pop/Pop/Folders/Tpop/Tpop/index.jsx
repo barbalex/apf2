@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { Row } from '../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../storeContext.js'
 import { TpopFolders } from './Folders/index.jsx'
-import { createTpopsQuery } from '../../../../../../../../../../../../../../modules/createTpopsQuery.js'
+import { useTpopsNavData } from '../../../../../../../../../../../../../../modules/useTpopsNavData.js'
 
 export const Tpop = memo(
   observer(({ projekt, ap, pop }) => {
@@ -14,11 +14,13 @@ export const Tpop = memo(
     const store = useContext(StoreContext)
     const { tpopGqlFilterForTree } = store.tree
 
-    const { data } = useQuery(
-      createTpopsQuery({ popId: pop.id, tpopGqlFilterForTree, apolloClient }),
-    )
+    const { navData } = useTpopsNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      popId: pop.id,
+    })
 
-    return (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((el) => {
+    return navData.menus.map((el) => {
       const isOpen =
         store.tree.openNodes.filter(
           (n) =>

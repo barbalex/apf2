@@ -256,6 +256,13 @@ const popbersHandle = {
   bookmarkFetcher: popbersBookmarkFetcher,
   bookmarkFetcherName: 'usePopbersNavData',
 }
+const tpopsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useTpopsNavData.js')).useTpopsNavData,
+}))
+const tpopsHandle = {
+  bookmarkFetcher: tpopsBookmarkFetcher,
+  bookmarkFetcherName: 'useTpopsNavData',
+}
 const tpopBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useTpopNavData.js')).useTpopNavData,
 }))
@@ -831,7 +838,10 @@ export const Router = () => {
                             }
                           />
                         </Route>
-                        <Route path="Teil-Populationen">
+                        <Route
+                          path="Teil-Populationen"
+                          handle={tpopsHandle}
+                        >
                           <Route
                             path="*"
                             lazy={() =>
