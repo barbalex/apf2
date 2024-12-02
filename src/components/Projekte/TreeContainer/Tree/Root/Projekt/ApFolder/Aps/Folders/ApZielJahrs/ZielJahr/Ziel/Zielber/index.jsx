@@ -1,37 +1,17 @@
 import { memo, useContext } from 'react'
-import { gql, useApolloClient } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
 import { Zielber } from './Zielber.jsx'
-import { createZielbersQuery } from '../../../../../../../../../../../../../modules/createZielbersQuery.js'
+import { useZielbersNavData } from '../../../../../../../../../../../../../modules/useZielbersNavData.js'
 
 export const ZielberFolder = memo(
   observer(({ projekt, ap, jahr, ziel }) => {
     const store = useContext(StoreContext)
-    const { zielberGqlFilterForTree, nodeLabelFilter } = store.tree
-    const apolloClient = useApolloClient()
+    const { nodeLabelFilter } = store.tree
 
-    console.log('ZielberFolder', { ziel, jahr })
-
-    const { data, isLoading } = useQuery(
-      createZielbersQuery({
-        zielId: ziel.id,
-        zielberGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-
-    const isFiltered = !!nodeLabelFilter?.zielber
-    const zielbers = data?.data?.zielById?.zielbersByZielId?.nodes ?? []
-    const zielbersLength = zielbers.length
-
-    const message =
-      isLoading ? '...'
-      : isFiltered ? `${zielbersLength} gefiltert`
-      : zielbersLength
+    const { navData, isLoading } = useZielbersNavData()
 
     const url = [
       'Projekte',
@@ -61,9 +41,9 @@ export const ZielberFolder = memo(
       id: `${ziel.id}ZielberFolder`,
       tableId: ziel.id,
       urlLabel: 'Berichte',
-      label: `Berichte (${message})`,
+      label: navData.label,
       url,
-      hasChildren: zielbersLength > 0,
+      hasChildren: true,
     }
 
     return (
@@ -71,7 +51,7 @@ export const ZielberFolder = memo(
         <Row node={node} />
         {isOpen && (
           <Zielber
-            zielbers={zielbers}
+            menus={navData.menus}
             projekt={projekt}
             ap={ap}
             jahr={jahr}

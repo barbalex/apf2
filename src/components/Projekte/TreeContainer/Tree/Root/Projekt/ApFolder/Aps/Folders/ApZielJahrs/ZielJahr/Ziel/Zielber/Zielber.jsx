@@ -1,7 +1,7 @@
 import { Row } from '../../../../../../../../../Row.jsx'
 
-export const Zielber = ({ zielbers, projekt, ap, jahr, ziel }) =>
-  (zielbers ?? []).map((el) => {
+export const Zielber = ({ menus, projekt, ap, jahr, ziel }) =>
+  menus.map((el) => {
     const node = {
       nodeType: 'table',
       menuType: 'zielber',
