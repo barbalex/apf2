@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import { createApartsQuery } from '../../../../../../../../../../modules/createApartsQuery.js'
+import { useApartsNavData } from '../../../../../../../../../../modules/useApartsNavData.js'
 
 export const ApArt = memo(
   observer(({ projekt, ap }) => {
@@ -13,15 +13,12 @@ export const ApArt = memo(
     const store = useContext(StoreContext)
     const { apartGqlFilterForTree } = store.tree
 
-    const { data } = useQuery(
-      createApartsQuery({
-        apId: ap.id,
-        apartGqlFilterForTree,
-        apolloClient,
-      }),
-    )
+    const { navData } = useApartsNavData({
+      projId: projekt.id,
+      apId: ap.id,
+    })
 
-    return (data?.data?.apById?.apartsByApId?.nodes ?? []).map((el) => {
+    return navData.menus.map((el) => {
       const node = {
         nodeType: 'table',
         menuType: 'apart',
