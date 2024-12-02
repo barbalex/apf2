@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 
 import { PopFolder } from './Pop/index.jsx'
 import { ApZielJahrs } from './ApZielJahrs/index.jsx'
@@ -17,27 +17,69 @@ import { useApNavData } from '../../../../../../../../../modules/useApNavData.js
 export const ApFolders = memo(({ ap, projekt }) => {
   const { navData, isLoading } = useApNavData({ apId: ap.id })
 
+  const popMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Populationen'),
+    [navData],
+  )
+  const apZielJahrsMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'AP-Ziele'),
+    [navData],
+  )
+  const apErfkritsMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'AP-Erfolgskriterien'),
+    [navData],
+  )
+  const apBerMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'AP-Berichte'),
+    [navData],
+  )
+  const apArtMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Taxa'),
+    [navData],
+  )
+  const assozartMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'assoziierte-Arten'),
+    [navData],
+  )
+  const ekfrequenzMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'EK-Frequenzen'),
+    [navData],
+  )
+  const ekzaehleinheitMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'EK-Zähleinheiten'),
+    [navData],
+  )
+  const beobNichtBeurteiltMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'nicht-beurteilte-Beobachtungen'),
+    [navData],
+  )
+  const beobNichtZuzuordnenMenu = useMemo(
+    () =>
+      navData?.menus.find((m) => m.id === 'nicht-zuzuordnende-Beobachtungen'),
+    [navData],
+  )
+
   return (
     <>
       <PopFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'Populationen')}
+        menu={popMenu}
       />
       <ApZielJahrs
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'AP-Ziele')}
+        menu={apZielJahrsMenu}
       />
       <ApErfkritFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'AP-Erfolgskriterien')}
+        menu={apErfkritsMenu}
       />
       <ApBerFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'AP-Berichte')}
+        menu={apBerMenu}
       />
       <IdealbiotopFolder
         projekt={projekt}
@@ -46,36 +88,32 @@ export const ApFolders = memo(({ ap, projekt }) => {
       <ApArtFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'Taxa')}
+        menu={apArtMenu}
       />
       <AssozArtFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'assoziierte-Arten')}
+        menu={assozartMenu}
       />
       <EkFrequenzFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'EK-Frequenzen')}
+        menu={ekfrequenzMenu}
       />
       <EkZaehleinheitFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find((m) => m.id === 'EK-Zähleinheiten')}
+        menu={ekzaehleinheitMenu}
       />
       <BeobNichtBeurteiltFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find(
-          (m) => m.id === 'nicht-beurteilte-Beobachtungen',
-        )}
+        menu={beobNichtBeurteiltMenu}
       />
       <BeobNichtZuzuordnenFolder
         projekt={projekt}
         ap={ap}
-        menu={navData?.menus.find(
-          (m) => m.id === 'nicht-zuzuordnende-Beobachtungen',
-        )}
+        menu={beobNichtZuzuordnenMenu}
       />
       <Qk
         projekt={projekt}
