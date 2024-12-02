@@ -6,6 +6,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
 import { Zaehl } from './Zaehl.jsx'
+import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
 
 export const ZaehlFolder = memo(
   observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
@@ -13,54 +14,13 @@ export const ZaehlFolder = memo(
     const store = useContext(StoreContext)
     const { nodeLabelFilter } = store.tree
 
-    const tpopkontrzaehlsFilter = {
-      tpopkontrId: { equalTo: tpopkontr.id },
-    }
-    if (nodeLabelFilter.tpopkontrzaehl) {
-      tpopkontrzaehlsFilter.label = {
-        includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
-      }
-    }
-
-    const { data, isLoading } = useQuery({
-      queryKey: [
-        'treeTpopfeldkontrzaehlFolders',
-        tpopkontr.id,
-        tpopkontrzaehlsFilter,
-      ],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeTpopfeldkontrzaehlFolderssQuery(
-              $id: UUID!
-              $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
-            ) {
-              tpopkontrById(id: $id) {
-                id
-                tpopkontrzaehlsByTpopkontrId(filter: $tpopkontrzaehlsFilter) {
-                  totalCount
-                }
-              }
-            }
-          `,
-          variables: {
-            id: tpopkontr.id,
-            tpopkontrzaehlsFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
+    const { navData, isLoading } = useTpopfeldkontrNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      popId: pop.id,
+      tpopId: tpop.id,
+      tpopkontrId: tpopkontr.id,
     })
-
-    const count =
-      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
-
-    const nodeLabelFilterString =
-      store.tree?.nodeLabelFilter?.tpopkontrzaehl ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const url = [
       'Projekte',
@@ -96,9 +56,9 @@ export const ZaehlFolder = memo(
       id: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
       tableId: tpopkontr.id,
       urlLabel: 'Zaehlungen',
-      label: `Zählungen (${message})`,
+      label: navData?.menus?.[0]?.label,
       url,
-      hasChildren: count > 0,
+      hasChildren: true,
     }
 
     return (

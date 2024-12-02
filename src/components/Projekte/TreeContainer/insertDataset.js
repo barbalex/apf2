@@ -280,4 +280,9 @@ export const insertDataset = async ({
       queryKey: [`treeZielsOfJahr`],
     })
   }
+  if (parentTable === 'tpopfeldkontr') {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontr`],
+    })
+  }
 }

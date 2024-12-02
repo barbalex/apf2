@@ -188,6 +188,11 @@ export const deleteModule = async ({ client, store, search }) => {
       queryKey: [`treeZielsOfJahr`],
     })
   }
+  if (parentTable === 'tpopfeldkontr') {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontr`],
+    })
+  }
 
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 
