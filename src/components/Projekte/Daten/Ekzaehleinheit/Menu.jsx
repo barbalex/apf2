@@ -57,6 +57,9 @@ export const Menu = memo(
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
       const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten/${id}${search}`,
@@ -103,6 +106,9 @@ export const Menu = memo(
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
       })
       // navigate to parent
       navigate(

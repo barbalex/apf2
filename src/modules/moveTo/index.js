@@ -88,14 +88,19 @@ export const moveTo = async ({
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeAp'],
+    })
   }
   if (table === 'tpop') {
     tanstackQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treePopFolders'],
+    })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treePop'],
     })
   }
   if (table === 'tpopmassn') {

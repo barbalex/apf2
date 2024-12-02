@@ -58,6 +58,9 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
       const id = result?.data?.createErfkrit?.erfkrit?.id
       navigate(`./${id}${search}`)
     }, [client, store, tanstackQueryClient, navigate, search, apId])

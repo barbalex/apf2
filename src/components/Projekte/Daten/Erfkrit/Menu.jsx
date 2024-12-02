@@ -57,6 +57,9 @@ export const Menu = memo(
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
       const id = result?.data?.createErfkrit?.erfkrit?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien/${id}${search}`,
@@ -103,6 +106,9 @@ export const Menu = memo(
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
       })
       // navigate to parent
       navigate(

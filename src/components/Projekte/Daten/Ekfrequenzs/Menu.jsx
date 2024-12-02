@@ -59,6 +59,9 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
       const id = result?.data?.createEkfrequenz?.ekfrequenz?.id
       navigate(`./${id}${search}`)
     }, [client, store, tanstackQueryClient, navigate, search, apId])

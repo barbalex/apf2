@@ -231,6 +231,7 @@ export const ChooseApToCopyErfkritsFrom = memo(
         })
         tanstackClient.invalidateQueries({ queryKey: [`treeErfkrits`] })
         tanstackClient.invalidateQueries({ queryKey: [`treeApFolders`] })
+        tanstackClient.invalidateQueries({ queryKey: [`treeAp`] })
       },
       [
         apId,

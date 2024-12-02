@@ -72,6 +72,9 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treePopFolders`],
       })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treePop`],
+      })
       const id = result?.data?.createTpop?.tpop?.id
       navigate(`./${id}${search}`)
     }, [apolloClient, store, tanstackQueryClient, navigate, search, popId])

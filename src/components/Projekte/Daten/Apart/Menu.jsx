@@ -57,6 +57,9 @@ export const Menu = memo(
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
       const id = result?.data?.createApart?.apart?.id
       navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Taxa/${id}${search}`)
     }, [apId, client, store, queryClient, navigate, search, projId])
@@ -101,6 +104,9 @@ export const Menu = memo(
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
       })
       // navigate to parent
       navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Taxa${search}`)

@@ -137,6 +137,9 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treePopFolders`],
       })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treePop`],
+      })
       const id = result?.data?.createTpop?.tpop?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${id}${search}`,
@@ -193,6 +196,9 @@ export const Menu = memo(
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treePopFolders`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treePop`],
       })
       // navigate to parent
       navigate(

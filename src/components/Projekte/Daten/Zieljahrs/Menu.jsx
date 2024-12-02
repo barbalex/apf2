@@ -64,6 +64,9 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
       const id = result?.data?.createZiel?.ziel?.id
       navigate(`./1/${id}${search}`)
     }, [client, store, tanstackQueryClient, navigate, search, apId])
