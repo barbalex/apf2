@@ -63,27 +63,24 @@ export const usePopmassnbersNavData = (props) => {
 
   const count = data?.data?.popById?.popmassnbersByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
+  const menus = useMemo(
+    () =>
+      data?.data?.popById?.popmassnbersByPopId?.nodes?.map((p) => ({
+        id: p.id,
+        label: p.label,
+      })) ?? [],
+    [data?.data?.popById?.popmassnbersByPopId?.nodes],
+  )
 
   const navData = useMemo(
     () => ({
       id: 'Massnahmen-Berichte',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte`,
       label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.popById?.popmassnbersByPopId?.nodes?.map((p) => ({
-          id: p.id,
-          label: p.label,
-        })) ?? [],
+      labelShort: `Massn.-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      menus,
     }),
-    [
-      apId,
-      count,
-      data?.data?.popById?.popmassnbersByPopId?.nodes,
-      isLoading,
-      popId,
-      projId,
-      totalCount,
-    ],
+    [apId, count, isLoading, menus, popId, projId, totalCount],
   )
 
   return { isLoading, error, navData }
