@@ -113,7 +113,7 @@ export const Component = memo(
         }
         setFieldErrors({})
         queryClient.invalidateQueries({
-          queryKey: [`treeTpopfeldkontrzaehl`],
+          queryKey: [`treeTpopfeldkontrzaehls`],
         })
       },
       [client, queryClient, row.id, store.user.name],

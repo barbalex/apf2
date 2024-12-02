@@ -228,7 +228,7 @@ export const insertDataset = async ({
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
+    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehls'
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehl'
     : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontrs'
     : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontrs'
