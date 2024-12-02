@@ -5,7 +5,7 @@ export const createApbersQuery = ({
   apberGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeApber', apId, apberGqlFilterForTree],
+  queryKey: ['treeApbers', apId, apberGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`
