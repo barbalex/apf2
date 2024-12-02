@@ -93,6 +93,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
       id: 'nicht-zuzuordnende-Beobachtungen',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen`,
       label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+      labelShort: `Beob. nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       // leave totalCount undefined as the menus are folders
       menus:
         data?.data?.filteredBeobsNichtZuzuordnen?.nodes?.map((p) => ({
