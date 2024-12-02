@@ -41,6 +41,7 @@ export const useTpopNavData = (props) => {
             tpopById(id: $tpopId) {
               id
               label
+              status
               tpopmassnsByTpopId {
                 totalCount
               }
