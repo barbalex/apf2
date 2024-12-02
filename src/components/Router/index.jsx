@@ -209,6 +209,14 @@ const apartsHandle = {
   bookmarkFetcher: apartsBookmarkFetcher,
   bookmarkFetcherName: 'useApartsNavData',
 }
+const assozartsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useAssozartsNavData.js'))
+    .useAssozartsNavData,
+}))
+const assozartsHandle = {
+  bookmarkFetcher: assozartsBookmarkFetcher,
+  bookmarkFetcherName: 'useAssozartsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -596,7 +604,10 @@ export const Router = () => {
                         lazy={() => import('../Projekte/Daten/Apart/index.jsx')}
                       />
                     </Route>
-                    <Route path="assoziierte-Arten">
+                    <Route
+                      path="assoziierte-Arten"
+                      handle={assozartsHandle}
+                    >
                       <Route
                         path="*"
                         lazy={() =>

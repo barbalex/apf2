@@ -5,7 +5,7 @@ export const createAssozartsQuery = ({
   assozartGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeAssozart', apId, assozartGqlFilterForTree],
+  queryKey: ['treeAssozarts', apId, assozartGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`
