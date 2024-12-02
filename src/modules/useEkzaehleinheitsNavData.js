@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useEkfrequenzsNavData = (props) => {
+export const useEkzaehleinheitsNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -15,30 +15,37 @@ export const useEkfrequenzsNavData = (props) => {
   const store = useContext(StoreContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeEkfrequenzs', apId, store.tree.ekfrequenzGqlFilterForTree],
+    queryKey: [
+      'treeEkzaehleinheits',
+      apId,
+      store.tree.ekzaehleinheitGqlFilterForTree,
+    ],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeEkfrequenzsQuery(
-            $ekfrequenzsFilter: EkfrequenzFilter!
+          query TreeEkzaehleinheitsQuery(
+            $ekzaehleinheitsFilter: EkzaehleinheitFilter!
             $apId: UUID!
           ) {
             apById(id: $apId) {
               id
-              ekfrequenzsByApId(filter: $ekfrequenzsFilter, orderBy: SORT_ASC) {
+              ekzaehleinheitsByApId(
+                filter: $ekzaehleinheitsFilter
+                orderBy: [SORT_ASC, LABEL_ASC]
+              ) {
                 nodes {
                   id
-                  label: code
+                  label
                 }
               }
-              totalCount: ekfrequenzsByApId {
+              totalCount: ekzaehleinheitsByApId {
                 totalCount
               }
             }
           }
         `,
         variables: {
-          ekfrequenzsFilter: store.tree.ekfrequenzGqlFilterForTree,
+          ekzaehleinheitsFilter: store.tree.ekzaehleinheitGqlFilterForTree,
           apId,
         },
         fetchPolicy: 'no-cache',
@@ -48,13 +55,13 @@ export const useEkfrequenzsNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.ekfrequenzGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.ekzaehleinheitGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
   const rows = useMemo(
-    () => data?.data?.apById?.ekfrequenzsByApId?.nodes ?? [],
+    () => data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? [],
     [data],
   )
   const count = rows.length
@@ -63,16 +70,16 @@ export const useEkfrequenzsNavData = (props) => {
     () =>
       rows.map((p) => ({
         id: p.id,
-        label: p.label ?? '(kein Kürzel)',
+        label: p.label,
       })) ?? [],
     [rows],
   )
 
   const navData = useMemo(
     () => ({
-      id: 'EK-Frequenzen',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
-      label: `EK-Frequenzen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      id: 'EK-Zähleinheiten',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
+      label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus,
     }),
     [apId, count, isLoading, menus, projId, totalCount],

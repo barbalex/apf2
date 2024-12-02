@@ -41,11 +41,17 @@ export const Bookmark = memo(({ navData }) => {
   const { pathname, search } = useLocation()
 
   // issue: relative paths are not working!!!???
-  const pathnameWithoutLastSlash = pathname.replace(/\/$/, '')
+  // also: need to decode pathname (Zähleinheiten...)
+  const pathnameDecoded = decodeURIComponent(pathname)
+  const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
   const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
-  // let label = `${navData.label}${!!navData.menus && !!navData.totalCount ? ` (${navData.menus.length}/${navData.totalCount})` : ''}`
-  // if (navData.nonFilterable) label = `${navData.label} (${navData.totalCount})`
+  console.log('Bookmark', {
+    navData,
+    pathname,
+    linksToSomewhereElse,
+    pathnameWithoutLastSlash,
+  })
 
   return (
     <Container>

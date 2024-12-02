@@ -1,11 +1,8 @@
 import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router'
 
 import { StoreContext } from '../../../../storeContext.js'
-import { createEkzaehleinheitsQuery } from '../../../../modules/createEkzaehleinheitsQuery.js'
+import { useEkzaehleinheitsNavData } from '../../../../modules/useEkzaehleinheitsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -13,22 +10,10 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const { apId } = useParams()
-    const apolloClient = useApolloClient()
     const store = useContext(StoreContext)
-    const { ekzaehleinheitGqlFilterForTree, nodeLabelFilter } = store.tree
+    const { nodeLabelFilter } = store.tree
 
-    const { data, isLoading, error } = useQuery(
-      createEkzaehleinheitsQuery({
-        apId,
-        ekzaehleinheitGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const ekzaehleinheits =
-      data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? []
-    const count = ekzaehleinheits.length
-    const totalCount = data?.data?.apById?.ekzaehleinheitsCount?.totalCount ?? 0
+    const { navData, isLoading, error } = useEkzaehleinheitsNavData()
 
     if (isLoading) return <Spinner />
 
@@ -36,8 +21,8 @@ export const Component = memo(
 
     return (
       <List
-        items={ekzaehleinheits}
-        title={`EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`}
+        items={navData.menus}
+        title={navData.label}
         menuBar={<Menu />}
         highlightSearchString={nodeLabelFilter.ekzaehleinheit}
       />

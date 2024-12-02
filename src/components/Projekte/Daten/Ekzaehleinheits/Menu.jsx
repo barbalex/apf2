@@ -50,7 +50,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeEkzaehleinheit`],
+        queryKey: [`treeEkzaehleinheits`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],

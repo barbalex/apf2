@@ -144,7 +144,7 @@ export const Component = memo(
         setFieldErrors({})
         if (['zaehleinheitId', 'sort'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treeEkzaehleinheit`],
+            queryKey: [`treeEkzaehleinheits`],
           })
         }
       },
