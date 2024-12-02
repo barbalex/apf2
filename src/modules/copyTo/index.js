@@ -270,7 +270,7 @@ export const copyTo = async ({
   }
   if (table === 'tpopmassn') {
     tanstackQueryClient.invalidateQueries({
-      queryKey: ['treeTpopmassn'],
+      queryKey: ['treeTpopmassns'],
     })
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treeTpopFolders'],

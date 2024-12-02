@@ -270,6 +270,14 @@ const tpopHandle = {
   bookmarkFetcher: tpopBookmarkFetcher,
   bookmarkFetcherName: 'useTpopNavData',
 }
+const tpopmassnsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useTpopmassnsNavData.js'))
+    .useTpopmassnsNavData,
+}))
+const tpopmassnsHandle = {
+  bookmarkFetcher: tpopmassnsBookmarkFetcher,
+  bookmarkFetcherName: 'useTpopmassnsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -913,7 +921,10 @@ export const Router = () => {
                                 }
                               />
                             </Route>
-                            <Route path="Massnahmen">
+                            <Route
+                              path="Massnahmen"
+                              handle={tpopmassnsHandle}
+                            >
                               <Route
                                 path="*"
                                 lazy={() =>

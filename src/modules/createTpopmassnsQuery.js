@@ -5,7 +5,7 @@ export const createTpopmassnsQuery = ({
   tpopmassnGqlFilterForTree,
   apolloClient,
 }) => ({
-  queryKey: ['treeTpopmassn', tpopId, tpopmassnGqlFilterForTree],
+  queryKey: ['treeTpopmassns', tpopId, tpopmassnGqlFilterForTree],
   queryFn: () =>
     apolloClient.query({
       query: gql`

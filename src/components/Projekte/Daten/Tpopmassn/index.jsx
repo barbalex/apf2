@@ -320,7 +320,7 @@ export const Component = memo(
         setFieldErrors({})
         if (['jahr', 'datum', 'typ'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treeTpopmassn`],
+            queryKey: [`treeTpopmassns`],
           })
         }
       },
