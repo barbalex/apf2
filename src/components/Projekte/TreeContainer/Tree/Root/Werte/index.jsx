@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
@@ -32,29 +32,33 @@ export const WerteFolder = memo(
       hasChildren: true,
     }
 
+    const adresseMenu = useMemo(
+      () => navData?.menus?.find?.((n) => n.id === 'Adressen'),
+      [navData],
+    )
+    const apberrelevantGrundMenu = useMemo(
+      () => navData?.menus?.find?.((n) => n.id === 'ApberrelevantGrundWerte'),
+      [navData],
+    )
+    const ekAbrechnungstypMenu = useMemo(
+      () => navData?.menus?.find?.((n) => n.id === 'EkAbrechnungstypWerte'),
+      [navData],
+    )
+    const zaehleinheitMenu = useMemo(
+      () =>
+        navData?.menus?.find?.((n) => n.id === 'TpopkontrzaehlEinheitWerte'),
+      [navData],
+    )
+
     return (
       <>
         <Row node={node} />
         {isOpen && (
           <>
-            <AdresseFolder
-              menu={navData?.menus?.find?.((n) => n.id === 'Adressen')}
-            />
-            <ApberrelevantGrundFolder
-              menu={navData?.menus?.find?.(
-                (n) => n.id === 'ApberrelevantGrundWerte',
-              )}
-            />
-            <EkAbrechnungstypFolder
-              menu={navData?.menus?.find?.(
-                (n) => n.id === 'EkAbrechnungstypWerte',
-              )}
-            />
-            <ZaehlEinheitFolder
-              menu={navData?.menus?.find?.(
-                (n) => n.id === 'TpopkontrzaehlEinheitWerte',
-              )}
-            />
+            <AdresseFolder menu={adresseMenu} />
+            <ApberrelevantGrundFolder menu={apberrelevantGrundMenu} />
+            <EkAbrechnungstypFolder menu={ekAbrechnungstypMenu} />
+            <ZaehlEinheitFolder menu={zaehleinheitMenu} />
           </>
         )}
       </>
