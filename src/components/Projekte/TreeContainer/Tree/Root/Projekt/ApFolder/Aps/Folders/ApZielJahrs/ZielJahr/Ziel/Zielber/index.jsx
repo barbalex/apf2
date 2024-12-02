@@ -11,7 +11,12 @@ export const ZielberFolder = memo(
     const store = useContext(StoreContext)
     const { nodeLabelFilter } = store.tree
 
-    const { navData, isLoading } = useZielbersNavData()
+    const { navData, isLoading } = useZielbersNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      jahr,
+      zielId: ziel.id,
+    })
 
     const url = [
       'Projekte',
