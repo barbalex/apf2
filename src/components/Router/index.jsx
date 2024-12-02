@@ -913,7 +913,6 @@ export const Router = () => {
                                 }
                               />
                             </Route>
-                            {/* add other tpop routes here */}
                             <Route path="Massnahmen">
                               <Route
                                 path="*"
@@ -982,24 +981,25 @@ export const Router = () => {
                                 </Route>
                               </Route>
                             </Route>
-                          </Route>
-                          <Route path=":tpopId/Massnahmen-Berichte">
-                            <Route
-                              path="*"
-                              lazy={() =>
-                                import(
-                                  '../Projekte/Daten/Tpopmassnbers/index.jsx'
-                                )
-                              }
-                            />
-                            <Route
-                              path=":tpopmassnberId"
-                              lazy={() =>
-                                import(
-                                  '../Projekte/Daten/Tpopmassnber/index.jsx'
-                                )
-                              }
-                            />
+                            <Route path="Massnahmen-Berichte">
+                              <Route
+                                path="*"
+                                lazy={() =>
+                                  import(
+                                    '../Projekte/Daten/Tpopmassnbers/index.jsx'
+                                  )
+                                }
+                              />
+                              <Route
+                                path=":tpopmassnberId"
+                                lazy={() =>
+                                  import(
+                                    '../Projekte/Daten/Tpopmassnber/index.jsx'
+                                  )
+                                }
+                              />
+                            </Route>
+                            {/* add other tpop routes here */}
                           </Route>
                           <Route path=":tpopId/Kontroll-Berichte">
                             <Route
