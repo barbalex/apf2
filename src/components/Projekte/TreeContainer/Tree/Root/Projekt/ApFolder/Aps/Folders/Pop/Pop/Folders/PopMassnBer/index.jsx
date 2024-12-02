@@ -6,15 +6,8 @@ import { StoreContext } from '../../../../../../../../../../../../../storeContex
 import { PopMassnBer } from './PopMassnBer.jsx'
 
 export const PopMassnBerFolder = memo(
-  observer(({ projekt, ap, pop, isLoading, count }) => {
+  observer(({ projekt, ap, pop, menu }) => {
     const store = useContext(StoreContext)
-
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.popmassnber ?? ''
-
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -32,7 +25,7 @@ export const PopMassnBerFolder = memo(
       id: `${pop.id}PopmassnberFolder`,
       tableId: pop.id,
       urlLabel: 'Massnahmen-Berichte',
-      label: `Massnahmen-Berichte (${message})`,
+      label: menu.label,
       url: [
         'Projekte',
         projekt.id,
@@ -42,7 +35,7 @@ export const PopMassnBerFolder = memo(
         pop.id,
         'Massnahmen-Berichte',
       ],
-      hasChildren: count > 0,
+      hasChildren: true,
     }
 
     return (
