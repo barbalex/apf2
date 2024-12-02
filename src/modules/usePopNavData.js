@@ -20,7 +20,7 @@ export const usePopNavData = (props) => {
       'treePop',
       popId,
       store.tree.tpopGqlFilterForTree,
-      store.tree.pobperGqlFilterForTree,
+      store.tree.popberGqlFilterForTree,
       store.tree.popmassnberGqlFilterForTree,
     ],
     queryFn: () =>
@@ -29,7 +29,7 @@ export const usePopNavData = (props) => {
           query NavPopQuery(
             $popId: UUID!
             $tpopFilter: TpopFilter!
-            $pobperFilter: PobperFilter!
+            $popberFilter: PopberFilter!
             $popmassnberFilter: PopmassnberFilter!
           ) {
             popById(id: $popId) {
@@ -41,14 +41,10 @@ export const usePopNavData = (props) => {
               filteredTpops: tpopsByPopId(filter: $tpopFilter) {
                 totalCount
               }
-              pobpersByPopId {
+              popbersByPopId {
                 totalCount
-                nodes {
-                  id
-                  jahr
-                }
               }
-              filteredPobpers: pobpersByPopId(filter: $pobperFilter) {
+              filteredPopbers: popbersByPopId(filter: $popberFilter) {
                 totalCount
                 nodes {
                   id
@@ -69,7 +65,7 @@ export const usePopNavData = (props) => {
         variables: {
           popId,
           tpopFilter: store.tree.tpopGqlFilterForTree,
-          pobperFilter: store.tree.pobperGqlFilterForTree,
+          popberFilter: store.tree.popberGqlFilterForTree,
           popmassnberFilter: store.tree.popmassnberGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
@@ -81,7 +77,7 @@ export const usePopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.tree.pobperGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.popberGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -93,10 +89,10 @@ export const usePopNavData = (props) => {
 
   const label = data?.data?.popById?.label
   const tpopsCount = data?.data?.popById?.tpopsByPopId?.totalCount ?? 0
-  const filteredTpopsCount = data?.data?.tpopById?.filteredPops?.totalCount ?? 0
-  const pobpersCount = data?.data?.popById?.pobpersByPopId?.totalCount ?? 0
-  const filteredPobpersCount =
-    data?.data?.popById?.filteredPobpers?.totalCount ?? 0
+  const filteredTpopsCount = data?.data?.popById?.filteredTpops?.totalCount ?? 0
+  const popbersCount = data?.data?.popById?.popbersByPopId?.totalCount ?? 0
+  const filteredPopbersCount =
+    data?.data?.popById?.filteredPopbers?.totalCount ?? 0
   const popmassnbersCount =
     data?.data?.popById?.popmassnbersByPopId?.totalCount ?? 0
   const filteredPopmassnbersCount =
@@ -116,8 +112,8 @@ export const usePopNavData = (props) => {
         },
         {
           id: 'Kontroll-Berichte',
-          label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredPobpersCount}/${pobpersCount}`})`,
-          count: pobpersCount,
+          label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredPopbersCount}/${popbersCount}`})`,
+          count: popbersCount,
         },
         {
           id: 'Massnahmen-Berichte',
@@ -128,12 +124,12 @@ export const usePopNavData = (props) => {
     }),
     [
       apId,
-      filteredPobpersCount,
+      filteredPopbersCount,
       filteredPopmassnbersCount,
       filteredTpopsCount,
       isLoading,
       label,
-      pobpersCount,
+      popbersCount,
       popId,
       popmassnbersCount,
       projId,
