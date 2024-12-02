@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useTpopmassnbersNavData = (props) => {
+export const useTpopbersNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -17,38 +17,31 @@ export const useTpopmassnbersNavData = (props) => {
   const store = useContext(StoreContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: [
-      'treeTpopmassnbers',
-      tpopId,
-      store.tree.tpopmassnberGqlFilterForTree,
-    ],
+    queryKey: ['treeTpopbers', tpopId, store.tree.tpopberGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeTpopmassnbersQuery(
-            $tpopmassnbersFilter: TpopmassnberFilter!
+          query TreeTpopbersQuery(
+            $tpopbersFilter: TpopberFilter!
             $tpopId: UUID!
           ) {
             tpopById(id: $tpopId) {
               id
-              tpopmassnbersByTpopId(
-                filter: $tpopmassnbersFilter
-                orderBy: LABEL_ASC
-              ) {
+              tpopbersByTpopId(filter: $tpopbersFilter, orderBy: LABEL_ASC) {
                 totalCount
                 nodes {
                   id
                   label
                 }
               }
-              totalCount: tpopmassnbersByTpopId {
+              totalCount: tpopbersByTpopId {
                 totalCount
               }
             }
           }
         `,
         variables: {
-          tpopmassnbersFilter: store.tree.tpopmassnberGqlFilterForTree,
+          tpopbersFilter: store.tree.tpopberGqlFilterForTree,
           tpopId,
         },
         fetchPolicy: 'no-cache',
@@ -58,21 +51,21 @@ export const useTpopmassnbersNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.tpopmassnberGqlFilterForTree, refetch),
+    () => reaction(() => store.tree.tpopberGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopbersByTpopId?.totalCount ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
-      id: 'Massnahmen-Berichte',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen-Berichte`,
-      label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      id: 'Kontroll-Berichte',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte`,
+      label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus:
-        data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes?.map((p) => ({
+        data?.data?.tpopById?.tpopbersByTpopId?.nodes?.map((p) => ({
           id: p.id,
           label: p.label,
         })) ?? [],
@@ -80,7 +73,7 @@ export const useTpopmassnbersNavData = (props) => {
     [
       apId,
       count,
-      data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes,
+      data?.data?.tpopById?.tpopbersByTpopId?.nodes,
       isLoading,
       popId,
       projId,
