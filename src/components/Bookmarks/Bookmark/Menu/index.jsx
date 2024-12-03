@@ -26,6 +26,9 @@ export const Menu = memo(({ navData }) => {
   const iconId = `${navData.id}/MenuIcon`
   const menuId = `${navData.id}/Menu`
 
+  // TODO:
+  // add filter symbol right of title
+  // when filtering, add filter field below title
   return (
     <>
       <IconButton
@@ -46,7 +49,6 @@ export const Menu = memo(({ navData }) => {
           'aria-labelledby': iconId,
         }}
       >
-        {/* TODO: add navData.label as title */}
         <MenuTitle
           divider
           disabled
