@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { useMatches } from 'react-router'
 import styled from '@emotion/styled'
 
@@ -6,6 +6,7 @@ import { FetcherImporter } from './FetcherImporter.jsx'
 
 const Container = styled.nav`
   display: flex;
+  flex-direction: row-reverse;
   align-items: center;
   justify-content: flex-start;
   flex-wrap: nowrap;
@@ -15,7 +16,7 @@ const Container = styled.nav`
   height: 40px;
   min-height: 40px;
   border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
-  overflow-x: overlay;
+  overflow-x: auto;
   overflow-y: hidden;
   scrollbar-width: thin;
 `
@@ -23,17 +24,20 @@ const Container = styled.nav`
 // this component extracts matches
 export const Bookmarks = memo(() => {
   const allMatches = useMatches()
-  // get match that contains the current pathname minus the last slash - if it ends with a slash
-  // Hm. So many matches. Often multiple with same path. Hard to find the right one.
-  // TODO: ensure this works for all cases
-  const bookmarkMatches = allMatches.filter(
-    (m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName,
+  const bookmarkMatches = useMemo(
+    () =>
+      allMatches.filter(
+        (m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName,
+      ),
+    [allMatches],
   )
   // console.log('Bookmarks', { bookmarkMatches, allMatches })
 
+  // flex-direction row-reverse combined with reverse order of matches
+  // to align bookmarks to the right, but still have them in order
   return (
     <Container>
-      {bookmarkMatches.map((match) => (
+      {bookmarkMatches.reverse().map((match) => (
         <FetcherImporter
           key={match.id}
           match={match}
