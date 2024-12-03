@@ -1,72 +1,100 @@
-import { memo, useState, useCallback, useMemo } from 'react'
+import { memo, useState, useCallback, useMemo, useRef, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 import isUuid from 'is-uuid'
+import { useResizeDetector } from 'react-resize-detector'
 
 import { FilterInput } from './FilterInput.jsx'
 
-const MenuTitleRow = styled.div`
+const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   z-index: 1;
   margin-top: -8px;
+  border-radius: 4px;
+  min-width: ${(props) => props.minwidth}px;
 `
 const ContentWrapper = styled.div`
+  position: fixed;
   display: flex;
   flex-direction: column;
+  min-width: ${(props) => props.minwidth}px;
 `
 const MenuTitle = styled.div`
-  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
   border-bottom: 0.6666667px solid rgba(0, 0, 0, 0.12);
   border-radius: 4px;
   font-weight: bold;
   opacity: 1 !important;
-  width: ${(props) => props.width}px;
+  // min-width: ${(props) => props.width}px;
   min-height: 40px;
 `
 const TitleDiv = styled.div`
-  padding-left: 16px;
+  padding: 0 16px;
   user-select: none;
   cursor: default;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`
+const StyledTooltip = styled(Tooltip)`
+  margin-right: 16px;
 `
 const FilterWrapper = styled.div``
 
-export const Title = memo(({ navData, width }) => {
-  const [isFiltering, setIsFiltering] = useState(false)
-  const onClickFilter = useCallback(() => setIsFiltering((prev) => !prev), [])
-  const isUuidList = useMemo(
-    () => navData.menus.some((menu) => isUuid.anyNonNil(menu.id)),
-    [navData.menus],
-  )
-  const showFilterIcon = !isFiltering && isUuidList
+export const Title = memo(
+  ({
+    navData,
+    width: parentWidth,
+    isFiltering,
+    setIsFiltering,
+    setTitleWidth,
+  }) => {
+    const onClickFilter = useCallback(() => setIsFiltering((prev) => !prev), [])
+    const isUuidList = useMemo(
+      () => navData.menus.some((menu) => isUuid.anyNonNil(menu.id)),
+      [navData.menus],
+    )
 
-  return (
-    <MenuTitleRow>
-      <ContentWrapper>
-        <MenuTitle width={width}>
-          <TitleDiv>{navData.label}</TitleDiv>
-          {showFilterIcon && (
-            <Tooltip title="Filtern">
-              <IconButton
-                aria-label="Filtern"
-                onClick={onClickFilter}
-              >
-                <MdFilterAlt />
-              </IconButton>
-            </Tooltip>
-          )}
-        </MenuTitle>
-        <FilterWrapper>
-          {isFiltering && <FilterInput isFiltering={isFiltering} />}
-        </FilterWrapper>
-      </ContentWrapper>
-    </MenuTitleRow>
-  )
-})
+    const { width: titleWidth, ref } = useResizeDetector({
+      handleHeight: false,
+      refreshMode: 'debounce',
+      refreshRate: 300,
+      refreshOptions: { leading: false, trailing: true },
+    })
+    useEffect(() => {
+      setTitleWidth((titleWidth ?? 40) + 40 + 32)
+    }, [titleWidth, setTitleWidth])
+
+    // minWidth is the larger of parentWidth and width
+    const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
+
+    console.log('Title', { parentWidth, titleWidth, minWidth })
+
+    return (
+      <Container minwidth={minWidth}>
+        <ContentWrapper minwidth={minWidth}>
+          <MenuTitle>
+            <TitleDiv ref={ref}>{navData.label}</TitleDiv>
+            {isUuidList && (
+              <StyledTooltip title="Filtern">
+                <IconButton
+                  aria-label="Filtern"
+                  onClick={onClickFilter}
+                >
+                  <MdFilterAlt />
+                </IconButton>
+              </StyledTooltip>
+            )}
+          </MenuTitle>
+          {isFiltering && <FilterInput width={parentWidth} />}
+        </ContentWrapper>
+      </Container>
+    )
+  },
+)
