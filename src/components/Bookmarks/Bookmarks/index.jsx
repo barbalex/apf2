@@ -1,8 +1,7 @@
 import { memo } from 'react'
-import { useMatches, useLocation } from 'react-router'
+import { useMatches } from 'react-router'
 import styled from '@emotion/styled'
 
-import { Fetcher } from './Fetcher.jsx'
 import { FetcherImporter } from './FetcherImporter.jsx'
 
 const Container = styled.nav`
@@ -23,7 +22,6 @@ const Container = styled.nav`
 
 // this component extracts matches
 export const Bookmarks = memo(() => {
-  const { pathname } = useLocation()
   const allMatches = useMatches()
   // get match that contains the current pathname minus the last slash - if it ends with a slash
   // Hm. So many matches. Often multiple with same path. Hard to find the right one.
