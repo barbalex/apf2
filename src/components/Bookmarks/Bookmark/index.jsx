@@ -10,12 +10,13 @@ const menuWidth = 40
 
 const Container = styled.div`
   padding: 0 9px;
-  min-width: ${minWidth + menuWidth}px;
-  max-width: ${maxWidth + menuWidth}px;
+  // min-width: ${minWidth + menuWidth}px;
+  // max-width: ${maxWidth + menuWidth}px;
+  max-width: 33vw;
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  overflow: hidden;
+  // overflow: hidden;
 `
 const StyledLink = styled(Link)`
   overflow: hidden;
@@ -29,8 +30,9 @@ const StyledLink = styled(Link)`
   }
 `
 const StyledText = styled.div`
-  min-width: ${minWidth}px;
-  max-width: ${maxWidth}px;
+  // min-width: ${minWidth}px;
+  // max-width: ${maxWidth}px;
+  // max-width: 33vw;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
