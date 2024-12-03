@@ -75,6 +75,10 @@ export const LabelFilter = memo(
     }, [filterValue])
 
     const [isIcon, setIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    useEffect(() => {
+      if (isFiltered && isIcon) return setIsIcon(false)
+      // if (!isFiltered && !isIcon && !filterValue) return setIsIcon(true)
+    }, [isFiltered, isIcon])
     const fadeOutInput = useCallback(async () => {
       await animWidth.start({ width: buttonWidth })
       await animInputFade.start({ opacity: 0 })

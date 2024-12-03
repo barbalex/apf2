@@ -68,13 +68,11 @@ export const Title = memo(
       refreshOptions: { leading: false, trailing: true },
     })
     useEffect(() => {
-      setTitleWidth((titleWidth ?? 40) + 40 + 32)
+      setTitleWidth((titleWidth ?? 40) + 40 + 32 + 16)
     }, [titleWidth, setTitleWidth])
 
     // minWidth is the larger of parentWidth and width
     const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
-
-    console.log('Title', { parentWidth, titleWidth, minWidth })
 
     return (
       <Container minwidth={minWidth}>
