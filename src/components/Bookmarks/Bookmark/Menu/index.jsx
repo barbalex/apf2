@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { Item } from './Item.jsx'
-import { Title } from './Title.jsx'
+import { Title } from './Title/index.jsx'
 
 const StyledMenu = styled(MuiMenu)`
   .MuiPaper-root {
