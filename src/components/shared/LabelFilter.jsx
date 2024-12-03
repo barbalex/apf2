@@ -1,4 +1,11 @@
-import { memo, useContext, useState, useCallback, useEffect } from 'react'
+import {
+  memo,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import IconButton from '@mui/material/IconButton'
@@ -64,6 +71,8 @@ export const LabelFilter = memo(
     const animWidth = useAnimation()
     const animInputFade = useAnimation()
 
+    const inputRef = useRef(null)
+
     const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
       nodeLabelFilter
     const isFiltered = runIsFiltered()
@@ -71,14 +80,16 @@ export const LabelFilter = memo(
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
     useEffect(() => {
+      if (filterValue === value) return
       setValue(filterValue)
-    }, [filterValue])
+    }, [
+      filterValue,
+      store?.tree?.nodeLabelFilter?.[activeFilterTable],
+      activeFilterTable,
+    ])
 
     const [isIcon, setIsIcon] = useAtom(listLabelFilterIsIconAtom)
-    useEffect(() => {
-      if (isFiltered && isIcon) return setIsIcon(false)
-      // if (!isFiltered && !isIcon && !filterValue) return setIsIcon(true)
-    }, [isFiltered, isIcon])
+
     const fadeOutInput = useCallback(async () => {
       await animWidth.start({ width: buttonWidth })
       await animInputFade.start({ opacity: 0 })
@@ -89,6 +100,10 @@ export const LabelFilter = memo(
       setIsIcon(false)
       await animInputFade.start({ opacity: 1 })
     }, [animWidth])
+    useEffect(() => {
+      if (isFiltered && isIcon) fadeInInput()
+      // if (!isFiltered && !isIcon && !filterValue) return setIsIcon(true)
+    }, [isFiltered, isIcon])
 
     const onBlurInput = useCallback(() => {
       if (value === '') fadeOutInput()
@@ -125,6 +140,11 @@ export const LabelFilter = memo(
       fadeOutInput()
     }, [setNodeLabelFilterAfterChange])
 
+    const onClickFilterIcon = useCallback(() => {
+      fadeInInput()
+      setTimeout(() => inputRef.current.focus(), 400)
+    }, [])
+
     // if no activeFilterTable, show nothing
     if (!activeFilterTable) return null
 
@@ -137,11 +157,7 @@ export const LabelFilter = memo(
           <Tooltip title="Filtern">
             <IconButton
               aria-label="Filtern"
-              onClick={() => {
-                setValue('')
-                setNodeLabelFilterAfterChange('')
-                fadeInInput()
-              }}
+              onClick={onClickFilterIcon}
             >
               <MdFilterAlt style={iconStyle} />
             </IconButton>
@@ -159,7 +175,9 @@ export const LabelFilter = memo(
                   value={value}
                   onChange={onChange}
                   onBlur={onBlurInput}
-                  autoFocus={true}
+                  ref={inputRef}
+                  // autofocus leads to focus being stolen from other filter inputs
+                  // autoFocus={true}
                 />
               </Tooltip>
               <InputEndIcon>

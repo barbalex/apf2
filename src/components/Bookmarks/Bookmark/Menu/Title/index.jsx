@@ -1,4 +1,11 @@
-import { memo, useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import {
+  memo,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  forwardRef,
+} from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdFilterAlt } from 'react-icons/md'
@@ -48,54 +55,62 @@ const StyledTooltip = styled(Tooltip)`
 const FilterWrapper = styled.div``
 
 export const Title = memo(
-  ({
-    navData,
-    width: parentWidth,
-    isFiltering,
-    setIsFiltering,
-    setTitleWidth,
-  }) => {
-    const onClickFilter = useCallback(() => setIsFiltering((prev) => !prev), [])
-    const isUuidList = useMemo(
-      () => navData.menus.some((menu) => isUuid.anyNonNil(menu.id)),
-      [navData.menus],
-    )
+  forwardRef(
+    (
+      {
+        navData,
+        width: parentWidth,
+        filterInputIsVisible,
+        toggleFilterInput,
+        setTitleWidth,
+      },
+      inputRef,
+    ) => {
+      const isUuidList = useMemo(
+        () => navData.menus.some((menu) => isUuid.anyNonNil(menu.id)),
+        [navData.menus],
+      )
 
-    const { width: titleWidth, ref } = useResizeDetector({
-      handleHeight: false,
-      refreshMode: 'debounce',
-      refreshRate: 300,
-      refreshOptions: { leading: false, trailing: true },
-    })
-    useEffect(() => {
-      setTitleWidth((titleWidth ?? 40) + 40 + 32 + 16)
-    }, [titleWidth, setTitleWidth])
+      console.log('Title, inputRef:', inputRef.current)
 
-    // minWidth is the larger of parentWidth and width
-    const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
+      const { width: titleWidth, ref } = useResizeDetector({
+        handleHeight: false,
+        refreshMode: 'debounce',
+        refreshRate: 300,
+        refreshOptions: { leading: false, trailing: true },
+      })
+      useEffect(() => {
+        setTitleWidth((titleWidth ?? 40) + 40 + 32 + 16)
+      }, [titleWidth, setTitleWidth])
 
-    console.log('Title', { minWidth, parentWidth, titleWidth })
+      // minWidth is the larger of parentWidth and width
+      const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
 
-    return (
-      <Container minwidth={minWidth}>
-        <ContentWrapper minwidth={minWidth}>
-          <MenuTitle>
-            <TitleDiv ref={ref}>{navData.label}</TitleDiv>
-            <StyledTooltip
-              title="Filtern"
-              show={isUuidList.toString()}
-            >
-              <IconButton
-                aria-label="Filtern"
-                onClick={onClickFilter}
+      return (
+        <Container minwidth={minWidth}>
+          <ContentWrapper minwidth={minWidth}>
+            <MenuTitle>
+              <TitleDiv ref={ref}>{navData.label}</TitleDiv>
+              <StyledTooltip
+                title="Filtern"
+                show={isUuidList.toString()}
               >
-                <MdFilterAlt />
-              </IconButton>
-            </StyledTooltip>
-          </MenuTitle>
-          {isFiltering && <FilterInput width={parentWidth} />}
-        </ContentWrapper>
-      </Container>
-    )
-  },
+                <IconButton
+                  aria-label="Filtern"
+                  onClick={toggleFilterInput}
+                >
+                  <MdFilterAlt />
+                </IconButton>
+              </StyledTooltip>
+            </MenuTitle>
+            <FilterInput
+              width={parentWidth}
+              filterInputIsVisible={filterInputIsVisible}
+              ref={inputRef}
+            />
+          </ContentWrapper>
+        </Container>
+      )
+    },
+  ),
 )

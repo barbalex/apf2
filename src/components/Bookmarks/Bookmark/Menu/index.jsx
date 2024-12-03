@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useMemo, useContext } from 'react'
+import { memo, useState, useCallback, useMemo, useContext, useRef } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuList from '@mui/material/MenuList'
@@ -47,7 +47,17 @@ export const Menu = memo(
       refreshOptions: { leading: false, trailing: true },
     })
 
-    const [isFiltering, setIsFiltering] = useState(!!filterValue)
+    const [filterInputIsVisible, setFilterInputIsVisible] =
+      useState(!!filterValue)
+    const inputRef = useRef(null)
+    const toggleFilterInput = useCallback(() => {
+      if (filterInputIsVisible) {
+        setFilterInputIsVisible(false)
+      } else {
+        setFilterInputIsVisible(true)
+        setTimeout(() => inputRef.current.focus(), 400)
+      }
+    }, [filterInputIsVisible])
     const [titleWidth, setTitleWidth] = useState(0)
 
     // TODO:
@@ -77,13 +87,14 @@ export const Menu = memo(
           <Title
             navData={navData}
             width={width}
-            isFiltering={isFiltering}
-            setIsFiltering={setIsFiltering}
+            filterInputIsVisible={filterInputIsVisible}
             setTitleWidth={setTitleWidth}
+            toggleFilterInput={toggleFilterInput}
+            ref={inputRef}
           />
           <StyledMenuList
             ref={ref}
-            margintop={isFiltering ? 100 : 40}
+            margintop={filterInputIsVisible ? 100 : 40}
             minwidth={titleWidth}
           >
             {navData.menus.map((menu) => (

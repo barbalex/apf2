@@ -1,4 +1,4 @@
-import { forwardRef, memo, useContext } from 'react'
+import { memo, useContext } from 'react'
 import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
 import '@uploadcare/react-uploader/core.css'
 

@@ -60,6 +60,7 @@ export const LabelFilter = memo(
     const [value, setValue] = useState('')
 
     useEffect(() => {
+      if (filterValue === value) return
       setValue(filterValue)
     }, [filterValue, activeFilterTable])
 
