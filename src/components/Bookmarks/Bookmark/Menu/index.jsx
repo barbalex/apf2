@@ -1,45 +1,22 @@
-import { memo, useState, useCallback } from 'react'
+import { memo, useState, useCallback, useMemo } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuList from '@mui/material/MenuList'
 import MenuItem from '@mui/material/MenuItem'
-import Tooltip from '@mui/material/Tooltip'
 import { BsCaretDown } from 'react-icons/bs'
-import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 
 import { Item } from './Item.jsx'
+import { Title } from './Title.jsx'
 
 const StyledMenu = styled(MuiMenu)`
   .MuiPaper-root {
     scrollbar-width: thin !important;
   }
 `
-const MenuTitleRow = styled.div`
-  position: relative;
-  z-index: 1;
-  margin-top: -8px;
-`
-const MenuTitle = styled.div`
-  position: fixed;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: white;
-  border-bottom: 0.6666667px solid rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
-  font-weight: bold;
-  opacity: 1 !important;
-  width: ${(props) => props.width}px;
-`
-const Title = styled.div`
-  padding-left: 16px;
-  user-select: none;
-  cursor: default;
-`
 const StyledMenuList = styled(MenuList)`
-  margin-top: 50px;
+  margin-top: 40px;
 `
 
 export const Menu = memo(({ navData }) => {
@@ -81,21 +58,10 @@ export const Menu = memo(({ navData }) => {
           'aria-labelledby': iconId,
         }}
       >
-        <MenuTitleRow>
-          <MenuTitle width={width}>
-            <Title>{navData.label}</Title>
-            <Tooltip title="Filtern">
-              <IconButton
-                aria-label="Filtern"
-                onClick={() => {
-                  console.log('Filtern')
-                }}
-              >
-                <MdFilterAlt />
-              </IconButton>
-            </Tooltip>
-          </MenuTitle>
-        </MenuTitleRow>
+        <Title
+          navData={navData}
+          width={width}
+        />
         <StyledMenuList ref={ref}>
           {navData.menus.map((menu) => (
             <Item
