@@ -12,6 +12,10 @@ const StyledMenu = styled(MuiMenu)`
     scrollbar-width: thin !important;
   }
 `
+const MenuTitle = styled(MenuItem)`
+  font-weight: bold;
+  opacity: 1 !important;
+`
 
 export const Menu = memo(({ navData }) => {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -42,6 +46,13 @@ export const Menu = memo(({ navData }) => {
           'aria-labelledby': iconId,
         }}
       >
+        {/* TODO: add navData.label as title */}
+        <MenuTitle
+          divider
+          disabled
+        >
+          {navData.label}
+        </MenuTitle>
         {navData.menus.map((menu) => (
           <Item
             key={menu.id}
