@@ -22,6 +22,7 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-width: ${(props) => props.minwidth}px;
+  background-color: white;
 `
 const MenuTitle = styled.div`
   display: flex;
@@ -30,8 +31,6 @@ const MenuTitle = styled.div`
   border-bottom: 0.6666667px solid rgba(0, 0, 0, 0.12);
   border-radius: 4px;
   font-weight: bold;
-  opacity: 1 !important;
-  // min-width: ${(props) => props.width}px;
   min-height: 40px;
 `
 const TitleDiv = styled.div`
@@ -44,6 +43,7 @@ const TitleDiv = styled.div`
 `
 const StyledTooltip = styled(Tooltip)`
   margin-right: 16px;
+  ${(props) => (props.show === 'true' ? '' : 'display: none;')}
 `
 const FilterWrapper = styled.div``
 
@@ -74,21 +74,24 @@ export const Title = memo(
     // minWidth is the larger of parentWidth and width
     const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
 
+    console.log('Title', { minWidth, parentWidth, titleWidth })
+
     return (
       <Container minwidth={minWidth}>
         <ContentWrapper minwidth={minWidth}>
           <MenuTitle>
             <TitleDiv ref={ref}>{navData.label}</TitleDiv>
-            {isUuidList && (
-              <StyledTooltip title="Filtern">
-                <IconButton
-                  aria-label="Filtern"
-                  onClick={onClickFilter}
-                >
-                  <MdFilterAlt />
-                </IconButton>
-              </StyledTooltip>
-            )}
+            <StyledTooltip
+              title="Filtern"
+              show={isUuidList.toString()}
+            >
+              <IconButton
+                aria-label="Filtern"
+                onClick={onClickFilter}
+              >
+                <MdFilterAlt />
+              </IconButton>
+            </StyledTooltip>
           </MenuTitle>
           {isFiltering && <FilterInput width={parentWidth} />}
         </ContentWrapper>

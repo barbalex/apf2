@@ -13,8 +13,10 @@ import { Title } from './Title/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 
 const StyledMenu = styled(MuiMenu)`
+  container-type: inline-size;
   .MuiPaper-root {
     scrollbar-width: thin !important;
+    scrollbar-gutter: stable;
     min-width: ${(props) => (props.minwidth ? `${props.minwidth}px` : 'unset')};
   }
 `
@@ -81,7 +83,7 @@ export const Menu = memo(
           />
           <StyledMenuList
             ref={ref}
-            margintop={isFiltering ? 92 : 40}
+            margintop={isFiltering ? 100 : 40}
             minwidth={titleWidth}
           >
             {navData.menus.map((menu) => (

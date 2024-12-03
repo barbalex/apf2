@@ -15,7 +15,7 @@ import { StoreContext } from '../../../../../storeContext.js'
 const height = 40
 
 const Container = styled.div`
-  padding: 4px 16px 0 16px;
+  padding: 4px 16px 4px 16px;
 `
 const StyledTextField = styled(TextField)`
   width: ${(props) => (props.width ?? 32) - 32}px;
