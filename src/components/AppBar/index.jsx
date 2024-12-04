@@ -2,6 +2,7 @@ import { memo, Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
 import { Bar } from './Bar/index.jsx'
 import { EkfBar } from './EkfBar/index.jsx'
@@ -9,6 +10,7 @@ import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { StoreContext } from '../../storeContext.js'
 import { constants } from '../../modules/constants.js'
+import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 
 const isInIframe = inIframe()
 
@@ -30,7 +32,7 @@ const Appbar = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: ${(props) => (props.mobile === 'true' ? 0 : 4)}px 0;
   background-color: #2e7d32;
   height: 38px;
 
@@ -52,6 +54,8 @@ export const Component = memo(
     const store = useContext(StoreContext)
     const activeNodeArray = store.tree.activeNodeArray
 
+    const [isDesktopView] = useAtom(isDesktopViewAtom)
+
     useEffect(() => {
       if (isInIframe) return
 
@@ -71,7 +75,7 @@ export const Component = memo(
 
     return (
       <Container>
-        <Appbar>
+        <Appbar mobile={(!isDesktopView).toString()}>
           {showEkf ?
             <EkfBar />
           : <Bar />}
