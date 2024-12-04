@@ -10,12 +10,12 @@ import { observer } from 'mobx-react-lite'
 import { Item } from './Item.jsx'
 import { Title } from './Title/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
+import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 
 const StyledMenu = styled(MuiMenu)`
   container-type: inline-size;
   .MuiPaper-root {
     scrollbar-width: thin !important;
-    scrollbar-gutter: stable;
     min-width: ${(props) => (props.minwidth ? `${props.minwidth}px` : 'unset')};
   }
 `
@@ -30,7 +30,7 @@ const MenuListContainer = styled.div`
 export const Menu = memo(
   observer(({ navData }) => {
     const store = useContext(StoreContext)
-    const { nodeLabelFilter, activeFilterTable } = store.tree
+    const { nodeLabelFilter, activeFilterTable, activeNodeArray } = store.tree
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
 
     const [anchorEl, setAnchorEl] = useState(null)
@@ -61,9 +61,6 @@ export const Menu = memo(
     }, [filterInputIsVisible])
     const [titleWidth, setTitleWidth] = useState(0)
 
-    // TODO:
-    // add filter symbol right of title
-    // when filtering, add filter field below title
     return (
       <>
         <IconButton
