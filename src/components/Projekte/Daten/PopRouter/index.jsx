@@ -55,7 +55,7 @@ export const Component = () => {
   const onChangeTab = useCallback(
     (event, value) =>
       pathname.endsWith(popId) ? navigate(`./${value}`) : navigate(value),
-    [popId, navigate],
+    [pathname, popId, navigate],
   )
 
   return (
