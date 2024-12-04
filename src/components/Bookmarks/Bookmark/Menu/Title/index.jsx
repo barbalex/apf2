@@ -78,8 +78,8 @@ export const Title = memo(
         refreshOptions: { leading: false, trailing: true },
       })
       useEffect(() => {
-        setTitleWidth((titleWidth ?? 40) + 40 + 32 + 16)
-      }, [titleWidth, setTitleWidth])
+        setTitleWidth((titleWidth ?? 40) + (isUuidList ? 40 : 0) + 32 + 16)
+      }, [titleWidth, setTitleWidth, isUuidList])
 
       // minWidth is the larger of parentWidth and width
       const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)

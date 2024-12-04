@@ -1,6 +1,7 @@
 import { memo, useState, useEffect } from 'react'
 
 import { Fetcher } from './Fetcher.jsx'
+import { Spinner } from '../../shared/Spinner.jsx'
 
 export const FetcherImporter = memo(({ match }) => {
   const [fetcherModule, setFetcherModule] = useState(null)
@@ -14,7 +15,7 @@ export const FetcherImporter = memo(({ match }) => {
     })
   }, [fetcherName])
 
-  if (!fetcherModule) return null
+  if (!fetcherModule) return <Spinner />
 
   return (
     <Fetcher
