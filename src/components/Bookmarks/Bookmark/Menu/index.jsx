@@ -12,6 +12,9 @@ import { Title } from './Title/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 
+const StyledIconButton = styled(IconButton)`
+  z-index: 2;
+`
 const StyledMenu = styled(MuiMenu)`
   container-type: inline-size;
   .MuiPaper-root {
@@ -63,7 +66,7 @@ export const Menu = memo(
 
     return (
       <>
-        <IconButton
+        <StyledIconButton
           id={iconId}
           aria-controls={open ? menuId : undefined}
           aria-haspopup="true"
@@ -71,7 +74,7 @@ export const Menu = memo(
           onClick={onClick}
         >
           <BsCaretDown />
-        </IconButton>
+        </StyledIconButton>
         <StyledMenu
           id={menuId}
           anchorEl={anchorEl}

@@ -8,12 +8,58 @@ const minWidth = 50
 const maxWidth = 150
 const menuWidth = 40
 
+const OuterContainer = styled.div`
+  position: relative;
+  &::after,
+  &::before {
+    background: rgb(255, 253, 231);
+    bottom: 0;
+    clip-path: polygon(50% 50%, -50% -50%, 0 100%);
+    content: '';
+    left: 100%;
+    position: absolute;
+    top: 0;
+    transition: background 0.2s linear;
+    width: 2em;
+    z-index: 1;
+  }
+  // TODO: change calculations if padding was changed (was 9+9)
+  // now: per menu 7px more padding plus 15px on right
+  padding-left: 25px;
+  &:last-child {
+    // border-left: 1.5px solid rgba(55, 118, 28, 0.5);
+    padding-left: 10px;
+  }
+  &:first-child {
+    margin-right: 15px;
+  }
+`
 const Container = styled.div`
-  padding: 0 9px;
+  margin-right: -10px;
+  position: relative;
+  border-collapse: collapse;
+  transition: background 0.2s linear;
   max-width: 45vw;
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  &::after,
+  &::before {
+    background: rgba(55, 118, 28, 0.5);
+    bottom: 0;
+    clip-path: polygon(50% 50%, -50% -50%, 0 100%);
+    content: '';
+    left: calc(100% - 8px);
+    position: absolute;
+    top: 1px;
+    transition: background 0.2s linear;
+    width: 2em;
+    z-index: 1;
+  }
+  &::before {
+    background: rgb(255, 253, 231);
+    margin-left: 1px;
+  }
 `
 const StyledLink = styled(Link)`
   overflow: hidden;
@@ -43,15 +89,17 @@ export const Bookmark = memo(({ navData }) => {
   const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
   return (
-    <Container>
-      <Tooltip title={navData.label}>
-        {linksToSomewhereElse ?
-          <StyledLink to={{ pathname: navData.url, search }}>
-            {navData.labelShort ?? navData.label}
-          </StyledLink>
-        : <StyledText>{navData.labelShort ?? navData.label}</StyledText>}
-      </Tooltip>
-      {!!navData.menus && <Menu navData={navData} />}
-    </Container>
+    <OuterContainer>
+      <Container>
+        <Tooltip title={navData.label}>
+          {linksToSomewhereElse ?
+            <StyledLink to={{ pathname: navData.url, search }}>
+              {navData.labelShort ?? navData.label}
+            </StyledLink>
+          : <StyledText>{navData.labelShort ?? navData.label}</StyledText>}
+        </Tooltip>
+        {!!navData.menus && <Menu navData={navData} />}
+      </Container>
+    </OuterContainer>
   )
 })
