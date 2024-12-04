@@ -20,3 +20,4 @@ export const alwaysShowBookmarksAtom = atomWithStorage(
   false,
 )
 export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)
+export const isDesktopViewAtom = atomWithStorage('isDesktopView', false)

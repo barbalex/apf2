@@ -35,6 +35,9 @@ const ChooseApToCopyErfkritsFrom = lazy(async () => ({
   default: (await import('./ChooseApToCopyErfkritsFrom'))
     .ChooseApToCopyErfkritsFrom,
 }))
+const IsDesktopViewSetter = lazy(async () => ({
+  default: (await import('./IsDesktopViewSetter')).IsDesktopViewSetter,
+}))
 
 import { Spinner } from '../shared/Spinner.jsx'
 
@@ -99,6 +102,7 @@ export const Component = memo(
             </Suspense>
             <Suspense fallback={null}>
               <ActiveNodeArraySetter />
+              <IsDesktopViewSetter />
               <NavigateSetter />
               <QueryClientSetter />
               <ChooseApToCopyEkfrequenzsFrom />
