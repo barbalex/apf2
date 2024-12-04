@@ -150,7 +150,6 @@ export const MenuBar = memo(
             : child.props.width
           : buttonWidth
         if (widthSum + width > spaceForButtons) {
-          // TODO: add bottom? border
           newMenus.push(cloneElement(child, { inmenu: 'true' }))
         } else {
           newButtons.push(cloneElement(child))
@@ -266,7 +265,12 @@ export const MenuBar = memo(
                 open={menuIsOpen}
                 onClose={onCloseMenu}
               >
-                <MenuContent bgColor={bgColor}>{menus}</MenuContent>
+                <MenuContent
+                  bgColor={bgColor}
+                  className="menubar-more-menus"
+                >
+                  {menus}
+                </MenuContent>
               </StyledMenu>
             </>
           )}
