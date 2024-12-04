@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback, useMemo, useRef } from 'react'
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import { Menu } from './Menu/index.jsx'
@@ -91,15 +91,17 @@ export const Bookmark = memo(({ navData }) => {
   const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
   const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
+  const ref = useRef(null)
+
   const onClick = useCallback(() => {
-    const element = document.getElementById(navData.url)
+    const element = ref.current
     if (!element) return
     setTimeout(() => {
       element.scrollIntoView({
         inline: 'start',
       })
     }, 200)
-  }, [navData.url])
+  }, [])
 
   const label = useMemo(
     () =>
@@ -122,11 +124,9 @@ export const Bookmark = memo(({ navData }) => {
 
   const [isDesktopView] = useAtom(isDesktopViewAtom)
 
-  console.log('Bookmark', { navData })
-
   // don't add tooltip on mobile as longpress opens menu
   return (
-    <OuterContainer id={navData.url}>
+    <OuterContainer ref={ref}>
       <Container>
         {isDesktopView ?
           <Tooltip title={navData.label}>{label}</Tooltip>
