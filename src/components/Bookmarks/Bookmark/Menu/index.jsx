@@ -1,7 +1,6 @@
 import { memo, useState, useCallback, useMemo, useContext, useRef } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
-import MenuList from '@mui/material/MenuList'
 import MenuItem from '@mui/material/MenuItem'
 import { BsCaretDown } from 'react-icons/bs'
 import styled from '@emotion/styled'
@@ -20,8 +19,10 @@ const StyledMenu = styled(MuiMenu)`
     min-width: ${(props) => (props.minwidth ? `${props.minwidth}px` : 'unset')};
   }
 `
-// TODO: depends on whether filter input is visible
-const StyledMenuList = styled(MenuList)`
+
+// do NOT use a MenuList. Reason: grabs key input to navigate to menu items
+// thus filter input does not work
+const MenuListContainer = styled.div`
   margin-top: ${(props) => props.margintop}px;
   min-width: ${(props) => (props.minwidth ? `${props.minwidth}px` : 'unset')};
 `
@@ -61,8 +62,6 @@ export const Menu = memo(
     }, [filterInputIsVisible])
     const [titleWidth, setTitleWidth] = useState(0)
 
-    console.log('Bookmark.Menu, inputRef:', inputRef.current)
-
     // TODO:
     // add filter symbol right of title
     // when filtering, add filter field below title
@@ -95,7 +94,7 @@ export const Menu = memo(
             toggleFilterInput={toggleFilterInput}
             ref={inputRef}
           />
-          <StyledMenuList
+          <MenuListContainer
             ref={ref}
             margintop={filterInputIsVisible ? 100 : 40}
             minwidth={titleWidth}
@@ -108,7 +107,7 @@ export const Menu = memo(
                 onClose={onClose}
               />
             ))}
-          </StyledMenuList>
+          </MenuListContainer>
         </StyledMenu>
       </>
     )
