@@ -17,16 +17,15 @@ import { constants } from '../../../../../modules/constants.js'
 
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
-const Container = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-`
 const MehrButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
+  ${(props) =>
+    props.inmenu === 'true' && `border: 1px solid #ab9518 !important;`}
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
+  text-wrap: none;
 `
 const Version = styled.div`
   padding: 12px 16px;
@@ -79,7 +78,7 @@ export const More = memo(
       }, [])
 
       return (
-        <Container>
+        <>
           <MehrButton
             ref={ref}
             aria-label="Mehr"
@@ -128,7 +127,7 @@ export const More = memo(
             </MenuItem>
             <Version>Version: 1.114.5 vom 28.11.2024</Version>
           </Menu>
-        </Container>
+        </>
       )
     }),
   ),
