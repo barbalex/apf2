@@ -26,11 +26,11 @@ const OuterContainer = styled.div`
   // TODO: change calculations if padding was changed (was 9+9)
   // now: per menu 7px more padding plus 15px on right
   padding-left: 25px;
-  &:last-child {
-    // border-left: 1.5px solid rgba(55, 118, 28, 0.5);
+  &:last-of-type {
+    // border-left: 1.5px solid rgb(46, 125, 50);
     padding-left: 10px;
   }
-  &:first-child {
+  &:first-of-type {
     margin-right: 15px;
   }
 `
@@ -45,13 +45,13 @@ const Container = styled.div`
   align-items: stretch;
   &::after,
   &::before {
-    background: rgba(55, 118, 28, 0.5);
+    background: rgb(46, 125, 50);
     bottom: 0;
     clip-path: polygon(50% 50%, -50% -50%, 0 100%);
     content: '';
-    left: calc(100% - 8px);
+    left: calc(100% - 8.3px);
     position: absolute;
-    top: 1px;
+    top: 0.5px;
     transition: background 0.2s linear;
     width: 2em;
     z-index: 1;
