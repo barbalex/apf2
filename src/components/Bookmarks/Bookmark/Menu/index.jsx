@@ -55,10 +55,13 @@ export const Menu = memo(
         setFilterInputIsVisible(false)
       } else {
         setFilterInputIsVisible(true)
+        inputRef.current.focus()
         setTimeout(() => inputRef.current.focus(), 400)
       }
     }, [filterInputIsVisible])
     const [titleWidth, setTitleWidth] = useState(0)
+
+    console.log('Bookmark.Menu, inputRef:', inputRef.current)
 
     // TODO:
     // add filter symbol right of title

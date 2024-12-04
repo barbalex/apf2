@@ -71,8 +71,6 @@ export const Title = memo(
         [navData.menus],
       )
 
-      console.log('Title, inputRef:', inputRef.current)
-
       const { width: titleWidth, ref } = useResizeDetector({
         handleHeight: false,
         refreshMode: 'debounce',

@@ -176,6 +176,10 @@ export const LabelFilter = memo(
                   onChange={onChange}
                   onBlur={onBlurInput}
                   ref={inputRef}
+                  spellCheck="false"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
                   // autofocus leads to focus being stolen from other filter inputs
                   // autoFocus={true}
                 />
