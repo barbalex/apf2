@@ -64,7 +64,7 @@ export const Title = memo(
         toggleFilterInput,
         setTitleWidth,
       },
-      inputRef,
+      filterInputRef,
     ) => {
       const isUuidList = useMemo(
         () => navData.menus.some((menu) => isUuid.anyNonNil(menu.id)),
@@ -104,7 +104,7 @@ export const Title = memo(
             <FilterInput
               width={parentWidth}
               filterInputIsVisible={filterInputIsVisible}
-              ref={inputRef}
+              ref={filterInputRef}
             />
           </ContentWrapper>
         </Container>

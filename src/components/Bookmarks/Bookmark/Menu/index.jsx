@@ -50,14 +50,13 @@ export const Menu = memo(
 
     const [filterInputIsVisible, setFilterInputIsVisible] =
       useState(!!filterValue)
-    const inputRef = useRef(null)
+    const filterInputRef = useRef(null)
     const toggleFilterInput = useCallback(() => {
       if (filterInputIsVisible) {
         setFilterInputIsVisible(false)
       } else {
         setFilterInputIsVisible(true)
-        inputRef.current.focus()
-        setTimeout(() => inputRef.current.focus(), 400)
+        setTimeout(() => filterInputRef?.current?.focus?.(), 0)
       }
     }, [filterInputIsVisible])
     const [titleWidth, setTitleWidth] = useState(0)
@@ -92,7 +91,7 @@ export const Menu = memo(
             filterInputIsVisible={filterInputIsVisible}
             setTitleWidth={setTitleWidth}
             toggleFilterInput={toggleFilterInput}
-            ref={inputRef}
+            ref={filterInputRef}
           />
           <MenuListContainer
             ref={ref}

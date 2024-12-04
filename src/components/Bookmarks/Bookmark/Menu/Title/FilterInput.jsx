@@ -53,7 +53,6 @@ export const FilterInput = memo(
             value: val,
             key: activeFilterTable,
           })
-          setTimeout(() => inputRef.current.focus(), 400)
         },
         [setNodeLabelFilterKey, activeFilterTable],
       )
@@ -67,8 +66,6 @@ export const FilterInput = memo(
           // remove some values as they can cause exceptions in regular expressions
           const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
-          console.log('FilterInput, onChange, val:', val)
-
           setValue(val)
           setNodeLabelFilterDebounced(val)
         },
@@ -78,27 +75,21 @@ export const FilterInput = memo(
       const onClickEmpty = useCallback(() => {
         setValue('')
         setNodeLabelFilterAfterChange('')
-        setTimeout(() => inputRef.current.focus(), 300)
+        setTimeout(() => inputRef?.current?.focus?.(), 0)
       }, [setNodeLabelFilterAfterChange])
-
-      console.log('FilterInput rendering')
 
       // if no activeFilterTable, show nothing
       if (!activeFilterTable) return null
 
-      // TODO: somehow can't type Arten as focus is lost
       return (
         <Container show={filterInputIsVisible.toString()}>
           <StyledTextField
-            ref={inputRef}
+            inputRef={inputRef}
             label="Filter"
             variant="standard"
             width={width}
             value={value}
             onChange={onChange}
-            onBlur={() => {
-              console.log('FilterInput, onBlur')
-            }}
             spellCheck="false"
             autoComplete="off"
             autoCorrect="off"
