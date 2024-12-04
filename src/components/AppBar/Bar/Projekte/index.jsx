@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router'
+import { useAtom } from 'jotai'
 
 import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
@@ -12,6 +13,7 @@ import { StoreContext } from '../../../../storeContext.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { constants } from '../../../../modules/constants.js'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render
@@ -51,9 +53,11 @@ const DokuButton = styled(Button)`
 `
 
 export const ProjekteMenus = memo(
-  observer(({ isDesktopView }) => {
+  observer(() => {
     const { projId } = useParams()
     const { search } = useLocation()
+
+    const [isDesktopView] = useAtom(isDesktopViewAtom)
     const isMobileView = !isDesktopView
 
     const store = useContext(StoreContext)
@@ -143,7 +147,7 @@ export const ProjekteMenus = memo(
             Strukturbaum
           </StyledButton>
         )}
-        <Daten width={77} isDesktopView={isDesktopView} />
+        <Daten width={77} />
         <StyledButton
           variant={filterIsVisible ? 'outlined' : 'text'}
           preceded={datenIsVisible?.toString()}

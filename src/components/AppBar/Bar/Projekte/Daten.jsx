@@ -3,18 +3,22 @@ import Button from '@mui/material/Button'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
 import { StyledButton } from './index.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 export const Daten = memo(
-  forwardRef(({ treeNr = '', hide = false, isDesktopView }, ref) => {
+  forwardRef(({ treeNr = '', hide = false,  }, ref) => {
     const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const isDaten = projekteTabs.includes(`daten${treeNr}`)
     const isTree = projekteTabs.includes(`tree${treeNr}`)
+    
+    const [isDesktopView] = useAtom(isDesktopViewAtom)
 
     const onClickButton = useCallback(() => {
       const copyOfProjekteTabs = [...projekteTabs]

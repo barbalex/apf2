@@ -1,4 +1,4 @@
-import { memo, useEffect, useCallback } from 'react'
+import { memo, useCallback } from 'react'
 import { useResizeDetector } from 'react-resize-detector'
 import { useAtom } from 'jotai'
 import styled from '@emotion/styled'

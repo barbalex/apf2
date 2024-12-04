@@ -11,7 +11,6 @@ import { StoreContext } from '../../storeContext.js'
 import { constants } from '../../modules/constants.js'
 
 const isInIframe = inIframe()
-export const minWidthToShowTitle = 1040
 
 const Container = styled.div`
   height: 100dvh;
@@ -35,7 +34,7 @@ const Appbar = styled.div`
   background-color: #2e7d32;
   height: 38px;
 
-  @media (max-width: ${minWidthToShowTitle - 1}px) {
+  @media (max-width: ${constants.minWidthToShowTitle - 1}px) {
     justify-content: flex-end;
   }
 

@@ -3,13 +3,14 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
+import { useAtom } from 'jotai'
 
 import { HomeMenus } from './Home.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
 import { DocsMenus } from './Docs.jsx'
-import { minWidthToShowTitle } from '../index.jsx'
 import { constants } from '../../../modules/constants.js'
+import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
 
 export const Container = styled.div`
   display: flex;
@@ -55,6 +56,8 @@ export const Bar = memo(() => {
   // const showProjekte = pathname.startsWith('/Daten') && !showEkPlan
   const showDocs = pathname.startsWith('/Dokumentation')
 
+  const [isDesktopView] = useAtom(isDesktopViewAtom)
+
   const { width, ref } = useResizeDetector({
     handleHeight: false,
     refreshMode: 'debounce',
@@ -62,22 +65,20 @@ export const Bar = memo(() => {
     refreshOptions: { leading: false, trailing: true },
   })
 
-  const isDesktopView = width >= constants.mobileViewMaxWidth
-
   const menuDivRef = useRef(null)
   const menuDivWidth = menuDivRef.current?.offsetWidth ?? 0
 
   return (
     <Container
       ref={ref}
-      alignFlexEnd={(width < minWidthToShowTitle).toString()}
+      alignFlexEnd={(width < constants.minWidthToShowTitle).toString()}
     >
       <SiteTitle
         variant="outlined"
         component={Link}
         to={`/${search}`}
         title="Home"
-        hide={(width <= minWidthToShowTitle).toString()}
+        hide={(width <= constants.minWidthToShowTitle).toString()}
       >
         AP Flora
       </SiteTitle>
@@ -88,7 +89,7 @@ export const Bar = memo(() => {
           <DocsMenus />
         : showEkPlan ?
           <EkPlanMenus />
-        : <ProjekteMenus isDesktopView={isDesktopView} />}
+        : <ProjekteMenus />}
       </MenuDiv>
     </Container>
   )
