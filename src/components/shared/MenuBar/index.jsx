@@ -74,7 +74,7 @@ const StyledMenu = styled(Menu)`
 `
 const MenuContent = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   row-gap: 3px;
   background-color: ${(props) => props.bgColor};
   overflow: hidden;
@@ -150,6 +150,7 @@ export const MenuBar = memo(
             : child.props.width
           : buttonWidth
         if (widthSum + width > spaceForButtons) {
+          // TODO: add bottom? border
           newMenus.push(cloneElement(child, { inmenu: 'true' }))
         } else {
           newButtons.push(cloneElement(child))
