@@ -13,8 +13,6 @@ import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { constants } from '../../../../modules/constants.js'
 
-const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
-
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render
 // if element is conditionally rendered and not visible on first render, ref.current will be null!!!
@@ -53,9 +51,10 @@ const DokuButton = styled(Button)`
 `
 
 export const ProjekteMenus = memo(
-  observer(({ showAllMenus }) => {
+  observer(({ isDesktopView }) => {
     const { projId } = useParams()
     const { search } = useLocation()
+    const isMobileView = !isDesktopView
 
     const store = useContext(StoreContext)
     const { user } = store
@@ -129,20 +128,22 @@ export const ProjekteMenus = memo(
 
     return (
       <MenuBar
-        rerenderer={`${projId}/${showAllMenus}/${projekteTabs}`}
+        rerenderer={`${projId}/${isDesktopView}/${projekteTabs}`}
         bgColor="rgb(46, 125, 50)"
         addMargin={false}
       >
-        <StyledButton
-          variant={treeIsVisible ? 'outlined' : 'text'}
-          followed={datenIsVisible?.toString()}
-          onClick={onClickTree}
-          data-id="nav-tree1"
-          width={134}
-        >
-          Strukturbaum
-        </StyledButton>
-        <Daten width={77} />
+        {isDesktopView && (
+          <StyledButton
+            variant={treeIsVisible ? 'outlined' : 'text'}
+            followed={datenIsVisible?.toString()}
+            onClick={onClickTree}
+            data-id="nav-tree1"
+            width={134}
+          >
+            Strukturbaum
+          </StyledButton>
+        )}
+        <Daten width={77} isDesktopView={isDesktopView} />
         <StyledButton
           variant={filterIsVisible ? 'outlined' : 'text'}
           preceded={datenIsVisible?.toString()}
@@ -159,7 +160,7 @@ export const ProjekteMenus = memo(
           preceded={filterIsVisible?.toString()}
           followed={(
             (!!projId && exporteIsVisible) ||
-            (showAllMenus && !projId && tree2IsVisible)
+            (isDesktopView && !projId && tree2IsVisible)
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
@@ -171,7 +172,7 @@ export const ProjekteMenus = memo(
           <StyledButton
             variant={exporteIsVisible ? 'outlined' : 'text'}
             preceded={karteIsVisible?.toString()}
-            followed={(showAllMenus && tree2IsVisible)?.toString()}
+            followed={(isDesktopView && tree2IsVisible)?.toString()}
             onClick={onClickExporte}
             data-id="nav-exporte"
             width={74}
@@ -179,7 +180,7 @@ export const ProjekteMenus = memo(
             Exporte
           </StyledButton>
         )}
-        {(showAllMenus || tree2IsVisible) && (
+        {(isDesktopView || tree2IsVisible) && (
           <StyledButton
             variant={tree2IsVisible ? 'outlined' : 'text'}
             preceded={(
@@ -194,13 +195,13 @@ export const ProjekteMenus = memo(
             Strukturbaum 2
           </StyledButton>
         )}
-        {((showAllMenus && tree2IsVisible) || daten2IsVisible) && (
+        {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
           <Daten
             treeNr="2"
             width={73}
           />
         )}
-        {((showAllMenus && tree2IsVisible) || filter2IsVisible) && (
+        {((isDesktopView && tree2IsVisible) || filter2IsVisible) && (
           <StyledButton
             variant={filter2IsVisible ? 'outlined' : 'text'}
             preceded={daten2IsVisible?.toString()}
@@ -213,7 +214,7 @@ export const ProjekteMenus = memo(
             Filter 2
           </StyledButton>
         )}
-        {showAllMenus && !!projId && (
+        {isDesktopView && !!projId && (
           <StyledButton
             variant="text"
             preceded={false?.toString()}
@@ -235,6 +236,18 @@ export const ProjekteMenus = memo(
         >
           Dokumentation
         </DokuButton>
+        {/* in mobile view: move tree to the end of the menus */}
+        {!isDesktopView && (
+          <StyledButton
+            variant={treeIsVisible ? 'outlined' : 'text'}
+            followed="false"
+            onClick={onClickTree}
+            data-id="nav-tree1"
+            width={134}
+          >
+            Strukturbaum
+          </StyledButton>
+        )}
         <More
           onClickExporte={onClickExporte}
           role={role}

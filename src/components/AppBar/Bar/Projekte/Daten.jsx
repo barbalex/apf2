@@ -11,23 +11,23 @@ import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 export const Daten = memo(
-  forwardRef(({ treeNr = '', hide = false }, ref) => {
+  forwardRef(({ treeNr = '', hide = false, isDesktopView }, ref) => {
     const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const isDaten = projekteTabs.includes(`daten${treeNr}`)
     const isTree = projekteTabs.includes(`tree${treeNr}`)
 
     const onClickButton = useCallback(() => {
       const copyOfProjekteTabs = [...projekteTabs]
-      if (isMobileView) {
-        // show one tab only
-        setProjekteTabs([`daten${treeNr}`])
-      } else {
+      if (isDesktopView) {
         if (copyOfProjekteTabs.includes(`daten${treeNr}`)) {
           remove(copyOfProjekteTabs, (el) => el === `daten${treeNr}`)
         } else {
           copyOfProjekteTabs.push(`daten${treeNr}`)
         }
         setProjekteTabs(copyOfProjekteTabs)
+      } else {
+        // show one tab only
+        setProjekteTabs([`daten${treeNr}`])
       }
     }, [projekteTabs, setProjekteTabs, treeNr])
 
@@ -40,7 +40,7 @@ export const Daten = memo(
       <StyledButton
         ref={ref}
         variant={isDaten ? 'outlined' : 'text'}
-        preceded={isTree.toString()}
+        preceded={isDesktopView ? isTree.toString() : 'false'}
         followed={followed.toString()}
         onClick={onClickButton}
         data-id={`nav-daten${treeNr || 1}`}

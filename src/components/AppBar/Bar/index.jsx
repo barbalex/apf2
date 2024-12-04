@@ -62,7 +62,7 @@ export const Bar = memo(() => {
     refreshOptions: { leading: false, trailing: true },
   })
 
-  const showAllMenus = width >= constants.mobileViewMaxWidth
+  const isDesktopView = width >= constants.mobileViewMaxWidth
 
   const menuDivRef = useRef(null)
   const menuDivWidth = menuDivRef.current?.offsetWidth ?? 0
@@ -88,7 +88,7 @@ export const Bar = memo(() => {
           <DocsMenus />
         : showEkPlan ?
           <EkPlanMenus />
-        : <ProjekteMenus showAllMenus={showAllMenus} />}
+        : <ProjekteMenus isDesktopView={isDesktopView} />}
       </MenuDiv>
     </Container>
   )
