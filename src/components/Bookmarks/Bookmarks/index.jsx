@@ -4,8 +4,6 @@ import { useAtom } from 'jotai'
 import styled from '@emotion/styled'
 
 import { FetcherImporter } from './FetcherImporter.jsx'
-import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
-import { alwaysShowBookmarksAtom } from '../../../JotaiStore/index.js'
 import { hideBookmarksAtom } from '../../../JotaiStore/index.js'
 
 const Container = styled.nav`
@@ -29,21 +27,14 @@ export const Bookmarks = memo(() => {
   const allMatches = useMatches()
   const bookmarkMatches = useMemo(
     () =>
-      allMatches.filter(
-        (m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName,
-      ),
+      allMatches
+        .filter(
+          (m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName,
+        )
+        .reverse(),
     [allMatches],
   )
-  // console.log('Bookmarks', { bookmarkMatches, allMatches })
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
-  const [alwaysShowBookmarks] = useAtom(alwaysShowBookmarksAtom)
   const [hideBookmarks] = useAtom(hideBookmarksAtom)
-
-  console.log('Bookmarks', {
-    hideBookmarks,
-    isDesktopView,
-    alwaysShowBookmarks,
-  })
 
   if (hideBookmarks) return null
 
@@ -51,7 +42,7 @@ export const Bookmarks = memo(() => {
   // to align bookmarks to the right, but still have them in order
   return (
     <Container>
-      {bookmarkMatches.reverse().map((match) => (
+      {bookmarkMatches.map((match) => (
         <FetcherImporter
           key={match.id}
           match={match}
