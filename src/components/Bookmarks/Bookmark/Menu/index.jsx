@@ -31,6 +31,9 @@ const StyledMenu = styled(MuiMenu)`
     scrollbar-width: thin !important;
     min-width: ${(props) => (props.minwidth ? `${props.minwidth}px` : 'unset')};
   }
+  .MuiList-root {
+    padding-top: 0;
+  }
 `
 
 // do NOT use a MenuList. Reason: grabs key input to navigate to menu items
@@ -92,14 +95,16 @@ export const Menu = memo(
           }}
           minwidth={titleWidth}
         >
-          <Title
-            navData={navData}
-            width={width}
-            filterInputIsVisible={filterInputIsVisible}
-            setTitleWidth={setTitleWidth}
-            toggleFilterInput={toggleFilterInput}
-            ref={filterInputRef}
-          />
+          {!!width && (
+            <Title
+              navData={navData}
+              width={width}
+              filterInputIsVisible={filterInputIsVisible}
+              setTitleWidth={setTitleWidth}
+              toggleFilterInput={toggleFilterInput}
+              ref={filterInputRef}
+            />
+          )}
           <motion.div
             ref={ref}
             minwidth={titleWidth}

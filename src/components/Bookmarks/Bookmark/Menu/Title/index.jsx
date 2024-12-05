@@ -21,7 +21,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   z-index: 1;
-  margin-top: -8px;
   border-radius: 4px;
   min-width: ${(props) => props.minwidth}px;
 `
