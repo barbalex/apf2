@@ -95,16 +95,14 @@ export const Menu = memo(
           }}
           minwidth={titleWidth}
         >
-          {!!width && (
-            <Title
-              navData={navData}
-              width={width}
-              filterInputIsVisible={filterInputIsVisible}
-              setTitleWidth={setTitleWidth}
-              toggleFilterInput={toggleFilterInput}
-              ref={filterInputRef}
-            />
-          )}
+          <Title
+            navData={navData}
+            width={width}
+            filterInputIsVisible={filterInputIsVisible}
+            setTitleWidth={setTitleWidth}
+            toggleFilterInput={toggleFilterInput}
+            ref={filterInputRef}
+          />
           <motion.div
             ref={ref}
             minwidth={titleWidth}

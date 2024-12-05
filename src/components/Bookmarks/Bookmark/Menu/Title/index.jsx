@@ -45,14 +45,13 @@ const TitleDiv = styled.div`
   user-select: none;
   cursor: default;
   white-space: nowrap;
-  text-overflow: ellipsis;
   overflow: hidden;
+  flex-shrink: 0;
 `
 const StyledTooltip = styled(Tooltip)`
   margin-right: 16px;
   ${(props) => (props.show === 'true' ? '' : 'display: none;')}
 `
-const FilterWrapper = styled.div``
 
 export const Title = memo(
   forwardRef(
@@ -83,23 +82,26 @@ export const Title = memo(
 
       // minWidth is the larger of parentWidth and width
       const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
+      console.log('Title', { parentWidth, titleWidth, minWidth })
 
       return (
         <Container minwidth={minWidth}>
           <ContentWrapper minwidth={minWidth}>
             <MenuTitle>
               <TitleDiv ref={ref}>{navData.label}</TitleDiv>
-              <StyledTooltip
-                title="Filtern"
-                show={isUuidList.toString()}
-              >
-                <IconButton
-                  aria-label="Filtern"
-                  onClick={toggleFilterInput}
+              {!!parentWidth && (
+                <StyledTooltip
+                  title="Filtern"
+                  show={isUuidList.toString()}
                 >
-                  <MdFilterAlt />
-                </IconButton>
-              </StyledTooltip>
+                  <IconButton
+                    aria-label="Filtern"
+                    onClick={toggleFilterInput}
+                  >
+                    <MdFilterAlt />
+                  </IconButton>
+                </StyledTooltip>
+              )}
             </MenuTitle>
             <Collapse in={filterInputIsVisible}>
               <FilterInput
