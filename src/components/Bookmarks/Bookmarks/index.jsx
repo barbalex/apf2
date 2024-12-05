@@ -1,8 +1,11 @@
 import { memo, useMemo } from 'react'
 import { useMatches } from 'react-router'
+import { useAtom } from 'jotai'
 import styled from '@emotion/styled'
 
 import { FetcherImporter } from './FetcherImporter.jsx'
+import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
+import { alwaysShowBookmarksAtom } from '../../../JotaiStore/index.js'
 
 const Container = styled.nav`
   display: flex;
@@ -31,6 +34,17 @@ export const Bookmarks = memo(() => {
     [allMatches],
   )
   // console.log('Bookmarks', { bookmarkMatches, allMatches })
+  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const [alwaysShowBookmarks] = useAtom(alwaysShowBookmarksAtom)
+  const hideBookmarks = isDesktopView && !alwaysShowBookmarks
+
+  console.log('Bookmarks', {
+    hideBookmarks,
+    isDesktopView,
+    alwaysShowBookmarks,
+  })
+
+  if (hideBookmarks) return null
 
   // flex-direction row-reverse combined with reverse order of matches
   // to align bookmarks to the right, but still have them in order
