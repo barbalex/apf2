@@ -81,7 +81,12 @@ export const ProjekteMenus = memo(
       (name) => {
         if (isMobileView) {
           // show one tab only
-          setProjekteTabs([name])
+          // if multiple tabs are visible, close the clicked one
+          if (projekteTabs.length === 1) {
+            setProjekteTabs([name])
+          } else {
+            setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
+          }
         } else {
           const newProjekteTabs = [...projekteTabs]
           if (newProjekteTabs.includes(name)) {
