@@ -271,7 +271,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}`}
+          rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}/${hideTreeRelatedMenus}`}
         >
           <Tooltip title="Neue Population erstellen">
             <IconButton onClick={onClickAdd}>
