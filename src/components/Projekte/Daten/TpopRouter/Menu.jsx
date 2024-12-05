@@ -24,6 +24,7 @@ import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import uniq from 'lodash/uniq'
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -37,6 +38,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
+import { hideTreeRelatedMenusAtom } from '../../../../JotaiStore/index.js'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -430,6 +432,8 @@ export const Menu = memo(
       })
     }, [tpopId, client, store, tanstackQueryClient])
 
+    const [hideTreeRelatedMenus] = useAtom(hideTreeRelatedMenusAtom)
+
     // ISSUE: refs are sometimes/often not set on first render
     // trying to measure widths of menus leads to complete chaos
     // so passing in static widths instead
@@ -452,16 +456,20 @@ export const Menu = memo(
               <FaMinus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
-              <FaFolderTree style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!hideTreeRelatedMenus && (
+            <Tooltip title="Ordner im Navigationsbaum öffnen">
+              <IconButton onClick={onClickOpenLowerNodes}>
+                <FaFolderTree style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!hideTreeRelatedMenus && (
+            <Tooltip title="Ordner im Navigationsbaum schliessen">
+              <IconButton onClick={onClickCloseLowerNodes}>
+                <RiFolderCloseFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
           <Tooltip title="Auf Karte verorten (mit Doppelklick)">
             <RoundToggleButton
               value={idOfTpopBeingLocalized ?? ''}

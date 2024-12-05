@@ -1,4 +1,4 @@
-import { createStore } from 'jotai'
+import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 
 export const store = createStore()
@@ -19,5 +19,18 @@ export const alwaysShowBookmarksAtom = atomWithStorage(
   'alwaysShowBookmarks',
   false,
 )
-export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)
 export const isDesktopViewAtom = atomWithStorage('isDesktopView', false)
+export const isMobileViewAtom = atom((get) => !get(isDesktopViewAtom))
+export const hideBookmarksAtom = atom((get) => {
+  const isDesktopView = get(isDesktopViewAtom)
+  const alwaysShowBookmarks = get(alwaysShowBookmarksAtom)
+  const hideBookmarks = isDesktopView && !alwaysShowBookmarks
+  return hideBookmarks
+})
+export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)
+export const hideTreeRelatedMenusAtom = atom((get) => {
+  const alwaysShowTree = get(alwaysShowTreeAtom)
+  const isMobileView = get(isMobileViewAtom)
+  const hideTreeRelatedMenus = !alwaysShowTree && isMobileView
+  return hideTreeRelatedMenus
+})

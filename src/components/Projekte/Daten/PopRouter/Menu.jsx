@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -23,6 +24,7 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
+import { hideTreeRelatedMenusAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
@@ -264,6 +266,8 @@ export const Menu = memo(
       })
     }, [setCopying])
 
+    const [hideTreeRelatedMenus] = useAtom(hideTreeRelatedMenusAtom)
+
     return (
       <ErrorBoundary>
         <MenuBar
@@ -282,16 +286,20 @@ export const Menu = memo(
               <FaMinus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
-              <FaFolderTree style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!hideTreeRelatedMenus && (
+            <Tooltip title="Ordner im Navigationsbaum öffnen">
+              <IconButton onClick={onClickOpenLowerNodes}>
+                <FaFolderTree style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!hideTreeRelatedMenus && (
+            <Tooltip title="Ordner im Navigationsbaum schliessen">
+              <IconButton onClick={onClickCloseLowerNodes}>
+                <RiFolderCloseFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
           <Tooltip
             title={
               !isMoving && !isTpopMoving ?

@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 import { FetcherImporter } from './FetcherImporter.jsx'
 import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
 import { alwaysShowBookmarksAtom } from '../../../JotaiStore/index.js'
+import { hideBookmarksAtom } from '../../../JotaiStore/index.js'
 
 const Container = styled.nav`
   display: flex;
@@ -36,7 +37,7 @@ export const Bookmarks = memo(() => {
   // console.log('Bookmarks', { bookmarkMatches, allMatches })
   const [isDesktopView] = useAtom(isDesktopViewAtom)
   const [alwaysShowBookmarks] = useAtom(alwaysShowBookmarksAtom)
-  const hideBookmarks = isDesktopView && !alwaysShowBookmarks
+  const [hideBookmarks] = useAtom(hideBookmarksAtom)
 
   console.log('Bookmarks', {
     hideBookmarks,

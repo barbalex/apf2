@@ -16,6 +16,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
+import { hideTreeRelatedMenusAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
@@ -91,6 +92,7 @@ export const Menu = memo(
     }, [projId, apId, store, search])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const [hideTreeRelatedMenus] = useAtom(hideTreeRelatedMenusAtom)
 
     return (
       <ErrorBoundary>
@@ -103,16 +105,20 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
-              <FaFolderTree style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!hideTreeRelatedMenus && (
+            <Tooltip title="Ordner im Navigationsbaum öffnen">
+              <IconButton onClick={onClickOpenLowerNodes}>
+                <FaFolderTree style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!hideTreeRelatedMenus && (
+            <Tooltip title="Ordner im Navigationsbaum schliessen">
+              <IconButton onClick={onClickCloseLowerNodes}>
+                <RiFolderCloseFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
         </MenuBar>
       </ErrorBoundary>
     )

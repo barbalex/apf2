@@ -1,15 +1,8 @@
-import { memo, useCallback, useMemo, useRef } from 'react'
-import { Link, useLocation } from 'react-router'
-import Tooltip from '@mui/material/Tooltip'
+import { memo, useRef } from 'react'
 import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
-import { useAtom } from 'jotai'
 
-import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
-
-const minWidth = 50
-const maxWidth = 150
-const menuWidth = 40
+import { Label } from './Label.jsx'
 
 const OuterContainer = styled.div`
   position: relative;
@@ -64,73 +57,18 @@ const Container = styled.div`
     margin-left: 1px;
   }
 `
-const StyledLink = styled(Link)`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-decoration: none;
-  align-content: center;
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: rgba(55, 118, 28, 0.5);
-  }
-`
-const StyledText = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  align-content: center;
-`
 
 export const Bookmark = memo(({ navData }) => {
-  const { pathname, search } = useLocation()
-
-  // issue: relative paths are not working!!!???
-  // also: need to decode pathname (Zähleinheiten...)
-  const pathnameDecoded = decodeURIComponent(pathname)
-  const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
-  const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
-
   const ref = useRef(null)
-
-  const onClick = useCallback(() => {
-    const element = ref.current
-    if (!element) return
-    setTimeout(() => {
-      element.scrollIntoView({
-        inline: 'start',
-      })
-    }, 200)
-  }, [])
-
-  const label = useMemo(
-    () =>
-      linksToSomewhereElse ?
-        <StyledLink
-          to={{ pathname: navData.url, search }}
-          onClick={onClick}
-        >
-          {navData.labelShort ?? navData.label}
-        </StyledLink>
-      : <StyledText>{navData.labelShort ?? navData.label}</StyledText>,
-    [
-      linksToSomewhereElse,
-      navData.label,
-      navData.labelShort,
-      navData.url,
-      search,
-    ],
-  )
-
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
 
   // don't add tooltip on mobile as longpress opens menu
   return (
     <OuterContainer ref={ref}>
       <Container>
-        {isDesktopView ?
-          <Tooltip title={navData.label}>{label}</Tooltip>
-        : label}
+        <Label
+          navData={navData}
+          outerContainerRef={ref}
+        />
         {!!navData.menus && <Menu navData={navData} />}
       </Container>
     </OuterContainer>
