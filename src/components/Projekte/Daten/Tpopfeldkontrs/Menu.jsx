@@ -152,7 +152,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${moving.label}/${copying.label}/${isMovingEk}/${isCopyingEk}`}
+          rerenderer={`${moving.label}/${copying.label}/${isMovingEk}/${isCopyingEk}/${hideTreeRelatedMenus}`}
         >
           <LabelFilter
             width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}

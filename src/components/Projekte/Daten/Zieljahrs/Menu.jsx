@@ -96,7 +96,7 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar>
+        <MenuBar rerenderer={hideTreeRelatedMenus}>
           <LabelFilter
             width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
           />
