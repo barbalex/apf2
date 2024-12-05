@@ -441,7 +441,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${hideTreeRelatedMenus}`}
         >
           <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>

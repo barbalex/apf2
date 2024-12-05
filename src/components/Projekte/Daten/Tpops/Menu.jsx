@@ -153,7 +153,9 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={`${isTpopMoving}/${isCopyingTpop}`}>
+        <MenuBar
+          rerenderer={`${isTpopMoving}/${isCopyingTpop}/${hideTreeRelatedMenus}`}
+        >
           <LabelFilter
             width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
           />
