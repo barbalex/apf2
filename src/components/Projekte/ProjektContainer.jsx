@@ -21,7 +21,7 @@ import { StoreContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
-import { Bookmarks } from '../Bookmarks/index.jsx'
+import { Bookmarks } from '../Bookmarks/Bookmarks/index.jsx'
 import { constants } from '../../modules/constants.js'
 import { alwaysShowBookmarksAtom } from '../../JotaiStore/index.js'
 
