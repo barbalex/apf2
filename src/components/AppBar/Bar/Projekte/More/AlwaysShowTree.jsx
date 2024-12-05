@@ -20,7 +20,7 @@ export const AlwaysShowTree = memo(() => {
 
   return (
     <Tooltip
-      title={`Wird normalerweise nur auf grossen Bildschirmen angezeigt (ab ${constants.mobileViewMaxWidth + 1} Pixeln)`}
+      title={`Ist normalerweise nur auf grossen Bildschirmen verfügbar (ab ${constants.mobileViewMaxWidth + 1} Pixeln)`}
       // if window width > 731 left
       placement={window.innerWidth > 730 ? 'left' : 'bottom'}
     >
@@ -31,7 +31,7 @@ export const AlwaysShowTree = memo(() => {
             onChange={toggleAlwaysShowTree}
           />
         }
-        label="Navigationsbaum immer anzeigen"
+        label="Navigationsbaum immer anbieten"
       />
     </Tooltip>
   )
