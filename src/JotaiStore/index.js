@@ -34,3 +34,9 @@ export const hideTreeRelatedMenusAtom = atom((get) => {
   const hideTreeRelatedMenus = !alwaysShowTree && isMobileView
   return hideTreeRelatedMenus
 })
+export const hideTreeAtom = atom((get) => {
+  const alwaysShowTree = get(alwaysShowTreeAtom)
+  const isMobileView = get(isMobileViewAtom)
+  const hideTree = !alwaysShowTree && isMobileView
+  return hideTree
+})
