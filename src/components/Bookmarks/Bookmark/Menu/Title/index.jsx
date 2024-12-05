@@ -8,6 +8,7 @@ import {
 } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import Collapse from '@mui/material/Collapse'
 import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 import isUuid from 'is-uuid'
@@ -101,11 +102,13 @@ export const Title = memo(
                 </IconButton>
               </StyledTooltip>
             </MenuTitle>
-            <FilterInput
-              width={parentWidth}
-              filterInputIsVisible={filterInputIsVisible}
-              ref={filterInputRef}
-            />
+            <Collapse in={filterInputIsVisible}>
+              <FilterInput
+                width={parentWidth}
+                filterInputIsVisible={filterInputIsVisible}
+                ref={filterInputRef}
+              />
+            </Collapse>
           </ContentWrapper>
         </Container>
       )
