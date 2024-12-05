@@ -21,7 +21,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
-import { hideTreeRelatedMenusAtom } from '../../../../JotaiStore/index.js'
+import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: white;
@@ -154,12 +154,12 @@ export const Menu = memo(
     }, [setCopying])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-    const [hideTreeRelatedMenus] = useAtom(hideTreeRelatedMenusAtom)
+    const [hideTree] = useAtom(hideTreeAtom)
 
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${moving.label}/${copying.label}/${isMovingEkf}/${isCopyingEkf}/${hideTreeRelatedMenus}`}
+          rerenderer={`${moving.label}/${copying.label}/${isMovingEkf}/${isCopyingEkf}/${hideTree}`}
         >
           <LabelFilter
             width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
@@ -169,14 +169,14 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!hideTreeRelatedMenus && (
+          {!hideTree && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>
                 <FaFolderTree style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {!hideTreeRelatedMenus && (
+          {!hideTree && (
             <Tooltip title="Ordner im Navigationsbaum schliessen">
               <IconButton onClick={onClickCloseLowerNodes}>
                 <RiFolderCloseFill style={iconStyle} />

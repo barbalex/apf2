@@ -96,7 +96,7 @@ export const Menu = memo(
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={hideTreeRelatedMenus}>
+        <MenuBar rerenderer={hideTree}>
           <LabelFilter
             width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
           />
@@ -105,14 +105,14 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!hideTreeRelatedMenus && (
+          {!hideTree && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>
                 <FaFolderTree style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {!hideTreeRelatedMenus && (
+          {!hideTree && (
             <Tooltip title="Ordner im Navigationsbaum schliessen">
               <IconButton onClick={onClickCloseLowerNodes}>
                 <RiFolderCloseFill style={iconStyle} />

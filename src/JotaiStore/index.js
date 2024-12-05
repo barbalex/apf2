@@ -28,12 +28,6 @@ export const hideBookmarksAtom = atom((get) => {
   return hideBookmarks
 })
 export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)
-export const hideTreeRelatedMenusAtom = atom((get) => {
-  const alwaysShowTree = get(alwaysShowTreeAtom)
-  const isMobileView = get(isMobileViewAtom)
-  const hideTreeRelatedMenus = !alwaysShowTree && isMobileView
-  return hideTreeRelatedMenus
-})
 export const hideTreeAtom = atom((get) => {
   const alwaysShowTree = get(alwaysShowTreeAtom)
   const isMobileView = get(isMobileViewAtom)

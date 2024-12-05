@@ -14,6 +14,7 @@ import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render
@@ -66,6 +67,8 @@ export const ProjekteMenus = memo(
 
     const [isDesktopView] = useAtom(isDesktopViewAtom)
     const isMobileView = !isDesktopView
+
+    const [hideTree] = useAtom(hideTreeAtom)
 
     const store = useContext(StoreContext)
     const { user } = store
@@ -253,7 +256,9 @@ export const ProjekteMenus = memo(
           Dokumentation
         </DokuButton>
         {/* in mobile view: move tree to the end of the menus */}
-        {!isDesktopView && (
+        {/* only show if user did not decide to always show */}
+        {/* do not hide if tree is visible - user can't close it! */}
+        {isMobileView && (!hideTree || treeIsVisible) && (
           <StyledButton
             variant={treeIsVisible ? 'outlined' : 'text'}
             followed="false"
