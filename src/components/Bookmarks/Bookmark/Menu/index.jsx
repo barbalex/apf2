@@ -1,4 +1,12 @@
-import { memo, useState, useCallback, useMemo, useContext, useRef } from 'react'
+import {
+  memo,
+  useState,
+  useCallback,
+  useMemo,
+  useContext,
+  useRef,
+  useEffect,
+} from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -6,11 +14,13 @@ import { BsCaretDown } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
+import { motion } from 'framer-motion'
 
 import { Item } from './Item.jsx'
 import { Title } from './Title/index.jsx'
 import { StoreContext } from '../../../../storeContext.js'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
+import { usePrevious } from '../../../../modules/usePrevious.js'
 
 const StyledIconButton = styled(IconButton)`
   z-index: 2;
@@ -25,10 +35,6 @@ const StyledMenu = styled(MuiMenu)`
 
 // do NOT use a MenuList. Reason: grabs key input to navigate to menu items
 // thus filter input does not work
-const MenuListContainer = styled.div`
-  margin-top: ${(props) => props.margintop}px;
-  min-width: ${(props) => (props.minwidth ? `${props.minwidth}px` : 'unset')};
-`
 
 export const Menu = memo(
   observer(({ navData }) => {
@@ -37,6 +43,7 @@ export const Menu = memo(
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
 
     const [anchorEl, setAnchorEl] = useState(null)
+    const previousAnchorEl = usePrevious(anchorEl)
     const open = Boolean(anchorEl)
     const onClick = useCallback((event) => setAnchorEl(event.currentTarget), [])
     const onClose = useCallback(() => setAnchorEl(null), [])
@@ -93,10 +100,18 @@ export const Menu = memo(
             toggleFilterInput={toggleFilterInput}
             ref={filterInputRef}
           />
-          <MenuListContainer
+          <motion.div
             ref={ref}
-            margintop={filterInputIsVisible ? 100 : 40}
             minwidth={titleWidth}
+            style={{ minWidth: titleWidth ?? 'unset' }}
+            initial={{
+              marginTop:
+                previousAnchorEl === null ? 40
+                : filterInputIsVisible ? 40
+                : 100,
+            }}
+            animate={{ marginTop: filterInputIsVisible ? 100 : 40 }}
+            transition={{ duration: 0.2, delay: 0, ease: 'linear' }}
           >
             {navData.menus.map((menu) => (
               <Item
@@ -106,7 +121,7 @@ export const Menu = memo(
                 onClose={onClose}
               />
             ))}
-          </MenuListContainer>
+          </motion.div>
         </StyledMenu>
       </>
     )
