@@ -82,14 +82,22 @@ function _toConsumableArray(arr) {
 
 import { Component } from 'react'
 
-import ContextMenuTrigger from './ContextMenuTrigger.js'
 import listener from './globalEventListener.js'
 
 // collect ContextMenuTrigger's expected props to NOT pass them on as part of the context
-var ignoredTriggerProps = [].concat(
-  _toConsumableArray(Object.keys(ContextMenuTrigger.propTypes)),
-  ['children'],
-)
+var ignoredTriggerProps = [
+  'id',
+  'children',
+  'attributes',
+  'collect',
+  'disable',
+  'holdToDispla',
+  'posX',
+  'posY',
+  'renderTag',
+  'mouseButton',
+  'disableIfShiftIsPressed',
+]
 
 // expect the id of the menu to be responsible for as outer parameter
 export default function (menuId) {

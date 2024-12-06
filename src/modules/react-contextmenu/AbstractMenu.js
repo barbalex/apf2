@@ -39,7 +39,6 @@ function _inherits(subClass, superClass) {
 }
 
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 
 import MenuItem from './MenuItem.js'
 
@@ -69,10 +68,6 @@ var AbstractMenu = (function (_Component) {
 
   return AbstractMenu
 })(Component)
-
-AbstractMenu.propTypes = {
-  children: PropTypes.node.isRequired,
-}
 
 var _initialiseProps = function _initialiseProps() {
   var _this2 = this

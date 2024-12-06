@@ -68,7 +68,6 @@ function _inherits(subClass, superClass) {
 }
 
 import React from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -365,21 +364,7 @@ var ContextMenu = (function (_AbstractMenu) {
   return ContextMenu
 })(AbstractMenu)
 
-ContextMenu.propTypes = {
-  id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  data: PropTypes.object,
-  className: PropTypes.string,
-  hideOnLeave: PropTypes.bool,
-  rtl: PropTypes.bool,
-  onHide: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  onShow: PropTypes.func,
-  preventHideOnContextMenu: PropTypes.bool,
-  preventHideOnResize: PropTypes.bool,
-  preventHideOnScroll: PropTypes.bool,
-  style: PropTypes.object,
-}
+
 ContextMenu.defaultProps = {
   className: '',
   data: {},

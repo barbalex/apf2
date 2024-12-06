@@ -84,7 +84,6 @@ function _inherits(subClass, superClass) {
 }
 
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -207,19 +206,7 @@ var MenuItem = (function (_Component) {
   return MenuItem
 })(Component)
 
-MenuItem.propTypes = {
-  attributes: PropTypes.object,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  data: PropTypes.object,
-  disabled: PropTypes.bool,
-  divider: PropTypes.bool,
-  onClick: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  onMouseMove: PropTypes.func,
-  preventClose: PropTypes.bool,
-  selected: PropTypes.bool,
-}
+
 MenuItem.defaultProps = {
   attributes: {},
   children: null,

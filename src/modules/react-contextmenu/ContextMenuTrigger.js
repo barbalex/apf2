@@ -56,7 +56,6 @@ function _inherits(subClass, superClass) {
 }
 
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -228,19 +227,7 @@ var ContextMenuTrigger = (function (_Component) {
   return ContextMenuTrigger
 })(Component)
 
-ContextMenuTrigger.propTypes = {
-  id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  attributes: PropTypes.object,
-  collect: PropTypes.func,
-  disable: PropTypes.bool,
-  holdToDisplay: PropTypes.number,
-  posX: PropTypes.number,
-  posY: PropTypes.number,
-  renderTag: PropTypes.elementType,
-  mouseButton: PropTypes.number,
-  disableIfShiftIsPressed: PropTypes.bool,
-}
+
 ContextMenuTrigger.defaultProps = {
   attributes: {},
   collect: function collect() {

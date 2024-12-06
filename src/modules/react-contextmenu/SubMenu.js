@@ -82,7 +82,6 @@ function _inherits(subClass, superClass) {
 }
 
 import React from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -250,7 +249,6 @@ var SubMenu = (function (_AbstractMenu) {
     {
       key: 'getSubMenuType',
       value: function getSubMenuType() {
-         
         return SubMenu
       },
     },
@@ -412,21 +410,6 @@ var SubMenu = (function (_AbstractMenu) {
   return SubMenu
 })(AbstractMenu)
 
-SubMenu.propTypes = {
-  children: PropTypes.node.isRequired,
-  attributes: PropTypes.object,
-  title: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  disabled: PropTypes.bool,
-  hoverDelay: PropTypes.number,
-  rtl: PropTypes.bool,
-  selected: PropTypes.bool,
-  onMouseMove: PropTypes.func,
-  onMouseOut: PropTypes.func,
-  forceOpen: PropTypes.bool,
-  forceClose: PropTypes.func,
-  parentKeyNavigationHandler: PropTypes.func,
-}
 SubMenu.defaultProps = {
   disabled: false,
   hoverDelay: 500,

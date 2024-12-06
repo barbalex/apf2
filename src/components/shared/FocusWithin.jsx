@@ -1,7 +1,6 @@
 import React from 'react'
 // https://github.com/ferdaber/react-focus-within/blob/master/src/index.js
 // extracted because of outdated peer dependencies causing npm installation to fail
-import PropTypes from 'prop-types'
 
 export function withFocusWithin(Component) {
   const WrappedComponent = ({ onFocus, onBlur, ...props }) => (
@@ -26,11 +25,6 @@ export function withFocusWithin(Component) {
 }
 
 export class FocusWithin extends React.Component {
-  static propTypes = {
-    onBlur: PropTypes.func,
-    onFocus: PropTypes.func,
-  }
-
   static defaultProps = {
     onBlur: () => {},
     onFocus: () => {},
