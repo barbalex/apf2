@@ -68,7 +68,7 @@ export const useZielbersNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: zielId,
+      id: 'Berichte',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}/Berichte`,
       label: `Zielberichte (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       // leave totalCount undefined as the menus are folders

@@ -69,7 +69,7 @@ export const useProjektNavData = () => {
 
   const navData = useMemo(
     () => ({
-      id: 'projekt',
+      id: projId,
       url: `/Daten/Projekte/${projId}`,
       label,
       // leave totalCount undefined as the menus are folders

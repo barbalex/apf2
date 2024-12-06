@@ -82,7 +82,7 @@ export const useZielsOfJahrNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: 'AP-Ziele',
+      id: jahr,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}`,
       label: `Ziele für ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
       labelShort: `${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
