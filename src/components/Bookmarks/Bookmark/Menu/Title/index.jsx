@@ -13,7 +13,6 @@ import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 import isUuid from 'is-uuid'
 import { useResizeDetector } from 'react-resize-detector'
-
 import { FilterInput } from './FilterInput.jsx'
 
 const Container = styled.div`
@@ -69,6 +68,10 @@ export const Title = memo(
         () => navData.menus.some((menu) => isUuid.anyNonNil(menu.id)),
         [navData.menus],
       )
+
+      // if is Aps, need to add ApFilter
+      const isAps = navData.id === 'Arten'
+      console.log('Title, navDataId:', { navDataId: navData.id, isAps })
 
       const { width: titleWidth, ref } = useResizeDetector({
         handleHeight: false,
