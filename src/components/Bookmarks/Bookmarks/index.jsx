@@ -1,10 +1,10 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useEffect, useState } from 'react'
 import { useMatches } from 'react-router'
-import { useAtom } from 'jotai'
 import styled from '@emotion/styled'
+import { TransitionGroup } from 'react-transition-group'
 
 import { FetcherImporter } from './FetcherImporter.jsx'
-import { hideBookmarksAtom } from '../../../JotaiStore/index.js'
+import { usePrevious } from '../../../modules/usePrevious.js'
 
 const Container = styled.nav`
   display: flex;
@@ -22,32 +22,29 @@ const Container = styled.nav`
   scrollbar-width: thin;
 `
 
+const matchesFromAllMatches = (allMatches) =>
+  allMatches
+    .filter((m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName)
+    .reverse()
+
 // this component extracts matches
 export const Bookmarks = memo(() => {
   const allMatches = useMatches()
-  const bookmarkMatches = useMemo(
-    () =>
-      allMatches
-        .filter(
-          (m) => m.handle?.bookmarkFetcher && m.handle?.bookmarkFetcherName,
-        )
-        .reverse(),
-    [allMatches],
-  )
-  const [hideBookmarks] = useAtom(hideBookmarksAtom)
 
-  if (hideBookmarks) return null
+  const matches = useMemo(() => matchesFromAllMatches(allMatches), [allMatches])
 
   // flex-direction row-reverse combined with reverse order of matches
   // to align bookmarks to the right, but still have them in order
   return (
     <Container>
-      {bookmarkMatches.map((match) => (
-        <FetcherImporter
-          key={match.id}
-          match={match}
-        />
-      ))}
+      <TransitionGroup component={null}>
+        {matches.map((match) => (
+          <FetcherImporter
+            key={match.id}
+            match={match}
+          />
+        ))}
+      </TransitionGroup>
     </Container>
   )
 })

@@ -1,6 +1,7 @@
 import { memo, useRef } from 'react'
 import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
+import { Transition } from 'react-transition-group'
 
 import { Label } from './Label.jsx'
 const OuterContainer = styled.div`
@@ -54,19 +55,39 @@ const Container = styled.div`
   }
 `
 
-export const Bookmark = memo(({ navData }) => {
-  const ref = useRef(null)
+const transitionStyles = {
+  entering: { opacity: 1 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 },
+}
+
+export const Bookmark = memo(({ navData, in: inProp }) => {
+  const outerContainerRef = useRef(null)
+  const labelRef = useRef(null)
 
   // don't add tooltip on mobile as longpress opens menu
   return (
-    <OuterContainer ref={ref}>
-      <Container>
-        <Label
-          navData={navData}
-          outerContainerRef={ref}
-        />
-        {!!navData.menus && <Menu navData={navData} />}
-      </Container>
-    </OuterContainer>
+    <Transition
+      in={inProp}
+      timeout={700}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={labelRef}
+    >
+      {(state) => (
+        <OuterContainer ref={outerContainerRef}>
+          <Container>
+            <Label
+              navData={navData}
+              outerContainerRef={outerContainerRef}
+              ref={labelRef}
+              labelStyle={transitionStyles[state]}
+            />
+            {!!navData.menus && <Menu navData={navData} />}
+          </Container>
+        </OuterContainer>
+      )}
+    </Transition>
   )
 })

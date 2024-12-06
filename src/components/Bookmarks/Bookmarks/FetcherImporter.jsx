@@ -3,7 +3,8 @@ import { memo, useState, useEffect } from 'react'
 import { Fetcher } from './Fetcher.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
-export const FetcherImporter = memo(({ match }) => {
+// pass on TransitionGroup's props
+export const FetcherImporter = memo(({ match, ...other }) => {
   const [fetcherModule, setFetcherModule] = useState(null)
 
   const fetcherName = match.handle?.bookmarkFetcherName
@@ -21,6 +22,7 @@ export const FetcherImporter = memo(({ match }) => {
     <Fetcher
       match={match}
       fetcherModule={fetcherModule}
+      {...other}
     />
   )
 })
