@@ -84,7 +84,6 @@ export const Title = memo(
 
       // if is Aps, need to add ApFilter
       const isAps = navData.id === 'Arten'
-      console.log('Title, navDataId:', { navDataId: navData.id, isAps })
 
       const { width: titleWidth, ref } = useResizeDetector({
         handleHeight: false,
