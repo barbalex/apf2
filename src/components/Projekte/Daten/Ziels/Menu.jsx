@@ -16,6 +16,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { StoreContext } from '../../../../storeContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
+import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
@@ -93,6 +94,7 @@ export const Menu = memo(
     }, [projId, apId, store, search, jahr])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const [hideTree] = useAtom(hideTreeAtom)
 
     return (
       <ErrorBoundary>
