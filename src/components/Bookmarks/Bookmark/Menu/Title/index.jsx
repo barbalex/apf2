@@ -82,7 +82,6 @@ export const Title = memo(
 
       // minWidth is the larger of parentWidth and width
       const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
-      console.log('Title', { parentWidth, titleWidth, minWidth })
 
       return (
         <Container minwidth={minWidth}>
