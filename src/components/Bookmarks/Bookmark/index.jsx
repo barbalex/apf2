@@ -20,7 +20,6 @@ const OuterContainer = styled.div`
   }
   padding-left: 25px;
   &:last-of-type {
-    // border-left: 1.5px solid rgb(46, 125, 50);
     padding-left: 10px;
   }
   &:first-of-type {
