@@ -32,7 +32,9 @@ export const ApFolder = memo(
     return (
       <>
         <Row node={node} />
-        <TransitionGroup>{isOpen && <Aps projekt={projekt} />}</TransitionGroup>
+        <TransitionGroup component={null}>
+          {isOpen && <Aps projekt={projekt} />}
+        </TransitionGroup>
       </>
     )
   }),

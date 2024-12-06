@@ -1,6 +1,6 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../storeContext.js'
@@ -46,19 +46,21 @@ export const Ap = memo(
         nodeRef={ref}
       >
         {(state) => (
-          <div>
+          <>
             <Row
               node={node}
               transitionState={state}
               ref={ref}
             />
-            {isOpen && (
-              <ApFolders
-                ap={ap}
-                projekt={projekt}
-              />
-            )}
-          </div>
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <ApFolders
+                  ap={ap}
+                  projekt={projekt}
+                />
+              )}
+            </TransitionGroup>
+          </>
         )}
       </Transition>
     )

@@ -1,4 +1,6 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useRef } from 'react'
+import styled from '@emotion/styled'
+import { Transition } from 'react-transition-group'
 
 import { PopFolder } from './Pop/index.jsx'
 import { ApZielJahrs } from './ApZielJahrs/index.jsx'
@@ -13,8 +15,13 @@ import { BeobNichtBeurteiltFolder } from './BeobNichtBeurteilt/index.jsx'
 import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnen/index.jsx'
 import { Qk } from './Qk.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
+import { transitionStyles } from '../../../../../Row.jsx'
 
-export const ApFolders = memo(({ ap, projekt }) => {
+const Container = styled.div`
+  transition: opacity 300ms ease-in-out;
+`
+
+export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
   const { navData, isLoading } = useApNavData({ apId: ap.id })
 
   const popMenu = useMemo(
@@ -59,66 +66,81 @@ export const ApFolders = memo(({ ap, projekt }) => {
     [navData],
   )
 
+  const ref = useRef(null)
+
   return (
-    <>
-      <PopFolder
-        projekt={projekt}
-        ap={ap}
-        menu={popMenu}
-      />
-      <ApZielJahrs
-        projekt={projekt}
-        ap={ap}
-        menu={apZielJahrsMenu}
-      />
-      <ApErfkritFolder
-        projekt={projekt}
-        ap={ap}
-        menu={apErfkritsMenu}
-      />
-      <ApBerFolder
-        projekt={projekt}
-        ap={ap}
-        menu={apBerMenu}
-      />
-      <IdealbiotopFolder
-        projekt={projekt}
-        ap={ap}
-      />
-      <ApArtFolder
-        projekt={projekt}
-        ap={ap}
-        menu={apArtMenu}
-      />
-      <AssozArtFolder
-        projekt={projekt}
-        ap={ap}
-        menu={assozartMenu}
-      />
-      <EkFrequenzFolder
-        projekt={projekt}
-        ap={ap}
-        menu={ekfrequenzMenu}
-      />
-      <EkZaehleinheitFolder
-        projekt={projekt}
-        ap={ap}
-        menu={ekzaehleinheitMenu}
-      />
-      <BeobNichtBeurteiltFolder
-        projekt={projekt}
-        ap={ap}
-        menu={beobNichtBeurteiltMenu}
-      />
-      <BeobNichtZuzuordnenFolder
-        projekt={projekt}
-        ap={ap}
-        menu={beobNichtZuzuordnenMenu}
-      />
-      <Qk
-        projekt={projekt}
-        ap={ap}
-      />
-    </>
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Container
+          ref={ref}
+          style={transitionStyles[state]}
+        >
+          <PopFolder
+            projekt={projekt}
+            ap={ap}
+            menu={popMenu}
+          />
+          <ApZielJahrs
+            projekt={projekt}
+            ap={ap}
+            menu={apZielJahrsMenu}
+          />
+          <ApErfkritFolder
+            projekt={projekt}
+            ap={ap}
+            menu={apErfkritsMenu}
+          />
+          <ApBerFolder
+            projekt={projekt}
+            ap={ap}
+            menu={apBerMenu}
+          />
+          <IdealbiotopFolder
+            projekt={projekt}
+            ap={ap}
+          />
+          <ApArtFolder
+            projekt={projekt}
+            ap={ap}
+            menu={apArtMenu}
+          />
+          <AssozArtFolder
+            projekt={projekt}
+            ap={ap}
+            menu={assozartMenu}
+          />
+          <EkFrequenzFolder
+            projekt={projekt}
+            ap={ap}
+            menu={ekfrequenzMenu}
+          />
+          <EkZaehleinheitFolder
+            projekt={projekt}
+            ap={ap}
+            menu={ekzaehleinheitMenu}
+          />
+          <BeobNichtBeurteiltFolder
+            projekt={projekt}
+            ap={ap}
+            menu={beobNichtBeurteiltMenu}
+          />
+          <BeobNichtZuzuordnenFolder
+            projekt={projekt}
+            ap={ap}
+            menu={beobNichtZuzuordnenMenu}
+          />
+          <Qk
+            projekt={projekt}
+            ap={ap}
+          />
+        </Container>
+      )}
+    </Transition>
   )
 })
