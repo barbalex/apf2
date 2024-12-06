@@ -3,7 +3,7 @@ import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
-import { Label } from './Label.jsx'
+import { LabelWrapper } from './LabelWrapper.jsx'
 const OuterContainer = styled.div`
   position: relative;
   &::after,
@@ -15,7 +15,7 @@ const OuterContainer = styled.div`
     left: 100%;
     position: absolute;
     top: 0;
-    transition: background 0.2s linear;
+    transition: background 700ms linear;
     width: 2em;
     z-index: 1;
   }
@@ -31,7 +31,7 @@ const Container = styled.div`
   margin-right: -10px;
   position: relative;
   border-collapse: collapse;
-  transition: background 0.2s linear;
+  transition: background 700ms linear;
   max-width: 45vw;
   display: flex;
   flex-direction: row;
@@ -45,7 +45,7 @@ const Container = styled.div`
     left: calc(100% - 8.3px);
     position: absolute;
     top: 0.5px;
-    transition: background 0.2s linear;
+    transition: background 700ms linear;
     width: 2em;
     z-index: 1;
   }
@@ -54,7 +54,6 @@ const Container = styled.div`
     margin-left: 1px;
   }
 `
-
 const transitionStyles = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
@@ -66,28 +65,31 @@ export const Bookmark = memo(({ navData, in: inProp }) => {
   const outerContainerRef = useRef(null)
   const labelRef = useRef(null)
 
+  console.log('Bookmark, inProp:', { inProp, labelRef })
+
   // don't add tooltip on mobile as longpress opens menu
   return (
     <Transition
       in={inProp}
       timeout={700}
-      mountOnEnter
-      unmountOnExit
       nodeRef={labelRef}
     >
-      {(state) => (
-        <OuterContainer ref={outerContainerRef}>
-          <Container>
-            <Label
-              navData={navData}
-              outerContainerRef={outerContainerRef}
-              ref={labelRef}
-              labelStyle={transitionStyles[state]}
-            />
-            {!!navData.menus && <Menu navData={navData} />}
-          </Container>
-        </OuterContainer>
-      )}
+      {(state) => {
+        console.log('Bookmark, state:', state)
+        return (
+          <OuterContainer ref={outerContainerRef}>
+            <Container>
+              <LabelWrapper
+                navData={navData}
+                outerContainerRef={outerContainerRef}
+                labelStyle={transitionStyles[state]}
+                ref={labelRef}
+              />
+              {!!navData.menus && <Menu navData={navData} />}
+            </Container>
+          </OuterContainer>
+        )
+      }}
     </Transition>
   )
 })
