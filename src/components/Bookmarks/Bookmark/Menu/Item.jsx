@@ -1,15 +1,11 @@
 import { memo, useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import MenuItem from '@mui/material/MenuItem'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import styled from '@emotion/styled'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 import { StoreContext } from '../../../../storeContext.js'
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-`
 
 export const Item = memo(
   observer(({ menu, baseUrl, onClose }) => {
@@ -33,22 +29,20 @@ export const Item = memo(
         }),
       [activeNodeArray, baseUrl, menu.id],
     )
-    const to = useMemo(
-      () => ({
+    const onClick = useCallback(() => {
+      navigate({
         pathname: `${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}`,
         search,
-      }),
-      [baseUrl, pathnameWithoutLastSlash, menu.id, search],
-    )
+      })
+      onClose()
+    }, [navigate, onClose, baseUrl, pathnameWithoutLastSlash, menu.id, search])
 
     return (
-      <MenuItem selected={selected}>
-        <StyledLink
-          to={to}
-          onClick={onClose}
-        >
-          {menu.label}
-        </StyledLink>
+      <MenuItem
+        selected={selected}
+        onClick={onClick}
+      >
+        {menu.label}
       </MenuItem>
     )
   }),
