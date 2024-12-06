@@ -6,9 +6,10 @@ import { reaction } from 'mobx'
 
 import { StoreContext } from '../storeContext.js'
 
-export const useProjektNavData = () => {
+export const useProjektNavData = (props) => {
   const apolloClient = useApolloClient()
-  const { projId } = useParams()
+  const params = useParams()
+  const projId = props?.projId ?? params?.projId
 
   const store = useContext(StoreContext)
 
