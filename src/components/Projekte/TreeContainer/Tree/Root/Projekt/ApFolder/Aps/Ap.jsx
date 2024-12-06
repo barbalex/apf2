@@ -1,0 +1,66 @@
+import { memo, useContext, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
+import { Transition } from 'react-transition-group'
+
+import { Row } from '../../../../Row.jsx'
+import { StoreContext } from '../../../../../../../../storeContext.js'
+import { ApFolders } from './Folders/index.jsx'
+import { useApsNavData } from '../../../../../../../../modules/useApsNavData.js'
+
+export const Ap = memo(
+  observer(({ projekt, ap, inProp }) => {
+    const store = useContext(StoreContext)
+    const { openNodes } = store.tree
+
+    const ref = useRef(null)
+
+    const isOpen =
+      openNodes.filter(
+        (n) =>
+          n[0] === 'Projekte' &&
+          n[1] === projekt.id &&
+          n[2] === 'Arten' &&
+          n[3] === ap.id,
+      ).length > 0
+
+    const url = ['Projekte', projekt.id, 'Arten', ap.id]
+
+    const node = {
+      nodeType: 'table',
+      menuType: 'ap',
+      id: ap.id,
+      parentId: projekt.id,
+      parentTableId: projekt.id,
+      urlLabel: ap.id,
+      label: ap.label,
+      url,
+      hasChildren: true,
+    }
+
+    return (
+      <Transition
+        in={inProp}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={ref}
+      >
+        {(state) => (
+          <div>
+            <Row
+              node={node}
+              transitionState={state}
+              ref={ref}
+            />
+            {isOpen && (
+              <ApFolders
+                ap={ap}
+                projekt={projekt}
+              />
+            )}
+          </div>
+        )}
+      </Transition>
+    )
+  }),
+)
