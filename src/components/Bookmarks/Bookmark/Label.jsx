@@ -36,8 +36,6 @@ export const Label = memo(
     const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
     const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
-    console.log('Label, labelStyle:', labelStyle)
-
     const onClick = useCallback(() => {
       const element = outerContainerRef.current
       if (!element) return
