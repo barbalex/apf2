@@ -14,6 +14,7 @@ import styled from '@emotion/styled'
 import isUuid from 'is-uuid'
 import { useResizeDetector } from 'react-resize-detector'
 import { FilterInput } from './FilterInput.jsx'
+import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.jsx'
 
 const Container = styled.div`
   position: relative;
@@ -47,9 +48,21 @@ const TitleDiv = styled.div`
   overflow: hidden;
   flex-shrink: 0;
 `
+const Filters = styled.div`
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  flex-grow: 0;
+  flex-shrink: 1;
+`
 const StyledTooltip = styled(Tooltip)`
-  margin-right: 16px;
   ${(props) => (props.show === 'true' ? '' : 'display: none;')}
+`
+const ApFilterFitter = styled.div`
+  margin-top: -14px;
+  margin-left: 15px;
+  margin-right: -15px;
+  width: 58px;
 `
 
 export const Title = memo(
@@ -80,7 +93,15 @@ export const Title = memo(
         refreshOptions: { leading: false, trailing: true },
       })
       useEffect(() => {
-        setTitleWidth((titleWidth ?? 40) + (isUuidList ? 40 : 0) + 32 + 16)
+        setTitleWidth(
+          (titleWidth ?? 40) +
+            (isUuidList ?
+              isAps ? 40 + 58
+              : 40
+            : 0) +
+            32 +
+            8,
+        )
       }, [titleWidth, setTitleWidth, isUuidList])
 
       // minWidth is the larger of parentWidth and width
@@ -92,17 +113,24 @@ export const Title = memo(
             <MenuTitle>
               <TitleDiv ref={ref}>{navData.label}</TitleDiv>
               {!!parentWidth && (
-                <StyledTooltip
-                  title="Filtern"
-                  show={isUuidList.toString()}
-                >
-                  <IconButton
-                    aria-label="Filtern"
-                    onClick={toggleFilterInput}
+                <Filters>
+                  <StyledTooltip
+                    title="Filtern"
+                    show={isUuidList.toString()}
                   >
-                    <MdFilterAlt />
-                  </IconButton>
-                </StyledTooltip>
+                    <IconButton
+                      aria-label="Filtern"
+                      onClick={toggleFilterInput}
+                    >
+                      <MdFilterAlt />
+                    </IconButton>
+                  </StyledTooltip>
+                  {isAps && (
+                    <ApFilterFitter>
+                      <ApFilter />
+                    </ApFilterFitter>
+                  )}
+                </Filters>
               )}
             </MenuTitle>
             <Collapse in={filterInputIsVisible}>
