@@ -3,7 +3,11 @@ import React from 'react'
 // extracted because of outdated peer dependencies causing npm installation to fail
 
 export function withFocusWithin(Component) {
-  const WrappedComponent = ({ onFocus, onBlur, ...props }) => (
+  const WrappedComponent = ({
+    onFocus = () => {},
+    onBlur = () => {},
+    ...props
+  }) => (
     <FocusWithin
       onFocus={onFocus}
       onBlur={onBlur}
@@ -25,10 +29,10 @@ export function withFocusWithin(Component) {
 }
 
 export class FocusWithin extends React.Component {
-  static defaultProps = {
-    onBlur: () => {},
-    onFocus: () => {},
-  }
+  // static defaultProps = {
+  //   onBlur: () => {},
+  //   onFocus: () => {},
+  // }
 
   static wrapComponent = withFocusWithin
 
@@ -44,7 +48,7 @@ export class FocusWithin extends React.Component {
       if (this.isUnmounted) {
         return
       }
-      cb(...args)
+      cb?.(...args)
     })
 
   setFocusState = (isFocused, isFocusWithinEvent) => {
@@ -91,7 +95,12 @@ export class FocusWithin extends React.Component {
     this.lastBlurEvent = null
   }
 
-  getFocusProps = ({ onFocus, onBlur, onMouseDown, ...props } = {}) => {
+  getFocusProps = ({
+    onFocus = () => {},
+    onBlur = () => {},
+    onMouseDown,
+    ...props
+  } = {}) => {
     return {
       ...props,
       onFocus: (event) => {
@@ -150,7 +159,7 @@ export class FocusWithin extends React.Component {
         // check if the focus manager is actually blurred for times
         // when document click causes a consective blur -> focus
         if (!this.state.isFocused) {
-          this.props.onBlur({ __isFocusWithinEvent: true })
+          this.props.onBlur?.({ __isFocusWithinEvent: true })
         }
       })
     }
