@@ -1,7 +1,10 @@
-import { memo, useCallback, forwardRef } from 'react'
+import { memo, useCallback, useMemo, forwardRef } from 'react'
 import { Link, useLocation } from 'react-router'
+import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { Transition } from 'react-transition-group'
+import { useAtom } from 'jotai'
+
+import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
 
 const StyledLink = styled(Link)`
   overflow: hidden;
@@ -24,7 +27,7 @@ const StyledText = styled.div`
 `
 
 export const Label = memo(
-  forwardRef(({ navData, outerContainerRef, labelStyle }, labelRef) => {
+  forwardRef(({ navData, outerContainerRef, labelStyle }, ref) => {
     const { pathname, search } = useLocation()
 
     // issue: relative paths are not working!!!???
@@ -32,6 +35,8 @@ export const Label = memo(
     const pathnameDecoded = decodeURIComponent(pathname)
     const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
     const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
+
+    console.log('Label, labelStyle:', labelStyle)
 
     const onClick = useCallback(() => {
       const element = outerContainerRef.current
@@ -43,25 +48,36 @@ export const Label = memo(
       }, 200)
     }, [])
 
-    if (linksToSomewhereElse) {
-      return (
-        <StyledLink
-          to={{ pathname: navData.url, search }}
-          onClick={onClick}
-          ref={labelRef}
-          style={labelStyle}
-        >
-          {navData.labelShort ?? navData.label}
-        </StyledLink>
-      )
-    }
-    return (
-      <StyledText
-        style={labelStyle}
-        ref={labelRef}
-      >
-        {navData.labelShort ?? navData.label}
-      </StyledText>
+    const label = useMemo(
+      () =>
+        linksToSomewhereElse ?
+          <StyledLink
+            to={{ pathname: navData.url, search }}
+            onClick={onClick}
+            ref={ref}
+            style={{ ...labelStyle }}
+          >
+            {navData.labelShort ?? navData.label}
+          </StyledLink>
+        : <StyledText
+            ref={ref}
+            style={{ ...labelStyle }}
+          >
+            {navData.labelShort ?? navData.label}
+          </StyledText>,
+      [
+        linksToSomewhereElse,
+        navData.label,
+        navData.labelShort,
+        navData.url,
+        search,
+        labelStyle,
+      ],
     )
+
+    const [isDesktopView] = useAtom(isDesktopViewAtom)
+
+    if (isDesktopView) return <Tooltip title={navData.label}>{label}</Tooltip>
+    return label
   }),
 )

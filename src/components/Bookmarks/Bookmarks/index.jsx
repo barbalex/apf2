@@ -32,7 +32,6 @@ export const Bookmarks = memo(() => {
   const allMatches = useMatches()
 
   const matches = useMemo(() => matchesFromAllMatches(allMatches), [allMatches])
-  console.log('Bookmarks, matches:', matches)
 
   // flex-direction row-reverse combined with reverse order of matches
   // to align bookmarks to the right, but still have them in order
