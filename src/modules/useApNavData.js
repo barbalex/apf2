@@ -299,7 +299,7 @@ export const useApNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: 'projekt',
+      id: apId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}`,
       label,
       // leave totalCount undefined as the menus are folders

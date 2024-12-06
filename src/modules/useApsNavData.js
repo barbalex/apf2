@@ -51,7 +51,7 @@ export const useApsNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: 'Daten',
+      id: 'Arten',
       url: `/Daten/Projekte/${projId}/Arten`,
       label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus:
