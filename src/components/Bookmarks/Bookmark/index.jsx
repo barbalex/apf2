@@ -3,7 +3,6 @@ import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 
 import { Label } from './Label.jsx'
-
 const OuterContainer = styled.div`
   position: relative;
   &::after,
@@ -19,8 +18,6 @@ const OuterContainer = styled.div`
     width: 2em;
     z-index: 1;
   }
-  // TODO: change calculations if padding was changed (was 9+9)
-  // now: per menu 7px more padding plus 15px on right
   padding-left: 25px;
   &:last-of-type {
     // border-left: 1.5px solid rgb(46, 125, 50);
