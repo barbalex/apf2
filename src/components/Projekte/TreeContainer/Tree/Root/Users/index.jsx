@@ -1,5 +1,6 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
@@ -23,10 +24,14 @@ export const UsersFolder = memo(
       (nodeArray) => nodeArray[0] === 'Benutzer',
     )
 
+    console.log('UsersFolder, isOpen:', isOpen)
+
     return (
       <>
         <Row node={node} />
-        {isOpen && <Users usersFilter={usersFilter} />}
+        <TransitionGroup component={null}>
+          {isOpen && <Users usersFilter={usersFilter} />}
+        </TransitionGroup>
       </>
     )
   }),
