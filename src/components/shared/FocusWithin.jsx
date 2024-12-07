@@ -29,11 +29,6 @@ export function withFocusWithin(Component) {
 }
 
 export class FocusWithin extends React.Component {
-  // static defaultProps = {
-  //   onBlur: () => {},
-  //   onFocus: () => {},
-  // }
-
   static wrapComponent = withFocusWithin
 
   state = {
