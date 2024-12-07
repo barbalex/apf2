@@ -1,4 +1,5 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
 
@@ -13,5 +14,23 @@ export const User = memo(({ inProp, menu }) => {
     hasChildren: false,
   }
 
-  return <Row node={node} />
+  const ref = useRef(null)
+
+  return (
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Row
+          node={node}
+          transitionState={state}
+          ref={ref}
+        />
+      )}
+    </Transition>
+  )
 })

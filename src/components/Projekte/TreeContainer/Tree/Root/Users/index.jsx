@@ -24,8 +24,6 @@ export const UsersFolder = memo(
       (nodeArray) => nodeArray[0] === 'Benutzer',
     )
 
-    console.log('UsersFolder, isOpen:', isOpen)
-
     return (
       <>
         <Row node={node} />
