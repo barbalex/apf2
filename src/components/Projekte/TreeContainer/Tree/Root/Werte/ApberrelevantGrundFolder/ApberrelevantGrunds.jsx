@@ -4,7 +4,7 @@ import { Transition } from 'react-transition-group'
 import { Row } from '../../../Row.jsx'
 import { useTpopApberrelevantGrundWertesNavData } from '../../../../../../../modules/useTpopApberrelevantGrundWertesNavData.js'
 
-export const ApberrelevantGrund = memo(({ in: inProp }) => {
+export const ApberrelevantGrunds = memo(({ in: inProp }) => {
   const { navData } = useTpopApberrelevantGrundWertesNavData()
 
   const nodes = (navData?.menus).map((el) => ({

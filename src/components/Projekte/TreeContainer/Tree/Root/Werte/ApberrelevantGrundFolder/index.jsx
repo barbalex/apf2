@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
-import { ApberrelevantGrund } from './ApberrelevantGrund.jsx'
+import { ApberrelevantGrunds } from './ApberrelevantGrunds.jsx'
 
 export const ApberrelevantGrundFolder = memo(
   observer(({ menu, in: inProp }) => {
@@ -43,7 +43,7 @@ export const ApberrelevantGrundFolder = memo(
               ref={ref}
             />
             <TransitionGroup component={null}>
-              {isOpen && <ApberrelevantGrund />}
+              {isOpen && <ApberrelevantGrunds />}
             </TransitionGroup>
           </>
         )}

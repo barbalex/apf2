@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
-import { ZaehlEinheit } from './ZaehlEinheit.jsx'
+import { ZaehlEinheits } from './ZaehlEinheits.jsx'
 
 export const ZaehlEinheitFolder = memo(
   observer(({ menu, in: inProp }) => {
@@ -45,7 +45,7 @@ export const ZaehlEinheitFolder = memo(
               ref={ref}
             />
             <TransitionGroup component={null}>
-              {isOpen && <ZaehlEinheit />}
+              {isOpen && <ZaehlEinheits />}
             </TransitionGroup>
           </>
         )}

@@ -7,9 +7,9 @@ import { TransitionGroup } from 'react-transition-group'
 import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
 import { AdresseFolder } from './Adresse/index.jsx'
-import { ApberrelevantGrundFolder } from './ApberrelevantGrund/index.jsx'
-import { EkAbrechnungstypFolder } from './EkAbrechnungstyp/index.jsx'
-import { ZaehlEinheitFolder } from './ZaehlEinheit/index.jsx'
+import { ApberrelevantGrundFolder } from './ApberrelevantGrundFolder/index.jsx'
+import { EkAbrechnungstypFolder } from './EkAbrechnungstypFolder/index.jsx'
+import { ZaehlEinheitFolder } from './ZaehlEinheitFolder/index.jsx'
 import { useWertesNavData } from '../../../../../../modules/useWertesNavData.js'
 
 export const WerteFolder = memo(

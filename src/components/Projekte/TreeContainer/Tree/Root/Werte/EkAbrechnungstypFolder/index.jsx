@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
-import { EkAbrechnungstyp } from './EkAbrechnungstyp.jsx'
+import { EkAbrechnungstyps } from './EkAbrechnungstyps.jsx'
 
 export const EkAbrechnungstypFolder = memo(
   observer(({ menu, in: inProp }) => {
@@ -43,7 +43,7 @@ export const EkAbrechnungstypFolder = memo(
               ref={ref}
             />
             <TransitionGroup component={null}>
-              {isOpen && <EkAbrechnungstyp />}
+              {isOpen && <EkAbrechnungstyps />}
             </TransitionGroup>
           </>
         )}
