@@ -39,11 +39,12 @@ export const Label = memo(
     const onClick = useCallback(() => {
       const element = outerContainerRef.current
       if (!element) return
+      // the timeout needs to be rather long to wait for the transition to finish
       setTimeout(() => {
         element.scrollIntoView({
           inline: 'start',
         })
-      }, 200)
+      }, 1000)
     }, [])
 
     const label = useMemo(
