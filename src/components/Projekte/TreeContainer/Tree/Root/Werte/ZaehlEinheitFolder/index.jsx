@@ -27,8 +27,6 @@ export const ZaehlEinheitFolder = memo(
 
     const ref = useRef(null)
 
-    console.log('ZaehlEinheitFolder, inProp:', inProp)
-
     return (
       <Transition
         in={inProp}

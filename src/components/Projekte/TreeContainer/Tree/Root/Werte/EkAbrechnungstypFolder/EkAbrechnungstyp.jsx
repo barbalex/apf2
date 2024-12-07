@@ -17,5 +17,21 @@ export const EkAbrechnungstyp = memo(({ inProp, menu }) => {
 
   const ref = useRef(null)
 
-  return <Row node={node} />
+  return (
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Row
+          node={node}
+          transitionState={state}
+          ref={ref}
+        />
+      )}
+    </Transition>
+  )
 })

@@ -1,17 +1,16 @@
 import { memo, useRef } from 'react'
 import { Transition } from 'react-transition-group'
 
-import { Row } from '../../../Row.jsx'
+import { Row } from '../../Row.jsx'
 
-export const ApberrelevantGrund = memo(({ inProp, menu }) => {
+export const Issue = memo(({ inProp, menu }) => {
   const node = {
     nodeType: 'table',
-    menuType: 'tpopApberrelevantGrundWerte',
+    menuType: 'currentIssue',
     id: menu.id,
-    parentId: 'tpopApberrelevantGrundWerteFolder',
     urlLabel: menu.id,
     label: menu.label,
-    url: ['Werte-Listen', 'ApberrelevantGrundWerte', menu.id],
+    url: ['Aktuelle-Fehler', menu.id],
     hasChildren: false,
   }
 

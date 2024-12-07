@@ -6,7 +6,7 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
-import { AdresseFolder } from './Adresse/index.jsx'
+import { AdresseFolder } from './AdresseFolder/index.jsx'
 import { ApberrelevantGrundFolder } from './ApberrelevantGrundFolder/index.jsx'
 import { EkAbrechnungstypFolder } from './EkAbrechnungstypFolder/index.jsx'
 import { ZaehlEinheitFolder } from './ZaehlEinheitFolder/index.jsx'

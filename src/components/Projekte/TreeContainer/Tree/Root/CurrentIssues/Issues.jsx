@@ -1,26 +1,30 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 
-import { Row } from '../../Row.jsx'
 import { useCurrentissuesNavData } from '../../../../../../modules/useCurrentissuesNavData.js'
+import { Issue } from './Issue.jsx'
 
-export const Issues = memo(() => {
+export const Issues = memo(({ in: inProp }) => {
   const { navData } = useCurrentissuesNavData()
 
-  const currentIssues = navData?.menus ?? []
-  const nodes = currentIssues.map((el) => ({
-    nodeType: 'table',
-    menuType: 'currentIssue',
-    id: el.id,
-    urlLabel: el.id,
-    label: el.label,
-    url: ['Aktuelle-Fehler', el.id],
-    hasChildren: false,
-  }))
+  const nodes = useMemo(
+    () =>
+      navData?.menus.map((menu) => ({
+        nodeType: 'table',
+        menuType: 'currentIssue',
+        id: menu.id,
+        urlLabel: menu.id,
+        label: menu.label,
+        url: ['Aktuelle-Fehler', menu.id],
+        hasChildren: false,
+      })),
+    [navData],
+  )
 
   return nodes.map((node) => (
-    <Row
+    <Issue
       key={node.id}
-      node={node}
+      inProp={inProp}
+      menu={node}
     />
   ))
 })

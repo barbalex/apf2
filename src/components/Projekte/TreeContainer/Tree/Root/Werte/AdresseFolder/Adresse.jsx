@@ -3,15 +3,15 @@ import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../Row.jsx'
 
-export const ApberrelevantGrund = memo(({ inProp, menu }) => {
+export const Adresse = memo(({ inProp, menu }) => {
   const node = {
     nodeType: 'table',
-    menuType: 'tpopApberrelevantGrundWerte',
+    menuType: 'adresse',
     id: menu.id,
-    parentId: 'tpopApberrelevantGrundWerteFolder',
+    parentId: 'adresseFolder',
     urlLabel: menu.id,
     label: menu.label,
-    url: ['Werte-Listen', 'ApberrelevantGrundWerte', menu.id],
+    url: ['Werte-Listen', 'Adressen', menu.id],
     hasChildren: false,
   }
 

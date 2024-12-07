@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
-import { Adresse } from './Adresse.jsx'
+import { Adresses } from './Adresses.jsx'
 
 export const AdresseFolder = memo(
   observer(({ menu, in: inProp }) => {
@@ -43,7 +43,7 @@ export const AdresseFolder = memo(
               ref={ref}
             />
             <TransitionGroup component={null}>
-              {isOpen && <Adresse />}
+              {isOpen && <Adresses />}
             </TransitionGroup>
           </>
         )}
