@@ -42,7 +42,9 @@ export const AdresseFolder = memo(
               transitionState={state}
               ref={ref}
             />
-            {isOpen && <Adresse />}
+            <TransitionGroup component={null}>
+              {isOpen && <Adresse />}
+            </TransitionGroup>
           </>
         )}
       </Transition>

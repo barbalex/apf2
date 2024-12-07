@@ -1,9 +1,10 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../Row.jsx'
 import { useEkAbrechnungstypWertesNavData } from '../../../../../../../modules/useEkAbrechnungstypWertesNavData.js'
 
-export const EkAbrechnungstyp = memo(() => {
+export const EkAbrechnungstyp = memo(({ in: inProp }) => {
   const { navData } = useEkAbrechnungstypWertesNavData()
 
   return navData.menus.map((el) => {

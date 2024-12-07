@@ -44,7 +44,9 @@ export const ZaehlEinheitFolder = memo(
               transitionState={state}
               ref={ref}
             />
-            {isOpen && <ZaehlEinheit />}
+            <TransitionGroup component={null}>
+              {isOpen && <ZaehlEinheit />}
+            </TransitionGroup>
           </>
         )}
       </Transition>

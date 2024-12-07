@@ -42,7 +42,9 @@ export const ApberrelevantGrundFolder = memo(
               transitionState={state}
               ref={ref}
             />
-            {isOpen && <ApberrelevantGrund />}
+            <TransitionGroup component={null}>
+              {isOpen && <ApberrelevantGrund />}
+            </TransitionGroup>
           </>
         )}
       </Transition>

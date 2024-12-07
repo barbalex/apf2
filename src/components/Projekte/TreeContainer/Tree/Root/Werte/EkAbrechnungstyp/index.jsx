@@ -42,7 +42,9 @@ export const EkAbrechnungstypFolder = memo(
               transitionState={state}
               ref={ref}
             />
-            {isOpen && <EkAbrechnungstyp />}
+            <TransitionGroup component={null}>
+              {isOpen && <EkAbrechnungstyp />}
+            </TransitionGroup>
           </>
         )}
       </Transition>
