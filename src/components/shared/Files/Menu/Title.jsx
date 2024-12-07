@@ -1,4 +1,4 @@
-import { memo, forwardRef } from 'react'
+import { memo } from 'react'
 import { Tooltip } from '@mui/material'
 import styled from '@emotion/styled'
 
@@ -32,35 +32,33 @@ const Content = styled.div`
   row-gap: 2px;
 `
 
-const FileNameForTooltip = memo(
-  forwardRef(({ file, ...props }, ref) => (
-    <TitleContainer
-      ref={ref}
-      {...props}
-    >
-      <Content>
-        {file.name && (
-          <>
-            <div>Name:</div>
-            <div>{file.name}</div>
-          </>
-        )}
-        {file.fileMimeType && (
-          <>
-            <div>Typ:</div>
-            <div>{file.fileMimeType}</div>
-          </>
-        )}
-        {file.beschreibung && (
-          <>
-            <div>Beschreibung:</div>
-            <div>{file.beschreibung}</div>
-          </>
-        )}
-      </Content>
-    </TitleContainer>
-  )),
-)
+const FileNameForTooltip = memo(({ file, props, ref }) => (
+  <TitleContainer
+    ref={ref}
+    {...props}
+  >
+    <Content>
+      {file.name && (
+        <>
+          <div>Name:</div>
+          <div>{file.name}</div>
+        </>
+      )}
+      {file.fileMimeType && (
+        <>
+          <div>Typ:</div>
+          <div>{file.fileMimeType}</div>
+        </>
+      )}
+      {file.beschreibung && (
+        <>
+          <div>Beschreibung:</div>
+          <div>{file.beschreibung}</div>
+        </>
+      )}
+    </Content>
+  </TitleContainer>
+))
 
 export const Title = memo(({ file, numbers, titleComponentWidth }) => {
   if (!file && numbers === undefined) return null
