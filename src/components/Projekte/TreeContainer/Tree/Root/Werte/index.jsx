@@ -2,6 +2,7 @@ import { memo, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { gql, useApolloClient } from '@apollo/client'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
 import { StoreContext } from '../../../../../../storeContext.js'
@@ -53,14 +54,26 @@ export const WerteFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <>
-            <AdresseFolder menu={adresseMenu} />
-            <ApberrelevantGrundFolder menu={apberrelevantGrundMenu} />
-            <EkAbrechnungstypFolder menu={ekAbrechnungstypMenu} />
-            <ZaehlEinheitFolder menu={zaehleinheitMenu} />
-          </>
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && [
+            <AdresseFolder
+              key={1}
+              menu={adresseMenu}
+            />,
+            <ApberrelevantGrundFolder
+              key={2}
+              menu={apberrelevantGrundMenu}
+            />,
+            <EkAbrechnungstypFolder
+              key={3}
+              menu={ekAbrechnungstypMenu}
+            />,
+            <ZaehlEinheitFolder
+              key={4}
+              menu={zaehleinheitMenu}
+            />,
+          ]}
+        </TransitionGroup>
       </>
     )
   }),

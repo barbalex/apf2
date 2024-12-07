@@ -1,12 +1,13 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { StoreContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
 import { EkAbrechnungstyp } from './EkAbrechnungstyp.jsx'
 
 export const EkAbrechnungstypFolder = memo(
-  observer(({ menu }) => {
+  observer(({ menu, in: inProp }) => {
     const store = useContext(StoreContext)
 
     const isOpen =
@@ -24,11 +25,27 @@ export const EkAbrechnungstypFolder = memo(
       hasChildren: menu?.count > 0,
     }
 
+    const ref = useRef(null)
+
     return (
-      <>
-        <Row node={node} />
-        {isOpen && <EkAbrechnungstyp />}
-      </>
+      <Transition
+        in={inProp}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={ref}
+      >
+        {(state) => (
+          <>
+            <Row
+              node={node}
+              transitionState={state}
+              ref={ref}
+            />
+            {isOpen && <EkAbrechnungstyp />}
+          </>
+        )}
+      </Transition>
     )
   }),
 )
