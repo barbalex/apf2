@@ -4,7 +4,7 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../storeContext.js'
-import { EkZaehleinheits } from './EkZaehleinheits.jsx'
+import { Ekzaehleinheits } from './Ekzaehleinheits.jsx'
 
 export const EkZaehleinheitFolder = memo(
   observer(({ projekt, ap, menu }) => {
@@ -37,7 +37,7 @@ export const EkZaehleinheitFolder = memo(
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <EkZaehleinheits
+            <Ekzaehleinheits
               projekt={projekt}
               ap={ap}
             />

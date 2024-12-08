@@ -3,7 +3,7 @@ import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 
-export const EkZaehleinheit = memo(({ projekt, ap, inProp, menu }) => {
+export const Ekzaehleinheit = memo(({ projekt, ap, inProp, menu }) => {
   const node = {
     nodeType: 'table',
     menuType: 'ekzaehleinheit',

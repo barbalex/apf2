@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../storeContext.js'
-import { AssozArts } from './AssozArts.jsx'
+import { AssozArts } from './Assozarts.jsx'
 
-export const AssozArtFolder = memo(
+export const AssozartFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 
