@@ -1,39 +1,21 @@
 import { memo } from 'react'
 
-import { Row } from '../../../../../../Row.jsx'
 import { useErfkritsNavData } from '../../../../../../../../../../modules/useErfkritsNavData.js'
+import { Aperfkrit } from './Aperfkrit.jsx'
 
-export const ApErfkrit = memo(({ projekt, ap }) => {
+export const Aperfkrits = memo(({ projekt, ap, in: inProp }) => {
   const { navData } = useErfkritsNavData({
     projId: projekt.id,
     apId: ap.id,
   })
 
-  return navData.menus.map((menu) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'erfkrit',
-      id: menu.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
-      urlLabel: menu.id,
-      label: menu.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'AP-Erfolgskriterien',
-        menu.id,
-      ],
-      hasChildren: false,
-    }
-
-    return (
-      <Row
-        key={menu.id}
-        node={node}
-      />
-    )
-  })
+  return navData.menus.map((menu) => (
+    <Aperfkrit
+      key={menu.id}
+      projekt={projekt}
+      ap={ap}
+      menu={menu}
+      inProp={inProp}
+    />
+  ))
 })

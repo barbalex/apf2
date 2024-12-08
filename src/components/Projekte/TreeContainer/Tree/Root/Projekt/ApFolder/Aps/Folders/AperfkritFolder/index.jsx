@@ -1,9 +1,10 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
-import { ApErfkrit } from './Aperfkrits.jsx'
+import { Aperfkrits } from './Aperfkrits.jsx'
 
 export const AperfkritFolder = memo(
   observer(({ projekt, ap, menu }) => {
@@ -34,12 +35,14 @@ export const AperfkritFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <ApErfkrit
-            projekt={projekt}
-            ap={ap}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <Aperfkrits
+              projekt={projekt}
+              ap={ap}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),
