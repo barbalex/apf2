@@ -1,32 +1,21 @@
 import { memo } from 'react'
 
-import { Row } from '../../../../../../Row.jsx'
 import { useApbersNavData } from '../../../../../../../../../../modules/useApbersNavData.js'
+import { Apber } from './Apber.jsx'
 
-export const Apbers = memo(({ projekt, ap }) => {
+export const Apbers = memo(({ projekt, ap, in: inProp }) => {
   const { navData } = useApbersNavData({
     projId: projekt.id,
     apId: ap.id,
   })
 
-  return navData.menus.map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'apber',
-      id: el.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Berichte', el.id],
-      hasChildren: false,
-    }
-
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
+  return navData.menus.map((menu) => (
+    <Apber
+      key={menu.id}
+      projekt={projekt}
+      ap={ap}
+      menu={menu}
+      inProp={inProp}
+    />
+  ))
 })
