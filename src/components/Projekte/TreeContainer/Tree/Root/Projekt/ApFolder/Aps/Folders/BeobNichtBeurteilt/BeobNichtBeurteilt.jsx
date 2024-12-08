@@ -3,10 +3,10 @@ import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 
-export const BeobNichtZuzuordnen = memo(({ projekt, ap, inProp, menu }) => {
+export const BeobNichtBeurteilt = memo(({ projekt, ap, inProp, menu }) => {
   const node = {
     nodeType: 'table',
-    menuType: 'beobNichtZuzuordnen',
+    menuType: 'beobNichtBeurteilt',
     id: menu.id,
     parentId: ap.id,
     parentTableId: ap.id,
@@ -17,7 +17,7 @@ export const BeobNichtZuzuordnen = memo(({ projekt, ap, inProp, menu }) => {
       projekt.id,
       'Arten',
       ap.id,
-      'nicht-zuzuordnende-Beobachtungen',
+      'nicht-beurteilte-Beobachtungen',
       menu.id,
     ],
     hasChildren: false,
