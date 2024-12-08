@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
-import { ApErfkrit } from './ApErfkrit.jsx'
+import { ApErfkrit } from './Aperfkrits.jsx'
 
-export const ApErfkritFolder = memo(
+export const AperfkritFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 

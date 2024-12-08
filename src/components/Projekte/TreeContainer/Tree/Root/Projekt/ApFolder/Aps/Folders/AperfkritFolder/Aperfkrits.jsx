@@ -9,29 +9,29 @@ export const ApErfkrit = memo(({ projekt, ap }) => {
     apId: ap.id,
   })
 
-  return navData.menus.map((el) => {
+  return navData.menus.map((menu) => {
     const node = {
       nodeType: 'table',
       menuType: 'erfkrit',
-      id: el.id,
+      id: menu.id,
       parentId: ap.id,
       parentTableId: ap.id,
-      urlLabel: el.id,
-      label: el.label,
+      urlLabel: menu.id,
+      label: menu.label,
       url: [
         'Projekte',
         projekt.id,
         'Arten',
         ap.id,
         'AP-Erfolgskriterien',
-        el.id,
+        menu.id,
       ],
       hasChildren: false,
     }
 
     return (
       <Row
-        key={el.id}
+        key={menu.id}
         node={node}
       />
     )
