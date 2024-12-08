@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { MdClear } from 'react-icons/md'
 import upperFirst from 'lodash/upperFirst'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const valForStore = (valPassed) => {
   let val = valPassed

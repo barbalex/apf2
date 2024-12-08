@@ -8,7 +8,7 @@ import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
 
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import { queryAll } from './queryAll.js'
 import { CellForYearMenu } from './CellForYearMenu/index.jsx'
 import { yearsFromTpops } from './yearsFromTpops.js'

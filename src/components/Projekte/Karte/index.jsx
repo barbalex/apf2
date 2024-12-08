@@ -67,7 +67,7 @@ import 'leaflet-measure/dist/leaflet-measure.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 // this does not work
 // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214

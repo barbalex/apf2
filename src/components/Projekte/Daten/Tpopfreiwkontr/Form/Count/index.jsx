@@ -13,7 +13,7 @@ import { Gezaehlt } from './Gezaehlt.jsx'
 import { Geschaetzt } from './Geschaetzt.jsx'
 import { query } from './query.js'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
-import { MobxContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 import { Error } from '../../../../../shared/Error.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 

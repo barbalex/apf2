@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'

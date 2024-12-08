@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 
 import { initial as tpopmassn } from '../../../../store/Tree/DataFilter/tpopmassn.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const Row = styled.div``
 const Title = styled.div`

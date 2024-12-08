@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { tpop } from '../../shared/fragments.js'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const Select = styled.select`
   width: 100%;

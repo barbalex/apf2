@@ -5,7 +5,7 @@ import { StyledTableCell } from '../index.jsx'
 import { EkIcon } from './EkIcon.jsx'
 import { MassnIcon } from './MassnIcon.jsx'
 import { InfoRow } from '../index.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 export const CellForYear = memo(
   observer(({ field, row, style }) => {

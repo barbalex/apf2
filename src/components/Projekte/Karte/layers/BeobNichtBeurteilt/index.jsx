@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
 const iconCreateFunction = function (cluster) {

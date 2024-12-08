@@ -29,7 +29,7 @@ import { layerLegends } from './layerLegends.js'
 import findIndex from 'lodash/findIndex'
 
 import { Checkbox } from './shared/Checkbox.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);

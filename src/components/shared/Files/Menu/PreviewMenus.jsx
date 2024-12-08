@@ -21,7 +21,7 @@ import screenfull from 'screenfull'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 import { UploaderContext } from '../../../../UploaderContext.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from './index.jsx'
 
 export const PreviewMenus = memo(

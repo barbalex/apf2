@@ -16,7 +16,7 @@ import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'

@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import sum from 'lodash/sum'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const CheckboxContainer = styled.div`
   width: 100%;

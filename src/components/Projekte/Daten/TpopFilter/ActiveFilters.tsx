@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const FilterCommentTitle = styled.div`

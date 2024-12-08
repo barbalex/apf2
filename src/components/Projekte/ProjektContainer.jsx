@@ -17,7 +17,7 @@ const Exporte = lazy(async () => ({
 const Filter = lazy(async () => ({
   default: (await import('./Filter/index.jsx')).Filter,
 }))
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'

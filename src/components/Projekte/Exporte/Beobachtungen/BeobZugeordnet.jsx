@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { exportModule } from '../../../../modules/export.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 export const BeobZugeordnet = memo(

@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
 
 import { MenuItem } from './MenuItem.jsx'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 // don't know why but divider is too thick,
 // thicker than ListItemButton divider

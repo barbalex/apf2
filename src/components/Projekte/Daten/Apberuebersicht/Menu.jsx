@@ -13,7 +13,7 @@ import isEqual from 'lodash/isEqual'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }

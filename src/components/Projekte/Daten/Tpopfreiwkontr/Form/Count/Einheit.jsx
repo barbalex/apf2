@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { Select } from '../../../../../shared/Select.jsx'
-import { MobxContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 

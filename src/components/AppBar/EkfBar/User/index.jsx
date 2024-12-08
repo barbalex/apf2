@@ -20,7 +20,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { updateUserById as updateUserByIdGql } from './updateUserById.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { logout } from '../../../../modules/logout.js'
 import { IdbContext } from '../../../../idbContext.js'
 

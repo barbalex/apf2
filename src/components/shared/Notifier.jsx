@@ -2,7 +2,7 @@ import { useEffect, useContext, useState, memo } from 'react'
 import { useSnackbar } from 'notistack'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 
 export const Notifier = memo(
   observer(() => {

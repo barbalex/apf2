@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,

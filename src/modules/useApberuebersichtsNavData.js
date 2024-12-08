@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { MobxContext } from '../storeContext.js'
+import { MobxContext } from '../mobxContext.js'
 
 export const useApberuebersichtsNavData = (props) => {
   const apolloClient = useApolloClient()

@@ -8,7 +8,7 @@ import { useParams } from 'react-router'
 
 import { logout } from '../../../../../modules/logout.js'
 import { EkfUser } from './EkfUser/index.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { AlwaysShowBookmarks } from './AlwaysShowBookmarks.jsx'

@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/client'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { queryTpops } from './queryTpops.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { Ek } from './Ek/index.jsx'
 import { Tpop } from './Tpop.jsx'

@@ -24,7 +24,7 @@ import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePat
 import { isNodeOpen } from '../isNodeOpen.js'
 import { toggleNode } from './toggleNode.js'
 import { toggleNodeSymbol } from './toggleNodeSymbol.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { historizeForAp } from '../../../../modules/historizeForAp.js'

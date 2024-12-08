@@ -18,7 +18,7 @@ import { TpopfeldkontrentwicklungPopover } from '../TpopfeldkontrentwicklungPopo
 import { constants } from '../../../../modules/constants.js'
 import { query } from './query.js'
 import { queryTpopkontrs } from './queryTpopkontrs.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'

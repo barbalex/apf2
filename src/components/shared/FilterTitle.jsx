@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { exists } from '../../modules/exists.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 

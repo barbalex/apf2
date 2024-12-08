@@ -9,7 +9,7 @@ import { useLocation } from 'react-router'
 
 import { tables } from '../../../../modules/tables.js'
 import { deleteModule } from './delete/index.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const StyledDialog = styled(Dialog)`

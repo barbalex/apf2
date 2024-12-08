@@ -1,7 +1,7 @@
 import { memo, useEffect, useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { isElementInViewport } from '../../../../modules/isElementInViewport.js'
 
 export const IntoViewScroller = memo(

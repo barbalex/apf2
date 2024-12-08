@@ -28,7 +28,7 @@ import { buildClient } from './client.js'
 
 import { store as jotaiStore } from './JotaiStore/index.js'
 
-import { MobxContext } from './storeContext.js'
+import { MobxContext } from './mobxContext.js'
 import { IdbContext } from './idbContext.js'
 import { UploaderContext } from './UploaderContext.js'
 

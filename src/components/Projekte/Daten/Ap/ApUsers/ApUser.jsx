@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { useApolloClient, gql } from '@apollo/client'
 
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 
 const DelIcon = styled(IconButton)`
   font-size: 1rem !important;

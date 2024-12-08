@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'

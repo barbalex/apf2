@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import { getNearestTpop } from '../../../../../modules/getNearestTpop.js'

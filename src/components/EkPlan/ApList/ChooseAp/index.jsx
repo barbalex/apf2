@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { queryApsToChoose } from './queryApsToChoose.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const StyledSelect = styled(AsyncSelect)`

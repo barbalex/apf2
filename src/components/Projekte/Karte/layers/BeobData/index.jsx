@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 import { Field } from './Field.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { beob } from '../../../../shared/fragments.js'
 import { Info } from '../BeobZugeordnet/Marker.jsx'
 

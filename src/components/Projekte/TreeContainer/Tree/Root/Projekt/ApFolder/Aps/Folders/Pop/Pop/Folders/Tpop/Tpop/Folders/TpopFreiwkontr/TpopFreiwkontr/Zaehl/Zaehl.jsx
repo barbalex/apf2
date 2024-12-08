@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../../../../../mobxContext.js'
 
 export const Zaehl = memo(
   observer(({ projekt, ap, pop, tpop, tpopkontr }) => {

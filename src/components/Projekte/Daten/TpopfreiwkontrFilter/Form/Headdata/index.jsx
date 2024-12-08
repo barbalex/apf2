@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
 import { Select } from '../../../../../shared/Select.jsx'
-import { MobxContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 

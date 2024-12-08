@@ -2,7 +2,7 @@ import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { MobxContext } from '../storeContext.js'
+import { MobxContext } from '../mobxContext.js'
 
 export const LastTouchedNodeSetter = memo(
   observer(() => {

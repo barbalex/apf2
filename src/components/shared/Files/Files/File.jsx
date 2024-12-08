@@ -21,7 +21,7 @@ import {
 } from '../../fragments.js'
 import { isImageFile } from '../isImageFile.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const Container = styled.div`
   display: flex;

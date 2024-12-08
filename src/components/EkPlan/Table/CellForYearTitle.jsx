@@ -2,7 +2,7 @@ import { memo, useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell, InfoRow } from './index.jsx'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 export const CellForYearTitle = memo(
   observer(({ style, row }) => {

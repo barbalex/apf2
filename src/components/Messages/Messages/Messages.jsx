@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
 
 import { createUsermessage } from '../createUsermessage.js'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const Container = styled.div`
   height: 100%;

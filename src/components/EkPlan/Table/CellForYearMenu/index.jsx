@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from '@apollo/client'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { queryTpop } from './queryTpop.js'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.js'
 import { mutationCreateEkplan } from './mutationCreateEkplan.js'

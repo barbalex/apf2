@@ -3,7 +3,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
-import { MobxContext } from '../storeContext.js'
+import { MobxContext } from '../mobxContext.js'
 
 export const useUsersNavData = () => {
   const apolloClient = useApolloClient()

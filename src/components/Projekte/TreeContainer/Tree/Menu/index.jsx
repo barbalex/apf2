@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`

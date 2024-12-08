@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import { query } from './query.js'
 import { createUsermessage } from './createUsermessage.js'
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { Error } from '../shared/Error.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { MessagesList } from './Messages/index.jsx'

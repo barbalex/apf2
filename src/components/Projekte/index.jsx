@@ -8,7 +8,7 @@ import queryString from 'query-string'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import { ProjektContainer } from './ProjektContainer.jsx'
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'

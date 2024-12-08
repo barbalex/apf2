@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
 import { PopFolders } from './Folders/index.jsx'
 import { usePopsNavData } from '../../../../../../../../../../../modules/usePopsNavData.js'
 

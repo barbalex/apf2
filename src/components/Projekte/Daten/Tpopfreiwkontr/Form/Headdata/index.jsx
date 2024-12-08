@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient, gql } from '@apollo/client'
 
 import { Select } from '../../../../../shared/Select.jsx'
-import { MobxContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.js'
 import {
   adresse as adresseFragment,

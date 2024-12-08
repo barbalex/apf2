@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 
 const Area = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.5);

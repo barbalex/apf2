@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Checkbox } from './Checkbox.jsx'
 import { StyledCellForSelect } from './index.jsx'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 export const CellForEkfrequenzAbweichend = memo(
   observer(({ field, row, style }) => {

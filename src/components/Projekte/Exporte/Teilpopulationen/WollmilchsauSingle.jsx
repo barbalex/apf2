@@ -6,7 +6,7 @@ import { useApolloClient, gql } from '@apollo/client'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { exportModule } from '../../../../modules/export.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const AutocompleteContainer = styled.div`
   flex-basis: 450px;

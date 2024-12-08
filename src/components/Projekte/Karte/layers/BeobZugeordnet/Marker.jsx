@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobHighlightedIconString } from './beobHighlightedIconString.js'
 import { getNearestTpop } from '../../../../../modules/getNearestTpop.js'

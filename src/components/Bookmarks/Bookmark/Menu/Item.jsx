@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router'
 import styled from '@emotion/styled'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 export const Item = memo(
   observer(({ menu, baseUrl, onClose }) => {

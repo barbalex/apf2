@@ -6,7 +6,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 
 const MapIcon = styled(MdLocalFlorist)`
   margin-right: -0.1em;

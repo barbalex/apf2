@@ -18,7 +18,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 

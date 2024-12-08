@@ -15,7 +15,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { TpopAbBerRelevantInfoPopover } from '../TpopAbBerRelevantInfoPopover.jsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { constants } from '../../../../modules/constants.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { Coordinates } from '../../../shared/Coordinates.jsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import {

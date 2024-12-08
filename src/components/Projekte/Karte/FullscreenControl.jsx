@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa'
 import screenfull from 'screenfull'
 
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const Button = styled.button`
   background-color: white;

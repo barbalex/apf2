@@ -8,7 +8,7 @@ import { Bar } from './Bar/index.jsx'
 import { EkfBar } from './EkfBar/index.jsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { constants } from '../../modules/constants.js'
 import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 

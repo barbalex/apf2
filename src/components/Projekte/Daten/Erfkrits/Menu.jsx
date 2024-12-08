@@ -11,7 +11,7 @@ import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 

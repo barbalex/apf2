@@ -22,7 +22,7 @@ import {
 } from '../fragments'
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import { Menu } from './Menu/index.jsx'
 
 const Container = styled.div`

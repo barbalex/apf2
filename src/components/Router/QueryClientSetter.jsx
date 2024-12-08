@@ -3,7 +3,7 @@ import { memo, useContext, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 
 export const QueryClientSetter = memo(
   observer(() => {

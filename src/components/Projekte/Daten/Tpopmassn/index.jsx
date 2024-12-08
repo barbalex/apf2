@@ -16,7 +16,7 @@ import { StringToCopy } from '../../../shared/StringToCopy.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { exists } from '../../../../modules/exists.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 

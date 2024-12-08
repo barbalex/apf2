@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { useTpopmassnbersNavData } from '../../../../modules/useTpopmassnbersNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'

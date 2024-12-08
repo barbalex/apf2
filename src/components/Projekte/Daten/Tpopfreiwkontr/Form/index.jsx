@@ -21,7 +21,7 @@ import { Files } from './Files.jsx'
 import { Count } from './Count/index.jsx'
 import { Verification } from './Verification.jsx'
 import { Image } from './Image.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 import {
   adresse as adresseFragment,

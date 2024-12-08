@@ -243,7 +243,7 @@ import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.js
 import { openLowerNodes } from './openLowerNodes/index.js'
 import { closeLowerNodes } from './closeLowerNodes.js'
 import { insertDataset } from './insertDataset.js'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import { useProjekteTabs } from '../../../modules/useProjekteTabs.js'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.js'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'

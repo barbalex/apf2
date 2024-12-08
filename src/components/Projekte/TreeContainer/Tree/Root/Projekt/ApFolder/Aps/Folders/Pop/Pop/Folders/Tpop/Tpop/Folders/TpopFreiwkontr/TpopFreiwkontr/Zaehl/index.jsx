@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../../../../../mobxContext.js'
 import { Zaehl } from './Zaehl.jsx'
 
 export const ZaehlFolder = memo(

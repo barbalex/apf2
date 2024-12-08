@@ -9,7 +9,7 @@ import sortBy from 'lodash/sortBy'
 // but only in production!
 import { EkfList } from './List/index.jsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'

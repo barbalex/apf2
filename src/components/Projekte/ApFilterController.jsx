@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useApolloClient, gql } from '@apollo/client'
 
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 
 export const ApFilterController = memo(
   observer(() => {

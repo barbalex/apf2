@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Field as BeobField } from './Field.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const OuterContainer = styled.div`
   container-type: inline-size;

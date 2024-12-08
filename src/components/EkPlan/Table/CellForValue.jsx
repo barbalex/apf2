@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { StyledTableCell } from './index.jsx'
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const Container = styled.div`
   height: 100%;

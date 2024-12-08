@@ -13,7 +13,7 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const SelectContainer = styled.div`

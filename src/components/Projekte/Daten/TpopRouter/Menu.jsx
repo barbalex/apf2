@@ -28,7 +28,7 @@ import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'

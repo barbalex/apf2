@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { Polyline } from './Polyline.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
 const Polylines = memo(

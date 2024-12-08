@@ -15,7 +15,7 @@ import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.js'
 import { queryEkfTpops } from './queryEkfTpops.js'

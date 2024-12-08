@@ -4,7 +4,7 @@ import 'leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const style = () => ({
   fill: true,

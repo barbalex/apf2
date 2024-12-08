@@ -2,7 +2,7 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
 import { TpopMassn } from './TpopMassn.jsx'
 
 export const TpopMassnFolder = memo(

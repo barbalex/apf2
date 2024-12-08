@@ -16,7 +16,7 @@ import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 import { motion, useAnimation } from 'framer-motion'
 
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { listLabelFilterIsIconAtom } from '../../JotaiStore/index.js'
 
 export const labelFilterWidth = 192

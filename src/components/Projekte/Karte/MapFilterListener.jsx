@@ -2,7 +2,7 @@ import { memo, useContext, useEffect } from 'react'
 import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 export const MapFilterListener = memo(
   observer(() => {

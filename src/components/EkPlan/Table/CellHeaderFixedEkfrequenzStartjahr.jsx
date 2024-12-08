@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
 
 export const StyledCell = styled.div`

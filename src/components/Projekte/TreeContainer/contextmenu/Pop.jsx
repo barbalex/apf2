@@ -6,7 +6,7 @@ import {
 } from '../../../../modules/react-contextmenu/index.js'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 // create objects outside render

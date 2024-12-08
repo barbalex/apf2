@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import upperFirst from 'lodash/upperFirst'
 
-import { MobxContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
 import { epsg2056to4326 } from '../../modules/epsg2056to4326.js'
 import {

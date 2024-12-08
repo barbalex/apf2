@@ -3,7 +3,7 @@ import 'leaflet'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const StyledDiv = styled.div`
   background-color: transparent;

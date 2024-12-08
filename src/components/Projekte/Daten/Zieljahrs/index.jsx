@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import union from 'lodash/union'
 
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { useZieljahrsNavData } from '../../../../modules/useZieljahrsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'

@@ -16,7 +16,7 @@ import { FaTimes } from 'react-icons/fa'
 import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 
 const height = 40
 

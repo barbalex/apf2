@@ -4,7 +4,7 @@ import max from 'lodash/max'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
-import { MobxContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 import { Issues } from './Issues.jsx'
 
 export const CurrentIssuesFolder = memo(

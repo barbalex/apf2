@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { MobxContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { Form } from './Form/index.jsx'
 import { Tabs } from './Tabs.jsx'
 

@@ -5,7 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import countBy from 'lodash/countBy'
 
-import { MobxContext } from '../storeContext.js'
+import { MobxContext } from '../mobxContext.js'
 
 export const useZieljahrsNavData = (props) => {
   const apolloClient = useApolloClient()

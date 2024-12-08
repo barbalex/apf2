@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router'
 
 import { Marker } from './Marker.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 import { updateTpopById } from './updateTpopById.js'
 

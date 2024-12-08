@@ -19,7 +19,7 @@ import { query } from './query.js'
 import { EkYear } from './EkYear.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
-import { MobxContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { query as tpopQuery } from '../../TpopRouter/query.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 import {

@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 import { MdGetApp } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const FileDownloadIcon = styled(MdGetApp)`
   font-size: 1.5rem;
