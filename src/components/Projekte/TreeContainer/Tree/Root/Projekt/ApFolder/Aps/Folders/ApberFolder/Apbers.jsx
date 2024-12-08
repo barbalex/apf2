@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Row } from '../../../../../../Row.jsx'
 import { useApbersNavData } from '../../../../../../../../../../modules/useApbersNavData.js'
 
-export const ApBer = memo(({ projekt, ap }) => {
+export const Apbers = memo(({ projekt, ap }) => {
   const { navData } = useApbersNavData({
     projId: projekt.id,
     apId: ap.id,
