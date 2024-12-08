@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Row } from '../../../../../../Row.jsx'
 import { useAssozartsNavData } from '../../../../../../../../../../modules/useAssozartsNavData.js'
 
-export const AssozArt = memo(({ projekt, ap }) => {
+export const AssozArts = memo(({ projekt, ap }) => {
   const { navData } = useAssozartsNavData({
     projId: projekt.id,
     apId: ap.id,

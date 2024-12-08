@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../storeContext.js'
-import { AssozArt } from './AssozArt.jsx'
+import { AssozArts } from './AssozArts.jsx'
 
 export const AssozArtFolder = memo(
   observer(({ projekt, ap, menu }) => {
@@ -35,7 +35,7 @@ export const AssozArtFolder = memo(
       <>
         <Row node={node} />
         {isOpen && (
-          <AssozArt
+          <AssozArts
             projekt={projekt}
             ap={ap}
           />
