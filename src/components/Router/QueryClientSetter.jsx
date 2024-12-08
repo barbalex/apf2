@@ -3,12 +3,12 @@ import { memo, useContext, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 
 export const QueryClientSetter = memo(
   observer(() => {
     const queryClient = useQueryClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setQueryClient } = store
 
     const wasSet = useRef(false)

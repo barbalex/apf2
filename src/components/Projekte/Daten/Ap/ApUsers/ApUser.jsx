@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { useApolloClient, gql } from '@apollo/client'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 
 const DelIcon = styled(IconButton)`
   font-size: 1rem !important;
@@ -17,7 +17,7 @@ const DelIcon = styled(IconButton)`
 export const ApUser = memo(
   observer(({ user, refetch }) => {
     const client = useApolloClient()
-    const { enqueNotification } = useContext(StoreContext)
+    const { enqueNotification } = useContext(MobxContext)
 
     const onClickDelete = useCallback(async () => {
       try {

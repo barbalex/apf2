@@ -20,7 +20,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { updateUserById as updateUserByIdGql } from './updateUserById.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { logout } from '../../../../modules/logout.js'
 import { IdbContext } from '../../../../idbContext.js'
 
@@ -52,7 +52,7 @@ const AbmeldenButton = styled(Button)`
 `
 
 export const User = ({ username, userOpen, toggleUserOpen }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const { idb } = useContext(IdbContext)
 
   const { data, error, loading } = useQuery(query, {

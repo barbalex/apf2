@@ -17,7 +17,7 @@ const Exporte = lazy(async () => ({
 const Filter = lazy(async () => ({
   default: (await import('./Filter/index.jsx')).Filter,
 }))
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
@@ -51,7 +51,7 @@ export const ProjektContainer = memo(
     const { projId, apberUebersichtId, apberId } = useParams()
     const { pathname } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { isPrint } = store
 
     const [hideBookmarks] = useAtom(hideBookmarksAtom)

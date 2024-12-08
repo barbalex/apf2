@@ -13,7 +13,7 @@ import { queryLists } from './queryLists.js'
 import { queryAps } from './queryAps.js'
 import { queryAdresses } from './queryAdresses.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
@@ -83,7 +83,7 @@ const FilterComment = styled.li`
 
 export const ApFilter = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       dataFilter,
       apFilter: nurApFilter,

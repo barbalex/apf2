@@ -3,7 +3,7 @@ import 'leaflet'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 const StyledDiv = styled.div`
   background-color: transparent;
@@ -28,7 +28,7 @@ const StyledDiv = styled.div`
 
 export const ShowCoordinates = memo(
   observer(({ setControlType }) => {
-    const { mapMouseCoordinates } = useContext(StoreContext)
+    const { mapMouseCoordinates } = useContext(MobxContext)
     const x = mapMouseCoordinates.x?.toLocaleString('de-ch')
     const y = mapMouseCoordinates.y?.toLocaleString('de-ch')
 

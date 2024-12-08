@@ -2,7 +2,7 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -32,7 +32,7 @@ const resetCopyingData = {
 
 export const TpopfeldkontrFolder = memo(
   observer(({ onClick }) => {
-    const { copying, user, moving } = useContext(StoreContext)
+    const { copying, user, moving } = useContext(MobxContext)
 
     const isMoving = moving.table && moving.table === 'tpopfeldkontr'
     const isCopying = copying.table && copying.table === 'tpopfeldkontr'

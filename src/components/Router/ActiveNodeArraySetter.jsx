@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import isEqual from 'lodash/isEqual'
 import { useLocation } from 'react-router'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.js'
 
 export const ActiveNodeArraySetter = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { activeNodeArray, setActiveNodeArray } = store.tree
 
     const { pathname } = useLocation()

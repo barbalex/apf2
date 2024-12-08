@@ -4,14 +4,14 @@ import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../storeContext.js'
 import { PopFolders } from './Folders/index.jsx'
 import { usePopsNavData } from '../../../../../../../../../../../modules/usePopsNavData.js'
 
 export const Pop = memo(
   observer(({ projekt, ap }) => {
     const apolloClient = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { popGqlFilterForTree } = store.tree
 
     const { navData } = usePopsNavData({ projId: projekt.id, apId: ap.id })

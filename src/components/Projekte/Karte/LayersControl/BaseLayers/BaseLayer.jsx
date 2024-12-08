@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { Radio } from '../shared/Radio.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 
 const LayerDiv = styled.div`
   border-bottom: 1px solid #ececec;
@@ -15,7 +15,7 @@ const LayerDiv = styled.div`
 
 export const BaseLayer = memo(
   observer(({ layer }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { activeBaseLayer, setActiveBaseLayer } = store
     const onChange = useCallback(
       () => setActiveBaseLayer(layer.value),

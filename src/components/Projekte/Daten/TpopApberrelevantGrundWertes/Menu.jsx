@@ -18,7 +18,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
@@ -35,7 +35,7 @@ export const Menu = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, tpopApberrelevantGrundWerteId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
       let result

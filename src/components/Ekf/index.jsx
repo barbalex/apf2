@@ -9,7 +9,7 @@ import sortBy from 'lodash/sortBy'
 // but only in production!
 import { EkfList } from './List/index.jsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'
@@ -67,7 +67,7 @@ export const Component = memo(
     const { search } = useLocation()
     const navigate = useNavigate()
     const { userId, ekfId, ekfYear } = useParams()
-    const { isPrint, isEkfSinglePrint } = useContext(StoreContext)
+    const { isPrint, isEkfSinglePrint } = useContext(MobxContext)
 
     const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
     const ekfRefYear = new Date(ekfRefDate).getFullYear()

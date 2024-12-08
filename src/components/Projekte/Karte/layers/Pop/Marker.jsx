@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { popIconString } from './popIconString.js'
 import { popHighlightedIconString } from './popHighlightedIconString.js'
@@ -55,7 +55,7 @@ export const Marker = memo(
     const { apId, projId, popId } = useParams()
     const { search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { apfloraLayers, openTree2WithActiveNodeArray, map } = store
     const { popIcon: popIconName, popLabel: popLabelName } = map
 

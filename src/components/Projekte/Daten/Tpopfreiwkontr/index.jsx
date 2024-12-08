@@ -7,7 +7,7 @@ import { useLocation, useParams } from 'react-router'
 import { query } from './query.js'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Form } from './Form/index.jsx'
@@ -44,7 +44,7 @@ export const Component = memo(
 
     const { pathname } = useLocation()
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification, isPrint, user } = store
 
     const id = idPassed ?? idPassedFromUrl

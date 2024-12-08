@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { Polyline } from './Polyline.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { query } from './query.js'
 
 const Polylines = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { beobGqlFilter } = store.tree
 
@@ -37,7 +37,7 @@ const Polylines = memo(
 
 export const BeobZugeordnetAssignPolylines = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const tree = store.tree
     const { beobGqlFilter } = tree
 

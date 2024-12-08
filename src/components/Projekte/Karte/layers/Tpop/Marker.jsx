@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { tpopIcon } from './tpopIcon.js'
 import { tpopIconHighlighted } from './tpopIconHighlighted.js'
 import { u as uIcon } from './statusGroup/u.js'
@@ -55,7 +55,7 @@ export const Marker = memo(
     const { apId, projId, tpopId } = useParams()
     const { search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { openTree2WithActiveNodeArray, map } = store
     const { tpopIcon: tpopIconName, tpopLabel: tpopLabelName } = map
 

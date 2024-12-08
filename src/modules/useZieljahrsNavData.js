@@ -5,7 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import countBy from 'lodash/countBy'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const useZieljahrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -13,7 +13,7 @@ export const useZieljahrsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeZieljahrs', apId, store.tree.zielGqlFilterForTree],

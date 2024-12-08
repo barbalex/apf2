@@ -3,13 +3,13 @@ import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../storeContext.js'
 import { ApFolders } from './Folders/index.jsx'
 import { useApsNavData } from '../../../../../../../../modules/useApsNavData.js'
 
 export const Ap = memo(
   observer(({ projekt, ap, inProp }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { openNodes } = store.tree
 
     const ref = useRef(null)

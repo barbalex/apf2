@@ -1,11 +1,11 @@
 import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const IsPrintSetter = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setIsPrint } = store
 
     /**

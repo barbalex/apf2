@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
 import { Zaehl } from './Zaehl.jsx'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
 
 export const ZaehlFolder = memo(
   observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
 
     const { navData, isLoading } = useTpopfeldkontrNavData({

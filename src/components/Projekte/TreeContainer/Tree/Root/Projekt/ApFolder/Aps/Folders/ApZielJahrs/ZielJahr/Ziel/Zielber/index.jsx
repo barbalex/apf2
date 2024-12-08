@@ -2,13 +2,13 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../storeContext.js'
 import { Zielber } from './Zielber.jsx'
 import { useZielbersNavData } from '../../../../../../../../../../../../../modules/useZielbersNavData.js'
 
 export const ZielberFolder = memo(
   observer(({ projekt, ap, jahr, ziel }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
 
     const { navData, isLoading } = useZielbersNavData({

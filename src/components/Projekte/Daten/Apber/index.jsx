@@ -14,7 +14,7 @@ import { DateField } from '../../../shared/Date.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { query } from './query.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apber } from '../../../shared/fragments.js'
@@ -70,7 +70,7 @@ export const Component = memo(
   observer(() => {
     const { apberId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const client = useApolloClient()
     const queryClient = useQueryClient()
 

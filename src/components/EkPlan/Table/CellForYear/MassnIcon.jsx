@@ -4,7 +4,7 @@ import sum from 'lodash/sum'
 import { GoZap } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 const CheckboxContainer = styled.div`
   width: 100%;
@@ -44,7 +44,7 @@ const SumCounted = styled.div`
 
 export const MassnIcon = memo(
   observer(({ ansiedlungs }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { showCount, showEkCount } = store.ekPlan
 
     if (!ansiedlungs.length) {

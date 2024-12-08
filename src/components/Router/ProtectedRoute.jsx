@@ -6,7 +6,7 @@ import { Outlet } from 'react-router'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.jsx')).Messages,
@@ -66,7 +66,7 @@ export const Component = memo(
     const { pathname, search } = useLocation()
     const { userId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { showDeletions, user } = store
 
     const token = user?.token

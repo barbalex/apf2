@@ -3,7 +3,7 @@ import { GeoJSON } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
 // need to fill or else popup will only happen when line is clicked
@@ -18,7 +18,7 @@ const style = () => ({
 
 export const Detailplaene = memo(
   observer(() => {
-    const { enqueNotification } = useContext(StoreContext)
+    const { enqueNotification } = useContext(MobxContext)
 
     const { data, error } = useQuery(gql`
       query karteDetailplaenesQuery {

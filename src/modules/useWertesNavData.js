@@ -3,13 +3,13 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const useWertesNavData = (props) => {
   const apolloClient = useApolloClient()
   const include = props?.include ?? true
 
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [

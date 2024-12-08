@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../Row.jsx'
-import { StoreContext } from '../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../storeContext.js'
 import { Aps } from './Aps/index.jsx'
 
 export const ApFolder = memo(
   observer(({ count, countFiltered, projekt, isLoading }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { openNodes } = store.tree
 
     const isOpen =

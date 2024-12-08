@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const useBeobNichtBeurteiltsNavData = (props) => {
   const apolloClient = useApolloClient()
   const { projId, apId: apIdFromParams } = useParams()
   const apId = props?.apId ?? apIdFromParams
 
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
 
   // const allBeobNichtZuzuordnenFilter = useMemo(
   //   () => ({

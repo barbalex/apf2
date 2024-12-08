@@ -22,7 +22,7 @@ import {
 } from '../fragments'
 import { Uploader } from '../Uploader/index.jsx'
 import { UploaderContext } from '../../../UploaderContext.js'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 import { Menu } from './Menu/index.jsx'
 
 const Container = styled.div`
@@ -49,7 +49,7 @@ const fragmentObject = {
 
 export const FilesRouter = memo(
   observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { fileId } = useParams()
     const navigate = useNavigate()
     const client = useApolloClient()

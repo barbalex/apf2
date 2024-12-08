@@ -18,7 +18,7 @@ import { TpopfeldkontrentwicklungPopover } from '../TpopfeldkontrentwicklungPopo
 import { constants } from '../../../../modules/constants.js'
 import { query } from './query.js'
 import { queryTpopkontrs } from './queryTpopkontrs.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
@@ -85,7 +85,7 @@ export const TpopfeldkontrFilter = memo(
   observer(() => {
     const { apId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       dataFilter,
       ekGqlFilter,

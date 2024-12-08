@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { exists } from '../../modules/exists.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 
@@ -47,7 +47,7 @@ const StyledInfoIcon = styled(MdInfoOutline)``
 
 export const FilterTitle = memo(
   observer(({ title, table, totalNr, filteredNr, activeTab }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { tableIsFiltered, dataFilterTreeIsFiltered } = store
     const {
       emptyMapFilter,

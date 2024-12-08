@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
 
 export const StyledCell = styled.div`
@@ -54,7 +54,7 @@ const StyledMenu = styled(Menu)`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderFixedEkfrequenz = ({ style, column }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const {
     filterEkfrequenzEmpty,
     setFilterEmptyEkfrequenz,

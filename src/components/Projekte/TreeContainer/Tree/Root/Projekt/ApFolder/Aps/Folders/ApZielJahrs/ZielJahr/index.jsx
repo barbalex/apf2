@@ -2,12 +2,12 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../storeContext.js'
 import { Ziel } from './Ziel/index.jsx'
 
 export const ZielJahr = memo(
   observer(({ projekt, ap, menu }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const { id, label, jahr } = menu
 

@@ -4,12 +4,12 @@ import max from 'lodash/max'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../storeContext.js'
 import { Issues } from './Issues.jsx'
 
 export const CurrentIssuesFolder = memo(
   observer(({ count, isLoading }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     let message = isLoading && !count ? '...' : max([count - 1, 0])
 

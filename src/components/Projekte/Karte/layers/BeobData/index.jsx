@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 import { Field } from './Field.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { beob } from '../../../../shared/fragments.js'
 import { Info } from '../BeobZugeordnet/Marker.jsx'
 
@@ -53,7 +53,7 @@ export const Data = memo(
   observer(({ id }) => {
     const client = useApolloClient()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
       store
 

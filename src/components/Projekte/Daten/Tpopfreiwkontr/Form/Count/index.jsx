@@ -13,7 +13,7 @@ import { Gezaehlt } from './Gezaehlt.jsx'
 import { Geschaetzt } from './Geschaetzt.jsx'
 import { query } from './query.js'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../storeContext.js'
 import { Error } from '../../../../../shared/Error.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
@@ -176,8 +176,8 @@ export const Count = memo(
       const client = useApolloClient()
       const queryClient = useQueryClient()
 
-      const store = useContext(StoreContext)
-      const { setToDelete } = useContext(StoreContext)
+      const store = useContext(MobxContext)
+      const { setToDelete } = useContext(MobxContext)
 
       const { activeNodeArray } = store.tree
 

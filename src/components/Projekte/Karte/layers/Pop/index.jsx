@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router'
 
 import { Marker } from './Marker.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { query } from './query.js'
 
 const iconCreateFunction = function (cluster) {
@@ -27,7 +27,7 @@ const iconCreateFunction = function (cluster) {
 const ObservedPop = memo(
   observer(() => {
     const map = useMap()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
     const tree = store.tree
     const { popGqlFilter } = tree
@@ -85,7 +85,7 @@ const ObservedPop = memo(
 
 export const Pop = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const tree = store.tree
     const { popGqlFilter } = tree
 

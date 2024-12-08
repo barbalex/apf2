@@ -9,7 +9,7 @@ import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
 import axios from 'redaxios'
 
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 import { Popup } from './layers/Popup.jsx'
 import { xmlToLayersData } from '../../../modules/xmlToLayersData.js'
 
@@ -17,7 +17,7 @@ export const ClickListener = memo(
   observer(() => {
     const { apId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { activeOverlays: activeOverlaysRaw, enqueNotification } = store
     const activeOverlays = getSnapshot(activeOverlaysRaw)
 

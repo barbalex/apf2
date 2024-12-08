@@ -19,7 +19,7 @@ import { query } from './query.js'
 import { EkYear } from './EkYear.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { query as tpopQuery } from '../../TpopRouter/query.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 import {
@@ -79,7 +79,7 @@ const EkplanTitle = styled.h5`
 
 export const Component = () => {
   const { tpopId, apId } = useParams()
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const client = useApolloClient()
   const queryClient = useQueryClient()
 

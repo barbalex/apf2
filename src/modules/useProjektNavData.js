@@ -4,14 +4,14 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const useProjektNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params?.projId
 
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeProject', projId],

@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { MdClear } from 'react-icons/md'
 import upperFirst from 'lodash/upperFirst'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 const valForStore = (valPassed) => {
   let val = valPassed
@@ -24,7 +24,7 @@ const valForState = (valPassed) => {
 }
 
 export const TextFilter = ({ column, closeMenu }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const { setFilterEmptyEkfrequenz, setFilterEmptyEkfrequenzStartjahr } =
     store.ekPlan
   const { name } = column

@@ -14,7 +14,7 @@ import upperFirst from 'lodash/upperFirst'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }
@@ -25,7 +25,7 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const typename = upperFirst(table)
     const pathName =

@@ -18,7 +18,7 @@ import { useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
@@ -43,7 +43,7 @@ export const Menu = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
 
     const onClickAdd = useCallback(async () => {

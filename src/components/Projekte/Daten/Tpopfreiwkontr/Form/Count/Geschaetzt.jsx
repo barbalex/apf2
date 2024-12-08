@@ -4,13 +4,13 @@ import { useApolloClient } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../../../shared/TextField.jsx'
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../storeContext.js'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
 export const Geschaetzt = memo(
   observer(({ row, refetch }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const client = useApolloClient()
     const queryClient = useQueryClient()
 

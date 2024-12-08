@@ -5,14 +5,14 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 import countBy from 'lodash/countBy'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
   const { projId, apId: apIdFromParams } = useParams()
   const apId = props?.apId ?? apIdFromParams
 
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
 
   const allBeobNichtZuzuordnenFilter = useMemo(
     () => ({

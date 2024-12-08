@@ -6,7 +6,7 @@ import {
 } from '../../../../modules/react-contextmenu/index.js'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 // create objects outside render
@@ -48,7 +48,7 @@ const resetCopyingData = {
 
 export const Pop = memo(
   observer(({ onClick }) => {
-    const { copying, user, moving } = useContext(StoreContext)
+    const { copying, user, moving } = useContext(MobxContext)
 
     const isMoving = moving.table && moving.table === 'tpop'
     const isCopying = copying.table && copying.table === 'tpop'

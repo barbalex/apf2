@@ -9,7 +9,7 @@ import { TextField } from '../../../shared/TextField.jsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import { Status } from '../../../shared/Status.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { Coordinates } from '../../../shared/Coordinates.jsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -40,7 +40,7 @@ export const Component = memo(
   observer(() => {
     const { data, refetchPop } = useOutletContext()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const queryClient = useQueryClient()
     const client = useApolloClient()
 

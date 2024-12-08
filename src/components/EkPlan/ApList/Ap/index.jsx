@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -27,7 +27,7 @@ const DelIcon = styled(IconButton)`
 `
 
 export const Ap = ({ ap }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const { removeAp, apsData, apsDataLoading } = store.ekPlan
 
   const onClickDelete = useCallback(() => removeAp(ap), [ap, removeAp])

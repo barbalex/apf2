@@ -16,7 +16,7 @@ import isEqual from 'lodash/isEqual'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
@@ -31,7 +31,7 @@ export const Menu = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const { setMoving, moving, copying, setCopying } = store
 

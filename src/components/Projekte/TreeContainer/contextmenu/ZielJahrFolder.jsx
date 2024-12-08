@@ -2,7 +2,7 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -23,7 +23,7 @@ const insertData = {
 
 export const ZielJahrFolder = memo(
   observer(({ onClick }) => {
-    const { user } = useContext(StoreContext)
+    const { user } = useContext(MobxContext)
 
     return (
       <ErrorBoundary>

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -15,7 +15,7 @@ export const Component = memo(
   observer(() => {
     const { projId } = useParams()
     const apolloClient = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
 
     const { navData, isLoading, error } = useApsNavData()

@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { useBeobNichtZuzuordnensNavData } from '../../../../modules/useBeobNichtZuzuordnensNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from '../BeobNichtBeurteilts/Menu.jsx'
@@ -10,7 +10,7 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const Component = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
 
     const { navData, isLoading, error } = useBeobNichtZuzuordnensNavData()

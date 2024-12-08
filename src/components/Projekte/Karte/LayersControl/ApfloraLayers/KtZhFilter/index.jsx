@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../storeContext.js'
 
 const LayerDiv = styled.div`
   min-height: 24px;
@@ -22,7 +22,7 @@ const StyledButton = styled(Button)`
 
 export const KtZhFilter = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setMapFilter, incrementMapFilterResetter } = store.tree
 
     const onClickFilterZh = useCallback(() => {

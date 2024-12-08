@@ -7,7 +7,7 @@ import max from 'lodash/max'
 
 import { StyledCellForSelect } from './index.jsx'
 import { tpop } from '../../shared/fragments.js'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 import { setStartjahr } from './setStartjahr/index.jsx'
 import { setEkplans } from './setEkplans/index.jsx'
 
@@ -31,7 +31,7 @@ const Option = styled.option`
 export const CellForEkfrequenz = memo(
   observer(({ row, field, style, refetchTpop, ekfrequenzs }) => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { hovered } = store.ekPlan
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''

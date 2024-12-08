@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa'
 import screenfull from 'screenfull'
 
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 
 const Button = styled.button`
   background-color: white;
@@ -25,7 +25,7 @@ const Button = styled.button`
 export const FullscreenControl = ({ mapRef }) => {
   // need to test if screenfull (i.e. the fullscreen api) is supported - iPhones don't support it
   // https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API/Guide
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const { enqueNotification } = store
 
   if (!screenfull.isEnabled) {

@@ -15,7 +15,7 @@ import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { query } from './query.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
@@ -58,7 +58,7 @@ export const TpopmassnFilter = memo(
   observer(() => {
     const { apId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       dataFilter,
       tpopmassnGqlFilter,

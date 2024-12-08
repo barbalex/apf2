@@ -10,7 +10,7 @@ import { useAtom } from 'jotai'
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
@@ -20,7 +20,7 @@ export const Menu = memo(
   observer(({ apfloraLayer }) => {
     const tanstackQueryClient = useQueryClient()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setActiveApfloraLayers, activeApfloraLayers } = store
 
     const [projekteTabs, setProjekteTabs] = useProjekteTabs()

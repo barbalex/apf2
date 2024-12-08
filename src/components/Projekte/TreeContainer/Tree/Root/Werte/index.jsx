@@ -5,7 +5,7 @@ import { gql, useApolloClient } from '@apollo/client'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../storeContext.js'
 import { AdresseFolder } from './AdresseFolder/index.jsx'
 import { ApberrelevantGrundFolder } from './ApberrelevantGrundFolder/index.jsx'
 import { EkAbrechnungstypFolder } from './EkAbrechnungstypFolder/index.jsx'
@@ -15,7 +15,7 @@ import { useWertesNavData } from '../../../../../../modules/useWertesNavData.js'
 export const WerteFolder = memo(
   observer(() => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const isOpen = store.tree.openNodes.some(
       (nodeArray) => nodeArray[0] === 'Werte-Listen',

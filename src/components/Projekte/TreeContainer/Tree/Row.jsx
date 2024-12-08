@@ -24,7 +24,7 @@ import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePat
 import { isNodeOpen } from '../isNodeOpen.js'
 import { toggleNode } from './toggleNode.js'
 import { toggleNodeSymbol } from './toggleNodeSymbol.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { historizeForAp } from '../../../../modules/historizeForAp.js'
@@ -351,7 +351,7 @@ export const Row = memo(
     // console.log('Row, node:', node)
     // console.log('Row', { transitionState, ref })
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       activeApfloraLayers,
       copying,

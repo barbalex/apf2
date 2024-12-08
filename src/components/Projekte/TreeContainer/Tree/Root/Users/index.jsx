@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../storeContext.js'
 import { Users } from './Users.jsx'
 
 export const UsersFolder = memo(
   observer(({ count, countFiltered, isLoading, usersFilter }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const node = {
       nodeType: 'folder',

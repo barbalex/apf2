@@ -16,7 +16,7 @@ import { FaTimes } from 'react-icons/fa'
 import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 
 const height = 40
 
@@ -30,7 +30,7 @@ const StyledTextField = styled(TextField)`
 
 export const FilterInput = memo(
   observer(({ width, filterInputIsVisible, ref: inputRef }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter, activeFilterTable } = store.tree
 
     const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =

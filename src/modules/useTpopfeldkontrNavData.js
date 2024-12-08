@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const useTpopfeldkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -15,7 +15,7 @@ export const useTpopfeldkontrNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
 
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [

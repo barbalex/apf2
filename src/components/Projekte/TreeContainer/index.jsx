@@ -243,7 +243,7 @@ import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.js
 import { openLowerNodes } from './openLowerNodes/index.js'
 import { closeLowerNodes } from './closeLowerNodes.js'
 import { insertDataset } from './insertDataset.js'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 import { useProjekteTabs } from '../../../modules/useProjekteTabs.js'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.js'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
@@ -366,7 +366,7 @@ export const TreeContainer = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       activeApfloraLayers,
       setActiveApfloraLayers,

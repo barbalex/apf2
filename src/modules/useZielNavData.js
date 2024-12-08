@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../storeContext.js'
 
 export const useZielNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -14,7 +14,7 @@ export const useZielNavData = (props) => {
   const jahr = props?.jahr ?? params.jahr
   const zielId = props?.zielId ?? params.zielId
 
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeZiel', zielId, store.tree.zielberGqlFilterForTree],

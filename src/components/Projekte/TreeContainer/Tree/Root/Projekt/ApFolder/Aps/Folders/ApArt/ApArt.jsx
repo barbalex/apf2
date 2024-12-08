@@ -4,13 +4,13 @@ import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../storeContext.js'
 import { useApartsNavData } from '../../../../../../../../../../modules/useApartsNavData.js'
 
 export const ApArt = memo(
   observer(({ projekt, ap }) => {
     const apolloClient = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { apartGqlFilterForTree } = store.tree
 
     const { navData } = useApartsNavData({

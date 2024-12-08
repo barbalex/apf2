@@ -2,12 +2,12 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../storeContext.js'
-import { EkFrequenz } from './EkFrequenz.jsx'
+import { MobxContext } from '../../../../../../../../../../storeContext.js'
+import { EkFrequenzs } from './EkFrequenzs.jsx'
 
 export const EkFrequenzFolder = memo(
   observer(({ projekt, ap, menu }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Frequenzen']
 
@@ -37,7 +37,7 @@ export const EkFrequenzFolder = memo(
       <>
         <Row node={node} />
         {isOpen && (
-          <EkFrequenz
+          <EkFrequenzs
             projekt={projekt}
             ap={ap}
           />

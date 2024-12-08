@@ -16,7 +16,7 @@ import { StringToCopy } from '../../../shared/StringToCopy.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { exists } from '../../../../modules/exists.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
@@ -61,7 +61,7 @@ export const Component = memo(
 
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
 

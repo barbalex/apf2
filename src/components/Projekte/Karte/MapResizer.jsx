@@ -3,12 +3,12 @@ import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 
 export const MapResizer = memo(
   observer(({ children, mapContainerRef }) => {
     const map = useMap()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { bounds: boundsRaw } = store
     const bounds = getSnapshot(boundsRaw)
 

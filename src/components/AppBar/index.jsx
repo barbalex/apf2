@@ -8,7 +8,7 @@ import { Bar } from './Bar/index.jsx'
 import { EkfBar } from './EkfBar/index.jsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { constants } from '../../modules/constants.js'
 import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 
@@ -51,7 +51,7 @@ export const Component = memo(
     const { userId } = useParams()
     const { pathname, search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const activeNodeArray = store.tree.activeNodeArray
 
     const [isDesktopView] = useAtom(isDesktopViewAtom)

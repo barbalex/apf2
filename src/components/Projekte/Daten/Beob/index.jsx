@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Field as BeobField } from './Field.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 const OuterContainer = styled.div`
   container-type: inline-size;
@@ -41,7 +41,7 @@ export const Beob = memo(
     const { beobId: id } = useParams()
     const client = useApolloClient()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
       store
     const sortedBeobFields = sortedBeobFieldsPassed.slice()

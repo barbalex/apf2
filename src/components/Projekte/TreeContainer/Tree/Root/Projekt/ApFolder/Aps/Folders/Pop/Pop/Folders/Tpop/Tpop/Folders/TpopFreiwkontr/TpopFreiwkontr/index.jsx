@@ -2,13 +2,13 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../../../../storeContext.js'
 import { ZaehlFolder } from './Zaehl/index.jsx'
 import { useTpopfreiwkontrsNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrsNavData.js'
 
 export const TpopFreiwkontr = memo(
   observer(({ projekt, ap, pop, tpop }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const { navData } = useTpopfreiwkontrsNavData({
       projId: projekt.id,

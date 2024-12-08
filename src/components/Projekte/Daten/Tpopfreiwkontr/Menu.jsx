@@ -16,7 +16,7 @@ import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
@@ -38,7 +38,7 @@ export const Menu = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { moving, setMoving, copying, setCopying, setIsPrint } = store
 
     const onClickAdd = useCallback(async () => {

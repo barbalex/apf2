@@ -4,7 +4,7 @@ import Divider from '@mui/material/Divider'
 import styled from '@emotion/styled'
 
 import { MenuItem } from './MenuItem.jsx'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../storeContext.js'
 
 // don't know why but divider is too thick,
 // thicker than ListItemButton divider
@@ -157,7 +157,7 @@ const nodes = [
 ]
 
 export const MenuItems = () => {
-  const { dokuFilter } = useContext(StoreContext)
+  const { dokuFilter } = useContext(MobxContext)
   const nodesFiltered = nodes.filter(
     (node) => node.title?.toLowerCase?.()?.includes?.(dokuFilter) ?? true,
   )

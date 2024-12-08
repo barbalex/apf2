@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 import upperFirst from 'lodash/upperFirst'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
 import { epsg2056to4326 } from '../../modules/epsg2056to4326.js'
 import {
@@ -48,7 +48,7 @@ export const Coordinates = memo(
     const wgs84Long = row?.geomPoint?.y
 
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const [lv95XState, setLv95XState] = useState(lv95X || '')
     const [lv95YState, setLv95YState] = useState(lv95Y || '')

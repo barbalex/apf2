@@ -8,7 +8,7 @@ import queryString from 'query-string'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import { ProjektContainer } from './ProjektContainer.jsx'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
@@ -40,7 +40,7 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 export const Component = memo(
   observer(() => {
     const { pathname, search } = useLocation()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { isPrint } = store
     const { tree2Src } = store.tree
 

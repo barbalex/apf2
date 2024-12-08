@@ -18,7 +18,7 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
 import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
@@ -38,7 +38,7 @@ export const Menu = memo(
     const apolloClient = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
 
     const onClickAdd = useCallback(async () => {

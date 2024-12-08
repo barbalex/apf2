@@ -5,14 +5,14 @@ import { useLocation, useNavigate } from 'react-router'
 import styled from '@emotion/styled'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 export const Item = memo(
   observer(({ menu, baseUrl, onClose }) => {
     const { pathname, search } = useLocation()
     const navigate = useNavigate()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const activeNodeArray = store.tree.activeNodeArray
 
     // issue: relative paths are not working!!!???

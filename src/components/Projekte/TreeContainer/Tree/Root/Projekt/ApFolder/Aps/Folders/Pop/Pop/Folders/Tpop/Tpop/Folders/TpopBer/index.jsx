@@ -2,12 +2,12 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../../../storeContext.js'
 import { TpopBer } from './TpopBer.jsx'
 
 export const TpopBerFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const url = [
       'Projekte',

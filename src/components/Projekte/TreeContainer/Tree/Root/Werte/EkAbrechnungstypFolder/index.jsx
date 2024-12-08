@@ -2,13 +2,13 @@ import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
 
-import { StoreContext } from '../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../storeContext.js'
 import { Row } from '../../../Row.jsx'
 import { EkAbrechnungstyps } from './EkAbrechnungstyps.jsx'
 
 export const EkAbrechnungstypFolder = memo(
   observer(({ menu, in: inProp }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const isOpen =
       store.tree.openNodes.filter(

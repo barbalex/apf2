@@ -4,12 +4,12 @@ import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../../../../../storeContext.js'
 
 export const Zaehl = memo(
   observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
 
     const tpopkontrzaehlsFilter = {

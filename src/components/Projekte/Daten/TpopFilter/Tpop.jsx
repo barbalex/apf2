@@ -13,7 +13,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { TpopAbBerRelevantInfoPopover } from '../TpopAbBerRelevantInfoPopover.jsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { constants } from '../../../../modules/constants.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 
 const Container = styled.div`
   height: 100%;
@@ -26,7 +26,7 @@ const Container = styled.div`
 
 export const Tpop = memo(
   observer(({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
     const client = useApolloClient()
 

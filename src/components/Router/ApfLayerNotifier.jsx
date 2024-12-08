@@ -2,13 +2,13 @@ import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 
 // TODO: only show messages if map is visible
 export const ApfLayerNotifier = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       showApfLayersForMultipleAps,
       enqueNotification,

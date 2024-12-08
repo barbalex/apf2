@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import union from 'lodash/union'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { useZieljahrsNavData } from '../../../../modules/useZieljahrsNavData.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
@@ -16,7 +16,7 @@ export const Component = memo(
   observer(() => {
     const { apId } = useParams()
     const apolloClient = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { zielGqlFilterForTree, nodeLabelFilter } = store.tree
 
     const { navData, isLoading, error } = useZieljahrsNavData()

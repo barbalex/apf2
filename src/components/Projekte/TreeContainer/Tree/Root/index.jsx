@@ -9,13 +9,13 @@ import { UsersFolder } from './Users/index.jsx'
 import { MessagesFolder } from './Messages.jsx'
 import { WerteFolder } from './Werte/index.jsx'
 import { CurrentIssuesFolder } from './CurrentIssues/index.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 
 export const Root = memo(
   observer(() => {
     const client = useApolloClient()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { projectIsOpen, nodeLabelFilter, apGqlFilterForTree } = store.tree
     const token = store.user?.token
     const role = token ? jwtDecode(token).role : null

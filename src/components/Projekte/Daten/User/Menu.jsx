@@ -15,7 +15,7 @@ import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.js'
 import { queryEkfTpops } from './queryEkfTpops.js'
@@ -45,7 +45,7 @@ export const Menu = memo(
       const navigate = useNavigate()
       const client = useApolloClient()
       const queryClient = useQueryClient()
-      const store = useContext(StoreContext)
+      const store = useContext(MobxContext)
 
       const thisYear = new Date().getFullYear()
       const { data, refetch } = useQuery(queryEkfTpops, {

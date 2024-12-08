@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../storeContext.js'
 import { BeobNichtZuzuordnens } from './BeobNichtZuzuordnens.jsx'
 
 export const BeobNichtZuzuordnenFolder = memo(
   observer(({ projekt, ap, menu }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const url = [
       'Projekte',

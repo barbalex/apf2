@@ -2,12 +2,12 @@ import { useEffect, useContext, useState, memo } from 'react'
 import { useSnackbar } from 'notistack'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 
 export const Notifier = memo(
   observer(() => {
     const { enqueueSnackbar } = useSnackbar()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { notifications, removeNotification } = store
     const [displayed, setDisplayed] = useState([])
 

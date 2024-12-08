@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 
 import { query } from './query.js'
 import { createUsermessage } from './createUsermessage.js'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { Error } from '../shared/Error.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { MessagesList } from './Messages/index.jsx'
@@ -35,7 +35,7 @@ const AllOkButton = styled(Button)`
 export const Messages = memo(
   observer(() => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { user } = store
     const userName = user.name
 

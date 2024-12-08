@@ -9,7 +9,7 @@ import { useAtom } from 'jotai'
 
 import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { constants } from '../../../../modules/constants.js'
@@ -70,7 +70,7 @@ export const ProjekteMenus = memo(
 
     const [hideTree] = useAtom(hideTreeAtom)
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { user } = store
     const { resetTree2Src } = store.tree
 

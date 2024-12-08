@@ -3,12 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../storeContext.js'
 import { EkZaehleinheits } from './EkZaehleinheits.jsx'
 
 export const EkZaehleinheitFolder = memo(
   observer(({ projekt, ap, menu }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Zähleinheiten']
 

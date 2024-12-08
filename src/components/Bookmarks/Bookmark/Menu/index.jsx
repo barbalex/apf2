@@ -18,7 +18,7 @@ import { motion } from 'framer-motion'
 
 import { Item } from './Item.jsx'
 import { Title } from './Title/index.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 import { usePrevious } from '../../../../modules/usePrevious.js'
 
@@ -41,7 +41,7 @@ const StyledMenu = styled(MuiMenu)`
 
 export const Menu = memo(
   observer(({ navData }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter, activeFilterTable, activeNodeArray } = store.tree
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
 

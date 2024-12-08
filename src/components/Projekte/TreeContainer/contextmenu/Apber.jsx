@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -19,7 +19,7 @@ const deleteData = {
 }
 
 export const Apber = ({ onClick }) => {
-  const { user } = useContext(StoreContext)
+  const { user } = useContext(MobxContext)
   const isReadOnly = userIsReadOnly(user.token)
 
   return (

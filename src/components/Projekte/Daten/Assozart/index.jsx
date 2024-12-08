@@ -10,7 +10,7 @@ import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { query } from './query.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { assozart } from '../../../shared/fragments.js'
@@ -45,7 +45,7 @@ export const Component = memo(
     const { assozartId: id } = useParams()
 
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const queryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})

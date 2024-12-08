@@ -1,32 +1,26 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
 
 import { Row } from '../../../../../../Row.jsx'
-import { useEkfrequenzsNavData } from '../../../../../../../../../../modules/useEkfrequenzsNavData.js'
 
-export const EkFrequenz = memo(({ projekt, ap }) => {
-  const { navData } = useEkfrequenzsNavData({
-    projId: projekt.id,
-    apId: ap.id,
-  })
+export const EkFrequenz = memo(({ projekt, ap, inProp, menu }) => {
+  const node = {
+    nodeType: 'table',
+    menuType: 'ekfrequenz',
+    id: menu.id,
+    parentId: ap.id,
+    parentTableId: ap.id,
+    urlLabel: menu.id,
+    label: menu.label,
+    url: ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Frequenzen', menu.id],
+    hasChildren: false,
+  }
 
-  return navData.menus.map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'ekfrequenz',
-      id: el.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Frequenzen', el.id],
-      hasChildren: false,
-    }
+  const ref = useRef(null)
 
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
+  return (
+    <Row
+      node={node}
+      ref={ref}
+    />
+  )
 })

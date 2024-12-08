@@ -4,14 +4,14 @@ import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../Row.jsx'
-import { StoreContext } from '../../../../../../../../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../../../../../../../../storeContext.js'
 import { TpopFolders } from './Folders/index.jsx'
 import { useTpopsNavData } from '../../../../../../../../../../../../../../modules/useTpopsNavData.js'
 
 export const Tpop = memo(
   observer(({ projekt, ap, pop }) => {
     const apolloClient = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { tpopGqlFilterForTree } = store.tree
 
     const { navData } = useTpopsNavData({

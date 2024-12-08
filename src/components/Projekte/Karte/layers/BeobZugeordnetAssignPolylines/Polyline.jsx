@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
@@ -31,7 +31,7 @@ export const Polyline = memo(
     const { apId, projId, beobId } = useParams()
     const { search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { openTree2WithActiveNodeArray } = store
 
     const isHighlighted = beobId === beob.id

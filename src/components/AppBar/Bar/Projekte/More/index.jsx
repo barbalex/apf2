@@ -8,7 +8,7 @@ import { useParams } from 'react-router'
 
 import { logout } from '../../../../../modules/logout.js'
 import { EkfUser } from './EkfUser/index.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../storeContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { AlwaysShowBookmarks } from './AlwaysShowBookmarks.jsx'
@@ -37,7 +37,7 @@ export const More = memo(
   observer(({ onClickExporte: passedOnClickExporte, role, ref }) => {
     const { projId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { deletedDatasets, user, setShowDeletions } = store
     const { idb } = useContext(IdbContext)
 

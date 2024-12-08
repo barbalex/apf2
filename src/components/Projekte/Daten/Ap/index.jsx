@@ -11,7 +11,7 @@ import { Select } from '../../../shared/Select.jsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ApUsers } from './ApUsers/index.jsx'
 import { ap, aeTaxonomies } from '../../../shared/fragments.js'
@@ -72,7 +72,7 @@ export const Component = memo(
     const { data } = useOutletContext()
 
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { user } = store
     const queryClient = useQueryClient()
 

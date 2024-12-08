@@ -15,7 +15,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { TpopAbBerRelevantInfoPopover } from '../TpopAbBerRelevantInfoPopover.jsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { constants } from '../../../../modules/constants.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../storeContext.js'
 import { Coordinates } from '../../../shared/Coordinates.jsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import {
@@ -76,7 +76,7 @@ export const Component = memo(
   observer(() => {
     const { data, refetchTpop } = useOutletContext()
     const { tpopId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
     const client = useApolloClient()
     const queryClient = useQueryClient()

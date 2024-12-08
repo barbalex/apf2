@@ -16,7 +16,7 @@ import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 import { motion, useAnimation } from 'framer-motion'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../storeContext.js'
 import { listLabelFilterIsIconAtom } from '../../JotaiStore/index.js'
 
 export const labelFilterWidth = 192
@@ -65,7 +65,7 @@ const iconStyle = { color: 'white' }
 
 export const LabelFilter = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter, activeFilterTable } = store.tree
 
     const animWidth = useAnimation()
