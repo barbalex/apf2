@@ -3,7 +3,7 @@ import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 
-export const EkFrequenz = memo(({ projekt, ap, inProp, menu }) => {
+export const Ekfrequenz = memo(({ projekt, ap, inProp, menu }) => {
   const node = {
     nodeType: 'table',
     menuType: 'ekfrequenz',

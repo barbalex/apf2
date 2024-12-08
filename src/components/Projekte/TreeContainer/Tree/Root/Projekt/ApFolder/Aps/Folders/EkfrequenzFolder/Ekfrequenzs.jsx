@@ -1,16 +1,16 @@
 import { memo } from 'react'
 
 import { useEkfrequenzsNavData } from '../../../../../../../../../../modules/useEkfrequenzsNavData.js'
-import { EkFrequenz } from './EkFrequenz.jsx'
+import { Ekfrequenz } from './Ekfrequenz.jsx'
 
-export const EkFrequenzs = memo(({ projekt, ap, in: inProp }) => {
+export const Ekfrequenzs = memo(({ projekt, ap, in: inProp }) => {
   const { navData } = useEkfrequenzsNavData({
     projId: projekt.id,
     apId: ap.id,
   })
 
   return navData.menus.map((menu) => (
-    <EkFrequenz
+    <Ekfrequenz
       key={menu.id}
       projekt={projekt}
       ap={ap}

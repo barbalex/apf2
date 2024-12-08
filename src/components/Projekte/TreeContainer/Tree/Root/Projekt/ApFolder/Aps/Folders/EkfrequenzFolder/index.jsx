@@ -4,9 +4,9 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../storeContext.js'
-import { EkFrequenzs } from './EkFrequenzs.jsx'
+import { Ekfrequenzs } from './Ekfrequenzs.jsx'
 
-export const EkFrequenzFolder = memo(
+export const EkfrequenzFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 
@@ -39,7 +39,7 @@ export const EkFrequenzFolder = memo(
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <EkFrequenzs
+            <Ekfrequenzs
               projekt={projekt}
               ap={ap}
             />
