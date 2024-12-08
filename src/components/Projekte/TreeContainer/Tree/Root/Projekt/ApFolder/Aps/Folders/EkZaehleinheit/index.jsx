@@ -1,5 +1,6 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { StoreContext } from '../../../../../../../../../../storeContext.js'
@@ -34,12 +35,14 @@ export const EkZaehleinheitFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <EkZaehleinheits
-            projekt={projekt}
-            ap={ap}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <EkZaehleinheits
+              projekt={projekt}
+              ap={ap}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),

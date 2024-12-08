@@ -1,32 +1,21 @@
 import { memo } from 'react'
 
-import { Row } from '../../../../../../Row.jsx'
 import { useEkzaehleinheitsNavData } from '../../../../../../../../../../modules/useEkzaehleinheitsNavData.js'
+import { EkZaehleinheit } from './EkZaehleinheit.jsx'
 
-export const EkZaehleinheits = memo(({ projekt, ap }) => {
+export const EkZaehleinheits = memo(({ projekt, ap, in: inProp }) => {
   const { navData } = useEkzaehleinheitsNavData({
     projId: projekt.id,
     apId: ap.id,
   })
 
-  return navData.menus.map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'ekzaehleinheit',
-      id: el.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', projekt.id, 'Arten', ap.id, 'EK-Zähleinheiten', el.id],
-      hasChildren: false,
-    }
-
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
+  return navData.menus.map((menu) => (
+    <EkZaehleinheit
+      key={menu.id}
+      projekt={projekt}
+      ap={ap}
+      menu={menu}
+      inProp={inProp}
+    />
+  ))
 })
