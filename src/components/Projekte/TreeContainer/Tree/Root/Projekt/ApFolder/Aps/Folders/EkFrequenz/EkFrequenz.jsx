@@ -1,4 +1,5 @@
 import { memo, useRef } from 'react'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 
@@ -18,9 +19,20 @@ export const EkFrequenz = memo(({ projekt, ap, inProp, menu }) => {
   const ref = useRef(null)
 
   return (
-    <Row
-      node={node}
-      ref={ref}
-    />
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Row
+          node={node}
+          ref={ref}
+          transitionState={state}
+        />
+      )}
+    </Transition>
   )
 })
