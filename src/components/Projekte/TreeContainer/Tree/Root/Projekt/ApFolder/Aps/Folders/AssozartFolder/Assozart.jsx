@@ -18,8 +18,6 @@ export const Assozart = memo(({ projekt, ap, menu, inProp }) => {
 
   const ref = useRef(null)
 
-  console.log('Assozart', { node, projekt, ap, menu, inProp })
-
   return (
     <Transition
       in={inProp}

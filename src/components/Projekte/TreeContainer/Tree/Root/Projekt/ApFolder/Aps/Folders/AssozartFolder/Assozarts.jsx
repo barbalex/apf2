@@ -9,8 +9,6 @@ export const Assozarts = memo(({ projekt, ap, in: inProp }) => {
     apId: ap.id,
   })
 
-  console.log('Assozarts', { navData, projekt, ap, inProp })
-
   return navData.menus.map((menu) => (
     <Assozart
       key={menu.id}
