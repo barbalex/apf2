@@ -4,7 +4,7 @@ import { Row } from '../../../../../../Row.jsx'
 import { useAssozartsNavData } from '../../../../../../../../../../modules/useAssozartsNavData.js'
 
 export const AssozArt = memo(({ projekt, ap }) => {
-  const { navData } = useQuery({
+  const { navData } = useAssozartsNavData({
     projId: projekt.id,
     apId: ap.id,
   })
