@@ -6,7 +6,7 @@ import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { ZielJahr } from './ZielJahr/index.jsx'
 import { useZieljahrsNavData } from '../../../../../../../../../../modules/useZieljahrsNavData.js'
 
-export const ApZielJahrs = memo(
+export const ApzieljahrFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
     const { openNodes } = store.tree

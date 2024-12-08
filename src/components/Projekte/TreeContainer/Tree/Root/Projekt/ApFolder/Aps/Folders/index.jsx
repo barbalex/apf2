@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
 import { PopFolder } from './Pop/index.jsx'
-import { ApZielJahrs } from './ApZielJahrs/index.jsx'
+import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
 import { AperfkritFolder } from './AperfkritFolder/index.jsx'
 import { ApberFolder } from './ApberFolder/index.jsx'
 import { IdealbiotopFolder } from './Idealbiotop.jsx'
@@ -86,7 +86,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={popMenu}
           />
-          <ApZielJahrs
+          <ApzieljahrFolder
             projekt={projekt}
             ap={ap}
             menu={apZielJahrsMenu}
