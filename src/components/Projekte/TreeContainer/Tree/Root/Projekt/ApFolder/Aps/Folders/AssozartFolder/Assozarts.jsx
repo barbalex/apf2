@@ -1,32 +1,23 @@
 import { memo } from 'react'
 
-import { Row } from '../../../../../../Row.jsx'
 import { useAssozartsNavData } from '../../../../../../../../../../modules/useAssozartsNavData.js'
+import { Assozart } from './Assozart.jsx'
 
-export const AssozArts = memo(({ projekt, ap }) => {
+export const Assozarts = memo(({ projekt, ap, in: inProp }) => {
   const { navData } = useAssozartsNavData({
     projId: projekt.id,
     apId: ap.id,
   })
 
-  return navData.menus.map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'assozart',
-      id: el.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: ['Projekte', projekt.id, 'Arten', ap.id, 'assoziierte-Arten', el.id],
-      hasChildren: false,
-    }
+  console.log('Assozarts', { navData, projekt, ap, inProp })
 
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
+  return navData.menus.map((menu) => (
+    <Assozart
+      key={menu.id}
+      projekt={projekt}
+      ap={ap}
+      menu={menu}
+      inProp={inProp}
+    />
+  ))
 })

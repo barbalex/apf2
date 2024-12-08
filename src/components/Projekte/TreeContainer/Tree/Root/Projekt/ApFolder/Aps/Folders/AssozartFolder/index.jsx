@@ -4,7 +4,7 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
-import { AssozArts } from './Assozarts.jsx'
+import { Assozarts } from './Assozarts.jsx'
 
 export const AssozartFolder = memo(
   observer(({ projekt, ap, menu }) => {
@@ -37,7 +37,7 @@ export const AssozartFolder = memo(
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <AssozArts
+            <Assozarts
               projekt={projekt}
               ap={ap}
             />
