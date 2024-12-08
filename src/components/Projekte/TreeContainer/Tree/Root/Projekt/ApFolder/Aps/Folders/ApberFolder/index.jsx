@@ -5,7 +5,7 @@ import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { ApBer } from './ApBer.jsx'
 
-export const ApBerFolder = memo(
+export const ApberFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 

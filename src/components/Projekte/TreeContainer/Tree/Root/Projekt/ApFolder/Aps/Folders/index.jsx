@@ -5,7 +5,7 @@ import { Transition } from 'react-transition-group'
 import { PopFolder } from './Pop/index.jsx'
 import { ApZielJahrs } from './ApZielJahrs/index.jsx'
 import { ApErfkritFolder } from './ApErfkrit/index.jsx'
-import { ApBerFolder } from './ApBer/index.jsx'
+import { ApberFolder } from './ApberFolder/index.jsx'
 import { IdealbiotopFolder } from './Idealbiotop.jsx'
 import { ApartFolder } from './ApartFolder/index.jsx'
 import { AssozartFolder } from './AssozartFolder/index.jsx'
@@ -96,7 +96,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={apErfkritsMenu}
           />
-          <ApBerFolder
+          <ApberFolder
             projekt={projekt}
             ap={ap}
             menu={apBerMenu}
