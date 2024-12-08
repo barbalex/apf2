@@ -1,11 +1,12 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { Aparts } from './Aparts.jsx'
 
-export const ApArtFolder = memo(
+export const ApartFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 
@@ -32,12 +33,14 @@ export const ApArtFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <Aparts
-            projekt={projekt}
-            ap={ap}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <Aparts
+              projekt={projekt}
+              ap={ap}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),

@@ -7,7 +7,7 @@ import { ApZielJahrs } from './ApZielJahrs/index.jsx'
 import { ApErfkritFolder } from './ApErfkrit/index.jsx'
 import { ApBerFolder } from './ApBer/index.jsx'
 import { IdealbiotopFolder } from './Idealbiotop.jsx'
-import { ApArtFolder } from './Apart/index.jsx'
+import { ApartFolder } from './ApartFolder/index.jsx'
 import { AssozartFolder } from './AssozartFolder/index.jsx'
 import { EkfrequenzFolder } from './EkfrequenzFolder/index.jsx'
 import { EkZaehleinheitFolder } from './EkzaehleinheitFolder/index.jsx'
@@ -105,7 +105,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             projekt={projekt}
             ap={ap}
           />
-          <ApArtFolder
+          <ApartFolder
             projekt={projekt}
             ap={ap}
             menu={apArtMenu}
