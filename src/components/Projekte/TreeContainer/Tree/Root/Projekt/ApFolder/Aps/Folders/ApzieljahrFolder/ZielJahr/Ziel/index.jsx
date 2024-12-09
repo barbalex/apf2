@@ -1,12 +1,13 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../mobxContext.js'
 import { ZielberFolder } from './ZielberFolder/index.jsx'
 
 export const Ziel = memo(
-  observer(({ projekt, ap, jahr, menu }) => {
+  observer(({ projekt, ap, jahr, menu, inProp }) => {
     const store = useContext(MobxContext)
 
     const node = {
@@ -21,10 +22,12 @@ export const Ziel = memo(
       hasChildren: true,
     }
 
+    const ref = useRef(null)
+
     const isOpen =
       store.tree.openNodes.filter(
         (n) =>
-          n.length > 7 &&
+          n.length > 6 &&
           n[1] === projekt.id &&
           n[3] === ap.id &&
           n[4] === 'AP-Ziele' &&
@@ -33,17 +36,31 @@ export const Ziel = memo(
       ).length > 0
 
     return (
-      <>
-        <Row node={node} />
-        {isOpen && (
-          <ZielberFolder
-            projekt={projekt}
-            ap={ap}
-            jahr={jahr}
-            ziel={menu}
-          />
+      <Transition
+        in={inProp}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={ref}
+      >
+        {(state) => (
+          <>
+            <Row
+              node={node}
+              ref={ref}
+              transitionState={state}
+            />
+            {isOpen && (
+              <ZielberFolder
+                projekt={projekt}
+                ap={ap}
+                jahr={jahr}
+                ziel={menu}
+              />
+            )}
+          </>
         )}
-      </>
+      </Transition>
     )
   }),
 )

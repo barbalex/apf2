@@ -1,6 +1,6 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
@@ -50,13 +50,15 @@ export const Zieljahr = memo(
               ref={ref}
               transitionState={state}
             />
-            {isOpen && (
-              <Ziels
-                projekt={projekt}
-                ap={ap}
-                jahr={jahr}
-              />
-            )}
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <Ziels
+                  projekt={projekt}
+                  ap={ap}
+                  jahr={jahr}
+                />
+              )}
+            </TransitionGroup>
           </>
         )}
       </Transition>
