@@ -1,5 +1,6 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../mobxContext.js'
@@ -7,7 +8,7 @@ import { Zielbers } from './Zielbers.jsx'
 import { useZielbersNavData } from '../../../../../../../../../../../../../modules/useZielbersNavData.js'
 
 export const ZielberFolder = memo(
-  observer(({ projekt, ap, jahr, ziel }) => {
+  observer(({ projekt, ap, jahr, ziel, in: inProp }) => {
     const store = useContext(MobxContext)
 
     const { navData } = useZielbersNavData({
@@ -52,21 +53,37 @@ export const ZielberFolder = memo(
       hasChildren: true,
     }
 
+    const ref = useRef(null)
+
     if (!navData) return null
 
     return (
-      <>
-        <Row node={node} />
-        {isOpen && (
-          <Zielbers
-            projekt={projekt}
-            ap={ap}
-            jahr={jahr}
-            ziel={ziel}
-            menus={navData.menus}
-          />
+      <Transition
+        in={inProp}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={ref}
+      >
+        {(state) => (
+          <>
+            <Row
+              node={node}
+              ref={ref}
+              transitionState={state}
+            />
+            {isOpen && (
+              <Zielbers
+                projekt={projekt}
+                ap={ap}
+                jahr={jahr}
+                ziel={ziel}
+                menus={navData.menus}
+              />
+            )}
+          </>
         )}
-      </>
+      </Transition>
     )
   }),
 )
