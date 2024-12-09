@@ -4,9 +4,9 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../mobxContext.js'
-import { Popmassnbers } from './Popmassnbers.jsx'
+import { Popbers } from './Popbers.jsx'
 
-export const PopMassnBerFolder = memo(
+export const PopberFolder = memo(
   observer(({ projekt, ap, pop, menu }) => {
     const store = useContext(MobxContext)
 
@@ -17,15 +17,15 @@ export const PopMassnBerFolder = memo(
           n[3] === ap.id &&
           n[4] === 'Populationen' &&
           n[5] === pop.id &&
-          n[6] === 'Massnahmen-Berichte',
+          n[6] === 'Kontroll-Berichte',
       ).length > 0
 
     const node = {
       nodeType: 'folder',
-      menuType: 'popmassnberFolder',
-      id: `${pop.id}PopmassnberFolder`,
+      menuType: 'popberFolder',
+      id: `${pop.id}PopberFolder`,
       tableId: pop.id,
-      urlLabel: 'Massnahmen-Berichte',
+      urlLabel: 'Kontroll-Berichte',
       label: menu.label,
       url: [
         'Projekte',
@@ -34,7 +34,7 @@ export const PopMassnBerFolder = memo(
         ap.id,
         'Populationen',
         pop.id,
-        'Massnahmen-Berichte',
+        'Kontroll-Berichte',
       ],
       hasChildren: true,
     }
@@ -44,7 +44,7 @@ export const PopMassnBerFolder = memo(
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <Popmassnbers
+            <Popbers
               projekt={projekt}
               ap={ap}
               pop={pop}

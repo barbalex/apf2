@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
 import { TpopFolder } from './Tpop/index.jsx'
-import { PopBerFolder } from './Popber/index.jsx'
-import { PopMassnBerFolder } from './PopmassnberWhatever/index.jsx'
+import { PopberFolder } from './PopberWhatever/index.jsx'
+import { PopmassnberFolder } from './Popmassnber/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
 
@@ -53,13 +53,13 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
             pop={pop}
             menu={tpopMenu}
           />
-          <PopBerFolder
+          <PopberFolder
             projekt={projekt}
             ap={ap}
             pop={pop}
             menu={popberMenu}
           />
-          <PopMassnBerFolder
+          <PopmassnberFolder
             projekt={projekt}
             ap={ap}
             pop={pop}
