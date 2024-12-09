@@ -16,7 +16,7 @@ export const useAssozartsNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeAssozarts',
+      'treeAssozart',
       projId,
       apId,
       store.tree.assozartGqlFilterForTree,

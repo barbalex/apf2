@@ -96,7 +96,7 @@ export const Component = memo(
         setFieldErrors({})
         if (field === 'name') {
           queryClient.invalidateQueries({
-            queryKey: [`treeAdresses`],
+            queryKey: [`treeAdresse`],
           })
         }
       },

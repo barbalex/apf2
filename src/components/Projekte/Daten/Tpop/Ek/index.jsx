@@ -164,7 +164,7 @@ export const Component = () => {
       }
       if (['nr', 'flurname'].includes(field)) {
         queryClient.invalidateQueries({
-          queryKey: [`treeTpops`],
+          queryKey: [`treeTpop`],
         })
       }
     },

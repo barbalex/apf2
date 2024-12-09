@@ -180,7 +180,7 @@ export const Component = memo(
         }
         if (['nr', 'flurname'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treeTpops`],
+            queryKey: [`treeTpop`],
           })
         }
       },

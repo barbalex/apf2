@@ -125,7 +125,7 @@ export const Component = memo(
         refetch()
         setFieldErrors({})
         queryClient.invalidateQueries({
-          queryKey: [`treeAparts`],
+          queryKey: [`treeApart`],
         })
       },
       [client, queryClient, refetch, row.id, store.user.name],

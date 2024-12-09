@@ -12,7 +12,7 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeTpopkontrzaehlEinheitWertes',
+      'treeTpopkontrzaehlEinheitWerte',
       store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: () =>

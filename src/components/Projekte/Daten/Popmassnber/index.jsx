@@ -115,7 +115,7 @@ export const Component = memo(
         setFieldErrors({})
         if (['jahr', 'beurteilung'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treePopmassnbers`],
+            queryKey: [`treePopmassnber`],
           })
         }
       },

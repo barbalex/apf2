@@ -16,7 +16,7 @@ export const useEkzaehleinheitsNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeEkzaehleinheits',
+      'treeEkzaehleinheit',
       apId,
       store.tree.ekzaehleinheitGqlFilterForTree,
     ],

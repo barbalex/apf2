@@ -102,7 +102,7 @@ export const Component = memo(
         setFieldErrors({})
         if (['name', 'nr'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treePops`],
+            queryKey: [`treePop`],
           })
         }
       },

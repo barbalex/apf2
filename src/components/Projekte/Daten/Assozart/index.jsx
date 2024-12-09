@@ -127,7 +127,7 @@ export const Component = memo(
         setFieldErrors({})
         if (field === 'aeId') {
           queryClient.invalidateQueries({
-            queryKey: [`treeAssozarts`],
+            queryKey: [`treeAssozart`],
           })
         }
       },

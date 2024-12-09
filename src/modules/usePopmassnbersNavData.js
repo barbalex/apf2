@@ -17,7 +17,7 @@ export const usePopmassnbersNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treePopmassnbers',
+      'treePopmassnber',
       popId,
       store.tree.popmassnberGqlFilterForTree,
     ],

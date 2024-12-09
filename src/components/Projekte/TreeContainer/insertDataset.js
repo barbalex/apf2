@@ -228,13 +228,13 @@ export const insertDataset = async ({
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehls'
+    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
     : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehl'
-    : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontrs'
-    : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontrs'
+    : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontr'
+    : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontr'
     : table === 'tpop_apberrelevant_grund_werte' ?
       'treeTpopApberrelevantGrundWerte'
-    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWertes'
+    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
     : table === 'tpopkontrzaehl_einheit_werte' ? 'treePopkontrzaehlEinheitWerte'
     : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({

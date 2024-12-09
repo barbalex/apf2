@@ -51,7 +51,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeAssozarts`],
+        queryKey: [`treeAssozart`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],

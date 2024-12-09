@@ -89,7 +89,7 @@ export const Menu = memo(
           })
         }
         queryClient.invalidateQueries({
-          queryKey: [`treeUsers`],
+          queryKey: [`treeUser`],
         })
         queryClient.invalidateQueries({
           queryKey: [`treeRoot`],
@@ -134,7 +134,7 @@ export const Menu = memo(
 
         // update tree query
         queryClient.invalidateQueries({
-          queryKey: [`treeUsers`],
+          queryKey: [`treeUser`],
         })
         queryClient.invalidateQueries({
           queryKey: [`treeRoot`],

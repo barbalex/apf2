@@ -14,7 +14,7 @@ export const useApberuebersichtsNavData = (props) => {
   const projId = props?.projId ?? params?.projId
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeApberuebersichts', projId],
+    queryKey: ['treeApberuebersicht', projId],
     queryFn: () =>
       apolloClient.query({
         query: gql`

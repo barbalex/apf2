@@ -125,7 +125,7 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (field === 'jahr') {
-          queryClient.invalidateQueries({ queryKey: [`treeApbers`] })
+          queryClient.invalidateQueries({ queryKey: [`treeApber`] })
         }
       },
       [client, queryClient, row.id, store.user.name],

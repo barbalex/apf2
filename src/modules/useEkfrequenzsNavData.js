@@ -15,7 +15,7 @@ export const useEkfrequenzsNavData = (props) => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeEkfrequenzs', apId, store.tree.ekfrequenzGqlFilterForTree],
+    queryKey: ['treeEkfrequenz', apId, store.tree.ekfrequenzGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`

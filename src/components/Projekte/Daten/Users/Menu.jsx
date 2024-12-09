@@ -59,7 +59,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeUsers`],
+        queryKey: [`treeUser`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],

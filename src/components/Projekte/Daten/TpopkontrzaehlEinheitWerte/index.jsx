@@ -128,7 +128,7 @@ export const TpopkontrzaehlEinheitWerte = memo(
         refetchTree[refetchTableName] && refetchTree[refetchTableName]()
         setFieldErrors({})
         queryClient.invalidateQueries({
-          queryKey: [`treeTpopkontrzaehlEinheitWertes`],
+          queryKey: [`treeTpopkontrzaehlEinheitWerte`],
         })
       },
       [

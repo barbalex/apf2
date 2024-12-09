@@ -119,7 +119,7 @@ export const Component = memo(
         }
         if (['jahr', 'entwicklung'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treeTpopbers`],
+            queryKey: [`treeTpopber`],
           })
         }
       },

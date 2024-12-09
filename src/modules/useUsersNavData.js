@@ -11,7 +11,7 @@ export const useUsersNavData = () => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeUsers', store.tree.userGqlFilterForTree],
+    queryKey: ['treeUser', store.tree.userGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`

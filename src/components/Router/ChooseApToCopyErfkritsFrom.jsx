@@ -229,7 +229,7 @@ export const ChooseApToCopyErfkritsFrom = memo(
           message: `Die Erfolgskriterien wurden kopiert`,
           options: { variant: 'info' },
         })
-        tanstackClient.invalidateQueries({ queryKey: [`treeErfkrits`] })
+        tanstackClient.invalidateQueries({ queryKey: [`treeErfkrit`] })
         tanstackClient.invalidateQueries({ queryKey: [`treeApFolders`] })
         tanstackClient.invalidateQueries({ queryKey: [`treeAp`] })
       },

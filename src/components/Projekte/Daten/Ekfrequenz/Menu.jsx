@@ -52,7 +52,7 @@ export const Menu = memo(
         })
       }
       queryClient.invalidateQueries({
-        queryKey: [`treeEkfrequenzs`],
+        queryKey: [`treeEkfrequenz`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
@@ -102,7 +102,7 @@ export const Menu = memo(
 
       // update tree query
       queryClient.invalidateQueries({
-        queryKey: [`treeEkfrequenzs`],
+        queryKey: [`treeEkfrequenz`],
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],

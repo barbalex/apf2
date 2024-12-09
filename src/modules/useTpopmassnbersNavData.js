@@ -18,7 +18,7 @@ export const useTpopmassnbersNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeTpopmassnbers',
+      'treeTpopmassnber',
       tpopId,
       store.tree.tpopmassnberGqlFilterForTree,
     ],

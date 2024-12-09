@@ -12,7 +12,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeEkAbrechnungstypWertes',
+      'treeEkAbrechnungstypWerte',
       store.tree.ekAbrechnungstypWerteGqlFilterForTree,
     ],
     queryFn: () =>

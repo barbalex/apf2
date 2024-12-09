@@ -147,13 +147,13 @@ export const deleteModule = async ({ client, store, search }) => {
   }
 
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrs'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrs'
+    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontr'
+    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontr'
     : table === 'tpop_apberrelevant_grund_werte' ?
       'treeTpopApberrelevantGrundWerte'
-    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWertes'
+    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
     : table === 'tpopkontrzaehl_einheit_werte' ?
-      'treeTpopkontrzaehlEinheitWertes'
+      'treeTpopkontrzaehlEinheitWerte'
     : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyTable],

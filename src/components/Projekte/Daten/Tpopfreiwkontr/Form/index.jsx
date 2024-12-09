@@ -293,7 +293,7 @@ export const Form = memo(
         }
         setErrors({})
         queryClient.invalidateQueries({
-          queryKey: [`treeTpopfreiwkontrs`],
+          queryKey: [`treeTpopfreiwkontr`],
         })
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps

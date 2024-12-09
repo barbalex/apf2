@@ -16,7 +16,7 @@ export const useErfkritsNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeErfkrits',
+      'treeErfkrit',
       projId,
       apId,
       store.tree.erfkritGqlFilterForTree,

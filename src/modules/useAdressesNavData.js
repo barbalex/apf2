@@ -11,7 +11,7 @@ export const useAdressesNavData = () => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeAdresses', store.tree.adresseGqlFilterForTree],
+    queryKey: ['treeAdresse', store.tree.adresseGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`

@@ -15,7 +15,7 @@ export const useApartsNavData = (props) => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeAparts', projId, apId, store.tree.apartGqlFilterForTree],
+    queryKey: ['treeApart', projId, apId, store.tree.apartGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`

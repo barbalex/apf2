@@ -54,7 +54,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeEkfrequenzs`],
+        queryKey: [`treeEkfrequenz`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],

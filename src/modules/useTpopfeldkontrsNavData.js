@@ -17,7 +17,7 @@ export const useTpopfeldkontrsNavData = (props) => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeTpopfeldkontrs', tpopId, store.tree.ekGqlFilterForTree],
+    queryKey: ['treeTpopfeldkontr', tpopId, store.tree.ekGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`

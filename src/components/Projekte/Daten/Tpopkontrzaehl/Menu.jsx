@@ -58,7 +58,7 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontrzaehls`],
+        queryKey: [`treeTpopfeldkontrzaehl`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehlFolders`],
@@ -118,7 +118,7 @@ export const Menu = memo(
 
       // update tree query
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontrzaehls`],
+        queryKey: [`treeTpopfeldkontrzaehl`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehlFolders`],

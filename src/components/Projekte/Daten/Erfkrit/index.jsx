@@ -105,7 +105,7 @@ export const Component = memo(
         }
         setFieldErrors({})
         queryClient.invalidateQueries({
-          queryKey: [`treeErfkrits`],
+          queryKey: [`treeErfkrit`],
         })
       },
       [client, queryClient, row.id, store.user.name],
