@@ -8,7 +8,7 @@ import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
 import { PopFolders } from './Folders/index.jsx'
 import { usePopsNavData } from '../../../../../../../../../../../modules/usePopsNavData.js'
 
-export const Pop = memo(
+export const Pops = memo(
   observer(({ projekt, ap }) => {
     const apolloClient = useApolloClient()
     const store = useContext(MobxContext)
@@ -16,17 +16,17 @@ export const Pop = memo(
 
     const { navData } = usePopsNavData({ projId: projekt.id, apId: ap.id })
 
-    return navData.menus.map((el) => {
+    return navData.menus.map((menu) => {
       const node = {
         nodeType: 'table',
         menuType: 'pop',
-        id: el.id,
+        id: menu.id,
         parentId: `${ap.id}PopFolder`,
         parentTableId: ap.id,
-        urlLabel: el.id,
-        label: el.label,
-        status: el.status,
-        url: ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen', el.id],
+        urlLabel: menu.id,
+        label: menu.label,
+        status: menu.status,
+        url: ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen', menu.id],
         hasChildren: true,
       }
       const isOpen =
@@ -36,17 +36,17 @@ export const Pop = memo(
             n[1] === projekt.id &&
             n[3] === ap.id &&
             n[4] === 'Populationen' &&
-            n[5] === el.id,
+            n[5] === menu.id,
         ).length > 0
 
       return (
-        <div key={el.id}>
+        <div key={menu.id}>
           <Row node={node} />
           {isOpen && (
             <PopFolders
               projekt={projekt}
               ap={ap}
-              pop={el}
+              pop={menu}
             />
           )}
         </div>

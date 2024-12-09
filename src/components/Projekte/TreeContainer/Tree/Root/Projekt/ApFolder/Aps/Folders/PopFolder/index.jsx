@@ -1,14 +1,14 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
-import { Pop } from './Pop/index.jsx'
+import { Pops } from './Pops/index.jsx'
 
 export const PopFolder = memo(
-  observer(({ projekt, ap,   menu }) => {
+  observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
-
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen']
 
@@ -35,12 +35,14 @@ export const PopFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <Pop
-            projekt={projekt}
-            ap={ap}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <Pops
+              projekt={projekt}
+              ap={ap}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),
