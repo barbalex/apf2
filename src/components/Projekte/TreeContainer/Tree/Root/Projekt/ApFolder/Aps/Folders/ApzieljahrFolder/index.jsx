@@ -1,5 +1,6 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
@@ -27,7 +28,7 @@ export const ApzieljahrFolder = memo(
       id: `${ap.id}ApzielFolder`,
       tableId: ap.id,
       urlLabel: 'AP-Ziele',
-      label: navData.label,
+      label: menu.label,
       url,
       hasChildren: true,
     }
@@ -35,12 +36,14 @@ export const ApzieljahrFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <Zieljahrs
-            projekt={projekt}
-            ap={ap}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <Zieljahrs
+              projekt={projekt}
+              ap={ap}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),

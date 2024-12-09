@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Zieljahr } from './Zieljahr/index.jsx'
 import { useZieljahrsNavData } from '../../../../../../../../../../modules/useZieljahrsNavData.js'
 
-export const Zieljahrs = memo(({ projekt, ap }) => {
+export const Zieljahrs = memo(({ projekt, ap, in: inProp }) => {
   const { navData, isLoading } = useZieljahrsNavData({
     projId: projekt.id,
     apId: ap.id,
@@ -15,6 +15,7 @@ export const Zieljahrs = memo(({ projekt, ap }) => {
       projekt={projekt}
       ap={ap}
       menu={menu}
+      inProp={inProp}
     />
   ))
 })

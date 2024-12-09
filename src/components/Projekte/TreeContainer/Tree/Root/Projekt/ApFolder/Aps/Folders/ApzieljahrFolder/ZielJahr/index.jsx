@@ -1,12 +1,13 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
 import { Ziel } from './Ziel/index.jsx'
 
 export const Zieljahr = memo(
-  observer(({ projekt, ap, menu }) => {
+  observer(({ projekt, ap, menu, inProp }) => {
     const store = useContext(MobxContext)
 
     const { id, label, jahr } = menu
@@ -32,17 +33,33 @@ export const Zieljahr = memo(
       hasChildren: true,
     }
 
+    const ref = useRef(null)
+
     return (
-      <div key={`${ap.id}/${jahr}`}>
-        <Row node={node} />
-        {isOpen && (
-          <Ziel
-            projekt={projekt}
-            ap={ap}
-            jahr={jahr}
-          />
+      <Transition
+        in={inProp}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={ref}
+      >
+        {(state) => (
+          <>
+            <Row
+              node={node}
+              ref={ref}
+              transitionState={state}
+            />
+            {isOpen && (
+              <Ziel
+                projekt={projekt}
+                ap={ap}
+                jahr={jahr}
+              />
+            )}
+          </>
         )}
-      </div>
+      </Transition>
     )
   }),
 )
