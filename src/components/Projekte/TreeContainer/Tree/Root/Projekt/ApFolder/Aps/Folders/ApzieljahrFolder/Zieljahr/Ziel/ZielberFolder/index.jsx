@@ -80,6 +80,7 @@ export const ZielberFolder = memo(
                   jahr={jahr}
                   ziel={ziel}
                   menus={navData.menus}
+                  parentTransitionState={state}
                 />
               )}
             </TransitionGroup>
