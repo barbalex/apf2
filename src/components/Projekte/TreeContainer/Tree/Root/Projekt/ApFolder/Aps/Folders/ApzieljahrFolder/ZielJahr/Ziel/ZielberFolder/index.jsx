@@ -3,20 +3,11 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../mobxContext.js'
-import { Zielber } from './Zielber.jsx'
-import { useZielbersNavData } from '../../../../../../../../../../../../../modules/useZielbersNavData.js'
+import { Zielbers } from './Zielbers.jsx'
 
 export const ZielberFolder = memo(
-  observer(({ projekt, ap, jahr, ziel }) => {
+  observer(({ projekt, ap, jahr, menu }) => {
     const store = useContext(MobxContext)
-    const { nodeLabelFilter } = store.tree
-
-    const { navData, isLoading } = useZielbersNavData({
-      projId: projekt.id,
-      apId: ap.id,
-      jahr,
-      zielId: ziel.id,
-    })
 
     const url = [
       'Projekte',
@@ -25,7 +16,7 @@ export const ZielberFolder = memo(
       ap.id,
       'AP-Ziele',
       jahr,
-      ziel.id,
+      menu.id,
       'Berichte',
     ]
 
@@ -37,16 +28,16 @@ export const ZielberFolder = memo(
           n[3] === ap.id &&
           n[4] === 'AP-Ziele' &&
           n[5] === jahr &&
-          n[6] === ziel.id,
+          n[6] === menu.id,
       ).length > 0
 
     const node = {
       nodeType: 'folder',
       menuType: 'zielberFolder',
-      id: `${ziel.id}ZielberFolder`,
-      tableId: ziel.id,
+      id: `${menu.id}ZielberFolder`,
+      tableId: menu.id,
       urlLabel: 'Berichte',
-      label: navData.label,
+      label: menu.label,
       url,
       hasChildren: true,
     }
@@ -55,12 +46,11 @@ export const ZielberFolder = memo(
       <>
         <Row node={node} />
         {isOpen && (
-          <Zielber
-            menus={navData.menus}
+          <Zielbers
             projekt={projekt}
             ap={ap}
             jahr={jahr}
-            ziel={ziel}
+            ziel={menu}
           />
         )}
       </>

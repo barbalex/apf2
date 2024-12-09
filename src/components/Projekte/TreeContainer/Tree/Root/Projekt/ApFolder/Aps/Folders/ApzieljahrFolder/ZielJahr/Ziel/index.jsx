@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../mobxContext.js'
-import { ZielberFolder } from './Zielber/index.jsx'
+import { ZielberFolder } from './ZielberFolder/index.jsx'
 import { useZielsOfJahrNavData } from '../../../../../../../../../../../../modules/useZielsOfJahrNavData.js'
 
 export const Ziel = memo(
@@ -56,7 +56,7 @@ export const Ziel = memo(
               projekt={projekt}
               ap={ap}
               jahr={jahr}
-              ziel={menu}
+              menu={menu}
             />
           )}
         </div>
