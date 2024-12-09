@@ -4,7 +4,7 @@ import { Row } from '../../../../../../../../../Row.jsx'
 import { useZielbersNavData } from '../../../../../../../../../../../../../modules/useZielbersNavData.js'
 
 export const Zielbers = memo(({ projekt, ap, jahr, ziel }) => {
-  const { navData, isLoading } = useZielbersNavData({
+  const { navData } = useZielbersNavData({
     projId: projekt.id,
     apId: ap.id,
     jahr,

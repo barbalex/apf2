@@ -4,7 +4,7 @@ import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
-import { Ziel } from './Ziel/index.jsx'
+import { Ziels } from './Ziels.jsx'
 
 export const Zieljahr = memo(
   observer(({ projekt, ap, menu, inProp }) => {
@@ -51,7 +51,7 @@ export const Zieljahr = memo(
               transitionState={state}
             />
             {isOpen && (
-              <Ziel
+              <Ziels
                 projekt={projekt}
                 ap={ap}
                 jahr={jahr}
