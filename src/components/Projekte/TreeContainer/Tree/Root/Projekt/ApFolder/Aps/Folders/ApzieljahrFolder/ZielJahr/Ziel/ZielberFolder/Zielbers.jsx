@@ -1,17 +1,9 @@
 import { memo } from 'react'
 
 import { Row } from '../../../../../../../../../Row.jsx'
-import { useZielbersNavData } from '../../../../../../../../../../../../../modules/useZielbersNavData.js'
 
-export const Zielbers = memo(({ projekt, ap, jahr, ziel }) => {
-  const { navData } = useZielbersNavData({
-    projId: projekt.id,
-    apId: ap.id,
-    jahr,
-    zielId: ziel.id,
-  })
-
-  return navData.menus.map((menu) => {
+export const Zielbers = memo(({ projekt, ap, jahr, ziel, menus }) => {
+  return menus.map((menu) => {
     const node = {
       nodeType: 'table',
       menuType: 'zielber',

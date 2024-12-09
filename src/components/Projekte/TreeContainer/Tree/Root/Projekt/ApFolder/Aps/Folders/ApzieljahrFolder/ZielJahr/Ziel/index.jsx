@@ -21,6 +21,17 @@ export const Ziel = memo(
       hasChildren: true,
     }
 
+    const isOpen =
+      store.tree.openNodes.filter(
+        (n) =>
+          n.length > 7 &&
+          n[1] === projekt.id &&
+          n[3] === ap.id &&
+          n[4] === 'AP-Ziele' &&
+          n[5] === jahr &&
+          n[6] === menu.id,
+      ).length > 0
+
     return (
       <>
         <Row node={node} />
@@ -29,7 +40,7 @@ export const Ziel = memo(
             projekt={projekt}
             ap={ap}
             jahr={jahr}
-            menu={menu}
+            ziel={menu}
           />
         )}
       </>
