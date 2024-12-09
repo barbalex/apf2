@@ -1,6 +1,6 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
@@ -50,13 +50,15 @@ export const Pop = memo(
               transitionState={state}
               ref={ref}
             />
-            {isOpen && (
-              <PopFolders
-                projekt={projekt}
-                ap={ap}
-                pop={menu}
-              />
-            )}
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <PopFolders
+                  projekt={projekt}
+                  ap={ap}
+                  pop={menu}
+                />
+              )}
+            </TransitionGroup>
           </>
         )}
       </Transition>

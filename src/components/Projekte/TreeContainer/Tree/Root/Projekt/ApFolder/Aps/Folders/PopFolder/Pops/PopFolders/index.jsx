@@ -1,11 +1,18 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useRef } from 'react'
+import styled from '@emotion/styled'
+import { Transition } from 'react-transition-group'
 
 import { TpopFolder } from './Tpop/index.jsx'
 import { PopBerFolder } from './PopBer/index.jsx'
 import { PopMassnBerFolder } from './PopMassnBer/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
+import { transitionStyles } from '../../../../../../../../Row.jsx'
 
-export const PopFolders = memo(({ projekt, ap, pop }) => {
+const Container = styled.div`
+  transition: opacity 300ms ease-in-out;
+`
+
+export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
   const { navData } = usePopNavData({
     projId: projekt.id,
     apId: ap.id,
@@ -25,26 +32,41 @@ export const PopFolders = memo(({ projekt, ap, pop }) => {
     [navData.menus],
   )
 
+  const ref = useRef(null)
+
   return (
-    <>
-      <TpopFolder
-        projekt={projekt}
-        ap={ap}
-        pop={pop}
-        menu={tpopMenu}
-      />
-      <PopBerFolder
-        projekt={projekt}
-        ap={ap}
-        pop={pop}
-        menu={popberMenu}
-      />
-      <PopMassnBerFolder
-        projekt={projekt}
-        ap={ap}
-        pop={pop}
-        menu={popmassnberMenu}
-      />
-    </>
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Container
+          ref={ref}
+          style={transitionStyles[state]}
+        >
+          <TpopFolder
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            menu={tpopMenu}
+          />
+          <PopBerFolder
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            menu={popberMenu}
+          />
+          <PopMassnBerFolder
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            menu={popmassnberMenu}
+          />
+        </Container>
+      )}
+    </Transition>
   )
 })
