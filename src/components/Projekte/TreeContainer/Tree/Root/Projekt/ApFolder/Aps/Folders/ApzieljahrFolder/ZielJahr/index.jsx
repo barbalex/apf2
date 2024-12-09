@@ -5,7 +5,7 @@ import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
 import { Ziel } from './Ziel/index.jsx'
 
-export const ZielJahr = memo(
+export const Zieljahr = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 
