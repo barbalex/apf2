@@ -100,7 +100,7 @@ export const Component = memo(
         setFieldErrors({})
         if (['jahr', 'erreichung'].includes(field)) {
           queryClient.invalidateQueries({
-            queryKey: [`treeZielbers`],
+            queryKey: [`treeZielber`],
           })
         }
       },

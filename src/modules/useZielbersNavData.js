@@ -17,7 +17,7 @@ export const useZielbersNavData = (props) => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeZielberss', zielId, store.tree.zielberGqlFilterForTree],
+    queryKey: ['treeZielber', zielId, store.tree.zielberGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`

@@ -42,13 +42,17 @@ export const ZielberFolder = memo(
     const node = {
       nodeType: 'folder',
       menuType: 'zielberFolder',
-      id: `${navData.id}ZielberFolder`,
-      tableId: navData.id,
+      id: `${navData?.id}ZielberFolder`,
+      tableId: navData?.id,
+      parentId: ziel.id,
+      parentTableId: ziel.id,
       urlLabel: 'Berichte',
-      label: navData.label,
+      label: navData?.label,
       url,
       hasChildren: true,
     }
+
+    if (!navData) return null
 
     return (
       <>

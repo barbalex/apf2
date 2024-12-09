@@ -30,16 +30,19 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createZielberForZielbersForm($zielId: UUID!) {
-              createZielber(input: { zielber: { zielId: $zielId } }) {
+            mutation createZielberForZielbersForm($zielId: UUID!, $jahr: Int!) {
+              createZielber(
+                input: { zielber: { zielId: $zielId, jahr: $jahr } }
+              ) {
                 zielber {
                   id
                   zielId
+                  jahr
                 }
               }
             }
           `,
-          variables: { zielId },
+          variables: { zielId, jahr },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -50,10 +53,16 @@ export const Menu = memo(
         })
       }
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeZielbers`],
+        queryKey: [`treeZielber`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeZielFolders`],
+        queryKey: [`treeZiel`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeZielsOfJahr`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeZieljahrs`],
       })
       const id = result?.data?.createZielber?.zielber?.id
       navigate(`./${id}${search}`)
