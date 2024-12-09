@@ -2,7 +2,7 @@ import { memo, useMemo, useRef } from 'react'
 import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
-import { PopFolder } from './Pop/index.jsx'
+import { PopFolder } from './PopFolder/index.jsx'
 import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
 import { AperfkritFolder } from './AperfkritFolder/index.jsx'
 import { ApberFolder } from './ApberFolder/index.jsx'

@@ -1,16 +1,13 @@
 import { memo, useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useApolloClient, gql } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
-import { PopFolders } from './Folders/index.jsx'
+import { PopFolders } from './PopFolders/index.jsx'
 import { usePopsNavData } from '../../../../../../../../../../../modules/usePopsNavData.js'
 
 export const Pops = memo(
   observer(({ projekt, ap }) => {
-    const apolloClient = useApolloClient()
     const store = useContext(MobxContext)
     const { popGqlFilterForTree } = store.tree
 
