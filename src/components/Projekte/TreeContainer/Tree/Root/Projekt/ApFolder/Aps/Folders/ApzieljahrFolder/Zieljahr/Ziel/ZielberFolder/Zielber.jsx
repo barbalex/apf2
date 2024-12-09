@@ -1,8 +1,9 @@
 import { memo, useRef } from 'react'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 
-export const Zielber = memo(({ projekt, ap, jahr, ziel, menu }) => {
+export const Zielber = memo(({ projekt, ap, jahr, ziel, menu, inProp }) => {
   const node = {
     nodeType: 'table',
     menuType: 'zielber',
@@ -28,9 +29,20 @@ export const Zielber = memo(({ projekt, ap, jahr, ziel, menu }) => {
   const ref = useRef(null)
 
   return (
-    <Row
-      node={node}
-      ref={ref}
-    />
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Row
+          node={node}
+          ref={ref}
+          transitionState={state}
+        />
+      )}
+    </Transition>
   )
 })

@@ -1,6 +1,6 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../mobxContext.js'
@@ -72,15 +72,17 @@ export const ZielberFolder = memo(
               ref={ref}
               transitionState={state}
             />
-            {isOpen && (
-              <Zielbers
-                projekt={projekt}
-                ap={ap}
-                jahr={jahr}
-                ziel={ziel}
-                menus={navData.menus}
-              />
-            )}
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <Zielbers
+                  projekt={projekt}
+                  ap={ap}
+                  jahr={jahr}
+                  ziel={ziel}
+                  menus={navData.menus}
+                />
+              )}
+            </TransitionGroup>
           </>
         )}
       </Transition>

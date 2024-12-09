@@ -2,7 +2,7 @@ import { memo } from 'react'
 
 import { Zielber } from './Zielber.jsx'
 
-export const Zielbers = memo(({ projekt, ap, jahr, ziel, menus }) =>
+export const Zielbers = memo(({ projekt, ap, jahr, ziel, menus, in: inProp }) =>
   menus.map((menu) => (
     <Zielber
       key={menu.id}
@@ -11,6 +11,7 @@ export const Zielbers = memo(({ projekt, ap, jahr, ziel, menus }) =>
       jahr={jahr}
       ziel={ziel}
       menu={menu}
+      inProp={inProp}
     />
   )),
 )
