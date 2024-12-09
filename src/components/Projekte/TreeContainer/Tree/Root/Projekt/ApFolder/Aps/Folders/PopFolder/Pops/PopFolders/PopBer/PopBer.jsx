@@ -1,42 +1,47 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../Row.jsx'
-import { usePopbersNavData } from '../../../../../../../../../../../../../modules/usePopbersNavData.js'
 
-export const PopBer = memo(({ projekt, ap, pop }) => {
-  const { navData } = usePopbersNavData({
-    projId: projekt.id,
-    apId: ap.id,
-    popId: pop.id,
-  })
+export const Popber = memo(({ projekt, ap, pop, menu, inProp }) => {
+  const node = {
+    nodeType: 'table',
+    menuType: 'popber',
+    id: menu.id,
+    parentId: pop.id,
+    parentTableId: pop.id,
+    urlLabel: menu.id,
+    label: menu.label,
+    url: [
+      'Projekte',
+      projekt.id,
+      'Arten',
+      ap.id,
+      'Populationen',
+      pop.id,
+      'Kontroll-Berichte',
+      menu.id,
+    ],
+    hasChildren: false,
+  }
 
-  return navData.menus.map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'popber',
-      id: el.id,
-      parentId: pop.id,
-      parentTableId: pop.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'Populationen',
-        pop.id,
-        'Kontroll-Berichte',
-        el.id,
-      ],
-      hasChildren: false,
-    }
+  const ref = useRef(null)
 
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
+  return (
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Row
+          node={node}
+          ref={ref}
+          transitionState={state}
+        />
+      )}
+    </Transition>
+  )
 })

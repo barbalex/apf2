@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
 import { TpopFolder } from './Tpop/index.jsx'
-import { PopBerFolder } from './PopBer/index.jsx'
-import { PopMassnBerFolder } from './PopMassnBer/index.jsx'
+import { PopBerFolder } from './Popber/index.jsx'
+import { PopMassnBerFolder } from './Popmassnber/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
 
