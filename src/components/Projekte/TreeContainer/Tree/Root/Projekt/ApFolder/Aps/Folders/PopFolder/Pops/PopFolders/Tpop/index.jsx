@@ -1,5 +1,6 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../mobxContext.js'
@@ -44,13 +45,15 @@ export const TpopFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <Tpop
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <Tpop
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),
