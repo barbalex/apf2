@@ -1,10 +1,10 @@
 # upgrade to 15-3.3?
 # beware when upgrading: need to re-create backups!
-FROM postgis/postgis:14-3.4
+FROM postgis/postgis:15-3.5
 
 COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data
-# COPY ./apflora.backup /sik_data/apflora.backup
+COPY ./apflora.backup /sik_data/apflora.backup
 
 RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
 

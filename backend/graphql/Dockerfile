@@ -1,5 +1,6 @@
 FROM node:slim
-RUN apk add dumb-init
+# RUN apk add dumb-init
+RUN apt-get update && apt-get install -y dumb-init
 
 ENV NODE_ENV production
 
