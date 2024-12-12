@@ -4,7 +4,7 @@ import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'
-import { useNavigate, Outlet, useParams } from 'react-router'
+import { useNavigate, Outlet, useParams, useLocation } from 'react-router'
 
 import './index.css'
 
@@ -51,6 +51,7 @@ export const FilesRouter = memo(
   observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
     const store = useContext(MobxContext)
     const { fileId } = useParams()
+    const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const uploaderCtx = useContext(UploaderContext)
@@ -148,11 +149,11 @@ export const FilesRouter = memo(
               `${parent}File`
             ]
           if (newFile) {
-            navigate(`${newFile.fileId}/Vorschau`)
+            navigate(`${newFile.fileId}/Vorschau${search}`)
           }
         }
       },
-      [client, fields, fragment, parent, parentId, refetch],
+      [client, fields, fragment, parent, parentId, refetch, search],
     )
 
     const onFileUploadFailed = useCallback((error) => {

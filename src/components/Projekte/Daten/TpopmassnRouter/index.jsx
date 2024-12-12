@@ -37,7 +37,7 @@ const TabContent = styled.div`
 export const Component = () => {
   const { tpopmassnId, tpopId, popId, apId, projId } = useParams()
   const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -50,10 +50,10 @@ export const Component = () => {
   const onChangeTab = useCallback(
     (event, value) => {
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${tpopmassnId}/${value}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${tpopmassnId}/${value}${search}`,
       )
     },
-    [projId, apId, popId, tpopId, tpopmassnId, navigate],
+    [projId, apId, popId, tpopId, tpopmassnId, navigate, search],
   )
 
   return (

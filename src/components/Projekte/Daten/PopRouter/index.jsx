@@ -37,7 +37,7 @@ const TabContent = styled.div`
 export const Component = () => {
   const { popId } = useParams()
   const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   const {
     data,
@@ -54,8 +54,10 @@ export const Component = () => {
 
   const onChangeTab = useCallback(
     (event, value) =>
-      pathname.endsWith(popId) ? navigate(`./${value}`) : navigate(value),
-    [pathname, popId, navigate],
+      pathname.endsWith(popId) ?
+        navigate(`./${value}${search}`)
+      : navigate(`${value}${search}`),
+    [pathname, popId, navigate, search],
   )
 
   return (
