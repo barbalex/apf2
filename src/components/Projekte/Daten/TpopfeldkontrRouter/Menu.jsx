@@ -52,6 +52,7 @@ export const Menu = memo(
     const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
     const onClickAdd = useCallback(async () => {
+      // 1. add new tpopkontr
       let result
       try {
         result = await client.mutate({
@@ -80,7 +81,7 @@ export const Menu = memo(
       }
       const id = result?.data?.createTpopkontr?.tpopkontr?.id
 
-      // 1. add new zaehlung
+      // 2. add new tpopkontrzaehl
       const resultZaehl = await client.mutate({
         mutation: gql`
           mutation createTpokontrzaehlForTpopfeldkontrForm($parentId: UUID!) {
@@ -95,17 +96,18 @@ export const Menu = memo(
         `,
         variables: { parentId: id },
       })
-      // // 2. open the zaehlungFolder
+      // 3. open the tpopkontrzaehl Folder
       const zaehlId =
         resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
-      const newActiveNodeArray = [...activeNodeArray, id]
-      const newOpenFolder = [...newActiveNodeArray, 'Zaehlungen']
-      const newOpenNode = [...newActiveNodeArray, 'Zaehlungen', zaehlId]
+      const activeNodeArrayWithoutLastElement = activeNodeArray.slice(0, -1)
+      const tpopkontrNode = [...activeNodeArrayWithoutLastElement, id]
+      const zaehlungenFolderNode = [...tpopkontrNode, 'Zaehlungen']
+      const zaehlungNode = [...zaehlungenFolderNode, zaehlId]
       const newOpenNodes = [
         ...openNodes,
-        newActiveNodeArray,
-        newOpenFolder,
-        newOpenNode,
+        tpopkontrNode,
+        zaehlungenFolderNode,
+        zaehlungNode,
       ]
       setOpenNodes(newOpenNodes)
       tanstackQueryClient.invalidateQueries({
@@ -171,6 +173,9 @@ export const Menu = memo(
       // update tree query
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeTpop`],
       })
       // navigate to parent
       navigate(
