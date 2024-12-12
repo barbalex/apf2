@@ -29,7 +29,7 @@ export const PreviewMenus = memo(
     const store = useContext(StoreContext)
     const { fileId } = useParams()
     const navigate = useNavigate()
-    const { pathname } = useLocation()
+    const { pathname, search } = useLocation()
     const client = useApolloClient()
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
@@ -41,7 +41,7 @@ export const PreviewMenus = memo(
       // relative navigation using ../.. does not work here
       const fileIdBeginsAt = pathname.indexOf(fileId)
       const newPathname = pathname.slice(0, fileIdBeginsAt)
-      navigate(newPathname)
+      navigate(`${newPathname}${search}`)
     }, [pathname, fileId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
