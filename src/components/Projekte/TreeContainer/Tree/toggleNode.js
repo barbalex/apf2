@@ -13,8 +13,6 @@ export const toggleNode = ({ node, store, navigate, search }) => {
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
 
-  console.log('toggleNode', { node, openNodes, aNA })
-
   let newActiveNodeArray = []
   if (!isNodeOpen({ openNodes, url: node.url })) {
     // node is closed
