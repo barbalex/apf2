@@ -36,8 +36,7 @@ services:
       - db
     env_file:
       - ./.env
-    command:
-      [
+    command: [
         '--connection',
         '${DATABASE_URL}',
         '--schema',
@@ -57,6 +56,9 @@ services:
         '--enable-query-batching',
         '--retry-on-init-fail',
         '--enhance-graphiql',
+        # export schema for apollo, only in dev
+        '--export-schema-json',
+        '/my_data/schema.json',
       ]
 volumes:
   db_data:
