@@ -23,9 +23,13 @@ export const toggleNode = ({ node, store, navigate, search }) => {
   } else if (node.urlLabel == aNA.slice(-1)[0]) {
     // the node is open
     // AND it is the active node
+    // BEFORE 2024.12.12:
     // make it's parent the new active node
-    newActiveNodeArray = [...node.url]
-    newActiveNodeArray.pop()
+    // newActiveNodeArray = [...node.url]
+    // newActiveNodeArray.pop()
+    // AFTER 2024.12.12:
+    // don't do anything
+    return
   } else {
     // the node is open
     // but not the active node
