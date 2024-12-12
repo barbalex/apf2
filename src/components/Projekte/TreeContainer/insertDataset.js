@@ -285,4 +285,12 @@ export const insertDataset = async ({
       queryKey: [`treeTpopfeldkontr`],
     })
   }
+  if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontrzaehl`],
+    })
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeTpop`],
+    })
+  }
 }

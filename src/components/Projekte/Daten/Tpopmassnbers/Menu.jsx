@@ -53,7 +53,7 @@ export const Menu = memo(
         queryKey: [`treeTpopmassnber`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopFolders`],
+        queryKey: [`treeTpop`],
       })
       const id = result?.data?.createTpopmassnber?.tpopmassnber?.id
       navigate(`./${id}${search}`)

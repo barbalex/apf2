@@ -49,6 +49,7 @@ export const Menu = memo(
       copyingBiotop,
       setCopyingBiotop,
     } = store
+    const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -77,13 +78,45 @@ export const Menu = memo(
           },
         })
       }
+      const id = result?.data?.createTpopkontr?.tpopkontr?.id
+
+      // 1. add new zaehlung
+      const resultZaehl = await client.mutate({
+        mutation: gql`
+          mutation createTpokontrzaehlForTpopfeldkontrForm($parentId: UUID!) {
+            createTpopkontrzaehl(
+              input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
+            ) {
+              tpopkontrzaehl {
+                id
+              }
+            }
+          }
+        `,
+        variables: { parentId: id },
+      })
+      // // 2. open the zaehlungFolder
+      const zaehlId =
+        resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+      const newActiveNodeArray = [...activeNodeArray, id]
+      const newOpenFolder = [...newActiveNodeArray, 'Zaehlungen']
+      const newOpenNode = [...newActiveNodeArray, 'Zaehlungen', zaehlId]
+      const newOpenNodes = [
+        ...openNodes,
+        newActiveNodeArray,
+        newOpenFolder,
+        newOpenNode,
+      ]
+      setOpenNodes(newOpenNodes)
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopFolders`],
+        queryKey: [`treeTpopfeldkontrzaehl`],
       })
-      const id = result?.data?.createTpopkontr?.tpopkontr?.id
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeTpop`],
+      })
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${id}${search}`,
       )
@@ -138,9 +171,6 @@ export const Menu = memo(
       // update tree query
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
-      })
-      tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopFolders`],
       })
       // navigate to parent
       navigate(
