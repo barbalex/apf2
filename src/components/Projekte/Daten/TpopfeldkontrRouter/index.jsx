@@ -35,7 +35,7 @@ const TabContent = styled.div`
 `
 
 export const Component = () => {
-  const { tpopkontrId } = useParams()
+  const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
   const navigate = useNavigate()
   const { pathname, search } = useLocation()
 
@@ -49,10 +49,10 @@ export const Component = () => {
 
   const onChangeTab = useCallback(
     (event, value) =>
-      pathname.endsWith(tpopkontrId) ?
-        navigate(`./${value}${search}`)
-      : navigate(`${value}${search}`),
-    [pathname, tpopkontrId, navigate, search],
+      navigate(
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/${value}${search}`,
+      ),
+    [projId, apId, popId, tpopId, tpopkontrId, navigate, search],
   )
 
   return (

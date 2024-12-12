@@ -31,16 +31,16 @@ const TabContent = styled.div`
 `
 
 export const Component = () => {
-  const { apId } = useParams()
+  const { projId, apId } = useParams()
   const navigate = useNavigate()
   const { pathname, search } = useLocation()
 
   const onChangeTab = useCallback(
     (event, value) =>
-      pathname.endsWith(apId) ?
-        navigate(`./${value}${search}`)
-      : navigate(`${value}${search}`),
-    [pathname, apId, navigate, search],
+      navigate(
+        `/Daten/Projekte/${projId}/Arten/${apId}/Idealbiotop/${value}${search}`,
+      ),
+    [projId, apId, search, navigate],
   )
   const path = pathname.split('/').filter((el) => !!el)
   const lastPathEl = path.at(-1)
