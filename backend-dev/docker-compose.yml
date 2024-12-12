@@ -1,3 +1,4 @@
+# name: apf
 services:
   db:
     # specify container name to make it easier to run commands
@@ -56,9 +57,9 @@ services:
         '--enable-query-batching',
         '--retry-on-init-fail',
         '--enhance-graphiql',
-        # export schema for apollo, only in dev
-        '--export-schema-json',
-        '/my_data/schema.json',
+        # enable exporting schema for apollo, only in dev
+        # '--export-schema-json',
+        # '/my_data/schema.json',
       ]
 volumes:
   db_data:
