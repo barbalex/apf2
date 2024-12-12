@@ -2,20 +2,21 @@ import { useCallback, useContext, memo } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { FaPlus, FaEye } from 'react-icons/fa6'
-import { useNavigate } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 import { UploaderContext } from '../../../../UploaderContext.js'
 
 export const ListMenus = memo(({ files }) => {
   const navigate = useNavigate()
+  const { search } = useLocation()
   const uploaderCtx = useContext(UploaderContext)
   const api = uploaderCtx?.current?.getAPI?.()
 
   const firstFileId = files?.[0]?.fileId
 
   const onClickPreview = useCallback(() => {
-    navigate(`${firstFileId}/Vorschau`)
+    navigate(`${firstFileId}/Vorschau${search}`)
   }, [firstFileId])
 
   return (
