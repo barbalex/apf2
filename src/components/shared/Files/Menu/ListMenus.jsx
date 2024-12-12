@@ -17,7 +17,7 @@ export const ListMenus = memo(({ files }) => {
 
   const onClickPreview = useCallback(() => {
     navigate(`${firstFileId}/Vorschau${search}`)
-  }, [firstFileId])
+  }, [firstFileId, search, navigate])
 
   return (
     <ErrorBoundary>

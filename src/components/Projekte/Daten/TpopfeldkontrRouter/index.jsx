@@ -37,7 +37,7 @@ const TabContent = styled.div`
 export const Component = () => {
   const { tpopkontrId } = useParams()
   const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   const { data, loading, error } = useQuery(query, {
     variables: {
@@ -49,8 +49,10 @@ export const Component = () => {
 
   const onChangeTab = useCallback(
     (event, value) =>
-      pathname.endsWith(tpopkontrId) ? navigate(`./${value}`) : navigate(value),
-    [tpopkontrId, navigate, pathname],
+      pathname.endsWith(tpopkontrId) ?
+        navigate(`./${value}${search}`)
+      : navigate(`${value}${search}`),
+    [pathname, tpopkontrId, navigate, search],
   )
 
   return (

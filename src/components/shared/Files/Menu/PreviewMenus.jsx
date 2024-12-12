@@ -42,7 +42,7 @@ export const PreviewMenus = memo(
       const fileIdBeginsAt = pathname.indexOf(fileId)
       const newPathname = pathname.slice(0, fileIdBeginsAt)
       navigate(`${newPathname}${search}`)
-    }, [pathname, fileId])
+    }, [pathname, fileId, search, navigate])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -88,7 +88,7 @@ export const PreviewMenus = memo(
       }
       setDelMenuAnchorEl(null)
       refetch()
-      navigate(nextPathname)
+      navigate(`${nextPathname}${search}`)
     }, [
       fileId,
       files,
@@ -99,18 +99,19 @@ export const PreviewMenus = memo(
       refetch,
       store,
       navigate,
+      search,
     ])
 
     const onClickNext = useCallback(() => {
       const nextFileIndex = fileIndex + 1
       const nextFile = files[nextFileIndex] ?? files[0]
-      navigate(`${nextFile.fileId}/Vorschau`)
-    }, [fileIndex, files, navigate])
+      navigate(`${nextFile.fileId}/Vorschau${search}`)
+    }, [fileIndex, files, navigate, search])
 
     const onClickPrev = useCallback(() => {
       const prevFile = files[fileIndex - 1] ?? files[files.length - 1]
-      navigate(`${prevFile.fileId}/Vorschau`)
-    }, [fileIndex, files, navigate])
+      navigate(`${prevFile.fileId}/Vorschau${search}`)
+    }, [fileIndex, files, navigate, search])
 
     // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
