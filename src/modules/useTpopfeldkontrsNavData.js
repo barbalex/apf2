@@ -8,6 +8,7 @@ import { MobxContext } from '../mobxContext.js'
 
 export const useTpopfeldkontrsNavData = (props) => {
   const apolloClient = useApolloClient()
+
   const params = useParams()
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId

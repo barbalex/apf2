@@ -33,15 +33,19 @@ const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(() => {
-    const { search } = useLocation()
-    const navigate = useNavigate()
     const apolloClient = useApolloClient()
     const tanstackQueryClient = useQueryClient()
+
+    const { search } = useLocation()
+    const navigate = useNavigate()
     const { projId, apId, popId, tpopId } = useParams()
+
     const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
+    const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
     const onClickAdd = useCallback(async () => {
+      // 1. create new tpopkontr
       let result
       try {
         result = await apolloClient.mutate({
@@ -67,13 +71,50 @@ export const Menu = memo(
           },
         })
       }
+      const id = result?.data?.createTpopkontr?.tpopkontr?.id
+
+      // 2. add new tpopkontrzaehl
+      const resultZaehl = await apolloClient.mutate({
+        mutation: gql`
+          mutation createTpokontrzaehlForTpopfeldkontrs($parentId: UUID!) {
+            createTpopkontrzaehl(
+              input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
+            ) {
+              tpopkontrzaehl {
+                id
+              }
+            }
+          }
+        `,
+        variables: { parentId: id },
+      })
+
+      // 3. open the tpopkontrzaehl Folder
+      const zaehlId =
+        resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+      const tpopkontrNode = [...activeNodeArray, id]
+      const zaehlungenFolderNode = [...tpopkontrNode, 'Zaehlungen']
+      const zaehlungNode = [...zaehlungenFolderNode, zaehlId]
+      const newOpenNodes = [
+        ...openNodes,
+        tpopkontrNode,
+        zaehlungenFolderNode,
+        zaehlungNode,
+      ]
+      setOpenNodes(newOpenNodes)
+
+      // 4. refresh tree
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
-      const id = result?.data?.createTpopkontr?.tpopkontr?.id
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfeldkontrzaehl`],
+      })
+
+      // 5. navigate to new tpopkontr
       navigate(`./${id}${search}`)
     }, [apolloClient, store, tanstackQueryClient, navigate, search, tpopId])
 

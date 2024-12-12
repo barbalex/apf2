@@ -35,11 +35,13 @@ const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(({ row }) => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
+
+    const { search, pathname } = useLocation()
+    const navigate = useNavigate()
     const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
+
     const store = useContext(MobxContext)
     const {
       moving,
@@ -96,6 +98,7 @@ export const Menu = memo(
         `,
         variables: { parentId: id },
       })
+
       // 3. open the tpopkontrzaehl Folder
       const zaehlId =
         resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
@@ -110,15 +113,19 @@ export const Menu = memo(
         zaehlungNode,
       ]
       setOpenNodes(newOpenNodes)
+
+      // 4. refresh tree
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeTpop`],
+      })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehl`],
       })
-      tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpop`],
-      })
+
+      // 5. navigate to new tpopkontr
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${id}${search}`,
       )
