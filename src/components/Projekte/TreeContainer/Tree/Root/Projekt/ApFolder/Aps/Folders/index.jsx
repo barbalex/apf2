@@ -83,6 +83,8 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
 
   const ref = useRef(null)
 
+  console.log('ApFolders, navData:', navData)
+
   return (
     <Transition
       in={inProp}
@@ -168,6 +170,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             projekt={projekt}
             ap={ap}
             menu={historienMenu}
+            parentUrl={navData?.url}
           />
         </Container>
       )}

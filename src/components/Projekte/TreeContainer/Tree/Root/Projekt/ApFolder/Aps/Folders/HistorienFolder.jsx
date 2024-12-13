@@ -1,16 +1,26 @@
+import lowerFirst from 'lodash/lowerFirst'
+
 import { Row } from '../../../../../Row.jsx'
 
-export const HistorienFolder = ({ projekt, ap, menu }) => {
+export const HistorienFolder = ({ projekt, ap, menu, parentUrl }) => {
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Historien']
+
+  const fullUrl = [
+    ...parentUrl
+      .split('/')
+      .filter((el) => el)
+      .slice(1),
+    'Historien',
+  ]
 
   const node = {
     nodeType: 'folder',
-    menuType: 'historienFolder',
-    id: `${ap.id}HistorienFolder`,
+    menuType: `${lowerFirst(menu.id)}Folder`,
+    id: `${ap.id}${menu.id}Folder`,
     tableId: ap.id,
-    urlLabel: 'Historien',
+    urlLabel: menu.id,
     label: menu.label,
-    url,
+    url: fullUrl,
     hasChildren: false,
   }
 
