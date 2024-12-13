@@ -513,55 +513,46 @@ export const Router = () => {
                     handle={apHandle}
                   >
                     <Route
-                      path="*"
+                      index={true}
+                      lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+                    />
+                    <Route
+                      path="Art"
+                      lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+                    />
+                    <Route
+                      path="Auswertung"
                       lazy={() =>
-                        import('../Projekte/Daten/ApRouter/index.jsx')
+                        import('../Projekte/Daten/ApAuswertung/index.jsx')
                       }
+                    />
+                    <Route
+                      path="Dateien"
+                      lazy={() => import('../Projekte/Daten/ApDateien.jsx')}
                     >
                       <Route
                         index={true}
-                        lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+                        lazy={() => import('../shared/Files/Files/index.jsx')}
                       />
-                      <Route
-                        path="Art"
-                        lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
-                      />
-                      <Route
-                        path="Auswertung"
-                        lazy={() =>
-                          import('../Projekte/Daten/Ap/Auswertung/index.jsx')
-                        }
-                      />
-                      <Route
-                        path="Dateien"
-                        lazy={() => import('../Projekte/Daten/Ap/Dateien.jsx')}
-                      >
+                      <Route path=":fileId">
                         <Route
-                          index={true}
-                          lazy={() => import('../shared/Files/Files/index.jsx')}
+                          path="*"
+                          lazy={() =>
+                            import('../shared/Files/Preview/index.jsx')
+                          }
                         />
-                        <Route path=":fileId">
-                          <Route
-                            path="*"
-                            lazy={() =>
-                              import('../shared/Files/Preview/index.jsx')
-                            }
-                          />
-                          <Route
-                            path="Vorschau"
-                            lazy={() =>
-                              import('../shared/Files/Preview/index.jsx')
-                            }
-                          />
-                        </Route>
+                        <Route
+                          path="Vorschau"
+                          lazy={() =>
+                            import('../shared/Files/Preview/index.jsx')
+                          }
+                        />
                       </Route>
-                      <Route
-                        path="Historien"
-                        lazy={() =>
-                          import('../Projekte/Daten/Ap/Historien.jsx')
-                        }
-                      />
                     </Route>
+                    <Route
+                      path="Historien"
+                      lazy={() => import('../Projekte/Daten/ApHistorien.jsx')}
+                    />
                     <Route
                       path="AP-Ziele"
                       handle={zielJahrsHandle}

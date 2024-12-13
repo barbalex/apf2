@@ -17,7 +17,7 @@ import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { CustomTick } from './CustomTick.jsx'
-import { Error } from '../../../../../shared/Error.jsx'
+import { Error } from '../../../../shared/Error.jsx'
 
 const SpinnerContainer = styled.div`
   height: 400px;

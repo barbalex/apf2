@@ -14,9 +14,9 @@ import { BMengen } from './BMengen.jsx'
 import { CMengen } from './CMengen.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import { PopMenge } from '../../Projekte/Daten/Ap/Auswertung/PopMenge/index.jsx'
-import { PopStatus } from '../../Projekte/Daten/Ap/Auswertung/PopStatus/index.jsx'
-import { TpopKontrolliert } from '../../Projekte/Daten/Ap/Auswertung/TpopKontrolliert/index.jsx'
+import { PopMenge } from '../../Projekte/Daten/ApAuswertung/PopMenge/index.jsx'
+import { PopStatus } from '../../Projekte/Daten/ApAuswertung/PopStatus/index.jsx'
+import { TpopKontrolliert } from '../../Projekte/Daten/ApAuswertung/TpopKontrolliert/index.jsx'
 
 const mdParser = new MarkdownIt({ breaks: true })
 

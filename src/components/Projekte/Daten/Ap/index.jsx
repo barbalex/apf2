@@ -1,9 +1,9 @@
 import { memo, useContext, useCallback, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
-import { useParams, useOutletContext } from 'react-router'
+import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
@@ -16,6 +16,9 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ApUsers } from './ApUsers/index.jsx'
 import { ap, aeTaxonomies } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { query } from './query.js'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { Menu } from './Menu.jsx'
 
 const FormContainer = styled.div`
   display: flex;
@@ -69,7 +72,6 @@ const fieldTypes = {
 export const Component = memo(
   observer(() => {
     const { apId } = useParams()
-    const { data } = useOutletContext()
 
     const client = useApolloClient()
     const store = useContext(MobxContext)
@@ -77,6 +79,10 @@ export const Component = memo(
     const queryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
+
+    const { data, error, loading } = useQuery(query, {
+      variables: { id: apId },
+    })
 
     const row = useMemo(() => data?.apById ?? {}, [data?.apById])
 
@@ -154,6 +160,10 @@ export const Component = memo(
 
     return (
       <ErrorBoundary>
+        <FormTitle
+          title="Art"
+          menuBar={<Menu />}
+        />
         <FormContainer>
           <SelectLoadingOptions
             field="artId"

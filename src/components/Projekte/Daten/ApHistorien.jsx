@@ -3,9 +3,10 @@ import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router'
 
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { History as HistoryComponent } from '../../../shared/History/index.jsx'
-import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
+import { Spinner } from '../../shared/Spinner.jsx'
+import { History as HistoryComponent } from '../../shared/History/index.jsx'
+import { appBaseUrl } from '../../../modules/appBaseUrl.js'
+import { FormTitle } from '../../shared/FormTitle/index.jsx'
 
 const apHistoriesQuery = gql`
   query apHistoryQuery($apId: UUID!) {
@@ -124,6 +125,7 @@ export const Component = () => {
 
   const row = data?.apById
   const rows = data?.allApHistories.nodes ?? []
+  const artname = row?.aeTaxonomyByArtId?.artname ?? 'Art'
 
   const openDocs = useCallback(() => {
     const url = `${appBaseUrl()}/Dokumentation/historisierung`
@@ -142,61 +144,64 @@ export const Component = () => {
   }
 
   return (
-    <InnerContainer>
-      <DocLine>
-        Jährlich historisierte Daten der Art (
-        <DocLink onClick={openDocs}>Dokumentation</DocLink>
-        ).
-      </DocLine>
-      <DocLine>
-        <Aenderung>Änderungen</Aenderung> zum{' '}
-        <Aktuell>aktuellen Zustand</Aktuell> sind hervorgehoben.
-      </DocLine>
-      {rows.map((r) => {
-        const dataArray = [
-          {
-            valueInRow: row?.aeTaxonomyByArtId?.artname ?? row?.artId,
-            valueInHist: r?.aeTaxonomyByArtId?.artname ?? r?.artId,
-            label: 'Art (id)',
-          },
-          {
-            valueInRow:
-              row?.apBearbstandWerteByBearbeitung?.text ?? row?.bearbeitung,
-            valueInHist:
-              r?.apBearbstandWerteByBearbeitung?.text ?? r?.bearbeitung,
-            label: 'Aktionsplan',
-          },
-          {
-            valueInRow:
-              row?.apUmsetzungWerteByUmsetzung?.text ?? row?.umsetzung,
-            valueInHist: r?.apUmsetzungWerteByUmsetzung?.text ?? r?.umsetzung,
-            label: 'Stand Umsetzung',
-          },
-          {
-            valueInRow: row?.adresseByBearbeiter?.name ?? row?.bearbeiter,
-            valueInHist: r?.adresseByBearbeiter?.name ?? r?.bearbeiter,
-            label: 'Verantwortlich',
-          },
-          {
-            valueInRow: row?.startJahr,
-            valueInHist: r?.startJahr,
-            label: 'Start im Jahr',
-          },
-          {
-            valueInRow: row?.ekfBeobachtungszeitpunkt,
-            valueInHist: r?.ekfBeobachtungszeitpunkt,
-            label: 'Bester Beobachtungszeitpunkt für EKF',
-          },
-        ]
+    <>
+      <FormTitle title={`${artname}: Historien`} />
+      <InnerContainer>
+        <DocLine>
+          Jährlich historisierte Daten der Art (
+          <DocLink onClick={openDocs}>Dokumentation</DocLink>
+          ).
+        </DocLine>
+        <DocLine>
+          <Aenderung>Änderungen</Aenderung> zum{' '}
+          <Aktuell>aktuellen Zustand</Aktuell> sind hervorgehoben.
+        </DocLine>
+        {rows.map((r) => {
+          const dataArray = [
+            {
+              valueInRow: row?.aeTaxonomyByArtId?.artname ?? row?.artId,
+              valueInHist: r?.aeTaxonomyByArtId?.artname ?? r?.artId,
+              label: 'Art (id)',
+            },
+            {
+              valueInRow:
+                row?.apBearbstandWerteByBearbeitung?.text ?? row?.bearbeitung,
+              valueInHist:
+                r?.apBearbstandWerteByBearbeitung?.text ?? r?.bearbeitung,
+              label: 'Aktionsplan',
+            },
+            {
+              valueInRow:
+                row?.apUmsetzungWerteByUmsetzung?.text ?? row?.umsetzung,
+              valueInHist: r?.apUmsetzungWerteByUmsetzung?.text ?? r?.umsetzung,
+              label: 'Stand Umsetzung',
+            },
+            {
+              valueInRow: row?.adresseByBearbeiter?.name ?? row?.bearbeiter,
+              valueInHist: r?.adresseByBearbeiter?.name ?? r?.bearbeiter,
+              label: 'Verantwortlich',
+            },
+            {
+              valueInRow: row?.startJahr,
+              valueInHist: r?.startJahr,
+              label: 'Start im Jahr',
+            },
+            {
+              valueInRow: row?.ekfBeobachtungszeitpunkt,
+              valueInHist: r?.ekfBeobachtungszeitpunkt,
+              label: 'Bester Beobachtungszeitpunkt für EKF',
+            },
+          ]
 
-        return (
-          <HistoryComponent
-            key={`${r.id}${r.year}`}
-            year={r?.year}
-            dataArray={dataArray}
-          />
-        )
-      })}
-    </InnerContainer>
+          return (
+            <HistoryComponent
+              key={`${r.id}${r.year}`}
+              year={r?.year}
+              dataArray={dataArray}
+            />
+          )
+        })}
+      </InnerContainer>
+    </>
   )
 }
