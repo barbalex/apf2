@@ -10,12 +10,5 @@ export const Component = memo(() => {
 
   if (isDesktopView) return <Ap />
 
-  return (
-    <List
-      items={navData.menus}
-      title={navData.label}
-      menuBar={<Menu />}
-      highlightSearchString={nodeLabelFilter.ziel}
-    />
-  )
+  return <List />
 })
