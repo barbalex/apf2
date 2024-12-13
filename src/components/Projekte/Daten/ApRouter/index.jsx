@@ -50,6 +50,13 @@ export const Component = () => {
       navigate(`/Daten/Projekte/${projId}/Arten/${apId}/${value}${search}`),
     [projId, apId, search, navigate],
   )
+  const tabValue = useMemo(() => {
+    if (pathname.includes(`${apId}/Art`)) return 'Art'
+    if (pathname.includes(`${apId}/Auswertung`)) return 'Auswertung'
+    if (pathname.includes(`${apId}/Dateien`)) return 'Dateien'
+    if (pathname.includes(`${apId}/Historien`)) return 'Historien'
+    return 'Art'
+  }, [pathname, apId])
 
   return (
     <ErrorBoundary>
@@ -59,16 +66,7 @@ export const Component = () => {
           menuBar={<Menu />}
         />
         <Tabs
-          value={
-            pathname.includes(`${apId}/Art`) ? 'Art'
-            : pathname.includes(`${apId}/Auswertung`) ?
-              'Auswertung'
-            : pathname.includes(`${apId}/Dateien`) ?
-              'Dateien'
-            : pathname.includes(`${apId}/Historien`) ?
-              'Historien'
-            : 'Art'
-          }
+          value={tabValue}
           onChange={onChangeTab}
           indicatorColor="primary"
           textColor="primary"
