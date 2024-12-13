@@ -143,6 +143,12 @@ export const useApNavData = (props) => {
               ) {
                 totalCount
               }
+              apFilesByApId {
+                totalCount
+              }
+            }
+            allApHistories(filter: { id: { equalTo: $apId } }) {
+              totalCount
             }
             beobsNichtBeurteilt: allBeobs(
               filter: $allBeobNichtBeurteiltFilter
@@ -296,6 +302,8 @@ export const useApNavData = (props) => {
     data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
   const filteredBeobsNichtZuzuordnenCount =
     data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
+  const apFilesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
+  const apHistoriesCount = data?.data?.allApHistories?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
@@ -304,6 +312,10 @@ export const useApNavData = (props) => {
       label,
       // leave totalCount undefined as the menus are folders
       menus: [
+        {
+          id: 'Art',
+          label: `Art`,
+        },
         {
           id: 'Populationen',
           label: `Populationen (${isLoading ? '...' : `${filteredPopsCount}/${popsCount}`})`,
@@ -362,9 +374,25 @@ export const useApNavData = (props) => {
           id: 'Qualitaetskontrollen',
           label: `Qualitaetskontrollen`,
         },
+        {
+          id: 'Auswertung',
+          label: `Auswertung`,
+        },
+        {
+          id: 'Dateien',
+          label: `Dateien (${apFilesCount})`,
+          count: apFilesCount,
+        },
+        {
+          id: 'Historien',
+          label: `Historien (${apHistoriesCount})`,
+          count: apHistoriesCount,
+        },
       ],
     }),
     [
+      apFilesCount,
+      apHistoriesCount,
       apId,
       apZielJahrsCount,
       apartsCount,
