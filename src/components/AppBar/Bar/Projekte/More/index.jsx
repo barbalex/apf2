@@ -6,12 +6,16 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
 import { logout } from '../../../../../modules/logout.js'
 import { EkfUser } from './EkfUser/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
-import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
+import { AlwaysShowBookmarks } from './AlwaysShowBookmarks.jsx'
+import { AlwaysShowTree } from './AlwaysShowTree.jsx'
+import { constants } from '../../../../../modules/constants.js'
+
+const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 const Container = styled.div`
   margin-top: auto;
@@ -41,16 +45,12 @@ export const More = memo(
 
       const [anchorEl, setAnchorEl] = useState(null)
       const closeMenu = useCallback(() => setAnchorEl(null), [])
+
       /**
        * need to clone projekteTabs
        * because otherwise removing elements errors out (because elements are sealed)
        */
-
-      const isMobile = isMobilePhone()
-      const [projekteTabs] = useSearchParamsState(
-        'projekteTabs',
-        isMobile ? ['tree'] : ['tree', 'daten'],
-      )
+      const [projekteTabs] = useProjekteTabs()
       const exporteIsActive = !!projId
 
       const showDeletedDatasets = useCallback(() => {
@@ -96,7 +96,7 @@ export const More = memo(
             open={Boolean(anchorEl)}
             onClose={closeMenu}
           >
-            {isMobile && exporteIsActive && (
+            {isMobileView && exporteIsActive && (
               <MenuItem
                 onClick={onClickExporte}
                 disabled={projekteTabs.includes('exporte')}
@@ -113,6 +113,12 @@ export const More = memo(
             {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
               <EkfUser closeMenu={closeMenu} />
             )}
+            <MenuItem>
+              <AlwaysShowBookmarks />
+            </MenuItem>
+            <MenuItem>
+              <AlwaysShowTree />
+            </MenuItem>
             <MenuItem
               onClick={onClickLogout}
               data-id="appbar-more-logout"
@@ -120,7 +126,7 @@ export const More = memo(
             <MenuItem onClick={onClickUptime}>
               Verfügbarkeit der Server von apflora.ch
             </MenuItem>
-            <Version>Version: 1.114.7 vom 12.12.2024</Version>
+            <Version>Version: 1.114.4 vom 26.11.2024</Version>
           </Menu>
         </Container>
       )
