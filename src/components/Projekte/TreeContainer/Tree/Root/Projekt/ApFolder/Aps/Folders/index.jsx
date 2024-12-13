@@ -6,7 +6,7 @@ import { PopFolder } from './PopFolder/index.jsx'
 import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
 import { AperfkritFolder } from './AperfkritFolder/index.jsx'
 import { ApberFolder } from './ApberFolder/index.jsx'
-import { IdealbiotopFolder } from './Idealbiotop.jsx'
+import { IdealbiotopFolder } from './IdealbiotopFolder.jsx'
 import { ApartFolder } from './ApartFolder/index.jsx'
 import { AssozartFolder } from './AssozartFolder/index.jsx'
 import { EkfrequenzFolder } from './EkfrequenzFolder/index.jsx'
@@ -14,6 +14,9 @@ import { EkZaehleinheitFolder } from './EkzaehleinheitFolder/index.jsx'
 import { BeobNichtBeurteiltFolder } from './BeobNichtBeurteiltFolder/index.jsx'
 import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnenFolder/index.jsx'
 import { Qk } from './Qk.jsx'
+import { AuswertungFolder } from './AuswertungFolder.jsx'
+import { DateienFolder } from './DateienFolder.jsx'
+import { HistorienFolder } from './HistorienFolder.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 
@@ -63,6 +66,18 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
   const beobNichtZuzuordnenMenu = useMemo(
     () =>
       navData?.menus.find((m) => m.id === 'nicht-zuzuordnende-Beobachtungen'),
+    [navData],
+  )
+  const auswertungMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Auswertung'),
+    [navData],
+  )
+  const dateienMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Dateien'),
+    [navData],
+  )
+  const historienMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Historien'),
     [navData],
   )
 
@@ -138,6 +153,21 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
           <Qk
             projekt={projekt}
             ap={ap}
+          />
+          <AuswertungFolder
+            projekt={projekt}
+            ap={ap}
+            menu={auswertungMenu}
+          />
+          <DateienFolder
+            projekt={projekt}
+            ap={ap}
+            menu={dateienMenu}
+          />
+          <HistorienFolder
+            projekt={projekt}
+            ap={ap}
+            menu={historienMenu}
           />
         </Container>
       )}
