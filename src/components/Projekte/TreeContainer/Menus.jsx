@@ -1,6 +1,3 @@
-/**
- * need to keep class because of ref
- */
 import { memo, useCallback, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import uniq from 'lodash/uniq'

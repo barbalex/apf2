@@ -1,28 +1,10 @@
-/**
- * need to keep class because of ref
- */
-import { memo, useCallback, useContext, useState, lazy, Suspense } from 'react'
+import { memo, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
-import uniq from 'lodash/uniq'
-import isEqual from 'lodash/isEqual'
-import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import { useParams, useLocation } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
-import { getSnapshot } from 'mobx-state-tree'
+import { useParams } from 'react-router'
 
-import { useSetAtom, useAtom } from 'jotai'
-import {
-  newTpopFromBeobDialogOpenAtom,
-  newTpopFromBeobBeobIdAtom,
-  isDesktopViewAtom,
-} from '../../../JotaiStore/index.js'
+import { useAtom } from 'jotai'
+import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
 
 const LabelFilter = lazy(async () => ({
   default: (await import('./LabelFilter.jsx')).LabelFilter,
@@ -36,200 +18,8 @@ const TreeComponent = lazy(async () => ({
 const Menus = lazy(async () => ({
   default: (await import('./Menus.jsx')).Menus,
 }))
-const CmApFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApFolder.jsx')).Apfolder,
-}))
-const CmAp = lazy(async () => ({
-  default: (await import('./contextmenu/Ap.jsx')).Ap,
-}))
-const CmUserFolder = lazy(async () => ({
-  default: (await import('./contextmenu/UserFolder.jsx')).UserFolder,
-}))
-const CmUser = lazy(async () => ({
-  default: (await import('./contextmenu/User.jsx')).User,
-}))
-const CmAdresseFolder = lazy(async () => ({
-  default: (await import('./contextmenu/AdresseFolder.jsx')).Adressefolder,
-}))
-const CmAdresse = lazy(async () => ({
-  default: (await import('./contextmenu/Adresse.jsx')).Adresse,
-}))
-const CmTpopApberrelevantGrundWerteFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopApberrelevantGrundWerteFolder.jsx'))
-    .TpopApberrelevantGrundWerteFolder,
-}))
-const CmTpopApberrelevantGrundWerte = lazy(async () => ({
-  default: (await import('./contextmenu/TpopApberrelevantGrundWerte.jsx'))
-    .TpopApberrelevantGrundWerte,
-}))
-const CmTpopkontrzaehlEinheitWerteFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerteFolder.jsx'))
-    .TpopkontrzaehlEinheitWerteFolder,
-}))
-const CmTpopkontrzaehlEinheitWerte = lazy(async () => ({
-  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerte.jsx'))
-    .TpopkontrzaehlEinheitWerte,
-}))
-const CmEkAbrechnungstypWerteFolder = lazy(async () => ({
-  default: (await import('./contextmenu/EkAbrechnungstypWerteFolder.jsx'))
-    .EkAbrechnungstypWerteFolder,
-}))
-const CmEkAbrechnungstypWerte = lazy(async () => ({
-  default: (await import('./contextmenu/EkAbrechnungstypWerte.jsx'))
-    .EkAbrechnungstypWerte,
-}))
-const CmApberuebersichtFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApberuebersichtFolder.jsx'))
-    .ApberuebersichtFolder,
-}))
-const CmApberuebersicht = lazy(async () => ({
-  default: (await import('./contextmenu/Apberuebersicht.jsx')).Apberuebersicht,
-}))
-const CmAssozartFolder = lazy(async () => ({
-  default: (await import('./contextmenu/AssozartFolder.jsx')).AssozartFolder,
-}))
-const CmAssozart = lazy(async () => ({
-  default: (await import('./contextmenu/Assozart.jsx')).AssozartFolder,
-}))
-const CmEkzaehleinheitFolder = lazy(async () => ({
-  default: (await import('./contextmenu/EkzaehleinheitFolder.jsx'))
-    .EkzaehleinheitFolder,
-}))
-const CmEkzaehleinheit = lazy(async () => ({
-  default: (await import('./contextmenu/Ekzaehleinheit.jsx')).Ekzaehleinheit,
-}))
-const CmEkfrequenzFolder = lazy(async () => ({
-  default: (await import('./contextmenu/EkfrequenzFolder.jsx'))
-    .EkfrequenzFolder,
-}))
-const CmEkfrequenz = lazy(async () => ({
-  default: (await import('./contextmenu/Ekfrequenz.jsx')).Ekfrequenz,
-}))
-const CmApartFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApartFolder.jsx')).ApartFolder,
-}))
-const CmApart = lazy(async () => ({
-  default: (await import('./contextmenu/Apart.jsx')).Apart,
-}))
-const CmBeobZugeordnetFolder = lazy(async () => ({
-  default: (await import('./contextmenu/BeobZugeordnetFolder.jsx'))
-    .BeobZugeordnetFolder,
-}))
-const CmApberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApberFolder.jsx')).ApberFolder,
-}))
-const CmApber = lazy(async () => ({
-  default: (await import('./contextmenu/Apber.jsx')).Apber,
-}))
-const CmErfkritFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ErfkritFolder.jsx')).ErfkritFolder,
-}))
-const CmErfkrit = lazy(async () => ({
-  default: (await import('./contextmenu/Erfkrit.jsx')).Erfkrit,
-}))
-const CmZielFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ZielFolder.jsx')).ZielFolder,
-}))
-const CmZielJahrFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ZielJahrFolder.jsx')).ZielJahrFolder,
-}))
-const CmZiel = lazy(async () => ({
-  default: (await import('./contextmenu/Ziel.jsx')).Ziel,
-}))
-const CmZielBerFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ZielBerFolder.jsx')).ZielBerFolder,
-}))
-const CmZielBer = lazy(async () => ({
-  default: (await import('./contextmenu/Zielber.jsx')).Zielber,
-}))
-const CmPopFolder = lazy(async () => ({
-  default: (await import('./contextmenu/PopFolder.jsx')).PopFolder,
-}))
-const CmPop = lazy(async () => ({
-  default: (await import('./contextmenu/Pop.jsx')).Pop,
-}))
-const CmPopmassnberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/PopmassnberFolder.jsx'))
-    .PopmassnberFolder,
-}))
-const CmPopmassnber = lazy(async () => ({
-  default: (await import('./contextmenu/Popmassnber.jsx')).Popmassnber,
-}))
-const CmPopberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/PopberFolder.jsx')).PopberFolder,
-}))
-const CmPopber = lazy(async () => ({
-  default: (await import('./contextmenu/Popber.jsx')).Popber,
-}))
-const CmProjekt = lazy(async () => ({
-  default: (await import('./contextmenu/Projekt.jsx')).Projekt,
-}))
-const CmWerteListen = lazy(async () => ({
-  default: (await import('./contextmenu/WerteListen.jsx')).WerteListen,
-}))
-const CmTpopFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopFolder.jsx')).TpopFolder,
-}))
-const CmTpop = lazy(async () => ({
-  default: (await import('./contextmenu/Tpop.jsx')).Tpop,
-}))
-const CmTpopberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopberFolder.jsx')).TpopberFolder,
-}))
-const CmTpopber = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopber.jsx')).Tpopber,
-}))
-const CmBeobZugeordnet = lazy(async () => ({
-  default: (await import('./contextmenu/BeobZugeordnet.jsx')).BeobZugeordnet,
-}))
-const CmBeobnichtbeurteilt = lazy(async () => ({
-  default: (await import('./contextmenu/Beobnichtbeurteilt.jsx'))
-    .BeobNichtBeurteilt,
-}))
-const CmBeobNichtZuzuordnen = lazy(async () => ({
-  default: (await import('./contextmenu/BeobNichtZuzuordnen.jsx'))
-    .BeobNichtZuzuordnen,
-}))
-const CmTpopfreiwkontrFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopfreiwkontrFolder.jsx'))
-    .TpopfreiwkontrFolder,
-}))
-const CmTpopfreiwkontr = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopfreiwkontr.jsx')).Tpopfreiwkontr,
-}))
-const CmTpopfeldkontrFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopfeldkontrFolder.jsx'))
-    .TpopfeldkontrFolder,
-}))
-const CmTpopfeldkontr = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopfeldkontr.jsx')).Tpopfeldkontr,
-}))
-const CmTpopfeldkontrzaehlFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopfeldkontrzaehlFolder.jsx'))
-    .TpopfeldkontrzaehlFolder,
-}))
-const CmTpopfeldkontrzaehl = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopfeldkontrzaehl.jsx'))
-    .Tpopfeldkontrzaehl,
-}))
-const CmTpopmassnberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopmassnberFolder.jsx'))
-    .TpopmassnberFolder,
-}))
-const CmTpopmassnber = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopmassnber.jsx')).Tpopmassnber,
-}))
-const CmTpopmassnFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopmassnFolder.jsx')).TpopmassnFolder,
-}))
-const CmTpopmassn = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopmassn.jsx')).Tpopmassn,
-}))
 const DeleteDatasetModal = lazy(async () => ({
   default: (await import('./DeleteDatasetModal/index.jsx')).DatasetDeleteModal,
-}))
-const TpopFromBeobPopList = lazy(async () => ({
-  default: (await import('./TpopFromBeobPopList.jsx')).TpopFromBeobPopList,
 }))
 const ErrorBoundary = lazy(async () => ({
   default: (await import('../../shared/ErrorBoundary.jsx')).ErrorBoundary,
@@ -238,22 +28,7 @@ const Spinner = lazy(async () => ({
   default: (await import('../../shared/Spinner.jsx')).Spinner,
 }))
 
-import { copyBiotopTo } from '../../../modules/copyBiotopTo.js'
-import { moveTo } from '../../../modules/moveTo/index.js'
-import { copyTo } from '../../../modules/copyTo/index.js'
-import { createNewPopFromBeob } from '../../../modules/createNewPopFromBeob/index.js'
-import { copyBeobZugeordnetKoordToTpop } from '../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
-import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.js'
-import { openLowerNodes } from './openLowerNodes/index.js'
-import { closeLowerNodes } from './closeLowerNodes.js'
-import { insertDataset } from './insertDataset.js'
 import { MobxContext } from '../../../mobxContext.js'
-import { useProjekteTabs } from '../../../modules/useProjekteTabs.js'
-import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.js'
-import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
-import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidateCoordinatesOfTpop.js'
-import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.js'
-import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 
 const Container = styled.div`
   height: 100%;
@@ -265,87 +40,6 @@ const Container = styled.div`
   @media print {
     display: none !important;
   }
-
-  .react-contextmenu {
-    display: flex;
-    flex-direction: column;
-    min-width: 100px;
-    padding: 5px 0;
-    margin: -1px;
-    font-size: 14px;
-    text-align: left;
-    background-color: rgb(66, 66, 66);
-    background-clip: padding-box;
-    border: 1px solid grey;
-    border-radius: 0.25rem;
-    outline: none;
-    opacity: 0;
-    pointer-events: none;
-    font-family: 'Roboto', sans-serif;
-  }
-
-  .react-contextmenu.react-contextmenu--visible {
-    color: white;
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 1000;
-  }
-
-  .react-contextmenu-title {
-    opacity: 0;
-  }
-
-  .react-contextmenu--visible .react-contextmenu-title {
-    color: #b3b3b3;
-    padding-left: 10px;
-    padding-right: 15px;
-    padding-bottom: 3px;
-    opacity: 1;
-  }
-
-  .react-contextmenu-title::after {
-    content: ':';
-  }
-
-  .react-contextmenu > .react-contextmenu-item {
-    display: inline-block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: 400;
-    line-height: 1.5;
-    color: white;
-    text-align: inherit;
-    white-space: nowrap;
-    background: 0 0;
-    border: 0;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .react-contextmenu-item.active,
-  .react-contextmenu-item:hover {
-    color: #f57c00;
-    border-color: #0275d8;
-    text-decoration: none;
-  }
-
-  .react-contextmenu-divider {
-    border-top: 1px solid grey;
-    margin-top: 4px;
-    margin-bottom: 7px;
-  }
-
-  .react-contextmenu-submenu {
-    padding-right: 27px !important;
-  }
-
-  .react-contextmenu-submenu:after {
-    content: '▶';
-    display: inline-block;
-    position: absolute;
-    right: 7px;
-    bottom: 3px;
-  }
 `
 const LabelFilterContainer = styled.div`
   display: flex;
@@ -354,39 +48,16 @@ const LabelFilterContainer = styled.div`
   padding-top: 5px;
   margin-bottom: 8px;
 `
-const StyledDialog = styled(Dialog)`
-  /*overflow-y: hidden;*/
-  .MuiDialog-paper {
-    overflow-y: hidden;
-  }
-`
 
 export const TreeContainer = memo(
   observer(() => {
     const params = useParams()
-    const { apId, projId, popId } = params
-    const { search } = useLocation()
-
-    const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const { projId } = params
 
     const store = useContext(MobxContext)
-    const {
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      setIdOfTpopBeingLocalized,
-      enqueNotification,
-      toDeleteId,
-      setToDelete,
-      setCopying,
-      setMoving,
-      copyingBiotop,
-      setCopyingBiotop,
-    } = store
+    const { toDeleteId } = store
 
     const [isDesktopView] = useAtom(isDesktopViewAtom)
-
-
 
     //console.log('TreeContainer',{data})
     // console.log('TreeContainer rendering')
