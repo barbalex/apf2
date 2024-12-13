@@ -3,14 +3,12 @@ import lowerFirst from 'lodash/lowerFirst'
 import { Row } from '../../../../../Row.jsx'
 
 export const HistorienFolder = ({ projekt, ap, menu, parentUrl }) => {
-  const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Historien']
-
-  const fullUrl = [
+  const url = [
     ...parentUrl
       .split('/')
       .filter((el) => el)
       .slice(1),
-    'Historien',
+    menu.id,
   ]
 
   const node = {
@@ -20,7 +18,7 @@ export const HistorienFolder = ({ projekt, ap, menu, parentUrl }) => {
     tableId: ap.id,
     urlLabel: menu.id,
     label: menu.label,
-    url: fullUrl,
+    url,
     hasChildren: false,
   }
 
