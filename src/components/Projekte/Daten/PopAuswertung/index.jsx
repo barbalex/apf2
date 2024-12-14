@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery, gql } from '@apollo/client'
 import sortBy from 'lodash/sortBy'
 import {
   AreaChart,
@@ -71,6 +71,7 @@ export const Component = ({ height = 400 }) => {
     variables: { apId, id: popId },
   })
 
+  const popLabel = data?.popById?.label ?? 'Population'
   const tpopsData = data?.allTpops?.nodes ?? []
   const tpopMengeRawData = data?.popAuswTpopMenge?.nodes ?? []
   const tpopMengeData = tpopMengeRawData.map((e) => ({
@@ -114,95 +115,97 @@ export const Component = ({ height = 400 }) => {
 
   return (
     <>
-      {loading ?
-        <SpinnerContainer>
-          <CircularProgress />
-          <SpinnerText>lade Mengen nach Teil-Populationen...</SpinnerText>
-        </SpinnerContainer>
-      : tpopMengeData.length ?
-        <>
-          <FormTitle title="Population: Auswertung" />
-          <TitleRow>
-            <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
-            <Tooltip title="Mehr Informationen">
-              <IconButton
-                aria-label="Mehr Informationen"
-                onClick={onClickMoreInfo}
-                size="large"
-              >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </Tooltip>
-          </TitleRow>
-          <Container
-            width="99%"
-            height={height}
-          >
-            <AreaChart
-              width={600}
-              height={300}
-              data={tpopMengeData}
-              margin={{ top: 10, right: 10, left: 27 }}
+      <FormTitle title={`${popLabel}: Auswertung`} />
+      <>
+        {loading ?
+          <SpinnerContainer>
+            <CircularProgress />
+            <SpinnerText>lade Mengen nach Teil-Populationen...</SpinnerText>
+          </SpinnerContainer>
+        : tpopMengeData.length ?
+          <>
+            <TitleRow>
+              <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
+              <Tooltip title="Mehr Informationen">
+                <IconButton
+                  aria-label="Mehr Informationen"
+                  onClick={onClickMoreInfo}
+                  size="large"
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </Tooltip>
+            </TitleRow>
+            <Container
+              width="99%"
+              height={height}
             >
-              <XAxis dataKey="jahr" />
-              <YAxis
-                interval={0}
-                label={{
-                  value: zielEinheit,
-                  angle: -90,
-                  position: 'insideLeft',
-                  offset: -15,
-                }}
-                tickFormatter={formatNumber}
-              />
-              {tpopIdsWithDataSorted.reverse().map((id) => {
-                const tpop = tpopsData.find((p) => p.id === id)
-                let color
-                if (!tpop) {
-                  color = 'grey'
-                } else {
-                  const isUrspruenglich = tpop?.status < 200
-                  color =
-                    isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
-                }
-
-                return (
-                  <Area
-                    key={id}
-                    type="linear"
-                    dataKey={id}
-                    stackId="1"
-                    stroke={color}
-                    strokeWidth={2}
-                    fill={color}
-                    isAnimationActive={true}
-                  />
-                )
-              })}
-              <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
-              <CartesianGrid
-                strokeDasharray="3 3"
-                horizontal={false}
-              />
-            </AreaChart>
-          </Container>
-        </>
-      : <>
-          <TitleRow>
-            <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
-            <MuiTooltip title="Mehr Informationen">
-              <IconButton
-                aria-label="Mehr Informationen"
-                onClick={onClickMoreInfo}
-                size="large"
+              <AreaChart
+                width={600}
+                height={300}
+                data={tpopMengeData}
+                margin={{ top: 10, right: 10, left: 27 }}
               >
-                <IoMdInformationCircleOutline />
-              </IconButton>
-            </MuiTooltip>
-          </TitleRow>
-          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
-        </>
-      }
+                <XAxis dataKey="jahr" />
+                <YAxis
+                  interval={0}
+                  label={{
+                    value: zielEinheit,
+                    angle: -90,
+                    position: 'insideLeft',
+                    offset: -15,
+                  }}
+                  tickFormatter={formatNumber}
+                />
+                {tpopIdsWithDataSorted.reverse().map((id) => {
+                  const tpop = tpopsData.find((p) => p.id === id)
+                  let color
+                  if (!tpop) {
+                    color = 'grey'
+                  } else {
+                    const isUrspruenglich = tpop?.status < 200
+                    color =
+                      isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
+                  }
+
+                  return (
+                    <Area
+                      key={id}
+                      type="linear"
+                      dataKey={id}
+                      stackId="1"
+                      stroke={color}
+                      strokeWidth={2}
+                      fill={color}
+                      isAnimationActive={true}
+                    />
+                  )
+                })}
+                <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal={false}
+                />
+              </AreaChart>
+            </Container>
+          </>
+        : <>
+            <TitleRow>
+              <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
+              <MuiTooltip title="Mehr Informationen">
+                <IconButton
+                  aria-label="Mehr Informationen"
+                  onClick={onClickMoreInfo}
+                  size="large"
+                >
+                  <IoMdInformationCircleOutline />
+                </IconButton>
+              </MuiTooltip>
+            </TitleRow>
+            <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+          </>
+        }
+      </>
     </>
   )
 }

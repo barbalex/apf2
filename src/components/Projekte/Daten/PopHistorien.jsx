@@ -22,6 +22,7 @@ const query = gql`
       }
       nr
       name
+      label
       status
       popStatusWerteByStatus {
         id
@@ -109,6 +110,7 @@ export const Component = () => {
 
   const row = data?.popById
   const rows = data?.allPopHistories.nodes ?? []
+  const label = row?.label ?? 'Population'
 
   const openDocs = useCallback(() => {
     const url = `${appBaseUrl()}/Dokumentation/historisierung`
@@ -128,7 +130,7 @@ export const Component = () => {
 
   return (
     <>
-      <FormTitle title="Population: Historien" />
+      <FormTitle title={`${label}: Historien`} />
       <Container>
         <DocLine>
           Jährlich historisierte Daten der Population (

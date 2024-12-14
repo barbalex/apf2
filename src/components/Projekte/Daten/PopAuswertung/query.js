@@ -2,6 +2,10 @@ import { gql } from '@apollo/client'
 
 export const query = gql`
   query popAuswertungTpopMenge($apId: UUID!, $id: UUID!) {
+    popById(id: $id) {
+      id
+      label
+    }
     # function apflora.pop_ausw_tpop_menge
     popAuswTpopMenge(popid: $id) {
       nodes {
