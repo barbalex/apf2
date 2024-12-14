@@ -11,23 +11,24 @@ import { useQuery, useApolloClient, gql } from '@apollo/client'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
-import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.jsx'
-import { Select } from '../../../../shared/Select.jsx'
-import { TextField } from '../../../../shared/TextField.jsx'
+import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
+import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
+import { Select } from '../../../shared/Select.jsx'
+import { TextField } from '../../../shared/TextField.jsx'
 import { query } from './query.js'
 import { EkYear } from './EkYear.jsx'
-import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { Spinner } from '../../../../shared/Spinner.jsx'
-import { MobxContext } from '../../../../../mobxContext.js'
-import { query as tpopQuery } from '../../TpopRouter/query.js'
-import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
+import { MobxContext } from '../../../../mobxContext.js'
+import { query as tpopQuery } from '../TpopRouter/query.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   popStatusWerte,
   tpop,
   tpopApberrelevantGrundWerte,
-} from '../../../../shared/fragments.js'
-import { fieldTypes } from '../index.jsx'
+} from '../../../shared/fragments.js'
+import { fieldTypes } from '../Tpop/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const Container = styled.div`
   display: flex;
@@ -223,6 +224,7 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
+      <FormTitle title="EK" />
       <Container>
         <FormContainerNoColumnsInner>
           <EkfrequenzOptionsContainer>
