@@ -1,9 +1,10 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
-import { TpopFeldkontr } from './TpopFeldkontr/index.jsx'
+import { Tpopfeldkontrs } from './Tpopfeldkontrs/index.jsx'
 
 export const TpopfeldkontrFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
@@ -47,14 +48,16 @@ export const TpopfeldkontrFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <TpopFeldkontr
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            tpop={tpop}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <Tpopfeldkontrs
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),
