@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
-import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { useTpopmassnsNavData } from '../../../../../../../../../../../../../../../../modules/useTpopmassnsNavData.js'
+import { Tpopmassn } from './Tpopmassn.jsx'
 
 export const Tpopmassns = memo(({ projekt, ap, pop, tpop }) => {
   const { navData } = useTpopmassnsNavData({
@@ -11,35 +11,14 @@ export const Tpopmassns = memo(({ projekt, ap, pop, tpop }) => {
     tpopId: tpop.id,
   })
 
-  return navData.menus.map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'tpopmassn',
-      id: el.id,
-      parentId: tpop.id,
-      parentTableId: tpop.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'Populationen',
-        pop.id,
-        'Teil-Populationen',
-        tpop.id,
-        'Massnahmen',
-        el.id,
-      ],
-      hasChildren: true,
-    }
-
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
+  return navData.menus.map((menu) => (
+    <Tpopmassn
+      key={menu.id}
+      projekt={projekt}
+      ap={ap}
+      pop={pop}
+      tpop={tpop}
+      menu={menu}
+    />
+  ))
 })
