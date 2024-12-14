@@ -1,31 +1,14 @@
-import { memo, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { memo } from 'react'
+import { useAtom } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.js'
-import { useTpopsNavData } from '../../../../modules/useTpopsNavData.js'
-import { List } from '../../../shared/List/index.jsx'
-import { Menu } from './Menu.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { Error } from '../../../shared/Error.jsx'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+import { Component as Pop } from '../Pop/index.jsx'
+import { List } from './List.jsx'
 
-export const Component = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const { nodeLabelFilter } = store.tree
+export const Component = memo(() => {
+  const [isDesktopView] = useAtom(isDesktopViewAtom)
 
-    const { navData, isLoading, error } = useTpopsNavData()
+  if (isDesktopView) return <Pop />
 
-    if (isLoading) return <Spinner />
-
-    if (error) return <Error error={error} />
-
-    return (
-      <List
-        items={navData.menus}
-        title={navData.label}
-        menuBar={<Menu />}
-        highlightSearchString={nodeLabelFilter.tpop}
-      />
-    )
-  }),
-)
+  return <List />
+})
