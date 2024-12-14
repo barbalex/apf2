@@ -2,10 +2,10 @@ import { memo, useMemo } from 'react'
 
 import { TpopmassnFolder } from './TpopmassnFolder/index.jsx'
 import { TpopmassnberFolder } from './TpopmassnberFolder/index.jsx'
-import { TpopFeldkontrFolder } from './TpopFeldkontr/index.jsx'
-import { TpopFreiwkontrFolder } from './TpopFreiwkontr/index.jsx'
-import { TpopBerFolder } from './TpopBer/index.jsx'
-import { BeobZugeordnetFolder } from './BeobZugeordnet/index.jsx'
+import { TpopfeldkontrFolder } from './TpopfeldkontrFolder/index.jsx'
+import { TpopfreiwkontrFolder } from './TpopfreiwkontrFolder/index.jsx'
+import { TpopberFolder } from './TpopberFolder/index.jsx'
+import { BeobzugeordnetFolder } from './BeobzugeordnetFolder/index.jsx'
 import { useTpopNavData } from '../../../../../../../../../../../../../../../modules/useTpopNavData.js'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
 
@@ -73,28 +73,28 @@ export const TpopFolders = memo(({ projekt, ap, pop, tpop }) => {
         tpop={tpop}
         menu={tpopmassnberMenu}
       />
-      <TpopFeldkontrFolder
+      <TpopfeldkontrFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
         tpop={tpop}
         menu={tpopfeldkontrMenu}
       />
-      <TpopFreiwkontrFolder
+      <TpopfreiwkontrFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
         tpop={tpop}
         menu={tpopfreiwkontrMenu}
       />
-      <TpopBerFolder
+      <TpopberFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
         tpop={tpop}
         menu={tpopberMenu}
       />
-      <BeobZugeordnetFolder
+      <BeobzugeordnetFolder
         projekt={projekt}
         ap={ap}
         pop={pop}

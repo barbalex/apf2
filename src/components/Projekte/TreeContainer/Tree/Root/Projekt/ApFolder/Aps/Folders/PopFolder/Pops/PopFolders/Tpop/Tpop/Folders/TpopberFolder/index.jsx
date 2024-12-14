@@ -5,7 +5,7 @@ import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
 import { TpopBer } from './TpopBer.jsx'
 
-export const TpopBerFolder = memo(
+export const TpopberFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
     const store = useContext(MobxContext)
 
