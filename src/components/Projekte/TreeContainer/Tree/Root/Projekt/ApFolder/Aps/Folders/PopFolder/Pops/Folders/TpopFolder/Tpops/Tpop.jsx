@@ -1,5 +1,5 @@
 import { memo, useRef, useContext } from 'react'
-import { observer, Observer } from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { MobxContext } from '../../../../../../../../../../../../../../mobxContext.js'
@@ -46,8 +46,6 @@ export const Tpop = memo(
 
     const ref = useRef(null)
 
-    console.log('Tpop', { menu, inProp, isOpen })
-
     return (
       <Transition
         in={inProp}
@@ -56,28 +54,25 @@ export const Tpop = memo(
         unmountOnExit
         nodeRef={ref}
       >
-        {(state) => {
-          console.log('Tpop state', state)
-          return (
-            <>
-              <Row
-                node={node}
-                ref={ref}
-                transitionState={state}
-              />
-              <TransitionGroup component={null}>
-                {isOpen && (
-                  <TpopFolders
-                    projekt={projekt}
-                    ap={ap}
-                    pop={pop}
-                    tpop={menu}
-                  />
-                )}
-              </TransitionGroup>
-            </>
-          )
-        }}
+        {(state) => (
+          <>
+            <Row
+              node={node}
+              ref={ref}
+              transitionState={state}
+            />
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <TpopFolders
+                  projekt={projekt}
+                  ap={ap}
+                  pop={pop}
+                  tpop={menu}
+                />
+              )}
+            </TransitionGroup>
+          </>
+        )}
       </Transition>
     )
   }),
