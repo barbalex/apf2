@@ -1,12 +1,17 @@
 import { memo, useContext, useRef, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition } from 'react-transition-group'
+import styled from '@emotion/styled'
 
-import { Row } from '../../../../../../../../../../../../../Row.jsx'
+import { Row, transitionStyles } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
+
+const Container = styled.div`
+  transition: opacity 300ms ease-in-out;
+`
 
 export const Tpopfeldkontr = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
