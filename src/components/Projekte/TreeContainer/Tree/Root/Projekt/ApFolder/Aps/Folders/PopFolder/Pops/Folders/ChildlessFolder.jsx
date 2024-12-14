@@ -1,8 +1,9 @@
+import { memo } from 'react'
 import lowerFirst from 'lodash/lowerFirst'
 
 import { Row } from '../../../../../../../../Row.jsx'
 
-export const ChildlessFolder = ({ projekt, ap, pop, menu, parentUrl }) => {
+export const ChildlessFolder = memo(({ projekt, ap, pop, menu, parentUrl }) => {
   const url = [
     ...parentUrl
       .split('/')
@@ -23,4 +24,4 @@ export const ChildlessFolder = ({ projekt, ap, pop, menu, parentUrl }) => {
   }
 
   return <Row node={node} />
-}
+})
