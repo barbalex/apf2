@@ -1,9 +1,10 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { useTpopmassnbersNavData } from '../../../../../../../../../../../../../../../../modules/useTpopmassnbersNavData.js'
 
-export const Tpopmassnber = memo(({ projekt, ap, pop, tpop, menu }) => {
+export const Tpopmassnber = memo(({ projekt, ap, pop, tpop, menu, inProp }) => {
   const node = {
     nodeType: 'table',
     menuType: 'tpopmassnber',
@@ -27,10 +28,23 @@ export const Tpopmassnber = memo(({ projekt, ap, pop, tpop, menu }) => {
     hasChildren: false,
   }
 
+  const ref = useRef(null)
+
   return (
-    <Row
-      key={menu.id}
-      node={node}
-    />
+    <Transition
+      nodeRef={ref}
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+    >
+      {(state) => (
+        <Row
+          node={node}
+          ref={ref}
+          transitionState={state}
+        />
+      )}
+    </Transition>
   )
 })
