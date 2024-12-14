@@ -11,7 +11,6 @@ import { tpopkontr } from '../../../../../../../../../../../../../../../../share
 
 export const Tpopfeldkontr = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
-    console.log('Tpopfeldkontr, menu:', menu)
     const { navData } = useTpopfeldkontrNavData({
       projId: projekt.id,
       apId: ap.id,

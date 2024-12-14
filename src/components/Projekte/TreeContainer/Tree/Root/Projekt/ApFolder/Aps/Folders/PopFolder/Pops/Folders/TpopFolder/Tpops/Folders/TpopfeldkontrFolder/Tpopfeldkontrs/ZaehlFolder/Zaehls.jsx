@@ -2,6 +2,7 @@ import { memo } from 'react'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
+import { Zaehl } from './Zaehl.jsx'
 
 export const Zaehls = memo(({ projekt, ap, pop, tpop, tpopkontr }) => {
   const { navData } = useTpopfeldkontrzaehlsNavData({
@@ -12,37 +13,15 @@ export const Zaehls = memo(({ projekt, ap, pop, tpop, tpopkontr }) => {
     tpopkontrId: tpopkontr.id,
   })
 
-  return navData.menus.map((el) => {
-    const node = {
-      nodeType: 'table',
-      menuType: 'tpopfeldkontrzaehl',
-      id: el.id,
-      parentId: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
-      parentTableId: tpopkontr.id,
-      urlLabel: el.id,
-      label: el.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'Populationen',
-        pop.id,
-        'Teil-Populationen',
-        tpop.id,
-        'Feld-Kontrollen',
-        tpopkontr.id,
-        'Zaehlungen',
-        el.id,
-      ],
-      hasChildren: false,
-    }
-
-    return (
-      <Row
-        key={el.id}
-        node={node}
-      />
-    )
-  })
+  return navData.menus.map((menu) => (
+    <Zaehl
+      key={menu.id}
+      projekt={projekt}
+      ap={ap}
+      pop={pop}
+      tpop={tpop}
+      tpopkontr={tpopkontr}
+      menu={menu}
+    />
+  ))
 })

@@ -32,7 +32,7 @@ export const ZaehlFolder = memo(
       'Teil-Populationen',
       tpop.id,
       'Feld-Kontrollen',
-      navData.id,
+      tpopkontr.id,
       'Zaehlungen',
     ]
 
@@ -46,15 +46,15 @@ export const ZaehlFolder = memo(
           n[6] === 'Teil-Populationen' &&
           n[7] === tpop.id &&
           n[8] === 'Feld-Kontrollen' &&
-          n[9] === navData.id &&
+          n[9] === tpopkontr.id &&
           n[10] === 'Zaehlungen',
       ).length > 0
 
     const node = {
       nodeType: 'folder',
       menuType: 'tpopfeldkontrzaehlFolder',
-      id: `${navData.id}TpopfeldkontrzaehlFolder`,
-      tableId: navData.id,
+      id: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
+      tableId: tpopkontr.id,
       urlLabel: 'Zaehlungen',
       label: navData.label,
       url,
