@@ -11,7 +11,7 @@ const Container = styled.div`
 `
 
 export const TpopfeldkontrFolders = memo(
-  ({ projekt, ap, pop, tpop, navData }) => {
+  ({ projekt, ap, pop, tpop, navData, in: inProp }) => {
     const biotopMenu = useMemo(
       () => navData?.menus?.find?.((menu) => menu.id === 'Biotop'),
       [navData],
@@ -28,33 +28,46 @@ export const TpopfeldkontrFolders = memo(
     const ref = useRef(null)
 
     return (
-      <>
-        <ChildlessFolder
-          projekt={projekt}
-          ap={ap}
-          pop={pop}
-          tpop={tpop}
-          menu={biotopMenu}
-          parentUrl={navData.url}
-        />
-        <ChildlessFolder
-          projekt={projekt}
-          ap={ap}
-          pop={pop}
-          tpop={tpop}
-          menu={dateienMenu}
-          parentUrl={navData.url}
-        />
-        <ZaehlFolder
-          projekt={projekt}
-          ap={ap}
-          pop={pop}
-          tpop={tpop}
-          tpopkontr={navData}
-          menu={zaehlMenu}
-          parentUrl={navData.url}
-        />
-      </>
+      <Transition
+        in={inProp}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={ref}
+      >
+        {(state) => (
+          <Container
+            ref={ref}
+            style={transitionStyles[state]}
+          >
+            <ChildlessFolder
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+              menu={biotopMenu}
+              parentUrl={navData.url}
+            />
+            <ChildlessFolder
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+              menu={dateienMenu}
+              parentUrl={navData.url}
+            />
+            <ZaehlFolder
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+              tpopkontr={navData}
+              menu={zaehlMenu}
+              parentUrl={navData.url}
+            />
+          </Container>
+        )}
+      </Transition>
     )
   },
 )

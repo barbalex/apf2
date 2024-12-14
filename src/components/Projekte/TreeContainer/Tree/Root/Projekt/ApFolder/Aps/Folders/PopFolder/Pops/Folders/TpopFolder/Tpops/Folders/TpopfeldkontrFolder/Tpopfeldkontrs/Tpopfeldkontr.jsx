@@ -1,6 +1,6 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionGroup } from 'react-transition-group'
 import styled from '@emotion/styled'
 
 import {
@@ -81,15 +81,17 @@ export const Tpopfeldkontr = memo(
               ref={ref}
               transitionState={state}
             />
-            {isOpen && (
-              <TpopfeldkontrFolders
-                projekt={projekt}
-                ap={ap}
-                pop={pop}
-                tpop={tpop}
-                navData={navData}
-              />
-            )}
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <TpopfeldkontrFolders
+                  projekt={projekt}
+                  ap={ap}
+                  pop={pop}
+                  tpop={tpop}
+                  navData={navData}
+                />
+              )}
+            </TransitionGroup>
           </>
         )}
       </Transition>
