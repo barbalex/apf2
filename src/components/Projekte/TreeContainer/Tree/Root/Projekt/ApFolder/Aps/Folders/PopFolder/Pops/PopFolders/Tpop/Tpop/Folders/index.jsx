@@ -7,6 +7,7 @@ import { TpopFreiwkontrFolder } from './TpopFreiwkontr/index.jsx'
 import { TpopBerFolder } from './TpopBer/index.jsx'
 import { BeobZugeordnetFolder } from './BeobZugeordnet/index.jsx'
 import { useTpopNavData } from '../../../../../../../../../../../../../../../modules/useTpopNavData.js'
+import { ChildlessFolder } from './ChildlessFolder.jsx'
 
 export const TpopFolders = memo(({ projekt, ap, pop, tpop }) => {
   const { navData, isLoading } = useTpopNavData({
@@ -39,6 +40,18 @@ export const TpopFolders = memo(({ projekt, ap, pop, tpop }) => {
   )
   const beobZugeordnetMenu = useMemo(
     () => navData?.menus?.find?.((menu) => menu.id === 'Beobachtungen'),
+    [navData],
+  )
+  const ekMenu = useMemo(
+    () => navData?.menus?.find?.((menu) => menu.id === 'EK'),
+    [navData],
+  )
+  const dateienMenu = useMemo(
+    () => navData?.menus?.find?.((menu) => menu.id === 'Dateien'),
+    [navData],
+  )
+  const historienMenu = useMemo(
+    () => navData?.menus?.find?.((menu) => menu.id === 'Historien'),
     [navData],
   )
 
@@ -87,6 +100,30 @@ export const TpopFolders = memo(({ projekt, ap, pop, tpop }) => {
         pop={pop}
         tpop={tpop}
         menu={beobZugeordnetMenu}
+      />
+      <ChildlessFolder
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        menu={ekMenu}
+        parentUrl={navData.url}
+      />
+      <ChildlessFolder
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        menu={dateienMenu}
+        parentUrl={navData.url}
+      />
+      <ChildlessFolder
+        projekt={projekt}
+        ap={ap}
+        pop={pop}
+        tpop={tpop}
+        menu={historienMenu}
+        parentUrl={navData.url}
       />
     </>
   )

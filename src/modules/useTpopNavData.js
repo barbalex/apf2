@@ -95,6 +95,12 @@ export const useTpopNavData = (props) => {
               ) {
                 totalCount
               }
+              tpopFilesByTpopId {
+                totalCount
+              }
+            }
+            allTpopHistories(filter: { id: { equalTo: $tpopId } }) {
+              totalCount
             }
           }
         `,
@@ -165,6 +171,8 @@ export const useTpopNavData = (props) => {
     data?.data?.tpopById?.beobZugeordnet?.totalCount ?? 0
   const filteredBeobZugeordnetCount =
     data?.data?.tpopById?.filteredBeobZugeordnet?.totalCount ?? 0
+  const filesCount = data?.data?.tpopById?.tpopFilesByTpopId?.totalCount ?? 0
+  const historiesCount = data?.data?.allTpopHistories?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
@@ -173,6 +181,10 @@ export const useTpopNavData = (props) => {
       label,
       // leave totalCount undefined as the menus are folders
       menus: [
+        {
+          id: 'Teil-Population',
+          label: `Teil-Population`,
+        },
         {
           id: 'Massnahmen',
           label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
@@ -203,12 +215,27 @@ export const useTpopNavData = (props) => {
           label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
           // count: beobZugeordnetCount,
         },
+        {
+          id: 'EK',
+          label: `EK`,
+        },
+        {
+          id: 'Dateien',
+          label: `Dateien (${filesCount})`,
+          count: filesCount,
+        },
+        {
+          id: 'Historien',
+          label: `Historien (${historiesCount})`,
+          count: historiesCount,
+        },
       ],
     }),
     [
       apId,
       beobZugeordnetCount,
       feldkontrCount,
+      filesCount,
       filteredBeobZugeordnetCount,
       filteredFeldkontrCount,
       filteredFreiwkontrCount,
@@ -216,6 +243,7 @@ export const useTpopNavData = (props) => {
       filteredPopmassnbersCount,
       filteredTpopbersCount,
       freiwkontrCount,
+      historiesCount,
       isLoading,
       label,
       massnCount,

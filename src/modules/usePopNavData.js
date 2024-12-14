@@ -110,6 +110,10 @@ export const usePopNavData = (props) => {
       // leave totalCount undefined as the menus are folders
       menus: [
         {
+          id: 'Population',
+          label: `Population`,
+        },
+        {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
           count: tpopsCount,
