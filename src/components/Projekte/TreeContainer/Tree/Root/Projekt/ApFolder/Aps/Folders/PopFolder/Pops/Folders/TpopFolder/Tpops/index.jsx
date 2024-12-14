@@ -8,7 +8,7 @@ import { MobxContext } from '../../../../../../../../../../../../../../mobxConte
 import { TpopFolders } from './Folders/index.jsx'
 import { useTpopsNavData } from '../../../../../../../../../../../../../../modules/useTpopsNavData.js'
 
-export const Tpop = memo(
+export const Tpops = memo(
   observer(({ projekt, ap, pop }) => {
     const apolloClient = useApolloClient()
     const store = useContext(MobxContext)

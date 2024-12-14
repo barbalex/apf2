@@ -4,7 +4,7 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../mobxContext.js'
-import { Tpop } from './Tpop/index.jsx'
+import { Tpops } from './Tpops/index.jsx'
 
 export const TpopFolder = memo(
   observer(({ projekt, ap, pop, menu }) => {
@@ -47,7 +47,7 @@ export const TpopFolder = memo(
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <Tpop
+            <Tpops
               projekt={projekt}
               ap={ap}
               pop={pop}
