@@ -36,6 +36,9 @@ export const useTpopfeldkontrNavData = (props) => {
               tpopkontrzaehlsByTpopkontrId {
                 totalCount
               }
+              tpopkontrFilesByTpopkontrId {
+                totalCount
+              }
               filteredTpopkontrzaehls: tpopkontrzaehlsByTpopkontrId(
                 filter: $tpopkontrzaehlFilter
               ) {
@@ -62,6 +65,8 @@ export const useTpopfeldkontrNavData = (props) => {
     data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
   const filteredTpopkontrzaehlCount =
     data?.data?.tpopkontrById?.filteredTpopkontrzaehls?.totalCount ?? 0
+  const filesCount =
+    data?.data?.tpopkontrById?.tpopkontrFilesByTpopkontrId?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
@@ -71,13 +76,27 @@ export const useTpopfeldkontrNavData = (props) => {
       // leave totalCount undefined as the menus are folders
       menus: [
         {
+          id: 'Entwicklung',
+          label: `Entwicklung`,
+        },
+        {
+          id: 'Biotop',
+          label: `Biotop`,
+        },
+        {
           id: 'Zaehlungen',
           label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
+        },
+        {
+          id: 'Dateien',
+          label: `Dateien (${filesCount})`,
+          count: filesCount,
         },
       ],
     }),
     [
       apId,
+      filesCount,
       filteredTpopkontrzaehlCount,
       isLoading,
       label,

@@ -1,14 +1,24 @@
-import { memo, useContext, useRef } from 'react'
+import { memo, useContext, useRef, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { ZaehlFolder } from './Zaehl/index.jsx'
-import { useTpopfeldkontrsNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrsNavData.js'
+import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
+import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { tpopkontr } from '../../../../../../../../../../../../../../../../shared/fragments.js'
 
 export const Tpopfeldkontr = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
+    const { navData } = useTpopfeldkontrNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      popId: pop.id,
+      tpopId: tpop.id,
+      tpopkontrId: menu.id,
+    })
+
     const isOpen =
       store.tree.openNodes.filter(
         (n) =>
@@ -20,17 +30,17 @@ export const Tpopfeldkontr = memo(
           n[6] === 'Teil-Populationen' &&
           n[7] === tpop.id &&
           n[8] === 'Feld-Kontrollen' &&
-          n[9] === menu.id,
+          n[9] === navData.id,
       ).length > 0
 
     const node = {
       nodeType: 'table',
       menuType: 'tpopfeldkontr',
-      id: menu.id,
+      id: navData.id,
       parentId: `${tpop.id}TpopfeldkontrFolder`,
       parentTableId: tpop.id,
-      urlLabel: menu.id,
-      label: menu.label,
+      urlLabel: navData.id,
+      label: navData.label,
       url: [
         'Projekte',
         projekt.id,
@@ -41,10 +51,23 @@ export const Tpopfeldkontr = memo(
         'Teil-Populationen',
         tpop.id,
         'Feld-Kontrollen',
-        menu.id,
+        navData.id,
       ],
       hasChildren: true,
     }
+
+    const biotopMenu = useMemo(
+      () => navData?.menus?.find?.((menu) => menu.id === 'Biotop'),
+      [navData],
+    )
+    const zaehlMenu = useMemo(
+      () => navData?.menus?.find?.((menu) => menu.id === 'Zaehlungen'),
+      [navData],
+    )
+    const dateienMenu = useMemo(
+      () => navData?.menus?.find?.((menu) => menu.id === 'Dateien'),
+      [navData],
+    )
 
     const ref = useRef(null)
 
@@ -64,13 +87,33 @@ export const Tpopfeldkontr = memo(
               transitionState={state}
             />
             {isOpen && (
-              <ZaehlFolder
-                projekt={projekt}
-                ap={ap}
-                pop={pop}
-                tpop={tpop}
-                tpopkontr={menu}
-              />
+              <>
+                <ChildlessFolder
+                  projekt={projekt}
+                  ap={ap}
+                  pop={pop}
+                  tpop={tpop}
+                  menu={biotopMenu}
+                  parentUrl={navData.url}
+                />
+                <ChildlessFolder
+                  projekt={projekt}
+                  ap={ap}
+                  pop={pop}
+                  tpop={tpop}
+                  menu={dateienMenu}
+                  parentUrl={navData.url}
+                />
+                <ZaehlFolder
+                  projekt={projekt}
+                  ap={ap}
+                  pop={pop}
+                  tpop={tpop}
+                  tpopkontr={navData}
+                  menu={zaehlMenu}
+                  parentUrl={navData.url}
+                />
+              </>
             )}
           </>
         )}

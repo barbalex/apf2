@@ -21,6 +21,9 @@ export const useTpopmassnNavData = (props) => {
             tpopmassnById(id: $tpopmassnId) {
               id
               label
+              tpopmassnFilesByTpopmassnId {
+                totalCount
+              }
             }
           }
         `,
