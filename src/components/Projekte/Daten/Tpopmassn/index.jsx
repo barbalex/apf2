@@ -21,7 +21,7 @@ import { exists } from '../../../../modules/exists.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { query } from '../TpopmassnRouter/query.js'
+import { query } from './query.js'
 import { Menu } from './Menu.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 

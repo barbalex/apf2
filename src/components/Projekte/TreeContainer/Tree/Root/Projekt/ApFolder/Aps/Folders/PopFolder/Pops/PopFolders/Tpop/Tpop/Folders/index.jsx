@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 
-import { TpopMassnFolder } from './TpopMassn/index.jsx'
-import { TpopMassnBerFolder } from './TpopMassnBer/index.jsx'
+import { TpopmassnFolder } from './TpopmassnFolder/index.jsx'
+import { TpopmassnberFolder } from './TpopmassnberFolder/index.jsx'
 import { TpopFeldkontrFolder } from './TpopFeldkontr/index.jsx'
 import { TpopFreiwkontrFolder } from './TpopFreiwkontr/index.jsx'
 import { TpopBerFolder } from './TpopBer/index.jsx'
@@ -59,14 +59,14 @@ export const TpopFolders = memo(({ projekt, ap, pop, tpop }) => {
 
   return (
     <>
-      <TpopMassnFolder
+      <TpopmassnFolder
         projekt={projekt}
         ap={ap}
         pop={pop}
         tpop={tpop}
         menu={tpopmassnMenu}
       />
-      <TpopMassnBerFolder
+      <TpopmassnberFolder
         projekt={projekt}
         ap={ap}
         pop={pop}

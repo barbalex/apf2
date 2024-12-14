@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
-import { TpopMassnBer } from './TpopMassnBer.jsx'
+import { TpopMassn } from './TpopMassn.jsx'
 
-export const TpopMassnBerFolder = memo(
+export const TpopmassnFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
     const store = useContext(MobxContext)
 
@@ -18,7 +18,7 @@ export const TpopMassnBerFolder = memo(
       pop.id,
       'Teil-Populationen',
       tpop.id,
-      'Massnahmen-Berichte',
+      'Massnahmen',
     ]
 
     const isOpen =
@@ -30,15 +30,15 @@ export const TpopMassnBerFolder = memo(
           n[5] === pop.id &&
           n[6] === 'Teil-Populationen' &&
           n[7] === tpop.id &&
-          n[8] === 'Massnahmen-Berichte',
+          n[8] === 'Massnahmen',
       ).length > 0
 
     const node = {
       nodeType: 'folder',
-      menuType: 'tpopmassnberFolder',
-      id: `${tpop.id}TpopmassnberFolder`,
+      menuType: 'tpopmassnFolder',
+      id: `${tpop.id}TpopmassnFolder`,
       tableId: tpop.id,
-      urlLabel: 'Massnahmen-Berichte',
+      urlLabel: 'Massnahmen',
       label: menu.label,
       url,
       hasChildren: true,
@@ -48,7 +48,7 @@ export const TpopMassnBerFolder = memo(
       <>
         <Row node={node} />
         {isOpen && (
-          <TpopMassnBer
+          <TpopMassn
             projekt={projekt}
             ap={ap}
             pop={pop}
