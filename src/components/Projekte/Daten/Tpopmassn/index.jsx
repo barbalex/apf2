@@ -2,7 +2,7 @@ import { memo, useCallback, useContext, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams, useOutletContext } from 'react-router'
+import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
@@ -19,6 +19,11 @@ import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { exists } from '../../../../modules/exists.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
+import { Error } from '../../../shared/Error.jsx'
+import { query } from '../TpopmassnRouter/query.js'
+import { Menu } from './Menu.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const ColumnContainer = styled.div`
   padding: 10px;
@@ -57,7 +62,10 @@ const fieldTypes = {
 export const Component = memo(
   observer(({ showFilter = false }) => {
     const { tpopmassnId, apId } = useParams()
-    const { data } = useOutletContext()
+
+    const { data, loading, error } = useQuery(query, {
+      variables: { id: tpopmassnId },
+    })
 
     const client = useApolloClient()
     const queryClient = useQueryClient()
@@ -337,8 +345,16 @@ export const Component = memo(
       ],
     )
 
+    if (error) return <Error error={error} />
+
+    if (loading) return <Spinner />
+
     return (
       <ErrorBoundary>
+        <FormTitle
+          title="Massnahme"
+          menuBar={<Menu row={row} />}
+        />
         <ColumnContainer>
           <FormContainer>
             <TextField

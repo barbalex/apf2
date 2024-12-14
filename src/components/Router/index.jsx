@@ -326,6 +326,14 @@ const tpopfeldkontrzaehlsHandle = {
   bookmarkFetcher: tpopfeldkontrzaehlsBookmarkFetcher,
   bookmarkFetcherName: 'useTpopfeldkontrzaehlsNavData',
 }
+const tpopmassnBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useTpopmassnNavData.js'))
+    .useTpopmassnNavData,
+}))
+const tpopmassnHandle = {
+  bookmarkFetcher: tpopmassnBookmarkFetcher,
+  bookmarkFetcherName: 'useTpopmassnNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -952,11 +960,7 @@ export const Router = () => {
                               />
                               <Route
                                 path=":tpopmassnId"
-                                lazy={() =>
-                                  import(
-                                    '../Projekte/Daten/TpopmassnRouter/index.jsx'
-                                  )
-                                }
+                                handle={tpopmassnHandle}
                               >
                                 <Route
                                   index={true}
@@ -978,7 +982,7 @@ export const Router = () => {
                                   path="Dateien"
                                   lazy={() =>
                                     import(
-                                      '../Projekte/Daten/Tpopmassn/Dateien.jsx'
+                                      '../Projekte/Daten/TpopmassnDateien.jsx'
                                     )
                                   }
                                 >
