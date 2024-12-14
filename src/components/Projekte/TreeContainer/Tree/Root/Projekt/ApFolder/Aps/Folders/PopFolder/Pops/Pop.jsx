@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
-import { PopFolders } from './PopFolders/index.jsx'
+import { PopFolders } from './Folders/index.jsx'
 
 export const Pop = memo(
   observer(({ projekt, ap, menu, inProp }) => {

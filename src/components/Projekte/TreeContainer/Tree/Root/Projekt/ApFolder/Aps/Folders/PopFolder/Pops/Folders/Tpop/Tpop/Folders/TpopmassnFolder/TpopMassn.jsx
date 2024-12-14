@@ -32,7 +32,7 @@ export const TpopMassn = memo(({ projekt, ap, pop, tpop }) => {
         'Massnahmen',
         el.id,
       ],
-      hasChildren: false,
+      hasChildren: true,
     }
 
     return (
