@@ -7,6 +7,8 @@ import { PopberFolder } from './Popber/index.jsx'
 import { PopmassnberFolder } from './Popmassnber/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
+import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { da } from 'date-fns/locale'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -29,6 +31,18 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
   )
   const popmassnberMenu = useMemo(
     () => navData.menus.find((m) => m.id === 'Massnahmen-Berichte'),
+    [navData.menus],
+  )
+  const auswertungMenu = useMemo(
+    () => navData.menus.find((m) => m.id === 'Auswertung'),
+    [navData.menus],
+  )
+  const dateienMenu = useMemo(
+    () => navData.menus.find((m) => m.id === 'Dateien'),
+    [navData.menus],
+  )
+  const historienMenu = useMemo(
+    () => navData.menus.find((m) => m.id === 'Historien'),
     [navData.menus],
   )
 
@@ -64,6 +78,27 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
             ap={ap}
             pop={pop}
             menu={popmassnberMenu}
+          />
+          <ChildlessFolder
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            menu={auswertungMenu}
+            parentUrl={navData?.url}
+          />
+          <ChildlessFolder
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            menu={dateienMenu}
+            parentUrl={navData?.url}
+          />
+          <ChildlessFolder
+            projekt={projekt}
+            ap={ap}
+            pop={pop}
+            menu={historienMenu}
+            parentUrl={navData?.url}
           />
         </Container>
       )}
