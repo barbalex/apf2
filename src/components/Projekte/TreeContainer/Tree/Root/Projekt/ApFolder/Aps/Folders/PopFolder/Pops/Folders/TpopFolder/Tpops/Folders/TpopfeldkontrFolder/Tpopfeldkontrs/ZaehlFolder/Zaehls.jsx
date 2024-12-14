@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
 
-export const Zaehl = memo(({ projekt, ap, pop, tpop, tpopkontr }) => {
+export const Zaehls = memo(({ projekt, ap, pop, tpop, tpopkontr }) => {
   const { navData } = useTpopfeldkontrzaehlsNavData({
     projId: projekt.id,
     apId: ap.id,

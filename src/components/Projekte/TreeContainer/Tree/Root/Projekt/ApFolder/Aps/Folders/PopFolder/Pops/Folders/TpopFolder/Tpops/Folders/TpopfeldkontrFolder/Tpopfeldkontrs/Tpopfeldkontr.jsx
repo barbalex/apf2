@@ -4,13 +4,14 @@ import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { ZaehlFolder } from './Zaehl/index.jsx'
+import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
 import { tpopkontr } from '../../../../../../../../../../../../../../../../shared/fragments.js'
 
 export const Tpopfeldkontr = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
+    console.log('Tpopfeldkontr, menu:', menu)
     const { navData } = useTpopfeldkontrNavData({
       projId: projekt.id,
       apId: ap.id,

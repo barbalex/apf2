@@ -5,16 +5,16 @@ import { useApolloClient, gql } from '@apollo/client'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../../mobxContext.js'
-import { Zaehl } from './Zaehl.jsx'
-import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
+import { Zaehls } from './Zaehls.jsx'
+import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
 
 export const ZaehlFolder = memo(
-  observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
+  observer(({ projekt, ap, pop, tpop, tpopkontr, menu, parentUrl }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
 
-    const { navData, isLoading } = useTpopfeldkontrNavData({
+    const { navData } = useTpopfeldkontrzaehlsNavData({
       projId: projekt.id,
       apId: ap.id,
       popId: pop.id,
@@ -32,7 +32,7 @@ export const ZaehlFolder = memo(
       'Teil-Populationen',
       tpop.id,
       'Feld-Kontrollen',
-      tpopkontr.id,
+      navData.id,
       'Zaehlungen',
     ]
 
@@ -46,17 +46,17 @@ export const ZaehlFolder = memo(
           n[6] === 'Teil-Populationen' &&
           n[7] === tpop.id &&
           n[8] === 'Feld-Kontrollen' &&
-          n[9] === tpopkontr.id &&
+          n[9] === navData.id &&
           n[10] === 'Zaehlungen',
       ).length > 0
 
     const node = {
       nodeType: 'folder',
       menuType: 'tpopfeldkontrzaehlFolder',
-      id: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
-      tableId: tpopkontr.id,
+      id: `${navData.id}TpopfeldkontrzaehlFolder`,
+      tableId: navData.id,
       urlLabel: 'Zaehlungen',
-      label: navData?.menus?.[0]?.label,
+      label: navData.label,
       url,
       hasChildren: true,
     }
@@ -65,7 +65,7 @@ export const ZaehlFolder = memo(
       <>
         <Row node={node} />
         {isOpen && (
-          <Zaehl
+          <Zaehls
             projekt={projekt}
             ap={ap}
             pop={pop}
