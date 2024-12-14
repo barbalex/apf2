@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { useTpopmassnsNavData } from '../../../../../../../../../../../../../../../../modules/useTpopmassnsNavData.js'
 
-export const TpopMassn = memo(({ projekt, ap, pop, tpop }) => {
+export const Tpopmassns = memo(({ projekt, ap, pop, tpop }) => {
   const { navData } = useTpopmassnsNavData({
     projId: projekt.id,
     apId: ap.id,

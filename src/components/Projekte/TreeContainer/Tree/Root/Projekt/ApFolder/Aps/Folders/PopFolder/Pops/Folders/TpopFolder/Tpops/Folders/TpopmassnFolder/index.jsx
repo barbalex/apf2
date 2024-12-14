@@ -1,9 +1,10 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
-import { TpopMassn } from './TpopMassn.jsx'
+import { Tpopmassns } from './Tpopmassns.jsx'
 
 export const TpopmassnFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
@@ -48,12 +49,14 @@ export const TpopmassnFolder = memo(
       <>
         <Row node={node} />
         {isOpen && (
-          <TpopMassn
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            tpop={tpop}
-          />
+          <TransitionGroup component={null}>
+            <Tpopmassns
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+            />
+          </TransitionGroup>
         )}
       </>
     )
