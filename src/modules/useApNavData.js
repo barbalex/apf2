@@ -302,8 +302,8 @@ export const useApNavData = (props) => {
     data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
   const filteredBeobsNichtZuzuordnenCount =
     data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
-  const apFilesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
-  const apHistoriesCount = data?.data?.allApHistories?.totalCount ?? 0
+  const filesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
+  const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
@@ -380,19 +380,19 @@ export const useApNavData = (props) => {
         },
         {
           id: 'Dateien',
-          label: `Dateien (${apFilesCount})`,
-          count: apFilesCount,
+          label: `Dateien (${filesCount})`,
+          count: filesCount,
         },
         {
           id: 'Historien',
-          label: `Historien (${apHistoriesCount})`,
-          count: apHistoriesCount,
+          label: `Historien (${historiesCount})`,
+          count: historiesCount,
         },
       ],
     }),
     [
-      apFilesCount,
-      apHistoriesCount,
+      filesCount,
+      historiesCount,
       apId,
       apZielJahrsCount,
       apartsCount,

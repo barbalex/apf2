@@ -55,6 +55,12 @@ export const usePopNavData = (props) => {
               ) {
                 totalCount
               }
+              popFilesByPopId {
+                totalCount
+              }
+            }
+            allPopHistories(filter: { id: { equalTo: $popId } }) {
+              totalCount
             }
           }
         `,
@@ -93,6 +99,8 @@ export const usePopNavData = (props) => {
     data?.data?.popById?.popmassnbersByPopId?.totalCount ?? 0
   const filteredPopmassnbersCount =
     data?.data?.popById?.filteredPopmassnbers?.totalCount ?? 0
+  const filesCount = data?.data?.popById?.popFilesByPopId?.totalCount ?? 0
+  const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
@@ -116,20 +124,36 @@ export const usePopNavData = (props) => {
           label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredPopmassnbersCount}/${popmassnbersCount}`})`,
           count: popmassnbersCount,
         },
+        {
+          id: 'Auswertung',
+          label: `Auswertung`,
+        },
+        {
+          id: 'Dateien',
+          label: `Dateien (${filesCount})`,
+          count: filesCount,
+        },
+        {
+          id: 'Historien',
+          label: `Historien (${historiesCount})`,
+          count: historiesCount,
+        },
       ],
     }),
     [
-      apId,
-      filteredPopbersCount,
-      filteredPopmassnbersCount,
-      filteredTpopsCount,
-      isLoading,
-      label,
-      popbersCount,
       popId,
-      popmassnbersCount,
       projId,
+      apId,
+      label,
+      isLoading,
+      filteredTpopsCount,
       tpopsCount,
+      filteredPopbersCount,
+      popbersCount,
+      filteredPopmassnbersCount,
+      popmassnbersCount,
+      filesCount,
+      historiesCount,
     ],
   )
 
