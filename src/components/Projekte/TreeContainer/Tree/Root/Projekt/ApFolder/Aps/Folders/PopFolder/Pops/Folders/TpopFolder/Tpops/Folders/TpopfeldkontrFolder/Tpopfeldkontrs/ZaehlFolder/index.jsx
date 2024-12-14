@@ -1,7 +1,5 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@tanstack/react-query'
-import { useApolloClient, gql } from '@apollo/client'
 
 import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../../mobxContext.js'
@@ -10,9 +8,7 @@ import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../
 
 export const ZaehlFolder = memo(
   observer(({ projekt, ap, pop, tpop, tpopkontr, menu, parentUrl }) => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
-    const { nodeLabelFilter } = store.tree
 
     const { navData } = useTpopfeldkontrzaehlsNavData({
       projId: projekt.id,

@@ -7,10 +7,11 @@ import { MobxContext } from '../../../../../../../../../../../../../../../../../
 import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
-import { tpopkontr } from '../../../../../../../../../../../../../../../../shared/fragments.js'
 
 export const Tpopfeldkontr = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
+    const store = useContext(MobxContext)
+
     const { navData } = useTpopfeldkontrNavData({
       projId: projekt.id,
       apId: ap.id,
