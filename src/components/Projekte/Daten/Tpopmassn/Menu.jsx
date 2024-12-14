@@ -46,7 +46,7 @@ export const Menu = memo(
       try {
         result = await client.mutate({
           mutation: gql`
-            mutation createTpopmassnForTpopmassnRouterForm($tpopId: UUID!) {
+            mutation createTpopmassnForTpopmassnForm($tpopId: UUID!) {
               createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
                 tpopmassn {
                   id
