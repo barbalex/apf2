@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import { useTpopmassnsNavData } from '../../../../../../../../../../../../../../../../modules/useTpopmassnsNavData.js'
-import { Tpopmassn } from './Tpopmassn.jsx'
+import { Tpopmassn } from './Tpopmassn/index.jsx'
 
 export const Tpopmassns = memo(({ projekt, ap, pop, tpop, in: inProp }) => {
   const { navData } = useTpopmassnsNavData({

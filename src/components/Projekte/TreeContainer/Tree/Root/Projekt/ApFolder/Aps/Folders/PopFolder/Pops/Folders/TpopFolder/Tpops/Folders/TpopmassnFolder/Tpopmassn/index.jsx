@@ -1,13 +1,29 @@
-import { memo, useRef, useContext } from 'react'
+import { memo, useRef, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition } from 'react-transition-group'
 
-import { Row } from '../../../../../../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
+import { Row } from '../../../../../../../../../../../../../Row.jsx'
+import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
+import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { useTpopmassnNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopmassnNavData.js'
+import { tpopmassn } from '../../../../../../../../../../../../../../../../shared/fragments.js'
 
 export const Tpopmassn = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
     const store = useContext(MobxContext)
+
+    const { navData } = useTpopmassnNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      popId: pop.id,
+      tpopId: tpop.id,
+      tpopmassnId: menu.id,
+    })
+
+    const dateienMenu = useMemo(
+      () => navData?.menus.find((m) => m.id === 'Dateien'),
+      [navData],
+    )
 
     const isOpen =
       store.tree.openNodes.filter(
@@ -63,7 +79,17 @@ export const Tpopmassn = memo(
               ref={ref}
               transitionState={state}
             />
-            {isOpen && <div>open</div>}
+            {isOpen && (
+              <ChildlessFolder
+                projekt={projekt}
+                ap={ap}
+                pop={pop}
+                tpop={tpop}
+                tpopmassn={menu}
+                menu={dateienMenu}
+                parentUrl={navData?.url}
+              />
+            )}
           </>
         )}
       </Transition>
