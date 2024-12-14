@@ -1,13 +1,15 @@
-import { memo, useContext, useRef, useMemo } from 'react'
+import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition } from 'react-transition-group'
 import styled from '@emotion/styled'
 
-import { Row, transitionStyles } from '../../../../../../../../../../../../../Row.jsx'
+import {
+  Row,
+  transitionStyles,
+} from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
-import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { TpopfeldkontrFolders } from './Folders/index.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -62,19 +64,6 @@ export const Tpopfeldkontr = memo(
       hasChildren: true,
     }
 
-    const biotopMenu = useMemo(
-      () => navData?.menus?.find?.((menu) => menu.id === 'Biotop'),
-      [navData],
-    )
-    const zaehlMenu = useMemo(
-      () => navData?.menus?.find?.((menu) => menu.id === 'Zaehlungen'),
-      [navData],
-    )
-    const dateienMenu = useMemo(
-      () => navData?.menus?.find?.((menu) => menu.id === 'Dateien'),
-      [navData],
-    )
-
     const ref = useRef(null)
 
     return (
@@ -93,33 +82,13 @@ export const Tpopfeldkontr = memo(
               transitionState={state}
             />
             {isOpen && (
-              <>
-                <ChildlessFolder
-                  projekt={projekt}
-                  ap={ap}
-                  pop={pop}
-                  tpop={tpop}
-                  menu={biotopMenu}
-                  parentUrl={navData.url}
-                />
-                <ChildlessFolder
-                  projekt={projekt}
-                  ap={ap}
-                  pop={pop}
-                  tpop={tpop}
-                  menu={dateienMenu}
-                  parentUrl={navData.url}
-                />
-                <ZaehlFolder
-                  projekt={projekt}
-                  ap={ap}
-                  pop={pop}
-                  tpop={tpop}
-                  tpopkontr={navData}
-                  menu={zaehlMenu}
-                  parentUrl={navData.url}
-                />
-              </>
+              <TpopfeldkontrFolders
+                projekt={projekt}
+                ap={ap}
+                pop={pop}
+                tpop={tpop}
+                navData={navData}
+              />
             )}
           </>
         )}

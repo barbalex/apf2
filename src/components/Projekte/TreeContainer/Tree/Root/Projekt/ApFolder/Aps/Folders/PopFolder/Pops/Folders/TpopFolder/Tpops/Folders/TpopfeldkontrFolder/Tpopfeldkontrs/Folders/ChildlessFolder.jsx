@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import lowerFirst from 'lodash/lowerFirst'
 
-import { Row } from '../../../../../../../../../../../../../Row.jsx'
+import { Row } from '../../../../../../../../../../../../../../Row.jsx'
 
 export const ChildlessFolder = memo(
   ({ projekt, ap, pop, tpop, menu, parentUrl }) => {

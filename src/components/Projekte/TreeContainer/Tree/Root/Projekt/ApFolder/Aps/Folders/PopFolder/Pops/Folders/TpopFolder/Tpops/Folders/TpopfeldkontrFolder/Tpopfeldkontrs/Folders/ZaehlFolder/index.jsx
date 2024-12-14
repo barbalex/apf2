@@ -1,10 +1,10 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { Row } from '../../../../../../../../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../../../mobxContext.js'
+import { Row } from '../../../../../../../../../../../../../../../Row.jsx'
+import { MobxContext } from '../../../../../../../../../../../../../../../../../../../mobxContext.js'
 import { Zaehls } from './Zaehls.jsx'
-import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
+import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
 
 export const ZaehlFolder = memo(
   observer(({ projekt, ap, pop, tpop, tpopkontr, menu, parentUrl }) => {
