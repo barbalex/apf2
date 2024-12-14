@@ -1,5 +1,5 @@
 import { memo, useRef } from 'react'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../Row.jsx'
 import { TpopFolders } from './Folders/index.jsx'
@@ -56,14 +56,16 @@ export const Tpop = memo(({ projekt, ap, pop, menu, inProp }) => {
             ref={ref}
             transitionState={state}
           />
-          {isOpen && (
-            <TpopFolders
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={menu}
-            />
-          )}
+          <TransitionGroup component={null}>
+            {isOpen && (
+              <TpopFolders
+                projekt={projekt}
+                ap={ap}
+                pop={pop}
+                tpop={menu}
+              />
+            )}
+          </TransitionGroup>
         </>
       )}
     </Transition>

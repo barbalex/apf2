@@ -8,7 +8,6 @@ import { PopmassnberFolder } from './PopmassnberFolder/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
-import { da } from 'date-fns/locale'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
