@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { useTpopsNavData } from '../../../../../../../../../../../../../../modules/useTpopsNavData.js'
 import { Tpop } from './Tpop.jsx'
 
-export const Tpops = memo(({ projekt, ap, pop }) => {
+export const Tpops = memo(({ projekt, ap, pop, in: inProp }) => {
   const { navData } = useTpopsNavData({
     projId: projekt.id,
     apId: ap.id,
@@ -17,6 +17,7 @@ export const Tpops = memo(({ projekt, ap, pop }) => {
       ap={ap}
       pop={pop}
       menu={menu}
+      inProp={inProp}
     />
   ))
 })

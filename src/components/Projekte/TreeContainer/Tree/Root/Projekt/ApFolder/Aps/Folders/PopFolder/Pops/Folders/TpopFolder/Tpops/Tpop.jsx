@@ -1,9 +1,10 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../Row.jsx'
 import { TpopFolders } from './Folders/index.jsx'
 
-export const Tpop = memo(({ projekt, ap, pop, menu }) => {
+export const Tpop = memo(({ projekt, ap, pop, menu, inProp }) => {
   const isOpen =
     store.tree.openNodes.filter(
       (n) =>
@@ -38,17 +39,33 @@ export const Tpop = memo(({ projekt, ap, pop, menu }) => {
     hasChildren: true,
   }
 
+  const ref = useRef(null)
+
   return (
-    <div key={menu.id}>
-      <Row node={node} />
-      {isOpen && (
-        <TpopFolders
-          projekt={projekt}
-          ap={ap}
-          pop={pop}
-          tpop={menu}
-        />
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <>
+          <Row
+            node={node}
+            ref={ref}
+            transitionState={state}
+          />
+          {isOpen && (
+            <TpopFolders
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={menu}
+            />
+          )}
+        </>
       )}
-    </div>
+    </Transition>
   )
 })
