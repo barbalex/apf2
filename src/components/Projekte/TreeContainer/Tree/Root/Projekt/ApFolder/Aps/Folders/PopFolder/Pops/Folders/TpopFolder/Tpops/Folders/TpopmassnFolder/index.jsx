@@ -48,16 +48,16 @@ export const TpopmassnFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <TransitionGroup component={null}>
+        <TransitionGroup component={null}>
+          {isOpen && (
             <Tpopmassns
               projekt={projekt}
               ap={ap}
               pop={pop}
               tpop={tpop}
             />
-          </TransitionGroup>
-        )}
+          )}
+        </TransitionGroup>
       </>
     )
   }),

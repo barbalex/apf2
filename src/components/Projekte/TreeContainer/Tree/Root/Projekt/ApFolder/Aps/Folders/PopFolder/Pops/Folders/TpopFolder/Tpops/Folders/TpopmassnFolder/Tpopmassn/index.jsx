@@ -1,6 +1,6 @@
 import { memo, useRef, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Transition } from 'react-transition-group'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
@@ -79,17 +79,19 @@ export const Tpopmassn = memo(
               ref={ref}
               transitionState={state}
             />
-            {isOpen && (
-              <ChildlessFolder
-                projekt={projekt}
-                ap={ap}
-                pop={pop}
-                tpop={tpop}
-                tpopmassn={menu}
-                menu={dateienMenu}
-                parentUrl={navData?.url}
-              />
-            )}
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <ChildlessFolder
+                  projekt={projekt}
+                  ap={ap}
+                  pop={pop}
+                  tpop={tpop}
+                  tpopmassn={menu}
+                  menu={dateienMenu}
+                  parentUrl={navData?.url}
+                />
+              )}
+            </TransitionGroup>
           </>
         )}
       </Transition>
