@@ -2,7 +2,7 @@ import { memo } from 'react'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 
-import { exists } from '../../../../../modules/exists.js'
+import { exists } from '../../../../modules/exists.js'
 
 const Popup = styled.div`
   background-color: white;

@@ -31,7 +31,7 @@ const OuterContainer = styled.div`
   overflow: hidden;
 `
 const Container = styled.div`
-  height: 100%;
+  height: ${(props) => props.height};
   position: relative;
 
   @media print {
@@ -129,7 +129,7 @@ export const ProjektContainer = memo(
     return (
       <OuterContainer>
         {!hideBookmarks && <Bookmarks />}
-        <Container>
+        <Container height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}>
           <StyledSplitPane
             split="vertical"
             size={

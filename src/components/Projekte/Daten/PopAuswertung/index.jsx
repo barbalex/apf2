@@ -19,8 +19,9 @@ import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { CustomTooltip } from './CustomTooltip.jsx'
-import { exists } from '../../../../../modules/exists.js'
-import { Error } from '../../../../shared/Error.jsx'
+import { exists } from '../../../../modules/exists.js'
+import { Error } from '../../../shared/Error.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const SpinnerContainer = styled.div`
   height: 400px;
@@ -120,6 +121,7 @@ export const Component = ({ height = 400 }) => {
         </SpinnerContainer>
       : tpopMengeData.length ?
         <>
+          <FormTitle title="Population: Auswertung" />
           <TitleRow>
             <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
             <Tooltip title="Mehr Informationen">

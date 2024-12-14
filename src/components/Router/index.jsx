@@ -827,64 +827,52 @@ export const Router = () => {
                         handle={popHandle}
                       >
                         <Route
+                          index={true}
+                          lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+                        />
+                        <Route
+                          path="Population"
+                          lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+                        />
+                        <Route
+                          path="Auswertung"
                           lazy={() =>
-                            import('../Projekte/Daten/PopRouter/index.jsx')
+                            import('../Projekte/Daten/PopAuswertung/index.jsx')
+                          }
+                        />
+                        <Route
+                          path="Dateien"
+                          lazy={() =>
+                            import('../Projekte/Daten/PopDateien.jsx')
                           }
                         >
                           <Route
                             index={true}
                             lazy={() =>
-                              import('../Projekte/Daten/Pop/index.jsx')
+                              import('../shared/Files/Files/index.jsx')
                             }
                           />
-                          <Route
-                            path="Population"
-                            lazy={() =>
-                              import('../Projekte/Daten/Pop/index.jsx')
-                            }
-                          />
-                          <Route
-                            path="Auswertung"
-                            lazy={() =>
-                              import(
-                                '../Projekte/Daten/Pop/Auswertung/index.jsx'
-                              )
-                            }
-                          />
-                          <Route
-                            path="Dateien"
-                            lazy={() =>
-                              import('../Projekte/Daten/Pop/Dateien.jsx')
-                            }
-                          >
+                          <Route path=":fileId">
                             <Route
                               index={true}
                               lazy={() =>
-                                import('../shared/Files/Files/index.jsx')
+                                import('../shared/Files/Preview/index.jsx')
                               }
                             />
-                            <Route path=":fileId">
-                              <Route
-                                index={true}
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.jsx')
-                                }
-                              />
-                              <Route
-                                path="Vorschau"
-                                lazy={() =>
-                                  import('../shared/Files/Preview/index.jsx')
-                                }
-                              />
-                            </Route>
+                            <Route
+                              path="Vorschau"
+                              lazy={() =>
+                                import('../shared/Files/Preview/index.jsx')
+                              }
+                            />
                           </Route>
-                          <Route
-                            path="Historien"
-                            lazy={() =>
-                              import('../Projekte/Daten/Pop/Historien.jsx')
-                            }
-                          />
                         </Route>
+                        <Route
+                          path="Historien"
+                          lazy={() =>
+                            import('../Projekte/Daten/PopHistorien.jsx')
+                          }
+                        />
                         <Route
                           path="Teil-Populationen"
                           handle={tpopsHandle}
