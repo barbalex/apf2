@@ -19,7 +19,7 @@ import { showCoordOfBeobOnMapsZhCh } from '../../../../modules/showCoordOfBeobOn
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
 import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/index.js'
-import { StyledLoadingButton, StyledButton } from '../TpopRouter/Menu.jsx'
+import { StyledLoadingButton, StyledButton } from '../Tpop/Menu.jsx'
 
 export const Menu = memo(
   observer(() => {
