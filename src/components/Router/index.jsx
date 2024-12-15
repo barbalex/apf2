@@ -1070,10 +1070,10 @@ export const Router = () => {
                                   }
                                 />
                                 <Route
-                                  path="Entwicklung"
+                                  path="Feld-Kontrolle"
                                   lazy={() =>
                                     import(
-                                      '../Projekte/Daten/Tpopfeldkontr/index.jsx'
+                                      '../Projekte/Daten/Tpopfeldkontr/Tpopfeldkontr.jsx'
                                     )
                                   }
                                 />
@@ -1167,6 +1167,14 @@ export const Router = () => {
                               >
                                 <Route
                                   path="*"
+                                  lazy={() =>
+                                    import(
+                                      '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
+                                    )
+                                  }
+                                />
+                                <Route
+                                  path="Freiwilligen-Kontrolle"
                                   lazy={() =>
                                     import(
                                       '../Projekte/Daten/Tpopfreiwkontr/index.jsx'

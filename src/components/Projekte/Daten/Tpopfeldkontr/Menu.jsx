@@ -34,7 +34,7 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(({ row, isList = false }) => {
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
 
@@ -215,7 +215,7 @@ export const Menu = memo(
       }
       setMoving({
         id: tpopkontrId,
-        label: row.labelEk,
+        label: row.labelEk ?? row.label,
         table: 'tpopfeldkontr',
         toTable: 'tpopfeldkontr',
         fromParentId: tpopId,
@@ -265,7 +265,7 @@ export const Menu = memo(
       setCopying({
         table: 'tpopfeldkontr',
         id: tpopkontrId,
-        label: row.labelEk,
+        label: row.labelEk ?? row.label,
         withNextLevel: false,
       })
       setCopyBiotopMenuAnchorEl(null)
@@ -273,7 +273,7 @@ export const Menu = memo(
     const onClickSetBiotopCopying = useCallback(() => {
       setCopyingBiotop({
         id: tpopkontrId,
-        label: row.labelEk,
+        label: row.labelEk ?? row.label,
       })
       setCopyBiotopMenuAnchorEl(null)
     }, [tpopkontrId, row, setCopyingBiotop])
@@ -300,18 +300,20 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Löschen">
-            <IconButton
-              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              aria-owns={delMenuOpen ? 'tpopfeldkontrDelMenu' : undefined}
-            >
-              <FaMinus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!isList && (
+            <Tooltip title="Löschen">
+              <IconButton
+                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+                aria-owns={delMenuOpen ? 'tpopfeldkontrDelMenu' : undefined}
+              >
+                <FaMinus style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
           <Tooltip
             title={
               !isMovingFeldkontr ?
-                `'${row.labelEk}' zu einer anderen Population verschieben`
+                `'${row.labelEk ?? row.label}' zu einer anderen Population verschieben`
               : thisTpopfeldkontrIsMoving ?
                 'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
               : movingFromThisTpop ?

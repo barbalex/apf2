@@ -44,6 +44,7 @@ export const Tpopfeldkontr = memo(
     const node = {
       nodeType: 'table',
       menuType: 'tpopfeldkontr',
+      singleElementName: 'Feld-Kontrolle',
       id: navData.id,
       parentId: `${tpop.id}TpopfeldkontrFolder`,
       parentTableId: tpop.id,

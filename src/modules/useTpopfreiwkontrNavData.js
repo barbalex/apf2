@@ -76,8 +76,8 @@ export const useTpopfreiwkontrNavData = (props) => {
       // leave totalCount undefined as the menus are folders
       menus: [
         {
-          id: 'Entwicklung',
-          label: `Entwicklung`,
+          id: 'Freiwilligen-Kontrolle',
+          label: `Freiwilligen-Kontrolle`,
         },
         {
           id: 'Zaehlungen',

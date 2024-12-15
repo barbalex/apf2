@@ -76,8 +76,8 @@ export const useTpopfeldkontrNavData = (props) => {
       // leave totalCount undefined as the menus are folders
       menus: [
         {
-          id: 'Entwicklung',
-          label: `Entwicklung`,
+          id: 'Feld-Kontrolle',
+          label: `Feld-Kontrolle`,
         },
         {
           id: 'Biotop',
