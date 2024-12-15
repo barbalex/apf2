@@ -1,5 +1,6 @@
 import { memo, useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
@@ -47,13 +48,15 @@ export const IdealbiotopFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <ChildlessFolder
-            projekt={projekt}
-            ap={ap}
-            menu={dateienMenu}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <ChildlessFolder
+              projekt={projekt}
+              ap={ap}
+              menu={dateienMenu}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),

@@ -1,9 +1,10 @@
-import { memo } from 'react'
+import { memo, useRef } from 'react'
 import lowerFirst from 'lodash/lowerFirst'
+import { Transition } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
 
-export const ChildlessFolder = memo(({ projekt, ap, menu }) => {
+export const ChildlessFolder = memo(({ projekt, ap, menu, in: inProp }) => {
   const node = {
     nodeType: 'folder',
     menuType: `${lowerFirst(menu.id)}Folder`,
@@ -15,5 +16,23 @@ export const ChildlessFolder = memo(({ projekt, ap, menu }) => {
     hasChildren: false,
   }
 
-  return <Row node={node} />
+  const ref = useRef(null)
+
+  return (
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Row
+          node={node}
+          ref={ref}
+          transitionState={state}
+        />
+      )}
+    </Transition>
+  )
 })
