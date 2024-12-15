@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { ZaehlFolder } from './ZaehlFolder/index.jsx'
+import { ZaehlFolder } from './Folders/ZaehlFolder/index.jsx'
 import { useTpopfreiwkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrNavData.js'
 
 export const Tpopfreiwkontr = memo(
