@@ -76,6 +76,10 @@ export const useProjektNavData = (props) => {
       // leave totalCount undefined as the menus are folders
       menus: [
         {
+          id: 'Projekt',
+          label: 'Projekt',
+        },
+        {
           id: 'Arten',
           label: `Arten (${isLoading ? '...' : `${artsCount}/${allArtsCount}`})`,
         },

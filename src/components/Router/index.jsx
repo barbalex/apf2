@@ -502,6 +502,10 @@ export const Router = () => {
                   lazy={() => import('../Projekte/Daten/Projekt/index.jsx')}
                 />
                 <Route
+                  path="Projekt"
+                  lazy={() => import('../Projekte/Daten/Projekt/Projekt.jsx')}
+                />
+                <Route
                   path="AP-Berichte"
                   handle={apberuebersichtsHandle}
                 >
