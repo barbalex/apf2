@@ -810,26 +810,15 @@ export const Router = () => {
                       />
                     </Route>
                     <Route
-                      path="Qualitaetskontrollen"
+                      path="Qualitätskontrollen"
+                      lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
+                    />
+                    <Route
+                      path="Qualitätskontrollen-wählen"
                       lazy={() =>
-                        import('../Projekte/Daten/QkRouter/index.jsx')
+                        import('../Projekte/Daten/Qk/Choose/index.jsx')
                       }
-                    >
-                      <Route
-                        index={true}
-                        lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
-                      />
-                      <Route
-                        path="ausfuehren"
-                        lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
-                      />
-                      <Route
-                        path="waehlen"
-                        lazy={() =>
-                          import('../Projekte/Daten/Qk/Choose/index.jsx')
-                        }
-                      />
-                    </Route>
+                    />
                     <Route
                       path="Populationen"
                       handle={popsHandle}

@@ -11,7 +11,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 export const Component = memo(() => {
   const { apId } = useParams()
 
-  const { data, loading, error, refetch } = useQuery(query, {
+  const { data, loading, error } = useQuery(query, {
     variables: { apId },
     fetchPolicy: 'no-cache',
   })
@@ -30,20 +30,19 @@ export const Component = memo(() => {
     ]),
   )
 
-  const qkCount = loading ? '...' : data?.allQks?.totalCount
+  const qkCount = data?.allQks?.totalCount
 
   if (error) return <Error error={error} />
 
+  if (loading) return <Spinner />
+
   return (
     <ErrorBoundary>
-      {loading ?
-        <Spinner />
-      : <Qk
-          key={qkCount}
-          qkNameQueries={qkNameQueries}
-          qks={qks}
-        />
-      }
+      <Qk
+        key={qkCount}
+        qkNameQueries={qkNameQueries}
+        qks={qks}
+      />
     </ErrorBoundary>
   )
 })

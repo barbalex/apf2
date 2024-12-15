@@ -215,7 +215,8 @@ export const Tree = types
         if (aNA[4] === 'EK-Zähleinheiten') return 'ekzaehleinheit'
         if (aNA[4] === 'nicht-beurteilte-Beobachtungen') return 'beob'
         if (aNA[4] === 'nicht-zuzuordnende-Beobachtungen') return 'beob'
-        if (aNA[4] === 'Qualitaetskontrollen') return undefined
+        if (aNA[4] === 'Qualitätskontrollen') return undefined
+        if (aNA[4] === 'Qualitätskontrollen-wählen') return undefined
       }
       if (aNA.length > 2) {
         if (aNA[2] === 'Arten') return 'ap'

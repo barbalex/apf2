@@ -371,8 +371,12 @@ export const useApNavData = (props) => {
           count: beobsNichtZuzuordnenCount,
         },
         {
-          id: 'Qualitaetskontrollen',
-          label: `Qualitaetskontrollen`,
+          id: 'Qualitätskontrollen',
+          label: `Qualitätskontrollen ausführen`,
+        },
+        {
+          id: 'Qualitätskontrollen-wählen',
+          label: `Qualitätskontrollen wählen`,
         },
         {
           id: 'Auswertung',

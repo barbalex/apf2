@@ -49,7 +49,7 @@ export const Component = () => {
   const onChangeTab = useCallback(
     (event, value) =>
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Qualitaetskontrollen/${value}${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/Qualitätskontrollen/${value}${search}`,
       ),
     [projId, apId, navigate, search],
   )

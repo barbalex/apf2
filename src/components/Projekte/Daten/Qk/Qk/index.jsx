@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useParams, useLocation } from 'react-router'
+import { useParams, useLocation, Form } from 'react-router'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { standardQkYear } from '../../../../../modules/standardQkYear.js'
@@ -20,6 +20,7 @@ import { MobxContext } from '../../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
+import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -136,6 +137,7 @@ export const Qk = memo(
     if (error2) return <Error error={error2} />
     return (
       <ErrorBoundary>
+        <FormTitle title="Qualitätskontrollen ausführen" />
         <Container>
           <StyledFormControl
             fullWidth

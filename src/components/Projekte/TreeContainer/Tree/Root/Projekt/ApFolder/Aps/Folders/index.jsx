@@ -14,6 +14,7 @@ import { EkZaehleinheitFolder } from './EkzaehleinheitFolder/index.jsx'
 import { BeobNichtBeurteiltFolder } from './BeobNichtBeurteiltFolder/index.jsx'
 import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnenFolder/index.jsx'
 import { Qk } from './Qk.jsx'
+import { QkWaehlen } from './QkWaehlen.jsx'
 import { AuswertungFolder } from './AuswertungFolder.jsx'
 import { DateienFolder } from './DateienFolder.jsx'
 import { HistorienFolder } from './HistorienFolder.jsx'
@@ -151,6 +152,10 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             menu={beobNichtZuzuordnenMenu}
           />
           <Qk
+            projekt={projekt}
+            ap={ap}
+          />
+          <QkWaehlen
             projekt={projekt}
             ap={ap}
           />
