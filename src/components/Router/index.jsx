@@ -682,7 +682,9 @@ export const Router = () => {
                       <Route
                         path="Idealbiotop"
                         lazy={() =>
-                          import('../Projekte/Daten/Idealbiotop/index.jsx')
+                          import(
+                            '../Projekte/Daten/Idealbiotop/Idealbiotop.jsx'
+                          )
                         }
                       />
                       <Route
