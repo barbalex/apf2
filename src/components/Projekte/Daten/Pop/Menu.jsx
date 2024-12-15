@@ -81,7 +81,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createPop?.pop?.id
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${id}${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${id}/Population${search}`,
       )
     }, [apId, client, store, tanstackQueryClient, navigate, search, projId])
 

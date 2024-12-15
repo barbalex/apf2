@@ -89,7 +89,7 @@ export const StyledButton = styled(Button)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(({ row, isList = false }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
@@ -144,7 +144,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createTpop?.tpop?.id
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${id}${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${id}/Teil-Population${search}`,
       )
     }, [
       apId,
@@ -448,14 +448,16 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Löschen">
-            <IconButton
-              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              aria-owns={delMenuOpen ? 'tpopDelMenu' : undefined}
-            >
-              <FaMinus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!isList && (
+            <Tooltip title="Löschen">
+              <IconButton
+                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+                aria-owns={delMenuOpen ? 'tpopDelMenu' : undefined}
+              >
+                <FaMinus style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
           {!hideTree && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>

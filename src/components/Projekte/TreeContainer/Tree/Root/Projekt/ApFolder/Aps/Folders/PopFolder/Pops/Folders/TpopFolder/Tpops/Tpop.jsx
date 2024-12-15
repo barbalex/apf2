@@ -25,6 +25,7 @@ export const Tpop = memo(
     const node = {
       nodeType: 'table',
       menuType: 'tpop',
+      singleElementName: 'Teil-Population',
       id: menu.id,
       parentId: `${pop.id}TpopFolder`,
       parentTableId: pop.id,
