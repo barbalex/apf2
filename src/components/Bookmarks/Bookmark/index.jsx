@@ -33,6 +33,8 @@ const Container = styled.div`
   border-collapse: collapse;
   transition: background 0.2s linear;
   max-width: 45vw;
+  height: 40px;
+  padding-right: ${(props) => props.paddingright};
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -62,6 +64,8 @@ const transitionStyles = {
   exited: { opacity: 0 },
 }
 
+const showMenu = true
+
 export const Bookmark = memo(({ navData, in: inProp }) => {
   const outerContainerRef = useRef(null)
   const labelRef = useRef(null)
@@ -77,14 +81,14 @@ export const Bookmark = memo(({ navData, in: inProp }) => {
     >
       {(state) => (
         <OuterContainer ref={outerContainerRef}>
-          <Container>
+          <Container paddingright={showMenu ? 'unset' : '15px'}>
             <Label
               navData={navData}
               outerContainerRef={outerContainerRef}
               ref={labelRef}
               labelStyle={transitionStyles[state]}
             />
-            {!!navData.menus && <Menu navData={navData} />}
+            {!!navData.menus && showMenu && <Menu navData={navData} />}
           </Container>
         </OuterContainer>
       )}
