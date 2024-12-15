@@ -1,4 +1,5 @@
 import { Row } from '../../../../../Row.jsx'
+import { ChildlessFolder } from './ChildlessFolder.jsx'
 
 export const IdealbiotopFolder = ({ projekt, ap }) => {
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Idealbiotop']
@@ -14,5 +15,13 @@ export const IdealbiotopFolder = ({ projekt, ap }) => {
     hasChildren: false,
   }
 
-  return <Row node={node} />
+  return (
+    <>
+      <Row node={node} />
+      <ChildlessFolder
+        projekt={projekt}
+        ap={ap}
+      />
+    </>
+  )
 }
