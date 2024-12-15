@@ -395,7 +395,7 @@ export const Row = memo(
     let useSymbolSpan = false
     let symbolIcon
     let showPrintIcon = false
-    if (node.hasChildren && nodeIsOpen) {
+    if (node.hasChildren && (nodeIsOpen || node.alwaysOpen)) {
       symbolIcon = 'expandMore'
     } else if (node.hasChildren) {
       symbolIcon = 'chevronRight'

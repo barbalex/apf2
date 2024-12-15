@@ -1,15 +1,11 @@
-import { memo, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { memo } from 'react'
 
 import { Row } from '../../../../../../../../../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../../../../mobxContext.js'
 import { Zaehls } from './Zaehls.jsx'
 import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
 
 export const ZaehlFolder = memo(
-  observer(({ projekt, ap, pop, tpop, tpopkontr, menu, parentUrl }) => {
-    const store = useContext(MobxContext)
-
+  ({ projekt, ap, pop, tpop, tpopkontr, menu, parentUrl }) => {
     const { navData } = useTpopfeldkontrzaehlsNavData({
       projId: projekt.id,
       apId: ap.id,
@@ -32,19 +28,8 @@ export const ZaehlFolder = memo(
       'Zaehlungen',
     ]
 
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen' &&
-          n[5] === pop.id &&
-          n[6] === 'Teil-Populationen' &&
-          n[7] === tpop.id &&
-          n[8] === 'Feld-Kontrollen' &&
-          n[9] === tpopkontr.id &&
-          n[10] === 'Zaehlungen',
-      ).length > 0
+    // Zählungen are always open
+    const isOpen = true
 
     const node = {
       nodeType: 'folder',
@@ -55,6 +40,7 @@ export const ZaehlFolder = memo(
       label: navData.label,
       url,
       hasChildren: true,
+      alwaysOpen: true,
     }
 
     return (
@@ -71,5 +57,5 @@ export const ZaehlFolder = memo(
         )}
       </>
     )
-  }),
+  },
 )
