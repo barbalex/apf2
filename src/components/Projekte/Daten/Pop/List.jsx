@@ -4,10 +4,10 @@ import { List as SharedList } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { useApNavData } from '../../../../modules/useApNavData.js'
+import { usePopNavData } from '../../../../modules/usePopNavData.js'
 
 export const List = memo(() => {
-  const { navData, isLoading, error } = useApNavData()
+  const { navData, isLoading, error } = usePopNavData()
 
   if (isLoading) return <Spinner />
 
@@ -17,7 +17,12 @@ export const List = memo(() => {
     <SharedList
       items={navData.menus}
       title={navData.label}
-      menuBar={<Menu isList={true} />}
+      menuBar={
+        <Menu
+          isList={true}
+          row={navData}
+        />
+      }
     />
   )
 })
