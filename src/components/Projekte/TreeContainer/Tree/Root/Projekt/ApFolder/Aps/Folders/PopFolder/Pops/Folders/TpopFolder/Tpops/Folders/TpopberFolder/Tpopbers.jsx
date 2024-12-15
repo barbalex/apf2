@@ -4,7 +4,7 @@ import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { useTpopbersNavData } from '../../../../../../../../../../../../../../../../modules/useTpopbersNavData.js'
 import { Tpopber } from './Tpopber.jsx'
 
-export const Tpopbers = memo(({ projekt, ap, pop, tpop }) => {
+export const Tpopbers = memo(({ projekt, ap, pop, tpop, in: inProp }) => {
   const { navData } = useTpopbersNavData({
     projId: projekt.id,
     apId: ap.id,
@@ -20,6 +20,7 @@ export const Tpopbers = memo(({ projekt, ap, pop, tpop }) => {
       pop={pop}
       tpop={tpop}
       menu={menu}
+      inProp={inProp}
     />
   ))
 })
