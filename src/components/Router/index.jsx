@@ -542,7 +542,7 @@ export const Router = () => {
                     />
                     <Route
                       path="Art"
-                      lazy={() => import('../Projekte/Daten/Ap/index.jsx')}
+                      lazy={() => import('../Projekte/Daten/Ap/Ap.jsx')}
                     />
                     <Route
                       path="Auswertung"
