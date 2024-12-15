@@ -22,7 +22,7 @@ export const AlwaysShowBookmarks = memo(() => {
 
   return (
     <Tooltip
-      title={`Wird normalerweise nur auf schmalen Bildschirmen angezeigt (unter ${constants.mobileViewMaxWidth + 1} Pixeln)`}
+      title={`Bookmarks dienen der Navigation auf Mobilgeräten. Daher werden sie normalerweise nur auf schmalen Bildschirmen angezeigt (unter ${constants.mobileViewMaxWidth + 1} Pixeln)`}
       placement={window.innerWidth > 730 ? 'left' : 'bottom'}
     >
       <StyledFormControlLabel
@@ -32,7 +32,7 @@ export const AlwaysShowBookmarks = memo(() => {
             onChange={toggleAlwaysShowBookmarks}
           />
         }
-        label="Bookmark-Navigationsmenü immer anzeigen"
+        label="Bookmarks immer anzeigen"
       />
     </Tooltip>
   )

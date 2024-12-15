@@ -12,6 +12,7 @@ import { MobxContext } from '../../../../../mobxContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { AlwaysShowBookmarks } from './AlwaysShowBookmarks.jsx'
+import { ShowBookmarksMenu } from './ShowBookmarksMenu.jsx'
 import { AlwaysShowTree } from './AlwaysShowTree.jsx'
 import { constants } from '../../../../../modules/constants.js'
 
@@ -115,6 +116,9 @@ export const More = memo(
             )}
             <MenuItem>
               <AlwaysShowBookmarks />
+            </MenuItem>
+            <MenuItem>
+              <ShowBookmarksMenu />
             </MenuItem>
             <MenuItem>
               <AlwaysShowTree />

@@ -27,6 +27,7 @@ export const hideBookmarksAtom = atom((get) => {
   const hideBookmarks = isDesktopView && !alwaysShowBookmarks
   return hideBookmarks
 })
+export const showBookmarksMenuAtom = atomWithStorage('showBookmarksMenu', false)
 export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)
 export const hideTreeAtom = atom((get) => {
   const alwaysShowTree = get(alwaysShowTreeAtom)

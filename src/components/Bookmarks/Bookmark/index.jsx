@@ -2,8 +2,11 @@ import { memo, useRef } from 'react'
 import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
+import { useAtom } from 'jotai'
 
 import { Label } from './Label.jsx'
+import { showBookmarksMenuAtom } from '../../../JotaiStore/index.js'
+
 const OuterContainer = styled.div`
   position: relative;
   &::after,
@@ -64,9 +67,9 @@ const transitionStyles = {
   exited: { opacity: 0 },
 }
 
-const showMenu = true
-
 export const Bookmark = memo(({ navData, in: inProp }) => {
+  const [showBookmarksMenu] = useAtom(showBookmarksMenuAtom)
+
   const outerContainerRef = useRef(null)
   const labelRef = useRef(null)
 
@@ -81,14 +84,14 @@ export const Bookmark = memo(({ navData, in: inProp }) => {
     >
       {(state) => (
         <OuterContainer ref={outerContainerRef}>
-          <Container paddingright={showMenu ? 'unset' : '15px'}>
+          <Container paddingright={showBookmarksMenu ? 'unset' : '15px'}>
             <Label
               navData={navData}
               outerContainerRef={outerContainerRef}
               ref={labelRef}
               labelStyle={transitionStyles[state]}
             />
-            {!!navData.menus && showMenu && <Menu navData={navData} />}
+            {!!navData.menus && showBookmarksMenu && <Menu navData={navData} />}
           </Container>
         </OuterContainer>
       )}
