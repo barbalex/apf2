@@ -20,7 +20,7 @@ export const AlwaysShowTree = memo(() => {
 
   return (
     <Tooltip
-      title={`Ist normalerweise nur auf grossen Bildschirmen verfügbar (ab ${constants.mobileViewMaxWidth + 1} Pixeln)`}
+      title={`Ist normalerweise nur auf grossen Bildschirmen verfügbar (ab ${constants.mobileViewMaxWidth + 1} Pixeln Breite)`}
       // if window width > 731 left
       placement={window.innerWidth > 730 ? 'left' : 'bottom'}
     >
