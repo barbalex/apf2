@@ -10,7 +10,7 @@ export const Qk = ({ projekt, ap }) => {
     tableId: ap.id,
     parentTableId: ap.id,
     urlLabel: 'Qualitätskontrollen',
-    label: 'Qualitätskontrollen',
+    label: 'Qualitätskontrollen ausführen',
     url,
     hasChildren: false,
   }
