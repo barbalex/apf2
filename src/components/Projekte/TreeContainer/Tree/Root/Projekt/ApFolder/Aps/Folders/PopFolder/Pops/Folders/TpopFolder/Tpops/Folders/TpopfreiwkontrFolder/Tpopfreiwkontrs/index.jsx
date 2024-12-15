@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { ZaehlFolder } from './Zaehl/index.jsx'
+import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { useTpopfreiwkontrsNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrsNavData.js'
 import { Tpopfreiwkontr } from './Tpopfreiwkontr.jsx'
 

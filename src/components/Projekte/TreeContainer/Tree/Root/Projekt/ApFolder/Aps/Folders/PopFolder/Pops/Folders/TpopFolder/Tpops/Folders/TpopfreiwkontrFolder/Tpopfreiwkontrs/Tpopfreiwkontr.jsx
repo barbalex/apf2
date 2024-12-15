@@ -4,10 +4,21 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { ZaehlFolder } from './Zaehl/index.jsx'
+import { ZaehlFolder } from './ZaehlFolder/index.jsx'
+import { useTpopfreiwkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrNavData.js'
 
 export const Tpopfreiwkontr = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
+    const store = useContext(MobxContext)
+
+    const { navData } = useTpopfreiwkontrNavData({
+      projId: projekt.id,
+      apId: ap.id,
+      popId: pop.id,
+      tpopId: tpop.id,
+      tpopkontrId: menu.id,
+    })
+
     const isOpen =
       store.tree.openNodes.filter(
         (n) =>
@@ -19,18 +30,18 @@ export const Tpopfreiwkontr = memo(
           n[6] === 'Teil-Populationen' &&
           n[7] === tpop.id &&
           n[8] === 'Freiwilligen-Kontrollen' &&
-          n[9] === menu.id,
+          n[9] === navData.id,
       ).length > 0
 
     const node = {
       nodeType: 'table',
       menuType: 'tpopfreiwkontr',
-      id: menu.id,
-      tableId: menu.id,
+      id: navData.id,
+      tableId: navData.id,
       parentId: `${tpop.id}TpopfreiwkontrFolder`,
       parentTableId: tpop.id,
-      urlLabel: menu.id,
-      label: menu.label,
+      urlLabel: navData.id,
+      label: navData.label,
       url: [
         'Projekte',
         projekt.id,
@@ -41,7 +52,7 @@ export const Tpopfreiwkontr = memo(
         'Teil-Populationen',
         tpop.id,
         'Freiwilligen-Kontrollen',
-        menu.id,
+        navData.id,
       ],
       hasChildren: true,
     }
