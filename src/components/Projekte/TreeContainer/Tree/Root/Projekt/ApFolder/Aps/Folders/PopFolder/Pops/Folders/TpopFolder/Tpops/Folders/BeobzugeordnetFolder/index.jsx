@@ -1,9 +1,10 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
-import { BeobZugeordnet } from './BeobZugeordnet.jsx'
+import { Beobzugeordnets } from './Beobzugeordnets.jsx'
 
 export const BeobzugeordnetFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
@@ -47,14 +48,16 @@ export const BeobzugeordnetFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && (
-          <BeobZugeordnet
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            tpop={tpop}
-          />
-        )}
+        <TransitionGroup component={null}>
+          {isOpen && (
+            <Beobzugeordnets
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+            />
+          )}
+        </TransitionGroup>
       </>
     )
   }),

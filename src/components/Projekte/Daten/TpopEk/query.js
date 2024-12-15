@@ -3,15 +3,15 @@ import { gql } from '@apollo/client'
 import { ekfrequenz } from '../../../shared/fragments.js'
 
 export const query = gql`
-  query TpopEkQuery($id: UUID!, $isEk: Boolean!, $apId: UUID!) {
-    allEkplans(filter: { tpopId: { equalTo: $id } }) @include(if: $isEk) {
+  query TpopEkQuery($id: UUID!, $apId: UUID!) {
+    allEkplans(filter: { tpopId: { equalTo: $id } }) {
       nodes {
         id
         jahr
         typ
       }
     }
-    allTpopkontrs(filter: { tpopId: { equalTo: $id } }) @include(if: $isEk) {
+    allTpopkontrs(filter: { tpopId: { equalTo: $id } }) {
       nodes {
         id
         jahr
