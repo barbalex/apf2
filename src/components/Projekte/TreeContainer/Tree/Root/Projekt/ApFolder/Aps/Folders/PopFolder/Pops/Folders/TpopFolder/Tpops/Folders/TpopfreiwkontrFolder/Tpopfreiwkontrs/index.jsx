@@ -6,7 +6,7 @@ import { MobxContext } from '../../../../../../../../../../../../../../../../../
 import { ZaehlFolder } from './Zaehl/index.jsx'
 import { useTpopfreiwkontrsNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrsNavData.js'
 
-export const TpopFreiwkontr = memo(
+export const Tpopfreiwkontrs = memo(
   observer(({ projekt, ap, pop, tpop }) => {
     const store = useContext(MobxContext)
 
@@ -17,7 +17,7 @@ export const TpopFreiwkontr = memo(
       tpopId: tpop.id,
     })
 
-    return navData.menus.map((el) => {
+    return navData.menus.map((menu) => {
       const isOpen =
         store.tree.openNodes.filter(
           (n) =>
@@ -29,18 +29,18 @@ export const TpopFreiwkontr = memo(
             n[6] === 'Teil-Populationen' &&
             n[7] === tpop.id &&
             n[8] === 'Freiwilligen-Kontrollen' &&
-            n[9] === el.id,
+            n[9] === menu.id,
         ).length > 0
 
       const node = {
         nodeType: 'table',
         menuType: 'tpopfreiwkontr',
-        id: el.id,
-        tableId: el.id,
+        id: menu.id,
+        tableId: menu.id,
         parentId: `${tpop.id}TpopfreiwkontrFolder`,
         parentTableId: tpop.id,
-        urlLabel: el.id,
-        label: el.label,
+        urlLabel: menu.id,
+        label: menu.label,
         url: [
           'Projekte',
           projekt.id,
@@ -51,13 +51,13 @@ export const TpopFreiwkontr = memo(
           'Teil-Populationen',
           tpop.id,
           'Freiwilligen-Kontrollen',
-          el.id,
+          menu.id,
         ],
         hasChildren: true,
       }
 
       return (
-        <div key={el.id}>
+        <div key={menu.id}>
           <Row node={node} />
           {isOpen && (
             <ZaehlFolder
@@ -65,7 +65,7 @@ export const TpopFreiwkontr = memo(
               ap={ap}
               pop={pop}
               tpop={tpop}
-              tpopkontr={el}
+              tpopkontr={menu}
             />
           )}
         </div>
