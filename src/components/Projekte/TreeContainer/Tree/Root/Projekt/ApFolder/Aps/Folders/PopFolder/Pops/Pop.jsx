@@ -13,6 +13,7 @@ export const Pop = memo(
     const node = {
       nodeType: 'table',
       menuType: 'pop',
+      singleElementName: 'Population',
       id: menu.id,
       parentId: `${ap.id}PopFolder`,
       parentTableId: ap.id,

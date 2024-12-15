@@ -851,7 +851,7 @@ export const Router = () => {
                         />
                         <Route
                           path="Population"
-                          lazy={() => import('../Projekte/Daten/Pop/index.jsx')}
+                          lazy={() => import('../Projekte/Daten/Pop/Pop.jsx')}
                         />
                         <Route
                           path="Auswertung"
