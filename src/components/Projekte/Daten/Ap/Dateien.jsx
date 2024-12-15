@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { useParams } from 'react-router'
 import { useQuery, gql } from '@apollo/client'
 
-import { FilesRouter } from '../../shared/Files/index.jsx'
-import { FormTitle } from '../../shared/FormTitle/index.jsx'
+import { FilesRouter } from '../../../shared/Files/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const apFilesQuery = gql`
   query apFilesQuery($apId: UUID!) {
