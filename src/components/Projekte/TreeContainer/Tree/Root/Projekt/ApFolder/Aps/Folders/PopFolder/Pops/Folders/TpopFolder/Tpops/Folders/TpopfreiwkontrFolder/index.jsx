@@ -4,7 +4,7 @@ import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
-import { Tpopfreiwkontrs } from './Tpopfreiwkontrs/Folders/index.jsx'
+import { Tpopfreiwkontrs } from './Tpopfreiwkontrs/index.jsx'
 
 export const TpopfreiwkontrFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
