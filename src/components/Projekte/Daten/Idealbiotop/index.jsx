@@ -2,7 +2,7 @@ import { memo, useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
-import { useParams } from 'react-router'
+import { Form, useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { DateField } from '../../../shared/Date.jsx'
@@ -14,6 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { idealbiotop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const FormContainer = styled.div`
   padding: 0 10px;
@@ -123,6 +124,7 @@ export const Component = memo(
 
     return (
       <ErrorBoundary>
+        <FormTitle title="Idealbiotop" />
         <FormContainer>
           <DateField
             name="erstelldatum"

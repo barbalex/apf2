@@ -342,6 +342,14 @@ const tpopfreiwkontrHandle = {
   bookmarkFetcher: tpopfreiwkontrBookmarkFetcher,
   bookmarkFetcherName: 'useTpopfreiwkontrNavData',
 }
+const idealbiotopBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useIdealbiotopNavData.js'))
+    .useIdealbiotopNavData,
+}))
+const idealbiotopHandle = {
+  bookmarkFetcher: idealbiotopBookmarkFetcher,
+  bookmarkFetcherName: 'useIdealbiotopNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'

@@ -1,8 +1,13 @@
-import { Row } from '../../../../../Row.jsx'
-import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { memo, useMemo } from 'react'
 
-export const IdealbiotopFolder = ({ projekt, ap }) => {
+import { Row } from '../../../../../../Row.jsx'
+import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { useIdealbiotopNavData } from '../../../../../../../../../../modules/useIdealbiotopNavData.js'
+
+export const IdealbiotopFolder = memo(({ projekt, ap }) => {
   const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Idealbiotop']
+
+  const { navData } = useIdealbiotopNavData({ projId: projekt.id, apId: ap.id })
 
   const node = {
     nodeType: 'folder',
@@ -15,13 +20,19 @@ export const IdealbiotopFolder = ({ projekt, ap }) => {
     hasChildren: false,
   }
 
+  const dateienMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Dateien'),
+    [navData],
+  )
+
   return (
     <>
       <Row node={node} />
       <ChildlessFolder
         projekt={projekt}
         ap={ap}
+        menu={dateienMenu}
       />
     </>
   )
-}
+})
