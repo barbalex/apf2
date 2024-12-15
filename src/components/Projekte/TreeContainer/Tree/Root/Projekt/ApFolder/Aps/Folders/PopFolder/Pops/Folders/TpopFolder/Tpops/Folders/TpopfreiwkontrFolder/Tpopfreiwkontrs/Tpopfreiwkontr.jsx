@@ -1,12 +1,13 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { ZaehlFolder } from './Zaehl/index.jsx'
 
 export const Tpopfreiwkontr = memo(
-  observer(({ projekt, ap, pop, tpop, menu }) => {
+  observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
     const isOpen =
       store.tree.openNodes.filter(
         (n) =>
@@ -45,19 +46,35 @@ export const Tpopfreiwkontr = memo(
       hasChildren: true,
     }
 
+    const ref = useRef(null)
+
     return (
-      <>
-        <Row node={node} />
-        {isOpen && (
-          <ZaehlFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            tpop={tpop}
-            tpopkontr={menu}
-          />
+      <Transition
+        in={inProp}
+        timeout={300}
+        mountOnEnter
+        unmountOnExit
+        nodeRef={ref}
+      >
+        {(state) => (
+          <>
+            <Row
+              node={node}
+              ref={ref}
+              transitionState={state}
+            />
+            {isOpen && (
+              <ZaehlFolder
+                projekt={projekt}
+                ap={ap}
+                pop={pop}
+                tpop={tpop}
+                tpopkontr={menu}
+              />
+            )}
+          </>
         )}
-      </>
+      </Transition>
     )
   }),
 )
