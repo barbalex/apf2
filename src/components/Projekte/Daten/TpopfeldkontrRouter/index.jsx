@@ -40,9 +40,7 @@ export const Component = () => {
   const { pathname, search } = useLocation()
 
   const { data, loading, error } = useQuery(query, {
-    variables: {
-      id: tpopkontrId,
-    },
+    variables: { id: tpopkontrId },
   })
 
   const row = data?.tpopkontrById ?? {}

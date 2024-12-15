@@ -18,10 +18,13 @@ import { TpopfeldkontrentwicklungPopover } from '../TpopfeldkontrentwicklungPopo
 import { constants } from '../../../../modules/constants.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { Menu } from './Menu.jsx'
+import { query } from './query.js'
 
 export const FormContainer = styled.div`
   display: flex;
@@ -102,7 +105,10 @@ const tpopkontrTypWerte = [
 export const Component = memo(
   observer(() => {
     const { tpopkontrId } = useParams()
-    const { data } = useOutletContext()
+
+    const { data, loading, error } = useQuery(query, {
+      variables: { id: tpopkontrId },
+    })
 
     const row = data?.tpopkontrById ?? {}
 
@@ -174,8 +180,16 @@ export const Component = memo(
       [client, queryClient, row.id, store.user.name],
     )
 
+    if (error) return <Error error={error} />
+
+    if (loading) return <Spinner />
+
     return (
       <ErrorBoundary>
+        <FormTitle
+          title="Feld-Kontrolle"
+          menuBar={loading ? null : <Menu row={row} />}
+        />
         <FormContainer>
           <TextField
             name="jahr"

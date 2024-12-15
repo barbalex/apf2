@@ -475,7 +475,7 @@ export const Form = memo(
               errors={errors}
             />
           )}
-          {!isPrint && <Files row={row} />}
+          {!isPrint && false && <Files row={row} />}
           {!isPrint && !isFreiwillig && (
             <Verification
               saveToDb={saveToDb}
