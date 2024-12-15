@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
-import { TpopBer } from './TpopBer.jsx'
+import { Tpopbers } from './Tpopbers.jsx'
 
 export const TpopberFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
@@ -48,7 +48,7 @@ export const TpopberFolder = memo(
       <>
         <Row node={node} />
         {isOpen && (
-          <TpopBer
+          <Tpopbers
             projekt={projekt}
             ap={ap}
             pop={pop}
