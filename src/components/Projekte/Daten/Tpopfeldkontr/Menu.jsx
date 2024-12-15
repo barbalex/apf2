@@ -34,7 +34,7 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row, isList = false }) => {
+  observer(({ row }) => {
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
 
@@ -127,7 +127,7 @@ export const Menu = memo(
 
       // 5. navigate to new tpopkontr
       navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${id}${search}`,
+        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${id}/Feld-Kontrolle${search}`,
       )
     }, [
       apId,
@@ -300,16 +300,14 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!isList && (
-            <Tooltip title="Löschen">
-              <IconButton
-                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-                aria-owns={delMenuOpen ? 'tpopfeldkontrDelMenu' : undefined}
-              >
-                <FaMinus style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'tpopfeldkontrDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
           <Tooltip
             title={
               !isMovingFeldkontr ?

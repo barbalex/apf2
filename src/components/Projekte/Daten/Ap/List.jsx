@@ -17,7 +17,7 @@ export const List = memo(() => {
     <SharedList
       items={navData.menus}
       title={navData.label}
-      menuBar={<Menu isList={true} />}
+      menuBar={<Menu />}
     />
   )
 })

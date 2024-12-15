@@ -25,7 +25,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ isList = false }) => {
+  observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
@@ -179,16 +179,14 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!isList && (
-            <Tooltip title="Löschen">
-              <IconButton
-                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-                aria-owns={delMenuOpen ? 'apDelMenu' : undefined}
-              >
-                <FaMinus style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'apDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Ordner im Navigationsbaum schliessen">
             <IconButton onClick={onClickCloseLowerNodes}>
               <RiFolderCloseFill style={iconStyle} />
