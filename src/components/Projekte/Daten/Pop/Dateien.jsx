@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { useParams } from 'react-router'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 
-import { FilesRouter } from '../../shared/Files/index.jsx'
-import { FormTitle } from '../../shared/FormTitle/index.jsx'
+import { FilesRouter } from '../../../shared/Files/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 export const Component = memo(() => {
   const { popId } = useParams()

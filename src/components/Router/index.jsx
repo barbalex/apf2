@@ -859,7 +859,7 @@ export const Router = () => {
                         <Route
                           path="Dateien"
                           lazy={() =>
-                            import('../Projekte/Daten/PopDateien.jsx')
+                            import('../Projekte/Daten/Pop/Dateien.jsx')
                           }
                         >
                           <Route
@@ -886,7 +886,7 @@ export const Router = () => {
                         <Route
                           path="Historien"
                           lazy={() =>
-                            import('../Projekte/Daten/PopHistorien.jsx')
+                            import('../Projekte/Daten/Pop/Historien.jsx')
                           }
                         />
                         <Route
