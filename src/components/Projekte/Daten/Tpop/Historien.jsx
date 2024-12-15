@@ -3,10 +3,10 @@ import styled from '@emotion/styled'
 import { useQuery, gql } from '@apollo/client'
 import { useParams } from 'react-router'
 
-import { Spinner } from '../../shared/Spinner.jsx'
-import { History as SharedHistory } from '../../shared/History/index.jsx'
-import { appBaseUrl } from '../../../modules/appBaseUrl.js'
-import { FormTitle } from '../../shared/FormTitle/index.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
+import { History as SharedHistory } from '../../../shared/History/index.jsx'
+import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const query = gql`
   query tpopHistoryQuery($tpopId: UUID!) {
