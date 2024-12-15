@@ -5,6 +5,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { ZaehlFolder } from './Folders/ZaehlFolder/index.jsx'
+import { TpopfreiwkontrFolders } from './Folders/index.jsx'
 import { useTpopfreiwkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrNavData.js'
 
 export const Tpopfreiwkontr = memo(
@@ -74,15 +75,17 @@ export const Tpopfreiwkontr = memo(
               ref={ref}
               transitionState={state}
             />
-            {isOpen && (
-              <ZaehlFolder
-                projekt={projekt}
-                ap={ap}
-                pop={pop}
-                tpop={tpop}
-                tpopkontr={menu}
-              />
-            )}
+            <TransitionGroup component={null}>
+              {isOpen && (
+                <TpopfreiwkontrFolders
+                  projekt={projekt}
+                  ap={ap}
+                  pop={pop}
+                  tpop={tpop}
+                  navData={navData}
+                />
+              )}
+            </TransitionGroup>
           </>
         )}
       </Transition>
