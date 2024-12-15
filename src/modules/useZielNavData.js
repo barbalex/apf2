@@ -62,6 +62,10 @@ export const useZielNavData = (props) => {
       // leave totalCount undefined as the menus are folders
       menus: [
         {
+          id: 'Ziel',
+          label: 'Ziel',
+        },
+        {
           id: 'Berichte',
           label: `Berichte (${isLoading ? '...' : `${filteredZielbersCount}/${zielbersCount}`})`,
           count: zielbersCount,

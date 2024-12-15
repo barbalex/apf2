@@ -28,13 +28,13 @@ export const Ap = memo(
     const node = {
       nodeType: 'table',
       menuType: 'ap',
+      singleElementName: 'Art',
       id: ap.id,
       parentId: projekt.id,
       parentTableId: projekt.id,
       urlLabel: ap.id,
       label: ap.label,
       url,
-      singleElementName: 'Art',
       hasChildren: true,
     }
 

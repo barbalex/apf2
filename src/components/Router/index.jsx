@@ -608,6 +608,12 @@ export const Router = () => {
                             }
                           />
                           <Route
+                            path="Ziel"
+                            lazy={() =>
+                              import('../Projekte/Daten/Ziel/Ziel.jsx')
+                            }
+                          />
+                          <Route
                             path="Berichte"
                             handle={zielbersHandle}
                           >

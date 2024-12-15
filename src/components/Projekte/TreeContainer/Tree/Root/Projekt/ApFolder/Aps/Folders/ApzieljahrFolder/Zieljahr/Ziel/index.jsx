@@ -13,6 +13,7 @@ export const Ziel = memo(
     const node = {
       nodeType: 'table',
       menuType: 'ziel',
+      singleElementName: 'Ziel',
       id: menu.id,
       parentId: ap.id,
       parentTableId: ap.id,
