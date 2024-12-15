@@ -671,9 +671,7 @@ export const Router = () => {
                     </Route>
                     <Route
                       path="Idealbiotop"
-                      lazy={() =>
-                        import('../Projekte/Daten/IdealbiotopRouter/index.jsx')
-                      }
+                      handle={idealbiotopHandle}
                     >
                       <Route
                         index={true}

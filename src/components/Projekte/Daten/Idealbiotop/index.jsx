@@ -17,7 +17,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const FormContainer = styled.div`
-  padding: 0 10px;
+  padding: 10px;
   height: 100%;
   column-width: ${constants.columnWidth}px;
 `
