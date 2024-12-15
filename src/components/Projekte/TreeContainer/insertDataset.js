@@ -191,6 +191,7 @@ export const insertDataset = async ({
     result?.data[`create${upperFirst(camelCase(table))}`][`${camelCase(table)}`]
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
+  // TODO: need to add single name to the url, i.e. 'Art' for ap
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]

@@ -66,7 +66,7 @@ export const Menu = memo(
         queryKey: [`treeRoot`],
       })
       const id = result?.data?.createAp?.ap?.id
-      navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
+      navigate(`/Daten/Projekte/${projId}/Arten/${id}/Art${search}`)
     }, [projId, client, store, tanstackQueryClient, navigate, search])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
