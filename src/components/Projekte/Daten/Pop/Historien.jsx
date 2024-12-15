@@ -73,7 +73,7 @@ const query = gql`
 `
 
 const Container = styled.div`
-  padding: 8px 25px 25px 25px;
+  padding: 10px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -90,6 +90,9 @@ const DocLink = styled.span`
 `
 const DocLine = styled.p`
   margin-bottom: 0;
+  &:first-of-type {
+    margin-top: 0;
+  }
 `
 const Aenderung = styled.span`
   background-color: rgba(216, 67, 21, 0.2);

@@ -136,7 +136,7 @@ const Container = styled.div`
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  padding: 8px 25px 0 25px;
+  padding: 10px;
   height: 100%;
 `
 const ErrorContainer = styled.div`
@@ -148,6 +148,9 @@ const DocLink = styled.span`
 `
 const DocLine = styled.p`
   margin-bottom: 0;
+  &:first-of-type {
+    margin-top: 0;
+  }
 `
 const Aenderung = styled.span`
   background-color: rgba(216, 67, 21, 0.2);

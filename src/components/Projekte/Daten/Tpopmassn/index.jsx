@@ -29,9 +29,7 @@ const ColumnContainer = styled.div`
   padding: 10px;
   column-width: ${constants.columnWidth}px;
 `
-const FormContainer = styled.div`
-  padding: 10px;
-`
+const FormContainer = styled.div``
 const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 const fieldTypes = {

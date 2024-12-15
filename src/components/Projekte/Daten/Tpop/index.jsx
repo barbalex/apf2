@@ -36,7 +36,7 @@ const Container = styled.div`
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  padding: 0 10px;
+  padding: 10px;
   column-width: ${constants.columnWidth}px;
 `
 
