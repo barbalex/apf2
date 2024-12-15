@@ -34,6 +34,7 @@ export const Ap = memo(
       urlLabel: ap.id,
       label: ap.label,
       url,
+      singleElementName: 'Art',
       hasChildren: true,
     }
 

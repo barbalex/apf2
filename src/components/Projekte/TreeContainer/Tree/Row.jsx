@@ -560,6 +560,7 @@ export const Row = memo(
           data-nodetype={node.nodeType}
           data-label={node.label}
           data-menutype={node.menuType}
+          data-singleelementname={node.singleElementName}
           data-jahr={node.jahr}
           // need this id to scroll elements into view
           id={node.id}

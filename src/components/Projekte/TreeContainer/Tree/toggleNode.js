@@ -36,6 +36,8 @@ export const toggleNode = ({ node, store, navigate, search }) => {
     // make it the new active node
     newActiveNodeArray = [...node.url]
   }
-  navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  navigate(
+    `/Daten/${newActiveNodeArray.join('/')}${node.singleElementName ? `/${node.singleElementName}` : ''}${search}`,
+  )
   setLastTouchedNode(node.url)
 }

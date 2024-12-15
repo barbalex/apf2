@@ -404,6 +404,9 @@ export const Menus = memo(
         const label = firstElementChild.getAttribute('data-label')
         const nodeType = firstElementChild.getAttribute('data-nodetype')
         const menuType = firstElementChild.getAttribute('data-menutype')
+        const singleElementName = firstElementChild.getAttribute(
+          'data-singleelementname',
+        )
         const jahr = firstElementChild.getAttribute('data-jahr')
         const actions = {
           insert() {
@@ -419,6 +422,7 @@ export const Menus = memo(
               parentId: parentId || id,
               url,
               menuType,
+              singleElementName,
               id,
               client,
               store,
