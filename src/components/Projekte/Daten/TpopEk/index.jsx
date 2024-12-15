@@ -27,7 +27,7 @@ import {
   tpop,
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.js'
-import { fieldTypes } from '../Tpop/index.jsx'
+import { fieldTypes } from '../Tpop/Tpop.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const Container = styled.div`

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useAtom } from 'jotai'
 
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
-import { Component as Tpop } from '../Tpop/index.jsx'
+import { Component as Tpop } from '../Tpop/Tpop.jsx'
 import { List } from './List.jsx'
 
 export const Component = memo(() => {
