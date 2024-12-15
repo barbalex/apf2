@@ -990,7 +990,7 @@ export const Router = () => {
                                   path="Dateien"
                                   lazy={() =>
                                     import(
-                                      '../Projekte/Daten/TpopmassnDateien.jsx'
+                                      '../Projekte/Daten/Tpopmassn/Dateien.jsx'
                                     )
                                   }
                                 >
