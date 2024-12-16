@@ -14,18 +14,10 @@ export const useApsNavData = (props) => {
   const apId = props?.apId ?? params.apId
 
   const store = useContext(MobxContext)
+
   const showPopIcon = store.activeApfloraLayers?.includes('pop')
-
-  console.log('useApsNavData', {
-    activeApfloraLayers: store.activeApfloraLayers,
-    apGqlFilterForTree: store.tree.apGqlFilterForTree,
-  })
-
-  const [rerenderer, setRerenderer] = useState(0)
-  const rerender = useCallback(() => {
-    console.log('useApsNavData.rerender')
-    setRerenderer((prev) => prev + 1)
-  }, [])
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeAp', projId, store.tree.apGqlFilterForTree],
@@ -94,5 +86,5 @@ export const useApsNavData = (props) => {
     ],
   )
 
-  return { isLoading, error, navData, rerenderer }
+  return { isLoading, error, navData }
 }

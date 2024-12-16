@@ -1,4 +1,4 @@
-import { useMemo, useContext, useEffect } from 'react'
+import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -6,6 +6,7 @@ import { reaction } from 'mobx'
 import countBy from 'lodash/countBy'
 
 import { MobxContext } from '../mobxContext.js'
+import { PopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -13,6 +14,10 @@ export const useApNavData = (props) => {
   const apId = props?.apId ?? apIdFromParams
 
   const store = useContext(MobxContext)
+
+  const showPopIcon = store.activeApfloraLayers?.includes('pop')
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
   const allBeobNichtZuzuordnenFilter = useMemo(
     () => ({
@@ -264,6 +269,11 @@ export const useApNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.apById?.label
   const popsCount = data?.data?.apById?.popsByApId?.totalCount ?? 0
@@ -315,6 +325,7 @@ export const useApNavData = (props) => {
         {
           id: 'Art',
           label: `Art`,
+          labelLeftElement: showPopIcon ? PopMapIcon : undefined,
         },
         {
           id: 'Populationen',
