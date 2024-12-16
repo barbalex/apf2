@@ -32,11 +32,6 @@ export const alwaysShowNavigationListsAtom = atomWithStorage(
   'alwaysShowNavigationLists',
   false,
 )
-export const showFormInsteadOfNavigationListAtom = atomWithStorage((get) => {
-  const alwaysShowNavigationLists = get(alwaysShowNavigationListsAtom)
-  const isDesktopView = get(isDesktopViewAtom)
-  return !alwaysShowNavigationLists && isDesktopView
-})
 export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)
 export const hideTreeAtom = atom((get) => {
   const alwaysShowTree = get(alwaysShowTreeAtom)
