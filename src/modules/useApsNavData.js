@@ -6,6 +6,7 @@ import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
 import { PopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { TpopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -16,6 +17,7 @@ export const useApsNavData = (props) => {
   const store = useContext(MobxContext)
 
   const showPopIcon = store.activeApfloraLayers?.includes('pop')
+  const showTpopIcon = store.activeApfloraLayers?.includes('tpop')
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
@@ -67,11 +69,16 @@ export const useApsNavData = (props) => {
       label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => {
         const showThisPopIcon = showPopIcon && p.id === apId
+        const showThisTpopIcon = showTpopIcon && p.id === apId
+        const labelLeftElements = []
+        if (showThisPopIcon) labelLeftElements.push(PopMapIcon)
+        if (showThisTpopIcon) labelLeftElements.push(TpopMapIcon)
 
         return {
           id: p.id,
           label: p.label,
-          labelLeftElement: showThisPopIcon ? PopMapIcon : undefined,
+          labelLeftElements:
+            labelLeftElements.length ? labelLeftElements : undefined,
         }
       }),
     }),
@@ -82,6 +89,7 @@ export const useApsNavData = (props) => {
       isLoading,
       projId,
       showPopIcon,
+      showTpopIcon,
       totalCount,
     ],
   )

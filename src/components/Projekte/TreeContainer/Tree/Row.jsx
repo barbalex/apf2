@@ -270,7 +270,7 @@ const StyledMapIcon = styled(MdLocalFlorist)`
 export const PopMapIcon = styled(StyledMapIcon)`
   color: #947500 !important;
 `
-const TpopMapIcon = styled(StyledMapIcon)`
+export const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
 const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`

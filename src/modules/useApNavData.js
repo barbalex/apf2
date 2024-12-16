@@ -7,6 +7,7 @@ import countBy from 'lodash/countBy'
 
 import { MobxContext } from '../mobxContext.js'
 import { PopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { TpopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -16,6 +17,7 @@ export const useApNavData = (props) => {
   const store = useContext(MobxContext)
 
   const showPopIcon = store.activeApfloraLayers?.includes('pop')
+  const showTpopIcon = store.activeApfloraLayers?.includes('tpop')
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
@@ -315,6 +317,10 @@ export const useApNavData = (props) => {
   const filesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
   const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
 
+  const labelLeftElements = []
+  if (showPopIcon) labelLeftElements.push(PopMapIcon)
+  if (showTpopIcon) labelLeftElements.push(TpopMapIcon)
+
   const navData = useMemo(
     () => ({
       id: apId,
@@ -325,7 +331,8 @@ export const useApNavData = (props) => {
         {
           id: 'Art',
           label: `Art`,
-          labelLeftElement: showPopIcon ? PopMapIcon : undefined,
+          labelLeftElements:
+            labelLeftElements.length ? labelLeftElements : undefined,
         },
         {
           id: 'Populationen',
@@ -406,32 +413,33 @@ export const useApNavData = (props) => {
       ],
     }),
     [
+      apId,
+      projId,
+      label,
+      labelLeftElements,
+      isLoading,
+      filteredPopsCount,
+      popsCount,
+      filteredApZielJahrsCount,
+      apZielJahrsCount,
+      filteredErfkritsCount,
+      erfkritsCount,
+      filteredApbersCount,
+      apbersCount,
+      filteredApartsCount,
+      apartsCount,
+      filteredAssozartsCount,
+      assozartsCount,
+      filteredEkfrequenzsCount,
+      ekfrequenzsCount,
+      filteredEkzaehleinheitsCount,
+      ekzaehleinheitsCount,
+      filteredBeobsNichtBeurteiltCount,
+      beobsNichtBeurteiltCount,
+      filteredBeobsNichtZuzuordnenCount,
+      beobsNichtZuzuordnenCount,
       filesCount,
       historiesCount,
-      apId,
-      apZielJahrsCount,
-      apartsCount,
-      apbersCount,
-      assozartsCount,
-      beobsNichtBeurteiltCount,
-      beobsNichtZuzuordnenCount,
-      ekfrequenzsCount,
-      ekzaehleinheitsCount,
-      erfkritsCount,
-      filteredApZielJahrsCount,
-      filteredApartsCount,
-      filteredApbersCount,
-      filteredAssozartsCount,
-      filteredBeobsNichtBeurteiltCount,
-      filteredBeobsNichtZuzuordnenCount,
-      filteredEkfrequenzsCount,
-      filteredEkzaehleinheitsCount,
-      filteredErfkritsCount,
-      filteredPopsCount,
-      isLoading,
-      label,
-      popsCount,
-      projId,
     ],
   )
 

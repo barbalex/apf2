@@ -42,7 +42,8 @@ export const Item = memo(
         selected={selected}
         onClick={onClick}
       >
-        {!!menu.labelLeftElement && <menu.labelLeftElement />}
+        {!!menu.labelLeftElements?.length &&
+          menu.labelLeftElements.map((El, index) => <El key={index} />)}
         {menu.label}
       </MenuItem>
     )

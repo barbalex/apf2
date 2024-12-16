@@ -65,7 +65,10 @@ export const List = memo(
                   key={item.id}
                   onClick={onClickRow.bind(this, item)}
                 >
-                  {!!item.labelLeftElement && <item.labelLeftElement />}
+                  {!!item.labelLeftElements?.length &&
+                    item.labelLeftElements.map((El, index) => (
+                      <El key={index} />
+                    ))}
                   {highlightSearchString ?
                     <Highlighter
                       searchWords={[highlightSearchString]}
