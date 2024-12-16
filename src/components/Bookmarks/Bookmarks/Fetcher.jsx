@@ -15,18 +15,8 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
   // there is a weird * param containing the pathname. Remove it
   delete params['*']
 
-  const {
-    navData,
-    isLoading,
-    error,
-    rerenderer: fetcherRerenderer,
-  } = fetcherModule?.[fetcherName](params)
-  const [rerenderer, setRerenderer] = useState(0)
-  useEffect(() => {
-    setRerenderer((prev) => prev + 1)
-  }, [fetcherRerenderer])
-
-  console.log('Bookmarks.Fetcher, rerenderer:', rerenderer)
+  const { navData, isLoading, error, rerenderer } =
+    fetcherModule?.[fetcherName](params)
 
   if (isLoading) return <Spinner />
 
@@ -34,7 +24,7 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
 
   return (
     <Bookmark
-      key={`${navData.id}/${fetcherRerenderer}`}
+      key={`${navData.id}/${rerenderer}`}
       navData={navData}
       {...other}
     />
