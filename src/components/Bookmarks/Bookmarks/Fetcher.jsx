@@ -15,8 +15,7 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
   // there is a weird * param containing the pathname. Remove it
   delete params['*']
 
-  const { navData, isLoading, error, rerenderer } =
-    fetcherModule?.[fetcherName](params)
+  const { navData, isLoading, error } = fetcherModule?.[fetcherName](params)
 
   if (isLoading) return <Spinner />
 
@@ -24,7 +23,7 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
 
   return (
     <Bookmark
-      key={`${navData.id}/${rerenderer}`}
+      key={`${navData.id}`}
       navData={navData}
       {...other}
     />
