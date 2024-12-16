@@ -432,8 +432,9 @@ export const Row = memo(
         store,
         navigate,
         search,
+        onlyShowActivePath,
       })
-    }, [navigate, node, search, store])
+    }, [navigate, node, search, store, onlyShowActivePath])
 
     const onClickNodeSymbol = useCallback(() => {
       toggleNodeSymbol({ node, store, search, navigate })

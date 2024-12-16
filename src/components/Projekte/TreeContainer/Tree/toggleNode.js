@@ -3,7 +3,13 @@ import { getSnapshot } from 'mobx-state-tree'
 import { isNodeOpen } from '../isNodeOpen.js'
 import { openNode } from '../openNode.js'
 
-export const toggleNode = ({ node, store, navigate, search }) => {
+export const toggleNode = ({
+  node,
+  store,
+  navigate,
+  search,
+  onlyShowActivePath = false,
+}) => {
   if (!node.url) throw new Error('passed node has no url')
   const {
     openNodes: openNodesRaw,
@@ -36,8 +42,10 @@ export const toggleNode = ({ node, store, navigate, search }) => {
     // make it the new active node
     newActiveNodeArray = [...node.url]
   }
+  // DO NOT add singleElementName to url if onlyShowActivePath is true
+  // as it prevents active Path from being shown
   navigate(
-    `/Daten/${newActiveNodeArray.join('/')}${node.singleElementName ? `/${node.singleElementName}` : ''}${search}`,
+    `/Daten/${newActiveNodeArray.join('/')}${node.singleElementName && !onlyShowActivePath ? `/${node.singleElementName}` : ''}${search}`,
   )
   setLastTouchedNode(node.url)
 }

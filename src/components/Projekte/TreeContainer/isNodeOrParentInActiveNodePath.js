@@ -7,11 +7,6 @@ export const isNodeOrParentInActiveNodePath = ({ node, activeNodeArray }) => {
   if (!node.url) return false
   if (!activeNodeArray) return false
 
-  // console.log('isNodeOrParentInActiveNodePath', {
-  //   activeNodeArray: activeNodeArray.slice(),
-  //   node,
-  // })
-
   const selfIsInActiveNodePath = isNodeInActiveNodePath({
     node,
     activeNodeArray,
