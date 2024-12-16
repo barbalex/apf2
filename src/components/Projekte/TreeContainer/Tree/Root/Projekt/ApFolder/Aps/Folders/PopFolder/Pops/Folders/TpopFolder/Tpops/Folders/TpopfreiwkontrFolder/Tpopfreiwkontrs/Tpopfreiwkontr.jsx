@@ -37,6 +37,7 @@ export const Tpopfreiwkontr = memo(
     const node = {
       nodeType: 'table',
       menuType: 'tpopfreiwkontr',
+      singleElementName: 'Freiwilligen-Kontrolle',
       id: navData.id,
       tableId: navData.id,
       parentId: `${tpop.id}TpopfreiwkontrFolder`,

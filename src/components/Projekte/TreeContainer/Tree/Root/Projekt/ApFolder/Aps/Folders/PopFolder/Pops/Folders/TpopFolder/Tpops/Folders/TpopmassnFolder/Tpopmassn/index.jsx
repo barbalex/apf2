@@ -42,6 +42,7 @@ export const Tpopmassn = memo(
     const node = {
       nodeType: 'table',
       menuType: 'tpopmassn',
+      singleElementName: 'Massnahme',
       id: menu.id,
       parentId: tpop.id,
       parentTableId: tpop.id,

@@ -978,7 +978,7 @@ export const Router = () => {
                                 handle={tpopmassnHandle}
                               >
                                 <Route
-                                  index={true}
+                                  path="*"
                                   lazy={() =>
                                     import(
                                       '../Projekte/Daten/Tpopmassn/index.jsx'
@@ -989,7 +989,7 @@ export const Router = () => {
                                   path="Massnahme"
                                   lazy={() =>
                                     import(
-                                      '../Projekte/Daten/Tpopmassn/index.jsx'
+                                      '../Projekte/Daten/Tpopmassn/Tpopmassn.jsx'
                                     )
                                   }
                                 />
@@ -1181,7 +1181,7 @@ export const Router = () => {
                                   path="Freiwilligen-Kontrolle"
                                   lazy={() =>
                                     import(
-                                      '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
+                                      '../Projekte/Daten/Tpopfreiwkontr/Tpopfreiwkontr.jsx'
                                     )
                                   }
                                 />

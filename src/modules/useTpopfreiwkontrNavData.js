@@ -82,6 +82,7 @@ export const useTpopfreiwkontrNavData = (props) => {
         {
           id: 'Zaehlungen',
           label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
+          hideInNavList: true,
         },
         {
           id: 'Dateien',
