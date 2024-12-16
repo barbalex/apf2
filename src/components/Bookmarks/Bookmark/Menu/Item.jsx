@@ -42,6 +42,7 @@ export const Item = memo(
         selected={selected}
         onClick={onClick}
       >
+        {!!menu.labelLeftElement && <menu.labelLeftElement />}
         {menu.label}
       </MenuItem>
     )

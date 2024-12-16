@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useEffect, useState } from 'react'
 
 import { Spinner } from '../../shared/Spinner.jsx'
 import { Error } from '../../shared/Error.jsx'
@@ -15,7 +15,18 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
   // there is a weird * param containing the pathname. Remove it
   delete params['*']
 
-  const { navData, isLoading, error } = fetcherModule?.[fetcherName](params)
+  const {
+    navData,
+    isLoading,
+    error,
+    rerenderer: fetcherRerenderer,
+  } = fetcherModule?.[fetcherName](params)
+  const [rerenderer, setRerenderer] = useState(0)
+  useEffect(() => {
+    setRerenderer((prev) => prev + 1)
+  }, [fetcherRerenderer])
+
+  console.log('Bookmarks.Fetcher, rerenderer:', rerenderer)
 
   if (isLoading) return <Spinner />
 
@@ -23,7 +34,7 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
 
   return (
     <Bookmark
-      key={navData.id}
+      key={`${navData.id}/${fetcherRerenderer}`}
       navData={navData}
       {...other}
     />

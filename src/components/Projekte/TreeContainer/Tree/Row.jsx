@@ -267,7 +267,7 @@ const StyledMapIcon = styled(MdLocalFlorist)`
   height: 20px !important;
   font-size: 1.4rem;
 `
-const PopMapIcon = styled(StyledMapIcon)`
+export const PopMapIcon = styled(StyledMapIcon)`
   color: #947500 !important;
 `
 const TpopMapIcon = styled(StyledMapIcon)`

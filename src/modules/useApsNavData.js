@@ -1,17 +1,31 @@
-import { useMemo, useEffect, useContext } from 'react'
+import { useMemo, useEffect, useContext, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { PopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
-  const { projId: projIdFromParams } = useParams()
-  const projId = props?.projId ?? projIdFromParams
+  const params = useParams()
+  const projId = props?.projId ?? params.projId
+  const apId = props?.apId ?? params.apId
 
   const store = useContext(MobxContext)
+  const showPopIcon = store.activeApfloraLayers?.includes('pop')
+
+  console.log('useApsNavData', {
+    activeApfloraLayers: store.activeApfloraLayers,
+    apGqlFilterForTree: store.tree.apGqlFilterForTree,
+  })
+
+  const [rerenderer, setRerenderer] = useState(0)
+  const rerender = useCallback(() => {
+    console.log('useApsNavData.rerender')
+    setRerenderer((prev) => prev + 1)
+  }, [])
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeAp', projId, store.tree.apGqlFilterForTree],
@@ -45,6 +59,11 @@ export const useApsNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const count = data?.data?.allAps?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
@@ -54,14 +73,26 @@ export const useApsNavData = (props) => {
       id: 'Arten',
       url: `/Daten/Projekte/${projId}/Arten`,
       label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.allAps?.nodes?.map((p) => ({
+      menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => {
+        const showThisPopIcon = showPopIcon && p.id === apId
+
+        return {
           id: p.id,
           label: p.label,
-        })) ?? [],
+          labelLeftElement: showThisPopIcon ? PopMapIcon : undefined,
+        }
+      }),
     }),
-    [count, data?.data?.allAps?.nodes, isLoading, projId, totalCount],
+    [
+      apId,
+      count,
+      data?.data?.allAps?.nodes,
+      isLoading,
+      projId,
+      showPopIcon,
+      totalCount,
+    ],
   )
 
-  return { isLoading, error, navData }
+  return { isLoading, error, navData, rerenderer }
 }
