@@ -3,9 +3,6 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { useAtom } from 'jotai'
-import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
-
 const LabelFilter = lazy(async () => ({
   default: (await import('./LabelFilter.jsx')).LabelFilter,
 }))
@@ -57,8 +54,6 @@ export const TreeContainer = memo(
     const store = useContext(MobxContext)
     const { toDeleteId } = store
 
-    const [isDesktopView] = useAtom(isDesktopViewAtom)
-
     //console.log('TreeContainer',{data})
     // console.log('TreeContainer rendering')
 
@@ -83,7 +78,7 @@ export const TreeContainer = memo(
           <Suspense fallback={<Spinner />}>
             <TreeComponent />
           </Suspense>
-          {isDesktopView && (
+          {!matchMedia('(pointer: coarse)').matches && (
             <Suspense fallback={null}>
               <Menus />
             </Suspense>

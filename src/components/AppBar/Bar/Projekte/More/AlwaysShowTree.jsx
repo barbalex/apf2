@@ -20,7 +20,14 @@ export const AlwaysShowTree = memo(() => {
 
   return (
     <Tooltip
-      title={`Ist normalerweise nur auf grossen Bildschirmen verfügbar (ab ${constants.mobileViewMaxWidth + 1} Pixeln Breite)`}
+      title={
+        <>
+          <div
+            style={{ paddingBottom: '4px' }}
+          >{`Ist normalerweise nur auf grossen Bildschirmen verfügbar (ab ${constants.mobileViewMaxWidth + 1} Pixeln Breite).`}</div>
+          <div>{`Auf Touch-Geräten sind die Kontext-Menüs nicht verfügbar.`}</div>
+        </>
+      }
       // if window width > 731 left
       placement={window.innerWidth > 730 ? 'left' : 'bottom'}
     >

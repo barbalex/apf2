@@ -3,7 +3,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { useAtom } from 'jotai'
 import styled from '@emotion/styled'
 
-import { isDesktopViewAtom } from '../../JotaiStore/index.js'
+import { setDesktopViewAtom } from '../../JotaiStore/index.js'
 import { constants } from '../../modules/constants.js'
 
 const InvisibleDesktopViewMeasuringDiv = styled.div`
@@ -11,16 +11,14 @@ const InvisibleDesktopViewMeasuringDiv = styled.div`
   height: 0;
 `
 
+// this sets the isDesktopViewAtom depending on the width of this component,
+// in contrast to: window.innerWidth
 export const IsDesktopViewSetter = memo(() => {
-  const [isDesktopView, setIsDesktopView] = useAtom(isDesktopViewAtom)
+  const [, setDesktopView] = useAtom(setDesktopViewAtom)
 
   const onResize = useCallback(
-    ({ width }) => {
-      const isNowDesktopView = width >= constants.mobileViewMaxWidth
-      if (isNowDesktopView === isDesktopView) return
-      setIsDesktopView(isNowDesktopView)
-    },
-    [isDesktopView, setIsDesktopView],
+    ({ width }) => setDesktopView(width),
+    [setDesktopView],
   )
 
   const { width, ref } = useResizeDetector({

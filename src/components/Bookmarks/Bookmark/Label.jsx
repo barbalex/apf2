@@ -2,9 +2,6 @@ import { memo, useCallback, useMemo } from 'react'
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { useAtom } from 'jotai'
-
-import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
 
 const StyledLink = styled(Link)`
   overflow: hidden;
@@ -13,6 +10,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   align-content: center;
   transition: opacity 700ms ease-in-out;
+  user-select: none;
   &:hover {
     text-decoration: underline;
     text-decoration-color: rgba(55, 118, 28, 0.5);
@@ -24,6 +22,7 @@ const StyledText = styled.div`
   white-space: nowrap;
   align-content: center;
   transition: opacity 700ms ease-in-out;
+  user-select: none;
 `
 
 export const Label = memo(({ navData, outerContainerRef, labelStyle, ref }) => {
@@ -73,8 +72,9 @@ export const Label = memo(({ navData, outerContainerRef, labelStyle, ref }) => {
     ],
   )
 
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
-
-  if (isDesktopView) return <Tooltip title={navData.label}>{label}</Tooltip>
+  // tooltip can mess with touch, so hide it on touch devices
+  if (!matchMedia('(pointer: coarse)').matches) {
+    return <Tooltip title={navData.label}>{label}</Tooltip>
+  }
   return label
 })

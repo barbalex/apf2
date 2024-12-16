@@ -5,19 +5,25 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
+import { useAtom } from 'jotai'
 
 import { logout } from '../../../../../modules/logout.js'
 import { EkfUser } from './EkfUser/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
-import { AlwaysShowBookmarks } from './AlwaysShowBookmarks.jsx'
-import { AlwaysShowNavigationLists } from './AlwaysShowNavigationLists.jsx'
 import { ShowBookmarksMenu } from './ShowBookmarksMenu.jsx'
+import { EnforceDesktopNavigation } from './EnforceDesktopNavigation.jsx'
+import { EnforceMobileNavigation } from './EnforceMobileNavigation.jsx'
 import { AlwaysShowTree } from './AlwaysShowTree.jsx'
 import { constants } from '../../../../../modules/constants.js'
-
-const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
+import {
+  isMobileViewAtom,
+  isDesktopViewAtom,
+  enforceDesktopNavigationAtom,
+  enforceMobileNavigationAtom,
+  writeEnforceDesktopNavigationAtom,
+} from '../../../../../JotaiStore/index.js'
 
 const Container = styled.div`
   margin-top: auto;
@@ -40,6 +46,8 @@ export const More = memo(
   observer(
     forwardRef(({ onClickExporte: passedOnClickExporte, role }, ref) => {
       const { projId } = useParams()
+
+      const [isMobileView] = useAtom(isMobileViewAtom)
 
       const store = useContext(MobxContext)
       const { deletedDatasets, user, setShowDeletions } = store
@@ -116,13 +124,15 @@ export const More = memo(
               <EkfUser closeMenu={closeMenu} />
             )}
             <MenuItem>
-              <AlwaysShowBookmarks />
+              <EnforceMobileNavigation />
             </MenuItem>
+            {isMobileView && (
+              <MenuItem>
+                <ShowBookmarksMenu />
+              </MenuItem>
+            )}
             <MenuItem>
-              <ShowBookmarksMenu />
-            </MenuItem>
-            <MenuItem>
-              <AlwaysShowNavigationLists />
+              <EnforceDesktopNavigation />
             </MenuItem>
             <MenuItem>
               <AlwaysShowTree />
