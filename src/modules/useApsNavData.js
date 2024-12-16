@@ -5,8 +5,8 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
-import { PopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
-import { TpopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -71,14 +71,13 @@ export const useApsNavData = (props) => {
         const showThisPopIcon = showPopIcon && p.id === apId
         const showThisTpopIcon = showTpopIcon && p.id === apId
         const labelLeftElements = []
-        if (showThisPopIcon) labelLeftElements.push(PopMapIcon)
-        if (showThisTpopIcon) labelLeftElements.push(TpopMapIcon)
+        if (showThisPopIcon) labelLeftElements.push(PopMapIconComponent)
+        if (showThisTpopIcon) labelLeftElements.push(TpopMapIconComponent)
 
         return {
           id: p.id,
           label: p.label,
-          labelLeftElements:
-            labelLeftElements.length ? labelLeftElements : undefined,
+          labelLeftElements,
         }
       }),
     }),

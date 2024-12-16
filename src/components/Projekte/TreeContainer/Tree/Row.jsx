@@ -267,12 +267,29 @@ const StyledMapIcon = styled(MdLocalFlorist)`
   height: 20px !important;
   font-size: 1.4rem;
 `
-export const PopMapIcon = styled(StyledMapIcon)`
+const PopMapIcon = styled(StyledMapIcon)`
   color: #947500 !important;
 `
-export const TpopMapIcon = styled(StyledMapIcon)`
+const IconContainer0 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 4px;
+  margin-left: -2px;
+`
+export const PopMapIconComponent = () => (
+  <IconContainer0 title="in Karte sichtbar">
+    <PopMapIcon />
+  </IconContainer0>
+)
+const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
+export const TpopMapIconComponent = () => (
+  <IconContainer0 title="in Karte sichtbar">
+    <TpopMapIcon />
+  </IconContainer0>
+)
 const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
 `

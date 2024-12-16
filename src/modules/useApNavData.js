@@ -6,8 +6,8 @@ import { reaction } from 'mobx'
 import countBy from 'lodash/countBy'
 
 import { MobxContext } from '../mobxContext.js'
-import { PopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
-import { TpopMapIcon } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -318,8 +318,8 @@ export const useApNavData = (props) => {
   const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
 
   const labelLeftElements = []
-  if (showPopIcon) labelLeftElements.push(PopMapIcon)
-  if (showTpopIcon) labelLeftElements.push(TpopMapIcon)
+  if (showPopIcon) labelLeftElements.push(PopMapIconComponent)
+  if (showTpopIcon) labelLeftElements.push(TpopMapIconComponent)
 
   const navData = useMemo(
     () => ({
@@ -331,8 +331,7 @@ export const useApNavData = (props) => {
         {
           id: 'Art',
           label: `Art`,
-          labelLeftElements:
-            labelLeftElements.length ? labelLeftElements : undefined,
+          labelLeftElements,
         },
         {
           id: 'Populationen',
