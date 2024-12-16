@@ -10,7 +10,7 @@ import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { MobxContext } from '../../mobxContext.js'
 import { constants } from '../../modules/constants.js'
-import { isDesktopViewAtom } from '../../JotaiStore/index.js'
+import { isMobileViewAtom } from '../../JotaiStore/index.js'
 
 const isInIframe = inIframe()
 
@@ -54,7 +54,7 @@ export const Component = memo(
     const store = useContext(MobxContext)
     const activeNodeArray = store.tree.activeNodeArray
 
-    const [isDesktopView] = useAtom(isDesktopViewAtom)
+    const [isMobileView] = useAtom(isMobileViewAtom)
 
     useEffect(() => {
       if (isInIframe) return
@@ -75,7 +75,7 @@ export const Component = memo(
 
     return (
       <Container>
-        <Appbar mobile={(!isDesktopView).toString()}>
+        <Appbar mobile={isMobileView.toString()}>
           {showEkf ?
             <EkfBar />
           : <Bar />}
