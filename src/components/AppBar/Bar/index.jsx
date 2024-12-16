@@ -3,14 +3,12 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
-import { useAtom } from 'jotai'
 
 import { HomeMenus } from './Home.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
 import { DocsMenus } from './Docs.jsx'
 import { constants } from '../../../modules/constants.js'
-import { isDesktopViewAtom } from '../../../JotaiStore/index.js'
 
 export const Container = styled.div`
   display: flex;
@@ -55,8 +53,6 @@ export const Bar = memo(() => {
   const showEkPlan = pathname.includes('/EK-Planung')
   // const showProjekte = pathname.startsWith('/Daten') && !showEkPlan
   const showDocs = pathname.startsWith('/Dokumentation')
-
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
 
   const { width, ref } = useResizeDetector({
     handleHeight: false,
