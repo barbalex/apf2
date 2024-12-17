@@ -633,13 +633,8 @@ export const Row = memo(
           )}
           {karteIsVisible && (
             <>
-              {node.menuType === 'ap' &&
-                node.id === apId &&
-                activeApfloraLayers.includes('pop') && (
-                  <div title="Populationen in Karte sichtbar">
-                    <PopMapIcon />
-                  </div>
-                )}
+              {node.labelLeftElements?.length &&
+                node.labelLeftElements.map((El, index) => <El key={index} />)}
               {node.menuType === 'ap' &&
                 node.id === apId &&
                 activeApfloraLayers.includes('tpop') && (
