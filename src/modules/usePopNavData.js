@@ -1,10 +1,11 @@
-import { useMemo, useContext, useEffect } from 'react'
+import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -14,6 +15,17 @@ export const usePopNavData = (props) => {
   const popId = props?.popId ?? params.popId
 
   const store = useContext(MobxContext)
+
+  const showTpopIcon = store.activeApfloraLayers?.includes('tpop')
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+
+  const labelLeftElementsTpop = useMemo(() => {
+    const labelLeftElements = []
+    if (showTpopIcon) labelLeftElements.push(TpopMapIconComponent)
+
+    return labelLeftElements
+  }, [showTpopIcon])
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -88,6 +100,11 @@ export const usePopNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.popById?.label
   const tpopsCount = data?.data?.popById?.tpopsByPopId?.totalCount ?? 0
@@ -117,6 +134,7 @@ export const usePopNavData = (props) => {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
           count: tpopsCount,
+          labelLeftElements: labelLeftElementsTpop,
         },
         {
           id: 'Kontroll-Berichte',
@@ -152,6 +170,7 @@ export const usePopNavData = (props) => {
       isLoading,
       filteredTpopsCount,
       tpopsCount,
+      labelLeftElementsTpop,
       filteredPopbersCount,
       popbersCount,
       filteredPopmassnbersCount,

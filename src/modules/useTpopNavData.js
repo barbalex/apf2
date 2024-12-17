@@ -1,10 +1,11 @@
-import { useMemo, useContext, useEffect } from 'react'
+import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { BeobZugeordnetMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useTpopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -15,6 +16,18 @@ export const useTpopNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+  const showBeobzugeordnetIcon =
+    store.activeApfloraLayers?.includes('beobZugeordnet')
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+
+  const labelLeftElementsBeobzugeordnet = useMemo(() => {
+    const labelLeftElements = []
+    if (showBeobzugeordnetIcon)
+      labelLeftElements.push(BeobZugeordnetMapIconComponent)
+
+    return labelLeftElements
+  }, [showBeobzugeordnetIcon])
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -149,6 +162,11 @@ export const useTpopNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.tpopById?.label
   const massnCount = data?.data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0
@@ -214,6 +232,7 @@ export const useTpopNavData = (props) => {
           id: 'Beobachtungen',
           label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
           // count: beobZugeordnetCount,
+          labelLeftElements: labelLeftElementsBeobzugeordnet,
         },
         {
           id: 'EK',
@@ -246,6 +265,7 @@ export const useTpopNavData = (props) => {
       historiesCount,
       isLoading,
       label,
+      labelLeftElementsBeobzugeordnet,
       massnCount,
       popId,
       popmassnbersCount,
