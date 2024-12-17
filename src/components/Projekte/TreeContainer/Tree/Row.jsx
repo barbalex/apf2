@@ -635,34 +635,6 @@ export const Row = memo(
             <>
               {node.labelLeftElements?.length &&
                 node.labelLeftElements.map((El, index) => <El key={index} />)}
-              {node.menuType === 'beobNichtBeurteiltFolder' &&
-                node.id === apId &&
-                activeApfloraLayers.includes('beobNichtBeurteilt') && (
-                  <div title="Beobachtungen nicht beurteilt in Karte sichtbar">
-                    <BeobNichtBeurteiltMapIcon />
-                  </div>
-                )}
-              {node.menuType === 'beobNichtZuzuordnenFolder' &&
-                node.id === apId &&
-                activeApfloraLayers.includes('beobNichtZuzuordnen') && (
-                  <div title="in Karte sichtbar">
-                    <BeobNichtZuzuordnenMapIcon />
-                  </div>
-                )}
-              {node.menuType === 'beobZugeordnetFolder' &&
-                node.id === tpopId &&
-                activeApfloraLayers.includes('beobZugeordnet') && (
-                  <div title="in Karte sichtbar">
-                    <BeobZugeordnetMapIcon />
-                  </div>
-                )}
-              {node.menuType === 'beobNichtBeurteilt' &&
-                activeApfloraLayers.includes('beobNichtBeurteilt') &&
-                !nodeIsActive && (
-                  <div title="in Karte sichtbar">
-                    <BeobNichtBeurteiltMapIcon />
-                  </div>
-                )}
               {node.menuType === 'beobNichtBeurteilt' &&
                 activeApfloraLayers.includes('beobNichtBeurteilt') &&
                 nodeIsActive && (

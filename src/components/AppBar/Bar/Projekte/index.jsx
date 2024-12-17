@@ -82,13 +82,26 @@ export const ProjekteMenus = memo(
 
     const onClickButton = useCallback(
       (name) => {
+        console.log('ProjekteMenus.onClickButton', {
+          name,
+          projekteTabs,
+          isMobileView,
+        })
         if (isMobileView) {
           // show one tab only
-          // if multiple tabs are visible, close the clicked one
           if (projekteTabs.length === 1) {
             setProjekteTabs([name])
           } else {
-            setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
+            // if multiple tabs are visible, close the clicked one
+            // UNLESS the clicked one was not yet visible - then open it and close non tree ones
+            if (projekteTabs.includes(name)) {
+              setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
+            } else {
+              setProjekteTabs([
+                ...projekteTabs.filter((el) => el === 'tree'),
+                name,
+              ])
+            }
           }
         } else {
           const newProjekteTabs = [...projekteTabs]
