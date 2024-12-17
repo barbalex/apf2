@@ -29,7 +29,7 @@ import { TpopIconPHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.jsx'
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
 
-const tpopIcons = {
+export const tpopIcons = {
   normal: {
     100: TpopIcon,
     '100Highlighted': TpopIconHighlighted,
