@@ -19,11 +19,11 @@ import { PopIcon300Highlighted } from '../components/Projekte/Karte/layers/Pop/s
 import { PopIcon } from '../components/Projekte/Karte/layers/Pop/Pop.jsx'
 import { PopIconHighlighted } from '../components/Projekte/Karte/layers/Pop/PopHighlighted.jsx'
 import { PopIconU } from '../components/Projekte/Karte/layers/Pop/statusGroup/U.jsx'
-import PopUIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/uHighlighted.svg'
-import PopAIcon from '../components/Projekte/Karte/layers/Pop/statusGroup/a.svg'
-import PopAIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/aHighlighted.svg'
-import PopPIcon from '../components/Projekte/Karte/layers/Pop/statusGroup/p.svg'
-import PopPIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/pHighlighted.svg'
+import { PopIconUHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/UHighlighted.jsx'
+import { PopIconA } from '../components/Projekte/Karte/layers/Pop/statusGroup/A.jsx'
+import { PopIconAHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/AHighlighted.jsx'
+import { PopIconP } from '../components/Projekte/Karte/layers/Pop/statusGroup/P.jsx'
+import { PopIconPHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/PHighlighted.jsx'
 import PopQIcon from '../components/Projekte/Karte/layers/Pop/statusGroup/q.svg'
 import PopQIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/qHighlighted.svg'
 
@@ -47,17 +47,17 @@ const popIcons = {
   },
   statusGroup: {
     100: PopIconU,
-    '100Highlighted': PopUIconHighlighted,
+    '100Highlighted': PopIconUHighlighted,
     101: PopIconU,
-    '101Highlighted': PopUIconHighlighted,
-    200: PopAIcon,
-    '200Highlighted': PopAIconHighlighted,
-    201: PopAIcon,
-    '201Highlighted': PopAIconHighlighted,
-    202: PopAIcon,
-    '202Highlighted': PopAIconHighlighted,
-    300: PopPIcon,
-    '300Highlighted': PopPIconHighlighted,
+    '101Highlighted': PopIconUHighlighted,
+    200: PopIconA,
+    '200Highlighted': PopIconAHighlighted,
+    201: PopIconA,
+    '201Highlighted': PopIconAHighlighted,
+    202: PopIconA,
+    '202Highlighted': PopIconAHighlighted,
+    300: PopIconP,
+    '300Highlighted': PopIconPHighlighted,
   },
   statusGroupSymbols: {
     100: PopIcon100,
