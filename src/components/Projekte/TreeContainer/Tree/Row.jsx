@@ -68,7 +68,7 @@ import PopSvg202 from '../../Karte/layers/Pop/statusGroupSymbols/202.svg'
 import PopSvg202Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/202Highlighted.svg'
 import PopSvg300 from '../../Karte/layers/Pop/statusGroupSymbols/300.svg'
 import PopSvg300Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/300Highlighted.svg'
-import PopIcon from '../../Karte/layers/Pop/pop.svg'
+import PopIconSvg from '../../Karte/layers/Pop/pop.svg'
 import PopIconHighlighted from '../../Karte/layers/Pop/popHighlighted.svg'
 import PopUIcon from '../../Karte/layers/Pop/statusGroup/u.svg'
 import PopUIconHighlighted from '../../Karte/layers/Pop/statusGroup/uHighlighted.svg'
@@ -125,17 +125,17 @@ const tpopIcons = {
 }
 const popIcons = {
   normal: {
-    100: PopIcon,
+    100: PopIconSvg,
     '100Highlighted': PopIconHighlighted,
-    101: PopIcon,
+    101: PopIconSvg,
     '101Highlighted': PopIconHighlighted,
-    200: PopIcon,
+    200: PopIconSvg,
     '200Highlighted': PopIconHighlighted,
-    201: PopIcon,
+    201: PopIconSvg,
     '201Highlighted': PopIconHighlighted,
-    202: PopIcon,
+    202: PopIconSvg,
     '202Highlighted': PopIconHighlighted,
-    300: PopIcon,
+    300: PopIconSvg,
     '300Highlighted': PopIconHighlighted,
   },
   statusGroup: {
@@ -270,7 +270,7 @@ const StyledMapIcon = styled(MdLocalFlorist)`
 const PopMapIcon = styled(StyledMapIcon)`
   color: #947500 !important;
 `
-const IconContainer0 = styled.div`
+export const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -278,41 +278,41 @@ const IconContainer0 = styled.div`
   margin-left: -2px;
 `
 export const PopMapIconComponent = () => (
-  <IconContainer0 title="Populationen in Karte sichtbar">
+  <IconContainer title="Populationen in Karte sichtbar">
     <PopMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
 export const TpopMapIconComponent = () => (
-  <IconContainer0 title="Teil-Populationen in Karte sichtbar">
+  <IconContainer title="Teil-Populationen in Karte sichtbar">
     <TpopMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
 `
 export const BeobNichtBeurteiltMapIconComponent = () => (
-  <IconContainer0 title="Beobachtungen nicht beurteilt in Karte sichtbar">
+  <IconContainer title="Beobachtungen nicht beurteilt in Karte sichtbar">
     <BeobNichtBeurteiltMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
   color: #ffe4ff !important;
 `
 export const BeobNichtZuzuordnenMapIconComponent = () => (
-  <IconContainer0 title="Beobachtungen nicht zuzuordnen in Karte sichtbar">
+  <IconContainer title="Beobachtungen nicht zuzuordnen in Karte sichtbar">
     <BeobNichtZuzuordnenMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
   color: #ff00ff !important;
 `
 export const BeobZugeordnetMapIconComponent = () => (
-  <IconContainer0 title="Beobachtungen zugeordnet in Karte sichtbar">
+  <IconContainer title="Beobachtungen zugeordnet in Karte sichtbar">
     <BeobZugeordnetMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
   paint-order: stroke;
@@ -320,9 +320,9 @@ const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
   stroke: #fff900;
 `
 export const BeobNichtBeurteiltFilteredMapIconComponent = () => (
-  <IconContainer0 title="Beobachtung in Karte hervorgehoben">
+  <IconContainer title="Beobachtung in Karte hervorgehoben">
     <BeobNichtBeurteiltFilteredMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
   paint-order: stroke;
@@ -330,9 +330,9 @@ const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
   stroke: #fff900;
 `
 export const BeobNichtZuzuordnenFilteredMapIconComponent = () => (
-  <IconContainer0 title="Beobachtung in Karte hervorgehoben">
+  <IconContainer title="Beobachtung in Karte hervorgehoben">
     <BeobNichtZuzuordnenFilteredMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   paint-order: stroke;
@@ -340,9 +340,9 @@ const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   stroke: #fff900;
 `
 export const BeobZugeordnetFilteredMapIconComponent = () => (
-  <IconContainer0 title="Beobachtung in Karte hervorgehoben">
+  <IconContainer title="Beobachtung in Karte hervorgehoben">
     <BeobZugeordnetFilteredMapIcon />
-  </IconContainer0>
+  </IconContainer>
 )
 const MovingIcon = styled(MdOutlineMoveDown)`
   padding-left: 0.2em;
@@ -373,11 +373,6 @@ const PrintIconContainer = styled.div`
       font-size: 22px !important;
     }
   }
-`
-const IconContainer = styled.div`
-  padding-right: 4px;
-  margin-left: -2px;
-  font-size: 1.1rem;
 `
 
 export const transitionStyles = {

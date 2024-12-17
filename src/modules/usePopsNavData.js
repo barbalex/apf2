@@ -4,7 +4,76 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
+import { PopIcon100 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.jsx'
+import { PopIcon100Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/100Highlighted.jsx'
+import { PopIcon101 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/101.jsx'
+import { PopIcon101Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/101Highlighted.jsx'
+import { PopIcon200 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/200.jsx'
+import { PopIcon200Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/200Highlighted.jsx'
+import { PopIcon201 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/201.jsx'
+import { PopIcon201Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/201Highlighted.jsx'
+import { PopIcon202 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/202.jsx'
+import { PopIcon202Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/202Highlighted.jsx'
+import { PopIcon300 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300.jsx'
+import { PopIcon300Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300Highlighted.jsx'
+import { PopIcon } from '../components/Projekte/Karte/layers/Pop/Pop.jsx'
+import { PopIconHighlighted } from '../components/Projekte/Karte/layers/Pop/PopHighlighted.jsx'
+import { PopIconU } from '../components/Projekte/Karte/layers/Pop/statusGroup/U.jsx'
+import PopUIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/uHighlighted.svg'
+import PopAIcon from '../components/Projekte/Karte/layers/Pop/statusGroup/a.svg'
+import PopAIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/aHighlighted.svg'
+import PopPIcon from '../components/Projekte/Karte/layers/Pop/statusGroup/p.svg'
+import PopPIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/pHighlighted.svg'
+import PopQIcon from '../components/Projekte/Karte/layers/Pop/statusGroup/q.svg'
+import PopQIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/qHighlighted.svg'
+
 import { MobxContext } from '../mobxContext.js'
+import { useProjekteTabs } from './useProjekteTabs.js'
+
+const popIcons = {
+  normal: {
+    100: PopIcon,
+    '100Highlighted': PopIconHighlighted,
+    101: PopIcon,
+    '101Highlighted': PopIconHighlighted,
+    200: PopIcon,
+    '200Highlighted': PopIconHighlighted,
+    201: PopIcon,
+    '201Highlighted': PopIconHighlighted,
+    202: PopIcon,
+    '202Highlighted': PopIconHighlighted,
+    300: PopIcon,
+    '300Highlighted': PopIconHighlighted,
+  },
+  statusGroup: {
+    100: PopIconU,
+    '100Highlighted': PopUIconHighlighted,
+    101: PopIconU,
+    '101Highlighted': PopUIconHighlighted,
+    200: PopAIcon,
+    '200Highlighted': PopAIconHighlighted,
+    201: PopAIcon,
+    '201Highlighted': PopAIconHighlighted,
+    202: PopAIcon,
+    '202Highlighted': PopAIconHighlighted,
+    300: PopPIcon,
+    '300Highlighted': PopPIconHighlighted,
+  },
+  statusGroupSymbols: {
+    100: PopIcon100,
+    '100Highlighted': PopIcon100Highlighted,
+    101: PopIcon101,
+    '101Highlighted': PopIcon101Highlighted,
+    200: PopIcon200,
+    '200Highlighted': PopIcon200Highlighted,
+    201: PopIcon201,
+    '201Highlighted': PopIcon201Highlighted,
+    202: PopIcon202,
+    '202Highlighted': PopIcon202Highlighted,
+    300: PopIcon300,
+    '300Highlighted': PopIcon300Highlighted,
+  },
+}
 
 export const usePopsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -13,6 +82,12 @@ export const usePopsNavData = (props) => {
   const apId = props?.apId ?? params.apId
 
   const store = useContext(MobxContext)
+
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+
+  const popIconName = store.map.popIcon
+  const showPopIcon = true
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
@@ -60,18 +135,35 @@ export const usePopsNavData = (props) => {
       id: 'Populationen',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
       label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.apById?.popsByApId?.nodes?.map((p) => ({
+      menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
+        const popIconIsHighlighted =
+          karteIsVisible && store.activeApfloraLayers.includes('pop')
+
+        const Icon =
+          p.status ?
+            popIconIsHighlighted ?
+              popIcons[popIconName][p.status + 'Highlighted']
+            : popIcons[popIconName][p.status]
+          : popIconIsHighlighted ? PopQIconHighlighted
+          : PopQIcon
+
+        return {
           id: p.id,
           label: p.label,
-        })) ?? [],
+          labelLeftElements: showPopIcon ? [Icon] : undefined,
+        }
+      }),
     }),
     [
       apId,
       count,
       data?.data?.apById?.popsByApId?.nodes,
       isLoading,
+      karteIsVisible,
+      popIconName,
       projId,
+      showPopIcon,
+      store.activeApfloraLayers,
       totalCount,
     ],
   )
