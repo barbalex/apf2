@@ -4,33 +4,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import PopSvg100Svg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.svg'
-import PopSvg100HighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/100Highlighted.svg'
-import PopSvg101Svg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/101.svg'
-import PopSvg101HighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/101Highlighted.svg'
-import PopSvg200Svg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/200.svg'
-import PopSvg200HighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/200Highlighted.svg'
-import PopSvg201Svg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/201.svg'
-import PopSvg201HighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/201Highlighted.svg'
-import PopSvg202Svg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/202.svg'
-import PopSvg202HighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/202Highlighted.svg'
-import PopSvg300Svg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300.svg'
-import PopSvg300HighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300Highlighted.svg'
-import PopIconSvgSvg from '../components/Projekte/Karte/layers/Pop/pop.svg'
-import PopIconHighlightedSvg from '../components/Projekte/Karte/layers/Pop/popHighlighted.svg'
-import PopUIconSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/u.svg'
-import PopUIconHighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/uHighlighted.svg'
-import PopAIconSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/a.svg'
-import PopAIconHighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/aHighlighted.svg'
-import PopPIconSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/p.svg'
-import PopPIconHighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/pHighlighted.svg'
-import PopQIconSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/q.svg'
-import PopQIconHighlightedSvg from '../components/Projekte/Karte/layers/Pop/statusGroup/qHighlighted.svg'
-import { IconContainer } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
-
 import { MobxContext } from '../mobxContext.js'
 import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
+import { popIcons } from './usePopsNavData.js'
+
+import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -129,6 +108,16 @@ export const usePopNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.map.popIcon, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.tree.showPopIcon, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.popById?.label
   const status = data?.data?.popById?.status
@@ -144,8 +133,9 @@ export const usePopNavData = (props) => {
   const filesCount = data?.data?.popById?.popFilesByPopId?.totalCount ?? 0
   const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
 
-  const popIconIsHighlighted =
-    karteIsVisible && store.activeApfloraLayers.includes('pop')
+  const popIconName = store.map.popIcon
+  const Icon =
+    status ? popIcons[popIconName][status + 'Highlighted'] : PopIconQHighlighted
 
   const navData = useMemo(
     () => ({
@@ -157,6 +147,7 @@ export const usePopNavData = (props) => {
         {
           id: 'Population',
           label: `Population`,
+          labelLeftElements: store.tree.showPopIcon ? [Icon] : undefined,
         },
         {
           id: 'Teil-Populationen',
@@ -195,6 +186,8 @@ export const usePopNavData = (props) => {
       projId,
       apId,
       label,
+      store.tree.showPopIcon,
+      Icon,
       isLoading,
       filteredTpopsCount,
       tpopsCount,

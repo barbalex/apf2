@@ -26,147 +26,9 @@ import { toggleNode } from './toggleNode.js'
 import { toggleNodeSymbol } from './toggleNodeSymbol.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
-import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { historizeForAp } from '../../../../modules/historizeForAp.js'
 import { historize } from '../../../../modules/historize.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-// adding ?react to .svg leads to error:
-// Warning: </src/components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.svg?react /> is using incorrect casing.
-// Use PascalCase for React components, or lowercase for HTML elements
-// https://github.com/pd4d10/vite-plugin-svgr/issues/95
-import TpopSvg100 from '../../Karte/layers/Tpop/statusGroupSymbols/100.svg'
-import TpopSvg100Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/100Highlighted.svg'
-import TpopSvg101 from '../../Karte/layers/Tpop/statusGroupSymbols/101.svg'
-import TpopSvg101Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/101Highlighted.svg'
-import TpopSvg200 from '../../Karte/layers/Tpop/statusGroupSymbols/200.svg'
-import TpopSvg200Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/200Highlighted.svg'
-import TpopSvg201 from '../../Karte/layers/Tpop/statusGroupSymbols/201.svg'
-import TpopSvg201Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/201Highlighted.svg'
-import TpopSvg202 from '../../Karte/layers/Tpop/statusGroupSymbols/202.svg'
-import TpopSvg202Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/202Highlighted.svg'
-import TpopSvg300 from '../../Karte/layers/Tpop/statusGroupSymbols/300.svg'
-import TpopSvg300Highlighted from '../../Karte/layers/Tpop/statusGroupSymbols/300Highlighted.svg'
-import TpopIcon from '../../Karte/layers/Tpop/tpop.svg'
-import TpopIconHighlighted from '../../Karte/layers/Tpop/tpopHighlighted.svg'
-import TpopUIcon from '../../Karte/layers/Tpop/statusGroup/u.svg'
-import TpopUIconHighlighted from '../../Karte/layers/Tpop/statusGroup/uHighlighted.svg'
-import TpopAIcon from '../../Karte/layers/Tpop/statusGroup/a.svg'
-import TpopAIconHighlighted from '../../Karte/layers/Tpop/statusGroup/aHighlighted.svg'
-import TpopPIcon from '../../Karte/layers/Tpop/statusGroup/p.svg'
-import TpopPIconHighlighted from '../../Karte/layers/Tpop/statusGroup/pHighlighted.svg'
-import TpopQIcon from '../../Karte/layers/Tpop/statusGroup/q.svg'
-import TpopQIconHighlighted from '../../Karte/layers/Tpop/statusGroup/qHighlighted.svg'
-import PopSvg100 from '../../Karte/layers/Pop/statusGroupSymbols/100.svg'
-import PopSvg100Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/100Highlighted.svg'
-import PopSvg101 from '../../Karte/layers/Pop/statusGroupSymbols/101.svg'
-import PopSvg101Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/101Highlighted.svg'
-import PopSvg200 from '../../Karte/layers/Pop/statusGroupSymbols/200.svg'
-import PopSvg200Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/200Highlighted.svg'
-import PopSvg201 from '../../Karte/layers/Pop/statusGroupSymbols/201.svg'
-import PopSvg201Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/201Highlighted.svg'
-import PopSvg202 from '../../Karte/layers/Pop/statusGroupSymbols/202.svg'
-import PopSvg202Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/202Highlighted.svg'
-import PopSvg300 from '../../Karte/layers/Pop/statusGroupSymbols/300.svg'
-import PopSvg300Highlighted from '../../Karte/layers/Pop/statusGroupSymbols/300Highlighted.svg'
-import PopIconSvg from '../../Karte/layers/Pop/pop.svg'
-import PopIconHighlighted from '../../Karte/layers/Pop/popHighlighted.svg'
-import PopUIcon from '../../Karte/layers/Pop/statusGroup/u.svg'
-import PopUIconHighlighted from '../../Karte/layers/Pop/statusGroup/uHighlighted.svg'
-import PopAIcon from '../../Karte/layers/Pop/statusGroup/a.svg'
-import PopAIconHighlighted from '../../Karte/layers/Pop/statusGroup/aHighlighted.svg'
-import PopPIcon from '../../Karte/layers/Pop/statusGroup/p.svg'
-import PopPIconHighlighted from '../../Karte/layers/Pop/statusGroup/pHighlighted.svg'
-import PopQIcon from '../../Karte/layers/Pop/statusGroup/q.svg'
-import PopQIconHighlighted from '../../Karte/layers/Pop/statusGroup/qHighlighted.svg'
-
-const tpopIcons = {
-  normal: {
-    100: TpopIcon,
-    '100Highlighted': TpopIconHighlighted,
-    101: TpopIcon,
-    '101Highlighted': TpopIconHighlighted,
-    200: TpopIcon,
-    '200Highlighted': TpopIconHighlighted,
-    201: TpopIcon,
-    '201Highlighted': TpopIconHighlighted,
-    202: TpopIcon,
-    '202Highlighted': TpopIconHighlighted,
-    300: TpopIcon,
-    '300Highlighted': TpopIconHighlighted,
-  },
-  statusGroup: {
-    100: TpopUIcon,
-    '100Highlighted': TpopUIconHighlighted,
-    101: TpopUIcon,
-    '101Highlighted': TpopUIconHighlighted,
-    200: TpopAIcon,
-    '200Highlighted': TpopAIconHighlighted,
-    201: TpopAIcon,
-    '201Highlighted': TpopAIconHighlighted,
-    202: TpopAIcon,
-    '202Highlighted': TpopAIconHighlighted,
-    300: TpopPIcon,
-    '300Highlighted': TpopPIconHighlighted,
-  },
-  statusGroupSymbols: {
-    100: TpopSvg100,
-    '100Highlighted': TpopSvg100Highlighted,
-    101: TpopSvg101,
-    '101Highlighted': TpopSvg101Highlighted,
-    200: TpopSvg200,
-    '200Highlighted': TpopSvg200Highlighted,
-    201: TpopSvg201,
-    '201Highlighted': TpopSvg201Highlighted,
-    202: TpopSvg202,
-    '202Highlighted': TpopSvg202Highlighted,
-    300: TpopSvg300,
-    '300Highlighted': TpopSvg300Highlighted,
-  },
-}
-const popIcons = {
-  normal: {
-    100: PopIconSvg,
-    '100Highlighted': PopIconHighlighted,
-    101: PopIconSvg,
-    '101Highlighted': PopIconHighlighted,
-    200: PopIconSvg,
-    '200Highlighted': PopIconHighlighted,
-    201: PopIconSvg,
-    '201Highlighted': PopIconHighlighted,
-    202: PopIconSvg,
-    '202Highlighted': PopIconHighlighted,
-    300: PopIconSvg,
-    '300Highlighted': PopIconHighlighted,
-  },
-  statusGroup: {
-    100: PopUIcon,
-    '100Highlighted': PopUIconHighlighted,
-    101: PopUIcon,
-    '101Highlighted': PopUIconHighlighted,
-    200: PopAIcon,
-    '200Highlighted': PopAIconHighlighted,
-    201: PopAIcon,
-    '201Highlighted': PopAIconHighlighted,
-    202: PopAIcon,
-    '202Highlighted': PopAIconHighlighted,
-    300: PopPIcon,
-    '300Highlighted': PopPIconHighlighted,
-  },
-  statusGroupSymbols: {
-    100: PopSvg100,
-    '100Highlighted': PopSvg100Highlighted,
-    101: PopSvg101,
-    '101Highlighted': PopSvg101Highlighted,
-    200: PopSvg200,
-    '200Highlighted': PopSvg200Highlighted,
-    201: PopSvg201,
-    '201Highlighted': PopSvg201Highlighted,
-    202: PopSvg202,
-    '202Highlighted': PopSvg202Highlighted,
-    300: PopSvg300,
-    '300Highlighted': PopSvg300Highlighted,
-  },
-}
 
 const PrintIcon = styled(MdPictureAsPdf)`
   font-size: 1.5rem;
@@ -557,29 +419,6 @@ export const Row = memo(
       store,
     ])
 
-    const [projekteTabs] = useProjekteTabs()
-    const karteIsVisible = projekteTabs.includes('karte')
-
-    const tpopIconIsHighlighted =
-      karteIsVisible && activeApfloraLayers.includes('tpop') && nodeIsActive
-    const TpopIcon =
-      node.status ?
-        tpopIconIsHighlighted ?
-          tpopIcons[tpopIconName][node.status + 'Highlighted']
-        : tpopIcons[tpopIconName][node.status]
-      : tpopIconIsHighlighted ? TpopQIconHighlighted
-      : TpopQIcon
-
-    const popIconIsHighlighted =
-      karteIsVisible && activeApfloraLayers.includes('pop') && nodeIsActive
-    const PopIcon =
-      node.status ?
-        popIconIsHighlighted ?
-          popIcons[popIconName][node.status + 'Highlighted']
-        : popIcons[popIconName][node.status]
-      : popIconIsHighlighted ? PopQIconHighlighted
-      : PopQIcon
-
     // console.log('Row, node:', node)
 
     if (onlyShowActivePath && !nodeOrParentIsInActivePath) return null
@@ -630,16 +469,6 @@ export const Row = memo(
             <SymbolDiv onClick={onClickNode}>
               <StyledRemoveIcon />
             </SymbolDiv>
-          )}
-          {node.menuType === 'pop' && node.status && showPopIcon && (
-            <IconContainer>
-              <PopIcon />
-            </IconContainer>
-          )}
-          {node.menuType === 'tpop' && node.status && showTpopIcon && (
-            <IconContainer>
-              <TpopIcon />
-            </IconContainer>
           )}
           {node.labelLeftElements?.length &&
             node.labelLeftElements.map((El, index) => <El key={index} />)}

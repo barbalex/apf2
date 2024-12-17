@@ -29,7 +29,7 @@ import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 
 import { MobxContext } from '../mobxContext.js'
 
-const popIcons = {
+export const popIcons = {
   normal: {
     100: PopIcon,
     '100Highlighted': PopIconHighlighted,
