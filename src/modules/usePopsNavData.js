@@ -138,12 +138,12 @@ export const usePopsNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving, rerender),
+    () => reaction(() => store.moving.id, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(
-    () => reaction(() => store.copying, rerender),
+    () => reaction(() => store.copying.id, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -166,11 +166,11 @@ export const usePopsNavData = (props) => {
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
         const popIconIsHighlighted = p.id === popId
         const labelRightElements = []
-        const isMoving = store.moving.id === popId
+        const isMoving = store.moving.id === p.id
         if (isMoving) {
           labelRightElements.push(MovingComponent)
         }
-        const isCopying = store.copying.id === popId
+        const isCopying = store.copying.id === p.id
         if (isCopying) {
           labelRightElements.push(CopyingComponent)
         }
@@ -187,7 +187,8 @@ export const usePopsNavData = (props) => {
           id: p.id,
           label: p.label,
           labelLeftElements: store.tree.showPopIcon ? [Icon] : undefined,
-          labelRightElements,
+          labelRightElements:
+            labelRightElements.length ? labelRightElements : undefined,
         }
       }),
     }),

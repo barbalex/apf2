@@ -506,11 +506,11 @@ export const Row = memo(
               <MovingIcon />
             </div>
           )}
-          {isCopying && (
+          {/* {isCopying && (
             <div title="kopiert, bereit zum Einfügen">
               <CopyingIcon />
             </div>
-          )}
+          )} */}
           {amCopyingBiotop && (
             <div title="Biotop kopiert, bereit zum Einfügen">
               <BiotopCopyingIcon />
