@@ -326,13 +326,6 @@ export const useApNavData = (props) => {
   const filesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
   const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
 
-  const labelLeftElementsPop = useMemo(() => {
-    const labelLeftElements = []
-    if (showPopIcon) labelLeftElements.push(PopMapIconComponent)
-
-    return labelLeftElements
-  }, [showPopIcon])
-
   const navData = useMemo(
     () => ({
       id: apId,
@@ -348,7 +341,7 @@ export const useApNavData = (props) => {
           id: 'Populationen',
           label: `Populationen (${isLoading ? '...' : `${filteredPopsCount}/${popsCount}`})`,
           count: popsCount,
-          labelLeftElements: labelLeftElementsPop,
+          labelLeftElements: showPopIcon ? [PopMapIconComponent] : undefined,
         },
         {
           id: 'AP-Ziele',
@@ -438,7 +431,7 @@ export const useApNavData = (props) => {
       isLoading,
       filteredPopsCount,
       popsCount,
-      labelLeftElementsPop,
+      showPopIcon,
       filteredApZielJahrsCount,
       apZielJahrsCount,
       filteredErfkritsCount,
