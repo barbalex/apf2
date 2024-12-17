@@ -19,6 +19,7 @@ export const Pop = memo(
       parentTableId: ap.id,
       urlLabel: menu.id,
       label: menu.label,
+      labelLeftElements: menu.labelLeftElements,
       status: menu.status,
       url: ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen', menu.id],
       hasChildren: true,

@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useContext } from 'react'
+import { useMemo, useEffect, useContext, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
@@ -24,11 +24,10 @@ import { PopIconA } from '../components/Projekte/Karte/layers/Pop/statusGroup/A.
 import { PopIconAHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/AHighlighted.jsx'
 import { PopIconP } from '../components/Projekte/Karte/layers/Pop/statusGroup/P.jsx'
 import { PopIconPHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/PHighlighted.jsx'
-import PopQIcon from '../components/Projekte/Karte/layers/Pop/statusGroup/q.svg'
-import PopQIconHighlighted from '../components/Projekte/Karte/layers/Pop/statusGroup/qHighlighted.svg'
+import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.jsx'
+import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
 
 import { MobxContext } from '../mobxContext.js'
-import { useProjekteTabs } from './useProjekteTabs.js'
 
 const popIcons = {
   normal: {
@@ -80,14 +79,15 @@ export const usePopsNavData = (props) => {
   const params = useParams()
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
+  const popId = props?.popId ?? params.popId
 
   const store = useContext(MobxContext)
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
   const popIconName = store.map.popIcon
-  const showPopIcon = true
+  console.log('usePopsNavData', {
+    popIconName,
+    showPopIcon: store.map.showPopIcon,
+  })
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
@@ -126,6 +126,18 @@ export const usePopsNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  useEffect(
+    () => reaction(() => store.map.popIcon, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.tree.showPopIcon, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
@@ -136,21 +148,20 @@ export const usePopsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
       label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
-        const popIconIsHighlighted =
-          karteIsVisible && store.activeApfloraLayers.includes('pop')
+        const popIconIsHighlighted = p.id === popId
 
         const Icon =
           p.status ?
             popIconIsHighlighted ?
               popIcons[popIconName][p.status + 'Highlighted']
             : popIcons[popIconName][p.status]
-          : popIconIsHighlighted ? PopQIconHighlighted
-          : PopQIcon
+          : popIconIsHighlighted ? PopIconQHighlighted
+          : PopIconQ
 
         return {
           id: p.id,
           label: p.label,
-          labelLeftElements: showPopIcon ? [Icon] : undefined,
+          labelLeftElements: store.tree.showPopIcon ? [Icon] : undefined,
         }
       }),
     }),
@@ -159,11 +170,10 @@ export const usePopsNavData = (props) => {
       count,
       data?.data?.apById?.popsByApId?.nodes,
       isLoading,
-      karteIsVisible,
       popIconName,
+      popId,
       projId,
-      showPopIcon,
-      store.activeApfloraLayers,
+      store.tree.showPopIcon,
       totalCount,
     ],
   )

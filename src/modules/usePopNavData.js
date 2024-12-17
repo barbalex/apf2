@@ -46,12 +46,7 @@ export const usePopNavData = (props) => {
 
   const showTpopIcon =
     store.activeApfloraLayers?.includes('tpop') && karteIsVisible
-  console.log('usePopNavData', {
-    showTpopIcon,
-    activeApfloraLayers: store.activeApfloraLayers.slice(),
-    karteIsVisible,
-    TpopMapIconComponent,
-  })
+
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
