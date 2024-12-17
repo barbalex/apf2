@@ -644,23 +644,9 @@ export const Row = memo(
                 )}
               {node.menuType === 'beobNichtZuzuordnen' &&
                 activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-                !nodeIsActive && (
-                  <div title="in Karte sichtbar">
-                    <BeobNichtZuzuordnenMapIcon />
-                  </div>
-                )}
-              {node.menuType === 'beobNichtZuzuordnen' &&
-                activeApfloraLayers.includes('beobNichtZuzuordnen') &&
                 nodeIsActive && (
                   <div title="in Karte hervorgehoben">
                     <BeobNichtZuzuordnenFilteredMapIcon />
-                  </div>
-                )}
-              {activeApfloraLayers.includes('beobZugeordnet') &&
-                node.menuType === 'beobZugeordnet' &&
-                !nodeIsActive && (
-                  <div title="in Karte sichtbar">
-                    <BeobZugeordnetMapIcon />
                   </div>
                 )}
               {activeApfloraLayers.includes('beobZugeordnet') &&
