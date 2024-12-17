@@ -6,7 +6,6 @@ import Highlighter from 'react-highlight-words'
 import { FormTitle } from '../FormTitle/index.jsx'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { navData } from '../../Bookmarks/NavTo/Navs/Projects.jsx'
-import { t } from 'mobx-state-tree'
 
 const Container = styled.div`
   display: flex;
