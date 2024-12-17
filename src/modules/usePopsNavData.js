@@ -83,12 +83,6 @@ export const usePopsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const popIconName = store.map.popIcon
-  console.log('usePopsNavData', {
-    popIconName,
-    showPopIcon: store.map.showPopIcon,
-  })
-
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
     queryFn: () =>
@@ -141,6 +135,8 @@ export const usePopsNavData = (props) => {
 
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
+
+  const popIconName = store.map.popIcon
 
   const navData = useMemo(
     () => ({
