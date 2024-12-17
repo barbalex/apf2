@@ -635,13 +635,6 @@ export const Row = memo(
             <>
               {node.labelLeftElements?.length &&
                 node.labelLeftElements.map((El, index) => <El key={index} />)}
-              {node.menuType === 'ap' &&
-                node.id === apId &&
-                activeApfloraLayers.includes('tpop') && (
-                  <div title="Teil-Populationen in Karte sichtbar">
-                    <TpopMapIcon />
-                  </div>
-                )}
               {node.menuType === 'beobNichtBeurteiltFolder' &&
                 node.id === apId &&
                 activeApfloraLayers.includes('beobNichtBeurteilt') && (
