@@ -12,6 +12,7 @@ export const BeobNichtZuzuordnen = memo(({ projekt, ap, inProp, menu }) => {
     parentTableId: ap.id,
     urlLabel: menu.id,
     label: menu.label,
+    labelLeftElements: menu.labelLeftElements,
     url: [
       'Projekte',
       projekt.id,

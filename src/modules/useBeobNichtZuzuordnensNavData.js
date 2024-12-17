@@ -1,17 +1,29 @@
-import { useMemo, useContext, useEffect } from 'react'
+import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { BeobNichtZuzuordnenFilteredMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const useBeobNichtZuzuordnensNavData = (props) => {
   const apolloClient = useApolloClient()
-  const { projId, apId: apIdFromParams } = useParams()
-  const apId = props?.apId ?? apIdFromParams
+  const params = useParams()
+  const projId = props?.projId ?? params.projId
+  const apId = props?.apId ?? params.apId
+  const beobId = props?.beobId ?? params.beobId
+
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
 
   const store = useContext(MobxContext)
+
+  const showBeobnichtzuzuordnenIcon =
+    store.activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
   const allBeobNichtZuzuordnenFilter = useMemo(
     () => ({
@@ -83,6 +95,11 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const count = data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
   const filteredCount =
@@ -95,19 +112,26 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
       label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       labelShort: `Beob. nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       // leave totalCount undefined as the menus are folders
-      menus:
-        data?.data?.filteredBeobsNichtZuzuordnen?.nodes?.map((p) => ({
+      menus: (data?.data?.filteredBeobsNichtZuzuordnen?.nodes ?? []).map(
+        (p) => ({
           id: p.id,
           label: p.label,
-        })) ?? [],
+          labelLeftElements:
+            showBeobnichtzuzuordnenIcon && beobId === p.id ?
+              [BeobNichtZuzuordnenFilteredMapIconComponent]
+            : undefined,
+        }),
+      ),
     }),
     [
       apId,
+      beobId,
       count,
       data?.data?.filteredBeobsNichtZuzuordnen?.nodes,
       filteredCount,
       isLoading,
       projId,
+      showBeobnichtzuzuordnenIcon,
     ],
   )
 

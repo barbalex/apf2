@@ -113,14 +113,14 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       labelShort: `Beob. nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       // leave totalCount undefined as the menus are folders
       menus:
-        data?.data?.filteredBeobsNichtBeurteilt?.nodes?.map((p) => ({
+        (data?.data?.filteredBeobsNichtBeurteilt?.nodes??[]).map((p) => ({
           id: p.id,
           label: p.label,
           labelLeftElements:
             showBeobnichtbeurteiltIcon && beobId === p.id ?
               [BeobNichtBeurteiltFilteredMapIconComponent]
             : undefined,
-        })) ?? [],
+        })) ,
     }),
     [
       apId,

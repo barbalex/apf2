@@ -329,6 +329,11 @@ const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
   stroke-width: 8px;
   stroke: #fff900;
 `
+export const BeobNichtZuzuordnenFilteredMapIconComponent = () => (
+  <IconContainer0 title="Beobachtung in Karte hervorgehoben">
+    <BeobNichtZuzuordnenFilteredMapIcon />
+  </IconContainer0>
+)
 const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   paint-order: stroke;
   stroke-width: 8px;
@@ -640,13 +645,6 @@ export const Row = memo(
             <>
               {node.labelLeftElements?.length &&
                 node.labelLeftElements.map((El, index) => <El key={index} />)}
-              {node.menuType === 'beobNichtZuzuordnen' &&
-                activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-                nodeIsActive && (
-                  <div title="in Karte hervorgehoben">
-                    <BeobNichtZuzuordnenFilteredMapIcon />
-                  </div>
-                )}
               {activeApfloraLayers.includes('beobZugeordnet') &&
                 node.menuType === 'beobZugeordnet' &&
                 nodeIsActive && (
