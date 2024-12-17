@@ -646,6 +646,8 @@ export const Row = memo(
               <TpopIcon />
             </IconContainer>
           )}
+          {node.labelLeftElements?.length &&
+            node.labelLeftElements.map((El, index) => <El key={index} />)}
           <TextSpan
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
             node={node}

@@ -30,6 +30,11 @@ export const TpopFolder = memo(
           n[6] === 'Teil-Populationen',
       ).length > 0
 
+    console.log('TpopFolder', {
+      menu,
+      labelLeftElements: menu.labelLeftElements,
+    })
+
     const node = {
       nodeType: 'folder',
       menuType: 'tpopFolder',

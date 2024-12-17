@@ -22,15 +22,14 @@ export const usePopNavData = (props) => {
 
   const showTpopIcon =
     store.activeApfloraLayers?.includes('tpop') && karteIsVisible
+  console.log('usePopNavData', {
+    showTpopIcon,
+    activeApfloraLayers: store.activeApfloraLayers.slice(),
+    karteIsVisible,
+    TpopMapIconComponent,
+  })
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
-
-  const labelLeftElementsTpop = useMemo(() => {
-    const labelLeftElements = []
-    if (showTpopIcon) labelLeftElements.push(TpopMapIconComponent)
-
-    return labelLeftElements
-  }, [showTpopIcon])
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -139,7 +138,7 @@ export const usePopNavData = (props) => {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
           count: tpopsCount,
-          labelLeftElements: labelLeftElementsTpop,
+          labelLeftElements: showTpopIcon ? [TpopMapIconComponent] : undefined,
         },
         {
           id: 'Kontroll-Berichte',
@@ -175,7 +174,7 @@ export const usePopNavData = (props) => {
       isLoading,
       filteredTpopsCount,
       tpopsCount,
-      labelLeftElementsTpop,
+      showTpopIcon,
       filteredPopbersCount,
       popbersCount,
       filteredPopmassnbersCount,
