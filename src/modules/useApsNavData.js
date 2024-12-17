@@ -7,6 +7,8 @@ import { useParams } from 'react-router'
 import { MobxContext } from '../mobxContext.js'
 import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobNichtBeurteiltMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobNichtZuzuordnenMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -18,6 +20,11 @@ export const useApsNavData = (props) => {
 
   const showPopIcon = store.activeApfloraLayers?.includes('pop')
   const showTpopIcon = store.activeApfloraLayers?.includes('tpop')
+  const showBeobnichtbeurteiltIcon =
+    store.activeApfloraLayers?.includes('beobNichtBeurteilt')
+  const showBeobnichtzuzuordnenIcon = store.activeApfloraLayers?.includes(
+    'beobNichtZuzuordnen',
+  )
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
@@ -70,9 +77,17 @@ export const useApsNavData = (props) => {
       menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => {
         const showThisPopIcon = showPopIcon && p.id === apId
         const showThisTpopIcon = showTpopIcon && p.id === apId
+        const showThisBeobnichtbeurteiltIcon =
+          showBeobnichtbeurteiltIcon && p.id === apId
+        const showThisBeobnichtzuzuordnenIcon =
+          showBeobnichtzuzuordnenIcon && p.id === apId
         const labelLeftElements = []
         if (showThisPopIcon) labelLeftElements.push(PopMapIconComponent)
         if (showThisTpopIcon) labelLeftElements.push(TpopMapIconComponent)
+        if (showThisBeobnichtbeurteiltIcon)
+          labelLeftElements.push(BeobNichtBeurteiltMapIconComponent)
+        if (showThisBeobnichtzuzuordnenIcon)
+          labelLeftElements.push(BeobNichtZuzuordnenMapIconComponent)
 
         return {
           id: p.id,
@@ -87,6 +102,8 @@ export const useApsNavData = (props) => {
       data?.data?.allAps?.nodes,
       isLoading,
       projId,
+      showBeobnichtbeurteiltIcon,
+      showBeobnichtzuzuordnenIcon,
       showPopIcon,
       showTpopIcon,
       totalCount,

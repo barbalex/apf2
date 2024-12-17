@@ -278,7 +278,7 @@ const IconContainer0 = styled.div`
   margin-left: -2px;
 `
 export const PopMapIconComponent = () => (
-  <IconContainer0 title="in Karte sichtbar">
+  <IconContainer0 title="Populationen in Karte sichtbar">
     <PopMapIcon />
   </IconContainer0>
 )
@@ -286,16 +286,26 @@ const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
 export const TpopMapIconComponent = () => (
-  <IconContainer0 title="in Karte sichtbar">
+  <IconContainer0 title="Teil-Populationen in Karte sichtbar">
     <TpopMapIcon />
   </IconContainer0>
 )
 const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
 `
+export const BeobNichtBeurteiltMapIconComponent = () => (
+  <IconContainer0 title="Beobachtungen nicht beurteilt in Karte sichtbar">
+    <BeobNichtBeurteiltMapIcon />
+  </IconContainer0>
+)
 const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
   color: #ffe4ff !important;
 `
+export const BeobNichtZuzuordnenMapIconComponent = () => (
+  <IconContainer0 title="Beobachtungen nicht zuzuordnen in Karte sichtbar">
+    <BeobNichtZuzuordnenMapIcon />
+  </IconContainer0>
+)
 const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
   color: #ff00ff !important;
 `
@@ -621,21 +631,21 @@ export const Row = memo(
               {node.menuType === 'ap' &&
                 node.id === apId &&
                 activeApfloraLayers.includes('pop') && (
-                  <div title="in Karte sichtbar">
+                  <div title="Populationen in Karte sichtbar">
                     <PopMapIcon />
                   </div>
                 )}
               {node.menuType === 'ap' &&
                 node.id === apId &&
                 activeApfloraLayers.includes('tpop') && (
-                  <div title="in Karte sichtbar">
+                  <div title="Teil-Populationen in Karte sichtbar">
                     <TpopMapIcon />
                   </div>
                 )}
               {node.menuType === 'beobNichtBeurteiltFolder' &&
                 node.id === apId &&
                 activeApfloraLayers.includes('beobNichtBeurteilt') && (
-                  <div title="in Karte sichtbar">
+                  <div title="Beobachtungen nicht beurteilt in Karte sichtbar">
                     <BeobNichtBeurteiltMapIcon />
                   </div>
                 )}

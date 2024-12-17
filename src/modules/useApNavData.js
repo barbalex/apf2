@@ -8,6 +8,8 @@ import countBy from 'lodash/countBy'
 import { MobxContext } from '../mobxContext.js'
 import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobNichtBeurteiltMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobNichtZuzuordnenMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -18,6 +20,11 @@ export const useApNavData = (props) => {
 
   const showPopIcon = store.activeApfloraLayers?.includes('pop')
   const showTpopIcon = store.activeApfloraLayers?.includes('tpop')
+  const showBeobnichtbeurteiltIcon =
+    store.activeApfloraLayers?.includes('beobNichtBeurteilt')
+  const showBeobnichtzuzuordnenIcon = store.activeApfloraLayers?.includes(
+    'beobNichtZuzuordnen',
+  )
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
@@ -317,9 +324,21 @@ export const useApNavData = (props) => {
   const filesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
   const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
 
-  const labelLeftElements = []
-  if (showPopIcon) labelLeftElements.push(PopMapIconComponent)
-  if (showTpopIcon) labelLeftElements.push(TpopMapIconComponent)
+  const labelLeftElements = useMemo(() => {
+    const labelLeftElements = []
+    if (showPopIcon) labelLeftElements.push(PopMapIconComponent)
+    if (showTpopIcon) labelLeftElements.push(TpopMapIconComponent)
+    if (showBeobnichtbeurteiltIcon)
+      labelLeftElements.push(BeobNichtBeurteiltMapIconComponent)
+    if (showBeobnichtzuzuordnenIcon)
+      labelLeftElements.push(BeobNichtZuzuordnenMapIconComponent)
+    return labelLeftElements
+  }, [
+    showPopIcon,
+    showTpopIcon,
+    showBeobnichtbeurteiltIcon,
+    showBeobnichtzuzuordnenIcon,
+  ])
 
   const navData = useMemo(
     () => ({
