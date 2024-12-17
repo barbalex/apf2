@@ -13,6 +13,7 @@ export const Beobzugeordnet = memo(
       parentTableId: tpop.id,
       urlLabel: menu.id,
       label: menu.label,
+      labelLeftElements: menu.labelLeftElements,
       url: [
         'Projekte',
         projekt.id,

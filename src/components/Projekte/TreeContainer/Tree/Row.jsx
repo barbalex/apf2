@@ -339,6 +339,11 @@ const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   stroke-width: 8px;
   stroke: #fff900;
 `
+export const BeobZugeordnetFilteredMapIconComponent = () => (
+  <IconContainer0 title="Beobachtung in Karte hervorgehoben">
+    <BeobZugeordnetFilteredMapIcon />
+  </IconContainer0>
+)
 const MovingIcon = styled(MdOutlineMoveDown)`
   padding-left: 0.2em;
   height: 20px !important;
@@ -640,19 +645,6 @@ export const Row = memo(
             <IconContainer>
               <TpopIcon />
             </IconContainer>
-          )}
-          {karteIsVisible && (
-            <>
-              {node.labelLeftElements?.length &&
-                node.labelLeftElements.map((El, index) => <El key={index} />)}
-              {activeApfloraLayers.includes('beobZugeordnet') &&
-                node.menuType === 'beobZugeordnet' &&
-                nodeIsActive && (
-                  <div title="in Karte hervorgehoben">
-                    <BeobZugeordnetFilteredMapIcon />
-                  </div>
-                )}
-            </>
           )}
           <TextSpan
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
