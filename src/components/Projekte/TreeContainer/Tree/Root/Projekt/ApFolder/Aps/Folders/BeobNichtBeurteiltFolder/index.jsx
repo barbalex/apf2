@@ -34,6 +34,7 @@ export const BeobNichtBeurteiltFolder = memo(
       tableId: ap.id,
       urlLabel: 'nicht-beurteilte-Beobachtungen',
       label: menu.label,
+      labelLeftElements: menu.labelLeftElements,
       url,
       hasChildren: menu.count > 0,
     }

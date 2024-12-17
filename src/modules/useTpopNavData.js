@@ -6,6 +6,7 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { BeobZugeordnetMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const useTpopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -15,19 +16,14 @@ export const useTpopNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+
   const store = useContext(MobxContext)
   const showBeobzugeordnetIcon =
-    store.activeApfloraLayers?.includes('beobZugeordnet')
+    store.activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
-
-  const labelLeftElementsBeobzugeordnet = useMemo(() => {
-    const labelLeftElements = []
-    if (showBeobzugeordnetIcon)
-      labelLeftElements.push(BeobZugeordnetMapIconComponent)
-
-    return labelLeftElements
-  }, [showBeobzugeordnetIcon])
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -206,33 +202,30 @@ export const useTpopNavData = (props) => {
         {
           id: 'Massnahmen',
           label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
-          // count: massnCount,
         },
         {
           id: 'Massnahmen-Berichte',
           label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredPopmassnbersCount}/${popmassnbersCount}`})`,
-          // count: popmassnbersCount,
         },
         {
           id: 'Feld-Kontrollen',
           label: `Feld-Kontrollen (${isLoading ? '...' : `${filteredFeldkontrCount}/${feldkontrCount}`})`,
-          // count: feldkontrCount,
         },
         {
           id: 'Freiwilligen-Kontrollen',
           label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${filteredFreiwkontrCount}/${freiwkontrCount}`})`,
-          // count: freiwkontrCount,
         },
         {
           id: 'Kontroll-Berichte',
           label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredTpopbersCount}/${tpopbersCount}`})`,
-          // count: tpopbersCount,
         },
         {
           id: 'Beobachtungen',
           label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
-          // count: beobZugeordnetCount,
-          labelLeftElements: labelLeftElementsBeobzugeordnet,
+          labelLeftElements:
+            showBeobzugeordnetIcon ?
+              [BeobZugeordnetMapIconComponent]
+            : undefined,
         },
         {
           id: 'EK',
@@ -265,11 +258,11 @@ export const useTpopNavData = (props) => {
       historiesCount,
       isLoading,
       label,
-      labelLeftElementsBeobzugeordnet,
       massnCount,
       popId,
       popmassnbersCount,
       projId,
+      showBeobzugeordnetIcon,
       tpopId,
       tpopbersCount,
     ],

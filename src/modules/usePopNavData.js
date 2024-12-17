@@ -6,6 +6,7 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -14,9 +15,13 @@ export const usePopNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+
   const store = useContext(MobxContext)
 
-  const showTpopIcon = store.activeApfloraLayers?.includes('tpop')
+  const showTpopIcon =
+    store.activeApfloraLayers?.includes('tpop') && karteIsVisible
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 

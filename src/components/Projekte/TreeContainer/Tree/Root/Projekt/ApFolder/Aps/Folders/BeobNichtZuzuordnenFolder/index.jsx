@@ -34,6 +34,7 @@ export const BeobNichtZuzuordnenFolder = memo(
       tableId: ap.id,
       urlLabel: 'nicht-zuzuordnende-Beobachtungen',
       label: menu.label,
+      labelLeftElements: menu.labelLeftElements,
       url,
       hasChildren: menu.count > 0,
     }

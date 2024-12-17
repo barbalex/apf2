@@ -41,6 +41,7 @@ export const BeobzugeordnetFolder = memo(
       tableId: tpop.id,
       urlLabel: 'Beobachtungen',
       label: menu.label,
+      labelLeftElements: menu.labelLeftElements,
       url,
       hasChildren: true,
     }

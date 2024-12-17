@@ -9,17 +9,24 @@ import { MobxContext } from '../mobxContext.js'
 import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { BeobNichtBeurteiltMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { BeobNichtZuzuordnenMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
   const { projId, apId: apIdFromParams } = useParams()
   const apId = props?.apId ?? apIdFromParams
 
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+
   const store = useContext(MobxContext)
 
-  const showPopIcon = store.activeApfloraLayers?.includes('pop')
+  const showPopIcon =
+    store.activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
-    store.activeApfloraLayers?.includes('beobNichtBeurteilt')
+    store.activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
+  const showBeobnichtzuzuordnenIcon =
+    store.activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
@@ -326,21 +333,6 @@ export const useApNavData = (props) => {
     return labelLeftElements
   }, [showPopIcon])
 
-  const labelLeftElementsBeobnichtbeurteilt = useMemo(() => {
-    const labelLeftElements = []
-    if (showBeobnichtbeurteiltIcon)
-      labelLeftElements.push(BeobNichtBeurteiltMapIconComponent)
-
-    return labelLeftElements
-  }, [showBeobnichtbeurteiltIcon])
-
-  const labelLeftElementsBeobnichtzuzuordnen = useMemo(() => {
-    const labelLeftElements = []
-    labelLeftElements.push(BeobNichtZuzuordnenMapIconComponent)
-
-    return labelLeftElements
-  }, [])
-
   const navData = useMemo(
     () => ({
       id: apId,
@@ -401,13 +393,19 @@ export const useApNavData = (props) => {
           id: 'nicht-beurteilte-Beobachtungen',
           label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredBeobsNichtBeurteiltCount}/${beobsNichtBeurteiltCount}`})`,
           count: beobsNichtBeurteiltCount,
-          labelLeftElements: labelLeftElementsBeobnichtbeurteilt,
+          labelLeftElements:
+            showBeobnichtbeurteiltIcon ?
+              [BeobNichtBeurteiltMapIconComponent]
+            : undefined,
         },
         {
           id: 'nicht-zuzuordnende-Beobachtungen',
           label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredBeobsNichtZuzuordnenCount}/${beobsNichtZuzuordnenCount}`})`,
           count: beobsNichtZuzuordnenCount,
-          labelLeftElements: labelLeftElementsBeobnichtzuzuordnen,
+          labelLeftElements:
+            showBeobnichtzuzuordnenIcon ?
+              [BeobNichtZuzuordnenMapIconComponent]
+            : undefined,
         },
         {
           id: 'Qualitätskontrollen',
@@ -457,10 +455,10 @@ export const useApNavData = (props) => {
       ekzaehleinheitsCount,
       filteredBeobsNichtBeurteiltCount,
       beobsNichtBeurteiltCount,
-      labelLeftElementsBeobnichtbeurteilt,
+      showBeobnichtbeurteiltIcon,
       filteredBeobsNichtZuzuordnenCount,
       beobsNichtZuzuordnenCount,
-      labelLeftElementsBeobnichtzuzuordnen,
+      showBeobnichtzuzuordnenIcon,
       filesCount,
       historiesCount,
     ],

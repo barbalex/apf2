@@ -38,6 +38,7 @@ export const TpopFolder = memo(
       parentTableId: pop.id,
       urlLabel: 'Teil-Populationen',
       label: menu.label,
+      labelLeftElements: menu.labelLeftElements,
       url,
       hasChildren: true,
     }
