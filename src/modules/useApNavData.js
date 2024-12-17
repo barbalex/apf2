@@ -10,6 +10,7 @@ import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/R
 import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { BeobNichtBeurteiltMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { BeobNichtZuzuordnenMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobZugeordnetMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -25,6 +26,8 @@ export const useApNavData = (props) => {
   const showBeobnichtzuzuordnenIcon = store.activeApfloraLayers?.includes(
     'beobNichtZuzuordnen',
   )
+  const showBeobzugeordnetIcon =
+    store.activeApfloraLayers?.includes('beobZugeordnet')
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
@@ -332,12 +335,16 @@ export const useApNavData = (props) => {
       labelLeftElements.push(BeobNichtBeurteiltMapIconComponent)
     if (showBeobnichtzuzuordnenIcon)
       labelLeftElements.push(BeobNichtZuzuordnenMapIconComponent)
+    if (showBeobzugeordnetIcon)
+      labelLeftElements.push(BeobZugeordnetMapIconComponent)
+
     return labelLeftElements
   }, [
     showPopIcon,
     showTpopIcon,
     showBeobnichtbeurteiltIcon,
     showBeobnichtzuzuordnenIcon,
+    showBeobzugeordnetIcon,
   ])
 
   const navData = useMemo(

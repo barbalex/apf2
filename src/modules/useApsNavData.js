@@ -9,6 +9,7 @@ import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/R
 import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { BeobNichtBeurteiltMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { BeobNichtZuzuordnenMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobZugeordnetMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -25,6 +26,8 @@ export const useApsNavData = (props) => {
   const showBeobnichtzuzuordnenIcon = store.activeApfloraLayers?.includes(
     'beobNichtZuzuordnen',
   )
+  const showBeobzugeordnetIcon =
+    store.activeApfloraLayers?.includes('beobZugeordnet')
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
 
@@ -81,6 +84,8 @@ export const useApsNavData = (props) => {
           showBeobnichtbeurteiltIcon && p.id === apId
         const showThisBeobnichtzuzuordnenIcon =
           showBeobnichtzuzuordnenIcon && p.id === apId
+        const showThisBeobzugeordnetIcon =
+          showBeobzugeordnetIcon && p.id === apId
         const labelLeftElements = []
         if (showThisPopIcon) labelLeftElements.push(PopMapIconComponent)
         if (showThisTpopIcon) labelLeftElements.push(TpopMapIconComponent)
@@ -88,6 +93,8 @@ export const useApsNavData = (props) => {
           labelLeftElements.push(BeobNichtBeurteiltMapIconComponent)
         if (showThisBeobnichtzuzuordnenIcon)
           labelLeftElements.push(BeobNichtZuzuordnenMapIconComponent)
+        if (showThisBeobzugeordnetIcon)
+          labelLeftElements.push(BeobZugeordnetMapIconComponent)
 
         return {
           id: p.id,
@@ -104,6 +111,7 @@ export const useApsNavData = (props) => {
       projId,
       showBeobnichtbeurteiltIcon,
       showBeobnichtzuzuordnenIcon,
+      showBeobzugeordnetIcon,
       showPopIcon,
       showTpopIcon,
       totalCount,

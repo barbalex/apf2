@@ -309,6 +309,11 @@ export const BeobNichtZuzuordnenMapIconComponent = () => (
 const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
   color: #ff00ff !important;
 `
+export const BeobZugeordnetMapIconComponent = () => (
+  <IconContainer0 title="Beobachtungen zugeordnet in Karte sichtbar">
+    <BeobZugeordnetMapIcon />
+  </IconContainer0>
+)
 const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
   paint-order: stroke;
   stroke-width: 8px;
