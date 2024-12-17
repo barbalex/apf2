@@ -28,6 +28,11 @@ import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
 
 import { MobxContext } from '../mobxContext.js'
+import {
+  MovingComponent,
+  CopyingComponent,
+  BiotopCopyingComponent,
+} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const popIcons = {
   normal: {
@@ -132,6 +137,21 @@ export const usePopsNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.moving, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.copying, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.copyingBiotop, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
@@ -145,6 +165,15 @@ export const usePopsNavData = (props) => {
       label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
         const popIconIsHighlighted = p.id === popId
+        const labelRightElements = []
+        const isMoving = store.moving.id === popId
+        if (isMoving) {
+          labelRightElements.push(MovingComponent)
+        }
+        const isCopying = store.copying.id === popId
+        if (isCopying) {
+          labelRightElements.push(CopyingComponent)
+        }
 
         const Icon =
           p.status ?
@@ -158,6 +187,7 @@ export const usePopsNavData = (props) => {
           id: p.id,
           label: p.label,
           labelLeftElements: store.tree.showPopIcon ? [Icon] : undefined,
+          labelRightElements,
         }
       }),
     }),
@@ -169,6 +199,8 @@ export const usePopsNavData = (props) => {
       popIconName,
       popId,
       projId,
+      store.copying.id,
+      store.moving.id,
       store.tree.showPopIcon,
       totalCount,
     ],

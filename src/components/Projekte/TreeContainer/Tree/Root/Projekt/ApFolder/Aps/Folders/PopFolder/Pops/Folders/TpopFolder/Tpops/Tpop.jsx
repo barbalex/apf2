@@ -32,6 +32,7 @@ export const Tpop = memo(
       urlLabel: menu.id,
       label: menu.label,
       labelLeftElements: menu.labelLeftElements,
+      labelRightElements: menu.labelRightElements,
       status: menu.status,
       url: [
         'Projekte',

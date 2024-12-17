@@ -45,6 +45,8 @@ export const Item = memo(
         {!!menu.labelLeftElements?.length &&
           menu.labelLeftElements.map((El, index) => <El key={index} />)}
         {menu.label}
+        {!!menu.labelRightElements?.length &&
+          menu.labelRightElements.map((El, index) => <El key={index} />)}
       </MenuItem>
     )
   }),

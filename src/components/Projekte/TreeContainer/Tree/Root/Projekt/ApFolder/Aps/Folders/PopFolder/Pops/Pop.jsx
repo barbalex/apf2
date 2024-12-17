@@ -20,6 +20,7 @@ export const Pop = memo(
       urlLabel: menu.id,
       label: menu.label,
       labelLeftElements: menu.labelLeftElements,
+      labelRightElements: menu.labelRightElements,
       status: menu.status,
       url: ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen', menu.id],
       hasChildren: true,

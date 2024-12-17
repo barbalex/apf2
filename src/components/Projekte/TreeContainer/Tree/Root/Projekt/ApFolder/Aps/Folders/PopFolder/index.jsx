@@ -29,6 +29,7 @@ export const PopFolder = memo(
       urlLabel: 'Populationen',
       label: menu.label,
       labelLeftElements: menu.labelLeftElements,
+      labelRightElements: menu.labelRightElements,
       url,
       hasChildren: menu.count > 0,
     }

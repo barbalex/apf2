@@ -74,6 +74,10 @@ export const List = memo(
                       textToHighlight={label?.toString()}
                     />
                   : label}
+                  {!!item.labelRightElements?.length &&
+                    item.labelRightElements.map((El, index) => (
+                      <El key={index} />
+                    ))}
                 </Row>
               )
             })}

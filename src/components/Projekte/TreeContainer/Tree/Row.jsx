@@ -212,18 +212,33 @@ const MovingIcon = styled(MdOutlineMoveDown)`
   color: rgb(255, 90, 0) !important;
   font-size: 1.5rem;
 `
+export const MovingComponent = () => (
+  <IconContainer title="zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen">
+    <MovingIcon />
+  </IconContainer>
+)
 const CopyingIcon = styled(MdContentCopy)`
   padding-left: 0.2em;
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
   font-size: 1.5rem;
 `
+export const CopyingComponent = () => (
+  <IconContainer title="kopiert, bereit zum Einfügen">
+    <CopyingIcon />
+  </IconContainer>
+)
 const BiotopCopyingIcon = styled(MdPhotoLibrary)`
   padding-left: 0.2em;
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
   font-size: 1.5rem;
 `
+export const BiotopCopyingComponent = () => (
+  <IconContainer title="Biotop kopiert, bereit zum Einfügen">
+    <BiotopCopyingIcon />
+  </IconContainer>
+)
 const PrintIconContainer = styled.div`
   cursor: pointer;
   padding-left: 8px;
@@ -484,6 +499,8 @@ export const Row = memo(
               />
             : node.label}
           </TextSpan>
+          {node.labelRightElements?.length &&
+            node.labelRightElements.map((El, index) => <El key={index} />)}
           {isMoving && (
             <div title="zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen">
               <MovingIcon />
