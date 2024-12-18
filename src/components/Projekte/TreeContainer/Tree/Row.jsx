@@ -501,21 +501,21 @@ export const Row = memo(
           </TextSpan>
           {node.labelRightElements?.length &&
             node.labelRightElements.map((El, index) => <El key={index} />)}
-          {isMoving && (
+          {/* {isMoving && (
             <div title="zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen">
               <MovingIcon />
             </div>
-          )}
+          )} */}
           {/* {isCopying && (
             <div title="kopiert, bereit zum Einfügen">
               <CopyingIcon />
             </div>
           )} */}
-          {amCopyingBiotop && (
+          {/* {amCopyingBiotop && (
             <div title="Biotop kopiert, bereit zum Einfügen">
               <BiotopCopyingIcon />
             </div>
-          )}
+          )} */}
           {showPrintIcon && (
             <PrintIconContainer
               title={printIconTitle}

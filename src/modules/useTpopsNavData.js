@@ -29,6 +29,11 @@ import { TpopIconPHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.jsx'
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
 
+import {
+  MovingComponent,
+  CopyingComponent,
+} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+
 export const tpopIcons = {
   normal: {
     100: TpopIcon,
@@ -136,6 +141,16 @@ export const useTpopsNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.moving.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.copying.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const count = data?.data?.popById?.tpopsByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
@@ -148,9 +163,18 @@ export const useTpopsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen`,
       label: `Teil-Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus: (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((p) => {
-        const iconIsHighlighted = p.id === tpopId
+        const labelRightElements = []
+        const isMoving = store.moving.id === p.id
+        if (isMoving) {
+          labelRightElements.push(MovingComponent)
+        }
+        const isCopying = store.copying.id === p.id
+        if (isCopying) {
+          labelRightElements.push(CopyingComponent)
+        }
 
-        const Icon =
+        const iconIsHighlighted = p.id === tpopId
+        const TpopIcon =
           p.status ?
             iconIsHighlighted ?
               tpopIcons[tpopIconName][p.status + 'Highlighted']
@@ -162,7 +186,9 @@ export const useTpopsNavData = (props) => {
           id: p.id,
           label: p.label,
           status: p.status,
-          labelLeftElements: store.tree.showTpopIcon ? [Icon] : undefined,
+          labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+          labelRightElements:
+            labelRightElements.length ? labelRightElements : undefined,
         }
       }),
     }),
@@ -173,6 +199,8 @@ export const useTpopsNavData = (props) => {
       isLoading,
       popId,
       projId,
+      store.copying.id,
+      store.moving.id,
       store.tree.showTpopIcon,
       totalCount,
       tpopIconName,

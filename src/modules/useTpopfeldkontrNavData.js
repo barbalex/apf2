@@ -1,10 +1,16 @@
-import { useMemo, useContext, useEffect } from 'react'
+import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+
+import {
+  MovingComponent,
+  CopyingComponent,
+  BiotopCopyingComponent,
+} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useTpopfeldkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -59,6 +65,23 @@ export const useTpopfeldkontrNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  useEffect(
+    () => reaction(() => store.copyingBiotop, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.moving.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.copying.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.tpopkontrById?.label
   const tpopkontrzaehlCount =
@@ -68,16 +91,38 @@ export const useTpopfeldkontrNavData = (props) => {
   const filesCount =
     data?.data?.tpopkontrById?.tpopkontrFilesByTpopkontrId?.totalCount ?? 0
 
+  const labelRightElements = useMemo(() => {
+    const labelRightElements = []
+    const isMoving = store.moving.id === tpopkontrId
+    if (isMoving) {
+      labelRightElements.push(MovingComponent)
+    }
+    const isCopying = store.copying.id === tpopkontrId
+    if (isCopying) {
+      labelRightElements.push(CopyingComponent)
+    }
+    const isCopyingBiotop = store.copyingBiotop.id === tpopkontrId
+    if (isCopyingBiotop) {
+      labelRightElements.push(BiotopCopyingComponent)
+    }
+    
+    return labelRightElements
+  }, [store.copying.id, store.copyingBiotop.id, store.moving.id, tpopkontrId])
+
   const navData = useMemo(
     () => ({
       id: tpopkontrId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}`,
       label,
+      labelRightElements:
+        labelRightElements.length ? labelRightElements : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Feld-Kontrolle',
           label: `Feld-Kontrolle`,
+          labelRightElements:
+            labelRightElements.length ? labelRightElements : undefined,
         },
         {
           id: 'Biotop',
@@ -100,6 +145,7 @@ export const useTpopfeldkontrNavData = (props) => {
       filteredTpopkontrzaehlCount,
       isLoading,
       label,
+      labelRightElements,
       popId,
       projId,
       tpopId,

@@ -1,7 +1,15 @@
-import { useMemo } from 'react'
+import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { reaction } from 'mobx'
+
+import { MobxContext } from '../mobxContext.js'
+
+import {
+  MovingComponent,
+  CopyingComponent,
+} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useTpopmassnNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -11,6 +19,8 @@ export const useTpopmassnNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopmassnId = props?.tpopmassnId ?? params.tpopmassnId
+
+  const store = useContext(MobxContext)
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['treeTpopmassn', tpopmassnId],
@@ -33,22 +43,52 @@ export const useTpopmassnNavData = (props) => {
         fetchPolicy: 'no-cache',
       }),
   })
+  const [, setRerenderer] = useState(0)
+  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  useEffect(
+    () => reaction(() => store.moving.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.copying.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.tpopmassnById?.label
   data?.data?.tpopmassnById?.filteredBeobZugeordnet?.totalCount ?? 0
   const filesCount =
     data?.data?.tpopmassnById?.tpopmassnFilesByTpopmassnId?.totalCount ?? 0
 
+  const labelRightElements = useMemo(() => {
+    const labelRightElements = []
+    const isMoving = store.moving.id === tpopmassnId
+    if (isMoving) {
+      labelRightElements.push(MovingComponent)
+    }
+    const isCopying = store.copying.id === tpopmassnId
+    if (isCopying) {
+      labelRightElements.push(CopyingComponent)
+    }
+
+    return labelRightElements
+  }, [store.copying.id, store.moving.id, tpopmassnId])
+
   const navData = useMemo(
     () => ({
       id: tpopmassnId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${tpopmassnId}`,
       label,
+      labelRightElements:
+        labelRightElements.length ? labelRightElements : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Massnahme',
           label: `Massnahme`,
+          labelRightElements:
+            labelRightElements.length ? labelRightElements : undefined,
         },
         {
           id: 'Dateien',
@@ -57,7 +97,16 @@ export const useTpopmassnNavData = (props) => {
         },
       ],
     }),
-    [apId, filesCount, label, popId, projId, tpopId, tpopmassnId],
+    [
+      apId,
+      filesCount,
+      label,
+      labelRightElements,
+      popId,
+      projId,
+      tpopId,
+      tpopmassnId,
+    ],
   )
 
   return { isLoading, error, navData }

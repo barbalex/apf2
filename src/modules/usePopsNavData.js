@@ -31,7 +31,6 @@ import { MobxContext } from '../mobxContext.js'
 import {
   MovingComponent,
   CopyingComponent,
-  BiotopCopyingComponent,
 } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const popIcons = {
@@ -147,11 +146,6 @@ export const usePopsNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
-  useEffect(
-    () => reaction(() => store.copyingBiotop, rerender),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
@@ -164,7 +158,6 @@ export const usePopsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
       label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
-        const popIconIsHighlighted = p.id === popId
         const labelRightElements = []
         const isMoving = store.moving.id === p.id
         if (isMoving) {
@@ -175,7 +168,8 @@ export const usePopsNavData = (props) => {
           labelRightElements.push(CopyingComponent)
         }
 
-        const Icon =
+        const popIconIsHighlighted = p.id === popId
+        const PopIcon =
           p.status ?
             popIconIsHighlighted ?
               popIcons[popIconName][p.status + 'Highlighted']
@@ -186,7 +180,7 @@ export const usePopsNavData = (props) => {
         return {
           id: p.id,
           label: p.label,
-          labelLeftElements: store.tree.showPopIcon ? [Icon] : undefined,
+          labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
           labelRightElements:
             labelRightElements.length ? labelRightElements : undefined,
         }

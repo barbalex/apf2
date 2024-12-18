@@ -48,6 +48,7 @@ export const Tpopmassn = memo(
       parentTableId: tpop.id,
       urlLabel: menu.id,
       label: menu.label,
+      labelRightElements: menu.labelRightElements,
       url: [
         'Projekte',
         projekt.id,

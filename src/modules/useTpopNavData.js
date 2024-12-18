@@ -9,29 +9,13 @@ import { BeobZugeordnetMapIconComponent } from '../components/Projekte/TreeConta
 import { useProjekteTabs } from './useProjekteTabs.js'
 
 // TODO:remove unused
-import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.jsx'
-import { TpopIcon100Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100Highlighted.jsx'
-import { TpopIcon101 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/101.jsx'
-import { TpopIcon101Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/101Highlighted.jsx'
-import { TpopIcon200 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/200.jsx'
-import { TpopIcon200Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/200Highlighted.jsx'
-import { TpopIcon201 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/201.jsx'
-import { TpopIcon201Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/201Highlighted.jsx'
-import { TpopIcon202 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/202.jsx'
-import { TpopIcon202Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/202Highlighted.jsx'
-import { TpopIcon300 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/300.jsx'
-import { TpopIcon300Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/300Highlighted.jsx'
-import { TpopIcon } from '../components/Projekte/Karte/layers/Tpop/tpop.jsx'
-import { TpopIconHighlighted } from '../components/Projekte/Karte/layers/Tpop/tpopHighlighted.jsx'
-import { TpopIconU } from '../components/Projekte/Karte/layers/Tpop/statusGroup/u.jsx'
-import { TpopIconUHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/uHighlighted.jsx'
-import { TpopIconA } from '../components/Projekte/Karte/layers/Tpop/statusGroup/a.jsx'
-import { TpopIconAHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/aHighlighted.jsx'
-import { TpopIconP } from '../components/Projekte/Karte/layers/Tpop/statusGroup/p.jsx'
-import { TpopIconPHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/pHighlighted.jsx'
-import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.jsx'
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
 import { tpopIcons } from './useTpopsNavData.js'
+
+import {
+  MovingComponent,
+  CopyingComponent,
+} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const useTpopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -198,6 +182,16 @@ export const useTpopNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.moving.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.copying.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.tpopById?.label
   const status = data?.data?.tpopById?.status
@@ -226,22 +220,41 @@ export const useTpopNavData = (props) => {
 
   const tpopIconName = store.map.tpopIcon
 
-  const Icon =
+  const TpopIcon =
     status ?
       tpopIcons[tpopIconName][status + 'Highlighted']
     : TpopIconQHighlighted
+
+  const labelRightElements = useMemo(() => {
+    const labelRightElements = []
+    const isMoving = store.moving.id === tpopId
+    if (isMoving) {
+      labelRightElements.push(MovingComponent)
+    }
+    const isCopying = store.copying.id === tpopId
+    if (isCopying) {
+      labelRightElements.push(CopyingComponent)
+    }
+    
+    return labelRightElements
+  }, [store.moving.id, store.copying.id, tpopId])
 
   const navData = useMemo(
     () => ({
       id: tpopId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}`,
       label,
+      labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+      labelRightElements:
+        labelRightElements.length ? labelRightElements : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Teil-Population',
           label: `Teil-Population`,
-          labelLeftElements: store.tree.showTpopIcon ? [Icon] : undefined,
+          labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+          labelRightElements:
+            labelRightElements.length ? labelRightElements : undefined,
         },
         {
           id: 'Massnahmen',
@@ -288,6 +301,7 @@ export const useTpopNavData = (props) => {
       ],
     }),
     [
+      TpopIcon,
       apId,
       beobZugeordnetCount,
       feldkontrCount,
@@ -302,11 +316,13 @@ export const useTpopNavData = (props) => {
       historiesCount,
       isLoading,
       label,
+      labelRightElements,
       massnCount,
       popId,
       popmassnbersCount,
       projId,
       showBeobzugeordnetIcon,
+      store.tree.showTpopIcon,
       tpopId,
       tpopbersCount,
     ],

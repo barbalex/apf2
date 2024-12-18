@@ -8,8 +8,11 @@ import { MobxContext } from '../mobxContext.js'
 import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 import { popIcons } from './usePopsNavData.js'
-
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
+import {
+  MovingComponent,
+  CopyingComponent,
+} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -118,6 +121,16 @@ export const usePopNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  useEffect(
+    () => reaction(() => store.moving.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => reaction(() => store.copying.id, rerender),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const label = data?.data?.popById?.label
   const status = data?.data?.popById?.status
@@ -134,20 +147,39 @@ export const usePopNavData = (props) => {
   const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
 
   const popIconName = store.map.popIcon
-  const Icon =
+  const PopIcon =
     status ? popIcons[popIconName][status + 'Highlighted'] : PopIconQHighlighted
+
+  const labelRightElements = useMemo(() => {
+    const labelRightElements = []
+    const isMoving = store.moving.id === popId
+    if (isMoving) {
+      labelRightElements.push(MovingComponent)
+    }
+    const isCopying = store.copying.id === popId
+    if (isCopying) {
+      labelRightElements.push(CopyingComponent)
+    }
+    
+    return labelRightElements
+  }, [store.moving.id, store.copying.id, popId])
 
   const navData = useMemo(
     () => ({
       id: popId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}`,
       label,
+      labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
+      labelRightElements:
+        labelRightElements.length ? labelRightElements : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Population',
           label: `Population`,
-          labelLeftElements: store.tree.showPopIcon ? [Icon] : undefined,
+          labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
+          labelRightElements:
+            labelRightElements.length ? labelRightElements : undefined,
         },
         {
           id: 'Teil-Populationen',
@@ -187,7 +219,8 @@ export const usePopNavData = (props) => {
       apId,
       label,
       store.tree.showPopIcon,
-      Icon,
+      PopIcon,
+      labelRightElements,
       isLoading,
       filteredTpopsCount,
       tpopsCount,

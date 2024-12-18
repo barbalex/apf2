@@ -50,6 +50,7 @@ export const Tpopfeldkontr = memo(
       parentTableId: tpop.id,
       urlLabel: navData.id,
       label: navData.label,
+      labelRightElements: navData.labelRightElements,
       url: [
         'Projekte',
         projekt.id,
