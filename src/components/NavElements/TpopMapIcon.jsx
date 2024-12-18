@@ -4,11 +4,11 @@ import { MapIcon } from './MapIcon.jsx'
 import { IconContainer } from './IconContainer.jsx'
 
 const StyledMapIcon = styled(MapIcon)`
-  color: #947500 !important;
+  color: #016f19 !important;
 `
 
-export const PopMapIcon = () => (
-  <IconContainer title="Populationen in Karte sichtbar">
+export const TpopMapIcon = () => (
+  <IconContainer title="Teil-Populationen in Karte sichtbar">
     <StyledMapIcon />
   </IconContainer>
 )

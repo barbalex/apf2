@@ -127,14 +127,6 @@ export const IconContainer = styled.div`
   padding-right: 4px;
   margin-left: -2px;
 `
-const TpopMapIcon = styled(StyledMapIcon)`
-  color: #016f19 !important;
-`
-export const TpopMapIconComponent = () => (
-  <IconContainer title="Teil-Populationen in Karte sichtbar">
-    <TpopMapIcon />
-  </IconContainer>
-)
 const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
 `

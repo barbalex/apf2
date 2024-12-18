@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { TpopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 import { popIcons } from './usePopsNavData.js'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
@@ -160,7 +160,7 @@ export const usePopNavData = (props) => {
     if (isCopying) {
       labelRightElements.push(CopyingComponent)
     }
-    
+
     return labelRightElements
   }, [store.moving.id, store.copying.id, popId])
 
@@ -185,7 +185,7 @@ export const usePopNavData = (props) => {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
           count: tpopsCount,
-          labelLeftElements: showTpopIcon ? [TpopMapIconComponent] : undefined,
+          labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
         },
         {
           id: 'Kontroll-Berichte',
