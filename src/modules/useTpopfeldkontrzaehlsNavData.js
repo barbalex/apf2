@@ -20,7 +20,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
       'treeTpopfeldkontrzaehl',
-      tpopId,
+      tpopkontrId,
       store.tree.tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: () =>
