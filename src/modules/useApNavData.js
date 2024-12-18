@@ -6,7 +6,7 @@ import { reaction } from 'mobx'
 import countBy from 'lodash/countBy'
 
 import { MobxContext } from '../mobxContext.js'
-import { PopMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { BeobNichtBeurteiltMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { BeobNichtZuzuordnenMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
@@ -341,7 +341,7 @@ export const useApNavData = (props) => {
           id: 'Populationen',
           label: `Populationen (${isLoading ? '...' : `${filteredPopsCount}/${popsCount}`})`,
           count: popsCount,
-          labelLeftElements: showPopIcon ? [PopMapIconComponent] : undefined,
+          labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
         },
         {
           id: 'AP-Ziele',

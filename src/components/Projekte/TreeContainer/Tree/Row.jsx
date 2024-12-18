@@ -120,9 +120,6 @@ const StyledMapIcon = styled(MdLocalFlorist)`
   height: 20px !important;
   font-size: 1.4rem;
 `
-const PopMapIcon = styled(StyledMapIcon)`
-  color: #947500 !important;
-`
 export const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -130,11 +127,6 @@ export const IconContainer = styled.div`
   padding-right: 4px;
   margin-left: -2px;
 `
-export const PopMapIconComponent = () => (
-  <IconContainer title="Populationen in Karte sichtbar">
-    <PopMapIcon />
-  </IconContainer>
-)
 const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
