@@ -10,7 +10,7 @@ const StyledMapIcon = styled(MapIcon)`
   stroke: #fff900;
 `
 
-export const BeobNichtBeurteiltFilteredMapIcon = () => (
+export const BeobnichtbeurteiltFilteredMapIcon = () => (
   <IconContainer title="Beobachtung in Karte hervorgehoben">
     <StyledMapIcon />
   </IconContainer>

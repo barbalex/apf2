@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { BeobNichtBeurteiltFilteredMapIcon } from '../components/NavElements/BeobNichtBeurteiltFilteredMapIcon.jsx'
+import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const useBeobNichtBeurteiltsNavData = (props) => {
@@ -118,7 +118,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
           label: p.label,
           labelLeftElements:
             showBeobnichtbeurteiltIcon && beobId === p.id ?
-              [BeobNichtBeurteiltFilteredMapIcon]
+              [BeobnichtbeurteiltFilteredMapIcon]
             : undefined,
         }),
       ),
