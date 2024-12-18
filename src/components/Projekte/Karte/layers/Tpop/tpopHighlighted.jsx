@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import Icon from './tpopHighlighted.svg'
-import { IconContainer } from '../../../TreeContainer/Tree/Row.jsx'
+import { IconContainer } from '../../../../NavElements/IconContainer.jsx'
 
 export const TpopIconHighlighted = memo(() => (
   <IconContainer>

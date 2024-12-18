@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import Icon from './pHighlighted.svg'
-import { IconContainer } from '../../../../TreeContainer/Tree/Row.jsx'
+import { IconContainer } from '../../../../../NavElements/IconContainer'
 
 export const PopIconPHighlighted = memo(() => (
   <IconContainer>

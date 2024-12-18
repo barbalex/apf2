@@ -110,13 +110,6 @@ const TextSpan = styled.span`
     color: #f57c00;
   }
 `
-export const IconContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-right: 4px;
-  margin-left: -2px;
-`
 
 export const transitionStyles = {
   entering: { opacity: 1 },
