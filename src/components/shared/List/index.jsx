@@ -55,6 +55,7 @@ export const List = memo(
             title={title}
             menuBar={menuBar}
           />
+          {/* TODO: add filter field here when filtering */}
           <ListContainer>
             {items.map((item) => {
               const label = item.label ?? item.labelEkf ?? item.labelEk
