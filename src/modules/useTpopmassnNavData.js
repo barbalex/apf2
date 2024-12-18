@@ -6,10 +6,8 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 
-import {
-  MovingComponent,
-  CopyingComponent,
-} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { CopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 
 export const useTpopmassnNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -65,7 +63,7 @@ export const useTpopmassnNavData = (props) => {
     const labelRightElements = []
     const isMoving = store.moving.id === tpopmassnId
     if (isMoving) {
-      labelRightElements.push(MovingComponent)
+      labelRightElements.push(MovingIcon)
     }
     const isCopying = store.copying.id === tpopmassnId
     if (isCopying) {
