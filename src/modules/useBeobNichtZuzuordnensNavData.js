@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { BeobNichtZuzuordnenFilteredMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const useBeobNichtZuzuordnensNavData = (props) => {
@@ -118,7 +118,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
           label: p.label,
           labelLeftElements:
             showBeobnichtzuzuordnenIcon && beobId === p.id ?
-              [BeobNichtZuzuordnenFilteredMapIconComponent]
+              [BeobnichtzuzuordnenFilteredMapIcon]
             : undefined,
         }),
       ),

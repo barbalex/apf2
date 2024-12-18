@@ -8,7 +8,7 @@ import countBy from 'lodash/countBy'
 import { MobxContext } from '../mobxContext.js'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.jsx'
-import { BeobnichtzuzuordnenMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const useApNavData = (props) => {
@@ -397,7 +397,7 @@ export const useApNavData = (props) => {
           count: beobsNichtZuzuordnenCount,
           labelLeftElements:
             showBeobnichtzuzuordnenIcon ?
-              [BeobnichtzuzuordnenMapIconComponent]
+              [BeobnichtzuzuordnenMapIcon]
             : undefined,
         },
         {
