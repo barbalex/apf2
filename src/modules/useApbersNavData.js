@@ -59,11 +59,10 @@ export const useApbersNavData = (props) => {
       id: 'AP-Berichte',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
       label: `AP-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.apById?.apbersByApId?.nodes?.map((p) => ({
-          id: p.id,
-          label: p.label,
-        })) ?? [],
+      menus: (data?.data?.apById?.apbersByApId?.nodes ?? []).map((p) => ({
+        id: p.id,
+        label: p.label,
+      })),
     }),
     [
       apId,

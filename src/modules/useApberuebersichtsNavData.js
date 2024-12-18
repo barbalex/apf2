@@ -63,11 +63,12 @@ export const useApberuebersichtsNavData = (props) => {
       label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
       // TODO: needed?
       totalCount,
-      menus:
-        data?.data?.projektById?.apberuebersichtsByProjId?.nodes.map((p) => ({
-          id: p.id,
-          label: p.label,
-        })) ?? [],
+      menus: (
+        data?.data?.projektById?.apberuebersichtsByProjId?.nodes ?? []
+      ).map((p) => ({
+        id: p.id,
+        label: p.label,
+      })),
     }),
     [
       count,

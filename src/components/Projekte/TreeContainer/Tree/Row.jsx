@@ -313,7 +313,6 @@ export const Row = memo(
     let useSymbolIcon = true
     let useSymbolSpan = false
     let symbolIcon
-    let showPrintIcon = false
     if (node.hasChildren && (nodeIsOpen || node.alwaysOpen)) {
       symbolIcon = 'expandMore'
     } else if (node.hasChildren) {
@@ -324,9 +323,8 @@ export const Row = memo(
       useSymbolSpan = true
       useSymbolIcon = false
     }
-    if (node.menuType === 'apber' || node.menuType === 'apberuebersicht') {
-      showPrintIcon = true
-    }
+    const showPrintIcon =
+      node.menuType === 'apber' || node.menuType === 'apberuebersicht'
     const printIconTitle =
       node.menuType === 'apberuebersicht' ?
         'Druckversion. Achtung: braucht Minuten, um vollständig zu laden'
