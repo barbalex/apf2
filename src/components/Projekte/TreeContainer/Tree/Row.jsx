@@ -127,14 +127,6 @@ export const IconContainer = styled.div`
   padding-right: 4px;
   margin-left: -2px;
 `
-const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
-  color: #9a009a !important;
-`
-export const BeobNichtBeurteiltMapIconComponent = () => (
-  <IconContainer title="Beobachtungen nicht beurteilt in Karte sichtbar">
-    <BeobNichtBeurteiltMapIcon />
-  </IconContainer>
-)
 const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
   color: #ffe4ff !important;
 `
@@ -149,16 +141,6 @@ const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
 export const BeobZugeordnetMapIconComponent = () => (
   <IconContainer title="Beobachtungen zugeordnet in Karte sichtbar">
     <BeobZugeordnetMapIcon />
-  </IconContainer>
-)
-const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
-  paint-order: stroke;
-  stroke-width: 8px;
-  stroke: #fff900;
-`
-export const BeobNichtBeurteiltFilteredMapIconComponent = () => (
-  <IconContainer title="Beobachtung in Karte hervorgehoben">
-    <BeobNichtBeurteiltFilteredMapIcon />
   </IconContainer>
 )
 const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
