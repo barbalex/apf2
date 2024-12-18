@@ -9,10 +9,8 @@ import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 import { popIcons } from './usePopsNavData.js'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
-import {
-  MovingComponent,
-  CopyingComponent,
-} from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { CopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -154,7 +152,7 @@ export const usePopNavData = (props) => {
     const labelRightElements = []
     const isMoving = store.moving.id === popId
     if (isMoving) {
-      labelRightElements.push(MovingComponent)
+      labelRightElements.push(MovingIcon)
     }
     const isCopying = store.copying.id === popId
     if (isCopying) {

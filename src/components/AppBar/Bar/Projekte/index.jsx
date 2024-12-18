@@ -82,11 +82,6 @@ export const ProjekteMenus = memo(
 
     const onClickButton = useCallback(
       (name) => {
-        console.log('ProjekteMenus.onClickButton', {
-          name,
-          projekteTabs,
-          isMobileView,
-        })
         if (isMobileView) {
           // show one tab only
           if (projekteTabs.length === 1) {

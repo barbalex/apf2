@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { BeobZugeordnetMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 
 // TODO:remove unused
@@ -235,7 +235,7 @@ export const useTpopNavData = (props) => {
     if (isCopying) {
       labelRightElements.push(CopyingComponent)
     }
-    
+
     return labelRightElements
   }, [store.moving.id, store.copying.id, tpopId])
 
@@ -280,9 +280,7 @@ export const useTpopNavData = (props) => {
           id: 'Beobachtungen',
           label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
           labelLeftElements:
-            showBeobzugeordnetIcon ?
-              [BeobZugeordnetMapIconComponent]
-            : undefined,
+            showBeobzugeordnetIcon ? [BeobzugeordnetMapIcon] : undefined,
         },
         {
           id: 'EK',

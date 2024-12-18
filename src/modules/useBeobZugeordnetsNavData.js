@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { BeobZugeordnetFilteredMapIconComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const useBeobZugeordnetsNavData = (props) => {
@@ -91,7 +91,7 @@ export const useBeobZugeordnetsNavData = (props) => {
         label: p.label,
         labelLeftElements:
           showBeobzugeordnetIcon && beobId === p.id ?
-            [BeobZugeordnetFilteredMapIconComponent]
+            [BeobzugeordnetFilteredMapIcon]
           : undefined,
       })),
     }),

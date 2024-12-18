@@ -1,7 +1,6 @@
 import { memo, useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import {
-  MdLocalFlorist,
   MdOutlineMoveDown,
   MdExpandMore,
   MdContentCopy,
@@ -114,12 +113,6 @@ const TextSpan = styled.span`
     color: #f57c00;
   }
 `
-const StyledMapIcon = styled(MdLocalFlorist)`
-  padding-right: 2px;
-  margin-left: -2px;
-  height: 20px !important;
-  font-size: 1.4rem;
-`
 export const IconContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -127,24 +120,6 @@ export const IconContainer = styled.div`
   padding-right: 4px;
   margin-left: -2px;
 `
-const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
-  color: #ff00ff !important;
-`
-export const BeobZugeordnetMapIconComponent = () => (
-  <IconContainer title="Beobachtungen zugeordnet in Karte sichtbar">
-    <BeobZugeordnetMapIcon />
-  </IconContainer>
-)
-const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
-  paint-order: stroke;
-  stroke-width: 8px;
-  stroke: #fff900;
-`
-export const BeobZugeordnetFilteredMapIconComponent = () => (
-  <IconContainer title="Beobachtung in Karte hervorgehoben">
-    <BeobZugeordnetFilteredMapIcon />
-  </IconContainer>
-)
 const MovingIcon = styled(MdOutlineMoveDown)`
   padding-left: 0.2em;
   height: 20px !important;
