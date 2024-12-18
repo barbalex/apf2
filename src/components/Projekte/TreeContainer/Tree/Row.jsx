@@ -2,7 +2,6 @@ import { memo, useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import {
   MdLocalFlorist,
-  MdSwapVerticalCircle,
   MdOutlineMoveDown,
   MdExpandMore,
   MdContentCopy,
@@ -10,14 +9,11 @@ import {
   MdChevronRight,
   MdRemove,
   MdMoreHoriz,
-  MdPictureAsPdf,
 } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
-import { useParams, useNavigate, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import upperFirst from 'lodash/upperFirst'
-import { useApolloClient, gql } from '@apollo/client'
-import { useSnackbar } from 'notistack'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'
 import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePath.js'
@@ -26,13 +22,8 @@ import { toggleNode } from './toggleNode.js'
 import { toggleNodeSymbol } from './toggleNodeSymbol.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
-import { historizeForAp } from '../../../../modules/historizeForAp.js'
-import { historize } from '../../../../modules/historize.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-const PrintIcon = styled(MdPictureAsPdf)`
-  font-size: 1.5rem;
-`
 const singleRowHeight = 23
 const StyledNode = styled.div`
   padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
@@ -239,18 +230,6 @@ export const BiotopCopyingComponent = () => (
     <BiotopCopyingIcon />
   </IconContainer>
 )
-const PrintIconContainer = styled.div`
-  cursor: pointer;
-  padding-left: 8px;
-  svg {
-    font-size: 19px !important;
-  }
-  &:hover {
-    svg {
-      font-size: 22px !important;
-    }
-  }
-`
 
 export const transitionStyles = {
   entering: { opacity: 1 },
@@ -261,33 +240,11 @@ export const transitionStyles = {
 
 export const Row = memo(
   observer(({ node, transitionState, ref }) => {
-    const { apId, tpopId } = useParams()
     const navigate = useNavigate()
     const { search } = useLocation()
 
-    const client = useApolloClient()
-
-    // console.log('Row, node:', node)
-    // console.log('Row', { transitionState, ref })
-
     const store = useContext(MobxContext)
-    const {
-      activeApfloraLayers,
-      copying,
-      moving,
-      copyingBiotop,
-      setPrintingJberYear,
-      map,
-    } = store
-    const tree = store.tree
-    const {
-      openNodes,
-      nodeLabelFilter,
-      activeNodeArray,
-      showTpopIcon,
-      showPopIcon,
-    } = tree
-    const { tpopIcon: tpopIconName, popIcon: popIconName } = map
+    const { openNodes, nodeLabelFilter, activeNodeArray } = store.tree
     const activeId = activeNodeArray[activeNodeArray.length - 1]
     const nodeIsActive = node.id === activeId
 
@@ -323,114 +280,26 @@ export const Row = memo(
       useSymbolSpan = true
       useSymbolIcon = false
     }
-    const showPrintIcon =
-      node.menuType === 'apber' || node.menuType === 'apberuebersicht'
-    const printIconTitle =
-      node.menuType === 'apberuebersicht' ?
-        'Druckversion. Achtung: braucht Minuten, um vollständig zu laden'
-      : 'Druckversion'
     const dataUrl = JSON.stringify(node.url)
     const level =
       node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
-    const isMoving =
-      node.nodeType === 'table' &&
-      node.menuType === moving.table &&
-      node.id === moving.id
-    const isCopying =
-      node.nodeType === 'table' &&
-      node.menuType === copying.table &&
-      node.id === copying.id
-    const amCopyingBiotop =
-      node.nodeType === 'table' && node.id === copyingBiotop.id
 
-    const onClickNode = useCallback(() => {
-      toggleNode({
-        node,
-        store,
-        navigate,
-        search,
-        onlyShowActivePath,
-      })
-    }, [navigate, node, search, store, onlyShowActivePath])
+    const onClickNode = useCallback(
+      () =>
+        toggleNode({
+          node,
+          store,
+          navigate,
+          search,
+          onlyShowActivePath,
+        }),
+      [navigate, node, search, store, onlyShowActivePath],
+    )
 
-    const onClickNodeSymbol = useCallback(() => {
-      toggleNodeSymbol({ node, store, search, navigate })
-    }, [navigate, node, search, store])
-
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-
-    const onClickPrint = useCallback(async () => {
-      if (!apId) {
-        // apberuebersicht
-        const { data } = await client.query({
-          query: gql`
-            query apberuebersichtForPrint($id: UUID!) {
-              apberuebersichtById(id: $id) {
-                id
-                jahr
-                historyFixed
-              }
-            }
-          `,
-          variables: { id: node.id },
-        })
-        const apberuebersicht = data?.apberuebersichtById
-        let snackbarKey
-        if (apberuebersicht?.historyFixed === false) {
-          snackbarKey = enqueueSnackbar(
-            'Arten, Pop und TPop werden historisiert, damit Sie aktuelle Daten sehen',
-            {
-              variant: 'info',
-              persist: true,
-            },
-          )
-          await historize({ store, apberuebersicht })
-          closeSnackbar(snackbarKey)
-        }
-        setPrintingJberYear(+node.label)
-        navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
-      } else {
-        // apber
-        const { data } = await client.query({
-          query: gql`
-            query apberForPrint($jahr: Int!) {
-              allApberuebersichts(filter: { jahr: { equalTo: $jahr } }) {
-                nodes {
-                  id
-                  historyFixed
-                }
-              }
-            }
-          `,
-          variables: { jahr: Number(node.label) },
-        })
-        const apberuebersicht = data?.allApberuebersichts?.nodes?.[0]
-        let snackbarKey
-        if (!apberuebersicht || apberuebersicht?.historyFixed === false) {
-          snackbarKey = enqueueSnackbar(
-            'Art, Pop und TPop werden historisiert',
-            {
-              variant: 'info',
-              persist: true,
-            },
-          )
-          await historizeForAp({ store, year: Number(node.label), apId })
-          closeSnackbar(snackbarKey)
-        }
-        setPrintingJberYear(+node.label)
-        navigate(`/Daten/${[...node.url, 'print'].join('/')}${search}`)
-      }
-    }, [
-      apId,
-      client,
-      closeSnackbar,
-      enqueueSnackbar,
-      navigate,
-      node,
-      search,
-      setPrintingJberYear,
-      store,
-    ])
+    const onClickNodeSymbol = useCallback(
+      () => toggleNodeSymbol({ node, store, search, navigate }),
+      [navigate, node, search, store],
+    )
 
     // console.log('Row, node:', node)
 
@@ -499,14 +368,6 @@ export const Row = memo(
           </TextSpan>
           {node.labelRightElements?.length &&
             node.labelRightElements.map((El, index) => <El key={index} />)}
-          {showPrintIcon && (
-            <PrintIconContainer
-              title={printIconTitle}
-              onClick={onClickPrint}
-            >
-              <PrintIcon />
-            </PrintIconContainer>
-          )}
         </StyledNode>
       </ContextMenuTrigger>
     )
