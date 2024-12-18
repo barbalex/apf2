@@ -53,29 +53,24 @@ export const useEkfrequenzsNavData = (props) => {
     [],
   )
 
-  const rows = useMemo(
-    () => data?.data?.apById?.ekfrequenzsByApId?.nodes ?? [],
-    [data],
-  )
-  const count = rows.length
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
   const menus = useMemo(
     () =>
-      rows.map((p) => ({
+      (data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label ?? '(kein Kürzel)',
-      })) ?? [],
-    [rows],
+      })),
+    [data?.data?.apById?.ekfrequenzsByApId?.nodes],
   )
 
   const navData = useMemo(
     () => ({
       id: 'EK-Frequenzen',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
-      label: `EK-Frequenzen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      label: `EK-Frequenzen (${isLoading ? '...' : `${menus.length}/${totalCount}`})`,
       menus,
     }),
-    [apId, count, isLoading, menus, projId, totalCount],
+    [apId, isLoading, menus, projId, totalCount],
   )
 
   return { isLoading, error, navData }

@@ -71,7 +71,7 @@ export const useEkzaehleinheitsNavData = (props) => {
       rows.map((p) => ({
         id: p.id,
         label: p.label,
-      })) ?? [],
+      })),
     [rows],
   )
 

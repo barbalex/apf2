@@ -15,12 +15,7 @@ export const useErfkritsNavData = (props) => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: [
-      'treeErfkrit',
-      projId,
-      apId,
-      store.tree.erfkritGqlFilterForTree,
-    ],
+    queryKey: ['treeErfkrit', projId, apId, store.tree.erfkritGqlFilterForTree],
     queryFn: () =>
       apolloClient.query({
         query: gql`
@@ -70,11 +65,10 @@ export const useErfkritsNavData = (props) => {
       id: 'AP-Erfolgskriterien',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien`,
       label: `AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.apById?.erfkritsByApId?.nodes?.map((p) => ({
-          id: p.id,
-          label: p.label,
-        })) ?? [],
+      menus: (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((p) => ({
+        id: p.id,
+        label: p.label,
+      })),
     }),
     [
       apId,

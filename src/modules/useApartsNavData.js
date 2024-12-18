@@ -59,11 +59,10 @@ export const useApartsNavData = (props) => {
       id: 'Taxa',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Taxa`,
       label: `Taxa (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.apById?.apartsByApId?.nodes?.map((p) => ({
-          id: p.id,
-          label: p.label,
-        })) ?? [],
+      menus: (data?.data?.apById?.apartsByApId?.nodes ?? []).map((p) => ({
+        id: p.id,
+        label: p.label,
+      })),
     }),
     [
       apId,

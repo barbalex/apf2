@@ -49,11 +49,10 @@ export const useAdressesNavData = () => {
       id: 'Adressen',
       url: `/Daten/Werte-Listen/Adressen`,
       label: `Adressen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.allAdresses?.nodes.map((p) => ({
-          id: p.id,
-          label: p.label,
-        })) ?? [],
+      menus: (data?.data?.allAdresses?.nodes ?? []).map((p) => ({
+        id: p.id,
+        label: p.label,
+      })),
     }),
     [count, data?.data?.allAdresses?.nodes, isLoading, totalCount],
   )

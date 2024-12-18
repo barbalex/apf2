@@ -62,11 +62,12 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
       id: 'ApberrelevantGrundWerte',
       url: `/Daten/Werte-Listen/ApberrelevantGrundWerte`,
       label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.allTpopApberrelevantGrundWertes?.nodes.map((p) => ({
+      menus: (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
+        (p) => ({
           id: p.id,
           label: p.label,
-        })) ?? [],
+        }),
+      ),
     }),
     [
       count,

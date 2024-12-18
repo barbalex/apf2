@@ -61,11 +61,12 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
       id: 'TpopkontrzaehlEinheitWerte',
       url: `/Daten/Werte-Listen/TpopkontrzaehlEinheitWerte`,
       label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus:
-        data?.data?.allTpopkontrzaehlEinheitWertes?.nodes.map((p) => ({
+      menus: (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
+        (p) => ({
           id: p.id,
           label: p.label,
-        })) ?? [],
+        }),
+      ),
     }),
     [
       count,

@@ -55,10 +55,10 @@ export const usePopbersNavData = (props) => {
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
   const menus = useMemo(
     () =>
-      data?.data?.popById?.popbersByPopId?.nodes?.map((p) => ({
+      (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
-      })) ?? [],
+      })),
     [data?.data?.popById?.popbersByPopId?.nodes],
   )
 
