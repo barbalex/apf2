@@ -1,5 +1,4 @@
 import { memo, useContext, useCallback } from 'react'
-import styled from '@emotion/styled'
 import {
   MdExpandMore,
   MdChevronRight,
@@ -10,6 +9,7 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useNavigate, useLocation } from 'react-router'
 import upperFirst from 'lodash/upperFirst'
+import styled from '@emotion/styled'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'
 import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePath.js'
