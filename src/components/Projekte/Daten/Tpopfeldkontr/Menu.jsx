@@ -279,21 +279,19 @@ export const Menu = memo(
     }, [tpopkontrId, row, setCopyingBiotop])
 
     const onClickStopCopying = useCallback(() => {
-      if (isCopyingTpopfeldkontr) {
-        return setCopying({
-          table: null,
-          id: '99999999-9999-9999-9999-999999999999',
-          label: null,
-          withNextLevel: false,
-        })
-      }
+      setCopying({
+        table: null,
+        id: '99999999-9999-9999-9999-999999999999',
+        label: null,
+        withNextLevel: false,
+      })
       setCopyingBiotop({ id: null, label: null })
     }, [setCopying])
 
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${isCopyingBiotop}/${copying.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
+          rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${isCopyingBiotop}/${copying.label}/${isCopying}/${copyingBiotop.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
         >
           <Tooltip title="Neue Feld-Kontrolle erstellen">
             <IconButton onClick={onClickAdd}>
@@ -361,8 +359,10 @@ export const Menu = memo(
               </IconButton>
             </Tooltip>
           }
-          {(isCopyingTpopfeldkontr || isCopyingBiotop) && (
-            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+          {isCopying && (
+            <Tooltip
+              title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}
+            >
               <IconButton onClick={onClickStopCopying}>
                 <BsSignStopFill style={iconStyle} />
               </IconButton>

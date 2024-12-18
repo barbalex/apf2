@@ -41,7 +41,14 @@ export const Menu = memo(
     const { projId, apId, popId, tpopId } = useParams()
 
     const store = useContext(MobxContext)
-    const { setMoving, moving, setCopying, copying } = store
+    const {
+      setMoving,
+      moving,
+      setCopying,
+      copying,
+      copyingBiotop,
+      setCopyingBiotop,
+    } = store
     const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
     const onClickAdd = useCallback(async () => {
@@ -169,6 +176,8 @@ export const Menu = memo(
     }, [setMoving])
 
     const isCopyingEk = copying.table === 'tpopfeldkontr'
+    const isCopyingBiotop = !!copyingBiotop.id
+    const isCopying = isCopyingEk || isCopyingBiotop
     const onClickCopyEkfToHere = useCallback(() => {
       return copyTo({
         parentId: tpopId,
@@ -185,7 +194,8 @@ export const Menu = memo(
         label: null,
         withNextLevel: false,
       })
-    }, [setCopying])
+      setCopyingBiotop({ id: null, label: null })
+    }, [setCopying, setCopyingBiotop])
 
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
     const [hideTree] = useAtom(hideTreeAtom)
@@ -193,7 +203,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${moving.label}/${copying.label}/${isMovingEk}/${isCopyingEk}/${hideTree}`}
+          rerenderer={`${moving.label}/${copying.label}/${copyingBiotop.label}/${isMovingEk}/${isCopyingEk}/${hideTree}`}
         >
           <LabelFilter
             width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
@@ -238,8 +248,10 @@ export const Menu = memo(
               </IconButton>
             </Tooltip>
           )}
-          {isCopyingEk && (
-            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+          {isCopying && (
+            <Tooltip
+              title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}
+            >
               <IconButton onClick={onClickStopCopying}>
                 <BsSignStopFill style={iconStyle} />
               </IconButton>
