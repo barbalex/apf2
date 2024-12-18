@@ -40,6 +40,14 @@ export const TpopfeldkontrFolders = memo(
             ref={ref}
             style={transitionStyles[state]}
           >
+            <ZaehlFolder
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+              tpopkontr={navData}
+              menu={zaehlMenu}
+            />
             <ChildlessFolder
               projekt={projekt}
               ap={ap}
@@ -54,15 +62,6 @@ export const TpopfeldkontrFolders = memo(
               pop={pop}
               tpop={tpop}
               menu={dateienMenu}
-              parentUrl={navData.url}
-            />
-            <ZaehlFolder
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={tpop}
-              tpopkontr={navData}
-              menu={zaehlMenu}
               parentUrl={navData.url}
             />
           </Container>

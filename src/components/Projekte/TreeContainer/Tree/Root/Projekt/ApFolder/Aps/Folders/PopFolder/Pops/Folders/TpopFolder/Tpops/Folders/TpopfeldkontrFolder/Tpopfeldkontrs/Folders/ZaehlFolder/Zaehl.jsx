@@ -1,7 +1,6 @@
 import { memo } from 'react'
 
 import { Row } from '../../../../../../../../../../../../../../../Row.jsx'
-import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
 
 export const Zaehl = memo(({ projekt, ap, pop, tpop, tpopkontr, menu }) => {
   const node = {

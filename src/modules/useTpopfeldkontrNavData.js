@@ -105,7 +105,7 @@ export const useTpopfeldkontrNavData = (props) => {
     if (isCopyingBiotop) {
       labelRightElements.push(BiotopCopyingComponent)
     }
-    
+
     return labelRightElements
   }, [store.copying.id, store.copyingBiotop.id, store.moving.id, tpopkontrId])
 
@@ -125,12 +125,12 @@ export const useTpopfeldkontrNavData = (props) => {
             labelRightElements.length ? labelRightElements : undefined,
         },
         {
-          id: 'Biotop',
-          label: `Biotop`,
-        },
-        {
           id: 'Zaehlungen',
           label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
+        },
+        {
+          id: 'Biotop',
+          label: `Biotop`,
         },
         {
           id: 'Dateien',

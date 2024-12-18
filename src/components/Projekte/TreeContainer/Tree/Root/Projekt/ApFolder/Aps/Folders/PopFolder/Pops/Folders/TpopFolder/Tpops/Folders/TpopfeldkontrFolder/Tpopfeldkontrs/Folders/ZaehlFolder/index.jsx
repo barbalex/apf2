@@ -5,7 +5,7 @@ import { Zaehls } from './Zaehls.jsx'
 import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
 
 export const ZaehlFolder = memo(
-  ({ projekt, ap, pop, tpop, tpopkontr, menu, parentUrl }) => {
+  ({ projekt, ap, pop, tpop, tpopkontr, menu, }) => {
     const { navData } = useTpopfeldkontrzaehlsNavData({
       projId: projekt.id,
       apId: ap.id,
