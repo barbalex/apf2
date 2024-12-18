@@ -2,11 +2,10 @@ import { memo, useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import MenuItem from '@mui/material/MenuItem'
 import { useLocation, useNavigate } from 'react-router'
-import styled from '@emotion/styled'
+import isEqual from 'lodash/isEqual'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { toggleNodeSymbol } from '../../../Projekte/TreeContainer/Tree/toggleNodeSymbol.js'
 
 export const Item = memo(
   observer(({ menu, baseUrl, onClose }) => {
@@ -31,22 +30,19 @@ export const Item = memo(
       [activeNodeArray, baseUrl, menu.id],
     )
     const onClick = useCallback(() => {
+      // 1. navigate
       const pathname = `${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}`
-      console.log('Item onClick', { menu, baseUrl, pathname })
       navigate({ pathname, search })
       // 2. sync tree openNodes
-      toggleNodeSymbol({
-        node: {
-          url: pathname
-            .split('/')
-            .filter((e) => !!e)
-            .slice(1),
-        },
-        store,
-        search,
-        navigate,
-        doNotSwitchToNodesParent: true,
-      })
+      const url = pathname
+        .split('/')
+        .filter((e) => !!e)
+        .slice(1)
+      const newOpenNodes = store.tree.openNodes.filter(
+        (n) => !isEqual(n.slice(0, url.length), url),
+      )
+      store.tree.setOpenNodes(newOpenNodes)
+      // 3. close menu
       onClose()
     }, [navigate, onClose, baseUrl, pathnameWithoutLastSlash, menu.id, search])
 
