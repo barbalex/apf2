@@ -6,9 +6,9 @@ import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
 
-import { BiotopCopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.jsx'
 
 export const useTpopfeldkontrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -96,7 +96,7 @@ export const useTpopfeldkontrsNavData = (props) => {
         }
         const isCopyingBiotop = store.copyingBiotop.id === p.id
         if (isCopyingBiotop) {
-          labelRightElements.push(BiotopCopyingComponent)
+          labelRightElements.push(BiotopCopyingIcon)
         }
 
         return {
