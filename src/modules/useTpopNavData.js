@@ -11,9 +11,8 @@ import { useProjekteTabs } from './useProjekteTabs.js'
 // TODO:remove unused
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
 import { tpopIcons } from './useTpopsNavData.js'
-
-import { CopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 
 export const useTpopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -231,7 +230,7 @@ export const useTpopNavData = (props) => {
     }
     const isCopying = store.copying.id === tpopId
     if (isCopying) {
-      labelRightElements.push(CopyingComponent)
+      labelRightElements.push(CopyingIcon)
     }
 
     return labelRightElements

@@ -28,7 +28,7 @@ import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
 
 import { MobxContext } from '../mobxContext.js'
-import { CopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 
 export const popIcons = {
@@ -163,7 +163,7 @@ export const usePopsNavData = (props) => {
         }
         const isCopying = store.copying.id === p.id
         if (isCopying) {
-          labelRightElements.push(CopyingComponent)
+          labelRightElements.push(CopyingIcon)
         }
 
         const popIconIsHighlighted = p.id === popId

@@ -1,9 +1,7 @@
 import { memo, useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import {
-  MdOutlineMoveDown,
   MdExpandMore,
-  MdContentCopy,
   MdPhotoLibrary,
   MdChevronRight,
   MdRemove,
@@ -120,28 +118,6 @@ export const IconContainer = styled.div`
   padding-right: 4px;
   margin-left: -2px;
 `
-const MovingIcon = styled(MdOutlineMoveDown)`
-  padding-left: 0.2em;
-  height: 20px !important;
-  color: rgb(255, 90, 0) !important;
-  font-size: 1.5rem;
-`
-export const MovingComponent = () => (
-  <IconContainer title="zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen">
-    <MovingIcon />
-  </IconContainer>
-)
-const CopyingIcon = styled(MdContentCopy)`
-  padding-left: 0.2em;
-  height: 20px !important;
-  color: rgb(255, 90, 0) !important;
-  font-size: 1.5rem;
-`
-export const CopyingComponent = () => (
-  <IconContainer title="kopiert, bereit zum Einfügen">
-    <CopyingIcon />
-  </IconContainer>
-)
 const BiotopCopyingIcon = styled(MdPhotoLibrary)`
   padding-left: 0.2em;
   height: 20px !important;

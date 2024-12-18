@@ -9,7 +9,7 @@ import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 import { popIcons } from './usePopsNavData.js'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
-import { CopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 
 export const usePopNavData = (props) => {
@@ -156,7 +156,7 @@ export const usePopNavData = (props) => {
     }
     const isCopying = store.copying.id === popId
     if (isCopying) {
-      labelRightElements.push(CopyingComponent)
+      labelRightElements.push(CopyingIcon)
     }
 
     return labelRightElements

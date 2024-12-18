@@ -5,9 +5,8 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-
-import { CopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 
 export const useTpopfreiwkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -91,7 +90,7 @@ export const useTpopfreiwkontrNavData = (props) => {
     }
     const isCopying = store.copying.id === tpopkontrId
     if (isCopying) {
-      labelRightElements.push(CopyingComponent)
+      labelRightElements.push(CopyingIcon)
     }
 
     return labelRightElements

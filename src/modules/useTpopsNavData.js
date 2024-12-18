@@ -29,8 +29,8 @@ import { TpopIconPHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.jsx'
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
 
-import { CopyingComponent } from '../components/Projekte/TreeContainer/Tree/Row.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 
 export const tpopIcons = {
   normal: {
@@ -168,7 +168,7 @@ export const useTpopsNavData = (props) => {
         }
         const isCopying = store.copying.id === p.id
         if (isCopying) {
-          labelRightElements.push(CopyingComponent)
+          labelRightElements.push(CopyingIcon)
         }
 
         const iconIsHighlighted = p.id === tpopId
