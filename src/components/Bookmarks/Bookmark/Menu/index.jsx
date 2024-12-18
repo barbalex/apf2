@@ -99,9 +99,9 @@ export const Menu = memo(
             navData={navData}
             width={width}
             filterInputIsVisible={filterInputIsVisible}
-            setTitleWidth={setTitleWidth}
             toggleFilterInput={toggleFilterInput}
             ref={filterInputRef}
+            setTitleWidth={setTitleWidth}
           />
           <motion.div
             ref={ref}

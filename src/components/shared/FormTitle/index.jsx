@@ -1,7 +1,9 @@
-import { memo } from 'react'
+import { memo, useCallback, useContext, useState, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { TestdataMessage } from './TestdataMessage.jsx'
+import { MobxContext } from '../../../mobxContext.js'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -37,13 +39,41 @@ const Title = styled.div`
 `
 
 export const FormTitle = memo(
-  ({ title, menuBar, noTestDataMessage = false }) => (
-    <Container>
-      <TitleRow>
-        <Title data-id="form-title">{title}</Title>
-        {menuBar}
-      </TitleRow>
-      {!noTestDataMessage && <TestdataMessage />}
-    </Container>
+  observer(
+    ({ title, menuBar, MenuBarComponent, noTestDataMessage = false }) => {
+      const store = useContext(MobxContext)
+      const { nodeLabelFilter, activeFilterTable } = store.tree
+      const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+
+      const [filterInputIsVisible, setFilterInputIsVisible] =
+        useState(!!filterValue)
+      const filterInputRef = useRef(null)
+      const toggleFilterInput = useCallback(() => {
+        if (filterInputIsVisible) {
+          setFilterInputIsVisible(false)
+        } else {
+          setFilterInputIsVisible(true)
+          setTimeout(() => filterInputRef?.current?.focus?.(), 0)
+        }
+      }, [filterInputIsVisible])
+
+      return (
+        <Container>
+          <TitleRow>
+            <Title data-id="form-title">{title}</Title>
+            {MenuBarComponent ?
+              <MenuBarComponent
+                filterInputIsVisible={filterInputIsVisible}
+                toggleFilterInput={toggleFilterInput}
+                ref={filterInputRef}
+              />
+            : menuBar}
+            {/* {menuBar} */}
+          </TitleRow>
+          {/* TODO: add filter field here when filtering */}
+          {!noTestDataMessage && <TestdataMessage />}
+        </Container>
+      )
+    },
   ),
 )

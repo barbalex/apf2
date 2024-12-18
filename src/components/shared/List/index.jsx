@@ -39,7 +39,7 @@ const Row = styled.div`
 `
 
 export const List = memo(
-  ({ items, title, menuBar = null, highlightSearchString }) => {
+  ({ items, title, menuBar = null, MenuBarComponent, highlightSearchString }) => {
     const navigate = useNavigate()
     const { search } = useLocation()
 
@@ -54,8 +54,8 @@ export const List = memo(
           <FormTitle
             title={title}
             menuBar={menuBar}
+            MenuBarComponent={MenuBarComponent}
           />
-          {/* TODO: add filter field here when filtering */}
           <ListContainer>
             {items.map((item) => {
               const label = item.label ?? item.labelEkf ?? item.labelEk

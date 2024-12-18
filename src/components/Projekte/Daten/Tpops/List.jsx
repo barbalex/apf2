@@ -24,6 +24,7 @@ export const List = memo(
         items={navData.menus}
         title={navData.label}
         menuBar={<Menu />}
+        MenuBarComponent={Menu}
         highlightSearchString={nodeLabelFilter.tpop}
       />
     )
