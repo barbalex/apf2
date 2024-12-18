@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 import { MobxContext } from '../../../../mobxContext.js'
+import { toggleNodeSymbol } from '../../../Projekte/TreeContainer/Tree/toggleNodeSymbol.js'
 
 export const Item = memo(
   observer(({ menu, baseUrl, onClose }) => {
@@ -30,9 +31,21 @@ export const Item = memo(
       [activeNodeArray, baseUrl, menu.id],
     )
     const onClick = useCallback(() => {
-      navigate({
-        pathname: `${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}`,
+      const pathname = `${baseUrl ?? pathnameWithoutLastSlash}/${menu.id}`
+      console.log('Item onClick', { menu, baseUrl, pathname })
+      navigate({ pathname, search })
+      // 2. sync tree openNodes
+      toggleNodeSymbol({
+        node: {
+          url: pathname
+            .split('/')
+            .filter((e) => !!e)
+            .slice(1),
+        },
+        store,
         search,
+        navigate,
+        doNotSwitchToNodesParent: true,
       })
       onClose()
     }, [navigate, onClose, baseUrl, pathnameWithoutLastSlash, menu.id, search])

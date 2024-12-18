@@ -1,7 +1,11 @@
-import { memo, useCallback, useMemo } from 'react'
-import { Link, useLocation } from 'react-router'
+import { memo, useCallback, useMemo, useContext } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
+
+import { toggleNodeSymbol } from '../../Projekte/TreeContainer/Tree/toggleNodeSymbol.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const StyledLink = styled(Link)`
   overflow: hidden;
@@ -25,56 +29,73 @@ const StyledText = styled.div`
   user-select: none;
 `
 
-export const Label = memo(({ navData, outerContainerRef, labelStyle, ref }) => {
-  const { pathname, search } = useLocation()
+export const Label = memo(
+  observer(({ navData, outerContainerRef, labelStyle, ref }) => {
+    const { pathname, search } = useLocation()
+    const navigate = useNavigate()
+    const store = useContext(MobxContext)
 
-  // issue: relative paths are not working!!!???
-  // also: need to decode pathname (Zähleinheiten...)
-  const pathnameDecoded = decodeURIComponent(pathname)
-  const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
-  const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
+    // issue: relative paths are not working!!!???
+    // also: need to decode pathname (Zähleinheiten...)
+    const pathnameDecoded = decodeURIComponent(pathname)
+    const pathnameWithoutLastSlash = pathnameDecoded.replace(/\/$/, '')
+    const linksToSomewhereElse = !pathnameWithoutLastSlash.endsWith(navData.url)
 
-  const onClick = useCallback(() => {
-    const element = outerContainerRef.current
-    if (!element) return
-    // the timeout needs to be rather long to wait for the transition to finish
-    setTimeout(() => {
-      element.scrollIntoView({
-        inline: 'start',
+    const onClick = useCallback(() => {
+      // 1. ensure the clicked element is visible
+      const element = outerContainerRef.current
+      if (!element) return
+      // the timeout needs to be rather long to wait for the transition to finish
+      setTimeout(() => {
+        element.scrollIntoView({
+          inline: 'start',
+        })
+      }, 1000)
+      // 2. sync tree openNodes
+      toggleNodeSymbol({
+        node: {
+          url: navData.url
+            .split('/')
+            .filter((e) => !!e)
+            .slice(1),
+        },
+        store,
+        search,
+        navigate,
       })
-    }, 1000)
-  }, [])
+    }, [])
 
-  const label = useMemo(
-    () =>
-      linksToSomewhereElse ?
-        <StyledLink
-          to={{ pathname: navData.url, search }}
-          onClick={onClick}
-          ref={ref}
-          style={{ ...labelStyle }}
-        >
-          {navData.labelShort ?? navData.label}
-        </StyledLink>
-      : <StyledText
-          ref={ref}
-          style={{ ...labelStyle }}
-        >
-          {navData.labelShort ?? navData.label}
-        </StyledText>,
-    [
-      linksToSomewhereElse,
-      navData.label,
-      navData.labelShort,
-      navData.url,
-      search,
-      labelStyle,
-    ],
-  )
+    const label = useMemo(
+      () =>
+        linksToSomewhereElse ?
+          <StyledLink
+            to={{ pathname: navData.url, search }}
+            onClick={onClick}
+            ref={ref}
+            style={{ ...labelStyle }}
+          >
+            {navData.labelShort ?? navData.label}
+          </StyledLink>
+        : <StyledText
+            ref={ref}
+            style={{ ...labelStyle }}
+          >
+            {navData.labelShort ?? navData.label}
+          </StyledText>,
+      [
+        linksToSomewhereElse,
+        navData.label,
+        navData.labelShort,
+        navData.url,
+        search,
+        labelStyle,
+      ],
+    )
 
-  // tooltip can mess with touch, so hide it on touch devices
-  if (!matchMedia('(pointer: coarse)').matches) {
-    return <Tooltip title={navData.label}>{label}</Tooltip>
-  }
-  return label
-})
+    // tooltip can mess with touch, so hide it on touch devices
+    if (!matchMedia('(pointer: coarse)').matches) {
+      return <Tooltip title={navData.label}>{label}</Tooltip>
+    }
+    return label
+  }),
+)
