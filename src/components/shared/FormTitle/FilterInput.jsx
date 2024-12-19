@@ -29,6 +29,9 @@ const StyledTextField = styled(TextField)`
   input {
     color: white;
   }
+  .MuiFormLabel-root.Mui-focused {
+    color: rgba(255, 255, 255, 0.7);
+  }
   .MuiInputBase-root:before {
     border-bottom: 1px solid white;
   }
