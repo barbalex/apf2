@@ -83,6 +83,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
       id: 'Zaehlungen',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen`,
       label: `Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus,
     }),
     [

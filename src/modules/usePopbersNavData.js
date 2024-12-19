@@ -67,6 +67,7 @@ export const usePopbersNavData = (props) => {
       id: 'Kontroll-Berichte',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte`,
       label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus,
     }),
     [apId, count, isLoading, menus, popId, projId, totalCount],

@@ -21,8 +21,7 @@ export const List = memo(
 
     return (
       <SharedList
-        items={navData.menus}
-        title={navData.label}
+        navData={navData}
         menuBar={<Menu apfloraLayer="beobNichtZuzuordnen" />}
         highlightSearchString={nodeLabelFilter.beob}
       />

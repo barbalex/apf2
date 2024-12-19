@@ -21,8 +21,7 @@ export const List = memo(
 
     return (
       <SharedList
-        items={navData.menus}
-        title={navData.label}
+        navData={navData}
         MenuBarComponent={Menu}
         highlightSearchString={nodeLabelFilter.apart}
       />

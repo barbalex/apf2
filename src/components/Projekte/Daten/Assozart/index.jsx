@@ -143,7 +143,7 @@ export const Component = memo(
         <Container data-id="assozart">
           <FormTitle
             title="assoziierte Art"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FormContainer>
             <SelectLoadingOptions

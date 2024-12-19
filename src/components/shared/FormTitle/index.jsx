@@ -52,9 +52,10 @@ export const FormTitle = memo(
   observer(
     ({
       title,
+      isFilterable,
       // todo: remove menuBar prop when all components use MenuBarComponent
-      menuBar,
-      MenuBarComponent,
+      menuBar = null,
+      MenuBarComponent = null,
       noTestDataMessage = false,
     }) => {
       const store = useContext(MobxContext)
@@ -76,17 +77,15 @@ export const FormTitle = memo(
         setFilterInputIsVisible(true)
       }, [!!filterValue])
 
-      console.log('FormTitle', { filterInputIsVisible })
-
       return (
         <Container>
           <TitleRow>
             <Title data-id="form-title">{title}</Title>
-            {MenuBarComponent ?
+            {MenuBarComponent && isFilterable ?
               <MenuBarComponent toggleFilterInput={toggleFilterInput} />
             : menuBar}
           </TitleRow>
-          <Collapse in={filterInputIsVisible}>
+          <Collapse in={filterInputIsVisible && isFilterable}>
             <FilterInput
               filterInputIsVisible={filterInputIsVisible}
               ref={filterInputRef}

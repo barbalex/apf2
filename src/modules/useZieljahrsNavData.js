@@ -89,6 +89,7 @@ export const useZieljahrsNavData = (props) => {
       id: 'AP-Ziele',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
       label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
+      isFilterable: false,
       menus,
     }),
     [apId, menus, isLoading, projId, zieljahrsCount],

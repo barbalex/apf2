@@ -304,7 +304,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="Beobachtung"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FormContainer>
             <FieldsContainer>

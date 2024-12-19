@@ -190,7 +190,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="AP-Bericht Jahresübersicht"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FieldsContainer>
             <FormContainer>

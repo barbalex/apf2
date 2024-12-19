@@ -80,6 +80,7 @@ export const useEkzaehleinheitsNavData = (props) => {
       id: 'EK-Zähleinheiten',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
       label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus,
     }),
     [apId, count, isLoading, menus, projId, totalCount],

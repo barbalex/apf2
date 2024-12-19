@@ -78,6 +78,7 @@ export const usePopmassnbersNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte`,
       label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `Massn.-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus,
     }),
     [apId, count, isLoading, menus, popId, projId, totalCount],

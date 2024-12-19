@@ -67,6 +67,7 @@ export const useAssozartsNavData = (props) => {
       id: 'assoziierte-Arten',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten`,
       label: `Assoziierte Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus: (data?.data?.apById?.assozartsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

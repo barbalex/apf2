@@ -12,10 +12,5 @@ export const List = memo(() => {
 
   if (error) return <Error error={error} />
 
-  return (
-    <SharedList
-      items={navData.menus}
-      title={navData.label}
-    />
-  )
+  return <SharedList navData={navData} />
 })

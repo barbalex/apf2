@@ -111,6 +111,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen`,
       label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       labelShort: `Beob. nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+      isFilterable: true,
       // leave totalCount undefined as the menus are folders
       menus: (data?.data?.filteredBeobsNichtBeurteilt?.nodes ?? []).map(
         (p) => ({

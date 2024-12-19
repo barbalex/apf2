@@ -331,6 +331,7 @@ export const useApNavData = (props) => {
       id: apId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}`,
       label,
+      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {

@@ -58,6 +58,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
       id: 'EkAbrechnungstypWerte',
       url: `/Daten/Werte-Listen/EkAbrechnungstypWerte`,
       label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus: (data?.data?.allEkAbrechnungstypWertes?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

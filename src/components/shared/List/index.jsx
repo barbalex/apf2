@@ -40,11 +40,10 @@ const Row = styled.div`
 
 export const List = memo(
   ({
-    items,
-    title,
+    navData,
     // todo: remove menuBar prop when all components use MenuBarComponent
     menuBar = null,
-    MenuBarComponent,
+    MenuBarComponent = null,
     highlightSearchString,
   }) => {
     const navigate = useNavigate()
@@ -59,12 +58,13 @@ export const List = memo(
       <ErrorBoundary>
         <Container>
           <FormTitle
-            title={title}
+            title={navData.label}
+            isFilterable={navData.isFilterable}
             menuBar={menuBar}
             MenuBarComponent={MenuBarComponent}
           />
           <ListContainer>
-            {items.map((item) => {
+            {navData.menus.map((item) => {
               const label = item.label ?? item.labelEkf ?? item.labelEk
 
               return (

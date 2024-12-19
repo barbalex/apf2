@@ -12,10 +12,5 @@ export const Component = memo(() => {
 
   if (error) return <Error error={error} />
 
-  return (
-    <List
-      items={navData.menus}
-      title={navData.label}
-    />
-  )
+  return <List navData={navData} />
 })

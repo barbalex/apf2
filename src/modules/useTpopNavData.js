@@ -244,6 +244,7 @@ export const useTpopNavData = (props) => {
       labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
       labelRightElements:
         labelRightElements.length ? labelRightElements : undefined,
+      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {

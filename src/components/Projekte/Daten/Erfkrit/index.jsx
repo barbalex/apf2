@@ -124,7 +124,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="Erfolgs-Kriterium"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FormContainer>
             <RadioButtonGroup

@@ -155,6 +155,7 @@ export const usePopsNavData = (props) => {
       id: 'Populationen',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
       label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id

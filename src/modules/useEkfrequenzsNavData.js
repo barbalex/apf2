@@ -68,6 +68,7 @@ export const useEkfrequenzsNavData = (props) => {
       id: 'EK-Frequenzen',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
       label: `EK-Frequenzen (${isLoading ? '...' : `${menus.length}/${totalCount}`})`,
+      isFilterable: true,
       menus,
     }),
     [apId, isLoading, menus, projId, totalCount],

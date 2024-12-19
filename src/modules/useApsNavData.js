@@ -53,6 +53,7 @@ export const useApsNavData = (props) => {
       id: 'Arten',
       url: `/Daten/Projekte/${projId}/Arten`,
       label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => ({
         id: p.id,
         label: p.label,

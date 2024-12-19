@@ -50,6 +50,7 @@ export const useUsersNavData = () => {
       id: 'Benutzer',
       url: `/Daten/Benutzer`,
       label: `Benutzer (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus: (data?.data?.allUsers?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

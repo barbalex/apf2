@@ -71,6 +71,7 @@ export const useZielbersNavData = (props) => {
       id: 'Berichte',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}/Berichte`,
       label: `Zielberichte (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+      isFilterable: true,
       // leave totalCount undefined as the menus are folders
       menus,
     }),

@@ -59,6 +59,7 @@ export const useZielNavData = (props) => {
       id: zielId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}`,
       label: data?.data?.zielById?.label ?? '(nicht beschrieben)',
+      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {

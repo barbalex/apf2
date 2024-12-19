@@ -82,37 +82,6 @@ export const useTpopfeldkontrsNavData = (props) => {
 
   const count = data?.data?.tpopById?.tpopkontrsByTpopId?.totalCount ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
-  const menus = useMemo(
-    () =>
-      (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map((p) => {
-        const labelRightElements = []
-        const isMoving = store.moving.id === p.id
-        if (isMoving) {
-          labelRightElements.push(MovingIcon)
-        }
-        const isCopying = store.copying.id === p.id
-        if (isCopying) {
-          labelRightElements.push(CopyingIcon)
-        }
-        const isCopyingBiotop = store.copyingBiotop.id === p.id
-        if (isCopyingBiotop) {
-          labelRightElements.push(BiotopCopyingIcon)
-        }
-
-        return {
-          id: p.id,
-          label: p.label,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
-        }
-      }),
-    [
-      data?.data?.tpopById?.tpopkontrsByTpopId?.nodes,
-      store.copying.id,
-      store.copyingBiotop.id,
-      store.moving.id,
-    ],
-  )
 
   const navData = useMemo(
     () => ({
@@ -120,9 +89,45 @@ export const useTpopfeldkontrsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
       label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus,
+      isFilterable: true,
+      menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
+        (p) => {
+          const labelRightElements = []
+          const isMoving = store.moving.id === p.id
+          if (isMoving) {
+            labelRightElements.push(MovingIcon)
+          }
+          const isCopying = store.copying.id === p.id
+          if (isCopying) {
+            labelRightElements.push(CopyingIcon)
+          }
+          const isCopyingBiotop = store.copyingBiotop.id === p.id
+          if (isCopyingBiotop) {
+            labelRightElements.push(BiotopCopyingIcon)
+          }
+
+          return {
+            id: p.id,
+            label: p.label,
+            labelRightElements:
+              labelRightElements.length ? labelRightElements : undefined,
+          }
+        },
+      ),
     }),
-    [apId, count, isLoading, menus, popId, projId, totalCount, tpopId],
+    [
+      apId,
+      count,
+      data?.data?.tpopById?.tpopkontrsByTpopId?.nodes,
+      isLoading,
+      popId,
+      projId,
+      store.copying.id,
+      store.copyingBiotop.id,
+      store.moving.id,
+      totalCount,
+      tpopId,
+    ],
   )
 
   return { isLoading, error, navData }

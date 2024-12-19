@@ -31,6 +31,7 @@ export const useProjekteNavData = () => {
       id: 'projekte',
       url: '/Daten/Projekte',
       label: `Projekte (${isLoading ? '...' : count})`,
+      isFilterable: false,
       menus: (data?.data?.allProjekts?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.name,

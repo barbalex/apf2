@@ -103,6 +103,7 @@ export const useTpopfreiwkontrNavData = (props) => {
       label,
       labelRightElements:
         labelRightElements.length ? labelRightElements : undefined,
+      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {

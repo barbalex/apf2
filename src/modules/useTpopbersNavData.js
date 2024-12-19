@@ -64,6 +64,7 @@ export const useTpopbersNavData = (props) => {
       id: 'Kontroll-Berichte',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte`,
       label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      isFilterable: true,
       menus: (data?.data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
