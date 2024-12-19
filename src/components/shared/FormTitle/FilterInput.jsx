@@ -97,7 +97,8 @@ export const FilterInput = memo(
           autoCorrect="off"
           autoCapitalize="off"
           // autofocus leads to focus being stolen from other filter inputs
-          // autoFocus={true}
+          // but necessary because rerenders happen (?)
+          autoFocus={true}
           slotProps={{
             input: {
               endAdornment:

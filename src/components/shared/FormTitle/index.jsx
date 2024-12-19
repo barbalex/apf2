@@ -5,6 +5,7 @@ import {
   useState,
   useRef,
   useEffect,
+  use,
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import Collapse from '@mui/material/Collapse'
@@ -13,7 +14,6 @@ import styled from '@emotion/styled'
 import { TestdataMessage } from './TestdataMessage.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { FilterInput } from './FilterInput.jsx'
-import { filter, set } from 'lodash'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -71,11 +71,12 @@ export const FormTitle = memo(
 
       // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty
       // use case: user set filter in other ui
-      useEffect(() => {
-        if (!filterValue) return
-        if (filterInputIsVisible) return
-        setFilterInputIsVisible(true)
-      }, [!!filterValue])
+      // deactivated because using autofocus on input is more important and that would steal focus from other places...
+      // useEffect(() => {
+      //   if (!filterValue) return
+      //   if (filterInputIsVisible) return
+      //   setFilterInputIsVisible(true)
+      // }, [!!filterValue])
 
       return (
         <Container>
@@ -88,12 +89,14 @@ export const FormTitle = memo(
               />
             )}
           </TitleRow>
-          <Collapse in={filterInputIsVisible && isFilterable}>
-            <FilterInput
-              filterInputIsVisible={filterInputIsVisible}
-              ref={filterInputRef}
-            />
-          </Collapse>
+          {isFilterable && (
+            <Collapse in={filterInputIsVisible}>
+              <FilterInput
+                filterInputIsVisible={filterInputIsVisible}
+                ref={filterInputRef}
+              />
+            </Collapse>
+          )}
           {!noTestDataMessage && <TestdataMessage />}
         </Container>
       )
