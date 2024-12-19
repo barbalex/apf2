@@ -18,11 +18,23 @@ import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-const height = 40
-
 const Container = styled.div`
-  padding: 4px 16px 4px 16px;
-  ${(props) => (props.show === 'true' ? '' : 'display: none;')}
+  padding: 0 10px 10px 10px;
+`
+const StyledIconButton = styled(IconButton)`
+  color: white;
+`
+const StyledTextField = styled(TextField)`
+  label,
+  input {
+    color: white;
+  }
+  .MuiInputBase-root:before {
+    border-bottom: 1px solid white;
+  }
+  .MuiInputBase-root.MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before {
+    border-bottom: 2px solid white;
+  }
 `
 
 export const FilterInput = memo(
@@ -78,7 +90,7 @@ export const FilterInput = memo(
 
     return (
       <Container show={filterInputIsVisible.toString()}>
-        <TextField
+        <StyledTextField
           inputRef={inputRef}
           label="Filter"
           variant="standard"
@@ -97,13 +109,13 @@ export const FilterInput = memo(
                 showFilter ?
                   <InputAdornment position="end">
                     <Tooltip title="Filter entfernen">
-                      <IconButton
+                      <StyledIconButton
                         aria-label="Filter entfernen"
                         onClick={onClickEmpty}
                         fontSize="small"
                       >
                         <FaTimes />
-                      </IconButton>
+                      </StyledIconButton>
                     </Tooltip>
                   </InputAdornment>
                 : null,
