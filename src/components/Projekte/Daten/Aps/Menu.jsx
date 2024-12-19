@@ -10,7 +10,6 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
@@ -21,8 +20,6 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { ApFilter } from '../../TreeContainer/ApFilter/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const Fitter = styled.div`
   margin-top: ${(props) => (props.inmenu === 'true' ? -8 : -15)}px;
@@ -123,14 +120,12 @@ export const Menu = memo(
     const isMoving = !!moving.table
     const isCopying = !!copying.table
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-
     return (
       <ErrorBoundary>
         <MenuBar rerenderer={`${moving.id}/${copying.id}`}>
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Art erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

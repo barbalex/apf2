@@ -20,8 +20,6 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
@@ -198,7 +196,6 @@ export const Menu = memo(
       setCopyingBiotop({ id: null, label: null })
     }, [setCopying, setCopyingBiotop])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
     const [hideTree] = useAtom(hideTreeAtom)
 
     return (
@@ -206,9 +203,9 @@ export const Menu = memo(
         <MenuBar
           rerenderer={`${moving.label}/${copying.label}/${copyingBiotop.label}/${isMovingEk}/${isCopyingEk}/${hideTree}`}
         >
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Feld-Kontrolle erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

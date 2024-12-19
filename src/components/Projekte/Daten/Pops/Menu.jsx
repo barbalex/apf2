@@ -20,8 +20,6 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
@@ -139,7 +137,6 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
     const [hideTree] = useAtom(hideTreeAtom)
 
     return (
@@ -147,9 +144,9 @@ export const Menu = memo(
         <MenuBar
           rerenderer={`${isMovingPop}/${isCopyingPop}/${popMovingFromThisAp}/${hideTree}`}
         >
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Population erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

@@ -7,14 +7,11 @@ import { FaPlus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
@@ -77,14 +74,12 @@ export const Menu = memo(
       tpopkontrId,
     ])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-
     return (
       <ErrorBoundary>
         <MenuBar>
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Zählung erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

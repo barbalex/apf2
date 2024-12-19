@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
@@ -20,8 +19,6 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const Fitter = styled.div`
   margin-top: -15px;
@@ -74,14 +71,12 @@ export const Menu = memo(
       navigate(`./${id}${search}`)
     }, [client, store, tanstackQueryClient, navigate, search])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-
     return (
       <ErrorBoundary>
         <MenuBar>
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Zähl-Einheit erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

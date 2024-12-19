@@ -15,8 +15,6 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
@@ -94,15 +92,14 @@ export const Menu = memo(
       })
     }, [projId, apId, store, search, jahr])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
     const [hideTree] = useAtom(hideTreeAtom)
 
     return (
       <ErrorBoundary>
         <MenuBar rerenderer={hideTree}>
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neues Ziel erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
