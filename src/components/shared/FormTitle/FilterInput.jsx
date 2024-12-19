@@ -1,11 +1,4 @@
-import {
-  memo,
-  useContext,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react'
+import { memo, useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 import IconButton from '@mui/material/IconButton'
@@ -13,7 +6,6 @@ import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
-import { MdFilterAlt } from 'react-icons/md'
 import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../mobxContext.js'
