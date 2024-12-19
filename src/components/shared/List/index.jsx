@@ -42,6 +42,7 @@ export const List = memo(
   ({
     items,
     title,
+    // todo: remove menuBar prop when all components use MenuBarComponent
     menuBar = null,
     MenuBarComponent,
     highlightSearchString,
@@ -59,6 +60,7 @@ export const List = memo(
         <Container>
           <FormTitle
             title={title}
+            menuBar={menuBar}
             MenuBarComponent={MenuBarComponent}
           />
           <ListContainer>
