@@ -26,7 +26,7 @@ export const List = memo(
         navData={navData}
         MenuBarComponent={Menu}
         menuBarProps={menuBarProps}
-        // highlightSearchString={nodeLabelFilter.beob}
+        highlightSearchString={nodeLabelFilter.beob}
       />
     )
   }),
