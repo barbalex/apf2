@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 import { TestdataMessage } from './TestdataMessage.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { FilterInput } from './FilterInput.jsx'
+import { filter, set } from 'lodash'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -57,23 +58,19 @@ export const FormTitle = memo(
         useState(!!filterValue)
       const filterInputRef = useRef(null)
       const toggleFilterInput = useCallback(() => {
-        if (filterInputIsVisible) {
-          setFilterInputIsVisible(false)
-        } else {
-          setFilterInputIsVisible(true)
+        setFilterInputIsVisible((prev) => !prev)
+        if (!filterInputIsVisible) {
           setTimeout(() => filterInputRef?.current?.focus?.(), 0)
         }
       }, [filterInputIsVisible, setFilterInputIsVisible])
+      console.log('FormTitle', { filterInputIsVisible })
 
       return (
         <Container>
           <TitleRow>
             <Title data-id="form-title">{title}</Title>
             {MenuBarComponent ?
-              <MenuBarComponent
-                key={filterInputIsVisible}
-                toggleFilterInput={toggleFilterInput}
-              />
+              <MenuBarComponent toggleFilterInput={toggleFilterInput} />
             : menuBar}
           </TitleRow>
           <Collapse in={filterInputIsVisible}>
