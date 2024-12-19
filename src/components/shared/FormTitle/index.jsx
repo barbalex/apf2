@@ -1,4 +1,11 @@
-import { memo, useCallback, useContext, useState, useRef } from 'react'
+import {
+  memo,
+  useCallback,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react'
 import { observer } from 'mobx-react-lite'
 import Collapse from '@mui/material/Collapse'
 import styled from '@emotion/styled'
@@ -59,10 +66,16 @@ export const FormTitle = memo(
       const filterInputRef = useRef(null)
       const toggleFilterInput = useCallback(() => {
         setFilterInputIsVisible((prev) => !prev)
-        if (!filterInputIsVisible) {
-          setTimeout(() => filterInputRef?.current?.focus?.(), 0)
-        }
+        setTimeout(() => filterInputRef?.current?.focus?.(), 0)
       }, [filterInputIsVisible, setFilterInputIsVisible])
+      // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty
+      // use case: user set filter in other ui
+      useEffect(() => {
+        if (!filterValue) return
+        if (filterInputIsVisible) return
+        setFilterInputIsVisible(true)
+      }, [!!filterValue])
+
       console.log('FormTitle', { filterInputIsVisible })
 
       return (
