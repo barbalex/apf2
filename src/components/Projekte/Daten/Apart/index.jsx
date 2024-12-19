@@ -140,7 +140,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="Taxon"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FieldsContainer>
             <div>

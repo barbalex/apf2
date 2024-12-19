@@ -162,7 +162,7 @@ export const Component = memo(
       <ErrorBoundary>
         <FormTitle
           title="Art"
-          menuBar={<Menu />}
+          MenuBarComponent={Menu}
         />
         <FormContainer>
           <SelectLoadingOptions
