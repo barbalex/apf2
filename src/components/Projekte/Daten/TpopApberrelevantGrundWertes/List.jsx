@@ -10,8 +10,6 @@ import { Error } from '../../../shared/Error.jsx'
 
 export const List = memo(
   observer(() => {
-    const [isDesktopView] = useAtom(isDesktopViewAtom)
-
     const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
 

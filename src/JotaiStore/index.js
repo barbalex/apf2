@@ -1,6 +1,25 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { constants } from '../modules/constants.js'
+import {
+  adresse,
+  ap,
+  apber,
+  apberuebersicht,
+  assozart,
+  ekAbrechnungstypWerte,
+  ekfrequenz,
+  ekzaehleinheit,
+  pop,
+  popber,
+  popmassnber,
+  tpop,
+  tpopber,
+  tpopkontrzaehlEinheitWerte,
+  tpopmassnber,
+  user,
+} from '../components/shared/fragments.js'
+import { ApberrelevantGrund } from '../components/Projekte/TreeContainer/Tree/Root/Werte/ApberrelevantGrundFolder/ApberrelevantGrund.jsx'
 
 export const store = createStore()
 
@@ -88,3 +107,36 @@ export const hideTreeAtom = atom((get) => {
   const hideTree = !alwaysShowTree && isMobileView
   return hideTree
 })
+export const navListFilterIsVisibleAtom = atomWithStorage(
+  'navListFilterIsVisible',
+  {
+    Adressen: false,
+    apberrelevantGrundWerte: false,
+    ekAbrechnungstypWerte: false,
+    tpopkontrzaehlEinheitWerte: false,
+    user: false,
+    apberuebersicht: false,
+    ap: false,
+    beobnichtzuzuordnen: false,
+    beobnichtbeurteilt: false,
+    ekzaehleinheit: false,
+    ekfrequenz: false,
+    assozart: false,
+    apart: false,
+    apber: false,
+    aperfkrit: false,
+    apziel: false,
+    apzielber: false,
+    pop: false,
+    popmassnber: false,
+    popber: false,
+    tpop: false,
+    beobzugeordnet: false,
+    tpopber: false,
+    tpopekf: false,
+    tpopek: false,
+    tpopkontrzaehl: false,
+    tpopmassnber: false,
+    tpopmassn: false,
+  },
+)

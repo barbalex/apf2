@@ -49,57 +49,50 @@ const Title = styled.div`
 `
 
 export const FormTitle = memo(
-  observer(
-    ({
-      title,
-      isFilterable,
-      MenuBarComponent = null,
-      menuBarProps = {},
-      noTestDataMessage = false,
-    }) => {
-      const store = useContext(MobxContext)
-      const { nodeLabelFilter, activeFilterTable } = store.tree
-      const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+  ({
+    title,
+    isFilterable,
+    MenuBarComponent = null,
+    menuBarProps = {},
+    noTestDataMessage = false,
+  }) => {
+    const [filterInputIsVisible, setFilterInputIsVisible] = useState(false)
+    const filterInputRef = useRef(null)
+    const toggleFilterInput = useCallback(() => {
+      setFilterInputIsVisible((prev) => !prev)
+      setTimeout(() => filterInputRef?.current?.focus?.(), 0)
+    }, [filterInputIsVisible, setFilterInputIsVisible])
 
-      const [filterInputIsVisible, setFilterInputIsVisible] =
-        useState(!!filterValue)
-      const filterInputRef = useRef(null)
-      const toggleFilterInput = useCallback(() => {
-        setFilterInputIsVisible((prev) => !prev)
-        setTimeout(() => filterInputRef?.current?.focus?.(), 0)
-      }, [filterInputIsVisible, setFilterInputIsVisible])
+    // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty
+    // use case: user set filter in other ui
+    // deactivated because using autofocus on input is more important and that would steal focus from other places...
+    // useEffect(() => {
+    //   if (!filterValue) return
+    //   if (filterInputIsVisible) return
+    //   setFilterInputIsVisible(true)
+    // }, [!!filterValue])
 
-      // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty
-      // use case: user set filter in other ui
-      // deactivated because using autofocus on input is more important and that would steal focus from other places...
-      // useEffect(() => {
-      //   if (!filterValue) return
-      //   if (filterInputIsVisible) return
-      //   setFilterInputIsVisible(true)
-      // }, [!!filterValue])
-
-      return (
-        <Container>
-          <TitleRow>
-            <Title data-id="form-title">{title}</Title>
-            {!!MenuBarComponent && (
-              <MenuBarComponent
-                toggleFilterInput={toggleFilterInput}
-                {...menuBarProps}
-              />
-            )}
-          </TitleRow>
-          {isFilterable && (
-            <Collapse in={filterInputIsVisible}>
-              <FilterInput
-                filterInputIsVisible={filterInputIsVisible}
-                ref={filterInputRef}
-              />
-            </Collapse>
+    return (
+      <Container>
+        <TitleRow>
+          <Title data-id="form-title">{title}</Title>
+          {!!MenuBarComponent && (
+            <MenuBarComponent
+              toggleFilterInput={toggleFilterInput}
+              {...menuBarProps}
+            />
           )}
-          {!noTestDataMessage && <TestdataMessage />}
-        </Container>
-      )
-    },
-  ),
+        </TitleRow>
+        {isFilterable && (
+          <Collapse in={filterInputIsVisible}>
+            <FilterInput
+              filterInputIsVisible={filterInputIsVisible}
+              ref={filterInputRef}
+            />
+          </Collapse>
+        )}
+        {!noTestDataMessage && <TestdataMessage />}
+      </Container>
+    )
+  },
 )
