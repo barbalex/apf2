@@ -125,7 +125,6 @@ export const useWertesNavData = (props) => {
       id: 'WerteListen',
       url: '/Daten/Werte-Listen',
       label: `Werte-Listen`,
-      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {

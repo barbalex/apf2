@@ -87,9 +87,9 @@ export const useZieljahrsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'AP-Ziele',
+      listFilter: 'ziel',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
       label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
-      isFilterable: true,
       menus,
     }),
     [apId, menus, isLoading, projId, zieljahrsCount],
