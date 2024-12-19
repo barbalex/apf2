@@ -69,6 +69,7 @@ export const FormTitle = memo(
         setFilterInputIsVisible((prev) => !prev)
         setTimeout(() => filterInputRef?.current?.focus?.(), 0)
       }, [filterInputIsVisible, setFilterInputIsVisible])
+
       // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty
       // use case: user set filter in other ui
       useEffect(() => {

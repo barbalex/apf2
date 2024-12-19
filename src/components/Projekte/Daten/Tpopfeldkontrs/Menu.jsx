@@ -13,6 +13,7 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
@@ -32,7 +33,7 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(() => {
+  observer(({ toggleFilterInput }) => {
     const apolloClient = useApolloClient()
     const tanstackQueryClient = useQueryClient()
 

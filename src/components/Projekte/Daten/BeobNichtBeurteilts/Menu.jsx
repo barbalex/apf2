@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -16,8 +17,10 @@ import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
+// TODO: how to pass both props?
+// TODO: need to add menu to other beobs to enable filtering
 export const Menu = memo(
-  observer(({ apfloraLayer }) => {
+  observer(({ apfloraLayer, toggleFilterInput }) => {
     const tanstackQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)

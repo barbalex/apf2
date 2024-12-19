@@ -13,6 +13,7 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
@@ -28,7 +29,7 @@ const Fitter = styled.div`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(() => {
+export const Menu = memo(({ toggleFilterInput }) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const client = useApolloClient()

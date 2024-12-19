@@ -10,6 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
@@ -19,7 +20,7 @@ const iconStyle = { color: 'white' }
 
 // TODO: add menu to setOpenChooseApToCopyEkfrequenzsFrom
 export const Menu = memo(
-  observer(() => {
+  observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
