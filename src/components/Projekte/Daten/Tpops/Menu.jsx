@@ -12,7 +12,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
-import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
@@ -20,8 +20,6 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
@@ -149,17 +147,11 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
     const [hideTree] = useAtom(hideTreeAtom)
-
-    console.log('Tpops Menu', { toggleFilterInput })
 
     return (
       <ErrorBoundary>
         <MenuBar rerenderer={`${isTpopMoving}/${isCopyingTpop}/${hideTree}`}>
-          {/* <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          /> */}
           {!!toggleFilterInput && (
             <FilterButton toggleFilterInput={toggleFilterInput} />
           )}

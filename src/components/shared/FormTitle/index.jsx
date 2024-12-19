@@ -57,7 +57,6 @@ export const FormTitle = memo(
         useState(!!filterValue)
       const filterInputRef = useRef(null)
       const toggleFilterInput = useCallback(() => {
-        console.log('Formtitle.toggleFilterInput', { filterInputIsVisible })
         if (filterInputIsVisible) {
           setFilterInputIsVisible(false)
         } else {
@@ -65,14 +64,6 @@ export const FormTitle = memo(
           setTimeout(() => filterInputRef?.current?.focus?.(), 0)
         }
       }, [filterInputIsVisible, setFilterInputIsVisible])
-
-      console.log('FormTitle', {
-        activeFilterTable,
-        filterValue,
-        filterInputIsVisible,
-        isFilterable,
-        toggleFilterInput,
-      })
 
       return (
         <Container>
@@ -84,7 +75,6 @@ export const FormTitle = memo(
                 toggleFilterInput={toggleFilterInput}
               />
             : menuBar}
-            {/* {menuBar} */}
           </TitleRow>
           <Collapse in={filterInputIsVisible}>
             <FilterInput
