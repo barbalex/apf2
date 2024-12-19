@@ -59,9 +59,9 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
   const navData = useMemo(
     () => ({
       id: 'TpopkontrzaehlEinheitWerte',
+      listFilter: 'tpopkontrzaehlEinheitWerte',
       url: `/Daten/Werte-Listen/TpopkontrzaehlEinheitWerte`,
       label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
         (p) => ({
           id: p.id,

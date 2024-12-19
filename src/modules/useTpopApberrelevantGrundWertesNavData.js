@@ -60,9 +60,9 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
   const navData = useMemo(
     () => ({
       id: 'ApberrelevantGrundWerte',
+      listFilter: 'tpopApberrelevantGrundWerte',
       url: `/Daten/Werte-Listen/ApberrelevantGrundWerte`,
       label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
         (p) => ({
           id: p.id,

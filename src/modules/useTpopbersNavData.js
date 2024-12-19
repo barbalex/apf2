@@ -62,9 +62,9 @@ export const useTpopbersNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Kontroll-Berichte',
+      listFilter: 'tpopber',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte`,
       label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

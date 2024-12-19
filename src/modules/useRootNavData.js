@@ -55,7 +55,6 @@ export const useRootNavData = () => {
       id: 'Daten',
       url: '/Daten',
       label: `Daten`,
-      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {

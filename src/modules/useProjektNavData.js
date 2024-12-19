@@ -73,7 +73,6 @@ export const useProjektNavData = (props) => {
       id: projId,
       url: `/Daten/Projekte/${projId}`,
       label,
-      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
