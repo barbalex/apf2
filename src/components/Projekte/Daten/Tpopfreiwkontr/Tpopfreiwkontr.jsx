@@ -139,7 +139,8 @@ export const Component = memo(
           <>
             <FormTitle
               title="Freiwilligen-Kontrolle"
-              menuBar={<Menu row={row} />}
+              MenuBarComponent={Menu}
+              menuBarProps={{ row }}
             />
           </>
         )}

@@ -153,12 +153,8 @@ export const Component = memo(
         <Container>
           <FormTitle
             title={table}
-            menuBar={
-              <Menu
-                row={row}
-                table={table}
-              />
-            }
+            MenuBarComponent={Menu}
+            menuBarProps={{ row, table }}
           />
           <FormContainer>
             <TextField

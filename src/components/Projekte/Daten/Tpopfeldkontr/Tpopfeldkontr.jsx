@@ -188,7 +188,8 @@ export const Component = memo(
       <ErrorBoundary>
         <FormTitle
           title="Feld-Kontrolle"
-          menuBar={loading ? null : <Menu row={row} />}
+          MenuBarComponent={Menu}
+          menuBarProps={{ row }}
         />
         <FormContainer>
           <TextField

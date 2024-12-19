@@ -41,9 +41,8 @@ const Row = styled.div`
 export const List = memo(
   ({
     navData,
-    // some components pass props and use menBar, others don't pass own props and use MenuBarComponent
-    menuBar = null,
     MenuBarComponent = null,
+    menuBarProps = {},
     highlightSearchString,
   }) => {
     const navigate = useNavigate()
@@ -60,8 +59,8 @@ export const List = memo(
           <FormTitle
             title={navData.label}
             isFilterable={navData.isFilterable}
-            menuBar={menuBar}
             MenuBarComponent={MenuBarComponent}
+            menuBarProps={menuBarProps}
           />
           <ListContainer>
             {navData.menus.map((item) => {

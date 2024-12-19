@@ -351,7 +351,8 @@ export const Component = memo(
       <ErrorBoundary>
         <FormTitle
           title="Massnahme"
-          menuBar={<Menu row={row} />}
+          MenuBarComponent={Menu}
+          menuBarProps={{ row }}
         />
         <ColumnContainer>
           <FormContainer>

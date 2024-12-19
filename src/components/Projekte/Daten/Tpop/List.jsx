@@ -16,7 +16,8 @@ export const List = memo(() => {
   return (
     <SharedList
       navData={navData}
-      menuBar={<Menu row={navData} />}
+      MenuBarComponent={Menu}
+      menuBarProps={{ row: navData }}
     />
   )
 })

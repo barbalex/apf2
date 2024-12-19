@@ -218,7 +218,8 @@ export const Component = memo(
       <>
         <FormTitle
           title="Teil-Population"
-          menuBar={<Menu row={row} />}
+          MenuBarComponent={Menu}
+          menuBarProps={{ row }}
         />
         <Container>
           <TextField

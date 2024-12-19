@@ -53,9 +53,8 @@ export const FormTitle = memo(
     ({
       title,
       isFilterable,
-      // some components pass props and use menBar, others don't pass own props and use MenuBarComponent
-      menuBar = null,
       MenuBarComponent = null,
+      menuBarProps = {},
       noTestDataMessage = false,
     }) => {
       const store = useContext(MobxContext)
@@ -82,9 +81,12 @@ export const FormTitle = memo(
         <Container>
           <TitleRow>
             <Title data-id="form-title">{title}</Title>
-            {MenuBarComponent && isFilterable ?
-              <MenuBarComponent toggleFilterInput={toggleFilterInput} />
-            : menuBar}
+            {!!MenuBarComponent && (
+              <MenuBarComponent
+                toggleFilterInput={toggleFilterInput}
+                {...menuBarProps}
+              />
+            )}
           </TitleRow>
           <Collapse in={filterInputIsVisible && isFilterable}>
             <FilterInput

@@ -209,15 +209,14 @@ export const Component = () => {
       <Container>
         <FormTitle
           title="Benutzer"
-          menuBar={
-            <Menu
-              row={row}
-              editPassword={editPassword}
-              setEditPassword={setEditPassword}
-              passwordMessage={passwordMessage}
-              setPasswordMessage={setPasswordMessage}
-            />
-          }
+          MenuBarComponent={Menu}
+          menuBarProps={{
+            row,
+            editPassword,
+            setEditPassword,
+            passwordMessage,
+            setPasswordMessage,
+          }}
         />
 
         <ScrollContainer>

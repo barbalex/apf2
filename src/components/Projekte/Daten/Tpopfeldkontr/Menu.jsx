@@ -215,7 +215,7 @@ export const Menu = memo(
       }
       setMoving({
         id: tpopkontrId,
-        label: row.labelEk ?? row.label,
+        label: row.label,
         table: 'tpopfeldkontr',
         toTable: 'tpopfeldkontr',
         fromParentId: tpopId,

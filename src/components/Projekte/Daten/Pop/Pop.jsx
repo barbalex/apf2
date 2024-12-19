@@ -132,7 +132,8 @@ export const Component = memo(
         <Suspense fallback={<Spinner />}>
           <FormTitle
             title="Population"
-            menuBar={<Menu row={row} />}
+            MenuBarComponent={Menu}
+            menuBarProps={{ row }}
           />
           <FormContainer>
             <TextField

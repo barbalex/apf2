@@ -8,6 +8,8 @@ import { Menu } from '../BeobNichtBeurteilts/Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 
+const menuBarProps = { apfloraLayer: 'beobNichtZuzuordnen' }
+
 export const List = memo(
   observer(() => {
     const store = useContext(MobxContext)
@@ -22,8 +24,9 @@ export const List = memo(
     return (
       <SharedList
         navData={navData}
-        menuBar={<Menu apfloraLayer="beobNichtZuzuordnen" />}
-        highlightSearchString={nodeLabelFilter.beob}
+        MenuBarComponent={Menu}
+        menuBarProps={menuBarProps}
+        // highlightSearchString={nodeLabelFilter.beob}
       />
     )
   }),
