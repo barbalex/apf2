@@ -79,9 +79,9 @@ export const useTpopmassnsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Massnahmen',
+      listFilter: 'tpopmassn',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen`,
       label: `Massnahmen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []
