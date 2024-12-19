@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 
 import { TestdataMessage } from './TestdataMessage.jsx'
 import { MobxContext } from '../../../mobxContext.js'
+import { FilterInput } from './FilterInput.jsx'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -56,19 +57,21 @@ export const FormTitle = memo(
         useState(!!filterValue)
       const filterInputRef = useRef(null)
       const toggleFilterInput = useCallback(() => {
+        console.log('Formtitle.toggleFilterInput', { filterInputIsVisible })
         if (filterInputIsVisible) {
           setFilterInputIsVisible(false)
         } else {
           setFilterInputIsVisible(true)
           setTimeout(() => filterInputRef?.current?.focus?.(), 0)
         }
-      }, [filterInputIsVisible])
+      }, [filterInputIsVisible, setFilterInputIsVisible])
 
       console.log('FormTitle', {
         activeFilterTable,
         filterValue,
         filterInputIsVisible,
         isFilterable,
+        toggleFilterInput,
       })
 
       return (
@@ -77,17 +80,18 @@ export const FormTitle = memo(
             <Title data-id="form-title">{title}</Title>
             {MenuBarComponent ?
               <MenuBarComponent
-                filterInputIsVisible={filterInputIsVisible}
+                key={filterInputIsVisible}
                 toggleFilterInput={toggleFilterInput}
-                ref={filterInputRef}
               />
             : menuBar}
             {/* {menuBar} */}
           </TitleRow>
-          {/* TODO: add filter field here when filtering */}
-          {isFilterable && (
-            <Collapse in={filterInputIsVisible}>filterInput</Collapse>
-          )}
+          <Collapse in={filterInputIsVisible}>
+            <FilterInput
+              filterInputIsVisible={filterInputIsVisible}
+              ref={filterInputRef}
+            />
+          </Collapse>
           {!noTestDataMessage && <TestdataMessage />}
         </Container>
       )

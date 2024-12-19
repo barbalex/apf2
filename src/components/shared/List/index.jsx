@@ -50,8 +50,6 @@ export const List = memo(
     const navigate = useNavigate()
     const { search } = useLocation()
 
-    console.log('List', { isFilterable })
-
     const onClickRow = useCallback(
       (item) => navigate(`./${item.id}${search}`),
       [navigate, search],

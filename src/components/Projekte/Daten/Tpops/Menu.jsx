@@ -13,6 +13,7 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
@@ -32,7 +33,7 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(() => {
+  observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
     const apolloClient = useApolloClient()
@@ -151,14 +152,17 @@ export const Menu = memo(
     const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
     const [hideTree] = useAtom(hideTreeAtom)
 
+    console.log('Tpops Menu', { toggleFilterInput })
+
     return (
       <ErrorBoundary>
-        <MenuBar
-          rerenderer={`${isTpopMoving}/${isCopyingTpop}/${hideTree}`}
-        >
-          <LabelFilter
+        <MenuBar rerenderer={`${isTpopMoving}/${isCopyingTpop}/${hideTree}`}>
+          {/* <LabelFilter
             width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          /> */}
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
