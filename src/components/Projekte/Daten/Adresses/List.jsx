@@ -23,7 +23,7 @@ export const List = memo(
       <SharedList
         items={navData.menus}
         title={navData.label}
-        menuBar={<Menu />}
+        MenuBarComponent={Menu}
         highlightSearchString={nodeLabelFilter.adresse}
       />
     )
