@@ -53,7 +53,7 @@ export const FormTitle = memo(
     ({
       title,
       isFilterable,
-      // todo: remove menuBar prop when all components use MenuBarComponent
+      // some components pass props and use menBar, others don't pass own props and use MenuBarComponent
       menuBar = null,
       MenuBarComponent = null,
       noTestDataMessage = false,
