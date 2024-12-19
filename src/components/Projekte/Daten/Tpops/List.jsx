@@ -25,6 +25,7 @@ export const List = memo(
         title={navData.label}
         menuBar={<Menu />}
         MenuBarComponent={Menu}
+        isFilterable={navData.isFilterable}
         highlightSearchString={nodeLabelFilter.tpop}
       />
     )

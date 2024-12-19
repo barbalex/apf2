@@ -39,9 +39,18 @@ const Row = styled.div`
 `
 
 export const List = memo(
-  ({ items, title, menuBar = null, MenuBarComponent, highlightSearchString }) => {
+  ({
+    items,
+    title,
+    menuBar = null,
+    MenuBarComponent,
+    highlightSearchString,
+    isFilterable = false,
+  }) => {
     const navigate = useNavigate()
     const { search } = useLocation()
+
+    console.log('List', { isFilterable })
 
     const onClickRow = useCallback(
       (item) => navigate(`./${item.id}${search}`),
@@ -55,6 +64,7 @@ export const List = memo(
             title={title}
             menuBar={menuBar}
             MenuBarComponent={MenuBarComponent}
+            isFilterable={isFilterable}
           />
           <ListContainer>
             {items.map((item) => {

@@ -1,5 +1,6 @@
 import { memo, useCallback, useContext, useState, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
+import Collapse from '@mui/material/Collapse'
 import styled from '@emotion/styled'
 
 import { TestdataMessage } from './TestdataMessage.jsx'
@@ -40,7 +41,13 @@ const Title = styled.div`
 
 export const FormTitle = memo(
   observer(
-    ({ title, menuBar, MenuBarComponent, noTestDataMessage = false }) => {
+    ({
+      title,
+      menuBar,
+      MenuBarComponent,
+      isFilterable = false,
+      noTestDataMessage = false,
+    }) => {
       const store = useContext(MobxContext)
       const { nodeLabelFilter, activeFilterTable } = store.tree
       const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
@@ -57,6 +64,13 @@ export const FormTitle = memo(
         }
       }, [filterInputIsVisible])
 
+      console.log('FormTitle', {
+        activeFilterTable,
+        filterValue,
+        filterInputIsVisible,
+        isFilterable,
+      })
+
       return (
         <Container>
           <TitleRow>
@@ -71,6 +85,9 @@ export const FormTitle = memo(
             {/* {menuBar} */}
           </TitleRow>
           {/* TODO: add filter field here when filtering */}
+          {isFilterable && (
+            <Collapse in={filterInputIsVisible}>filterInput</Collapse>
+          )}
           {!noTestDataMessage && <TestdataMessage />}
         </Container>
       )
