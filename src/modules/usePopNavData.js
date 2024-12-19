@@ -170,7 +170,6 @@ export const usePopNavData = (props) => {
       labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
       labelRightElements:
         labelRightElements.length ? labelRightElements : undefined,
-      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
