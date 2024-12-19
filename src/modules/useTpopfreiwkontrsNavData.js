@@ -107,10 +107,10 @@ export const useTpopfreiwkontrsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Freiwilligen-Kontrollen',
+      listFilter: 'tpopkontr',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen`,
       label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `EKF (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus,
     }),
     [apId, count, isLoading, menus, popId, projId, totalCount, tpopId],

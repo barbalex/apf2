@@ -86,10 +86,10 @@ export const useTpopfeldkontrsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Feld-Kontrollen',
+      listFilter: 'tpopkontr',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
       label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []

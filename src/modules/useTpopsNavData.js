@@ -158,9 +158,9 @@ export const useTpopsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Teil-Populationen',
+      listFilter: 'tpop',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen`,
       label: `Teil-Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id

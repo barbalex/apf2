@@ -81,9 +81,9 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Zaehlungen',
+      listFilter: 'tpopkontrzaehl',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen`,
       label: `Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus,
     }),
     [
