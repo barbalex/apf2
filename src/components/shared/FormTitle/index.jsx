@@ -52,9 +52,9 @@ export const FormTitle = memo(
   observer(
     ({
       title,
+      // todo: remove menuBar prop when all components use MenuBarComponent
       menuBar,
       MenuBarComponent,
-      isFilterable = false,
       noTestDataMessage = false,
     }) => {
       const store = useContext(MobxContext)

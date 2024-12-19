@@ -45,7 +45,6 @@ export const List = memo(
     menuBar = null,
     MenuBarComponent,
     highlightSearchString,
-    isFilterable = false,
   }) => {
     const navigate = useNavigate()
     const { search } = useLocation()
@@ -60,9 +59,7 @@ export const List = memo(
         <Container>
           <FormTitle
             title={title}
-            menuBar={menuBar}
             MenuBarComponent={MenuBarComponent}
-            isFilterable={isFilterable}
           />
           <ListContainer>
             {items.map((item) => {
