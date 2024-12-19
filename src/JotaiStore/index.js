@@ -12,10 +12,6 @@ export const newTpopFromBeobBeobIdAtom = atomWithStorage(
   'newTpopFromBeobBeobId',
   null,
 )
-export const listLabelFilterIsIconAtom = atomWithStorage(
-  'listLabelFilterIsIcon',
-  true,
-)
 export const enforceDesktopNavigationAtom = atomWithStorage(
   'enforceDesktopNavigation',
   false,
