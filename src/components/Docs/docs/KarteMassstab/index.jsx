@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../index.jsx'
+import { DokuDate } from '../../Docs.jsx'
 import mapMeasure from './mapMeasure.png'
 import mapScale from './mapScale.png'
 import mapScaleOpen from './mapScaleOpen.png'

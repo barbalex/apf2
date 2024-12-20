@@ -7,7 +7,7 @@ import { setDesktopViewAtom } from '../JotaiStore/index.js'
 import { constants } from '../modules/constants.js'
 
 const InvisibleDesktopViewMeasuringDiv = styled.div`
-  width: 100vw;
+  width: 100%;
   height: 0;
 `
 

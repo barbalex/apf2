@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../index.jsx'
+import { DokuDate } from '../../Docs.jsx'
 import files01 from './files_01.png'
 import files02Gallery from './files_02_gallery.png'
 import files03Herunterladen from './files_03_herunterladen.png'

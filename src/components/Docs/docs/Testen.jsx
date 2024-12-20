@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
 
-import { DokuDate } from '../index.jsx'
+import { DokuDate } from '../Docs.jsx'
 
 const LI = styled.li`
   list-style-type: none;

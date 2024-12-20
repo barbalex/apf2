@@ -111,6 +111,7 @@ export const App = () => {
                   >
                     <UploaderContext value={uploaderRef}>
                       <GlobalStyle />
+                      <IsDesktopViewSetter />
                       <Suspense fallback={<Spinner />}>
                         <Router />
                       </Suspense>
@@ -120,7 +121,6 @@ export const App = () => {
                         <LastTouchedNodeSetter />
                         <MouseWheelHandler />
                         <LegacyBrowserInformer />
-                        <IsDesktopViewSetter />
                         <StorePersister
                           client={client}
                           store={store}
