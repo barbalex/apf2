@@ -33,7 +33,6 @@ export const useCurrentissuesNavData = () => {
       url: `/Daten/Aktuelle-Fehler`,
       label: `Aktuelle Fehler (${isLoading ? '...' : count})`,
       totalCount: data?.data?.allCurrentissues?.totalCount ?? 0,
-      isFilterable: false,
       menus: (data?.data?.allCurrentissues?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

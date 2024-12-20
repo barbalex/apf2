@@ -29,7 +29,6 @@ export const useMessagesNavData = () => {
       id: 'Mitteilungen',
       url: `/Daten/Mitteilungen`,
       label: `Mitteilungen (${isLoading ? '...' : data?.data?.allMessages?.totalCount})`,
-      isFilterable: false,
       // leave menus undefined as there are none
     }),
     [data?.data?.allMessages?.totalCount, isLoading],

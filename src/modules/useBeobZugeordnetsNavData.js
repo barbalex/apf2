@@ -82,10 +82,10 @@ export const useBeobZugeordnetsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Beobachtungen',
+      listFilter: 'beobZugeordnet',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen`,
       label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       labelShort: `Beob. zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      isFilterable: true,
       // leave totalCount undefined as the menus are folders
       menus: (data?.data?.filteredBeobsZugeordnet?.nodes ?? []).map((p) => ({
         id: p.id,
