@@ -21,6 +21,10 @@ export const DokumentationMobile = memo(() => {
     [],
   )
   const onClose = useCallback(() => setAnchorEl(null), [])
+  const onClickMenuItem = useCallback((args) => {
+    console.log('DokumentationMobile, onClickMenuItem, args:', args)
+    setAnchorEl(null)
+  }, [])
 
   const { navData } = useDocsNavData()
   console.log('DokumentationMobile, navData:', navData)
@@ -50,7 +54,14 @@ export const DokumentationMobile = memo(() => {
           'aria-labelledby': 'docs-button',
         }}
       >
-        content
+        {navData.menus.map((item) => (
+          <MenuItem
+            key={item.id}
+            onClick={onClickMenuItem.bind(item)}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
       </Menu>
     </>
   )
