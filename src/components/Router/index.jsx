@@ -1366,6 +1366,10 @@ export const Router = () => {
               lazy={() => import('../Docs/docs/AnleitungZurEingabe.jsx')}
             />
             <Route
+              path="navigation"
+              lazy={() => import('../Docs/docs/Navigation/index.jsx')}
+            />
+            <Route
               path="ist-apflora-langsam"
               lazy={() => import('../Docs/docs/IstApfloraLangsam.jsx')}
             />
