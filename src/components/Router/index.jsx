@@ -350,6 +350,13 @@ const idealbiotopHandle = {
   bookmarkFetcher: idealbiotopBookmarkFetcher,
   bookmarkFetcherName: 'useIdealbiotopNavData',
 }
+const docsBookmarkFetcher = lazy(async () => ({
+  default: (await import('../../modules/useDocsNavData.js')).useDocsNavData,
+}))
+const docsHandle = {
+  bookmarkFetcher: docsBookmarkFetcher,
+  bookmarkFetcherName: 'useDocsNavData',
+}
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
