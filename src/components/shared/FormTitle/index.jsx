@@ -9,11 +9,13 @@ import {
 } from 'react'
 import { observer } from 'mobx-react-lite'
 import Collapse from '@mui/material/Collapse'
+import { useAtom } from 'jotai'
 import styled from '@emotion/styled'
 
 import { TestdataMessage } from './TestdataMessage.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { FilterInput } from './FilterInput.jsx'
+import { navListFilterAtoms } from '../../../JotaiStore/index.js'
 
 const Container = styled.div`
   background-color: #388e3c;
@@ -51,17 +53,21 @@ const Title = styled.div`
 export const FormTitle = memo(
   ({
     title,
-    isFilterable,
+    listFilter,
     MenuBarComponent = null,
     menuBarProps = {},
     noTestDataMessage = false,
   }) => {
-    const [filterInputIsVisible, setFilterInputIsVisible] = useState(false)
+    // get list filter from the correct atom
+    console.log('FormTitle:', { navListFilterAtoms, listFilter })
+    const [filterInputIsVisible, toggleFilterInputIsVisible] = useAtom(
+      navListFilterAtoms[listFilter] ?? 'undefined',
+    )
     const filterInputRef = useRef(null)
     const toggleFilterInput = useCallback(() => {
-      setFilterInputIsVisible((prev) => !prev)
+      toggleFilterInputIsVisible()
       setTimeout(() => filterInputRef?.current?.focus?.(), 0)
-    }, [filterInputIsVisible, setFilterInputIsVisible])
+    }, [filterInputIsVisible, toggleFilterInputIsVisible])
 
     // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty
     // use case: user set filter in other ui
@@ -83,7 +89,7 @@ export const FormTitle = memo(
             />
           )}
         </TitleRow>
-        {isFilterable && (
+        {!!listFilter && (
           <Collapse in={filterInputIsVisible}>
             <FilterInput
               filterInputIsVisible={filterInputIsVisible}

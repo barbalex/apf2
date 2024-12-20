@@ -58,7 +58,7 @@ export const List = memo(
         <Container>
           <FormTitle
             title={navData.label}
-            isFilterable={navData.isFilterable}
+            listFilter={navData.listFilter}
             MenuBarComponent={MenuBarComponent}
             menuBarProps={menuBarProps}
           />

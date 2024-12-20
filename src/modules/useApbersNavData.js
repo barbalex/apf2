@@ -57,9 +57,9 @@ export const useApbersNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'AP-Berichte',
+      listFilter: 'apber',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
       label: `AP-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.apById?.apbersByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
