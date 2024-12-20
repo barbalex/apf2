@@ -2,11 +2,11 @@ import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { Outlet } from 'react-router'
 
-import { Sidebar } from './Sidebar/index.jsx'
+import { Sidebar } from './DesktopSidebar/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 
-const Container = styled.div`
+export const Container = styled.div`
   height: 100%;
   display: flex;
   overflow: hidden;
@@ -15,10 +15,10 @@ const Container = styled.div`
     height: 100% !important;
   }
 `
-const Doku = styled.div`
+export const Doku = styled.div`
   height: 100%;
   width: 100%;
-  padding: 25px;
+  padding: 0 25px 25px 25px;
   overflow-y: auto;
   scrollbar-width: thin;
   box-sizing: border-box;

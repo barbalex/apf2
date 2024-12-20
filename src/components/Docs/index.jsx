@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useAtom } from 'jotai'
 
 import { isDesktopViewAtom } from '../../JotaiStore/index.js'
-import { List } from './List.jsx'
+import { MobileList } from './MobileList.jsx'
 import { DesktopDocs } from './DesktopDocs.jsx'
 
 export const Component = memo(() => {
@@ -10,5 +10,5 @@ export const Component = memo(() => {
 
   if (isDesktopView) return <DesktopDocs />
 
-  return <List />
+  return <MobileList />
 })

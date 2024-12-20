@@ -28,7 +28,7 @@ export const HomeMenus = memo(() => {
       >
         Daten
       </StyledButton>
-      : <Dokumentation />
+      <Dokumentation />
     </>
   )
 })
