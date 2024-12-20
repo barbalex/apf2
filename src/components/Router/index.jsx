@@ -1342,7 +1342,7 @@ export const Router = () => {
             lazy={() =>
               isDesktopView ?
                 import('../Docs/DesktopDoc.jsx')
-              : import('../Docs/Doc.jsx')
+              : import('../Docs/MobileDoc.jsx')
             }
           >
             <Route
