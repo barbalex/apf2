@@ -75,11 +75,7 @@ export const Bar = memo(() => {
         component={Link}
         to={`/${search}`}
         title="Home"
-        hide={(
-          width <= constants.minWidthToShowTitle &&
-          !showHome &&
-          !showDocs
-        ).toString()}
+        hide={(width <= constants.minWidthToShowTitle && !showHome).toString()}
       >
         AP Flora
       </SiteTitle>

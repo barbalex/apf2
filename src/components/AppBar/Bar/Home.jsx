@@ -11,7 +11,12 @@ const StyledButton = styled(Button)`
     props.border === 'true' &&
     'border-color: rgba(255, 255, 255, 0.5) !important;'}
   text-transform: none !important;
-  width: ${(props) => `${props.width}px` ?? 'unset'} !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+`
+const RightButton = styled(StyledButton)`
+  margin-right: 8px;
 `
 export const HomeMenus = () => {
   const { pathname, search } = useLocation()
@@ -21,24 +26,20 @@ export const HomeMenus = () => {
   return (
     <>
       <StyledButton
-        key="artenBearbeiten"
         variant="text"
         component={Link}
         to={`/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13${search}`}
-        width={isMobileView ? 70 : 140}
       >
-        {isMobileView ? 'Daten' : 'Arten bearbeiten'}
+        Daten
       </StyledButton>
-      <StyledButton
-        key="dokumentation"
+      <RightButton
         variant={pathname.startsWith('/Dokumentation') ? 'outlined' : 'text'}
         component={Link}
         to={`/Dokumentation/${search}`}
-        width={isMobileView ? 60 : 130}
         border={isDocs.toString()}
       >
-        {isMobileView ? 'Doku' : 'Dokumentation'}
-      </StyledButton>
+        Dokumentation
+      </RightButton>
     </>
   )
 }
