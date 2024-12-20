@@ -5,7 +5,7 @@ import { useLocation, Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 import { useAtom } from 'jotai'
 
-import { HomeMenus } from './Home.jsx'
+import { HomeMenus } from './Home/index.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
 import { constants } from '../../../modules/constants.js'
