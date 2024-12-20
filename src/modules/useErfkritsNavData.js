@@ -63,9 +63,9 @@ export const useErfkritsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'AP-Erfolgskriterien',
+      listFilter: 'erfkrit',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien`,
       label: `AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

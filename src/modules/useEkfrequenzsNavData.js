@@ -66,9 +66,9 @@ export const useEkfrequenzsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'EK-Frequenzen',
+      listFilter: 'ekfrequenz',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
       label: `EK-Frequenzen (${isLoading ? '...' : `${menus.length}/${totalCount}`})`,
-      isFilterable: true,
       menus,
     }),
     [apId, isLoading, menus, projId, totalCount],

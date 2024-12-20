@@ -78,9 +78,9 @@ export const useEkzaehleinheitsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'EK-Zähleinheiten',
+      listFilter: 'ekzaehleinheit',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
       label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus,
     }),
     [apId, count, isLoading, menus, projId, totalCount],

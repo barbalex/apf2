@@ -43,7 +43,6 @@ export const useIdealbiotopNavData = (props) => {
       id: apId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Idealbiotop`,
       label: 'Idealbiotop',
-      isFilterable: false,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
