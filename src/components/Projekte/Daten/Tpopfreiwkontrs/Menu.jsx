@@ -159,6 +159,9 @@ export const Menu = memo(
         <MenuBar
           rerenderer={`${moving.label}/${copying.label}/${isMovingEkf}/${isCopyingEkf}/${hideTree}`}
         >
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Freiwilligen-Kontrolle erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

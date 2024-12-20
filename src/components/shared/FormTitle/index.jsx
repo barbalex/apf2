@@ -59,7 +59,6 @@ export const FormTitle = memo(
     noTestDataMessage = false,
   }) => {
     // get list filter from the correct atom
-    console.log('FormTitle:', { navListFilterAtoms, listFilter })
     const [filterInputIsVisible, toggleFilterInputIsVisible] = useAtom(
       navListFilterAtoms[listFilter] ?? 'undefined',
     )
