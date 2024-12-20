@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
 
@@ -5,7 +6,7 @@ import { StyledButton } from './index.jsx'
 
 const style = { marginRight: 8 }
 
-export const Dokumentation = () => {
+export const Dokumentation = memo(() => {
   const { pathname, search } = useLocation()
   const isDocs = pathname.startsWith('/Dokumentation')
 
@@ -20,4 +21,4 @@ export const Dokumentation = () => {
       Dokumentation
     </StyledButton>
   )
-}
+})

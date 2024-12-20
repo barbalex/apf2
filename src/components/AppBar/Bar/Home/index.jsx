@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
@@ -18,7 +19,7 @@ export const StyledButton = styled(Button)`
   text-overflow: ellipsis !important;
 `
 
-export const HomeMenus = () => {
+export const HomeMenus = memo(() => {
   const { search } = useLocation()
   const [isMobileView] = useAtom(isMobileViewAtom)
 
@@ -36,4 +37,4 @@ export const HomeMenus = () => {
       : <Dokumentation />}
     </>
   )
-}
+})
