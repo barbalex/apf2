@@ -14,16 +14,11 @@ export const MobileList = memo(
 
     const { navData } = useDocsNavData()
 
-    console.log('MobileList', {
-      navData,
-      nodeLabelFilter: getSnapshot(nodeLabelFilter),
-    })
-
     return (
       <SharedList
         navData={navData}
         MenuBarComponent={Menu}
-        // TODO: highlightSearchString={nodeLabelFilter.adresse}
+        highlightSearchString={nodeLabelFilter.doc}
       />
     )
   }),
