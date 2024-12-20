@@ -1,9 +1,11 @@
-import { memo, useState } from 'react'
+import { memo, useState, useCallback } from 'react'
 import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import { useLocation, Link } from 'react-router'
 import styled from '@emotion/styled'
 
 import { StyledButton } from './index.jsx'
+import { useDocsNavData } from '../../../../modules/useDocsNavData.js'
 
 const style = { marginRight: 8 }
 
@@ -14,8 +16,14 @@ export const DokumentationMobile = memo(() => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
 
-  const handleClick = (event) => setAnchorEl(event.currentTarget)
-  const handleClose = () => setAnchorEl(null)
+  const onClickDocsButton = useCallback(
+    (event) => setAnchorEl(event.currentTarget),
+    [],
+  )
+  const onClose = useCallback(() => setAnchorEl(null), [])
+
+  const { navData } = useDocsNavData()
+  console.log('DokumentationMobile, navData:', navData)
 
   return (
     <>
@@ -24,7 +32,7 @@ export const DokumentationMobile = memo(() => {
         aria-controls={open ? 'docs-button' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
+        onClick={onClickDocsButton}
         variant={isDocs ? 'outlined' : 'text'}
         component={Link}
         to={`/Dokumentation/${search}`}
@@ -37,7 +45,7 @@ export const DokumentationMobile = memo(() => {
         id="docs-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={onClose}
         MenuListProps={{
           'aria-labelledby': 'docs-button',
         }}
