@@ -1328,163 +1328,170 @@ export const Router = () => {
           </Route>
         </Route>
         <Route
-          path="/Dokumentation"
-          lazy={() => import('../Docs/index.jsx')}
-        />
-        <Route
-          path=":docId"
+          path="Dokumentation"
           lazy={() =>
-            isDesktopView ?
-              import('../Docs/DesktopDoc.jsx')
-            : import('../Docs/Doc.jsx')
+            isDesktopView ? import('../Docs/DesktopDocs.jsx') : null
           }
         >
           <Route
-            path="was-kann-man-mit-apflora-machen"
-            lazy={() => import('../Docs/docs/WasKannApflora.jsx')}
-          />
-          <Route
-            path="technische-voraussetzungen"
-            lazy={() => import('../Docs/docs/TechnischeVoraussetzungen.jsx')}
-          />
-          <Route
-            path="tipps-fuer-den-einstieg"
-            lazy={() => import('../Docs/docs/TippsFuerDenEinstieg.jsx')}
-          />
-          <Route
-            path="videos-fuer-den-einstieg"
-            lazy={() => import('../Docs/docs/VideosFuerDenEinstieg.jsx')}
-          />
-          <Route
-            path="anleitung-eingabe"
-            lazy={() => import('../Docs/docs/AnleitungZurEingabe.jsx')}
-          />
-          <Route
-            path="ist-apflora-langsam"
-            lazy={() => import('../Docs/docs/IstApfloraLangsam.jsx')}
-          />
-          <Route
-            path="art-auswertung-pop-menge"
-            lazy={() => import('../Docs/docs/ArtAuswertungPopMenge.jsx')}
-          />
-          <Route
-            path="beobachtungen-einer-teil-population-zuordnen"
-            lazy={() => import('../Docs/docs/BeobZuordnen/index.jsx')}
-          />
-          <Route
-            path="falsch-bestimmte-beobachtungen"
-            lazy={() => import('../Docs/docs/FalschBestimmteBeob.jsx')}
-          />
-          <Route
-            path="erfolgs-kontrollen-planen"
-            lazy={() => import('../Docs/docs/EkPlanen/index.jsx')}
-          />
-          <Route
-            path="benutzer-konti"
-            lazy={() => import('../Docs/docs/BenutzerKonti.jsx')}
-          />
-          <Route
-            path="erfolgs-kontrollen-freiwillige"
-            lazy={() => import('../Docs/docs/Ekf.jsx')}
-          />
-          <Route
-            path="filter"
-            lazy={() => import('../Docs/docs/Filter/index.jsx')}
-          />
-          <Route
-            path="markdown"
-            lazy={() => import('../Docs/docs/Markdown/index.jsx')}
-          />
-          <Route
-            path="historisierung"
-            lazy={() => import('../Docs/docs/Historisierung.jsx')}
-          />
-          <Route
-            path="karte-teil-populationen-aller-arten-anzeigen"
-            lazy={() => import('../Docs/docs/KarteTpopAllerArten.jsx')}
-          />
-          <Route
-            path="karte-filter"
-            lazy={() => import('../Docs/docs/KarteFilter.jsx')}
-          />
-          <Route
-            path="karte-symbole-und-label-fuer-populationen-und-teil-populationen-waehlen"
-            lazy={() =>
-              import('../Docs/docs/KartePopTpopIconsLabelWaehlen/index.jsx')
-            }
-          />
-          <Route
-            path="karte-massstab"
-            lazy={() => import('../Docs/docs/KarteMassstab/index.jsx')}
-          />
-          <Route
-            path="karte-drucken"
-            lazy={() => import('../Docs/docs/KarteDrucken.jsx')}
-          />
-          <Route
-            path="gedaechtnis"
-            lazy={() => import('../Docs/docs/Gedaechtnis.jsx')}
-          />
-          <Route
-            path="dateien"
-            lazy={() => import('../Docs/docs/Dateien/index.jsx')}
-          />
-          <Route
-            path="koordinaten"
-            lazy={() => import('../Docs/docs/Koordinaten/index.jsx')}
-          />
-          <Route
-            path="melden"
-            lazy={() => import('../Docs/docs/Melden.jsx')}
-          />
-          <Route
-            path="pwa"
-            lazy={() => import('../Docs/docs/Pwa/index.jsx')}
-          />
-          <Route
-            path="technologien"
-            lazy={() => import('../Docs/docs/Technologien/index.jsx')}
-          />
-          <Route
-            path="beobachtungen-verwalten"
-            lazy={() => import('../Docs/docs/BeobVerwalten/index.jsx')}
-          />
-          <Route
-            path="produkte-fuer-die-fns"
-            lazy={() => import('../Docs/docs/ProdukteFuerFNS.jsx')}
-          />
-          <Route
-            path="daten-sichern"
-            lazy={() => import('../Docs/docs/DatenSichern.jsx')}
-          />
-          <Route
-            path="daten-wiederherstellen"
-            lazy={() => import('../Docs/docs/DatenWiederherstellen.jsx')}
-          />
-          <Route
-            path="testen"
-            lazy={() => import('../Docs/docs/Testen.jsx')}
-          />
-          <Route
-            path="geschichte"
-            lazy={() => import('../Docs/docs/Geschichte.jsx')}
-          />
-          <Route
-            path="open-source"
-            lazy={() => import('../Docs/docs/OpenSource.jsx')}
-          />
-          <Route
-            path="art-taxonomien-ergaenzen"
-            lazy={() => import('../Docs/docs/ArtTaxonomieErgaenzen.jsx')}
-          />
-          <Route
-            path="info-flora-export"
-            lazy={() => import('../Docs/docs/InfofloraExport.jsx')}
+            index={true}
+            lazy={() => import('../Docs/index.jsx')}
           />
           <Route
             path="*"
-            lazy={() => import('../404.jsx')}
-          />
+            lazy={() =>
+              isDesktopView ?
+                import('../Docs/DesktopDoc.jsx')
+              : import('../Docs/Doc.jsx')
+            }
+          >
+            <Route
+              path="was-kann-man-mit-apflora-machen"
+              lazy={() => import('../Docs/docs/WasKannApflora.jsx')}
+            />
+            <Route
+              path="technische-voraussetzungen"
+              lazy={() => import('../Docs/docs/TechnischeVoraussetzungen.jsx')}
+            />
+            <Route
+              path="tipps-fuer-den-einstieg"
+              lazy={() => import('../Docs/docs/TippsFuerDenEinstieg.jsx')}
+            />
+            <Route
+              path="videos-fuer-den-einstieg"
+              lazy={() => import('../Docs/docs/VideosFuerDenEinstieg.jsx')}
+            />
+            <Route
+              path="anleitung-eingabe"
+              lazy={() => import('../Docs/docs/AnleitungZurEingabe.jsx')}
+            />
+            <Route
+              path="ist-apflora-langsam"
+              lazy={() => import('../Docs/docs/IstApfloraLangsam.jsx')}
+            />
+            <Route
+              path="art-auswertung-pop-menge"
+              lazy={() => import('../Docs/docs/ArtAuswertungPopMenge.jsx')}
+            />
+            <Route
+              path="beobachtungen-einer-teil-population-zuordnen"
+              lazy={() => import('../Docs/docs/BeobZuordnen/index.jsx')}
+            />
+            <Route
+              path="falsch-bestimmte-beobachtungen"
+              lazy={() => import('../Docs/docs/FalschBestimmteBeob.jsx')}
+            />
+            <Route
+              path="erfolgs-kontrollen-planen"
+              lazy={() => import('../Docs/docs/EkPlanen/index.jsx')}
+            />
+            <Route
+              path="benutzer-konti"
+              lazy={() => import('../Docs/docs/BenutzerKonti.jsx')}
+            />
+            <Route
+              path="erfolgs-kontrollen-freiwillige"
+              lazy={() => import('../Docs/docs/Ekf.jsx')}
+            />
+            <Route
+              path="filter"
+              lazy={() => import('../Docs/docs/Filter/index.jsx')}
+            />
+            <Route
+              path="markdown"
+              lazy={() => import('../Docs/docs/Markdown/index.jsx')}
+            />
+            <Route
+              path="historisierung"
+              lazy={() => import('../Docs/docs/Historisierung.jsx')}
+            />
+            <Route
+              path="karte-teil-populationen-aller-arten-anzeigen"
+              lazy={() => import('../Docs/docs/KarteTpopAllerArten.jsx')}
+            />
+            <Route
+              path="karte-filter"
+              lazy={() => import('../Docs/docs/KarteFilter.jsx')}
+            />
+            <Route
+              path="karte-symbole-und-label-fuer-populationen-und-teil-populationen-waehlen"
+              lazy={() =>
+                import('../Docs/docs/KartePopTpopIconsLabelWaehlen/index.jsx')
+              }
+            />
+            <Route
+              path="karte-massstab"
+              lazy={() => import('../Docs/docs/KarteMassstab/index.jsx')}
+            />
+            <Route
+              path="karte-drucken"
+              lazy={() => import('../Docs/docs/KarteDrucken.jsx')}
+            />
+            <Route
+              path="gedaechtnis"
+              lazy={() => import('../Docs/docs/Gedaechtnis.jsx')}
+            />
+            <Route
+              path="dateien"
+              lazy={() => import('../Docs/docs/Dateien/index.jsx')}
+            />
+            <Route
+              path="koordinaten"
+              lazy={() => import('../Docs/docs/Koordinaten/index.jsx')}
+            />
+            <Route
+              path="melden"
+              lazy={() => import('../Docs/docs/Melden.jsx')}
+            />
+            <Route
+              path="pwa"
+              lazy={() => import('../Docs/docs/Pwa/index.jsx')}
+            />
+            <Route
+              path="technologien"
+              lazy={() => import('../Docs/docs/Technologien/index.jsx')}
+            />
+            <Route
+              path="beobachtungen-verwalten"
+              lazy={() => import('../Docs/docs/BeobVerwalten/index.jsx')}
+            />
+            <Route
+              path="produkte-fuer-die-fns"
+              lazy={() => import('../Docs/docs/ProdukteFuerFNS.jsx')}
+            />
+            <Route
+              path="daten-sichern"
+              lazy={() => import('../Docs/docs/DatenSichern.jsx')}
+            />
+            <Route
+              path="daten-wiederherstellen"
+              lazy={() => import('../Docs/docs/DatenWiederherstellen.jsx')}
+            />
+            <Route
+              path="testen"
+              lazy={() => import('../Docs/docs/Testen.jsx')}
+            />
+            <Route
+              path="geschichte"
+              lazy={() => import('../Docs/docs/Geschichte.jsx')}
+            />
+            <Route
+              path="open-source"
+              lazy={() => import('../Docs/docs/OpenSource.jsx')}
+            />
+            <Route
+              path="art-taxonomien-ergaenzen"
+              lazy={() => import('../Docs/docs/ArtTaxonomieErgaenzen.jsx')}
+            />
+            <Route
+              path="info-flora-export"
+              lazy={() => import('../Docs/docs/InfofloraExport.jsx')}
+            />
+            <Route
+              path="*"
+              lazy={() => import('../404.jsx')}
+            />
+          </Route>
         </Route>
         <Route
           path="*"
