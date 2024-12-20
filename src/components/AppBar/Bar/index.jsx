@@ -3,18 +3,19 @@ import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
+import { useAtom } from 'jotai'
 
-import { HomeMenus } from './Home.jsx'
+import { HomeMenus } from './Home/index.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
-import { DocsMenus } from './Docs.jsx'
 import { constants } from '../../../modules/constants.js'
+import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 
 export const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: ${(props) =>
-    props.alignFlexEnd === 'true' ? 'flex-end' : 'space-between'};
+    props.alignflexend === 'true' ? 'flex-end' : 'space-between'};
   align-items: center;
   flex-grow: 1;
   overflow: hidden;
@@ -49,10 +50,10 @@ export const MenuDiv = styled.div`
 
 export const Bar = memo(() => {
   const { search, pathname } = useLocation()
-  const showHome = pathname === '/'
+  const showHome = pathname === '/' || pathname.startsWith('/Dokumentation')
   const showEkPlan = pathname.includes('/EK-Planung')
-  // const showProjekte = pathname.startsWith('/Daten') && !showEkPlan
-  const showDocs = pathname.startsWith('/Dokumentation')
+
+  const [isMobileView] = useAtom(isMobileViewAtom)
 
   const { width, ref } = useResizeDetector({
     handleHeight: false,
@@ -67,22 +68,20 @@ export const Bar = memo(() => {
   return (
     <Container
       ref={ref}
-      alignFlexEnd={(width < constants.minWidthToShowTitle).toString()}
+      alignflexend={(width < constants.minWidthToShowTitle).toString()}
     >
       <SiteTitle
         variant="outlined"
         component={Link}
         to={`/${search}`}
         title="Home"
-        hide={(width <= constants.minWidthToShowTitle).toString()}
+        hide={(width <= constants.minWidthToShowTitle && !showHome).toString()}
       >
         AP Flora
       </SiteTitle>
       <MenuDiv ref={menuDivRef}>
         {showHome ?
           <HomeMenus />
-        : showDocs ?
-          <DocsMenus />
         : showEkPlan ?
           <EkPlanMenus />
         : <ProjekteMenus />}

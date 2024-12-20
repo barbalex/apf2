@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../index.jsx'
+import { DokuDate } from '../DesktopDocs.jsx'
 import { YoutubeEmbed } from '../../shared/YoutubeEmbed.jsx'
 
 export const Component = memo(() => (

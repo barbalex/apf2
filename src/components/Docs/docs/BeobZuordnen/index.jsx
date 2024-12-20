@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../index.jsx'
+import { DokuDate } from '../../DesktopDocs.jsx'
 import { YoutubeEmbed } from '../../../shared/YoutubeEmbed.jsx'
 import beobZuordnen from './beobZuordnen_01.png'
 

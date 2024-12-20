@@ -7,8 +7,8 @@ export const MenuItem = ({ node }) => {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
 
-  const { slug, title } = node
-  const activeUrl = `/Dokumentation/${slug}`
+  const { id, label } = node
+  const activeUrl = `/Dokumentation/${id}`
   const active = activeUrl === pathname || `${activeUrl}/` === pathname
 
   const onClickMenuItem = useCallback(() => {
@@ -22,10 +22,10 @@ export const MenuItem = ({ node }) => {
         selected={active}
         divider
         dense
-        id={slug}
+        id={id}
       >
         <ListItemText onClick={onClickMenuItem}>
-          {title ?? '(Titel fehlt)'}
+          {label ?? '(Titel fehlt)'}
         </ListItemText>
       </ListItemButton>
     </>

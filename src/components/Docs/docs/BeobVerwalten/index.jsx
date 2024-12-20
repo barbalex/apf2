@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { DokuDate, Code } from '../../index.jsx'
+import { DokuDate, Code } from '../../DesktopDocs.jsx'
 import beobTable from './beobTable.webp'
 
 export const Component = memo(() => (

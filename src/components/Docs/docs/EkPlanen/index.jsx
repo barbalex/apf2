@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../index.jsx'
+import { DokuDate } from '../../DesktopDocs.jsx'
 import ekplanFilternJahr from './ekplan_filtern_jahr.gif'
 import ekplanenAp from './ekplanen_ap.png'
 import ekplanenAuto from './ekplanen_auto.gif'

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../index.jsx'
+import { DokuDate } from '../../DesktopDocs.jsx'
 import field from './field.png'
 
 export const Component = memo(() => (

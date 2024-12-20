@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../index.jsx'
+import { DokuDate } from '../../DesktopDocs.jsx'
 import tpopSymbols1 from './tpopSymbols1.png'
 import tpopSymbols2 from './tpopSymbols2.png'
 import tpopSymbols3 from './tpopSymbols3.png'

@@ -6,6 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
+import { useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../mobxContext.js'
@@ -35,7 +36,13 @@ const StyledTextField = styled(TextField)`
 export const FilterInput = memo(
   observer(({ filterInputIsVisible, ref: inputRef }) => {
     const store = useContext(MobxContext)
-    const { nodeLabelFilter, activeFilterTable } = store.tree
+    const { nodeLabelFilter, activeFilterTable: activeFilterTableIn } =
+      store.tree
+    // ISSUE: doc is not covered by active node array
+    // thus activeFilterTable is not set for /Dokumentation
+    const { pathname } = useLocation()
+    const isDocs = pathname.includes('/Dokumentation')
+    const activeFilterTable = isDocs ? 'doc' : activeFilterTableIn
 
     const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
       nodeLabelFilter
