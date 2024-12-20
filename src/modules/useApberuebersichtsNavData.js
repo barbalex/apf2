@@ -59,11 +59,11 @@ export const useApberuebersichtsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'AP-Berichte',
+      listFilter: 'apberuebersicht',
       url: `/Daten/Projekte/${projId}/AP-Berichte`,
       label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
       // TODO: needed?
       totalCount,
-      isFilterable: true,
       menus: (
         data?.data?.projektById?.apberuebersichtsByProjId?.nodes ?? []
       ).map((p) => ({

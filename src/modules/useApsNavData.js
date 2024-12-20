@@ -51,9 +51,9 @@ export const useApsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Arten',
+      listFilter: 'ap',
       url: `/Daten/Projekte/${projId}/Arten`,
       label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => ({
         id: p.id,
         label: p.label,
