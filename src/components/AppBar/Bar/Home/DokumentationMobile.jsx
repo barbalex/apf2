@@ -9,6 +9,16 @@ import { useDocsNavData } from '../../../../modules/useDocsNavData.js'
 
 const style = { marginRight: 8 }
 
+const StyledMenu = styled(Menu)`
+  container-type: inline-size;
+  .MuiPaper-root {
+    scrollbar-width: thin !important;
+  }
+  .MuiList-root {
+    padding-top: 0;
+  }
+`
+
 export const DokumentationMobile = memo(() => {
   const { pathname, search } = useLocation()
   const isDocs = pathname.startsWith('/Dokumentation')
@@ -21,13 +31,8 @@ export const DokumentationMobile = memo(() => {
     [],
   )
   const onClose = useCallback(() => setAnchorEl(null), [])
-  const onClickMenuItem = useCallback((args) => {
-    console.log('DokumentationMobile, onClickMenuItem, args:', args)
-    setAnchorEl(null)
-  }, [])
 
   const { navData } = useDocsNavData()
-  console.log('DokumentationMobile, navData:', navData)
 
   return (
     <>
@@ -45,7 +50,7 @@ export const DokumentationMobile = memo(() => {
       >
         Dokumentation
       </StyledButton>
-      <Menu
+      <StyledMenu
         id="docs-menu"
         anchorEl={anchorEl}
         open={open}
@@ -57,12 +62,14 @@ export const DokumentationMobile = memo(() => {
         {navData.menus.map((item) => (
           <MenuItem
             key={item.id}
-            onClick={onClickMenuItem.bind(item)}
+            onClick={onClose}
+            component={Link}
+            to={`/Dokumentation/${item.id}${search}`}
           >
             {item.label}
           </MenuItem>
         ))}
-      </Menu>
+      </StyledMenu>
     </>
   )
 })
