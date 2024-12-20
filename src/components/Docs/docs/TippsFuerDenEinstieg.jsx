@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../Docs.jsx'
+import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>

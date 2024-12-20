@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../Docs.jsx'
+import { DokuDate } from '../../DesktopDocs.jsx'
 // import beziehungen from './beziehungen.png'
 
 export const Component = memo(() => (

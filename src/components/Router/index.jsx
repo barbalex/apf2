@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
 } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
+import { useAtom } from 'jotai'
 
 // import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.jsx'
 
@@ -350,6 +351,7 @@ const idealbiotopHandle = {
   bookmarkFetcher: idealbiotopBookmarkFetcher,
   bookmarkFetcherName: 'useIdealbiotopNavData',
 }
+import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
@@ -358,6 +360,8 @@ const idealbiotopHandle = {
 
 // uncomment unterhalt route for Unterhalt
 export const Router = () => {
+  const [isDesktopView] = useAtom(isDesktopViewAtom)
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route lazy={() => import('../AppBar/index.jsx')}>
@@ -1324,13 +1328,17 @@ export const Router = () => {
           </Route>
         </Route>
         <Route
-          path="Dokumentation"
+          path="/Dokumentation"
           lazy={() => import('../Docs/index.jsx')}
+        />
+        <Route
+          path=":docId"
+          lazy={() =>
+            isDesktopView ?
+              import('../Docs/DesktopDoc.jsx')
+            : import('../Docs/Doc.jsx')
+          }
         >
-          <Route
-            index
-            element={null}
-          />
           <Route
             path="was-kann-man-mit-apflora-machen"
             lazy={() => import('../Docs/docs/WasKannApflora.jsx')}

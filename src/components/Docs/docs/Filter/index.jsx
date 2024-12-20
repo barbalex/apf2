@@ -1,6 +1,6 @@
 import { memo } from 'react'
 
-import { DokuDate } from '../../Docs.jsx'
+import { DokuDate } from '../../DesktopDocs.jsx'
 import entfernen1 from './entfernen_1.png'
 import formularFilter1 from './formular_filter_1.png'
 import formularFilter2 from './formular_filter_2.png'
