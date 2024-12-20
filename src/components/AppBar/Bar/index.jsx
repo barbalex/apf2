@@ -8,7 +8,6 @@ import { useAtom } from 'jotai'
 import { HomeMenus } from './Home.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
-import { DocsMenus } from './Docs.jsx'
 import { constants } from '../../../modules/constants.js'
 import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 
@@ -51,10 +50,8 @@ export const MenuDiv = styled.div`
 
 export const Bar = memo(() => {
   const { search, pathname } = useLocation()
-  const showHome = pathname === '/'
+  const showHome = pathname === '/' || pathname.startsWith('/Dokumentation')
   const showEkPlan = pathname.includes('/EK-Planung')
-  // const showProjekte = pathname.startsWith('/Daten') && !showEkPlan
-  const showDocs = pathname.startsWith('/Dokumentation')
 
   const [isMobileView] = useAtom(isMobileViewAtom)
 
@@ -89,8 +86,6 @@ export const Bar = memo(() => {
       <MenuDiv ref={menuDivRef}>
         {showHome ?
           <HomeMenus />
-        : showDocs ?
-          <DocsMenus />
         : showEkPlan ?
           <EkPlanMenus />
         : <ProjekteMenus />}

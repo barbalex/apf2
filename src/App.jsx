@@ -63,6 +63,10 @@ const StorePersister = lazy(async () => ({
 const Spinner = lazy(async () => ({
   default: (await import('./components/shared/Spinner.jsx')).Spinner,
 }))
+const IsDesktopViewSetter = lazy(async () => ({
+  default: (await import('./components/IsDesktopViewSetter'))
+    .IsDesktopViewSetter,
+}))
 
 registerLocale('de', de)
 setDefaultLocale('de')
@@ -116,6 +120,7 @@ export const App = () => {
                         <LastTouchedNodeSetter />
                         <MouseWheelHandler />
                         <LegacyBrowserInformer />
+                        <IsDesktopViewSetter />
                         <StorePersister
                           client={client}
                           store={store}

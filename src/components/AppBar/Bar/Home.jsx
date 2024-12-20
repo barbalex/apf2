@@ -7,11 +7,15 @@ import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 
 const StyledButton = styled(Button)`
   color: white !important;
+  ${(props) =>
+    props.border === 'true' &&
+    'border-color: rgba(255, 255, 255, 0.5) !important;'}
   text-transform: none !important;
   width: ${(props) => `${props.width}px` ?? 'unset'} !important;
 `
 export const HomeMenus = () => {
   const { pathname, search } = useLocation()
+  const isDocs = pathname.startsWith('/Dokumentation')
   const [isMobileView] = useAtom(isMobileViewAtom)
 
   return (
@@ -21,18 +25,19 @@ export const HomeMenus = () => {
         variant="text"
         component={Link}
         to={`/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13${search}`}
-        width={140}
+        width={isMobileView ? 70 : 140}
       >
-        Arten bearbeiten
+        {isMobileView ? 'Daten' : 'Arten bearbeiten'}
       </StyledButton>
       <StyledButton
         key="dokumentation"
         variant={pathname.startsWith('/Dokumentation') ? 'outlined' : 'text'}
         component={Link}
         to={`/Dokumentation/${search}`}
-        width={130}
+        width={isMobileView ? 60 : 130}
+        border={isDocs.toString()}
       >
-        Dokumentation
+        {isMobileView ? 'Doku' : 'Dokumentation'}
       </StyledButton>
     </>
   )
