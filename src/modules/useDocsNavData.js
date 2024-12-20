@@ -1,4 +1,4 @@
-import { useMemo, useContext } from 'react'
+import { useMemo, useContext, useState, useCallback, useEffect } from 'react'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
@@ -165,6 +165,15 @@ export const useDocsNavData = () => {
         : menus,
     }),
     [filterValue],
+  )
+  const [, setRerenderer] = useState(0)
+  const refetch = useCallback(() => {
+    setRerenderer((prev) => prev + 1)
+  }, [])
+  useEffect(
+    () => reaction(() => store.tree.apGqlFilterForTree, refetch),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   )
 
   return { isLoading: false, error: undefined, navData }
