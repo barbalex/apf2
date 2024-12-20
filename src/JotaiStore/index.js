@@ -1,25 +1,19 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { constants } from '../modules/constants.js'
-import {
-  adresse,
-  ap,
-  apber,
-  apberuebersicht,
-  assozart,
-  ekAbrechnungstypWerte,
-  ekfrequenz,
-  ekzaehleinheit,
-  pop,
-  popber,
-  popmassnber,
-  tpop,
-  tpopber,
-  tpopkontrzaehlEinheitWerte,
-  tpopmassnber,
-  user,
-} from '../components/shared/fragments.js'
-import { ApberrelevantGrund } from '../components/Projekte/TreeContainer/Tree/Root/Werte/ApberrelevantGrundFolder/ApberrelevantGrund.jsx'
+
+function atomWithToggleAndStorage(key, initialValue, storage) {
+  const anAtom = atomWithStorage(key, initialValue, storage)
+  const derivedAtom = atom(
+    (get) => get(anAtom),
+    (get, set, nextValue) => {
+      const update = nextValue ?? !get(anAtom)
+      set(anAtom, update)
+    },
+  )
+
+  return derivedAtom
+}
 
 export const store = createStore()
 
@@ -107,36 +101,149 @@ export const hideTreeAtom = atom((get) => {
   const hideTree = !alwaysShowTree && isMobileView
   return hideTree
 })
-export const navListFilterIsVisibleAtom = atomWithStorage(
-  'navListFilterIsVisible',
-  {
-    Adressen: false,
-    apberrelevantGrundWerte: false,
-    ekAbrechnungstypWerte: false,
-    tpopkontrzaehlEinheitWerte: false,
-    user: false,
-    apberuebersicht: false,
-    ap: false,
-    beobnichtzuzuordnen: false,
-    beobnichtbeurteilt: false,
-    ekzaehleinheit: false,
-    ekfrequenz: false,
-    assozart: false,
-    apart: false,
-    apber: false,
-    aperfkrit: false,
-    apziel: false,
-    apzielber: false,
-    pop: false,
-    popmassnber: false,
-    popber: false,
-    tpop: false,
-    beobzugeordnet: false,
-    tpopber: false,
-    tpopekf: false,
-    tpopek: false,
-    tpopkontrzaehl: false,
-    tpopmassnber: false,
-    tpopmassn: false,
-  },
+export const adresseNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'adresseNavListFilterIsVisible',
+  false,
 )
+export const apNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'apNavListFilterIsVisible',
+  false,
+)
+export const apartNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'apartNavListFilterIsVisible',
+  false,
+)
+export const apberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'apberNavListFilterIsVisible',
+  false,
+)
+export const apberuebersichtNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage('apberuebersichtNavListFilterIsVisible', false)
+export const aperfkritNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'aprefkritNavListFilterIsVisible',
+  false,
+)
+export const apzielNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'apzielNavListFilterIsVisible',
+  false,
+)
+export const apzielberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'apzielberNavListFilterIsVisible',
+  false,
+)
+export const assozartNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'assozartNavListFilterIsVisible',
+  false,
+)
+export const beobNichtBeurteiltNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage('beobNichtBeurteiltNavListFilterIsVisible', false)
+export const beobNichtZuzuordnenNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage('beobNichtZuzuordnenNavListFilterIsVisible', false)
+export const beobZugeordnetNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage('beobZugeordnetNavListFilterIsVisible', false)
+export const ekAbrechnungstypWerteNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage('ekAbrechnungstypWerteNavListFilterIsVisible', false)
+export const ekfrequenzNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'ekfrequenzNavListFilterIsVisible',
+  false,
+)
+export const ekzaehleinheitNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage('ekzaehleinheitNavListFilterIsVisible', false)
+export const erfkritNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'erfkritNavListFilterIsVisible',
+  false,
+)
+export const popNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'popNavListFilterIsVisible',
+  false,
+)
+export const popberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'popberNavListFilterIsVisible',
+  false,
+)
+export const popmassnberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'popmassnberNavListFilterIsVisible',
+  false,
+)
+export const tpopNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'tpopNavListFilterIsVisible',
+  false,
+)
+export const tpopApberrelevantGrundWerteNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage(
+    'tpopApberrelevantGrundWerteNavListFilterIsVisible',
+    false,
+  )
+export const tpopberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'tpopberNavListFilterIsVisible',
+  false,
+)
+export const tpopkontrNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'tpopkontrNavListFilterIsVisible',
+  false,
+)
+export const tpopkontrzaehlNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage('tpopkontrzaehlNavListFilterIsVisible', false)
+export const tpopkontrzaehlEinheitWerteNavListFilterIsVisibleAtom =
+  atomWithToggleAndStorage(
+    'tpopkontrzaehlEinheitWerteNavListFilterIsVisible',
+    false,
+  )
+export const tpopmassnNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'tpopmassnNavListFilterIsVisible',
+  false,
+)
+export const tpopmassnberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'tpopmassnberNavListFilterIsVisible',
+  false,
+)
+export const userNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'userNavListFilterIsVisible',
+  false,
+)
+export const zielNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'zielNavListFilterIsVisible',
+  false,
+)
+export const zielberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
+  'zielberNavListFilterIsVisible',
+  false,
+)
+
+export const navListFilterAtoms = {
+  adresse: adresseNavListFilterIsVisibleAtom,
+  ap: apNavListFilterIsVisibleAtom,
+  apart: apartNavListFilterIsVisibleAtom,
+  apber: apberNavListFilterIsVisibleAtom,
+  apberuebersicht: apberuebersichtNavListFilterIsVisibleAtom,
+  aperfkrit: aperfkritNavListFilterIsVisibleAtom,
+  apziel: apzielNavListFilterIsVisibleAtom,
+  apzielber: apzielberNavListFilterIsVisibleAtom,
+  assozart: assozartNavListFilterIsVisibleAtom,
+  beobNichtBeurteilt: beobNichtBeurteiltNavListFilterIsVisibleAtom,
+  beobNichtZuzuordnen: beobNichtZuzuordnenNavListFilterIsVisibleAtom,
+  beobZugeordnet: beobZugeordnetNavListFilterIsVisibleAtom,
+  ekAbrechnungstypWerte: ekAbrechnungstypWerteNavListFilterIsVisibleAtom,
+  ekfrequenz: ekfrequenzNavListFilterIsVisibleAtom,
+  ekzaehleinheit: ekzaehleinheitNavListFilterIsVisibleAtom,
+  erfkrit: erfkritNavListFilterIsVisibleAtom,
+  pop: popNavListFilterIsVisibleAtom,
+  popber: popberNavListFilterIsVisibleAtom,
+  popmassnber: popmassnberNavListFilterIsVisibleAtom,
+  tpop: tpopNavListFilterIsVisibleAtom,
+  tpopApberrelevantGrundWerte:
+    tpopApberrelevantGrundWerteNavListFilterIsVisibleAtom,
+  tpopber: tpopberNavListFilterIsVisibleAtom,
+  tpopkontr: tpopkontrNavListFilterIsVisibleAtom,
+  tpopkontrzaehl: tpopkontrzaehlNavListFilterIsVisibleAtom,
+  tpopkontrzaehlEinheitWerte:
+    tpopkontrzaehlEinheitWerteNavListFilterIsVisibleAtom,
+  tpopmassn: tpopmassnNavListFilterIsVisibleAtom,
+  tpopmassnber: tpopmassnberNavListFilterIsVisibleAtom,
+  user: userNavListFilterIsVisibleAtom,
+  ziel: zielNavListFilterIsVisibleAtom,
+  zielber: zielberNavListFilterIsVisibleAtom,
+  // needed because the hook can't be called conditionally
+  // and an atom always needs to be returned
+  undefined: adresseNavListFilterIsVisibleAtom,
+}

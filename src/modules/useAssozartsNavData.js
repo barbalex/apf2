@@ -65,9 +65,9 @@ export const useAssozartsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'assoziierte-Arten',
+      listFilter: 'assozart',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten`,
       label: `Assoziierte Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.apById?.assozartsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

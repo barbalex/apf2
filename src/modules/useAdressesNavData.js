@@ -47,9 +47,9 @@ export const useAdressesNavData = () => {
   const navData = useMemo(
     () => ({
       id: 'Adressen',
+      listFilter: 'adresse',
       url: `/Daten/Werte-Listen/Adressen`,
       label: `Adressen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.allAdresses?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,

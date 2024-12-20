@@ -57,9 +57,9 @@ export const useApartsNavData = (props) => {
   const navData = useMemo(
     () => ({
       id: 'Taxa',
+      listFilter: 'apart',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Taxa`,
       label: `Taxa (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      isFilterable: true,
       menus: (data?.data?.apById?.apartsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
