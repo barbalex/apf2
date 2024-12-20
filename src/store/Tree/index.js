@@ -231,6 +231,7 @@ export const Tree = types
           return 'tpopkontrzaehlEinheitWerte'
       }
       if (aNA[0] === 'Benutzer') return 'user'
+      if (aNA[0] === 'Dokumentation') return 'doc'
       return undefined
     },
     get openProjekts() {

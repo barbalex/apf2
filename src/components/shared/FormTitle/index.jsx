@@ -68,6 +68,14 @@ export const FormTitle = memo(
       setTimeout(() => filterInputRef?.current?.focus?.(), 0)
     }, [filterInputIsVisible, toggleFilterInputIsVisible])
 
+    console.log('FormTitle', {
+      filterInputIsVisible,
+      listFilter,
+      title,
+      toggleFilterInput,
+      toggleFilterInputIsVisible,
+    })
+
     // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty
     // use case: user set filter in other ui
     // deactivated because using autofocus on input is more important and that would steal focus from other places...

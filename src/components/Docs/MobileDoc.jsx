@@ -1,16 +1,12 @@
-import { Suspense } from 'react'
-import styled from '@emotion/styled'
+import { memo } from 'react'
 import { Outlet } from 'react-router'
 
-import { Sidebar } from './DesktopSidebar/index.jsx'
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { Spinner } from '../shared/Spinner.jsx'
-import { Container, Doku, DokuDate, Code } from './DesktopDocs.jsx'
+import { Container, Doku } from './DesktopDocs.jsx'
 
-export const Component = () => (
+export const Component = memo(() => (
   <Container>
     <Doku>
       <Outlet />
     </Doku>
   </Container>
-)
+))
