@@ -84,7 +84,6 @@ function _inherits(subClass, superClass) {
 }
 
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -129,9 +128,9 @@ var MenuItem = (function (_Component) {
           if (_this.props.disabled || _this.props.divider) return
 
           callIfExists(
-            _this.props.onClick,
+            _this.props.onClick ?? (() => null),
             event,
-            assign({}, _this.props.data, store.data),
+            assign({}, _this.props.data ?? {}, store.data),
             store.target,
           )
 
@@ -152,12 +151,12 @@ var MenuItem = (function (_Component) {
           _this2 = this
 
         var _props = this.props,
-          attributes = _props.attributes,
-          children = _props.children,
-          className = _props.className,
-          disabled = _props.disabled,
-          divider = _props.divider,
-          selected = _props.selected
+          attributes = _props.attributes ?? {},
+          children = _props.children ?? null,
+          className = _props.className ?? '',
+          disabled = _props.disabled ?? false,
+          divider = _props.divider ?? false,
+          selected = _props.selected ?? false
 
         var menuItemClassNames = cx(
           className,
@@ -193,8 +192,8 @@ var MenuItem = (function (_Component) {
             ref: function ref(_ref2) {
               _this2.ref = _ref2
             },
-            onMouseMove: this.props.onMouseMove,
-            onMouseLeave: this.props.onMouseLeave,
+            onMouseMove: this.props.onMouseMove ?? (() => null),
+            onMouseLeave: this.props.onMouseLeave ?? (() => null),
             onTouchEnd: this.handleClick,
             onClick: this.handleClick,
           }),
@@ -207,37 +206,4 @@ var MenuItem = (function (_Component) {
   return MenuItem
 })(Component)
 
-MenuItem.propTypes = {
-  attributes: PropTypes.object,
-  children: PropTypes.node,
-  className: PropTypes.string,
-  data: PropTypes.object,
-  disabled: PropTypes.bool,
-  divider: PropTypes.bool,
-  onClick: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  onMouseMove: PropTypes.func,
-  preventClose: PropTypes.bool,
-  selected: PropTypes.bool,
-}
-MenuItem.defaultProps = {
-  attributes: {},
-  children: null,
-  className: '',
-  data: {},
-  disabled: false,
-  divider: false,
-  onClick: function onClick() {
-    return null
-  },
-
-  onMouseMove: function onMouseMove() {
-    return null
-  },
-  onMouseLeave: function onMouseLeave() {
-    return null
-  },
-  preventClose: false,
-  selected: false,
-}
 export default MenuItem

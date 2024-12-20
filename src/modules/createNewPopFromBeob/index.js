@@ -184,6 +184,9 @@ export const createNewPopFromBeob = async ({
     queryKey: [`treeApFolders`],
   })
   tanstackQueryClient.invalidateQueries({
+    queryKey: ['treeAp'],
+  })
+  tanstackQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
   tanstackQueryClient.invalidateQueries({

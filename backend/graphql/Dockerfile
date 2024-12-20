@@ -2,7 +2,7 @@ FROM node:slim
 # RUN apk add dumb-init
 RUN apt-get update && apt-get install -y dumb-init
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 RUN npm install -g postgraphile
 RUN npm install -g postgraphile-plugin-connection-filter

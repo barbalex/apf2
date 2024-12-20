@@ -8,13 +8,13 @@ import queryString from 'query-string'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import { ProjektContainer } from './ProjektContainer.jsx'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { inIframe } from '../../modules/inIframe.js'
-import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
+
 const ApFilterController = lazy(async () => ({
   default: (await import('./ApFilterController.jsx')).ApFilterController,
 }))
@@ -40,14 +40,11 @@ const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 export const Component = memo(
   observer(() => {
     const { pathname, search } = useLocation()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { isPrint } = store
     const { tree2Src } = store.tree
 
-    const [projekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs] = useProjekteTabs()
     const tree2Tabs = intersection(tree2TabValues, projekteTabs)
 
     let iFrameSrc = tree2Src

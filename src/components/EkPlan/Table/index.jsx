@@ -8,7 +8,7 @@ import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
 
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import { queryAll } from './queryAll.js'
 import { CellForYearMenu } from './CellForYearMenu/index.jsx'
 import { yearsFromTpops } from './yearsFromTpops.js'
@@ -120,7 +120,7 @@ const ExportButton = styled(Button)`
 
 export const EkPlanTable = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       aps,
       apValues,

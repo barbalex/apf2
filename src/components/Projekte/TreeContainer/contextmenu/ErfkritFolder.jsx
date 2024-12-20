@@ -2,7 +2,7 @@ import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -17,7 +17,7 @@ const insertData = {
 
 export const ErfkritFolder = memo(
   observer(({ onClick }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       user,
       openChooseApToCopyErfkritsFrom,

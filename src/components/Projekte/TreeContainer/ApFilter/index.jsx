@@ -9,7 +9,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { apById } from './apById.js'
 import { Label } from '../../../shared/Label.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const Container = styled.div`
@@ -33,7 +33,7 @@ export const ApFilter = memo(
     const client = useApolloClient()
     const queryClient = useQueryClient()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       apFilter,
       setApFilter,

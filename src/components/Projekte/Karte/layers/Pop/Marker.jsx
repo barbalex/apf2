@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { popIconString } from './popIconString.js'
 import { popHighlightedIconString } from './popHighlightedIconString.js'
@@ -29,8 +29,7 @@ import { svg202 } from './statusGroupSymbols/202.js'
 import { svg202Highlighted } from './statusGroupSymbols/202Highlighted.js'
 import { svg300 } from './statusGroupSymbols/300.js'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
-import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
@@ -56,7 +55,7 @@ export const Marker = memo(
     const { apId, projId, popId } = useParams()
     const { search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { apfloraLayers, openTree2WithActiveNodeArray, map } = store
     const { popIcon: popIconName, popLabel: popLabelName } = map
 
@@ -100,10 +99,7 @@ export const Marker = memo(
       return iconHtml
     }, [isHighlighted, pop.status, popIconName])
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const openPopInTree2 = useCallback(() => {
       openTree2WithActiveNodeArray({
         activeNodeArray: [

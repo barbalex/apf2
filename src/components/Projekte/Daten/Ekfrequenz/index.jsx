@@ -11,7 +11,7 @@ import { Kontrolljahre } from './Kontrolljahre.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { query } from './query.js'
 import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ekfrequenz } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -80,7 +80,7 @@ export const Component = memo(
 
     const queryClient = useQueryClient()
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -160,7 +160,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="EK-Frequenz"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FormContainer>
             <TextField

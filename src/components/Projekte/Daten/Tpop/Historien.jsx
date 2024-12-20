@@ -6,6 +6,7 @@ import { useParams } from 'react-router'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { History as SharedHistory } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 const query = gql`
   query tpopHistoryQuery($tpopId: UUID!) {
@@ -135,7 +136,7 @@ const Container = styled.div`
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  padding: 8px 25px 0 25px;
+  padding: 10px;
   height: 100%;
 `
 const ErrorContainer = styled.div`
@@ -147,6 +148,9 @@ const DocLink = styled.span`
 `
 const DocLine = styled.p`
   margin-bottom: 0;
+  &:first-of-type {
+    margin-top: 0;
+  }
 `
 const Aenderung = styled.span`
   background-color: rgba(216, 67, 21, 0.2);
@@ -183,178 +187,182 @@ export const Component = () => {
   }
 
   return (
-    <Container>
-      <DocLine>
-        Jährlich historisierte Daten der Teil-Population (
-        <DocLink onClick={openDocs}>Dokumentation</DocLink>
-        ).
-      </DocLine>
-      <DocLine>
-        <Aenderung>Änderungen</Aenderung> zum{' '}
-        <Aktuell>aktuellen Zustand</Aktuell> sind hervorgehoben.
-      </DocLine>
-      {rows.map((r) => {
-        const dataArray = [
-          {
-            valueInRow: row?.popByPopId?.label ?? row?.popId,
-            valueInHist: r?.popByPopId?.label ?? r?.popId,
-            label: 'Population',
-          },
-          {
-            valueInRow: row?.nr,
-            valueInHist: r?.nr,
-            label: 'Nr.',
-          },
-          {
-            valueInRow: row?.flurname,
-            valueInHist: r?.flurname,
-            label: 'Flurname',
-          },
-          {
-            valueInRow: row?.bekanntSeit,
-            valueInHist: r?.bekanntSeit,
-            label: 'bekannt seit',
-          },
-          {
-            valueInRow: row?.popStatusWerteByStatus?.text ?? row?.status,
-            valueInHist: r?.popStatusWerteByStatus?.text ?? r?.status,
-            label: 'Status',
-          },
-          {
-            valueInRow: row?.statusUnklar,
-            valueInHist: r?.statusUnklar,
-            label: 'Status unklar',
-          },
-          {
-            valueInRow: row?.statusUnklarGrund,
-            valueInHist: r?.statusUnklarGrund,
-            label: 'Begründung (für Status unklar)',
-          },
-          {
-            valueInRow: row?.apberRelevant,
-            valueInHist: r?.apberRelevant,
-            label: 'Für AP-Bericht relevant',
-          },
-          {
-            valueInRow:
-              row?.tpopApberrelevantGrundWerteByApberRelevantGrund?.text ??
-              row?.apberRelevantGrund,
-            valueInHist:
-              r?.tpopApberrelevantGrundWerteByApberRelevantGrund?.text ??
-              r?.apberRelevantGrund,
-            label: 'Grund für AP-Bericht (Nicht-)Relevanz',
-          },
-          {
-            valueInRow: row?.geomPoint?.x,
-            valueInHist: r?.geomPoint?.x,
-            label: 'Längengrad',
-          },
-          {
-            valueInRow: row?.geomPoint?.y,
-            valueInHist: r?.geomPoint?.y,
-            label: 'Breitengrad',
-          },
-          {
-            valueInRow: row?.gemeinde,
-            valueInHist: r?.gemeinde,
-            label: 'Gemeinde',
-          },
-          {
-            valueInRow: row?.radius,
-            valueInHist: r?.radius,
-            label: 'Radius (m)',
-          },
-          {
-            valueInRow: row?.hoehe,
-            valueInHist: r?.hoehe,
-            label: 'Höhe (m.ü.M.)',
-          },
-          {
-            valueInRow: row?.exposition,
-            valueInHist: r?.exposition,
-            label: 'Exposition, Besonnung',
-          },
-          {
-            valueInRow: row?.klima,
-            valueInHist: r?.klima,
-            label: 'Klima',
-          },
-          {
-            valueInRow: row?.neigung,
-            valueInHist: r?.neigung,
-            label: 'Hangneigung',
-          },
-          {
-            valueInRow: row?.beschreibung,
-            valueInHist: r?.beschreibung,
-            label: 'Beschreibung',
-          },
-          {
-            valueInRow: row?.katasterNr,
-            valueInHist: r?.katasterNr,
-            label: 'Kataster-Nr.',
-          },
-          {
-            valueInRow: row?.eigentuemer,
-            valueInHist: r?.eigentuemer,
-            label: 'EigentümerIn',
-          },
-          {
-            valueInRow: row?.kontakt,
-            valueInHist: r?.kontakt,
-            label: 'Kontakt vor Ort',
-          },
-          {
-            valueInRow: row?.nutzungszone,
-            valueInHist: r?.nutzungszone,
-            label: 'Nutzungszone',
-          },
-          {
-            valueInRow: row?.bewirtschafter,
-            valueInHist: r?.bewirtschafter,
-            label: 'BewirtschafterIn',
-          },
-          {
-            valueInRow: row?.bewirtschaftung,
-            valueInHist: r?.bewirtschaftung,
-            label: 'Bewirtschaftung',
-          },
-          {
-            valueInRow: row?.bemerkungen,
-            valueInHist: r?.bemerkungen,
-            label: 'Bemerkungen',
-          },
-          {
-            valueInRow: row?.ekfrequenzByEkfrequenz?.code ?? row?.ekfrequenz,
-            valueInHist: r?.ekfrequenzByEkfrequenz?.code ?? r?.ekfrequenz,
-            label: 'EK-Frequenz',
-          },
-          {
-            valueInRow: row?.ekfrequenzAbweichend,
-            valueInHist: r?.ekfrequenzAbweichend,
-            label: 'EK-Frequenz abweichend',
-          },
-          {
-            valueInRow: row?.ekfrequenzStartjahr,
-            valueInHist: r?.ekfrequenzStartjahr,
-            label: 'EK-Frequenz Startjahr',
-          },
-          {
-            valueInRow:
-              row?.adresseByEkfKontrolleur?.name ?? row?.ekfKontrolleur,
-            valueInHist: r?.adresseByEkfKontrolleur?.name ?? r?.ekfKontrolleur,
-            label: 'EKF-KontrolleurIn',
-          },
-        ]
+    <>
+      <FormTitle title="Historien" />
+      <Container>
+        <DocLine>
+          Jährlich historisierte Daten der Teil-Population (
+          <DocLink onClick={openDocs}>Dokumentation</DocLink>
+          ).
+        </DocLine>
+        <DocLine>
+          <Aenderung>Änderungen</Aenderung> zum{' '}
+          <Aktuell>aktuellen Zustand</Aktuell> sind hervorgehoben.
+        </DocLine>
+        {rows.map((r) => {
+          const dataArray = [
+            {
+              valueInRow: row?.popByPopId?.label ?? row?.popId,
+              valueInHist: r?.popByPopId?.label ?? r?.popId,
+              label: 'Population',
+            },
+            {
+              valueInRow: row?.nr,
+              valueInHist: r?.nr,
+              label: 'Nr.',
+            },
+            {
+              valueInRow: row?.flurname,
+              valueInHist: r?.flurname,
+              label: 'Flurname',
+            },
+            {
+              valueInRow: row?.bekanntSeit,
+              valueInHist: r?.bekanntSeit,
+              label: 'bekannt seit',
+            },
+            {
+              valueInRow: row?.popStatusWerteByStatus?.text ?? row?.status,
+              valueInHist: r?.popStatusWerteByStatus?.text ?? r?.status,
+              label: 'Status',
+            },
+            {
+              valueInRow: row?.statusUnklar,
+              valueInHist: r?.statusUnklar,
+              label: 'Status unklar',
+            },
+            {
+              valueInRow: row?.statusUnklarGrund,
+              valueInHist: r?.statusUnklarGrund,
+              label: 'Begründung (für Status unklar)',
+            },
+            {
+              valueInRow: row?.apberRelevant,
+              valueInHist: r?.apberRelevant,
+              label: 'Für AP-Bericht relevant',
+            },
+            {
+              valueInRow:
+                row?.tpopApberrelevantGrundWerteByApberRelevantGrund?.text ??
+                row?.apberRelevantGrund,
+              valueInHist:
+                r?.tpopApberrelevantGrundWerteByApberRelevantGrund?.text ??
+                r?.apberRelevantGrund,
+              label: 'Grund für AP-Bericht (Nicht-)Relevanz',
+            },
+            {
+              valueInRow: row?.geomPoint?.x,
+              valueInHist: r?.geomPoint?.x,
+              label: 'Längengrad',
+            },
+            {
+              valueInRow: row?.geomPoint?.y,
+              valueInHist: r?.geomPoint?.y,
+              label: 'Breitengrad',
+            },
+            {
+              valueInRow: row?.gemeinde,
+              valueInHist: r?.gemeinde,
+              label: 'Gemeinde',
+            },
+            {
+              valueInRow: row?.radius,
+              valueInHist: r?.radius,
+              label: 'Radius (m)',
+            },
+            {
+              valueInRow: row?.hoehe,
+              valueInHist: r?.hoehe,
+              label: 'Höhe (m.ü.M.)',
+            },
+            {
+              valueInRow: row?.exposition,
+              valueInHist: r?.exposition,
+              label: 'Exposition, Besonnung',
+            },
+            {
+              valueInRow: row?.klima,
+              valueInHist: r?.klima,
+              label: 'Klima',
+            },
+            {
+              valueInRow: row?.neigung,
+              valueInHist: r?.neigung,
+              label: 'Hangneigung',
+            },
+            {
+              valueInRow: row?.beschreibung,
+              valueInHist: r?.beschreibung,
+              label: 'Beschreibung',
+            },
+            {
+              valueInRow: row?.katasterNr,
+              valueInHist: r?.katasterNr,
+              label: 'Kataster-Nr.',
+            },
+            {
+              valueInRow: row?.eigentuemer,
+              valueInHist: r?.eigentuemer,
+              label: 'EigentümerIn',
+            },
+            {
+              valueInRow: row?.kontakt,
+              valueInHist: r?.kontakt,
+              label: 'Kontakt vor Ort',
+            },
+            {
+              valueInRow: row?.nutzungszone,
+              valueInHist: r?.nutzungszone,
+              label: 'Nutzungszone',
+            },
+            {
+              valueInRow: row?.bewirtschafter,
+              valueInHist: r?.bewirtschafter,
+              label: 'BewirtschafterIn',
+            },
+            {
+              valueInRow: row?.bewirtschaftung,
+              valueInHist: r?.bewirtschaftung,
+              label: 'Bewirtschaftung',
+            },
+            {
+              valueInRow: row?.bemerkungen,
+              valueInHist: r?.bemerkungen,
+              label: 'Bemerkungen',
+            },
+            {
+              valueInRow: row?.ekfrequenzByEkfrequenz?.code ?? row?.ekfrequenz,
+              valueInHist: r?.ekfrequenzByEkfrequenz?.code ?? r?.ekfrequenz,
+              label: 'EK-Frequenz',
+            },
+            {
+              valueInRow: row?.ekfrequenzAbweichend,
+              valueInHist: r?.ekfrequenzAbweichend,
+              label: 'EK-Frequenz abweichend',
+            },
+            {
+              valueInRow: row?.ekfrequenzStartjahr,
+              valueInHist: r?.ekfrequenzStartjahr,
+              label: 'EK-Frequenz Startjahr',
+            },
+            {
+              valueInRow:
+                row?.adresseByEkfKontrolleur?.name ?? row?.ekfKontrolleur,
+              valueInHist:
+                r?.adresseByEkfKontrolleur?.name ?? r?.ekfKontrolleur,
+              label: 'EKF-KontrolleurIn',
+            },
+          ]
 
-        return (
-          <SharedHistory
-            key={`${r.id}${r.year}`}
-            year={r?.year}
-            dataArray={dataArray}
-          />
-        )
-      })}
-    </Container>
+          return (
+            <SharedHistory
+              key={`${r.id}${r.year}`}
+              year={r?.year}
+              dataArray={dataArray}
+            />
+          )
+        })}
+      </Container>
+    </>
   )
 }

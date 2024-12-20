@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
 
 const Container = styled.div`
@@ -52,7 +52,7 @@ const StyledFaCog = styled(FaCog)`
 
 export const Menu = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { map, tree } = store
     const { tpopIcon, setTpopIcon, popIcon, setPopIcon } = map
     const {

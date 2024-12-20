@@ -2,14 +2,13 @@ import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { StoreContext } from '../../storeContext.js'
-import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../modules/isMobilePhone.js'
+import { MobxContext } from '../../mobxContext.js'
+import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 
 // TODO: only show messages if map is visible
 export const ApfLayerNotifier = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       showApfLayersForMultipleAps,
       enqueNotification,
@@ -18,10 +17,7 @@ export const ApfLayerNotifier = memo(
 
     const { apId } = useParams()
 
-    const [projekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs] = useProjekteTabs()
     const mapIsOpen = projekteTabs.includes(`karte`)
 
     useEffect(() => {

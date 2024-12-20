@@ -4,7 +4,7 @@ import 'leaflet'
 import { observer } from 'mobx-react-lite'
 import { useQuery, gql } from '@apollo/client'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const style = () => ({
   fill: true,
@@ -26,7 +26,7 @@ const pointToLayer = (feature, latlng) =>
 
 export const Markierungen = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
 
     const { data, error } = useQuery(gql`

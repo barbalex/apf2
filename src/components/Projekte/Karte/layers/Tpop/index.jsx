@@ -7,7 +7,7 @@ import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router'
 
 import { Marker } from './Marker.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 import { updateTpopById } from './updateTpopById.js'
 
@@ -29,7 +29,7 @@ const ObservedTpop = memo(
   observer(({ clustered }) => {
     const client = useApolloClient()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       enqueNotification,
       setIdOfTpopBeingLocalized,
@@ -169,7 +169,7 @@ const ObservedTpop = memo(
 
 export const Tpop = memo(
   observer(({ clustered }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const tree = store.tree
     const { tpopGqlFilter } = tree
 

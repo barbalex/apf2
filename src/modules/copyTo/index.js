@@ -253,6 +253,9 @@ export const copyTo = async ({
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treeApFolders'],
     })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treeAp'],
+    })
   }
   if (table === 'tpop') {
     tanstackQueryClient.invalidateQueries({
@@ -261,13 +264,16 @@ export const copyTo = async ({
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treePopFolders'],
     })
+    tanstackQueryClient.invalidateQueries({
+      queryKey: ['treePop'],
+    })
   }
   if (table === 'tpopmassn') {
     tanstackQueryClient.invalidateQueries({
       queryKey: ['treeTpopmassn'],
     })
     tanstackQueryClient.invalidateQueries({
-      queryKey: ['treeTpopFolders'],
+      queryKey: ['treeTpop'],
     })
   }
   if (table === 'tpopfeldkontr') {
@@ -283,7 +289,7 @@ export const copyTo = async ({
       queryKey: ['treeTpopfeldkontr'],
     })
     tanstackQueryClient.invalidateQueries({
-      queryKey: ['treeTpopFolders'],
+      queryKey: ['treeTpop'],
     })
   }
   if (table === 'tpopfreiwkontr') {
@@ -291,7 +297,7 @@ export const copyTo = async ({
       queryKey: ['treeTpopfreiwkontr'],
     })
     tanstackQueryClient.invalidateQueries({
-      queryKey: ['treeTpopFolders'],
+      queryKey: ['treeTpop'],
     })
   }
 

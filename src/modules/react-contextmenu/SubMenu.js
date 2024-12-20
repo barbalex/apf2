@@ -82,7 +82,6 @@ function _inherits(subClass, superClass) {
 }
 
 import React from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -159,7 +158,7 @@ var SubMenu = (function (_AbstractMenu) {
       }
 
       if (_this.props.forceOpen) {
-        _this.props.forceClose()
+        _this.props.forceClose?.()
       }
       _this.setState({ visible: false, selectedItem: null })
       _this.unregisterHandlers()
@@ -192,7 +191,7 @@ var SubMenu = (function (_AbstractMenu) {
           visible: true,
           selectedItem: null,
         })
-      }, _this.props.hoverDelay)
+      }, _this.props.hoverDelay ?? 500)
     }
 
     _this.handleMouseLeave = function () {
@@ -205,7 +204,7 @@ var SubMenu = (function (_AbstractMenu) {
           visible: false,
           selectedItem: null,
         })
-      }, _this.props.hoverDelay)
+      }, _this.props.hoverDelay ?? 500)
     }
 
     _this.menuRef = function (c) {
@@ -219,7 +218,7 @@ var SubMenu = (function (_AbstractMenu) {
     _this.registerHandlers = function () {
       document.removeEventListener(
         'keydown',
-        _this.props.parentKeyNavigationHandler,
+        _this.props.parentKeyNavigationHandler ?? (() => null),
       )
       document.addEventListener('keydown', _this.handleKeyNavigation)
     }
@@ -229,7 +228,7 @@ var SubMenu = (function (_AbstractMenu) {
       if (!dismounting) {
         document.addEventListener(
           'keydown',
-          _this.props.parentKeyNavigationHandler,
+          _this.props.parentKeyNavigationHandler ?? (() => null),
         )
       }
     }
@@ -250,7 +249,6 @@ var SubMenu = (function (_AbstractMenu) {
     {
       key: 'getSubMenuType',
       value: function getSubMenuType() {
-         
         return SubMenu
       },
     },
@@ -259,9 +257,9 @@ var SubMenu = (function (_AbstractMenu) {
       value: function shouldComponentUpdate(nextProps, nextState) {
         this.isVisibilityChange =
           (this.state.visible !== nextState.visible ||
-            this.props.forceOpen !== nextProps.forceOpen) &&
+            (this.props.forceOpen ?? false) !== nextProps.forceOpen) &&
           !(this.state.visible && nextProps.forceOpen) &&
-          !(this.props.forceOpen && nextState.visible)
+          !((this.props.forceOpen ?? false) && nextState.visible)
         return true
       },
     },
@@ -271,7 +269,7 @@ var SubMenu = (function (_AbstractMenu) {
         var _this2 = this
 
         if (!this.isVisibilityChange) return
-        if (this.props.forceOpen || this.state.visible) {
+        if ((this.props.forceOpen ?? false) || this.state.visible) {
           var wrapper = window.requestAnimationFrame || setTimeout
           wrapper(function () {
             var styles =
@@ -331,10 +329,10 @@ var SubMenu = (function (_AbstractMenu) {
 
         var _props = this.props,
           children = _props.children,
-          attributes = _props.attributes,
-          disabled = _props.disabled,
+          attributes = _props.attributes ?? {},
+          disabled = _props.disabled ?? false,
           title = _props.title,
-          selected = _props.selected
+          selected = _props.selected ?? false
         var visible = this.state.visible
 
         var menuProps = {
@@ -372,8 +370,8 @@ var SubMenu = (function (_AbstractMenu) {
             ),
             _cx),
           ),
-          onMouseMove: this.props.onMouseMove,
-          onMouseOut: this.props.onMouseOut,
+          onMouseMove: this.props.onMouseMove ?? (() => null),
+          onMouseOut: this.props.onMouseOut ?? (() => null),
           onClick: this.handleClick,
         }
         var subMenuProps = {
@@ -384,7 +382,7 @@ var SubMenu = (function (_AbstractMenu) {
             top: 0,
             left: '100%',
           },
-          className: cx(cssClasses.menu, this.props.className),
+          className: cx(cssClasses.menu, this.props.className ?? ''),
         }
 
         return React.createElement(
@@ -412,40 +410,4 @@ var SubMenu = (function (_AbstractMenu) {
   return SubMenu
 })(AbstractMenu)
 
-SubMenu.propTypes = {
-  children: PropTypes.node.isRequired,
-  attributes: PropTypes.object,
-  title: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  disabled: PropTypes.bool,
-  hoverDelay: PropTypes.number,
-  rtl: PropTypes.bool,
-  selected: PropTypes.bool,
-  onMouseMove: PropTypes.func,
-  onMouseOut: PropTypes.func,
-  forceOpen: PropTypes.bool,
-  forceClose: PropTypes.func,
-  parentKeyNavigationHandler: PropTypes.func,
-}
-SubMenu.defaultProps = {
-  disabled: false,
-  hoverDelay: 500,
-  attributes: {},
-  className: '',
-  rtl: false,
-  selected: false,
-  onMouseMove: function onMouseMove() {
-    return null
-  },
-  onMouseOut: function onMouseOut() {
-    return null
-  },
-  forceOpen: false,
-  forceClose: function forceClose() {
-    return null
-  },
-  parentKeyNavigationHandler: function parentKeyNavigationHandler() {
-    return null
-  },
-}
 export default SubMenu

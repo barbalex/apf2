@@ -6,11 +6,10 @@ import { App } from './App.jsx'
 // https://vite-pwa-org.netlify.app/guide/auto-update.html
 registerSW({ immediate: true })
 
-createRoot(document.getElementById('root'))
-  // todo: causes mstPersist to run twice
-  // .render(
-  //   <React.StrictMode>
-  //     <App />
-  //   </React.StrictMode>,
-  // )
-  .render(<App />)
+createRoot(document.getElementById('root')).render(<App />)
+// todo: causes mstPersist to run twice
+// .render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>,
+// )

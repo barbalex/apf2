@@ -21,7 +21,7 @@ import {
 } from '../../fragments.js'
 import { isImageFile } from '../isImageFile.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -89,7 +89,7 @@ const fragmentObject = {
 export const File = memo(
   observer(({ file, parent, refetch }) => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
 

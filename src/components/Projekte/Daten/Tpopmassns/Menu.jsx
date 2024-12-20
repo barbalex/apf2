@@ -9,15 +9,13 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
-import { StoreContext } from '../../../../storeContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: white;
@@ -28,13 +26,13 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(({ row }) => {
+  observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { tpopId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
 
     const onClickAdd = useCallback(async () => {
@@ -67,7 +65,7 @@ export const Menu = memo(
         queryKey: [`treeTpopmassn`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopFolders`],
+        queryKey: [`treeTpop`],
       })
       const id = result?.data?.createTpopmassn?.tpopmassn?.id
       navigate(`./${id}${search}`)
@@ -112,16 +110,14 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-
     return (
       <ErrorBoundary>
         <MenuBar
           rerenderer={`${moving.label}/${copying.label}/${isMovingMassn}/${isCopyingMassn}`}
         >
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Massnahme erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

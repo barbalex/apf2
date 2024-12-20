@@ -1,45 +1,14 @@
-import { memo, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
-import { useParams } from 'react-router'
+import { memo } from 'react'
+import { useAtom } from 'jotai'
 
-import { StoreContext } from '../../../../storeContext.js'
-import { createZielbersQuery } from '../../../../modules/createZielbersQuery.js'
-import { List } from '../../../shared/List/index.jsx'
-import { Menu } from './Menu.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { Error } from '../../../shared/Error.jsx'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+import { Component as Ziel } from '../Ziel/index.jsx'
+import { List } from './List.jsx'
 
-export const Component = memo(
-  observer(() => {
-    const { zielId, jahr } = useParams()
-    const apolloClient = useApolloClient()
-    const store = useContext(StoreContext)
-    const { zielberGqlFilterForTree, nodeLabelFilter } = store.tree
+export const Component = memo(() => {
+  const [isDesktopView] = useAtom(isDesktopViewAtom)
 
-    const { data, isLoading, error } = useQuery(
-      createZielbersQuery({
-        zielId,
-        zielberGqlFilterForTree,
-        apolloClient,
-      }),
-    )
-    const zielbers = data?.data?.zielById?.zielbersByZielId?.nodes ?? []
-    const totalCount = data?.data?.zielById?.zielbersCount?.totalCount ?? 0
+  if (isDesktopView) return <Ziel />
 
-    if (isLoading) return <Spinner />
-
-    if (error) return <Error error={error} />
-
-    return (
-      <List
-        items={zielbers}
-        title="Zielberichte"
-        totalCount={totalCount}
-        menuBar={<Menu />}
-        highlightSearchString={nodeLabelFilter.zielber}
-      />
-    )
-  }),
-)
+  return <List />
+})

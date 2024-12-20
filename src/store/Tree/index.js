@@ -215,7 +215,8 @@ export const Tree = types
         if (aNA[4] === 'EK-Zähleinheiten') return 'ekzaehleinheit'
         if (aNA[4] === 'nicht-beurteilte-Beobachtungen') return 'beob'
         if (aNA[4] === 'nicht-zuzuordnende-Beobachtungen') return 'beob'
-        if (aNA[4] === 'Qualitaetskontrollen') return undefined
+        if (aNA[4] === 'Qualitätskontrollen') return undefined
+        if (aNA[4] === 'Qualitätskontrollen-wählen') return undefined
       }
       if (aNA.length > 2) {
         if (aNA[2] === 'Arten') return 'ap'
@@ -1515,7 +1516,7 @@ export const Tree = types
       // 2. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add data filter
         const dataFilter = { ...filter }
@@ -1710,7 +1711,7 @@ export const Tree = types
       // 2. build data filter
       const filterArray = []
       for (const filter of filterArrayInStore) {
-        // add hiearchy filter
+        // add hierarchy filter
         const singleFilter = {}
         // add data filter
         const dataFilter = { ...filter }
@@ -1737,7 +1738,7 @@ export const Tree = types
             coveredBy: self.mapFilter,
           }
         }
-        // Object needt to filter by typ
+        // Object needs to filter by typ
         if (!singleFilter.typ) {
           singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
         }
@@ -1896,6 +1897,73 @@ export const Tree = types
       // console.log('beobGqlFilter:', { beobGqlFilter, nodeLabelFilter, type })
 
       return beobGqlFilter
+    },
+    get beobNichtBeurteiltGqlFilterForTree() {
+      const filter = {
+        wgs84Lat: { isNull: false },
+        tpopId: { isNull: true },
+        nichtZuordnen: { equalTo: false },
+      }
+
+      // node label filter
+      if (self.nodeLabelFilter.beob) {
+        filter.label = {
+          includesInsensitive: self.nodeLabelFilter.beob,
+        }
+      }
+
+      // mapFilter
+      if (self.mapFilter) {
+        filter.geomPoint = {
+          coveredBy: self.mapFilter,
+        }
+      }
+
+      return filter
+    },
+    get beobNichtZuzuordnenGqlFilterForTree() {
+      const filter = {
+        wgs84Lat: { isNull: false },
+        nichtZuordnen: { equalTo: true },
+      }
+
+      // node label filter
+      if (self.nodeLabelFilter.beob) {
+        filter.label = {
+          includesInsensitive: self.nodeLabelFilter.beob,
+        }
+      }
+
+      // mapFilter
+      if (self.mapFilter) {
+        filter.geomPoint = {
+          coveredBy: self.mapFilter,
+        }
+      }
+
+      return filter
+    },
+    get beobZugeordnetGqlFilterForTree() {
+      const filter = {
+        wgs84Lat: { isNull: false },
+        tpopId: { isNull: false },
+      }
+
+      // node label filter
+      if (self.nodeLabelFilter.beob) {
+        filter.label = {
+          includesInsensitive: self.nodeLabelFilter.beob,
+        }
+      }
+
+      // mapFilter
+      if (self.mapFilter) {
+        filter.geomPoint = {
+          coveredBy: self.mapFilter,
+        }
+      }
+
+      return filter
     },
     beobGqlFilterForTree(type) {
       const filter = {

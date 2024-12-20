@@ -21,7 +21,7 @@ import { saveNichtZuordnenToDb } from './saveNichtZuordnenToDb.js'
 import { saveArtIdToDb } from './saveArtIdToDb.js'
 import { saveTpopIdToDb } from './saveTpopIdToDb.js'
 import { sendMail } from '../../../../modules/sendMail.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -142,7 +142,7 @@ export const Component = memo(
       : 'uups'
 
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const { data, loading, error, refetch } = useQuery(query, {
       variables: {
@@ -304,7 +304,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="Beobachtung"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FormContainer>
             <FieldsContainer>

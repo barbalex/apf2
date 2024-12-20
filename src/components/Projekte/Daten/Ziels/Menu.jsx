@@ -10,23 +10,23 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { StoreContext } from '../../../../storeContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
+import { MobxContext } from '../../../../mobxContext.js'
+import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(() => {
+  observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, jahr } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -55,8 +55,17 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeZiel`],
       })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZieljahrs`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZielsOfJahr`],
+      })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeAp`],
       })
       const id = result?.data?.createZiel?.ziel?.id
       navigate(`./${id}${search}`)
@@ -83,29 +92,33 @@ export const Menu = memo(
       })
     }, [projId, apId, store, search, jahr])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const [hideTree] = useAtom(hideTreeAtom)
 
     return (
       <ErrorBoundary>
-        <MenuBar>
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+        <MenuBar rerenderer={hideTree}>
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neues Ziel erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
-              <FaFolderTree style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!hideTree && (
+            <Tooltip title="Ordner im Navigationsbaum öffnen">
+              <IconButton onClick={onClickOpenLowerNodes}>
+                <FaFolderTree style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!hideTree && (
+            <Tooltip title="Ordner im Navigationsbaum schliessen">
+              <IconButton onClick={onClickCloseLowerNodes}>
+                <RiFolderCloseFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
         </MenuBar>
       </ErrorBoundary>
     )

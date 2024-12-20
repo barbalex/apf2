@@ -14,7 +14,7 @@ import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { query } from './query.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apberuebersicht } from '../../../shared/fragments.js'
@@ -73,7 +73,7 @@ export const Component = memo(
   observer(() => {
     const { apberUebersichtId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const client = useApolloClient()
     const { user } = store
     const { token } = user
@@ -190,7 +190,7 @@ export const Component = memo(
         <Container>
           <FormTitle
             title="AP-Bericht Jahresübersicht"
-            menuBar={<Menu />}
+            MenuBarComponent={Menu}
           />
           <FieldsContainer>
             <FormContainer>

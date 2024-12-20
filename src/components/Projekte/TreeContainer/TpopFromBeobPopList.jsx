@@ -7,7 +7,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router'
 
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Error } from '../../shared/Error.jsx'
@@ -30,7 +30,7 @@ export const TpopFromBeobPopList = memo(
     const { search } = useLocation()
 
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const query = gql`
       query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {

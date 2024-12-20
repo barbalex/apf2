@@ -14,12 +14,12 @@ import {
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { showCoordOfBeobOnMapsZhCh } from '../../../../modules/showCoordOfBeobOnMapsZhCh.js'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
 import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/index.js'
-import { StyledLoadingButton, StyledButton } from '../TpopRouter/Menu.jsx'
+import { StyledLoadingButton, StyledButton } from '../Tpop/Menu.jsx'
 
 export const Menu = memo(
   observer(() => {
@@ -28,7 +28,7 @@ export const Menu = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, beobId, tpopId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const isBeobZugeordnet = !!tpopId
     const isBeobNichtBeurteilt =

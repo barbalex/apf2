@@ -2,7 +2,7 @@ import { memo, Fragment, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -27,7 +27,7 @@ const moveData = {
 
 export const Ap = memo(
   observer(({ onClick }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { user, moving } = store
 
     const isMoving = moving.table && moving.table === 'pop'

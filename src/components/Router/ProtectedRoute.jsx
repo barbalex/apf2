@@ -6,7 +6,7 @@ import { Outlet } from 'react-router'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
 
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.jsx')).Messages,
@@ -34,6 +34,9 @@ const ChooseApToCopyEkfrequenzsFrom = lazy(async () => ({
 const ChooseApToCopyErfkritsFrom = lazy(async () => ({
   default: (await import('./ChooseApToCopyErfkritsFrom'))
     .ChooseApToCopyErfkritsFrom,
+}))
+const IsDesktopViewSetter = lazy(async () => ({
+  default: (await import('./IsDesktopViewSetter')).IsDesktopViewSetter,
 }))
 
 import { Spinner } from '../shared/Spinner.jsx'
@@ -63,7 +66,7 @@ export const Component = memo(
     const { pathname, search } = useLocation()
     const { userId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { showDeletions, user } = store
 
     const token = user?.token
@@ -99,6 +102,7 @@ export const Component = memo(
             </Suspense>
             <Suspense fallback={null}>
               <ActiveNodeArraySetter />
+              <IsDesktopViewSetter />
               <NavigateSetter />
               <QueryClientSetter />
               <ChooseApToCopyEkfrequenzsFrom />

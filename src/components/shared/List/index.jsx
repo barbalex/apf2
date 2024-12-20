@@ -5,6 +5,7 @@ import Highlighter from 'react-highlight-words'
 
 import { FormTitle } from '../FormTitle/index.jsx'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
+import { navData } from '../../Bookmarks/NavTo/Navs/Projects.jsx'
 
 const Container = styled.div`
   display: flex;
@@ -38,7 +39,12 @@ const Row = styled.div`
 `
 
 export const List = memo(
-  ({ items, title, totalCount, menuBar = null, highlightSearchString }) => {
+  ({
+    navData,
+    MenuBarComponent = null,
+    menuBarProps = {},
+    highlightSearchString,
+  }) => {
     const navigate = useNavigate()
     const { search } = useLocation()
 
@@ -51,11 +57,13 @@ export const List = memo(
       <ErrorBoundary>
         <Container>
           <FormTitle
-            title={`${title} (${items.length}/${totalCount ?? items.length})`}
-            menuBar={menuBar}
+            title={navData.label}
+            listFilter={navData.listFilter}
+            MenuBarComponent={MenuBarComponent}
+            menuBarProps={menuBarProps}
           />
           <ListContainer>
-            {items.map((item) => {
+            {navData.menus.map((item) => {
               const label = item.label ?? item.labelEkf ?? item.labelEk
 
               return (
@@ -63,12 +71,20 @@ export const List = memo(
                   key={item.id}
                   onClick={onClickRow.bind(this, item)}
                 >
+                  {!!item.labelLeftElements?.length &&
+                    item.labelLeftElements.map((El, index) => (
+                      <El key={index} />
+                    ))}
                   {highlightSearchString ?
                     <Highlighter
                       searchWords={[highlightSearchString]}
                       textToHighlight={label?.toString()}
                     />
                   : label}
+                  {!!item.labelRightElements?.length &&
+                    item.labelRightElements.map((El, index) => (
+                      <El key={index} />
+                    ))}
                 </Row>
               )
             })}

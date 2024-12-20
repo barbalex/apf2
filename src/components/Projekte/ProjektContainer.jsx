@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite'
 import intersection from 'lodash/intersection'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
+import { useAtom } from 'jotai'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import { Karte } from './Karte/index.jsx'
@@ -16,14 +17,21 @@ const Exporte = lazy(async () => ({
 const Filter = lazy(async () => ({
   default: (await import('./Filter/index.jsx')).Filter,
 }))
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
-import { useSearchParamsState } from '../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../modules/isMobilePhone.js'
 import { Spinner } from '../shared/Spinner.jsx'
+import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
+import { Bookmarks } from '../Bookmarks/Bookmarks/index.jsx'
+import { constants } from '../../modules/constants.js'
+import { hideBookmarksAtom } from '../../JotaiStore/index.js'
 
-const Container = styled.div`
+const OuterContainer = styled.div`
+  display: block;
   height: 100%;
+  overflow: hidden;
+`
+const Container = styled.div`
+  height: ${(props) => props.height};
   position: relative;
 
   @media print {
@@ -43,8 +51,11 @@ export const ProjektContainer = memo(
     const { projId, apberUebersichtId, apberId } = useParams()
     const { pathname } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { isPrint } = store
+
+    const [hideBookmarks] = useAtom(hideBookmarksAtom)
+
     // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
     // to prevent it from causing unnessecary renders
     // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
@@ -57,10 +68,7 @@ export const ProjektContainer = memo(
       ...(projId ? ['exporte'] : []),
     ]
 
-    const [projekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs] = useProjekteTabs()
 
     const treeTabs = useMemo(
       () => intersection(treeTabValues, projekteTabs),
@@ -119,74 +127,77 @@ export const ProjektContainer = memo(
     }
 
     return (
-      <Container>
-        <StyledSplitPane
-          split="vertical"
-          size={
-            treeTabs.length === 2 && treeTabs[0] === 'tree' ?
-              '33%'
-            : `${100 / treeTabs.length}%`
-          }
-          maxSize={-10}
-          overflowPane1={
-            treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
-              'auto'
-            : 'hidden'
-          }
-          overflowPane2={
-            (
-              treeTabs[1] === 'daten' &&
-              treeTabs.length === 2 &&
-              (showApberForAll || showApberForArt)
-            ) ?
-              'auto'
-            : 'hidden'
-          }
-        >
-          {elObj[treeTabs[0]]}
-          {treeTabs.length === 1 && <></>}
-          {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
-          {treeTabs.length > 2 && (
-            <StyledSplitPane
-              split="vertical"
-              size={`${100 / (treeTabs.length - 1)}%`}
-              maxSize={-10}
-              overflowPane1={
-                (
-                  treeTabs[1] === 'daten' &&
-                  treeTabs.length > 2 &&
-                  (showApberForAll || showApberForArt)
-                ) ?
-                  'auto'
-                : 'hidden'
-              }
-            >
-              {elObj[treeTabs[1]]}
-              {treeTabs.length === 3 && elObj[treeTabs[2]]}
-              {treeTabs.length > 3 && (
-                <StyledSplitPane
-                  split="vertical"
-                  size={`${100 / (treeTabs.length - 2)}%`}
-                  maxSize={-10}
-                >
-                  {elObj[treeTabs[2]]}
-                  {treeTabs.length === 4 && elObj[treeTabs[3]]}
-                  {treeTabs.length === 5 && (
-                    <StyledSplitPane
-                      split="vertical"
-                      size="50%"
-                      maxSize={-10}
-                    >
-                      {elObj[treeTabs[3]]}
-                      {elObj[treeTabs[4]]}
-                    </StyledSplitPane>
-                  )}
-                </StyledSplitPane>
-              )}
-            </StyledSplitPane>
-          )}
-        </StyledSplitPane>
-      </Container>
+      <OuterContainer>
+        {!hideBookmarks && <Bookmarks />}
+        <Container height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}>
+          <StyledSplitPane
+            split="vertical"
+            size={
+              treeTabs.length === 2 && treeTabs[0] === 'tree' ?
+                '33%'
+              : `${100 / treeTabs.length}%`
+            }
+            maxSize={-10}
+            overflowPane1={
+              treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
+                'auto'
+              : 'hidden'
+            }
+            overflowPane2={
+              (
+                treeTabs[1] === 'daten' &&
+                treeTabs.length === 2 &&
+                (showApberForAll || showApberForArt)
+              ) ?
+                'auto'
+              : 'hidden'
+            }
+          >
+            {elObj[treeTabs[0]]}
+            {treeTabs.length === 1 && <></>}
+            {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
+            {treeTabs.length > 2 && (
+              <StyledSplitPane
+                split="vertical"
+                size={`${100 / (treeTabs.length - 1)}%`}
+                maxSize={-10}
+                overflowPane1={
+                  (
+                    treeTabs[1] === 'daten' &&
+                    treeTabs.length > 2 &&
+                    (showApberForAll || showApberForArt)
+                  ) ?
+                    'auto'
+                  : 'hidden'
+                }
+              >
+                {elObj[treeTabs[1]]}
+                {treeTabs.length === 3 && elObj[treeTabs[2]]}
+                {treeTabs.length > 3 && (
+                  <StyledSplitPane
+                    split="vertical"
+                    size={`${100 / (treeTabs.length - 2)}%`}
+                    maxSize={-10}
+                  >
+                    {elObj[treeTabs[2]]}
+                    {treeTabs.length === 4 && elObj[treeTabs[3]]}
+                    {treeTabs.length === 5 && (
+                      <StyledSplitPane
+                        split="vertical"
+                        size="50%"
+                        maxSize={-10}
+                      >
+                        {elObj[treeTabs[3]]}
+                        {elObj[treeTabs[4]]}
+                      </StyledSplitPane>
+                    )}
+                  </StyledSplitPane>
+                )}
+              </StyledSplitPane>
+            )}
+          </StyledSplitPane>
+        </Container>
+      </OuterContainer>
     )
   }),
 )

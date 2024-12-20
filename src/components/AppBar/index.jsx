@@ -2,16 +2,17 @@ import { memo, Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
+import { useAtom } from 'jotai'
 
 import { Bar } from './Bar/index.jsx'
 import { EkfBar } from './EkfBar/index.jsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
+import { constants } from '../../modules/constants.js'
+import { isMobileViewAtom } from '../../JotaiStore/index.js'
 
 const isInIframe = inIframe()
-export const minWidthToShowAllMenus = 920
-export const minWidthToShowTitle = 1030
 
 const Container = styled.div`
   height: 100dvh;
@@ -31,11 +32,11 @@ const Appbar = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: ${(props) => (props.mobile === 'true' ? 0 : 4)}px 0;
   background-color: #2e7d32;
   height: 38px;
 
-  @media (max-width: ${minWidthToShowTitle - 1}px) {
+  @media (max-width: ${constants.minWidthToShowTitle - 1}px) {
     justify-content: flex-end;
   }
 
@@ -50,14 +51,18 @@ export const Component = memo(
     const { userId } = useParams()
     const { pathname, search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const activeNodeArray = store.tree.activeNodeArray
+
+    const [isMobileView] = useAtom(isMobileViewAtom)
 
     useEffect(() => {
       if (isInIframe) return
 
       // if app was opened on top level, navigate to last active node
-      if (pathname === '/') {
+      // but only if activeNodeArray is not empty
+      // otherwise first time users are navigated to the login
+      if (pathname === '/' && activeNodeArray.length > 0) {
         navigate('/Daten/' + activeNodeArray.join('/') + search)
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -70,7 +75,7 @@ export const Component = memo(
 
     return (
       <Container>
-        <Appbar>
+        <Appbar mobile={isMobileView.toString()}>
           {showEkf ?
             <EkfBar />
           : <Bar />}

@@ -3,13 +3,13 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { exportModule } from '../../../../modules/export.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 export const Kontrollen = memo(
   observer(({ filtered = false }) => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { tpopkontrGqlFilter } = store.tree
 

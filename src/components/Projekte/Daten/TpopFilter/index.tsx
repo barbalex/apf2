@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/client'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { queryTpops } from './queryTpops.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { Ek } from './Ek/index.jsx'
 import { Tpop } from './Tpop.jsx'
@@ -30,7 +30,7 @@ const StyledTab = styled(Tab)`
 
 export const TpopFilter = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
 

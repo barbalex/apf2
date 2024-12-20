@@ -14,7 +14,7 @@ import { useParams, useLocation } from 'react-router'
 
 import { EkfYear } from './EkfYear.jsx'
 import { User } from './User/index.jsx'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
 
@@ -54,7 +54,7 @@ export const Menus = memo(
     const { userId, ekfId, ekfYear } = useParams()
     const { search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { user, setIsPrint, setIsEkfSinglePrint } = store
     const ekfIsActive = !!ekfId
 

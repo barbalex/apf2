@@ -17,7 +17,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { observer } from 'mobx-react-lite'
 
 import { Fields } from './Fields.jsx'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { allFields } from '../../store/EkPlan/index.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
@@ -82,7 +82,7 @@ const DenserCheckbox = (props) => (
 
 export const Choose = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       fields,
       showEk,

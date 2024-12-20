@@ -13,7 +13,7 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../storeContext.js'
+import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 const SelectContainer = styled.div`
@@ -72,7 +72,7 @@ export const ChooseApToCopyErfkritsFrom = memo(
     const { apId } = useParams()
     const apolloClient = useApolloClient()
     const tanstackClient = useQueryClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       user,
       enqueNotification,
@@ -231,6 +231,7 @@ export const ChooseApToCopyErfkritsFrom = memo(
         })
         tanstackClient.invalidateQueries({ queryKey: [`treeErfkrit`] })
         tanstackClient.invalidateQueries({ queryKey: [`treeApFolders`] })
+        tanstackClient.invalidateQueries({ queryKey: [`treeAp`] })
       },
       [
         apId,

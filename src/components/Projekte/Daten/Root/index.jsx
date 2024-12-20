@@ -1,75 +1,16 @@
-import { memo, useMemo } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
-import { useQuery } from '@tanstack/react-query'
+import { memo } from 'react'
 
-import { createCurrentissuesQuery } from '../../../../modules/createCurrentissuesQuery.js'
 import { List } from '../../../shared/List/index.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
+import { useRootNavData } from '../../../../modules/useRootNavData.js'
 
 export const Component = memo(() => {
-  const apolloClient = useApolloClient()
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['treeRoot'],
-    queryFn: () =>
-      apolloClient.query({
-        query: gql`
-          query TreeRootQueryForRootForm {
-            allUsers {
-              totalCount
-            }
-            allMessages {
-              totalCount
-            }
-            allCurrentissues {
-              totalCount
-            }
-          }
-        `,
-        fetchPolicy: 'no-cache',
-      }),
-  })
-  const totalCount = 5
-  const usersCount = data?.data?.allUsers?.totalCount ?? 0
-  const messagesCount = data?.data?.allMessages?.totalCount ?? 0
-  const currentIssuesCount = data?.data?.allCurrentissues?.totalCount ?? 0
-
-  const items = useMemo(
-    () => [
-      {
-        id: 'Projekte',
-        label: `Projekte`,
-      },
-      {
-        id: 'Benutzer',
-        label: `Benutzer (${usersCount})`,
-      },
-      {
-        id: 'Werte-Listen',
-        label: `Werte-Listen (4)`,
-      },
-      {
-        id: 'Mitteilungen',
-        label: `Mitteilungen (${messagesCount})`,
-      },
-      {
-        id: 'Aktuelle-Fehler',
-        label: `Aktuelle Fehler (${currentIssuesCount})`,
-      },
-    ],
-    [usersCount, messagesCount, currentIssuesCount],
-  )
+  const { navData, isLoading, error } = useRootNavData()
 
   if (isLoading) return <Spinner />
 
   if (error) return <Error error={error} />
 
-  return (
-    <List
-      items={items}
-      title="AP Flora"
-      totalCount={totalCount}
-    />
-  )
+  return <List navData={navData} />
 })

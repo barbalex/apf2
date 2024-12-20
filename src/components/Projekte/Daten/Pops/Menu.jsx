@@ -13,14 +13,14 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
-import { StoreContext } from '../../../../storeContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
+import { MobxContext } from '../../../../mobxContext.js'
+import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: white;
@@ -31,13 +31,13 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(() => {
+  observer(({ toggleFilterInput }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
 
     const onClickAdd = useCallback(async () => {
@@ -69,6 +69,9 @@ export const Menu = memo(
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeAp`],
       })
       const id = result?.data?.createPop?.pop?.id
       navigate(`./${id}${search}`)
@@ -134,31 +137,35 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const [hideTree] = useAtom(hideTreeAtom)
 
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${isMovingPop}/${isCopyingPop}/${popMovingFromThisAp}`}
+          rerenderer={`${isMovingPop}/${isCopyingPop}/${popMovingFromThisAp}/${hideTree}`}
         >
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Population erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
-              <FaFolderTree style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!hideTree && (
+            <Tooltip title="Ordner im Navigationsbaum öffnen">
+              <IconButton onClick={onClickOpenLowerNodes}>
+                <FaFolderTree style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!hideTree && (
+            <Tooltip title="Ordner im Navigationsbaum schliessen">
+              <IconButton onClick={onClickCloseLowerNodes}>
+                <RiFolderCloseFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
           {isMovingPop && (
             <Tooltip
               title={

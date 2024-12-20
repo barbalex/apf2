@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { Form } from './Form/index.jsx'
 import { Tabs } from './Tabs.jsx'
 
@@ -52,7 +52,7 @@ export const TpopfreiwkontrFilter = memo(
   observer(() => {
     const { apId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const tree = store.tree
     const {
       dataFilter,

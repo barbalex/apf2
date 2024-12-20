@@ -13,7 +13,7 @@ import isEqual from 'lodash/isEqual'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }
@@ -25,7 +25,7 @@ export const Menu = memo(
     const client = useApolloClient()
     const queryClient = useQueryClient()
     const { projId, apId, jahr, zielId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -53,6 +53,12 @@ export const Menu = memo(
       }
       queryClient.invalidateQueries({
         queryKey: [`treeZiel`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZieljahrs`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZielsOfJahr`],
       })
       const id = result?.data?.createZiel?.ziel?.id
       navigate(
@@ -97,6 +103,12 @@ export const Menu = memo(
       // update tree query
       queryClient.invalidateQueries({
         queryKey: [`treeZiel`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZieljahrs`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeZielsOfJahr`],
       })
       // navigate to parent
       navigate(

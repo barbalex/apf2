@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.jsx'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
 const iconCreateFunction = function (cluster) {
@@ -29,7 +29,7 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtZuzuordnenMarker = memo(
   observer(({ clustered }) => {
     // const leafletMap = useMap()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { enqueNotification } = store
     const tree = store.tree
     const { beobGqlFilter } = tree
@@ -86,7 +86,7 @@ const BeobNichtZuzuordnenMarker = memo(
 
 export const BeobNichtZuzuordnen = memo(
   observer(({ clustered }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const tree = store.tree
     const { beobGqlFilter } = tree
 

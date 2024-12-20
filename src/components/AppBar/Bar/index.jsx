@@ -4,12 +4,11 @@ import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 
-import { isMobilePhone } from '../../../modules/isMobilePhone.js'
 import { HomeMenus } from './Home.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
 import { DocsMenus } from './Docs.jsx'
-import { minWidthToShowAllMenus, minWidthToShowTitle } from '../index.jsx'
+import { constants } from '../../../modules/constants.js'
 
 export const Container = styled.div`
   display: flex;
@@ -49,8 +48,6 @@ export const MenuDiv = styled.div`
 `
 
 export const Bar = memo(() => {
-  const isMobile = isMobilePhone()
-
   const { search, pathname } = useLocation()
   const showHome = pathname === '/'
   const showEkPlan = pathname.includes('/EK-Planung')
@@ -64,22 +61,20 @@ export const Bar = memo(() => {
     refreshOptions: { leading: false, trailing: true },
   })
 
-  const showAllMenus = !isMobile && width >= minWidthToShowAllMenus
-
   const menuDivRef = useRef(null)
   const menuDivWidth = menuDivRef.current?.offsetWidth ?? 0
 
   return (
     <Container
       ref={ref}
-      alignFlexEnd={(width < minWidthToShowTitle).toString()}
+      alignFlexEnd={(width < constants.minWidthToShowTitle).toString()}
     >
       <SiteTitle
         variant="outlined"
         component={Link}
         to={`/${search}`}
         title="Home"
-        hide={(width <= minWidthToShowTitle).toString()}
+        hide={(width <= constants.minWidthToShowTitle).toString()}
       >
         AP Flora
       </SiteTitle>
@@ -90,7 +85,7 @@ export const Bar = memo(() => {
           <DocsMenus />
         : showEkPlan ?
           <EkPlanMenus />
-        : <ProjekteMenus showAllMenus={showAllMenus} />}
+        : <ProjekteMenus />}
       </MenuDiv>
     </Container>
   )

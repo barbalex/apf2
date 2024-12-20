@@ -7,26 +7,24 @@ import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const iconStyle = { color: 'white' }
 
 // TODO: add menu to setOpenChooseApToCopyEkfrequenzsFrom
 export const Menu = memo(
-  observer(() => {
+  observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { apId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setOpenChooseApToCopyEkfrequenzsFrom } = store
 
     const onClickAdd = useCallback(async () => {
@@ -59,6 +57,9 @@ export const Menu = memo(
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeAp`],
+      })
       const id = result?.data?.createEkfrequenz?.ekfrequenz?.id
       navigate(`./${id}${search}`)
     }, [client, store, tanstackQueryClient, navigate, search, apId])
@@ -68,14 +69,12 @@ export const Menu = memo(
       [setOpenChooseApToCopyEkfrequenzsFrom],
     )
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
-
     return (
       <ErrorBoundary>
         <MenuBar>
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue EK-Frequenz erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />

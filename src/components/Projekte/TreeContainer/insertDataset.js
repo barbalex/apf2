@@ -23,6 +23,7 @@ export const insertDataset = async ({
   parentId,
   //id,
   menuType,
+  singleElementUrlName: singleElementName,
   url,
   client,
   store,
@@ -191,7 +192,10 @@ export const insertDataset = async ({
     result?.data[`create${upperFirst(camelCase(table))}`][`${camelCase(table)}`]
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
-  store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  // need to add single name to the url, i.e. 'Art' for ap
+  store.navigate(
+    `/Daten/${newActiveNodeArray.join('/')}${singleElementName ? `/${singleElementName}` : ''}${search}`,
+  )
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
@@ -272,4 +276,25 @@ export const insertDataset = async ({
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyFolder],
   })
+  if (table === 'ziel') {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeZieljahrs`],
+    })
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeZielsOfJahr`],
+    })
+  }
+  if (parentTable === 'tpopfeldkontr') {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontr`],
+    })
+  }
+  if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontrzaehl`],
+    })
+    store.queryClient.invalidateQueries({
+      queryKey: [`treeTpop`],
+    })
+  }
 }

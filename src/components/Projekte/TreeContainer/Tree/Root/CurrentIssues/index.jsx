@@ -1,14 +1,15 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import max from 'lodash/max'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../Row.jsx'
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 import { Issues } from './Issues.jsx'
 
 export const CurrentIssuesFolder = memo(
   observer(({ count, isLoading }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     let message = isLoading && !count ? '...' : max([count - 1, 0])
 
@@ -29,7 +30,9 @@ export const CurrentIssuesFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && <Issues />}
+        <TransitionGroup component={null}>
+          {isOpen && <Issues />}
+        </TransitionGroup>
       </>
     )
   }),

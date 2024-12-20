@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery, useApolloClient } from '@apollo/client'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { queryTpop } from './queryTpop.js'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.js'
 import { mutationCreateEkplan } from './mutationCreateEkplan.js'
@@ -48,7 +48,7 @@ const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 export const CellForYearMenu = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const client = useApolloClient()
     const {
       showEk,

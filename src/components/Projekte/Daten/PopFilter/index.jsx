@@ -10,7 +10,7 @@ import { Status } from '../../../shared/Status.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { query } from './query.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
@@ -50,7 +50,7 @@ export const PopFilter = memo(
   observer(() => {
     const { apId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const {
       dataFilter: dataFilterRaw,
       nodeLabelFilter,

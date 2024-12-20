@@ -56,7 +56,6 @@ function _inherits(subClass, superClass) {
 }
 
 import { Component } from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -96,60 +95,60 @@ var ContextMenuTrigger = (function (_Component) {
           _this)),
         (_this.touchHandled = false),
         (_this.handleMouseDown = function (event) {
-          if (_this.props.holdToDisplay >= 0 && event.button === 0) {
+          if ((_this.props.holdToDisplay ?? 1000) >= 0 && event.button === 0) {
             event.persist()
             event.stopPropagation()
 
             _this.mouseDownTimeoutId = setTimeout(function () {
               return _this.handleContextClick(event)
-            }, _this.props.holdToDisplay)
+            }, _this.props.holdToDisplay ?? 1000)
           }
-          callIfExists(_this.props.attributes.onMouseDown, event)
+          callIfExists(_this.props.attributes?.onMouseDown, event)
         }),
         (_this.handleMouseUp = function (event) {
           if (event.button === 0) {
             clearTimeout(_this.mouseDownTimeoutId)
           }
-          callIfExists(_this.props.attributes.onMouseUp, event)
+          callIfExists(_this.props.attributes?.onMouseUp, event)
         }),
         (_this.handleMouseOut = function (event) {
           if (event.button === 0) {
             clearTimeout(_this.mouseDownTimeoutId)
           }
-          callIfExists(_this.props.attributes.onMouseOut, event)
+          callIfExists(_this.props.attributes?.onMouseOut, event)
         }),
         (_this.handleTouchstart = function (event) {
           _this.touchHandled = false
 
-          if (_this.props.holdToDisplay >= 0) {
+          if ((_this.props.holdToDisplay ?? 1000) >= 0) {
             event.persist()
             event.stopPropagation()
 
             _this.touchstartTimeoutId = setTimeout(function () {
               _this.handleContextClick(event)
               _this.touchHandled = true
-            }, _this.props.holdToDisplay)
+            }, _this.props.holdToDisplay ?? 1000)
           }
-          callIfExists(_this.props.attributes.onTouchStart, event)
+          callIfExists(_this.props.attributes?.onTouchStart, event)
         }),
         (_this.handleTouchEnd = function (event) {
           if (_this.touchHandled) {
             event.preventDefault()
           }
           clearTimeout(_this.touchstartTimeoutId)
-          callIfExists(_this.props.attributes.onTouchEnd, event)
+          callIfExists(_this.props.attributes?.onTouchEnd, event)
         }),
         (_this.handleContextMenu = function (event) {
-          if (event.button === _this.props.mouseButton) {
+          if (event.button === 2) {
             _this.handleContextClick(event)
           }
-          callIfExists(_this.props.attributes.onContextMenu, event)
+          callIfExists(_this.props.attributes?.onContextMenu, event)
         }),
         (_this.handleMouseClick = function (event) {
-          if (event.button === _this.props.mouseButton) {
+          if (event.button === 2) {
             _this.handleContextClick(event)
           }
-          callIfExists(_this.props.attributes.onClick, event)
+          callIfExists(_this.props.attributes?.onClick, event)
         }),
         (_this.handleContextClick = function (event) {
           if (_this.props.disable) return
@@ -170,7 +169,10 @@ var ContextMenuTrigger = (function (_Component) {
 
           hideMenu()
 
-          var data = callIfExists(_this.props.collect, _this.props)
+          var data = callIfExists(
+            _this.props.collect ?? (() => null),
+            _this.props,
+          )
           var showMenuConfig = {
             position: { x: x, y: y },
             target: _this.elem,
@@ -204,8 +206,8 @@ var ContextMenuTrigger = (function (_Component) {
       key: 'render',
       value: function render() {
         var _props = this.props,
-          renderTag = _props.renderTag,
-          attributes = _props.attributes,
+          renderTag = _props.renderTag ?? 'div',
+          attributes = _props.attributes ?? {},
           children = _props.children
 
         var newAttrs = assign({}, attributes, {
@@ -228,31 +230,4 @@ var ContextMenuTrigger = (function (_Component) {
   return ContextMenuTrigger
 })(Component)
 
-ContextMenuTrigger.propTypes = {
-  id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  attributes: PropTypes.object,
-  collect: PropTypes.func,
-  disable: PropTypes.bool,
-  holdToDisplay: PropTypes.number,
-  posX: PropTypes.number,
-  posY: PropTypes.number,
-  renderTag: PropTypes.elementType,
-  mouseButton: PropTypes.number,
-  disableIfShiftIsPressed: PropTypes.bool,
-}
-ContextMenuTrigger.defaultProps = {
-  attributes: {},
-  collect: function collect() {
-    return null
-  },
-
-  disable: false,
-  holdToDisplay: 1000,
-  renderTag: 'div',
-  posX: 0,
-  posY: 0,
-  mouseButton: 2, // 0 is left click, 2 is right click
-  disableIfShiftIsPressed: false,
-}
 export default ContextMenuTrigger

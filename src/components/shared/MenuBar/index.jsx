@@ -74,7 +74,7 @@ const StyledMenu = styled(Menu)`
 `
 const MenuContent = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   row-gap: 3px;
   background-color: ${(props) => props.bgColor};
   overflow: hidden;
@@ -265,7 +265,12 @@ export const MenuBar = memo(
                 open={menuIsOpen}
                 onClose={onCloseMenu}
               >
-                <MenuContent bgColor={bgColor}>{menus}</MenuContent>
+                <MenuContent
+                  bgColor={bgColor}
+                  className="menubar-more-menus"
+                >
+                  {menus}
+                </MenuContent>
               </StyledMenu>
             </>
           )}

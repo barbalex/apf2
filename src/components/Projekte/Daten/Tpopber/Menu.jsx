@@ -14,7 +14,7 @@ import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }
@@ -26,7 +26,7 @@ export const Menu = memo(
     const client = useApolloClient()
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopberId } = useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -56,7 +56,7 @@ export const Menu = memo(
         queryKey: [`treeTpopber`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopFolders`],
+        queryKey: [`treeTpop`],
       })
       const id = result?.data?.createTpopber?.tpopber?.id
       navigate(
@@ -113,7 +113,7 @@ export const Menu = memo(
         queryKey: [`treeTpopber`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopFolders`],
+        queryKey: [`treeTpop`],
       })
       // navigate to parent
       navigate(

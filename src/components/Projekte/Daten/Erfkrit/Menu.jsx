@@ -13,7 +13,7 @@ import isEqual from 'lodash/isEqual'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }
@@ -24,8 +24,8 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId, apId } = useParams()
-    const store = useContext(StoreContext)
+    const { projId, apId, erfkritId } = useParams()
+    const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -56,6 +56,9 @@ export const Menu = memo(
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
       })
       const id = result?.data?.createErfkrit?.erfkrit?.id
       navigate(
@@ -103,6 +106,9 @@ export const Menu = memo(
       })
       queryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
+      })
+      queryClient.invalidateQueries({
+        queryKey: [`treeAp`],
       })
       // navigate to parent
       navigate(

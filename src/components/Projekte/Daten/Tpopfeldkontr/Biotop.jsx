@@ -9,14 +9,15 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { constants } from '../../../../modules/constants.js'
-import { query } from '../TpopfeldkontrRouter/query.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { query } from './query.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { fieldTypes, FormContainer, Section } from './index.jsx'
+import { fieldTypes, FormContainer, Section } from './Tpopfeldkontr.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 export const Component = memo(
   observer(() => {
@@ -24,7 +25,7 @@ export const Component = memo(
 
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -110,6 +111,7 @@ export const Component = memo(
 
     return (
       <ErrorBoundary>
+        <FormTitle title="Biotop" />
         <FormContainer>
           <TextField
             name="flaeche"

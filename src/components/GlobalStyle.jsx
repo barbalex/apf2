@@ -44,6 +44,12 @@ export const GlobalStyle = () => (
         color: black;
       }
 
+      // ensuring menus in more-menu have a a border
+      // somehow the inmenu prop is not always passed in
+      .menubar-more-menus button {
+        border: 1px solid #ab9518 !important;
+      }
+
       /* scrollbars */
 
       .simplebar-scrollbar:before {

@@ -68,7 +68,6 @@ function _inherits(subClass, superClass) {
 }
 
 import React from 'react'
-import PropTypes from 'prop-types'
 import cx from 'classnames'
 import assign from 'object-assign'
 
@@ -122,7 +121,7 @@ var ContextMenu = (function (_AbstractMenu) {
 
       _this.setState({ isVisible: true, x: x, y: y })
       _this.registerHandlers()
-      callIfExists(_this.props.onShow, e)
+      callIfExists(_this.props.onShow ?? (() => null), e)
     }
 
     _this.handleHide = function (e) {
@@ -136,7 +135,7 @@ var ContextMenu = (function (_AbstractMenu) {
           selectedItem: null,
           forceSubMenuOpen: false,
         })
-        callIfExists(_this.props.onHide, e)
+        callIfExists(_this.props.onHide ?? (() => null), e)
       }
     }
 
@@ -148,9 +147,9 @@ var ContextMenu = (function (_AbstractMenu) {
       event.preventDefault()
 
       callIfExists(
-        _this.props.onMouseLeave,
+        _this.props.onMouseLeave ?? (() => null),
         event,
-        assign({}, _this.props.data, store.data),
+        assign({}, _this.props.data ?? {}, store.data),
         store.target,
       )
 
@@ -330,8 +329,8 @@ var ContextMenu = (function (_AbstractMenu) {
       value: function render() {
         var _props = this.props,
           children = _props.children,
-          className = _props.className,
-          style = _props.style
+          className = _props.className ?? '',
+          style = _props.style ?? {}
         var isVisible = this.state.isVisible
 
         var inlineStyle = assign({}, style, {
@@ -341,7 +340,7 @@ var ContextMenu = (function (_AbstractMenu) {
         })
         var menuClassnames = cx(
           cssClasses.menu,
-          className,
+          className ?? '',
           _defineProperty({}, cssClasses.menuVisible, isVisible),
         )
 
@@ -365,39 +364,4 @@ var ContextMenu = (function (_AbstractMenu) {
   return ContextMenu
 })(AbstractMenu)
 
-ContextMenu.propTypes = {
-  id: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-  data: PropTypes.object,
-  className: PropTypes.string,
-  hideOnLeave: PropTypes.bool,
-  rtl: PropTypes.bool,
-  onHide: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  onShow: PropTypes.func,
-  preventHideOnContextMenu: PropTypes.bool,
-  preventHideOnResize: PropTypes.bool,
-  preventHideOnScroll: PropTypes.bool,
-  style: PropTypes.object,
-}
-ContextMenu.defaultProps = {
-  className: '',
-  data: {},
-  hideOnLeave: false,
-  rtl: false,
-  onHide: function onHide() {
-    return null
-  },
-  onMouseLeave: function onMouseLeave() {
-    return null
-  },
-  onShow: function onShow() {
-    return null
-  },
-
-  preventHideOnContextMenu: false,
-  preventHideOnResize: false,
-  preventHideOnScroll: false,
-  style: {},
-}
 export default ContextMenu

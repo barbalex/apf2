@@ -10,17 +10,17 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useParams, useLocation } from 'react-router'
+import { useParams, useLocation, Form } from 'react-router'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { standardQkYear } from '../../../../../modules/standardQkYear.js'
 import { query as query2 } from './query.js'
 import { createMessageFunctions } from './createMessageFunctions.js'
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
-import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
+import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -79,12 +79,9 @@ export const Qk = memo(
     const { apId, projId } = useParams()
     const { search } = useLocation()
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { openTree2WithActiveNodeArray } = store
 
     const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
@@ -140,6 +137,7 @@ export const Qk = memo(
     if (error2) return <Error error={error2} />
     return (
       <ErrorBoundary>
+        <FormTitle title="Qualitätskontrollen ausführen" />
         <Container>
           <StyledFormControl
             fullWidth

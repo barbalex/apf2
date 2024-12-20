@@ -1,4 +1,4 @@
-export function getDataArrayFromExportObjects(exportObjects) {
+export function GetDataArrayFromExportObjectsWorker(exportObjects) {
   const dataArray = []
   // first the field names:
   dataArray.push(Object.keys(exportObjects[0]))

@@ -1,228 +1,182 @@
-import { memo, useContext } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useApolloClient, gql } from '@apollo/client'
-import { observer } from 'mobx-react-lite'
+import { memo, useMemo, useRef } from 'react'
+import styled from '@emotion/styled'
+import { Transition } from 'react-transition-group'
 
-import { StoreContext } from '../../../../../../../../../storeContext.js'
-import { PopFolder } from './Pop/index.jsx'
-import { ApZielFolder } from './ApZiel/index.jsx'
-import { ApErfkritFolder } from './ApErfkrit/index.jsx'
-import { ApBerFolder } from './ApBer/index.jsx'
-import { IdealbiotopFolder } from './Idealbiotop.jsx'
-import { ApArtFolder } from './ApArt/index.jsx'
-import { AssozArtFolder } from './AssozArt/index.jsx'
-import { EkFrequenzFolder } from './EkFrequenz/index.jsx'
-import { EkZaehleinheitFolder } from './EkZaehleinheit/index.jsx'
-import { BeobNichtBeurteiltFolder } from './BeobNichtBeurteilt/index.jsx'
-import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnen/index.jsx'
+import { PopFolder } from './PopFolder/index.jsx'
+import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
+import { AperfkritFolder } from './AperfkritFolder/index.jsx'
+import { ApberFolder } from './ApberFolder/index.jsx'
+import { IdealbiotopFolder } from './IdealbiotopFolder/index.jsx'
+import { ApartFolder } from './ApartFolder/index.jsx'
+import { AssozartFolder } from './AssozartFolder/index.jsx'
+import { EkfrequenzFolder } from './EkfrequenzFolder/index.jsx'
+import { EkZaehleinheitFolder } from './EkzaehleinheitFolder/index.jsx'
+import { BeobNichtBeurteiltFolder } from './BeobNichtBeurteiltFolder/index.jsx'
+import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnenFolder/index.jsx'
 import { Qk } from './Qk.jsx'
+import { QkWaehlen } from './QkWaehlen.jsx'
+import { AuswertungFolder } from './AuswertungFolder.jsx'
+import { DateienFolder } from './DateienFolder.jsx'
+import { HistorienFolder } from './HistorienFolder.jsx'
+import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
+import { transitionStyles } from '../../../../../Row.jsx'
 
-export const ApFolders = memo(
-  observer(({ ap, projekt }) => {
-    const client = useApolloClient()
-    const store = useContext(StoreContext)
-    const { nodeLabelFilter, beobGqlFilterForTree, popGqlFilterForTree } =
-      store.tree
+const Container = styled.div`
+  transition: opacity 300ms ease-in-out;
+`
 
-    const popsFilter = popGqlFilterForTree
-    const erfkritsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.erfkrit) {
-      erfkritsFilter.label = {
-        includesInsensitive: nodeLabelFilter.erfkrit,
-      }
-    }
-    const apbersFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.apber) {
-      apbersFilter.label = { includesInsensitive: nodeLabelFilter.apber }
-    }
-    const assozartFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.assozart) {
-      assozartFilter.label = {
-        includesInsensitive: nodeLabelFilter.assozart,
-      }
-    }
-    const ekfrequenzsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.ekfrequenz) {
-      ekfrequenzsFilter.code = {
-        includesInsensitive: nodeLabelFilter.ekfrequenz,
-      }
-    }
-    const ekzaehleinheitsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.ekzaehleinheit) {
-      ekzaehleinheitsFilter.label = {
-        includesInsensitive: nodeLabelFilter.ekzaehleinheit,
-      }
-    }
-    const beobNichtBeurteiltsFilter = beobGqlFilterForTree('nichtBeurteilt')
-    const beobNichtZuzuordnensFilter = beobGqlFilterForTree('nichtZuzuordnen')
-    const apartsFilter = { apId: { equalTo: ap.id } }
-    if (nodeLabelFilter.apart) {
-      apartsFilter.label = { includesInsensitive: nodeLabelFilter.apart }
-    }
+export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
+  const { navData, isLoading } = useApNavData({ apId: ap.id })
 
-    const { data, isLoading } = useQuery({
-      queryKey: [
-        'treeApFolders',
-        projekt.id,
-        ap.id,
-        popsFilter,
-        erfkritsFilter,
-        apbersFilter,
-        assozartFilter,
-        ekfrequenzsFilter,
-        ekzaehleinheitsFilter,
-        beobNichtBeurteiltsFilter,
-        beobNichtZuzuordnensFilter,
-        apartsFilter,
-      ],
-      queryFn: () =>
-        client.query({
-          query: gql`
-            query TreeApFoldersQuery(
-              $id: UUID!
-              $popsFilter: PopFilter!
-              $erfkritsFilter: ErfkritFilter!
-              $apbersFilter: ApberFilter!
-              $apartsFilter: ApartFilter!
-              $assozartFilter: AssozartFilter!
-              $ekfrequenzsFilter: EkfrequenzFilter!
-              $ekzaehleinheitsFilter: EkzaehleinheitFilter!
-              $beobNichtBeurteiltsFilter: BeobFilter
-              $beobNichtZuzuordnensFilter: BeobFilter
-            ) {
-              apById(id: $id) {
-                id
-                popsByApId(filter: $popsFilter) {
-                  totalCount
-                }
-                erfkritsByApId(filter: $erfkritsFilter) {
-                  totalCount
-                }
-                apbersByApId(filter: $apbersFilter) {
-                  totalCount
-                }
-                apartsByApId(filter: $apartsFilter) {
-                  totalCount
-                }
-                assozartsByApId(filter: $assozartFilter) {
-                  totalCount
-                }
-                ekfrequenzsByApId(filter: $ekfrequenzsFilter) {
-                  totalCount
-                }
-                ekzaehleinheitsByApId(filter: $ekzaehleinheitsFilter) {
-                  totalCount
-                }
-                beobNichtBeurteilt: apartsByApId {
-                  nodes {
-                    id
-                    aeTaxonomyByArtId {
-                      id
-                      beobsByArtId(filter: $beobNichtBeurteiltsFilter) {
-                        totalCount
-                      }
-                    }
-                  }
-                }
-                beobNichtZuzuordnen: apartsByApId {
-                  nodes {
-                    id
-                    aeTaxonomyByArtId {
-                      id
-                      beobsByArtId(filter: $beobNichtZuzuordnensFilter) {
-                        totalCount
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          `,
-          variables: {
-            id: ap.id,
-            popsFilter,
-            erfkritsFilter,
-            apbersFilter,
-            assozartFilter,
-            ekfrequenzsFilter,
-            ekzaehleinheitsFilter,
-            beobNichtBeurteiltsFilter,
-            beobNichtZuzuordnensFilter,
-            apartsFilter,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+  const popMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Populationen'),
+    [navData],
+  )
+  const apZielJahrsMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'AP-Ziele'),
+    [navData],
+  )
+  const apErfkritsMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'AP-Erfolgskriterien'),
+    [navData],
+  )
+  const apBerMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'AP-Berichte'),
+    [navData],
+  )
+  const apArtMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Taxa'),
+    [navData],
+  )
+  const assozartMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'assoziierte-Arten'),
+    [navData],
+  )
+  const ekfrequenzMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'EK-Frequenzen'),
+    [navData],
+  )
+  const ekzaehleinheitMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'EK-Zähleinheiten'),
+    [navData],
+  )
+  const beobNichtBeurteiltMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'nicht-beurteilte-Beobachtungen'),
+    [navData],
+  )
+  const beobNichtZuzuordnenMenu = useMemo(
+    () =>
+      navData?.menus.find((m) => m.id === 'nicht-zuzuordnende-Beobachtungen'),
+    [navData],
+  )
+  const auswertungMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Auswertung'),
+    [navData],
+  )
+  const dateienMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Dateien'),
+    [navData],
+  )
+  const historienMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Historien'),
+    [navData],
+  )
 
-    return (
-      <>
-        <PopFolder
-          projekt={projekt}
-          ap={ap}
-          count={data?.data?.apById?.popsByApId?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
-        <ApZielFolder
-          projekt={projekt}
-          ap={ap}
-        />
-        <ApErfkritFolder
-          projekt={projekt}
-          ap={ap}
-          count={data?.data?.apById?.erfkritsByApId?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
-        <ApBerFolder
-          projekt={projekt}
-          ap={ap}
-          count={data?.data?.apById?.apbersByApId?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
-        <IdealbiotopFolder
-          projekt={projekt}
-          ap={ap}
-        />
-        <ApArtFolder
-          projekt={projekt}
-          ap={ap}
-          count={data?.data?.apById?.apartsByApId?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
-        <AssozArtFolder
-          projekt={projekt}
-          ap={ap}
-          count={data?.data?.apById?.assozartsByApId?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
-        <EkFrequenzFolder
-          projekt={projekt}
-          ap={ap}
-          count={data?.data?.apById?.ekfrequenzsByApId?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
-        <EkZaehleinheitFolder
-          projekt={projekt}
-          ap={ap}
-          count={data?.data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
-        <BeobNichtBeurteiltFolder
-          projekt={projekt}
-          ap={ap}
-          aparts={data?.data?.apById?.beobNichtBeurteilt?.nodes ?? []}
-          isLoading={isLoading}
-        />
-        <BeobNichtZuzuordnenFolder
-          projekt={projekt}
-          ap={ap}
-          aparts={data?.data?.apById?.beobNichtZuzuordnen?.nodes ?? []}
-          isLoading={isLoading}
-        />
-        <Qk
-          projekt={projekt}
-          ap={ap}
-        />
-      </>
-    )
-  }),
-)
+  const ref = useRef(null)
+
+  return (
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Container
+          ref={ref}
+          style={transitionStyles[state]}
+        >
+          <PopFolder
+            projekt={projekt}
+            ap={ap}
+            menu={popMenu}
+          />
+          <ApzieljahrFolder
+            projekt={projekt}
+            ap={ap}
+            menu={apZielJahrsMenu}
+          />
+          <AperfkritFolder
+            projekt={projekt}
+            ap={ap}
+            menu={apErfkritsMenu}
+          />
+          <ApberFolder
+            projekt={projekt}
+            ap={ap}
+            menu={apBerMenu}
+          />
+          <IdealbiotopFolder
+            projekt={projekt}
+            ap={ap}
+          />
+          <ApartFolder
+            projekt={projekt}
+            ap={ap}
+            menu={apArtMenu}
+          />
+          <AssozartFolder
+            projekt={projekt}
+            ap={ap}
+            menu={assozartMenu}
+          />
+          <EkfrequenzFolder
+            projekt={projekt}
+            ap={ap}
+            menu={ekfrequenzMenu}
+          />
+          <EkZaehleinheitFolder
+            projekt={projekt}
+            ap={ap}
+            menu={ekzaehleinheitMenu}
+          />
+          <BeobNichtBeurteiltFolder
+            projekt={projekt}
+            ap={ap}
+            menu={beobNichtBeurteiltMenu}
+          />
+          <BeobNichtZuzuordnenFolder
+            projekt={projekt}
+            ap={ap}
+            menu={beobNichtZuzuordnenMenu}
+          />
+          <Qk
+            projekt={projekt}
+            ap={ap}
+          />
+          <QkWaehlen
+            projekt={projekt}
+            ap={ap}
+          />
+          <AuswertungFolder
+            projekt={projekt}
+            ap={ap}
+            menu={auswertungMenu}
+          />
+          <DateienFolder
+            projekt={projekt}
+            ap={ap}
+            menu={dateienMenu}
+          />
+          <HistorienFolder
+            projekt={projekt}
+            ap={ap}
+            menu={historienMenu}
+            parentUrl={navData?.url}
+          />
+        </Container>
+      )}
+    </Transition>
+  )
+})

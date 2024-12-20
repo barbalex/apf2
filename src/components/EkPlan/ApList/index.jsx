@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 
 import { Ap } from './Ap/index.jsx'
 import { ChooseAp } from './ChooseAp/index.jsx'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const Container = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ const PlusIcon = styled(IconButton)`
 `
 
 export const ApList = () => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const { aps } = store.ekPlan
 
   const [showChoose, setShowChoose] = useState(aps.length === 0)

@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { useDebouncedCallback } from 'use-debounce'
 
 import { tables } from '../../../modules/tables.js'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -33,7 +33,7 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
 
 export const LabelFilter = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { nodeLabelFilter, activeFilterTable } = store.tree
     const {
       setKey: setNodeLabelFilterKey,
@@ -60,6 +60,7 @@ export const LabelFilter = memo(
     const [value, setValue] = useState('')
 
     useEffect(() => {
+      if (filterValue === value) return
       setValue(filterValue)
     }, [filterValue, activeFilterTable])
 

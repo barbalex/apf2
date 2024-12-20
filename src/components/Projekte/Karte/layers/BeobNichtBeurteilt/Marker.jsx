@@ -9,14 +9,13 @@ import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { StoreContext } from '../../../../../storeContext.js'
+import { MobxContext } from '../../../../../mobxContext.js'
 import { beobIconString } from './beobIconString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
 import { getNearestTpop } from '../../../../../modules/getNearestTpop.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { updateBeobById } from './updateBeobById.js'
-import { useSearchParamsState } from '../../../../../modules/useSearchParamsState.js'
-import { isMobilePhone } from '../../../../../modules/isMobilePhone.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
 
 const StyledH3 = styled.h3`
@@ -37,7 +36,7 @@ export const Marker = memo(
     const queryClient = useQueryClient()
 
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { assigningBeob, openTree2WithActiveNodeArray } = store
 
     const isHighlighted = beobId === beob.id
@@ -93,10 +92,7 @@ export const Marker = memo(
       [apId, beob.id, client, navigate, projId, queryClient, search],
     )
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
     const openBeobInTree2 = useCallback(() => {
       openTree2WithActiveNodeArray({
         activeNodeArray: [

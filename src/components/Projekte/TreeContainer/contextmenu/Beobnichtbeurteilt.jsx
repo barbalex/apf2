@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -30,7 +30,7 @@ const showCoordOfBeobOnMapGeoAdminChData = {
 
 export const BeobNichtBeurteilt = memo(
   observer(({ onClick }) => {
-    const { user } = useContext(StoreContext)
+    const { user } = useContext(MobxContext)
 
     return (
       <ErrorBoundary>

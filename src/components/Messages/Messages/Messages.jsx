@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
 
 import { createUsermessage } from '../createUsermessage.js'
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 
 const Container = styled.div`
   height: 100%;
@@ -33,7 +33,7 @@ const OkButton = styled(Button)`
 export const Messages = memo(
   observer(({ unreadMessages }) => {
     const client = useApolloClient()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { user } = store
     const userName = user.name
 

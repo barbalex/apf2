@@ -1,7 +1,7 @@
 import { Row } from '../../../../../Row.jsx'
 
 export const Qk = ({ projekt, ap }) => {
-  const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Qualitaetskontrollen']
+  const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Qualitätskontrollen']
 
   const node = {
     nodeType: 'folder',
@@ -9,8 +9,8 @@ export const Qk = ({ projekt, ap }) => {
     id: `${ap.id}QkFolder`,
     tableId: ap.id,
     parentTableId: ap.id,
-    urlLabel: 'Qualitaetskontrollen',
-    label: 'Qualitätskontrollen',
+    urlLabel: 'Qualitätskontrollen',
+    label: 'Qualitätskontrollen ausführen',
     url,
     hasChildren: false,
   }

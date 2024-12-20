@@ -5,14 +5,16 @@ import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router'
+import { useAtom } from 'jotai'
 
-import { isMobilePhone } from '../../../../modules/isMobilePhone.js'
 import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
-import { StoreContext } from '../../../../storeContext.js'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { MobxContext } from '../../../../mobxContext.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
-import { minWidthToShowAllMenus } from '../../index.jsx'
+import { constants } from '../../../../modules/constants.js'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render
@@ -40,6 +42,9 @@ export const StyledButton = styled(Button)`
   margin-right: ${(props) =>
     props.followed === 'true' ? '-1px' : 'unset'} !important;
   text-transform: none !important;
+  ${(props) =>
+    props.inmenu === 'true' && `border: 1px solid #ab9518 !important;`}
+  text-wrap: none;
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
@@ -49,33 +54,50 @@ const DokuButton = styled(Button)`
   text-transform: none !important;
   flex-shrink: 0;
   flex-grow: 0;
+  text-transform: none !important;
+  text-wrap: none;
+  ${(props) =>
+    props.inmenu === 'true' && `border: 1px solid #ab9518 !important;`};
 `
 
 export const ProjekteMenus = memo(
-  observer(({ showAllMenus }) => {
+  observer(() => {
     const { projId } = useParams()
     const { search } = useLocation()
 
-    const store = useContext(StoreContext)
+    const [isDesktopView] = useAtom(isDesktopViewAtom)
+    const isMobileView = !isDesktopView
+
+    const [hideTree] = useAtom(hideTreeAtom)
+
+    const store = useContext(MobxContext)
     const { user } = store
     const { resetTree2Src } = store.tree
-
-    const isMobile = isMobilePhone()
 
     const token = user?.token
     const tokenDecoded = token ? jwtDecode(token) : null
     const role = tokenDecoded ? tokenDecoded.role : null
 
-    const [projekteTabs, setProjekteTabs] = useSearchParamsState(
-      'projekteTabs',
-      isMobilePhone() ? ['tree'] : ['tree', 'daten'],
-    )
+    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
 
     const onClickButton = useCallback(
       (name) => {
-        if (isMobile) {
+        if (isMobileView) {
           // show one tab only
-          setProjekteTabs([name])
+          if (projekteTabs.length === 1) {
+            setProjekteTabs([name])
+          } else {
+            // if multiple tabs are visible, close the clicked one
+            // UNLESS the clicked one was not yet visible - then open it and close non tree ones
+            if (projekteTabs.includes(name)) {
+              setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
+            } else {
+              setProjekteTabs([
+                ...projekteTabs.filter((el) => el === 'tree'),
+                name,
+              ])
+            }
+          }
         } else {
           const newProjekteTabs = [...projekteTabs]
           if (newProjekteTabs.includes(name)) {
@@ -90,7 +112,7 @@ export const ProjekteMenus = memo(
           setProjekteTabs(newProjekteTabs)
         }
       },
-      [isMobile, setProjekteTabs, projekteTabs],
+      [isMobileView, setProjekteTabs, projekteTabs],
     )
     const onClickTree = useCallback(
       () => onClickButton('tree'),
@@ -133,19 +155,21 @@ export const ProjekteMenus = memo(
 
     return (
       <MenuBar
-        rerenderer={`${projId}/${showAllMenus}/${projekteTabs}`}
+        rerenderer={`${projId}/${isDesktopView}/${projekteTabs}`}
         bgColor="rgb(46, 125, 50)"
         addMargin={false}
       >
-        <StyledButton
-          variant={treeIsVisible ? 'outlined' : 'text'}
-          followed={datenIsVisible?.toString()}
-          onClick={onClickTree}
-          data-id="nav-tree1"
-          width={134}
-        >
-          Strukturbaum
-        </StyledButton>
+        {isDesktopView && (
+          <StyledButton
+            variant={treeIsVisible ? 'outlined' : 'text'}
+            followed={datenIsVisible?.toString()}
+            onClick={onClickTree}
+            data-id="nav-tree1"
+            width={134}
+          >
+            Strukturbaum
+          </StyledButton>
+        )}
         <Daten width={77} />
         <StyledButton
           variant={filterIsVisible ? 'outlined' : 'text'}
@@ -163,7 +187,7 @@ export const ProjekteMenus = memo(
           preceded={filterIsVisible?.toString()}
           followed={(
             (!!projId && exporteIsVisible) ||
-            (showAllMenus && !projId && tree2IsVisible)
+            (isDesktopView && !projId && tree2IsVisible)
           )?.toString()}
           onClick={onClickKarte}
           data-id="nav-karte1"
@@ -175,7 +199,7 @@ export const ProjekteMenus = memo(
           <StyledButton
             variant={exporteIsVisible ? 'outlined' : 'text'}
             preceded={karteIsVisible?.toString()}
-            followed={(showAllMenus && tree2IsVisible)?.toString()}
+            followed={(isDesktopView && tree2IsVisible)?.toString()}
             onClick={onClickExporte}
             data-id="nav-exporte"
             width={74}
@@ -183,7 +207,7 @@ export const ProjekteMenus = memo(
             Exporte
           </StyledButton>
         )}
-        {(showAllMenus || tree2IsVisible) && (
+        {(isDesktopView || tree2IsVisible) && (
           <StyledButton
             variant={tree2IsVisible ? 'outlined' : 'text'}
             preceded={(
@@ -198,13 +222,13 @@ export const ProjekteMenus = memo(
             Strukturbaum 2
           </StyledButton>
         )}
-        {((showAllMenus && tree2IsVisible) || daten2IsVisible) && (
+        {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
           <Daten
             treeNr="2"
             width={73}
           />
         )}
-        {((showAllMenus && tree2IsVisible) || filter2IsVisible) && (
+        {((isDesktopView && tree2IsVisible) || filter2IsVisible) && (
           <StyledButton
             variant={filter2IsVisible ? 'outlined' : 'text'}
             preceded={daten2IsVisible?.toString()}
@@ -217,7 +241,7 @@ export const ProjekteMenus = memo(
             Filter 2
           </StyledButton>
         )}
-        {showAllMenus && !!projId && (
+        {isDesktopView && !!projId && (
           <StyledButton
             variant="text"
             preceded={false?.toString()}
@@ -239,6 +263,20 @@ export const ProjekteMenus = memo(
         >
           Dokumentation
         </DokuButton>
+        {/* in mobile view: move tree to the end of the menus */}
+        {/* only show if user did not decide to always show */}
+        {/* do not hide if tree is visible - user can't close it! */}
+        {isMobileView && (!hideTree || treeIsVisible) && (
+          <StyledButton
+            variant={treeIsVisible ? 'outlined' : 'text'}
+            followed="false"
+            onClick={onClickTree}
+            data-id="nav-tree1"
+            width={134}
+          >
+            Strukturbaum
+          </StyledButton>
+        )}
         <More
           onClickExporte={onClickExporte}
           role={role}

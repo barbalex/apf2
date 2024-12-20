@@ -5,12 +5,13 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { useQuery } from '@apollo/client'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useParams } from 'react-router'
+import { Form, useParams } from 'react-router'
 
 import { query } from './query.js'
 import { Row } from './Row/index.jsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
+import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
 const Container = styled.div`
   height: 100%;
@@ -72,6 +73,7 @@ export const Component = ({ refetchTab }) => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
+      <FormTitle title="Qualitätskontrollen wählen" />
       <Container>
         <FilterContainer>
           <StyledFormControl

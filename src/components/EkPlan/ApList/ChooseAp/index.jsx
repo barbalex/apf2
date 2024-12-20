@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { queryApsToChoose } from './queryApsToChoose.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
 const StyledSelect = styled(AsyncSelect)`
@@ -76,7 +76,7 @@ export const ChooseAp = memo(
   observer(({ setShowChoose }) => {
     const { projId } = useParams()
 
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { aps, addAp } = store.ekPlan
     const client = useApolloClient()
 

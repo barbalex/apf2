@@ -28,8 +28,8 @@ import { buildClient } from './client.js'
 
 import { store as jotaiStore } from './JotaiStore/index.js'
 
-import { Provider as MobxProvider } from './storeContext.js'
-import { Provider as IdbProvider } from './idbContext.js'
+import { MobxContext } from './mobxContext.js'
+import { IdbContext } from './idbContext.js'
 import { UploaderContext } from './UploaderContext.js'
 
 const Notifier = lazy(async () => ({
@@ -88,8 +88,8 @@ export const App = () => {
 
   return (
     <JotaiProvider store={jotaiStore}>
-      <IdbProvider value={idbContext}>
-        <MobxProvider value={store}>
+      <IdbContext value={idbContext}>
+        <MobxContext value={store}>
           <ApolloProvider client={client}>
             <QueryClientProvider client={queryClient}>
               <StyledEngineProvider injectFirst>
@@ -105,7 +105,7 @@ export const App = () => {
                     autoHideDuration={10000}
                     action={(key) => <NotificationDismisser nKey={key} />}
                   >
-                    <UploaderContext.Provider value={uploaderRef}>
+                    <UploaderContext value={uploaderRef}>
                       <GlobalStyle />
                       <Suspense fallback={<Spinner />}>
                         <Router />
@@ -122,14 +122,14 @@ export const App = () => {
                           idb={idb}
                         />
                       </Suspense>
-                    </UploaderContext.Provider>
+                    </UploaderContext>
                   </SnackbarProvider>
                 </ThemeProvider>
               </StyledEngineProvider>
             </QueryClientProvider>
           </ApolloProvider>
-        </MobxProvider>
-      </IdbProvider>
+        </MobxContext>
+      </IdbContext>
     </JotaiProvider>
   )
 }

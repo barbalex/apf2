@@ -13,14 +13,14 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
-import { StoreContext } from '../../../../storeContext.js'
-import { LabelFilter, labelFilterWidth } from '../../../shared/LabelFilter.jsx'
-import { listLabelFilterIsIconAtom } from '../../../../JotaiStore/index.js'
+import { MobxContext } from '../../../../mobxContext.js'
+import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: white;
@@ -31,16 +31,27 @@ const CopyIcon = styled(MdContentCopy)`
 const iconStyle = { color: 'white' }
 
 export const Menu = memo(
-  observer(() => {
-    const { search } = useLocation()
-    const navigate = useNavigate()
+  observer(({ toggleFilterInput }) => {
     const apolloClient = useApolloClient()
     const tanstackQueryClient = useQueryClient()
+
+    const { search } = useLocation()
+    const navigate = useNavigate()
     const { projId, apId, popId, tpopId } = useParams()
-    const store = useContext(StoreContext)
-    const { setMoving, moving, setCopying, copying } = store
+
+    const store = useContext(MobxContext)
+    const {
+      setMoving,
+      moving,
+      setCopying,
+      copying,
+      copyingBiotop,
+      setCopyingBiotop,
+    } = store
+    const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
     const onClickAdd = useCallback(async () => {
+      // 1. create new tpopkontr
       let result
       try {
         result = await apolloClient.mutate({
@@ -66,13 +77,50 @@ export const Menu = memo(
           },
         })
       }
+      const id = result?.data?.createTpopkontr?.tpopkontr?.id
+
+      // 2. add new tpopkontrzaehl
+      const resultZaehl = await apolloClient.mutate({
+        mutation: gql`
+          mutation createTpokontrzaehlForTpopfeldkontrs($parentId: UUID!) {
+            createTpopkontrzaehl(
+              input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
+            ) {
+              tpopkontrzaehl {
+                id
+              }
+            }
+          }
+        `,
+        variables: { parentId: id },
+      })
+
+      // 3. open the tpopkontrzaehl Folder
+      const zaehlId =
+        resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+      const tpopkontrNode = [...activeNodeArray, id]
+      const zaehlungenFolderNode = [...tpopkontrNode, 'Zaehlungen']
+      const zaehlungNode = [...zaehlungenFolderNode, zaehlId]
+      const newOpenNodes = [
+        ...openNodes,
+        tpopkontrNode,
+        zaehlungenFolderNode,
+        zaehlungNode,
+      ]
+      setOpenNodes(newOpenNodes)
+
+      // 4. refresh tree
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
       tanstackQueryClient.invalidateQueries({
-        queryKey: [`treeTpopFolders`],
+        queryKey: [`treeTpop`],
       })
-      const id = result?.data?.createTpopkontr?.tpopkontr?.id
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfeldkontrzaehl`],
+      })
+
+      // 5. navigate to new tpopkontr
       navigate(`./${id}${search}`)
     }, [apolloClient, store, tanstackQueryClient, navigate, search, tpopId])
 
@@ -127,6 +175,8 @@ export const Menu = memo(
     }, [setMoving])
 
     const isCopyingEk = copying.table === 'tpopfeldkontr'
+    const isCopyingBiotop = !!copyingBiotop.id
+    const isCopying = isCopyingEk || isCopyingBiotop
     const onClickCopyEkfToHere = useCallback(() => {
       return copyTo({
         parentId: tpopId,
@@ -143,33 +193,38 @@ export const Menu = memo(
         label: null,
         withNextLevel: false,
       })
-    }, [setCopying])
+      setCopyingBiotop({ id: null, label: null })
+    }, [setCopying, setCopyingBiotop])
 
-    const [labelFilterIsIcon] = useAtom(listLabelFilterIsIconAtom)
+    const [hideTree] = useAtom(hideTreeAtom)
 
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${moving.label}/${copying.label}/${isMovingEk}/${isCopyingEk}`}
+          rerenderer={`${moving.label}/${copying.label}/${copyingBiotop.label}/${isMovingEk}/${isCopyingEk}/${hideTree}`}
         >
-          <LabelFilter
-            width={labelFilterIsIcon ? buttonWidth : labelFilterWidth}
-          />
+          {!!toggleFilterInput && (
+            <FilterButton toggleFilterInput={toggleFilterInput} />
+          )}
           <Tooltip title="Neue Feld-Kontrolle erstellen">
             <IconButton onClick={onClickAdd}>
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
-              <FaFolderTree style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {!hideTree && (
+            <Tooltip title="Ordner im Navigationsbaum öffnen">
+              <IconButton onClick={onClickOpenLowerNodes}>
+                <FaFolderTree style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
+          {!hideTree && (
+            <Tooltip title="Ordner im Navigationsbaum schliessen">
+              <IconButton onClick={onClickCloseLowerNodes}>
+                <RiFolderCloseFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
           {isMovingEk && (
             <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
               <IconButton onClick={onClickMoveEkfToHere}>
@@ -191,8 +246,10 @@ export const Menu = memo(
               </IconButton>
             </Tooltip>
           )}
-          {isCopyingEk && (
-            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+          {isCopying && (
+            <Tooltip
+              title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}
+            >
               <IconButton onClick={onClickStopCopying}>
                 <BsSignStopFill style={iconStyle} />
               </IconButton>

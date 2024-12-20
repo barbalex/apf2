@@ -7,7 +7,7 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-import { StoreContext } from '../../../storeContext.js'
+import { MobxContext } from '../../../mobxContext.js'
 import {
   StyledCardContent,
   CardActionTitle,
@@ -26,7 +26,7 @@ const StyledCheckbox = styled(Checkbox)`
 
 export const Optionen = memo(
   observer(() => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { setExportFileType, exportFileType } = store
     const [expanded, setExpanded] = useState(false)
 

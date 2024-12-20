@@ -21,12 +21,12 @@ import screenfull from 'screenfull'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 import { UploaderContext } from '../../../../UploaderContext.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from './index.jsx'
 
 export const PreviewMenus = memo(
   observer(({ parent, files, refetch, containerRef }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { fileId } = useParams()
     const navigate = useNavigate()
     const { pathname, search } = useLocation()

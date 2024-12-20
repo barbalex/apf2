@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -15,7 +15,7 @@ const showBeobOnMapData = {
 }
 
 export const BeobZugeordnetFolder = ({ onClick }) => {
-  const store = useContext(StoreContext)
+  const store = useContext(MobxContext)
   const { activeApfloraLayers } = store
 
   return (

@@ -2,7 +2,7 @@ import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -42,7 +42,7 @@ const resetCopyingBiotopData = {
 
 export const Tpopfeldkontr = memo(
   observer(({ onClick }) => {
-    const { copying, user, copyingBiotop } = useContext(StoreContext)
+    const { copying, user, copyingBiotop } = useContext(MobxContext)
 
     return (
       <ErrorBoundary>

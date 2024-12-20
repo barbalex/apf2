@@ -6,4 +6,6 @@ export const constants = {
     '0aba83f3-d515-4806-bc14-838f8f6d0fe6',
     '96efab5c-8bfc-11e7-a848-2b4184d2c8eb',
   ],
+  mobileViewMaxWidth: 999,
+  minWidthToShowTitle: 1040,
 }

@@ -24,7 +24,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, gql } from '@apollo/client'
 
 import { IdbContext } from '../idbContext.js'
-import { StoreContext } from '../storeContext.js'
+import { MobxContext } from '../mobxContext.js'
 import { getUserFromIdb } from '../modules/getUserFromIdb.js'
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 
@@ -55,7 +55,7 @@ export const User = memo(
   observer(() => {
     const client = useApolloClient()
     const { idb } = useContext(IdbContext)
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { user } = store
 
     const [name, setName] = useState('')

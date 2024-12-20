@@ -14,7 +14,7 @@ import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { StoreContext } from '../../../../storeContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }
@@ -27,7 +27,7 @@ export const Menu = memo(
     const tanstackQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopkontrId, tpopkontrzaehlId } =
       useParams()
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -62,6 +62,9 @@ export const Menu = memo(
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehlFolders`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfeldkontr`],
       })
       const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
       navigate(
@@ -119,6 +122,9 @@ export const Menu = memo(
       })
       tanstackQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehlFolders`],
+      })
+      tanstackQueryClient.invalidateQueries({
+        queryKey: [`treeTpopfeldkontr`],
       })
       // navigate to parent
       navigate(

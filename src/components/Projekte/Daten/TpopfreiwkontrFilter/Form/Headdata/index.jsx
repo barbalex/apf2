@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client'
 
 import { Select } from '../../../../../shared/Select.jsx'
-import { StoreContext } from '../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
@@ -46,7 +46,7 @@ const BearbVal = styled.div`
 
 export const Headdata = memo(
   observer(({ row, activeTab }) => {
-    const store = useContext(StoreContext)
+    const store = useContext(MobxContext)
     const { dataFilterSetValue } = store.tree
     const { data, loading, error } = useQuery(query)
 

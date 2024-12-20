@@ -1,17 +1,15 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../Row.jsx'
-import { StoreContext } from '../../../../../../../storeContext.js'
+import { MobxContext } from '../../../../../../../mobxContext.js'
 import { Aps } from './Aps/index.jsx'
 
 export const ApFolder = memo(
-  observer(({ count, projekt }) => {
-    const store = useContext(StoreContext)
+  observer(({ count, countFiltered, projekt, isLoading }) => {
+    const store = useContext(MobxContext)
     const { openNodes } = store.tree
-    const nodeLabelFilterString = store.tree?.nodeLabelFilter?.ap ?? ''
-
-    const message = nodeLabelFilterString ? `${count} gefiltert` : count
 
     const isOpen =
       openNodes.filter(
@@ -26,7 +24,7 @@ export const ApFolder = memo(
       id: `${projekt.id}ApFolder`,
       tableId: projekt.id,
       urlLabel: 'Arten',
-      label: `Arten (${message})`,
+      label: `Arten (${isLoading ? '...' : `${countFiltered}/${count}`})`,
       url,
       hasChildren: count > 0,
     }
@@ -34,7 +32,9 @@ export const ApFolder = memo(
     return (
       <>
         <Row node={node} />
-        {isOpen && <Aps projekt={projekt} />}
+        <TransitionGroup component={null}>
+          {isOpen && <Aps projekt={projekt} />}
+        </TransitionGroup>
       </>
     )
   }),
