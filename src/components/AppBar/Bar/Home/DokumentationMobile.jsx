@@ -5,7 +5,7 @@ import { StyledButton } from './index.jsx'
 
 const style = { marginRight: 8 }
 
-export const Dokumentation = () => {
+export const DokumentationMobile = () => {
   const { pathname, search } = useLocation()
   const isDocs = pathname.startsWith('/Dokumentation')
 

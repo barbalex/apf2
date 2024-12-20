@@ -1,8 +1,11 @@
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
+import { useAtom } from 'jotai'
 
 import { Dokumentation } from './Dokumentation.jsx'
+import { DokumentationMobile } from './DokumentationMobile.jsx'
+import { isMobileViewAtom } from '../../../../JotaiStore/index.js'
 
 export const StyledButton = styled(Button)`
   color: white !important;
@@ -17,6 +20,7 @@ export const StyledButton = styled(Button)`
 
 export const HomeMenus = () => {
   const { search } = useLocation()
+  const [isMobileView] = useAtom(isMobileViewAtom)
 
   return (
     <>
@@ -27,7 +31,9 @@ export const HomeMenus = () => {
       >
         Daten
       </StyledButton>
-      <Dokumentation />
+      {isMobileView ?
+        <DokumentationMobile />
+      : <Dokumentation />}
     </>
   )
 }
