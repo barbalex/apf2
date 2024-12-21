@@ -22,7 +22,7 @@ export const Component = memo(() => (
     <h3>1.1 Im Formular</h3>
     <ol>
       <li>Art wählen</li>
-      <li>Im Strukturbaum eine nicht beurteilte Beobachtung wählen</li>
+      <li>Im Navigationsbaum eine nicht beurteilte Beobachtung wählen</li>
       <li>
         Im Formular bei &quot;Einer Teilpopulation zuordnen&quot; die gewünschte
         wählen
@@ -31,7 +31,7 @@ export const Component = memo(() => (
     <h3>1.2 in Karten</h3>
     <p>Gemäss diesem Video:</p>
     <YoutubeEmbed embedId={'Oy-TDV37xhI'} />
-    <h3>1.3 Im Strukturbaum</h3>
+    <h3>1.3 Im Navigationsbaum</h3>
     <p>
       Hier gibt es zwei Methoden, die mit einem einzigen Klick ausgelöst werden
       können:
@@ -49,7 +49,7 @@ export const Component = memo(() => (
     </ul>
     <img
       src={beobZuordnen}
-      alt="im Strukturbaum"
+      alt="im Navigationsbaum"
     />
     <h2>2. Verfügbare Beobachtungen</h2>
     <p>
@@ -60,7 +60,11 @@ export const Component = memo(() => (
       <li>2016: 228&#39;791 von der Fachstelle Naturschutz</li>
       <li>
         2017: 192&#39;606 von{' '}
-        <a href="https://www.infoflora.ch/de/allgemeines/info-species.html">
+        <a
+          href="https://www.infoflora.ch/de/allgemeines/info-species.html"
+          target="_blank"
+          rel="noreferrer"
+        >
           Info Spezies
         </a>
       </li>

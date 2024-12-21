@@ -15,9 +15,9 @@ export const Component = memo(() => (
     </p>
     <h3>Navigation</h3>
     <YoutubeEmbed embedId={'WxLBtsbgdJw'} />
-    <h3>Strukturbaum</h3>
+    <h3>Navigationsbaum</h3>
     <YoutubeEmbed embedId={'rhHsG021wAk'} />
-    <h3>Strukturbaum 2</h3>
+    <h3>Navigationsbaum 2</h3>
     <YoutubeEmbed embedId={'uG-6WmTZvOU'} />
     <h3>Daten erfassen</h3>
     <YoutubeEmbed embedId={'Iqhp1XDTNfc'} />

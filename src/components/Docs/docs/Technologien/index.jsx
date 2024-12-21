@@ -12,8 +12,14 @@ export const Component = memo(() => (
     <ol>
       <li>
         Das <strong>Backend</strong> bietet die API (Daten-Schnittstelle) auf{' '}
-        <a href="//api.apflora.ch/graphql">api.apflora.ch/graphql</a> an. Es
-        läuft auf einem virtuellen Server.
+        <a
+          href="//api.apflora.ch/graphql"
+          target="_blank"
+          rel="noreferrer"
+        >
+          api.apflora.ch/graphql
+        </a>{' '}
+        an. Es läuft auf einem virtuellen Server.
       </li>
       <li>
         Die <strong>App</strong> bzw. das Frontend ist auf{' '}

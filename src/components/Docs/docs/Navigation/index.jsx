@@ -75,7 +75,7 @@ export const Component = memo(() => (
     </p>
     <ul>
       <li>EK-Planung</li>
-      <li>Strukturbaum 2, Daten 2, Filter 2</li>
+      <li>Navigationsbaum 2, Daten 2, Filter 2</li>
     </ul>
   </>
 ))

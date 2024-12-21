@@ -106,7 +106,7 @@ export const Component = memo(() => (
     </ul>
     <h2 id="diese-daten-werden-erfasst">2. Diese Daten werden erfasst</h2>
     <h3 id="global">Global</h3>
-    <p>Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.</p>
+    <p>Durch die Koordinationsstelle. Im Navigationsbaum in den Werte-Listen.</p>
     <ul>
       <li>EK-Abrechnungstypen</li>
       <li>
@@ -115,7 +115,7 @@ export const Component = memo(() => (
         <img
           src={ekplanenGlobal}
           referrerPolicy="no-referrer"
-          alt="im Strukturbaum"
+          alt="im Navigationsbaum"
           width={400}
         />
       </li>
@@ -133,7 +133,7 @@ export const Component = memo(() => (
         <img
           src={ekplanenAp}
           referrerPolicy="no-referrer"
-          alt="im Strukturbaum"
+          alt="im Navigationsbaum"
         />
       </li>
     </ul>

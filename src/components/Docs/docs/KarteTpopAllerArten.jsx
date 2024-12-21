@@ -8,9 +8,9 @@ export const Component = memo(() => (
     <DokuDate>20.05.2020</DokuDate>
     <p>Bedingungen:</p>
     <ul>
-      <li>Strukturbaum ist offen</li>
+      <li>Navigationsbaum ist offen</li>
       <li>
-        Im Strukturbaum ist das Projekt oder der Art-Ordner aktiv.
+        Im Navigationsbaum ist das Projekt oder der Art-Ordner aktiv.
         <br />
         Ist eine Art oder tieferer Knoten aktiv, wird nur die betreffende Art
         angezeigt

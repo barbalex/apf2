@@ -53,7 +53,7 @@ export const Component = memo(() => (
       <li>
         Mit Hilfe der abgeleiteten Felder können gebaut werden:
         <ul>
-          <li>der Strukturbaum</li>
+          <li>der Navigationsbaum</li>
           <li>das Beobachtungs-Formular</li>
           <li>Popup-Formulare in der Karte</li>
           <li>die Funktion für Meldungen an Info Spezies</li>

@@ -23,8 +23,8 @@ export const Component = memo(() => (
       vielen Daten arbeiten oder sehr viel rechnen müssen:
     </p>
     <ul>
-      <li>Im Strukturbaum eine Art öffnen, die sehr viele Daten enthält</li>
-      <li>Einen (zweiten) Strukturbaum öffnen</li>
+      <li>Im Navigationsbaum eine Art öffnen, die sehr viele Daten enthält</li>
+      <li>Einen (zweiten) Navigationsbaum öffnen</li>
       <li>In der Karte Daten aller Arten anzeigen</li>
       <li>
         In der Karte (viele) apflora-Ebenen einblenden, wenn sie sehr viele
@@ -60,25 +60,33 @@ export const Component = memo(() => (
         Den cache des Browsers leeren. Danach müsst ihr neu anmelden.
         <br />
         Anleitungen für:{' '}
-        <a href="https://superuser.com/a/444881/275664">Chrome</a>,{' '}
-        <a href="https://superuser.com/a/733154/275664">Firefox</a>,{' '}
-        <a href="https://superuser.com/a/1081295/275664">Safari</a>
+        <a
+          href="https://superuser.com/a/444881/275664"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Chrome
+        </a>
+        ,{' '}
+        <a
+          href="https://superuser.com/a/733154/275664"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Firefox
+        </a>
+        ,{' '}
+        <a
+          href="https://superuser.com/a/1081295/275664"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Safari
+        </a>
         <br />
         apflora.ch speichert Daten auf eurer Festplatte (damit die App viel
         schneller läuft). Diese Daten können auch einmal Fehler enthalten. Cache
         leeren entfernt diese Daten, wonach sie vom Server neu geladen werden
-      </li>
-      <li>
-        Die lokal installierbare Version von apflora.ch verwenden.
-        <br />
-        Es gibt sie bisher nur für Windows. Anleitung: Den aktuellsten
-        apflora-win32-x64-Ordner von{' '}
-        <a href="https://www.dropbox.com/sh/5ar4f0fu5uqvhar/AADJmUo_9pakOnjL_U27EpQMa?dl=0">
-          hier
-        </a>{' '}
-        in den eigenen Benutzer-Ordner oder auf den Desktop kopieren. Dann die
-        darin enthaltene apflora.exe-Datei starten. Ob das etwas bringt, wisst
-        ihr nur, wenn ihr es ausprobiert habt
       </li>
     </ul>
     <p>
