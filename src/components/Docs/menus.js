@@ -37,7 +37,7 @@ export const menus = [
   },
   {
     id: 'falsch-bestimmte-beobachtungen',
-    label: `Falsch bestimmte Beobachtungen`,
+    label: `Falsch bestimmte Beobachtungen 👀`,
   },
   {
     id: 'erfolgs-kontrollen-planen',
@@ -113,7 +113,7 @@ export const menus = [
   },
   {
     id: 'produkte-fuer-die-fns',
-    label: `Produkte für die Fachstelle Naturschutz`,
+    label: `Produkte für die Fachstelle Naturschutz 🛒`,
   },
   {
     id: 'daten-sichern',

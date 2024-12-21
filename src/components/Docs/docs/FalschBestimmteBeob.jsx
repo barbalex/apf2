@@ -4,7 +4,7 @@ import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Falsch bestimmte Beobachtungen</h1>
+    <h1>Falsch bestimmte Beobachtungen 👀</h1>
     <DokuDate>30.01.2019</DokuDate>
     <p>Bei AP-Arten ist vorgesehen:</p>
     <ul>
