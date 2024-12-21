@@ -25,11 +25,11 @@ export const menus = [
   },
   {
     id: 'ist-apflora-langsam',
-    label: `Ist apflora langsam?`,
+    label: `Ist apflora langsam? 🐌`,
   },
   {
     id: 'art-auswertung-pop-menge',
-    label: `Art: Auswertung Population Mengen`,
+    label: `Art: Auswertung Population Mengen 📈`,
   },
   {
     id: 'beobachtungen-einer-teil-population-zuordnen',

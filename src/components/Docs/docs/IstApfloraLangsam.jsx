@@ -4,7 +4,7 @@ import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Ist apflora langsam?</h1>
+    <h1>Ist apflora langsam? 🐌</h1>
     <DokuDate>18.04.2019</DokuDate>
     <p>Normalerweise sollte apflora nicht langsam wirken.</p>
     <h2>1. Das Problem</h2>

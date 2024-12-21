@@ -5,7 +5,7 @@ import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Art: Auswertung Population Mengen</h1>
+    <h1>Art: Auswertung Population Mengen 📈</h1>
     <DokuDate>27.03.2020 (Ebene Population ergänzt am 31.3.2023)</DokuDate>
     <h3>Rahmen-Bedingungen</h3>
     <ul>
