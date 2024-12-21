@@ -1,7 +1,7 @@
 export const menus = [
   {
     id: 'was-kann-man-mit-apflora-machen',
-    label: `Was kann man mit apflora.ch machen?`,
+    label: `Was kann man mit apflora.ch machen? 💪`,
   },
   {
     id: 'technische-voraussetzungen',

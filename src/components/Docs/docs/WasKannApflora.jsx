@@ -5,7 +5,7 @@ import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Was kann man mit apflora.ch machen?</h1>
+    <h1>Was kann man mit apflora.ch machen? 💪</h1>
     <DokuDate>20.12.2024</DokuDate>
     <h3>Arten verwalten</h3>
     <ul>
