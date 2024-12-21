@@ -69,5 +69,13 @@ export const Component = memo(() => (
       bei der Implementation der Mobil-Navigation in die normale Navigation
       (Navigationsbaum bzw. Bookmarks & Navigationslisten) gezügelt.
     </p>
+    <p>
+      Die folgenden Oberflächen bleiben dem Desktop vorbehalten, weil sie auf
+      kleinen Bildschirmen keinen Sinn machen:
+    </p>
+    <ul>
+      <li>EK-Planung</li>
+      <li>Strukturbaum 2, Daten 2, Filter 2</li>
+    </ul>
   </>
 ))
