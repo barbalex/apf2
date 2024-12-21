@@ -21,7 +21,7 @@ export const menus = [
   },
   {
     id: 'navigation',
-    label: `Navigation`,
+    label: `Navigation 📱💻`,
   },
   {
     id: 'ist-apflora-langsam',
@@ -77,11 +77,11 @@ export const menus = [
   },
   {
     id: 'karte-massstab',
-    label: `Karte: Massstab`,
+    label: `Karte: Massstab 📏`,
   },
   {
     id: 'karte-drucken',
-    label: `Karte: Drucken`,
+    label: `Karte: Drucken 🖨`,
   },
   {
     id: 'gedaechtnis',
@@ -89,7 +89,7 @@ export const menus = [
   },
   {
     id: 'dateien',
-    label: `Dateien anfügen`,
+    label: `Dateien anfügen 📸`,
   },
   {
     id: 'koordinaten',
@@ -117,7 +117,7 @@ export const menus = [
   },
   {
     id: 'daten-sichern',
-    label: `Daten sichern`,
+    label: `Daten sichern 🔒`,
   },
   {
     id: 'daten-wiederherstellen',

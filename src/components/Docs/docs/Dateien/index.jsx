@@ -4,7 +4,7 @@ import { DokuDate } from '../../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Dateien anfügen</h1>
+    <h1>Dateien anfügen 📸</h1>
     <DokuDate>21.12.2024</DokuDate>
     <p>Wurde am 27.05.2019 eingeführt.</p>
     <p>

@@ -4,7 +4,7 @@ import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Karte: Drucken</h1>
+    <h1>Karte: Drucken 🖨</h1>
     <DokuDate>14.09.2019</DokuDate>
     <p>Auf der Karte gibt es zwei Schaltflächen, um:</p>
     <ol>

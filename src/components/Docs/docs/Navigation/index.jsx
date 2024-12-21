@@ -3,7 +3,7 @@ import { DokuDate, Code } from '../../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Navigation</h1>
+    <h1>Navigation 📱💻</h1>
     <DokuDate>20.12.2024</DokuDate>
     <p>
       Früher war apflora primär für die Arbeit auf Desktops ausgelegt. Ende 2024

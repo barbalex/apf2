@@ -8,7 +8,7 @@ import mapScaleSet from './mapScaleSet.png'
 
 export const Component = memo(() => (
   <>
-    <h1>Karte: Massstab</h1>
+    <h1>Karte: Massstab 📏</h1>
     <DokuDate>18.04.2019</DokuDate>
     <p>Wurde am 14.09.2018 eingeführt.</p>
     <p>
