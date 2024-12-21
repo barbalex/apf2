@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
@@ -9,7 +10,7 @@ export const Component = memo(() => (
     <ul>
       <li>
         Die <strong>Anwendung</strong> ist hier:{' '}
-        <a href="https://apflora.ch/Daten">https://apflora.ch/Daten</a>
+        <Link to="/Daten">https://apflora.ch/Daten</Link>
       </li>
       <li>
         Ihr braucht ein <strong>Login</strong>. Das wird von Topos vergeben,

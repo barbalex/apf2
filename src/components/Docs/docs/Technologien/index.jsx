@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../../DesktopDocs.jsx'
 // import beziehungen from './beziehungen.png'
@@ -16,14 +17,13 @@ export const Component = memo(() => (
       </li>
       <li>
         Die <strong>App</strong> bzw. das Frontend ist auf{' '}
-        <a href="//apflora.ch">apflora.ch</a> erreichbar. Sie läuft serverless
-        auf{' '}
+        <Link to="/">apflora.ch</Link> erreichbar. Sie läuft serverless auf{' '}
         <a
-          href="https://vercel.com"
+          href="https://www.linode.com/"
           target="_blank"
           rel="noreferrer"
         >
-          vercel
+          Akamai
         </a>
       </li>
     </ol>
@@ -64,7 +64,7 @@ export const Component = memo(() => (
           </a>{' '}
           in Form von{' '}
           <a
-            href="https://github.com/graphile/postgraphile"
+            href="https://github.com/graphile/crystal"
             target="_blank"
             rel="noreferrer"
           >

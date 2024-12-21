@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
@@ -15,7 +16,7 @@ export const Component = memo(() => (
     <p>
       Sporadisch wird die Datenbank auf Entwicklungs-PC&#39;s aus einer
       Sicherung neu hergestellt{' '}
-      <a href="../daten-wiederherstellen">(Anleitung)</a>. Das dient einerseits
+      <Link to="/Dokumentation/daten-wiederherstellen">(Anleitung)</Link>. Das dient einerseits
       dem Unterhalt der Anwendung: Entwickelt wird auf einer lokalen Kopie.
       Gleichzeitig werden so Sicherung und Wiederherstellung getestet.
     </p>

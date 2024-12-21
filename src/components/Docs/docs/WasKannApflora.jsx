@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
@@ -34,23 +35,20 @@ export const Component = memo(() => (
         innerhalb des Kantons Zürich und im nahen Umfeld
       </li>
       <li>
-        Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung
-        per mail an InfoFlora gemeldet werden{' '}
+        Von Info Flora bezogene Beobachtungen können korrigiert und die Änderung
+        per mail an InfoFlora gemeldet werden&nbsp;
         <a href="/Dokumentation/falsch-bestimmte-beobachtungen/">(Anleitung)</a>
       </li>
       <li>
-        Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons
-        Zürich
-      </li>
-      <li>
-        Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer
-        Datenstruktur
+        Alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
       </li>
       <li>
         Beobachtungen von beliebigen (synonymen) Taxa der selben Art zuordnen
       </li>
       <li>
-        <a href="./docs/beobZuordnen">Anleitung</a>
+        <Link to="/Dokumentation/beobachtungen-einer-teil-population-zuordnen">
+          Anleitung
+        </Link>
       </li>
     </ul>
     <h3>Auf Karten darstellen</h3>

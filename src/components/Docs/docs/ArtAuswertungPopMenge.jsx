@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
@@ -27,7 +28,8 @@ export const Component = memo(() => (
           <li>nur Pop und TPop mit den Stati 100, 200, 201</li>
           <li>
             nur für den AP-Bericht relevante TPop Mehr zu der Historisierung von
-            Art, Pop und TPop <a href="./historisierung">hier</a>.
+            Art, Pop und TPop{' '}
+            <Link to="/Dokumentation/historisierung">hier</Link>.
           </li>
         </ul>
       </li>

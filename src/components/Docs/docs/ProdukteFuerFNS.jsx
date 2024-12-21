@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
@@ -14,17 +15,11 @@ export const Component = memo(() => (
         <br />
         Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von
         soeben angesäten, noch nicht etablierten Teilpopulationen) exportiert.
-        Siehe <a href="../info-flora-export">Info-Flora-Export</a>
+        Siehe{' '}
+        <Link to="/Dokumentation/info-flora-export">Info-Flora-Export</Link>
       </li>
       <li>
-        Teilpopulationen, Kontrollen und Massnahmen für die Anzeige in GIS und{' '}
-        <a
-          href="https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/web_gis.html"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Web-GIS BUN
-        </a>
+        Teilpopulationen, Kontrollen und Massnahmen für die Anzeige in GIS
       </li>
     </ul>
   </>
