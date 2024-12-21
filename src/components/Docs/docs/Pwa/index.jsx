@@ -6,7 +6,7 @@ import installieren from './installieren.png'
 export const Component = memo(() => (
   <>
     <h1>Progressive Web App</h1>
-    <DokuDate>27.12.2021</DokuDate>
+    <DokuDate>21.12.2024</DokuDate>
     <p>
       apflora.ch ist eine{' '}
       <a
@@ -19,41 +19,38 @@ export const Component = memo(() => (
       (PWA).
     </p>
     <p>
-      &quot;Progressive Web Apps&quot; sind Web-Apps und werden für Browser
-      entwickelt. Weil sie einige zusätzliche Anforderungen erfüllen, können sie
-      je länger je weniger von &quot;normalen&quot; Apps unterschieden werden.
+      &quot;Progressive Web Apps&quot; sind für den Browser entwickelte
+      Web-Applikationen. Weil sie einige zusätzliche Anforderungen erfüllen,
+      können sie je länger je weniger von &quot;normalen&quot; Applikationen
+      unterschieden werden.
     </p>
     <p>
       <strong>Was ist der Unterschied zu einer gewöhnlichen Web-App?</strong>
     </p>
     <ul>
       <li>
-        Sie können apflora auf Desktop/Startseite platzieren bzw.
-        &quot;installieren&quot;.
+        Sie können apflora &quot;installieren&quot; (müssen aber nicht)
         <ul>
           <li>
-            In Chrome auf PC und Mac öffnen Sie dazu das Menü ganz oben rechts:
-            <br />
-            <img
-              src={installieren}
-              alt="installieren"
-            />
-            <br />
-            In der URL-Zeile finden Sie dafür ein Symbol.
+            Wie, hängt vom Browser ab und kann im gleichen Browser auch von Zeit
+            zu Zeit ändern 🙄
+          </li>
+          <li>
+            In Chrome auf PC finden Sie in der URL-Zeile rechts dafür ein Symbol
           </li>
           <li>
             Auf Android werden Sie von Chrome gefragt, ob sie apflora auf dem
-            Startbildschirm platzieren wollen.
+            Startbildschirm platzieren bzw. installieren wollen
           </li>
         </ul>
       </li>
       <li>
         Danach hat apflora eine eigene Verknüpfung und startet ausserhalb des
-        Browsers in einem eigenen Fenster, ohne URL-Zeile.
+        Browsers in einem eigenen Fenster, ohne URL-Zeile
       </li>
       <li>
         Auch apflora-Links sollen bald mit der installierten Version geöffnet
-        werden (funktioniert auf Android schon).
+        werden (funktioniert auf Android schon)
       </li>
     </ul>
     <p>
@@ -63,8 +60,8 @@ export const Component = memo(() => (
     </p>
     <ul>
       <li>
-        Die App funktioniert auf allen Bertriebssystemen und auf allen Geräten
-        mit modernem Browser
+        Die App funktioniert auf allen Geräten mit modernem Browser, unabhängig
+        vom Betriebssystem
       </li>
       <li>Statt die App zu installieren, müssen Sie nur apflora.ch besuchen</li>
       <li>Updates erfolgen automatisch</li>

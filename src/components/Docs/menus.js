@@ -85,7 +85,7 @@ export const menus = [
   },
   {
     id: 'gedaechtnis',
-    label: `apflora erinnert sich an euch`,
+    label: `Big apflora is watching you 😉`,
   },
   {
     id: 'dateien',
@@ -129,7 +129,7 @@ export const menus = [
   },
   {
     id: 'geschichte',
-    label: `Entstehungs-Geschichte`,
+    label: `Entstehungs-Geschichte 🚀`,
   },
   {
     id: 'open-source',

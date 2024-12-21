@@ -109,7 +109,6 @@ export const MobxStore = types
     tree: types.optional(Tree, defaultTree),
     ekPlan: types.optional(EkPlan, defaultEkPlan),
     showDeletions: types.optional(types.boolean, false),
-    dokuFilter: types.optional(types.union(types.string, types.number), ''),
     map: types.optional(Map, defaultMap),
     sortedBeobFields: types.optional(
       types.array(types.string),
@@ -167,9 +166,6 @@ export const MobxStore = types
     },
     removeNotification(note) {
       self.notifications = self.notifications.filter((n) => n.key !== note)
-    },
-    setDokuFilter(val) {
-      self.dokuFilter = val
     },
     setShowDeletions(val) {
       self.showDeletions = val

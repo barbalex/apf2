@@ -2,8 +2,9 @@ import { useCallback } from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
+import Highlighter from 'react-highlight-words'
 
-export const MenuItem = ({ node }) => {
+export const MenuItem = ({ node, highlightSearchString }) => {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
 
@@ -25,7 +26,12 @@ export const MenuItem = ({ node }) => {
         id={id}
       >
         <ListItemText onClick={onClickMenuItem}>
-          {label ?? '(Titel fehlt)'}
+          {highlightSearchString ?
+            <Highlighter
+              searchWords={[highlightSearchString]}
+              textToHighlight={label?.toString?.() ?? '(Titel fehlt)'}
+            />
+          : (label ?? '(Titel fehlt)')}
         </ListItemText>
       </ListItemButton>
     </>

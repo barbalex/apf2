@@ -4,7 +4,7 @@ import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>apflora erinnert sich an euch</h1>
+    <h1>Big apflora is watching you 😉</h1>
     <DokuDate>24.06.2022</DokuDate>
     <p>Wurde am 8.7.2019 eingeführt.</p>
     <p>
