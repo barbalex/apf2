@@ -25,7 +25,6 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
 export const Filter = ({ filter, setFilter }) => {
   const onChange = useCallback((e) => setFilter(e.target.value), [setFilter])
   const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
-  console.log('Filter, filter:', filter)
 
   return (
     <FormControl
