@@ -1,6 +1,8 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
+import { getSnapshot } from 'mobx-state-tree'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
@@ -10,33 +12,20 @@ export const BeobNichtZuzuordnenFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 
-    const url = [
-      'Projekte',
-      projekt.id,
-      'Arten',
-      ap.id,
-      'nicht-zuzuordnende-Beobachtungen',
-    ]
-
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 4 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'nicht-zuzuordnende-Beobachtungen',
-      ).length > 0
+    const isOpen = store.tree.openNodes.some((n) =>
+      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+    )
 
     const node = {
-      nodeType: 'folder',
-      menuType: 'beobNichtZuzuordnenFolder',
-      id: `${ap.id}BeobNichtZuzuordnenFolder`,
-      tableId: ap.id,
-      urlLabel: 'nicht-zuzuordnende-Beobachtungen',
+      nodeType: menu.treeNodeType,
+      menuType: menu.treeMenuType,
+      id: menu.treeId,
+      tableId: menu.treeTableId,
+      urlLabel: menu.id,
       label: menu.label,
+      url: menu.treeUrl,
+      hasChildren: menu.hasChildren,
       labelLeftElements: menu.labelLeftElements,
-      url,
-      hasChildren: menu.count > 0,
     }
 
     return (

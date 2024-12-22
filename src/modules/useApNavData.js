@@ -394,7 +394,19 @@ export const useApNavData = (props) => {
         {
           id: 'nicht-zuzuordnende-Beobachtungen',
           label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredBeobsNichtZuzuordnenCount}/${beobsNichtZuzuordnenCount}`})`,
-          count: beobsNichtZuzuordnenCount,
+          // count: beobsNichtZuzuordnenCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'beobNichtZuzuordnenFolder',
+          treeId: `${apId}BeobNichtZuzuordnenFolder`,
+          treeTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'nicht-zuzuordnende-Beobachtungen',
+          ],
+          hasChildren: true,
           labelLeftElements:
             showBeobnichtzuzuordnenIcon ?
               [BeobnichtzuzuordnenMapIcon]
