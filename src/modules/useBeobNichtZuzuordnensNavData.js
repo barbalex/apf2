@@ -119,7 +119,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
           label: p.label,
           treeNodeType: 'table',
           treeMenuType: 'beobNichtZuzuordnen',
-          treeId: `${apId}beobNichtZuzuordnenFolder`,
+          treeId: p.id,
           treeParentId: apId,
           treeParentTableId: apId,
           treeUrl: [
