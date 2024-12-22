@@ -7,6 +7,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { BeobNichtZuzuordnens } from './BeobNichtZuzuordnens.jsx'
+import { TableFolder } from '../../../../../../TableFolder/index.jsx'
 
 export const BeobNichtZuzuordnenFolder = memo(
   observer(({ projekt, ap, menu }) => {
@@ -35,10 +36,11 @@ export const BeobNichtZuzuordnenFolder = memo(
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <BeobNichtZuzuordnens
-              projekt={projekt}
-              ap={ap}
-            />
+            <TableFolder menu={menu} />
+            // <BeobNichtZuzuordnens
+            //   projekt={projekt}
+            //   ap={ap}
+            // />
           )}
         </TransitionGroup>
       </>
