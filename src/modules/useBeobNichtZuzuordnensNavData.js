@@ -117,6 +117,20 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
         (p) => ({
           id: p.id,
           label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'beobNichtZuzuordnen',
+          treeId: `${apId}beobNichtZuzuordnenFolder`,
+          treeParentId: apId,
+          treeParentTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'nicht-zuzuordnende-Beobachtungen',
+            p.id,
+          ],
+          hasChildren: false,
           labelLeftElements:
             showBeobnichtzuzuordnenIcon && beobId === p.id ?
               [BeobnichtzuzuordnenFilteredMapIcon]

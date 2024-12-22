@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import { Row } from './Row.jsx'
 
-export const ChildlessFolder = ({ menu }) => {
+export const ChildlessFolder = memo(({ menu }) => {
   const node = {
     nodeType: menu.treeNodeType,
     menuType: menu.treeMenuType,
@@ -13,4 +14,4 @@ export const ChildlessFolder = ({ menu }) => {
   }
 
   return <Row node={node} />
-}
+})
