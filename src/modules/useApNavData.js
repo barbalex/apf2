@@ -411,6 +411,12 @@ export const useApNavData = (props) => {
         {
           id: 'Auswertung',
           label: `Auswertung`,
+          treeNodeType: 'folder',
+          treeMenuType: 'auswertungFolder',
+          treeId: `${apId}AuswertungFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Auswertung'],
+          hasChildren: false,
         },
         {
           id: 'Dateien',
