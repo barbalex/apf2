@@ -199,8 +199,7 @@ export const insertDataset = async ({
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
-    const urlWithoutJahr = [...url]
-    urlWithoutJahr.pop()
+    const urlWithoutJahr = url.toSpliced(-1)
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {

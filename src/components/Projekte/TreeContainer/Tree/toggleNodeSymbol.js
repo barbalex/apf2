@@ -33,8 +33,7 @@ export const toggleNodeSymbol = ({
     ) {
       // when a user closes a folder in the active node path
       // the active node should switch to the node's parent
-      const newActiveNodeArray = [...node.url]
-      newActiveNodeArray.pop()
+      const newActiveNodeArray = node.url.toSpliced(-1)
       navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
     }
   } else {

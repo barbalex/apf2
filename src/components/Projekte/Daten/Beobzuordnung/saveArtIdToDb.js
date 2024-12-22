@@ -41,10 +41,8 @@ export const saveArtIdToDb = async ({ value, row, client, store, search }) => {
   if (!newApId) return
 
   const newANA = [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]]
-  const oldParentNodeUrl = [...aNA]
-  oldParentNodeUrl.pop()
-  const oldGParentNodeUrl = [...oldParentNodeUrl]
-  oldGParentNodeUrl.pop()
+  const oldParentNodeUrl = aNA.toSpliced(-1)
+  const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
 
   // need to close:
   // - beobNode

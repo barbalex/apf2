@@ -59,14 +59,11 @@ export const saveTpopIdToDb = async ({
       'Beobachtungen',
       id,
     ]
-    const oldParentNodeUrl = [...aNA]
-    oldParentNodeUrl.pop()
-    const oldGParentNodeUrl = [...oldParentNodeUrl]
-    oldGParentNodeUrl.pop()
-    const oldGGParentNodeUrl = [...oldGParentNodeUrl]
-    oldGGParentNodeUrl.pop()
-    const oldGGGParentNodeUrl = [...oldGGParentNodeUrl]
-    oldGGGParentNodeUrl.pop()
+    const oldParentNodeUrl = aNA.toSpliced(-1)
+    const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
+    const oldGGParentNodeUrl = oldGParentNodeUrl.toSpliced(-1)
+    const oldGGGParentNodeUrl = oldGGParentNodeUrl.toSpliced(-1)
+
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(
@@ -184,16 +181,12 @@ export const saveTpopIdToDb = async ({
       'nicht-beurteilte-Beobachtungen',
       id,
     ]
-    const oldParentNodeUrl = [...aNA]
-    oldParentNodeUrl.pop()
-    const oldGParentNodeUrl = [...oldParentNodeUrl]
-    oldGParentNodeUrl.pop()
-    const oldGGParentNodeUrl = [...oldGParentNodeUrl]
-    oldGGParentNodeUrl.pop()
-    const oldGGGParentNodeUrl = [...oldGGParentNodeUrl]
-    oldGGGParentNodeUrl.pop()
-    const oldGGGGParentNodeUrl = [...oldGGGParentNodeUrl]
-    oldGGGGParentNodeUrl.pop()
+    const oldParentNodeUrl = aNA.toSpliced(-1)
+    const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
+    const oldGGParentNodeUrl = oldGParentNodeUrl.toSpliced(-1)
+    const oldGGGParentNodeUrl = oldGGParentNodeUrl.toSpliced(-1)
+    const oldGGGGParentNodeUrl = oldGGGParentNodeUrl.toSpliced(-1)
+
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(

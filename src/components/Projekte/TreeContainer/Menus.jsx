@@ -410,6 +410,7 @@ export const Menus = memo(
         const jahr = firstElementChild.getAttribute('data-jahr')
         const actions = {
           insert() {
+            const urlForInsert = [...url]
             if (nodeType === 'table') {
               url.pop()
             }
@@ -420,7 +421,7 @@ export const Menus = memo(
             insertDataset({
               tablePassed: table,
               parentId: parentId || id,
-              url,
+              url: urlForInsert,
               menuType,
               singleElementName,
               id,
