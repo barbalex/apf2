@@ -16,7 +16,6 @@ import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnenFolder/index.jsx
 import { Qk } from './Qk.jsx'
 import { QkWaehlen } from './QkWaehlen.jsx'
 import { AuswertungFolder } from './AuswertungFolder.jsx'
-import { DateienFolder } from './DateienFolder.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { ChildlessFolder } from '../../../../../ChildlessFolder.jsx'
@@ -164,11 +163,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={auswertungMenu}
           />
-          <DateienFolder
-            projekt={projekt}
-            ap={ap}
-            menu={dateienMenu}
-          />
+          <ChildlessFolder menu={dateienMenu} />
           <ChildlessFolder menu={historienMenu} />
         </Container>
       )}
