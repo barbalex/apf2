@@ -1,13 +1,11 @@
-import lowerFirst from 'lodash/lowerFirst'
+import { Row } from './Row.jsx'
 
-import { Row } from '../../../../../Row.jsx'
-
-export const HistorienFolder = ({ projekt, ap, menu }) => {
+export const ChildlessFolder = ({ menu }) => {
   const node = {
     nodeType: menu.treeNodeType,
     menuType: menu.treeMenuType,
     id: menu.treeId,
-    tableId: ap.id,
+    tableId: menu.treeTableId,
     urlLabel: menu.id,
     label: menu.label,
     url: menu.treeUrl,

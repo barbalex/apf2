@@ -20,6 +20,7 @@ import { DateienFolder } from './DateienFolder.jsx'
 import { HistorienFolder } from './HistorienFolder.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
+import { ChildlessFolder } from '../../../../../ChildlessFolder.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -169,12 +170,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={dateienMenu}
           />
-          <HistorienFolder
-            projekt={projekt}
-            ap={ap}
-            menu={historienMenu}
-            parentUrl={navData?.url}
-          />
+          <ChildlessFolder menu={historienMenu} />
         </Container>
       )}
     </Transition>
