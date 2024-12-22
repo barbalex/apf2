@@ -13,8 +13,6 @@ import { EkfrequenzFolder } from './EkfrequenzFolder/index.jsx'
 import { EkZaehleinheitFolder } from './EkzaehleinheitFolder/index.jsx'
 import { BeobNichtBeurteiltFolder } from './BeobNichtBeurteiltFolder/index.jsx'
 import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnenFolder/index.jsx'
-import { Qk } from './Qk.jsx'
-import { QkWaehlen } from './QkWaehlen.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { ChildlessFolder } from '../../../../../ChildlessFolder.jsx'
@@ -65,6 +63,14 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
   const beobNichtZuzuordnenMenu = useMemo(
     () =>
       navData?.menus.find((m) => m.id === 'nicht-zuzuordnende-Beobachtungen'),
+    [navData],
+  )
+  const qkMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Qualitätskontrollen'),
+    [navData],
+  )
+  const qkWaehlenMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Qualitätskontrollen-wählen'),
     [navData],
   )
   const auswertungMenu = useMemo(
@@ -149,14 +155,8 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={beobNichtZuzuordnenMenu}
           />
-          <Qk
-            projekt={projekt}
-            ap={ap}
-          />
-          <QkWaehlen
-            projekt={projekt}
-            ap={ap}
-          />
+          <ChildlessFolder menu={qkMenu} />
+          <ChildlessFolder menu={qkWaehlenMenu} />
           <ChildlessFolder menu={auswertungMenu} />
           <ChildlessFolder menu={dateienMenu} />
           <ChildlessFolder menu={historienMenu} />

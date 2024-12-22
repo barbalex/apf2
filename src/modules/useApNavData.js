@@ -403,10 +403,28 @@ export const useApNavData = (props) => {
         {
           id: 'Qualitätskontrollen',
           label: `Qualitätskontrollen ausführen`,
+          treeNodeType: 'folder',
+          treeMenuType: 'qkFolder',
+          treeId: `${apId}QkFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Qualitätskontrollen'],
+          hasChildren: false,
         },
         {
           id: 'Qualitätskontrollen-wählen',
           label: `Qualitätskontrollen wählen`,
+          treeNodeType: 'folder',
+          treeMenuType: 'qkWaehlenFolder',
+          treeId: `${apId}QkWaehlenFolder`,
+          treeTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Qualitätskontrollen-wählen',
+          ],
+          hasChildren: false,
         },
         {
           id: 'Auswertung',
