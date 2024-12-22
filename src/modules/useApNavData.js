@@ -420,7 +420,7 @@ export const useApNavData = (props) => {
         {
           id: 'Historien',
           label: `Historien (${historiesCount})`,
-          count: historiesCount,
+          // count: historiesCount,
           treeNodeType: 'folder',
           treeMenuType: 'historienFolder',
           treeId: `${apId}HistorienFolder`,
