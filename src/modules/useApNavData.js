@@ -394,7 +394,6 @@ export const useApNavData = (props) => {
         {
           id: 'nicht-zuzuordnende-Beobachtungen',
           label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredBeobsNichtZuzuordnenCount}/${beobsNichtZuzuordnenCount}`})`,
-          // count: beobsNichtZuzuordnenCount,
           treeNodeType: 'folder',
           treeMenuType: 'beobNichtZuzuordnenFolder',
           treeId: `${apId}BeobNichtZuzuordnenFolder`,
@@ -406,6 +405,8 @@ export const useApNavData = (props) => {
             apId,
             'nicht-zuzuordnende-Beobachtungen',
           ],
+          fetcherName: 'useBeobNichtZuzuordnensNavData',
+          fetcherParams: { apId },
           hasChildren: true,
           labelLeftElements:
             showBeobnichtzuzuordnenIcon ?

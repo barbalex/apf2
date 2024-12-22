@@ -28,6 +28,8 @@ export const BeobNichtZuzuordnenFolder = memo(
       labelLeftElements: menu.labelLeftElements,
     }
 
+    console.log('FetcherName', menu.fetcherName)
+
     return (
       <>
         <Row node={node} />
