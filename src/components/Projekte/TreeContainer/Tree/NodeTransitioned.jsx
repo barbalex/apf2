@@ -3,7 +3,7 @@ import { Transition } from 'react-transition-group'
 
 import { Row } from './Row.jsx'
 
-export const NodeTransitioned = memo(({ menu, inProp }) => {
+export const NodeTransitioned = memo(({ menu, in: inProp }) => {
   const node = {
     nodeType: menu.treeNodeType,
     menuType: menu.treeMenuType,

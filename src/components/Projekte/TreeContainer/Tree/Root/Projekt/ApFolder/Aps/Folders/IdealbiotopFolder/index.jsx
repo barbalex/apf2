@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../Row.jsx'
-import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { NodeTransitioned } from '../../../../../../NodeTransitioned.jsx'
 import { useIdealbiotopNavData } from '../../../../../../../../../../modules/useIdealbiotopNavData.js'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 
@@ -45,17 +45,13 @@ export const IdealbiotopFolder = memo(
       [navData],
     )
 
+    console.log('IdealbiotopFolder', { dateienMenu, isOpen })
+
     return (
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && (
-            <ChildlessFolder
-              projekt={projekt}
-              ap={ap}
-              menu={dateienMenu}
-            />
-          )}
+          {isOpen && <NodeTransitioned menu={dateienMenu} />}
         </TransitionGroup>
       </>
     )
