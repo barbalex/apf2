@@ -47,9 +47,6 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
 
   const ref = useRef(null)
 
-  pop.id === '70d2b98f-4f62-11e7-aebe-d3b09a4611dd' &&
-    console.log('PopFolders', { navData, popmassnberMenu })
-
   return (
     <Transition
       in={inProp}

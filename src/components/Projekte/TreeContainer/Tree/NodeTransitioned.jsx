@@ -21,12 +21,12 @@ export const NodeTransitioned = memo(
 
     const ref = useRef(null)
 
-    console.log('NodeTransitioned, node:', {
-      node,
-      menu,
-      inProp,
-      inPropPassedFromAbove,
-    })
+    // console.log('NodeTransitioned, node:', {
+    //   node,
+    //   menu,
+    //   inProp,
+    //   inPropPassedFromAbove,
+    // })
 
     return (
       <Transition
