@@ -11,14 +11,16 @@ export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
   const isLoading = result?.isLoading
   const error = result?.error
 
-  if (isLoading) return null
-  if (error) return null
+  if (error) {
+    console.log('TableFolder.Fetcher, error:', error)
+    return null
+  }
   if (!navData?.menus?.length) return null
 
-  return navData.menus.map((menuu) => (
+  return navData.menus.map((m) => (
     <ChildlessFolderTransitioned
-      key={menuu.id}
-      menu={menuu}
+      key={m.id}
+      menu={m}
       inProp={inProp}
     />
   ))
