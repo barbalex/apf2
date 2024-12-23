@@ -7,7 +7,6 @@ import { PopberFolder } from './PopberFolder/index.jsx'
 import { PopmassnberFolder } from './PopmassnberFolder/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
-import { ChildlessFolder } from './ChildlessFolder.jsx'
 import { Node } from '../../../../../../../../Node.jsx'
 
 const Container = styled.div`
@@ -79,20 +78,8 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
             pop={pop}
             menu={popmassnberMenu}
           />
-          <ChildlessFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            menu={auswertungMenu}
-            parentUrl={navData?.url}
-          />
-          <ChildlessFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            menu={dateienMenu}
-            parentUrl={navData?.url}
-          />
+          <Node menu={auswertungMenu} />
+          <Node menu={dateienMenu} />
           <Node menu={historienMenu} />
         </Container>
       )}
