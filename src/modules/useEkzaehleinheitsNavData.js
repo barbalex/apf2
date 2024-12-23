@@ -66,9 +66,14 @@ export const useEkzaehleinheitsNavData = (props) => {
   )
   const count = rows.length
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
-  const menus = useMemo(
-    () =>
-      rows.map((p) => ({
+
+  const navData = useMemo(
+    () => ({
+      id: 'EK-Zähleinheiten',
+      listFilter: 'ekzaehleinheit',
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
+      label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      menus: rows.map((p) => ({
         id: p.id,
         label: p.label,
         treeNodeType: 'table',
@@ -79,18 +84,8 @@ export const useEkzaehleinheitsNavData = (props) => {
         treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', p.id],
         hasChildren: false,
       })),
-    [apId, projId, rows],
-  )
-
-  const navData = useMemo(
-    () => ({
-      id: 'EK-Zähleinheiten',
-      listFilter: 'ekzaehleinheit',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
-      label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus,
     }),
-    [apId, count, isLoading, menus, projId, totalCount],
+    [apId, count, isLoading, projId, rows, totalCount],
   )
 
   return { isLoading, error, navData }

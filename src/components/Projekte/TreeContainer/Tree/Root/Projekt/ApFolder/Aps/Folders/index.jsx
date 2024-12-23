@@ -9,7 +9,6 @@ import { ApberFolder } from './ApberFolder/index.jsx'
 import { IdealbiotopFolder } from './IdealbiotopFolder/index.jsx'
 import { ApartFolder } from './ApartFolder/index.jsx'
 import { AssozartFolder } from './AssozartFolder/index.jsx'
-import { EkfrequenzFolder } from './EkfrequenzFolder/index.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
@@ -133,11 +132,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={assozartMenu}
           />
-          <EkfrequenzFolder
-            projekt={projekt}
-            ap={ap}
-            menu={ekfrequenzMenu}
-          />
+          <NodeListFolder menu={ekfrequenzMenu} />
           <NodeListFolder menu={ekzaehleinheitMenu} />
           <NodeListFolder menu={beobNichtBeurteiltMenu} />
           <NodeListFolder menu={beobNichtZuzuordnenMenu} />

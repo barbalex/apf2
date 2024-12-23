@@ -375,13 +375,18 @@ export const useApNavData = (props) => {
         {
           id: 'EK-Frequenzen',
           label: `EK-Frequenzen (${isLoading ? '...' : `${filteredEkfrequenzsCount}/${ekfrequenzsCount}`})`,
-          count: ekfrequenzsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'ekfrequenzFolder',
+          treeId: `${apId}EkfrequenzFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
+          fetcherName: 'useEkfrequenzsNavData',
+          fetcherParams: { apId },
+          hasChildren: !!filteredEkfrequenzsCount,
         },
         {
           id: 'EK-Zähleinheiten',
           label: `EK-Zähleinheiten (${isLoading ? '...' : `${filteredEkzaehleinheitsCount}/${ekzaehleinheitsCount}`})`,
-          // TODO: remove
-          count: ekzaehleinheitsCount,
           treeNodeType: 'folder',
           treeMenuType: 'ekzaehleinheitFolder',
           treeId: `${apId}EkzaehleinheitFolder`,

@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { has } from 'lodash'
 
 export const useEkfrequenzsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -54,12 +55,8 @@ export const useEkfrequenzsNavData = (props) => {
   )
 
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
-  const menus = useMemo(
-    () =>
-      (data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label ?? '(kein Kürzel)',
-      })),
+  const rows = useMemo(
+    () => data?.data?.apById?.ekfrequenzsByApId?.nodes ?? [],
     [data?.data?.apById?.ekfrequenzsByApId?.nodes],
   )
 
@@ -68,10 +65,20 @@ export const useEkfrequenzsNavData = (props) => {
       id: 'EK-Frequenzen',
       listFilter: 'ekfrequenz',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
-      label: `EK-Frequenzen (${isLoading ? '...' : `${menus.length}/${totalCount}`})`,
-      menus,
+      label: `EK-Frequenzen (${isLoading ? '...' : `${rows.length}/${totalCount}`})`,
+      menus: rows.map((p) => ({
+        id: p.id,
+        label: p.label ?? '(kein Kürzel)',
+        treeNodeType: 'table',
+        treeMenuType: 'ekfrequenz',
+        treeId: p.id,
+        treeParentId: apId,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', p.id],
+        hasChildren: false,
+      })),
     }),
-    [apId, isLoading, menus, projId, totalCount],
+    [apId, isLoading, projId, rows, totalCount],
   )
 
   return { isLoading, error, navData }
