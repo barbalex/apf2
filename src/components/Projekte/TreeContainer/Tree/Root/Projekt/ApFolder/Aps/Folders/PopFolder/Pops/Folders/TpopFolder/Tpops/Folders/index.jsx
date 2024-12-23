@@ -6,7 +6,6 @@ import { TpopmassnFolder } from './TpopmassnFolder/index.jsx'
 import { TpopmassnberFolder } from './TpopmassnberFolder/index.jsx'
 import { TpopfeldkontrFolder } from './TpopfeldkontrFolder/index.jsx'
 import { TpopfreiwkontrFolder } from './TpopfreiwkontrFolder/index.jsx'
-import { TpopberFolder } from './TpopberFolder/index.jsx'
 import { useTpopNavData } from '../../../../../../../../../../../../../../../modules/useTpopNavData.js'
 import { transitionStyles } from '../../../../../../../../../../../Row.jsx'
 import { Node } from '../../../../../../../../../../../Node.jsx'
@@ -107,13 +106,7 @@ export const TpopFolders = memo(({ projekt, ap, pop, tpop, in: inProp }) => {
             tpop={tpop}
             menu={tpopfreiwkontrMenu}
           />
-          <TpopberFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            tpop={tpop}
-            menu={tpopberMenu}
-          />
+          <NodeListFolder menu={tpopberMenu} />
           <NodeListFolder menu={beobZugeordnetMenu} />
           <Node menu={ekMenu} />
           <Node menu={dateienMenu} />
