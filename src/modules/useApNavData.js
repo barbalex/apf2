@@ -356,7 +356,14 @@ export const useApNavData = (props) => {
         {
           id: 'AP-Berichte',
           label: `AP-Berichte (${isLoading ? '...' : `${filteredApbersCount}/${apbersCount}`})`,
-          count: apbersCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'apberFolder',
+          treeId: `${apId}ApberFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte'],
+          fetcherName: 'useApbersNavData',
+          fetcherParams: { apId },
+          hasChildren: !!filteredApbersCount,
         },
         {
           id: 'Idealbiotop',
@@ -365,7 +372,14 @@ export const useApNavData = (props) => {
         {
           id: 'Taxa',
           label: `Taxa (${isLoading ? '...' : `${filteredApartsCount}/${apartsCount}`})`,
-          count: apartsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'apartFolder',
+          treeId: `${apId}ApartFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa'],
+          fetcherName: 'useApartsNavData',
+          fetcherParams: { apId },
+          hasChildren: !!filteredApartsCount,
         },
         {
           id: 'assoziierte-Arten',

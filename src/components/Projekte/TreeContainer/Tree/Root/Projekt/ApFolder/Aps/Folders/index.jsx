@@ -5,9 +5,7 @@ import { Transition } from 'react-transition-group'
 import { PopFolder } from './PopFolder/index.jsx'
 import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
 import { AperfkritFolder } from './AperfkritFolder/index.jsx'
-import { ApberFolder } from './ApberFolder/index.jsx'
 import { IdealbiotopFolder } from './IdealbiotopFolder/index.jsx'
-import { ApartFolder } from './ApartFolder/index.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
@@ -112,20 +110,12 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={apErfkritsMenu}
           />
-          <ApberFolder
-            projekt={projekt}
-            ap={ap}
-            menu={apBerMenu}
-          />
+          <NodeListFolder menu={apBerMenu} />
           <IdealbiotopFolder
             projekt={projekt}
             ap={ap}
           />
-          <ApartFolder
-            projekt={projekt}
-            ap={ap}
-            menu={apArtMenu}
-          />
+          <NodeListFolder menu={apArtMenu} />
           <NodeListFolder menu={assozartMenu} />
           <NodeListFolder menu={ekfrequenzMenu} />
           <NodeListFolder menu={ekzaehleinheitMenu} />
