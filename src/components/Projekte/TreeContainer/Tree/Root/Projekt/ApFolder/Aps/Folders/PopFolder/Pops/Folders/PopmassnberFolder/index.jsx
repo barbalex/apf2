@@ -10,15 +10,14 @@ export const PopmassnberFolder = memo(
   observer(({ projekt, ap, pop, menu }) => {
     const store = useContext(MobxContext)
 
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen' &&
-          n[5] === pop.id &&
-          n[6] === 'Massnahmen-Berichte',
-      ).length > 0
+    const isOpen = store.tree.openNodes.some(
+      (n) =>
+        n[1] === projekt.id &&
+        n[3] === ap.id &&
+        n[4] === 'Populationen' &&
+        n[5] === pop.id &&
+        n[6] === 'Massnahmen-Berichte',
+    )
 
     const node = {
       nodeType: 'folder',
