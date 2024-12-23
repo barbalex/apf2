@@ -3,7 +3,6 @@ import { Transition } from 'react-transition-group'
 import styled from '@emotion/styled'
 
 import { TpopmassnFolder } from './TpopmassnFolder/index.jsx'
-import { TpopmassnberFolder } from './TpopmassnberFolder/index.jsx'
 import { TpopfeldkontrFolder } from './TpopfeldkontrFolder/index.jsx'
 import { TpopfreiwkontrFolder } from './TpopfreiwkontrFolder/index.jsx'
 import { useTpopNavData } from '../../../../../../../../../../../../../../../modules/useTpopNavData.js'
@@ -85,13 +84,7 @@ export const TpopFolders = memo(({ projekt, ap, pop, tpop, in: inProp }) => {
             tpop={tpop}
             menu={tpopmassnMenu}
           />
-          <TpopmassnberFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            tpop={tpop}
-            menu={tpopmassnberMenu}
-          />
+          <NodeListFolder menu={tpopmassnberMenu} />
           <TpopfeldkontrFolder
             projekt={projekt}
             ap={ap}
