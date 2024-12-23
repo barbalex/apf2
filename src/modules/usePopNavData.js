@@ -188,7 +188,22 @@ export const usePopNavData = (props) => {
         {
           id: 'Kontroll-Berichte',
           label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredPopbersCount}/${popbersCount}`})`,
-          count: popbersCount,
+          treeNodeType: 'folder',
+          treeMenuType: `popberFolder`,
+          treeId: `${popId}PopberFolder`,
+          treeTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Kontroll-Berichte',
+          ],
+          fetcherName: 'usePopbersNavData',
+          fetcherParams: { projId, apId, popId },
+          hasChildren: !!filteredPopbersCount,
         },
         {
           id: 'Massnahmen-Berichte',
