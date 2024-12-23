@@ -380,13 +380,20 @@ export const useApNavData = (props) => {
         {
           id: 'EK-Zähleinheiten',
           label: `EK-Zähleinheiten (${isLoading ? '...' : `${filteredEkzaehleinheitsCount}/${ekzaehleinheitsCount}`})`,
+          // TODO: remove
           count: ekzaehleinheitsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'ekzaehleinheitFolder',
+          treeId: `${apId}EkzaehleinheitFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
+          fetcherName: 'useEkzaehleinheitsNavData',
+          fetcherParams: { apId },
+          hasChildren: !!filteredEkzaehleinheitsCount,
         },
         {
           id: 'nicht-beurteilte-Beobachtungen',
           label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredBeobsNichtBeurteiltCount}/${beobsNichtBeurteiltCount}`})`,
-          // TODO: remove
-          count: beobsNichtBeurteiltCount,
           treeNodeType: 'folder',
           treeMenuType: 'beobNichtBeurteiltFolder',
           treeId: `${apId}BeobNichtBeurteiltFolder`,

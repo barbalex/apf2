@@ -71,8 +71,15 @@ export const useEkzaehleinheitsNavData = (props) => {
       rows.map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'ekzaehleinheit',
+        treeId: p.id,
+        treeParentId: apId,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', p.id],
+        hasChildren: false,
       })),
-    [rows],
+    [apId, projId, rows],
   )
 
   const navData = useMemo(
