@@ -8,7 +8,6 @@ import { AperfkritFolder } from './AperfkritFolder/index.jsx'
 import { ApberFolder } from './ApberFolder/index.jsx'
 import { IdealbiotopFolder } from './IdealbiotopFolder/index.jsx'
 import { ApartFolder } from './ApartFolder/index.jsx'
-import { AssozartFolder } from './AssozartFolder/index.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
@@ -127,11 +126,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={apArtMenu}
           />
-          <AssozartFolder
-            projekt={projekt}
-            ap={ap}
-            menu={assozartMenu}
-          />
+          <NodeListFolder menu={assozartMenu} />
           <NodeListFolder menu={ekfrequenzMenu} />
           <NodeListFolder menu={ekzaehleinheitMenu} />
           <NodeListFolder menu={beobNichtBeurteiltMenu} />

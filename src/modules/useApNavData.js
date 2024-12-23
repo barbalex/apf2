@@ -370,7 +370,14 @@ export const useApNavData = (props) => {
         {
           id: 'assoziierte-Arten',
           label: `Assoziierte Arten (${isLoading ? '...' : `${filteredAssozartsCount}/${assozartsCount}`})`,
-          count: assozartsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'assozartFolder',
+          treeId: `${apId}AssozartFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten'],
+          fetcherName: 'useAssozartsNavData',
+          fetcherParams: { apId },
+          hasChildren: !!filteredAssozartsCount,
         },
         {
           id: 'EK-Frequenzen',
