@@ -1,6 +1,5 @@
 import { memo, useState, useEffect } from 'react'
 
-import { ChildlessFolderTransitioned } from '../ChildlessFolderTransitioned.jsx'
 import { Fetcher } from './Fetcher.jsx'
 
 export const TableFolder = memo(({ menu, in: inProp }) => {

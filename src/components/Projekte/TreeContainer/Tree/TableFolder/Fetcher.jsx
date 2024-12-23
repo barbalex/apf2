@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react'
 
 import { ChildlessFolderTransitioned } from '../ChildlessFolderTransitioned.jsx'
 
-export const Fetcher = memo(({ menu, in: inProp, fetcherModule }) => {
+export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
   const { fetcherName, fetcherParams } = menu
 
   const result = fetcherModule?.[fetcherName]?.(fetcherParams)
@@ -10,15 +10,6 @@ export const Fetcher = memo(({ menu, in: inProp, fetcherModule }) => {
   const navData = result?.navData
   const isLoading = result?.isLoading
   const error = result?.error
-
-  console.log('TableFolderFetcher', {
-    menu,
-    fetcherModule,
-    fetcherParams,
-    navData,
-    isLoading,
-    error,
-  })
 
   if (isLoading) return null
   if (error) return null
