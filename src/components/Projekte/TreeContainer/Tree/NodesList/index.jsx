@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react'
 
 import { Fetcher } from './Fetcher.jsx'
 
-export const TableFolder = memo(({ menu, in: inProp }) => {
+export const NodesList = memo(({ menu, in: inProp }) => {
   const { fetcherName, fetcherParams } = menu
 
   const [fetcherModule, setFetcherModule] = useState(null)

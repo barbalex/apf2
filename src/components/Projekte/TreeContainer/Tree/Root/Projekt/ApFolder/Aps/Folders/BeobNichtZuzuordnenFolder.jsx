@@ -6,7 +6,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { Row } from '../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../mobxContext.js'
-import { TableFolder } from '../../../../../TableFolder/index.jsx'
+import { NodesList } from '../../../../../NodesList/index.jsx'
 
 export const BeobNichtZuzuordnenFolder = memo(
   observer(({ menu }) => {
@@ -32,7 +32,7 @@ export const BeobNichtZuzuordnenFolder = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && <TableFolder menu={menu} />}
+          {isOpen && <NodesList menu={menu} />}
         </TransitionGroup>
       </>
     )
