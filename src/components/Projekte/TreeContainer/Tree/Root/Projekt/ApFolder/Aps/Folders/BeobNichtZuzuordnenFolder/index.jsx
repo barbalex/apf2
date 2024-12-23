@@ -9,7 +9,7 @@ import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { TableFolder } from '../../../../../../TableFolder/index.jsx'
 
 export const BeobNichtZuzuordnenFolder = memo(
-  observer(({ projekt, ap, menu }) => {
+  observer(({ menu }) => {
     const store = useContext(MobxContext)
 
     const isOpen = store.tree.openNodes.some((n) =>
@@ -27,8 +27,6 @@ export const BeobNichtZuzuordnenFolder = memo(
       hasChildren: menu.hasChildren,
       labelLeftElements: menu.labelLeftElements,
     }
-
-    console.log('FetcherName', menu.fetcherName)
 
     return (
       <>

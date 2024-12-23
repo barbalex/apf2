@@ -150,11 +150,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={beobNichtBeurteiltMenu}
           />
-          <BeobNichtZuzuordnenFolder
-            projekt={projekt}
-            ap={ap}
-            menu={beobNichtZuzuordnenMenu}
-          />
+          <BeobNichtZuzuordnenFolder menu={beobNichtZuzuordnenMenu} />
           <ChildlessFolder menu={qkMenu} />
           <ChildlessFolder menu={qkWaehlenMenu} />
           <ChildlessFolder menu={auswertungMenu} />
