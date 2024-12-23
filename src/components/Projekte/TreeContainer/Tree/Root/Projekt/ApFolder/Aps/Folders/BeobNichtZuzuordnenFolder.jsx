@@ -4,9 +4,9 @@ import { TransitionGroup } from 'react-transition-group'
 import isEqual from 'lodash/isEqual'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { Row } from '../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../mobxContext.js'
-import { TableFolder } from '../../../../../../TableFolder/index.jsx'
+import { Row } from '../../../../../Row.jsx'
+import { MobxContext } from '../../../../../../../../../mobxContext.js'
+import { TableFolder } from '../../../../../TableFolder/index.jsx'
 
 export const BeobNichtZuzuordnenFolder = memo(
   observer(({ menu }) => {
