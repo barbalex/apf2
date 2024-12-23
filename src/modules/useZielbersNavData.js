@@ -59,12 +59,6 @@ export const useZielbersNavData = (props) => {
 
   const count = data?.data?.zielById?.zielbersByZielId?.totalCount ?? 0
   const filteredCount = data?.data?.zielById?.filteredZielbers?.totalCount ?? 0
-  const menus = (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
-    (zielber) => ({
-      id: zielber.id,
-      label: zielber.label,
-    }),
-  )
 
   const navData = useMemo(
     () => ({
@@ -73,9 +67,40 @@ export const useZielbersNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}/Berichte`,
       label: `Zielberichte (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       // leave totalCount undefined as the menus are folders
-      menus,
+      menus: (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
+        (zielber) => ({
+          id: zielber.id,
+          label: zielber.label,
+          treeNodeType: 'table',
+          treeMenuType: 'zielber',
+          treeId: zielber.id,
+          treeParentId: zielId,
+          treeParentTableId: zielId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'AP-Ziele',
+            jahr,
+            zielId,
+            'Berichte',
+            zielber.id,
+          ],
+          hasChildren: false,
+        }),
+      ),
     }),
-    [apId, count, filteredCount, isLoading, jahr, menus, projId, zielId],
+    [
+      apId,
+      count,
+      data?.data?.zielById?.filteredZielbers?.nodes,
+      filteredCount,
+      isLoading,
+      jahr,
+      projId,
+      zielId,
+    ],
   )
 
   return { isLoading, error, navData }
