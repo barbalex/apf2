@@ -351,7 +351,14 @@ export const useApNavData = (props) => {
         {
           id: 'AP-Erfolgskriterien',
           label: `AP-Erfolgskriterien (${isLoading ? '...' : `${filteredErfkritsCount}/${erfkritsCount}`})`,
-          count: erfkritsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'erfkritFolder',
+          treeId: `${apId}ErfkritFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
+          fetcherName: 'useErfkritsNavData',
+          fetcherParams: { apId },
+          hasChildren: !!filteredErfkritsCount,
         },
         {
           id: 'AP-Berichte',
