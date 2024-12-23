@@ -8,6 +8,7 @@ import { PopmassnberFolder } from './PopmassnberFolder/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { Node } from '../../../../../../../../Node.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -92,13 +93,7 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
             menu={dateienMenu}
             parentUrl={navData?.url}
           />
-          <ChildlessFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            menu={historienMenu}
-            parentUrl={navData?.url}
-          />
+          <Node menu={historienMenu} />
         </Container>
       )}
     </Transition>

@@ -207,7 +207,22 @@ export const usePopNavData = (props) => {
         {
           id: 'Historien',
           label: `Historien (${historiesCount})`,
+          // TODO: remove
           count: historiesCount,
+          treeNodeType: 'folder',
+          treeMenuType: `popHistorienFolder`,
+          treeId: `${popId}HistorienFolder`,
+          treeTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Historien',
+          ],
+          hasChildren: false,
         },
       ],
     }),
