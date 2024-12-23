@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react'
 
-import { ChildlessFolderTransitioned } from '../ChildlessFolderTransitioned.jsx'
+import { NodeTransitioned } from '../NodeTransitioned.jsx'
 
 export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
   const { fetcherName, fetcherParams } = menu
@@ -18,7 +18,7 @@ export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
   if (!navData?.menus?.length) return null
 
   return navData.menus.map((m) => (
-    <ChildlessFolderTransitioned
+    <NodeTransitioned
       key={m.id}
       menu={m}
       inProp={inProp}

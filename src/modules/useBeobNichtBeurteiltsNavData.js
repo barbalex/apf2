@@ -117,6 +117,20 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
         (p) => ({
           id: p.id,
           label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'beobNichtBeurteilt',
+          treeId: p.id,
+          treeParentId: apId,
+          treeParentTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'nicht-beurteilte-Beobachtungen',
+            p.id,
+          ],
+          hasChildren: false,
           labelLeftElements:
             showBeobnichtbeurteiltIcon && beobId === p.id ?
               [BeobnichtbeurteiltFilteredMapIcon]
@@ -125,13 +139,13 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       ),
     }),
     [
+      projId,
       apId,
       beobId,
       count,
       data?.data?.filteredBeobsNichtBeurteilt?.nodes,
       filteredCount,
       isLoading,
-      projId,
       showBeobnichtbeurteiltIcon,
     ],
   )

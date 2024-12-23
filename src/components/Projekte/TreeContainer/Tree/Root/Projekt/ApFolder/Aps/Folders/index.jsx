@@ -11,11 +11,10 @@ import { ApartFolder } from './ApartFolder/index.jsx'
 import { AssozartFolder } from './AssozartFolder/index.jsx'
 import { EkfrequenzFolder } from './EkfrequenzFolder/index.jsx'
 import { EkZaehleinheitFolder } from './EkzaehleinheitFolder/index.jsx'
-import { BeobNichtBeurteiltFolder } from './BeobNichtBeurteiltFolder/index.jsx'
-import { BeobNichtZuzuordnenFolder } from './BeobNichtZuzuordnenFolder.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
-import { ChildlessFolder } from '../../../../../ChildlessFolder.jsx'
+import { Node } from '../../../../../Node.jsx'
+import { NodeListFolder } from '../../../../../NodeListFolder.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -145,17 +144,13 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
             ap={ap}
             menu={ekzaehleinheitMenu}
           />
-          <BeobNichtBeurteiltFolder
-            projekt={projekt}
-            ap={ap}
-            menu={beobNichtBeurteiltMenu}
-          />
-          <BeobNichtZuzuordnenFolder menu={beobNichtZuzuordnenMenu} />
-          <ChildlessFolder menu={qkMenu} />
-          <ChildlessFolder menu={qkWaehlenMenu} />
-          <ChildlessFolder menu={auswertungMenu} />
-          <ChildlessFolder menu={dateienMenu} />
-          <ChildlessFolder menu={historienMenu} />
+          <NodeListFolder menu={beobNichtBeurteiltMenu} />
+          <NodeListFolder menu={beobNichtZuzuordnenMenu} />
+          <Node menu={qkMenu} />
+          <Node menu={qkWaehlenMenu} />
+          <Node menu={auswertungMenu} />
+          <Node menu={dateienMenu} />
+          <Node menu={historienMenu} />
         </Container>
       )}
     </Transition>

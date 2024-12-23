@@ -385,7 +385,22 @@ export const useApNavData = (props) => {
         {
           id: 'nicht-beurteilte-Beobachtungen',
           label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredBeobsNichtBeurteiltCount}/${beobsNichtBeurteiltCount}`})`,
+          // TODO: remove
           count: beobsNichtBeurteiltCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'beobNichtBeurteiltFolder',
+          treeId: `${apId}BeobNichtBeurteiltFolder`,
+          treeTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'nicht-beurteilte-Beobachtungen',
+          ],
+          fetcherName: 'useBeobNichtBeurteiltsNavData',
+          fetcherParams: { apId },
+          hasChildren: !!filteredBeobsNichtBeurteiltCount,
           labelLeftElements:
             showBeobnichtbeurteiltIcon ?
               [BeobnichtbeurteiltMapIcon]
@@ -407,7 +422,7 @@ export const useApNavData = (props) => {
           ],
           fetcherName: 'useBeobNichtZuzuordnensNavData',
           fetcherParams: { apId },
-          hasChildren: true,
+          hasChildren: !!filteredBeobsNichtZuzuordnenCount,
           labelLeftElements:
             showBeobnichtzuzuordnenIcon ?
               [BeobnichtzuzuordnenMapIcon]

@@ -4,11 +4,11 @@ import { TransitionGroup } from 'react-transition-group'
 import isEqual from 'lodash/isEqual'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { Row } from '../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../mobxContext.js'
-import { NodesList } from '../../../../../NodesList/index.jsx'
+import { Row } from './Row.jsx'
+import { MobxContext } from '../../../../mobxContext.js'
+import { NodesList } from './NodesList/index.jsx'
 
-export const BeobNichtZuzuordnenFolder = memo(
+export const NodeListFolder = memo(
   observer(({ menu }) => {
     const store = useContext(MobxContext)
 

@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Row } from './Row.jsx'
 
-export const ChildlessFolder = memo(({ menu }) => {
+export const Node = memo(({ menu }) => {
   const node = {
     nodeType: menu.treeNodeType,
     menuType: menu.treeMenuType,
