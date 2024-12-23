@@ -23,6 +23,7 @@ export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
     error,
     menu,
     inProp,
+    menus: navData.menus,
   })
 
   return navData.menus.map((m) => (

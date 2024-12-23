@@ -4,7 +4,6 @@ import { Transition } from 'react-transition-group'
 
 import { TpopFolder } from './TpopFolder/index.jsx'
 import { PopberFolder } from './PopberFolder/index.jsx'
-import { PopmassnberFolder } from './PopmassnberFolder/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
 import { Node } from '../../../../../../../../Node.jsx'
@@ -75,12 +74,6 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
             ap={ap}
             pop={pop}
             menu={popberMenu}
-          />
-          <PopmassnberFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            menu={popmassnberMenu}
           />
           <NodeListFolder menu={popmassnberMenu} />
           <Node menu={auswertungMenu} />
