@@ -2,10 +2,10 @@ import { memo, useMemo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 
-import { Row } from '../../../../../../Row.jsx'
-import { NodeTransitioned } from '../../../../../../NodeTransitioned.jsx'
-import { useIdealbiotopNavData } from '../../../../../../../../../../modules/useIdealbiotopNavData.js'
-import { MobxContext } from '../../../../../../../../../../mobxContext.js'
+import { Row } from '../../../../../Row.jsx'
+import { NodeTransitioned } from '../../../../../NodeTransitioned.jsx'
+import { useIdealbiotopNavData } from '../../../../../../../../../modules/useIdealbiotopNavData.js'
+import { MobxContext } from '../../../../../../../../../mobxContext.js'
 
 export const IdealbiotopFolder = memo(
   observer(({ projekt, ap }) => {
@@ -30,22 +30,19 @@ export const IdealbiotopFolder = memo(
       hasChildren: true,
     }
 
-    const isOpen =
-      openNodes.filter(
-        (n) =>
-          n[0] === 'Projekte' &&
-          n[1] === projekt.id &&
-          n[2] === 'Arten' &&
-          n[3] === ap.id &&
-          n[4] === 'Idealbiotop',
-      ).length > 0
+    const isOpen = openNodes.some(
+      (n) =>
+        n[0] === 'Projekte' &&
+        n[1] === projekt.id &&
+        n[2] === 'Arten' &&
+        n[3] === ap.id &&
+        n[4] === 'Idealbiotop',
+    )
 
     const dateienMenu = useMemo(
       () => navData?.menus.find((m) => m.id === 'Dateien'),
       [navData],
     )
-
-    console.log('IdealbiotopFolder', { dateienMenu, isOpen })
 
     return (
       <>

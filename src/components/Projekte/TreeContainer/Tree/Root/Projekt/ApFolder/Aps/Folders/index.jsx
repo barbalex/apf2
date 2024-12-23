@@ -4,7 +4,7 @@ import { Transition } from 'react-transition-group'
 
 import { PopFolder } from './PopFolder/index.jsx'
 import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
-import { IdealbiotopFolder } from './IdealbiotopFolder/index.jsx'
+import { IdealbiotopFolder } from './IdealbiotopFolder.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
