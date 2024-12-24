@@ -97,6 +97,24 @@ export const useTpopmassnsNavData = (props) => {
           return {
             id: p.id,
             label: p.label,
+            treeNodeType: 'table',
+            treeMenuType: 'tpopmassn',
+            treeId: p.id,
+            treeParentId: tpopId,
+            treeParentTableId: tpopId,
+            treeUrl: [
+              'Projekte',
+              projId,
+              'Arten',
+              apId,
+              'Populationen',
+              popId,
+              'Teil-Populationen',
+              tpopId,
+              'Massnahmen',
+              p.id,
+            ],
+            hasChildren: !!count,
             labelRightElements:
               labelRightElements.length ? labelRightElements : undefined,
           }

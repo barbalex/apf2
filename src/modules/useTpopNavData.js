@@ -197,7 +197,7 @@ export const useTpopNavData = (props) => {
     data?.data?.tpopById?.filteredTpopmassns?.totalCount ?? 0
   const popmassnbersCount =
     data?.data?.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0
-  const filteredPopmassnbersCount =
+  const filteredTpopmassnbersCount =
     data?.data?.tpopById?.filteredTpopmassnbers?.totalCount ?? 0
   const feldkontrCount = data?.data?.tpopById?.tpopfeldkontrs?.totalCount ?? 0
   const filteredFeldkontrCount =
@@ -256,10 +256,28 @@ export const useTpopNavData = (props) => {
         {
           id: 'Massnahmen',
           label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopmassnFolder',
+          treeId: `${tpopId}MassnFolder`,
+          treeTableId: tpopId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Massnahmen',
+          ],
+          fetcherName: 'useMassnbersNavData',
+          fetcherParams: { projId, apId, popId, tpopId },
+          hasChildren: !!filteredMassnCount,
         },
         {
           id: 'Massnahmen-Berichte',
-          label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredPopmassnbersCount}/${popmassnbersCount}`})`,
+          label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredTpopmassnbersCount}/${popmassnbersCount}`})`,
           treeNodeType: 'folder',
           treeMenuType: 'tpopmassnberFolder',
           treeId: `${tpopId}MassnberFolder`,
@@ -277,7 +295,7 @@ export const useTpopNavData = (props) => {
           ],
           fetcherName: 'useTpopmassnbersNavData',
           fetcherParams: { projId, apId, popId, tpopId },
-          hasChildren: !!filteredPopmassnbersCount,
+          hasChildren: !!filteredTpopmassnbersCount,
         },
         {
           id: 'Feld-Kontrollen',
@@ -405,7 +423,7 @@ export const useTpopNavData = (props) => {
       filteredFeldkontrCount,
       filteredFreiwkontrCount,
       filteredMassnCount,
-      filteredPopmassnbersCount,
+      filteredTpopmassnbersCount,
       filteredTpopbersCount,
       freiwkontrCount,
       historiesCount,
