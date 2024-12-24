@@ -11,7 +11,8 @@ export const useZielbersNavData = (props) => {
   const params = useParams()
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
-  const jahr = props?.jahr ?? params.jahr
+  let jahr = props?.jahr ?? params.jahr
+  jahr = jahr ? +jahr : jahr
   const zielId = props?.zielId ?? params.zielId
 
   const store = useContext(MobxContext)
@@ -66,6 +67,22 @@ export const useZielbersNavData = (props) => {
       listFilter: 'zielber',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}/Berichte`,
       label: `Zielberichte (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'zielberFolder',
+      treeId: zielId,
+      treeParentId: jahr,
+      treeParentTableId: apId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'AP-Ziele',
+        jahr,
+        zielId,
+        'Berichte',
+      ],
+      hasChildren: !!count,
       // leave totalCount undefined as the menus are folders
       menus: (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
         (zielber) => ({

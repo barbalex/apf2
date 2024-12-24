@@ -1,10 +1,13 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 
 import { Row } from '../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../mobxContext.js'
 import { ZielberFolder } from './ZielberFolder/index.jsx'
+import { NodeListFolderTransitioned } from '../../../../../../../../NodeListFolderTransitioned.jsx'
+import { NodeTransitioned } from '../../../../../../../../NodeTransitioned.jsx'
 
 export const Ziel = memo(
   observer(({ projekt, ap, jahr, menu, inProp }) => {
@@ -25,16 +28,18 @@ export const Ziel = memo(
 
     const ref = useRef(null)
 
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 6 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'AP-Ziele' &&
-          n[5] === jahr &&
-          n[6] === menu.id,
-      ).length > 0
+    const isOpen = store.tree.openNodes.some((n) =>
+      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+    )
+
+    // console.log('Ziel', { node, menu })
+
+    // return (
+    //   <NodeListFolderTransitioned
+    //     menu={menu}
+    //     inProp={inProp}
+    //   />
+    // )
 
     return (
       <Transition

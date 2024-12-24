@@ -1,10 +1,11 @@
+// TODO: not in use
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 import isEqual from 'lodash/isEqual'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import {NodeTransitioned} from './NodeTransitioned.jsx'
+import { NodeTransitioned } from './NodeTransitioned.jsx'
 
 export const NodeChildFolder = memo(
   observer(({ menu }) => {
@@ -13,7 +14,6 @@ export const NodeChildFolder = memo(
     const isOpen = store.tree.openNodes.some((n) =>
       isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
     )
-
 
     return (
       <>

@@ -1,10 +1,12 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { Zieljahrs } from './Zieljahrs.jsx'
+import { NodeListFolder } from '../../../../../../NodeListFolder.jsx'
 
 export const ApzieljahrFolder = memo(
   observer(({ projekt, ap, menu }) => {
@@ -13,14 +15,9 @@ export const ApzieljahrFolder = memo(
 
     const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele']
 
-    const isOpen =
-      openNodes.filter(
-        (n) =>
-          n.length > 4 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'AP-Ziele',
-      ).length > 0
+    const isOpen = store.tree.openNodes.some((n) =>
+      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+    )
 
     const node = {
       nodeType: 'folder',
@@ -32,6 +29,10 @@ export const ApzieljahrFolder = memo(
       url,
       hasChildren: true,
     }
+
+    console.log('ApzieljahrFolder', { node, menu })
+
+    // return <NodeListFolder menu={menu} />
 
     return (
       <>

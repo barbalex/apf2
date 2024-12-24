@@ -1,6 +1,7 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 
 import { Row } from '../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../mobxContext.js'
@@ -29,16 +30,9 @@ export const ZielberFolder = memo(
       'Berichte',
     ]
 
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 7 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'AP-Ziele' &&
-          n[5] === jahr &&
-          n[6] === ziel.id,
-      ).length > 0
+    const isOpen = store.tree.openNodes.some((n) =>
+      isEqual(n.slice(0, url.length), url),
+    )
 
     const node = {
       nodeType: 'folder',
