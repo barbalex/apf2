@@ -80,9 +80,17 @@ export const useZieljahrsNavData = (props) => {
       id: +jahr,
       label: `${jahr} (${countByJahr[jahr]}/${unfilteredCountByJahr[jahr]})`,
       jahr: +jahr,
+      treeNodeType: 'folder',
+      treeId: `${apId}ZielJahreFolder`,
+      treeTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr],
+      fetcherName: 'useZielsOfJahrNavData',
+      fetcherParams: { projId, apId, jahr },
+      hasChildren: !!countByJahr[jahr],
     }))
+
     return jahre
-  }, [filteredZiels, ziels])
+  }, [apId, filteredZiels, projId, ziels])
 
   const navData = useMemo(
     () => ({
