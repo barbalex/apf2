@@ -2,11 +2,11 @@ import { memo, useRef, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
 
-import { Row } from '../../../../../../../../../../../../../Row.jsx'
-import { NodeTransitioned } from '../../../../../../../../../../../../../NodeTransitioned.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { useTpopmassnNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopmassnNavData.js'
-import { tpopmassn } from '../../../../../../../../../../../../../../../../shared/fragments.js'
+import { Row } from '../../../../../../../../../../../../Row.jsx'
+import { NodeTransitioned } from '../../../../../../../../../../../../NodeTransitioned.jsx'
+import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
+import { useTpopmassnNavData } from '../../../../../../../../../../../../../../../../modules/useTpopmassnNavData.js'
+import { tpopmassn } from '../../../../../../../../../../../../../../../shared/fragments.js'
 
 export const Tpopmassn = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
