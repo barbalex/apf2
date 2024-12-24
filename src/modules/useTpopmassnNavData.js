@@ -84,8 +84,22 @@ export const useTpopmassnNavData = (props) => {
         {
           id: 'Massnahme',
           label: `Massnahme`,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Massnahmen',
+            tpopmassnId,
+            'Massnahme',
+          ],
           labelRightElements:
             labelRightElements.length ? labelRightElements : undefined,
+          isSelf: true,
         },
         {
           id: 'Dateien',

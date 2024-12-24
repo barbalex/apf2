@@ -258,7 +258,7 @@ export const useTpopNavData = (props) => {
           label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
           treeNodeType: 'folder',
           treeMenuType: 'tpopmassnFolder',
-          treeId: `${tpopId}MassnFolder`,
+          treeId: `${tpopId}TpopmassnFolder`,
           treeTableId: tpopId,
           treeUrl: [
             'Projekte',
@@ -271,7 +271,7 @@ export const useTpopNavData = (props) => {
             tpopId,
             'Massnahmen',
           ],
-          fetcherName: 'useMassnbersNavData',
+          fetcherName: 'useTpopmassnsNavData',
           fetcherParams: { projId, apId, popId, tpopId },
           hasChildren: !!filteredMassnCount,
         },

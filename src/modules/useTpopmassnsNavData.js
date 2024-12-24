@@ -115,6 +115,8 @@ export const useTpopmassnsNavData = (props) => {
               p.id,
             ],
             hasChildren: !!count,
+            fetcherName: 'useTpopmassnNavData',
+            fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
             labelRightElements:
               labelRightElements.length ? labelRightElements : undefined,
           }

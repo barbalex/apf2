@@ -9,8 +9,9 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { NodesList } from './NodesList/index.jsx'
 
 export const NodeListFolderTransitioned = memo(
-  observer(({ menu, in: inProp }) => {
+  observer(({ menu, in: inLocal, inProp: inPropFromHigherUp }) => {
     const store = useContext(MobxContext)
+    const inProp = inLocal ?? inPropFromHigherUp
 
     const isOpen = store.tree.openNodes.some((n) =>
       isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),

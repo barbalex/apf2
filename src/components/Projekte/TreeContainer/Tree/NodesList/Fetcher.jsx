@@ -15,18 +15,19 @@ export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
     console.log('TableFolder.Fetcher, error:', error)
     return null
   }
-  if (!navData?.menus?.length) return null
+  // do not want to show self i.e. 'Massnahme' in 'Massnahmen'
+  const menus = navData?.menus?.filter((m) => !m.isSelf)
+
+  if (!menus?.length) return null
 
   // console.log('TableFolder.Fetcher', {
   //   navData,
-  //   isLoading,
-  //   error,
   //   menu,
   //   inProp,
   //   menus: navData.menus,
   // })
 
-  return navData.menus.map((m) => (
+  return menus.map((m) => (
     <NodeTransitioned
       key={m.id}
       menu={m}
