@@ -92,8 +92,8 @@ export const useTpopmassnNavData = (props) => {
           label: `Dateien (${filesCount})`,
           treeNodeType: 'folder',
           treeMenuType: 'tpopmassnDateienFolder',
-          treeId: `${tpopId}TpopmassnDateienFolder`,
-          treeTableId: tpopId,
+          treeId: `${tpopmassnId}TpopmassnDateienFolder`,
+          treeTableId: tpopmassnId,
           treeUrl: [
             'Projekte',
             projId,

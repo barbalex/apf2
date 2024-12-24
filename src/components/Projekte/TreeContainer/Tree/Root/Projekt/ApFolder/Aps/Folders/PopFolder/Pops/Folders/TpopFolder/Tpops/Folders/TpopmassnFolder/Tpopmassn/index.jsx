@@ -3,9 +3,8 @@ import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
-import { Node } from '../../../../../../../../../../../../../Node.jsx'
+import { NodeTransitioned } from '../../../../../../../../../../../../../NodeTransitioned.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { ChildlessFolder } from './ChildlessFolder.jsx'
 import { useTpopmassnNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopmassnNavData.js'
 import { tpopmassn } from '../../../../../../../../../../../../../../../../shared/fragments.js'
 
@@ -85,18 +84,7 @@ export const Tpopmassn = memo(
               transitionState={state}
             />
             <TransitionGroup component={null}>
-              {isOpen && (
-                <Node menu={dateienMenu} />
-                // <ChildlessFolder
-                //   projekt={projekt}
-                //   ap={ap}
-                //   pop={pop}
-                //   tpop={tpop}
-                //   tpopmassn={menu}
-                //   menu={dateienMenu}
-                //   parentUrl={navData?.url}
-                // />
-              )}
+              {isOpen && <NodeTransitioned menu={dateienMenu} />}
             </TransitionGroup>
           </>
         )}
