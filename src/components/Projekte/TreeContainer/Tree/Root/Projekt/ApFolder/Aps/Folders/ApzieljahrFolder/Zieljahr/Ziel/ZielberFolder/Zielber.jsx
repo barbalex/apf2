@@ -6,25 +6,14 @@ import { Row } from '../../../../../../../../../Row.jsx'
 export const Zielber = memo(
   ({ projekt, ap, jahr, ziel, menu, inProp, parentTransitionState }) => {
     const node = {
-      nodeType: 'table',
-      menuType: 'zielber',
-      id: menu.id,
-      parentId: ziel.id,
-      parentTableId: ziel.id,
+      nodeType: menu.treeNodeType,
+      menuType: menu.treeMenuType,
+      id: menu.treeId,
+      tableId: menu.treeTableId,
       urlLabel: menu.id,
       label: menu.label,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'AP-Ziele',
-        jahr,
-        ziel.id,
-        'Berichte',
-        menu.id,
-      ],
-      hasChildren: false,
+      url: menu.treeUrl,
+      hasChildren: menu.hasChildren,
     }
 
     const ref = useRef(null)

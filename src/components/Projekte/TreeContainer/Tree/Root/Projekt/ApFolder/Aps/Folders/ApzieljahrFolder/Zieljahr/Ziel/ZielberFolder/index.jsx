@@ -35,16 +35,14 @@ export const ZielberFolder = memo(
     )
 
     const node = {
-      nodeType: 'folder',
-      menuType: 'zielberFolder',
-      id: `${navData?.id}ZielberFolder`,
-      tableId: navData?.id,
-      parentId: ziel.id,
-      parentTableId: ziel.id,
-      urlLabel: 'Berichte',
-      label: navData?.label,
-      url,
-      hasChildren: true,
+      nodeType: navData.treeNodeType,
+      menuType: navData.treeMenuType,
+      id: navData.treeId,
+      tableId: navData.treeTableId,
+      urlLabel: navData.id,
+      label: navData.label,
+      url: navData.treeUrl,
+      hasChildren: navData.hasChildren,
     }
 
     const ref = useRef(null)

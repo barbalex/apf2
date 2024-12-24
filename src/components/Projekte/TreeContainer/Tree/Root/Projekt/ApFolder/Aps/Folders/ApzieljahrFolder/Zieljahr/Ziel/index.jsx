@@ -14,16 +14,14 @@ export const Ziel = memo(
     const store = useContext(MobxContext)
 
     const node = {
-      nodeType: 'table',
-      menuType: 'ziel',
-      singleElementName: 'Ziel',
-      id: menu.id,
-      parentId: ap.id,
-      parentTableId: ap.id,
+      nodeType: menu.treeNodeType,
+      menuType: menu.treeMenuType,
+      id: menu.treeId,
+      tableId: menu.treeTableId,
       urlLabel: menu.id,
       label: menu.label,
-      url: ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele', jahr, menu.id],
-      hasChildren: true,
+      url: menu.treeUrl,
+      hasChildren: menu.hasChildren,
     }
 
     const ref = useRef(null)
