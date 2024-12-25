@@ -1,4 +1,4 @@
-import { memo, useContext, useRef } from 'react'
+import { memo, useContext, useRef, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import isEqual from 'lodash/isEqual'
@@ -12,28 +12,17 @@ import { nodeFromMenu } from '../../../../nodeFromMenu.js'
 export const Ap = memo(
   observer(({ projekt, ap, inProp }) => {
     const store = useContext(MobxContext)
-    const { openNodes } = store.tree
 
     const { navData } = useApNavData({ projId: projekt.id, apId: ap.id })
 
     const ref = useRef(null)
 
-    const isOpen = openNodes.some(
-      (n) =>
-        n[0] === 'Projekte' &&
-        n[1] === projekt.id &&
-        n[2] === 'Arten' &&
-        n[3] === ap.id,
-    )
-    // TODO: UUPs. This is way too slow
-    // const isOpen =
-    //   navData.alwaysOpen ? true : (
-    //     store.tree.openNodes.some((n) =>
-    //       isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
-    //     )
-    //   )
-
-    const url = ['Projekte', projekt.id, 'Arten', ap.id]
+    const isOpen =
+      navData.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
+        )
+      )
 
     const node = nodeFromMenu(navData)
 
