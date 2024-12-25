@@ -60,7 +60,7 @@ export const Ziel = memo(
                   projekt={projekt}
                   ap={ap}
                   jahr={jahr}
-                  ziel={menu}
+                  menu={menu}
                 />
               )}
             </TransitionGroup>

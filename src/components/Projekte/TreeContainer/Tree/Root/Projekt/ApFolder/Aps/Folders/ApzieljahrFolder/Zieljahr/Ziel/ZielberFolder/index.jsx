@@ -9,29 +9,18 @@ import { Zielbers } from './Zielbers.jsx'
 import { useZielbersNavData } from '../../../../../../../../../../../../../modules/useZielbersNavData.js'
 
 export const ZielberFolder = memo(
-  observer(({ projekt, ap, jahr, ziel, in: inProp }) => {
+  observer(({ projekt, ap, jahr, menu, in: inProp }) => {
     const store = useContext(MobxContext)
 
     const { navData } = useZielbersNavData({
       projId: projekt.id,
       apId: ap.id,
       jahr,
-      zielId: ziel.id,
+      zielId: menu.id,
     })
 
-    const url = [
-      'Projekte',
-      projekt.id,
-      'Arten',
-      ap.id,
-      'AP-Ziele',
-      jahr,
-      ziel.id,
-      'Berichte',
-    ]
-
     const isOpen = store.tree.openNodes.some((n) =>
-      isEqual(n.slice(0, url.length), url),
+      isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
     )
 
     const node = {
@@ -70,7 +59,7 @@ export const ZielberFolder = memo(
                   projekt={projekt}
                   ap={ap}
                   jahr={jahr}
-                  ziel={ziel}
+                  ziel={menu}
                   menus={navData.menus}
                   parentTransitionState={state}
                 />
