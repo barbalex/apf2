@@ -2,10 +2,10 @@ import { memo, useRef, useMemo } from 'react'
 import { Transition } from 'react-transition-group'
 import styled from '@emotion/styled'
 
-import { transitionStyles } from '../../../../../../../../../../../../../../Row.jsx'
-import { Node } from '../../../../../../../../../../../../../../Node.jsx'
-import { NodesList } from '../../../../../../../../../../../../../../NodesList/index.jsx'
-import { NodeListFolder } from '../../../../../../../../../../../../../../NodeListFolder.jsx'
+import { transitionStyles } from '../../../../../../../../../../../../../Row.jsx'
+import { Node } from '../../../../../../../../../../../../../Node.jsx'
+import { NodesList } from '../../../../../../../../../../../../../NodesList/index.jsx'
+import { NodeListFolder } from '../../../../../../../../../../../../../NodeListFolder.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;

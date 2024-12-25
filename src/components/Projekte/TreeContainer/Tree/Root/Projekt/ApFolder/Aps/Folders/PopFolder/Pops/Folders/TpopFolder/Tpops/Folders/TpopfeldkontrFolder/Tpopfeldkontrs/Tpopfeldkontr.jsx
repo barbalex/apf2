@@ -10,7 +10,7 @@ import {
 } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
-import { TpopfeldkontrFolders } from './Folders/index.jsx'
+import { TpopfeldkontrFolders } from './Folders.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
