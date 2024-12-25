@@ -20,12 +20,12 @@ export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
 
   if (!menus?.length) return null
 
-  // console.log('TableFolder.Fetcher', {
-  //   navData,
-  //   menu,
-  //   inProp,
-  //   menus: navData.menus,
-  // })
+  console.log('TableFolder.Fetcher', {
+    navData,
+    menu,
+    inProp,
+    menus: navData.menus,
+  })
 
   return menus.map((m) => (
     <NodeTransitioned

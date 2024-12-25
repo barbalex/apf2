@@ -3,9 +3,9 @@ import { Transition } from 'react-transition-group'
 import styled from '@emotion/styled'
 
 import { transitionStyles } from '../../../../../../../../../../../../../../Row.jsx'
-import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { Node } from '../../../../../../../../../../../../../../Node.jsx'
 import { NodesList } from '../../../../../../../../../../../../../../NodesList/index.jsx'
+import { NodeListFolder } from '../../../../../../../../../../../../../../NodeListFolder.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -41,15 +41,7 @@ export const TpopfeldkontrFolders = memo(
             ref={ref}
             style={transitionStyles[state]}
           >
-            <ZaehlFolder
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={tpop}
-              tpopkontr={navData}
-              menu={zaehlMenu}
-            />
-            <NodesList menu={zaehlMenu} />
+            <NodeListFolder menu={zaehlMenu} />
             <Node menu={biotopMenu} />
             <Node menu={dateienMenu} />
           </Container>

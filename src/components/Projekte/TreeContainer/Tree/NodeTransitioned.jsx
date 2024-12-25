@@ -37,6 +37,8 @@ export const NodeTransitioned = memo(
         )
       : false
 
+    console.log('NodeTransitioned', { menu, isOpen, node })
+
     return (
       <Transition
         in={inProp ?? inPropPassedFromAbove}

@@ -84,15 +84,7 @@ export const Tpopfeldkontr = memo(
               transitionState={state}
             />
             <TransitionGroup component={null}>
-              {isOpen && (
-                <TpopfeldkontrFolders
-                  projekt={projekt}
-                  ap={ap}
-                  pop={pop}
-                  tpop={tpop}
-                  navData={navData}
-                />
-              )}
+              {isOpen && <TpopfeldkontrFolders navData={navData} />}
             </TransitionGroup>
           </>
         )}
