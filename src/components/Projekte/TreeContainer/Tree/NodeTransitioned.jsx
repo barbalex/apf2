@@ -23,6 +23,7 @@ export const NodeTransitioned = memo(
       label: menu.label,
       labelLeftElements: menu.labelLeftElements,
       url: menu.treeUrl,
+      singleElementName: menu.treeSingleElementName,
       hasChildren: menu.hasChildren,
       alwaysOpen: menu.alwaysOpen,
     }
@@ -37,7 +38,7 @@ export const NodeTransitioned = memo(
         )
       : false
 
-    console.log('NodeTransitioned', { menu, isOpen, node })
+    // console.log('NodeTransitioned', { menu, isOpen, node })
 
     return (
       <Transition

@@ -1,6 +1,7 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 import styled from '@emotion/styled'
 
 import {
@@ -28,42 +29,25 @@ export const Tpopfeldkontr = memo(
     })
 
     const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 5 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen' &&
-          n[5] === pop.id &&
-          n[6] === 'Teil-Populationen' &&
-          n[7] === tpop.id &&
-          n[8] === 'Feld-Kontrollen' &&
-          n[9] === navData.id,
-      ).length > 0
+      menu.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+        )
+      )
 
     const node = {
-      nodeType: 'table',
-      menuType: 'tpopfeldkontr',
-      singleElementName: 'Feld-Kontrolle',
-      id: navData.id,
-      parentId: `${tpop.id}TpopfeldkontrFolder`,
-      parentTableId: tpop.id,
+      nodeType: navData.treeNodeType,
+      menuType: navData.treeMenuType,
+      id: navData.treeId,
+      tableId: navData.treeTableId,
+      parentId: navData.treeParentId,
+      parentTableId: navData.treeParentTableId,
       urlLabel: navData.id,
       label: navData.label,
-      labelRightElements: navData.labelRightElements,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'Populationen',
-        pop.id,
-        'Teil-Populationen',
-        tpop.id,
-        'Feld-Kontrollen',
-        navData.id,
-      ],
-      hasChildren: true,
+      url: navData.treeUrl,
+      singleElementName: menu.treeSingleElementName,
+      hasChildren: navData.hasChildren,
+      alwaysOpen: navData.alwaysOpen,
     }
 
     const ref = useRef(null)

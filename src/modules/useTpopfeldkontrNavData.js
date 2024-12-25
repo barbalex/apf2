@@ -130,6 +130,7 @@ export const useTpopfeldkontrNavData = (props) => {
       ],
       fetcherName: 'useTpopfeldkontrNavData',
       fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+      treeSingleElementName: 'Feld-Kontrolle',
       hasChildren: true,
       labelRightElements:
         labelRightElements.length ? labelRightElements : undefined,

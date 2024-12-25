@@ -9,6 +9,7 @@ import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.jsx'
+import { tr } from 'date-fns/locale'
 
 export const useTpopfeldkontrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -90,6 +91,23 @@ export const useTpopfeldkontrsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
       label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'tpopfeldkontr',
+      treeId: `${tpopId}FeldkontrFolder`,
+      treeParentId: tpopId,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Feld-Kontrollen',
+      ],
+      hasChildren: !!count,
       menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []
@@ -109,6 +127,24 @@ export const useTpopfeldkontrsNavData = (props) => {
           return {
             id: p.id,
             label: p.label,
+            treeNodeType: 'table',
+            treeMenuType: 'tpopfeldkontr',
+            treeId: p.id,
+            treeParentId: tpopId,
+            treeParentTableId: tpopId,
+            treeUrl: [
+              'Projekte',
+              projId,
+              'Arten',
+              apId,
+              'Populationen',
+              popId,
+              'Teil-Populationen',
+              tpopId,
+              'Feld-Kontrollen',
+              p.id,
+            ],
+            hasChildren: true,
             labelRightElements:
               labelRightElements.length ? labelRightElements : undefined,
           }

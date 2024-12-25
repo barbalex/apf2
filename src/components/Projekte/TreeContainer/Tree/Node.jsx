@@ -12,6 +12,7 @@ export const Node = memo(({ menu }) => {
     urlLabel: menu.id,
     label: menu.label,
     url: menu.treeUrl,
+    singleElementName: menu.treeSingleElementName,
     hasChildren: menu.hasChildren,
     alwaysOpen: menu.alwaysOpen,
   }
