@@ -3,18 +3,13 @@ import { memo } from 'react'
 import { Row } from '../../Row.jsx'
 import { ApberuebersichtFolder } from './ApberuebersichtFolder/index.jsx'
 import { ApFolder } from './ApFolder/index.jsx'
+import { NodeListFolder } from '../../NodeListFolder.jsx'
+import { useProjektNavData } from '../../../../../../modules/useProjektNavData.js'
+import { nodeFromMenu } from '../../nodeFromMenu.js'
 
 export const Projekt = memo(({ projekt, isLoading, projectIsOpen }) => {
-  const url = ['Projekte', projekt.id]
-  const node = {
-    nodeType: 'table',
-    menuType: 'projekt',
-    id: projekt.id,
-    urlLabel: projekt.id,
-    label: projekt.label,
-    url,
-    hasChildren: true,
-  }
+  const { navData } = useProjektNavData({ projId: projekt.id })
+  const node = nodeFromMenu(navData)
 
   return (
     <>

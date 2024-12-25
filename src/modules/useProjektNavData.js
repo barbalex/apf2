@@ -73,6 +73,13 @@ export const useProjektNavData = (props) => {
       id: projId,
       url: `/Daten/Projekte/${projId}`,
       label,
+      treeNodeType: 'folder',
+      treeMenuType: 'projekt', // was: projekt?
+      treeId: projId,
+      treeTableId: projId,
+      treeParentTableId: projId,
+      treeUrl: ['Projekte', projId],
+      hasChildren: true,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
@@ -86,6 +93,15 @@ export const useProjektNavData = (props) => {
         {
           id: 'AP-Berichte',
           label: `AP-Berichte (${isLoading ? '...' : `${apberuebersichtsCount}/${allApberuebersichtsCount}`})`,
+          treeNodeType: 'folder',
+          treeMenuType: 'apberuebersichtsFolder',
+          treeId: `${projId}/ApberuebersichtsFolder`,
+          treeTableId: projId,
+          treeParentTableId: projId,
+          treeUrl: ['Projekte', projId, 'AP-Berichte'],
+          hasChildren: !!apberuebersichtsCount,
+          fetcherName: 'useApberuebersichtsNavData',
+          fetcherParams: { projId },
         },
       ],
     }),
