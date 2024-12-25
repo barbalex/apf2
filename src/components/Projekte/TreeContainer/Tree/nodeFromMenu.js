@@ -8,6 +8,7 @@ export const nodeFromMenu = (menu) => ({
   urlLabel: menu.id,
   label: menu.label,
   labelLeftElements: menu.labelLeftElements,
+  labelRightElements: menu.labelRightElements,
   url: menu.treeUrl,
   singleElementName: menu.treeSingleElementName,
   hasChildren: menu.hasChildren,
