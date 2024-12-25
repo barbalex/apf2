@@ -30,7 +30,7 @@ export const ApzieljahrFolder = memo(
       hasChildren: true,
     }
 
-    console.log('ApzieljahrFolder', { node, menu })
+    // console.log('ApzieljahrFolder', { node, menu })
 
     // return <NodeListFolder menu={menu} />
 
