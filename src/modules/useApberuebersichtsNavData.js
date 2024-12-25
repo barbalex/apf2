@@ -24,7 +24,10 @@ export const useApberuebersichtsNavData = (props) => {
           ) {
             projektById(id: $projId) {
               id
-              apberuebersichtsByProjId(filter: $apberuebersichtFilter) {
+              apberuebersichtsByProjId(
+                filter: $apberuebersichtFilter
+                orderBy: LABEL_ASC
+              ) {
                 totalCount
                 nodes {
                   id
