@@ -67,16 +67,6 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
   const count =
     data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
   const totalCount = data?.data?.tpopkontrById?.totalCount?.totalCount ?? 0
-  const menus = useMemo(
-    () =>
-      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes?.map(
-        (p) => ({
-          id: p.id,
-          label: p.label,
-        }),
-      ) ?? [],
-    [data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes],
-  )
 
   const navData = useMemo(
     () => ({
@@ -84,13 +74,59 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
       listFilter: 'tpopkontrzaehl',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen`,
       label: `Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus,
+      treeNodeType: 'folder',
+      treeMenuType: 'tpopfeldkontrzaehlFolder',
+      treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+      treeTableId: tpopkontrId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Feld-Kontrollen',
+        tpopkontrId,
+        'Zaehlungen',
+      ],
+      fetcherName: 'useTpopfeldkontrzaehlsNavData',
+      fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+      hasChildren: !!count,
+      menus: (
+        data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+      ).map((p) => ({
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'tpopfeldkontrzaehl',
+        treeId: p.id,
+        // treeParentId: tpopkontrId,
+        parentId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+        treeParentTableId: tpopkontrId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Feld-Kontrollen',
+          tpopkontrId,
+          'Zaehlungen',
+          p.id,
+        ],
+        hasChildren: false,
+      })),
     }),
     [
       apId,
       count,
+      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes,
       isLoading,
-      menus,
       popId,
       projId,
       totalCount,

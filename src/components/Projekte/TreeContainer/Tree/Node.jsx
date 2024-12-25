@@ -7,6 +7,8 @@ export const Node = memo(({ menu }) => {
     menuType: menu.treeMenuType,
     id: menu.treeId,
     tableId: menu.treeTableId,
+    parentId: menu.treeParentId,
+    parentTableId: menu.treeParentTableId,
     urlLabel: menu.id,
     label: menu.label,
     url: menu.treeUrl,

@@ -162,7 +162,7 @@ export const useTpopfeldkontrNavData = (props) => {
             tpopkontrId,
             'Zaehlungen',
           ],
-          fetcherName: 'useTpopkontrzaehlNavData',
+          fetcherName: 'useTpopkontrzaehlsNavData',
           fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
           hasChildren: !!filteredTpopkontrzaehlCount,
         },
