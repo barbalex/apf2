@@ -10,6 +10,11 @@ import { apber } from '../../../../../shared/fragments.js'
 export const Projekt = memo(({ projekt, isLoading, projectIsOpen }) => {
   const { navData } = useProjektNavData({ projId: projekt.id })
   const node = nodeFromMenu(navData)
+
+  const apMenu = useMemo(
+    () => navData?.menus?.find?.((menu) => menu.id === 'Arten'),
+    [navData],
+  )
   const apberuebersichtMenu = useMemo(
     () => navData?.menus?.find?.((menu) => menu.id === 'AP-Berichte'),
     [navData],
@@ -27,6 +32,7 @@ export const Projekt = memo(({ projekt, isLoading, projectIsOpen }) => {
             count={projekt?.apsByProjId?.totalCount ?? 0}
             countFiltered={projekt?.apsFiltered?.totalCount ?? 0}
             isLoading={isLoading}
+            menu={apMenu}
           />
           <NodeListFolder menu={apberuebersichtMenu} />
         </>

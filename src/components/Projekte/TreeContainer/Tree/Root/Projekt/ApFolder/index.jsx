@@ -1,33 +1,27 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 
 import { Row } from '../../../Row.jsx'
 import { MobxContext } from '../../../../../../../mobxContext.js'
 import { Aps } from './Aps/index.jsx'
+import { nodeFromMenu } from '../../../nodeFromMenu.js'
 
+// TODO: get rud of projekt
 export const ApFolder = memo(
-  observer(({ count, countFiltered, projekt, isLoading }) => {
+  observer(({ projekt, menu }) => {
     const store = useContext(MobxContext)
-    const { openNodes } = store.tree
 
     const isOpen =
-      openNodes.filter(
-        (n) => n[0] === 'Projekte' && n[1] === projekt.id && n[2] === 'Arten',
-      ).length > 0
+      menu.alwaysOpen ? true
+      : menu.treeUrl?.length ?
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+        )
+      : false
 
-    const url = ['Projekte', projekt.id, 'Arten']
-
-    const node = {
-      nodeType: 'folder',
-      menuType: 'apFolder',
-      id: `${projekt.id}ApFolder`,
-      tableId: projekt.id,
-      urlLabel: 'Arten',
-      label: `Arten (${isLoading ? '...' : `${countFiltered}/${count}`})`,
-      url,
-      hasChildren: count > 0,
-    }
+    const node = nodeFromMenu(menu)
 
     return (
       <>
