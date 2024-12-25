@@ -7,6 +7,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { Row } from './Row.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { NodesList } from './NodesList/index.jsx'
+import { nodeFromMenu } from './nodeFromMenu.js'
 
 export const NodeListFolderTransitioned = memo(
   observer(({ menu, in: inLocal, inProp: inPropFromHigherUp }) => {
@@ -20,17 +21,7 @@ export const NodeListFolderTransitioned = memo(
         )
       )
 
-    const node = {
-      nodeType: menu.treeNodeType,
-      menuType: menu.treeMenuType,
-      id: menu.treeId,
-      tableId: menu.treeTableId,
-      urlLabel: menu.id,
-      label: menu.label,
-      url: menu.treeUrl,
-      hasChildren: menu.hasChildren,
-      labelLeftElements: menu.labelLeftElements,
-    }
+    const node = nodeFromMenu(menu)
 
     const ref = useRef(null)
 

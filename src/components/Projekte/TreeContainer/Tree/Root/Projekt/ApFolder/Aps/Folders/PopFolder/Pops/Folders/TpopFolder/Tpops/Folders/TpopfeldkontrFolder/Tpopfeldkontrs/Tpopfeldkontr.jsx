@@ -10,7 +10,7 @@ import {
 } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
-import { TpopfeldkontrFolders } from './Folders.jsx'
+import { Folders } from './Folders.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -68,7 +68,7 @@ export const Tpopfeldkontr = memo(
               transitionState={state}
             />
             <TransitionGroup component={null}>
-              {isOpen && <TpopfeldkontrFolders navData={navData} />}
+              {isOpen && <Folders navData={navData} />}
             </TransitionGroup>
           </>
         )}

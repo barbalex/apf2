@@ -7,26 +7,13 @@ import isEqual from 'lodash/isEqual'
 
 import { Row } from './Row.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
+import { nodeFromMenu } from './nodeFromMenu.js'
 
 export const NodeTransitioned = memo(
   observer(({ menu, in: inProp, inProp: inPropPassedFromAbove }) => {
     const store = useContext(MobxContext)
 
-    const node = {
-      nodeType: menu.treeNodeType,
-      menuType: menu.treeMenuType,
-      id: menu.treeId,
-      tableId: menu.treeTableId,
-      parentId: menu.treeParentId,
-      parentTableId: menu.treeParentTableId,
-      urlLabel: menu.id,
-      label: menu.label,
-      labelLeftElements: menu.labelLeftElements,
-      url: menu.treeUrl,
-      singleElementName: menu.treeSingleElementName,
-      hasChildren: menu.hasChildren,
-      alwaysOpen: menu.alwaysOpen,
-    }
+    const node = nodeFromMenu(menu)
 
     const ref = useRef(null)
 

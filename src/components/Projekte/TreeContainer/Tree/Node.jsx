@@ -1,21 +1,10 @@
 import { memo } from 'react'
+
 import { Row } from './Row.jsx'
+import { nodeFromMenu } from './nodeFromMenu.js'
 
 export const Node = memo(({ menu }) => {
-  const node = {
-    nodeType: menu.treeNodeType,
-    menuType: menu.treeMenuType,
-    id: menu.treeId,
-    tableId: menu.treeTableId,
-    parentId: menu.treeParentId,
-    parentTableId: menu.treeParentTableId,
-    urlLabel: menu.id,
-    label: menu.label,
-    url: menu.treeUrl,
-    singleElementName: menu.treeSingleElementName,
-    hasChildren: menu.hasChildren,
-    alwaysOpen: menu.alwaysOpen,
-  }
+  const node = nodeFromMenu(menu)
 
   return <Row node={node} />
 })

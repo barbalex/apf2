@@ -10,7 +10,7 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-export const TpopfeldkontrFolders = memo(({ navData, in: inProp }) => {
+export const Folders = memo(({ navData, in: inProp }) => {
   const ref = useRef(null)
 
   // self menu has no component
@@ -33,7 +33,10 @@ export const TpopfeldkontrFolders = memo(({ navData, in: inProp }) => {
           style={transitionStyles[state]}
         >
           {menus.map((menu) => (
-            <menu.component menu={menu} />
+            <menu.component
+              menu={menu}
+              key={menu.id}
+            />
           ))}
         </Container>
       )}
