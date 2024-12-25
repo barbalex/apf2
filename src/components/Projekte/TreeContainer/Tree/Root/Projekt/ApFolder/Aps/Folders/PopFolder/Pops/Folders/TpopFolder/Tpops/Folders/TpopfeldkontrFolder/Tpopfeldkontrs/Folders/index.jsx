@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { transitionStyles } from '../../../../../../../../../../../../../../Row.jsx'
 import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { Node } from '../../../../../../../../../../../../../../Node.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -56,14 +57,7 @@ export const TpopfeldkontrFolders = memo(
               menu={biotopMenu}
               parentUrl={navData.url}
             />
-            <ChildlessFolder
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={tpop}
-              menu={dateienMenu}
-              parentUrl={navData.url}
-            />
+            <Node menu={dateienMenu} />
           </Container>
         )}
       </Transition>
