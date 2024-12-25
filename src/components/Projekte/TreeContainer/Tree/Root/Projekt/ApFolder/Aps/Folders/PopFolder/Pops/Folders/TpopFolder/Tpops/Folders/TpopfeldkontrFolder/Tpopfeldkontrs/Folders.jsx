@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react'
+import { memo, useRef, useMemo } from 'react'
 import { Transition } from 'react-transition-group'
 import styled from '@emotion/styled'
 
@@ -14,6 +14,11 @@ export const TpopfeldkontrFolders = memo(
   ({ projekt, ap, pop, tpop, navData, in: inProp }) => {
     const ref = useRef(null)
 
+    const menus = useMemo(
+      () => (navData?.menus ?? []).filter((m) => !!m.component),
+      [navData],
+    )
+
     return (
       <Transition
         in={inProp}
@@ -27,11 +32,9 @@ export const TpopfeldkontrFolders = memo(
             ref={ref}
             style={transitionStyles[state]}
           >
-            {navData?.menus
-              ?.filter((m) => !!m.component)
-              ?.map((menu) => (
-                <menu.component menu={menu} />
-              ))}
+            {menus.map((menu) => (
+              <menu.component menu={menu} />
+            ))}
           </Container>
         )}
       </Transition>
