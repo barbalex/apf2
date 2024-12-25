@@ -70,6 +70,7 @@ export const useApsNavData = (props) => {
         label: p.label,
         treeNodeType: 'table',
         treeMenuType: 'ap',
+        singleElementName: 'Art',
         treeId: p.id,
         treeParentId: projId,
         treeParentTableId: projId,

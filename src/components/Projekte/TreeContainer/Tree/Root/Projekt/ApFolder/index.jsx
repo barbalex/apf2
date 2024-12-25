@@ -8,7 +8,6 @@ import { MobxContext } from '../../../../../../../mobxContext.js'
 import { Aps } from './Aps/index.jsx'
 import { nodeFromMenu } from '../../../nodeFromMenu.js'
 
-// TODO: get rud of projekt
 export const ApFolder = memo(
   observer(({ projekt, menu }) => {
     const store = useContext(MobxContext)

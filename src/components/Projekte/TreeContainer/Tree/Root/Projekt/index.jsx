@@ -7,7 +7,7 @@ import { useProjektNavData } from '../../../../../../modules/useProjektNavData.j
 import { nodeFromMenu } from '../../nodeFromMenu.js'
 import { apber } from '../../../../../shared/fragments.js'
 
-export const Projekt = memo(({ projekt, isLoading, projectIsOpen }) => {
+export const Projekt = memo(({ projekt, projectIsOpen }) => {
   const { navData } = useProjektNavData({ projId: projekt.id })
   const node = nodeFromMenu(navData)
 
@@ -27,13 +27,7 @@ export const Projekt = memo(({ projekt, isLoading, projectIsOpen }) => {
       <Row node={node} />
       {projectIsOpen && (
         <>
-          <ApFolder
-            projekt={projekt}
-            count={projekt?.apsByProjId?.totalCount ?? 0}
-            countFiltered={projekt?.apsFiltered?.totalCount ?? 0}
-            isLoading={isLoading}
-            menu={apMenu}
-          />
+          <ApFolder projekt={projekt} menu={apMenu} />
           <NodeListFolder menu={apberuebersichtMenu} />
         </>
       )}

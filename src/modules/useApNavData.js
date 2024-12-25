@@ -331,7 +331,16 @@ export const useApNavData = (props) => {
       id: apId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}`,
       label,
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'table',
+      treeMenuType: 'ap',
+      singleElementName: 'Art',
+      treeId: apId,
+      treeParentId: projId,
+      treeParentTableId: projId,
+      treeUrl: ['Projekte', projId, 'Arten', apId],
+      hasChildren: true,
+      fetcherName: 'useApNavData',
+      fetcherParams: { projId, apId },
       menus: [
         {
           id: 'Art',
