@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeListFolder } from '../components/Projekte/TreeContainer/Tree/NodeListFolder.jsx'
 
 export const useProjektNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -74,13 +75,14 @@ export const useProjektNavData = (props) => {
       url: `/Daten/Projekte/${projId}`,
       label,
       treeNodeType: 'folder',
-      treeMenuType: 'projekt', // was: projekt?
+      treeMenuType: 'projekt',
       treeId: projId,
       treeTableId: projId,
       treeParentTableId: projId,
       treeUrl: ['Projekte', projId],
       hasChildren: true,
-      // leave totalCount undefined as the menus are folders
+      fetcherName: 'useProjektNavData',
+      fetcherParams: { projId },
       menus: [
         {
           id: 'Projekt',
@@ -89,6 +91,15 @@ export const useProjektNavData = (props) => {
         {
           id: 'Arten',
           label: `Arten (${isLoading ? '...' : `${artsCount}/${allArtsCount}`})`,
+          treeNodeType: 'folder',
+          treeMenuType: 'apFolder',
+          treeId: `${projId}/ApFolder`,
+          treeTableId: projId,
+          treeParentTableId: projId,
+          treeUrl: ['Projekte', projId, 'Arten'],
+          hasChildren: !!artsCount,
+          fetcherName: 'useApsNavData',
+          fetcherParams: { projId },
         },
         {
           id: 'AP-Berichte',
@@ -102,6 +113,7 @@ export const useProjektNavData = (props) => {
           hasChildren: !!apberuebersichtsCount,
           fetcherName: 'useApberuebersichtsNavData',
           fetcherParams: { projId },
+          component: NodeListFolder,
         },
       ],
     }),
