@@ -10,34 +10,33 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-export const TpopfeldkontrFolders = memo(
-  ({ projekt, ap, pop, tpop, navData, in: inProp }) => {
-    const ref = useRef(null)
+export const TpopfeldkontrFolders = memo(({ navData, in: inProp }) => {
+  const ref = useRef(null)
 
-    const menus = useMemo(
-      () => (navData?.menus ?? []).filter((m) => !!m.component),
-      [navData],
-    )
+  // self menu has no component
+  const menus = useMemo(
+    () => (navData?.menus ?? []).filter((m) => !!m.component),
+    [navData],
+  )
 
-    return (
-      <Transition
-        in={inProp}
-        timeout={300}
-        mountOnEnter
-        unmountOnExit
-        nodeRef={ref}
-      >
-        {(state) => (
-          <Container
-            ref={ref}
-            style={transitionStyles[state]}
-          >
-            {menus.map((menu) => (
-              <menu.component menu={menu} />
-            ))}
-          </Container>
-        )}
-      </Transition>
-    )
-  },
-)
+  return (
+    <Transition
+      in={inProp}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      nodeRef={ref}
+    >
+      {(state) => (
+        <Container
+          ref={ref}
+          style={transitionStyles[state]}
+        >
+          {menus.map((menu) => (
+            <menu.component menu={menu} />
+          ))}
+        </Container>
+      )}
+    </Transition>
+  )
+})
