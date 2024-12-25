@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 
 import { transitionStyles } from '../../../../../../../../../../../../../../Row.jsx'
 import { ZaehlFolder } from './ZaehlFolder/index.jsx'
-import { ChildlessFolder } from './ChildlessFolder.jsx'
 import { Node } from '../../../../../../../../../../../../../../Node.jsx'
 
 const Container = styled.div`
@@ -49,14 +48,7 @@ export const TpopfeldkontrFolders = memo(
               tpopkontr={navData}
               menu={zaehlMenu}
             />
-            <ChildlessFolder
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={tpop}
-              menu={biotopMenu}
-              parentUrl={navData.url}
-            />
+            <Node menu={biotopMenu} />
             <Node menu={dateienMenu} />
           </Container>
         )}
