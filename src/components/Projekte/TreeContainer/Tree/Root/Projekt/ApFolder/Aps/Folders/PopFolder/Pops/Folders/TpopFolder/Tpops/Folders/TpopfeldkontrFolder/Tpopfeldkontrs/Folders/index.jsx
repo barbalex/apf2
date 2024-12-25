@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { transitionStyles } from '../../../../../../../../../../../../../../Row.jsx'
 import { ZaehlFolder } from './ZaehlFolder/index.jsx'
 import { Node } from '../../../../../../../../../../../../../../Node.jsx'
+import { NodesList } from '../../../../../../../../../../../../../../NodesList/index.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -48,6 +49,7 @@ export const TpopfeldkontrFolders = memo(
               tpopkontr={navData}
               menu={zaehlMenu}
             />
+            <NodesList menu={zaehlMenu} />
             <Node menu={biotopMenu} />
             <Node menu={dateienMenu} />
           </Container>
