@@ -15,6 +15,8 @@ export const Projekt = memo(({ projekt, isLoading, projectIsOpen }) => {
     [navData],
   )
 
+  // TODO: map over menus and return their components
+  // WHEN: ApFolder has component
   return (
     <>
       <Row node={node} />
