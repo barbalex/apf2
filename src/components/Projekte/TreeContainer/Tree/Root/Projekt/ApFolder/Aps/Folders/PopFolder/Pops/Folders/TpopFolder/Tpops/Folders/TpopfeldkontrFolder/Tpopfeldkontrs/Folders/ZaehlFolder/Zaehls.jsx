@@ -13,11 +13,9 @@ export const Zaehls = memo(({ projekt, ap, pop, tpop, tpopkontr }) => {
   })
 
   return navData.menus.map((menu) => (
-    <>
-      <Node
-        menu={menu}
-        key={menu.id}
-      />
-    </>
+    <Node
+      menu={menu}
+      key={menu.id}
+    />
   ))
 })

@@ -12,9 +12,12 @@ export const NodeListFolder = memo(
   observer(({ menu }) => {
     const store = useContext(MobxContext)
 
-    const isOpen = store.tree.openNodes.some((n) =>
-      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-    )
+    const isOpen =
+      menu.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+        )
+      )
 
     const node = {
       nodeType: menu.treeNodeType,

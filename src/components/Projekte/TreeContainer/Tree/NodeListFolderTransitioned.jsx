@@ -13,9 +13,12 @@ export const NodeListFolderTransitioned = memo(
     const store = useContext(MobxContext)
     const inProp = inLocal ?? inPropFromHigherUp
 
-    const isOpen = store.tree.openNodes.some((n) =>
-      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-    )
+    const isOpen =
+      menu.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+        )
+      )
 
     const node = {
       nodeType: menu.treeNodeType,

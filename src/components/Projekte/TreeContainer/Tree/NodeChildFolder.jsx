@@ -12,7 +12,9 @@ export const NodeChildFolder = memo(
     const store = useContext(MobxContext)
 
     const isOpen = store.tree.openNodes.some((n) =>
-      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+      menu.alwaysOpen ? true : (
+        isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl)
+      ),
     )
 
     return (

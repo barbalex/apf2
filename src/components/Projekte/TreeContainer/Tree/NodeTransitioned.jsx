@@ -30,7 +30,8 @@ export const NodeTransitioned = memo(
     const ref = useRef(null)
 
     const isOpen =
-      menu.treeUrl?.length ?
+      menu.alwaysOpen ? true
+      : menu.treeUrl?.length ?
         store.tree.openNodes.some((n) =>
           isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
         )
