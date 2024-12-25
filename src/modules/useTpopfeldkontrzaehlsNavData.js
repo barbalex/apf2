@@ -94,6 +94,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
       fetcherName: 'useTpopfeldkontrzaehlsNavData',
       fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
       hasChildren: !!count,
+      alwaysOpen: true,
       menus: (
         data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
       ).map((p) => ({

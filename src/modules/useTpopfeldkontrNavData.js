@@ -165,6 +165,7 @@ export const useTpopfeldkontrNavData = (props) => {
           fetcherName: 'useTpopkontrzaehlsNavData',
           fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
           hasChildren: !!filteredTpopkontrzaehlCount,
+          alwaysOpen: true,
         },
         {
           id: 'Biotop',

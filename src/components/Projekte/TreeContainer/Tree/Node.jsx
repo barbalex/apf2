@@ -13,6 +13,7 @@ export const Node = memo(({ menu }) => {
     label: menu.label,
     url: menu.treeUrl,
     hasChildren: menu.hasChildren,
+    alwaysOpen: menu.alwaysOpen,
   }
 
   return <Row node={node} />

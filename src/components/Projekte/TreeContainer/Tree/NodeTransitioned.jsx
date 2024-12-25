@@ -24,6 +24,7 @@ export const NodeTransitioned = memo(
       labelLeftElements: menu.labelLeftElements,
       url: menu.treeUrl,
       hasChildren: menu.hasChildren,
+      alwaysOpen: menu.alwaysOpen,
     }
 
     const ref = useRef(null)

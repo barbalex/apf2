@@ -3,9 +3,10 @@ import { memo } from 'react'
 import { Row } from '../../../../../../../../../../../../../../../Row.jsx'
 import { Zaehls } from './Zaehls.jsx'
 import { useTpopfeldkontrzaehlsNavData } from '../../../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrzaehlsNavData.js'
+import { NodesList } from '../../../../../../../../../../../../../../../NodesList/index.jsx'
 
 export const ZaehlFolder = memo(
-  ({ projekt, ap, pop, tpop, tpopkontr, menu, }) => {
+  ({ projekt, ap, pop, tpop, tpopkontr, menu }) => {
     const { navData } = useTpopfeldkontrzaehlsNavData({
       projId: projekt.id,
       apId: ap.id,
@@ -14,33 +15,22 @@ export const ZaehlFolder = memo(
       tpopkontrId: tpopkontr.id,
     })
 
-    const url = [
-      'Projekte',
-      projekt.id,
-      'Arten',
-      ap.id,
-      'Populationen',
-      pop.id,
-      'Teil-Populationen',
-      tpop.id,
-      'Feld-Kontrollen',
-      tpopkontr.id,
-      'Zaehlungen',
-    ]
-
     // Zählungen are always open
     const isOpen = true
 
     const node = {
-      nodeType: 'folder',
-      menuType: 'tpopfeldkontrzaehlFolder',
-      id: `${tpopkontr.id}TpopfeldkontrzaehlFolder`,
-      tableId: tpopkontr.id,
-      urlLabel: 'Zaehlungen',
-      label: navData.label,
-      url,
-      hasChildren: true,
-      alwaysOpen: true,
+      nodeType: menu.treeNodeType,
+      menuType: menu.treeMenuType,
+      id: menu.treeId,
+      tableId: menu.treeTableId,
+      parentId: menu.treeParentId,
+      parentTableId: menu.treeParentTableId,
+      urlLabel: menu.id,
+      label: menu.label,
+      labelLeftElements: menu.labelLeftElements,
+      url: menu.treeUrl,
+      hasChildren: menu.hasChildren,
+      alwaysOpen: menu.alwaysOpen,
     }
 
     return (
