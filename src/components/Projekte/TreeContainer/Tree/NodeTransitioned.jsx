@@ -10,46 +10,58 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { nodeFromMenu } from './nodeFromMenu.js'
 
 export const NodeTransitioned = memo(
-  observer(({ menu, in: inProp, inProp: inPropPassedFromAbove }) => {
-    const store = useContext(MobxContext)
+  observer(
+    ({
+      menu,
+      in: inPropLocal,
+      inProp: inPropPassedFromAbove,
+      // enables transitioning grandchildren. Example: Zielber
+      parentTransitionState,
+    }) => {
+      const store = useContext(MobxContext)
 
-    const node = nodeFromMenu(menu)
+      const node = nodeFromMenu(menu)
 
-    const ref = useRef(null)
+      const ref = useRef(null)
 
-    const isOpen =
-      menu.alwaysOpen ? true
-      : menu.treeUrl?.length ?
-        store.tree.openNodes.some((n) =>
-          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-        )
-      : false
+      const isOpen =
+        menu.alwaysOpen ? true
+        : menu.treeUrl?.length ?
+          store.tree.openNodes.some((n) =>
+            isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+          )
+        : false
 
-    // console.log('NodeTransitioned', { menu, isOpen, node })
+      // console.log('NodeTransitioned', { menu, isOpen, node })
 
-    return (
-      <Transition
-        in={inProp ?? inPropPassedFromAbove}
-        timeout={300}
-        mountOnEnter
-        unmountOnExit
-        nodeRef={ref}
-      >
-        {(state) => (
-          <>
-            <Row
-              node={node}
-              ref={ref}
-              transitionState={state}
-            />
-            {!!menu.fetcherName && (
-              <TransitionGroup component={null}>
-                {isOpen && <NodesList menu={menu} />}
-              </TransitionGroup>
-            )}
-          </>
-        )}
-      </Transition>
-    )
-  }),
+      return (
+        <Transition
+          in={inPropLocal ?? inPropPassedFromAbove}
+          timeout={300}
+          mountOnEnter
+          unmountOnExit
+          nodeRef={ref}
+        >
+          {(state) => (
+            <>
+              <Row
+                node={node}
+                ref={ref}
+                transitionState={
+                  parentTransitionState !== 'entered' ?
+                    parentTransitionState
+                  : state
+                }
+              />
+              {!!menu.fetcherName && (
+                <TransitionGroup component={null}>
+                  {isOpen && <NodesList menu={menu} />}
+                </TransitionGroup>
+              )}
+            </>
+          )}
+        </Transition>
+      )
+    },
+  ),
 )
