@@ -17,8 +17,6 @@ export const zieljahrFolder = async ({
   const jahr = +jahrString
   const { addOpenNodes } = tree
 
-  console.log('zieljahrFolder', { apId, projId, jahr, jahrString })
-
   // 1. load all data
   const { data } = await client.query({
     query: query,

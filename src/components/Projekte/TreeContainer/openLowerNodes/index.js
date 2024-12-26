@@ -26,15 +26,15 @@ export const openLowerNodes = ({
    * 5. activeNodeArray stays same
    * 6. refresh tree
    */
-  console.log('openLowerNodes', {
-    id,
-    parentId,
-    popId,
-    apId,
-    projId,
-    menuType,
-    jahr,
-  })
+  // console.log('openLowerNodes', {
+  //   id,
+  //   parentId,
+  //   popId,
+  //   apId,
+  //   projId,
+  //   menuType,
+  //   jahr,
+  // })
   switch (menuType) {
     case 'popFolder':
       popFolder({ id, projId, client, store })
