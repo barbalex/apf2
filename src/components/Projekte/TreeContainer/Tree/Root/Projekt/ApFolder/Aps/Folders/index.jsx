@@ -82,8 +82,6 @@ export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
 
   const ref = useRef(null)
 
-  console.log('ApFolders, idealbiotopMenu:', idealbiotopMenu)
-
   return (
     <Transition
       in={inProp}
