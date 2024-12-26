@@ -1,22 +1,12 @@
-import { memo, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { memo } from 'react'
 
-import { Row } from '../../../../../../../../../../../../../Row.jsx'
-import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { useTpopfreiwkontrsNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrsNavData.js'
 import { Tpopfreiwkontr } from './Tpopfreiwkontr.jsx'
 
-export const Tpopfreiwkontrs = memo(
-  observer(({ projekt, ap, pop, tpop, in: inProp, menu }) => {
-    const store = useContext(MobxContext)
+export const Tpopfreiwkontrs = memo(({ in: inProp, menu }) => {
+  const { navData } = useTpopfreiwkontrsNavData(menu.fetcherParams)
 
-    const { navData } = useTpopfreiwkontrsNavData(menu.fetcherParams)
-
-    return navData.menus.map((menu) => (
-      <Tpopfreiwkontr
-        key={menu.id}
-        {...{ menu, projekt, ap, pop, tpop, inProp }}
-      />
-    ))
-  }),
-)
+  return navData.menus.map((menu) => (
+    <Tpopfreiwkontr key={menu.id} menu={menu} inProp={inProp} />
+  ))
+})

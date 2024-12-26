@@ -4,7 +4,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import { Row } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
-import { TpopfreiwkontrFolders } from './Folders.jsx'
+import { Folders } from './Folders.jsx'
 import { useTpopfreiwkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrNavData.js'
 import { nodeFromMenu } from '../../../../../../../../../../../../../nodeFromMenu.js'
 import { checkIfIsOpen } from '../../../../../../../../../../../../../checkIfIsOpen.js'
@@ -34,7 +34,7 @@ export const Tpopfreiwkontr = memo(
             <Row node={node} ref={ref} transitionState={state} />
             <TransitionGroup component={null}>
               {isOpen && (
-                <TpopfreiwkontrFolders
+                <Folders
                   projekt={projekt}
                   ap={ap}
                   pop={pop}

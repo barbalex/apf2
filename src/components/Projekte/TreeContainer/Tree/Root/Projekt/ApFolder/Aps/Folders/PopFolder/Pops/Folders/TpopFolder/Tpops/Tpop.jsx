@@ -10,9 +10,8 @@ import { useTpopNavData } from '../../../../../../../../../../../../../../module
 import { nodeFromMenu } from '../../../../../../../../../../nodeFromMenu.js'
 import { checkIfIsOpen } from '../../../../../../../../../../checkIfIsOpen.js'
 
-// TODO: get rid of having to pass projekt, ap, pop
 export const Tpop = memo(
-  observer(({ projekt, ap, pop, menu, inProp }) => {
+  observer(({ menu, inProp }) => {
     const store = useContext(MobxContext)
 
     const { navData } = useTpopNavData(menu.fetcherParams)
@@ -35,9 +34,7 @@ export const Tpop = memo(
           <>
             <Row node={node} ref={ref} transitionState={state} />
             <TransitionGroup component={null}>
-              {isOpen && (
-                <TpopFolders projekt={projekt} ap={ap} pop={pop} menu={menu} />
-              )}
+              {isOpen && <TpopFolders menu={menu} />}
             </TransitionGroup>
           </>
         )}

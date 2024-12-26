@@ -9,7 +9,7 @@ import { checkIfIsOpen } from '../../../../../../../../../../../../checkIfIsOpen
 import { nodeFromMenu } from '../../../../../../../../../../../../nodeFromMenu.js'
 
 export const TpopfreiwkontrFolder = memo(
-  observer(({ projekt, ap, pop, tpop, menu }) => {
+  observer(({ menu }) => {
     const store = useContext(MobxContext)
 
     const isOpen = checkIfIsOpen({ store, menu })
@@ -20,15 +20,7 @@ export const TpopfreiwkontrFolder = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && (
-            <Tpopfreiwkontrs
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={tpop}
-              menu={menu}
-            />
-          )}
+          {isOpen && <Tpopfreiwkontrs menu={menu} />}
         </TransitionGroup>
       </>
     )

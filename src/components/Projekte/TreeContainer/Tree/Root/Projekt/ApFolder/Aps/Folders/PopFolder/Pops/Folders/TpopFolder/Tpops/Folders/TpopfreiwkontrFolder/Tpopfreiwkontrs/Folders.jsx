@@ -8,7 +8,7 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-export const TpopfreiwkontrFolders = memo(({ navData, in: inProp }) => {
+export const Folders = memo(({ navData, in: inProp }) => {
   const menus = useMemo(
     () => (navData?.menus ?? []).filter((m) => !!m.component),
     [navData],
