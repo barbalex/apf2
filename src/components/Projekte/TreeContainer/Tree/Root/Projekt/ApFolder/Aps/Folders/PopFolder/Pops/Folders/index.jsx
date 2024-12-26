@@ -12,8 +12,7 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-// TODO: get rid of having to pass projekt, ap, pop
-export const PopFolders = memo(({ projekt, ap, menu, in: inProp }) => {
+export const PopFolders = memo(({ menu, in: inProp }) => {
   const { navData } = usePopNavData(menu.fetcherParams)
 
   const tpopMenu = useMemo(
@@ -52,16 +51,8 @@ export const PopFolders = memo(({ projekt, ap, menu, in: inProp }) => {
       nodeRef={ref}
     >
       {(state) => (
-        <Container
-          ref={ref}
-          style={transitionStyles[state]}
-        >
-          <TpopFolder
-            projekt={projekt}
-            ap={ap}
-            pop={menu}
-            menu={tpopMenu}
-          />
+        <Container ref={ref} style={transitionStyles[state]}>
+          <TpopFolder menu={tpopMenu} />
           <NodeListFolder menu={popberMenu} />
           <NodeListFolder menu={popmassnberMenu} />
           <Node menu={auswertungMenu} />

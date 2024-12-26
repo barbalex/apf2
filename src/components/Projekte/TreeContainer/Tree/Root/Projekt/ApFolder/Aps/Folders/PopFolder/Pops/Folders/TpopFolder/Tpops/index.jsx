@@ -7,13 +7,6 @@ export const Tpops = memo(({ in: inProp, menu }) => {
   const { navData } = useTpopsNavData(menu.fetcherParams)
 
   return navData.menus.map((menu) => (
-    <Tpop
-      key={menu.id}
-      projekt={projekt}
-      ap={ap}
-      pop={pop}
-      menu={menu}
-      inProp={inProp}
-    />
+    <Tpop key={menu.id} menu={menu} inProp={inProp} />
   ))
 })

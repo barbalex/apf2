@@ -12,8 +12,7 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-// TODO: get rid of having to pass projekt, ap
-export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
+export const ApFolders = memo(({ in: inProp, navData }) => {
   const popMenu = useMemo(
     () => navData?.menus.find((m) => m.id === 'Populationen'),
     [navData],
@@ -84,7 +83,6 @@ export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
 
   // TODO: map over menus and return their components
   // WHEN: PopFolder has component
-// TODO: get rid of having to pass projekt, ap
   return (
     <Transition
       in={inProp}
@@ -94,15 +92,8 @@ export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
       nodeRef={ref}
     >
       {(state) => (
-        <Container
-          ref={ref}
-          style={transitionStyles[state]}
-        >
-          <PopFolder
-            projekt={projekt}
-            ap={ap}
-            menu={popMenu}
-          />
+        <Container ref={ref} style={transitionStyles[state]}>
+          <PopFolder menu={popMenu} />
           <NodeListFolder menu={apZielJahrsMenu} />
           <NodeListFolder menu={apErfkritsMenu} />
           <NodeListFolder menu={apBerMenu} />

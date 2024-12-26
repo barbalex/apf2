@@ -9,9 +9,8 @@ import { PopFolders } from './Folders/index.jsx'
 import { nodeFromMenu } from '../../../../../../../nodeFromMenu.js'
 import { usePopNavData } from '../../../../../../../../../../../modules/usePopNavData.js'
 
-// TODO: get rid of having to pass projekt, ap, pop
 export const Pop = memo(
-  observer(({ projekt, ap, menu, inProp }) => {
+  observer(({ menu, inProp }) => {
     const store = useContext(MobxContext)
 
     const { navData } = usePopNavData(menu.fetcherParams)
@@ -20,12 +19,11 @@ export const Pop = memo(
 
     const ref = useRef(null)
 
-    const isOpen =
-      navData.alwaysOpen ? true : (
-        store.tree.openNodes.some((n) =>
+    const isOpen = navData.alwaysOpen
+      ? true
+      : store.tree.openNodes.some((n) =>
           isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
         )
-      )
 
     return (
       <Transition
@@ -37,19 +35,9 @@ export const Pop = memo(
       >
         {(state) => (
           <>
-            <Row
-              node={node}
-              transitionState={state}
-              ref={ref}
-            />
+            <Row node={node} transitionState={state} ref={ref} />
             <TransitionGroup component={null}>
-              {isOpen && (
-                <PopFolders
-                  projekt={projekt}
-                  ap={ap}
-                  menu={menu}
-                />
-              )}
+              {isOpen && <PopFolders menu={menu} />}
             </TransitionGroup>
           </>
         )}
