@@ -31,6 +31,7 @@ export const TpopFolder = memo(
               projekt={projekt}
               ap={ap}
               pop={pop}
+              menu={menu}
             />
           )}
         </TransitionGroup>
