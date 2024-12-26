@@ -432,6 +432,7 @@ export const Menus = memo(
             })
           },
           openLowerNodes() {
+            console.log('Menus.openLowerNodes, jahr:', jahr)
             openLowerNodes({
               id,
               parentId,

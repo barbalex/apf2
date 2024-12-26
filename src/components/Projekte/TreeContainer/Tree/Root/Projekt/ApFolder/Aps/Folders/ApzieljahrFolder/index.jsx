@@ -9,9 +9,8 @@ import { Zieljahrs } from './Zieljahrs.jsx'
 import { NodeListFolder } from '../../../../../../NodeListFolder.jsx'
 import { nodeFromMenu } from '../../../../../../nodeFromMenu.js'
 
-// TODO: get rid of having to pass projekt, ap
 export const ApzieljahrFolder = memo(
-  observer(({ projekt, ap, menu }) => {
+  observer(({ menu }) => {
     const store = useContext(MobxContext)
 
     const isOpen =
@@ -29,13 +28,7 @@ export const ApzieljahrFolder = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && (
-            <Zieljahrs
-              projekt={projekt}
-              ap={ap}
-              menu={menu}
-            />
-          )}
+          {isOpen && <Zieljahrs menu={menu} />}
         </TransitionGroup>
       </>
     )

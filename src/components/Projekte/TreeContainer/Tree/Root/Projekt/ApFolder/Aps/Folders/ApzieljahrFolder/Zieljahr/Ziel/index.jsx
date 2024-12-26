@@ -8,27 +8,22 @@ import { MobxContext } from '../../../../../../../../../../../../mobxContext.js'
 import { ZielberFolder } from './ZielberFolder/index.jsx'
 import { NodeListFolderTransitioned } from '../../../../../../../../NodeListFolderTransitioned.jsx'
 import { NodeTransitioned } from '../../../../../../../../NodeTransitioned.jsx'
+import { nodeFromMenu } from '../../../../../../../../nodeFromMenu.js'
 
 export const Ziel = memo(
-  observer(({ projekt, ap, jahr, menu, inProp }) => {
+  observer(({ menu, inProp }) => {
     const store = useContext(MobxContext)
 
-    const node = {
-      nodeType: menu.treeNodeType,
-      menuType: menu.treeMenuType,
-      id: menu.treeId,
-      tableId: menu.treeTableId,
-      urlLabel: menu.id,
-      label: menu.label,
-      url: menu.treeUrl,
-      hasChildren: menu.hasChildren,
-    }
+    const node = nodeFromMenu(menu)
 
     const ref = useRef(null)
 
-    const isOpen = store.tree.openNodes.some((n) =>
-      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-    )
+    const isOpen =
+      menu.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+        )
+      )
 
     // console.log('Ziel', { node, menu })
 
@@ -55,14 +50,7 @@ export const Ziel = memo(
               transitionState={state}
             />
             <TransitionGroup component={null}>
-              {isOpen && (
-                <ZielberFolder
-                  projekt={projekt}
-                  ap={ap}
-                  jahr={jahr}
-                  menu={menu}
-                />
-              )}
+              {isOpen && <ZielberFolder menu={menu} />}
             </TransitionGroup>
           </>
         )}

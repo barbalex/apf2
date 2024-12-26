@@ -101,11 +101,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
             ap={ap}
             menu={popMenu}
           />
-          <ApzieljahrFolder
-            projekt={projekt}
-            ap={ap}
-            menu={apZielJahrsMenu}
-          />
+          <ApzieljahrFolder menu={apZielJahrsMenu} />
           <NodeListFolder menu={apErfkritsMenu} />
           <NodeListFolder menu={apBerMenu} />
           <NodeListFolder menu={idealbiotopMenu} />
