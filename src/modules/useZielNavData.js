@@ -59,11 +59,21 @@ export const useZielNavData = (props) => {
       id: zielId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}`,
       label: data?.data?.zielById?.label ?? '(nicht beschrieben)',
+      treeNodeType: 'table',
+      treeMenuType: 'ziel',
+      treeId: zielId,
+      treeParentId: apId,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, zielId],
+      fetcherName: 'useZielNavData',
+      fetcherParams: { projId, apId, jahr, zielId },
+      hasChildren: true,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Ziel',
           label: 'Ziel',
+          isSelf: true,
         },
         {
           id: 'Berichte',
@@ -84,7 +94,9 @@ export const useZielNavData = (props) => {
           ],
           fetcherName: 'useZielbersNavData',
           fetcherParams: { projId, apId, jahr, zielId },
+          passTransitionStateToChildren: true,
           hasChildren: !!filteredZielbersCount,
+          alwaysOpen: true,
         },
       ],
     }),

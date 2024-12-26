@@ -9,19 +9,24 @@ import { ZielberFolder } from './ZielberFolder/index.jsx'
 import { NodeListFolderTransitioned } from '../../../../../../../../NodeListFolderTransitioned.jsx'
 import { NodeTransitioned } from '../../../../../../../../NodeTransitioned.jsx'
 import { nodeFromMenu } from '../../../../../../../../nodeFromMenu.js'
+import { useZielNavData } from '../../../../../../../../../../../../modules/useZielNavData.js'
 
 export const Ziel = memo(
   observer(({ menu, inProp }) => {
     const store = useContext(MobxContext)
 
-    const node = nodeFromMenu(menu)
+    const { navData } = useZielNavData(menu.fetcherParams)
+
+    console.log('Ziel', { menu, navData })
+
+    const node = nodeFromMenu(navData)
 
     const ref = useRef(null)
 
     const isOpen =
-      menu.alwaysOpen ? true : (
+      navData.alwaysOpen ? true : (
         store.tree.openNodes.some((n) =>
-          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+          isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
         )
       )
 

@@ -98,7 +98,7 @@ export const useZielsOfJahrNavData = (props) => {
         treeParentId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, p.id],
-        fetcherName: 'useZielbersNavData',
+        fetcherName: 'useZielNavData',
         fetcherParams: { projId, apId, jahr, zielId: p.id },
         hasChildren: !!filteredZiels.length,
       })),
