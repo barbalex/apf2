@@ -134,16 +134,19 @@ export const useTpopfeldkontrNavData = (props) => {
       fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
       treeSingleElementName: 'Feld-Kontrolle',
       hasChildren: true,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
+      childrenAreFolders: true,
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Feld-Kontrolle',
           label: `Feld-Kontrolle`,
           isSelf: true,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         },
         {
           id: 'Zaehlungen',

@@ -124,6 +124,7 @@ export const useTpopfreiwkontrNavData = (props) => {
       fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
       singleElementName: 'Freiwilligen-Kontrolle',
       hasChildren: true,
+      childrenAreFolders: true,
       labelRightElements: labelRightElements.length
         ? labelRightElements
         : undefined,

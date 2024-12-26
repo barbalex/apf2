@@ -7,6 +7,7 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useTpopmassnNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -77,8 +78,30 @@ export const useTpopmassnNavData = (props) => {
       id: tpopmassnId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${tpopmassnId}`,
       label,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopmassn',
+      treeId: tpopmassnId,
+      treeParentId: tpopId,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Massnahmen',
+        tpopmassnId,
+      ],
+      hasChildren: true,
+      childrenAreFolders: true,
+      fetcherName: 'useTpopmassnNavData',
+      fetcherParams: { projId, apId, popId, tpopId, tpopmassnId },
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
@@ -97,8 +120,9 @@ export const useTpopmassnNavData = (props) => {
             tpopmassnId,
             'Massnahme',
           ],
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
           isSelf: true,
         },
         {
@@ -122,6 +146,7 @@ export const useTpopmassnNavData = (props) => {
             'Dateien',
           ],
           hasChildren: false,
+          component: Node,
         },
       ],
     }),
