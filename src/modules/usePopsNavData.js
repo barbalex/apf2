@@ -16,7 +16,7 @@ import { PopIcon202 } from '../components/Projekte/Karte/layers/Pop/statusGroupS
 import { PopIcon202Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/202Highlighted.jsx'
 import { PopIcon300 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300.jsx'
 import { PopIcon300Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300Highlighted.jsx'
-import { PopIcon } from '../components/Projekte/Karte/layers/Pop/Pop.jsx'
+import { PopIcon as PopIconComponent } from '../components/Projekte/Karte/layers/Pop/Pop.jsx'
 import { PopIconHighlighted } from '../components/Projekte/Karte/layers/Pop/PopHighlighted.jsx'
 import { PopIconU } from '../components/Projekte/Karte/layers/Pop/statusGroup/U.jsx'
 import { PopIconUHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/UHighlighted.jsx'
@@ -31,21 +31,20 @@ import { MobxContext } from '../mobxContext.js'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
-import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const popIcons = {
   normal: {
-    100: PopIcon,
+    100: PopIconComponent,
     '100Highlighted': PopIconHighlighted,
-    101: PopIcon,
+    101: PopIconComponent,
     '101Highlighted': PopIconHighlighted,
-    200: PopIcon,
+    200: PopIconComponent,
     '200Highlighted': PopIconHighlighted,
-    201: PopIcon,
+    201: PopIconComponent,
     '201Highlighted': PopIconHighlighted,
-    202: PopIcon,
+    202: PopIconComponent,
     '202Highlighted': PopIconHighlighted,
-    300: PopIcon,
+    300: PopIconComponent,
     '300Highlighted': PopIconHighlighted,
   },
   statusGroup: {
@@ -85,13 +84,7 @@ export const usePopsNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
   const store = useContext(MobxContext)
-
-  const showPopIcon =
-    store.activeApfloraLayers?.includes('pop') && karteIsVisible
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
@@ -174,7 +167,7 @@ export const usePopsNavData = (props) => {
       fetcherName: 'usePopsNavData',
       fetcherParams: { projId, apId },
       hasChildren: !!count,
-      labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
+      labelLeftElements: store.tree.showPopIcon ? [PopMapIcon] : undefined,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id
@@ -223,7 +216,6 @@ export const usePopsNavData = (props) => {
       popIconName,
       popId,
       projId,
-      showPopIcon,
       store.copying.id,
       store.moving.id,
       store.tree.showPopIcon,

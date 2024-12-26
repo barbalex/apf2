@@ -1,6 +1,7 @@
 import { memo, useContext, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 
 import { Row } from '../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../mobxContext.js'
@@ -15,40 +16,16 @@ export const Pop = memo(
 
     const { navData } = usePopNavData(menu.fetcherParams)
 
-    const node = {
-      nodeType: 'table',
-      menuType: 'pop',
-      singleElementName: 'Population',
-      id: menu.id,
-      parentId: `${ap.id}PopFolder`,
-      parentTableId: ap.id,
-      urlLabel: menu.id,
-      label: menu.label,
-      labelLeftElements: menu.labelLeftElements,
-      labelRightElements: menu.labelRightElements,
-      status: menu.status,
-      url: ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen', menu.id],
-      hasChildren: true,
-    }
-    console.log('Pop', { node, nodeFromMenu: nodeFromMenu(navData) })
+    const node = nodeFromMenu(navData)
 
     const ref = useRef(null)
 
     const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 5 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen' &&
-          n[5] === menu.id,
-      ).length > 0
-    // const isOpen =
-    //   navData.alwaysOpen ? true : (
-    //     store.tree.openNodes.some((n) =>
-    //       isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
-    //     )
-    //   )
+      navData.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
+        )
+      )
 
     return (
       <Transition

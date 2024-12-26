@@ -6,9 +6,9 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
-import { useProjekteTabs } from './useProjekteTabs.js'
 import { popIcons } from './usePopsNavData.js'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
+import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 
@@ -19,13 +19,7 @@ export const usePopNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
   const store = useContext(MobxContext)
-
-  const showTpopIcon =
-    store.activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
@@ -145,8 +139,14 @@ export const usePopNavData = (props) => {
   const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
 
   const popIconName = store.map.popIcon
+
+  const popIconIsHighlighted = props?.popId === params.popId
   const PopIcon =
-    status ? popIcons[popIconName][status + 'Highlighted'] : PopIconQHighlighted
+    status ?
+      popIconIsHighlighted ? popIcons[popIconName][status + 'Highlighted']
+      : popIcons[popIconName][status]
+    : popIconIsHighlighted ? PopIconQHighlighted
+    : PopIconQ
 
   const labelRightElements = useMemo(() => {
     const labelRightElements = []
@@ -194,7 +194,8 @@ export const usePopNavData = (props) => {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
           count: tpopsCount,
-          labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
+          labelLeftElements:
+            store.tree.showTpopIcon ? [TpopMapIcon] : undefined,
         },
         {
           id: 'Kontroll-Berichte',
@@ -299,12 +300,12 @@ export const usePopNavData = (props) => {
       label,
       status,
       store.tree.showPopIcon,
+      store.tree.showTpopIcon,
       PopIcon,
       labelRightElements,
       isLoading,
       filteredTpopsCount,
       tpopsCount,
-      showTpopIcon,
       filteredPopbersCount,
       popbersCount,
       filteredPopmassnbersCount,
