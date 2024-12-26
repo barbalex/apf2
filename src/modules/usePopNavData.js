@@ -11,6 +11,7 @@ import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -20,6 +21,11 @@ export const usePopNavData = (props) => {
   const popId = props?.popId ?? params.popId
 
   const store = useContext(MobxContext)
+
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+  const showTpopIcon =
+    store.activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const [, setRerenderer] = useState(0)
   const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
@@ -194,8 +200,8 @@ export const usePopNavData = (props) => {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
           count: tpopsCount,
-          labelLeftElements:
-            store.tree.showTpopIcon ? [TpopMapIcon] : undefined,
+          // TODO: show this on only if map is visible and tpop layer is set
+          labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
         },
         {
           id: 'Kontroll-Berichte',
@@ -300,12 +306,12 @@ export const usePopNavData = (props) => {
       label,
       status,
       store.tree.showPopIcon,
-      store.tree.showTpopIcon,
       PopIcon,
       labelRightElements,
       isLoading,
       filteredTpopsCount,
       tpopsCount,
+      showTpopIcon,
       filteredPopbersCount,
       popbersCount,
       filteredPopmassnbersCount,
