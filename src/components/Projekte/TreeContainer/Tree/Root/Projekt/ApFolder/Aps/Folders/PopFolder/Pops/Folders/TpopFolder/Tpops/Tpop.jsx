@@ -7,6 +7,7 @@ import { MobxContext } from '../../../../../../../../../../../../../../mobxConte
 import { Row } from '../../../../../../../../../../Row.jsx'
 import { TpopFolders } from './Folders/index.jsx'
 import { useTpopNavData } from '../../../../../../../../../../../../../../modules/useTpopNavData.js'
+import { nodeFromMenu } from '../../../../../../../../../../nodeFromMenu.js'
 
 // TODO: get rid of having to pass projekt, ap, pop
 export const Tpop = memo(
@@ -22,30 +23,7 @@ export const Tpop = memo(
         )
       )
 
-    const node = {
-      nodeType: 'table',
-      menuType: 'tpop',
-      singleElementName: 'Teil-Population',
-      id: menu.id,
-      parentId: `${pop.id}TpopFolder`,
-      parentTableId: pop.id,
-      urlLabel: menu.id,
-      label: menu.label,
-      labelLeftElements: menu.labelLeftElements,
-      labelRightElements: menu.labelRightElements,
-      status: menu.status,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'Populationen',
-        pop.id,
-        'Teil-Populationen',
-        menu.id,
-      ],
-      hasChildren: true,
-    }
+    const node = nodeFromMenu(navData)
 
     const ref = useRef(null)
 

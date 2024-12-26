@@ -10,6 +10,7 @@ import { useProjekteTabs } from './useProjekteTabs.js'
 
 // TODO:remove unused
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
+import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.jsx'
 import { tpopIcons } from './useTpopsNavData.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
@@ -22,10 +23,11 @@ export const useTpopNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
+  const store = useContext(MobxContext)
+
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
 
-  const store = useContext(MobxContext)
   const showBeobzugeordnetIcon =
     store.activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
   const [, setRerenderer] = useState(0)
@@ -217,10 +219,13 @@ export const useTpopNavData = (props) => {
 
   const tpopIconName = store.map.tpopIcon
 
+  const tpopIconIsHighlighted = props?.tpopId === params.tpopId
   const TpopIcon =
     status ?
-      tpopIcons[tpopIconName][status + 'Highlighted']
-    : TpopIconQHighlighted
+      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
+      : tpopIcons[tpopIconName][status]
+    : tpopIconIsHighlighted ? TpopIconQHighlighted
+    : TpopIconQ
 
   const labelRightElements = useMemo(() => {
     const labelRightElements = []
@@ -259,6 +264,7 @@ export const useTpopNavData = (props) => {
       fetcherName: 'useTpopData',
       fetcherParams: { projId, apId, popId, tpopId },
       hasChildren: true,
+      // TODO: show only if map is visible and tpop layer active
       labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
       labelRightElements:
         labelRightElements.length ? labelRightElements : undefined,
