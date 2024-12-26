@@ -10,10 +10,10 @@ import { useApNavData } from '../../../../../../../../modules/useApNavData.js'
 import { nodeFromMenu } from '../../../../nodeFromMenu.js'
 
 export const Ap = memo(
-  observer(({ projekt, ap, inProp }) => {
+  observer(({ projekt, ap, inProp, menu }) => {
     const store = useContext(MobxContext)
 
-    const { navData } = useApNavData({ projId: projekt.id, apId: ap.id })
+    const { navData } = useApNavData(menu.fetcherParams)
 
     const ref = useRef(null)
 
@@ -46,6 +46,7 @@ export const Ap = memo(
                 <ApFolders
                   ap={ap}
                   projekt={projekt}
+                  navData={navData}
                 />
               )}
             </TransitionGroup>

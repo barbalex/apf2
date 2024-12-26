@@ -375,7 +375,7 @@ export const useApNavData = (props) => {
           treeTableId: apId,
           treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
           fetcherName: 'useErfkritsNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredErfkritsCount,
         },
         {
@@ -387,12 +387,20 @@ export const useApNavData = (props) => {
           treeTableId: apId,
           treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte'],
           fetcherName: 'useApbersNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredApbersCount,
         },
         {
           id: 'Idealbiotop',
           label: `Idealbiotop`,
+          treeNodeType: 'folder',
+          treeMenuType: 'idealbiotopFolder',
+          treeId: `${apId}IdealbiotopFolder`,
+          treeTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
+          fetcherName: 'useIdealbiotopNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: true,
         },
         {
           id: 'Taxa',
@@ -403,7 +411,7 @@ export const useApNavData = (props) => {
           treeTableId: apId,
           treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa'],
           fetcherName: 'useApartsNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredApartsCount,
         },
         {
@@ -415,7 +423,7 @@ export const useApNavData = (props) => {
           treeTableId: apId,
           treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten'],
           fetcherName: 'useAssozartsNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredAssozartsCount,
         },
         {
@@ -427,7 +435,7 @@ export const useApNavData = (props) => {
           treeTableId: apId,
           treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
           fetcherName: 'useEkfrequenzsNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredEkfrequenzsCount,
         },
         {
@@ -439,7 +447,7 @@ export const useApNavData = (props) => {
           treeTableId: apId,
           treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
           fetcherName: 'useEkzaehleinheitsNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredEkzaehleinheitsCount,
         },
         {
@@ -457,7 +465,7 @@ export const useApNavData = (props) => {
             'nicht-beurteilte-Beobachtungen',
           ],
           fetcherName: 'useBeobNichtBeurteiltsNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredBeobsNichtBeurteiltCount,
           labelLeftElements:
             showBeobnichtbeurteiltIcon ?
@@ -479,7 +487,7 @@ export const useApNavData = (props) => {
             'nicht-zuzuordnende-Beobachtungen',
           ],
           fetcherName: 'useBeobNichtZuzuordnensNavData',
-          fetcherParams: { apId },
+          fetcherParams: { projId, apId },
           hasChildren: !!filteredBeobsNichtZuzuordnenCount,
           labelLeftElements:
             showBeobnichtzuzuordnenIcon ?

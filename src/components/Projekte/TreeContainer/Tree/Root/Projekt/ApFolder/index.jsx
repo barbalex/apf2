@@ -26,7 +26,7 @@ export const ApFolder = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && <Aps projekt={projekt} />}
+          {isOpen && <Aps projekt={projekt} menu={menu} />}
         </TransitionGroup>
       </>
     )

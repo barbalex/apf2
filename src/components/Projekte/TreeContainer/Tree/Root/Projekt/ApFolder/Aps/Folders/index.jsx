@@ -4,7 +4,6 @@ import { Transition } from 'react-transition-group'
 
 import { PopFolder } from './PopFolder/index.jsx'
 import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
-import { IdealbiotopFolder } from './IdealbiotopFolder.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
@@ -14,9 +13,7 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
-  const { navData, isLoading } = useApNavData({ apId: ap.id })
-
+export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
   const popMenu = useMemo(
     () => navData?.menus.find((m) => m.id === 'Populationen'),
     [navData],
@@ -31,6 +28,10 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
   )
   const apBerMenu = useMemo(
     () => navData?.menus.find((m) => m.id === 'AP-Berichte'),
+    [navData],
+  )
+  const idealbiotopMenu = useMemo(
+    () => navData?.menus.find((m) => m.id === 'Idealbiotop'),
     [navData],
   )
   const apArtMenu = useMemo(
@@ -81,6 +82,8 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
 
   const ref = useRef(null)
 
+  console.log('ApFolders, idealbiotopMenu:', idealbiotopMenu)
+
   return (
     <Transition
       in={inProp}
@@ -106,10 +109,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp }) => {
           />
           <NodeListFolder menu={apErfkritsMenu} />
           <NodeListFolder menu={apBerMenu} />
-          <IdealbiotopFolder
-            projekt={projekt}
-            ap={ap}
-          />
+          <NodeListFolder menu={idealbiotopMenu} />
           <NodeListFolder menu={apArtMenu} />
           <NodeListFolder menu={assozartMenu} />
           <NodeListFolder menu={ekfrequenzMenu} />

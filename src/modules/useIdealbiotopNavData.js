@@ -40,14 +40,24 @@ export const useIdealbiotopNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: apId,
+      id: 'Idealbiotop',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Idealbiotop`,
       label: 'Idealbiotop',
+      treeNodeType: 'folder',
+      treeMenuType: 'idealbiotopFolder',
+      treeId: `${apId}IdealbiotopFolder`,
+      treeTableId: apId,
+      treeParentId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
+      hasChildren: true,
+      fetcherName: 'useIdealbiotopNavData',
+      fetcherParams: { projId, apId },
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Idealbiotop',
           label: `Idealbiotop`,
+          isSelf: true,
         },
         {
           id: 'Dateien',
@@ -57,7 +67,14 @@ export const useIdealbiotopNavData = (props) => {
           treeMenuType: 'idealbiotopDateienFolder',
           treeId: `${apId}IdealbiotopDateienFolder`,
           treeTableId: apId,
-          treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop', 'Dateien'],
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Idealbiotop',
+            'Dateien',
+          ],
           hasChildren: false,
         },
       ],
