@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { useTpopfeldkontrsNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrsNavData.js'
 import { Tpopfeldkontr } from './Tpopfeldkontr.jsx'
 
+// TODO: get rid of having to pass projekt, ap, pop, tpop
 export const Tpopfeldkontrs = memo(({ projekt, ap, pop, tpop, in: inProp }) => {
   const { navData } = useTpopfeldkontrsNavData({
     projId: projekt.id,

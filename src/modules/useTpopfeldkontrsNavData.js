@@ -9,7 +9,6 @@ import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.jsx'
-import { tr } from 'date-fns/locale'
 
 export const useTpopfeldkontrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -147,8 +146,9 @@ export const useTpopfeldkontrsNavData = (props) => {
             fetcherName: 'useTpopfeldkontrNavData',
             fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
             hasChildren: true,
-            labelRightElements:
-              labelRightElements.length ? labelRightElements : undefined,
+            labelRightElements: labelRightElements.length
+              ? labelRightElements
+              : undefined,
           }
         },
       ),

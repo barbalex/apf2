@@ -220,12 +220,13 @@ export const useTpopNavData = (props) => {
   const tpopIconName = store.map.tpopIcon
 
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
-  const TpopIcon =
-    status ?
-      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
+  const TpopIcon = status
+    ? tpopIconIsHighlighted
+      ? tpopIcons[tpopIconName][status + 'Highlighted']
       : tpopIcons[tpopIconName][status]
-    : tpopIconIsHighlighted ? TpopIconQHighlighted
-    : TpopIconQ
+    : tpopIconIsHighlighted
+      ? TpopIconQHighlighted
+      : TpopIconQ
 
   const labelRightElements = useMemo(() => {
     const labelRightElements = []
@@ -266,8 +267,9 @@ export const useTpopNavData = (props) => {
       hasChildren: true,
       // TODO: show only if map is visible and tpop layer active
       labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
@@ -275,8 +277,9 @@ export const useTpopNavData = (props) => {
           label: `Teil-Population`,
           // TODO: add more
           labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         },
         {
           id: 'Massnahmen',
@@ -347,6 +350,24 @@ export const useTpopNavData = (props) => {
         {
           id: 'Freiwilligen-Kontrollen',
           label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${filteredFreiwkontrCount}/${freiwkontrCount}`})`,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopfreiwkontrFolder',
+          treeId: `${tpopId}FreiwkontrFolder`,
+          treeTableId: tpopId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Freiwilligen-Kontrollen',
+          ],
+          fetcherName: 'useTpopfreiwkontrsNavData',
+          fetcherParams: { projId, apId, popId, tpopId },
+          hasChildren: !!filteredFreiwkontrCount,
         },
         {
           id: 'Kontroll-Berichte',
@@ -391,8 +412,9 @@ export const useTpopNavData = (props) => {
           fetcherName: 'useBeobZugeordnetsNavData',
           fetcherParams: { projId, apId, popId, tpopId },
           hasChildren: !!filteredBeobZugeordnetCount,
-          labelLeftElements:
-            showBeobzugeordnetIcon ? [BeobzugeordnetMapIcon] : undefined,
+          labelLeftElements: showBeobzugeordnetIcon
+            ? [BeobzugeordnetMapIcon]
+            : undefined,
         },
         {
           id: 'EK',
