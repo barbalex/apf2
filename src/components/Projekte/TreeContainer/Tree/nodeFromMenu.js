@@ -17,4 +17,5 @@ export const nodeFromMenu = (menu) => ({
   jahr: menu.jahr,
   // needed for pop and tpop folders
   status: menu.status,
+  hideInNavList: menu.hideInNavList,
 })

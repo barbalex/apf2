@@ -8,9 +8,8 @@ import { MobxContext } from '../../../../../../../../../../../../../../../../mob
 import { Tpopfeldkontrs } from './Tpopfeldkontrs/index.jsx'
 import { nodeFromMenu } from '../../../../../../../../../../../../nodeFromMenu.js'
 
-// TODO: get rid of having to pass projekt, ap, pop, tpop
 export const TpopfeldkontrFolder = memo(
-  observer(({ projekt, ap, pop, tpop, menu }) => {
+  observer(({ menu }) => {
     const store = useContext(MobxContext)
 
     const isOpen = menu.alwaysOpen

@@ -69,19 +69,10 @@ export const TpopFolders = memo(({ projekt, ap, pop, menu, in: inProp }) => {
       nodeRef={ref}
     >
       {(state) => (
-        <Container
-          ref={ref}
-          style={transitionStyles[state]}
-        >
+        <Container ref={ref} style={transitionStyles[state]}>
           <NodeListFolder menu={tpopmassnMenu} />
           <NodeListFolder menu={tpopmassnberMenu} />
-          <TpopfeldkontrFolder
-            projekt={projekt}
-            ap={ap}
-            pop={pop}
-            tpop={menu}
-            menu={tpopfeldkontrMenu}
-          />
+          <TpopfeldkontrFolder menu={tpopfeldkontrMenu} />
           <TpopfreiwkontrFolder
             projekt={projekt}
             ap={ap}

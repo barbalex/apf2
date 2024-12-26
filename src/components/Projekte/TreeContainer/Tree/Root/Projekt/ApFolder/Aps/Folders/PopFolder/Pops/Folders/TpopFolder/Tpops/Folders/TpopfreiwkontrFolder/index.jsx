@@ -5,6 +5,8 @@ import { TransitionGroup } from 'react-transition-group'
 import { Row } from '../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../mobxContext.js'
 import { Tpopfreiwkontrs } from './Tpopfreiwkontrs/index.jsx'
+import { checkIfIsOpen } from '../../../../../../../../../../../../checkIfIsOpen.js'
+import { nodeFromMenu } from '../../../../../../../../../../../../nodeFromMenu.js'
 
 export const TpopfreiwkontrFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
@@ -22,17 +24,7 @@ export const TpopfreiwkontrFolder = memo(
       'Freiwilligen-Kontrollen',
     ]
 
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen' &&
-          n[5] === pop.id &&
-          n[6] === 'Teil-Populationen' &&
-          n[7] === tpop.id &&
-          n[8] === 'Freiwilligen-Kontrollen',
-      ).length > 0
+    const isOpen = checkIfIsOpen({ store, menu })
 
     const node = {
       nodeType: 'folder',
@@ -50,12 +42,7 @@ export const TpopfreiwkontrFolder = memo(
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <Tpopfreiwkontrs
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={tpop}
-            />
+            <Tpopfreiwkontrs projekt={projekt} ap={ap} pop={pop} tpop={tpop} />
           )}
         </TransitionGroup>
       </>

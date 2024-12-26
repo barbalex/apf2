@@ -101,15 +101,38 @@ export const useTpopfreiwkontrNavData = (props) => {
       id: tpopkontrId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}`,
       label,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopfreiwkontr',
+      treeId: tpopkontrId,
+      treeParentId: tpopId,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Freiwilligen-Kontrollen',
+        tpopkontrId,
+      ],
+      fetcherName: 'useTpopfreiwkontrNavData',
+      fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+      hasChildren: true,
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Freiwilligen-Kontrolle',
           label: `Freiwilligen-Kontrolle`,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          isSelf: true,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         },
         {
           id: 'Zaehlungen',

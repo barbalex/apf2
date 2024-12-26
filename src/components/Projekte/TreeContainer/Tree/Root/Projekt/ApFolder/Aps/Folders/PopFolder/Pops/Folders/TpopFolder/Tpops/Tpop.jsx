@@ -8,6 +8,7 @@ import { Row } from '../../../../../../../../../../Row.jsx'
 import { TpopFolders } from './Folders/index.jsx'
 import { useTpopNavData } from '../../../../../../../../../../../../../../modules/useTpopNavData.js'
 import { nodeFromMenu } from '../../../../../../../../../../nodeFromMenu.js'
+import { checkIfIsOpen } from '../../../../../../../../../../checkIfIsOpen.js'
 
 // TODO: get rid of having to pass projekt, ap, pop
 export const Tpop = memo(
@@ -16,12 +17,7 @@ export const Tpop = memo(
 
     const { navData } = useTpopNavData(menu.fetcherParams)
 
-    const isOpen =
-      navData.alwaysOpen ? true : (
-        store.tree.openNodes.some((n) =>
-          isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
-        )
-      )
+    const isOpen = checkIfIsOpen({ store, menu: navData })
 
     const node = nodeFromMenu(navData)
 
@@ -37,19 +33,10 @@ export const Tpop = memo(
       >
         {(state) => (
           <>
-            <Row
-              node={node}
-              ref={ref}
-              transitionState={state}
-            />
+            <Row node={node} ref={ref} transitionState={state} />
             <TransitionGroup component={null}>
               {isOpen && (
-                <TpopFolders
-                  projekt={projekt}
-                  ap={ap}
-                  pop={pop}
-                  menu={menu}
-                />
+                <TpopFolders projekt={projekt} ap={ap} pop={pop} menu={menu} />
               )}
             </TransitionGroup>
           </>
