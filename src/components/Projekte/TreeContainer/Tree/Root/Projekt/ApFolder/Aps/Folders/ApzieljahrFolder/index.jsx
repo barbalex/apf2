@@ -7,31 +7,21 @@ import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { Zieljahrs } from './Zieljahrs.jsx'
 import { NodeListFolder } from '../../../../../../NodeListFolder.jsx'
+import { nodeFromMenu } from '../../../../../../nodeFromMenu.js'
 
 // TODO: get rid of having to pass projekt, ap
 export const ApzieljahrFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
-    const { openNodes } = store.tree
 
-    const url = ['Projekte', projekt.id, 'Arten', ap.id, 'AP-Ziele']
+    const isOpen =
+      menu.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+        )
+      )
 
-    const isOpen = store.tree.openNodes.some((n) =>
-      isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-    )
-
-    const node = {
-      nodeType: 'folder',
-      menuType: 'zielFolder',
-      id: `${ap.id}ApzielFolder`,
-      tableId: ap.id,
-      urlLabel: 'AP-Ziele',
-      label: menu.label,
-      url,
-      hasChildren: true,
-    }
-
-    // console.log('ApzieljahrFolder', { node, menu })
+    const node = nodeFromMenu(menu)
 
     // return <NodeListFolder menu={menu} />
 
@@ -43,6 +33,7 @@ export const ApzieljahrFolder = memo(
             <Zieljahrs
               projekt={projekt}
               ap={ap}
+              menu={menu}
             />
           )}
         </TransitionGroup>

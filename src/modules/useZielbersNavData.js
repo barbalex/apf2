@@ -83,7 +83,8 @@ export const useZielbersNavData = (props) => {
         'Berichte',
       ],
       hasChildren: !!count,
-      // leave totalCount undefined as the menus are folders
+      fetcherName: 'useZielsOfJahrNavData',
+      fetcherParams: { projId, apId, jahr },
       menus: (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
         (zielber) => ({
           id: zielber.id,
