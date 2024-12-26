@@ -15,4 +15,6 @@ export const nodeFromMenu = (menu) => ({
   alwaysOpen: menu.alwaysOpen,
   // needed for apzieljahr folders
   jahr: menu.jahr,
+  // needed for pop and tpop folders
+  status: menu.status,
 })

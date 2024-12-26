@@ -198,6 +198,17 @@ export const usePopsNavData = (props) => {
         return {
           id: p.id,
           label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'pop',
+          treeSingleElementName: 'Population',
+          treeId: p.id,
+          treeParentId: `${apId}PopFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', p.id],
+          hasChildren: true,
+          fetcherName: 'usePopNavData',
+          fetcherParams: { projId, apId, popId: p.id },
+          status: p.status,
           labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
           labelRightElements:
             labelRightElements.length ? labelRightElements : undefined,

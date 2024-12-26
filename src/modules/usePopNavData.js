@@ -167,10 +167,20 @@ export const usePopNavData = (props) => {
       id: popId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}`,
       label,
+      treeNodeType: 'table',
+      treeMenuType: 'pop',
+      treeSingleElementName: 'Population',
+      treeId: popId,
+      treeParentId: `${apId}PopFolder`,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', popId],
+      hasChildren: true,
+      fetcherName: 'usePopNavData',
+      fetcherParams: { projId, apId, popId },
+      status,
       labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
       labelRightElements:
         labelRightElements.length ? labelRightElements : undefined,
-      // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Population',
@@ -178,6 +188,7 @@ export const usePopNavData = (props) => {
           labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
           labelRightElements:
             labelRightElements.length ? labelRightElements : undefined,
+          isSelf: true,
         },
         {
           id: 'Teil-Populationen',
@@ -282,10 +293,11 @@ export const usePopNavData = (props) => {
       ],
     }),
     [
+      popId,
       projId,
       apId,
-      popId,
       label,
+      status,
       store.tree.showPopIcon,
       PopIcon,
       labelRightElements,
