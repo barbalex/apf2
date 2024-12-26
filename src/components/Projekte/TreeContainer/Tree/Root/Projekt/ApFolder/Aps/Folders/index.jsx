@@ -13,6 +13,7 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
+// TODO: get rid of having to pass projekt, ap
 export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
   const popMenu = useMemo(
     () => navData?.menus.find((m) => m.id === 'Populationen'),

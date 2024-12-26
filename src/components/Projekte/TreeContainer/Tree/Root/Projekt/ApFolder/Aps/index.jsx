@@ -3,6 +3,7 @@ import { memo } from 'react'
 import { useApsNavData } from '../../../../../../../../modules/useApsNavData.js'
 import { Ap } from './Ap.jsx'
 
+// TODO: get rid of having to pass projekt, ap
 export const Aps = memo(({ projekt, in: inProp, menu }) => {
   const { navData } = useApsNavData(menu.fetcherParams)
 

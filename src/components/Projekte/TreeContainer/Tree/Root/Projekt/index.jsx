@@ -22,12 +22,16 @@ export const Projekt = memo(({ projekt, projectIsOpen }) => {
 
   // TODO: map over menus and return their components
   // WHEN: ApFolder has component
+  // TODO: get rid of having to pass projekt
   return (
     <>
       <Row node={node} />
       {projectIsOpen && (
         <>
-          <ApFolder projekt={projekt} menu={apMenu} />
+          <ApFolder
+            projekt={projekt}
+            menu={apMenu}
+          />
           <NodeListFolder menu={apberuebersichtMenu} />
         </>
       )}

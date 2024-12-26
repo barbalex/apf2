@@ -8,6 +8,7 @@ import { MobxContext } from '../../../../../../../mobxContext.js'
 import { Aps } from './Aps/index.jsx'
 import { nodeFromMenu } from '../../../nodeFromMenu.js'
 
+// TODO: get rid of having to pass projekt
 export const ApFolder = memo(
   observer(({ projekt, menu }) => {
     const store = useContext(MobxContext)
@@ -26,7 +27,12 @@ export const ApFolder = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && <Aps projekt={projekt} menu={menu} />}
+          {isOpen && (
+            <Aps
+              projekt={projekt}
+              menu={menu}
+            />
+          )}
         </TransitionGroup>
       </>
     )

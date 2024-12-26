@@ -9,6 +9,7 @@ import { ApFolders } from './Folders/index.jsx'
 import { useApNavData } from '../../../../../../../../modules/useApNavData.js'
 import { nodeFromMenu } from '../../../../nodeFromMenu.js'
 
+// TODO: get rid of having to pass projekt, ap
 export const Ap = memo(
   observer(({ projekt, ap, inProp, menu }) => {
     const store = useContext(MobxContext)

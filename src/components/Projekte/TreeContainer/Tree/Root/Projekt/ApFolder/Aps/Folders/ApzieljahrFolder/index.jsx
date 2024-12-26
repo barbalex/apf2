@@ -8,6 +8,7 @@ import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { Zieljahrs } from './Zieljahrs.jsx'
 import { NodeListFolder } from '../../../../../../NodeListFolder.jsx'
 
+// TODO: get rid of having to pass projekt, ap
 export const ApzieljahrFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
