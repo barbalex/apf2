@@ -12,9 +12,9 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-// TODO: get rid of having to pass projekt, ap
-export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
-  const { navData } = usePopNavData(menubar.fetcherParams)
+// TODO: get rid of having to pass projekt, ap, pop
+export const PopFolders = memo(({ projekt, ap, menu, in: inProp }) => {
+  const { navData } = usePopNavData(menu.fetcherParams)
 
   const tpopMenu = useMemo(
     () => navData.menus.find((m) => m.id === 'Teil-Populationen'),
@@ -59,7 +59,7 @@ export const PopFolders = memo(({ projekt, ap, pop, in: inProp }) => {
           <TpopFolder
             projekt={projekt}
             ap={ap}
-            pop={pop}
+            pop={menu}
             menu={tpopMenu}
           />
           <NodeListFolder menu={popberMenu} />

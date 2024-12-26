@@ -8,7 +8,7 @@ import { MobxContext } from '../../../../../../../../../../../../../mobxContext.
 import { Tpops } from './Tpops/index.jsx'
 import { nodeFromMenu } from '../../../../../../../../../nodeFromMenu.js'
 
-// TODO: get rid of having to pass projekt, ap
+// TODO: get rid of having to pass projekt, ap, pop
 export const TpopFolder = memo(
   observer(({ projekt, ap, pop, menu }) => {
     const store = useContext(MobxContext)

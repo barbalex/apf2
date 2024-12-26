@@ -9,7 +9,7 @@ import { PopFolders } from './Folders/index.jsx'
 import { nodeFromMenu } from '../../../../../../../nodeFromMenu.js'
 import { usePopNavData } from '../../../../../../../../../../../modules/usePopNavData.js'
 
-// TODO: get rid of having to pass projekt, ap
+// TODO: get rid of having to pass projekt, ap, pop
 export const Pop = memo(
   observer(({ projekt, ap, menu, inProp }) => {
     const store = useContext(MobxContext)
@@ -47,7 +47,7 @@ export const Pop = memo(
                 <PopFolders
                   projekt={projekt}
                   ap={ap}
-                  pop={menu}
+                  menu={menu}
                 />
               )}
             </TransitionGroup>
