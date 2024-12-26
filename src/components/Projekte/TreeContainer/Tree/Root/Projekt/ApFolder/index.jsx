@@ -8,18 +8,17 @@ import { MobxContext } from '../../../../../../../mobxContext.js'
 import { Aps } from './Aps/index.jsx'
 import { nodeFromMenu } from '../../../nodeFromMenu.js'
 
-// TODO: get rid of having to pass projekt
 export const ApFolder = memo(
-  observer(({ projekt, menu }) => {
+  observer(({ menu }) => {
     const store = useContext(MobxContext)
 
-    const isOpen =
-      menu.alwaysOpen ? true
-      : menu.treeUrl?.length ?
-        store.tree.openNodes.some((n) =>
-          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-        )
-      : false
+    const isOpen = menu.alwaysOpen
+      ? true
+      : menu.treeUrl?.length
+        ? store.tree.openNodes.some((n) =>
+            isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+          )
+        : false
 
     const node = nodeFromMenu(menu)
 
@@ -27,12 +26,7 @@ export const ApFolder = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && (
-            <Aps
-              projekt={projekt}
-              menu={menu}
-            />
-          )}
+          {isOpen && <Aps menu={menu} />}
         </TransitionGroup>
       </>
     )

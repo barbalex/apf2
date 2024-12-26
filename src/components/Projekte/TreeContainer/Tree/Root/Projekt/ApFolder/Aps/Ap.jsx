@@ -9,21 +9,19 @@ import { ApFolders } from './Folders/index.jsx'
 import { useApNavData } from '../../../../../../../../modules/useApNavData.js'
 import { nodeFromMenu } from '../../../../nodeFromMenu.js'
 
-// TODO: get rid of having to pass projekt, ap
 export const Ap = memo(
-  observer(({ projekt, ap, inProp, menu }) => {
+  observer(({ inProp, menu }) => {
     const store = useContext(MobxContext)
 
     const { navData } = useApNavData(menu.fetcherParams)
 
     const ref = useRef(null)
 
-    const isOpen =
-      navData.alwaysOpen ? true : (
-        store.tree.openNodes.some((n) =>
+    const isOpen = navData.alwaysOpen
+      ? true
+      : store.tree.openNodes.some((n) =>
           isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
         )
-      )
 
     const node = nodeFromMenu(navData)
 
@@ -37,19 +35,9 @@ export const Ap = memo(
       >
         {(state) => (
           <>
-            <Row
-              node={node}
-              transitionState={state}
-              ref={ref}
-            />
+            <Row node={node} transitionState={state} ref={ref} />
             <TransitionGroup component={null}>
-              {isOpen && (
-                <ApFolders
-                  ap={ap}
-                  projekt={projekt}
-                  navData={navData}
-                />
-              )}
+              {isOpen && <ApFolders navData={navData} />}
             </TransitionGroup>
           </>
         )}
