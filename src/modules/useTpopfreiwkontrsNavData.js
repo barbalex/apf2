@@ -87,7 +87,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
       labelShort: `EKF (${isLoading ? '...' : `${count}/${totalCount}`})`,
       treeNodeType: 'folder',
       treeMenuType: 'tpopfreiwkontrFolder',
-      treeId: `${tpopId}FreiwkontrFolder`,
+      treeId: `${tpopId}TpopfreiwkontrFolder`,
       treeTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -137,6 +137,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
             ],
             fetcherName: 'useTpopfreiwkontrNavData',
             fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
+            singleElementName: 'Freiwilligen-Kontrolle',
             hasChildren: true,
             labelRightElements: labelRightElements.length
               ? labelRightElements

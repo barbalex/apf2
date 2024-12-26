@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 import { transitionStyles } from '../../../../../../../../../../../../../../Row.jsx'
 import { ZaehlFolder } from './ZaehlFolder/index.jsx'
-import { ChildlessFolder } from './ChildlessFolder.jsx'
+import { Node } from '../../../../../../../../../../../../../../Node.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -32,18 +32,7 @@ export const TpopfreiwkontrFolders = memo(
         nodeRef={ref}
       >
         {(state) => (
-          <Container
-            ref={ref}
-            style={transitionStyles[state]}
-          >
-            <ChildlessFolder
-              projekt={projekt}
-              ap={ap}
-              pop={pop}
-              tpop={tpop}
-              menu={dateienMenu}
-              parentUrl={navData.url}
-            />
+          <Container ref={ref} style={transitionStyles[state]}>
             <ZaehlFolder
               projekt={projekt}
               ap={ap}
@@ -53,6 +42,7 @@ export const TpopfreiwkontrFolders = memo(
               menu={zaehlMenu}
               parentUrl={navData.url}
             />
+            <Node menu={dateienMenu} />
           </Container>
         )}
       </Transition>

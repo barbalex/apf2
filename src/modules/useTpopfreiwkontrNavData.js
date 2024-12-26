@@ -7,6 +7,8 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { NodeListFolder } from '../components/Projekte/TreeContainer/Tree/NodeListFolder.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useTpopfreiwkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -120,6 +122,7 @@ export const useTpopfreiwkontrNavData = (props) => {
       ],
       fetcherName: 'useTpopfreiwkontrNavData',
       fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+      singleElementName: 'Freiwilligen-Kontrolle',
       hasChildren: true,
       labelRightElements: labelRightElements.length
         ? labelRightElements
@@ -138,11 +141,53 @@ export const useTpopfreiwkontrNavData = (props) => {
           id: 'Zaehlungen',
           label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
           hideInNavList: true,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopfreiwkontrzaehlFolder',
+          treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
+          treeTableId: tpopkontrId,
+          treeParentId: tpopkontrId,
+          treeParentTableId: tpopkontrId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Freiwilligen-Kontrollen',
+            tpopkontrId,
+            'Zaehlungen',
+          ],
+          fetcherName: 'useTpopfreiwkontrzaehlsNavData',
+          fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+          component: NodeListFolder,
+          hasChildren: !!filteredTpopkontrzaehlCount,
+          alwaysOpen: true,
         },
         {
           id: 'Dateien',
           label: `Dateien (${filesCount})`,
-          count: filesCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'dateienFolder',
+          treeId: `${tpopkontrId}DateienFolder`,
+          treeTableId: tpopkontrId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Freiwilligen-Kontrollen',
+            tpopkontrId,
+            'Dateien',
+          ],
+          component: Node,
+          hasChildren: false,
         },
       ],
     }),

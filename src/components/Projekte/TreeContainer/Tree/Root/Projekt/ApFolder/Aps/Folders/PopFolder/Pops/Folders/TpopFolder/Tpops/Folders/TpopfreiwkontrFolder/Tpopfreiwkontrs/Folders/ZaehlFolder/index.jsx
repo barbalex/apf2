@@ -8,7 +8,7 @@ import { MobxContext } from '../../../../../../../../../../../../../../../../../
 import { Zaehl } from './Zaehl.jsx'
 
 export const ZaehlFolder = memo(
-  observer(({ projekt, ap, pop, tpop, tpopkontr }) => {
+  observer(({ projekt, ap, pop, tpop, tpopkontr, menu }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { nodeLabelFilter } = store.tree
@@ -57,10 +57,11 @@ export const ZaehlFolder = memo(
     const nodeLabelFilterString =
       store.tree?.nodeLabelFilter?.tpopkontrzaehl ?? ''
 
-    const message =
-      isLoading ? '...'
-      : nodeLabelFilterString ? `${count} gefiltert`
-      : count
+    const message = isLoading
+      ? '...'
+      : nodeLabelFilterString
+        ? `${count} gefiltert`
+        : count
 
     const url = [
       'Projekte',

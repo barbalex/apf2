@@ -12,37 +12,22 @@ export const TpopfreiwkontrFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
     const store = useContext(MobxContext)
 
-    const url = [
-      'Projekte',
-      projekt.id,
-      'Arten',
-      ap.id,
-      'Populationen',
-      pop.id,
-      'Teil-Populationen',
-      tpop.id,
-      'Freiwilligen-Kontrollen',
-    ]
-
     const isOpen = checkIfIsOpen({ store, menu })
 
-    const node = {
-      nodeType: 'folder',
-      menuType: 'tpopfreiwkontrFolder',
-      id: `${tpop.id}TpopfreiwkontrFolder`,
-      tableId: tpop.id,
-      urlLabel: 'Freiwilligen-Kontrollen',
-      label: menu.label,
-      url,
-      hasChildren: true,
-    }
+    const node = nodeFromMenu(menu)
 
     return (
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
           {isOpen && (
-            <Tpopfreiwkontrs projekt={projekt} ap={ap} pop={pop} tpop={tpop} />
+            <Tpopfreiwkontrs
+              projekt={projekt}
+              ap={ap}
+              pop={pop}
+              tpop={tpop}
+              menu={menu}
+            />
           )}
         </TransitionGroup>
       </>

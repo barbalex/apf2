@@ -8,15 +8,10 @@ import { useTpopfreiwkontrsNavData } from '../../../../../../../../../../../../.
 import { Tpopfreiwkontr } from './Tpopfreiwkontr.jsx'
 
 export const Tpopfreiwkontrs = memo(
-  observer(({ projekt, ap, pop, tpop, in: inProp }) => {
+  observer(({ projekt, ap, pop, tpop, in: inProp, menu }) => {
     const store = useContext(MobxContext)
 
-    const { navData } = useTpopfreiwkontrsNavData({
-      projId: projekt.id,
-      apId: ap.id,
-      popId: pop.id,
-      tpopId: tpop.id,
-    })
+    const { navData } = useTpopfreiwkontrsNavData(menu.fetcherParams)
 
     return navData.menus.map((menu) => (
       <Tpopfreiwkontr

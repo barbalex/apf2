@@ -7,58 +7,18 @@ import { MobxContext } from '../../../../../../../../../../../../../../../../../
 import { ZaehlFolder } from './Folders/ZaehlFolder/index.jsx'
 import { TpopfreiwkontrFolders } from './Folders/index.jsx'
 import { useTpopfreiwkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfreiwkontrNavData.js'
+import { nodeFromMenu } from '../../../../../../../../../../../../../nodeFromMenu.js'
+import { checkIfIsOpen } from '../../../../../../../../../../../../../checkIfIsOpen.js'
 
 export const Tpopfreiwkontr = memo(
   observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
     const store = useContext(MobxContext)
 
-    const { navData } = useTpopfreiwkontrNavData({
-      projId: projekt.id,
-      apId: ap.id,
-      popId: pop.id,
-      tpopId: tpop.id,
-      tpopkontrId: menu.id,
-    })
+    const { navData } = useTpopfreiwkontrNavData(menu.fetcherParams)
 
-    const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 5 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen' &&
-          n[5] === pop.id &&
-          n[6] === 'Teil-Populationen' &&
-          n[7] === tpop.id &&
-          n[8] === 'Freiwilligen-Kontrollen' &&
-          n[9] === navData.id,
-      ).length > 0
+    const isOpen = checkIfIsOpen({ store, menu: navData })
 
-    const node = {
-      nodeType: 'table',
-      menuType: 'tpopfreiwkontr',
-      singleElementName: 'Freiwilligen-Kontrolle',
-      id: navData.id,
-      tableId: navData.id,
-      parentId: `${tpop.id}TpopfreiwkontrFolder`,
-      parentTableId: tpop.id,
-      urlLabel: navData.id,
-      label: navData.label,
-      labelRightElements: navData.labelRightElements,
-      url: [
-        'Projekte',
-        projekt.id,
-        'Arten',
-        ap.id,
-        'Populationen',
-        pop.id,
-        'Teil-Populationen',
-        tpop.id,
-        'Freiwilligen-Kontrollen',
-        navData.id,
-      ],
-      hasChildren: true,
-    }
+    const node = nodeFromMenu(navData)
 
     const ref = useRef(null)
 
@@ -72,11 +32,7 @@ export const Tpopfreiwkontr = memo(
       >
         {(state) => (
           <>
-            <Row
-              node={node}
-              ref={ref}
-              transitionState={state}
-            />
+            <Row node={node} ref={ref} transitionState={state} />
             <TransitionGroup component={null}>
               {isOpen && (
                 <TpopfreiwkontrFolders
