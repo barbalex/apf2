@@ -82,6 +82,9 @@ export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
 
   const ref = useRef(null)
 
+  // TODO: map over menus and return their components
+  // WHEN: PopFolder has component
+// TODO: get rid of having to pass projekt, ap
   return (
     <Transition
       in={inProp}

@@ -29,7 +29,9 @@ import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 
 import { MobxContext } from '../mobxContext.js'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const popIcons = {
   normal: {
@@ -83,7 +85,13 @@ export const usePopsNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+
   const store = useContext(MobxContext)
+
+  const showPopIcon =
+    store.activeApfloraLayers?.includes('pop') && karteIsVisible
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
@@ -156,6 +164,17 @@ export const usePopsNavData = (props) => {
       listFilter: 'pop',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
       label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'popFolder',
+      treeId: `${apId}PopFolder`,
+      treeTableId: apId,
+      treeParentId: apId,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
+      fetcherName: 'usePopsNavData',
+      fetcherParams: { projId, apId },
+      hasChildren: !!count,
+      labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id
@@ -193,6 +212,7 @@ export const usePopsNavData = (props) => {
       popIconName,
       popId,
       projId,
+      showPopIcon,
       store.copying.id,
       store.moving.id,
       store.tree.showPopIcon,

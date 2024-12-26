@@ -1,38 +1,26 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 
 import { Row } from '../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../mobxContext.js'
 import { Pops } from './Pops/index.jsx'
+import { nodeFromMenu } from '../../../../../../nodeFromMenu.js'
 
+// TODO: get rid of having to pass projekt, ap
 export const PopFolder = memo(
   observer(({ projekt, ap, menu }) => {
     const store = useContext(MobxContext)
 
-    const url = ['Projekte', projekt.id, 'Arten', ap.id, 'Populationen']
-
     const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 4 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen',
-      ).length > 0
+      menu.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+        )
+      )
 
-    const node = {
-      nodeType: 'folder',
-      menuType: 'popFolder',
-      id: `${ap.id}PopFolder`,
-      tableId: ap.id,
-      urlLabel: 'Populationen',
-      label: menu.label,
-      labelLeftElements: menu.labelLeftElements,
-      labelRightElements: menu.labelRightElements,
-      url,
-      hasChildren: menu.count > 0,
-    }
+    const node = nodeFromMenu(menu)
 
     return (
       <>

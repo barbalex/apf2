@@ -13,6 +13,6 @@ export const nodeFromMenu = (menu) => ({
   singleElementName: menu.treeSingleElementName,
   hasChildren: menu.hasChildren,
   alwaysOpen: menu.alwaysOpen,
-  // needed for apziel jahr folders
+  // needed for apzieljahr folders
   jahr: menu.jahr,
 })
