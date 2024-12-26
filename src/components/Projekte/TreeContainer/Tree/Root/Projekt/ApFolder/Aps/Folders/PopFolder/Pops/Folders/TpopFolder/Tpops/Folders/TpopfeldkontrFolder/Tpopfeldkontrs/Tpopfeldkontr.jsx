@@ -11,44 +11,25 @@ import {
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
 import { Folders } from './Folders.jsx'
+import { nodeFromMenu } from '../../../../../../../../../../../../../nodeFromMenu.js'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
 export const Tpopfeldkontr = memo(
-  observer(({ projekt, ap, pop, tpop, menu, inProp }) => {
+  observer(({ menu, inProp }) => {
     const store = useContext(MobxContext)
 
-    const { navData } = useTpopfeldkontrNavData({
-      projId: projekt.id,
-      apId: ap.id,
-      popId: pop.id,
-      tpopId: tpop.id,
-      tpopkontrId: menu.id,
-    })
+    const { navData } = useTpopfeldkontrNavData(menu.fetcherParams)
 
-    const isOpen =
-      menu.alwaysOpen ? true : (
-        store.tree.openNodes.some((n) =>
+    const isOpen = menu.alwaysOpen
+      ? true
+      : store.tree.openNodes.some((n) =>
           isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
         )
-      )
 
-    const node = {
-      nodeType: navData.treeNodeType,
-      menuType: navData.treeMenuType,
-      id: navData.treeId,
-      tableId: navData.treeTableId,
-      parentId: navData.treeParentId,
-      parentTableId: navData.treeParentTableId,
-      urlLabel: navData.id,
-      label: navData.label,
-      url: navData.treeUrl,
-      singleElementName: menu.treeSingleElementName,
-      hasChildren: navData.hasChildren,
-      alwaysOpen: navData.alwaysOpen,
-    }
+    const node = nodeFromMenu(navData)
 
     const ref = useRef(null)
 
@@ -62,11 +43,7 @@ export const Tpopfeldkontr = memo(
       >
         {(state) => (
           <>
-            <Row
-              node={node}
-              ref={ref}
-              transitionState={state}
-            />
+            <Row node={node} ref={ref} transitionState={state} />
             <TransitionGroup component={null}>
               {isOpen && <Folders navData={navData} />}
             </TransitionGroup>

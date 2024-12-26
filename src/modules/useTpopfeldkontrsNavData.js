@@ -106,6 +106,8 @@ export const useTpopfeldkontrsNavData = (props) => {
         tpopId,
         'Feld-Kontrollen',
       ],
+      fetcherName: 'useTpopfeldkontrsNavData',
+      fetcherParams: { projId, apId, popId, tpopId },
       hasChildren: !!count,
       menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
         (p) => {
@@ -145,6 +147,7 @@ export const useTpopfeldkontrsNavData = (props) => {
             ],
             fetcherName: 'useTpopfeldkontrNavData',
             fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
+            treeSingleElementName: 'Feld-Kontrolle',
             hasChildren: true,
             labelRightElements: labelRightElements.length
               ? labelRightElements

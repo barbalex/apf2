@@ -13,18 +13,6 @@ export const TpopfeldkontrFolder = memo(
   observer(({ projekt, ap, pop, tpop, menu }) => {
     const store = useContext(MobxContext)
 
-    const url = [
-      'Projekte',
-      projekt.id,
-      'Arten',
-      ap.id,
-      'Populationen',
-      pop.id,
-      'Teil-Populationen',
-      tpop.id,
-      'Feld-Kontrollen',
-    ]
-
     const isOpen = menu.alwaysOpen
       ? true
       : store.tree.openNodes.some((n) =>
@@ -37,9 +25,7 @@ export const TpopfeldkontrFolder = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && (
-            <Tpopfeldkontrs projekt={projekt} ap={ap} pop={pop} tpop={tpop} />
-          )}
+          {isOpen && <Tpopfeldkontrs menu={menu} />}
         </TransitionGroup>
       </>
     )
