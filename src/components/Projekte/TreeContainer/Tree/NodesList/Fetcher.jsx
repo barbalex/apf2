@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react'
 
 import { NodeTransitioned } from '../NodeTransitioned.jsx'
 
-export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
+export const Fetcher = memo(({ menu, inProp, parentTransitionState, fetcherModule }) => {
   const { fetcherName, fetcherParams } = menu
 
   const result = fetcherModule?.[fetcherName]?.(fetcherParams)
@@ -32,6 +32,7 @@ export const Fetcher = memo(({ menu, inProp, fetcherModule }) => {
       key={m.id}
       menu={m}
       inProp={inProp}
+      parentTransitionState={parentTransitionState}
     />
   ))
 })

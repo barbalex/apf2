@@ -2,7 +2,7 @@ import { memo, useState, useEffect } from 'react'
 
 import { Fetcher } from './Fetcher.jsx'
 
-export const NodesList = memo(({ menu, in: inProp }) => {
+export const NodesList = memo(({ menu, in: inProp, parentTransitionState }) => {
   const { fetcherName, fetcherParams } = menu
 
   const [fetcherModule, setFetcherModule] = useState(null)
@@ -29,6 +29,7 @@ export const NodesList = memo(({ menu, in: inProp }) => {
       menu={menu}
       fetcherModule={fetcherModule}
       inProp={inProp}
+      parentTransitionState={parentTransitionState}
     />
   )
 })

@@ -85,6 +85,7 @@ export const useZielbersNavData = (props) => {
       hasChildren: !!count,
       fetcherName: 'useZielsOfJahrNavData',
       fetcherParams: { projId, apId, jahr },
+      passTransitionStateToChildren: true,
       menus: (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
         (zielber) => ({
           id: zielber.id,

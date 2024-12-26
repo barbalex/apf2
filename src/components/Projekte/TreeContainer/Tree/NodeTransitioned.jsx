@@ -48,7 +48,10 @@ export const NodeTransitioned = memo(
                 node={node}
                 ref={ref}
                 transitionState={
-                  parentTransitionState !== 'entered' ?
+                  (
+                    !!parentTransitionState &&
+                    parentTransitionState !== 'entered'
+                  ) ?
                     parentTransitionState
                   : state
                 }

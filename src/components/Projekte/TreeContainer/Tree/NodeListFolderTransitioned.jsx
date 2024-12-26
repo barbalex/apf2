@@ -41,7 +41,14 @@ export const NodeListFolderTransitioned = memo(
               transitionState={state}
             />
             <TransitionGroup component={null}>
-              {isOpen && <NodesList menu={menu} />}
+              {isOpen && (
+                <NodesList
+                  menu={menu}
+                  parentTransitionState={
+                    menu.passTransitionStateToChildren ? state : undefined
+                  }
+                />
+              )}
             </TransitionGroup>
           </>
         )}
