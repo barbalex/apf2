@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
 import { PopFolder } from './PopFolder/index.jsx'
-import { ApzieljahrFolder } from './ApzieljahrFolder/index.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
@@ -101,7 +100,7 @@ export const ApFolders = memo(({ ap, projekt, in: inProp, navData }) => {
             ap={ap}
             menu={popMenu}
           />
-          <ApzieljahrFolder menu={apZielJahrsMenu} />
+          <NodeListFolder menu={apZielJahrsMenu} />
           <NodeListFolder menu={apErfkritsMenu} />
           <NodeListFolder menu={apBerMenu} />
           <NodeListFolder menu={idealbiotopMenu} />
