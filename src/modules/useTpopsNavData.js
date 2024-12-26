@@ -31,6 +31,8 @@ import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
 
 export const tpopIcons = {
   normal: {
@@ -86,6 +88,11 @@ export const useTpopsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+  const showTpopIcon =
+    store.activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeTpop', popId, store.tree.tpopGqlFilterForTree],
@@ -161,6 +168,24 @@ export const useTpopsNavData = (props) => {
       listFilter: 'tpop',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen`,
       label: `Teil-Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: `tpopFolder`,
+      treeId: `${popId}TpopFolder`,
+      treeTableId: popId,
+      treeParentTableId: popId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+      ],
+      fetcherName: 'useTpopsNavData',
+      fetcherParams: { projId, apId, popId },
+      hasChildren: !!count,
+      labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
       menus: (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id

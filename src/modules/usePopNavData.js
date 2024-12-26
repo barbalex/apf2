@@ -199,8 +199,23 @@ export const usePopNavData = (props) => {
         {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
-          count: tpopsCount,
-          // TODO: show this on only if map is visible and tpop layer is set
+          treeNodeType: 'folder',
+          treeMenuType: `tpopFolder`,
+          treeId: `${popId}TpopFolder`,
+          treeTableId: popId,
+          treeParentTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+          ],
+          fetcherName: 'useTpopsNavData',
+          fetcherParams: { projId, apId, popId },
+          hasChildren: !!filteredTpopsCount,
           labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
         },
         {
