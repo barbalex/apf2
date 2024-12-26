@@ -1,26 +1,26 @@
 import { memo, useRef, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
+import isEqual from 'lodash/isEqual'
 
 import { MobxContext } from '../../../../../../../../../../../../../../mobxContext.js'
 import { Row } from '../../../../../../../../../../Row.jsx'
 import { TpopFolders } from './Folders/index.jsx'
+import { useTpopNavData } from '../../../../../../../../../../../../../../modules/useTpopNavData.js'
 
+// TODO: get rid of having to pass projekt, ap, pop
 export const Tpop = memo(
   observer(({ projekt, ap, pop, menu, inProp }) => {
     const store = useContext(MobxContext)
 
+    const { navData } = useTpopNavData(menu.fetcherParams)
+
     const isOpen =
-      store.tree.openNodes.filter(
-        (n) =>
-          n.length > 5 &&
-          n[1] === projekt.id &&
-          n[3] === ap.id &&
-          n[4] === 'Populationen' &&
-          n[5] === pop.id &&
-          n[6] === 'Teil-Populationen' &&
-          n[7] === menu.id,
-      ).length > 0
+      navData.alwaysOpen ? true : (
+        store.tree.openNodes.some((n) =>
+          isEqual(n.slice(0, navData.treeUrl.length), navData.treeUrl),
+        )
+      )
 
     const node = {
       nodeType: 'table',

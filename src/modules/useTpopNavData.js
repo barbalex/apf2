@@ -241,6 +241,24 @@ export const useTpopNavData = (props) => {
       id: tpopId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}`,
       label,
+      treeNodeType: 'table',
+      treeMenuType: 'tpop',
+      treeId: tpopId,
+      treeParentId: `${popId}TpopFolder`,
+      treeParentTableId: popId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+      ],
+      fetcherName: 'useTpopData',
+      fetcherParams: { projId, apId, popId, tpopId },
+      hasChildren: true,
       labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
       labelRightElements:
         labelRightElements.length ? labelRightElements : undefined,
@@ -249,6 +267,7 @@ export const useTpopNavData = (props) => {
         {
           id: 'Teil-Population',
           label: `Teil-Population`,
+          // TODO: add more
           labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
           labelRightElements:
             labelRightElements.length ? labelRightElements : undefined,
