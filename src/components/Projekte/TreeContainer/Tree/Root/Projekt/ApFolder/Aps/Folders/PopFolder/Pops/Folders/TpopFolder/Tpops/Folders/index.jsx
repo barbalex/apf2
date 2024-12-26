@@ -14,13 +14,9 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-export const TpopFolders = memo(({ projekt, ap, pop, tpop, in: inProp }) => {
-  const { navData, isLoading } = useTpopNavData({
-    projId: projekt.id,
-    apId: ap.id,
-    popId: pop.id,
-    tpopId: tpop.id,
-  })
+// TODO: get rid of having to pass projekt, ap, pop, tpop
+export const TpopFolders = memo(({ projekt, ap, pop, menu, in: inProp }) => {
+  const { navData, isLoading } = useTpopNavData(menu.fetcherParams)
 
   const tpopmassnMenu = useMemo(
     () => navData?.menus?.find?.((menu) => menu.id === 'Massnahmen'),
@@ -83,14 +79,14 @@ export const TpopFolders = memo(({ projekt, ap, pop, tpop, in: inProp }) => {
             projekt={projekt}
             ap={ap}
             pop={pop}
-            tpop={tpop}
+            tpop={menu}
             menu={tpopfeldkontrMenu}
           />
           <TpopfreiwkontrFolder
             projekt={projekt}
             ap={ap}
             pop={pop}
-            tpop={tpop}
+            tpop={menu}
             menu={tpopfreiwkontrMenu}
           />
           <NodeListFolder menu={tpopberMenu} />

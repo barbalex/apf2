@@ -48,7 +48,7 @@ export const Tpop = memo(
                   projekt={projekt}
                   ap={ap}
                   pop={pop}
-                  tpop={menu}
+                  menu={menu}
                 />
               )}
             </TransitionGroup>
