@@ -5,11 +5,12 @@ import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
 import { Projekt } from './Projekt/index.jsx'
-import { UsersFolder } from './Users/index.jsx'
+import { UsersFolder } from './Users.jsx'
 import { MessagesFolder } from './Messages.jsx'
 import { WerteFolder } from './Werte/index.jsx'
 import { CurrentIssuesFolder } from './CurrentIssues/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
+import { NodeWithList } from '../NodeWithList.jsx'
 
 export const Root = memo(
   observer(() => {
