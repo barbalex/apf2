@@ -6,11 +6,13 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { RootNode } from '../components/Projekte/TreeContainer/Tree/RootNode.jsx'
 
 export const useProjektNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params?.projId
+  const projId =
+    props?.projId ?? params?.projId ?? 'e57f56f4-4376-11e8-ab21-4314b6749d13'
 
   const store = useContext(MobxContext)
 
@@ -74,7 +76,7 @@ export const useProjektNavData = (props) => {
       id: projId,
       url: `/Daten/Projekte/${projId}`,
       label,
-      treeNodeType: 'folder',
+      treeNodeType: 'table',
       treeMenuType: 'projekt',
       treeId: projId,
       treeTableId: projId,
@@ -83,10 +85,12 @@ export const useProjektNavData = (props) => {
       hasChildren: true,
       fetcherName: 'useProjektNavData',
       fetcherParams: { projId },
+      component: RootNode,
       menus: [
         {
           id: 'Projekt',
           label: 'Projekt',
+          isSelf: true,
         },
         {
           id: 'Arten',
