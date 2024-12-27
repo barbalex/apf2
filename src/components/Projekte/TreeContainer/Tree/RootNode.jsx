@@ -1,20 +1,10 @@
-import { memo, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { memo } from 'react'
 
-import { MobxContext } from '../../../../mobxContext.js'
+export const RootNode = memo(({ fetcher }) => {
+  const { navData } = fetcher?.() ?? {}
+  console.log('RootNode', { fetcher, navData })
 
-import { nodeFromMenu } from './nodeFromMenu.js'
-import { checkIfIsOpen } from './checkIfIsOpen.js'
-import { NodeWithList } from './NodeWithList.jsx'
+  if (!navData) return null
 
-export const RootNode = memo(
-  observer(({ fetcher }) => {
-    const store = useContext(MobxContext)
-
-    const { navData } = fetcher()
-    const node = nodeFromMenu(navData)
-    const isOpen = checkIfIsOpen({ store, menu: navData })
-
-    return <navData.component menu={navData} />
-  }),
-)
+  return <navData.component menu={navData} />
+})
