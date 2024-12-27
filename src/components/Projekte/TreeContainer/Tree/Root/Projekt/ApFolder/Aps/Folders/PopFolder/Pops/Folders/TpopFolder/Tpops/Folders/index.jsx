@@ -8,7 +8,6 @@ import { useTpopNavData } from '../../../../../../../../../../../../../../../mod
 import { transitionStyles } from '../../../../../../../../../../../Row.jsx'
 import { Node } from '../../../../../../../../../../../Node.jsx'
 import { NodeWithList } from '../../../../../../../../../../../NodeWithList.jsx'
-import { NodeListFolderTransitioned } from '../../../../../../../../../../../NodeListFolderTransitioned.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
