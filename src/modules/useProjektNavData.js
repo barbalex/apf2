@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { NodeListFolder } from '../components/Projekte/TreeContainer/Tree/NodeListFolder.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useProjektNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -113,7 +113,7 @@ export const useProjektNavData = (props) => {
           hasChildren: !!apberuebersichtsCount,
           fetcherName: 'useApberuebersichtsNavData',
           fetcherParams: { projId },
-          component: NodeListFolder,
+          component: NodeWithList,
         },
       ],
     }),

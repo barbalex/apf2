@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 import { transitionStyles } from '../../../../../../../../../../../../../Row.jsx'
 import { Node } from '../../../../../../../../../../../../../Node.jsx'
-import { NodeListFolder } from '../../../../../../../../../../../../../NodeListFolder.jsx'
+import { NodeWithList } from '../../../../../../../../../../../../../NodeWithList.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;

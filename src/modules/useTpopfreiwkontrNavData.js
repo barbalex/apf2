@@ -7,7 +7,7 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
-import { NodeListFolder } from '../components/Projekte/TreeContainer/Tree/NodeListFolder.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useTpopfreiwkontrNavData = (props) => {
@@ -163,7 +163,7 @@ export const useTpopfreiwkontrNavData = (props) => {
           ],
           fetcherName: 'useTpopfreiwkontrzaehlsNavData',
           fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
-          component: NodeListFolder,
+          component: NodeWithList,
           hasChildren: !!filteredTpopkontrzaehlCount,
           alwaysOpen: true,
         },

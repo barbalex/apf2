@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 
 import { Row } from '../../Row.jsx'
 import { ApFolder } from './ApFolder/index.jsx'
-import { NodeListFolder } from '../../NodeListFolder.jsx'
+import { NodeWithList } from '../../NodeWithList.jsx'
 import { useProjektNavData } from '../../../../../../modules/useProjektNavData.js'
 import { nodeFromMenu } from '../../nodeFromMenu.js'
 import { apber } from '../../../../../shared/fragments.js'
@@ -28,7 +28,7 @@ export const Projekt = memo(({ projekt, projectIsOpen }) => {
       {projectIsOpen && (
         <>
           <ApFolder menu={apMenu} />
-          <NodeListFolder menu={apberuebersichtMenu} />
+          <NodeWithList menu={apberuebersichtMenu} />
         </>
       )}
     </>

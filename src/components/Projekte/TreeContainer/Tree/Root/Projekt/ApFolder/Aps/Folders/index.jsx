@@ -6,7 +6,7 @@ import { PopFolder } from './PopFolder/index.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
-import { NodeListFolder } from '../../../../../NodeListFolder.jsx'
+import { NodeWithList } from '../../../../../NodeWithList.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -94,16 +94,16 @@ export const ApFolders = memo(({ in: inProp, navData }) => {
       {(state) => (
         <Container ref={ref} style={transitionStyles[state]}>
           <PopFolder menu={popMenu} />
-          <NodeListFolder menu={apZielJahrsMenu} />
-          <NodeListFolder menu={apErfkritsMenu} />
-          <NodeListFolder menu={apBerMenu} />
-          <NodeListFolder menu={idealbiotopMenu} />
-          <NodeListFolder menu={apArtMenu} />
-          <NodeListFolder menu={assozartMenu} />
-          <NodeListFolder menu={ekfrequenzMenu} />
-          <NodeListFolder menu={ekzaehleinheitMenu} />
-          <NodeListFolder menu={beobNichtBeurteiltMenu} />
-          <NodeListFolder menu={beobNichtZuzuordnenMenu} />
+          <NodeWithList menu={apZielJahrsMenu} />
+          <NodeWithList menu={apErfkritsMenu} />
+          <NodeWithList menu={apBerMenu} />
+          <NodeWithList menu={idealbiotopMenu} />
+          <NodeWithList menu={apArtMenu} />
+          <NodeWithList menu={assozartMenu} />
+          <NodeWithList menu={ekfrequenzMenu} />
+          <NodeWithList menu={ekzaehleinheitMenu} />
+          <NodeWithList menu={beobNichtBeurteiltMenu} />
+          <NodeWithList menu={beobNichtZuzuordnenMenu} />
           <Node menu={qkMenu} />
           <Node menu={qkWaehlenMenu} />
           <Node menu={auswertungMenu} />

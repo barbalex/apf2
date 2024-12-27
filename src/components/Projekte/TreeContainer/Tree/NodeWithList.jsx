@@ -9,16 +9,15 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { NodesList } from './NodesList/index.jsx'
 import { nodeFromMenu } from './nodeFromMenu.js'
 
-export const NodeListFolder = memo(
+export const NodeWithList = memo(
   observer(({ menu }) => {
     const store = useContext(MobxContext)
 
-    const isOpen =
-      menu.alwaysOpen ? true : (
-        store.tree.openNodes.some((n) =>
+    const isOpen = menu.alwaysOpen
+      ? true
+      : store.tree.openNodes.some((n) =>
           isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
         )
-      )
 
     const node = nodeFromMenu(menu)
 

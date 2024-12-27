@@ -6,7 +6,7 @@ import { TpopFolder } from './TpopFolder/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
 import { Node } from '../../../../../../../../Node.jsx'
-import { NodeListFolder } from '../../../../../../../../NodeListFolder.jsx'
+import { NodeWithList } from '../../../../../../../../NodeWithList.jsx'
 
 const Container = styled.div`
   transition: opacity 300ms ease-in-out;
@@ -53,8 +53,8 @@ export const PopFolders = memo(({ menu, in: inProp }) => {
       {(state) => (
         <Container ref={ref} style={transitionStyles[state]}>
           <TpopFolder menu={tpopMenu} />
-          <NodeListFolder menu={popberMenu} />
-          <NodeListFolder menu={popmassnberMenu} />
+          <NodeWithList menu={popberMenu} />
+          <NodeWithList menu={popmassnberMenu} />
           <Node menu={auswertungMenu} />
           <Node menu={dateienMenu} />
           <Node menu={historienMenu} />

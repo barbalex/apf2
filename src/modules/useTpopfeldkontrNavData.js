@@ -10,7 +10,7 @@ import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.jsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
-import { NodeListFolder } from '../components/Projekte/TreeContainer/Tree/NodeListFolder.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopfeldkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -172,7 +172,7 @@ export const useTpopfeldkontrNavData = (props) => {
           ],
           fetcherName: 'useTpopfeldkontrzaehlsNavData',
           fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
-          component: NodeListFolder,
+          component: NodeWithList,
           hasChildren: !!filteredTpopkontrzaehlCount,
           alwaysOpen: true,
         },

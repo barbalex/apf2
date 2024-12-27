@@ -7,7 +7,7 @@ import { TpopfreiwkontrFolder } from './TpopfreiwkontrFolder/index.jsx'
 import { useTpopNavData } from '../../../../../../../../../../../../../../../modules/useTpopNavData.js'
 import { transitionStyles } from '../../../../../../../../../../../Row.jsx'
 import { Node } from '../../../../../../../../../../../Node.jsx'
-import { NodeListFolder } from '../../../../../../../../../../../NodeListFolder.jsx'
+import { NodeWithList } from '../../../../../../../../../../../NodeWithList.jsx'
 import { NodeListFolderTransitioned } from '../../../../../../../../../../../NodeListFolderTransitioned.jsx'
 
 const Container = styled.div`
@@ -69,12 +69,12 @@ export const TpopFolders = memo(({ menu, in: inProp }) => {
     >
       {(state) => (
         <Container ref={ref} style={transitionStyles[state]}>
-          <NodeListFolder menu={tpopmassnMenu} />
-          <NodeListFolder menu={tpopmassnberMenu} />
+          <NodeWithList menu={tpopmassnMenu} />
+          <NodeWithList menu={tpopmassnberMenu} />
           <TpopfeldkontrFolder menu={tpopfeldkontrMenu} />
           <TpopfreiwkontrFolder menu={tpopfreiwkontrMenu} />
-          <NodeListFolder menu={tpopberMenu} />
-          <NodeListFolder menu={beobZugeordnetMenu} />
+          <NodeWithList menu={tpopberMenu} />
+          <NodeWithList menu={beobZugeordnetMenu} />
           <Node menu={ekMenu} />
           <Node menu={dateienMenu} />
           <Node menu={historienMenu} />
