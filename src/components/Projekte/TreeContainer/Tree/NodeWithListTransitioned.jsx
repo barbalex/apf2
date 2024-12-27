@@ -8,6 +8,7 @@ import { Row } from './Row.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { nodeFromMenu } from './nodeFromMenu.js'
 import { checkIfIsOpen } from './checkIfIsOpen.js'
+import { Folders } from './Folders.jsx'
 
 export const NodeWithListTransitioned = memo(
   observer(
@@ -50,12 +51,20 @@ export const NodeWithListTransitioned = memo(
               {!!menu.fetcherName && (
                 <TransitionGroup component={null}>
                   {isOpen && (
-                    <NodesList
-                      menu={menu}
-                      parentTransitionState={
-                        menu.passTransitionStateToChildren ? state : undefined
-                      }
-                    />
+                    <>
+                      {!!menu.childrenAreFolders ? (
+                        <Folders menu={menu} />
+                      ) : (
+                        <NodesList
+                          menu={menu}
+                          parentTransitionState={
+                            menu.passTransitionStateToChildren
+                              ? state
+                              : undefined
+                          }
+                        />
+                      )}
+                    </>
                   )}
                 </TransitionGroup>
               )}

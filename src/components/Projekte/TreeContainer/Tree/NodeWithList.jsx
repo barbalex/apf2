@@ -7,6 +7,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { Row } from './Row.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { NodesList } from './NodesList/index.jsx'
+import { Folders } from './Folders.jsx'
 import { nodeFromMenu } from './nodeFromMenu.js'
 
 export const NodeWithList = memo(
@@ -25,7 +26,15 @@ export const NodeWithList = memo(
       <>
         <Row node={node} />
         <TransitionGroup component={null}>
-          {isOpen && <NodesList menu={menu} />}
+          {isOpen && (
+            <>
+              {!!menu.childrenAreFolders ? (
+                <Folders menu={menu} />
+              ) : (
+                <NodesList menu={menu} />
+              )}
+            </>
+          )}
         </TransitionGroup>
       </>
     )
