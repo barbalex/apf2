@@ -14,14 +14,7 @@ import { checkIfIsOpen } from './checkIfIsOpen.js'
 export const NodeWithList = memo(
   observer(({ menu }) => {
     const store = useContext(MobxContext)
-
-    // const isOpen = checkIfIsOpen({ store, menu })
-    const isOpen =
-      menu.alwaysOpen ??
-      store.tree.openNodes.some((n) =>
-        isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-      )
-
+    const isOpen = checkIfIsOpen({ store, menu })
     const node = nodeFromMenu(menu)
 
     return (

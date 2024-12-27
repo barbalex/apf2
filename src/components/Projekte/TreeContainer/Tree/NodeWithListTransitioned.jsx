@@ -20,12 +20,9 @@ export const NodeWithListTransitioned = memo(
       parentTransitionState,
     }) => {
       const store = useContext(MobxContext)
-
-      const node = nodeFromMenu(menu)
-
-      const ref = useRef(null)
-
       const isOpen = checkIfIsOpen({ menu, store })
+      const node = nodeFromMenu(menu)
+      const ref = useRef(null)
 
       // console.log('NodeTransitioned', { menu, isOpen, node })
 

@@ -22,12 +22,12 @@ export const Fetcher = memo(
 
     if (!menus?.length) return null
 
-    console.log('TableFolder.Fetcher', {
-      navData,
-      menu,
-      inProp,
-      menus: navData.menus,
-    })
+    // console.log('TableFolder.Fetcher', {
+    //   navData,
+    //   menu,
+    //   inProp,
+    //   menus: navData.menus,
+    // })
 
     if (inProp === undefined) {
       return menus.map((m) => (
