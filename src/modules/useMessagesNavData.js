@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useMessagesNavData = () => {
   const apolloClient = useApolloClient()
@@ -38,8 +38,8 @@ export const useMessagesNavData = () => {
       treeId: 'Mitteilungen',
       treeUrl: ['Mitteilungen'],
       fetcherName: 'useMessagesNavData',
-      component: NodeWithList,
-      hasChildren: !!count,
+      component: Node,
+      hasChildren: false,
     }),
     [count, isLoading],
   )

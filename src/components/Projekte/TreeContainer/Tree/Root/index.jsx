@@ -5,13 +5,13 @@ import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
 import { Projekt } from './Projekt/index.jsx'
-import { MessagesFolder } from './Messages.jsx'
 import { WerteFolder } from './Werte/index.jsx'
 import { CurrentIssuesFolder } from './CurrentIssues/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { NodeWithList } from '../NodeWithList.jsx'
 import { RootNode } from '../RootNode.jsx'
 import { useUsersNavData } from '../../../../../modules/useUsersNavData.js'
+import { useMessagesNavData } from '../../../../../modules/useMessagesNavData.js'
 
 export const Root = memo(
   observer(() => {
@@ -76,9 +76,6 @@ export const Root = memo(
               allCurrentissues {
                 totalCount
               }
-              allMessages {
-                totalCount
-              }
             }
           `,
           variables: {
@@ -111,10 +108,7 @@ export const Root = memo(
         />
         <RootNode fetcher={useUsersNavData} />
         {role === 'apflora_manager' && <WerteFolder />}
-        <MessagesFolder
-          count={data?.data?.allMessages?.totalCount ?? 0}
-          isLoading={isLoading}
-        />
+        <RootNode fetcher={useMessagesNavData} />
         <CurrentIssuesFolder
           count={data?.data?.allCurrentissues?.totalCount ?? 0}
           isLoading
