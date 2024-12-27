@@ -100,6 +100,7 @@ export const useProjektNavData = (props) => {
           hasChildren: !!artsCount,
           fetcherName: 'useApsNavData',
           fetcherParams: { projId },
+          component: NodeWithList,
         },
         {
           id: 'AP-Berichte',
