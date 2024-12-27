@@ -10,7 +10,8 @@ import {
 } from '../../../../../../../../../../../../../Row.jsx'
 import { MobxContext } from '../../../../../../../../../../../../../../../../../mobxContext.js'
 import { useTpopfeldkontrNavData } from '../../../../../../../../../../../../../../../../../modules/useTpopfeldkontrNavData.js'
-import { Folders } from './Folders.jsx'
+import { Folders } from '../../../../../../../../../../../../../Folders.jsx'
+// import { Folders } from './Folders.jsx'
 import { nodeFromMenu } from '../../../../../../../../../../../../../nodeFromMenu.js'
 
 const Container = styled.div`
