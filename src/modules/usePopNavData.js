@@ -12,6 +12,8 @@ import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -147,12 +149,13 @@ export const usePopNavData = (props) => {
   const popIconName = store.map.popIcon
 
   const popIconIsHighlighted = props?.popId === params.popId
-  const PopIcon =
-    status ?
-      popIconIsHighlighted ? popIcons[popIconName][status + 'Highlighted']
+  const PopIcon = status
+    ? popIconIsHighlighted
+      ? popIcons[popIconName][status + 'Highlighted']
       : popIcons[popIconName][status]
-    : popIconIsHighlighted ? PopIconQHighlighted
-    : PopIconQ
+    : popIconIsHighlighted
+      ? PopIconQHighlighted
+      : PopIconQ
 
   const labelRightElements = useMemo(() => {
     const labelRightElements = []
@@ -185,15 +188,17 @@ export const usePopNavData = (props) => {
       fetcherParams: { projId, apId, popId },
       status,
       labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       menus: [
         {
           id: 'Population',
           label: `Population`,
           labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
           isSelf: true,
         },
         {
@@ -217,6 +222,7 @@ export const usePopNavData = (props) => {
           fetcherParams: { projId, apId, popId },
           hasChildren: !!filteredTpopsCount,
           labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
+          component: NodeWithList,
         },
         {
           id: 'Kontroll-Berichte',
@@ -237,6 +243,7 @@ export const usePopNavData = (props) => {
           fetcherName: 'usePopbersNavData',
           fetcherParams: { projId, apId, popId },
           hasChildren: !!filteredPopbersCount,
+          component: NodeWithList,
         },
         {
           id: 'Massnahmen-Berichte',
@@ -257,6 +264,7 @@ export const usePopNavData = (props) => {
           fetcherName: 'usePopmassnbersNavData',
           fetcherParams: { projId, apId, popId },
           hasChildren: !!filteredPopmassnbersCount,
+          component: NodeWithList,
         },
         {
           id: 'Auswertung',
@@ -275,6 +283,7 @@ export const usePopNavData = (props) => {
             'Auswertung',
           ],
           hasChildren: false,
+          component: Node,
         },
         {
           id: 'Dateien',
@@ -293,6 +302,7 @@ export const usePopNavData = (props) => {
             'Dateien',
           ],
           hasChildren: false,
+          component: Node,
         },
         {
           id: 'Historien',
@@ -311,6 +321,7 @@ export const usePopNavData = (props) => {
             'Historien',
           ],
           hasChildren: false,
+          component: Node,
         },
       ],
     }),

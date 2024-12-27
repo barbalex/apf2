@@ -2,7 +2,6 @@ import { memo, useMemo, useRef } from 'react'
 import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
-import { PopFolder } from './PopFolder/index.jsx'
 import { useApNavData } from '../../../../../../../../../modules/useApNavData.js'
 import { transitionStyles } from '../../../../../Row.jsx'
 import { Node } from '../../../../../Node.jsx'
@@ -93,7 +92,7 @@ export const ApFolders = memo(({ in: inProp, navData }) => {
     >
       {(state) => (
         <Container ref={ref} style={transitionStyles[state]}>
-          <PopFolder menu={popMenu} />
+          <NodeWithList menu={popMenu} />
           <NodeWithList menu={apZielJahrsMenu} />
           <NodeWithList menu={apErfkritsMenu} />
           <NodeWithList menu={apBerMenu} />
