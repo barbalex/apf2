@@ -5,7 +5,7 @@ import { TransitionGroup } from 'react-transition-group'
 import isEqual from 'lodash/isEqual'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { NodeTransitioned } from './NodeTransitioned.jsx'
+import { NodeWithListTransitioned } from './NodeWithListTransitioned.jsx'
 
 export const NodeChildFolder = memo(
   observer(({ menu }) => {
@@ -20,7 +20,7 @@ export const NodeChildFolder = memo(
     return (
       <>
         <TransitionGroup component={null}>
-          {isOpen && <NodeTransitioned menu={menu} />}
+          {isOpen && <NodeWithListTransitioned menu={menu} />}
         </TransitionGroup>
       </>
     )

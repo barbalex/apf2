@@ -1,6 +1,6 @@
 import { memo, useState, useEffect } from 'react'
 
-import { NodeTransitioned } from '../NodeTransitioned.jsx'
+import { NodeWithListTransitioned } from '../NodeWithListTransitioned.jsx'
 
 export const Fetcher = memo(({ menu, inProp, parentTransitionState, fetcherModule }) => {
   const { fetcherName, fetcherParams } = menu
@@ -28,7 +28,7 @@ export const Fetcher = memo(({ menu, inProp, parentTransitionState, fetcherModul
   // })
 
   return menus.map((m) => (
-    <NodeTransitioned
+    <NodeWithListTransitioned
       key={m.id}
       menu={m}
       inProp={inProp}

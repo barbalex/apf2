@@ -9,7 +9,7 @@ import { Row } from './Row.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { nodeFromMenu } from './nodeFromMenu.js'
 
-export const NodeTransitioned = memo(
+export const NodeWithListTransitioned = memo(
   observer(
     ({
       menu,
@@ -24,13 +24,13 @@ export const NodeTransitioned = memo(
 
       const ref = useRef(null)
 
-      const isOpen =
-        menu.alwaysOpen ? true
-        : menu.treeUrl?.length ?
-          store.tree.openNodes.some((n) =>
-            isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
-          )
-        : false
+      const isOpen = menu.alwaysOpen
+        ? true
+        : menu.treeUrl?.length
+          ? store.tree.openNodes.some((n) =>
+              isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+            )
+          : false
 
       // console.log('NodeTransitioned', { menu, isOpen, node })
 
@@ -48,12 +48,9 @@ export const NodeTransitioned = memo(
                 node={node}
                 ref={ref}
                 transitionState={
-                  (
-                    !!parentTransitionState &&
-                    parentTransitionState !== 'entered'
-                  ) ?
-                    parentTransitionState
-                  : state
+                  !!parentTransitionState && parentTransitionState !== 'entered'
+                    ? parentTransitionState
+                    : state
                 }
               />
               {!!menu.fetcherName && (
