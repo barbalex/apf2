@@ -198,13 +198,13 @@ export const useTpopsNavData = (props) => {
         }
 
         const iconIsHighlighted = p.id === tpopId
-        const TpopIcon =
-          p.status ?
-            iconIsHighlighted ?
-              tpopIcons[tpopIconName][p.status + 'Highlighted']
+        const TpopIcon = p.status
+          ? iconIsHighlighted
+            ? tpopIcons[tpopIconName][p.status + 'Highlighted']
             : tpopIcons[tpopIconName][p.status]
-          : iconIsHighlighted ? TpopIconQHighlighted
-          : TpopIconQ
+          : iconIsHighlighted
+            ? TpopIconQHighlighted
+            : TpopIconQ
 
         return {
           id: p.id,
@@ -225,12 +225,13 @@ export const useTpopsNavData = (props) => {
             'Teil-Populationen',
             p.id,
           ],
-          fetcherName: 'useTpopData',
+          fetcherName: 'useTpopNavData',
           fetcherParams: { projId, apId, popId, tpopId: p.id },
           hasChildren: true,
           labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         }
       }),
     }),

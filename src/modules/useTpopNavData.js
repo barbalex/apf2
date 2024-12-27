@@ -264,7 +264,7 @@ export const useTpopNavData = (props) => {
         'Teil-Populationen',
         tpopId,
       ],
-      fetcherName: 'useTpopData',
+      fetcherName: 'useTpopNavData',
       fetcherParams: { projId, apId, popId, tpopId },
       hasChildren: true,
       // TODO: show only if map is visible and tpop layer active

@@ -2,7 +2,6 @@ import { memo, useMemo, useRef } from 'react'
 import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
 
-import { TpopFolder } from './TpopFolder/index.jsx'
 import { usePopNavData } from '../../../../../../../../../../../../modules/usePopNavData.js'
 import { transitionStyles } from '../../../../../../../../Row.jsx'
 import { Node } from '../../../../../../../../Node.jsx'
@@ -52,7 +51,7 @@ export const PopFolders = memo(({ menu, in: inProp }) => {
     >
       {(state) => (
         <Container ref={ref} style={transitionStyles[state]}>
-          <TpopFolder menu={tpopMenu} />
+          <NodeWithList menu={tpopMenu} />
           <NodeWithList menu={popberMenu} />
           <NodeWithList menu={popmassnberMenu} />
           <Node menu={auswertungMenu} />
