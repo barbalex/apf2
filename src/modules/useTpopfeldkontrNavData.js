@@ -9,6 +9,8 @@ import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopfeldkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -112,28 +114,113 @@ export const useTpopfeldkontrNavData = (props) => {
       id: tpopkontrId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}`,
       label,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopfeldkontr',
+      treeId: tpopkontrId,
+      treeTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Feld-Kontrollen',
+        tpopkontrId,
+      ],
+      fetcherName: 'useTpopfeldkontrNavData',
+      fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+      treeSingleElementName: 'Feld-Kontrolle',
+      hasChildren: true,
+      childrenAreFolders: true,
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Feld-Kontrolle',
           label: `Feld-Kontrolle`,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          isSelf: true,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         },
         {
           id: 'Zaehlungen',
           label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopfeldkontrzaehlFolder',
+          treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+          treeTableId: tpopkontrId,
+          treeParentId: tpopkontrId,
+          treeParentTableId: tpopkontrId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Feld-Kontrollen',
+            tpopkontrId,
+            'Zaehlungen',
+          ],
+          fetcherName: 'useTpopfeldkontrzaehlsNavData',
+          fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+          component: NodeWithList,
+          hasChildren: !!filteredTpopkontrzaehlCount,
+          alwaysOpen: true,
         },
         {
           id: 'Biotop',
           label: `Biotop`,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopkontrBiotopFolder',
+          treeId: `${tpopkontrId}TpopkontrBiotopFolder`,
+          treeTableId: tpopkontrId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Feld-Kontrollen',
+            tpopkontrId,
+            'Biotop',
+          ],
+          component: Node,
+          hasChildren: false,
         },
         {
           id: 'Dateien',
           label: `Dateien (${filesCount})`,
-          count: filesCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopfeldkontrDateienFolder',
+          treeId: `${tpopkontrId}TpopfeldkontrDateienFolder`,
+          treeTableId: tpopkontrId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Feld-Kontrollen',
+            tpopkontrId,
+            'Dateien',
+          ],
+          component: Node,
+          hasChildren: false,
         },
       ],
     }),

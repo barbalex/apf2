@@ -7,6 +7,8 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useTpopfreiwkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -101,25 +103,92 @@ export const useTpopfreiwkontrNavData = (props) => {
       id: tpopkontrId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}`,
       label,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopfreiwkontr',
+      treeId: tpopkontrId,
+      treeParentId: tpopId,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Freiwilligen-Kontrollen',
+        tpopkontrId,
+      ],
+      fetcherName: 'useTpopfreiwkontrNavData',
+      fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+      singleElementName: 'Freiwilligen-Kontrolle',
+      hasChildren: true,
+      childrenAreFolders: true,
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
           id: 'Freiwilligen-Kontrolle',
           label: `Freiwilligen-Kontrolle`,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          isSelf: true,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         },
         {
           id: 'Zaehlungen',
           label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
           hideInNavList: true,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopfreiwkontrzaehlFolder',
+          treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
+          treeTableId: tpopkontrId,
+          treeParentId: tpopkontrId,
+          treeParentTableId: tpopkontrId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Freiwilligen-Kontrollen',
+            tpopkontrId,
+            'Zaehlungen',
+          ],
+          fetcherName: 'useTpopfreiwkontrzaehlsNavData',
+          fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+          component: NodeWithList,
+          hasChildren: !!filteredTpopkontrzaehlCount,
+          alwaysOpen: true,
         },
         {
           id: 'Dateien',
           label: `Dateien (${filesCount})`,
-          count: filesCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'dateienFolder',
+          treeId: `${tpopkontrId}DateienFolder`,
+          treeTableId: tpopkontrId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Freiwilligen-Kontrollen',
+            tpopkontrId,
+            'Dateien',
+          ],
+          component: Node,
+          hasChildren: false,
         },
       ],
     }),

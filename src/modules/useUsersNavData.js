@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useUsersNavData = () => {
   const apolloClient = useApolloClient()
@@ -51,9 +52,21 @@ export const useUsersNavData = () => {
       listFilter: 'user',
       url: `/Daten/Benutzer`,
       label: `Benutzer (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'userFolder',
+      treeId: 'Benutzer',
+      treeUrl: ['Benutzer'],
+      fetcherName: 'useUsersNavData',
+      hasChildren: !!count,
+      component: NodeWithList,
       menus: (data?.data?.allUsers?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'user',
+        treeId: p.id,
+        treeUrl: ['Benutzer', p.id],
+        hasChildren: false,
       })),
     }),
     [count, data?.data?.allUsers?.nodes, isLoading, totalCount],

@@ -6,6 +6,7 @@ import { useParams } from 'react-router'
 import countBy from 'lodash/countBy'
 
 import { MobxContext } from '../mobxContext.js'
+import { has } from 'lodash'
 
 export const useZieljahrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -80,16 +81,37 @@ export const useZieljahrsNavData = (props) => {
       id: +jahr,
       label: `${jahr} (${countByJahr[jahr]}/${unfilteredCountByJahr[jahr]})`,
       jahr: +jahr,
+      treeNodeType: 'folder',
+      treeMenuType: 'zieljahrFolder',
+      treeId: `${apId}ZielJahreFolder`,
+      treeTableId: apId,
+      treeTableParentId: apId,
+      treeParentId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', +jahr],
+      fetcherName: 'useZielsOfJahrNavData',
+      fetcherParams: { projId, apId, jahr: +jahr },
+      hasChildren: !!countByJahr[jahr],
     }))
+
     return jahre
-  }, [filteredZiels, ziels])
+  }, [apId, filteredZiels, projId, ziels])
 
   const navData = useMemo(
     () => ({
       id: 'AP-Ziele',
+      label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
       listFilter: 'ziel',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
-      label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'zieljahrsFolder',
+      treeId: `${apId}ZieljahrsFolder`,
+      treeTableId: apId,
+      treeParentId: apId,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
+      hasChildren: !!zieljahrsCount,
+      fetcherName: 'useZieljahrsNavData',
+      fetcherParams: { projId, apId },
       menus,
     }),
     [apId, menus, isLoading, projId, zieljahrsCount],

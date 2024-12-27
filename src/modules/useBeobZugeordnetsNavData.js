@@ -90,6 +90,24 @@ export const useBeobZugeordnetsNavData = (props) => {
       menus: (data?.data?.filteredBeobsZugeordnet?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'beobZugeordnet',
+        treeId: p.id,
+        treeParentId: tpopId,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Beobachtungen',
+          p.id,
+        ],
+        hasChildren: false,
         labelLeftElements:
           showBeobzugeordnetIcon && beobId === p.id ?
             [BeobzugeordnetFilteredMapIcon]

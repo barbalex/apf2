@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
 
-export const useTpopfeldkontrzaehlsNavData = (props) => {
+export const useTpopfreiwkontrzaehlsNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -19,14 +19,14 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeTpopfeldkontrzaehl',
+      'treeTpopfreiwkontrzaehl',
       tpopkontrId,
       store.tree.tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query TreeTpopfeldkontrzaehlsQuery(
+          query TreeTpopfreiwkontrzaehlsQuery(
             $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
             $tpopkontrId: UUID!
           ) {
@@ -72,11 +72,11 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     () => ({
       id: 'Zaehlungen',
       listFilter: 'tpopkontrzaehl',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen`,
+      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}/Zaehlungen`,
       label: `Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       treeNodeType: 'folder',
-      treeMenuType: 'tpopfeldkontrzaehlFolder',
-      treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+      treeMenuType: 'tpopfreiwkontrzaehlFolder',
+      treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
       treeTableId: tpopkontrId,
       treeParentId: tpopkontrId,
       treeParentTableId: tpopkontrId,
@@ -89,11 +89,11 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
         popId,
         'Teil-Populationen',
         tpopId,
-        'Feld-Kontrollen',
+        'Freiwilligen-Kontrollen',
         tpopkontrId,
         'Zaehlungen',
       ],
-      fetcherName: 'useTpopfeldkontrzaehlsNavData',
+      fetcherName: 'useTpopfreiwkontrzaehlsNavData',
       fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
       hasChildren: !!count,
       alwaysOpen: true,
@@ -103,10 +103,9 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
         id: p.id,
         label: p.label,
         treeNodeType: 'table',
-        treeMenuType: 'tpopfeldkontrzaehl',
+        treeMenuType: 'tpopfreiwkontrzaehl',
         treeId: p.id,
-        // treeParentId: tpopkontrId,
-        treeParentId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+        treeParentId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',
@@ -117,7 +116,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
           popId,
           'Teil-Populationen',
           tpopId,
-          'Feld-Kontrollen',
+          'Freiwilligen-Kontrollen',
           tpopkontrId,
           'Zaehlungen',
           p.id,

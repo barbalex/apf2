@@ -11,7 +11,8 @@ export const useZielsOfJahrNavData = (props) => {
   const params = useParams()
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
-  const jahr = props?.jahr ?? params.jahr
+  let jahr = props?.jahr ?? params.jahr
+  jahr = jahr ? +jahr : jahr
 
   const store = useContext(MobxContext)
 
@@ -78,10 +79,28 @@ export const useZielsOfJahrNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}`,
       label: `Ziele für ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
       labelShort: `${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'zielJahrFolder',
+      treeId: `${apId}ApzielJahrFolder`,
+      treeParentId: apId,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr],
+      hasChildren: !!filteredZiels.length,
+      fetcherName: 'useZielsOfJahrNavData',
+      fetcherParams: { projId, apId, jahr },
       menus: filteredZiels.map((p) => ({
         id: p.id,
         label: p.label,
         jahr: p.jahr,
+        treeNodeType: 'table',
+        treeMenuType: 'ziel',
+        treeId: p.id,
+        treeParentId: apId,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, p.id],
+        fetcherName: 'useZielNavData',
+        fetcherParams: { projId, apId, jahr, zielId: p.id },
+        hasChildren: !!filteredZiels.length,
       })),
     }),
     [apId, count, filteredZiels, isLoading, jahr, projId],

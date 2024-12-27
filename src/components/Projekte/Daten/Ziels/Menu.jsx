@@ -72,6 +72,7 @@ export const Menu = memo(
     }, [client, store, tanstackQueryClient, navigate, search, apId])
 
     const onClickOpenLowerNodes = useCallback(() => {
+      console.log('Menu onClickOpenLowerNodes', { projId, apId, jahr })
       openLowerNodes({
         id: apId,
         projId,

@@ -63,14 +63,6 @@ export const usePopmassnbersNavData = (props) => {
 
   const count = data?.data?.popById?.popmassnbersByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
-  const menus = useMemo(
-    () =>
-      (data?.data?.popById?.popmassnbersByPopId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-      })),
-    [data?.data?.popById?.popmassnbersByPopId?.nodes],
-  )
 
   const navData = useMemo(
     () => ({
@@ -79,9 +71,38 @@ export const usePopmassnbersNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte`,
       label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `Massn.-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus,
+      menus: (data?.data?.popById?.popmassnbersByPopId?.nodes ?? []).map(
+        (p) => ({
+          id: p.id,
+          label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'popmassnber',
+          treeId: p.id,
+          treeParentId: popId,
+          treeParentTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Massnahmen-Berichte',
+            p.id,
+          ],
+          hasChildren: false,
+        }),
+      ),
     }),
-    [apId, count, isLoading, menus, popId, projId, totalCount],
+    [
+      apId,
+      count,
+      data?.data?.popById?.popmassnbersByPopId?.nodes,
+      isLoading,
+      popId,
+      projId,
+      totalCount,
+    ],
   )
 
   return { isLoading, error, navData }

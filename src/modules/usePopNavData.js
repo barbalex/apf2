@@ -6,11 +6,14 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
-import { useProjekteTabs } from './useProjekteTabs.js'
 import { popIcons } from './usePopsNavData.js'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
+import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const usePopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -19,11 +22,10 @@ export const usePopNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
   const store = useContext(MobxContext)
 
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
   const showTpopIcon =
     store.activeApfloraLayers?.includes('tpop') && karteIsVisible
 
@@ -145,8 +147,15 @@ export const usePopNavData = (props) => {
   const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
 
   const popIconName = store.map.popIcon
-  const PopIcon =
-    status ? popIcons[popIconName][status + 'Highlighted'] : PopIconQHighlighted
+
+  const popIconIsHighlighted = props?.popId === params.popId
+  const PopIcon = status
+    ? popIconIsHighlighted
+      ? popIcons[popIconName][status + 'Highlighted']
+      : popIcons[popIconName][status]
+    : popIconIsHighlighted
+      ? PopIconQHighlighted
+      : PopIconQ
 
   const labelRightElements = useMemo(() => {
     const labelRightElements = []
@@ -167,47 +176,152 @@ export const usePopNavData = (props) => {
       id: popId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}`,
       label,
+      treeNodeType: 'table',
+      treeMenuType: 'pop',
+      treeSingleElementName: 'Population',
+      treeId: popId,
+      treeParentId: `${apId}PopFolder`,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', popId],
+      hasChildren: true,
+      fetcherName: 'usePopNavData',
+      fetcherParams: { projId, apId, popId },
+      status,
       labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
-      // leave totalCount undefined as the menus are folders
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
       menus: [
         {
           id: 'Population',
           label: `Population`,
           labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
+          isSelf: true,
         },
         {
           id: 'Teil-Populationen',
           label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
-          count: tpopsCount,
+          treeNodeType: 'folder',
+          treeMenuType: `tpopFolder`,
+          treeId: `${popId}TpopFolder`,
+          treeTableId: popId,
+          treeParentTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+          ],
+          fetcherName: 'useTpopsNavData',
+          fetcherParams: { projId, apId, popId },
+          hasChildren: !!filteredTpopsCount,
           labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
+          component: NodeWithList,
         },
         {
           id: 'Kontroll-Berichte',
           label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredPopbersCount}/${popbersCount}`})`,
-          count: popbersCount,
+          treeNodeType: 'folder',
+          treeMenuType: `popberFolder`,
+          treeId: `${popId}PopberFolder`,
+          treeTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Kontroll-Berichte',
+          ],
+          fetcherName: 'usePopbersNavData',
+          fetcherParams: { projId, apId, popId },
+          hasChildren: !!filteredPopbersCount,
+          component: NodeWithList,
         },
         {
           id: 'Massnahmen-Berichte',
           label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredPopmassnbersCount}/${popmassnbersCount}`})`,
-          count: popmassnbersCount,
+          treeNodeType: 'folder',
+          treeMenuType: `popmassnberFolder`,
+          treeId: `${popId}PopmassnberFolder`,
+          treeTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Massnahmen-Berichte',
+          ],
+          fetcherName: 'usePopmassnbersNavData',
+          fetcherParams: { projId, apId, popId },
+          hasChildren: !!filteredPopmassnbersCount,
+          component: NodeWithList,
         },
         {
           id: 'Auswertung',
           label: `Auswertung`,
+          treeNodeType: 'folder',
+          treeMenuType: `popAuswertungFolder`,
+          treeId: `${popId}AuswertungFolder`,
+          treeTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Auswertung',
+          ],
+          hasChildren: false,
+          component: Node,
         },
         {
           id: 'Dateien',
           label: `Dateien (${filesCount})`,
-          count: filesCount,
+          treeNodeType: 'folder',
+          treeMenuType: `popDateienFolder`,
+          treeId: `${popId}DateienFolder`,
+          treeTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Dateien',
+          ],
+          hasChildren: false,
+          component: Node,
         },
         {
           id: 'Historien',
           label: `Historien (${historiesCount})`,
-          count: historiesCount,
+          treeNodeType: 'folder',
+          treeMenuType: `popHistorienFolder`,
+          treeId: `${popId}HistorienFolder`,
+          treeTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Historien',
+          ],
+          hasChildren: false,
+          component: Node,
         },
       ],
     }),
@@ -216,6 +330,7 @@ export const usePopNavData = (props) => {
       projId,
       apId,
       label,
+      status,
       store.tree.showPopIcon,
       PopIcon,
       labelRightElements,

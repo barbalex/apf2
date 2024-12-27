@@ -82,6 +82,26 @@ export const useTpopmassnsNavData = (props) => {
       listFilter: 'tpopmassn',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen`,
       label: `Massnahmen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'tpopmassnFolder',
+      treeId: `${tpopId}TpopmassnFolder`,
+      treeTableId: tpopId,
+      treeParentId: tpopId,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Massnahmen',
+      ],
+      fetcherName: 'useTpopmassnsNavData',
+      fetcherParams: { projId, apId, popId, tpopId },
+      hasChildren: !!count,
       menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []
@@ -97,8 +117,29 @@ export const useTpopmassnsNavData = (props) => {
           return {
             id: p.id,
             label: p.label,
-            labelRightElements:
-              labelRightElements.length ? labelRightElements : undefined,
+            treeNodeType: 'table',
+            treeMenuType: 'tpopmassn',
+            treeId: p.id,
+            treeParentId: tpopId,
+            treeParentTableId: tpopId,
+            treeUrl: [
+              'Projekte',
+              projId,
+              'Arten',
+              apId,
+              'Populationen',
+              popId,
+              'Teil-Populationen',
+              tpopId,
+              'Massnahmen',
+              p.id,
+            ],
+            hasChildren: true,
+            fetcherName: 'useTpopmassnNavData',
+            fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
+            labelRightElements: labelRightElements.length
+              ? labelRightElements
+              : undefined,
           }
         },
       ),

@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { has } from 'lodash'
 
 export const usePopbersNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -53,14 +54,6 @@ export const usePopbersNavData = (props) => {
 
   const count = data?.data?.popById?.popbersByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
-  const menus = useMemo(
-    () =>
-      (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-      })),
-    [data?.data?.popById?.popbersByPopId?.nodes],
-  )
 
   const navData = useMemo(
     () => ({
@@ -68,9 +61,36 @@ export const usePopbersNavData = (props) => {
       listFilter: 'popber',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte`,
       label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus,
+      menus: (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((p) => ({
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'popber',
+        treeId: p.id,
+        treeParentId: popId,
+        treeParentTableId: popId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Kontroll-Berichte',
+          p.id,
+        ],
+        hasChildren: false,
+      })),
     }),
-    [apId, count, isLoading, menus, popId, projId, totalCount],
+    [
+      apId,
+      count,
+      data?.data?.popById?.popbersByPopId?.nodes,
+      isLoading,
+      popId,
+      projId,
+      totalCount,
+    ],
   )
 
   return { isLoading, error, navData }

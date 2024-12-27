@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { has } from 'lodash'
 
 export const useApartsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -63,6 +64,13 @@ export const useApartsNavData = (props) => {
       menus: (data?.data?.apById?.apartsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'apart',
+        treeId: p.id,
+        treeParentId: apId,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa', p.id],
+        hasChildren: false,
       })),
     }),
     [

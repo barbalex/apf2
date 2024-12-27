@@ -90,6 +90,25 @@ export const useTpopfeldkontrsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
       label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'tpopfeldkontr',
+      treeId: `${tpopId}FeldkontrFolder`,
+      treeParentId: tpopId,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Feld-Kontrollen',
+      ],
+      fetcherName: 'useTpopfeldkontrsNavData',
+      fetcherParams: { projId, apId, popId, tpopId },
+      hasChildren: !!count,
       menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []
@@ -109,8 +128,30 @@ export const useTpopfeldkontrsNavData = (props) => {
           return {
             id: p.id,
             label: p.label,
-            labelRightElements:
-              labelRightElements.length ? labelRightElements : undefined,
+            treeNodeType: 'table',
+            treeMenuType: 'tpopfeldkontr',
+            treeId: p.id,
+            treeParentId: tpopId,
+            treeParentTableId: tpopId,
+            treeUrl: [
+              'Projekte',
+              projId,
+              'Arten',
+              apId,
+              'Populationen',
+              popId,
+              'Teil-Populationen',
+              tpopId,
+              'Feld-Kontrollen',
+              p.id,
+            ],
+            fetcherName: 'useTpopfeldkontrNavData',
+            fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
+            treeSingleElementName: 'Feld-Kontrolle',
+            hasChildren: true,
+            labelRightElements: labelRightElements.length
+              ? labelRightElements
+              : undefined,
           }
         },
       ),

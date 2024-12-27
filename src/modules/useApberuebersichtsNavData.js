@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useApberuebersichtsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -24,7 +25,10 @@ export const useApberuebersichtsNavData = (props) => {
           ) {
             projektById(id: $projId) {
               id
-              apberuebersichtsByProjId(filter: $apberuebersichtFilter) {
+              apberuebersichtsByProjId(
+                filter: $apberuebersichtFilter
+                orderBy: LABEL_ASC
+              ) {
                 totalCount
                 nodes {
                   id
@@ -62,13 +66,30 @@ export const useApberuebersichtsNavData = (props) => {
       listFilter: 'apberuebersicht',
       url: `/Daten/Projekte/${projId}/AP-Berichte`,
       label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
-      // TODO: needed?
-      totalCount,
+      treeNodeType: 'folder',
+      treeMenuType: 'apberuebersichtFolder',
+      treeId: `${projId}/ApberuebersichtFolder`,
+      treeTableId: projId,
+      treeParentTableId: projId,
+      treeUrl: ['Projekte', projId, 'AP-Berichte'],
+      hasChildren: !!count,
+      fetcherName: 'useApberuebersichtsNavData',
+      fetcherParams: { projId },
+      component: NodeWithList,
       menus: (
         data?.data?.projektById?.apberuebersichtsByProjId?.nodes ?? []
       ).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'apberuebersicht',
+        treeId: p.id,
+        treeParentId: projId,
+        treeParentTableId: projId,
+        treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
+        hasChildren: false,
+        fetcherName: 'useApberuebersichtNavData',
+        fetcherParams: { projId, apberuebersichtId: p.id },
       })),
     }),
     [
