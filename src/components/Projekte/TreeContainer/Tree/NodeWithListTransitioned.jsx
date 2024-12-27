@@ -48,23 +48,17 @@ export const NodeWithListTransitioned = memo(
                     : state
                 }
               />
-              {!!menu.fetcherName && (
+              {!!menu.fetcherName && isOpen && (
                 <TransitionGroup component={null}>
-                  {isOpen && (
-                    <>
-                      {!!menu.childrenAreFolders ? (
-                        <Folders menu={menu} />
-                      ) : (
-                        <NodesList
-                          menu={menu}
-                          parentTransitionState={
-                            menu.passTransitionStateToChildren
-                              ? state
-                              : undefined
-                          }
-                        />
-                      )}
-                    </>
+                  {!!menu.childrenAreFolders ? (
+                    <Folders menu={menu} />
+                  ) : (
+                    <NodesList
+                      menu={menu}
+                      parentTransitionState={
+                        menu.passTransitionStateToChildren ? state : undefined
+                      }
+                    />
                   )}
                 </TransitionGroup>
               )}

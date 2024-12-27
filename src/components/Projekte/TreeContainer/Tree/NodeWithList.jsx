@@ -15,24 +15,27 @@ export const NodeWithList = memo(
   observer(({ menu }) => {
     const store = useContext(MobxContext)
 
-    const isOpen = checkIfIsOpen({ store, menu })
+    // const isOpen = checkIfIsOpen({ store, menu })
+    const isOpen =
+      menu.alwaysOpen ??
+      store.tree.openNodes.some((n) =>
+        isEqual(n.slice(0, menu.treeUrl.length), menu.treeUrl),
+      )
 
     const node = nodeFromMenu(menu)
 
     return (
       <>
         <Row node={node} />
-        <TransitionGroup component={null}>
-          {isOpen && (
-            <>
-              {!!menu.childrenAreFolders ? (
-                <Folders menu={menu} />
-              ) : (
-                <NodesList menu={menu} />
-              )}
-            </>
-          )}
-        </TransitionGroup>
+        {isOpen && (
+          <TransitionGroup component={null}>
+            {!!menu.childrenAreFolders ? (
+              <Folders menu={menu} />
+            ) : (
+              <NodesList menu={menu} />
+            )}
+          </TransitionGroup>
+        )}
       </>
     )
   }),
