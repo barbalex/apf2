@@ -12,6 +12,7 @@ import { NodeWithList } from '../NodeWithList.jsx'
 import { RootNode } from '../RootNode.jsx'
 import { useUsersNavData } from '../../../../../modules/useUsersNavData.js'
 import { useMessagesNavData } from '../../../../../modules/useMessagesNavData.js'
+import { useProjektNavData } from '../../../../../modules/useProjektNavData.js'
 
 export const Root = memo(
   observer(() => {
@@ -106,6 +107,8 @@ export const Root = memo(
           isLoading={isLoading}
           projectIsOpen={projectIsOpen}
         />
+        {/* TODO: fetcher is always undefined. IMPOSSIBLE */}
+        <RootNode fetcher={useProjektNavData} />
         <RootNode fetcher={useUsersNavData} />
         {role === 'apflora_manager' && <WerteFolder />}
         <RootNode fetcher={useMessagesNavData} />
