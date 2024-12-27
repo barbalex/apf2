@@ -14,13 +14,13 @@ export const NodesList = memo(({ menu, in: inProp, parentTransitionState }) => {
     })
   }, [fetcherName])
 
-  // console.log('NodesList', {
-  //   fetcherModule,
-  //   menu,
-  //   inProp,
-  //   fetcherName,
-  //   fetcherParams,
-  // })
+  console.log('NodesList', {
+    fetcherModule,
+    menu,
+    inProp,
+    fetcherName,
+    fetcherParams,
+  })
 
   if (!fetcherModule) return null
 
