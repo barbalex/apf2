@@ -52,7 +52,7 @@ export const useUsersNavData = () => {
       url: `/Daten/Benutzer`,
       label: `Benutzer (${isLoading ? '...' : `${count}/${totalCount}`})`,
       treeNodeType: 'folder',
-      treeMenuType: 'user',
+      treeMenuType: 'userFolder',
       treeId: 'Benutzer',
       treeUrl: ['Benutzer'],
       fetcherName: 'useUsersNavData',

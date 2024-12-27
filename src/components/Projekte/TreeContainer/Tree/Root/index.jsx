@@ -5,12 +5,13 @@ import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
 import { Projekt } from './Projekt/index.jsx'
-import { UsersFolder } from './Users.jsx'
 import { MessagesFolder } from './Messages.jsx'
 import { WerteFolder } from './Werte/index.jsx'
 import { CurrentIssuesFolder } from './CurrentIssues/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { NodeWithList } from '../NodeWithList.jsx'
+import { RootNodeWithList } from '../RootNodeWithList.jsx'
+import { useUsersNavData } from '../../../../../modules/useUsersNavData.js'
 
 export const Root = memo(
   observer(() => {
@@ -21,12 +22,6 @@ export const Root = memo(
     const token = store.user?.token
     const role = token ? jwtDecode(token).role : null
 
-    const usersFilter = { id: { isNull: false } }
-    if (nodeLabelFilter.user) {
-      usersFilter.label = {
-        includesInsensitive: nodeLabelFilter.user,
-      }
-    }
     const apberuebersichtsFilter = {
       projId: { in: ['e57f56f4-4376-11e8-ab21-4314b6749d13'] },
     }
@@ -41,7 +36,6 @@ export const Root = memo(
       queryKey: [
         'treeRoot',
         projectIsOpen,
-        nodeLabelFilter.user,
         apsFilter,
         nodeLabelFilter.apberuebersicht,
       ],
@@ -54,7 +48,6 @@ export const Root = memo(
         client.query({
           query: gql`
             query TreeRootQuery(
-              $usersFilter: UserFilter!
               $apsFilter: ApFilter!
               $apberuebersichtsFilter: ApberuebersichtFilter!
               $projectIsOpen: Boolean!
@@ -86,16 +79,9 @@ export const Root = memo(
               allMessages {
                 totalCount
               }
-              allUsers {
-                totalCount
-              }
-              filteredUsers: allUsers(filter: $usersFilter) {
-                totalCount
-              }
             }
           `,
           variables: {
-            usersFilter,
             apsFilter,
             apberuebersichtsFilter,
             projectIsOpen,
@@ -106,7 +92,6 @@ export const Root = memo(
 
     // console.log('TreeComponents rendering', {
     //   data,
-    //   usersFilter,
     //   apsFilter,
     //   apberuebersichtsFilter,
     //   projectIsOpen,
@@ -124,12 +109,7 @@ export const Root = memo(
           isLoading={isLoading}
           projectIsOpen={projectIsOpen}
         />
-        <UsersFolder
-          count={data?.data?.allUsers?.totalCount ?? 0}
-          countFiltered={data?.data?.filteredUsers?.totalCount ?? 0}
-          isLoading={isLoading}
-          usersFilter={usersFilter}
-        />
+        <RootNodeWithList fetcher={useUsersNavData} />
         {role === 'apflora_manager' && <WerteFolder />}
         <MessagesFolder
           count={data?.data?.allMessages?.totalCount ?? 0}
