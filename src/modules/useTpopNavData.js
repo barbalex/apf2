@@ -14,6 +14,8 @@ import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/
 import { tpopIcons } from './useTpopsNavData.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useTpopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -275,6 +277,7 @@ export const useTpopNavData = (props) => {
         {
           id: 'Teil-Population',
           label: `Teil-Population`,
+          isSelf: true,
           // TODO: add more
           labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
           labelRightElements: labelRightElements.length
@@ -302,6 +305,7 @@ export const useTpopNavData = (props) => {
           fetcherName: 'useTpopmassnsNavData',
           fetcherParams: { projId, apId, popId, tpopId },
           hasChildren: !!filteredMassnCount,
+          component: NodeWithList,
         },
         {
           id: 'Massnahmen-Berichte',
@@ -324,6 +328,7 @@ export const useTpopNavData = (props) => {
           fetcherName: 'useTpopmassnbersNavData',
           fetcherParams: { projId, apId, popId, tpopId },
           hasChildren: !!filteredTpopmassnbersCount,
+          component: NodeWithList,
         },
         {
           id: 'Feld-Kontrollen',
@@ -390,6 +395,7 @@ export const useTpopNavData = (props) => {
           fetcherName: 'useTpopbersNavData',
           fetcherParams: { projId, apId, popId, tpopId },
           hasChildren: !!filteredTpopbersCount,
+          component: NodeWithList,
         },
         {
           id: 'Beobachtungen',
@@ -415,6 +421,7 @@ export const useTpopNavData = (props) => {
           labelLeftElements: showBeobzugeordnetIcon
             ? [BeobzugeordnetMapIcon]
             : undefined,
+          component: NodeWithList,
         },
         {
           id: 'EK',
@@ -435,6 +442,7 @@ export const useTpopNavData = (props) => {
             'EK',
           ],
           hasChildren: false,
+          component: Node,
         },
         {
           id: 'Dateien',
@@ -455,6 +463,7 @@ export const useTpopNavData = (props) => {
             'Dateien',
           ],
           hasChildren: false,
+          component: Node,
         },
         {
           id: 'Historien',
@@ -475,6 +484,7 @@ export const useTpopNavData = (props) => {
             'Historien',
           ],
           hasChildren: false,
+          component: Node,
         },
       ],
     }),
