@@ -7,7 +7,7 @@ import { nodeFromMenu } from './nodeFromMenu.js'
 import { checkIfIsOpen } from './checkIfIsOpen.js'
 import { NodeWithList } from './NodeWithList.jsx'
 
-export const RootNodeWithList = memo(
+export const RootNode = memo(
   observer(({ fetcher }) => {
     const store = useContext(MobxContext)
 
@@ -15,6 +15,6 @@ export const RootNodeWithList = memo(
     const node = nodeFromMenu(navData)
     const isOpen = checkIfIsOpen({ store, menu: navData })
 
-    return <NodeWithList menu={navData} />
+    return <navData.component menu={navData} />
   }),
 )

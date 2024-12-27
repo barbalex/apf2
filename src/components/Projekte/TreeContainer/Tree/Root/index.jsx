@@ -10,7 +10,7 @@ import { WerteFolder } from './Werte/index.jsx'
 import { CurrentIssuesFolder } from './CurrentIssues/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { NodeWithList } from '../NodeWithList.jsx'
-import { RootNodeWithList } from '../RootNodeWithList.jsx'
+import { RootNode } from '../RootNode.jsx'
 import { useUsersNavData } from '../../../../../modules/useUsersNavData.js'
 
 export const Root = memo(
@@ -109,7 +109,7 @@ export const Root = memo(
           isLoading={isLoading}
           projectIsOpen={projectIsOpen}
         />
-        <RootNodeWithList fetcher={useUsersNavData} />
+        <RootNode fetcher={useUsersNavData} />
         {role === 'apflora_manager' && <WerteFolder />}
         <MessagesFolder
           count={data?.data?.allMessages?.totalCount ?? 0}
