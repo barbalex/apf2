@@ -28,6 +28,7 @@ export const Projekt = memo(({ projekt, projectIsOpen }) => {
       {projectIsOpen && (
         <>
           <ApFolder menu={apMenu} />
+          {/* <NodeWithList menu={apMenu} /> */}
           <NodeWithList menu={apberuebersichtMenu} />
         </>
       )}
