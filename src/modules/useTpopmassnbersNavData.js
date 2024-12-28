@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopmassnbersNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -72,6 +73,23 @@ export const useTpopmassnbersNavData = (props) => {
       listFilter: 'tpopmassnber',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen-Berichte`,
       label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'tpopmassnberFolder',
+      treeId: `${tpopId}TpopmassnberFolder`,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Massnahmen-Berichte',
+      ],
+      hasChildren: !!count,
+      component: NodeWithList,
       menus: (data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []).map(
         (p) => ({
           id: p.id,
@@ -79,7 +97,6 @@ export const useTpopmassnbersNavData = (props) => {
           treeNodeType: 'table',
           treeMenuType: 'tpopmassnber',
           treeId: p.id,
-          treeParentId: tpopId,
           treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',

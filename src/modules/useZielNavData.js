@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useZielNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -62,13 +63,12 @@ export const useZielNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'ziel',
       treeId: zielId,
-      treeParentId: apId,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, zielId],
       fetcherName: 'useZielNavData',
       fetcherParams: { projId, apId, jahr, zielId },
       hasChildren: true,
-      // leave totalCount undefined as the menus are folders
+      component: NodeWithList,
       menus: [
         {
           id: 'Ziel',

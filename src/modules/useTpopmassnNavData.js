@@ -8,6 +8,7 @@ import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopmassnNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -81,7 +82,6 @@ export const useTpopmassnNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'tpopmassn',
       treeId: tpopmassnId,
-      treeParentId: tpopId,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -102,7 +102,7 @@ export const useTpopmassnNavData = (props) => {
       labelRightElements: labelRightElements.length
         ? labelRightElements
         : undefined,
-      // leave totalCount undefined as the menus are folders
+      component: NodeWithList,
       menus: [
         {
           id: 'Massnahme',
