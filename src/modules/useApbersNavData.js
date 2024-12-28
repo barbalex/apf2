@@ -66,7 +66,6 @@ export const useApbersNavData = (props) => {
         treeNodeType: 'table',
         treeMenuType: 'apber',
         treeId: p.id,
-        treeParentId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', p.id],
         hasChildren: false,

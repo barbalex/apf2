@@ -67,7 +67,6 @@ export const useApartsNavData = (props) => {
         treeNodeType: 'table',
         treeMenuType: 'apart',
         treeId: p.id,
-        treeParentId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa', p.id],
         hasChildren: false,
