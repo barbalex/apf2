@@ -31,6 +31,7 @@ import { MobxContext } from '../mobxContext.js'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const popIcons = {
   normal: {
@@ -161,13 +162,13 @@ export const usePopsNavData = (props) => {
       treeMenuType: 'popFolder',
       treeId: `${apId}PopFolder`,
       treeTableId: apId,
-      treeParentId: apId,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
       fetcherName: 'usePopsNavData',
       fetcherParams: { projId, apId },
       hasChildren: !!count,
       labelLeftElements: store.tree.showPopIcon ? [PopMapIcon] : undefined,
+      component: NodeWithList,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id
@@ -180,13 +181,13 @@ export const usePopsNavData = (props) => {
         }
 
         const popIconIsHighlighted = p.id === popId
-        const PopIcon =
-          p.status ?
-            popIconIsHighlighted ?
-              popIcons[popIconName][p.status + 'Highlighted']
+        const PopIcon = p.status
+          ? popIconIsHighlighted
+            ? popIcons[popIconName][p.status + 'Highlighted']
             : popIcons[popIconName][p.status]
-          : popIconIsHighlighted ? PopIconQHighlighted
-          : PopIconQ
+          : popIconIsHighlighted
+            ? PopIconQHighlighted
+            : PopIconQ
 
         return {
           id: p.id,
@@ -195,7 +196,6 @@ export const usePopsNavData = (props) => {
           treeMenuType: 'pop',
           treeSingleElementName: 'Population',
           treeId: p.id,
-          treeParentId: `${apId}PopFolder`,
           treeParentTableId: apId,
           treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', p.id],
           hasChildren: true,
@@ -203,8 +203,9 @@ export const usePopsNavData = (props) => {
           fetcherParams: { projId, apId, popId: p.id },
           status: p.status,
           labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         }
       }),
     }),

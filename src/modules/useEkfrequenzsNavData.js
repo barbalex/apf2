@@ -5,7 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
-import { has } from 'lodash'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useEkfrequenzsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -66,13 +66,19 @@ export const useEkfrequenzsNavData = (props) => {
       listFilter: 'ekfrequenz',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
       label: `EK-Frequenzen (${isLoading ? '...' : `${rows.length}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'ekfrequenzFolder',
+      treeId: `${apId}EkfrequenzFolder`,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
+      hasChildren: !!rows.length,
+      component: NodeWithList,
       menus: rows.map((p) => ({
         id: p.id,
         label: p.label ?? '(kein Kürzel)',
         treeNodeType: 'table',
         treeMenuType: 'ekfrequenz',
         treeId: p.id,
-        treeParentId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', p.id],
         hasChildren: false,

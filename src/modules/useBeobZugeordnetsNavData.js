@@ -7,6 +7,7 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useBeobZugeordnetsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -86,14 +87,29 @@ export const useBeobZugeordnetsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen`,
       label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       labelShort: `Beob. zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'folder',
+      treeMenuType: 'beobZugeordnetFolder',
+      treeId: `${tpopId}BeobZugeordnetFolder`,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Beobachtungen',
+      ],
+      hasChildren: !!filteredCount,
+      component: NodeWithList,
       menus: (data?.data?.filteredBeobsZugeordnet?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
         treeNodeType: 'table',
         treeMenuType: 'beobZugeordnet',
         treeId: p.id,
-        treeParentId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -109,9 +125,9 @@ export const useBeobZugeordnetsNavData = (props) => {
         ],
         hasChildren: false,
         labelLeftElements:
-          showBeobzugeordnetIcon && beobId === p.id ?
-            [BeobzugeordnetFilteredMapIcon]
-          : undefined,
+          showBeobzugeordnetIcon && beobId === p.id
+            ? [BeobzugeordnetFilteredMapIcon]
+            : undefined,
       })),
     }),
     [

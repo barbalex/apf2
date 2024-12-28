@@ -7,6 +7,7 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useBeobNichtZuzuordnensNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -112,7 +113,19 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen`,
       label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       labelShort: `Beob. nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'folder',
+      treeMenuType: 'beobNichtZuzuordnenFolder',
+      treeId: `${apId}BeobNichtZuzuordnenFolder`,
+      treeParentTableId: apId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'nicht-zuzuordnende-Beobachtungen',
+      ],
+      hasChildren: !!filteredCount,
+      component: NodeWithList,
       menus: (data?.data?.filteredBeobsNichtZuzuordnen?.nodes ?? []).map(
         (p) => ({
           id: p.id,
@@ -120,7 +133,6 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
           treeNodeType: 'table',
           treeMenuType: 'beobNichtZuzuordnen',
           treeId: p.id,
-          treeParentId: apId,
           treeParentTableId: apId,
           treeUrl: [
             'Projekte',
@@ -132,9 +144,9 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
           ],
           hasChildren: false,
           labelLeftElements:
-            showBeobnichtzuzuordnenIcon && beobId === p.id ?
-              [BeobnichtzuzuordnenFilteredMapIcon]
-            : undefined,
+            showBeobnichtzuzuordnenIcon && beobId === p.id
+              ? [BeobnichtzuzuordnenFilteredMapIcon]
+              : undefined,
         }),
       ),
     }),
