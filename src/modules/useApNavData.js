@@ -101,6 +101,9 @@ export const useApNavData = (props) => {
             apById(id: $apId) {
               id
               label
+              apqksByApId {
+                totalCount
+              }
               popsByApId {
                 totalCount
               }
@@ -327,6 +330,7 @@ export const useApNavData = (props) => {
     data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
   const filesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
   const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
+  const qkCount = data?.data?.apById?.apqksByApId?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
@@ -529,7 +533,7 @@ export const useApNavData = (props) => {
         },
         {
           id: 'Qualitätskontrollen-wählen',
-          label: `Qualitätskontrollen wählen`,
+          label: `Qualitätskontrollen wählen (${qkCount})`,
           treeNodeType: 'folder',
           treeMenuType: 'qkWaehlenFolder',
           treeId: `${apId}QkWaehlenFolder`,
