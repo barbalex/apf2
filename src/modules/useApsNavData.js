@@ -5,7 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
-import { has } from 'lodash'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -64,7 +64,7 @@ export const useApsNavData = (props) => {
       hasChildren: !!count,
       fetcherName: 'useApsNavData',
       fetcherParams: { projId },
-      component: 'TODO:',
+      component: NodeWithList,
       menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => ({
         id: p.id,
         label: p.label,
@@ -72,13 +72,12 @@ export const useApsNavData = (props) => {
         treeMenuType: 'ap',
         singleElementName: 'Art',
         treeId: p.id,
-        treeParentId: projId,
         treeParentTableId: projId,
         treeUrl: ['Projekte', projId, 'Arten', p.id],
         hasChildren: true,
         fetcherName: 'useApNavData',
         fetcherParams: { projId, apId: p.id },
-        component: 'TODO:',
+        component: NodeWithList,
       })),
     }),
     [count, data?.data?.allAps?.nodes, isLoading, projId, totalCount],

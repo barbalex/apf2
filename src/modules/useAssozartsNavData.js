@@ -5,7 +5,6 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
-import { has } from 'lodash'
 
 export const useAssozartsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -75,7 +74,6 @@ export const useAssozartsNavData = (props) => {
         treeNodeType: 'table',
         treeMenuType: 'assozart',
         treeId: p.id,
-        treeParentId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', p.id],
         hasChildren: false,
