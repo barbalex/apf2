@@ -8,7 +8,6 @@ import { MobxContext } from '../mobxContext.js'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 
-// TODO:remove unused
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
 import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.jsx'
 import { tpopIcons } from './useTpopsNavData.js'
@@ -288,7 +287,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopmassnFolder',
           treeId: `${tpopId}TpopmassnFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -311,7 +310,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopmassnberFolder',
           treeId: `${tpopId}MassnberFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -334,7 +333,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopfeldkontrFolder',
           treeId: `${tpopId}FeldkontrFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -356,7 +355,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopfreiwkontrFolder',
           treeId: `${tpopId}FreiwkontrFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -378,7 +377,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopberFolder',
           treeId: `${tpopId}TpopberFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -401,7 +400,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'beobZugeordnetFolder',
           treeId: `${tpopId}BeobZugeordnetFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -427,7 +426,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopEkFolder',
           treeId: `${tpopId}EkFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -448,7 +447,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopDateienFolder',
           treeId: `${tpopId}DateienFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,
@@ -469,7 +468,7 @@ export const useTpopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopHistorienFolder',
           treeId: `${tpopId}HistorienFolder`,
-          treeTableId: tpopId,
+          treeParentTableId: tpopId,
           treeUrl: [
             'Projekte',
             projId,

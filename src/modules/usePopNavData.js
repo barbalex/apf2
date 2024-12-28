@@ -207,7 +207,6 @@ export const usePopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: `tpopFolder`,
           treeId: `${popId}TpopFolder`,
-          treeTableId: popId,
           treeParentTableId: popId,
           treeUrl: [
             'Projekte',
@@ -230,7 +229,7 @@ export const usePopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: `popberFolder`,
           treeId: `${popId}PopberFolder`,
-          treeTableId: popId,
+          treeParentTableId: popId,
           treeUrl: [
             'Projekte',
             projId,
@@ -251,7 +250,7 @@ export const usePopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: `popmassnberFolder`,
           treeId: `${popId}PopmassnberFolder`,
-          treeTableId: popId,
+          treeParentTableId: popId,
           treeUrl: [
             'Projekte',
             projId,
@@ -272,7 +271,7 @@ export const usePopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: `popAuswertungFolder`,
           treeId: `${popId}AuswertungFolder`,
-          treeTableId: popId,
+          treeParentTableId: popId,
           treeUrl: [
             'Projekte',
             projId,
@@ -291,7 +290,7 @@ export const usePopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: `popDateienFolder`,
           treeId: `${popId}DateienFolder`,
-          treeTableId: popId,
+          treeParentTableId: popId,
           treeUrl: [
             'Projekte',
             projId,
@@ -310,7 +309,7 @@ export const usePopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: `popHistorienFolder`,
           treeId: `${popId}HistorienFolder`,
-          treeTableId: popId,
+          treeParentTableId: popId,
           treeUrl: [
             'Projekte',
             projId,

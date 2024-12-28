@@ -161,7 +161,6 @@ export const usePopsNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'popFolder',
       treeId: `${apId}PopFolder`,
-      treeTableId: apId,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
       fetcherName: 'usePopsNavData',
