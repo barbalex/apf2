@@ -81,7 +81,7 @@ export const useZielNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'zielberFolder',
           treeId: `${zielId}ZielberFolder`,
-          treeTableId: zielId,
+          treeParentTableId: zielId,
           treeUrl: [
             'Projekte',
             projId,
