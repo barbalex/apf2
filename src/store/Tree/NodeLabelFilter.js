@@ -128,7 +128,7 @@ export const NodeLabelFilter = types
     ),
     doc: types.optional(
       types.maybeNull(types.union(types.string, types.number)),
-      null,
+      '',
     ),
   })
   .actions((self) => ({
@@ -183,5 +183,5 @@ export const defaultValue = {
   adresse: null,
   gemeinde: null,
   user: null,
-  doc: null,
+  doc: '',
 }
