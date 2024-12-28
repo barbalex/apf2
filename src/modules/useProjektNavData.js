@@ -85,7 +85,7 @@ export const useProjektNavData = (props) => {
       hasChildren: true,
       fetcherName: 'useProjektNavData',
       fetcherParams: { projId },
-      component: RootNode,
+      component: NodeWithList,
       menus: [
         {
           id: 'Projekt',

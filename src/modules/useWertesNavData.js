@@ -129,7 +129,7 @@ export const useWertesNavData = () => {
       hasChildren: true,
       fetcherName: 'useWertesNavData',
       fetcherParams: {},
-      component: RootNode,
+      component: NodeWithList,
       // leave totalCount undefined as the menus are folders
       menus: [
         {

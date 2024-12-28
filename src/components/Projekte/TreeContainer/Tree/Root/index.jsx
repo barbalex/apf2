@@ -5,7 +5,6 @@ import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
 import { Projekt } from './Projekt/index.jsx'
-import { WerteFolder } from './Werte/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { NodeWithList } from '../NodeWithList.jsx'
 import { RootNode } from '../RootNode.jsx'
@@ -108,7 +107,7 @@ export const Root = memo(
         {/* TODO: renders twice, on second render fetcher is undefined. IMPOSSIBLE */}
         <RootNode fetcher={useProjektNavData} />
         <RootNode fetcher={useUsersNavData} />
-        {role === 'apflora_manager' && <WerteFolder />}
+        {/* {role === 'apflora_manager' && <WerteFolder />} */}
         {/* TODO: renders twice, on second render fetcher is undefined. IMPOSSIBLE */}
         {role === 'apflora_manager' && <RootNode fetcher={useWertesNavData} />}
         <RootNode fetcher={useMessagesNavData} />
