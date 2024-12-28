@@ -54,7 +54,7 @@ export const Sidebar = memo(
             Dokumentation
           </MenuTitleLink>
           <Filter
-            filter={store.tree.nodeLabelFilter.doc}
+            filter={store.tree.nodeLabelFilter.doc ?? ''}
             setFilter={setFilter}
           />
         </MenuTitle>
