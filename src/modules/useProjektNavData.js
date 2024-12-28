@@ -6,7 +6,6 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
-import { RootNode } from '../components/Projekte/TreeContainer/Tree/RootNode.jsx'
 
 export const useProjektNavData = (props) => {
   const apolloClient = useApolloClient()
