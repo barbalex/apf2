@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopfeldkontrzaehlsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -78,7 +79,6 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
       treeMenuType: 'tpopfeldkontrzaehlFolder',
       treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
       treeTableId: tpopkontrId,
-      treeParentId: tpopkontrId,
       treeParentTableId: tpopkontrId,
       treeUrl: [
         'Projekte',
@@ -97,6 +97,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
       fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
       hasChildren: !!count,
       alwaysOpen: true,
+      component: NodeWithList,
       menus: (
         data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
       ).map((p) => ({
@@ -105,8 +106,6 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
         treeNodeType: 'table',
         treeMenuType: 'tpopfeldkontrzaehl',
         treeId: p.id,
-        // treeParentId: tpopkontrId,
-        treeParentId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',

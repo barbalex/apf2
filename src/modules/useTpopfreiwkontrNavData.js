@@ -106,7 +106,6 @@ export const useTpopfreiwkontrNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'tpopfreiwkontr',
       treeId: tpopkontrId,
-      treeParentId: tpopId,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -145,8 +144,6 @@ export const useTpopfreiwkontrNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'tpopfreiwkontrzaehlFolder',
           treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
-          treeTableId: tpopkontrId,
-          treeParentId: tpopkontrId,
           treeParentTableId: tpopkontrId,
           treeUrl: [
             'Projekte',

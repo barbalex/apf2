@@ -9,6 +9,7 @@ import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopfeldkontrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -93,7 +94,6 @@ export const useTpopfeldkontrsNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'tpopfeldkontr',
       treeId: `${tpopId}FeldkontrFolder`,
-      treeParentId: tpopId,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -109,6 +109,7 @@ export const useTpopfeldkontrsNavData = (props) => {
       fetcherName: 'useTpopfeldkontrsNavData',
       fetcherParams: { projId, apId, popId, tpopId },
       hasChildren: !!count,
+      component: NodeWithList,
       menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []
@@ -131,7 +132,6 @@ export const useTpopfeldkontrsNavData = (props) => {
             treeNodeType: 'table',
             treeMenuType: 'tpopfeldkontr',
             treeId: p.id,
-            treeParentId: tpopId,
             treeParentTableId: tpopId,
             treeUrl: [
               'Projekte',

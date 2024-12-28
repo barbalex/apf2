@@ -7,6 +7,7 @@ import { useParams } from 'react-router'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopmassnsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -85,8 +86,6 @@ export const useTpopmassnsNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'tpopmassnFolder',
       treeId: `${tpopId}TpopmassnFolder`,
-      treeTableId: tpopId,
-      treeParentId: tpopId,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -102,6 +101,7 @@ export const useTpopmassnsNavData = (props) => {
       fetcherName: 'useTpopmassnsNavData',
       fetcherParams: { projId, apId, popId, tpopId },
       hasChildren: !!count,
+      component: NodeWithList,
       menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []
@@ -120,7 +120,6 @@ export const useTpopmassnsNavData = (props) => {
             treeNodeType: 'table',
             treeMenuType: 'tpopmassn',
             treeId: p.id,
-            treeParentId: tpopId,
             treeParentTableId: tpopId,
             treeUrl: [
               'Projekte',

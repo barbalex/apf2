@@ -138,7 +138,7 @@ export const useTpopfeldkontrNavData = (props) => {
       labelRightElements: labelRightElements.length
         ? labelRightElements
         : undefined,
-      // leave totalCount undefined as the menus are folders
+      component: NodeWithList,
       menus: [
         {
           id: 'Feld-Kontrolle',
@@ -155,7 +155,6 @@ export const useTpopfeldkontrNavData = (props) => {
           treeMenuType: 'tpopfeldkontrzaehlFolder',
           treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
           treeTableId: tpopkontrId,
-          treeParentId: tpopkontrId,
           treeParentTableId: tpopkontrId,
           treeUrl: [
             'Projekte',
