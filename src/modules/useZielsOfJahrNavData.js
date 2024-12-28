@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useZielsOfJahrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -82,12 +83,12 @@ export const useZielsOfJahrNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'zielJahrFolder',
       treeId: `${apId}ApzielJahrFolder`,
-      treeParentId: apId,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr],
       hasChildren: !!filteredZiels.length,
       fetcherName: 'useZielsOfJahrNavData',
       fetcherParams: { projId, apId, jahr },
+      component: NodeWithList,
       menus: filteredZiels.map((p) => ({
         id: p.id,
         label: p.label,
@@ -95,7 +96,6 @@ export const useZielsOfJahrNavData = (props) => {
         treeNodeType: 'table',
         treeMenuType: 'ziel',
         treeId: p.id,
-        treeParentId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, p.id],
         fetcherName: 'useZielNavData',

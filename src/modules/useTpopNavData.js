@@ -252,7 +252,6 @@ export const useTpopNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'tpop',
       treeId: tpopId,
-      treeParentId: `${popId}TpopFolder`,
       treeParentTableId: popId,
       treeUrl: [
         'Projekte',
@@ -272,13 +271,12 @@ export const useTpopNavData = (props) => {
       labelRightElements: labelRightElements.length
         ? labelRightElements
         : undefined,
-      // leave totalCount undefined as the menus are folders
+      component: NodeWithList,
       menus: [
         {
           id: 'Teil-Population',
           label: `Teil-Population`,
           isSelf: true,
-          // TODO: add more
           labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
           labelRightElements: labelRightElements.length
             ? labelRightElements

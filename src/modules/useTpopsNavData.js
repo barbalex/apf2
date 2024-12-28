@@ -33,6 +33,7 @@ import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const tpopIcons = {
   normal: {
@@ -171,7 +172,6 @@ export const useTpopsNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: `tpopFolder`,
       treeId: `${popId}TpopFolder`,
-      treeTableId: popId,
       treeParentTableId: popId,
       treeUrl: [
         'Projekte',
@@ -186,6 +186,7 @@ export const useTpopsNavData = (props) => {
       fetcherParams: { projId, apId, popId },
       hasChildren: !!count,
       labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
+      component: NodeWithList,
       menus: (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id
@@ -213,7 +214,6 @@ export const useTpopsNavData = (props) => {
           treeNodeType: 'table',
           treeMenuType: 'tpop',
           treeId: p.id,
-          treeParentId: `${popId}TpopFolder`,
           treeParentTableId: popId,
           treeUrl: [
             'Projekte',

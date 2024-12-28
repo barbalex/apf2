@@ -6,7 +6,6 @@ import { useParams } from 'react-router'
 import countBy from 'lodash/countBy'
 
 import { MobxContext } from '../mobxContext.js'
-import { has } from 'lodash'
 
 export const useZieljahrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -84,9 +83,7 @@ export const useZieljahrsNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'zieljahrFolder',
       treeId: `${apId}ZielJahreFolder`,
-      treeTableId: apId,
-      treeTableParentId: apId,
-      treeParentId: apId,
+      treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', +jahr],
       fetcherName: 'useZielsOfJahrNavData',
       fetcherParams: { projId, apId, jahr: +jahr },
@@ -105,8 +102,6 @@ export const useZieljahrsNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'zieljahrsFolder',
       treeId: `${apId}ZieljahrsFolder`,
-      treeTableId: apId,
-      treeParentId: apId,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
       hasChildren: !!zieljahrsCount,

@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useZielbersNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -70,7 +71,6 @@ export const useZielbersNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'zielberFolder',
       treeId: zielId,
-      treeParentId: jahr,
       treeParentTableId: apId,
       treeUrl: [
         'Projekte',
@@ -87,6 +87,7 @@ export const useZielbersNavData = (props) => {
       fetcherParams: { projId, apId, jahr },
       passTransitionStateToChildren: true,
       alwaysOpen: true,
+      component: NodeWithList,
       menus: (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
         (zielber) => ({
           id: zielber.id,
@@ -94,7 +95,6 @@ export const useZielbersNavData = (props) => {
           treeNodeType: 'table',
           treeMenuType: 'zielber',
           treeId: zielber.id,
-          treeParentId: zielId,
           treeParentTableId: zielId,
           treeUrl: [
             'Projekte',
