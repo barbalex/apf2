@@ -30,7 +30,7 @@
     "@mui/lab": "6.0.0-beta.21",
     "@mui/material": "6.3.0",
     "@react-leaflet/core": "2.1.0",
-    "@tanstack/react-query": "5.62.10",
+    "@tanstack/react-query": "5.62.11",
     "@turf/ellipse": "7.1.0",
     "@turf/helpers": "7.1.0",
     "@turf/nearest-point": "7.1.0",
