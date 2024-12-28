@@ -78,7 +78,6 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'tpopfeldkontrzaehlFolder',
       treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
-      treeTableId: tpopkontrId,
       treeParentTableId: tpopkontrId,
       treeUrl: [
         'Projekte',

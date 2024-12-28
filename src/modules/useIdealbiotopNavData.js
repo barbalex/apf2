@@ -47,8 +47,7 @@ export const useIdealbiotopNavData = (props) => {
       treeNodeType: 'folder',
       treeMenuType: 'idealbiotopFolder',
       treeId: `${apId}IdealbiotopFolder`,
-      treeTableId: apId,
-      treeTableParentId: apId,
+      treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
       hasChildren: true,
       fetcherName: 'useIdealbiotopNavData',
@@ -67,7 +66,7 @@ export const useIdealbiotopNavData = (props) => {
           treeNodeType: 'folder',
           treeMenuType: 'idealbiotopDateienFolder',
           treeId: `${apId}IdealbiotopDateienFolder`,
-          treeTableId: apId,
+          treeParentTableId: apId,
           treeUrl: [
             'Projekte',
             projId,

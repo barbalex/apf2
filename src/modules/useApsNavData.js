@@ -59,7 +59,7 @@ export const useApsNavData = (props) => {
       nodeType: 'folder',
       nodeMenuType: 'apFolder',
       treeId: `${projId}ApFolder`,
-      treeTableId: projId,
+      treeParentTableId: projId,
       treeUrl: [`Daten`, `Projekte`, projId, `Arten`],
       hasChildren: !!count,
       fetcherName: 'useApsNavData',

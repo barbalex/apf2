@@ -1,7 +1,9 @@
-// TODO: treeTableId not used > remove
 export const nodeFromMenu = (menu) => ({
+  // TODO: used?
   nodeType: menu.treeNodeType,
+  // know what menu to show
   menuType: menu.treeMenuType,
+  // TODO: what for?
   id: menu.treeId,
   // know what parent to insert a new node into
   // this has to be the id of the parent table's dataset
@@ -23,5 +25,6 @@ export const nodeFromMenu = (menu) => ({
   status: menu.status,
   // used for zaehlungen in ekf
   hideInNavList: menu.hideInNavList,
+  // used by NodeWithList
   childrenAreFolders: menu.childrenAreFolders,
 })
