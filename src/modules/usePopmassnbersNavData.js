@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const usePopmassnbersNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -71,6 +72,21 @@ export const usePopmassnbersNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte`,
       label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
       labelShort: `Massn.-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'popmassnberFolder',
+      treeId: `${popId}PopmassnberFolder`,
+      treeParentTableId: popId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Massnahmen-Berichte',
+      ],
+      hasChildren: count > 0,
+      component: NodeWithList,
       menus: (data?.data?.popById?.popmassnbersByPopId?.nodes ?? []).map(
         (p) => ({
           id: p.id,
@@ -78,7 +94,6 @@ export const usePopmassnbersNavData = (props) => {
           treeNodeType: 'table',
           treeMenuType: 'popmassnber',
           treeId: p.id,
-          treeParentId: popId,
           treeParentTableId: popId,
           treeUrl: [
             'Projekte',

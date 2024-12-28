@@ -180,7 +180,6 @@ export const usePopNavData = (props) => {
       treeMenuType: 'pop',
       treeSingleElementName: 'Population',
       treeId: popId,
-      treeParentId: `${apId}PopFolder`,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', popId],
       hasChildren: true,
@@ -191,6 +190,7 @@ export const usePopNavData = (props) => {
       labelRightElements: labelRightElements.length
         ? labelRightElements
         : undefined,
+      component: NodeWithList,
       menus: [
         {
           id: 'Population',

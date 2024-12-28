@@ -5,7 +5,6 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
-import { has } from 'lodash'
 
 export const usePopbersNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -61,13 +60,26 @@ export const usePopbersNavData = (props) => {
       listFilter: 'popber',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte`,
       label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'popberFolder',
+      treeId: `${popId}popberFolder`,
+      treeParentTableId: popId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Kontroll-Berichte',
+      ],
+      hasChildren: !!count,
       menus: (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
         treeNodeType: 'table',
         treeMenuType: 'popber',
         treeId: p.id,
-        treeParentId: popId,
         treeParentTableId: popId,
         treeUrl: [
           'Projekte',

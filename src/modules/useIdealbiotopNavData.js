@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList'
 
 export const useIdealbiotopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -47,12 +48,12 @@ export const useIdealbiotopNavData = (props) => {
       treeMenuType: 'idealbiotopFolder',
       treeId: `${apId}IdealbiotopFolder`,
       treeTableId: apId,
-      treeParentId: apId,
+      treeTableParentId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
       hasChildren: true,
       fetcherName: 'useIdealbiotopNavData',
       fetcherParams: { projId, apId },
-      // leave totalCount undefined as the menus are folders
+      component: NodeWithList,
       menus: [
         {
           id: 'Idealbiotop',
