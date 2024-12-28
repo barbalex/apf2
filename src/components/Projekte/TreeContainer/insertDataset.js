@@ -193,7 +193,7 @@ export const insertDataset = async ({
   const newActiveNodeArray = [...url, row[idField]]
   // need to add single name to the url, i.e. 'Art' for ap
   const to = `/Daten/${newActiveNodeArray.join('/')}${singleElementName ? `/${singleElementName}` : ''}${search}`
-  store.navigate(to)
+  setTimeout(() => store.navigate(to), 300)
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
