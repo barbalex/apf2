@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useEkAbrechnungstypWertesNavData = () => {
   const apolloClient = useApolloClient()
@@ -59,9 +60,22 @@ export const useEkAbrechnungstypWertesNavData = () => {
       listFilter: 'ekAbrechnungstypWerte',
       url: `/Daten/Werte-Listen/EkAbrechnungstypWerte`,
       label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'ekAbrechnungstypWerteFolder',
+      treeId: `EkAbrechnungstypWerteFolder`,
+      treeUrl: ['Werte-Listen', 'EkAbrechnungstypWerte'],
+      hasChildren: !!count,
+      fetcherName: 'useEkAbrechnungstypWertesNavData',
+      fetcherParams: {},
+      component: NodeWithList,
       menus: (data?.data?.allEkAbrechnungstypWertes?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'ekAbrechnungstypWerte',
+        treeId: p.id,
+        treeUrl: ['Werte-Listen', 'EkAbrechnungstypWerte', p.id],
+        hasChildren: false,
       })),
     }),
     [
