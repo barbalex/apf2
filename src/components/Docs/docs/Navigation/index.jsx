@@ -33,7 +33,7 @@ export const Component = memo(() => (
     </p>
     <p>
       Der Navigationsbaum enthält Kontext-Menüs. Diese sind auf primär
-      Finger-Gesteuerten Geräten deaktiviert, weil sie sich nicht für die
+      Finger-gesteuerten Geräten deaktiviert, weil sie sich nicht für die
       Bedienung mit Fingern eignen und die Gefahr besteht, sie ungewollt zu
       aktivieren (v.a. bei Nässe). Neu gibt es Menüs in den Formularköpfen, die
       sich dynamisch an die verfügbare Breite anpassen (sie sind auch auf dem
