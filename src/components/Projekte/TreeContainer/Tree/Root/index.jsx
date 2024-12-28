@@ -13,6 +13,7 @@ import { useUsersNavData } from '../../../../../modules/useUsersNavData.js'
 import { useMessagesNavData } from '../../../../../modules/useMessagesNavData.js'
 import { useProjektNavData } from '../../../../../modules/useProjektNavData.js'
 import { useCurrentissuesNavData } from '../../../../../modules/useCurrentissuesNavData.js'
+import { useWertesNavData } from '../../../../../modules/useWertesNavData.js'
 
 export const Root = memo(
   observer(() => {
@@ -104,10 +105,12 @@ export const Root = memo(
           isLoading={isLoading}
           projectIsOpen={projectIsOpen}
         />
-        {/* TODO: fetcher is always undefined. IMPOSSIBLE */}
+        {/* TODO: renders twice, on second render fetcher is undefined. IMPOSSIBLE */}
         <RootNode fetcher={useProjektNavData} />
         <RootNode fetcher={useUsersNavData} />
         {role === 'apflora_manager' && <WerteFolder />}
+        {/* TODO: renders twice, on second render fetcher is undefined. IMPOSSIBLE */}
+        {role === 'apflora_manager' && <RootNode fetcher={useWertesNavData} />}
         <RootNode fetcher={useMessagesNavData} />
         <RootNode fetcher={useCurrentissuesNavData} />
       </>

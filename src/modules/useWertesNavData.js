@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { RootNode } from '../components/Projekte/TreeContainer/Tree/RootNode.jsx'
 
 export const useWertesNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -126,6 +127,13 @@ export const useWertesNavData = (props) => {
       id: 'WerteListen',
       url: '/Daten/Werte-Listen',
       label: `Werte-Listen`,
+      treeNodeType: 'folder',
+      treeMenuType: 'projekt',
+      treeUrl: ['Werte-Listen'],
+      hasChildren: true,
+      fetcherName: 'useWertesNavData',
+      fetcherParams: {},
+      component: RootNode,
       // leave totalCount undefined as the menus are folders
       menus: [
         {
