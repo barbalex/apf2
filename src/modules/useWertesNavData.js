@@ -7,9 +7,8 @@ import { MobxContext } from '../mobxContext.js'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 import { RootNode } from '../components/Projekte/TreeContainer/Tree/RootNode.jsx'
 
-export const useWertesNavData = (props) => {
+export const useWertesNavData = () => {
   const apolloClient = useApolloClient()
-  const include = props?.include ?? true
 
   const store = useContext(MobxContext)
 
@@ -29,37 +28,35 @@ export const useWertesNavData = (props) => {
             $tpopApberrelevantGrundWerteFilter: TpopApberrelevantGrundWerteFilter!
             $ekAbrechnungstypWerteFilter: EkAbrechnungstypWerteFilter!
             $tpopkontrzaehlEinheitWerteFilter: TpopkontrzaehlEinheitWerteFilter!
-            $include: Boolean!
           ) {
-            allAdresses @include(if: $include) {
+            allAdresses {
               totalCount
             }
-            filteredAdresses: allAdresses(filter: $adressesFilter)
-              @include(if: $include) {
+            filteredAdresses: allAdresses(filter: $adressesFilter) {
               totalCount
             }
-            allTpopApberrelevantGrundWertes @include(if: $include) {
+            allTpopApberrelevantGrundWertes {
               totalCount
             }
             filteredTpopApberrelevantGrundWertes: allTpopApberrelevantGrundWertes(
               filter: $tpopApberrelevantGrundWerteFilter
-            ) @include(if: $include) {
+            ) {
               totalCount
             }
-            allEkAbrechnungstypWertes @include(if: $include) {
+            allEkAbrechnungstypWertes {
               totalCount
             }
             filteredEkAbrechnungstypWertes: allEkAbrechnungstypWertes(
               filter: $ekAbrechnungstypWerteFilter
-            ) @include(if: $include) {
+            ) {
               totalCount
             }
-            allTpopkontrzaehlEinheitWertes @include(if: $include) {
+            allTpopkontrzaehlEinheitWertes {
               totalCount
             }
             filteredTpopkontrzaehlEinheitWertes: allTpopkontrzaehlEinheitWertes(
               filter: $tpopkontrzaehlEinheitWerteFilter
-            ) @include(if: $include) {
+            ) {
               totalCount
             }
           }
@@ -72,7 +69,6 @@ export const useWertesNavData = (props) => {
             store.tree.ekAbrechnungstypWerteGqlFilterForTree,
           tpopkontrzaehlEinheitWerteFilter:
             store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
-          include,
         },
         fetchPolicy: 'no-cache',
       }),
