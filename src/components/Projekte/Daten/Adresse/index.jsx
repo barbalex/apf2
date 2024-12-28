@@ -109,10 +109,7 @@ export const Component = memo(
     return (
       <ErrorBoundary>
         <Container>
-          <FormTitle
-            title="Adresse"
-            MenuBarComponent={Menu}
-          />
+          <FormTitle title="Adresse" MenuBarComponent={Menu} />
           <FieldsContainer>
             <FormContainer>
               <TextField

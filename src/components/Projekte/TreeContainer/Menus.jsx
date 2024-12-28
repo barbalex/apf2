@@ -411,12 +411,13 @@ export const Menus = memo(
         const actions = {
           insert() {
             const urlForInsert = [...url]
+            // when inserting on same level, remove last url element
             if (nodeType === 'table') {
-              url.pop()
+              urlForInsert.pop()
             }
             if (menuType === 'zielFolder') {
               // db sets year 1 as standard
-              url.push(1)
+              urlForInsert.push(1)
             }
             insertDataset({
               tablePassed: table,
@@ -677,10 +678,7 @@ export const Menus = memo(
                 />
               </DialogContent>
               <DialogActions>
-                <Button
-                  onClick={closeNewTpopFromBeobDialog}
-                  color="inherit"
-                >
+                <Button onClick={closeNewTpopFromBeobDialog} color="inherit">
                   abbrechen
                 </Button>
               </DialogActions>
