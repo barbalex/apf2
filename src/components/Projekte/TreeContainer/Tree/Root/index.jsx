@@ -6,13 +6,13 @@ import { jwtDecode } from 'jwt-decode'
 
 import { Projekt } from './Projekt/index.jsx'
 import { WerteFolder } from './Werte/index.jsx'
-import { CurrentIssuesFolder } from './CurrentIssues/index.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { NodeWithList } from '../NodeWithList.jsx'
 import { RootNode } from '../RootNode.jsx'
 import { useUsersNavData } from '../../../../../modules/useUsersNavData.js'
 import { useMessagesNavData } from '../../../../../modules/useMessagesNavData.js'
 import { useProjektNavData } from '../../../../../modules/useProjektNavData.js'
+import { useCurrentissuesNavData } from '../../../../../modules/useCurrentissuesNavData.js'
 
 export const Root = memo(
   observer(() => {
@@ -74,9 +74,6 @@ export const Root = memo(
                   }
                 }
               }
-              allCurrentissues {
-                totalCount
-              }
             }
           `,
           variables: {
@@ -112,10 +109,7 @@ export const Root = memo(
         <RootNode fetcher={useUsersNavData} />
         {role === 'apflora_manager' && <WerteFolder />}
         <RootNode fetcher={useMessagesNavData} />
-        <CurrentIssuesFolder
-          count={data?.data?.allCurrentissues?.totalCount ?? 0}
-          isLoading
-        />
+        <RootNode fetcher={useCurrentissuesNavData} />
       </>
     )
   }),
