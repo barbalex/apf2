@@ -3,7 +3,7 @@ export const nodeFromMenu = (menu) => ({
   nodeType: menu.treeNodeType,
   // know what menu to show
   menuType: menu.treeMenuType,
-  // TODO: what for?
+  // is used
   id: menu.treeId,
   // know what parent to insert a new node into
   // this has to be the id of the parent table's dataset
