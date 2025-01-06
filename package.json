@@ -138,7 +138,6 @@
     "react-leaflet-bing-v2": "5.2.3: reinstall after pull-request accepted: https://github.com/TA-Geoforce/react-leaflet-bing-v2/pull/25",
     "react-split-pane": "0.1.92 creates dependency conflict and thus forces to npm i --force: https://github.com/tomkp/react-split-pane/pull/836. TODO: migrate off of it",
     "react-contextmenu": "extracted into modules because: archived, caused conflicting peer dependency (old react versions)",
-    "classnames": "needed by react-contextmenu",
-    "react-leaflet": "Wait updating from 4.2.1 to 5.0.0 for react-leaflet-marker to update to react v19"
+    "classnames": "needed by react-contextmenu"
   }
 }
