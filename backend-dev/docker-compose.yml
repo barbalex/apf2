@@ -4,7 +4,7 @@ services:
     # specify container name to make it easier to run commands
     container_name: apf_db
     restart: always
-    image: db
+    # image: db
     # ensure enough shared memory - docker only allows 64mb
     # https://stackoverflow.com/a/56754077/712005
     shm_size: 1g
