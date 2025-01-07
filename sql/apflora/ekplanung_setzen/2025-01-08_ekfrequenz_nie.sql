@@ -49,6 +49,7 @@ ORDER BY
   tpop.id,
   tpop.nr;
 
+-- 210 (2024: ???)
 -- ensure ekfrequenz are still named like this:
 SELECT
   code,
@@ -76,7 +77,7 @@ WHERE
     FROM
       apflora.v_tpop_ekfrequenz_to_set_nie);
 
--- xxx
+-- 210
 --
 -- need to remove ekplan:
 WITH tpop_id_to_unplan AS (
@@ -96,4 +97,4 @@ WHERE tpop_id IN (
   -- TODO: reset year every time this query is run:
   AND jahr > 2024;
 
--- xxx
+-- 336 (2024: 564)
