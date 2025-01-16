@@ -20,7 +20,6 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-const singleRowHeight = 23
 const StyledNode = styled.div`
   padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
   box-sizing: border-box;
@@ -73,7 +72,6 @@ const SymbolDiv = styled.div`
   flex-grow: 0;
   flex-shrink: 0;
   cursor: pointer;
-  // height: ${singleRowHeight}px;
   align-self: flex-start;
   svg {
     display: block;
