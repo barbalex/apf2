@@ -86,8 +86,6 @@ export const useApberuebersichtsNavData = (props) => {
         treeParentTableId: projId,
         treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
         hasChildren: false,
-        fetcherName: 'useApberuebersichtNavData',
-        fetcherParams: { projId, apberuebersichtId: p.id },
       })),
     }),
     [
