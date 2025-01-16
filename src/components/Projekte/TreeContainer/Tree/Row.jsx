@@ -23,8 +23,6 @@ import { useSearchParamsState } from '../../../../modules/useSearchParamsState.j
 const singleRowHeight = 23
 const StyledNode = styled.div`
   padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
-  height: ${singleRowHeight}px;
-  max-height: ${singleRowHeight}px;
   box-sizing: border-box;
   margin: 0;
   display: flex;
@@ -75,7 +73,8 @@ const SymbolDiv = styled.div`
   flex-grow: 0;
   flex-shrink: 0;
   cursor: pointer;
-  height: ${singleRowHeight}px;
+  // height: ${singleRowHeight}px;
+  align-self: flex-start;
   svg {
     display: block;
     margin: auto;
@@ -87,7 +86,8 @@ const TextSpan = styled.span`
   font-size: 16px !important;
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
-  white-space: nowrap;
+  // line-height: 23px;
+  white-space: normal;
   text-overflow: ellipsis;
   overflow: hidden !important;
   cursor: pointer;
