@@ -82,7 +82,13 @@ export const Component = memo(
           [field]: value,
           changedBy: store.user.name,
         }
-        console.log('Idealbiotop, saveToDb', { variables, field, value })
+        console.log('Idealbiotop, saveToDb', {
+          variables,
+          field,
+          value,
+          fieldTypes,
+          fieldType: fieldTypes[field],
+        })
         try {
           await client.mutate({
             mutation: gql`
