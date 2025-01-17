@@ -78,17 +78,11 @@ export const Component = memo(
         const value = ifIsNumericAsNumber(event.target.value)
 
         const variables = {
-          id: apId,
+          id: row.id,
           [field]: value,
           changedBy: store.user.name,
         }
-        console.log('Idealbiotop, saveToDb', {
-          variables,
-          field,
-          value,
-          fieldTypes,
-          fieldType: fieldTypes[field],
-        })
+
         try {
           await client.mutate({
             mutation: gql`
@@ -116,8 +110,6 @@ export const Component = memo(
             variables,
           })
         } catch (error) {
-          // TODO: apollo client GraphQL error: Message: No values were updated in collection 'idealbiotops' because no values you can update were found matching these criteria., Location: [{"line":2,"column":3}], Path: updateIdealbiotopById
-          console.error(error)
           return setFieldErrors({ [field]: error.message })
         }
         setFieldErrors({})
