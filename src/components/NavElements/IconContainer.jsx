@@ -7,4 +7,5 @@ export const IconContainer = styled.div`
   padding-right: 4px;
   margin-left: -2px;
   align-self: flex-start;
+  margin-top: 3px;
 `
