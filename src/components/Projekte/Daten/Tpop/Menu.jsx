@@ -38,10 +38,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
-import {
-  hideTreeAtom,
-  showTreeMenusAtom,
-} from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -435,7 +432,6 @@ export const Menu = memo(
       })
     }, [tpopId, client, store, tanstackQueryClient])
 
-    const [hideTree] = useAtom(hideTreeAtom)
     const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     // ISSUE: refs are sometimes/often not set on first render
@@ -445,7 +441,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${hideTree}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${showTreeMenus}`}
         >
           <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>
@@ -460,14 +456,14 @@ export const Menu = memo(
               <FaMinus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>
                 <FaFolderTree style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum schliessen">
               <IconButton onClick={onClickCloseLowerNodes}>
                 <RiFolderCloseFill style={iconStyle} />

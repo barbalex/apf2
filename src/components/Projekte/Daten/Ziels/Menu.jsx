@@ -15,10 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import {
-  hideTreeAtom,
-  showTreeMenusAtom,
-} from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
@@ -96,12 +93,11 @@ export const Menu = memo(
       })
     }, [projId, apId, store, search, jahr])
 
-    const [hideTree] = useAtom(hideTreeAtom)
     const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={hideTree}>
+        <MenuBar rerenderer={showTreeMenus}>
           {!!toggleFilterInput && (
             <FilterButton toggleFilterInput={toggleFilterInput} />
           )}
@@ -110,14 +106,14 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>
                 <FaFolderTree style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum schliessen">
               <IconButton onClick={onClickCloseLowerNodes}>
                 <RiFolderCloseFill style={iconStyle} />

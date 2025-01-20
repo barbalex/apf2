@@ -24,10 +24,7 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
-import {
-  hideTreeAtom,
-  showTreeMenusAtom,
-} from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: ${(props) =>
@@ -269,13 +266,12 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const [hideTree] = useAtom(hideTreeAtom)
     const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}/${hideTree}`}
+          rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}/${showTreeMenus}`}
         >
           <Tooltip title="Neue Population erstellen">
             <IconButton onClick={onClickAdd}>
@@ -290,14 +286,14 @@ export const Menu = memo(
               <FaMinus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>
                 <FaFolderTree style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum schliessen">
               <IconButton onClick={onClickCloseLowerNodes}>
                 <RiFolderCloseFill style={iconStyle} />
