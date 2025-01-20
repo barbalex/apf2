@@ -38,7 +38,10 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
-import { hideTreeAtom } from '../../../../JotaiStore/index.js'
+import {
+  hideTreeAtom,
+  showTreeMenusAtom,
+} from '../../../../JotaiStore/index.js'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -433,6 +436,7 @@ export const Menu = memo(
     }, [tpopId, client, store, tanstackQueryClient])
 
     const [hideTree] = useAtom(hideTreeAtom)
+    const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     // ISSUE: refs are sometimes/often not set on first render
     // trying to measure widths of menus leads to complete chaos

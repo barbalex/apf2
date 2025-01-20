@@ -15,7 +15,10 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { hideTreeAtom } from '../../../../JotaiStore/index.js'
+import {
+  hideTreeAtom,
+  showTreeMenusAtom,
+} from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
@@ -91,6 +94,7 @@ export const Menu = memo(
     }, [projId, apId, store, search])
 
     const [hideTree] = useAtom(hideTreeAtom)
+    const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     return (
       <ErrorBoundary>

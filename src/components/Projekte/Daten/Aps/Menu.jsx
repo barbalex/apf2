@@ -10,6 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
@@ -20,6 +21,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { ApFilter } from '../../TreeContainer/ApFilter/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 const Fitter = styled.div`
   margin-top: ${(props) => (props.inmenu === 'true' ? -8 : -15)}px;
@@ -37,6 +39,7 @@ export const Menu = memo(
     const store = useContext(MobxContext)
 
     const { setMoving, moving, copying, setCopying } = store
+    const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     const onClickAdd = useCallback(async () => {
       let result

@@ -20,7 +20,10 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { hideTreeAtom } from '../../../../JotaiStore/index.js'
+import {
+  hideTreeAtom,
+  showTreeMenusAtom,
+} from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: white;
@@ -138,6 +141,7 @@ export const Menu = memo(
     }, [setCopying])
 
     const [hideTree] = useAtom(hideTreeAtom)
+    const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     return (
       <ErrorBoundary>
