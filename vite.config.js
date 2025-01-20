@@ -17,11 +17,6 @@ export default defineConfig({
         }
         warn(warning)
       },
-      // output: {
-      //   manualChunks: {
-      //     reactDatepicker: ['react-datepicker'],
-      //   },
-      // },
     },
   },
   plugins: [
