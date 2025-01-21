@@ -269,7 +269,8 @@ export const MenuBar = memo(
                   bgColor={bgColor}
                   className="menubar-more-menus"
                   // GOAL: close menu on click on menu item
-                  onClick={() => setMenuAnchor(null)}
+                  // TODO: prevents more menu opening on very narrow screens
+                  onClick={onCloseMenu}
                 >
                   {menus}
                 </MenuContent>
