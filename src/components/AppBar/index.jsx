@@ -11,6 +11,7 @@ import { Spinner } from '../shared/Spinner.jsx'
 import { MobxContext } from '../../mobxContext.js'
 import { constants } from '../../modules/constants.js'
 import { isMobileViewAtom } from '../../JotaiStore/index.js'
+import { IsDesktopViewSetter } from '../IsDesktopViewSetter.jsx'
 
 const isInIframe = inIframe()
 
@@ -75,6 +76,7 @@ export const Component = memo(
 
     return (
       <Container>
+        <IsDesktopViewSetter />
         <Appbar mobile={isMobileView.toString()}>
           {showEkf ?
             <EkfBar />

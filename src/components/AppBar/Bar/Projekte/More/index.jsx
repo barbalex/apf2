@@ -2,6 +2,8 @@ import { memo, useContext, useState, useCallback, forwardRef } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
+import { FaBars } from 'react-icons/fa6'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
@@ -24,6 +26,7 @@ import {
   enforceMobileNavigationAtom,
   writeEnforceDesktopNavigationAtom,
 } from '../../../../../JotaiStore/index.js'
+import { StyledIconButton } from '../index.jsx'
 
 const Container = styled.div`
   margin-top: auto;
@@ -43,63 +46,73 @@ const Version = styled.div`
 `
 
 export const More = memo(
-  observer(
-    forwardRef(({ onClickExporte: passedOnClickExporte, role }, ref) => {
-      const { projId } = useParams()
+  observer(({ onClickExporte: passedOnClickExporte, role }) => {
+    const { projId } = useParams()
 
-      const [isMobileView] = useAtom(isMobileViewAtom)
+    const [isMobileView] = useAtom(isMobileViewAtom)
 
-      const store = useContext(MobxContext)
-      const { deletedDatasets, user, setShowDeletions } = store
-      const { idb } = useContext(IdbContext)
+    const store = useContext(MobxContext)
+    const { deletedDatasets, user, setShowDeletions } = store
+    const { idb } = useContext(IdbContext)
 
-      const [anchorEl, setAnchorEl] = useState(null)
-      const closeMenu = useCallback(() => setAnchorEl(null), [])
+    const [anchorEl, setAnchorEl] = useState(null)
+    const closeMenu = useCallback(() => setAnchorEl(null), [])
 
-      /**
-       * need to clone projekteTabs
-       * because otherwise removing elements errors out (because elements are sealed)
-       */
-      const [projekteTabs] = useProjekteTabs()
-      const exporteIsActive = !!projId
+    /**
+     * need to clone projekteTabs
+     * because otherwise removing elements errors out (because elements are sealed)
+     */
+    const [projekteTabs] = useProjekteTabs()
+    const exporteIsActive = !!projId
 
-      const showDeletedDatasets = useCallback(() => {
-        closeMenu()
-        // prevent following from happening
-        // before setAnchor has finished
-        setTimeout(() => setShowDeletions(true))
-      }, [closeMenu, setShowDeletions])
-      const onClickMehrButton = useCallback(
-        (event) => setAnchorEl(event.currentTarget),
-        [],
-      )
-      const onClickExporte = useCallback(() => {
-        closeMenu()
-        // prevent following from happening
-        // before setAnchor has finished
-        setTimeout(() => passedOnClickExporte())
-      }, [closeMenu, passedOnClickExporte])
-      const onClickLogout = useCallback(() => {
-        logout(idb)
-      }, [idb])
+    const showDeletedDatasets = useCallback(() => {
+      closeMenu()
+      // prevent following from happening
+      // before setAnchor has finished
+      setTimeout(() => setShowDeletions(true))
+    }, [closeMenu, setShowDeletions])
+    const onClickMehrButton = useCallback(
+      (event) => setAnchorEl(event.currentTarget),
+      [],
+    )
+    const onClickExporte = useCallback(() => {
+      closeMenu()
+      // prevent following from happening
+      // before setAnchor has finished
+      setTimeout(() => passedOnClickExporte())
+    }, [closeMenu, passedOnClickExporte])
+    const onClickLogout = useCallback(() => {
+      logout(idb)
+    }, [idb])
 
-      const onClickUptime = useCallback(() => {
-        window.open('https://uptime.apflora.ch')
-        setAnchorEl(null)
-      }, [])
+    const onClickUptime = useCallback(() => {
+      window.open('https://uptime.apflora.ch')
+      setAnchorEl(null)
+    }, [])
 
-      return (
-        <Container>
-          <MehrButton
-            ref={ref}
-            aria-label="Mehr"
-            aria-owns={anchorEl ? 'appbar-more-menu' : null}
-            aria-haspopup="true"
-            onClick={onClickMehrButton}
-            data-id="appbar-more"
-          >
-            Mehr
-          </MehrButton>
+    return (
+      <Container>
+        <Tooltip title="Mehr Befehle">
+          {isMobileView ?
+            <StyledIconButton
+              aria-label="Mehr"
+              aria-owns={anchorEl ? 'appbar-more-menu' : null}
+              aria-haspopup="true"
+              onClick={onClickMehrButton}
+              data-id="appbar-more"
+            >
+              <FaBars />
+            </StyledIconButton>
+          : <MehrButton
+              aria-label="Mehr"
+              aria-owns={anchorEl ? 'appbar-more-menu' : null}
+              aria-haspopup="true"
+              onClick={onClickMehrButton}
+              data-id="appbar-more"
+            >
+              Mehr
+            </MehrButton>
+          }
           <Menu
             id="appbar-more-menu"
             anchorEl={anchorEl}
@@ -146,8 +159,8 @@ export const More = memo(
             </MenuItem>
             <Version>Version: 1.114.4 vom 26.11.2024</Version>
           </Menu>
-        </Container>
-      )
-    }),
-  ),
+        </Tooltip>
+      </Container>
+    )
+  }),
 )

@@ -54,10 +54,31 @@ export const StyledButton = styled(Button)`
   flex-shrink: 0;
   flex-grow: 0;
 `
-const StyledIconButton = styled(Button)`
+export const StyledIconButton = styled(Button)`
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
+  border-right-color: ${(props) =>
+    props.followed === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
+  border-left-color: ${(props) =>
+    props.preceded === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
+  border-top-left-radius: ${(props) =>
+    props.preceded === 'true' ? '0' : '4px'} !important;
+  border-bottom-left-radius: ${(props) =>
+    props.preceded === 'true' ? '0' : '4px'} !important;
+  border-top-right-radius: ${(props) =>
+    props.followed === 'true' ? '0' : '4px'} !important;
+  border-bottom-right-radius: ${(props) =>
+    props.followed === 'true' ? '0' : '4px'} !important;
+  margin-right: ${(props) =>
+    props.followed === 'true' ? '-1px' : 'unset'} !important;
   border-radius: 4px !important;
+  flex-shrink: 0;
+  flex-grow: 0;
+  // icon specific
   align-self: stretch;
   margin: 2px 0;
   padding: 5px 10px;
@@ -175,19 +196,34 @@ export const ProjekteMenus = memo(
         addMargin={false}
       >
         {isDesktopView && (
-          <StyledButton
-            variant={treeIsVisible ? 'outlined' : 'text'}
-            followed={datenIsVisible?.toString()}
-            onClick={onClickTree}
-            data-id="nav-tree1"
-            width={134}
-          >
-            Strukturbaum
-          </StyledButton>
+          <Tooltip title="Navigationsbaum anzeigen">
+            <StyledButton
+              variant={treeIsVisible ? 'outlined' : 'text'}
+              followed={datenIsVisible?.toString()}
+              onClick={onClickTree}
+              data-id="nav-tree1"
+              width={150}
+            >
+              Navigationsbaum
+            </StyledButton>
+          </Tooltip>
         )}
-        <Tooltip title="Formulare anzeigen">
-          <Daten width={77} />
-        </Tooltip>
+        {/* in mobile view: only show if user did not decide to always show */}
+        {/* do not hide if tree is visible - user can't close it! */}
+        {isMobileView && (!hideTree || treeIsVisible) && (
+          <Tooltip title="Navigationsbaum anzeigen">
+            <StyledIconButton
+              variant={treeIsVisible ? 'outlined' : 'text'}
+              followed={datenIsVisible?.toString()}
+              onClick={onClickTree}
+              data-id="nav-tree1"
+              width={46}
+            >
+              <VscListTree />
+            </StyledIconButton>
+          </Tooltip>
+        )}
+        <Daten width={77} />
         <Tooltip title="Daten filtern">
           {isDesktopView ?
             <StyledButton
@@ -269,9 +305,9 @@ export const ProjekteMenus = memo(
             followed={daten2IsVisible?.toString()}
             onClick={onClickTree2}
             data-id="nav-tree2"
-            width={147}
+            width={165}
           >
-            Strukturbaum 2
+            Navigationsbaum 2
           </StyledButton>
         )}
         {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
@@ -327,20 +363,6 @@ export const ProjekteMenus = memo(
             </StyledIconButton>
           }
         </Tooltip>
-        {/* in mobile view: move tree to the end of the menus */}
-        {/* only show if user did not decide to always show */}
-        {/* do not hide if tree is visible - user can't close it! */}
-        {isMobileView && (!hideTree || treeIsVisible) && (
-          <StyledButton
-            variant={treeIsVisible ? 'outlined' : 'text'}
-            followed="false"
-            onClick={onClickTree}
-            data-id="nav-tree1"
-            width={134}
-          >
-            Strukturbaum
-          </StyledButton>
-        )}
         <More
           onClickExporte={onClickExporte}
           role={role}
