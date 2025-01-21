@@ -5,7 +5,7 @@ import remove from 'lodash/remove'
 import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { Link, useParams, useLocation } from 'react-router'
+import { Link, useParams, useLocation, useNavigate } from 'react-router'
 import { useAtom } from 'jotai'
 import { MdFilterAlt, MdInfoOutline, MdEditNote } from 'react-icons/md'
 import { FaDownload } from 'react-icons/fa6'
@@ -20,6 +20,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
+import { se } from 'date-fns/locale'
 
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render
@@ -100,6 +101,7 @@ export const ProjekteMenus = memo(
   observer(() => {
     const { projId } = useParams()
     const { search } = useLocation()
+    const navigate = useNavigate()
 
     const [isDesktopView] = useAtom(isDesktopViewAtom)
     const isMobileView = !isDesktopView
@@ -165,6 +167,16 @@ export const ProjekteMenus = memo(
     const onClickFilter2 = useCallback(
       () => onClickButton('filter2'),
       [onClickButton],
+    )
+    // need to not use Link in appbar because:
+    // long press on mobile opens context menu AND tooltip...
+    const onClickDocs = useCallback(
+      () => navigate(`/Dokumentation/${search}`),
+      [search],
+    )
+    const onClickEkPlanung = useCallback(
+      () => navigate(`/Daten/Projekte/${projId}/EK-Planung${search}`),
+      [projId, search],
     )
     const onClickExporte = useCallback(
       () => onClickButton('exporte'),
@@ -330,33 +342,30 @@ export const ProjekteMenus = memo(
           </StyledButton>
         )}
         {isDesktopView && !!projId && (
-          <StyledButton
-            variant="text"
-            preceded={false?.toString()}
-            followed={false.toString()}
-            component={Link}
-            to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
-            data-id="ek-planung"
-            title="EK und EKF planen"
-            width={101}
-          >
-            EK-Planung
-          </StyledButton>
+          <Tooltip title="EK und EKF planen">
+            <StyledButton
+              variant="text"
+              preceded={false?.toString()}
+              followed={false.toString()}
+              onClick={onClickEkPlanung}
+              width={101}
+            >
+              EK-Planung
+            </StyledButton>
+          </Tooltip>
         )}
         <Tooltip title="Dokumentation anzeigen">
           {isDesktopView ?
             <DokuButton
               variant="text"
-              component={Link}
-              to={`/Dokumentation/${search}`}
+              onClick={onClickDocs}
               width={129}
             >
               Dokumentation
             </DokuButton>
           : <StyledIconButton
               variant="text"
-              component={Link}
-              to={`/Dokumentation/${search}`}
+              onClick={onClickDocs}
               width={46}
             >
               <MdInfoOutline />
