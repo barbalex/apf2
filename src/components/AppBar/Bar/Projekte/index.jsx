@@ -1,5 +1,6 @@
 import { memo, useContext, useCallback } from 'react'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
@@ -51,6 +52,16 @@ export const StyledButton = styled(Button)`
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
   flex-grow: 0;
+`
+const StyledIconButton = styled(Button)`
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-radius: 4px !important;
+  align-self: stretch;
+  margin: 2px 0;
+  padding: 5px 10px;
+  font-size: 1.5em;
+  min-width: unset !important;
 `
 const DokuButton = styled(Button)`
   color: white !important;
@@ -173,31 +184,56 @@ export const ProjekteMenus = memo(
             Strukturbaum
           </StyledButton>
         )}
-        <Daten width={77} />
-        <StyledButton
-          variant={filterIsVisible ? 'outlined' : 'text'}
-          preceded={datenIsVisible?.toString()}
-          followed={karteIsVisible?.toString()}
-          onClick={onClickFilter}
-          data-id="nav-filter1"
-          title="Daten filtern"
-          width={70}
-        >
-          Filter
-        </StyledButton>
-        <StyledButton
-          variant={karteIsVisible ? 'outlined' : 'text'}
-          preceded={filterIsVisible?.toString()}
-          followed={(
-            (!!projId && exporteIsVisible) ||
-            (isDesktopView && !projId && tree2IsVisible)
-          )?.toString()}
-          onClick={onClickKarte}
-          data-id="nav-karte1"
-          width={70}
-        >
-          Karte
-        </StyledButton>
+        <Tooltip title="Formulare anzeigen">
+          <Daten width={77} />
+        </Tooltip>
+        <Tooltip title="Daten filtern">
+          {isDesktopView ?
+            <StyledButton
+              variant={filterIsVisible ? 'outlined' : 'text'}
+              preceded={datenIsVisible?.toString()}
+              followed={karteIsVisible?.toString()}
+              onClick={onClickFilter}
+              data-id="nav-filter1"
+              width={70}
+            >
+              Filter
+            </StyledButton>
+          : <StyledIconButton
+              variant={filterIsVisible ? 'outlined' : 'text'}
+              onClick={onClickFilter}
+              data-id="nav-filter1"
+              width={46}
+            >
+              <MdFilterAlt />
+            </StyledIconButton>
+          }
+        </Tooltip>
+        <Tooltip title="Karte anzeigen">
+          {isDesktopView ?
+            <StyledButton
+              variant={karteIsVisible ? 'outlined' : 'text'}
+              preceded={filterIsVisible?.toString()}
+              followed={(
+                (!!projId && exporteIsVisible) ||
+                (isDesktopView && !projId && tree2IsVisible)
+              )?.toString()}
+              onClick={onClickKarte}
+              data-id="nav-karte1"
+              width={70}
+            >
+              Karte
+            </StyledButton>
+          : <StyledIconButton
+              variant={karteIsVisible ? 'outlined' : 'text'}
+              onClick={onClickKarte}
+              data-id="nav-karte1"
+              width={46}
+            >
+              <FaMapLocation />
+            </StyledIconButton>
+          }
+        </Tooltip>
         {!!projId && (
           <StyledButton
             variant={exporteIsVisible ? 'outlined' : 'text'}
