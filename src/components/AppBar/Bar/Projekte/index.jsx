@@ -7,9 +7,10 @@ import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation } from 'react-router'
 import { useAtom } from 'jotai'
-import { MdFilterAlt, MdDownload, MdInfo } from 'react-icons/md'
-import { FaMapLocation } from 'react-icons/fa6'
+import { MdFilterAlt, MdInfoOutline, MdEditNote } from 'react-icons/md'
+import { FaDownload } from 'react-icons/fa6'
 import { VscListTree } from 'react-icons/vsc'
+import { TbMap2 } from 'react-icons/tb'
 
 import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
@@ -230,21 +231,33 @@ export const ProjekteMenus = memo(
               data-id="nav-karte1"
               width={46}
             >
-              <FaMapLocation />
+              <TbMap2 />
             </StyledIconButton>
           }
         </Tooltip>
         {!!projId && (
-          <StyledButton
-            variant={exporteIsVisible ? 'outlined' : 'text'}
-            preceded={karteIsVisible?.toString()}
-            followed={(isDesktopView && tree2IsVisible)?.toString()}
-            onClick={onClickExporte}
-            data-id="nav-exporte"
-            width={74}
-          >
-            Exporte
-          </StyledButton>
+          <Tooltip title="Exporte anzeigen">
+            {isDesktopView ?
+              <StyledButton
+                variant={exporteIsVisible ? 'outlined' : 'text'}
+                preceded={karteIsVisible?.toString()}
+                followed={(isDesktopView && tree2IsVisible)?.toString()}
+                onClick={onClickExporte}
+                data-id="nav-exporte"
+                width={74}
+              >
+                Exporte
+              </StyledButton>
+            : <StyledIconButton
+                variant={exporteIsVisible ? 'outlined' : 'text'}
+                onClick={onClickExporte}
+                data-id="nav-exporte"
+                width={46}
+              >
+                <FaDownload />
+              </StyledIconButton>
+            }
+          </Tooltip>
         )}
         {(isDesktopView || tree2IsVisible) && (
           <StyledButton
@@ -294,14 +307,26 @@ export const ProjekteMenus = memo(
             EK-Planung
           </StyledButton>
         )}
-        <DokuButton
-          variant="text"
-          component={Link}
-          to={`/Dokumentation/${search}`}
-          width={129}
-        >
-          Dokumentation
-        </DokuButton>
+        <Tooltip title="Dokumentation anzeigen">
+          {isDesktopView ?
+            <DokuButton
+              variant="text"
+              component={Link}
+              to={`/Dokumentation/${search}`}
+              width={129}
+            >
+              Dokumentation
+            </DokuButton>
+          : <StyledIconButton
+              variant="text"
+              component={Link}
+              to={`/Dokumentation/${search}`}
+              width={46}
+            >
+              <MdInfoOutline />
+            </StyledIconButton>
+          }
+        </Tooltip>
         {/* in mobile view: move tree to the end of the menus */}
         {/* only show if user did not decide to always show */}
         {/* do not hide if tree is visible - user can't close it! */}
