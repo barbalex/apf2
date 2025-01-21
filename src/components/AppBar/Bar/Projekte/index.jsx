@@ -308,19 +308,21 @@ export const ProjekteMenus = memo(
           </Tooltip>
         )}
         {(isDesktopView || tree2IsVisible) && (
-          <StyledButton
-            variant={tree2IsVisible ? 'outlined' : 'text'}
-            preceded={(
-              (!!projId && exporteIsVisible) ||
-              (!projId && karteIsVisible)
-            )?.toString()}
-            followed={daten2IsVisible?.toString()}
-            onClick={onClickTree2}
-            data-id="nav-tree2"
-            width={165}
-          >
-            Navigationsbaum 2
-          </StyledButton>
+          <Tooltip title="Navigationsbaum 2 anzeigen">
+            <StyledButton
+              variant={tree2IsVisible ? 'outlined' : 'text'}
+              preceded={(
+                (!!projId && exporteIsVisible) ||
+                (!projId && karteIsVisible)
+              )?.toString()}
+              followed={daten2IsVisible?.toString()}
+              onClick={onClickTree2}
+              data-id="nav-tree2"
+              width={165}
+            >
+              Navigationsbaum 2
+            </StyledButton>
+          </Tooltip>
         )}
         {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
           <Daten
@@ -329,17 +331,19 @@ export const ProjekteMenus = memo(
           />
         )}
         {((isDesktopView && tree2IsVisible) || filter2IsVisible) && (
-          <StyledButton
-            variant={filter2IsVisible ? 'outlined' : 'text'}
-            preceded={daten2IsVisible?.toString()}
-            followed={karte2IsVisible?.toString()}
-            onClick={onClickFilter2}
-            data-id="nav-filter2"
-            title="Daten filtern"
-            width={70}
-          >
-            Filter 2
-          </StyledButton>
+          <Tooltip title="Daten filtern">
+            <StyledButton
+              variant={filter2IsVisible ? 'outlined' : 'text'}
+              preceded={daten2IsVisible?.toString()}
+              followed={karte2IsVisible?.toString()}
+              onClick={onClickFilter2}
+              data-id="nav-filter2"
+              title="Daten filtern"
+              width={70}
+            >
+              Filter 2
+            </StyledButton>
+          </Tooltip>
         )}
         {isDesktopView && !!projId && (
           <Tooltip title="EK und EKF planen">
