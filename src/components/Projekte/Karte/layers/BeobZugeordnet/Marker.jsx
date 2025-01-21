@@ -190,7 +190,7 @@ export const Marker = memo(
               fullWidth
               onClick={openBeobInTree2}
             >
-              Formular in Strukturbaum 2 öffnen
+              Formular in Navigationsbaum 2 öffnen
             </StyledButton>
             <Data id={beob.id} />
           </>

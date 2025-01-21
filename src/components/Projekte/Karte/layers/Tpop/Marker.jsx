@@ -192,7 +192,7 @@ export const Marker = memo(
               onClick={openTpopInTree2}
               fullWidth
             >
-              Formular in Strukturbaum 2 öffnen
+              Formular in Navigationsbaum 2 öffnen
             </StyledButton>
           </>
         </Popup>

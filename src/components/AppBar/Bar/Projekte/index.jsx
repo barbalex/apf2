@@ -20,7 +20,6 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { constants } from '../../../../modules/constants.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
-import { se } from 'date-fns/locale'
 
 // getting widths of elements from refs
 // BEWARE: ref.current is only set on first render

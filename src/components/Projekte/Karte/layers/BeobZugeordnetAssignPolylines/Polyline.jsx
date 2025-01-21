@@ -174,7 +174,7 @@ export const Polyline = memo(
               onClick={openBeobInTree2}
               fullWidth
             >
-              Beob. in Strukturbaum 2 öffnen
+              Beob. in Navigationsbaum 2 öffnen
             </StyledButton>
             <StyledButton
               size="small"
@@ -192,7 +192,7 @@ export const Polyline = memo(
               onClick={openTpopInTree2}
               fullWidth
             >
-              TPop. in Strukturbaum 2 öffnen
+              TPop. in Navigationsbaum 2 öffnen
             </StyledButton>
             <Data id={beob.id} />
           </>
