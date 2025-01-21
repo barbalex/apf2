@@ -45,7 +45,7 @@ export const Daten = memo(({ treeNr = '', hide = false }) => {
     <Tooltip
       title={
         isDesktopView ? 'Formulare anzeigen' : (
-          'Mobil-Navigation inkl. Formulare anzeigen'
+          'Mobil-Navigation und Formulare anzeigen'
         )
       }
     >
