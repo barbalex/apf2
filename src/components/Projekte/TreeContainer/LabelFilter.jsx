@@ -76,7 +76,8 @@ export const LabelFilter = memo(
       setNodeLabelFilterAfterChange,
       // issue 710
       // TODO: solve for all filters
-      matchMedia('(pointer: coarse)').matches ? 1100 : 600,
+      // matchMedia('(pointer: coarse)').matches ? 1100 : 600,
+      600,
     )
 
     const onChange = useCallback(
