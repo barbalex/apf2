@@ -106,20 +106,19 @@ export const Component = memo(() => (
     </ul>
     <h2 id="diese-daten-werden-erfasst">2. Diese Daten werden erfasst</h2>
     <h3 id="global">Global</h3>
-    <p>Durch die Koordinationsstelle. Im Strukturbaum in den Werte-Listen.</p>
+    <p>
+      Durch die Koordinationsstelle. Im Navigationsbaum in den Werte-Listen.
+    </p>
     <ul>
       <li>EK-Abrechnungstypen</li>
-      <li>
-        Zähleinheiten
-        <br />
-        <img
-          src={ekplanenGlobal}
-          referrerPolicy="no-referrer"
-          alt="im Strukturbaum"
-          width={400}
-        />
-      </li>
+      <li>Zähleinheiten</li>
     </ul>
+    <img
+      src={ekplanenGlobal}
+      referrerPolicy="no-referrer"
+      alt="im Navigationsbaum"
+      width={400}
+    />
     <h3 id="pro-art">Pro Art</h3>
     <p>Durch Koordinationsstelle und Artverantwortliche.</p>
     <ul>
@@ -130,13 +129,13 @@ export const Component = memo(() => (
       <li>
         Frequenzen, nach denen in dieser Art kontrolliert werden soll. Inklusive
         Abrechnungstyp (EK-Frequenzen)
-        <img
-          src={ekplanenAp}
-          referrerPolicy="no-referrer"
-          alt="im Strukturbaum"
-        />
       </li>
     </ul>
+    <img
+      src={ekplanenAp}
+      referrerPolicy="no-referrer"
+      alt="im Navigationsbaum"
+    />
     <h3 id="pro-teilpopulation">Pro Teilpopulation</h3>
     <p>Durch Artverantwortliche.</p>
     <ul>
@@ -158,6 +157,7 @@ export const Component = memo(() => (
       Letzteres ist die eigentliche EK-Planung und sie geschieht primär im
       entsprechenden Formular:
     </p>
+    <br />
     <h2 id="3-formular-ek-planung">3. Formular EK-Planung</h2>
     <p>
       Das Formular ist für die Darstellung und Bearbeitung grosser Datenmengen

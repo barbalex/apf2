@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useEkzaehleinheitsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -66,14 +67,6 @@ export const useEkzaehleinheitsNavData = (props) => {
   )
   const count = rows.length
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
-  const menus = useMemo(
-    () =>
-      rows.map((p) => ({
-        id: p.id,
-        label: p.label,
-      })),
-    [rows],
-  )
 
   const navData = useMemo(
     () => ({
@@ -81,9 +74,25 @@ export const useEkzaehleinheitsNavData = (props) => {
       listFilter: 'ekzaehleinheit',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
       label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus,
+      treeNodeType: 'folder',
+      treeMenuType: 'ekzaehleinheitFolder',
+      treeId: `${apId}EkzaehleinheitFolder`,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
+      hasChildren: !!count,
+      component: NodeWithList,
+      menus: rows.map((p) => ({
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'ekzaehleinheit',
+        treeId: p.id,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', p.id],
+        hasChildren: false,
+      })),
     }),
-    [apId, count, isLoading, menus, projId, totalCount],
+    [apId, count, isLoading, projId, rows, totalCount],
   )
 
   return { isLoading, error, navData }

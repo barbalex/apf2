@@ -22,7 +22,7 @@ export const Component = memo(() => (
         integriert
       </li>
       <li>
-        Erstellt man eine neue EKF, werden die im Strukturbaum unter der Art im
+        Erstellt man eine neue EKF, werden die im Navigationsbaum unter der Art im
         Knoten &quot;EK-Zähleinheiten&quot; aufgelisteten maximal 3
         Zähleinheiten erzeugt
       </li>

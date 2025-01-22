@@ -101,6 +101,18 @@ export const hideTreeAtom = atom((get) => {
   const hideTree = !alwaysShowTree && isMobileView
   return hideTree
 })
+export const showTreeMenusAtom = atom((get) => {
+  // always show tree menus on desktop
+  const isDesktopView = get(isDesktopViewAtom)
+  // always show tree menus on mobile if alwaysShowTree is set
+  const alwaysShowTree = get(alwaysShowTreeAtom)
+  // always show tree menus if context menus are hidden i.e. on coarse pointer devices
+  const contextMenusAreHidden = matchMedia('(pointer: coarse)').matches
+  const showTreeMenus = isDesktopView || alwaysShowTree || contextMenusAreHidden
+
+  return showTreeMenus
+})
+
 export const adresseNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
   'adresseNavListFilterIsVisible',
   false,

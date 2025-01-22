@@ -1,10 +1,11 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Art: Auswertung Population Mengen</h1>
+    <h1>Art: Auswertung Population Mengen 📈</h1>
     <DokuDate>27.03.2020 (Ebene Population ergänzt am 31.3.2023)</DokuDate>
     <h3>Rahmen-Bedingungen</h3>
     <ul>
@@ -27,7 +28,8 @@ export const Component = memo(() => (
           <li>nur Pop und TPop mit den Stati 100, 200, 201</li>
           <li>
             nur für den AP-Bericht relevante TPop Mehr zu der Historisierung von
-            Art, Pop und TPop <a href="./historisierung">hier</a>.
+            Art, Pop und TPop{' '}
+            <Link to="/Dokumentation/historisierung">hier</Link>.
           </li>
         </ul>
       </li>

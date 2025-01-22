@@ -7,6 +7,7 @@ import { useParams } from 'react-router'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopmassnsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -82,6 +83,25 @@ export const useTpopmassnsNavData = (props) => {
       listFilter: 'tpopmassn',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen`,
       label: `Massnahmen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'tpopmassnFolder',
+      treeId: `${tpopId}TpopmassnFolder`,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Massnahmen',
+      ],
+      fetcherName: 'useTpopmassnsNavData',
+      fetcherParams: { projId, apId, popId, tpopId },
+      hasChildren: !!count,
+      component: NodeWithList,
       menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
         (p) => {
           const labelRightElements = []
@@ -97,8 +117,28 @@ export const useTpopmassnsNavData = (props) => {
           return {
             id: p.id,
             label: p.label,
-            labelRightElements:
-              labelRightElements.length ? labelRightElements : undefined,
+            treeNodeType: 'table',
+            treeMenuType: 'tpopmassn',
+            treeId: p.id,
+            treeParentTableId: tpopId,
+            treeUrl: [
+              'Projekte',
+              projId,
+              'Arten',
+              apId,
+              'Populationen',
+              popId,
+              'Teil-Populationen',
+              tpopId,
+              'Massnahmen',
+              p.id,
+            ],
+            hasChildren: true,
+            fetcherName: 'useTpopmassnNavData',
+            fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
+            labelRightElements: labelRightElements.length
+              ? labelRightElements
+              : undefined,
           }
         },
       ),

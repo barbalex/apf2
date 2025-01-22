@@ -21,7 +21,6 @@ const fragments = {
 export const insertDataset = async ({
   tablePassed,
   parentId,
-  //id,
   menuType,
   singleElementUrlName: singleElementName,
   url,
@@ -193,14 +192,12 @@ export const insertDataset = async ({
   // set new url
   const newActiveNodeArray = [...url, row[idField]]
   // need to add single name to the url, i.e. 'Art' for ap
-  store.navigate(
-    `/Daten/${newActiveNodeArray.join('/')}${singleElementName ? `/${singleElementName}` : ''}${search}`,
-  )
+  const to = `/Daten/${newActiveNodeArray.join('/')}${singleElementName ? `/${singleElementName}` : ''}${search}`
+  setTimeout(() => store.navigate(to), 300)
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
-    const urlWithoutJahr = [...url]
-    urlWithoutJahr.pop()
+    const urlWithoutJahr = url.toSpliced(-1)
     newOpenNodes = [...openNodes, urlWithoutJahr, newActiveNodeArray]
   }
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
@@ -232,15 +229,21 @@ export const insertDataset = async ({
     store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehl'
-    : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontr'
-    : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontr'
-    : table === 'tpop_apberrelevant_grund_werte' ?
-      'treeTpopApberrelevantGrundWerte'
-    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
-    : table === 'tpopkontrzaehl_einheit_werte' ? 'treePopkontrzaehlEinheitWerte'
-    : `tree${upperFirst(table)}`
+    parentTable === 'tpopfeldkontr'
+      ? 'treeTpopfeldkontrzaehl'
+      : parentTable === 'tpopfreiwkontr'
+        ? 'treeTpopfreiwkontrzaehl'
+        : menuType.includes('tpopfeldkontr')
+          ? 'treeTpopfeldkontr'
+          : menuType.includes('tpopfreiwkontr')
+            ? 'treeTpopfreiwkontr'
+            : table === 'tpop_apberrelevant_grund_werte'
+              ? 'treeTpopApberrelevantGrundWerte'
+              : table === 'ek_abrechnungstyp_werte'
+                ? 'treeEkAbrechnungstypWerte'
+                : table === 'tpopkontrzaehl_einheit_werte'
+                  ? 'treePopkontrzaehlEinheitWerte'
+                  : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
@@ -250,21 +253,22 @@ export const insertDataset = async ({
   //   menuType,
   //   queryKeyTable,
   // })
-  const queryKeyFolder =
-    ['apberuebersicht'].includes(table) ? 'treeRoot'
-    : table === 'ziel' ? 'treeZiel'
-    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
-    : (
-      [
-        'adresse',
-        'tpop_apberrelevant_grund_werte',
-        'ek_abrechnungstyp_werte',
-        'tpopkontrzaehl_einheit_werte',
-      ].includes(table)
-    ) ?
-      'treeWerteFolders'
-    : `tree${upperFirst(parentTable)}Folders`
+  const queryKeyFolder = ['apberuebersicht'].includes(table)
+    ? 'treeRoot'
+    : table === 'ziel'
+      ? 'treeZiel'
+      : parentTable === 'tpopfeldkontr'
+        ? 'treeTpopfeldkontrzaehlFolders'
+        : parentTable === 'tpopfreiwkontr'
+          ? 'treeTpopfreiwkontrzaehlFolders'
+          : [
+                'adresse',
+                'tpop_apberrelevant_grund_werte',
+                'ek_abrechnungstyp_werte',
+                'tpopkontrzaehl_einheit_werte',
+              ].includes(table)
+            ? 'treeWerteFolders'
+            : `tree${upperFirst(parentTable)}Folders`
   // console.log('insertDataset', {
   //   table,
   //   parentTable,

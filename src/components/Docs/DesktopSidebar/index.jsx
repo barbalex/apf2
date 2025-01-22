@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { memo, useContext, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -36,7 +36,16 @@ export const Sidebar = memo(
     const { search } = useLocation()
 
     const store = useContext(MobxContext)
-    const { dokuFilter, setDokuFilter } = store
+    const { setKey: setNodeLabelFilterKey } = store.tree.nodeLabelFilter
+    const setFilter = useCallback(
+      (val) => {
+        setNodeLabelFilterKey({
+          value: val,
+          key: 'doc',
+        })
+      },
+      [setNodeLabelFilterKey],
+    )
 
     return (
       <Menu>
@@ -45,8 +54,8 @@ export const Sidebar = memo(
             Dokumentation
           </MenuTitleLink>
           <Filter
-            filter={dokuFilter}
-            setFilter={setDokuFilter}
+            filter={store.tree.nodeLabelFilter.doc ?? ''}
+            setFilter={setFilter}
           />
         </MenuTitle>
         <MenuItems />

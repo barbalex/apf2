@@ -13,6 +13,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import isEqual from 'lodash/isEqual'
+import { useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -21,6 +22,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
@@ -34,6 +36,7 @@ export const Menu = memo(
     const store = useContext(MobxContext)
 
     const { setMoving, moving, copying, setCopying } = store
+    const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -187,11 +190,13 @@ export const Menu = memo(
               <FaMinus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill style={iconStyle} />
-            </IconButton>
-          </Tooltip>
+          {showTreeMenus && (
+            <Tooltip title="Ordner im Navigationsbaum schliessen">
+              <IconButton onClick={onClickCloseLowerNodes}>
+                <RiFolderCloseFill style={iconStyle} />
+              </IconButton>
+            </Tooltip>
+          )}
           {isMoving &&
             moving.toTable === 'ap' &&
             moving.fromParentId !== apId && (

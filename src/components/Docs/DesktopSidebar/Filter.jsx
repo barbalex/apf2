@@ -27,7 +27,10 @@ export const Filter = ({ filter, setFilter }) => {
   const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
 
   return (
-    <FormControl fullWidth variant="standard">
+    <FormControl
+      fullWidth
+      variant="standard"
+    >
       <InputLabel htmlFor="filterInput">filtern</InputLabel>
       <StyledInput
         id="filterInput"
@@ -38,7 +41,7 @@ export const Filter = ({ filter, setFilter }) => {
         autoCorrect="off"
         autoCapitalize="off"
         endAdornment={
-          filter ? (
+          filter ?
             <InputAdornment
               position="end"
               onClick={onClickEmptyFilter}
@@ -46,10 +49,9 @@ export const Filter = ({ filter, setFilter }) => {
             >
               <StyledDeleteFilterIcon />
             </InputAdornment>
-          ) : null
+          : null
         }
       />
     </FormControl>
   )
 }
-

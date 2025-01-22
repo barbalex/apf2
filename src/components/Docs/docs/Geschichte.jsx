@@ -1,10 +1,11 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Entstehungs-Geschichte</h1>
+    <h1>Entstehungs-Geschichte 🚀</h1>
     <DokuDate>18.04.2019</DokuDate>
     <h2>Ab 1995: Excel-Listen</h2>
     <p>
@@ -73,8 +74,8 @@ export const Component = memo(() => (
     <p>Diese Ziele wurden erreicht ✨.</p>
     <p>
       Heute wird apflora regelmässig modernisiert.{' '}
-      <a href="../technologien">Hier</a> finden Sie Informationen über die
-      aktuell verwendeten Technologien.
+      <Link to="/Dokumentation/technologien">Hier</Link> finden Sie
+      Informationen über die aktuell verwendeten Technologien.
     </p>
   </>
 ))

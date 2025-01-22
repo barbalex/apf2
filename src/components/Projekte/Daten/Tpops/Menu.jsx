@@ -20,7 +20,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { hideTreeAtom } from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 const MoveIcon = styled(MdOutlineMoveDown)`
   color: white;
@@ -147,11 +147,13 @@ export const Menu = memo(
       })
     }, [setCopying])
 
-    const [hideTree] = useAtom(hideTreeAtom)
+    const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     return (
       <ErrorBoundary>
-        <MenuBar rerenderer={`${isTpopMoving}/${isCopyingTpop}/${hideTree}`}>
+        <MenuBar
+          rerenderer={`${isTpopMoving}/${isCopyingTpop}/${showTreeMenus}`}
+        >
           {!!toggleFilterInput && (
             <FilterButton toggleFilterInput={toggleFilterInput} />
           )}
@@ -160,14 +162,14 @@ export const Menu = memo(
               <FaPlus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>
                 <FaFolderTree style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum schliessen">
               <IconButton onClick={onClickCloseLowerNodes}>
                 <RiFolderCloseFill style={iconStyle} />

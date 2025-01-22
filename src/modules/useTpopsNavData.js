@@ -31,6 +31,9 @@ import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
+import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const tpopIcons = {
   normal: {
@@ -86,6 +89,11 @@ export const useTpopsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+
+  const [projekteTabs] = useProjekteTabs()
+  const karteIsVisible = projekteTabs.includes('karte')
+  const showTpopIcon =
+    store.activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['treeTpop', popId, store.tree.tpopGqlFilterForTree],
@@ -161,6 +169,24 @@ export const useTpopsNavData = (props) => {
       listFilter: 'tpop',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen`,
       label: `Teil-Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: `tpopFolder`,
+      treeId: `${popId}TpopFolder`,
+      treeParentTableId: popId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+      ],
+      fetcherName: 'useTpopsNavData',
+      fetcherParams: { projId, apId, popId },
+      hasChildren: !!count,
+      labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
+      component: NodeWithList,
       menus: (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id
@@ -173,21 +199,39 @@ export const useTpopsNavData = (props) => {
         }
 
         const iconIsHighlighted = p.id === tpopId
-        const TpopIcon =
-          p.status ?
-            iconIsHighlighted ?
-              tpopIcons[tpopIconName][p.status + 'Highlighted']
+        const TpopIcon = p.status
+          ? iconIsHighlighted
+            ? tpopIcons[tpopIconName][p.status + 'Highlighted']
             : tpopIcons[tpopIconName][p.status]
-          : iconIsHighlighted ? TpopIconQHighlighted
-          : TpopIconQ
+          : iconIsHighlighted
+            ? TpopIconQHighlighted
+            : TpopIconQ
 
         return {
           id: p.id,
           label: p.label,
           status: p.status,
+          treeNodeType: 'table',
+          treeMenuType: 'tpop',
+          treeId: p.id,
+          treeParentTableId: popId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            p.id,
+          ],
+          fetcherName: 'useTpopNavData',
+          fetcherParams: { projId, apId, popId, tpopId: p.id },
+          hasChildren: true,
           labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         }
       }),
     }),
@@ -198,6 +242,7 @@ export const useTpopsNavData = (props) => {
       isLoading,
       popId,
       projId,
+      showTpopIcon,
       store.copying.id,
       store.moving.id,
       store.tree.showTpopIcon,

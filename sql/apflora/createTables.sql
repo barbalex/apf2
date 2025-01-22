@@ -1501,6 +1501,7 @@ DROP TABLE IF EXISTS apflora.idealbiotop;
 
 CREATE TABLE apflora.idealbiotop(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  -- seems unique is not implemented?
   ap_id uuid UNIQUE DEFAULT NULL REFERENCES apflora.ap(id) ON DELETE CASCADE ON UPDATE CASCADE,
   erstelldatum date DEFAULT NULL,
   hoehenlage text,

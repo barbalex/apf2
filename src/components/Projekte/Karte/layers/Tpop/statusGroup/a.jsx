@@ -1,7 +1,7 @@
 import { memo } from 'react'
 
 import Icon from './a.svg'
-import { IconContainer } from '../../../../../NavElements/IconContainer'
+import { IconContainer } from '../../../../../NavElements/IconContainer.jsx'
 
 export const TpopIconA = memo(() => (
   <IconContainer>

@@ -63,6 +63,12 @@ export const useApbersNavData = (props) => {
       menus: (data?.data?.apById?.apbersByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'apber',
+        treeId: p.id,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', p.id],
+        hasChildren: false,
       })),
     }),
     [

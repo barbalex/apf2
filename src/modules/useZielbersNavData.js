@@ -5,13 +5,15 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useZielbersNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
-  const jahr = props?.jahr ?? params.jahr
+  let jahr = props?.jahr ?? params.jahr
+  jahr = jahr ? +jahr : jahr
   const zielId = props?.zielId ?? params.zielId
 
   const store = useContext(MobxContext)
@@ -59,12 +61,6 @@ export const useZielbersNavData = (props) => {
 
   const count = data?.data?.zielById?.zielbersByZielId?.totalCount ?? 0
   const filteredCount = data?.data?.zielById?.filteredZielbers?.totalCount ?? 0
-  const menus = (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
-    (zielber) => ({
-      id: zielber.id,
-      label: zielber.label,
-    }),
-  )
 
   const navData = useMemo(
     () => ({
@@ -72,10 +68,59 @@ export const useZielbersNavData = (props) => {
       listFilter: 'zielber',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}/Berichte`,
       label: `Zielberichte (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      // leave totalCount undefined as the menus are folders
-      menus,
+      treeNodeType: 'folder',
+      treeMenuType: 'zielberFolder',
+      treeId: zielId,
+      treeParentTableId: apId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'AP-Ziele',
+        jahr,
+        zielId,
+        'Berichte',
+      ],
+      hasChildren: !!count,
+      fetcherName: 'useZielsOfJahrNavData',
+      fetcherParams: { projId, apId, jahr },
+      passTransitionStateToChildren: true,
+      alwaysOpen: true,
+      component: NodeWithList,
+      menus: (data?.data?.zielById?.filteredZielbers?.nodes ?? []).map(
+        (zielber) => ({
+          id: zielber.id,
+          label: zielber.label,
+          treeNodeType: 'table',
+          treeMenuType: 'zielber',
+          treeId: zielber.id,
+          treeParentTableId: zielId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'AP-Ziele',
+            jahr,
+            zielId,
+            'Berichte',
+            zielber.id,
+          ],
+          hasChildren: false,
+        }),
+      ),
     }),
-    [apId, count, filteredCount, isLoading, jahr, menus, projId, zielId],
+    [
+      apId,
+      count,
+      data?.data?.zielById?.filteredZielbers?.nodes,
+      filteredCount,
+      isLoading,
+      jahr,
+      projId,
+      zielId,
+    ],
   )
 
   return { isLoading, error, navData }

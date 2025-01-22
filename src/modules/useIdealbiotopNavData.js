@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList'
 
 export const useIdealbiotopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -40,19 +41,41 @@ export const useIdealbiotopNavData = (props) => {
 
   const navData = useMemo(
     () => ({
-      id: apId,
+      id: 'Idealbiotop',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Idealbiotop`,
       label: 'Idealbiotop',
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'folder',
+      treeMenuType: 'idealbiotopFolder',
+      treeId: `${apId}IdealbiotopFolder`,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
+      hasChildren: true,
+      fetcherName: 'useIdealbiotopNavData',
+      fetcherParams: { projId, apId },
+      component: NodeWithList,
       menus: [
         {
           id: 'Idealbiotop',
           label: `Idealbiotop`,
+          isSelf: true,
         },
         {
           id: 'Dateien',
           label: `Dateien (${filesCount})`,
           count: filesCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'idealbiotopDateienFolder',
+          treeId: `${apId}IdealbiotopDateienFolder`,
+          treeParentTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Idealbiotop',
+            'Dateien',
+          ],
+          hasChildren: false,
         },
       ],
     }),

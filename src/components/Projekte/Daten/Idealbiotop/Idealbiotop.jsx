@@ -64,9 +64,7 @@ export const Component = memo(
     const [fieldErrors, setFieldErrors] = useState({})
 
     const { data, loading, error } = useQuery(query, {
-      variables: {
-        id: apId,
-      },
+      variables: { id: apId },
     })
 
     const row = useMemo(
@@ -80,10 +78,11 @@ export const Component = memo(
         const value = ifIsNumericAsNumber(event.target.value)
 
         const variables = {
-          id: apId,
+          id: row.id,
           [field]: value,
           changedBy: store.user.name,
         }
+
         try {
           await client.mutate({
             mutation: gql`

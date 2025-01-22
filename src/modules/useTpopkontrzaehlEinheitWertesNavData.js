@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopkontrzaehlEinheitWertesNavData = () => {
   const apolloClient = useApolloClient()
@@ -62,10 +63,23 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
       listFilter: 'tpopkontrzaehlEinheitWerte',
       url: `/Daten/Werte-Listen/TpopkontrzaehlEinheitWerte`,
       label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'TpopkontrzaehlEinheitWerte',
+      treeId: `tpopkontrzaehlEinheitWerteFolder`,
+      treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
+      hasChildren: !!count,
+      fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
+      fetcherParams: {},
+      component: NodeWithList,
       menus: (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
         (p) => ({
           id: p.id,
           label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'tpopkontrzaehlEinheitWerte',
+          treeId: p.id,
+          treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', p.id],
+          hasChildren: false,
         }),
       ),
     }),

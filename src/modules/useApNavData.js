@@ -10,6 +10,8 @@ import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.jsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -99,6 +101,9 @@ export const useApNavData = (props) => {
             apById(id: $apId) {
               id
               label
+              apqksByApId {
+                totalCount
+              }
               popsByApId {
                 totalCount
               }
@@ -325,102 +330,251 @@ export const useApNavData = (props) => {
     data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
   const filesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
   const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
+  const qkCount = data?.data?.apById?.apqksByApId?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
       id: apId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}`,
       label,
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'table',
+      treeMenuType: 'ap',
+      singleElementName: 'Art',
+      treeId: apId,
+      treeParentTableId: projId,
+      treeUrl: ['Projekte', projId, 'Arten', apId],
+      hasChildren: true,
+      fetcherName: 'useApNavData',
+      fetcherParams: { projId, apId },
       menus: [
         {
           id: 'Art',
           label: `Art`,
+          isSelf: true,
         },
         {
           id: 'Populationen',
           label: `Populationen (${isLoading ? '...' : `${filteredPopsCount}/${popsCount}`})`,
-          count: popsCount,
+          listFilter: 'pop',
+          treeNodeType: 'folder',
+          treeMenuType: 'popFolder',
+          treeId: `${apId}PopFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
+          fetcherName: 'usePopsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredPopsCount,
           labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
+          component: NodeWithList,
         },
         {
           id: 'AP-Ziele',
           label: `AP-Ziele Jahre (${isLoading ? '...' : `${filteredApZielJahrsCount}/${apZielJahrsCount}`})`,
-          count: apZielJahrsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'zielFolder',
+          treeId: `${apId}ApzielFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
+          fetcherName: 'useZieljahrsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredApZielJahrsCount,
+          component: NodeWithList,
         },
         {
           id: 'AP-Erfolgskriterien',
           label: `AP-Erfolgskriterien (${isLoading ? '...' : `${filteredErfkritsCount}/${erfkritsCount}`})`,
-          count: erfkritsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'erfkritFolder',
+          treeId: `${apId}ErfkritFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
+          fetcherName: 'useErfkritsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredErfkritsCount,
+          component: NodeWithList,
         },
         {
           id: 'AP-Berichte',
           label: `AP-Berichte (${isLoading ? '...' : `${filteredApbersCount}/${apbersCount}`})`,
-          count: apbersCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'apberFolder',
+          treeId: `${apId}ApberFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte'],
+          fetcherName: 'useApbersNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredApbersCount,
+          component: NodeWithList,
         },
         {
           id: 'Idealbiotop',
           label: `Idealbiotop`,
+          treeNodeType: 'folder',
+          treeMenuType: 'idealbiotopFolder',
+          treeId: `${apId}IdealbiotopFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
+          fetcherName: 'useIdealbiotopNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: true,
+          component: Node,
         },
         {
           id: 'Taxa',
           label: `Taxa (${isLoading ? '...' : `${filteredApartsCount}/${apartsCount}`})`,
-          count: apartsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'apartFolder',
+          treeId: `${apId}ApartFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa'],
+          fetcherName: 'useApartsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredApartsCount,
+          component: NodeWithList,
         },
         {
           id: 'assoziierte-Arten',
           label: `Assoziierte Arten (${isLoading ? '...' : `${filteredAssozartsCount}/${assozartsCount}`})`,
-          count: assozartsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'assozartFolder',
+          treeId: `${apId}AssozartFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten'],
+          fetcherName: 'useAssozartsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredAssozartsCount,
+          component: NodeWithList,
         },
         {
           id: 'EK-Frequenzen',
           label: `EK-Frequenzen (${isLoading ? '...' : `${filteredEkfrequenzsCount}/${ekfrequenzsCount}`})`,
-          count: ekfrequenzsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'ekfrequenzFolder',
+          treeId: `${apId}EkfrequenzFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
+          fetcherName: 'useEkfrequenzsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredEkfrequenzsCount,
+          component: NodeWithList,
         },
         {
           id: 'EK-Zähleinheiten',
           label: `EK-Zähleinheiten (${isLoading ? '...' : `${filteredEkzaehleinheitsCount}/${ekzaehleinheitsCount}`})`,
-          count: ekzaehleinheitsCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'ekzaehleinheitFolder',
+          treeId: `${apId}EkzaehleinheitFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
+          fetcherName: 'useEkzaehleinheitsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredEkzaehleinheitsCount,
+          component: NodeWithList,
         },
         {
           id: 'nicht-beurteilte-Beobachtungen',
           label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredBeobsNichtBeurteiltCount}/${beobsNichtBeurteiltCount}`})`,
-          count: beobsNichtBeurteiltCount,
-          labelLeftElements:
-            showBeobnichtbeurteiltIcon ?
-              [BeobnichtbeurteiltMapIcon]
+          treeNodeType: 'folder',
+          treeMenuType: 'beobNichtBeurteiltFolder',
+          treeId: `${apId}BeobNichtBeurteiltFolder`,
+          treeParentTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'nicht-beurteilte-Beobachtungen',
+          ],
+          fetcherName: 'useBeobNichtBeurteiltsNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredBeobsNichtBeurteiltCount,
+          labelLeftElements: showBeobnichtbeurteiltIcon
+            ? [BeobnichtbeurteiltMapIcon]
             : undefined,
+          component: NodeWithList,
         },
         {
           id: 'nicht-zuzuordnende-Beobachtungen',
           label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredBeobsNichtZuzuordnenCount}/${beobsNichtZuzuordnenCount}`})`,
-          count: beobsNichtZuzuordnenCount,
-          labelLeftElements:
-            showBeobnichtzuzuordnenIcon ?
-              [BeobnichtzuzuordnenMapIcon]
+          treeNodeType: 'folder',
+          treeMenuType: 'beobNichtZuzuordnenFolder',
+          treeId: `${apId}BeobNichtZuzuordnenFolder`,
+          treeParentTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'nicht-zuzuordnende-Beobachtungen',
+          ],
+          fetcherName: 'useBeobNichtZuzuordnensNavData',
+          fetcherParams: { projId, apId },
+          hasChildren: !!filteredBeobsNichtZuzuordnenCount,
+          labelLeftElements: showBeobnichtzuzuordnenIcon
+            ? [BeobnichtzuzuordnenMapIcon]
             : undefined,
+          component: NodeWithList,
         },
         {
           id: 'Qualitätskontrollen',
           label: `Qualitätskontrollen ausführen`,
+          treeNodeType: 'folder',
+          treeMenuType: 'qkFolder',
+          treeId: `${apId}QkFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Qualitätskontrollen'],
+          hasChildren: false,
+          component: Node,
         },
         {
           id: 'Qualitätskontrollen-wählen',
-          label: `Qualitätskontrollen wählen`,
+          label: `Qualitätskontrollen wählen (${qkCount})`,
+          treeNodeType: 'folder',
+          treeMenuType: 'qkWaehlenFolder',
+          treeId: `${apId}QkWaehlenFolder`,
+          treeParentTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Qualitätskontrollen-wählen',
+          ],
+          hasChildren: false,
+          component: Node,
         },
         {
           id: 'Auswertung',
           label: `Auswertung`,
+          treeNodeType: 'folder',
+          treeMenuType: 'auswertungFolder',
+          treeId: `${apId}AuswertungFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Auswertung'],
+          hasChildren: false,
+          component: Node,
         },
         {
           id: 'Dateien',
           label: `Dateien (${filesCount})`,
-          count: filesCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'dateienFolder',
+          treeId: `${apId}DateienFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Dateien'],
+          hasChildren: false,
+          component: Node,
         },
         {
           id: 'Historien',
           label: `Historien (${historiesCount})`,
-          count: historiesCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'historienFolder',
+          treeId: `${apId}HistorienFolder`,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Historien'],
+          hasChildren: false,
+          component: Node,
         },
       ],
     }),
@@ -452,6 +606,7 @@ export const useApNavData = (props) => {
       filteredBeobsNichtZuzuordnenCount,
       beobsNichtZuzuordnenCount,
       showBeobnichtzuzuordnenIcon,
+      qkCount,
       filesCount,
       historiesCount,
     ],

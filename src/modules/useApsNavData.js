@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -55,9 +56,28 @@ export const useApsNavData = (props) => {
       listFilter: 'ap',
       url: `/Daten/Projekte/${projId}/Arten`,
       label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'apFolder',
+      treeId: `${projId}ApFolder`,
+      treeParentTableId: projId,
+      treeUrl: [`Daten`, `Projekte`, projId, `Arten`],
+      hasChildren: !!count,
+      fetcherName: 'useApsNavData',
+      fetcherParams: { projId },
+      component: NodeWithList,
       menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'ap',
+        singleElementName: 'Art',
+        treeId: p.id,
+        treeParentTableId: projId,
+        treeUrl: ['Projekte', projId, 'Arten', p.id],
+        hasChildren: true,
+        fetcherName: 'useApNavData',
+        fetcherParams: { projId, apId: p.id },
+        component: NodeWithList,
       })),
     }),
     [count, data?.data?.allAps?.nodes, isLoading, projId, totalCount],

@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopApberrelevantGrundWertesNavData = () => {
   const apolloClient = useApolloClient()
@@ -63,10 +64,23 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
       listFilter: 'tpopApberrelevantGrundWerte',
       url: `/Daten/Werte-Listen/ApberrelevantGrundWerte`,
       label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'tpopApberrelevantGrundWerteFolder',
+      treeId: `tpopApberrelevantGrundWerteFolder`,
+      treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte'],
+      hasChildren: !!count,
+      fetcherName: 'useTpopApberrelevantGrundWertesNavData',
+      fetcherParams: {},
+      component: NodeWithList,
       menus: (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
         (p) => ({
           id: p.id,
           label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'tpopApberrelevantGrundWerte',
+          treeId: p.id,
+          treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte', p.id],
+          hasChildren: false,
         }),
       ),
     }),

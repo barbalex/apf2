@@ -24,7 +24,6 @@ import {
   FaCaretUp,
 } from 'react-icons/fa6'
 import styled from '@emotion/styled'
-import { over, set } from 'lodash'
 import { useDebouncedCallback } from 'use-debounce'
 
 const buttonHeight = 40
@@ -97,6 +96,10 @@ export const MenuBar = memo(
     // and that needs to be compensated for
     addMargin = true,
   }) => {
+    const [menuAnchor, setMenuAnchor] = useState(null)
+    const menuIsOpen = Boolean(menuAnchor)
+    const onCloseMenu = useCallback(() => setMenuAnchor(null), [])
+
     const { visibleChildren, widths } = useMemo(() => {
       const visibleChildren = []
       for (const [index, child] of Children.toArray(children).entries()) {
@@ -231,11 +234,8 @@ export const MenuBar = memo(
     }, [rerenderer, checkOverflowDebounced])
 
     const onClickMenuButton = useCallback((event) =>
-      setMenuAnchorEl(event.currentTarget),
+      setMenuAnchor(event.currentTarget),
     )
-    const onCloseMenu = useCallback(() => setMenuAnchorEl(null), [])
-    const [menuAnchorEl, setMenuAnchorEl] = useState(null)
-    const menuIsOpen = Boolean(menuAnchorEl)
 
     return (
       <MeasuredOuterContainer
@@ -261,13 +261,16 @@ export const MenuBar = memo(
               </Tooltip>
               <StyledMenu
                 id="menubutton"
-                anchorEl={menuAnchorEl}
+                anchorEl={menuAnchor}
                 open={menuIsOpen}
                 onClose={onCloseMenu}
               >
                 <MenuContent
                   bgColor={bgColor}
                   className="menubar-more-menus"
+                  // GOAL: close menu on click on menu item
+                  // TODO: prevents more menu opening on very narrow screens
+                  onClick={onCloseMenu}
                 >
                   {menus}
                 </MenuContent>

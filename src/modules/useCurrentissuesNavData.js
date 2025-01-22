@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 import { useApolloClient, gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+
 export const useCurrentissuesNavData = () => {
   const apolloClient = useApolloClient()
 
@@ -29,13 +31,26 @@ export const useCurrentissuesNavData = () => {
 
   const navData = useMemo(
     () => ({
-      id: 'AktuelleFehler',
+      id: 'Aktuelle-Fehler',
       url: `/Daten/Aktuelle-Fehler`,
       label: `Aktuelle Fehler (${isLoading ? '...' : count})`,
       totalCount: data?.data?.allCurrentissues?.totalCount ?? 0,
+      treeNodeType: 'table',
+      treeMenuType: 'currentissues',
+      treeId: 'currentissueFolder',
+      treeUrl: ['Aktuelle-Fehler'],
+      fetcherName: 'useCurrentissuesNavData',
+      fetcherParams: {},
+      hasChildren: !!count,
+      component: NodeWithList,
       menus: (data?.data?.allCurrentissues?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'currentissue',
+        treeId: p.id,
+        treeUrl: ['Aktuelle-Fehler', p.id],
+        hasChildren: false,
       })),
     }),
     [

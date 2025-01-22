@@ -1,7 +1,5 @@
 import { gql } from '@apollo/client'
 
-import { beob as beobFragment } from '../components/shared/fragments.js'
-
 const beobById = gql`
   query beobById($id: UUID!) {
     beobById(id: $id) {
@@ -10,7 +8,6 @@ const beobById = gql`
       lv95Y
     }
   }
-  ${beobFragment}
 `
 
 // client is apollo client
@@ -34,7 +31,8 @@ export const getAndValidateCoordinatesOfBeob = async ({
     })
   }
   const beob = beobResult?.data?.beobById
-  const { lv95X, lv95Y } = beob
+  const lv95X = beob?.lv95X
+  const lv95Y = beob?.lv95Y
   if (!lv95X) {
     enqueNotification({
       message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,

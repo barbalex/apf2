@@ -7,6 +7,7 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useBeobNichtBeurteiltsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -112,26 +113,51 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen`,
       label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
       labelShort: `Beob. nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'folder',
+      treeNodeMenuType: 'beobNichtBeurteiltFolder',
+      treeId: `${apId}BeobNichtBeurteiltFolder`,
+      treeParentTableId: apId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'nicht-beurteilte-Beobachtungen',
+      ],
+      hasChildren: !!filteredCount,
+      component: NodeWithList,
       menus: (data?.data?.filteredBeobsNichtBeurteilt?.nodes ?? []).map(
         (p) => ({
           id: p.id,
           label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'beobNichtBeurteilt',
+          treeId: p.id,
+          treeParentTableId: apId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'nicht-beurteilte-Beobachtungen',
+            p.id,
+          ],
+          hasChildren: false,
           labelLeftElements:
-            showBeobnichtbeurteiltIcon && beobId === p.id ?
-              [BeobnichtbeurteiltFilteredMapIcon]
-            : undefined,
+            showBeobnichtbeurteiltIcon && beobId === p.id
+              ? [BeobnichtbeurteiltFilteredMapIcon]
+              : undefined,
         }),
       ),
     }),
     [
+      projId,
       apId,
       beobId,
       count,
       data?.data?.filteredBeobsNichtBeurteilt?.nodes,
       filteredCount,
       isLoading,
-      projId,
       showBeobnichtbeurteiltIcon,
     ],
   )

@@ -22,6 +22,8 @@ const Label = styled.div`
 `
 const Value = styled.div`
   padding: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `
 
 const ItemTypes = {
@@ -89,7 +91,11 @@ export const Field = ({ label, value, index, moveField }) => {
   drag(drop(ref))
 
   return (
-    <Row ref={ref} style={{ opacity }} data-handler-id={handlerId}>
+    <Row
+      ref={ref}
+      style={{ opacity }}
+      data-handler-id={handlerId}
+    >
       <Label>{label}</Label>
       <Value>
         <Linkify properties={{ target: '_blank' }}>{value}</Linkify>

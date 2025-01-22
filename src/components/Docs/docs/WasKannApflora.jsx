@@ -1,11 +1,12 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Was kann man mit apflora.ch machen?</h1>
-    <DokuDate>15.04.2019</DokuDate>
+    <h1>Was kann man mit apflora.ch machen? 💪</h1>
+    <DokuDate>20.12.2024</DokuDate>
     <h3>Arten verwalten</h3>
     <ul>
       <li>Arten, Populationen und Teilpopulationen beschreiben</li>
@@ -34,23 +35,22 @@ export const Component = memo(() => (
         innerhalb des Kantons Zürich und im nahen Umfeld
       </li>
       <li>
-        Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung
-        per mail an InfoFlora gemeldet werden{' '}
-        <a href="/Dokumentation/falsch-bestimmte-beobachtungen/">(Anleitung)</a>
+        Von Info Flora bezogene Beobachtungen können korrigiert und die Änderung
+        per mail an InfoFlora gemeldet werden&nbsp;
+        <Link to="/Dokumentation/falsch-bestimmte-beobachtungen/">
+          (Anleitung)
+        </Link>
       </li>
       <li>
-        Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons
-        Zürich
-      </li>
-      <li>
-        Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer
-        Datenstruktur
+        Alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
       </li>
       <li>
         Beobachtungen von beliebigen (synonymen) Taxa der selben Art zuordnen
       </li>
       <li>
-        <a href="./docs/beobZuordnen">Anleitung</a>
+        <Link to="/Dokumentation/beobachtungen-einer-teil-population-zuordnen">
+          Anleitung
+        </Link>
       </li>
     </ul>
     <h3>Auf Karten darstellen</h3>
@@ -100,13 +100,13 @@ export const Component = memo(() => (
     <h3>Sich rasch zurechtfinden</h3>
     <ul>
       <li>
-        Über einen dynamisch aufgebauten Strukturbaum navigieren und dabei die
-        Übersicht über die komplexe Hierarchie behalten
+        Über einen dynamisch aufgebauten Navigationsbaum navigieren und dabei
+        die Übersicht über die komplexe Hierarchie behalten
       </li>
       <li>Im Formular rechts des Baums die gewählten Daten bearbeiten</li>
       <li>
-        Strukturbaum, Formular und Karte beliebig ein- und ausblenden und in der
-        Grösse variieren
+        Navigationsbaum, Formular und Karte beliebig ein- und ausblenden und in
+        der Grösse variieren
       </li>
     </ul>
     <h3>Sich anleiten lassen</h3>
@@ -132,9 +132,9 @@ export const Component = memo(() => (
     </ul>
     <h3>Effizient arbeiten</h3>
     <ul>
-      <li>Im Strukturbaum in jeder Ebene nach dem Label filtern</li>
+      <li>Im Navigationsbaum in jeder Ebene nach dem Label filtern</li>
       <li>
-        <a href="/Dokumentation/formular-filter">Fomular-basiert filtern</a>
+        <Link to="/Dokumentation/filter">Fomular-basiert filtern</Link>
       </li>
       <li>
         Strukturelemente wie z.B. Teilpopulationen im Baum zu anderen
@@ -142,7 +142,7 @@ export const Component = memo(() => (
       </li>
       <li>
         Für übersichtliches Kopieren/Verschieben zweites
-        Strukturbaum-Formular-Paar einblenden
+        Navigationsbaum-Formular-Paar einblenden
       </li>
       <li>
         Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den
@@ -161,6 +161,20 @@ export const Component = memo(() => (
         Mit über hundert Kontroll-Abfragen die Qualität der Daten kontrollieren
       </li>
     </ul>
+    <h3>Arbeiten, wo es passt</h3>
+    <ul>
+      <li>
+        apflora wurde ursprünglich für die Arbeit am PC entwickelt. Einzelne
+        Teil-Funktionen bleiben auch heute noch grossen Bildschirmen vorbehalten
+      </li>
+      <li>
+        Die Navigation passt sich kleinen Bildschirmen an. Man kann auf Handy
+        und Tablett bequem mit den Fingern arbeiten
+      </li>
+      <li>
+        Siehe <Link to="/Dokumentation/navigation">Navigation</Link>
+      </li>
+    </ul>
     <h3>Freiwilligen-Erfolgskontrollen vorbereiten</h3>
     <ul>
       <li>
@@ -169,7 +183,9 @@ export const Component = memo(() => (
       </li>
       <li>...und drucken gleich die Feld-Formulare aus</li>
       <li>
-        <a href="/Dokumentation/erfolgs-kontrollen-freiwillige">Anleitung</a>
+        <Link to="/Dokumentation/erfolgs-kontrollen-freiwillige">
+          Anleitung
+        </Link>
       </li>
     </ul>
     <h3>Freiwillige erfassen ihre Kontrollen selber</h3>
@@ -208,25 +224,17 @@ export const Component = memo(() => (
       <li>
         Beobachtungen nach{' '}
         <a
-          href="https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content"
+          href="https://infoflora.ch"
           target="_blank"
           rel="noreferrer"
         >
-          EvAB
+          Info Flora
         </a>{' '}
-        exportieren (separate Access-Anwendung)
+        exportieren
       </li>
       <li>
-        Beobachtungen aus einem{' '}
-        <a
-          href="https://aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content"
-          target="_blank"
-          rel="noreferrer"
-        >
-          EvAB
-        </a>{' '}
-        importieren (um sie danach in apflora Teilpopulationen zuzuordnen)
-        (separate Access-Anwendung)
+        Beobachtungen importieren (um sie danach in apflora Teilpopulationen
+        zuzuordnen)
       </li>
     </ul>
     <h3>Daten nach Verlust wiederherstellen</h3>

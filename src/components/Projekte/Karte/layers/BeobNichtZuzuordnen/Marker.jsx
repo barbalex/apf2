@@ -117,7 +117,7 @@ export const Marker = memo(
               color="inherit"
               fullWidth
             >
-              Formular in Strukturbaum 2 öffnen
+              Formular in Navigationsbaum 2 öffnen
             </StyledButton>
             <Data id={beob.id} />
           </>

@@ -71,6 +71,12 @@ export const useAssozartsNavData = (props) => {
       menus: (data?.data?.apById?.assozartsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'assozart',
+        treeId: p.id,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', p.id],
+        hasChildren: false,
       })),
     }),
     [

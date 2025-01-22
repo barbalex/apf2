@@ -17,7 +17,6 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import ToggleButton from '@mui/material/ToggleButton'
-import LoadingButton from '@mui/lab/LoadingButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
@@ -38,7 +37,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
-import { hideTreeAtom } from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 // unfortunately, toggle buttons are different from icon buttons...
 const RoundToggleButton = styled(ToggleButton)`
@@ -58,7 +57,7 @@ const CopyIcon = styled(MdContentCopy)`
   color: ${(props) =>
     props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
 `
-export const StyledLoadingButton = styled(LoadingButton)`
+export const StyledLoadingButton = styled(Button)`
   margin: 0 5px;
   padding: 3px 10px;
   text-transform: none;
@@ -432,7 +431,7 @@ export const Menu = memo(
       })
     }, [tpopId, client, store, tanstackQueryClient])
 
-    const [hideTree] = useAtom(hideTreeAtom)
+    const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
     // ISSUE: refs are sometimes/often not set on first render
     // trying to measure widths of menus leads to complete chaos
@@ -441,7 +440,7 @@ export const Menu = memo(
     return (
       <ErrorBoundary>
         <MenuBar
-          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${hideTree}`}
+          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${showTreeMenus}`}
         >
           <Tooltip title="Neue Teil-Population erstellen">
             <IconButton onClick={onClickAdd}>
@@ -456,14 +455,14 @@ export const Menu = memo(
               <FaMinus style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum öffnen">
               <IconButton onClick={onClickOpenLowerNodes}>
                 <FaFolderTree style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
-          {!hideTree && (
+          {showTreeMenus && (
             <Tooltip title="Ordner im Navigationsbaum schliessen">
               <IconButton onClick={onClickCloseLowerNodes}>
                 <RiFolderCloseFill style={iconStyle} />

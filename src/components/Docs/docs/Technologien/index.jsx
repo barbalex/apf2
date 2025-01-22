@@ -1,7 +1,7 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../../DesktopDocs.jsx'
-// import beziehungen from './beziehungen.png'
 
 export const Component = memo(() => (
   <>
@@ -10,160 +10,161 @@ export const Component = memo(() => (
     <p>Die Anwendung ist zweigeteilt:</p>
     <ol>
       <li>
-        Das <strong>Backend</strong> bietet die API (Daten-Schnittstelle) auf{' '}
-        <a href="//api.apflora.ch/graphql">api.apflora.ch/graphql</a> an. Es
-        läuft auf einem virtuellen Server.
-      </li>
-      <li>
-        Die <strong>App</strong> bzw. das Frontend ist auf{' '}
-        <a href="//apflora.ch">apflora.ch</a> erreichbar. Sie läuft serverless
-        auf{' '}
+        Das <strong>Backend</strong> bietet die API (Daten-Schnittstelle)
+        auf&nbsp;
         <a
-          href="https://vercel.com"
+          href="//api.apflora.ch/graphql"
           target="_blank"
           rel="noreferrer"
         >
-          vercel
+          api.apflora.ch/graphql
+        </a>
+        &nbsp;an. Es läuft auf einem virtuellen Server.
+      </li>
+      <li>
+        Die <strong>App</strong> bzw. das Frontend ist auf&nbsp;
+        <Link to="/">apflora.ch</Link> erreichbar. Sie läuft serverless
+        auf&nbsp;
+        <a
+          href="https://www.linode.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Akamai
         </a>
       </li>
     </ol>
     <p>Die wichtigsten verwendeten Technologien sind:</p>
     <ul>
       <li>
-        <p>
-          <a
-            href="//de.wikipedia.org/wiki/Docker_(Software)"
-            target="_blank"
-            rel="noreferrer"
-          >
-            docker
-          </a>{' '}
-          für das Backend
-        </p>
+        <a
+          href="//de.wikipedia.org/wiki/Docker_(Software)"
+          target="_blank"
+          rel="noreferrer"
+        >
+          docker
+        </a>
+        ,&nbsp;
+        <a
+          href="https://nodejs.org"
+          target="_blank"
+          rel="noreferrer"
+        >
+          nodejs
+        </a>
+        &nbsp;und&nbsp;
+        <a
+          href="https://caddyserver.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          caddy
+        </a>
+        &nbsp;für das Backend
       </li>
       <li>
-        <p>
-          <a
-            href="//vitejs.dev/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Vite
-          </a>
-          : Modernes Werkzeug, um dynamische Apps zu erzeugen
-        </p>
+        <a
+          href="https://github.com/facebook/graphql"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GraphQL
+        </a>
+        &nbsp;in Form von&nbsp;
+        <a
+          href="https://github.com/graphile/crystal"
+          target="_blank"
+          rel="noreferrer"
+        >
+          PostGraphile
+        </a>
+        &nbsp; als API-Server (liefert die Daten vom Backend zur App)
       </li>
       <li>
-        <p>
-          <a
-            href="https://github.com/facebook/graphql"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GraphQL
-          </a>{' '}
-          in Form von{' '}
-          <a
-            href="https://github.com/graphile/postgraphile"
-            target="_blank"
-            rel="noreferrer"
-          >
-            PostGraphile
-          </a>
-        </p>
-        <ul>
-          <li>
-            API-Server mit einer Zeile bauen und konfigurieren. Das sind{' '}
-            <em>tausende</em> weniger als zuvor!
-          </li>
-          <li>
-            GraphQL ist die kommende API-Technologie. Verglichen mit REST ist
-            GraphQL einfach zu verstehen und extrem flexibel. Somit steht ein
-            aussergewöhnlich benutzerfreundlicher API-Server zur Verfügung
-          </li>
-        </ul>
+        <a
+          href="//vitejs.dev/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Vite
+        </a>
+        : Modernes Werkzeug, um dynamische Apps zu erzeugen
       </li>
       <li>
-        <p>
-          <a
-            href="//facebook.github.io/react"
-            target="_blank"
-            rel="noreferrer"
-          >
-            React
-          </a>
-          : Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
-        </p>
+        <a
+          href="//facebook.github.io/react"
+          target="_blank"
+          rel="noreferrer"
+        >
+          React
+        </a>
+        : Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
       </li>
       <li>
-        <p>
-          <a
-            href="https://www.apollodata.com"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Apollo
-          </a>
-          . Komponenten definieren, welche Daten sie brauchen. Apollo stellt sie
-          via GraphQL bereit
-        </p>
+        <a
+          href="https://www.apollodata.com"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Apollo
+        </a>
+        . Komponenten definieren, welche Daten sie brauchen. Apollo holt sie von
+        PostGraphile und stellt sie bereit
       </li>
       <li>
-        <p>
-          <a
-            href="https://emotion.sh/docs/introduction"
-            target="_blank"
-            rel="noreferrer"
-          >
-            emotion
-          </a>
-          : modular stylen
-        </p>
+        <a
+          href="https://www.cypress.io"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Cypress
+        </a>
+        &nbsp;für automatisierte Tests
       </li>
       <li>
-        <p>
-          <a
-            href="https://www.cypress.io"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Cypress
-          </a>
-          : automatisiert testen
-        </p>
+        <a
+          href="//postgresql.org/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          PostgreSQL
+        </a>
+        &nbsp;als Datenbank. Hier ein&nbsp;
+        <a
+          href="//dbdiagram.io/d/apflora-65639a833be1495787c2f457"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Diagramm der Beziehungen
+        </a>
+        :
+        <iframe
+          width="100%"
+          height="800"
+          src="https://dbdiagram.io/e/65639a833be1495787c2f457/67238c12b1b39dd8581538b4"
+          frameBorder="0.5"
+          style={{ border: '1px solid #dbdbdb' }}
+        ></iframe>
       </li>
       <li>
-        <p>
-          Als Datenbank dient{' '}
-          <a
-            href="//postgresql.org/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            PostgreSQL
-          </a>
-          . Hier ein{' '}
-          <a
-            href="//dbdiagram.io/d/apflora-65639a833be1495787c2f457"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Diagramm der Beziehungen
-          </a>
-          :
-          {/* <img
-            src={beziehungen}
-            alt="Beziehungs-Diagramm"
-            width="100%"
-          /> */}
-          <iframe
-            width="100%"
-            height="800"
-            src="https://dbdiagram.io/e/65639a833be1495787c2f457/67238c12b1b39dd8581538b4"
-            frameBorder="0.5"
-            style={{ border: '1px solid #dbdbdb' }}
-          ></iframe>
-        </p>
+        <a
+          href="//postgis.net"
+          target="_blank"
+          rel="noreferrer"
+        >
+          PostGIS
+        </a>
+        &nbsp;für anspruchsvolle GIS-Funktionen
+      </li>
+      <li>
+        <a
+          href="https://leafletjs.com/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Leaflet
+        </a>
+        &nbsp;für die Karten
       </li>
     </ul>
   </>

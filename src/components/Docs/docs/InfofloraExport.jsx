@@ -224,12 +224,12 @@ export const Component = memo(() => (
     <p>
       O.k., selber schuld 😉:{' '}
       <a
-        href="https://github.com/barbalex/apf2/blob/master/sql/apflora/export_info_flora/2022-04-12_export_info_flora.sql"
+        href="https://github.com/barbalex/apf2/blob/master/sql/apflora/export_info_flora/2024-04-24.sql"
         target="_blank"
         className="url"
         rel="noreferrer"
       >
-        https://github.com/barbalex/apf2/blob/master/sql/apflora/export_info_flora/2022-04-12_export_info_flora.sql
+        https://github.com/barbalex/apf2/blob/master/sql/apflora/export_info_flora/2024-04-24.sql
       </a>
     </p>
   </>

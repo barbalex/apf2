@@ -36,10 +36,8 @@ export const saveNichtZuordnenToDb = async ({
     : 'nicht-beurteilte-Beobachtungen'
   newActiveNodeArray[5] = id
   newActiveNodeArray = newActiveNodeArray.slice(0, 6)
-  const oldParentNodeUrl = [...activeNodeArray]
-  oldParentNodeUrl.pop()
-  const newParentNodeUrl = [...newActiveNodeArray]
-  newParentNodeUrl.pop()
+  const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
+  const newParentNodeUrl = newActiveNodeArray.toSpliced(-1)
   const newOpenNodes = openNodes.map((n) => {
     if (isEqual(n, activeNodeArray)) return newActiveNodeArray
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl

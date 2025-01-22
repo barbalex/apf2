@@ -20,15 +20,13 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-const singleRowHeight = 23
 const StyledNode = styled.div`
   padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
-  height: ${singleRowHeight}px;
-  max-height: ${singleRowHeight}px;
   box-sizing: border-box;
   margin: 0;
   display: flex;
   flex-direction: row;
+  align-items: center;
   white-space: nowrap;
   user-select: none;
   color: ${(props) =>
@@ -38,27 +36,15 @@ const StyledNode = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 const StyledExpandMoreIcon = styled(MdExpandMore)`
-  margin-top: ${(props) =>
-    props['data-nodeisopen'] ? '-6px !important' : '1px !important'};
-  margin-left: ${(props) => (props['data-nodeisopen'] ? '-1px !important' : 0)};
-  margin-right: ${(props) =>
-    props['data-nodeisopen'] ? '-5px !important' : 0};
-  padding-left: ${(props) => (props['data-nodeisopen'] ? '2px' : '2px')};
-  height: ${(props) =>
-    props['data-nodeisopen'] ? '30px !important' : '22px !important'};
-  width: ${(props) =>
-    props['data-nodeisopen'] ? '30px !important' : '26px !important'};
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   cursor: pointer;
+  font-size: 1.1rem;
   &:hover {
     color: #f57c00 !important;
   }
 `
 const StyledChevronRightIcon = styled(MdChevronRight)`
-  padding-left: 2px;
-  height: 22px !important;
-  width: 26px;
   cursor: pointer;
   font-size: 1.5rem;
   &:hover {
@@ -66,20 +52,9 @@ const StyledChevronRightIcon = styled(MdChevronRight)`
   }
 `
 const StyledMoreHorizIcon = styled(MdMoreHoriz)`
-  margin-top: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '-5px !important' : (
-      '-2px !important'
-    )};
-  padding-left: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
-  height: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '26px !important' : (
-      '22px !important'
-    )};
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   font-size: 1.5rem;
-  width: 26px;
   cursor: pointer;
   &:hover {
     color: #f57c00 !important;
@@ -93,8 +68,15 @@ const StyledRemoveIcon = styled(MdRemove)`
   font-size: 1.5rem;
 `
 const SymbolDiv = styled.div`
+  flex-basis: 23px;
+  flex-grow: 0;
+  flex-shrink: 0;
   cursor: pointer;
-  width: 28px;
+  align-self: flex-start;
+  svg {
+    display: block;
+    margin: auto;
+  }
 `
 const TextSpan = styled.span`
   margin-left: 0;
@@ -102,7 +84,8 @@ const TextSpan = styled.span`
   font-size: 16px !important;
   font-weight: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
-  white-space: nowrap;
+  // line-height: 23px;
+  white-space: normal;
   text-overflow: ellipsis;
   overflow: hidden !important;
   cursor: pointer;
@@ -216,7 +199,8 @@ export const Row = memo(
               {symbolIcon === 'expandMore' && (
                 <StyledExpandMoreIcon
                   data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                  data-nodeisopen={nodeIsOpen}
+                  viewBox="4 3 17 17"
+                  height={23}
                 />
               )}
               {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}

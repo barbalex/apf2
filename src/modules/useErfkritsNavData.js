@@ -5,6 +5,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useErfkritsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -66,9 +67,29 @@ export const useErfkritsNavData = (props) => {
       listFilter: 'erfkrit',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien`,
       label: `AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'erfkritFolder',
+      treeId: `${apId}ErfkritFolder`,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
+      hasChildren: !!count,
+      component: NodeWithList,
       menus: (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((p) => ({
         id: p.id,
         label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'erfkrit',
+        treeId: p.id,
+        treeParentTableId: apId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'AP-Erfolgskriterien',
+          p.id,
+        ],
+        hasChildren: false,
       })),
     }),
     [

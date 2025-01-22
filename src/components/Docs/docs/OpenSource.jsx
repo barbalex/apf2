@@ -8,7 +8,7 @@ export const Component = memo(() => (
     <DokuDate>30.01.2019</DokuDate>
     <p>
       <a
-        href="https://github.com/barbalex/apf2/blob/master/license.md"
+        href="https://github.com/barbalex/apf2/blob/master/LICENSE"
         target="_blank"
         rel="noreferrer"
       >
@@ -21,7 +21,7 @@ export const Component = memo(() => (
     <p>
       Die verwendete{' '}
       <a
-        href="https://github.com/barbalex/apf2/blob/master/license.md"
+        href="https://github.com/barbalex/apf2/blob/master/LICENSE"
         target="_blank"
         rel="noreferrer"
       >
@@ -32,7 +32,7 @@ export const Component = memo(() => (
     <p>
       Neben dem Code steht auch die{' '}
       <a
-        href="https://github.com/barbalex/apf2/tree/master/sql/apflora"
+        href="https://github.com/barbalex/apf2/blob/master/sql/apflora/createTables.sql"
         target="_blank"
         rel="noreferrer"
       >

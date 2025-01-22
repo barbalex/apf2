@@ -1,7 +1,7 @@
 export const menus = [
   {
     id: 'was-kann-man-mit-apflora-machen',
-    label: `Was kann man mit apflora.ch machen?`,
+    label: `Was kann man mit apflora.ch machen? 💪`,
   },
   {
     id: 'technische-voraussetzungen',
@@ -21,15 +21,15 @@ export const menus = [
   },
   {
     id: 'navigation',
-    label: `Navigation`,
+    label: `Navigation 📱💻`,
   },
   {
     id: 'ist-apflora-langsam',
-    label: `Ist apflora langsam?`,
+    label: `Ist apflora langsam? 🐌`,
   },
   {
     id: 'art-auswertung-pop-menge',
-    label: `Art: Auswertung Population Mengen`,
+    label: `Art: Auswertung Population Mengen 📈`,
   },
   {
     id: 'beobachtungen-einer-teil-population-zuordnen',
@@ -37,7 +37,7 @@ export const menus = [
   },
   {
     id: 'falsch-bestimmte-beobachtungen',
-    label: `Falsch bestimmte Beobachtungen`,
+    label: `Falsch bestimmte Beobachtungen 👀`,
   },
   {
     id: 'erfolgs-kontrollen-planen',
@@ -77,19 +77,19 @@ export const menus = [
   },
   {
     id: 'karte-massstab',
-    label: `Karte: Massstab`,
+    label: `Karte: Massstab 📏`,
   },
   {
     id: 'karte-drucken',
-    label: `Karte: Drucken`,
+    label: `Karte: Drucken 🖨`,
   },
   {
     id: 'gedaechtnis',
-    label: `apflora erinnert sich an euch`,
+    label: `Big apflora is watching you 😉`,
   },
   {
     id: 'dateien',
-    label: `Dateien anfügen`,
+    label: `Dateien anfügen 📸`,
   },
   {
     id: 'koordinaten',
@@ -113,11 +113,11 @@ export const menus = [
   },
   {
     id: 'produkte-fuer-die-fns',
-    label: `Produkte für die Fachstelle Naturschutz`,
+    label: `Produkte für die Fachstelle Naturschutz 🛒`,
   },
   {
     id: 'daten-sichern',
-    label: `Daten sichern`,
+    label: `Daten sichern 🔒`,
   },
   {
     id: 'daten-wiederherstellen',
@@ -129,7 +129,7 @@ export const menus = [
   },
   {
     id: 'geschichte',
-    label: `Entstehungs-Geschichte`,
+    label: `Entstehungs-Geschichte 🚀`,
   },
   {
     id: 'open-source',

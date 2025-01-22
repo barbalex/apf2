@@ -1,11 +1,16 @@
 import { memo, useContext, useCallback } from 'react'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import remove from 'lodash/remove'
 import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { Link, useParams, useLocation } from 'react-router'
+import { Link, useParams, useLocation, useNavigate } from 'react-router'
 import { useAtom } from 'jotai'
+import { MdFilterAlt, MdInfoOutline, MdEditNote } from 'react-icons/md'
+import { FaDownload } from 'react-icons/fa6'
+import { VscListTree } from 'react-icons/vsc'
+import { TbMap2 } from 'react-icons/tb'
 
 import { More } from './More/index.jsx'
 import { Daten } from './Daten.jsx'
@@ -49,6 +54,37 @@ export const StyledButton = styled(Button)`
   flex-shrink: 0;
   flex-grow: 0;
 `
+export const StyledIconButton = styled(Button)`
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-right-color: ${(props) =>
+    props.followed === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
+  border-left-color: ${(props) =>
+    props.preceded === 'true' ?
+      ' rgba(255, 255, 255, 0.25)'
+    : ' rgba(255, 255, 255, 0.5)'} !important;
+  border-top-left-radius: ${(props) =>
+    props.preceded === 'true' ? '0' : '4px'} !important;
+  border-bottom-left-radius: ${(props) =>
+    props.preceded === 'true' ? '0' : '4px'} !important;
+  border-top-right-radius: ${(props) =>
+    props.followed === 'true' ? '0' : '4px'} !important;
+  border-bottom-right-radius: ${(props) =>
+    props.followed === 'true' ? '0' : '4px'} !important;
+  margin-right: ${(props) =>
+    props.followed === 'true' ? '-1px' : 'unset'} !important;
+  border-radius: 4px !important;
+  flex-shrink: 0;
+  flex-grow: 0;
+  // icon specific
+  align-self: stretch;
+  margin: 2px 0;
+  padding: 5px 10px;
+  font-size: 1.5em;
+  min-width: unset !important;
+`
 const DokuButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
@@ -64,6 +100,7 @@ export const ProjekteMenus = memo(
   observer(() => {
     const { projId } = useParams()
     const { search } = useLocation()
+    const navigate = useNavigate()
 
     const [isDesktopView] = useAtom(isDesktopViewAtom)
     const isMobileView = !isDesktopView
@@ -130,6 +167,16 @@ export const ProjekteMenus = memo(
       () => onClickButton('filter2'),
       [onClickButton],
     )
+    // need to not use Link in appbar because:
+    // long press on mobile opens context menu AND tooltip...
+    const onClickDocs = useCallback(
+      () => navigate(`/Dokumentation/${search}`),
+      [search],
+    )
+    const onClickEkPlanung = useCallback(
+      () => navigate(`/Daten/Projekte/${projId}/EK-Planung${search}`),
+      [projId, search],
+    )
     const onClickExporte = useCallback(
       () => onClickButton('exporte'),
       [onClickButton],
@@ -160,67 +207,121 @@ export const ProjekteMenus = memo(
         addMargin={false}
       >
         {isDesktopView && (
-          <StyledButton
-            variant={treeIsVisible ? 'outlined' : 'text'}
-            followed={datenIsVisible?.toString()}
-            onClick={onClickTree}
-            data-id="nav-tree1"
-            width={134}
-          >
-            Strukturbaum
-          </StyledButton>
+          <Tooltip title="Navigationsbaum anzeigen">
+            <StyledButton
+              variant={treeIsVisible ? 'outlined' : 'text'}
+              followed={datenIsVisible?.toString()}
+              onClick={onClickTree}
+              data-id="nav-tree1"
+              width={150}
+            >
+              Navigationsbaum
+            </StyledButton>
+          </Tooltip>
+        )}
+        {/* in mobile view: only show if user did not decide to always show */}
+        {/* do not hide if tree is visible - user can't close it! */}
+        {isMobileView && (!hideTree || treeIsVisible) && (
+          <Tooltip title="Navigationsbaum anzeigen">
+            <StyledIconButton
+              variant={treeIsVisible ? 'outlined' : 'text'}
+              followed={datenIsVisible?.toString()}
+              onClick={onClickTree}
+              data-id="nav-tree1"
+              width={46}
+            >
+              <VscListTree />
+            </StyledIconButton>
+          </Tooltip>
         )}
         <Daten width={77} />
-        <StyledButton
-          variant={filterIsVisible ? 'outlined' : 'text'}
-          preceded={datenIsVisible?.toString()}
-          followed={karteIsVisible?.toString()}
-          onClick={onClickFilter}
-          data-id="nav-filter1"
-          title="Daten filtern"
-          width={70}
-        >
-          Filter
-        </StyledButton>
-        <StyledButton
-          variant={karteIsVisible ? 'outlined' : 'text'}
-          preceded={filterIsVisible?.toString()}
-          followed={(
-            (!!projId && exporteIsVisible) ||
-            (isDesktopView && !projId && tree2IsVisible)
-          )?.toString()}
-          onClick={onClickKarte}
-          data-id="nav-karte1"
-          width={70}
-        >
-          Karte
-        </StyledButton>
+        <Tooltip title="Daten filtern">
+          {isDesktopView ?
+            <StyledButton
+              variant={filterIsVisible ? 'outlined' : 'text'}
+              preceded={datenIsVisible?.toString()}
+              followed={karteIsVisible?.toString()}
+              onClick={onClickFilter}
+              data-id="nav-filter1"
+              width={70}
+            >
+              Filter
+            </StyledButton>
+          : <StyledIconButton
+              variant={filterIsVisible ? 'outlined' : 'text'}
+              onClick={onClickFilter}
+              data-id="nav-filter1"
+              width={46}
+            >
+              <MdFilterAlt />
+            </StyledIconButton>
+          }
+        </Tooltip>
+        <Tooltip title="Karte anzeigen">
+          {isDesktopView ?
+            <StyledButton
+              variant={karteIsVisible ? 'outlined' : 'text'}
+              preceded={filterIsVisible?.toString()}
+              followed={(
+                (!!projId && exporteIsVisible) ||
+                (isDesktopView && !projId && tree2IsVisible)
+              )?.toString()}
+              onClick={onClickKarte}
+              data-id="nav-karte1"
+              width={70}
+            >
+              Karte
+            </StyledButton>
+          : <StyledIconButton
+              variant={karteIsVisible ? 'outlined' : 'text'}
+              onClick={onClickKarte}
+              data-id="nav-karte1"
+              width={46}
+            >
+              <TbMap2 />
+            </StyledIconButton>
+          }
+        </Tooltip>
         {!!projId && (
-          <StyledButton
-            variant={exporteIsVisible ? 'outlined' : 'text'}
-            preceded={karteIsVisible?.toString()}
-            followed={(isDesktopView && tree2IsVisible)?.toString()}
-            onClick={onClickExporte}
-            data-id="nav-exporte"
-            width={74}
-          >
-            Exporte
-          </StyledButton>
+          <Tooltip title="Exporte anzeigen">
+            {isDesktopView ?
+              <StyledButton
+                variant={exporteIsVisible ? 'outlined' : 'text'}
+                preceded={karteIsVisible?.toString()}
+                followed={(isDesktopView && tree2IsVisible)?.toString()}
+                onClick={onClickExporte}
+                data-id="nav-exporte"
+                width={74}
+              >
+                Exporte
+              </StyledButton>
+            : <StyledIconButton
+                variant={exporteIsVisible ? 'outlined' : 'text'}
+                onClick={onClickExporte}
+                data-id="nav-exporte"
+                width={46}
+              >
+                <FaDownload />
+              </StyledIconButton>
+            }
+          </Tooltip>
         )}
         {(isDesktopView || tree2IsVisible) && (
-          <StyledButton
-            variant={tree2IsVisible ? 'outlined' : 'text'}
-            preceded={(
-              (!!projId && exporteIsVisible) ||
-              (!projId && karteIsVisible)
-            )?.toString()}
-            followed={daten2IsVisible?.toString()}
-            onClick={onClickTree2}
-            data-id="nav-tree2"
-            width={147}
-          >
-            Strukturbaum 2
-          </StyledButton>
+          <Tooltip title="Navigationsbaum 2 anzeigen">
+            <StyledButton
+              variant={tree2IsVisible ? 'outlined' : 'text'}
+              preceded={(
+                (!!projId && exporteIsVisible) ||
+                (!projId && karteIsVisible)
+              )?.toString()}
+              followed={daten2IsVisible?.toString()}
+              onClick={onClickTree2}
+              data-id="nav-tree2"
+              width={165}
+            >
+              Navigationsbaum 2
+            </StyledButton>
+          </Tooltip>
         )}
         {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
           <Daten
@@ -229,54 +330,51 @@ export const ProjekteMenus = memo(
           />
         )}
         {((isDesktopView && tree2IsVisible) || filter2IsVisible) && (
-          <StyledButton
-            variant={filter2IsVisible ? 'outlined' : 'text'}
-            preceded={daten2IsVisible?.toString()}
-            followed={karte2IsVisible?.toString()}
-            onClick={onClickFilter2}
-            data-id="nav-filter2"
-            title="Daten filtern"
-            width={70}
-          >
-            Filter 2
-          </StyledButton>
+          <Tooltip title="Daten filtern">
+            <StyledButton
+              variant={filter2IsVisible ? 'outlined' : 'text'}
+              preceded={daten2IsVisible?.toString()}
+              followed={karte2IsVisible?.toString()}
+              onClick={onClickFilter2}
+              data-id="nav-filter2"
+              title="Daten filtern"
+              width={70}
+            >
+              Filter 2
+            </StyledButton>
+          </Tooltip>
         )}
         {isDesktopView && !!projId && (
-          <StyledButton
-            variant="text"
-            preceded={false?.toString()}
-            followed={false.toString()}
-            component={Link}
-            to={`/Daten/Projekte/${projId}/EK-Planung${search}`}
-            data-id="ek-planung"
-            title="EK und EKF planen"
-            width={101}
-          >
-            EK-Planung
-          </StyledButton>
+          <Tooltip title="EK und EKF planen">
+            <StyledButton
+              variant="text"
+              preceded={false?.toString()}
+              followed={false.toString()}
+              onClick={onClickEkPlanung}
+              width={101}
+            >
+              EK-Planung
+            </StyledButton>
+          </Tooltip>
         )}
-        <DokuButton
-          variant="text"
-          component={Link}
-          to={`/Dokumentation/${search}`}
-          width={129}
-        >
-          Dokumentation
-        </DokuButton>
-        {/* in mobile view: move tree to the end of the menus */}
-        {/* only show if user did not decide to always show */}
-        {/* do not hide if tree is visible - user can't close it! */}
-        {isMobileView && (!hideTree || treeIsVisible) && (
-          <StyledButton
-            variant={treeIsVisible ? 'outlined' : 'text'}
-            followed="false"
-            onClick={onClickTree}
-            data-id="nav-tree1"
-            width={134}
-          >
-            Strukturbaum
-          </StyledButton>
-        )}
+        <Tooltip title="Dokumentation anzeigen">
+          {isDesktopView ?
+            <DokuButton
+              variant="text"
+              onClick={onClickDocs}
+              width={129}
+            >
+              Dokumentation
+            </DokuButton>
+          : <StyledIconButton
+              variant="text"
+              onClick={onClickDocs}
+              width={46}
+            >
+              <MdInfoOutline />
+            </StyledIconButton>
+          }
+        </Tooltip>
         <More
           onClickExporte={onClickExporte}
           role={role}

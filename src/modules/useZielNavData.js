@@ -5,6 +5,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useZielNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -59,16 +60,43 @@ export const useZielNavData = (props) => {
       id: zielId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}`,
       label: data?.data?.zielById?.label ?? '(nicht beschrieben)',
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'table',
+      treeMenuType: 'ziel',
+      treeId: zielId,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, zielId],
+      fetcherName: 'useZielNavData',
+      fetcherParams: { projId, apId, jahr, zielId },
+      hasChildren: true,
+      component: NodeWithList,
       menus: [
         {
           id: 'Ziel',
           label: 'Ziel',
+          isSelf: true,
         },
         {
           id: 'Berichte',
           label: `Berichte (${isLoading ? '...' : `${filteredZielbersCount}/${zielbersCount}`})`,
-          count: zielbersCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'zielberFolder',
+          treeId: `${zielId}ZielberFolder`,
+          treeParentTableId: zielId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'AP-Ziele',
+            jahr,
+            zielId,
+            'Berichte',
+          ],
+          fetcherName: 'useZielbersNavData',
+          fetcherParams: { projId, apId, jahr, zielId },
+          passTransitionStateToChildren: true,
+          hasChildren: !!filteredZielbersCount,
+          alwaysOpen: true,
         },
       ],
     }),

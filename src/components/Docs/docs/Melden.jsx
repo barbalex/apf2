@@ -43,7 +43,7 @@ export const Component = memo(() => (
       immer).
     </p>
     <p>
-      Allerdings ist GitHub öffentlich. Ihr könnt Alex daher Anliegen auch per{' '}
+      GitHub ist öffentlich. Ihr könnt Alex Anliegen auch per{' '}
       <a href="mailto:alex@gabriel-software.ch">email</a> melden.
     </p>
   </>

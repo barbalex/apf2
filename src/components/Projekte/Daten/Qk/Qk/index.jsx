@@ -204,7 +204,7 @@ export const Qk = memo(
                         onlyShowActivePath: true,
                       })
                     }
-                    title="in Strukturbaum 2 öffnen"
+                    title="in Navigationsbaum 2 öffnen"
                   >
                     {m.text}
                   </StyledA>

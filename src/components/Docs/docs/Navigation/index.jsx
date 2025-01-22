@@ -3,7 +3,7 @@ import { DokuDate, Code } from '../../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
-    <h1>Navigation</h1>
+    <h1>Navigation 📱💻</h1>
     <DokuDate>20.12.2024</DokuDate>
     <p>
       Früher war apflora primär für die Arbeit auf Desktops ausgelegt. Ende 2024
@@ -15,7 +15,6 @@ export const Component = memo(() => (
       <b>Mobil-Ansicht</b> und eine <b>Desktop-Ansicht</b> mit jeweils eigener
       Navigation:
     </p>
-    <br />
     <ul>
       <li>
         Auf dem Desktop ist der <b>Navigationsbaum</b>&nbsp;das Werkzeug der
@@ -33,14 +32,13 @@ export const Component = memo(() => (
     </p>
     <p>
       Der Navigationsbaum enthält Kontext-Menüs. Diese sind auf primär
-      Finger-Gesteuerten Geräten deaktiviert, weil sie sich nicht für die
-      Bedienung mit Fingern eignen und die Gefahr besteht, sie ungewollt zu
-      aktivieren (v.a. bei Nässe). Neu gibt es Menüs in den Formularköpfen, die
-      sich dynamisch an die verfügbare Breite anpassen (sie sind auch auf dem
-      Desktop verfügbar).
+      Finger-gesteuerten Geräten deaktiviert, weil die Knoten des
+      Navigationsbaums zu klein sind und bei den Kontextmenüs die Gefahr
+      besteht, sie ungewollt zu aktivieren, v.a. bei Nässe. Neu gibt es Menüs in
+      den Formularköpfen, die sich dynamisch an die verfügbare Breite anpassen.
     </p>
     <p>
-      Mobile und Desktop sind nicht immer klar zu bestimmen. Es gibt sehr grosse
+      Mobile und Desktop sind nicht immer klar abzugrenzen. Es gibt sehr grosse
       Bildschirme mit Touch-Steuerung. Einige Bildschirme mit Touch-Steuerung
       werden primär mit der Maus bedient. Handys wiederum können z.T. sehr hohe
       Auflösung haben.
@@ -51,7 +49,6 @@ export const Component = memo(() => (
       Grenze zwischen Mobile und Desktop gibt es im Mehr-Menü die folgenden
       Optionen:
     </p>
-    <br />
     <ul>
       <li>
         Der Navigationsbaum kann auch auf Mobilgeräten angeboten werden. Man
@@ -69,5 +66,13 @@ export const Component = memo(() => (
       bei der Implementation der Mobil-Navigation in die normale Navigation
       (Navigationsbaum bzw. Bookmarks & Navigationslisten) gezügelt.
     </p>
+    <p>
+      Die folgenden Oberflächen bleiben dem Desktop vorbehalten, weil sie auf
+      kleinen Bildschirmen keinen Sinn machen:
+    </p>
+    <ul>
+      <li>EK-Planung</li>
+      <li>Navigationsbaum 2, Daten 2, Filter 2</li>
+    </ul>
   </>
 ))

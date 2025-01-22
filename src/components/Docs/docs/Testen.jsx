@@ -55,7 +55,7 @@ export const Component = memo(() => (
             <ul>
               <LI>◻️ zeichnen</LI>
               <LI>◻️ löschen</LI>
-              <LI>◻️ im Strukturbaum zeigen</LI>
+              <LI>◻️ im Navigationsbaum zeigen</LI>
               <LI>◻️ in Exporten verwenden</LI>
             </ul>
           </li>

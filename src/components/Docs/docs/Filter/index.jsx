@@ -125,9 +125,9 @@ export const Component = memo(() => (
       Drücken der Enter-Taste angewandt (bei Auswahl-Feldern sofort).
     </p>
     <p>
-      Filtern kann man im <code>Strukturbaum</code> <em>und</em> im{' '}
-      <code>Strukturbaum 2</code>. Öffnet man den <code>Strukturbaum 2</code>,
-      entspricht er genau dem <code>Strukturbaum</code>, d.h. es wird auch ein
+      Filtern kann man im <code>Navigationsbaum</code> <em>und</em> im{' '}
+      <code>Navigationsbaum 2</code>. Öffnet man den <code>Navigationsbaum 2</code>,
+      entspricht er genau dem <code>Navigationsbaum</code>, d.h. es wird auch ein
       allfälliger Filter kopiert. Danach sind die Filter unabhängig im
       jeweiligen Navigationsbaum gültig.
     </p>

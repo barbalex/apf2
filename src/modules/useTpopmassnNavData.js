@@ -7,6 +7,8 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const useTpopmassnNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -77,20 +79,74 @@ export const useTpopmassnNavData = (props) => {
       id: tpopmassnId,
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${tpopmassnId}`,
       label,
-      labelRightElements:
-        labelRightElements.length ? labelRightElements : undefined,
-      // leave totalCount undefined as the menus are folders
+      treeNodeType: 'table',
+      treeMenuType: 'tpopmassn',
+      treeId: tpopmassnId,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Massnahmen',
+        tpopmassnId,
+      ],
+      hasChildren: true,
+      childrenAreFolders: true,
+      fetcherName: 'useTpopmassnNavData',
+      fetcherParams: { projId, apId, popId, tpopId, tpopmassnId },
+      labelRightElements: labelRightElements.length
+        ? labelRightElements
+        : undefined,
+      component: NodeWithList,
       menus: [
         {
           id: 'Massnahme',
           label: `Massnahme`,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Massnahmen',
+            tpopmassnId,
+            'Massnahme',
+          ],
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
+          isSelf: true,
         },
         {
           id: 'Dateien',
           label: `Dateien (${filesCount})`,
-          count: filesCount,
+          treeNodeType: 'folder',
+          treeMenuType: 'tpopmassnDateienFolder',
+          treeId: `${tpopmassnId}TpopmassnDateienFolder`,
+          treeParentTableId: tpopmassnId,
+          treeUrl: [
+            'Projekte',
+            projId,
+            'Arten',
+            apId,
+            'Populationen',
+            popId,
+            'Teil-Populationen',
+            tpopId,
+            'Massnahmen',
+            tpopmassnId,
+            'Dateien',
+          ],
+          hasChildren: false,
+          component: Node,
         },
       ],
     }),

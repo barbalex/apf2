@@ -5,32 +5,27 @@ import { DokuDate } from '../DesktopDocs.jsx'
 export const Component = memo(() => (
   <>
     <h1>Karte: (Teil-)Populationen aller Arten anzeigen</h1>
-    <DokuDate>20.05.2020</DokuDate>
+    <DokuDate>20.12.2024</DokuDate>
     <p>Bedingungen:</p>
     <ul>
-      <li>Strukturbaum ist offen</li>
+      <li>Navigationsbaum ist offen</li>
       <li>
-        Im Strukturbaum ist das Projekt oder der Art-Ordner aktiv.
+        Im Navigationsbaum ist das Projekt oder der Art-Ordner aktiv.
         <br />
         Ist eine Art oder tieferer Knoten aktiv, wird nur die betreffende Art
         angezeigt
       </li>
       <li>Die Karte ist offen</li>
       <li>In der Karte ist das (Teil-)Populationen-Layer aktiv</li>
-      <li>
-        Bei Teil-Populationen: Die Karte ist auf einen kleinen Ausschnitt
-        gezoomt.
-        <br />
-        Sonst gibt es mehr Teil-Populationen, als angezeigt werden können (die
-        Grenze wurde bei 2&#39;000 Teilpopulationen gesetzt).
-        <br />
-        Ist der Ausschnitt zu gross, erscheint eine entsprechende Meldung
-      </li>
-      <li>
-        Sobald der Ausschnitt ändert (Zoomen oder Verschieben), werden die Daten
-        automatisch neu geladen
-      </li>
     </ul>
+    <p>
+      Ist keine Art aktiv, werden die (Teil-)Populationen aller Arten geladen.
+      Das können über 30'000 Objekte sein! Meldungen warnen vor den möglichen
+      Folgen. Damit die Daten geladen werden, muss die entsprechende Option im
+      Layertool explizit gewählt werden. Ist also selber schuld, wer sein Gerät
+      überfordert... (allerdings funktioniert es auf meinen leistungstarken
+      Entwicklungs-PC einwandfrei)
+    </p>
     <p>Wurde am 11.12.2018 eingeführt. Und am 20.5.2020 verbessert.</p>
   </>
 ))

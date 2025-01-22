@@ -123,11 +123,9 @@ export const Component = memo(
         if (field === 'jahr') {
           const newActiveNodeArray = [...aNA]
           newActiveNodeArray[5] = +value
-          const oldParentNodeUrl = [...aNA]
-          oldParentNodeUrl.pop()
-          const newParentNodeUrl = [...newActiveNodeArray]
-          newParentNodeUrl.pop()
-          let newOpenNodes = openNodes.map((n) => {
+          const oldParentNodeUrl = aNA.toSpliced(-1)
+          const newParentNodeUrl = newActiveNodeArray.toSpliced(-1)
+          const newOpenNodes = openNodes.map((n) => {
             if (isEqual(n, aNA)) return newActiveNodeArray
             if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
             return n

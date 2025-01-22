@@ -1,3 +1,4 @@
+-- used in export
 DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popber CASCADE;
 
 CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popber AS
@@ -41,6 +42,29 @@ SELECT
   pop.lv95_y AS pop_y,
   tpop_info.apber_relevant AS tpops_apber_relevant,
   tpop_info.apber_relevant_grund AS tpops_apber_relevant_grund,
+  EXISTS ( SELECT DISTINCT
+      pop_id
+    FROM
+      apflora.tpop tpop2
+    WHERE
+      pop_id = pop.id
+      AND EXISTS (
+        SELECT
+          id
+        FROM
+          apflora.tpop
+        WHERE
+          pop_id = tpop2.pop_id
+          AND apber_relevant = TRUE)
+        -- not exists prevents results
+        AND NOT EXISTS (
+          SELECT
+            id
+          FROM
+            apflora.tpop
+          WHERE
+            pop_id = tpop2.pop_id
+            AND apber_relevant_grund IN ('2', '3')))::text AS pop_relevant_fuer_projektdoku_karten,
   pop.created_at AS pop_created_at,
   pop.updated_at AS pop_updated_at,
   pop.changed_by AS pop_changed_by,
@@ -60,7 +84,7 @@ FROM
   LEFT JOIN tpop_info ON pop.id = tpop_info.pop_id
   LEFT JOIN letzter_popber ON pop.id = letzter_popber.pop_id
   LEFT JOIN apflora.popber popber ON (letzter_popber.jahr = popber.jahr)
-    AND (letzter_popber.pop_id = popber.pop_id)
+  AND (letzter_popber.pop_id = popber.pop_id)
   LEFT JOIN apflora.tpop_entwicklung_werte tpop_entwicklung_werte ON popber.entwicklung = tpop_entwicklung_werte.code
   LEFT JOIN apflora.pop_status_werte pop_status_werte ON pop.status = pop_status_werte.code
 WHERE
@@ -2604,20 +2628,22 @@ ORDER BY
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_erste_massn_vor_bekannt_seit CASCADE;
 
-CREATE OR REPLACE VIEW apflora.v_q_tpop_erste_massn_vor_bekannt_seit AS SELECT
+CREATE OR REPLACE VIEW apflora.v_q_tpop_erste_massn_vor_bekannt_seit AS
+SELECT
   ap.proj_id,
   pop.ap_id,
   pop.id AS pop_id,
   pop.nr AS pop_nr,
   tpop.id,
   tpop.nr,
-  'Erste Massnahme: ' || min(massn.jahr) || ', Tpop bekannt seit: ' || tpop.bekannt_seit  as bemerkung
+  'Erste Massnahme: ' || min(massn.jahr) || ', Tpop bekannt seit: ' || tpop.bekannt_seit AS bemerkung
 FROM
   apflora.ap ap
   INNER JOIN apflora.pop pop ON pop.ap_id = ap.id
-  INNER JOIN apflora.tpop tpop on tpop.pop_id = pop.id
-  inner join apflora.tpopmassn massn on massn.tpop_id = tpop.id and massn.jahr < tpop.bekannt_seit
-group by
+  INNER JOIN apflora.tpop tpop ON tpop.pop_id = pop.id
+  INNER JOIN apflora.tpopmassn massn ON massn.tpop_id = tpop.id
+    AND massn.jahr < tpop.bekannt_seit
+GROUP BY
   ap.proj_id,
   pop.ap_id,
   pop.id,
@@ -2796,16 +2822,14 @@ FROM
 WHERE
   -- Populationen mit Bericht abnehmend
   apflora.popber.entwicklung = 1
-  AND apflora.popber.pop_id NOT IN ( 
+  AND apflora.popber.pop_id NOT IN (
     -- ohne Teil-Population mit Bericht abnehmend oder erloschen
     SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
+      apflora.tpop.pop_id FROM apflora.tpop
       INNER JOIN apflora.tpopber ON apflora.tpop.id = apflora.tpopber.tpop_id
-    WHERE
-      apflora.tpopber.entwicklung IN (1, 8)
-      AND apflora.tpopber.jahr = apflora.popber.jahr)
+      WHERE
+        apflora.tpopber.entwicklung IN (1, 8)
+        AND apflora.tpopber.jahr = apflora.popber.jahr)
 ORDER BY
   apflora.ap.proj_id,
   apflora.ap.id,

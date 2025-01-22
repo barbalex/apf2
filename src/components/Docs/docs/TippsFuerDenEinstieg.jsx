@@ -1,15 +1,16 @@
 import { memo } from 'react'
+import { Link } from 'react-router'
 
 import { DokuDate } from '../DesktopDocs.jsx'
 
 export const Component = memo(() => (
   <>
     <h1>Tipps für den Einstieg</h1>
-    <DokuDate>24.02.2022</DokuDate>
+    <DokuDate>20.12.2024</DokuDate>
     <ul>
       <li>
         Die <strong>Anwendung</strong> ist hier:{' '}
-        <a href="https://apflora.ch/Daten">https://apflora.ch/Daten</a>
+        <Link to="/Daten">https://apflora.ch/Daten</Link>
       </li>
       <li>
         Ihr braucht ein <strong>Login</strong>. Das wird von Topos vergeben,
@@ -18,21 +19,13 @@ export const Component = memo(() => (
       <li>
         Nach erfolgreichem Login wählt ihr die <strong>Art</strong>, mit dem ihr
         arbeiten wollt.
-        <br />
-        &quot;Aktionsplan&quot; bezeichnet Förderprograme für{' '}
-        <a
-          href="https://www.zh.ch/de/umwelt-tiere/naturschutz/artenschutz.html#-161530551"
-          target="_blank"
-          rel="noreferrer"
-        >
-          ein paar Dutzend besonders geförderte Arten
-        </a>
-        .
       </li>
       <li>
         Die <strong>Menübefehle</strong> erscheinen, wenn ihr mit der rechten
-        Maustaste im Strukturbaum auf ein Objekt (z.B. eine Population) klickt.
-        Mit dem Finger: lange drücken
+        Maustaste im Navigationsbaum auf ein Objekt (z.B. eine Population)
+        klickt. Auf Mobilgeräten navigiert ihr mit Bookmarks und
+        Navigationslisten (
+        <Link to="/Dokumentation/Navigation">siehe Navigation</Link>)
       </li>
       <li>
         Ein Teil der <strong>Objekte können verschoben werden</strong>:
@@ -44,7 +37,7 @@ export const Component = memo(() => (
       <li>
         Um wiederholtes Kopieren / Verschieben effizienter zu gestalten,{' '}
         <strong>
-          kann man einen zweiten Satz von Strukturbaum und Daten öffnen
+          kann man einen zweiten Satz von Navigationsbaum und Daten öffnen
         </strong>
       </li>
       <li>

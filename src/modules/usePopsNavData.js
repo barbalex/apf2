@@ -16,7 +16,7 @@ import { PopIcon202 } from '../components/Projekte/Karte/layers/Pop/statusGroupS
 import { PopIcon202Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/202Highlighted.jsx'
 import { PopIcon300 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300.jsx'
 import { PopIcon300Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/300Highlighted.jsx'
-import { PopIcon } from '../components/Projekte/Karte/layers/Pop/Pop.jsx'
+import { PopIcon as PopIconComponent } from '../components/Projekte/Karte/layers/Pop/Pop.jsx'
 import { PopIconHighlighted } from '../components/Projekte/Karte/layers/Pop/PopHighlighted.jsx'
 import { PopIconU } from '../components/Projekte/Karte/layers/Pop/statusGroup/U.jsx'
 import { PopIconUHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/UHighlighted.jsx'
@@ -29,21 +29,23 @@ import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 
 import { MobxContext } from '../mobxContext.js'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
 export const popIcons = {
   normal: {
-    100: PopIcon,
+    100: PopIconComponent,
     '100Highlighted': PopIconHighlighted,
-    101: PopIcon,
+    101: PopIconComponent,
     '101Highlighted': PopIconHighlighted,
-    200: PopIcon,
+    200: PopIconComponent,
     '200Highlighted': PopIconHighlighted,
-    201: PopIcon,
+    201: PopIconComponent,
     '201Highlighted': PopIconHighlighted,
-    202: PopIcon,
+    202: PopIconComponent,
     '202Highlighted': PopIconHighlighted,
-    300: PopIcon,
+    300: PopIconComponent,
     '300Highlighted': PopIconHighlighted,
   },
   statusGroup: {
@@ -156,6 +158,16 @@ export const usePopsNavData = (props) => {
       listFilter: 'pop',
       url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
       label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+      treeNodeType: 'folder',
+      treeMenuType: 'popFolder',
+      treeId: `${apId}PopFolder`,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
+      fetcherName: 'usePopsNavData',
+      fetcherParams: { projId, apId },
+      hasChildren: !!count,
+      labelLeftElements: store.tree.showPopIcon ? [PopMapIcon] : undefined,
+      component: NodeWithList,
       menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
         const labelRightElements = []
         const isMoving = store.moving.id === p.id
@@ -168,20 +180,31 @@ export const usePopsNavData = (props) => {
         }
 
         const popIconIsHighlighted = p.id === popId
-        const PopIcon =
-          p.status ?
-            popIconIsHighlighted ?
-              popIcons[popIconName][p.status + 'Highlighted']
+        const PopIcon = p.status
+          ? popIconIsHighlighted
+            ? popIcons[popIconName][p.status + 'Highlighted']
             : popIcons[popIconName][p.status]
-          : popIconIsHighlighted ? PopIconQHighlighted
-          : PopIconQ
+          : popIconIsHighlighted
+            ? PopIconQHighlighted
+            : PopIconQ
 
         return {
           id: p.id,
           label: p.label,
+          treeNodeType: 'table',
+          treeMenuType: 'pop',
+          treeSingleElementName: 'Population',
+          treeId: p.id,
+          treeParentTableId: apId,
+          treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', p.id],
+          hasChildren: true,
+          fetcherName: 'usePopNavData',
+          fetcherParams: { projId, apId, popId: p.id },
+          status: p.status,
           labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
-          labelRightElements:
-            labelRightElements.length ? labelRightElements : undefined,
+          labelRightElements: labelRightElements.length
+            ? labelRightElements
+            : undefined,
         }
       }),
     }),

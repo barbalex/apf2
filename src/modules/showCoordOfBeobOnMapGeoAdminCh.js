@@ -5,11 +5,13 @@ export const showCoordOfBeobOnMapGeoAdminCh = async ({
   enqueNotification,
   client,
 }) => {
-  const { lv95X, lv95Y } = await getAndValidateCoordinatesOfBeob({
+  const beob = await getAndValidateCoordinatesOfBeob({
     id,
     enqueNotification,
     client,
   })
+  const lv95X = beob?.lv95X
+  const lv95Y = beob?.lv95Y
   if (lv95X && lv95Y) {
     window.open(
       `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${lv95X}&X=${lv95Y}&zoom=10&crosshair=circle`,
