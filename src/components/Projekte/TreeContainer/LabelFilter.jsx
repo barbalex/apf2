@@ -74,6 +74,8 @@ export const LabelFilter = memo(
     )
     const changeDebounced = useDebouncedCallback(
       setNodeLabelFilterAfterChange,
+      // issue 710
+      // TODO: solve for all filters
       900,
     )
 
