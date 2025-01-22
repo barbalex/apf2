@@ -63,7 +63,7 @@ SELECT
             apflora.tpop
           WHERE
             pop_id = tpop2.pop_id
-            AND apber_relevant_grund IN ('2', '3')))::text AS pop_relevant_fuer_projektdoku_karten,
+            AND apber_relevant_grund > 3))::text AS pop_relevant_fuer_projektdoku_karten,
   pop.created_at AS pop_created_at,
   pop.updated_at AS pop_updated_at,
   pop.changed_by AS pop_changed_by,
@@ -93,5 +93,5 @@ ORDER BY
   pop.nr,
   letzter_popber.jahr;
 
-
 COMMENT ON VIEW apflora.v_pop_mit_letzter_popber IS '@foreignKey (pop_id) references pop (id)';
+
