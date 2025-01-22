@@ -74,7 +74,7 @@ export const LabelFilter = memo(
     )
     const changeDebounced = useDebouncedCallback(
       setNodeLabelFilterAfterChange,
-      600,
+      900,
     )
 
     const onChange = useCallback(
