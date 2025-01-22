@@ -17,7 +17,6 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import ToggleButton from '@mui/material/ToggleButton'
-import LoadingButton from '@mui/lab/LoadingButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
@@ -58,7 +57,7 @@ const CopyIcon = styled(MdContentCopy)`
   color: ${(props) =>
     props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
 `
-export const StyledLoadingButton = styled(LoadingButton)`
+export const StyledLoadingButton = styled(Button)`
   margin: 0 5px;
   padding: 3px 10px;
   text-transform: none;
