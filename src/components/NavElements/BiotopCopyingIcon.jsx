@@ -8,6 +8,7 @@ const StyledIcon = styled(MdPhotoLibrary)`
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
   font-size: 1.5rem;
+  align-self: flex-start;
 `
 
 export const BiotopCopyingIcon = () => (
