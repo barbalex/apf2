@@ -48,6 +48,7 @@ export const LetzterPopBericht = memo(
                           popY
                           tpopsApberRelevant
                           tpopsApberRelevantGrund
+                          popRelevantFuerProjektdokuKarten
                           popCreatedAt
                           popUpdatedAt
                           popChangedBy
@@ -105,6 +106,9 @@ export const LetzterPopBericht = memo(
             tpops_apber_relevant_grund:
               z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
                 ?.tpopsApberRelevantGrund ?? '',
+            pop_relevant_fuer_projektdoku_karten:
+              z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]
+                ?.popRelevantFuerProjektdokuKarten ?? '',
             pop_created_at:
               z?.vPopMitLetzterPopbersByPopId?.nodes?.[0]?.popCreatedAt ?? '',
             pop_updated_at:
