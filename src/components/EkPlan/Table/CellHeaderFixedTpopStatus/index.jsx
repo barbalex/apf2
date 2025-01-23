@@ -4,8 +4,8 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import { MobxContext } from '../../../mobxContext.js'
-import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
+import { MobxContext } from '../../../../mobxContext.js'
+import { TextFilter } from '../CellHeaderFixed/TextFilter.jsx'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -73,12 +73,7 @@ export const CellHeaderFixedTpopStatus = ({ style, column }) => {
     }
     setFilterEmptyStatus(!filterStatusEmpty)
     setAnchorEl(null)
-  }, [
-    filterStatusEmpty,
-    setFilterStatus,
-    setFilterEmptyStatus,
-    filterStatus,
-  ])
+  }, [filterStatusEmpty, setFilterStatus, setFilterEmptyStatus, filterStatus])
 
   const { label } = column
 
@@ -107,9 +102,7 @@ export const CellHeaderFixedTpopStatus = ({ style, column }) => {
           onClick={onClickFilterEmptyValues}
           dense
         >
-          {filterStatusEmpty ?
-            'nicht Leerwerte filtern'
-          : 'Leerwerte filtern'}
+          {filterStatusEmpty ? 'nicht Leerwerte filtern' : 'Leerwerte filtern'}
         </MenuItem>
         <TextFilterContainer>
           <TextFilter
