@@ -47,23 +47,25 @@ SELECT
       apflora.tpop tpop2
     WHERE
       pop_id = pop.id
-      AND EXISTS (
-        SELECT
-          id
-        FROM
-          apflora.tpop
-        WHERE
-          pop_id = tpop2.pop_id
-          AND apber_relevant = TRUE)
-        -- not exists prevents results
-        AND NOT EXISTS (
+      AND (
+        -- entweder gibt es eine tpop mit apber_relevant = true
+        EXISTS (
           SELECT
             id
           FROM
             apflora.tpop
           WHERE
             pop_id = tpop2.pop_id
-            AND apber_relevant_grund > 3))::text AS pop_relevant_fuer_projektdoku_karten,
+            AND apber_relevant = TRUE)
+            -- oder es gibt eine tpop mit apber_relevant_grund = 2 oder 3 (ausserkantonal oder historisch, denn die werden in dieser Karte auch gezeigt)
+          OR EXISTS (
+            SELECT
+              id
+            FROM
+              apflora.tpop
+            WHERE
+              pop_id = tpop2.pop_id
+              AND apber_relevant_grund IN (2, 3))))::text AS pop_relevant_fuer_projektdoku_karten,
   pop.created_at AS pop_created_at,
   pop.updated_at AS pop_updated_at,
   pop.changed_by AS pop_changed_by,
