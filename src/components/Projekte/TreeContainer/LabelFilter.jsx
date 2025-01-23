@@ -64,7 +64,7 @@ export const LabelFilter = memo(
       setValue(filterValue)
     }, [filterValue, activeFilterTable])
 
-    const setNodeLabelFilterAfterChange = useCallback(
+    const setNodeLabelFilter = useCallback(
       (val) =>
         setNodeLabelFilterKey({
           value: val,
@@ -72,8 +72,8 @@ export const LabelFilter = memo(
         }),
       [setNodeLabelFilterKey, activeFilterTable],
     )
-    const changeDebounced = useDebouncedCallback(
-      setNodeLabelFilterAfterChange,
+    const changeDebouncedDesktop = useDebouncedCallback(
+      setNodeLabelFilter,
       // issue 710
       // TODO: solve for all filters
       // matchMedia('(pointer: coarse)').matches ? 1100 : 600,
@@ -82,14 +82,25 @@ export const LabelFilter = memo(
 
     const onChange = useCallback(
       (e) => {
+        if (labelText === '(filtern nicht möglich)') return
+
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
         setValue(val)
-        if (labelText === '(filtern nicht möglich)') return
-        changeDebounced(val)
+
+        if (matchMedia('(pointer: coarse)').matches) {
+          console.log('pointer is coarse')
+          if (e.key === 'Enter') {
+            setNodeLabelFilter(val)
+          }
+          return
+        }
+        // pointer is fine
+        console.log('pointer is fine')
+        changeDebouncedDesktop(val)
       },
-      [labelText, changeDebounced],
+      [labelText, changeDebouncedDesktop],
     )
 
     const onClickEmptyFilter = useCallback(() => {
