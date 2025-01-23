@@ -110,10 +110,13 @@ export const FilterInput = memo(
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (!isCoarsePointer) return
 
-        const doSet = e.key === 'Enter' || e.keyCode === 13
-        if (!doSet) return
+        const filterValue = nodeLabelFilter?.[activeFilterTable]
+        if (filterValue !== value) return setNodeLabelFilter(value)
 
-        setNodeLabelFilter(value)
+        // const doSet = e.key === 'Enter' || e.keyCode === 13
+        // if (!doSet) return
+
+        // setNodeLabelFilter(value)
       },
       [setNodeLabelFilter],
     )
