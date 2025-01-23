@@ -64,7 +64,7 @@ export const LabelFilter = memo(
         const tableLabel = table ? table.label : null
         // danger: Projekte can not be filtered because no parent folder
         if (tableLabel !== 'Projekte') {
-          labelText = `${tableLabel} filtern`
+          labelText = `${tableLabel} filtern (pointer is coarse: ${matchMedia('(pointer: coarse)').matches})`
         }
       }
 
