@@ -53,6 +53,7 @@ export const FilterInput = memo(
 
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
+    // value should update when changed from outside
     useEffect(() => {
       if (filterValue === value) return
       setValue(filterValue)
@@ -112,9 +113,9 @@ export const FilterInput = memo(
         setDoSet(doSet)
         if (!doSet) return
 
-        setTimeout(() => setNodeLabelFilter(value), 0)
+        setNodeLabelFilter(value)
       },
-      [setNodeLabelFilter],
+      [setNodeLabelFilter, isCoarsePointer],
     )
 
     const onClickEmpty = useCallback(() => {
