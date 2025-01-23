@@ -17,6 +17,7 @@ import { AnzKontr } from './AnzKontr.jsx'
 import { Ber } from './Ber.jsx'
 import { BerUndMassn } from './BerUndMassn.jsx'
 import { PriorisierungFuerEk } from './PriorisierungFuerEk.jsx'
+import { InfoFlora } from './InfoFlora.jsx'
 import { EkPlanung } from './EkPlanung.jsx'
 import { Ziele } from './Ziele.jsx'
 import { Zielber } from './Zielber.jsx'
@@ -68,6 +69,7 @@ export const Ap = () => {
             <Erfkrit />
             <Idealbiotop />
             <Assozart />
+            <InfoFlora />
           </StyledCardContent>
         : null}
       </Collapse>
