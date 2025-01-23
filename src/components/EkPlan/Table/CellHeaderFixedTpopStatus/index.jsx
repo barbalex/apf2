@@ -63,6 +63,8 @@ export const CellHeaderFixedTpopStatus = ({ style, column }) => {
     setFilterStatus,
   } = store.ekPlan
 
+  const options = []
+
   const [anchorEl, setAnchorEl] = useState(null)
 
   const closeMenu = useCallback(() => setAnchorEl(null), [])
@@ -105,10 +107,19 @@ export const CellHeaderFixedTpopStatus = ({ style, column }) => {
           {filterStatusEmpty ? 'nicht Leerwerte filtern' : 'Leerwerte filtern'}
         </MenuItem>
         <TextFilterContainer>
-          <TextFilter
+          {/* <TextFilter
             column={column}
             closeMenu={closeMenu}
-          />
+          /> */}
+          TODO: option list, multiple select
+          {options.map((option) => (
+            <MenuItem
+              onClick={() => {}}
+              dense
+            >
+              {option.label}
+            </MenuItem>
+          ))}
         </TextFilterContainer>
       </StyledMenu>
     </>

@@ -62,7 +62,7 @@ export const EkPlan = types
     filterNr: types.maybeNull(types.union(types.string, types.number)),
     filterGemeinde: types.maybeNull(types.union(types.string, types.number)),
     filterFlurname: types.maybeNull(types.union(types.string, types.number)),
-    filterStatus: types.maybeNull(types.union(types.string, types.number)),
+    filterStatus: types.maybeNull(types.array(types.number)),
     filterBekanntSeit: types.maybeNull(types.number),
     filterLv95X: types.maybeNull(types.union(types.string, types.number)),
     filterLv95Y: types.maybeNull(types.union(types.string, types.number)),
