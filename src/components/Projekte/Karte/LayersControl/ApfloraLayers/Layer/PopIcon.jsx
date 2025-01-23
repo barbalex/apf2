@@ -82,6 +82,7 @@ export const PopIcon = memo(
           aria-haspopup="true"
           onClick={onClickIconContainer}
           title="Symbole und Beschriftung wählen"
+          className="iconContainer"
         >
           <MapIcon id="PopMapIcon" />
         </IconContainer>

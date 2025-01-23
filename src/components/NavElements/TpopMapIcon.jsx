@@ -8,7 +8,10 @@ const StyledMapIcon = styled(MapIcon)`
 `
 
 export const TpopMapIcon = () => (
-  <IconContainer title="Teil-Populationen in Karte sichtbar">
+  <IconContainer
+    title="Teil-Populationen in Karte sichtbar"
+    className="iconContainer"
+  >
     <StyledMapIcon />
   </IconContainer>
 )

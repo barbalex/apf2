@@ -12,7 +12,10 @@ const StyledIcon = styled(MdOutlineMoveDown)`
 `
 
 export const MovingIcon = () => (
-  <IconContainer title="zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen">
+  <IconContainer
+    title="zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen"
+    className="iconContainer"
+  >
     <StyledIcon />
   </IconContainer>
 )

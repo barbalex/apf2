@@ -34,6 +34,11 @@ const StyledNode = styled.div`
   contentvisibility: auto;
   contain-intrinsic-size: 0 23px;
   transition: opacity 300ms ease-in-out;
+  // a child .iconContainer needs some love
+  .iconContainer {
+    align-self: flex-start !important;
+    margin-top: 3px !important;
+  }
 `
 const StyledExpandMoreIcon = styled(MdExpandMore)`
   color: ${(props) =>

@@ -8,7 +8,10 @@ const StyledMapIcon = styled(MapIcon)`
 `
 
 export const BeobzugeordnetMapIcon = () => (
-  <IconContainer title="Beobachtungen zugeordnet in Karte sichtbar">
+  <IconContainer
+    title="Beobachtungen zugeordnet in Karte sichtbar"
+    className="iconContainer"
+  >
     <StyledMapIcon />
   </IconContainer>
 )

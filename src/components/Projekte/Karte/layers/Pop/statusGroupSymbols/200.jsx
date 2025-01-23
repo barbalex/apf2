@@ -4,7 +4,7 @@ import Icon from './200.svg'
 import { IconContainer } from '../../../../../NavElements/IconContainer.jsx'
 
 export const PopIcon200 = memo(() => (
-  <IconContainer>
+  <IconContainer className="iconContainer">
     <Icon />
   </IconContainer>
 ))

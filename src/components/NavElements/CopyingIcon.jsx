@@ -12,7 +12,10 @@ const StyledIcon = styled(MdContentCopy)`
 `
 
 export const CopyingIcon = () => (
-  <IconContainer title="kopiert, bereit zum Einfügen">
+  <IconContainer
+    title="kopiert, bereit zum Einfügen"
+    className="iconContainer"
+  >
     <StyledIcon />
   </IconContainer>
 )

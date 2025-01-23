@@ -4,7 +4,7 @@ import Icon from './100Highlighted.svg'
 import { IconContainer } from '../../../../../NavElements/IconContainer.jsx'
 
 export const PopIcon100Highlighted = memo(() => (
-  <IconContainer>
+  <IconContainer className="iconContainer">
     <Icon />
   </IconContainer>
 ))

@@ -12,7 +12,10 @@ const StyledIcon = styled(MdPhotoLibrary)`
 `
 
 export const BiotopCopyingIcon = () => (
-  <IconContainer title="Biotop kopiert, bereit zum Einfügen">
+  <IconContainer
+    title="Biotop kopiert, bereit zum Einfügen"
+    className="iconContainer"
+  >
     <StyledIcon />
   </IconContainer>
 )
