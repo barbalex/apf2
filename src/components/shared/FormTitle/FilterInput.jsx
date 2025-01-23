@@ -94,7 +94,6 @@ export const FilterInput = memo(
     )
     const [keyPressed, setKeyPressed] = useState(null)
     const [doSet, setDoSet] = useState(false)
-    const [coarsePointer, setCoarsePointer] = useState(null)
     const onKeyDown = useCallback(
       (e) => {
         // issue: (https://github.com/barbalex/apf2/issues/710)
@@ -113,7 +112,7 @@ export const FilterInput = memo(
         setDoSet(doSet)
         if (!doSet) return
 
-        setNodeLabelFilter(value)
+        setTimeout(() => setNodeLabelFilter(value), 0)
       },
       [setNodeLabelFilter],
     )
@@ -132,7 +131,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (coarse: ${isCoarsePointer},key: ${keyPressed}, value: ${value}, filter: ${filterValue}, set: ${doSet})`}
+          label={`Filter (coarse: ${isCoarsePointer}, key: ${keyPressed}, value: ${value}, filter: ${filterValue}, set: ${doSet})`}
           variant="standard"
           fullWidth
           value={value}
