@@ -59,8 +59,10 @@ export const FilterInput = memo(
       setValue(filterValue)
     }, [filterValue])
 
+    const [valSNLF, setValSNLF] = useState('')
     const setNodeLabelFilter = useCallback(
       (val) => {
+        setValSNLF(val)
         setNodeLabelFilterKey({
           value: val,
           key: activeFilterTable,
@@ -93,6 +95,7 @@ export const FilterInput = memo(
       },
       [setNodeLabelFilterDebounced, isCoarsePointer],
     )
+
     const [keyPressed, setKeyPressed] = useState(null)
     const [doSet, setDoSet] = useState(false)
     const onKeyDown = useCallback(
@@ -113,7 +116,6 @@ export const FilterInput = memo(
         setDoSet(doSet)
         if (!doSet) return
 
-        setNodeLabelFilterDebounced(value)
         setNodeLabelFilter(value)
       },
       [setNodeLabelFilter, isCoarsePointer],
@@ -133,7 +135,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (coarse: ${isCoarsePointer}, key: ${keyPressed}, value: ${value}, filter: ${filterValue}, set: ${doSet})`}
+          label={`Filter (value: ${value}, filter: ${filterValue}, valSNLF: ${valSNLF}, set: ${doSet})`}
           variant="standard"
           fullWidth
           value={value}
