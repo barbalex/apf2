@@ -71,9 +71,13 @@ export const FilterInput = memo(
     )
 
     const [keyPressed, setKeyPressed] = useState(null)
+    const [keyCodePressed, setKeyCodePressed] = useState(null)
+    const [codePressed, setCodePressed] = useState(null)
     const onChange = useCallback(
       (e) => {
         setKeyPressed(e.key)
+        setKeyCodePressed(e.keyCode)
+        setCodePressed(e.code)
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
@@ -110,7 +114,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (key pressed: ${keyPressed})`}
+          label={`Filter (key: ${keyPressed}), code: ${codePressed}, keyCode: ${keyCodePressed}`}
           variant="standard"
           fullWidth
           value={value}
