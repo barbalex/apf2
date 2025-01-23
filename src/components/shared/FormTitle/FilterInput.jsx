@@ -98,20 +98,22 @@ export const FilterInput = memo(
     )
     const onKeyDown = useCallback(
       (e) => {
+        // issue: (https://github.com/barbalex/apf2/issues/710)
+        // setting nodeLabelFilter rerenders the component
+        // so focus has to be reset
+        // on mobile this makes the keyboard disappear and reappear
+        // thus better to filter on enter
         setKeyPressed(e.key)
         setKeyCodePressed(e.keyCode)
         setCodePressed(e.code)
         // on coarse pointer if enter is pressed, setNodeLabelFilter
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-        // key is Enter and keyCode is 13
-        if (isCoarsePointer && e.key === 'Enter') {
-          // issue: (https://github.com/barbalex/apf2/issues/710)
-          // setting nodeLabelFilter rerenders the component
-          // so focus has to be reset
-          // on mobile this makes the keyboard disappear and reappear
-          // thus better to filter on enter
-          setNodeLabelFilter(value)
-        }
+        if (!isCoarsePointer) return
+
+        const doSet = e.key === 'Enter' || e.keyCode === 13
+        if (!doSet) return
+
+        setNodeLabelFilter(value)
       },
       [setNodeLabelFilter],
     )
