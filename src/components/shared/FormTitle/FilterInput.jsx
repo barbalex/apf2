@@ -78,6 +78,7 @@ export const FilterInput = memo(
         setKeyPressed(e.key)
         setKeyCodePressed(e.keyCode)
         setCodePressed(e.code)
+        console.log('e:', e)
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
@@ -91,14 +92,27 @@ export const FilterInput = memo(
           // so focus has to be reset
           // on mobile this makes the keyboard disappear and reappear
           // thus better to filter on enter
-          if (e.key === 'Enter') {
-            setNodeLabelFilter(val)
-          }
+          // but that can only be caught on keydown, not on change
           return
         }
         setNodeLabelFilterDebounced(val)
       },
       [setNodeLabelFilterDebounced],
+    )
+    const onKeyDown = useCallback(
+      (e) => {
+        // on coarse pointer if enter is pressed, setNodeLabelFilter
+        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+        if (isCoarsePointer && e.key === 'Enter') {
+          // issue: (https://github.com/barbalex/apf2/issues/710)
+          // setting nodeLabelFilter rerenders the component
+          // so focus has to be reset
+          // on mobile this makes the keyboard disappear and reappear
+          // thus better to filter on enter
+          setNodeLabelFilter(value)
+        }
+      },
+      [setNodeLabelFilter],
     )
 
     const onClickEmpty = useCallback(() => {
@@ -119,6 +133,7 @@ export const FilterInput = memo(
           fullWidth
           value={value}
           onChange={onChange}
+          onKeyDown={onKeyDown}
           spellCheck="false"
           autoComplete="off"
           autoCorrect="off"
