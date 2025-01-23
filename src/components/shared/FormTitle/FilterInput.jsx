@@ -59,10 +59,8 @@ export const FilterInput = memo(
       setValue(filterValue)
     }, [filterValue])
 
-    const [valSNLF, setValSNLF] = useState('')
     const setNodeLabelFilter = useCallback(
       (val) => {
-        setValSNLF(val)
         setNodeLabelFilterKey({
           value: val,
           key: activeFilterTable,
@@ -79,42 +77,24 @@ export const FilterInput = memo(
       (e) => {
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
-
         setValue(val)
 
-        if (isCoarsePointer) {
-          // issue: (https://github.com/barbalex/apf2/issues/710)
-          // setting nodeLabelFilter rerenders the component
-          // so focus has to be reset
-          // on mobile this makes the keyboard disappear and reappear
-          // thus better to filter on enter
-          // but that can only be caught on keydown, not on change
-          return
-        }
+        // on coarse pointer filter on enter, not debounced
+        if (isCoarsePointer) return
+
         setNodeLabelFilterDebounced(val)
       },
       [setNodeLabelFilterDebounced, isCoarsePointer],
     )
 
-    const [keyPressed, setKeyPressed] = useState(null)
-    const [doSet, setDoSet] = useState(false)
+    // issue: (https://github.com/barbalex/apf2/issues/710)
+    // setting nodeLabelFilter rerenders the component, so focus has to be reset
+    // on mobile this makes the keyboard disappear and reappear
+    // thus better to filter on pressing enter
     const onKeyDown = useCallback(
       (e) => {
-        // issue: (https://github.com/barbalex/apf2/issues/710)
-        // setting nodeLabelFilter rerenders the component
-        // so focus has to be reset
-        // on mobile this makes the keyboard disappear and reappear
-        // thus better to filter on enter
-        setKeyPressed(e.key)
-        // on coarse pointer if enter is pressed, setNodeLabelFilter
         if (!isCoarsePointer) return
-
-        // const filterValue = nodeLabelFilter?.[activeFilterTable]
-        // if (filterValue !== value) return setNodeLabelFilter(value)
-
-        const doSet = e.key === 'Enter' || e.keyCode === 13
-        setDoSet(doSet)
-        if (!doSet) return
+        if (!e.key === 'Enter') return
 
         setNodeLabelFilter(value)
       },
@@ -124,9 +104,9 @@ export const FilterInput = memo(
     const onClickEmpty = useCallback(() => {
       setValue('')
       setNodeLabelFilter('')
-      // should the focus be set here?
+      // should the focus be set here? No, hideous on mobile
       // setTimeout(() => inputRef?.current?.focus?.(), 0)
-    }, [setNodeLabelFilter])
+    }, [setNodeLabelFilter, setValue])
 
     // if no activeFilterTable, show nothing
     if (!activeFilterTable) return null
@@ -135,7 +115,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (value: ${value}, filter: ${filterValue}, valSNLF: ${valSNLF}, set: ${doSet})`}
+          label="Filter"
           variant="standard"
           fullWidth
           value={value}

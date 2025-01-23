@@ -28,6 +28,8 @@ const StyledTextField = styled(TextField)`
   width: ${(props) => (props.width ?? 32) - 32}px;
 `
 
+const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+
 export const FilterInput = memo(
   observer(({ width, filterInputIsVisible, ref: inputRef }) => {
     const store = useContext(MobxContext)
@@ -39,6 +41,7 @@ export const FilterInput = memo(
 
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
+    // value should update when changed from outside
     useEffect(() => {
       if (filterValue === value) return
       setValue(filterValue)
@@ -62,26 +65,28 @@ export const FilterInput = memo(
       (e) => {
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
-
         setValue(val)
 
-        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+        // on coarse pointer filter on enter, not debounced
+        if (isCoarsePointer) return
 
-        if (isCoarsePointer) {
-          // issue: (https://github.com/barbalex/apf2/issues/710)
-          // setting nodeLabelFilter rerenders the component
-          // so focus has to be reset
-          // on mobile this makes the keyboard disappear and reappear
-          // thus better to filter on enter
-          if (e.key === 'Enter') {
-            setNodeLabelFilter(val)
-          }
-          return
-        }
-        // pointer is fine
         setNodeLabelFilterDebounced(val)
       },
-      [setNodeLabelFilterDebounced],
+      [setNodeLabelFilterDebounced, isCoarsePointer],
+    )
+
+    // issue: (https://github.com/barbalex/apf2/issues/710)
+    // setting nodeLabelFilter rerenders the component, so focus has to be reset
+    // on mobile this makes the keyboard disappear and reappear
+    // thus better to filter on pressing enter
+    const onKeyDown = useCallback(
+      (e) => {
+        if (!isCoarsePointer) return
+        if (!e.key === 'Enter') return
+
+        setNodeLabelFilter(value)
+      },
+      [setNodeLabelFilter, isCoarsePointer, value],
     )
 
     const onClickEmpty = useCallback(() => {
@@ -102,6 +107,7 @@ export const FilterInput = memo(
           width={width}
           value={value}
           onChange={onChange}
+          onKeyDown={onKeyDown}
           spellCheck="false"
           autoComplete="off"
           autoCorrect="off"
