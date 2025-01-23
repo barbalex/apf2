@@ -1,4 +1,11 @@
-import { memo, useCallback, useContext, useState, useEffect } from 'react'
+import {
+  memo,
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -42,20 +49,27 @@ export const LabelFilter = memo(
     } = nodeLabelFilter
     const isFiltered = runIsFiltered()
 
-    let labelText = '(filtern nicht möglich)'
-    let filterValue = ''
-    if (activeFilterTable) {
-      filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
-      // make sure 0 is kept
-      if (!filterValue && filterValue !== 0) filterValue = ''
-      // should be to_under_score_case
-      const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
-      const tableLabel = table ? table.label : null
-      // danger: Projekte can not be filtered because no parent folder
-      if (tableLabel !== 'Projekte') {
-        labelText = `${tableLabel} filtern`
+    const { labelText, filterValue } = useMemo(() => {
+      let labelText = '(filtern nicht möglich)'
+      let filterValue = ''
+
+      if (activeFilterTable) {
+        filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+        // make sure 0 is kept
+        if (!filterValue && filterValue !== 0) filterValue = ''
+        // should be to_under_score_case
+        const table = tables.find(
+          (t) => t.table === snakeCase(activeFilterTable),
+        )
+        const tableLabel = table ? table.label : null
+        // danger: Projekte can not be filtered because no parent folder
+        if (tableLabel !== 'Projekte') {
+          labelText = `${tableLabel} filtern`
+        }
       }
-    }
+
+      return { labelText, filterValue }
+    }, [activeFilterTable, nodeLabelFilter])
 
     const [value, setValue] = useState('')
 
@@ -90,6 +104,11 @@ export const LabelFilter = memo(
         setValue(val)
 
         if (matchMedia('(pointer: coarse)').matches) {
+          // issue:
+          // setting nodeLabelFilter rerenders the component
+          // so focus has to be reset
+          // on mobile this makes the keyboard disappear and reappear
+          // thus better to filter on enter
           console.log('pointer is coarse')
           if (e.key === 'Enter') {
             setNodeLabelFilter(val)
