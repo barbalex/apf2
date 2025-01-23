@@ -10,6 +10,7 @@ import { useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../mobxContext.js'
+import { set } from 'lodash'
 
 const Container = styled.div`
   padding: 0 10px 10px 10px;
@@ -69,8 +70,10 @@ export const FilterInput = memo(
       600,
     )
 
+    const [keyPressed, setKeyPressed] = useState(null)
     const onChange = useCallback(
       (e) => {
+        setKeyPressed(e.key)
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
@@ -107,7 +110,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label="Filter"
+          label={`Filter (key pressed: ${keyPressed})`}
           variant="standard"
           fullWidth
           value={value}
@@ -122,7 +125,7 @@ export const FilterInput = memo(
           slotProps={{
             input: {
               endAdornment:
-                isFiltered ?
+                isFiltered || value?.length ?
                   <InputAdornment position="end">
                     <Tooltip title="Filter entfernen">
                       <StyledIconButton

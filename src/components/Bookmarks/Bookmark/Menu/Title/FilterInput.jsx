@@ -111,7 +111,7 @@ export const FilterInput = memo(
           slotProps={{
             input: {
               endAdornment:
-                isFiltered ?
+                isFiltered || value.length ?
                   <InputAdornment position="end">
                     <Tooltip title="Filter entfernen">
                       <IconButton
