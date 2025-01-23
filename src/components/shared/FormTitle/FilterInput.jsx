@@ -103,7 +103,8 @@ export const FilterInput = memo(
         setCodePressed(e.code)
         // on coarse pointer if enter is pressed, setNodeLabelFilter
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-        if (isCoarsePointer && e.keyCode === 13) {
+        // key is Enter and keyCode is 13
+        if (isCoarsePointer && e.key === 'Enter') {
           // issue: (https://github.com/barbalex/apf2/issues/710)
           // setting nodeLabelFilter rerenders the component
           // so focus has to be reset
