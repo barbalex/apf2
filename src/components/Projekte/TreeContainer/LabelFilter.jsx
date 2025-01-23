@@ -89,8 +89,6 @@ export const LabelFilter = memo(
     const changeDebouncedDesktop = useDebouncedCallback(
       setNodeLabelFilter,
       // issue 710
-      // TODO: solve for all filters
-      // matchMedia('(pointer: coarse)').matches ? 1100 : 600,
       600,
     )
 
@@ -104,7 +102,7 @@ export const LabelFilter = memo(
         setValue(val)
 
         if (matchMedia('(pointer: coarse)').matches) {
-          // issue:
+          // issue: (https://github.com/barbalex/apf2/issues/710)
           // setting nodeLabelFilter rerenders the component
           // so focus has to be reset
           // on mobile this makes the keyboard disappear and reappear
