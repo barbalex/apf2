@@ -118,7 +118,7 @@ export const FilterInput = memo(
 
         setNodeLabelFilter(value)
       },
-      [setNodeLabelFilter, isCoarsePointer],
+      [setNodeLabelFilter, isCoarsePointer, value],
     )
 
     const onClickEmpty = useCallback(() => {
