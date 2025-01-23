@@ -110,13 +110,13 @@ export const FilterInput = memo(
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (!isCoarsePointer) return
 
-        const filterValue = nodeLabelFilter?.[activeFilterTable]
-        if (filterValue !== value) return setNodeLabelFilter(value)
+        // const filterValue = nodeLabelFilter?.[activeFilterTable]
+        // if (filterValue !== value) return setNodeLabelFilter(value)
 
-        // const doSet = e.key === 'Enter' || e.keyCode === 13
-        // if (!doSet) return
+        const doSet = e.key === 'Enter' || e.keyCode === 13
+        if (!doSet) return
 
-        // setNodeLabelFilter(value)
+        setNodeLabelFilter(value)
       },
       [setNodeLabelFilter],
     )
@@ -124,7 +124,8 @@ export const FilterInput = memo(
     const onClickEmpty = useCallback(() => {
       setValue('')
       setNodeLabelFilter('')
-      setTimeout(() => inputRef?.current?.focus?.(), 0)
+      // should the focus be set here?
+      // setTimeout(() => inputRef?.current?.focus?.(), 0)
     }, [setNodeLabelFilter])
 
     // if no activeFilterTable, show nothing
@@ -134,7 +135,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (key: ${keyPressed}, keyCode: ${keyCodePressed}, code: ${codePressed}, value: ${value})`}
+          label={`Filter (key: ${keyPressed}, keyCode: ${keyCodePressed}, code: ${codePressed}, value: ${value}, filter: ${filterValue})`}
           variant="standard"
           fullWidth
           value={value}
