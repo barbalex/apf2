@@ -34,6 +34,8 @@ const StyledTextField = styled(TextField)`
   }
 `
 
+const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+
 export const FilterInput = memo(
   observer(({ filterInputIsVisible, ref: inputRef }) => {
     const store = useContext(MobxContext)
@@ -72,13 +74,10 @@ export const FilterInput = memo(
 
     const onChange = useCallback(
       (e) => {
-        console.log('e:', e)
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
         setValue(val)
-
-        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
 
         if (isCoarsePointer) {
           // issue: (https://github.com/barbalex/apf2/issues/710)
@@ -105,8 +104,6 @@ export const FilterInput = memo(
         // thus better to filter on enter
         setKeyPressed(e.key)
         // on coarse pointer if enter is pressed, setNodeLabelFilter
-        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-        setCoarsePointer(isCoarsePointer)
         if (!isCoarsePointer) return
 
         // const filterValue = nodeLabelFilter?.[activeFilterTable]
@@ -135,7 +132,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (coarse: ${coarsePointer},key: ${keyPressed}, value: ${value}, filter: ${filterValue}, set: ${doSet})`}
+          label={`Filter (coarse: ${isCoarsePointer},key: ${keyPressed}, value: ${value}, filter: ${filterValue}, set: ${doSet})`}
           variant="standard"
           fullWidth
           value={value}
