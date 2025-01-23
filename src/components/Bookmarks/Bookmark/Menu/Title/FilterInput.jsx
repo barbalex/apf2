@@ -92,7 +92,6 @@ export const FilterInput = memo(
     const onClickEmpty = useCallback(() => {
       setValue('')
       setNodeLabelFilter('')
-      setTimeout(() => inputRef?.current?.focus?.(), 0)
     }, [setNodeLabelFilter])
 
     // if no activeFilterTable, show nothing
