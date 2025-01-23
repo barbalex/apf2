@@ -19,6 +19,7 @@ import { yearColumnWidth } from './yearColumnWidth.js'
 import { CellHeaderFixed } from './CellHeaderFixed/index.jsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.jsx'
 import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.jsx'
+import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus.jsx'
 import { CellHeaderYear } from './CellHeaderYear.jsx'
 import { CellForYearTitle } from './CellForYearTitle.jsx'
 import { CellForEkfrequenz } from './CellForEkfrequenz.jsx'
@@ -423,6 +424,14 @@ export const EkPlanTable = memo(
                 if (field === 'ekfrequenzStartjahr') {
                   return (
                     <CellHeaderFixedEkfrequenzStartjahr
+                      style={style}
+                      column={column}
+                    />
+                  )
+                }
+                if (field === 'status') {
+                  return (
+                    <CellHeaderFixedTpopStatus
                       style={style}
                       column={column}
                     />
