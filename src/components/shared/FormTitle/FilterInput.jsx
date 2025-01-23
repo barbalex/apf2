@@ -113,6 +113,7 @@ export const FilterInput = memo(
         setDoSet(doSet)
         if (!doSet) return
 
+        setNodeLabelFilterDebounced(value)
         setNodeLabelFilter(value)
       },
       [setNodeLabelFilter, isCoarsePointer],
