@@ -47,7 +47,6 @@ export const FilterInput = memo(
     const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
       nodeLabelFilter
     const isFiltered = runIsFiltered()
-    const showFilter = isFiltered
 
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
@@ -123,7 +122,7 @@ export const FilterInput = memo(
           slotProps={{
             input: {
               endAdornment:
-                showFilter ?
+                isFiltered ?
                   <InputAdornment position="end">
                     <Tooltip title="Filter entfernen">
                       <StyledIconButton
