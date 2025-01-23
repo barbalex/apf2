@@ -70,7 +70,6 @@ export const FilterInput = memo(
       600,
     )
 
-    const [keyPressed, setKeyPressed] = useState(null)
     const onChange = useCallback(
       (e) => {
         console.log('e:', e)
@@ -94,6 +93,8 @@ export const FilterInput = memo(
       },
       [setNodeLabelFilterDebounced],
     )
+    const [keyPressed, setKeyPressed] = useState(null)
+    const [doSet, setDoSet] = useState(false)
     const onKeyDown = useCallback(
       (e) => {
         // issue: (https://github.com/barbalex/apf2/issues/710)
@@ -102,7 +103,6 @@ export const FilterInput = memo(
         // on mobile this makes the keyboard disappear and reappear
         // thus better to filter on enter
         setKeyPressed(e.key)
-        // setKeyCodePressed(e.keyCode)
         // on coarse pointer if enter is pressed, setNodeLabelFilter
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (!isCoarsePointer) return
@@ -111,6 +111,7 @@ export const FilterInput = memo(
         // if (filterValue !== value) return setNodeLabelFilter(value)
 
         const doSet = e.key === 'Enter' || e.keyCode === 13
+        setDoSet(doSet)
         if (!doSet) return
 
         setNodeLabelFilter(value)
@@ -132,7 +133,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (key: ${keyPressed}, value: ${value}, filter: ${filterValue})`}
+          label={`Filter (key: ${keyPressed}, value: ${value}, filter: ${filterValue}, set: ${doSet})`}
           variant="standard"
           fullWidth
           value={value}
