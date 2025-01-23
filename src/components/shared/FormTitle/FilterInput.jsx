@@ -129,7 +129,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (key: ${keyPressed}), code: ${codePressed}, keyCode: ${keyCodePressed}`}
+          label={`Filter (key: ${keyPressed})`}
           variant="standard"
           fullWidth
           value={value}
