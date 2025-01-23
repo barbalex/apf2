@@ -75,9 +75,6 @@ export const FilterInput = memo(
     const [codePressed, setCodePressed] = useState(null)
     const onChange = useCallback(
       (e) => {
-        setKeyPressed(e.key)
-        setKeyCodePressed(e.keyCode)
-        setCodePressed(e.code)
         console.log('e:', e)
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
@@ -101,6 +98,9 @@ export const FilterInput = memo(
     )
     const onKeyDown = useCallback(
       (e) => {
+        setKeyPressed(e.key)
+        setKeyCodePressed(e.keyCode)
+        setCodePressed(e.code)
         // on coarse pointer if enter is pressed, setNodeLabelFilter
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (isCoarsePointer && e.key === 'Enter') {
