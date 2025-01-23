@@ -64,7 +64,7 @@ export const LabelFilter = memo(
         const tableLabel = table ? table.label : null
         // danger: Projekte can not be filtered because no parent folder
         if (tableLabel !== 'Projekte') {
-          labelText = `${tableLabel} filtern (pointer is coarse: ${matchMedia('(pointer: coarse)').matches})`
+          labelText = `${tableLabel} filtern`
         }
       }
 
@@ -101,7 +101,6 @@ export const LabelFilter = memo(
         setValue(val)
 
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-        console.log('isCoarsePointer:', isCoarsePointer)
 
         if (isCoarsePointer) {
           // issue: (https://github.com/barbalex/apf2/issues/710)

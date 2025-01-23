@@ -65,7 +65,7 @@ export const FormTitle = memo(
     const filterInputRef = useRef(null)
     const toggleFilterInput = useCallback(() => {
       toggleFilterInputIsVisible()
-      // setTimeout(() => filterInputRef?.current?.focus?.(), 0)
+      setTimeout(() => filterInputRef?.current?.focus?.(), 0)
     }, [filterInputIsVisible, toggleFilterInputIsVisible])
 
     // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty

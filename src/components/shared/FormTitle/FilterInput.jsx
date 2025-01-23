@@ -56,7 +56,7 @@ export const FilterInput = memo(
       setValue(filterValue)
     }, [filterValue])
 
-    const setNodeLabelFilterAfterChange = useCallback(
+    const setNodeLabelFilter = useCallback(
       (val) => {
         setNodeLabelFilterKey({
           value: val,
@@ -66,7 +66,7 @@ export const FilterInput = memo(
       [setNodeLabelFilterKey, activeFilterTable],
     )
     const setNodeLabelFilterDebounced = useDebouncedCallback(
-      setNodeLabelFilterAfterChange,
+      setNodeLabelFilter,
       600,
     )
 
@@ -76,6 +76,20 @@ export const FilterInput = memo(
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
 
         setValue(val)
+
+        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+
+        if (isCoarsePointer) {
+          // issue: (https://github.com/barbalex/apf2/issues/710)
+          // setting nodeLabelFilter rerenders the component
+          // so focus has to be reset
+          // on mobile this makes the keyboard disappear and reappear
+          // thus better to filter on enter
+          if (e.key === 'Enter') {
+            setNodeLabelFilter(val)
+          }
+          return
+        }
         setNodeLabelFilterDebounced(val)
       },
       [setNodeLabelFilterDebounced],
@@ -83,9 +97,9 @@ export const FilterInput = memo(
 
     const onClickEmpty = useCallback(() => {
       setValue('')
-      setNodeLabelFilterAfterChange('')
+      setNodeLabelFilter('')
       setTimeout(() => inputRef?.current?.focus?.(), 0)
-    }, [setNodeLabelFilterAfterChange])
+    }, [setNodeLabelFilter])
 
     // if no activeFilterTable, show nothing
     if (!activeFilterTable) return null
