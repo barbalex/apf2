@@ -91,7 +91,7 @@ export const FilterInput = memo(
         }
         setNodeLabelFilterDebounced(val)
       },
-      [setNodeLabelFilterDebounced],
+      [setNodeLabelFilterDebounced, isCoarsePointer],
     )
     const [keyPressed, setKeyPressed] = useState(null)
     const [doSet, setDoSet] = useState(false)
