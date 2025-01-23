@@ -71,7 +71,6 @@ export const FilterInput = memo(
     )
 
     const [keyPressed, setKeyPressed] = useState(null)
-    const [codePressed, setCodePressed] = useState(null)
     const onChange = useCallback(
       (e) => {
         console.log('e:', e)
@@ -103,7 +102,7 @@ export const FilterInput = memo(
         // on mobile this makes the keyboard disappear and reappear
         // thus better to filter on enter
         setKeyPressed(e.key)
-        setKeyCodePressed(e.keyCode)
+        // setKeyCodePressed(e.keyCode)
         // on coarse pointer if enter is pressed, setNodeLabelFilter
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (!isCoarsePointer) return
@@ -133,7 +132,7 @@ export const FilterInput = memo(
       <Container show={filterInputIsVisible.toString()}>
         <StyledTextField
           inputRef={inputRef}
-          label={`Filter (key: ${keyPressed}, keyCode: ${keyCodePressed}, value: ${value}, filter: ${filterValue})`}
+          label={`Filter (key: ${keyPressed}, value: ${value}, filter: ${filterValue})`}
           variant="standard"
           fullWidth
           value={value}
