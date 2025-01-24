@@ -55,14 +55,16 @@ export const FilterInput = memo(
     const [value, setValue] = useState(filterValue)
     // value should update when changed from outside
 
-    useEffect(() => {
-      if (filterValue === value) return
-      // return if tree is not visible
-      const treeIsVisible = projekteTabs.includes('tree')
-      if (!treeIsVisible) return
+    // useEffect(() => {
+    //   if (filterValue === value) return
+    //   // return if tree is not visible
+    //   // IMPORTANT: this is necessary because the filter input is always rendered
+    //   // which makes the virtual keyboard flicker on mobile
+    //   const treeIsVisible = projekteTabs.includes('tree')
+    //   if (!treeIsVisible) return
 
-      setValue(filterValue)
-    }, [filterValue])
+    //   setValue(filterValue)
+    // }, [filterValue])
 
     const setNodeLabelFilter = useCallback(
       (val) => {
