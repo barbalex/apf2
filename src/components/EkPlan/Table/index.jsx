@@ -21,7 +21,6 @@ import { CellHeaderFixed } from './CellHeaderFixed/index.jsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.jsx'
 import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.jsx'
 import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.jsx'
-import { CellHeaderFixedPopStatus } from './CellHeaderFixedPopStatus.jsx'
 import { CellHeaderYear } from './CellHeaderYear.jsx'
 import { CellForYearTitle } from './CellForYearTitle.jsx'
 import { CellForEkfrequenz } from './CellForEkfrequenz.jsx'
@@ -474,10 +473,11 @@ export const EkPlanTable = memo(
                 }
                 if (field === 'popStatus') {
                   return (
-                    <CellHeaderFixedPopStatus
+                    <CellHeaderFixedTpopStatus
                       style={style}
                       column={column}
                       refetch={refetch}
+                      type="pop"
                     />
                   )
                 }

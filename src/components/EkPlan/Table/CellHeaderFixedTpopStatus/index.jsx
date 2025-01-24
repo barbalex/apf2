@@ -54,46 +54,49 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedTpopStatus = memo(({ style, column, refetch }) => {
-  const store = useContext(MobxContext)
-  const {  filterStatus, setFilterStatus } = store.ekPlan
+export const CellHeaderFixedTpopStatus = memo(
+  ({ style, column, refetch, type = 'tpop' }) => {
+    const store = useContext(MobxContext)
+    const filterStatus =
+      type === 'tpop' ? store.ekPlan.filterStatus : store.ekPlan.filterPopStatus
 
-  const [anchorEl, setAnchorEl] = useState(null)
+    const [anchorEl, setAnchorEl] = useState(null)
 
-  const closeMenu = useCallback(() => {
-    setAnchorEl(null)
-    // needed to update after changing tpop status
-    refetch()
-  }, [])
-  const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
+    const closeMenu = useCallback(() => {
+      setAnchorEl(null)
+      // needed to update after changing tpop status
+      refetch()
+    }, [])
+    const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
 
-  const { label } = column
+    const { label } = column
 
-  return (
-    <>
-      <StyledCell
-        style={style}
-        aria-controls="tpopStatusHeaderMenu"
-        aria-haspopup="true"
-        onClick={onClickCell}
-      >
-        <Title>{label}</Title>
-        <Dropdown>
-          {filterStatus?.length ?
-            <StyledFaFilter />
-          : <Caret />}
-        </Dropdown>
-      </StyledCell>
-      <StyledMenu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={closeMenu}
-        anchorOrigin={anchorOrigin}
-      >
-        <TextFilterContainer>
-          <Options />
-        </TextFilterContainer>
-      </StyledMenu>
-    </>
-  )
-})
+    return (
+      <>
+        <StyledCell
+          style={style}
+          aria-controls={`${type}StatusHeaderMenu`}
+          aria-haspopup="true"
+          onClick={onClickCell}
+        >
+          <Title>{label}</Title>
+          <Dropdown>
+            {filterStatus?.length ?
+              <StyledFaFilter />
+            : <Caret />}
+          </Dropdown>
+        </StyledCell>
+        <StyledMenu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={closeMenu}
+          anchorOrigin={anchorOrigin}
+        >
+          <TextFilterContainer>
+            <Options type={type} />
+          </TextFilterContainer>
+        </StyledMenu>
+      </>
+    )
+  },
+)
