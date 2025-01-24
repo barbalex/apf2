@@ -64,12 +64,11 @@ export const CellHeaderFixedTpopStatus = memo(({ style, column, refetch }) => {
     setFilterStatus,
   } = store.ekPlan
 
-  const options = []
-
   const [anchorEl, setAnchorEl] = useState(null)
 
   const closeMenu = useCallback(() => {
     setAnchorEl(null)
+    // TODO: needed to update after changing tpop status
     refetch()
   }, [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])

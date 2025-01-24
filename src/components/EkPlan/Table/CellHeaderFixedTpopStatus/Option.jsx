@@ -21,24 +21,19 @@ export const Option = memo(
         : [...new Set([...filterStatus, option.code])]
 
       setFilterStatus(newStatus)
-      // refetch()
+      refetch()
     }, [filterStatus, setFilterStatus, option.code])
 
     return (
-      <MenuItem
-        onClick={() => {}}
-        dense
-      >
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={checked}
-              onChange={onChange}
-            />
-          }
-          label={option.text}
-        />
-      </MenuItem>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={checked}
+            onChange={onChange}
+          />
+        }
+        label={option.text}
+      />
     )
   }),
 )
