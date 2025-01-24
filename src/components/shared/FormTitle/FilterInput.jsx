@@ -98,7 +98,8 @@ export const FilterInput = memo(
 
         setNodeLabelFilter(value)
       },
-      [setNodeLabelFilter, value],
+      // TODO: re-add value?
+      [setNodeLabelFilter],
     )
 
     const onClickEmpty = useCallback(() => {
