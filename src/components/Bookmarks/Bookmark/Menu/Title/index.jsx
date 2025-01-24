@@ -126,6 +126,7 @@ export const Title = memo(
             <FilterInput
               width={parentWidth}
               filterInputIsVisible={filterInputIsVisible}
+              toggleFilterInput={toggleFilterInput}
               ref={filterInputRef}
             />
           </Collapse>

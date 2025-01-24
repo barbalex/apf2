@@ -28,89 +28,92 @@ const StyledTextField = styled(TextField)`
 `
 
 export const FilterInput = memo(
-  observer(({ width, filterInputIsVisible, ref: inputRef }) => {
-    const store = useContext(MobxContext)
-    const { nodeLabelFilter, activeFilterTable } = store.tree
+  observer(
+    ({ width, filterInputIsVisible, toggleFilterInput, ref: inputRef }) => {
+      const store = useContext(MobxContext)
+      const { nodeLabelFilter, activeFilterTable } = store.tree
 
-    const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
-      nodeLabelFilter
-    const isFiltered = runIsFiltered()
+      const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
+        nodeLabelFilter
+      const isFiltered = runIsFiltered()
 
-    const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
-    const [value, setValue] = useState(filterValue)
-    // value should update when changed from outside
-    useEffect(() => {
-      if (filterValue === value) return
-      setValue(filterValue)
-    }, [filterValue])
+      const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+      const [value, setValue] = useState(filterValue)
+      // value should update when changed from outside
+      useEffect(() => {
+        if (filterValue === value) return
+        setValue(filterValue)
+      }, [filterValue])
 
-    const setNodeLabelFilter = useCallback(
-      (val) => {
-        setNodeLabelFilterKey({
-          value: val,
-          key: activeFilterTable,
-        })
-      },
-      [setNodeLabelFilterKey, activeFilterTable],
-    )
+      const setNodeLabelFilter = useCallback(
+        (val) => {
+          setNodeLabelFilterKey({
+            value: val,
+            key: activeFilterTable,
+          })
+        },
+        [setNodeLabelFilterKey, activeFilterTable],
+      )
 
-    const onChange = useCallback((e) => {
-      // remove some values as they can cause exceptions in regular expressions
-      const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
-      setValue(val)
-    }, [])
+      const onChange = useCallback((e) => {
+        // remove some values as they can cause exceptions in regular expressions
+        const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
+        setValue(val)
+      }, [])
 
-    const onKeyUp = useCallback(
-      (e) => {
-        if (e.key === 'Enter') setNodeLabelFilter(value)
-      },
-      [setNodeLabelFilter, value],
-    )
+      const onKeyUp = useCallback(
+        (e) => {
+          if (e.key === 'Enter') setNodeLabelFilter(value)
+        },
+        [setNodeLabelFilter, value],
+      )
 
-    const onClickEmpty = useCallback(() => {
-      setValue('')
-      setNodeLabelFilter('')
-    }, [setNodeLabelFilter])
+      const onClickEmpty = useCallback(() => {
+        toggleFilterInput()
+        setValue('')
+        setNodeLabelFilter('')
+      }, [setNodeLabelFilter])
 
-    // if no activeFilterTable, show nothing
-    if (!activeFilterTable) return null
+      // if no activeFilterTable, show nothing
+      if (!activeFilterTable) return null
 
-    return (
-      <Container show={filterInputIsVisible.toString()}>
-        <StyledTextField
-          inputRef={inputRef}
-          label="Filter"
-          variant="standard"
-          width={width}
-          value={value}
-          onChange={onChange}
-          onKeyUp={onKeyUp}
-          spellCheck="false"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          // autofocus leads to focus being stolen from other filter inputs
-          // autoFocus={true}
-          slotProps={{
-            input: {
-              endAdornment:
-                isFiltered || value.length ?
-                  <InputAdornment position="end">
-                    <Tooltip title="Filter entfernen">
-                      <IconButton
-                        aria-label="Filter entfernen"
-                        onClick={onClickEmpty}
-                        fontSize="small"
-                      >
-                        <FaTimes />
-                      </IconButton>
-                    </Tooltip>
-                  </InputAdornment>
-                : null,
-            },
-          }}
-        />
-      </Container>
-    )
-  }),
+      return (
+        <Container show={filterInputIsVisible.toString()}>
+          <StyledTextField
+            inputRef={inputRef}
+            label="Filter"
+            variant="standard"
+            width={width}
+            value={value}
+            onChange={onChange}
+            onKeyUp={onKeyUp}
+            spellCheck="false"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            // autofocus leads to focus being stolen from other filter inputs
+            // autoFocus={true}
+            slotProps={{
+              input: {
+                endAdornment:
+                  isFiltered || value.length ?
+                    <InputAdornment position="end">
+                      <Tooltip title="Filter entfernen">
+                        <IconButton
+                          aria-label="Filter entfernen"
+                          onClick={onClickEmpty}
+                          fontSize="small"
+                        >
+                          <FaTimes />
+                        </IconButton>
+                      </Tooltip>
+                    </InputAdornment>
+                  : null,
+              },
+            }}
+          />
+        </Container>
+      )
+    },
+  ),
 )

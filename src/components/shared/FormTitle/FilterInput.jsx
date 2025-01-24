@@ -76,7 +76,7 @@ export const FilterInput = memo(
         (e) => {
           if (e.key === 'Enter') {
             setNodeLabelFilter(value)
-            // TODO: on coarse pointers, move focus out to close the keyboard
+            // on coarse pointers, move focus out to close the keyboard
             if (matchMedia('(pointer: coarse)').matches) {
               inputRef.current.blur()
             }
