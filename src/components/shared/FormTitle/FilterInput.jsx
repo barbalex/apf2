@@ -81,8 +81,7 @@ export const FilterInput = memo(
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (isCoarsePointer) return
 
-        // TODO: re-enable after testing
-        // setNodeLabelFilterDebounced(val)
+        setNodeLabelFilterDebounced(val)
       },
       [setNodeLabelFilterDebounced],
     )
@@ -93,9 +92,8 @@ export const FilterInput = memo(
     // thus better to filter on pressing enter
     const onKeyDown = useCallback(
       (e) => {
-        // TODO: re-enable after testing
-        // const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-        // if (!isCoarsePointer) return
+        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+        if (!isCoarsePointer) return
         if (!e.key === 'Enter') return
 
         setNodeLabelFilter(value)
