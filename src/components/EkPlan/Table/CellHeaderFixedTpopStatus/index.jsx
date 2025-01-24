@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useCallback, useContext, memo } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
@@ -55,7 +55,7 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedTpopStatus = ({ style, column }) => {
+export const CellHeaderFixedTpopStatus = memo(({ style, column, refetch }) => {
   const store = useContext(MobxContext)
   const {
     filterStatusEmpty,
@@ -108,9 +108,12 @@ export const CellHeaderFixedTpopStatus = ({ style, column }) => {
           {filterStatusEmpty ? 'nicht Leerwerte filtern' : 'Leerwerte filtern'}
         </MenuItem>
         <TextFilterContainer>
-          <Options filterStatus={filterStatus} />
+          <Options
+            filterStatus={filterStatus}
+            refetch={refetch}
+          />
         </TextFilterContainer>
       </StyledMenu>
     </>
   )
-}
+})

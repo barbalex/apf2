@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client'
 import { Option } from './Option.jsx'
 import { query } from './query.js'
 
-export const Options = memo(() => {
+export const Options = memo(({refetch}) => {
   const { data } = useQuery(query)
 
   const options = data?.allPopStatusWertes?.nodes ?? []
@@ -20,6 +20,7 @@ export const Options = memo(() => {
         <Option
           key={option.id}
           option={option}
+          refetch={refetch}
         />
       ))}
     </FormGroup>

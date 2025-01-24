@@ -174,97 +174,125 @@ export const EkPlanTable = memo(
       refreshOptions: { leading: true },
     })
 
-    const tpopFilter = { popByPopId: { apId: { in: apValues } } }
-    if (filterAp) {
-      tpopFilter.apName = { includesInsensitive: filterAp }
-    }
-    if (filterPopNr) {
-      tpopFilter.popByPopId.nr = { equalTo: filterPopNr }
-    }
-    if (filterPopName) {
-      tpopFilter.popByPopId.name = { includesInsensitive: filterPopName }
-    }
-    if (filterPopStatus) {
-      tpopFilter.popByPopId.popStatusWerteByStatus = {
-        code: {
-          in: filterPopStatus,
-        },
+    const tpopFilter = useMemo(() => {
+      const tpopFilter = { popByPopId: { apId: { in: apValues } } }
+      if (filterAp) {
+        tpopFilter.apName = { includesInsensitive: filterAp }
       }
-    }
-    if (filterNr) {
-      tpopFilter.nr = { equalTo: filterNr }
-    }
-    if (filterGemeinde) {
-      tpopFilter.gemeinde = { includesInsensitive: filterGemeinde }
-    }
-    if (filterFlurname) {
-      tpopFilter.flurname = { includesInsensitive: filterFlurname }
-    }
-    if (filterStatus) {
-      tpopFilter.popStatusWerteByStatus = {
-        code: {
-          in: filterStatus,
-        },
+      if (filterPopNr) {
+        tpopFilter.popByPopId.nr = { equalTo: filterPopNr }
       }
-    }
-    if (filterBekanntSeit) {
-      tpopFilter.bekanntSeit = { equalTo: filterBekanntSeit }
-    }
-    if (filterLv95X) {
-      tpopFilter.lv95X = { equalTo: filterLv95X }
-    }
-    if (filterLv95Y) {
-      tpopFilter.lv95Y = { equalTo: filterLv95Y }
-    }
-    if (filterEkfKontrolleur) {
-      tpopFilter.adresseByEkfKontrolleur = {
-        name: { includesInsensitive: filterEkfKontrolleur },
+      if (filterPopName) {
+        tpopFilter.popByPopId.name = { includesInsensitive: filterPopName }
       }
-    }
-    if (filterEkfrequenzAbweichend) {
-      tpopFilter.ekfrequenzAbweichend = { equalTo: filterEkfrequenzAbweichend }
-    }
-    if (filterEkAbrechnungstyp) {
-      tpopFilter.ekfrequenzByEkfrequenz = {
-        ekAbrechnungstyp: {
-          includesInsensitive: filterEkAbrechnungstyp,
-        },
+      if (filterPopStatus) {
+        tpopFilter.popByPopId.popStatusWerteByStatus = {
+          code: {
+            in: filterPopStatus,
+          },
+        }
       }
-    }
-    if (filterEkfrequenz) {
-      tpopFilter.ekfrequenzByEkfrequenz = {
-        code: {
-          includesInsensitive: filterEkfrequenz,
-        },
+      if (filterNr) {
+        tpopFilter.nr = { equalTo: filterNr }
       }
-    }
-    if (filterEkfrequenzStartjahr) {
-      tpopFilter.ekfrequenzStartjahr = { equalTo: filterEkfrequenzStartjahr }
-    }
-    if (filterEkfrequenzEmpty) {
-      tpopFilter.ekfrequenz = { isNull: true }
-    }
-    if (filterEkfrequenzStartjahrEmpty) {
-      tpopFilter.ekfrequenzStartjahr = { isNull: true }
-    }
-    if (filterKontrolleYear) {
-      tpopFilter.tpopkontrsByTpopId = {
-        some: { jahr: { equalTo: filterKontrolleYear } },
+      if (filterGemeinde) {
+        tpopFilter.gemeinde = { includesInsensitive: filterGemeinde }
       }
-    }
-    if (filterAnsiedlungYear) {
-      tpopFilter.tpopmassnsByTpopId = {
-        some: {
-          jahr: { equalTo: filterAnsiedlungYear },
-          tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
-        },
+      if (filterFlurname) {
+        tpopFilter.flurname = { includesInsensitive: filterFlurname }
       }
-    }
-    if (filterEkplanYear) {
-      tpopFilter.ekplansByTpopId = {
-        some: { jahr: { equalTo: filterEkplanYear } },
+      if (filterStatus?.length) {
+        tpopFilter.popStatusWerteByStatus = {
+          code: {
+            in: filterStatus,
+          },
+        }
       }
-    }
+      if (filterBekanntSeit) {
+        tpopFilter.bekanntSeit = { equalTo: filterBekanntSeit }
+      }
+      if (filterLv95X) {
+        tpopFilter.lv95X = { equalTo: filterLv95X }
+      }
+      if (filterLv95Y) {
+        tpopFilter.lv95Y = { equalTo: filterLv95Y }
+      }
+      if (filterEkfKontrolleur) {
+        tpopFilter.adresseByEkfKontrolleur = {
+          name: { includesInsensitive: filterEkfKontrolleur },
+        }
+      }
+      if (filterEkfrequenzAbweichend) {
+        tpopFilter.ekfrequenzAbweichend = {
+          equalTo: filterEkfrequenzAbweichend,
+        }
+      }
+      if (filterEkAbrechnungstyp) {
+        tpopFilter.ekfrequenzByEkfrequenz = {
+          ekAbrechnungstyp: {
+            includesInsensitive: filterEkAbrechnungstyp,
+          },
+        }
+      }
+      if (filterEkfrequenz) {
+        tpopFilter.ekfrequenzByEkfrequenz = {
+          code: {
+            includesInsensitive: filterEkfrequenz,
+          },
+        }
+      }
+      if (filterEkfrequenzStartjahr) {
+        tpopFilter.ekfrequenzStartjahr = { equalTo: filterEkfrequenzStartjahr }
+      }
+      if (filterEkfrequenzEmpty) {
+        tpopFilter.ekfrequenz = { isNull: true }
+      }
+      if (filterEkfrequenzStartjahrEmpty) {
+        tpopFilter.ekfrequenzStartjahr = { isNull: true }
+      }
+      if (filterKontrolleYear) {
+        tpopFilter.tpopkontrsByTpopId = {
+          some: { jahr: { equalTo: filterKontrolleYear } },
+        }
+      }
+      if (filterAnsiedlungYear) {
+        tpopFilter.tpopmassnsByTpopId = {
+          some: {
+            jahr: { equalTo: filterAnsiedlungYear },
+            tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
+          },
+        }
+      }
+      if (filterEkplanYear) {
+        tpopFilter.ekplansByTpopId = {
+          some: { jahr: { equalTo: filterEkplanYear } },
+        }
+      }
+      return tpopFilter
+    }, [
+      apValues,
+      filterAp,
+      filterPopNr,
+      filterPopName,
+      filterPopStatus,
+      filterNr,
+      filterGemeinde,
+      filterFlurname,
+      filterStatus,
+      filterBekanntSeit,
+      filterLv95X,
+      filterLv95Y,
+      filterEkfKontrolleur,
+      filterEkfrequenzAbweichend,
+      filterEkAbrechnungstyp,
+      filterEkfrequenz,
+      filterEkfrequenzStartjahr,
+      filterEkfrequenzEmpty,
+      filterEkfrequenzStartjahrEmpty,
+      filterAnsiedlungYear,
+      filterKontrolleYear,
+      filterEkplanYear,
+    ])
 
     const { data, loading, error, refetch } = useQuery(queryAll, {
       variables: {
@@ -434,6 +462,7 @@ export const EkPlanTable = memo(
                     <CellHeaderFixedTpopStatus
                       style={style}
                       column={column}
+                      refetch={refetch}
                     />
                   )
                 }
