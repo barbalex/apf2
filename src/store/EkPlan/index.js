@@ -5,6 +5,7 @@ import groupBy from 'lodash/groupBy'
 import { Ap } from './Ap.js'
 import { Hovered, defaultValue as defaultHovered } from './Hovered.js'
 import { fields } from '../../components/EkPlan/Table/fields.js'
+import { set } from 'lodash'
 
 export const defaultFields = [
   'ap',
@@ -58,11 +59,17 @@ export const EkPlan = types
     filterAp: types.maybeNull(types.union(types.string, types.number)),
     filterPopNr: types.maybeNull(types.number),
     filterPopName: types.maybeNull(types.union(types.string, types.number)),
-    filterPopStatus: types.maybeNull(types.union(types.string, types.number)),
+    filterPopStatus: types.optional(
+      types.array(types.number),
+      [100, 101, 200, 201, 202, 300],
+    ),
     filterNr: types.maybeNull(types.union(types.string, types.number)),
     filterGemeinde: types.maybeNull(types.union(types.string, types.number)),
     filterFlurname: types.maybeNull(types.union(types.string, types.number)),
-    filterStatus: types.maybeNull(types.array(types.number)),
+    filterStatus: types.optional(
+      types.array(types.number),
+      [100, 101, 200, 201, 202, 300],
+    ),
     filterBekanntSeit: types.maybeNull(types.number),
     filterLv95X: types.maybeNull(types.union(types.string, types.number)),
     filterLv95Y: types.maybeNull(types.union(types.string, types.number)),
@@ -107,7 +114,7 @@ export const EkPlan = types
       self.filterPopName = val
     },
     setFilterPopStatus(val) {
-      self.filterPopStatus = val
+      self.filterPopStatus = val || [100, 101, 200, 201, 202, 300]
     },
     setFilterNr(val) {
       self.filterNr = val ? +val : null
@@ -119,7 +126,7 @@ export const EkPlan = types
       self.filterFlurname = val
     },
     setFilterStatus(val) {
-      self.filterStatus = val
+      self.filterStatus = val || [100, 101, 200, 201, 202, 300]
     },
     setFilterBekanntSeit(val) {
       self.filterBekanntSeit = val ? +val : null
@@ -367,11 +374,11 @@ export const defaultValue = {
   filterAp: null,
   filterPopNr: null,
   filterPopName: null,
-  filterPopStatus: null,
+  filterPopStatus: [100, 101, 200, 201, 202, 300],
   filterNr: null,
   filterGemeinde: null,
   filterFlurname: null,
-  filterStatus: null,
+  filterStatus: [100, 101, 200, 201, 202, 300],
   filterBekanntSeit: null,
   filterLv95X: null,
   filterLv95Y: null,

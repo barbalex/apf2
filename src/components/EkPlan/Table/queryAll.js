@@ -37,6 +37,7 @@ export const queryAll = gql`
         }
         popStatusWerteByStatus {
           code
+          text
         }
         bekanntSeit
         adresseByEkfKontrolleur {
@@ -102,6 +103,7 @@ export const queryAll = gql`
           name
           popStatusWerteByStatus {
             code
+            text
           }
           apByApId {
             id

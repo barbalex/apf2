@@ -4,8 +4,8 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
-import { MobxContext } from '../../../../mobxContext.js'
-import { Options } from './Options.jsx'
+import { MobxContext } from '../../../mobxContext.js'
+import { Options } from './CellHeaderFixedTpopStatus/Options.jsx'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -54,9 +54,9 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedTpopStatus = memo(({ style, column, refetch }) => {
+export const CellHeaderFixedPopStatus = memo(({ style, column, refetch }) => {
   const store = useContext(MobxContext)
-  const {  filterStatus, setFilterStatus } = store.ekPlan
+  const { filterPopStatus, setFilterPopStatus } = store.ekPlan
 
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -73,13 +73,13 @@ export const CellHeaderFixedTpopStatus = memo(({ style, column, refetch }) => {
     <>
       <StyledCell
         style={style}
-        aria-controls="tpopStatusHeaderMenu"
+        aria-controls="popStatusHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
       >
         <Title>{label}</Title>
         <Dropdown>
-          {filterStatus?.length ?
+          {filterPopStatus?.length ?
             <StyledFaFilter />
           : <Caret />}
         </Dropdown>
@@ -91,7 +91,7 @@ export const CellHeaderFixedTpopStatus = memo(({ style, column, refetch }) => {
         anchorOrigin={anchorOrigin}
       >
         <TextFilterContainer>
-          <Options />
+          <Options type="pop" />
         </TextFilterContainer>
       </StyledMenu>
     </>

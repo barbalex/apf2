@@ -8,10 +8,16 @@ import { getSnapshot } from 'mobx-state-tree'
 import { MobxContext } from '../../../../mobxContext.js'
 
 export const Option = memo(
-  observer(({ option, refetch }) => {
+  observer(({ option, type = 'tpop' }) => {
     const store = useContext(MobxContext)
-    const { filterStatus: filterStatusIn, setFilterStatus } = store.ekPlan
-    const filterStatus = filterStatusIn ? getSnapshot(filterStatusIn) : []
+    const setFilterStatus =
+      type === 'tpop' ?
+        store.ekPlan.setFilterStatus
+      : store.ekPlan.setFilterPopStatus
+    const filterStatus =
+      type === 'tpop' ?
+        getSnapshot(store.ekPlan.filterStatus)
+      : getSnapshot(store.ekPlan.filterPopStatus)
     const checked = filterStatus.includes(option.code)
 
     const onChange = useCallback(() => {
@@ -21,7 +27,6 @@ export const Option = memo(
         : [...new Set([...filterStatus, option.code])]
 
       setFilterStatus(newStatus)
-      refetch()
     }, [filterStatus, setFilterStatus, option.code])
 
     return (

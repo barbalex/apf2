@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
+import { getSnapshot } from 'mobx-state-tree'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { queryAll } from './queryAll.js'
@@ -20,6 +21,7 @@ import { CellHeaderFixed } from './CellHeaderFixed/index.jsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.jsx'
 import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.jsx'
 import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.jsx'
+import { CellHeaderFixedPopStatus } from './CellHeaderFixedPopStatus.jsx'
 import { CellHeaderYear } from './CellHeaderYear.jsx'
 import { CellForYearTitle } from './CellForYearTitle.jsx'
 import { CellForEkfrequenz } from './CellForEkfrequenz.jsx'
@@ -294,12 +296,16 @@ export const EkPlanTable = memo(
       filterEkplanYear,
     ])
 
-    const { data, loading, error, refetch } = useQuery(queryAll, {
-      variables: {
-        tpopFilter,
-        apIds: apValues,
+    const { data, loading, error, refetch, networkStatus } = useQuery(
+      queryAll,
+      {
+        variables: {
+          tpopFilter,
+          apIds: apValues,
+        },
+        notifyOnNetworkStatusChange: true,
       },
-    })
+    )
 
     const ekfrequenzs = useMemo(
       () => data?.allEkfrequenzs?.nodes ?? [],
@@ -412,7 +418,7 @@ export const EkPlanTable = memo(
       })
     }, [tpops, store, years, ekfrequenzs])
 
-    if (aps.length > 0 && loading) return <Spinner />
+    if (aps.length > 0 && networkStatus === 1) return <Spinner />
 
     if (error) return <Error error={error} />
 
@@ -427,7 +433,7 @@ export const EkPlanTable = memo(
         </ExportButton>
         <Container ref={resizeRef}>
           <HeaderContainer>
-            <TpopTitle>{`${tpops.length} Teilpopulationen`}</TpopTitle>
+            <TpopTitle>{`${loading ? '...' : tpops.length} Teilpopulationen`}</TpopTitle>
             <VariableSizeList
               style={{ overflow: 'hidden' }}
               key={`${headerFieldsFixed.length}${fieldsShown.join()}`}
@@ -460,6 +466,15 @@ export const EkPlanTable = memo(
                 if (field === 'status') {
                   return (
                     <CellHeaderFixedTpopStatus
+                      style={style}
+                      column={column}
+                      refetch={refetch}
+                    />
+                  )
+                }
+                if (field === 'popStatus') {
+                  return (
+                    <CellHeaderFixedPopStatus
                       style={style}
                       column={column}
                       refetch={refetch}
