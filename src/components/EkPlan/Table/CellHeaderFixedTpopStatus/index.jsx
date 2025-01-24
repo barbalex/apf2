@@ -6,6 +6,7 @@ import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../../mobxContext.js'
 import { TextFilter } from '../CellHeaderFixed/TextFilter.jsx'
+import { Options } from './Options.jsx'
 
 export const StyledCell = styled.div`
   display: flex;
@@ -107,19 +108,7 @@ export const CellHeaderFixedTpopStatus = ({ style, column }) => {
           {filterStatusEmpty ? 'nicht Leerwerte filtern' : 'Leerwerte filtern'}
         </MenuItem>
         <TextFilterContainer>
-          {/* <TextFilter
-            column={column}
-            closeMenu={closeMenu}
-          /> */}
-          TODO: option list, multiple select
-          {options.map((option) => (
-            <MenuItem
-              onClick={() => {}}
-              dense
-            >
-              {option.label}
-            </MenuItem>
-          ))}
+          <Options filterStatus={filterStatus} />
         </TextFilterContainer>
       </StyledMenu>
     </>

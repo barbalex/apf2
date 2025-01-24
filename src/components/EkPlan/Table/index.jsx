@@ -186,8 +186,8 @@ export const EkPlanTable = memo(
     }
     if (filterPopStatus) {
       tpopFilter.popByPopId.popStatusWerteByStatus = {
-        text: {
-          includesInsensitive: filterPopStatus,
+        code: {
+          in: filterPopStatus,
         },
       }
     }
@@ -202,8 +202,8 @@ export const EkPlanTable = memo(
     }
     if (filterStatus) {
       tpopFilter.popStatusWerteByStatus = {
-        text: {
-          includesInsensitive: filterStatus,
+        code: {
+          in: filterStatus,
         },
       }
     }
