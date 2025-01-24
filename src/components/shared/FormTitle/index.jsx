@@ -92,6 +92,7 @@ export const FormTitle = memo(
           <Collapse in={filterInputIsVisible}>
             <FilterInput
               filterInputIsVisible={filterInputIsVisible}
+              toggleFilterInputIsVisible={toggleFilterInputIsVisible}
               ref={filterInputRef}
             />
           </Collapse>
