@@ -95,6 +95,7 @@ export const More = memo(
             aria-haspopup="true"
             onClick={onClickMehrButton}
             data-id="appbar-more"
+            width={42}
           >
             <FaBars />
           </StyledIconButton>
