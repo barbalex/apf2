@@ -34,8 +34,6 @@ const StyledTextField = styled(TextField)`
   }
 `
 
-const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-
 export const FilterInput = memo(
   observer(({ filterInputIsVisible, ref: inputRef }) => {
     const store = useContext(MobxContext)
@@ -80,11 +78,12 @@ export const FilterInput = memo(
         setValue(val)
 
         // on coarse pointer filter on enter, not debounced
+        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (isCoarsePointer) return
 
         setNodeLabelFilterDebounced(val)
       },
-      [setNodeLabelFilterDebounced, isCoarsePointer],
+      [setNodeLabelFilterDebounced],
     )
 
     // issue: (https://github.com/barbalex/apf2/issues/710)
@@ -93,12 +92,13 @@ export const FilterInput = memo(
     // thus better to filter on pressing enter
     const onKeyDown = useCallback(
       (e) => {
+        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (!isCoarsePointer) return
         if (!e.key === 'Enter') return
 
         setNodeLabelFilter(value)
       },
-      [setNodeLabelFilter, isCoarsePointer, value],
+      [setNodeLabelFilter, value],
     )
 
     const onClickEmpty = useCallback(() => {
