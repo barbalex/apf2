@@ -125,7 +125,7 @@ export const LabelFilter = memo(
           autoCorrect="off"
           autoCapitalize="off"
           endAdornment={
-            isFiltered ?
+            isFiltered || value?.length ?
               <InputAdornment
                 position="end"
                 onClick={onClickEmptyFilter}
