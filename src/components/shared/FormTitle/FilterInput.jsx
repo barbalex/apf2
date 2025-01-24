@@ -55,46 +55,42 @@ export const FilterInput = memo(
     const [value, setValue] = useState(filterValue)
     // value should update when changed from outside
 
-    // useEffect(() => {
-    //   if (filterValue === value) return
-    //   // return if tree is not visible
-    //   // IMPORTANT: this is necessary because the filter input is always rendered
-    //   // which makes the virtual keyboard flicker on mobile
-    //   const treeIsVisible = projekteTabs.includes('tree')
-    //   if (!treeIsVisible) return
+    useEffect(() => {
+      if (filterValue === value) return
+      // return if tree is not visible
+      // IMPORTANT: this is necessary because the filter input is always rendered
+      // which makes the virtual keyboard flicker on mobile
+      const treeIsVisible = projekteTabs.includes('tree')
+      if (!treeIsVisible) return
 
-    //   setValue(filterValue)
-    // }, [filterValue])
+      setValue(filterValue)
+    }, [filterValue])
 
     const setNodeLabelFilter = useCallback(
       (val) => {
-        console.log('FilterInput.setNodeLabelFilter, value:', value)
         setNodeLabelFilterKey({
-          value: val ?? value,
+          value: val,
           key: activeFilterTable,
         })
       },
-      [setNodeLabelFilterKey, activeFilterTable, value],
+      [setNodeLabelFilterKey, activeFilterTable],
     )
     const setNodeLabelFilterDebounced = useDebouncedCallback(
       setNodeLabelFilter,
       600,
     )
 
-    const onChange = useCallback(
-      (e) => {
-        // remove some values as they can cause exceptions in regular expressions
-        const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
-        setValue(val)
+    const onChange = useCallback((e) => {
+      // remove some values as they can cause exceptions in regular expressions
+      const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
+      setValue(val)
 
-        // on coarse pointer: filter on enter, not debounced
-        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-        if (isCoarsePointer) return
+      // on coarse pointer: filter on enter, not debounced
+      // const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+      // if (isCoarsePointer) return
 
-        setNodeLabelFilterDebounced(val)
-      },
-      [setNodeLabelFilterDebounced],
-    )
+      // setNodeLabelFilterDebounced(val)
+    }, [])
 
     // issue: (https://github.com/barbalex/apf2/issues/710)
     // setting nodeLabelFilter rerenders the component, so focus has to be reset
@@ -110,18 +106,14 @@ export const FilterInput = memo(
         })
         // if (!isCoarsePointer) return
 
-        if (!e.key === 'Enter') return
-
-        setNodeLabelFilter()
+        e.key === 'Enter' && setNodeLabelFilter(value)
       },
-      [setNodeLabelFilter],
+      [setNodeLabelFilter, value],
     )
 
     const onClickEmpty = useCallback(() => {
       setValue('')
-      setTimeout(() => setNodeLabelFilter(''), 0)
-      // should the focus be set here? No, hideous on mobile
-      // setTimeout(() => inputRef?.current?.focus?.(), 0)
+      setNodeLabelFilter('')
     }, [setNodeLabelFilter, setValue])
 
     // if no activeFilterTable, show nothing
