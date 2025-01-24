@@ -96,9 +96,10 @@ export const FilterInput = memo(
         if (!isCoarsePointer) return
         if (!e.key === 'Enter') return
 
-        setNodeLabelFilter(value)
+        // remove some values as they can cause exceptions in regular expressions
+        const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
+        setNodeLabelFilter(val)
       },
-      // TODO: re-add value?
       [setNodeLabelFilter],
     )
 
