@@ -28,10 +28,6 @@ import {
 } from '../../../../../JotaiStore/index.js'
 import { StyledIconButton } from '../index.jsx'
 
-const Container = styled.div`
-  margin-top: auto;
-  margin-bottom: auto;
-`
 const MehrButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
@@ -91,76 +87,74 @@ export const More = memo(
     }, [])
 
     return (
-      <Container>
-        <Tooltip title="Mehr Befehle">
-          {isMobileView ?
-            <StyledIconButton
-              aria-label="Mehr"
-              aria-owns={anchorEl ? 'appbar-more-menu' : null}
-              aria-haspopup="true"
-              onClick={onClickMehrButton}
-              data-id="appbar-more"
-            >
-              <FaBars />
-            </StyledIconButton>
-          : <MehrButton
-              aria-label="Mehr"
-              aria-owns={anchorEl ? 'appbar-more-menu' : null}
-              aria-haspopup="true"
-              onClick={onClickMehrButton}
-              data-id="appbar-more"
-            >
-              Mehr
-            </MehrButton>
-          }
-          <Menu
-            id="appbar-more-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={closeMenu}
+      <Tooltip title="Mehr Befehle">
+        {isMobileView ?
+          <StyledIconButton
+            aria-label="Mehr"
+            aria-owns={anchorEl ? 'appbar-more-menu' : null}
+            aria-haspopup="true"
+            onClick={onClickMehrButton}
+            data-id="appbar-more"
           >
-            {isMobileView && exporteIsActive && (
-              <MenuItem
-                onClick={onClickExporte}
-                disabled={projekteTabs.includes('exporte')}
-              >
-                Exporte
-              </MenuItem>
-            )}
+            <FaBars />
+          </StyledIconButton>
+        : <MehrButton
+            aria-label="Mehr"
+            aria-owns={anchorEl ? 'appbar-more-menu' : null}
+            aria-haspopup="true"
+            onClick={onClickMehrButton}
+            data-id="appbar-more"
+          >
+            Mehr
+          </MehrButton>
+        }
+        <Menu
+          id="appbar-more-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={closeMenu}
+        >
+          {isMobileView && exporteIsActive && (
             <MenuItem
-              onClick={showDeletedDatasets}
-              disabled={deletedDatasets.length === 0}
+              onClick={onClickExporte}
+              disabled={projekteTabs.includes('exporte')}
             >
-              gelöschte Datensätze wiederherstellen
+              Exporte
             </MenuItem>
-            {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
-              <EkfUser closeMenu={closeMenu} />
-            )}
+          )}
+          <MenuItem
+            onClick={showDeletedDatasets}
+            disabled={deletedDatasets.length === 0}
+          >
+            gelöschte Datensätze wiederherstellen
+          </MenuItem>
+          {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
+            <EkfUser closeMenu={closeMenu} />
+          )}
+          <MenuItem>
+            <EnforceMobileNavigation />
+          </MenuItem>
+          {isMobileView && (
             <MenuItem>
-              <EnforceMobileNavigation />
+              <ShowBookmarksMenu />
             </MenuItem>
-            {isMobileView && (
-              <MenuItem>
-                <ShowBookmarksMenu />
-              </MenuItem>
-            )}
-            <MenuItem>
-              <EnforceDesktopNavigation />
-            </MenuItem>
-            <MenuItem>
-              <AlwaysShowTree />
-            </MenuItem>
-            <MenuItem
-              onClick={onClickLogout}
-              data-id="appbar-more-logout"
-            >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
-            <MenuItem onClick={onClickUptime}>
-              Verfügbarkeit der Server von apflora.ch
-            </MenuItem>
-            <Version>Version: 1.114.4 vom 26.11.2024</Version>
-          </Menu>
-        </Tooltip>
-      </Container>
+          )}
+          <MenuItem>
+            <EnforceDesktopNavigation />
+          </MenuItem>
+          <MenuItem>
+            <AlwaysShowTree />
+          </MenuItem>
+          <MenuItem
+            onClick={onClickLogout}
+            data-id="appbar-more-logout"
+          >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
+          <MenuItem onClick={onClickUptime}>
+            Verfügbarkeit der Server von apflora.ch
+          </MenuItem>
+          <Version>Version: 1.114.4 vom 26.11.2024</Version>
+        </Menu>
+      </Tooltip>
     )
   }),
 )
