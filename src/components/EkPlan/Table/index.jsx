@@ -46,7 +46,6 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   width: 100%;
 `
-// TODO: how to use simplebar here?
 const BodyContainer = styled.div`
   display: flex;
   flex-direction: row;
