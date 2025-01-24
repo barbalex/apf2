@@ -10,7 +10,7 @@ import { useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { set } from 'lodash'
+import { useProjekteTabs } from '../../../modules/useProjekteTabs.js'
 
 const Container = styled.div`
   padding: 0 10px 10px 10px;
@@ -49,14 +49,20 @@ export const FilterInput = memo(
       nodeLabelFilter
     const isFiltered = runIsFiltered()
 
+    const [projekteTabs] = useProjekteTabs()
+
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
     // value should update when changed from outside
-    // TODO: re-enable
-    // useEffect(() => {
-    //   if (filterValue === value) return
-    //   setValue(filterValue)
-    // }, [filterValue])
+
+    useEffect(() => {
+      if (filterValue === value) return
+      // return if tree is not visible
+      const treeIsVisible = projekteTabs.includes('tree')
+      if (!treeIsVisible) return
+
+      setValue(filterValue)
+    }, [filterValue])
 
     const setNodeLabelFilter = useCallback(
       (val) => {
