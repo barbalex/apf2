@@ -14,23 +14,14 @@ export const Option = memo(
     const filterStatus = filterStatusIn ? getSnapshot(filterStatusIn) : []
     const checked = filterStatus.includes(option.code)
 
-    console.log('Option', { option, filterStatus, checked })
-
     const onChange = useCallback(() => {
       const newStatus =
         filterStatus.includes(option.code) ?
           filterStatus.filter((el) => el !== option.code)
         : [...new Set([...filterStatus, option.code])]
 
-      console.log('Option onChange', {
-        newStatus,
-        code: option.code,
-        filterStatus,
-        includes: filterStatus.includes(option.code),
-      })
-
       setFilterStatus(newStatus)
-      refetch()
+      // refetch()
     }, [filterStatus, setFilterStatus, option.code])
 
     return (

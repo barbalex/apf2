@@ -68,7 +68,10 @@ export const CellHeaderFixedTpopStatus = memo(({ style, column, refetch }) => {
 
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const closeMenu = useCallback(() => setAnchorEl(null), [])
+  const closeMenu = useCallback(() => {
+    setAnchorEl(null)
+    refetch()
+  }, [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
   const onClickFilterEmptyValues = useCallback(() => {
     if (!filterStatusEmpty && filterStatus) {
