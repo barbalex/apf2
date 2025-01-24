@@ -90,9 +90,14 @@ export const FilterInput = memo(
     // setting nodeLabelFilter rerenders the component, so focus has to be reset
     // on mobile this makes the keyboard disappear and reappear
     // thus better to filter on pressing enter
-    const onKeyDown = useCallback(
+    const onKeyUp = useCallback(
       (e) => {
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
+        console.log('FilterInput.onKeyDown', {
+          isCoarsePointer,
+          value: e.target.value,
+          key: e.key,
+        })
         if (!isCoarsePointer) return
         if (!e.key === 'Enter') return
 
@@ -122,7 +127,7 @@ export const FilterInput = memo(
           fullWidth
           value={value}
           onChange={onChange}
-          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
           spellCheck="false"
           autoComplete="off"
           autoCorrect="off"
