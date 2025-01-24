@@ -14,6 +14,7 @@ import { MdDeleteSweep } from 'react-icons/md'
 import styled from '@emotion/styled'
 import snakeCase from 'lodash/snakeCase'
 import { observer } from 'mobx-react-lite'
+import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../modules/tables.js'
 import { MobxContext } from '../../../mobxContext.js'
@@ -40,13 +41,12 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
 export const LabelFilter = memo(
   observer(() => {
     const store = useContext(MobxContext)
-    const { nodeLabelFilter, activeFilterTable } = store.tree
-    const {
-      setKey: setNodeLabelFilterKey,
-      isFiltered: runIsFiltered,
-      empty,
-    } = nodeLabelFilter
-    const isFiltered = runIsFiltered()
+    const { nodeLabelFilter: nodeLabelFilterRaw, activeFilterTable } =
+      store.tree
+    const nodeLabelFilter = getSnapshot(nodeLabelFilterRaw)
+    const setNodeLabelFilterKey = store.tree.nodeLabelFilter.setKey
+    const empty = store.tree.nodeLabelFilter.empty
+    const isFiltered = store.tree.nodeLabelFilter.isFiltered()
 
     const { labelText, filterValue } = useMemo(() => {
       let labelText = '(filtern nicht möglich)'
