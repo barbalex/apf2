@@ -14,7 +14,6 @@ import { MdDeleteSweep } from 'react-icons/md'
 import styled from '@emotion/styled'
 import snakeCase from 'lodash/snakeCase'
 import { observer } from 'mobx-react-lite'
-import { useDebouncedCallback } from 'use-debounce'
 
 import { tables } from '../../../modules/tables.js'
 import { MobxContext } from '../../../mobxContext.js'
@@ -37,8 +36,6 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   color: rgba(0, 0, 0, 0.7);
   font-size: 1.5rem;
 `
-
-const isCoarsePointer = matchMedia('(pointer: coarse)').matches
 
 export const LabelFilter = memo(
   observer(() => {
@@ -73,12 +70,12 @@ export const LabelFilter = memo(
       return { labelText, filterValue }
     }, [activeFilterTable, nodeLabelFilter])
 
-    const [value, setValue] = useState('')
-
+    const [value, setValue] = useState(filterValue)
+    // value should update when changed from outside
     useEffect(() => {
       if (filterValue === value) return
       setValue(filterValue)
-    }, [filterValue, activeFilterTable])
+    }, [filterValue])
 
     const setNodeLabelFilter = useCallback(
       (val) =>
@@ -88,10 +85,6 @@ export const LabelFilter = memo(
         }),
       [setNodeLabelFilterKey, activeFilterTable],
     )
-    const setNodeLabelFilterDebounced = useDebouncedCallback(
-      setNodeLabelFilter,
-      600,
-    )
 
     const onChange = useCallback(
       (e) => {
@@ -100,27 +93,15 @@ export const LabelFilter = memo(
         // remove some values as they can cause exceptions in regular expressions
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
         setValue(val)
-
-        // on coarse pointer filter on enter, not debounced
-        if (isCoarsePointer) return
-
-        setNodeLabelFilterDebounced(val)
       },
-      [labelText, setNodeLabelFilterDebounced],
+      [labelText],
     )
 
-    // issue: (https://github.com/barbalex/apf2/issues/710)
-    // setting nodeLabelFilter rerenders the component, so focus has to be reset
-    // on mobile this makes the keyboard disappear and reappear
-    // thus better to filter on pressing enter
-    const onKeyDown = useCallback(
+    const onKeyUp = useCallback(
       (e) => {
-        if (!isCoarsePointer) return
-        if (!e.key === 'Enter') return
-
-        setNodeLabelFilter(value)
+        if (e.key === 'Enter') setNodeLabelFilter(value)
       },
-      [setNodeLabelFilter, isCoarsePointer, value],
+      [setNodeLabelFilter, value],
     )
 
     const onClickEmptyFilter = useCallback(() => {
@@ -138,7 +119,7 @@ export const LabelFilter = memo(
           id={labelText}
           value={value}
           onChange={onChange}
-          onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
           spellCheck="false"
           autoComplete="off"
           autoCorrect="off"

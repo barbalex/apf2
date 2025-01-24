@@ -1,6 +1,5 @@
 import { memo, useContext, useState, useCallback, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useDebouncedCallback } from 'use-debounce'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
@@ -10,7 +9,6 @@ import { useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { useProjekteTabs } from '../../../modules/useProjekteTabs.js'
 
 const Container = styled.div`
   padding: 0 10px 10px 10px;
@@ -49,20 +47,11 @@ export const FilterInput = memo(
       nodeLabelFilter
     const isFiltered = runIsFiltered()
 
-    const [projekteTabs] = useProjekteTabs()
-
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
     // value should update when changed from outside
-
     useEffect(() => {
       if (filterValue === value) return
-      // return if tree is not visible
-      // IMPORTANT: this is necessary because the filter input is always rendered
-      // which makes the virtual keyboard flicker on mobile
-      const treeIsVisible = projekteTabs.includes('tree')
-      if (!treeIsVisible) return
-
       setValue(filterValue)
     }, [filterValue])
 
@@ -75,38 +64,16 @@ export const FilterInput = memo(
       },
       [setNodeLabelFilterKey, activeFilterTable],
     )
-    const setNodeLabelFilterDebounced = useDebouncedCallback(
-      setNodeLabelFilter,
-      600,
-    )
 
     const onChange = useCallback((e) => {
       // remove some values as they can cause exceptions in regular expressions
       const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
       setValue(val)
-
-      // on coarse pointer: filter on enter, not debounced
-      // const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-      // if (isCoarsePointer) return
-
-      // setNodeLabelFilterDebounced(val)
     }, [])
 
-    // issue: (https://github.com/barbalex/apf2/issues/710)
-    // setting nodeLabelFilter rerenders the component, so focus has to be reset
-    // on mobile this makes the keyboard disappear and reappear
-    // thus better to filter on pressing enter
     const onKeyUp = useCallback(
       (e) => {
-        const isCoarsePointer = matchMedia('(pointer: coarse)').matches
-        console.log('FilterInput.onKeyDown', {
-          isCoarsePointer,
-          value: e.target.value,
-          key: e.key,
-        })
-        // if (!isCoarsePointer) return
-
-        e.key === 'Enter' && setNodeLabelFilter(value)
+        if (e.key === 'Enter') setNodeLabelFilter(value)
       },
       [setNodeLabelFilter, value],
     )
