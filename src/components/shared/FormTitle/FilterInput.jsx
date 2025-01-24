@@ -52,19 +52,21 @@ export const FilterInput = memo(
     const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     const [value, setValue] = useState(filterValue)
     // value should update when changed from outside
-    useEffect(() => {
-      if (filterValue === value) return
-      setValue(filterValue)
-    }, [filterValue])
+    // TODO: re-enable
+    // useEffect(() => {
+    //   if (filterValue === value) return
+    //   setValue(filterValue)
+    // }, [filterValue])
 
     const setNodeLabelFilter = useCallback(
       (val) => {
+        console.log('FilterInput.setNodeLabelFilter, value:', value)
         setNodeLabelFilterKey({
-          value: val,
+          value: val ?? value,
           key: activeFilterTable,
         })
       },
-      [setNodeLabelFilterKey, activeFilterTable],
+      [setNodeLabelFilterKey, activeFilterTable, value],
     )
     const setNodeLabelFilterDebounced = useDebouncedCallback(
       setNodeLabelFilter,
@@ -98,19 +100,18 @@ export const FilterInput = memo(
           value: e.target.value,
           key: e.key,
         })
-        if (!isCoarsePointer) return
+        // if (!isCoarsePointer) return
+
         if (!e.key === 'Enter') return
 
-        // remove some values as they can cause exceptions in regular expressions
-        const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
-        setNodeLabelFilter(val)
+        setNodeLabelFilter()
       },
       [setNodeLabelFilter],
     )
 
     const onClickEmpty = useCallback(() => {
       setValue('')
-      setNodeLabelFilter('')
+      setTimeout(() => setNodeLabelFilter(''), 0)
       // should the focus be set here? No, hideous on mobile
       // setTimeout(() => inputRef?.current?.focus?.(), 0)
     }, [setNodeLabelFilter, setValue])
