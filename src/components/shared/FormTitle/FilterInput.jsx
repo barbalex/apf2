@@ -77,7 +77,7 @@ export const FilterInput = memo(
         const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
         setValue(val)
 
-        // on coarse pointer filter on enter, not debounced
+        // on coarse pointer: filter on enter, not debounced
         const isCoarsePointer = matchMedia('(pointer: coarse)').matches
         if (isCoarsePointer) return
 
