@@ -519,7 +519,7 @@ export const Router = () => {
                       import('../Projekte/Daten/Apberuebersichts/index.jsx')
                     }
                   />
-                  <Route path=":apberUebersichtId">
+                  <Route path=":apberuebersichtId">
                     <Route
                       path="*"
                       lazy={() =>

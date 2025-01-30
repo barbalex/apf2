@@ -48,7 +48,7 @@ const InnerContainer = styled.div`
 
 export const ProjektContainer = memo(
   observer(() => {
-    const { projId, apberUebersichtId, apberId } = useParams()
+    const { projId, apberuebersichtId, apberId } = useParams()
     const { pathname } = useLocation()
 
     const store = useContext(MobxContext)
@@ -78,7 +78,7 @@ export const ProjektContainer = memo(
     // console.log('ProjektContainer, treeTabs:', treeTabs)
 
     const showApberForArt = apberId && pathname.endsWith('print')
-    const showApberForAll = apberUebersichtId && pathname.endsWith('print')
+    const showApberForAll = apberuebersichtId && pathname.endsWith('print')
 
     // need this to prevent map from greying out on resize
     // https://github.com/PaulLeCam/react-leaflet/issues/1074

@@ -103,18 +103,18 @@ const SecondPageText = styled.div`
 `
 
 export const ApberForYear = memo(() => {
-  const { apberUebersichtId, projId } = useParams()
+  const { apberuebersichtId, projId } = useParams()
 
   const client = useApolloClient()
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ['ApberForYearQuery', apberUebersichtId],
+    queryKey: ['ApberForYearQuery', apberuebersichtId],
     queryFn: async () => {
       // first get year
       const { data: data1 } = await client.query({
         query: queryForApberuebersicht,
         variables: {
-          id: apberUebersichtId,
+          id: apberuebersichtId,
         },
         fetchPolicy: 'no-cache',
       })
@@ -125,7 +125,7 @@ export const ApberForYear = memo(() => {
         variables: {
           projektId: projId,
           jahr,
-          apberuebersichtId: apberUebersichtId,
+          apberuebersichtId,
         },
         fetchPolicy: 'no-cache',
       })

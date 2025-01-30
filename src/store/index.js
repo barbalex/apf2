@@ -95,7 +95,6 @@ export const MobxStore = types
     user: types.optional(User, defaultUser),
     isPrint: types.optional(types.boolean, false),
     isEkfSinglePrint: types.optional(types.boolean, false),
-    printingJberYear: types.optional(types.number, 0),
     copying: types.optional(Copying, defaultCopying),
     copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
     moving: types.optional(Moving, defaultMoving),
@@ -147,9 +146,6 @@ export const MobxStore = types
     },
     setQueryClient(val) {
       self.queryClient = val
-    },
-    setPrintingJberYear(val) {
-      self.printingJberYear = val
     },
     setHideMapControls(val) {
       self.hideMapControls = val

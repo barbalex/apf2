@@ -24,7 +24,7 @@ export const Menu = memo(
     const navigate = useNavigate()
     const client = useApolloClient()
     const queryClient = useQueryClient()
-    const { projId, apberUebersichtId } = useParams()
+    const { projId, apberuebersichtId } = useParams()
     const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
@@ -81,7 +81,7 @@ export const Menu = memo(
               }
             }
           `,
-          variables: { id: apberUebersichtId },
+          variables: { id: apberuebersichtId },
         })
       } catch (error) {
         return store.enqueNotification({
@@ -115,11 +115,13 @@ export const Menu = memo(
       navigate,
       search,
       projId,
-      apberUebersichtId,
+      apberuebersichtId,
       pathname,
     ])
 
     const onClickPrint = useCallback(() => {
+      // TODO?
+      // store.setPrintingJberYear
       navigate(`print${search}`)
     }, [navigate, search])
 

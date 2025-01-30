@@ -71,7 +71,7 @@ const fieldTypes = {
 
 export const Component = memo(
   observer(() => {
-    const { apberUebersichtId } = useParams()
+    const { apberuebersichtId } = useParams()
 
     const store = useContext(MobxContext)
     const client = useApolloClient()
@@ -86,11 +86,11 @@ export const Component = memo(
     const [historizing, setHistorizing] = useState(false)
 
     const { data, isLoading, error } = useQuery({
-      queryKey: [`Apberuebersicht`, apberUebersichtId],
+      queryKey: [`Apberuebersicht`, apberuebersichtId],
       queryFn: () =>
         client.query({
           query,
-          variables: { id: apberUebersichtId },
+          variables: { id: apberuebersichtId },
           fetchPolicy: 'no-cache',
         }),
     })
