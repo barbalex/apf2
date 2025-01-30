@@ -125,7 +125,7 @@ export const ApErfolg = memo(() => {
                 dataKey="value"
                 stroke="#2e7d32"
                 strokeWidth={1}
-                isAnimationActive={false}
+                isAnimationActive={true}
                 dot={{ strokeWidth: 2, r: 4 }}
                 fill="rgba(255,253,231,0)"
               />

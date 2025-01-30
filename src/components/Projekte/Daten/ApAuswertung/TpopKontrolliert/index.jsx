@@ -114,7 +114,7 @@ export const TpopKontrolliert = memo(
                   dataKey="Teil-Populationen"
                   stroke="#2e7d32"
                   strokeWidth={1}
-                  isAnimationActive={false}
+                  isAnimationActive={!isSubReport}
                   dot={{ strokeWidth: 2, r: 4 }}
                   fill="rgba(255,253,231,0)"
                 />
@@ -123,7 +123,7 @@ export const TpopKontrolliert = memo(
                   dataKey="kontrolliert"
                   stroke="red"
                   strokeWidth={1}
-                  isAnimationActive={false}
+                  isAnimationActive={!isSubReport}
                   dot={{ strokeWidth: 2, r: 4 }}
                   fill="rgba(255,253,231,0)"
                 />
