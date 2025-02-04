@@ -109,26 +109,6 @@ export const setEkplans = async ({
       },
     })
   }
-  // serial execution:
-  // for (const jahr of kontrolljahre) {
-  //   try {
-  //     await client.mutate({
-  //       mutation: mutationCreateEkplan,
-  //       variables: {
-  //         tpopId,
-  //         jahr: jahr + ekfrequenzStartjahr,
-  //         typ,
-  //       },
-  //     })
-  //   } catch (error) {
-  //     return enqueNotification({
-  //       message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
-  //       options: {
-  //         variant: 'error',
-  //       },
-  //     })
-  //   }
-  // }
   // 5. tell user how it went
   let jahreList = kontrolljahre.join(', ')
   const formatter = new Intl.ListFormat('de', {
