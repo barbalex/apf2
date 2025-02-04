@@ -337,7 +337,6 @@ export const ProjekteMenus = memo(
               followed={karte2IsVisible?.toString()}
               onClick={onClickFilter2}
               data-id="nav-filter2"
-              title="Daten filtern"
               width={70}
             >
               Filter 2
