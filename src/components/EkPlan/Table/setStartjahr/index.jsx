@@ -11,9 +11,7 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   try {
     ekfrequenzResult = await client.query({
       query: queryEkfrequenz,
-      variables: {
-        id: ekfrequenz,
-      },
+      variables: { id: ekfrequenz },
     })
   } catch (error) {
     return enqueNotification({
