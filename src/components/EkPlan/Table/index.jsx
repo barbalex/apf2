@@ -568,6 +568,7 @@ export const EkPlanTable = memo(
                       row={row}
                       style={style}
                       refetchTpop={refetch}
+                      setProcessing={setProcessing}
                     />
                   )
                 }

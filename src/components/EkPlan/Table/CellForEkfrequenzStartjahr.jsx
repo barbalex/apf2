@@ -58,7 +58,7 @@ const Input = styled.input`
 `
 
 export const CellForEkfrequenzStartjahr = memo(
-  observer(({ row, style, refetchTpop }) => {
+  observer(({ row, style, refetchTpop, setProcessing }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -89,6 +89,7 @@ export const CellForEkfrequenzStartjahr = memo(
     }, [])
     const onBlur = useCallback(
       async (e) => {
+        setProcessing(true)
         const value =
           e.target.value || e.target.value === 0 ? +e.target.value : null
         try {
@@ -133,7 +134,7 @@ export const CellForEkfrequenzStartjahr = memo(
         }
         // TODO: or ekfrequenz has no kontrolljahre
         if (row.ekfrequenz.value && value) {
-          setEkplans({
+          await setEkplans({
             tpopId: row.id,
             ekfrequenz: row.ekfrequenz.value,
             ekfrequenzStartjahr: value,
@@ -142,8 +143,9 @@ export const CellForEkfrequenzStartjahr = memo(
             store,
           })
         } else {
-          refetchTpop()
+          await refetchTpop()
         }
+        setProcessing(false)
       },
       [row, client, store, enqueNotification, refetchTpop],
     )
