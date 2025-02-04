@@ -79,7 +79,7 @@ export const setEkplans = async ({
   const typ = ekfrequenz.ektyp.toUpperCase()
   const kontrolljahre = ekfrequenz.kontrolljahre || []
   if (kontrolljahre.length === 0) {
-    refetchTpop()
+    await refetchTpop()
     return enqueNotification({
       message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht. Weil aber für die gewählte EK-Frequenz keine Kontrolljahre existieren, wurden keine neuen Kontrolljahre gesetzt`,
       options: {
@@ -87,31 +87,55 @@ export const setEkplans = async ({
       },
     })
   }
-  for (const jahr of kontrolljahre) {
-    try {
-      await client.mutate({
-        mutation: mutationCreateEkplan,
-        variables: {
-          tpopId,
-          jahr: jahr + ekfrequenzStartjahr,
-          typ,
-        },
-      })
-    } catch (error) {
-      return enqueNotification({
-        message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
+  // parallel execution:
+  const mutationPromises = kontrolljahre.map((jahr) =>
+    client.mutate({
+      mutation: mutationCreateEkplan,
+      variables: {
+        tpopId,
+        jahr: jahr + ekfrequenzStartjahr,
+        typ,
+      },
+    }),
+  )
+  // await all mutations
+  try {
+    await Promise.all(mutationPromises)
+  } catch (error) {
+    return enqueNotification({
+      message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
   }
+  // serial execution:
+  // for (const jahr of kontrolljahre) {
+  //   try {
+  //     await client.mutate({
+  //       mutation: mutationCreateEkplan,
+  //       variables: {
+  //         tpopId,
+  //         jahr: jahr + ekfrequenzStartjahr,
+  //         typ,
+  //       },
+  //     })
+  //   } catch (error) {
+  //     return enqueNotification({
+  //       message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
+  //       options: {
+  //         variant: 'error',
+  //       },
+  //     })
+  //   }
+  // }
   // 5. tell user how it went
   let jahreList = kontrolljahre.join(', ')
   const formatter = new Intl.ListFormat('de', {
     style: 'long',
     type: 'conjunction',
   })
+  await refetchTpop()
   jahreList = formatter.format(kontrolljahre.map((j) => j.toString()))
   enqueNotification({
     message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${
@@ -121,5 +145,5 @@ export const setEkplans = async ({
       variant: 'success',
     },
   })
-  refetchTpop()
+  return
 }
