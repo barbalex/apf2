@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, useCallback, useRef } from 'react'
+import { memo, useContext, useMemo, useCallback, useRef, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
@@ -34,6 +34,7 @@ import { exportRowFromTpop } from './exportRowFromTpop.js'
 import { exportModule } from '../../../modules/export.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
+import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
 
 const Container = styled.div`
   position: relative;
@@ -153,6 +154,8 @@ export const EkPlanTable = memo(
       filterEkplanYear,
       pastYears,
     } = store.ekPlan
+
+    const [processing, setProcessing] = useState(false)
 
     /**
      * BIG TROUBLE with height
@@ -422,6 +425,7 @@ export const EkPlanTable = memo(
 
     return (
       <ErrorBoundary>
+        {processing && <SpinnerOverlay message="Daten werden verarbeitet" />}
         <ExportButton
           variant="outlined"
           onClick={onClickExport}
@@ -553,6 +557,7 @@ export const EkPlanTable = memo(
                       field={value}
                       style={style}
                       refetchTpop={refetch}
+                      setProcessing={setProcessing}
                     />
                   )
                 }

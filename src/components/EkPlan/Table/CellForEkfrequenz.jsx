@@ -29,7 +29,7 @@ const Option = styled.option`
 `
 
 export const CellForEkfrequenz = memo(
-  observer(({ row, field, style, refetchTpop, ekfrequenzs }) => {
+  observer(({ row, field, style, refetchTpop, ekfrequenzs, setProcessing }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -65,6 +65,7 @@ export const CellForEkfrequenz = memo(
     const onChange = useCallback(
       async (e) => {
         const value = e.target.value || null
+        setProcessing(true)
         try {
           await client.mutate({
             mutation: gql`
@@ -118,7 +119,7 @@ export const CellForEkfrequenz = memo(
         // set ekplans if startjahr exists
         // TODO: or ekfrequenz has no kontrolljahre
         if (!!ekfrequenzStartjahr && !!value) {
-          setEkplans({
+          await setEkplans({
             tpopId: row.id,
             ekfrequenz: value,
             ekfrequenzStartjahr,
@@ -127,6 +128,7 @@ export const CellForEkfrequenz = memo(
             store,
           })
         }
+        setProcessing(false)
       },
       [row, client, store, enqueNotification, refetchTpop],
     )
