@@ -9,10 +9,6 @@ import { useTpopfreiwkontrNavData } from '../../../../modules/useTpopfreiwkontrN
 export const List = memo(() => {
   const { navData, isLoading, error } = useTpopfreiwkontrNavData()
 
-  if (isLoading) return <Spinner />
-
-  if (error) return <Error error={error} />
-
   // BEWARE: Zählungen need to be hidden in this list
   const navDataToPass = useMemo(
     () => ({
@@ -21,6 +17,10 @@ export const List = memo(() => {
     }),
     [navData],
   )
+
+  if (isLoading) return <Spinner />
+
+  if (error) return <Error error={error} />
 
   return (
     <SharedList
