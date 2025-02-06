@@ -4,7 +4,7 @@ WITH adm AS (
   FROM
     apflora.ch_administrative_unit
   WHERE
-	localisedcharacterstring = 'Gemeinde'
+	  localisedcharacterstring = 'Gemeinde'
 )
 SELECT
     tax.artname,
