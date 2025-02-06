@@ -131,7 +131,11 @@ export const Choose = memo(
     }, [pastYears])
     const onChangePastYears = useCallback(
       (event) => {
-        setPastYearsLocal(event.target.value ? +event.target.value : '')
+        const value =
+          event.target.value || event.target.value === 0 ?
+            +event.target.value
+          : ''
+        setPastYearsLocal(value)
       },
       [setPastYearsLocal],
     )
