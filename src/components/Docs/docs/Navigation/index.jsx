@@ -1,5 +1,12 @@
 import { memo } from 'react'
+
 import { DokuDate, Code } from '../../DesktopDocs.jsx'
+import image001 from './image001.png'
+import image002 from './image002.png'
+import image003 from './image003.png'
+import image004 from './image004.png'
+import image005 from './image005.png'
+import image006 from './image006.png'
 
 export const Component = memo(() => (
   <>
@@ -25,6 +32,7 @@ export const Component = memo(() => (
         <b>Navigationslisten</b>.
       </li>
     </ul>
+    <h2>Navigieren und Arbeiten in der mobilen Version</h2>
     <p>
       In der Mobil-Ansicht wird grundsätzlich immer nur eine Oberfläche
       angezeigt. Mehr (z.B. Navigationsbaum neben Formular) ist nur in der
@@ -37,6 +45,19 @@ export const Component = memo(() => (
       besteht, sie ungewollt zu aktivieren, v.a. bei Nässe. Neu gibt es Menüs in
       den Formularköpfen, die sich dynamisch an die verfügbare Breite anpassen.
     </p>
+    <img
+      src={image001}
+      alt="UI-Elemente"
+    />
+    <p>
+      In der Mobil-Ansicht wird einem angezeigt, was die verschiedenen Menüs
+      auslösen, wenn man lange darauf drückt:
+    </p>
+    <img
+      src={image002}
+      alt="Tooltip"
+    />
+    <h2>Wechsel zwischen Mobiler und Desktop-Version</h2>
     <p>
       Mobile und Desktop sind nicht immer klar abzugrenzen. Es gibt sehr grosse
       Bildschirme mit Touch-Steuerung. Einige Bildschirme mit Touch-Steuerung
@@ -61,6 +82,10 @@ export const Component = memo(() => (
         werden.
       </li>
     </ul>
+    <img
+      src={image003}
+      alt="Menüs"
+    />
     <p>
       Die bisherigen Tabs (z.B. Auswertung, Dateien, Biotop, Historien) wurden
       bei der Implementation der Mobil-Navigation in die normale Navigation
@@ -74,5 +99,26 @@ export const Component = memo(() => (
       <li>EK-Planung</li>
       <li>Navigationsbaum 2, Daten 2, Filter 2</li>
     </ul>
+    <h2>Änderungen der Anzeige im Strukturbaum und der Navigationsliste</h2>
+    <p>
+      Die bisherigen Tabs (z.B. Auswertung, Dateien, Biotop, Historien) wurden
+      bei der Implementation der Mobil-Navigation in die normale Navigation
+      (Navigationsbaum bzw. Bookmarks & Navigationslisten) gezügelt.
+    </p>
+    <p>
+      Es wird neu nicht nur angezeigt, wieviele z.B. Teilpopulationen eine
+      Population hat, sondern auch, wieviele davon gerade angezeigt werden (z.B.
+      2/4). Dies ist vor allem nützlich um zu sehen, ob noch ein Filter aktiv
+      ist.
+    </p>
+    <img
+      src={image004}
+      alt="Ehemalige Tabs"
+      width={558}
+    />
+    <img
+      src={image005}
+      alt="Ehemalige Tabs"
+    />
   </>
 ))
