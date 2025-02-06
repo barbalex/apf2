@@ -154,6 +154,11 @@ export const Choose = memo(
               value={pastYearsLocal}
               onChange={onChangePastYears}
               onBlur={onBlurPastYears}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  onBlurPastYears(e)
+                }
+              }}
               size="small"
               type="number"
               slotProps={{ inputLabel: { shrink: true } }}
