@@ -336,7 +336,6 @@ export const EkPlanTable = memo(
       () => yearsFromTpops({ tpops, pastYears }),
       [pastYears, tpops],
     )
-    // console.log('EkPlanTable, years:', years)
     const yearRows = useMemo(
       () =>
         tpops.map((tpop, index) =>
@@ -465,16 +464,26 @@ export const EkPlanTable = memo(
             <TpopTitle>{`${loading ? '...' : tpops.length} Teilpopulationen`}</TpopTitle>
             {headerFieldsFixed.map((column, index) => {
               const field = column.name
-              console.log('column:', column)
               if (field === 'ekfrequenz') {
-                return <CellHeaderFixedEkfrequenz column={column} />
+                return (
+                  <CellHeaderFixedEkfrequenz
+                    key={column.name}
+                    column={column}
+                  />
+                )
               }
               if (field === 'ekfrequenzStartjahr') {
-                return <CellHeaderFixedEkfrequenzStartjahr column={column} />
+                return (
+                  <CellHeaderFixedEkfrequenzStartjahr
+                    key={column.name}
+                    column={column}
+                  />
+                )
               }
               if (field === 'status') {
                 return (
                   <CellHeaderFixedTpopStatus
+                    key={column.name}
                     column={column}
                     refetch={refetch}
                   />
@@ -483,13 +492,19 @@ export const EkPlanTable = memo(
               if (field === 'popStatus') {
                 return (
                   <CellHeaderFixedTpopStatus
+                    key={column.name}
                     column={column}
                     refetch={refetch}
                     type="pop"
                   />
                 )
               }
-              return <CellHeaderFixed column={column} />
+              return (
+                <CellHeaderFixed
+                  key={column.name}
+                  column={column}
+                />
+              )
             })}
             {years.map((year, index) => (
               <CellHeaderYear

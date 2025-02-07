@@ -23,7 +23,6 @@ export const TpopRow = memo(
   ({ row, rowIndex, setProcessing, tpopColumns, years, yearRows }) => {
     const ref = useRef(null)
     const isVisible = useOnScreen(ref)
-    isVisible && console.log('TpopRow', { row, years, yearRows, rowIndex })
 
     return (
       <ErrorBoundary>
