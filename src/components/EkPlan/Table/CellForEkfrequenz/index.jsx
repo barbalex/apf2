@@ -132,9 +132,9 @@ export const CellForEkfrequenz = memo(
             store,
           })
         }
-        setProcessing(false)
-        // TODO: only unvalidate the specific tpop's query cache?
+        // don't await as this would block the ui and it doesn't matter if user navigates away
         client.refetchQueries({ include: ['EkplanCellForYearQuery'] })
+        setProcessing(false)
       },
       [row, client, store, enqueNotification, refetchTpop],
     )
