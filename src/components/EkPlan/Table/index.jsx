@@ -321,6 +321,7 @@ export const EkPlanTable = memo(
       () => yearsFromTpops({ tpops, pastYears }),
       [pastYears, tpops],
     )
+    // console.log('EkPlanTable, years:', years)
     const yearRows = useMemo(
       () =>
         tpops.map((tpop, index) =>
@@ -332,16 +333,6 @@ export const EkPlanTable = memo(
         ),
       [tpops, years],
     )
-    const yearColumns =
-      yearRows.length ?
-        sortBy(
-          Object.values(yearRows[0])
-            .filter((o) => typeof o === 'object')
-            .filter((o) => !!o.value && !!o.value.eks)
-            .filter((o) => !!o.name),
-          'sort',
-        )
-      : []
     // tpopRows does not update when a single tpop changes if passed tpops
     // solution is to pass stringified version
     // Also: they need to update when the filter changes
@@ -499,7 +490,7 @@ export const EkPlanTable = memo(
               height={60}
               width={headerYearFieldsWidth}
               rowHeight={() => 60}
-              columnCount={yearColumns.length}
+              columnCount={years.length}
               rowCount={1}
               columnWidth={() => yearColumnWidth}
             >
@@ -604,7 +595,7 @@ export const EkPlanTable = memo(
               }}
             </VariableSizeGrid>
             <FixedSizeGrid
-              columnCount={yearColumns.length}
+              columnCount={years.length}
               columnWidth={yearColumnWidth}
               height={height - 60}
               rowCount={yearRows.length}
@@ -614,7 +605,7 @@ export const EkPlanTable = memo(
             >
               {({ columnIndex, rowIndex, style }) => {
                 const row = yearRows[rowIndex]
-                const column = yearColumns[columnIndex].name
+                const column = years[columnIndex]
                 const value = row[column]
 
                 return (
