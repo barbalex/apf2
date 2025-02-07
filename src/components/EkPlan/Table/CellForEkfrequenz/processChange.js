@@ -41,7 +41,6 @@ export const processChange = async ({
         ekfrequenz: value,
         changedBy: store.user.name,
       },
-      // refetchQueries: ['EkplanTpopQuery'],
     })
   } catch (error) {
     enqueNotification({
