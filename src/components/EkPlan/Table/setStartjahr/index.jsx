@@ -40,6 +40,8 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
       },
     })
   }
+  // TODO: query last ek here instead of fetching from previously loaded
+  // reason: no need to load that data beforehand if it is not needed
   let ekfrequenzStartjahr
   // 2a if ek: get last ek
   if (kontrolljahreAb === 'EK') {

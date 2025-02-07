@@ -1,11 +1,13 @@
 import { memo, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useQuery } from '@apollo/client'
 
 import { StyledTableCell } from '../index.jsx'
 import { EkIcon } from './EkIcon.jsx'
 import { MassnIcon } from './MassnIcon.jsx'
 import { InfoRow } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
+import { query } from './query.js'
 
 export const CellForYear = memo(
   observer(({ field, row, style }) => {
@@ -21,6 +23,15 @@ export const CellForYear = memo(
       hovered,
     } = store.ekPlan
 
+    const { data, loading } = useQuery(query, {
+      variables: { tpopId: row.id, jahr: field.name },
+    })
+    const ekPlan = data?.tpopById?.ekPlans?.totalCount > 0
+    const ekfPlan = data?.tpopById?.ekfPlans?.totalCount > 0
+    const eks = data?.tpopById?.eks?.nodes ?? []
+    const ekfs = data?.tpopById?.ekfs?.nodes ?? []
+    const ansiedlungs = data?.tpopById?.ansiedlungs?.nodes ?? []
+
     const { label, value, width } = field
     const onMouseEnter = useCallback(
       () => hovered.set({ year: label, tpopId: row.id }),
@@ -35,8 +46,8 @@ export const CellForYear = memo(
           year: label,
           tpopId: row.id,
           title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${label}`,
-          ekPlan: value.ekPlan,
-          ekfPlan: value.ekfPlan,
+          ekPlan,
+          ekfPlan,
         })
         // can't pass currentTarget directly as anchorEl
         // because it does not exist any more until the menu wants to look it up
@@ -51,8 +62,8 @@ export const CellForYear = memo(
         row.popNr.value,
         setYearClicked,
         setYearMenuAnchor,
-        value.ekPlan,
-        value.ekfPlan,
+        ekPlan,
+        ekfPlan,
       ],
     )
     const classes = []
@@ -72,25 +83,25 @@ export const CellForYear = memo(
         style={style}
       >
         <InfoRow>
-          {showEk && (
+          {showEk && data && (
             <EkIcon
-              planned={value.ekPlan}
-              eks={value.eks}
+              planned={ekPlan}
+              eks={eks}
               einheits={einheits}
             />
           )}
         </InfoRow>
         <InfoRow>
-          {showEkf && (
+          {showEkf && data && (
             <EkIcon
-              planned={value.ekfPlan}
-              eks={value.ekfs}
+              planned={ekfPlan}
+              eks={ekfs}
               einheits={einheits}
             />
           )}
         </InfoRow>
         <InfoRow>
-          {showMassn && <MassnIcon ansiedlungs={value.ansiedlungs} />}
+          {showMassn && data && <MassnIcon ansiedlungs={ansiedlungs} />}
         </InfoRow>
       </StyledTableCell>
     )

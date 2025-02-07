@@ -47,54 +47,6 @@ export const queryAll = gql`
           nodes {
             id
             jahr
-            typ
-            tpopkontrzaehlsByTpopkontrId {
-              nodes {
-                id
-                einheit
-                anzahl
-                tpopkontrzaehlEinheitWerteByEinheit {
-                  id
-                  text
-                  ekzaehleinheitsByZaehleinheitId(
-                    filter: { zielrelevant: { equalTo: true } }
-                  ) {
-                    nodes {
-                      id
-                      zielrelevant
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-        tpopmassnsByTpopId(
-          filter: { tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } } }
-        ) {
-          nodes {
-            id
-            jahr
-            typ
-            beschreibung
-            anzTriebe
-            anzPflanzen
-            zieleinheitAnzahl
-            tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
-              id
-              text
-            }
-            tpopmassnTypWerteByTyp {
-              id
-              text
-            }
-          }
-        }
-        ekplansByTpopId {
-          nodes {
-            id
-            jahr
-            typ
           }
         }
         popByPopId {

@@ -129,6 +129,7 @@ export const CellForEkfrequenz = memo(
           })
         }
         setProcessing(false)
+        client.refetchQueries({ include: ['EkplanCellForYearQuery'] })
       },
       [row, client, store, enqueNotification, refetchTpop],
     )
