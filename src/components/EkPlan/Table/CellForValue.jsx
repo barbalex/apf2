@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 export const CellForValue = memo(
-  observer(({ field, style, row, firstChild }) => {
+  observer(({ field, width, row, firstChild }) => {
     const store = useContext(MobxContext)
 
     const { value } = field
@@ -27,7 +27,7 @@ export const CellForValue = memo(
 
     return (
       <StyledTableCell
-        style={style}
+        width={width}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}

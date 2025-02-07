@@ -46,6 +46,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: ${(props) => props.width}px;
+  min-width: ${(props) => props.width}px;
+  height: 60px;
   &:focus-within {
     border: solid orange 3px;
   }
@@ -63,7 +66,7 @@ const Input = styled.input`
 `
 
 export const CellForEkfrequenzStartjahr = memo(
-  observer(({ row, style, refetchTpop, setProcessing }) => {
+  observer(({ row, width, refetchTpop, setProcessing }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -123,7 +126,7 @@ export const CellForEkfrequenzStartjahr = memo(
 
     return (
       <Container
-        style={style}
+        width={width}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}

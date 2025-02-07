@@ -32,7 +32,7 @@ const Option = styled.option`
 `
 
 export const CellForEkfrequenz = memo(
-  observer(({ row, field, style, refetchTpop, setProcessing }) => {
+  observer(({ row, field, width, refetchTpop, setProcessing }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -101,7 +101,7 @@ export const CellForEkfrequenz = memo(
 
     return (
       <StyledCellForSelect
-        style={style}
+        width={width}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}

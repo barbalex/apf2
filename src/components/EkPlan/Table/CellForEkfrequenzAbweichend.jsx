@@ -7,7 +7,7 @@ import { StyledCellForSelect } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
 export const CellForEkfrequenzAbweichend = memo(
-  observer(({ field, row, style }) => {
+  observer(({ field, row, width }) => {
     const store = useContext(MobxContext)
 
     const { data } = useQuery(
@@ -34,7 +34,7 @@ export const CellForEkfrequenzAbweichend = memo(
 
     return (
       <StyledCellForSelect
-        style={style}
+        width={width}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}

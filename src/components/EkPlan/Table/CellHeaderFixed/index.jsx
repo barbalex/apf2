@@ -70,8 +70,6 @@ export const CellHeaderFixed = memo(
 
     const typeIsBoolean = ['ekfrequenzAbweichend'].includes(name)
 
-    console.log('CellHeaderFixed, column:', column)
-
     return (
       <>
         <StyledCell

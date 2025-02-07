@@ -22,7 +22,7 @@ const Link = styled.div`
 `
 
 export const CellForTpopLink = memo(
-  observer(({ field, style, row }) => {
+  observer(({ field, width, row }) => {
     const store = useContext(MobxContext)
 
     const { hovered } = store.ekPlan
@@ -41,7 +41,7 @@ export const CellForTpopLink = memo(
 
     return (
       <StyledTableCell
-        style={style}
+        width={width}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}
