@@ -32,14 +32,10 @@ export const query = gql`
               anzahl
               tpopkontrzaehlEinheitWerteByEinheit {
                 id
-                text
                 ekzaehleinheitsByZaehleinheitId(
                   filter: { zielrelevant: { equalTo: true } }
                 ) {
-                  nodes {
-                    id
-                    zielrelevant
-                  }
+                  totalCount
                 }
               }
             }
@@ -58,14 +54,10 @@ export const query = gql`
               anzahl
               tpopkontrzaehlEinheitWerteByEinheit {
                 id
-                text
                 ekzaehleinheitsByZaehleinheitId(
                   filter: { zielrelevant: { equalTo: true } }
                 ) {
-                  nodes {
-                    id
-                    zielrelevant
-                  }
+                  totalCount
                 }
               }
             }
