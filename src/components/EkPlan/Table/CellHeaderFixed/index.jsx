@@ -25,6 +25,7 @@ export const StyledCell = styled.div`
   padding: 0 4px;
   cursor: pointer;
   box-sizing: border-box;
+  width: ${(props) => props.width}px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 700 !important;
@@ -52,7 +53,7 @@ const StyledFaFilter = styled(FaFilter)`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderFixed = memo(
-  observer(({ style, column }) => {
+  observer(({ column }) => {
     const { name, label, nofilter } = column
     const store = useContext(MobxContext)
 
@@ -67,13 +68,15 @@ export const CellHeaderFixed = memo(
 
     const typeIsBoolean = ['ekfrequenzAbweichend'].includes(name)
 
+    console.log('CellHeaderFixed, column:', column)
+
     return (
       <>
         <StyledCell
-          style={style}
           aria-controls={`${name}ColumnHeaderMenu`}
           aria-haspopup="true"
           onClick={onClickCell}
+          width={column.width}
         >
           <Title data-label={label}>{label}</Title>
           {!nofilter && (

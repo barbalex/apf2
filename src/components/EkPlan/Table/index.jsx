@@ -456,62 +456,34 @@ export const EkPlanTable = memo(
         <Container ref={resizeRef}>
           <HeaderContainer>
             <TpopTitle>{`${loading ? '...' : tpops.length} Teilpopulationen`}</TpopTitle>
-            <VariableSizeList
-              style={{ overflow: 'hidden' }}
-              key={`${headerFieldsFixed.length}${fieldsShown.join()}`}
-              height={60}
-              itemCount={headerFieldsFixed.length}
-              itemSize={(index) => headerFieldsFixed[index].width}
-              layout="horizontal"
-              width={headerFieldsFixedWidth}
-            >
-              {({ index, style }) => {
-                const column = headerFieldsFixed[index]
-                const field = column.name
-                // Return specifically built components for columns with menu
-                if (field === 'ekfrequenz') {
-                  return (
-                    <CellHeaderFixedEkfrequenz
-                      style={style}
-                      column={column}
-                    />
-                  )
-                }
-                if (field === 'ekfrequenzStartjahr') {
-                  return (
-                    <CellHeaderFixedEkfrequenzStartjahr
-                      style={style}
-                      column={column}
-                    />
-                  )
-                }
-                if (field === 'status') {
-                  return (
-                    <CellHeaderFixedTpopStatus
-                      style={style}
-                      column={column}
-                      refetch={refetch}
-                    />
-                  )
-                }
-                if (field === 'popStatus') {
-                  return (
-                    <CellHeaderFixedTpopStatus
-                      style={style}
-                      column={column}
-                      refetch={refetch}
-                      type="pop"
-                    />
-                  )
-                }
+            {headerFieldsFixed.map((column, index) => {
+              const field = column.name
+              console.log('column:', column)
+              if (field === 'ekfrequenz') {
+                return <CellHeaderFixedEkfrequenz column={column} />
+              }
+              if (field === 'ekfrequenzStartjahr') {
+                return <CellHeaderFixedEkfrequenzStartjahr column={column} />
+              }
+              if (field === 'status') {
                 return (
-                  <CellHeaderFixed
-                    style={style}
+                  <CellHeaderFixedTpopStatus
                     column={column}
+                    refetch={refetch}
                   />
                 )
-              }}
-            </VariableSizeList>
+              }
+              if (field === 'popStatus') {
+                return (
+                  <CellHeaderFixedTpopStatus
+                    column={column}
+                    refetch={refetch}
+                    type="pop"
+                  />
+                )
+              }
+              return <CellHeaderFixed column={column} />
+            })}
             <VariableSizeGrid
               key={yearHeaderRerenderValue}
               style={{ overflow: 'hidden' }}

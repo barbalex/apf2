@@ -21,6 +21,7 @@ export const StyledCell = styled.div`
   padding: 0 4px;
   cursor: pointer;
   box-sizing: border-box;
+  width: ${({ width }) => width}px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 700 !important;
@@ -54,7 +55,7 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
+export const CellHeaderFixedEkfrequenzStartjahr = ({ column }) => {
   const store = useContext(MobxContext)
   const {
     filterEkfrequenzStartjahrEmpty,
@@ -85,10 +86,10 @@ export const CellHeaderFixedEkfrequenzStartjahr = ({ style, column }) => {
   return (
     <>
       <StyledCell
-        style={style}
         aria-controls="ekfrequenzStartjahrHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
+        width={column.width}
       >
         <Title>{label}</Title>
         <Dropdown>
