@@ -24,7 +24,7 @@ import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzS
 import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.jsx'
 import { CellHeaderYear } from './CellHeaderYear.jsx'
 import { CellForYearTitle } from './CellForYearTitle.jsx'
-import { CellForEkfrequenz } from './CellForEkfrequenz.jsx'
+import { CellForEkfrequenz } from './CellForEkfrequenz/index.jsx'
 import { CellForEkfrequenzStartjahr } from './CellForEkfrequenzStartjahr.jsx'
 import { CellForEkfrequenzAbweichend } from './CellForEkfrequenzAbweichend.jsx'
 import { CellForTpopLink } from './CellForTpopLink.jsx'
@@ -304,16 +304,11 @@ export const EkPlanTable = memo(
       {
         variables: {
           tpopFilter,
-          apIds: apValues,
         },
         notifyOnNetworkStatusChange: true,
       },
     )
 
-    const ekfrequenzs = useMemo(
-      () => data?.allEkfrequenzs?.nodes ?? [],
-      [data?.allEkfrequenzs?.nodes],
-    )
     const tpops = useMemo(
       () => data?.allTpops?.nodes ?? [],
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -402,16 +397,11 @@ export const EkPlanTable = memo(
     )
 
     const onClickExport = useCallback(async () => {
-      // TODO: load data from previous version of queryAll
-
       let result
       try {
         result = await client.query({
           query: queryForExport,
-          variables: {
-            tpopFilter,
-            apIds: apValues,
-          },
+          variables: { tpopFilter, apIds: apValues },
         })
       } catch (error) {
         return enqueNotification({
@@ -422,17 +412,17 @@ export const EkPlanTable = memo(
         })
       }
       const tpops = result?.data?.allTpops?.nodes ?? []
+      const ekfrequenzs = result?.data?.allEkfrequenzs?.nodes ?? []
       const data = tpops.map((tpop) =>
         exportRowFromTpop({ tpop, years, store, ekfrequenzs }),
       )
-      console.log('EkPlanTable.onClickExport', { data, tpops, result })
       exportModule({
         data,
         fileName: 'ek-planung',
         store,
         client,
       })
-    }, [tpops, store, years, ekfrequenzs])
+    }, [tpops, store, years, apValues, tpopFilter, client])
 
     if (aps.length > 0 && networkStatus === 1) return <Spinner />
 
@@ -568,7 +558,6 @@ export const EkPlanTable = memo(
                     <CellForEkfrequenz
                       key={value.name}
                       row={row}
-                      ekfrequenzs={ekfrequenzs}
                       field={value}
                       style={style}
                       refetchTpop={refetch}

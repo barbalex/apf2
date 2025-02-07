@@ -1,17 +1,7 @@
 import { gql } from '@apollo/client'
-import { ekfrequenz } from '../../shared/fragments.js'
 
 export const queryAll = gql`
-  query EkplanTpopQuery($tpopFilter: TpopFilter!, $apIds: [UUID!]) {
-    allEkfrequenzs(filter: { apId: { in: $apIds } }, orderBy: SORT_ASC) {
-      nodes {
-        ...EkfrequenzFields
-        ekAbrechnungstypWerteByEkAbrechnungstyp {
-          id
-          text
-        }
-      }
-    }
+  query EkplanTpopQuery($tpopFilter: TpopFilter!) {
     allTpops(
       filter: $tpopFilter
       orderBy: [AP_NAME_ASC, POP_BY_POP_ID__NR_ASC, NR_ASC]
@@ -60,5 +50,4 @@ export const queryAll = gql`
       }
     }
   }
-  ${ekfrequenz}
 `

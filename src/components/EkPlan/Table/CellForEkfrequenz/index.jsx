@@ -1,15 +1,16 @@
 import { memo, useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { useApolloClient, gql } from '@apollo/client'
+import { useApolloClient, gql, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import groupBy from 'lodash/groupBy'
 import max from 'lodash/max'
 
-import { StyledCellForSelect } from './index.jsx'
-import { tpop } from '../../shared/fragments.js'
-import { MobxContext } from '../../../mobxContext.js'
-import { setStartjahr } from './setStartjahr/index.jsx'
-import { setEkplans } from './setEkplans/index.jsx'
+import { StyledCellForSelect } from '../index.jsx'
+import { tpop } from '../../../shared/fragments.js'
+import { MobxContext } from '../../../../mobxContext.js'
+import { setStartjahr } from '../setStartjahr/index.jsx'
+import { setEkplans } from '../setEkplans/index.jsx'
+import { query } from './query.js'
 
 const Select = styled.select`
   width: 100%;
@@ -29,12 +30,15 @@ const Option = styled.option`
 `
 
 export const CellForEkfrequenz = memo(
-  observer(({ row, field, style, refetchTpop, ekfrequenzs, setProcessing }) => {
+  observer(({ row, field, style, refetchTpop, setProcessing }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
-    const { hovered } = store.ekPlan
+    const { hovered, apValues } = store.ekPlan
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+
+    const { data } = useQuery(query, { variables: { apIds: apValues } })
+    const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
     const ekfOptionsGroupedPerAp = useMemo(() => {
       const longestAnwendungsfall = max(
