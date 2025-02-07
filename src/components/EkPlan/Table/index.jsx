@@ -484,25 +484,15 @@ export const EkPlanTable = memo(
               }
               return <CellHeaderFixed column={column} />
             })}
-            <VariableSizeGrid
-              key={yearHeaderRerenderValue}
-              style={{ overflow: 'hidden' }}
-              ref={yearHeaderGrid}
-              height={60}
-              width={headerYearFieldsWidth}
-              rowHeight={() => 60}
-              columnCount={years.length}
-              rowCount={1}
-              columnWidth={() => yearColumnWidth}
-            >
-              {({ columnIndex, style }) => (
+            {years.map((year, index) => {
+              console.log('year:', year)
+              return (
                 <CellHeaderYear
-                  style={style}
-                  column={years[columnIndex]}
+                  column={year}
                   rows={tpopRows}
                 />
-              )}
-            </VariableSizeGrid>
+              )
+            })}
           </HeaderContainer>
           <BodyContainer>
             <VariableSizeGrid

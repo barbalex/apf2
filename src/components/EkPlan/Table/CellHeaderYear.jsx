@@ -19,6 +19,9 @@ const StyledCell = styled.div`
   border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
   cursor: pointer;
+  width: 51px;
+  min-width: 51px;
+  height: 60px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 700 !important;
@@ -42,7 +45,7 @@ const StyledMenuItem = styled(MenuItem)`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderYear = memo(
-  observer(({ style, column, rows }) => {
+  observer(({ column, rows }) => {
     const client = useApolloClient()
 
     const store = useContext(MobxContext)
@@ -139,7 +142,6 @@ export const CellHeaderYear = memo(
     return (
       <>
         <StyledCell
-          style={style}
           onMouseEnter={onMouseEnter}
           onMouseLeave={hovered.reset}
           className={className}

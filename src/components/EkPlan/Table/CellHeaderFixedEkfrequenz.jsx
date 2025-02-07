@@ -22,6 +22,8 @@ export const StyledCell = styled.div`
   cursor: pointer;
   box-sizing: border-box;
   width: ${(props) => props.width}px;
+  min-width: ${(props) => props.width}px;
+  height: 60px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 700 !important;
