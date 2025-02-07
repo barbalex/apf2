@@ -4,14 +4,15 @@ import { useApolloClient, gql, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import groupBy from 'lodash/groupBy'
 import max from 'lodash/max'
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { StyledCellForSelect } from '../index.jsx'
-import { tpop } from '../../../shared/fragments.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { setStartjahr } from '../setStartjahr/index.jsx'
-import { setEkplans } from '../setEkplans/index.jsx'
 import { query } from './query.js'
-import { processChange } from './processChange.js'
+
+const processChangeWorkerFactory = createWorkerFactory(
+  () => import('./processChange.js'),
+)
 
 const Select = styled.select`
   width: 100%;
@@ -37,6 +38,8 @@ export const CellForEkfrequenz = memo(
     const { enqueNotification } = store
     const { hovered, apValues } = store.ekPlan
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+
+    const processChangeWorker = useWorker(processChangeWorkerFactory)
 
     const { data } = useQuery(query, { variables: { apIds: apValues } })
     const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
@@ -70,8 +73,8 @@ export const CellForEkfrequenz = memo(
     const onChange = useCallback(
       async (e) => {
         const value = e.target.value || null
-        setProcessing(true)
-        await processChange({
+        // setProcessing(true)
+        await processChangeWorker.processChange({
           client,
           value,
           row,
@@ -79,7 +82,7 @@ export const CellForEkfrequenz = memo(
           store,
           refetchTpop,
         })
-        setProcessing(false)
+        // setProcessing(false)
       },
       [row, client, store, enqueNotification, refetchTpop],
     )

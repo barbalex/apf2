@@ -424,6 +424,8 @@ export const EkPlanTable = memo(
       })
     }, [tpops, store, years, apValues, tpopFilter, client])
 
+    console.log('EkPlanTable, render')
+
     if (aps.length > 0 && networkStatus === 1) return <Spinner />
 
     if (error) return <Error error={error} />
