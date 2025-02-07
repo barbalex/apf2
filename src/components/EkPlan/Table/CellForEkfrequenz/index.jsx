@@ -32,7 +32,7 @@ const Option = styled.option`
 `
 
 export const CellForEkfrequenz = memo(
-  observer(({ row, field, width, refetchTpop, setProcessing }) => {
+  observer(({ row, field, width, setProcessing }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -85,7 +85,7 @@ export const CellForEkfrequenz = memo(
         })
         setProcessing(false)
       },
-      [row, client, store, enqueNotification, refetchTpop],
+      [row, client, store, enqueNotification],
     )
     const onFocus = useCallback(() => {
       setFocused(true)

@@ -66,7 +66,7 @@ const Input = styled.input`
 `
 
 export const CellForEkfrequenzStartjahr = memo(
-  observer(({ row, width, refetchTpop, setProcessing }) => {
+  observer(({ row, width, setProcessing }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -121,7 +121,7 @@ export const CellForEkfrequenzStartjahr = memo(
         })
         setProcessing(false)
       },
-      [row, client, store, enqueNotification, refetchTpop, ekfrequenz],
+      [row, client, store, enqueNotification, ekfrequenz],
     )
 
     return (

@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
-import { FixedSizeGrid, VariableSizeGrid, VariableSizeList } from 'react-window'
 import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
 import { getSnapshot } from 'mobx-state-tree'
@@ -36,7 +35,7 @@ import { exportModule } from '../../../modules/export.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
-import { filter } from 'lodash'
+import { TpopRow } from './Row.jsx'
 
 const Container = styled.div`
   position: relative;
@@ -54,9 +53,8 @@ const BodyContainer = styled.div`
   flex-direction: column;
   height: calc(100% - 60px);
   width: 100%;
-  > div:nth-of-type(2) {
-    scrollbar-gutter: stable;
-  }
+  overflow: auto;
+  scrollbar-gutter: stable;
 `
 const RowContainer = styled.div`
   display: flex;
@@ -493,214 +491,28 @@ export const EkPlanTable = memo(
               }
               return <CellHeaderFixed column={column} />
             })}
-            {years.map((year, index) => {
-              console.log('year:', year)
-              return (
-                <CellHeaderYear
-                  column={year}
-                  rows={tpopRows}
-                />
-              )
-            })}
+            {years.map((year, index) => (
+              <CellHeaderYear
+                key={`yearsColumn/${year}`}
+                column={year}
+                rows={tpopRows}
+              />
+            ))}
           </HeaderContainer>
           <BodyContainer>
             {tpopRows.map((row, rowIndex) => {
               return (
-                <RowContainer key={row.id}>
-                  {tpopColumns.map((tpopColumn, columnIndex) => {
-                    const value = row[tpopColumn.name]
-                    const column = tpopColumn.name
-                    const width = tpopColumn.width
-
-                    if (value.name === 'yearTitle') {
-                      return (
-                        <CellForYearTitle
-                          key={value.name}
-                          row={row}
-                          width={width}
-                        />
-                      )
-                    }
-                    if (value.name === 'ekAbrechnungstyp') {
-                      return (
-                        <CellForValue
-                          key={value.name}
-                          field={value}
-                          row={row}
-                          firstChild={columnIndex === 0}
-                          width={width}
-                        />
-                      )
-                    }
-                    if (value.name === 'ekfrequenz') {
-                      return (
-                        <CellForEkfrequenz
-                          key={value.name}
-                          row={row}
-                          field={value}
-                          refetchTpop={refetch}
-                          setProcessing={setProcessing}
-                          width={width}
-                        />
-                      )
-                    }
-                    if (value.name === 'ekfrequenzStartjahr') {
-                      return (
-                        <CellForEkfrequenzStartjahr
-                          key={value.name}
-                          row={row}
-                          refetchTpop={refetch}
-                          setProcessing={setProcessing}
-                          width={width}
-                        />
-                      )
-                    }
-                    if (value.name === 'ekfrequenzAbweichend') {
-                      return (
-                        <CellForEkfrequenzAbweichend
-                          key={value.name}
-                          row={row}
-                          field={value}
-                          width={width}
-                        />
-                      )
-                    }
-                    if (value.name === 'link') {
-                      return (
-                        <CellForTpopLink
-                          key={value.name}
-                          field={value}
-                          row={row}
-                          width={width}
-                        />
-                      )
-                    }
-                    return (
-                      <CellForValue
-                        key={value.label}
-                        field={value}
-                        row={row}
-                        firstChild={columnIndex === 0}
-                        width={width}
-                      />
-                    )
-                  })}
-                </RowContainer>
+                <TpopRow
+                  key={row.id}
+                  row={row}
+                  setProcessing={setProcessing}
+                  tpopColumns={tpopColumns}
+                  years={years}
+                  yearRows={yearRows}
+                  rowIndex={rowIndex}
+                />
               )
             })}
-            {/* <VariableSizeGrid
-              key={`${rowHeight}${fieldsShown.join()}`}
-              ref={tpopGrid}
-              style={{ overflowY: 'hidden' }}
-              columnCount={tpopColumns.length}
-              columnWidth={(index) => tpopColumns[index].width}
-              height={height - 60}
-              rowCount={tpopRows.length}
-              rowHeight={() => rowHeight}
-              width={headerFieldsFixedWidth}
-            >
-              {({ columnIndex, rowIndex, style }) => {
-                const row = tpopRows[rowIndex]
-                const column = tpopColumns[columnIndex].name
-                const value = row[column]
-
-                if (value.name === 'yearTitle') {
-                  return (
-                    <CellForYearTitle
-                      key={value.name}
-                      style={style}
-                      row={row}
-                    />
-                  )
-                }
-                if (value.name === 'ekAbrechnungstyp') {
-                  return (
-                    <CellForValue
-                      key={value.name}
-                      field={value}
-                      style={style}
-                      row={row}
-                      firstChild={columnIndex === 0}
-                    />
-                  )
-                }
-                if (value.name === 'ekfrequenz') {
-                  return (
-                    <CellForEkfrequenz
-                      key={value.name}
-                      row={row}
-                      field={value}
-                      style={style}
-                      refetchTpop={refetch}
-                      setProcessing={setProcessing}
-                    />
-                  )
-                }
-                if (value.name === 'ekfrequenzStartjahr') {
-                  return (
-                    <CellForEkfrequenzStartjahr
-                      key={value.name}
-                      row={row}
-                      style={style}
-                      refetchTpop={refetch}
-                      setProcessing={setProcessing}
-                    />
-                  )
-                }
-                if (value.name === 'ekfrequenzAbweichend') {
-                  return (
-                    <CellForEkfrequenzAbweichend
-                      key={value.name}
-                      row={row}
-                      field={value}
-                      style={style}
-                    />
-                  )
-                }
-                if (value.name === 'link') {
-                  return (
-                    <CellForTpopLink
-                      key={value.name}
-                      field={value}
-                      style={style}
-                      row={row}
-                    />
-                  )
-                }
-                return (
-                  <CellForValue
-                    key={value.label}
-                    field={value}
-                    style={style}
-                    row={row}
-                    firstChild={columnIndex === 0}
-                  />
-                )
-              }}
-            </VariableSizeGrid> */}
-            <FixedSizeGrid
-              columnCount={years.length}
-              columnWidth={yearColumnWidth}
-              height={height - 60}
-              rowCount={yearRows.length}
-              rowHeight={rowHeight}
-              width={width - headerFieldsFixedWidth}
-              onScroll={onScroll}
-            >
-              {({ columnIndex, rowIndex, style }) => {
-                const row = yearRows[rowIndex]
-                const column = years[columnIndex]
-                const value = row[column]
-
-                return (
-                  <CellForYear
-                    row={row}
-                    field={value}
-                    style={style}
-                  />
-                )
-              }}
-            </FixedSizeGrid>
           </BodyContainer>
         </Container>
         {!!yearMenuAnchor && <CellForYearMenu />}
