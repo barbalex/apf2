@@ -43,17 +43,23 @@ const Container = styled.div`
   height: calc(100% - 86px);
   user-select: none !important;
 `
+const YScrollContainer = styled.div`
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  overflow-x: auto;
+  scrollbar-gutter: stable;
+`
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
-  width: 100%;
 `
 const BodyContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100% - 60px);
-  width: 100%;
-  overflow: auto;
+  overflow: hidden;
+  overflow-y: auto;
   scrollbar-gutter: stable;
 `
 const RowContainer = styled.div`
@@ -460,75 +466,77 @@ export const EkPlanTable = memo(
           exportieren
         </ExportButton>
         <Container ref={resizeRef}>
-          <HeaderContainer>
-            <TpopTitle>{`${loading ? '...' : tpops.length} Teilpopulationen`}</TpopTitle>
-            {headerFieldsFixed.map((column, index) => {
-              const field = column.name
-              if (field === 'ekfrequenz') {
+          <YScrollContainer>
+            <HeaderContainer>
+              <TpopTitle>{`${loading ? '...' : tpops.length} Teilpopulationen`}</TpopTitle>
+              {headerFieldsFixed.map((column, index) => {
+                const field = column.name
+                if (field === 'ekfrequenz') {
+                  return (
+                    <CellHeaderFixedEkfrequenz
+                      key={column.name}
+                      column={column}
+                    />
+                  )
+                }
+                if (field === 'ekfrequenzStartjahr') {
+                  return (
+                    <CellHeaderFixedEkfrequenzStartjahr
+                      key={column.name}
+                      column={column}
+                    />
+                  )
+                }
+                if (field === 'status') {
+                  return (
+                    <CellHeaderFixedTpopStatus
+                      key={column.name}
+                      column={column}
+                      refetch={refetch}
+                    />
+                  )
+                }
+                if (field === 'popStatus') {
+                  return (
+                    <CellHeaderFixedTpopStatus
+                      key={column.name}
+                      column={column}
+                      refetch={refetch}
+                      type="pop"
+                    />
+                  )
+                }
                 return (
-                  <CellHeaderFixedEkfrequenz
+                  <CellHeaderFixed
                     key={column.name}
                     column={column}
                   />
                 )
-              }
-              if (field === 'ekfrequenzStartjahr') {
-                return (
-                  <CellHeaderFixedEkfrequenzStartjahr
-                    key={column.name}
-                    column={column}
-                  />
-                )
-              }
-              if (field === 'status') {
-                return (
-                  <CellHeaderFixedTpopStatus
-                    key={column.name}
-                    column={column}
-                    refetch={refetch}
-                  />
-                )
-              }
-              if (field === 'popStatus') {
-                return (
-                  <CellHeaderFixedTpopStatus
-                    key={column.name}
-                    column={column}
-                    refetch={refetch}
-                    type="pop"
-                  />
-                )
-              }
-              return (
-                <CellHeaderFixed
-                  key={column.name}
-                  column={column}
+              })}
+              {years.map((year, index) => (
+                <CellHeaderYear
+                  key={`yearsColumn/${year}`}
+                  column={year}
+                  rows={tpopRows}
                 />
-              )
-            })}
-            {years.map((year, index) => (
-              <CellHeaderYear
-                key={`yearsColumn/${year}`}
-                column={year}
-                rows={tpopRows}
-              />
-            ))}
-          </HeaderContainer>
-          <BodyContainer>
-            {tpopRows.map((row, rowIndex) => {
-              return (
-                <TpopRow
-                  key={row.id}
-                  row={row}
-                  setProcessing={setProcessing}
-                  tpopColumns={tpopColumns}
-                  years={years}
-                  yearRows={yearRows}
-                  rowIndex={rowIndex}
-                />
-              )
-            })}
-          </BodyContainer>
+              ))}
+            </HeaderContainer>
+            <BodyContainer>
+              {tpopRows.map((row, rowIndex) => {
+                return (
+                  <TpopRow
+                    key={row.id}
+                    row={row}
+                    setProcessing={setProcessing}
+                    tpopColumns={tpopColumns}
+                    years={years}
+                    yearRows={yearRows}
+                    rowIndex={rowIndex}
+                  />
+                )
+              })}
+            </BodyContainer>
+          </YScrollContainer>
         </Container>
         {!!yearMenuAnchor && <CellForYearMenu />}
       </ErrorBoundary>
