@@ -127,16 +127,17 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
     })
   }
   // 4inform user
-  const message =
-    kontrolljahreAb === 'EK' ?
-      `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
-    : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
-  enqueNotification({
-    message,
-    options: {
-      variant: 'success',
-    },
-  })
+  // const message =
+  //   kontrolljahreAb === 'EK' ?
+  //     `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
+  //   : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
+  // enqueNotification({
+  //   message,
+  //   options: {
+  //     variant: 'success',
+  //   },
+  // })
+
   // 5 return startjahr
   return ekfrequenzStartjahr
 }

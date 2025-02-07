@@ -3,7 +3,7 @@ import { appBaseUrl } from '../../../modules/appBaseUrl.js'
 
 const isOdd = (num) => num % 2 === 0
 
-export const tpopRowFromTpop = ({ tpop, index }) => {
+export const tpopRowFromTpop = ({ tpop, index, store }) => {
   let lv95X = tpop?.lv95X
   if (lv95X && lv95X?.toLocaleString) {
     lv95X = lv95X?.toLocaleString('de-ch')
@@ -30,72 +30,128 @@ export const tpopRowFromTpop = ({ tpop, index }) => {
       ...fields.popNr,
       value: tpop?.popByPopId?.nr ?? '-',
     },
-    popName: {
-      ...fields.popName,
-      value: tpop?.popByPopId?.name ?? '-',
-    },
-    popStatus: {
-      ...fields.popStatus,
-      value: tpop?.popByPopId?.popStatusWerteByStatus?.text ?? '-',
-    },
+    ...(store.ekPlan.fields.includes('popName') ?
+      {
+        popName: {
+          ...fields.popName,
+          value: tpop?.popByPopId?.name ?? '-',
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('popStatus') ?
+      {
+        popStatus: {
+          ...fields.popStatus,
+          value: tpop?.popByPopId?.popStatusWerteByStatus?.text ?? '-',
+        },
+      }
+    : {}),
     nr: {
       ...fields.nr,
       value: tpop?.nr ?? '-',
     },
-    gemeinde: {
-      ...fields.gemeinde,
-      value: tpop?.gemeinde ?? '-',
-    },
-    flurname: {
-      ...fields.flurname,
-      value: tpop?.flurname ?? '-',
-    },
-    status: {
-      ...fields.status,
-      value: tpop?.popStatusWerteByStatus?.text ?? '-',
-    },
-    bekanntSeit: {
-      ...fields.bekanntSeit,
-      value: tpop?.bekanntSeit ?? '-',
-    },
-    lv95X: {
-      ...fields.lv95X,
-      value: lv95X,
-    },
-    lv95Y: {
-      ...fields.lv95Y,
-      value: lv95Y,
-    },
-    link: {
-      ...fields.link,
-      value: `${appBaseUrl()}Daten/Projekte/${
-        tpop.popByPopId.apByApId.projId
-      }/Arten/${tpop.popByPopId.apByApId.id}/Populationen/${
-        tpop.popByPopId.id
-      }/Teil-Populationen/${tpop.id}`,
-    },
-    ekfKontrolleur: {
-      ...fields.ekfKontrolleur,
-      value: tpop?.adresseByEkfKontrolleur?.name,
-    },
-    ekAbrechnungstyp: {
-      ...fields.ekAbrechnungstyp,
-      value:
-        tpop?.ekfrequenzByEkfrequenz?.ekAbrechnungstypWerteByEkAbrechnungstyp
-          ?.text ?? '',
-    },
-    ekfrequenz: {
-      ...fields.ekfrequenz,
-      value: tpop?.ekfrequenz ?? null,
-    },
-    ekfrequenzStartjahr: {
-      ...fields.ekfrequenzStartjahr,
-      value: tpop?.ekfrequenzStartjahr ?? null,
-    },
-    ekfrequenzAbweichend: {
-      ...fields.ekfrequenzAbweichend,
-      value: tpop?.ekfrequenzAbweichend === true,
-    },
+    ...(store.ekPlan.fields.includes('gemeinde') ?
+      {
+        gemeinde: {
+          ...fields.gemeinde,
+          value: tpop?.gemeinde ?? '-',
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('flurname') ?
+      {
+        flurname: {
+          ...fields.flurname,
+          value: tpop?.flurname ?? '-',
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('status') ?
+      {
+        status: {
+          ...fields.status,
+          value: tpop?.popStatusWerteByStatus?.text ?? '-',
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('bekanntSeit') ?
+      {
+        bekanntSeit: {
+          ...fields.bekanntSeit,
+          value: tpop?.bekanntSeit ?? '-',
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('lv95X') ?
+      {
+        lv95X: {
+          ...fields.lv95X,
+          value: lv95X,
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('lv95Y') ?
+      {
+        lv95Y: {
+          ...fields.lv95Y,
+          value: lv95Y,
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('link') ?
+      {
+        link: {
+          ...fields.link,
+          value: `${appBaseUrl()}Daten/Projekte/${
+            tpop.popByPopId.apByApId.projId
+          }/Arten/${tpop.popByPopId.apByApId.id}/Populationen/${
+            tpop.popByPopId.id
+          }/Teil-Populationen/${tpop.id}`,
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('ekfKontrolleur') ?
+      {
+        ekfKontrolleur: {
+          ...fields.ekfKontrolleur,
+          value: tpop?.adresseByEkfKontrolleur?.name,
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('ekAbrechnungstyp') ?
+      {
+        ekAbrechnungstyp: {
+          ...fields.ekAbrechnungstyp,
+          value:
+            tpop?.ekfrequenzByEkfrequenz
+              ?.ekAbrechnungstypWerteByEkAbrechnungstyp?.text ?? '',
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('ekfrequenz') ?
+      {
+        ekfrequenz: {
+          ...fields.ekfrequenz,
+          value: tpop?.ekfrequenz ?? null,
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('ekfrequenzStartjahr') ?
+      {
+        ekfrequenzStartjahr: {
+          ...fields.ekfrequenzStartjahr,
+          value: tpop?.ekfrequenzStartjahr ?? null,
+        },
+      }
+    : {}),
+    ...(store.ekPlan.fields.includes('ekfrequenzAbweichend') ?
+      {
+        ekfrequenzAbweichend: {
+          ...fields.ekfrequenzAbweichend,
+          value: tpop?.ekfrequenzAbweichend === true,
+        },
+      }
+    : {}),
     yearTitle: fields.yearTitle,
   }
 }

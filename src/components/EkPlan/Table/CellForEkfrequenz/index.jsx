@@ -41,7 +41,9 @@ export const CellForEkfrequenz = memo(
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-    const { data } = useQuery(query, { variables: { apIds: apValues } })
+    const { data } = useQuery(query, {
+      variables: { apIds: apValues, tpopId: row.id },
+    })
     const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
     const ekfOptionsGroupedPerAp = useMemo(() => {
@@ -73,16 +75,15 @@ export const CellForEkfrequenz = memo(
     const onChange = useCallback(
       async (e) => {
         const value = e.target.value || null
-        // setProcessing(true)
+        setProcessing(true)
         await processChangeWorker.processChange({
           client,
           value,
           row,
           enqueNotification,
           store,
-          refetchTpop,
         })
-        // setProcessing(false)
+        setProcessing(false)
       },
       [row, client, store, enqueNotification, refetchTpop],
     )
@@ -93,7 +94,9 @@ export const CellForEkfrequenz = memo(
       setFocused(false)
     }, [])
     const optionsGrouped = ekfOptionsGroupedPerAp[row.apId]
-    const ekfrequenz = ekfrequenzs.find((f) => f.id === field.value)
+    const ekfrequenz = ekfrequenzs.find(
+      (f) => f.id === data?.tpopById?.ekfrequenz,
+    ) // was: field.value instead of tpop.ekfrequenz
     const valueToShow = ekfrequenz ? ekfrequenz.code : ''
 
     return (

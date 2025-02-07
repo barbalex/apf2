@@ -1,11 +1,16 @@
 import { memo, useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
+import { useApolloClient, gql, useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
+import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
-import { MobxContext } from '../../../mobxContext.js'
-import { tpop } from '../../shared/fragments.js'
-import { setEkplans } from './setEkplans/index.jsx'
+import { MobxContext } from '../../../../mobxContext.js'
+import { tpop } from '../../../shared/fragments.js'
+import { setEkplans } from '../setEkplans/index.jsx'
+
+const processChangeWorkerFactory = createWorkerFactory(
+  () => import('./processChange.js'),
+)
 
 const Container = styled.div`
   font-size: 0.75rem !important;
@@ -65,19 +70,30 @@ export const CellForEkfrequenzStartjahr = memo(
     const { hovered } = store.ekPlan
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
-    const [stateValue, setStateValue] = useState(
-      row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
-        row.ekfrequenzStartjahr.value
-      : '',
-    )
+    const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-    useEffect(() => {
-      setStateValue(
-        !!row.ekfrequenzStartjahr.value || row.ekfrequenzStartjahr.value === 0 ?
-          row.ekfrequenzStartjahr.value
-        : '',
-      )
-    }, [row.ekfrequenzStartjahr.value, row.id])
+    const { data } = useQuery(
+      gql`
+        query EkfrequenzstartjahrQueryForCellForEkfrequenzStartjahr(
+          $tpopId: UUID!
+        ) {
+          tpopById(id: $tpopId) {
+            id
+            ekfrequenz
+            ekfrequenzStartjahr
+          }
+        }
+      `,
+      { variables: { tpopId: row.id } },
+    )
+    const ekfrequenzStartjahr = data?.tpopById?.ekfrequenzStartjahr
+    const ekfrequenz = data?.tpopById?.ekfrequenz
+
+    const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
+    useEffect(
+      () => setStateValue(ekfrequenzStartjahr ?? ''),
+      [ekfrequenzStartjahr],
+    )
 
     const onMouseEnter = useCallback(
       () => hovered.setTpopId(row.id),
@@ -89,65 +105,20 @@ export const CellForEkfrequenzStartjahr = memo(
     }, [])
     const onBlur = useCallback(
       async (e) => {
-        setProcessing(true)
         const value =
           e.target.value || e.target.value === 0 ? +e.target.value : null
-        try {
-          await client.mutate({
-            mutation: gql`
-              mutation updateTpopEkfrequenzStartjahr(
-                $id: UUID!
-                $ekfrequenzStartjahr: Int
-                $changedBy: String
-              ) {
-                updateTpopById(
-                  input: {
-                    id: $id
-                    tpopPatch: {
-                      id: $id
-                      ekfrequenzStartjahr: $ekfrequenzStartjahr
-                      changedBy: $changedBy
-                    }
-                  }
-                ) {
-                  tpop {
-                    ...TpopFields
-                  }
-                }
-              }
-              ${tpop}
-            `,
-            variables: {
-              id: row.id,
-              ekfrequenzStartjahr: value,
-              changedBy: store.user.name,
-            },
-            refetchQueries: ['EkplanTpopQuery'],
-          })
-        } catch (error) {
-          enqueNotification({
-            message: error.message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        // TODO: or ekfrequenz has no kontrolljahre
-        if (row.ekfrequenz.value && value) {
-          await setEkplans({
-            tpopId: row.id,
-            ekfrequenz: row.ekfrequenz.value,
-            ekfrequenzStartjahr: value,
-            refetchTpop,
-            client,
-            store,
-          })
-        } else {
-          await refetchTpop()
-        }
+        setProcessing(true)
+        await processChangeWorker.processChange({
+          client,
+          value,
+          ekfrequenz,
+          row,
+          enqueNotification,
+          store,
+        })
         setProcessing(false)
       },
-      [row, client, store, enqueNotification, refetchTpop],
+      [row, client, store, enqueNotification, refetchTpop, ekfrequenz],
     )
 
     return (

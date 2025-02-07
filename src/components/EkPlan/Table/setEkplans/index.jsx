@@ -7,7 +7,6 @@ export const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
-  refetchTpop,
   client,
   store,
 }) => {
@@ -79,7 +78,6 @@ export const setEkplans = async ({
   const typ = ekfrequenz.ektyp.toUpperCase()
   const kontrolljahre = ekfrequenz.kontrolljahre || []
   if (kontrolljahre.length === 0) {
-    await refetchTpop()
     return enqueNotification({
       message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht. Weil aber für die gewählte EK-Frequenz keine Kontrolljahre existieren, wurden keine neuen Kontrolljahre gesetzt`,
       options: {
@@ -110,20 +108,20 @@ export const setEkplans = async ({
     })
   }
   // 5. tell user how it went
-  let jahreList = kontrolljahre.join(', ')
-  const formatter = new Intl.ListFormat('de', {
-    style: 'long',
-    type: 'conjunction',
-  })
-  await refetchTpop()
-  jahreList = formatter.format(kontrolljahre.map((j) => j.toString()))
-  enqueNotification({
-    message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${
-      kontrolljahre.length > 1 ? 'die Jahre' : 'das Jahr'
-    } ${jahreList} gesetzt`,
-    options: {
-      variant: 'success',
-    },
-  })
+  // let jahreList = kontrolljahre.join(', ')
+  // const formatter = new Intl.ListFormat('de', {
+  //   style: 'long',
+  //   type: 'conjunction',
+  // })
+  // jahreList = formatter.format(kontrolljahre.map((j) => j.toString()))
+  // enqueNotification({
+  //   message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${
+  //     kontrolljahre.length > 1 ? 'die Jahre' : 'das Jahr'
+  //   } ${jahreList} gesetzt`,
+  //   options: {
+  //     variant: 'success',
+  //   },
+  // })
+
   return
 }

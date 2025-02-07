@@ -25,7 +25,7 @@ import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.jsx
 import { CellHeaderYear } from './CellHeaderYear.jsx'
 import { CellForYearTitle } from './CellForYearTitle.jsx'
 import { CellForEkfrequenz } from './CellForEkfrequenz/index.jsx'
-import { CellForEkfrequenzStartjahr } from './CellForEkfrequenzStartjahr.jsx'
+import { CellForEkfrequenzStartjahr } from './CellForEkfrequenzStartjahr/index.jsx'
 import { CellForEkfrequenzAbweichend } from './CellForEkfrequenzAbweichend.jsx'
 import { CellForTpopLink } from './CellForTpopLink.jsx'
 import { CellForValue } from './CellForValue.jsx'
@@ -36,6 +36,7 @@ import { exportModule } from '../../../modules/export.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
+import { filter } from 'lodash'
 
 const Container = styled.div`
   position: relative;
@@ -304,6 +305,16 @@ export const EkPlanTable = memo(
       {
         variables: {
           tpopFilter,
+          showEkf: fieldsShown.includes('ekfKontrolleur'),
+          showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
+          showBekanntSeit: fieldsShown.includes('bekanntSeit'),
+          showStatus: fieldsShown.includes('status'),
+          showFlurname: fieldsShown.includes('flurname'),
+          showGemeinde: fieldsShown.includes('gemeinde'),
+          showPopStatus: fieldsShown.includes('popStatus'),
+          showPopName: fieldsShown.includes('popName'),
+          showLv95X: fieldsShown.includes('lv95X'),
+          showLv95Y: fieldsShown.includes('lv95Y'),
         },
         notifyOnNetworkStatusChange: true,
       },
@@ -335,7 +346,7 @@ export const EkPlanTable = memo(
     // Also: they need to update when the filter changes
     const tpopsStringified = JSON.stringify(tpops)
     const tpopRows = useMemo(
-      () => tpops.map((tpop, index) => tpopRowFromTpop({ tpop, index })),
+      () => tpops.map((tpop, index) => tpopRowFromTpop({ tpop, index, store })),
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [tpops, tpopFilter, tpopsStringified, apValues],
     )
@@ -432,7 +443,9 @@ export const EkPlanTable = memo(
 
     return (
       <ErrorBoundary>
-        {processing && <SpinnerOverlay message="Daten werden verarbeitet" />}
+        {processing && (
+          <SpinnerOverlay message="Startjahr und EK-Pläne werden gesetzt" />
+        )}
         <ExportButton
           variant="outlined"
           onClick={onClickExport}
@@ -535,6 +548,7 @@ export const EkPlanTable = memo(
                 const row = tpopRows[rowIndex]
                 const column = tpopColumns[columnIndex].name
                 const value = row[column]
+
                 if (value.name === 'yearTitle') {
                   return (
                     <CellForYearTitle
