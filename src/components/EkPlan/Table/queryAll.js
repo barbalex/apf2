@@ -43,12 +43,6 @@ export const queryAll = gql`
         adresseByEkfKontrolleur {
           name
         }
-        tpopkontrsByTpopId {
-          nodes {
-            id
-            jahr
-          }
-        }
         popByPopId {
           id
           nr

@@ -1,6 +1,8 @@
 import max from 'lodash/max'
 
 import { queryEkfrequenz } from './queryEkfrequenz.js'
+import { queryTpopkontr } from './queryTpopkontr.js'
+import { queryTpopmassn } from './queryTpopmassn.js'
 import { mutationUpdateTpop } from './mutationUpdateTpop.js'
 
 export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
@@ -45,8 +47,24 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   let ekfrequenzStartjahr
   // 2a if ek: get last ek
   if (kontrolljahreAb === 'EK') {
+    let result
+    try {
+      result = await client.query({
+        query: queryTpopkontr,
+        variables: { tpopId: row.id },
+      })
+    } catch (error) {
+      return enqueNotification({
+        message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
     ekfrequenzStartjahr = max(
-      (row?.tpop?.tpopkontrsByTpopId?.nodes ?? []).map((n) => n.jahr),
+      (result?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
+        (n) => n.jahr,
+      ),
     )
     if (!ekfrequenzStartjahr) {
       return enqueNotification({
@@ -62,8 +80,24 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
     // TODO:
     // if tpop.status === 201 (Ansaatversuch): choose first ansaat
     // else: choose last anpflanzung
+    let result
+    try {
+      result = await client.query({
+        query: queryTpopmassn,
+        variables: { tpopId: row.id },
+      })
+    } catch (error) {
+      return enqueNotification({
+        message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
     ekfrequenzStartjahr = max(
-      (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).map((n) => n.jahr),
+      (result?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
+        (n) => n.jahr,
+      ),
     )
     if (!ekfrequenzStartjahr) {
       return enqueNotification({

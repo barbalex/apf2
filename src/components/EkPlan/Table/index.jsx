@@ -1,5 +1,5 @@
 import { memo, useContext, useMemo, useCallback, useRef, useState } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery, useApolloClient } from '@apollo/client'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import sumBy from 'lodash/sumBy'
@@ -11,6 +11,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { queryAll } from './queryAll.js'
+import { queryForExport } from './queryForExport.js'
 import { CellForYearMenu } from './CellForYearMenu/index.jsx'
 import { yearsFromTpops } from './yearsFromTpops.js'
 import { tpopRowFromTpop } from './tpopRowFromTpop.js'
@@ -122,6 +123,7 @@ const ExportButton = styled(Button)`
 
 export const EkPlanTable = memo(
   observer(() => {
+    const client = useApolloClient()
     const store = useContext(MobxContext)
     const {
       aps,
@@ -399,14 +401,36 @@ export const EkPlanTable = memo(
       [filterAnsiedlungYear, filterEkplanYear, filterKontrolleYear],
     )
 
-    const onClickExport = useCallback(() => {
+    const onClickExport = useCallback(async () => {
+      // TODO: load data from previous version of queryAll
+
+      let result
+      try {
+        result = await client.query({
+          query: queryForExport,
+          variables: {
+            tpopFilter,
+            apIds: apValues,
+          },
+        })
+      } catch (error) {
+        return enqueNotification({
+          message: `Fehler beim Abfragen für den Export: ${error.message}`,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      const tpops = result?.data?.allTpops?.nodes ?? []
       const data = tpops.map((tpop) =>
         exportRowFromTpop({ tpop, years, store, ekfrequenzs }),
       )
+      console.log('EkPlanTable.onClickExport', { data, tpops, result })
       exportModule({
         data,
         fileName: 'ek-planung',
         store,
+        client,
       })
     }, [tpops, store, years, ekfrequenzs])
 

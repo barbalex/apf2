@@ -129,6 +129,7 @@ export const CellForEkfrequenz = memo(
           })
         }
         setProcessing(false)
+        // TODO: only unvalidate the specific tpop's query cache?
         client.refetchQueries({ include: ['EkplanCellForYearQuery'] })
       },
       [row, client, store, enqueNotification, refetchTpop],
