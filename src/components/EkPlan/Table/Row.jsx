@@ -35,11 +35,7 @@ export const TpopRow = memo(
 
               if (value.name === 'yearTitle') {
                 return (
-                  <CellForYearTitle
-                    key={value.name}
-                    row={row}
-                    width={width}
-                  />
+                  <CellForYearTitle key={value.name} row={row} width={width} />
                 )
               }
               if (value.name === 'ekAbrechnungstyp') {

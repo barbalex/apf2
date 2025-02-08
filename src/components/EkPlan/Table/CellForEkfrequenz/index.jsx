@@ -84,6 +84,9 @@ export const CellForEkfrequenz = memo(
           store,
         })
         setProcessing(false)
+        setTimeout(() => {
+          setFocused(false)
+        }, 100)
       },
       [row, client, store, enqueNotification],
     )
@@ -113,32 +116,24 @@ export const CellForEkfrequenz = memo(
           onFocus={onFocus}
           onBlur={onBlur}
         >
-          {focused ?
-            optionsGrouped ?
+          {focused ? (
+            optionsGrouped ? (
               <>
-                <Option
-                  key="option1"
-                  value={null}
-                >
+                <Option key="option1" value={null}>
                   {''}
                 </Option>
                 {optionsGrouped.map((o) => (
-                  <Option
-                    key={o.value}
-                    value={o.value}
-                  >
+                  <Option key={o.value} value={o.value}>
                     {o.label}
                   </Option>
                 ))}
               </>
-            : null
-          : <Option
-              key="option1"
-              value={field.value}
-            >
+            ) : null
+          ) : (
+            <Option key="option1" value={field.value}>
               {valueToShow}
             </Option>
-          }
+          )}
         </Select>
       </StyledCellForSelect>
     )

@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, useCallback, useRef, useState } from 'react'
+import { memo, useContext, useMemo, useCallback, useState } from 'react'
 import { useQuery, useApolloClient } from '@apollo/client'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
@@ -78,9 +78,11 @@ export const StyledTableCell = styled.div`
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
   background: ${(props) =>
-    props['data-clicked'] ? 'rgb(255,211,167) !important'
-    : props['data-isodd'] ? 'rgb(255, 255, 252)'
-    : 'unset'};
+    props['data-clicked']
+      ? 'rgb(255,211,167) !important'
+      : props['data-isodd']
+        ? 'rgb(255, 255, 252)'
+        : 'unset'};
   box-sizing: border-box;
   width: ${(props) => props.width}px;
   min-width: ${(props) => props.width}px;
@@ -362,9 +364,8 @@ export const EkPlanTable = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [tpops, tpopFilter, tpopsStringified, apValues],
     )
-    const tpopColumns =
-      tpopRows.length ?
-        sortBy(
+    const tpopColumns = tpopRows.length
+      ? sortBy(
           Object.values(tpopRows[0])
             .filter((o) => typeof o === 'object')
             .filter((o) => !!o.name)
@@ -383,29 +384,11 @@ export const EkPlanTable = memo(
       headerFieldsFixedWidth = width
     }
 
-    const tpopGrid = useRef(null)
-    const yearHeaderGrid = useRef(null)
-
     let headerYearFieldsWidth = width - headerFieldsFixedWidth
     if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
 
     const showsLength = [showEk, showEkf, showMassn].filter((s) => !!s).length
     const rowHeight = 23 + (showsLength ? showsLength - 1 : 0) * 16
-
-    /**
-     * See https://github.com/bvaughn/react-window/issues/69
-     * for sticky columns,
-     * https://codesandbox.io/s/y3pyp85zm1
-     * for sticky headers
-     */
-    const onScroll = ({ scrollTop, scrollLeft, scrollUpdateWasRequested }) => {
-      if (!scrollUpdateWasRequested) {
-        tpopGrid.current && tpopGrid.current.scrollTo({ scrollTop })
-        yearHeaderGrid.current &&
-          scrollLeft &&
-          yearHeaderGrid.current.scrollTo({ scrollLeft })
-      }
-    }
 
     // when this value changes, year columns are re-rendered as it is added as key
     // needed because otherwise when changing filters column widths can be off
@@ -506,12 +489,7 @@ export const EkPlanTable = memo(
                     />
                   )
                 }
-                return (
-                  <CellHeaderFixed
-                    key={column.name}
-                    column={column}
-                  />
-                )
+                return <CellHeaderFixed key={column.name} column={column} />
               })}
               {years.map((year, index) => (
                 <CellHeaderYear
@@ -521,7 +499,7 @@ export const EkPlanTable = memo(
                 />
               ))}
             </HeaderContainer>
-            <BodyContainer>
+            <BodyContainer tabIndex={-1}>
               {tpopRows.map((row, rowIndex) => {
                 return (
                   <TpopRow
