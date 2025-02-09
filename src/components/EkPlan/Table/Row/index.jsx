@@ -17,7 +17,6 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { useOnScreen } from '../../../../modules/useOnScreen.js'
 import { queryRow } from './queryRow.js'
 import { tpopRowFromTpop } from './tpopRowFromTpop.js'
-import { yearRowFromTpop } from './yearRowFromTpop.js'
 
 const RowContainer = styled.div`
   display: flex;
@@ -31,16 +30,7 @@ export const TpopRow = memo(
     const ref = useRef(null)
     const isVisible = useOnScreen(ref)
 
-    const row = tpopRowFromTpop({ tpop, index, store })
-    const tpopColumns = Object.values(row)
-      .filter((o) => typeof o === 'object')
-      .filter((o) => !!o.name)
-      .filter((o) => store.ekPlan.fields.includes(o.name) || !!o.alwaysShow)
-    const yearRow = yearRowFromTpop({
-      tpop,
-      years,
-      index,
-    })
+    const { row, tpopColumns } = tpopRowFromTpop({ tpop, index, years, store })
 
     return (
       <ErrorBoundary>
@@ -120,12 +110,12 @@ export const TpopRow = memo(
             })}
           {isVisible &&
             years.map((year, columnIndex) => {
-              const value = yearRow[year]
+              const value = row[year]
 
               return (
                 <CellForYear
                   key={value.name}
-                  row={yearRow}
+                  row={row}
                   field={value}
                   width={yearColumnWidth}
                 />

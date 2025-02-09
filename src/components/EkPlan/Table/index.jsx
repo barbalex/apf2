@@ -467,7 +467,7 @@ export const EkPlanTable = memo(
                 />
               ))}
             </HeaderContainer>
-            <BodyContainer tabIndex={-1}>
+            <BodyContainer>
               {tpops.map((tpop, index) => (
                 <TpopRow
                   key={tpop.id}
