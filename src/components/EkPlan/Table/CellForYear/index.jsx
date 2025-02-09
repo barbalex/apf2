@@ -10,7 +10,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.js'
 
 export const CellForYear = memo(
-  observer(({ field, row, style }) => {
+  observer(({ field, row, ekPlan, ekfPlan, eks, ekfs, ansiedlungs, style }) => {
     const store = useContext(MobxContext)
     const {
       showEk,
@@ -22,15 +22,6 @@ export const CellForYear = memo(
       einheitsByAp,
       hovered,
     } = store.ekPlan
-
-    const { data, loading } = useQuery(query, {
-      variables: { tpopId: row.id, jahr: field.name },
-    })
-    const ekPlan = data?.tpopById?.ekPlans?.totalCount > 0
-    const ekfPlan = data?.tpopById?.ekfPlans?.totalCount > 0
-    const eks = data?.tpopById?.eks?.nodes ?? []
-    const ekfs = data?.tpopById?.ekfs?.nodes ?? []
-    const ansiedlungs = data?.tpopById?.ansiedlungs?.nodes ?? []
 
     const { label, value, width } = field
     const onMouseEnter = useCallback(
@@ -83,25 +74,15 @@ export const CellForYear = memo(
         style={style}
       >
         <InfoRow>
-          {showEk && data && (
-            <EkIcon
-              planned={ekPlan}
-              eks={eks}
-              einheits={einheits}
-            />
+          {showEk && <EkIcon planned={ekPlan} eks={eks} einheits={einheits} />}
+        </InfoRow>
+        <InfoRow>
+          {showEkf && (
+            <EkIcon planned={ekfPlan} eks={ekfs} einheits={einheits} />
           )}
         </InfoRow>
         <InfoRow>
-          {showEkf && data && (
-            <EkIcon
-              planned={ekfPlan}
-              eks={ekfs}
-              einheits={einheits}
-            />
-          )}
-        </InfoRow>
-        <InfoRow>
-          {showMassn && data && <MassnIcon ansiedlungs={ansiedlungs} />}
+          {showMassn && <MassnIcon ansiedlungs={ansiedlungs} />}
         </InfoRow>
       </StyledTableCell>
     )

@@ -72,6 +72,6 @@ export const processChange = async ({
     })
   }
   // don't await as this would block the ui and it doesn't matter if user navigates away
-  client.refetchQueries({ include: ['EkplanCellForYearQuery'] })
+  client.refetchQueries({ include: ['RowQueryForEkPlan'] })
   return
 }

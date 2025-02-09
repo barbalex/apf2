@@ -25,6 +25,7 @@ export const Visible = memo(
       variables: {
         apIds: store.ekPlan.apValues,
         tpopId,
+        years,
         showEkf: fieldsShown.includes('ekfKontrolleur'),
         showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
         showBekanntSeit: fieldsShown.includes('bekanntSeit'),
@@ -131,10 +132,25 @@ export const Visible = memo(
         })}
         {years.map((year, columnIndex) => {
           const value = row[year]
+          // TODO: query view to get these values without having to filter here
+          const ekPlan =
+            tpop?.ekPlans?.nodes?.filter((n) => n.jahr === year).length > 0
+          const ekfPlan =
+            tpop?.ekfPlans?.nodes?.filter((n) => n.jahr === year).length > 0
+          const eks = (tpop?.eks?.nodes ?? []).filter((n) => n.jahr === year)
+          const ekfs = (tpop?.ekfs?.nodes ?? []).filter((n) => n.jahr === year)
+          const ansiedlungs = (tpop?.ansiedlungs?.nodes ?? []).filter(
+            (n) => n.jahr === year,
+          )
 
           return (
             <CellForYear
               key={value.name}
+              ekPlan={ekPlan}
+              ekfPlan={ekfPlan}
+              eks={eks}
+              ekfs={ekfs}
+              ansiedlungs={ansiedlungs}
               row={row}
               field={value}
               width={yearColumnWidth}
