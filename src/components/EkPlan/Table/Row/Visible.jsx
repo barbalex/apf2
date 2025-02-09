@@ -19,9 +19,20 @@ import { tpopRowFromTpop } from './tpopRowFromTpop.js'
 export const Visible = memo(
   observer(({ tpop, index, setProcessing, years }) => {
     const store = useContext(MobxContext)
+    const fieldsShown = store.ekPlan.fields
 
     const { data, loading, error } = useQuery(queryRow, {
-      variables: { apIds: store.ekPlan.apValues, tpopId: tpop.id },
+      variables: { apIds: store.ekPlan.apValues, tpopId: tpop.id,
+        showEkf: fieldsShown.includes('ekfKontrolleur'),
+        showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
+        showBekanntSeit: fieldsShown.includes('bekanntSeit'),
+        showStatus: fieldsShown.includes('status'),
+        showFlurname: fieldsShown.includes('flurname'),
+        showGemeinde: fieldsShown.includes('gemeinde'),
+        showPopStatus: fieldsShown.includes('popStatus'),
+        showPopName: fieldsShown.includes('popName'),
+        showLv95X: fieldsShown.includes('lv95X'),
+        showLv95Y: fieldsShown.includes('lv95Y'), },
     })
     const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
     const ekfrequenz = data?.tpopById?.ekfrequenz
