@@ -6,7 +6,7 @@
 //import min from 'lodash/min'
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-export const yearsFromTpops = ({ tpops, pastYears }) => {
+export const yearsFromTpops = ({ pastYears }) => {
   //const ekplans = tpops.flatMap((tpop) => tpop?.ekplansByTpopId?.nodes ?? [])
   //const kontrs = tpops.flatMap((tpop) => tpop?.tpopkontrsByTpopId?.nodes ?? [])
   //const massns = tpops.flatMap((tpop) => tpop?.tpopmassnsByTpopId?.nodes ?? [])

@@ -5,6 +5,8 @@ import { yearColumnWidth } from './yearColumnWidth.js'
 const isOdd = (num) => num % 2 === 0
 
 export const tpopRowFromTpop = ({ tpop, index, years, store }) => {
+  if (!tpop) return { row: {}, tpopColumns: [] }
+
   let lv95X = tpop?.lv95X
   if (lv95X && lv95X?.toLocaleString) {
     lv95X = lv95X?.toLocaleString('de-ch')

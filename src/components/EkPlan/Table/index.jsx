@@ -314,33 +314,15 @@ export const EkPlanTable = memo(
 
     const { data, loading, error, refetch, networkStatus } = useQuery(
       queryAll,
-      {
-        variables: {
-          tpopFilter,
-          showEkf: fieldsShown.includes('ekfKontrolleur'),
-          showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
-          showBekanntSeit: fieldsShown.includes('bekanntSeit'),
-          showStatus: fieldsShown.includes('status'),
-          showFlurname: fieldsShown.includes('flurname'),
-          showGemeinde: fieldsShown.includes('gemeinde'),
-          showPopStatus: fieldsShown.includes('popStatus'),
-          showPopName: fieldsShown.includes('popName'),
-          showLv95X: fieldsShown.includes('lv95X'),
-          showLv95Y: fieldsShown.includes('lv95Y'),
-        },
-        notifyOnNetworkStatusChange: true,
-      },
+      { variables: { tpopFilter }, notifyOnNetworkStatusChange: true },
     )
 
     const tpops = useMemo(
       () => data?.allTpops?.nodes ?? [],
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [data?.allTpops?.nodes, tpopFilter, apValues],
+      [data?.allTpops?.nodes, tpopFilter],
     )
-    const years = useMemo(
-      () => yearsFromTpops({ tpops, pastYears }),
-      [pastYears, tpops],
-    )
+    const years = useMemo(() => yearsFromTpops({ pastYears }), [pastYears])
     const headerFieldsFixed = sortBy(
       Object.values(fields).filter(
         (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
@@ -471,7 +453,7 @@ export const EkPlanTable = memo(
               {tpops.map((tpop, index) => (
                 <TpopRow
                   key={tpop.id}
-                  tpop={tpop}
+                  tpopId={tpop.id}
                   index={index}
                   setProcessing={setProcessing}
                   years={years}

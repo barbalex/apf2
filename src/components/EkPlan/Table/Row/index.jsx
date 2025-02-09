@@ -10,7 +10,7 @@ const RowContainer = styled.div`
   min-height: 60px;
 `
 
-export const TpopRow = memo(({ tpop, index, setProcessing, years }) => {
+export const TpopRow = memo(({ tpopId, index, setProcessing, years }) => {
   const ref = useRef(null)
   const isVisible = useOnScreen(ref)
 
@@ -18,7 +18,7 @@ export const TpopRow = memo(({ tpop, index, setProcessing, years }) => {
     <RowContainer ref={ref}>
       {isVisible && (
         <Visible
-          tpop={tpop}
+          tpopId={tpopId}
           index={index}
           setProcessing={setProcessing}
           years={years}

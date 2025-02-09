@@ -17,12 +17,14 @@ import { queryRow } from './queryRow.js'
 import { tpopRowFromTpop } from './tpopRowFromTpop.js'
 
 export const Visible = memo(
-  observer(({ tpop, index, setProcessing, years }) => {
+  observer(({ tpopId, index, setProcessing, years }) => {
     const store = useContext(MobxContext)
     const fieldsShown = store.ekPlan.fields
 
     const { data, loading, error } = useQuery(queryRow, {
-      variables: { apIds: store.ekPlan.apValues, tpopId: tpop.id,
+      variables: {
+        apIds: store.ekPlan.apValues,
+        tpopId,
         showEkf: fieldsShown.includes('ekfKontrolleur'),
         showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
         showBekanntSeit: fieldsShown.includes('bekanntSeit'),
@@ -32,16 +34,24 @@ export const Visible = memo(
         showPopStatus: fieldsShown.includes('popStatus'),
         showPopName: fieldsShown.includes('popName'),
         showLv95X: fieldsShown.includes('lv95X'),
-        showLv95Y: fieldsShown.includes('lv95Y'), },
+        showLv95Y: fieldsShown.includes('lv95Y'),
+      },
     })
     const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
-    const ekfrequenz = data?.tpopById?.ekfrequenz
-    const ekfrequenzStartjahr = data?.tpopById?.ekfrequenzStartjahr
-    const ekfrequenzAbweichend = data?.tpopById?.ekfrequenzAbweichend
+    const tpop = data?.tpopById
+    const ekfrequenz = tpop?.ekfrequenz
+    const ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr
+    const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
 
-    const { row, tpopColumns } = tpopRowFromTpop({ tpop, index, years, store })
+    const { row, tpopColumns } = tpopRowFromTpop({
+      tpop,
+      index,
+      years,
+      store,
+    })
 
     if (error) return `Fehler: ${error.message}`
+    if (!tpop) return null
 
     return (
       <ErrorBoundary>
