@@ -30,6 +30,10 @@ export const TpopRow = memo(
     const ref = useRef(null)
     const isVisible = useOnScreen(ref)
 
+    // const { data, loading, error } = useQuery(queryRow, {
+    //   variables: { apIds: store.ekPlan.apValues, tpopId: tpop.id },
+    // })
+    // console.log('Row', { data, loading, error })
     const { row, tpopColumns } = tpopRowFromTpop({ tpop, index, years, store })
 
     return (
