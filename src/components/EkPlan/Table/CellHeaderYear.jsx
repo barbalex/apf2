@@ -45,7 +45,7 @@ const StyledMenuItem = styled(MenuItem)`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderYear = memo(
-  observer(({ column, rows }) => {
+  observer(({ column, tpops }) => {
     const client = useApolloClient()
 
     const store = useContext(MobxContext)
@@ -66,39 +66,42 @@ export const CellHeaderYear = memo(
       filterKontrolleYear === column ||
       filterEkplanYear === column
 
+    // TODO: data is missing. query own?
     const yearHasKontrollen = useMemo(() => {
       if (filterKontrolleYear && filterKontrolleYear !== column) return false
       return (
-        rows.filter(
+        tpops.filter(
           (row) =>
             (row?.tpop?.tpopkontrsByTpopId?.nodes ?? []).filter(
               (node) => node.jahr === column,
             ).length > 0,
         ).length > 0
       )
-    }, [column, filterKontrolleYear, rows])
+    }, [column, filterKontrolleYear, tpops])
+    // TODO: data is missing. query own?
     const yearHasAnsiedlungen = useMemo(() => {
       if (filterAnsiedlungYear && filterAnsiedlungYear !== column) return false
       return (
-        rows.filter(
+        tpops.filter(
           (row) =>
             (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).filter(
               (node) => node.jahr === column,
             ).length > 0,
         ).length > 0
       )
-    }, [column, filterAnsiedlungYear, rows])
+    }, [column, filterAnsiedlungYear, tpops])
+    // TODO: data is missing. query own?
     const yearHasEkplan = useMemo(() => {
       if (filterEkplanYear && filterEkplanYear !== column) return false
       return (
-        rows.filter(
+        tpops.filter(
           (row) =>
             (row?.tpop?.ekplansByTpopId?.nodes ?? []).filter(
               (node) => node.jahr === column,
             ).length > 0,
         ).length > 0
       )
-    }, [column, filterEkplanYear, rows])
+    }, [column, filterEkplanYear, tpops])
 
     const closeMenu = useCallback(() => setAnchorEl(null), [])
     const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
@@ -150,11 +153,7 @@ export const CellHeaderYear = memo(
           onClick={onClickCell}
         >
           <Title>{column}</Title>
-          <Dropdown>
-            {filterSet ?
-              <FaFilter />
-            : <Caret />}
-          </Dropdown>
+          <Dropdown>{filterSet ? <FaFilter /> : <Caret />}</Dropdown>
         </StyledCell>
         <Menu
           anchorEl={anchorEl}
@@ -167,27 +166,27 @@ export const CellHeaderYear = memo(
             active={yearHasKontrollen ? 1 : 0}
             dense
           >
-            {filterKontrolleYear === column ?
-              `nicht TPop mit Kontrollen in ${column} filtern`
-            : `TPop mit Kontrollen in ${column} filtern`}
+            {filterKontrolleYear === column
+              ? `nicht TPop mit Kontrollen in ${column} filtern`
+              : `TPop mit Kontrollen in ${column} filtern`}
           </StyledMenuItem>
           <StyledMenuItem
             onClick={onClickFilterEkplanYear}
             active={yearHasEkplan ? 1 : 0}
             dense
           >
-            {filterEkplanYear === column ?
-              `nicht TPop mit Ekplan in ${column} filtern`
-            : `TPop mit Ekplan in ${column} filtern`}
+            {filterEkplanYear === column
+              ? `nicht TPop mit Ekplan in ${column} filtern`
+              : `TPop mit Ekplan in ${column} filtern`}
           </StyledMenuItem>
           <StyledMenuItem
             onClick={onClickFilterAnsiedlungYear}
             active={yearHasAnsiedlungen ? 1 : 0}
             dense
           >
-            {filterAnsiedlungYear === column ?
-              `nicht TPop mit Ansiedlungen in ${column} filtern`
-            : `TPop mit Ansiedlungen in ${column} filtern`}
+            {filterAnsiedlungYear === column
+              ? `nicht TPop mit Ansiedlungen in ${column} filtern`
+              : `TPop mit Ansiedlungen in ${column} filtern`}
           </StyledMenuItem>
         </Menu>
       </>

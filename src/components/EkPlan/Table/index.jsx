@@ -13,8 +13,6 @@ import { queryAll } from './queryAll.js'
 import { queryForExport } from './queryForExport.js'
 import { CellForYearMenu } from './CellForYearMenu/index.jsx'
 import { yearsFromTpops } from './yearsFromTpops.js'
-import { tpopRowFromTpop } from './Row/tpopRowFromTpop.js'
-import { yearRowFromTpop } from './Row/yearRowFromTpop.js'
 import { fields } from './fields.js'
 import { CellHeaderFixed } from './CellHeaderFixed/index.jsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.jsx'
@@ -343,26 +341,6 @@ export const EkPlanTable = memo(
       () => yearsFromTpops({ tpops, pastYears }),
       [pastYears, tpops],
     )
-    const yearRows = useMemo(
-      () =>
-        tpops.map((tpop, index) =>
-          yearRowFromTpop({
-            tpop,
-            years,
-            index,
-          }),
-        ),
-      [tpops, years],
-    )
-    // tpopRows does not update when a single tpop changes if passed tpops
-    // solution is to pass stringified version
-    // Also: they need to update when the filter changes
-    const tpopsStringified = JSON.stringify(tpops)
-    const tpopRows = useMemo(
-      () => tpops.map((tpop, index) => tpopRowFromTpop({ tpop, index, store })),
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      [tpops, tpopFilter, tpopsStringified, apValues],
-    )
     const headerFieldsFixed = sortBy(
       Object.values(fields).filter(
         (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
@@ -485,23 +463,20 @@ export const EkPlanTable = memo(
                 <CellHeaderYear
                   key={`yearsColumn/${year}`}
                   column={year}
-                  rows={tpopRows}
+                  tpops={tpops}
                 />
               ))}
             </HeaderContainer>
             <BodyContainer tabIndex={-1}>
-              {tpops.map((tpop, index) => {
-                return (
-                  <TpopRow
-                    key={tpop.id}
-                    tpop={tpop}
-                    index={index}
-                    setProcessing={setProcessing}
-                    years={years}
-                    yearRows={yearRows}
-                  />
-                )
-              })}
+              {tpops.map((tpop, index) => (
+                <TpopRow
+                  key={tpop.id}
+                  tpop={tpop}
+                  index={index}
+                  setProcessing={setProcessing}
+                  years={years}
+                />
+              ))}
             </BodyContainer>
           </YScrollContainer>
         </Container>
