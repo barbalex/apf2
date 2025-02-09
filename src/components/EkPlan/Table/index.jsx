@@ -35,7 +35,7 @@ import { exportModule } from '../../../modules/export.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
-import { TpopRow } from './Row.jsx'
+import { TpopRow } from './Row/index.jsx'
 
 const Container = styled.div`
   position: relative;
