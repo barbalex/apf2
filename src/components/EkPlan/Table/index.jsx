@@ -363,15 +363,6 @@ export const EkPlanTable = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [tpops, tpopFilter, tpopsStringified, apValues],
     )
-    const tpopColumns = tpopRows.length
-      ? sortBy(
-          Object.values(tpopRows[0])
-            .filter((o) => typeof o === 'object')
-            .filter((o) => !!o.name)
-            .filter((o) => fieldsShown.includes(o.name) || !!o.alwaysShow),
-          'sort',
-        )
-      : []
     const headerFieldsFixed = sortBy(
       Object.values(fields).filter(
         (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
@@ -499,16 +490,15 @@ export const EkPlanTable = memo(
               ))}
             </HeaderContainer>
             <BodyContainer tabIndex={-1}>
-              {tpopRows.map((row, rowIndex) => {
+              {tpops.map((tpop, index) => {
                 return (
                   <TpopRow
-                    key={row.id}
-                    row={row}
+                    key={tpop.id}
+                    tpop={tpop}
+                    index={index}
                     setProcessing={setProcessing}
-                    tpopColumns={tpopColumns}
                     years={years}
                     yearRows={yearRows}
-                    rowIndex={rowIndex}
                   />
                 )
               })}
