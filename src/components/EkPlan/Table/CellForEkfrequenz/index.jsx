@@ -1,6 +1,6 @@
 import { memo, useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { useApolloClient, gql, useQuery } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 import groupBy from 'lodash/groupBy'
 import max from 'lodash/max'
@@ -32,7 +32,7 @@ const Option = styled.option`
 `
 
 export const CellForEkfrequenz = memo(
-  observer(({ row, field, width, setProcessing }) => {
+  observer(({ row, field, width, setProcessing, data }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -41,9 +41,6 @@ export const CellForEkfrequenz = memo(
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-    const { data } = useQuery(query, {
-      variables: { apIds: apValues, tpopId: row.id },
-    })
     const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
     const ekfOptionsGroupedPerAp = useMemo(() => {

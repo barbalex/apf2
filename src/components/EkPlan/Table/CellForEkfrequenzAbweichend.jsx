@@ -1,29 +1,13 @@
 import { memo, useContext, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql, useQuery } from '@apollo/client'
 
 import { Checkbox } from './Checkbox.jsx'
 import { StyledCellForSelect } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
 export const CellForEkfrequenzAbweichend = memo(
-  observer(({ field, row, width }) => {
+  observer(({ field, row, ekfrequenzAbweichend, width }) => {
     const store = useContext(MobxContext)
-
-    const { data } = useQuery(
-      gql`
-        query EkfrequenzabweichendQueryForCellForEkfrequenzAbweichend(
-          $tpopId: UUID!
-        ) {
-          tpopById(id: $tpopId) {
-            id
-            ekfrequenzAbweichend
-          }
-        }
-      `,
-      { variables: { tpopId: row.id } },
-    )
-    const ekfrequenzAbweichend = data?.tpopById?.ekfrequenzAbweichend
 
     const { hovered } = store.ekPlan
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''

@@ -1,6 +1,6 @@
 import { memo, useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql, useQuery } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import styled from '@emotion/styled'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
@@ -25,9 +25,11 @@ const Container = styled.div`
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
   background: ${(props) =>
-    props['data-clicked'] ? 'rgb(255,211,167) !important'
-    : props['data-isodd'] ? 'rgb(255, 255, 252)'
-    : 'unset'};
+    props['data-clicked']
+      ? 'rgb(255,211,167) !important'
+      : props['data-isodd']
+        ? 'rgb(255, 255, 252)'
+        : 'unset'};
   &.tpop-hovered {
     background-color: hsla(45, 100%, 90%, 1);
   }
@@ -66,7 +68,7 @@ const Input = styled.input`
 `
 
 export const CellForEkfrequenzStartjahr = memo(
-  observer(({ row, width, setProcessing }) => {
+  observer(({ row, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -74,23 +76,6 @@ export const CellForEkfrequenzStartjahr = memo(
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)
-
-    const { data } = useQuery(
-      gql`
-        query EkfrequenzstartjahrQueryForCellForEkfrequenzStartjahr(
-          $tpopId: UUID!
-        ) {
-          tpopById(id: $tpopId) {
-            id
-            ekfrequenz
-            ekfrequenzStartjahr
-          }
-        }
-      `,
-      { variables: { tpopId: row.id } },
-    )
-    const ekfrequenzStartjahr = data?.tpopById?.ekfrequenzStartjahr
-    const ekfrequenz = data?.tpopById?.ekfrequenz
 
     const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
     useEffect(
@@ -132,11 +117,7 @@ export const CellForEkfrequenzStartjahr = memo(
         className={className}
         data-isodd={row.isOdd}
       >
-        <Input
-          value={stateValue}
-          onChange={onChange}
-          onBlur={onBlur}
-        />
+        <Input value={stateValue} onChange={onChange} onBlur={onBlur} />
       </Container>
     )
   }),

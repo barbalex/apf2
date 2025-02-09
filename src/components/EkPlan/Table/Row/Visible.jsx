@@ -20,11 +20,17 @@ export const Visible = memo(
   observer(({ tpop, index, setProcessing, years }) => {
     const store = useContext(MobxContext)
 
-    // const { data, loading, error } = useQuery(queryRow, {
-    //   variables: { apIds: store.ekPlan.apValues, tpopId: tpop.id },
-    // })
-    // console.log('Row', { data, loading, error })
+    const { data, loading, error } = useQuery(queryRow, {
+      variables: { apIds: store.ekPlan.apValues, tpopId: tpop.id },
+    })
+    const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
+    const ekfrequenz = data?.tpopById?.ekfrequenz
+    const ekfrequenzStartjahr = data?.tpopById?.ekfrequenzStartjahr
+    const ekfrequenzAbweichend = data?.tpopById?.ekfrequenzAbweichend
+
     const { row, tpopColumns } = tpopRowFromTpop({ tpop, index, years, store })
+
+    if (error) return `Fehler: ${error.message}`
 
     return (
       <ErrorBoundary>
@@ -52,6 +58,7 @@ export const Visible = memo(
               <CellForEkfrequenz
                 key={value.name}
                 row={row}
+                data={data}
                 field={value}
                 setProcessing={setProcessing}
                 width={width}
@@ -63,6 +70,8 @@ export const Visible = memo(
               <CellForEkfrequenzStartjahr
                 key={value.name}
                 row={row}
+                ekfrequenzStartjahr={ekfrequenzStartjahr}
+                ekfrequenz={ekfrequenz}
                 setProcessing={setProcessing}
                 width={width}
               />
@@ -73,6 +82,7 @@ export const Visible = memo(
               <CellForEkfrequenzAbweichend
                 key={value.name}
                 row={row}
+                ekfrequenzAbweichend={ekfrequenzAbweichend}
                 field={value}
                 width={width}
               />
