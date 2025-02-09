@@ -5,7 +5,7 @@ import { gql, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { yearColumnWidth } from '../yearColumnWidth.js'
+import { yearColumnWidth } from './yearColumnWidth.js'
 import { CellForYearTitle } from '../CellForYearTitle.jsx'
 import { CellForEkfrequenz } from '../CellForEkfrequenz/index.jsx'
 import { CellForEkfrequenzStartjahr } from '../CellForEkfrequenzStartjahr/index.jsx'

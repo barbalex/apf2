@@ -1,6 +1,6 @@
 import { fields } from '../fields.js'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
-import { yearColumnWidth } from '../yearColumnWidth.js'
+import { yearColumnWidth } from './yearColumnWidth.js'
 
 const isOdd = (num) => num % 2 === 0
 
