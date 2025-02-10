@@ -41,6 +41,7 @@ const NrOfEk = styled.div`
 `
 const SumCounted = styled.div`
   margin-left: 3px;
+  align-self: center;
   flex-grow: 0;
   flex-basis: 32px;
   text-overflow: ellipsis;
