@@ -4,9 +4,10 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import { MobxContext } from '../../../mobxContext.js'
+import { tpop } from '../../shared/fragments.js'
 
 const StyledCell = styled.div`
   display: flex;
@@ -40,12 +41,13 @@ const Dropdown = styled.div`
   font-size: 1.3em;
 `
 const StyledMenuItem = styled(MenuItem)`
-  color: ${(props) => (props.active ? 'black' : 'rgba(0,0,0,0.3) !important')};
+  color: ${(props) =>
+    props.active === 1 ? 'black' : 'rgba(0,0,0,0.3) !important'};
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderYear = memo(
-  observer(({ column, tpops }) => {
+  observer(({ column, tpopFilter }) => {
     const client = useApolloClient()
 
     const store = useContext(MobxContext)
@@ -59,6 +61,45 @@ export const CellHeaderYear = memo(
       setFilterEkplanYear,
     } = store.ekPlan
 
+    const kontrFilter = {
+      ...tpopFilter,
+      tpopkontrsByTpopId: { some: { jahr: { equalTo: 2022 } } },
+    }
+    const ansiedlungFilter = {
+      ...tpopFilter,
+      tpopmassnsByTpopId: {
+        some: {
+          tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
+          jahr: { equalTo: 2022 },
+        },
+      },
+    }
+    const ekplanFilter = {
+      ...tpopFilter,
+      ekplansByTpopId: { some: { jahr: { equalTo: 2022 } } },
+    }
+
+    const { data, loading, error } = useQuery(
+      gql`
+        query TpopQueryForCellHeaderYear(
+          $kontrFilter: TpopFilter!
+          $ansiedlungFilter: TpopFilter!
+          $ekplanFilter: TpopFilter!
+        ) {
+          tpopCountWithKontrInYear: allTpops(filter: $kontrFilter) {
+            totalCount
+          }
+          tpopCountWithAnsiedlungsInYear: allTpops(filter: $ansiedlungFilter) {
+            totalCount
+          }
+          tpopCountWithEkplanInYear: allTpops(filter: $ekplanFilter) {
+            totalCount
+          }
+        }
+      `,
+      { variables: { kontrFilter, ansiedlungFilter, ekplanFilter } },
+    )
+
     const [anchorEl, setAnchorEl] = useState(null)
 
     const filterSet =
@@ -66,42 +107,18 @@ export const CellHeaderYear = memo(
       filterKontrolleYear === column ||
       filterEkplanYear === column
 
-    // TODO: data is missing. query own?
     const yearHasKontrollen = useMemo(() => {
       if (filterKontrolleYear && filterKontrolleYear !== column) return false
-      return (
-        tpops.filter(
-          (row) =>
-            (row?.tpop?.tpopkontrsByTpopId?.nodes ?? []).filter(
-              (node) => node.jahr === column,
-            ).length > 0,
-        ).length > 0
-      )
-    }, [column, filterKontrolleYear, tpops])
-    // TODO: data is missing. query own?
+      return data?.tpopCountWithKontrInYear?.totalCount > 0
+    }, [column, filterKontrolleYear, data])
     const yearHasAnsiedlungen = useMemo(() => {
       if (filterAnsiedlungYear && filterAnsiedlungYear !== column) return false
-      return (
-        tpops.filter(
-          (row) =>
-            (row?.tpop?.tpopmassnsByTpopId?.nodes ?? []).filter(
-              (node) => node.jahr === column,
-            ).length > 0,
-        ).length > 0
-      )
-    }, [column, filterAnsiedlungYear, tpops])
-    // TODO: data is missing. query own?
+      return data?.tpopCountWithAnsiedlungsInYear?.totalCount > 0
+    }, [column, filterAnsiedlungYear, data])
     const yearHasEkplan = useMemo(() => {
       if (filterEkplanYear && filterEkplanYear !== column) return false
-      return (
-        tpops.filter(
-          (row) =>
-            (row?.tpop?.ekplansByTpopId?.nodes ?? []).filter(
-              (node) => node.jahr === column,
-            ).length > 0,
-        ).length > 0
-      )
-    }, [column, filterEkplanYear, tpops])
+      return data?.tpopCountWithEkplanInYear?.totalCount > 0
+    }, [column, filterEkplanYear, data])
 
     const closeMenu = useCallback(() => setAnchorEl(null), [])
     const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])

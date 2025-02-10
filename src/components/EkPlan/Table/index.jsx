@@ -445,7 +445,7 @@ export const EkPlanTable = memo(
                 <CellHeaderYear
                   key={`yearsColumn/${year}`}
                   column={year}
-                  tpops={tpops}
+                  tpopFilter={tpopFilter}
                 />
               ))}
             </HeaderContainer>
