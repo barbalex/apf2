@@ -113,6 +113,10 @@ export const InfoRow = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  height: 19px;
+  min-height: 19px;
+  display: flex;
+  align-items: center;
 `
 const TpopTitle = styled.h4`
   position: absolute;
