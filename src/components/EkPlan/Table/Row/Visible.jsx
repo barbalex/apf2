@@ -1,4 +1,4 @@
-import { memo, useRef, useContext } from 'react'
+import { memo, useRef, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { gql, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
@@ -44,12 +44,18 @@ export const Visible = memo(
     const ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr
     const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
 
-    const { row, tpopColumns } = tpopRowFromTpop({
-      tpop,
-      index,
-      years,
-      store,
-    })
+    const { row, tpopColumns } = useMemo(
+      () =>
+        tpopRowFromTpop({
+          tpop,
+          index,
+          years,
+          store,
+        }),
+      [tpop, index, years, store],
+    )
+
+    console.log('Visible rendering')
 
     if (error) return `Fehler: ${error.message}`
     if (!tpop) return null

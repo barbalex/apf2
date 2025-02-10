@@ -7,7 +7,6 @@ import styled from '@emotion/styled'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { tpop } from '../../shared/fragments.js'
 
 const StyledCell = styled.div`
   display: flex;

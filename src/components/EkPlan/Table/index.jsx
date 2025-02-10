@@ -12,7 +12,7 @@ import { MobxContext } from '../../../mobxContext.js'
 import { queryAll } from './queryAll.js'
 import { queryForExport } from './queryForExport.js'
 import { CellForYearMenu } from './CellForYearMenu/index.jsx'
-import { yearsFromTpops } from './yearsFromTpops.js'
+import { getYears } from './getYears.js'
 import { fields } from './fields.js'
 import { CellHeaderFixed } from './CellHeaderFixed/index.jsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.jsx'
@@ -319,26 +319,34 @@ export const EkPlanTable = memo(
 
     const tpops = useMemo(
       () => data?.allTpops?.nodes ?? [],
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       [data?.allTpops?.nodes, tpopFilter],
     )
-    const years = useMemo(() => yearsFromTpops({ pastYears }), [pastYears])
-    const headerFieldsFixed = sortBy(
-      Object.values(fields).filter(
-        (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
-      ),
-      'sort',
+    const years = useMemo(() => getYears(pastYears), [pastYears])
+    const headerFieldsFixed = useMemo(
+      () =>
+        sortBy(
+          Object.values(fields).filter(
+            (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
+          ),
+          'sort',
+        ),
+      [fieldsShown],
     )
-    let headerFieldsFixedWidth = sumBy(headerFieldsFixed, 'width')
-    if (headerFieldsFixedWidth > width) {
-      headerFieldsFixedWidth = width
-    }
+    const headerFieldsFixedWidth = useMemo(() => {
+      let hFFWidth = sumBy(headerFieldsFixed, 'width')
+      if (hFFWidth > width) {
+        hFFWidth = width
+      }
 
-    let headerYearFieldsWidth = width - headerFieldsFixedWidth
-    if (headerYearFieldsWidth < 0) headerYearFieldsWidth = 0
+      return hFFWidth
+    }, [headerFieldsFixed, width])
 
-    const showsLength = [showEk, showEkf, showMassn].filter((s) => !!s).length
-    const rowHeight = 23 + (showsLength ? showsLength - 1 : 0) * 16
+    const headerYearFieldsWidth = useMemo(() => {
+      let hYFWidth = width - headerFieldsFixedWidth
+      if (hYFWidth < 0) hYFWidth = 0
+
+      return hYFWidth
+    }, [headerFieldsFixedWidth, width])
 
     // when this value changes, year columns are re-rendered as it is added as key
     // needed because otherwise when changing filters column widths can be off
@@ -383,6 +391,7 @@ export const EkPlanTable = memo(
     console.log('EkPlanTable, render')
 
     if (aps.length > 0 && networkStatus === 1) return <Spinner />
+    if (!tpops?.length) return <Spinner />
 
     if (error) return <Error error={error} />
 

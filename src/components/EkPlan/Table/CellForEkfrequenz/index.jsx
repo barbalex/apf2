@@ -8,7 +8,6 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { StyledCellForSelect } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { query } from './query.js'
 
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.js'),
