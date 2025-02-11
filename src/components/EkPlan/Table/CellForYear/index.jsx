@@ -10,7 +10,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.js'
 
 export const CellForYear = memo(
-  observer(({ field, row, ekPlan, ekfPlan, eks, ekfs, ansiedlungs, style }) => {
+  observer(({ field, row, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
     const store = useContext(MobxContext)
     const {
       showEk,
@@ -71,7 +71,6 @@ export const CellForYear = memo(
         data-isodd={row.isOdd}
         onClick={onClickCell}
         className={className}
-        style={style}
       >
         <InfoRow>
           {showEk && <EkIcon planned={ekPlan} eks={eks} einheits={einheits} />}

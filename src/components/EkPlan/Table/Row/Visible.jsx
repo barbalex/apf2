@@ -136,9 +136,9 @@ export const Visible = memo(
             />
           )
         })}
-        {years.map((year, columnIndex) => {
+        {years.map((year) => {
           const value = row[year]
-          // TODO: query view to get these values without having to filter here
+          // TODO: query view/function to get these values without having to filter here?
           const ekPlan =
             tpop?.ekPlans?.nodes?.filter((n) => n.jahr === year).length > 0
           const ekfPlan =
