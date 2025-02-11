@@ -55,7 +55,7 @@ export const Visible = memo(
       [tpop, index, years, store],
     )
 
-    console.log('Visible Row rendering')
+    // console.log('Visible Row rendering')
 
     if (error) return `Fehler: ${error.message}`
     if (!tpop) return null

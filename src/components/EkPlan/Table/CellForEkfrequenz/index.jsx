@@ -26,7 +26,7 @@ const Select = styled.select`
   }
 `
 const Option = styled.option`
-  font-family: 'Roboto Mono';
+  font-family: 'Roboto Mono', monospace;
   font-size: 0.85rem;
 `
 
@@ -40,27 +40,27 @@ export const CellForEkfrequenz = memo(
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-    const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
+    const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
-    const ekfOptionsGroupedPerAp = useMemo(() => {
+    const ekfOptions = useMemo(() => {
       const longestAnwendungsfall = max(
-        ekfrequenzs.map((a) => (a.anwendungsfall || '').length),
+        allEkfrequenzs.map((a) => (a.anwendungsfall || '').length),
       )
-      const options = ekfrequenzs.map((o) => {
-        const code = (o.code || '').padEnd(9, '\xA0')
-        const anwendungsfall =
-          `${(o.anwendungsfall || '').padEnd(longestAnwendungsfall, '\xA0')}` ||
-          ''
-        return {
-          value: o.id,
-          label: `${code}: ${anwendungsfall}`,
-          anwendungsfall,
-          apId: o.apId,
-        }
-      })
-      const os = groupBy(options, 'apId')
-      return os
-    }, [ekfrequenzs])
+      const longestCode = max(allEkfrequenzs.map((a) => (a.code || '').length))
+      const options = allEkfrequenzs
+        .filter((e) => e.apId === row.apId)
+        .map((o) => {
+          const code = (o.code ?? '').padEnd(longestCode + 1, '\u00A0')
+          return {
+            id: o.id,
+            code: o.code,
+            count: longestCode,
+            label: `${code}: ${o.anwendungsfall}`,
+          }
+        })
+
+      return options
+    }, [allEkfrequenzs])
 
     const [focused, setFocused] = useState(false)
 
@@ -87,20 +87,13 @@ export const CellForEkfrequenz = memo(
       },
       [row, client, store, enqueNotification],
     )
-    const onFocus = useCallback(() => {
-      console.log('onFocus')
-      setFocused(true)
-    }, [])
-    const onBlur = useCallback(() => {
-      setFocused(false)
-    }, [])
-    const optionsGrouped = ekfOptionsGroupedPerAp[row.apId]
-    const ekfrequenz = ekfrequenzs.find(
-      (f) => f.id === data?.tpopById?.ekfrequenz,
-    ) // was: field.value instead of tpop.ekfrequenz
-    const valueToShow = ekfrequenz ? ekfrequenz.code : ''
+    const onFocus = useCallback(() => setFocused(true), [])
+    const onBlur = useCallback(() => setFocused(false), [])
 
-    // console.log('CellForEkfrequenz', { optionsGrouped, focused })
+    const valueToShow = useMemo(
+      () => allEkfrequenzs?.find((e) => e.id === field.value)?.code,
+      [allEkfrequenzs, field.value],
+    )
 
     return (
       <StyledCellForSelect
@@ -111,22 +104,37 @@ export const CellForEkfrequenz = memo(
         data-isodd={row.isOdd}
       >
         <Select
-          value={valueToShow}
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
           // prevent not being focused when clicking on select
           onClick={onFocus}
         >
+          {/* <Option key="option1" value={null}>
+            {''}
+          </Option> */}
+          {/* {ekfOptions.map((e) => (
+            <Option
+              key={e.id}
+              value={e.id}
+              selected={e.id === data?.tpopById?.ekfrequenz}
+            >
+              {e.cde}
+            </Option>
+          ))} */}
           {focused ? (
-            optionsGrouped ? (
+            ekfOptions ? (
               <>
                 <Option key="option1" value={null}>
                   {''}
                 </Option>
-                {optionsGrouped.map((o) => (
-                  <Option key={o.value} value={o.value}>
-                    {o.label}
+                {ekfOptions.map((e) => (
+                  <Option
+                    key={e.id}
+                    value={e.id}
+                    selected={e.id === data?.tpopById?.ekfrequenz}
+                  >
+                    {e.label}
                   </Option>
                 ))}
               </>
