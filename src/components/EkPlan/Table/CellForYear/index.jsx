@@ -8,9 +8,10 @@ import { MassnIcon } from './MassnIcon.jsx'
 import { InfoRow } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.js'
+import { yearColumnWidth } from '../Row/yearColumnWidth.js'
 
 export const CellForYear = memo(
-  observer(({ field, row, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
+  observer(({ year, row, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
     const store = useContext(MobxContext)
     const {
       showEk,
@@ -23,20 +24,18 @@ export const CellForYear = memo(
       hovered,
     } = store.ekPlan
 
-    const { label, value, width } = field
     const onMouseEnter = useCallback(
-      () => hovered.set({ year: label, tpopId: row.id }),
-      [hovered, label, row.id],
+      () => hovered.set({ year, tpopId: row.id }),
+      [hovered, year, row.id],
     )
-    const { year, tpopId } = yearClicked
-    const clicked = year === label && tpopId === row.id
+    const clicked = yearClicked.year === year && yearClicked.tpopId === row.id
     const einheits = einheitsByAp[row.apId]
     const onClickCell = useCallback(
       (event) => {
         setYearClicked({
-          year: label,
+          year,
           tpopId: row.id,
-          title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${label}`,
+          title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${year}`,
           ekPlan,
           ekfPlan,
         })
@@ -46,7 +45,7 @@ export const CellForYear = memo(
         setYearMenuAnchor(event.currentTarget.getBoundingClientRect())
       },
       [
-        label,
+        year,
         row.ap.value,
         row.id,
         row.nr.value,
@@ -58,13 +57,13 @@ export const CellForYear = memo(
       ],
     )
     const classes = []
-    if (hovered.year === label) classes.push('column-hovered')
+    if (hovered.year === year) classes.push('column-hovered')
     if (hovered.tpopId === row.id) classes.push('tpop-hovered')
     const className = classes.join(' ')
 
     return (
       <StyledTableCell
-        width={width}
+        width={yearColumnWidth}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         data-clicked={clicked}

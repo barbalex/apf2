@@ -1,10 +1,9 @@
 import { fields } from '../fields.js'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
-import { yearColumnWidth } from './yearColumnWidth.js'
 
 const isOdd = (num) => num % 2 === 0
 
-export const tpopRowFromTpop = ({ tpop, index, years, store }) => {
+export const tpopRowFromTpop = ({ tpop, index, store }) => {
   if (!tpop) return { row: {}, tpopColumns: [] }
 
   let lv95X = tpop?.lv95X
@@ -158,21 +157,5 @@ export const tpopRowFromTpop = ({ tpop, index, years, store }) => {
     yearTitle: fields.yearTitle,
   }
 
-  const tpopColumns = Object.values(row)
-    .filter((o) => typeof o === 'object')
-    .filter((o) => !!o.name)
-    .filter((o) => store.ekPlan.fields.includes(o.name) || !!o.alwaysShow)
-
-  years.forEach(
-    (year) =>
-      (row[year.toString()] = {
-        name: year,
-        label: year,
-        alwaysShow: true,
-        sort: year,
-        width: yearColumnWidth,
-      }),
-  )
-
-  return { row, tpopColumns }
+  return row
 }

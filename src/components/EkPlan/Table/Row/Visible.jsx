@@ -44,16 +44,14 @@ export const Visible = memo(
     const ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr
     const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
 
-    const { row, tpopColumns } = useMemo(
-      () =>
-        tpopRowFromTpop({
-          tpop,
-          index,
-          years,
-          store,
-        }),
-      [tpop, index, years, store],
+    const row = useMemo(
+      () => tpopRowFromTpop({ tpop, index, store }),
+      [tpop, index, store],
     )
+    const tpopColumns = Object.values(row)
+      .filter((o) => typeof o === 'object')
+      .filter((o) => !!o.name)
+      .filter((o) => store.ekPlan.fields.includes(o.name) || !!o.alwaysShow)
 
     // console.log('Visible Row rendering')
 
@@ -138,7 +136,6 @@ export const Visible = memo(
           )
         })}
         {years.map((year) => {
-          const value = row[year]
           // TODO: query view/function to get these values without having to filter here?
           const ekPlan =
             tpop?.ekPlans?.nodes?.filter((n) => n.jahr === year).length > 0
@@ -152,14 +149,14 @@ export const Visible = memo(
 
           return (
             <CellForYear
-              key={value.name}
+              key={year}
+              row={row}
+              year={year}
               ekPlan={ekPlan}
               ekfPlan={ekfPlan}
               eks={eks}
               ekfs={ekfs}
               ansiedlungs={ansiedlungs}
-              row={row}
-              field={value}
               width={yearColumnWidth}
             />
           )
