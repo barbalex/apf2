@@ -4,19 +4,6 @@ import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 export const tpopRowFromTpop = ({ tpop, store }) => {
   if (!tpop) return {}
 
-  let lv95X = tpop?.lv95X
-  if (lv95X && lv95X?.toLocaleString) {
-    lv95X = lv95X?.toLocaleString('de-ch')
-  } else {
-    lv95X = '-'
-  }
-  let lv95Y = tpop?.lv95Y
-  if (lv95Y && lv95Y?.toLocaleString) {
-    lv95Y = lv95Y?.toLocaleString('de-ch')
-  } else {
-    lv95Y = '-'
-  }
-
   const row = {
     id: tpop.id,
     tpop: tpop,
@@ -85,7 +72,7 @@ export const tpopRowFromTpop = ({ tpop, store }) => {
       ? {
           lv95X: {
             ...fields.lv95X,
-            value: lv95X,
+            value: tpop?.lv95X?.toLocaleString?.('de-ch') ?? '-',
           },
         }
       : {}),
@@ -93,7 +80,7 @@ export const tpopRowFromTpop = ({ tpop, store }) => {
       ? {
           lv95Y: {
             ...fields.lv95Y,
-            value: lv95Y,
+            value: tpop?.lv95Y?.toLocaleString?.('de-ch') ?? '-',
           },
         }
       : {}),
