@@ -19,13 +19,6 @@ import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.jsx'
 import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.jsx'
 import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.jsx'
 import { CellHeaderYear } from './CellHeaderYear.jsx'
-import { CellForYearTitle } from './CellForYearTitle.jsx'
-import { CellForEkfrequenz } from './CellForEkfrequenz/index.jsx'
-import { CellForEkfrequenzStartjahr } from './CellForEkfrequenzStartjahr/index.jsx'
-import { CellForEkfrequenzAbweichend } from './CellForEkfrequenzAbweichend.jsx'
-import { CellForTpopLink } from './CellForTpopLink.jsx'
-import { CellForValue } from './CellForValue.jsx'
-import { CellForYear } from './CellForYear/index.jsx'
 import { Error } from '../../shared/Error.jsx'
 import { exportRowFromTpop } from './exportRowFromTpop.js'
 import { exportModule } from '../../../modules/export.js'
@@ -65,6 +58,9 @@ const Body = styled.div`
 const RowContainer = styled.div`
   display: flex;
 `
+
+const isItOdd = (num) => num % 2 === 0
+
 export const StyledTableCell = styled.div`
   font-size: 0.75rem !important;
   white-space: nowrap !important;

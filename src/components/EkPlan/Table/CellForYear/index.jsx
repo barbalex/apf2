@@ -8,10 +8,10 @@ import { MassnIcon } from './MassnIcon.jsx'
 import { InfoRow } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.js'
-import { yearColumnWidth } from '../Row/yearColumnWidth.js'
+import { yearColumnWidth } from './yearColumnWidth.js'
 
 export const CellForYear = memo(
-  observer(({ year, row, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
+  observer(({ year, row, isOdd, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
     const store = useContext(MobxContext)
     const {
       showEk,
@@ -67,7 +67,7 @@ export const CellForYear = memo(
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         data-clicked={clicked}
-        data-isodd={row.isOdd}
+        data-isodd={isOdd}
         onClick={onClickCell}
         className={className}
       >

@@ -13,7 +13,7 @@ const Container = styled.div`
 `
 
 export const CellForValue = memo(
-  observer(({ field, width, row, firstChild }) => {
+  observer(({ field, width, row, isOdd, firstChild }) => {
     const store = useContext(MobxContext)
 
     const { value } = field
@@ -31,7 +31,7 @@ export const CellForValue = memo(
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}
-        data-isodd={row.isOdd}
+        data-isodd={isOdd}
         data-firstchild={firstChild}
       >
         <Container>

@@ -1,10 +1,8 @@
 import { fields } from '../fields.js'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 
-const isOdd = (num) => num % 2 === 0
-
-export const tpopRowFromTpop = ({ tpop, index, store }) => {
-  if (!tpop) return { row: {}, tpopColumns: [] }
+export const tpopRowFromTpop = ({ tpop, store }) => {
+  if (!tpop) return {}
 
   let lv95X = tpop?.lv95X
   if (lv95X && lv95X?.toLocaleString) {
@@ -20,7 +18,6 @@ export const tpopRowFromTpop = ({ tpop, index, store }) => {
   }
 
   const row = {
-    isOdd: isOdd(index),
     id: tpop.id,
     tpop: tpop,
     apId: tpop?.popByPopId?.apByApId?.id,

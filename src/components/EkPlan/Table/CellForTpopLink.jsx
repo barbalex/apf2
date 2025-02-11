@@ -22,7 +22,7 @@ const Link = styled.div`
 `
 
 export const CellForTpopLink = memo(
-  observer(({ field, width, row }) => {
+  observer(({ field, width, row, isOdd }) => {
     const store = useContext(MobxContext)
 
     const { hovered } = store.ekPlan
@@ -45,12 +45,9 @@ export const CellForTpopLink = memo(
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}
-        data-isodd={row.isOdd}
+        data-isodd={isOdd}
       >
-        <Link
-          onClick={onClickLink}
-          title="in neuem Fenster öffnen"
-        >
+        <Link onClick={onClickLink} title="in neuem Fenster öffnen">
           <div>
             <FaExternalLinkAlt />
           </div>

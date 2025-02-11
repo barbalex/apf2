@@ -68,57 +68,60 @@ const Input = styled.input`
 `
 
 export const CellForEkfrequenzStartjahr = memo(
-  observer(({ row, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
-    const client = useApolloClient()
-    const store = useContext(MobxContext)
-    const { enqueNotification } = store
-    const { hovered } = store.ekPlan
-    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+  observer(
+    ({ row, isOdd, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
+      const client = useApolloClient()
+      const store = useContext(MobxContext)
+      const { enqueNotification } = store
+      const { hovered } = store.ekPlan
+      const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
-    const processChangeWorker = useWorker(processChangeWorkerFactory)
+      const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-    const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
-    useEffect(
-      () => setStateValue(ekfrequenzStartjahr ?? ''),
-      [ekfrequenzStartjahr],
-    )
+      const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
+      useEffect(
+        () => setStateValue(ekfrequenzStartjahr ?? ''),
+        [ekfrequenzStartjahr],
+      )
 
-    const onMouseEnter = useCallback(
-      () => hovered.setTpopId(row.id),
-      [hovered, row.id],
-    )
-    const onChange = useCallback((e) => {
-      const value = e.target.value || e.target.value === 0 ? e.target.value : ''
-      setStateValue(value)
-    }, [])
-    const onBlur = useCallback(
-      async (e) => {
+      const onMouseEnter = useCallback(
+        () => hovered.setTpopId(row.id),
+        [hovered, row.id],
+      )
+      const onChange = useCallback((e) => {
         const value =
-          e.target.value || e.target.value === 0 ? +e.target.value : null
-        setProcessing(true)
-        await processChangeWorker.processChange({
-          client,
-          value,
-          ekfrequenz,
-          row,
-          enqueNotification,
-          store,
-        })
-        setProcessing(false)
-      },
-      [row, client, store, enqueNotification, ekfrequenz],
-    )
+          e.target.value || e.target.value === 0 ? e.target.value : ''
+        setStateValue(value)
+      }, [])
+      const onBlur = useCallback(
+        async (e) => {
+          const value =
+            e.target.value || e.target.value === 0 ? +e.target.value : null
+          setProcessing(true)
+          await processChangeWorker.processChange({
+            client,
+            value,
+            ekfrequenz,
+            row,
+            enqueNotification,
+            store,
+          })
+          setProcessing(false)
+        },
+        [row, client, store, enqueNotification, ekfrequenz],
+      )
 
-    return (
-      <Container
-        width={width}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={hovered.reset}
-        className={className}
-        data-isodd={row.isOdd}
-      >
-        <Input value={stateValue} onChange={onChange} onBlur={onBlur} />
-      </Container>
-    )
-  }),
+      return (
+        <Container
+          width={width}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={hovered.reset}
+          className={className}
+          data-isodd={isOdd}
+        >
+          <Input value={stateValue} onChange={onChange} onBlur={onBlur} />
+        </Container>
+      )
+    },
+  ),
 )

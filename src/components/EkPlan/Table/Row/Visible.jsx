@@ -4,7 +4,6 @@ import { gql, useQuery } from '@apollo/client'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { yearColumnWidth } from './yearColumnWidth.js'
 import { CellForYearTitle } from '../CellForYearTitle.jsx'
 import { CellForEkfrequenz } from '../CellForEkfrequenz/index.jsx'
 import { CellForEkfrequenzStartjahr } from '../CellForEkfrequenzStartjahr/index.jsx'
@@ -16,10 +15,13 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { queryRow } from './queryRow.js'
 import { tpopRowFromTpop } from './tpopRowFromTpop.js'
 
+const isItOdd = (num) => num % 2 === 0
+
 export const Visible = memo(
   observer(({ tpopId, index, setProcessing, years, rowContainerRef }) => {
     const store = useContext(MobxContext)
     const fieldsShown = store.ekPlan.fields
+    const isOdd = isItOdd(index)
 
     const { data, loading, error } = useQuery(queryRow, {
       variables: {
@@ -45,7 +47,7 @@ export const Visible = memo(
     const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
 
     const row = useMemo(
-      () => tpopRowFromTpop({ tpop, index, store }),
+      () => tpopRowFromTpop({ tpop, store }),
       [tpop, index, store],
     )
     const tpopColumns = Object.values(row)
@@ -66,7 +68,14 @@ export const Visible = memo(
           const width = tpopColumn.width
 
           if (value.name === 'yearTitle') {
-            return <CellForYearTitle key={value.name} row={row} width={width} />
+            return (
+              <CellForYearTitle
+                key={value.name}
+                row={row}
+                isOdd={isOdd}
+                width={width}
+              />
+            )
           }
           if (value.name === 'ekAbrechnungstyp') {
             return (
@@ -74,6 +83,7 @@ export const Visible = memo(
                 key={value.name}
                 field={value}
                 row={row}
+                isOdd={isOdd}
                 firstChild={columnIndex === 0}
                 width={width}
               />
@@ -84,6 +94,7 @@ export const Visible = memo(
               <CellForEkfrequenz
                 key={value.name}
                 row={row}
+                isOdd={isOdd}
                 data={data}
                 field={value}
                 setProcessing={setProcessing}
@@ -97,6 +108,7 @@ export const Visible = memo(
               <CellForEkfrequenzStartjahr
                 key={value.name}
                 row={row}
+                isOdd={isOdd}
                 ekfrequenzStartjahr={ekfrequenzStartjahr}
                 ekfrequenz={ekfrequenz}
                 setProcessing={setProcessing}
@@ -109,6 +121,7 @@ export const Visible = memo(
               <CellForEkfrequenzAbweichend
                 key={value.name}
                 row={row}
+                isOdd={isOdd}
                 ekfrequenzAbweichend={ekfrequenzAbweichend}
                 field={value}
                 width={width}
@@ -121,6 +134,7 @@ export const Visible = memo(
                 key={value.name}
                 field={value}
                 row={row}
+                isOdd={isOdd}
                 width={width}
               />
             )
@@ -151,13 +165,13 @@ export const Visible = memo(
             <CellForYear
               key={year}
               row={row}
+              isOdd={isOdd}
               year={year}
               ekPlan={ekPlan}
               ekfPlan={ekfPlan}
               eks={eks}
               ekfs={ekfs}
               ansiedlungs={ansiedlungs}
-              width={yearColumnWidth}
             />
           )
         })}

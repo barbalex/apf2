@@ -6,7 +6,7 @@ import { StyledCellForSelect } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
 export const CellForEkfrequenzAbweichend = memo(
-  observer(({ field, row, ekfrequenzAbweichend, width }) => {
+  observer(({ field, row, isOdd, ekfrequenzAbweichend, width }) => {
     const store = useContext(MobxContext)
 
     const { hovered } = store.ekPlan
@@ -22,7 +22,7 @@ export const CellForEkfrequenzAbweichend = memo(
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}
-        data-isodd={row.isOdd}
+        data-isodd={isOdd}
       >
         <Checkbox
           row={row.tpop}

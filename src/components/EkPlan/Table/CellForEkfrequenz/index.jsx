@@ -31,89 +31,92 @@ const Option = styled.option`
 `
 
 export const CellForEkfrequenz = memo(
-  observer(({ row, field, width, setProcessing, data, rowContainerRef }) => {
-    const client = useApolloClient()
-    const store = useContext(MobxContext)
-    const { enqueNotification } = store
-    const { hovered, apValues } = store.ekPlan
-    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+  observer(
+    ({ row, isOdd, field, width, setProcessing, data, rowContainerRef }) => {
+      const client = useApolloClient()
+      const store = useContext(MobxContext)
+      const { enqueNotification } = store
+      const { hovered, apValues } = store.ekPlan
+      const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
-    const processChangeWorker = useWorker(processChangeWorkerFactory)
+      const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-    const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
+      const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
-    const ekfOptions = useMemo(() => {
-      const longestAnwendungsfall = max(
-        allEkfrequenzs.map((a) => (a.anwendungsfall || '').length),
+      const ekfOptions = useMemo(() => {
+        const longestAnwendungsfall = max(
+          allEkfrequenzs.map((a) => (a.anwendungsfall || '').length),
+        )
+        const longestCode = max(
+          allEkfrequenzs.map((a) => (a.code || '').length),
+        )
+        const options = allEkfrequenzs
+          .filter((e) => e.apId === row.apId)
+          .map((o) => {
+            const code = (o.code ?? '').padEnd(longestCode + 1, '\u00A0')
+            return {
+              id: o.id,
+              code: o.code,
+              count: longestCode,
+              label: `${code}: ${o.anwendungsfall}`,
+            }
+          })
+
+        return options
+      }, [allEkfrequenzs])
+
+      const [focused, setFocused] = useState(false)
+
+      const onMouseEnter = useCallback(
+        () => hovered.setTpopId(row.id),
+        [hovered, row.id],
       )
-      const longestCode = max(allEkfrequenzs.map((a) => (a.code || '').length))
-      const options = allEkfrequenzs
-        .filter((e) => e.apId === row.apId)
-        .map((o) => {
-          const code = (o.code ?? '').padEnd(longestCode + 1, '\u00A0')
-          return {
-            id: o.id,
-            code: o.code,
-            count: longestCode,
-            label: `${code}: ${o.anwendungsfall}`,
-          }
-        })
+      const onChange = useCallback(
+        async (e) => {
+          const value = e.target.value || null
+          setProcessing(true)
+          await processChangeWorker.processChange({
+            client,
+            value,
+            row,
+            enqueNotification,
+            store,
+          })
+          setProcessing(false)
+          setTimeout(() => {
+            setFocused(false)
+            rowContainerRef.current.focus()
+          }, 100)
+        },
+        [row, client, store, enqueNotification],
+      )
+      const onFocus = useCallback(() => setFocused(true), [])
+      const onBlur = useCallback(() => setFocused(false), [])
 
-      return options
-    }, [allEkfrequenzs])
+      const valueToShow = useMemo(
+        () => allEkfrequenzs?.find((e) => e.id === field.value)?.code,
+        [allEkfrequenzs, field.value],
+      )
 
-    const [focused, setFocused] = useState(false)
-
-    const onMouseEnter = useCallback(
-      () => hovered.setTpopId(row.id),
-      [hovered, row.id],
-    )
-    const onChange = useCallback(
-      async (e) => {
-        const value = e.target.value || null
-        setProcessing(true)
-        await processChangeWorker.processChange({
-          client,
-          value,
-          row,
-          enqueNotification,
-          store,
-        })
-        setProcessing(false)
-        setTimeout(() => {
-          setFocused(false)
-          rowContainerRef.current.focus()
-        }, 100)
-      },
-      [row, client, store, enqueNotification],
-    )
-    const onFocus = useCallback(() => setFocused(true), [])
-    const onBlur = useCallback(() => setFocused(false), [])
-
-    const valueToShow = useMemo(
-      () => allEkfrequenzs?.find((e) => e.id === field.value)?.code,
-      [allEkfrequenzs, field.value],
-    )
-
-    return (
-      <StyledCellForSelect
-        width={width}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={hovered.reset}
-        className={className}
-        data-isodd={row.isOdd}
-      >
-        <Select
-          onChange={onChange}
-          onFocus={onFocus}
-          onBlur={onBlur}
-          // prevent not being focused when clicking on select
-          onClick={onFocus}
+      return (
+        <StyledCellForSelect
+          width={width}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={hovered.reset}
+          className={className}
+          data-isodd={isOdd}
         >
-          {/* <Option key="option1" value={null}>
+          <Select
+            onChange={onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            // prevent not being focused when clicking on select
+            onClick={onFocus}
+          >
+            {/* <Option key="option1" value={null}>
             {''}
           </Option> */}
-          {/* {ekfOptions.map((e) => (
+            {/* {ekfOptions.map((e) => (
             <Option
               key={e.id}
               value={e.id}
@@ -122,30 +125,31 @@ export const CellForEkfrequenz = memo(
               {e.cde}
             </Option>
           ))} */}
-          {focused ? (
-            ekfOptions ? (
-              <>
-                <Option key="option1" value={null}>
-                  {''}
-                </Option>
-                {ekfOptions.map((e) => (
-                  <Option
-                    key={e.id}
-                    value={e.id}
-                    selected={e.id === data?.tpopById?.ekfrequenz}
-                  >
-                    {e.label}
+            {focused ? (
+              ekfOptions ? (
+                <>
+                  <Option key="option1" value={null}>
+                    {''}
                   </Option>
-                ))}
-              </>
-            ) : null
-          ) : (
-            <Option key="option1" value={field.value}>
-              {valueToShow}
-            </Option>
-          )}
-        </Select>
-      </StyledCellForSelect>
-    )
-  }),
+                  {ekfOptions.map((e) => (
+                    <Option
+                      key={e.id}
+                      value={e.id}
+                      selected={e.id === data?.tpopById?.ekfrequenz}
+                    >
+                      {e.label}
+                    </Option>
+                  ))}
+                </>
+              ) : null
+            ) : (
+              <Option key="option1" value={field.value}>
+                {valueToShow}
+              </Option>
+            )}
+          </Select>
+        </StyledCellForSelect>
+      )
+    },
+  ),
 )
