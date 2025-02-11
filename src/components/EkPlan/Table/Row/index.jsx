@@ -22,6 +22,7 @@ export const TpopRow = memo(({ tpopId, index, setProcessing, years }) => {
           index={index}
           setProcessing={setProcessing}
           years={years}
+          rowContainerRef={ref}
         />
       )}
     </RowContainer>

@@ -31,7 +31,7 @@ const Option = styled.option`
 `
 
 export const CellForEkfrequenz = memo(
-  observer(({ row, field, width, setProcessing, data }) => {
+  observer(({ row, field, width, setProcessing, data, rowContainerRef }) => {
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
@@ -82,11 +82,13 @@ export const CellForEkfrequenz = memo(
         setProcessing(false)
         setTimeout(() => {
           setFocused(false)
+          rowContainerRef.current.focus()
         }, 100)
       },
       [row, client, store, enqueNotification],
     )
     const onFocus = useCallback(() => {
+      console.log('onFocus')
       setFocused(true)
     }, [])
     const onBlur = useCallback(() => {
@@ -97,6 +99,8 @@ export const CellForEkfrequenz = memo(
       (f) => f.id === data?.tpopById?.ekfrequenz,
     ) // was: field.value instead of tpop.ekfrequenz
     const valueToShow = ekfrequenz ? ekfrequenz.code : ''
+
+    // console.log('CellForEkfrequenz', { optionsGrouped, focused })
 
     return (
       <StyledCellForSelect
@@ -111,6 +115,8 @@ export const CellForEkfrequenz = memo(
           onChange={onChange}
           onFocus={onFocus}
           onBlur={onBlur}
+          // prevent not being focused when clicking on select
+          onClick={onFocus}
         >
           {focused ? (
             optionsGrouped ? (

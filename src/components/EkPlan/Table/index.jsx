@@ -39,25 +39,28 @@ const Container = styled.div`
   width: 100%;
   height: calc(100% - 86px);
   user-select: none !important;
+  display: flex;
+  flex-direction: column;
 `
 const YScrollContainer = styled.div`
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
   scrollbar-gutter: stable;
 `
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
 `
-const BodyContainer = styled.div`
+// Setting overflow-y: auto on the body did not work
+// as the columns not initially visible would not be rendered
+const Body = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 60px);
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
+  width: 100vw;
 `
 const RowContainer = styled.div`
   display: flex;
@@ -394,8 +397,9 @@ export const EkPlanTable = memo(
 
     console.log('EkPlanTable, render')
 
-    if (aps.length > 0 && networkStatus === 1) return <Spinner />
-    if (!tpops?.length) return <Spinner />
+    if ((aps.length > 0 && networkStatus === 1) || !tpops?.length) {
+      return <Spinner />
+    }
 
     if (error) return <Error error={error} />
 
@@ -462,17 +466,15 @@ export const EkPlanTable = memo(
                 />
               ))}
             </HeaderContainer>
-            <BodyContainer>
-              {tpops.map((tpop, index) => (
-                <TpopRow
-                  key={tpop.id}
-                  tpopId={tpop.id}
-                  index={index}
-                  setProcessing={setProcessing}
-                  years={years}
-                />
-              ))}
-            </BodyContainer>
+            {tpops.map((tpop, index) => (
+              <TpopRow
+                key={tpop.id}
+                tpopId={tpop.id}
+                index={index}
+                setProcessing={setProcessing}
+                years={years}
+              />
+            ))}
           </YScrollContainer>
         </Container>
         {!!yearMenuAnchor && <CellForYearMenu />}

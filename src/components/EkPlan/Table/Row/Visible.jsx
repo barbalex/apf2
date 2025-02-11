@@ -17,7 +17,7 @@ import { queryRow } from './queryRow.js'
 import { tpopRowFromTpop } from './tpopRowFromTpop.js'
 
 export const Visible = memo(
-  observer(({ tpopId, index, setProcessing, years }) => {
+  observer(({ tpopId, index, setProcessing, years, rowContainerRef }) => {
     const store = useContext(MobxContext)
     const fieldsShown = store.ekPlan.fields
 
@@ -55,7 +55,7 @@ export const Visible = memo(
       [tpop, index, years, store],
     )
 
-    console.log('Visible rendering')
+    console.log('Visible Row rendering')
 
     if (error) return `Fehler: ${error.message}`
     if (!tpop) return null
@@ -90,6 +90,7 @@ export const Visible = memo(
                 field={value}
                 setProcessing={setProcessing}
                 width={width}
+                rowContainerRef={rowContainerRef}
               />
             )
           }
