@@ -26,6 +26,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
 import { TpopRow } from './Row/index.jsx'
+import { EkplanTableHeader } from './Header.jsx'
 
 const Container = styled.div`
   position: relative;
@@ -46,7 +47,7 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   position: sticky;
   top: 0;
-  z-index: 9999;
+  z-index: 9;
 `
 // Setting overflow-y: auto on the body did not work
 // as the columns not initially visible would not be rendered
@@ -335,21 +336,6 @@ export const EkPlanTable = memo(
         ),
       [fieldsShown],
     )
-    const headerFieldsFixedWidth = useMemo(() => {
-      let hFFWidth = sumBy(headerFieldsFixed, 'width')
-      if (hFFWidth > width) {
-        hFFWidth = width
-      }
-
-      return hFFWidth
-    }, [headerFieldsFixed, width])
-
-    const headerYearFieldsWidth = useMemo(() => {
-      let hYFWidth = width - headerFieldsFixedWidth
-      if (hYFWidth < 0) hYFWidth = 0
-
-      return hYFWidth
-    }, [headerFieldsFixedWidth, width])
 
     // when this value changes, year columns are re-rendered as it is added as key
     // needed because otherwise when changing filters column widths can be off
@@ -413,55 +399,11 @@ export const EkPlanTable = memo(
         </ExportButton>
         <Container ref={resizeRef}>
           <YScrollContainer>
-            <HeaderContainer>
-              <TpopTitle>{`${loading ? '...' : tpops.length} Teilpopulationen`}</TpopTitle>
-              {headerFieldsFixed.map((column, index) => {
-                const field = column.name
-                if (field === 'ekfrequenz') {
-                  return (
-                    <CellHeaderFixedEkfrequenz
-                      key={column.name}
-                      column={column}
-                    />
-                  )
-                }
-                if (field === 'ekfrequenzStartjahr') {
-                  return (
-                    <CellHeaderFixedEkfrequenzStartjahr
-                      key={column.name}
-                      column={column}
-                    />
-                  )
-                }
-                if (field === 'status') {
-                  return (
-                    <CellHeaderFixedTpopStatus
-                      key={column.name}
-                      column={column}
-                      refetch={refetch}
-                    />
-                  )
-                }
-                if (field === 'popStatus') {
-                  return (
-                    <CellHeaderFixedTpopStatus
-                      key={column.name}
-                      column={column}
-                      refetch={refetch}
-                      type="pop"
-                    />
-                  )
-                }
-                return <CellHeaderFixed key={column.name} column={column} />
-              })}
-              {years.map((year, index) => (
-                <CellHeaderYear
-                  key={`yearsColumn/${year}`}
-                  column={year}
-                  tpopFilter={tpopFilter}
-                />
-              ))}
-            </HeaderContainer>
+            <EkplanTableHeader
+              tpopLength={loading ? '...' : tpops.length}
+              tpopFilter={tpopFilter}
+              refetch={refetch}
+            />
             {tpops.map((tpop, index) => (
               <TpopRow
                 key={tpop.id}
