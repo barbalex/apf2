@@ -95,7 +95,7 @@ export const CellForYearMenu = memo(
             variables: {
               id,
             },
-            refetchQueries: ['EkplanTpopQuery'],
+            refetchQueries: ['RowQueryForEkPlan'],
           })
         } catch (error) {
           store.enqueNotification({
@@ -130,7 +130,7 @@ export const CellForYearMenu = memo(
           await client.mutate({
             mutation: mutationCreateEkplan,
             variables,
-            refetchQueries: ['EkplanTpopQuery'],
+            refetchQueries: ['RowQueryForEkPlan'],
           })
         } catch (error) {
           store.enqueNotification({
@@ -176,38 +176,40 @@ export const CellForYearMenu = memo(
           <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
           {showEk && (
             <div>
-              {yearClicked.ekPlan ?
+              {yearClicked.ekPlan ? (
                 <StyledMenuItem onClick={onClickEkEntfernen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EK-Planung entfernen" />
                 </StyledMenuItem>
-              : <StyledMenuItem onClick={onClickEkPlanen}>
+              ) : (
+                <StyledMenuItem onClick={onClickEkPlanen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EK planen" />
                 </StyledMenuItem>
-              }
+              )}
             </div>
           )}
           {showEkf && (
             <div>
-              {yearClicked.ekfPlan ?
+              {yearClicked.ekfPlan ? (
                 <StyledMenuItem onClick={onClickEkfEntfernen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EKF-Planung entfernen" />
                 </StyledMenuItem>
-              : <StyledMenuItem onClick={onClickEkfPlanen}>
+              ) : (
+                <StyledMenuItem onClick={onClickEkfPlanen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EKF planen" />
                 </StyledMenuItem>
-              }
+              )}
             </div>
           )}
           {showEk && !!eks.length && (
