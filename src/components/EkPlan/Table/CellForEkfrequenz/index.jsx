@@ -86,7 +86,7 @@ export const CellForEkfrequenz = memo(
           setTimeout(() => {
             setFocused(false)
             rowContainerRef.current.focus()
-          }, 100)
+          }, 300)
         },
         [row, client, store, enqueNotification],
       )
