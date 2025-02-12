@@ -112,6 +112,7 @@ export const CellForEkfrequenz = memo(
             onBlur={onBlur}
             // prevent not being focused when clicking on select
             onClick={onFocus}
+            value={data?.tpopById?.ekfrequenz}
           >
             {/* <Option key="option1" value={null}>
             {''}
@@ -132,11 +133,7 @@ export const CellForEkfrequenz = memo(
                     {''}
                   </Option>
                   {ekfOptions.map((e) => (
-                    <Option
-                      key={e.id}
-                      value={e.id}
-                      selected={e.id === data?.tpopById?.ekfrequenz}
-                    >
+                    <Option key={e.id} value={e.id}>
                       {e.label}
                     </Option>
                   ))}
