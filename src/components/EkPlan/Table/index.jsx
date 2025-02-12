@@ -1,24 +1,15 @@
 import { memo, useContext, useMemo, useCallback, useState } from 'react'
 import { useQuery, useApolloClient } from '@apollo/client'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
-import sumBy from 'lodash/sumBy'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { queryAll } from './queryAll.js'
 import { queryForExport } from './queryForExport.js'
 import { CellForYearMenu } from './CellForYearMenu/index.jsx'
 import { getYears } from './getYears.js'
-import { fields } from './fields.js'
-import { CellHeaderFixed } from './CellHeaderFixed/index.jsx'
-import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.jsx'
-import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.jsx'
-import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.jsx'
-import { CellHeaderYear } from './CellHeaderYear.jsx'
 import { Error } from '../../shared/Error.jsx'
 import { exportRowFromTpop } from './exportRowFromTpop.js'
 import { exportModule } from '../../../modules/export.js'
@@ -42,13 +33,7 @@ const YScrollContainer = styled.div`
   overflow: auto;
   scrollbar-gutter: stable;
 `
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: sticky;
-  top: 0;
-  z-index: 9;
-`
+// not in use
 // Setting overflow-y: auto on the body did not work
 // as the columns not initially visible would not be rendered
 const Body = styled.div`
@@ -56,11 +41,6 @@ const Body = styled.div`
   flex-direction: column;
   width: 100vw;
 `
-const RowContainer = styled.div`
-  display: flex;
-`
-
-const isItOdd = (num) => num % 2 === 0
 
 export const StyledTableCell = styled.div`
   font-size: 0.75rem !important;
@@ -118,12 +98,6 @@ export const InfoRow = styled.div`
   display: flex;
   align-items: center;
 `
-const TpopTitle = styled.h4`
-  position: absolute;
-  left: 10px;
-  z-index: 3;
-  top: -20px;
-`
 const ExportButton = styled(Button)`
   position: absolute !important;
   top: 53px !important;
@@ -145,7 +119,6 @@ export const EkPlanTable = memo(
     const {
       aps,
       apValues,
-      fields: fieldsShown,
       yearMenuAnchor,
       showEk,
       showEkf,
@@ -171,7 +144,6 @@ export const EkPlanTable = memo(
       filterAnsiedlungYear,
       filterKontrolleYear,
       filterEkplanYear,
-      pastYears,
     } = store.ekPlan
 
     const [processing, setProcessing] = useState(false)
@@ -325,16 +297,9 @@ export const EkPlanTable = memo(
       () => data?.allTpops?.nodes ?? [],
       [data?.allTpops?.nodes, tpopFilter],
     )
-    const years = useMemo(() => getYears(pastYears), [pastYears])
-    const headerFieldsFixed = useMemo(
-      () =>
-        sortBy(
-          Object.values(fields).filter(
-            (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
-          ),
-          'sort',
-        ),
-      [fieldsShown],
+    const years = useMemo(
+      () => getYears(store.ekPlan.pastYears),
+      [store.ekPlan.pastYears],
     )
 
     // when this value changes, year columns are re-rendered as it is added as key
@@ -403,6 +368,7 @@ export const EkPlanTable = memo(
               tpopLength={loading ? '...' : tpops.length}
               tpopFilter={tpopFilter}
               refetch={refetch}
+              years={years}
             />
             {tpops.map((tpop, index) => (
               <TpopRow
