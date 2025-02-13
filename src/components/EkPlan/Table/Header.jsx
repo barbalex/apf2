@@ -18,7 +18,7 @@ const HeaderContainer = styled.div`
   flex-direction: row;
   position: sticky;
   top: 0;
-  z-index: 9;
+  z-index: 1;
 `
 const TpopTitle = styled.h4`
   position: absolute;
