@@ -88,7 +88,7 @@ export const More = memo(
 
     return (
       <Tooltip title="Mehr Befehle">
-        {isMobileView ?
+        {isMobileView ? (
           <StyledIconButton
             aria-label="Mehr"
             aria-owns={anchorEl ? 'appbar-more-menu' : null}
@@ -99,7 +99,8 @@ export const More = memo(
           >
             <FaBars />
           </StyledIconButton>
-        : <MehrButton
+        ) : (
+          <MehrButton
             aria-label="Mehr"
             aria-owns={anchorEl ? 'appbar-more-menu' : null}
             aria-haspopup="true"
@@ -108,7 +109,7 @@ export const More = memo(
           >
             Mehr
           </MehrButton>
-        }
+        )}
         <Menu
           id="appbar-more-menu"
           anchorEl={anchorEl}
@@ -153,7 +154,7 @@ export const More = memo(
           <MenuItem onClick={onClickUptime}>
             Verfügbarkeit der Server von apflora.ch
           </MenuItem>
-          <Version>Version: 1.114.4 vom 26.11.2024</Version>
+          <Version>Version: 1.115.0 vom 17.02.2024</Version>
         </Menu>
       </Tooltip>
     )
