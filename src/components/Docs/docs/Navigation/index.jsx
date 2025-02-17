@@ -45,19 +45,13 @@ export const Component = memo(() => (
       besteht, sie ungewollt zu aktivieren, v.a. bei Nässe. Neu gibt es Menüs in
       den Formularköpfen, die sich dynamisch an die verfügbare Breite anpassen.
     </p>
-    <img
-      src={image001}
-      alt="UI-Elemente"
-    />
+    <img src={image001} alt="UI-Elemente" />
     <p>
       In der Mobil-Ansicht wird einem angezeigt, was die verschiedenen Menüs
       auslösen, wenn man lange darauf drückt:
     </p>
-    <img
-      src={image002}
-      alt="Tooltip"
-    />
-    <h2>Wechsel zwischen Mobiler und Desktop-Version</h2>
+    <img src={image002} alt="Tooltip" />
+    <h2>Wechsel zwischen Mobile und Desktop-Version</h2>
     <p>
       Mobile und Desktop sind nicht immer klar abzugrenzen. Es gibt sehr grosse
       Bildschirme mit Touch-Steuerung. Einige Bildschirme mit Touch-Steuerung
@@ -82,10 +76,7 @@ export const Component = memo(() => (
         werden.
       </li>
     </ul>
-    <img
-      src={image003}
-      alt="Menüs"
-    />
+    <img src={image003} alt="Menüs" />
     <p>
       Die bisherigen Tabs (z.B. Auswertung, Dateien, Biotop, Historien) wurden
       bei der Implementation der Mobil-Navigation in die normale Navigation
@@ -111,14 +102,7 @@ export const Component = memo(() => (
       2/4). Dies ist vor allem nützlich um zu sehen, ob noch ein Filter aktiv
       ist.
     </p>
-    <img
-      src={image004}
-      alt="Ehemalige Tabs"
-      width={558}
-    />
-    <img
-      src={image005}
-      alt="Ehemalige Tabs"
-    />
+    <img src={image004} alt="Ehemalige Tabs" width={558} />
+    <img src={image005} alt="Ehemalige Tabs" />
   </>
 ))
