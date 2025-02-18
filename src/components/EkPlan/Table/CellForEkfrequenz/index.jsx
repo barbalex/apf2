@@ -8,6 +8,7 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { StyledCellForSelect } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
+import { processChange } from './processChange.js'
 
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.js'),
@@ -65,8 +66,6 @@ export const CellForEkfrequenz = memo(
         return options
       }, [allEkfrequenzs])
 
-      const [focused, setFocused] = useState(false)
-
       const onMouseEnter = useCallback(
         () => hovered.setTpopId(row.id),
         [hovered, row.id],
@@ -74,7 +73,15 @@ export const CellForEkfrequenz = memo(
       const onChange = useCallback(
         async (e) => {
           const value = e.target.value || null
+          console.log('CellForEkfrequenz, onChange, value:', value)
           setProcessing(true)
+          // await processChange({
+          //   client,
+          //   value,
+          //   row,
+          //   enqueNotification,
+          //   store,
+          // })
           await processChangeWorker.processChange({
             client,
             value,
@@ -84,20 +91,22 @@ export const CellForEkfrequenz = memo(
           })
           setProcessing(false)
           setTimeout(() => {
-            setFocused(false)
-            rowContainerRef.current.focus()
+            // TODO: needed?
+            // rowContainerRef.current.focus()
           }, 300)
         },
         [row, client, store, enqueNotification],
       )
-      const onFocus = useCallback(() => setFocused(true), [])
-      const onBlur = useCallback(() => setFocused(false), [])
 
       const valueToShow = useMemo(
         () => allEkfrequenzs?.find((e) => e.id === field.value)?.code,
         [allEkfrequenzs, field.value],
       )
 
+      // TODO:
+      // 1. this doesn't work on Firefox
+      // 2. showing full text in labels does not work well with Select Options anyway
+      // So: build a "Button", on click open a modal with all options
       return (
         <StyledCellForSelect
           width={width}
@@ -108,25 +117,22 @@ export const CellForEkfrequenz = memo(
         >
           <Select
             onChange={onChange}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            // prevent not being focused when clicking on select
-            onClick={onFocus}
             value={data?.tpopById?.ekfrequenz}
+            autoComplete="off"
           >
-            {/* <Option key="option1" value={null}>
-            {''}
-          </Option> */}
-            {/* {ekfOptions.map((e) => (
-            <Option
-              key={e.id}
-              value={e.id}
-              selected={e.id === data?.tpopById?.ekfrequenz}
-            >
-              {e.cde}
+            <Option key="option1" value={null}>
+              {''}
             </Option>
-          ))} */}
-            {focused ? (
+            {ekfOptions.map((e) => (
+              <Option
+                key={e.id}
+                value={e.id}
+                // selected={e.id === data?.tpopById?.ekfrequenz}
+              >
+                {e.code}
+              </Option>
+            ))}
+            {/* {focused ? (
               ekfOptions ? (
                 <>
                   <Option key="option1" value={null}>
@@ -143,7 +149,7 @@ export const CellForEkfrequenz = memo(
               <Option key="option1" value={field.value}>
                 {valueToShow}
               </Option>
-            )}
+            )} */}
           </Select>
         </StyledCellForSelect>
       )
