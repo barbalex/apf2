@@ -18,7 +18,7 @@ import { tpopRowFromTpop } from './tpopRowFromTpop.js'
 const isItOdd = (num) => num % 2 === 0
 
 export const Visible = memo(
-  observer(({ tpopId, index, setProcessing, years, rowContainerRef }) => {
+  observer(({ tpopId, index, setProcessing, years }) => {
     const store = useContext(MobxContext)
     const fieldsShown = store.ekPlan.fields
     const isOdd = isItOdd(index)
@@ -99,7 +99,6 @@ export const Visible = memo(
                 field={value}
                 setProcessing={setProcessing}
                 width={width}
-                rowContainerRef={rowContainerRef}
               />
             )
           }

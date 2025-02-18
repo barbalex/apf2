@@ -85,6 +85,11 @@ export const StyledCellForSelect = styled(StyledTableCell)`
   width: ${(props) => props.width}px;
   min-width: ${(props) => props.width}px;
   height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem !important;
+  cursor: pointer;
   &:focus-within {
     border: solid orange 3px;
   }
