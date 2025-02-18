@@ -8,7 +8,6 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { StyledCellForSelect } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { processChange } from './processChange.js'
 
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.js'),
@@ -75,13 +74,6 @@ export const CellForEkfrequenz = memo(
           const value = e.target.value || null
           console.log('CellForEkfrequenz, onChange, value:', value)
           setProcessing(true)
-          // await processChange({
-          //   client,
-          //   value,
-          //   row,
-          //   enqueNotification,
-          //   store,
-          // })
           await processChangeWorker.processChange({
             client,
             value,
