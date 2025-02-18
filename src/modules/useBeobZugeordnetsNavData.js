@@ -31,7 +31,7 @@ export const useBeobZugeordnetsNavData = (props) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
       'treeBeobZugeordnets',
-      apId,
+      tpopId,
       store.tree.beobZugeordnetGqlFilterForTree,
     ],
     queryFn: () =>
