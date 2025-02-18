@@ -21,6 +21,9 @@ export const StyledCell = styled.div`
   padding: 0 4px;
   cursor: pointer;
   box-sizing: border-box;
+  width: ${(props) => props.width}px;
+  min-width: ${(props) => props.width}px;
+  height: 60px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 700 !important;
@@ -55,7 +58,7 @@ const StyledMenu = styled(Menu)`
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderFixedTpopStatus = memo(
-  ({ style, column, refetch, type = 'tpop' }) => {
+  ({ column, refetch, type = 'tpop' }) => {
     const store = useContext(MobxContext)
     const filterStatus =
       type === 'tpop' ? store.ekPlan.filterStatus : store.ekPlan.filterPopStatus
@@ -74,10 +77,10 @@ export const CellHeaderFixedTpopStatus = memo(
     return (
       <>
         <StyledCell
-          style={style}
           aria-controls={`${type}StatusHeaderMenu`}
           aria-haspopup="true"
           onClick={onClickCell}
+          width={column.width}
         >
           <Title>{label}</Title>
           <Dropdown>

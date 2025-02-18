@@ -41,6 +41,7 @@ const NrOfEk = styled.div`
 `
 const SumCounted = styled.div`
   margin-left: 3px;
+  align-self: center;
   flex-grow: 0;
   flex-basis: 32px;
   text-overflow: ellipsis;
@@ -68,10 +69,8 @@ export const EkIcon = memo(
               (z) =>
                 einheits.includes(z.einheit) &&
                 z.anzahl !== null &&
-                (
-                  z?.tpopkontrzaehlEinheitWerteByEinheit
-                    ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
-                ).length > 0,
+                z?.tpopkontrzaehlEinheitWerteByEinheit
+                  ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
             ),
           )
           .filter((o) => !!o).length > 0
@@ -84,10 +83,8 @@ export const EkIcon = memo(
               (z) =>
                 einheits.includes(z.einheit) &&
                 z.anzahl !== null &&
-                (
-                  z?.tpopkontrzaehlEinheitWerteByEinheit
-                    ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
-                ).length > 0,
+                z?.tpopkontrzaehlEinheitWerteByEinheit
+                  ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
             )
             .flatMap((z) => z.anzahl),
         ),

@@ -21,6 +21,9 @@ export const StyledCell = styled.div`
   padding: 0 4px;
   cursor: pointer;
   box-sizing: border-box;
+  width: ${(props) => props.width}px;
+  min-width: ${(props) => props.width}px;
+  height: 60px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 700 !important;
@@ -53,7 +56,7 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedEkfrequenz = ({ style, column }) => {
+export const CellHeaderFixedEkfrequenz = ({ column }) => {
   const store = useContext(MobxContext)
   const {
     filterEkfrequenzEmpty,
@@ -87,10 +90,10 @@ export const CellHeaderFixedEkfrequenz = ({ style, column }) => {
   return (
     <>
       <StyledCell
-        style={style}
         aria-controls="ekfrequenzHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
+        width={column.width}
       >
         <Title>{label}</Title>
         <Dropdown>
@@ -123,4 +126,3 @@ export const CellHeaderFixedEkfrequenz = ({ style, column }) => {
     </>
   )
 }
-
