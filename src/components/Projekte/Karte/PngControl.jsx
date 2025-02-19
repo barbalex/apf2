@@ -35,6 +35,8 @@ const options = {
   hideControlContainer: true,
 }
 
+// TODO: not working in firefox
+// but not clear why
 export const PngControl = memo(
   observer(() => {
     const { setHideMapControls } = useContext(MobxContext)
@@ -72,10 +74,7 @@ export const PngControl = memo(
     )
 
     return (
-      <StyledButton
-        onClick={savePng}
-        title="Karte als png speichern"
-      >
+      <StyledButton onClick={savePng} title="Karte als png speichern">
         <FileDownloadIcon />
       </StyledButton>
     )
