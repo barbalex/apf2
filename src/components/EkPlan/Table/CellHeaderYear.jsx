@@ -11,6 +11,7 @@ import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
 
 const StyledCell = styled.div`
   display: flex;
+  justify-content: space-evenly;
   color: black;
   font-weight: 500;
   font-size: 0.75rem;
@@ -20,9 +21,9 @@ const StyledCell = styled.div`
   border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
   cursor: pointer;
-  // somehow the width is 1.6px too much
-  width: ${(props) => props.width - 1.6}px;
-  min-width: ${(props) => props.width - 1.6}px;
+  width: ${(props) => props.width}px;
+  min-width: ${(props) => props.width}px;
+  box-sizing: border-box;
   height: 60px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
