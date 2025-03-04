@@ -38,14 +38,30 @@ const Header = styled.div`
   flex-wrap: nowrap;
   justify-content: space-between;
 `
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 10px;
+`
 const AnleitungButton = styled(Button)`
   text-transform: none !important;
-  height: 2.2em;
-  min-width: 100px !important;
+  height: 2em;
+  min-width: 9em !important;
   font-size: 0.75rem !important;
   padding: 2px 15px !important;
-  margin-right: 30px;
-  margin-top: 34px;
+  margin-left: -15px;
+  margin-top: 28px;
+  line-height: unset !important;
+`
+const FilterResetButton = styled(Button)`
+  text-transform: none !important;
+  height: 2em;
+  min-width: 9em !important;
+  font-size: 0.75rem !important;
+  padding: 2px 5px !important;
+  margin-left: -15px;
+  margin-top: 3px;
   line-height: unset !important;
 `
 
@@ -54,6 +70,27 @@ export const Component = memo(
     const store = useContext(MobxContext)
     const { user } = store
     const { aps, setApsData, setApsDataLoading } = store.ekPlan
+    const {
+      setFilterAp,
+      setFilterPopNr,
+      setFilterPopName,
+      setFilterPopStatus,
+      setFilterNr,
+      setFilterGemeinde,
+      setFilterFlurname,
+      setFilterStatus,
+      setFilterBekanntSeit,
+      setFilterLv95X,
+      setFilterLv95Y,
+      setFilterEkfKontrolleur,
+      setFilterEkfrequenzAbweichend,
+      setFilterEkAbrechnungstyp,
+      setFilterEkfrequenz,
+      setFilterEkfrequenzStartjahr,
+      setFilterAnsiedlungYear,
+      setFilterKontrolleYear,
+      setFilterEkplanYear,
+    } = store.ekPlan
 
     const { data, loading, error } = useQuery(queryAps, {
       variables: {
@@ -69,6 +106,28 @@ export const Component = memo(
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
+    }, [])
+
+    const onClickResetFilter = useCallback(() => {
+      setFilterAp(null)
+      setFilterPopNr(null)
+      setFilterPopName(null)
+      setFilterPopStatus([100, 101, 200, 201, 202, 300])
+      setFilterNr(null)
+      setFilterGemeinde(null)
+      setFilterFlurname(null)
+      setFilterStatus([100, 101, 200, 201, 202, 300])
+      setFilterBekanntSeit(null)
+      setFilterLv95X(null)
+      setFilterLv95Y(null)
+      setFilterEkfKontrolleur(null)
+      setFilterEkfrequenzAbweichend(false)
+      setFilterEkAbrechnungstyp(null)
+      setFilterEkfrequenz(null)
+      setFilterEkfrequenzStartjahr(null)
+      setFilterAnsiedlungYear(null)
+      setFilterKontrolleYear(null)
+      setFilterEkplanYear(null)
     }, [])
 
     if (error) {
@@ -87,13 +146,22 @@ export const Component = memo(
               <>
                 <Header>
                   <ApList />
-                  <AnleitungButton
-                    variant="outlined"
-                    onClick={onClickAnleitung}
-                    color="inherit"
-                  >
-                    Anleitung
-                  </AnleitungButton>
+                  <ButtonContainer>
+                    <AnleitungButton
+                      variant="outlined"
+                      onClick={onClickAnleitung}
+                      color="inherit"
+                    >
+                      Anleitung
+                    </AnleitungButton>
+                    <FilterResetButton
+                      variant="outlined"
+                      onClick={onClickResetFilter}
+                      color="inherit"
+                    >
+                      Filter leeren
+                    </FilterResetButton>
+                  </ButtonContainer>
                   <Choose />
                 </Header>
                 <Table />

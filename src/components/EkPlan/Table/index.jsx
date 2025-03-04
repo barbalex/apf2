@@ -55,11 +55,9 @@ export const StyledTableCell = styled.div`
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
   background: ${(props) =>
-    props['data-clicked']
-      ? 'rgb(255,211,167) !important'
-      : props['data-isodd']
-        ? 'rgb(255, 255, 252)'
-        : 'unset'};
+    props['data-clicked'] ? 'rgb(255,211,167) !important'
+    : props['data-isodd'] ? 'rgb(255, 255, 252)'
+    : 'unset'};
   box-sizing: border-box;
   width: ${(props) => props.width}px;
   min-width: ${(props) => props.width}px;
@@ -106,10 +104,10 @@ export const InfoRow = styled.div`
 const ExportButton = styled(Button)`
   position: absolute !important;
   top: 53px !important;
-  right: 536px !important;
-  min-width: 100px !important;
+  right: 517px !important;
+  min-width: 9em !important;
   text-transform: none !important;
-  height: 2.2em;
+  height: 2em;
   font-size: 0.75rem !important;
   right: 10px;
   padding: 2px 15px !important;
@@ -349,9 +347,10 @@ export const EkPlanTable = memo(
 
     // console.log('EkPlanTable, render')
 
-    if ((aps.length > 0 && networkStatus === 1) || !tpops?.length) {
-      return <Spinner />
-    }
+    const showSpinner =
+      (aps.length > 0 && networkStatus === 1) || !tpops?.length
+
+    // TODO: give button to remove all filters in case something goes wrong
 
     if (error) return <Error error={error} />
 
@@ -368,23 +367,26 @@ export const EkPlanTable = memo(
           exportieren
         </ExportButton>
         <Container ref={resizeRef}>
-          <YScrollContainer>
-            <EkplanTableHeader
-              tpopLength={loading ? '...' : tpops.length}
-              tpopFilter={tpopFilter}
-              refetch={refetch}
-              years={years}
-            />
-            {tpops.map((tpop, index) => (
-              <TpopRow
-                key={tpop.id}
-                tpopId={tpop.id}
-                index={index}
-                setProcessing={setProcessing}
+          {showSpinner ?
+            <Spinner />
+          : <YScrollContainer>
+              <EkplanTableHeader
+                tpopLength={loading ? '...' : tpops.length}
+                tpopFilter={tpopFilter}
+                refetch={refetch}
                 years={years}
               />
-            ))}
-          </YScrollContainer>
+              {tpops.map((tpop, index) => (
+                <TpopRow
+                  key={tpop.id}
+                  tpopId={tpop.id}
+                  index={index}
+                  setProcessing={setProcessing}
+                  years={years}
+                />
+              ))}
+            </YScrollContainer>
+          }
         </Container>
         {!!yearMenuAnchor && <CellForYearMenu />}
       </ErrorBoundary>
