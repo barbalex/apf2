@@ -20,6 +20,7 @@ const StyledCell = styled.div`
   border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
   cursor: pointer;
+  // somehow the width is 1.6px too much
   width: ${(props) => props.width - 1.6}px;
   min-width: ${(props) => props.width - 1.6}px;
   height: 60px;
@@ -63,20 +64,20 @@ export const CellHeaderYear = memo(
 
     const kontrFilter = {
       ...tpopFilter,
-      tpopkontrsByTpopId: { some: { jahr: { equalTo: 2022 } } },
+      tpopkontrsByTpopId: { some: { jahr: { equalTo: column } } },
     }
     const ansiedlungFilter = {
       ...tpopFilter,
       tpopmassnsByTpopId: {
         some: {
           tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
-          jahr: { equalTo: 2022 },
+          jahr: { equalTo: column },
         },
       },
     }
     const ekplanFilter = {
       ...tpopFilter,
-      ekplansByTpopId: { some: { jahr: { equalTo: 2022 } } },
+      ekplansByTpopId: { some: { jahr: { equalTo: column } } },
     }
 
     const { data, loading, error } = useQuery(
