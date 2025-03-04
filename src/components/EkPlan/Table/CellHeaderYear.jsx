@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { useApolloClient, useQuery, gql } from '@apollo/client'
 
 import { MobxContext } from '../../../mobxContext.js'
+import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
 
 const StyledCell = styled.div`
   display: flex;
@@ -19,8 +20,8 @@ const StyledCell = styled.div`
   border-bottom: solid #e6e6e6 1px;
   background: hsla(120, 25%, 88%, 1);
   cursor: pointer;
-  width: 51px;
-  min-width: 51px;
+  width: ${(props) => props.width - 1.6}px;
+  min-width: ${(props) => props.width - 1.6}px;
   height: 60px;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
@@ -167,9 +168,14 @@ export const CellHeaderYear = memo(
           aria-controls="yearHeaderMenu"
           aria-haspopup="true"
           onClick={onClickCell}
+          width={yearColumnWidth}
         >
           <Title>{column}</Title>
-          <Dropdown>{filterSet ? <FaFilter /> : <Caret />}</Dropdown>
+          <Dropdown>
+            {filterSet ?
+              <FaFilter />
+            : <Caret />}
+          </Dropdown>
         </StyledCell>
         <Menu
           anchorEl={anchorEl}
@@ -182,27 +188,27 @@ export const CellHeaderYear = memo(
             active={yearHasKontrollen ? 1 : 0}
             dense
           >
-            {filterKontrolleYear === column
-              ? `nicht TPop mit Kontrollen in ${column} filtern`
-              : `TPop mit Kontrollen in ${column} filtern`}
+            {filterKontrolleYear === column ?
+              `nicht TPop mit Kontrollen in ${column} filtern`
+            : `TPop mit Kontrollen in ${column} filtern`}
           </StyledMenuItem>
           <StyledMenuItem
             onClick={onClickFilterEkplanYear}
             active={yearHasEkplan ? 1 : 0}
             dense
           >
-            {filterEkplanYear === column
-              ? `nicht TPop mit Ekplan in ${column} filtern`
-              : `TPop mit Ekplan in ${column} filtern`}
+            {filterEkplanYear === column ?
+              `nicht TPop mit Ekplan in ${column} filtern`
+            : `TPop mit Ekplan in ${column} filtern`}
           </StyledMenuItem>
           <StyledMenuItem
             onClick={onClickFilterAnsiedlungYear}
             active={yearHasAnsiedlungen ? 1 : 0}
             dense
           >
-            {filterAnsiedlungYear === column
-              ? `nicht TPop mit Ansiedlungen in ${column} filtern`
-              : `TPop mit Ansiedlungen in ${column} filtern`}
+            {filterAnsiedlungYear === column ?
+              `nicht TPop mit Ansiedlungen in ${column} filtern`
+            : `TPop mit Ansiedlungen in ${column} filtern`}
           </StyledMenuItem>
         </Menu>
       </>
