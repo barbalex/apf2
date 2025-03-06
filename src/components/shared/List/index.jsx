@@ -12,6 +12,8 @@ const Container = styled.div`
   flex-direction: column;
   flex-grow: 1;
   overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 45px;
 `
 const ListContainer = styled.div`
   display: flex;
