@@ -8,6 +8,8 @@ const RowContainer = styled.div`
   display: flex;
   height: 60px;
   min-height: 60px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 60px;
 `
 
 export const TpopRow = memo(({ tpopId, index, setProcessing, years }) => {

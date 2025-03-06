@@ -31,8 +31,8 @@ const StyledNode = styled.div`
   user-select: none;
   color: ${(props) =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
-  contentvisibility: auto;
-  contain-intrinsic-size: 0 23px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 23px;
   transition: opacity 300ms ease-in-out;
   // a child .iconContainer needs some love
   .iconContainer {
