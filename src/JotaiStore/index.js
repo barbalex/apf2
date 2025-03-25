@@ -25,6 +25,7 @@ export const newTpopFromBeobBeobIdAtom = atomWithStorage(
   'newTpopFromBeobBeobId',
   null,
 )
+
 export const enforceDesktopNavigationAtom = atomWithStorage(
   'enforceDesktopNavigation',
   false,
