@@ -4,7 +4,6 @@ import { useAtom } from 'jotai'
 import styled from '@emotion/styled'
 
 import { setDesktopViewAtom } from '../JotaiStore/index.js'
-import { constants } from '../modules/constants.js'
 
 const InvisibleDesktopViewMeasuringDiv = styled.div`
   width: 100%;
@@ -21,7 +20,7 @@ export const IsDesktopViewSetter = memo(() => {
     [setDesktopView],
   )
 
-  const { width, ref } = useResizeDetector({
+  const { ref } = useResizeDetector({
     handleHeight: false,
     refreshMode: 'debounce',
     refreshRate: 300,
