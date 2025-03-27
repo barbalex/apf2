@@ -8,7 +8,7 @@ import {
   Children,
   cloneElement,
 } from 'react'
-import { IconButton, Menu, MenuItem } from '@mui/material'
+import { IconButton, Menu } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
 import styled from '@emotion/styled'
@@ -101,7 +101,7 @@ export const MenuBar = memo(
         : buttonWidth,
       )
       return { visibleChildren, widths }
-    }, [children])
+    }, [addMargin, children])
 
     const outerContainerRef = useRef(null)
     const outerContainerWidth = outerContainerRef.current?.clientWidth
@@ -160,7 +160,7 @@ export const MenuBar = memo(
       //   newButtons,
       //   newMenus,
       // })
-    }, [titleComponentWidth, buttonWidth, widths, visibleChildren, addMargin])
+    }, [titleComponentWidth, widths, visibleChildren, addMargin])
 
     const checkOverflowDebounced = useDebouncedCallback(checkOverflow, 300, {
       leading: false,
@@ -221,8 +221,9 @@ export const MenuBar = memo(
       }
     }, [rerenderer, checkOverflowDebounced])
 
-    const onClickMenuButton = useCallback((event) =>
-      setMenuAnchor(event.currentTarget),
+    const onClickMenuButton = useCallback(
+      (event) => setMenuAnchor(event.currentTarget),
+      [],
     )
 
     return (
