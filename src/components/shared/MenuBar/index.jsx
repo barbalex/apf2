@@ -10,19 +10,7 @@ import {
 } from 'react'
 import { IconButton, Menu, MenuItem } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
-import {
-  FaBars,
-  FaAlignLeft,
-  FaAlignRight,
-  FaArrowDown,
-  FaArrowRight,
-  FaArrowLeft,
-  FaArrowUp,
-  FaCaretDown,
-  FaCaretLeft,
-  FaCaretRight,
-  FaCaretUp,
-} from 'react-icons/fa6'
+import { FaBars } from 'react-icons/fa6'
 import styled from '@emotion/styled'
 import { useDebouncedCallback } from 'use-debounce'
 
