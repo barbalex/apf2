@@ -7,6 +7,8 @@ import {
 import { RouterProvider } from 'react-router/dom'
 import { useAtom } from 'jotai'
 
+import { Spinner } from '../shared/Spinner.jsx'
+
 // import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.jsx'
 
 const DatenNav = lazy(async () => ({
@@ -364,7 +366,10 @@ export const Router = () => {
 
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route lazy={() => import('../AppBar/index.jsx')}>
+      <Route
+        lazy={() => import('../AppBar/index.jsx')}
+        hydrateFallbackElement={<Spinner />}
+      >
         <Route
           index
           lazy={() => import('../Home/index.jsx')}
