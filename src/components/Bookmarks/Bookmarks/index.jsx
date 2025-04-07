@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { TransitionGroup } from 'react-transition-group'
 
 import { FetcherImporter } from './FetcherImporter.jsx'
-import { usePrevious } from '../../../modules/usePrevious.js'
 
 const Container = styled.nav`
   display: flex;
