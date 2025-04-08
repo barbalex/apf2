@@ -51,11 +51,15 @@ export const InfoFlora = memo(
                   deckungStrauchschicht
                   deckungBaumschicht
                   genauigkeitLage
+                  genauigkeitLageCodiert
+                  geometryType
+                  genauigkeitHoehe
                   x
                   y
                   gemeinde
                   flurname
                   obergrenzeHoehe
+                  zaehlungen
                   expertiseIntroduit
                   expertiseIntroduiteNom
                   projekt
@@ -105,11 +109,15 @@ export const InfoFlora = memo(
           deckung_strauchschicht: z.deckungStrauchschicht,
           deckung_baumschicht: z.deckungBaumschicht,
           genauigkeit_lage: z.genauigkeitLage,
+          genauigkeit_lage_codiert: z.genauigkeitLageCodiert,
+          geometry_type: z.geometryType,
+          genauigkeit_hoehe: z.genauigkeitHoehe,
           x: z.x,
           y: z.y,
           gemeinde: z.gemeinde,
           flurname: z.flurname,
           obergrenze_hoehe: z.obergrenzeHoehe,
+          zaehlungen: z.zaehlungen,
           expertise_introduit: z.expertiseIntroduit,
           expertise_introduite_nom: z.expertiseIntroduiteNom,
           projekt: z.projekt,
