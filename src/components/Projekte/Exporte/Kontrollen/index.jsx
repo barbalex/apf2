@@ -13,6 +13,7 @@ import {
 import { Kontrollen as KontrollenComponent } from './Kontrollen.jsx'
 import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
 import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
+import { InfoFlora } from './InfoFlora.jsx'
 
 export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -46,6 +47,7 @@ export const Kontrollen = () => {
             <KontrollenComponent filtered={true} />
             <KontrFuerWebgisBun />
             <KontrAnzProZaehlEinheit />
+            <InfoFlora />
           </StyledCardContent>
         : null}
       </Collapse>
