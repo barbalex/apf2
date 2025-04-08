@@ -14,6 +14,7 @@ import { Form } from './Form/index.jsx'
 import { Menu } from './Menu.jsx'
 
 const Container = styled.div`
+  height: 100%;
   flex-grow: 0;
   display: flex;
   flex-direction: column;
