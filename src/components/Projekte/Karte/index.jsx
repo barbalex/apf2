@@ -37,6 +37,7 @@ import { ZhUep } from './layers/ZhUep.jsx'
 import { Detailplaene } from './layers/Detailplaene.jsx'
 import { Massnahmen } from './layers/Massnahmen.jsx'
 import { Betreuungsgebiete } from './layers/Betreuungsgebiete.jsx'
+import { Forstreviere } from './layers/Forstreviere.jsx'
 import { Markierungen } from './layers/Markierungen.jsx'
 import { ZhSvoColor } from './layers/ZhSvoColor.jsx'
 import { ZhPflegeplan } from './layers/ZhPflegeplan.jsx'
@@ -481,6 +482,7 @@ export const Karte = memo(
         MassnahmenLinien: () => <Massnahmen layer="linien" />,
         MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
         Betreuungsgebiete: () => <Betreuungsgebiete />,
+        Forstreviere: () => <Forstreviere />,
         Gemeinden: () => <Gemeinden />,
         ZhSvoColor: () => <ZhSvoColor />,
         ZhSvoGrey: () => <ZhSvoGrey />,

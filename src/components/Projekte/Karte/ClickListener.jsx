@@ -21,6 +21,8 @@ export const ClickListener = memo(
     const { activeOverlays: activeOverlaysRaw, enqueNotification } = store
     const activeOverlays = getSnapshot(activeOverlaysRaw)
 
+    console.log('ClickListener activeOverlays', activeOverlays)
+
     const client = useApolloClient()
 
     const map = useMapEvent('click', async (event) => {
@@ -44,7 +46,7 @@ export const ClickListener = memo(
 
       // idea 4:
       // get all activeOverlays
-      // filter queryable ones (Markierungen, Gemeinden, Betreuungsgebiete, Detailplaene, Massnahmen)
+      // filter queryable ones (Markierungen, Gemeinden, Betreuungsgebiete, Forstreviere, Detailplaene, Massnahmen)
       // directly query them using ST_Contains
       // using https://postgis.net/docs/ST_Contains.html, https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis#operators
       // build popup from responses (https://leafletjs.com/reference.html#popup)
@@ -89,26 +91,27 @@ export const ClickListener = memo(
           })
         }
       }
+
       if (activeOverlays.includes('Betreuungsgebiete')) {
         let betreuungsgebieteData
         try {
           betreuungsgebieteData = await client.query({
             query: gql`query karteBetreuungsgebietesQuery {
-          allNsBetreuungs(
-            filter: { 
-              geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
-            }
-          ) {
-            nodes {
-              id: gebietNr
-              gebietNr
-              gebietName
-              firma
-              projektleiter
-              telefon
-            }
-          }
-        }`,
+              allNsBetreuungs(
+                filter: { 
+                  geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
+                }
+              ) {
+                nodes {
+                  id: gebietNr
+                  gebietNr
+                  gebietName
+                  firma
+                  projektleiter
+                  telefon
+                }
+              }
+            }`,
           })
         } catch (error) {
           console.log(error)
@@ -125,6 +128,42 @@ export const ClickListener = memo(
           })
         }
       }
+
+      // Forstreviere
+      if (activeOverlays.includes('Forstreviere')) {
+        let forstreviereData
+        try {
+          forstreviereData = await client.query({
+            query: gql`query karteForstrevieresQuery {
+              allForstreviers(
+                filter: { 
+                  wkbGeometry: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
+                }
+              ) {
+                nodes {
+                  Nr: forevnr
+                  Name: revName
+                }
+              }
+            }`,
+          })
+        } catch (error) {
+          console.log(error)
+        }
+        console.log('ClickListener', { forstreviereData, lng, lat })
+
+        const node = forstreviereData?.data?.allForstreviers?.nodes?.[0]
+        if (node) {
+          const properties = { ...node }
+          delete properties.__typename
+          delete properties.id
+          layersData.push({
+            label: 'Forstreviere',
+            properties: Object.entries(properties),
+          })
+        }
+      }
+
       if (activeOverlays.includes('Detailplaene')) {
         let detailplaeneData
         try {

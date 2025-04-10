@@ -25,4 +25,5 @@ export const overlays = [
   },
   { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
+  { label: 'Forstreviere', value: 'Forstreviere' },
 ]
