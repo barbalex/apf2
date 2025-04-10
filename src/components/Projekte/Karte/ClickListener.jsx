@@ -21,8 +21,6 @@ export const ClickListener = memo(
     const { activeOverlays: activeOverlaysRaw, enqueNotification } = store
     const activeOverlays = getSnapshot(activeOverlaysRaw)
 
-    console.log('ClickListener activeOverlays', activeOverlays)
-
     const client = useApolloClient()
 
     const map = useMapEvent('click', async (event) => {
@@ -150,7 +148,6 @@ export const ClickListener = memo(
         } catch (error) {
           console.log(error)
         }
-        console.log('ClickListener', { forstreviereData, lng, lat })
 
         const node = forstreviereData?.data?.allForstreviers?.nodes?.[0]
         if (node) {
