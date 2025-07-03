@@ -105,7 +105,6 @@
     "@types/leaflet-draw": "1.0.12",
     "@types/lodash": "4.17.20",
     "@types/node": "24.0.10",
-    "@types/proj4": "2.19.0",
     "@types/proj4leaflet": "1.0.11",
     "@types/react": "19.1.8",
     "@types/react-datepicker": "7.0.0",
