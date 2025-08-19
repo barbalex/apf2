@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
-import { splitVendorChunkPlugin } from 'vite'
 // import emotionSwcPlugin from 'emotion-swc-plugin'
 
 // https://vitejs.dev/config/
@@ -20,7 +19,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    splitVendorChunkPlugin(),
     svgrPlugin({
       include: '**/*.svg', // https://github.com/pd4d10/vite-plugin-svgr/issues/91#issuecomment-1732028802
       svgrOptions: {

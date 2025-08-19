@@ -22,6 +22,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - sik_data:/sik_data
+    platform: linux/amd64
   graphql:
     container_name: apf_graphql
     restart: unless-stopped

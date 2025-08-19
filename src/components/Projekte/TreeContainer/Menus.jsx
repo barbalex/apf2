@@ -408,6 +408,21 @@ export const Menus = memo(
           'data-singleelementname',
         )
         const jahr = firstElementChild.getAttribute('data-jahr')
+        // console.log('TreeContainer.Menus.handleClick', {
+        //   table,
+        //   action,
+        //   actionTable,
+        //   firstElementChild,
+        //   id,
+        //   parentId,
+        //   urlPassed,
+        //   url,
+        //   label,
+        //   nodeType,
+        //   menuType,
+        //   singleElementName,
+        //   jahr,
+        // })
         const actions = {
           insert() {
             const urlForInsert = [...url]
@@ -494,7 +509,12 @@ export const Menus = memo(
             })
           },
           move() {
-            moveTo({ id, store, client, tanstackQueryClient })
+            moveTo({
+              id: nodeType === 'folder' ? parentId : id,
+              store,
+              client,
+              tanstackQueryClient,
+            })
           },
           markForCopying() {
             setCopying({ table, id, label, withNextLevel: false })
@@ -511,8 +531,12 @@ export const Menus = memo(
             })
           },
           copy() {
+            // console.log('TreeContainer.Menus.handleClick.copy', {
+            //   id,
+            //   parentId,
+            // })
             copyTo({
-              parentId: id,
+              parentId: nodeType === 'folder' ? parentId : id,
               client,
               store,
               tanstackQueryClient,
@@ -678,7 +702,10 @@ export const Menus = memo(
                 />
               </DialogContent>
               <DialogActions>
-                <Button onClick={closeNewTpopFromBeobDialog} color="inherit">
+                <Button
+                  onClick={closeNewTpopFromBeobDialog}
+                  color="inherit"
+                >
                   abbrechen
                 </Button>
               </DialogActions>
