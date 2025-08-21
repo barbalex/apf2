@@ -28,7 +28,7 @@ const StyledButton = styled(Button)`
 export const Info = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
-  column-gap: 5px;
+  column-gap: 15px;
 `
 const AbsenzDiv = styled.div`
   color: red;
