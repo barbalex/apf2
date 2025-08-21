@@ -15,6 +15,12 @@ order by
 
 -- select data from apflora.beob where quelle = 'EvAB 2016'
 select
+  quelle,
+  data ->> 'PRESENCE_'
+from
+  apflora.beob
+where
+  quelle = 'EvAB 2016';
 
 
 
@@ -24,12 +30,22 @@ CREATE OR REPLACE FUNCTION beob_extract_absenz(_beob apflora.beob)
 DECLARE
   result boolean;
 BEGIN
-  IF _beob.data ->> 'presence' IS NULL THEN
-    result = false;
-  ELSIF _beob.data ->> 'presence' <> '+' THEN
-    result = true;
+  IF _beob.quelle = 'EvAB 2016' THEN
+    IF _beob.data ->> 'PRESENCE_' IS NULL THEN
+      result = false;
+    ELSIF _beob.data ->> 'PRESENCE_' <> '+' THEN
+      result = true;
+    ELSE
+      result = false; -- no information available
+    END IF;
   ELSE
-    result = false; -- no information available
+    IF _beob.data ->> 'presence' IS NULL THEN
+      result = false;
+    ELSIF _beob.data ->> 'presence' <> '+' THEN
+      result = true;
+    ELSE
+      result = false; -- no information available
+    END IF;
   END IF;
   RETURN result;
 END;
@@ -41,6 +57,7 @@ select
   beob.quelle,
   beob.data ->> 'presence' AS presence,
   beob.data ->> 'interpretation_note' AS interpretation_note,
+  data ->> 'PRESENCE_' AS presence_evab,
   beob_extract_absenz(beob) AS absent,
   count(*) AS count
 from
@@ -50,6 +67,7 @@ group by
   beob.quelle,
   beob.data ->> 'presence',
   beob.data ->> 'interpretation_note',
+  data ->> 'PRESENCE_',
   beob_extract_absenz(beob)
 order by
   beob.quelle;
