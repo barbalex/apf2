@@ -358,9 +358,6 @@ import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-// import { Unterhalt } from './components/Unterhalt.jsx'
-
-// uncomment unterhalt route for Unterhalt
 export const Router = () => {
   const [isDesktopView] = useAtom(isDesktopViewAtom)
 
@@ -379,7 +376,6 @@ export const Router = () => {
           lazy={() => import('./ProtectedRoute.jsx')}
           handle={datenHandle}
         >
-          {/* <Route path="*" element={<Unterhalt />}></Route> */}
           <Route
             path="Projekte/:projId/EK-Planung"
             lazy={() => import('../EkPlan/index.jsx')}
