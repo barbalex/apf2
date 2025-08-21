@@ -3377,8 +3377,8 @@ CREATE TABLE apflora.beob(
   autor varchar(100) DEFAULT NULL,
   -- data without coordinates is not imported
   geom_point geometry(point, 4326) DEFAULT NULL,
-  -- 
-  absent boolean DEFAULT FALSE,
+  -- clearly mark absence. Must be extracted from data on imports
+  absenz boolean DEFAULT FALSE,
   -- maybe later add a geojson field for polygons?
   data jsonb,
   tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop(id) ON DELETE SET NULL ON UPDATE CASCADE,
