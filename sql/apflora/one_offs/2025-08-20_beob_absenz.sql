@@ -110,3 +110,30 @@ group by
   absenz
 order by
   beob.quelle;
+
+-- fetch some test data where absenz is true
+-- should include artname
+-- should include pop.nr and tpop.nr
+select 
+  tax.artname,
+  pop.nr AS pop_nr,
+  tpop.nr AS tpop_nr,
+  beob.quelle,
+  beob.data ->> 'presence' AS presence,
+  beob.data ->> 'interpretation_note' AS interpretation_note,
+  data ->> 'PRESENCE_' AS presence_evab,
+  absenz
+from
+  apflora.beob beob
+  left join apflora.ae_taxonomies tax on beob.art_id = tax.id
+  left join apflora.ap ap on tax.id = ap.art_id
+  left join apflora.tpop tpop on beob.tpop_id = tpop.id
+  left join apflora.pop pop on tpop.pop_id = pop.id
+where
+  absenz = true 
+  and ap.start_jahr is not null
+order by
+  tax.artname,
+  pop.nr,
+  tpop.nr
+limit 1000;

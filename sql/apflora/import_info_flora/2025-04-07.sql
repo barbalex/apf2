@@ -256,6 +256,10 @@ WHERE
 
 -- 15
 --
+-- TODO: beginning 2025.8 update absenz field
+UPDATE apflora.beob
+SET absenz = beob_extract_absenz(beob);
+
 -- 10 get stats
 SELECT
   quelle,
