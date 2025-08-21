@@ -11,28 +11,28 @@ api.apflora.ch {
   }
 }
 
-ss.apflora.ch {
-  reverse_proxy * ss:7000 {
-    header_down Access-Control-Allow-Origin *
-    header_down Access-Control-Allow-Methods "HEAD, GET, POST, OPTIONS"
-  }
-}
+# ss.apflora.ch {
+#   reverse_proxy * ss:7000 {
+#     header_down Access-Control-Allow-Origin *
+#     header_down Access-Control-Allow-Methods "HEAD, GET, POST, OPTIONS"
+#   }
+# }
 
 # caddy docs: 
 # https://caddyserver.com/docs/modules/http.reverse_proxy.transport.fastcgi
 # https://caddyserver.com/docs/caddyfile/directives/reverse_proxy
 # example: https://github.com/opengisch/qgisserver-caddy/blob/master/Caddyfile
 # nginx example: https://docs.qgis.org/3.10/en/docs/user_manual/working_with_ogc/server/containerized_deployment.html#usable-sample
-gisdata.apflora.ch {
-  root * /etc/qgisserver
-  file_server
-  # @ows path_regexp map_file ^/ows/(.*)
+# gisdata.apflora.ch {
+#   root * /etc/qgisserver
+#   file_server
+#   # @ows path_regexp map_file ^/ows/(.*)
   
-  reverse_proxy * qgisserver:8380 {
-    transport fastcgi {
-      # env PGSERVICEFILE /etc/qgisserver/pg_service.conf
-      # env QUERY_STRING {query}&map=/etc/qgisserver/{re.map_file.1}.qgs
-      env QGIS_PROJECT_FILE /etc/qgisserver/project.qgs
-    }
-  }
-}
+#   reverse_proxy * qgisserver:8380 {
+#     transport fastcgi {
+#       # env PGSERVICEFILE /etc/qgisserver/pg_service.conf
+#       # env QUERY_STRING {query}&map=/etc/qgisserver/{re.map_file.1}.qgs
+#       env QGIS_PROJECT_FILE /etc/qgisserver/project.qgs
+#     }
+#   }
+# }
