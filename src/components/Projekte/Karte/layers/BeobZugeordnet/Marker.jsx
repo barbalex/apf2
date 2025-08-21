@@ -30,6 +30,10 @@ export const Info = styled.div`
   grid-template-columns: auto 1fr;
   column-gap: 5px;
 `
+const AbsenzDiv = styled.div`
+  color: red;
+  font-weight: bold;
+`
 
 export const Marker = memo(
   observer(({ beob }) => {
@@ -159,6 +163,9 @@ export const Marker = memo(
             <div>{`Beobachtung von ${
               beob?.aeTaxonomyByArtId?.artname ?? ''
             }`}</div>
+            {beob?.absenz ?
+              <AbsenzDiv>Absenzmeldung</AbsenzDiv>
+            : null}
             <StyledH3>{label}</StyledH3>
             <Info>
               <div>Koordinaten:</div>

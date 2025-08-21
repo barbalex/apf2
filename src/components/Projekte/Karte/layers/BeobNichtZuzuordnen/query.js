@@ -12,6 +12,7 @@ export const query = gql`
         datum
         autor
         quelle
+        absenz
         aeTaxonomyByArtId {
           id
           artname

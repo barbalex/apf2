@@ -152,6 +152,7 @@ export const beob = gql`
     idField
     datum
     autor
+    absenz
     lv95X
     wgs84Lat
     lv95Y

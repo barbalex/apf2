@@ -40,6 +40,7 @@ const StyledAccordionSummary = styled(AccordionSummary)`
 const StyledAccordionDetails = styled(AccordionDetails)`
   padding: 4px 8px;
 `
+const AbsenzStyle = { fontWeight: 'bold', color: 'red' }
 
 const topFieldNames = [
   'PRESENCE',
@@ -179,12 +180,21 @@ export const Data = memo(
         {!!topFields.length && (
           <TopFieldContainer>
             <Info>
-              {topFields.map(([key, value]) => (
-                <div key={key}>
-                  <div>{`${key}:`}</div>
-                  <div>{value}</div>
-                </div>
-              ))}
+              {topFields.map(([key, value]) => {
+                const isAbsenz =
+                  key?.toLowerCase?.()?.includes?.('presence') && row?.absenz
+                const style = isAbsenz ? AbsenzStyle : {}
+
+                return (
+                  <div
+                    key={key}
+                    style={style}
+                  >
+                    <div>{`${key}:`}</div>
+                    <div>{value}</div>
+                  </div>
+                )
+              })}
             </Info>
           </TopFieldContainer>
         )}

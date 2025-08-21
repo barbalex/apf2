@@ -22,6 +22,10 @@ const StyledButton = styled(Button)`
   justify-content: left;
   padding: 2px 0;
 `
+const AbsenzDiv = styled.div`
+  color: red;
+  font-weight: bold;
+`
 
 export const Marker = memo(
   observer(({ beob }) => {
@@ -95,6 +99,9 @@ export const Marker = memo(
             <div>{`Beobachtung von ${
               beob?.aeTaxonomyByArtId?.artname ?? ''
             }`}</div>
+            {beob?.absenz ?
+              <AbsenzDiv>Absenzmeldung</AbsenzDiv>
+            : null}
             <StyledH3>{label}</StyledH3>
             <div>
               {`Koordinaten: ${beob.lv95X?.toLocaleString(
