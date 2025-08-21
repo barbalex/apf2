@@ -1,0 +1,13 @@
+export const beobHighlightedIconAbsenzString = `
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <path d="M12 22.483a9 9 0 0 0 9-9 9 9 0 0 0-9 9zm-6.4-11.75a2.5 2.5 0 0 0 3.92 2.06l-.02.19a2.5 2.5 0 0 0 5 0l-.02-.19c.4.28.89.44 1.42.44a2.5 2.5 0 0 0 2.5-2.5c0-1-.59-1.85-1.43-2.25.84-.4 1.43-1.25 1.43-2.25a2.5 2.5 0 0 0-3.92-2.06l.02-.19a2.5 2.5 0 0 0-5 0l.02.19c-.4-.28-.89-.44-1.42-.44a2.5 2.5 0 0 0-2.5 2.5c0 1 .59 1.85 1.43 2.25-.84.4-1.43 1.25-1.43 2.25zm6.4-4.75a2.5 2.5 0 0 1 0 5 2.5 2.5 0 0 1 0-5zm-9 7.5a9 9 0 0 0 9 9 9 9 0 0 0-9-9z" style="fill:#ff5eff;stroke:#ff0;stroke-width:2.95000005;stroke-miterlimit:2.79999995;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"/>
+  <path
+     style="fill:url(#linearGradient900);fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:2;stroke-dasharray:none"
+     d="M 21.706595,0.96904441 2.3903096,22.25572"
+     id="path869" />
+  <path
+     style="fill:#000000;stroke:#000000;stroke-opacity:1;stroke-width:2;stroke-dasharray:none"
+     d="M 2.3257066,1.3243607 21.512786,22.191117"
+     id="path902" />
+</svg>
+`

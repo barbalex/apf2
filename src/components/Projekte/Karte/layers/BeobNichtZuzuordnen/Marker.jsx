@@ -9,7 +9,9 @@ import { useParams, useLocation } from 'react-router'
 
 import { MobxContext } from '../../../../../mobxContext.js'
 import { beobIconString } from './beobIconString.js'
+import { beobIconAbsenzString } from './beobIconAbsenzString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
+import { beobIconHighlightedAbsenzString } from './beobIconHighlightedAbsenzString.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
@@ -36,10 +38,16 @@ export const Marker = memo(
     const { openTree2WithActiveNodeArray } = store
 
     const isHighlighted = beobId === beob.id
+    const isAbsenz = beob.absenz
     const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
     // use divIcon instead? https://leafletjs.com/reference.html#divicon
     const icon = window.L.divIcon({
-      html: isHighlighted ? beobIconHighlightedString : beobIconString,
+      html:
+        isHighlighted ?
+          isAbsenz ? beobIconHighlightedAbsenzString
+          : beobIconHighlightedString
+        : isAbsenz ? beobIconAbsenzString
+        : beobIconString,
       className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
     // some dates are not valid
