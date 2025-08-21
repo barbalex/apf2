@@ -34,7 +34,7 @@ export const Unterhalt = () => (
     <Article>
       <Titel>Wir sind bald zurück!</Titel>
       <div>
-        <p>apflora erhält gerade eine neue Datenbank &#x1F69A;</p>
+        <p>apflora erhält gerade eine neue Datenbank</p>
         <p>
           Wenn nötig sind wir per{' '}
           <A href="mailto:alex@gabriel-software.ch">email</A> erreichbar,

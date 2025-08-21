@@ -111,9 +111,8 @@ export const App = () => {
                     <UploaderContext value={uploaderRef}>
                       <GlobalStyle />
                       <Suspense fallback={<Spinner />}>
-                        <Router />
-                        {/* <UnterhaltsRouter /> */
-                        /* Uncomment for Unterhalt route */}
+                        {/* <Router /> */}
+                        <UnterhaltsRouter />
                       </Suspense>
                       <Suspense fallback={null}>
                         <Notifier />
