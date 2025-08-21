@@ -1,0 +1,1 @@
+Ab Version 1.117.0: Absenzmeldungen in Beobachtungen werden erkannt. Sie werden in der Karte markiert (durchgestrichen). Im Popup (das Fenster, das öffnet, wenn man in der Karte auf eine Beobachtung klickt) wird die entsprechende Information rot betont
