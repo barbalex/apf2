@@ -1,4 +1,5 @@
 # beware when upgrading: need to re-create backups!
+# 2025.08.21: live version is 14
 FROM postgis/postgis:17-3.5
 
 COPY ./init/ /docker-entrypoint-initdb.d/
