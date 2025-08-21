@@ -158,22 +158,23 @@ export const Component = memo(
               saveToDb={saveToDb}
               error={fieldErrors.vergleichVorjahrGesamtziel}
             />
-            <RadioButtonGroup
+            <Select
               name="beurteilung"
               label="Beurteilung"
-              dataSource={data?.allApErfkritWertes?.nodes ?? []}
+              options={data?.allApErfkritWertes?.nodes ?? []}
               loading={loading}
               value={row.beurteilung}
               saveToDb={saveToDb}
               error={fieldErrors.beurteilung}
             />
-            <RadioButtonGroup
+            <Select
               name="veraenderungZumVorjahr"
               label="Veränderung zum Vorjahr"
-              dataSource={veraenGegenVorjahrWerte}
+              options={veraenGegenVorjahrWerte}
+              loading={false}
               value={row.veraenderungZumVorjahr}
               saveToDb={saveToDb}
-              error={fieldErrors.beurteilung}
+              error={fieldErrors.veraenderungZumVorjahr}
             />
             <MarkdownField
               name="apberAnalyse"
