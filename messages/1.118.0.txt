@@ -1,0 +1,1 @@
+Ab Version 1.118.0: Im AP-Bericht werden die Beurteilung und die Veränderung zum Vorjahr über Select-Felder gewählt. Die bisherigen Auswahl-Felder konnten zu versehentlichen Änderungen führen, wenn man ohne zu merken in deren Bereich klickte (statt z.B. zu scrollen...) 
