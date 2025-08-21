@@ -11,7 +11,9 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../../mobxContext.js'
 import { beobIconString } from './beobIconString.js'
+import { beobIconAbsenzString } from './beobIconAbsenzString.js'
 import { beobIconHighlightedString } from './beobIconHighlightedString.js'
+import { beobIconHighlightedAbsenzString } from './beobIconHighlightedAbsenzString.js'
 import { getNearestTpop } from '../../../../../modules/getNearestTpop.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { updateBeobById } from './updateBeobById.js'
@@ -44,9 +46,15 @@ export const Marker = memo(
     const { assigningBeob, openTree2WithActiveNodeArray } = store
 
     const isHighlighted = beobId === beob.id
+    const isAbsenz = beob.absenz
     const latLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)
     const icon = window.L.divIcon({
-      html: isHighlighted ? beobIconHighlightedString : beobIconString,
+      html:
+        isHighlighted ?
+          isAbsenz ? beobIconHighlightedAbsenzString
+          : beobIconHighlightedString
+        : isAbsenz ? beobIconAbsenzString
+        : beobIconString,
       className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
     // some dates are not valid
