@@ -42,9 +42,9 @@ const NotificationDismisser = lazy(async () => ({
 const Router = lazy(async () => ({
   default: (await import('./components/Router/index.jsx')).Router,
 }))
-const UnterhaltsRouter = lazy(async () => ({
-  default: (await import('./components/Router/indexUnterhalt.jsx')).Router,
-}))
+// const UnterhaltsRouter = lazy(async () => ({
+//   default: (await import('./components/Router/indexUnterhalt.jsx')).Router,
+// }))
 const IsPrintSetter = lazy(async () => ({
   default: (await import('./components/IsPrintSetter.jsx')).IsPrintSetter,
 }))
