@@ -1,0 +1,1 @@
+Ab Version 1.119.0: Die Datenbank (PostgreSQL) wurde von Version 14.7 auf 17.5 aktualisiert. Möglich, dass dadurch gewisse langsamere Vorgänge schneller werden (z.B. die EK-Planung)
