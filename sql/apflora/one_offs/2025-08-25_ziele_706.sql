@@ -7,6 +7,7 @@
 -- 5. add Ziel-Erreichung to label (if is not null)
 -- 6. add erreichung and bemerkungen to ziel form
 -- 7. drop zielber table
+-- 8. drop zielber group and nodes in tree
 --
 -- 1. ensure no ziel has multiple zielber
 select 
@@ -63,3 +64,7 @@ where z.erreichung is distinct from zb.erreichung
 -- 5. add Ziel-Erreichung to label (if is not null)
 -- TODO: run: CREATE OR REPLACE FUNCTION apflora.ziel_label
 -- TODO: DROP FUNCTION IF EXISTS apflora.zielber_label (zielber apflora.zielber);
+
+
+-- 7. drop zielber table
+-- TODO: DROP TABLE IF EXISTS apflora.zielber cascade;
