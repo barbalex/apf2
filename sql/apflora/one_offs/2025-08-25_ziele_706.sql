@@ -1,13 +1,13 @@
 -- https://github.com/barbalex/apf2/issues/706
 -- TODO:
--- 1. ensure no ziel has multiple zielber
--- 2. create zielber fields (erreichung, bemerkungen) to ziel
--- 3. copy data from zielber to ziel
--- 4. find every place zielber are used and change to ziel
--- 5. add Ziel-Erreichung to label (if is not null)
--- 6. add erreichung and bemerkungen to ziel form
--- 7. drop zielber table
--- 8. drop zielber group and nodes in tree
+-- 1. ensure no ziel has multiple zielber ✓
+-- 2. create zielber fields (erreichung, bemerkungen) to ziel ✓
+-- 3. copy data from zielber to ziel ✓
+-- 4. find every place zielber are used and change to ziel ✓
+-- 5. add Ziel-Erreichung to label (if is not null) ✓
+-- 6. add erreichung and bemerkungen to ziel form ✓
+-- 7. drop zielber group and nodes in tree ✓
+-- 8. drop zielber table
 --
 -- 1. ensure no ziel has multiple zielber
 select 
