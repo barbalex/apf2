@@ -170,12 +170,21 @@ CREATE OR REPLACE FUNCTION apflora.ziel_label (ziel apflora.ziel)
   RETURNS citext
   AS $$
   SELECT
-    coalesce(ziel.bezeichnung, '(kein Ziel)') || ' (' || coalesce((
+    coalesce(ziel.bezeichnung, '(kein Ziel)') || 
+    ' (' || 
+    coalesce((
       SELECT
         text
       FROM apflora.ziel_typ_werte
       WHERE
-        apflora.ziel_typ_werte.code = ziel.typ), 'kein Typ') || ')'
+        apflora.ziel_typ_werte.code = ziel.typ), 'kein Typ') || 
+    ')' ||
+    coalesce(CASE 
+      WHEN ziel.erreichung IS NOT NULL AND trim(ziel.erreichung) <> '' THEN 
+        '. ' || upper(substring(ziel.erreichung from 1 for 1)) || substring(ziel.erreichung from 2)
+      ELSE
+        ''
+      END, '')
 $$
 LANGUAGE sql
 STABLE;

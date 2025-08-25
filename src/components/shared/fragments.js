@@ -722,6 +722,8 @@ export const ziel = gql`
     typ
     jahr
     bezeichnung
+    erreichung
+    bemerkungen
     changedBy
   }
 `

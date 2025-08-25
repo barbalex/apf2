@@ -34,12 +34,22 @@ const FormContainer = styled.div`
   scrollbar-width: thin;
   padding: 10px;
 `
+const Subtitle = styled.h3`
+  margin-top: 10px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  font-size: 1em;
+  color: rgba(0, 0, 0, 0.6);
+  padding-bottom: 2px;
+`
 
 const fieldTypes = {
   apId: 'UUID',
   typ: 'Int',
   jahr: 'Int',
   bezeichnung: 'String',
+  erreichung: 'String',
+  bemerkungen: 'String',
 }
 
 export const Component = memo(
@@ -184,6 +194,24 @@ export const Component = memo(
               value={row.bezeichnung}
               saveToDb={saveToDb}
               error={fieldErrors.bezeichnung}
+            />
+            <Subtitle>Beurteilung</Subtitle>
+            <TextField
+              name="erreichung"
+              label="Ziel-Erreichung"
+              type="text"
+              value={row.erreichung}
+              saveToDb={saveToDb}
+              error={fieldErrors.erreichung}
+            />
+            <TextField
+              name="bemerkungen"
+              label="Bemerkungen"
+              type="text"
+              multiLine
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={fieldErrors.bemerkungen}
             />
           </FormContainer>
         </Container>

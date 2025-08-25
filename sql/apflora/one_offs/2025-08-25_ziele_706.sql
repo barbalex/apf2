@@ -4,7 +4,9 @@
 -- 2. create zielber fields (erreichung, bemerkungen) to ziel
 -- 3. copy data from zielber to ziel
 -- 4. find every place zielber are used and change to ziel
--- 5. drop zielber table
+-- 5. add Ziel-Erreichung to label (if is not null)
+-- 6. add erreichung and bemerkungen to ziel form
+-- 7. drop zielber table
 --
 -- 1. ensure no ziel has multiple zielber
 select 
@@ -57,3 +59,7 @@ from
 where z.erreichung is distinct from zb.erreichung
    or z.bemerkungen is distinct from zb.bemerkungen;
 -- looks good
+
+-- 5. add Ziel-Erreichung to label (if is not null)
+-- TODO: run: CREATE OR REPLACE FUNCTION apflora.ziel_label
+-- TODO: DROP FUNCTION IF EXISTS apflora.zielber_label (zielber apflora.zielber);
