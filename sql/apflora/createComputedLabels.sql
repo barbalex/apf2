@@ -190,21 +190,6 @@ LANGUAGE sql
 STABLE;
 
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
-COMMENT ON FUNCTION apflora.ziel_label (apflora.ziel) IS e'@sortable';
-
-DROP FUNCTION IF EXISTS apflora.zielber_label (zielber apflora.zielber);
-
-CREATE OR REPLACE FUNCTION apflora.zielber_label (zielber apflora.zielber)
-  RETURNS citext
-  AS $$
-  SELECT
-    coalesce(lpad(zielber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce(zielber.erreichung, '(nicht beurteilt)')
-$$
-LANGUAGE sql
-STABLE;
-
--- make label sortable, as of postgraphile 4.4/postgraphile@next
-COMMENT ON FUNCTION apflora.zielber_label (apflora.zielber) IS e'@sortable';
 
 DROP FUNCTION IF EXISTS apflora.assozart_label (assozart apflora.assozart);
 

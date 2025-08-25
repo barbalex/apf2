@@ -7,7 +7,6 @@ import {
   ziel,
   apErfkritWerte,
   tpopmassnTypWerte,
-  zielber,
   zielTypWerte,
 } from '../../shared/fragments.js'
 
@@ -88,11 +87,6 @@ export const query = gql`
             zielTypWerteByTyp {
               ...ZielTypWerteFields
             }
-            zielbersByZielId {
-              nodes {
-                ...ZielberFields
-              }
-            }
           }
         }
         apbersByApId: apbersByApIdAndJahr(
@@ -118,6 +112,5 @@ export const query = gql`
   ${apErfkritWerte}
   ${tpopmassnTypWerte}
   ${ziel}
-  ${zielber}
   ${zielTypWerte}
 `
