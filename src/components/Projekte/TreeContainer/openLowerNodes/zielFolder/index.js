@@ -48,23 +48,6 @@ export const zielFolder = async ({
           'Berichte',
         ],
       ]
-      const zielbers = ziel?.zielbersByZielId?.nodes ?? []
-      zielbers.forEach((zielber) => {
-        newOpenNodes = [
-          ...newOpenNodes,
-          [
-            'Projekte',
-            projId,
-            'Arten',
-            id,
-            'AP-Ziele',
-            +jahr,
-            ziel.id,
-            'Berichte',
-            zielber.id,
-          ],
-        ]
-      })
     })
   })
 

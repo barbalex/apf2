@@ -9,11 +9,6 @@ export const query = gql`
       zielsByApId(filter: { jahr: { equalTo: $jahr } }) {
         nodes {
           ...ZielFields
-          zielbersByZielId {
-            nodes {
-              id
-            }
-          }
         }
       }
     }

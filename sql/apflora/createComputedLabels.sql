@@ -170,32 +170,26 @@ CREATE OR REPLACE FUNCTION apflora.ziel_label (ziel apflora.ziel)
   RETURNS citext
   AS $$
   SELECT
-    coalesce(ziel.bezeichnung, '(kein Ziel)') || ' (' || coalesce((
+    coalesce(ziel.bezeichnung, '(kein Ziel)') || 
+    ' (' || 
+    coalesce((
       SELECT
         text
       FROM apflora.ziel_typ_werte
       WHERE
-        apflora.ziel_typ_werte.code = ziel.typ), 'kein Typ') || ')'
+        apflora.ziel_typ_werte.code = ziel.typ), 'kein Typ') || 
+    ')' ||
+    coalesce(CASE 
+      WHEN ziel.erreichung IS NOT NULL AND trim(ziel.erreichung) <> '' THEN 
+        '. ' || upper(substring(ziel.erreichung from 1 for 1)) || substring(ziel.erreichung from 2)
+      ELSE
+        ''
+      END, '')
 $$
 LANGUAGE sql
 STABLE;
 
 -- make label sortable, as of postgraphile 4.4/postgraphile@next
-COMMENT ON FUNCTION apflora.ziel_label (apflora.ziel) IS e'@sortable';
-
-DROP FUNCTION IF EXISTS apflora.zielber_label (zielber apflora.zielber);
-
-CREATE OR REPLACE FUNCTION apflora.zielber_label (zielber apflora.zielber)
-  RETURNS citext
-  AS $$
-  SELECT
-    coalesce(lpad(zielber.jahr::text, 4, '0'), '(kein Jahr)') || ': ' || coalesce(zielber.erreichung, '(nicht beurteilt)')
-$$
-LANGUAGE sql
-STABLE;
-
--- make label sortable, as of postgraphile 4.4/postgraphile@next
-COMMENT ON FUNCTION apflora.zielber_label (apflora.zielber) IS e'@sortable';
 
 DROP FUNCTION IF EXISTS apflora.assozart_label (assozart apflora.assozart);
 

@@ -2115,6 +2115,8 @@ CREATE TABLE apflora.ziel(
   typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte(code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   bezeichnung text,
+  erreichung text DEFAULT NULL,
+  bemerkungen text DEFAULT NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   changed_by varchar(20) DEFAULT NULL
@@ -2138,39 +2140,11 @@ COMMENT ON COLUMN apflora.ziel.jahr IS 'In welchem Jahr soll das Ziel erreicht w
 
 COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels';
 
+COMMENT ON COLUMN apflora.ziel.erreichung IS 'Beurteilung der Zielerreichung';
+
+COMMENT ON COLUMN apflora.ziel.bemerkungen IS 'Bemerkungen zur Zielerreichung';
+
 COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-
--- zielber
-DROP TABLE IF EXISTS apflora.zielber;
-
-CREATE TABLE apflora.zielber(
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  ziel_id uuid DEFAULT NULL REFERENCES apflora.ziel(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  jahr smallint DEFAULT NULL,
-  erreichung text DEFAULT NULL,
-  bemerkungen text DEFAULT NULL,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  changed_by varchar(20) DEFAULT NULL
-);
-
-CREATE INDEX ON apflora.zielber USING btree(id);
-
-CREATE INDEX ON apflora.zielber USING btree(ziel_id);
-
-CREATE INDEX ON apflora.zielber USING btree(jahr);
-
-COMMENT ON COLUMN apflora.zielber.id IS 'Primärschlüssel';
-
-COMMENT ON COLUMN apflora.zielber.ziel_id IS 'Zugehöriges Ziel. Fremdschlüssel aus der Tabelle "ziel"';
-
-COMMENT ON COLUMN apflora.zielber.jahr IS 'Für welches Jahr gilt der Bericht?';
-
-COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung';
-
-COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung';
-
-COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 -- beob
 DROP TABLE IF EXISTS apflora.beob;

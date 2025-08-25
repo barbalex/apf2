@@ -21,7 +21,6 @@ export const getUrlNameFromTableName = (table) => {
     tpopmassnber: 'Massnahmen-Berichte',
     userprojekt: 'Benutzer-Projekte',
     ziel: 'AP-Ziele',
-    zielber: 'Berichte',
   }
   const name = names[table]
   if (!name)

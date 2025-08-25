@@ -39,6 +39,8 @@ export const Ziele = memo(
                     text
                   }
                   bezeichnung
+                  erreichung
+                  bemerkungen
                   apByApId {
                     id
                     apBearbstandWerteByBearbeitung {

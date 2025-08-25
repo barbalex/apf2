@@ -182,14 +182,6 @@ const zielHandle = {
   bookmarkFetcher: zielBookmarkFetcher,
   bookmarkFetcherName: 'useZielNavData',
 }
-const zielbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useZielbersNavData.js'))
-    .useZielbersNavData,
-}))
-const zielbersHandle = {
-  bookmarkFetcher: zielbersBookmarkFetcher,
-  bookmarkFetcherName: 'useZielbersNavData',
-}
 const erfkritsBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useErfkritsNavData.js'))
     .useErfkritsNavData,
@@ -622,23 +614,6 @@ export const Router = () => {
                               import('../Projekte/Daten/Ziel/Ziel.jsx')
                             }
                           />
-                          <Route
-                            path="Berichte"
-                            handle={zielbersHandle}
-                          >
-                            <Route
-                              path="*"
-                              lazy={() =>
-                                import('../Projekte/Daten/Zielbers/index.jsx')
-                              }
-                            />
-                            <Route
-                              path=":zielberId"
-                              lazy={() =>
-                                import('../Projekte/Daten/Zielber/index.jsx')
-                              }
-                            />
-                          </Route>
                         </Route>
                       </Route>
                     </Route>

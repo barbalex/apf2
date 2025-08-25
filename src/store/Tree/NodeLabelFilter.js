@@ -38,10 +38,6 @@ export const NodeLabelFilter = types
       types.maybeNull(types.union(types.string, types.number)),
       null,
     ),
-    zielber: types.optional(
-      types.maybeNull(types.union(types.string, types.number)),
-      null,
-    ),
     erfkrit: types.optional(
       types.maybeNull(types.union(types.string, types.number)),
       null,
@@ -164,7 +160,6 @@ export const defaultValue = {
   tpopkontrzaehl: null,
   tpopmassn: null,
   ziel: null,
-  zielber: null,
   erfkrit: null,
   apber: null,
   apberuebersicht: null,

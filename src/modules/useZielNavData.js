@@ -18,42 +18,21 @@ export const useZielNavData = (props) => {
   const store = useContext(MobxContext)
 
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['treeZiel', zielId, store.tree.zielberGqlFilterForTree],
+    queryKey: ['treeZiel', zielId],
     queryFn: () =>
       apolloClient.query({
         query: gql`
-          query NavZielQuery($zielId: UUID!, $zielberFilter: ZielberFilter!) {
+          query NavZielQuery($zielId: UUID!) {
             zielById(id: $zielId) {
               id
               label
-              zielbersByZielId {
-                totalCount
-              }
-              filteredZielbers: zielbersByZielId(
-                filter: $zielberFilter
-                orderBy: LABEL_ASC
-              ) {
-                totalCount
-              }
             }
           }
         `,
-        variables: {
-          zielId,
-          zielberFilter: store.tree.zielberGqlFilterForTree,
-        },
+        variables: { zielId },
         fetchPolicy: 'no-cache',
       }),
   })
-  useEffect(
-    () => reaction(() => store.tree.zielberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-
-  const zielbersCount = data?.data?.zielById?.zielbersByZielId?.totalCount ?? 0
-  const filteredZielbersCount =
-    data?.data?.zielById?.filteredZielbers?.totalCount ?? 0
 
   const navData = useMemo(
     () => ({
@@ -67,7 +46,7 @@ export const useZielNavData = (props) => {
       treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, zielId],
       fetcherName: 'useZielNavData',
       fetcherParams: { projId, apId, jahr, zielId },
-      hasChildren: true,
+      hasChildren: false,
       component: NodeWithList,
       menus: [
         {
@@ -75,41 +54,9 @@ export const useZielNavData = (props) => {
           label: 'Ziel',
           isSelf: true,
         },
-        {
-          id: 'Berichte',
-          label: `Berichte (${isLoading ? '...' : `${filteredZielbersCount}/${zielbersCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'zielberFolder',
-          treeId: `${zielId}ZielberFolder`,
-          treeParentTableId: zielId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'AP-Ziele',
-            jahr,
-            zielId,
-            'Berichte',
-          ],
-          fetcherName: 'useZielbersNavData',
-          fetcherParams: { projId, apId, jahr, zielId },
-          passTransitionStateToChildren: true,
-          hasChildren: !!filteredZielbersCount,
-          alwaysOpen: true,
-        },
       ],
     }),
-    [
-      apId,
-      data?.data?.zielById?.label,
-      filteredZielbersCount,
-      isLoading,
-      jahr,
-      projId,
-      zielId,
-      zielbersCount,
-    ],
+    [apId, data?.data?.zielById?.label, isLoading, jahr, projId, zielId],
   )
 
   return { isLoading, error, navData }

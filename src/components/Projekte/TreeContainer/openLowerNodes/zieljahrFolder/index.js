@@ -42,23 +42,6 @@ export const zieljahrFolder = async ({
         'Berichte',
       ],
     ]
-    const zielbers = ziel?.zielbersByZielId?.nodes ?? []
-    zielbers.forEach((zielber) => {
-      newOpenNodes = [
-        ...newOpenNodes,
-        [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'AP-Ziele',
-          jahr,
-          ziel.id,
-          'Berichte',
-          zielber.id,
-        ],
-      ]
-    })
   })
 
   // 3. update

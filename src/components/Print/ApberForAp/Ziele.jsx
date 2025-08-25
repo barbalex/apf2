@@ -39,17 +39,17 @@ export const Ziele = ({ ziele }) => (
       <Goal>Ziel</Goal>
     </TitleRow>
     {ziele.map((z) => {
-      const zielBer = (z?.zielbersByZielId?.nodes ?? [])[0]
+      const hasZielBer = Boolean(z.erreichung || z.bemerkungen)
 
       return (
         <Row key={z.id}>
           <Typ>{z?.zielTypWerteByTyp?.text ?? ''}</Typ>
           <ZielColumn>
             <Goal>{z.bezeichnung || ''}</Goal>
-            {zielBer && (
-              <Opinion>{`Beurteilung: ${zielBer.erreichung || '(keine)'}${
-                zielBer.bemerkungen ? '; ' : ''
-              }${zielBer.bemerkungen || ''}`}</Opinion>
+            {hasZielBer && (
+              <Opinion>{`Beurteilung: ${z.erreichung || '(keine)'}${
+                z.bemerkungen ? '; ' : ''
+              }${z.bemerkungen || ''}`}</Opinion>
             )}
           </ZielColumn>
         </Row>

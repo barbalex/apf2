@@ -135,14 +135,6 @@ export const tables = [
     stammdaten: true,
   },
   {
-    table: 'zielber',
-    parentTable: 'ziel',
-    label: 'Berichte',
-    labelSingular: 'Bericht',
-    idField: 'id',
-    parentIdField: 'ziel_id',
-  },
-  {
     table: 'erfkrit',
     parentTable: 'ap',
     label: 'AP-Erfolgskriterien',

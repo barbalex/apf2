@@ -194,9 +194,6 @@ export const Tree = types
         if (aNA[8] === 'Kontroll-Berichte') return 'tpopber'
         if (aNA[8] === 'Beobachtungen') return 'beob'
       }
-      if (aNA.length > 7) {
-        if (aNA[4] === 'AP-Ziele' && aNA[7] === 'Berichte') return 'zielber'
-      }
       if (aNA.length > 6) {
         if (aNA[6] === 'Teil-Populationen') return 'tpop'
         if (aNA[6] === 'Kontroll-Berichte') return 'popber'
@@ -1148,22 +1145,6 @@ export const Tree = types
         gqlFilter.label = {
           includesInsensitive: self.nodeLabelFilter.apberuebersicht,
         }
-      }
-
-      if (Object.keys(gqlFilter).length === 0) return { or: [] }
-
-      return gqlFilter
-    },
-    get zielberGqlFilterForTree() {
-      const gqlFilter = {}
-      // 1. hierarchy filter
-      const zielId = self.zielIdInActiveNodeArray
-      if (zielId) {
-        gqlFilter.zielId = { equalTo: zielId }
-      }
-      // 2. node label filter
-      if (self.nodeLabelFilter.zielber) {
-        gqlFilter.label = { includesInsensitive: self.nodeLabelFilter.zielber }
       }
 
       if (Object.keys(gqlFilter).length === 0) return { or: [] }

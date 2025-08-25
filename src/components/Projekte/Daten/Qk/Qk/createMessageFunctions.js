@@ -63,58 +63,6 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
         text: `Ziel: ${n.jahr || n.id}`,
       }),
     ),
-  zielberOhneJahr: () => {
-    const zielNodes =
-      data?.zielberOhneJahr?.apsByProjId?.nodes?.[0]?.zielsByApId?.nodes ?? []
-    const zielberNodes = flatten(
-      zielNodes.map((n) => n?.zielbersByZielId?.nodes ?? []),
-    )
-    return zielberNodes.map((n) => {
-      const zielId = n?.zielByZielId?.id
-      const zielJahr = n?.zielByZielId?.jahr
-
-      return {
-        url: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'AP-Ziele',
-          n?.zielByZielId?.jahr,
-          zielId,
-          'Berichte',
-          n.id,
-        ],
-        text: `Ziel: ${zielJahr || zielId}, Bericht: ${n.id}`,
-      }
-    })
-  },
-  zielberOhneEntwicklung: () => {
-    const zielNodes =
-      data?.zielberOhneEntwicklung?.apsByProjId?.nodes?.[0]?.zielsByApId
-        ?.nodes ?? []
-    const zielberNodes = flatten(
-      zielNodes.map((n) => n?.zielbersByZielId?.nodes ?? []),
-    )
-    return zielberNodes.map((n) => {
-      const zielId = n?.zielByZielId?.id
-      const zielJahr = n?.zielByZielId?.jahr
-      return {
-        url: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'AP-Ziele',
-          n?.zielByZielId?.jahr,
-          zielId,
-          'Berichte',
-          n.id,
-        ],
-        text: `Ziel: ${zielJahr || zielId}, Bericht: ${n.jahr || n.id}`,
-      }
-    })
-  },
   erfkritOhneBeurteilung: () =>
     (
       data?.erfkritOhneBeurteilung?.apsByProjId?.nodes?.[0]?.erfkritsByApId

@@ -9,11 +9,6 @@ export const query = gql`
       zielsByApId {
         nodes {
           ...ZielFields
-          zielbersByZielId {
-            nodes {
-              id
-            }
-          }
         }
       }
     }

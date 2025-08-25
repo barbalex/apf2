@@ -9,6 +9,8 @@ export default gql`
     $typ: Int
     $jahr: Int
     $bezeichnung: String
+    $erreichung: String
+    $bemerkungen: String
   ) {
     createZiel(
       input: {
@@ -18,6 +20,8 @@ export default gql`
           typ: $typ
           jahr: $jahr
           bezeichnung: $bezeichnung
+          erreichung: $erreichung
+          bemerkungen: $bemerkungen
         }
       }
     ) {

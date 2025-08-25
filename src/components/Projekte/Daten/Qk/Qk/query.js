@@ -116,8 +116,6 @@ export const query = gql`
     $zielOhneJahr: Boolean!
     $zielOhneTyp: Boolean!
     $zielOhneZiel: Boolean!
-    $zielberOhneEntwicklung: Boolean!
-    $zielberOhneJahr: Boolean!
   ) {
     tpopsOutsideZh: tpopOutsideZhForApFunction(apId: $apId, projId: $projId) {
       nodes {
@@ -233,61 +231,6 @@ export const query = gql`
           ) {
             nodes {
               ...ZielFields
-            }
-          }
-        }
-      }
-    }
-    zielberOhneJahr: projektById(id: $projId) @include(if: $zielberOhneJahr) {
-      id
-      apsByProjId(filter: { id: { equalTo: $apId } }) {
-        nodes {
-          id
-          zielsByApId(filter: { jahr: { equalTo: $berichtjahr } }) {
-            nodes {
-              ...ZielFields
-              zielbersByZielId(
-                filter: { jahr: { isNull: true } }
-                orderBy: ID_ASC
-              ) {
-                nodes {
-                  id
-                  zielByZielId {
-                    id
-                    jahr
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-    zielberOhneEntwicklung: projektById(id: $projId)
-      @include(if: $zielberOhneEntwicklung) {
-      id
-      apsByProjId(filter: { id: { equalTo: $apId } }) {
-        nodes {
-          id
-          zielsByApId(filter: { jahr: { equalTo: $berichtjahr } }) {
-            nodes {
-              ...ZielFields
-              zielbersByZielId(
-                filter: {
-                  erreichung: { isNull: true }
-                  jahr: { equalTo: $berichtjahr }
-                }
-                orderBy: JAHR_ASC
-              ) {
-                nodes {
-                  id
-                  jahr
-                  zielByZielId {
-                    id
-                    jahr
-                  }
-                }
-              }
             }
           }
         }

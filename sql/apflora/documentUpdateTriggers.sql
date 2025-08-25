@@ -944,28 +944,6 @@ CREATE TRIGGER ziel_typ_werte_updated
   FOR EACH ROW
   EXECUTE PROCEDURE ziel_typ_werte_updated ();
 
--- zielber
-DROP TRIGGER IF EXISTS zielber_updated ON apflora.zielber CASCADE;
-
-DROP FUNCTION IF EXISTS zielber_updated () CASCADE;
-
-CREATE OR REPLACE FUNCTION zielber_updated ()
-  RETURNS TRIGGER
-  AS $$
-BEGIN
-  IF NEW.updated_at IS NULL THEN
-    NEW.updated_at = now();
-  END IF;
-  RETURN NEW;
-END;
-$$
-LANGUAGE plpgsql;
-
-CREATE TRIGGER zielber_updated
-  BEFORE UPDATE ON apflora.zielber
-  FOR EACH ROW
-  EXECUTE PROCEDURE zielber_updated ();
-
 -- beob
 DROP TRIGGER IF EXISTS beob_updated ON apflora.beob CASCADE;
 

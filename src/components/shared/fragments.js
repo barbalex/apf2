@@ -722,16 +722,6 @@ export const ziel = gql`
     typ
     jahr
     bezeichnung
-    changedBy
-  }
-`
-
-export const zielber = gql`
-  fragment ZielberFields on Zielber {
-    id
-    label
-    zielId
-    jahr
     erreichung
     bemerkungen
     changedBy
