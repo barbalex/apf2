@@ -294,7 +294,6 @@ export const MobxStore = types
         tpopkontrzaehl: null,
         tpopmassn: null,
         ziel: null,
-        zielber: null,
         erfkrit: null,
         apber: null,
         apberuebersicht: null,
