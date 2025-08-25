@@ -8,6 +8,7 @@
 -- 6. add erreichung and bemerkungen to ziel form ✓
 -- 7. drop zielber group and nodes in tree ✓
 -- 8. drop zielber table
+-- 9. reload graphql
 --
 -- 1. ensure no ziel has multiple zielber
 select 
