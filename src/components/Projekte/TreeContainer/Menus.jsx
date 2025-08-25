@@ -120,12 +120,6 @@ const CmZielJahrFolder = lazy(async () => ({
 const CmZiel = lazy(async () => ({
   default: (await import('./contextmenu/Ziel.jsx')).Ziel,
 }))
-const CmZielBerFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ZielBerFolder.jsx')).ZielBerFolder,
-}))
-const CmZielBer = lazy(async () => ({
-  default: (await import('./contextmenu/Zielber.jsx')).Zielber,
-}))
 const CmPopFolder = lazy(async () => ({
   default: (await import('./contextmenu/PopFolder.jsx')).PopFolder,
 }))
@@ -648,8 +642,6 @@ export const Menus = memo(
             <CmZielFolder onClick={handleClick} />
             <CmZielJahrFolder onClick={handleClick} />
             <CmZiel onClick={handleClick} />
-            <CmZielBerFolder onClick={handleClick} />
-            <CmZielBer onClick={handleClick} />
             <CmPopFolder onClick={handleClick} />
             <CmPop onClick={handleClick} />
             <CmPopmassnberFolder onClick={handleClick} />

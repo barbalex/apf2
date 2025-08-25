@@ -11,10 +11,6 @@ export const openNode = async ({ node, openNodes, store }) => {
     // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
     newOpenNodes.push([...node.url, 'Zaehlungen'])
   }
-  if (node.menuType === 'ziel') {
-    // automatically open zielberFolder of ziel
-    newOpenNodes.push([...node.url, 'Berichte'])
-  }
 
   store.tree.setOpenNodes(newOpenNodes)
 
