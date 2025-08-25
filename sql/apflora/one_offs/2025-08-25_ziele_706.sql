@@ -69,3 +69,7 @@ where z.erreichung is distinct from zb.erreichung
 -- 7. drop zielber table
 -- TODO: DROP TABLE IF EXISTS apflora.zielber cascade;
 -- DROP FUNCTION IF EXISTS apflora.zielber_label (zielber apflora.zielber);
+
+
+-- get all values of erreichung including their counts
+select erreichung, count(*) from apflora.ziel group by erreichung order by count desc;
