@@ -46,7 +46,7 @@ export const useZielNavData = (props) => {
       treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, zielId],
       fetcherName: 'useZielNavData',
       fetcherParams: { projId, apId, jahr, zielId },
-      hasChildren: true,
+      hasChildren: false,
       component: NodeWithList,
       menus: [
         {
