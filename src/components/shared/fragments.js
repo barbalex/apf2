@@ -728,18 +728,6 @@ export const ziel = gql`
   }
 `
 
-export const zielber = gql`
-  fragment ZielberFields on Zielber {
-    id
-    label
-    zielId
-    jahr
-    erreichung
-    bemerkungen
-    changedBy
-  }
-`
-
 export const apBearbstandWerte = gql`
   fragment ApBearbstandWerteFields on ApBearbstandWerte {
     id

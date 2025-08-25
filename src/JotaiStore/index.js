@@ -218,10 +218,6 @@ export const zielNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
   'zielNavListFilterIsVisible',
   false,
 )
-export const zielberNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
-  'zielberNavListFilterIsVisible',
-  false,
-)
 export const docNavListFilterIsVisibleAtom = atomWithToggleAndStorage(
   'docNavListFilterIsVisible',
   false,
@@ -259,7 +255,6 @@ export const navListFilterAtoms = {
   tpopmassnber: tpopmassnberNavListFilterIsVisibleAtom,
   user: userNavListFilterIsVisibleAtom,
   ziel: zielNavListFilterIsVisibleAtom,
-  zielber: zielberNavListFilterIsVisibleAtom,
   doc: docNavListFilterIsVisibleAtom,
   // needed because the hook can't be called conditionally
   // and an atom always needs to be returned
