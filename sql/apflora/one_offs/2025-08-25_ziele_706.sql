@@ -74,4 +74,20 @@ where z.erreichung is distinct from zb.erreichung
 
 
 -- get all values of erreichung including their counts
-select erreichung, count(*) from apflora.ziel group by erreichung order by count desc;
+select
+  tax.artname,
+  ziel.erreichung, 
+  count(*) 
+from 
+  apflora.ziel ziel
+  inner join apflora.ap ap on ziel.ap_id = ap.id
+  inner join apflora.ae_taxonomies tax on tax.id = ap.art_id
+group by
+  tax.taxid,
+  tax.artname,
+  erreichung
+having
+  tax.taxid > 150
+order by
+  tax.artname,
+  count desc;
