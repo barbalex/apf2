@@ -30,7 +30,7 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
   apMitAktKontrOhneZielrelevanteEinheit: () =>
     (data?.apMitAktKontrOhneZielrelevanteEinheit?.nodes ?? []).map(() => ({
       url: ['Projekte', projId, 'Arten', apId],
-      text: `Art mit Kontrollen im aktuellen Jahr. Aber eine Ziel-relevante Einheit fehlt`,
+      text: `Art mit Kontrollen im Bericht-Jahr. Aber eine Ziel-relevante Einheit fehlt`,
     })),
   apOhneVerantwortlich: () =>
     (data?.apOhneVerantwortlich?.apsByProjId?.nodes ?? []).map(() => ({
