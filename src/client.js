@@ -126,6 +126,7 @@ export const buildClient = ({ store }) => {
           'JberAbc',
           'JberAktPop',
           'QPopOhnePopmassnber',
+          'QApMitAktuellenKontrollenOhneZielrelevanteEinheit',
           'QPopOhnePopber',
           'QTpopOhneMassnber',
           'QTpopOhneTpopber',

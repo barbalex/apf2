@@ -153,8 +153,8 @@ export const query = gql`
         }
       }
     }
-    apMitAktKontrOhneZielrelevanteEinheit: allVQApMitAktuellenKontrollenOhneZielrelevanteEinheits(
-      filter: { apId: { equalTo: $apId } }
+    apMitAktKontrOhneZielrelevanteEinheit: qApMitAktuellenKontrollenOhneZielrelevanteEinheit(
+      berichtjahr: $berichtjahr
     ) @include(if: $apMitAktKontrOhneZielrelevanteEinheit) {
       nodes {
         projId
