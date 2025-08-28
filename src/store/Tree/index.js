@@ -1353,7 +1353,7 @@ export const Tree = types
       return gqlFilter
     },
     get ekGqlFilter() {
-      // 1. prepare hiearchy filter
+      // 1. prepare hierarchy filter
       const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
