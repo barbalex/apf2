@@ -153,7 +153,7 @@ export const More = memo(
           <MenuItem onClick={onClickUptime}>
             Verfügbarkeit der Server von apflora.ch
           </MenuItem>
-          <Version>Version: 1.120.0 vom 25.08.2025</Version>
+          <Version>Version: 1.121.0 vom 28.08.2025</Version>
         </Menu>
       </Tooltip>
     )
