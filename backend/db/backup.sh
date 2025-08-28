@@ -17,7 +17,7 @@ else
   echo "previous backup does not exist"
   # 1. copy to dropbox
   echo "uploading backup file..."
-  rclone copy /sik_data/$FILENAME nextcloud:apps/apf
+  rclone copy /sik_data/$FILENAME dropbox:apps/apf
   # 2. rename $FILENAME to last.backup
   # http://manpages.ubuntu.com/manpages/xenial/man1/mv.1.html
   mv -f /sik_data/$FILENAME /sik_data/last.backup
@@ -40,7 +40,7 @@ else
   # 1. copy to dropbox
   echo "uploading backup file..."
   # BEWARE: the name given in rclone needs to be the same as before the :, i.e. dropbox
-  rclone copyto /sik_data/$FILENAME nextcloud:apps/apf/$FILENAME -v
+  rclone copyto /sik_data/$FILENAME dropbox:apps/apf/$FILENAME -v
   # 2. delete last.backup
   rm -f /sik_data/last.backup
   # 3. rename $FILENAME to last.backup
