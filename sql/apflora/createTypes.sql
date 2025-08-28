@@ -6,6 +6,16 @@
 -- 3. So either use existing id's but tell apollo to
 --    combine them with the __typename when caching (in client.js, dataIdFromObject)
 -- 4. Or give them new uuid's
+
+CREATE TYPE apflora.q_tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit AS (
+  proj_id uuid,
+  ap_id uuid,
+  pop_id uuid,
+  pop_nr integer,
+  id uuid,
+  nr integer
+);
+
 CREATE TYPE apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit AS (
   proj_id uuid,
   ap_id uuid

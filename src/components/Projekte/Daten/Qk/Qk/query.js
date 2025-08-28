@@ -1400,8 +1400,10 @@ export const query = gql`
         bemerkung
       }
     }
-    tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: allVQTpopMitAktuellenKontrollenOhneZielrelevanteEinheits(
-      filter: { projId: { equalTo: $projId }, apId: { equalTo: $apId } }
+    tpopMitAktuellenKontrollenOhneZielrelevanteEinheit: qTpopMitAktuellenKontrollenOhneZielrelevanteEinheit(
+      berichtjahr: $berichtjahr
+      apId: $apId
+      projId: $projId
     ) @include(if: $tpopMitAktuellenKontrollenOhneZielrelevanteEinheit) {
       nodes {
         projId
