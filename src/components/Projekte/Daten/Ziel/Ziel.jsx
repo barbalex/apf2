@@ -10,6 +10,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { Select } from '../../../shared/Select.jsx'
 import { query } from './query.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
@@ -51,6 +52,12 @@ const fieldTypes = {
   erreichung: 'String',
   bemerkungen: 'String',
 }
+
+const erreichungOptions = [
+  { value: 'erreicht', label: 'erreicht' },
+  { value: 'nicht', label: 'nicht erreicht' },
+  { value: 'unsicher', label: 'unsicher' },
+]
 
 export const Component = memo(
   observer(() => {
@@ -196,10 +203,11 @@ export const Component = memo(
               error={fieldErrors.bezeichnung}
             />
             <Subtitle>Beurteilung</Subtitle>
-            <TextField
+            <Select
               name="erreichung"
               label="Ziel-Erreichung"
-              type="text"
+              options={erreichungOptions}
+              loading={false}
               value={row.erreichung}
               saveToDb={saveToDb}
               error={fieldErrors.erreichung}
