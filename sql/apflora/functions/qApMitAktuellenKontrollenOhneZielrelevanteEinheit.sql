@@ -1,6 +1,6 @@
-DROP FUNCTION IF EXISTS apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit(berichtjahr integer);
+DROP FUNCTION IF EXISTS apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit(berichtjahr integer, ap_id uuid);
 
-CREATE OR REPLACE FUNCTION apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit(berichtjahr integer)
+CREATE OR REPLACE FUNCTION apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit(berichtjahr integer, ap_id uuid)
   RETURNS SETOF apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit
   AS $$
   with ap_mit_zielrelevanter_zaehleinheit AS (
@@ -40,6 +40,8 @@ CREATE OR REPLACE FUNCTION apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielreleva
     INNER JOIN apflora.pop
     INNER JOIN apflora.tpop
     INNER JOIN tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_zaehleinheit ON tpop_mit_aktuellen_kontrollen_ohne_zielrelevante_zaehleinheit.id = apflora.tpop.id ON apflora.tpop.pop_id = apflora.pop.id ON apflora.pop.ap_id = apflora.ap.id ON apflora.projekt.id = apflora.ap.proj_id
+  WHERE
+    apflora.ap.id = $2
   ORDER BY
     apflora.projekt.id,
     apflora.ap.id
@@ -47,5 +49,5 @@ $$
 LANGUAGE sql
 STABLE;
 
-ALTER FUNCTION apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit(berichtjahr integer) OWNER TO postgres;
+ALTER FUNCTION apflora.q_ap_mit_aktuellen_kontrollen_ohne_zielrelevante_einheit(berichtjahr integer, ap_id uuid) OWNER TO postgres;
 
