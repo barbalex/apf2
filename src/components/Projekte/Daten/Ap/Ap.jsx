@@ -158,8 +158,6 @@ export const Component = memo(
       [apId],
     )
 
-    console.log('ap, data', data?.allAdresses?.nodes ?? [])
-
     return (
       <ErrorBoundary>
         <FormTitle
