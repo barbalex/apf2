@@ -23,10 +23,11 @@ import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
 const Container = styled.div`
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   padding: 10px;
+  overflow: hidden;
 `
 const StyledPaper = styled(Paper)`
   padding: 10px;
@@ -64,6 +65,12 @@ const StyledFormControl = styled(FormControl)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const BerichtjahrControl = styled(FormControl)`
+  padding-bottom: 9px !important;
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 const AnalyzingButton = styled(Button)`
   margin-bottom: 15px !important;
   margin-top: -5px !important;
@@ -72,6 +79,9 @@ const AnalyzingButton = styled(Button)`
 `
 const AnalyzingSpan = styled.span`
   padding-right: 13px;
+`
+const ScrollContainer = styled.div`
+  overflow-y: auto;
 `
 
 export const Qk = memo(
@@ -139,7 +149,7 @@ export const Qk = memo(
       <ErrorBoundary>
         <FormTitle title="Qualitätskontrollen ausführen" />
         <Container>
-          <StyledFormControl
+          <BerichtjahrControl
             fullWidth
             variant="standard"
           >
@@ -150,7 +160,7 @@ export const Qk = memo(
               type="number"
               onChange={onChangeBerichtjahr}
             />
-          </StyledFormControl>
+          </BerichtjahrControl>
           <StyledFormControl
             fullWidth
             variant="standard"
@@ -186,48 +196,51 @@ export const Qk = memo(
               </Badge>
             </div>
           }
-          {messageGroupsFiltered.map((messageGroup) => (
-            <StyledPaper
-              key={messageGroup.title}
-              elevation={2}
-            >
-              <Title>{messageGroup.title}</Title>
-              {messageGroup.messages.map((m, i) => (
-                <Row key={`${m.text}Index${i}`}>
-                  <StyledA
-                    onClick={() =>
-                      openTree2WithActiveNodeArray({
-                        activeNodeArray: m.url,
-                        search,
-                        projekteTabs,
-                        setProjekteTabs,
-                        onlyShowActivePath: true,
-                      })
-                    }
-                    title="in Navigationsbaum 2 öffnen"
-                  >
-                    {m.text}
-                  </StyledA>
-                  <OutsideLink
-                    onClick={() => {
-                      const url = `${appBaseUrl()}Daten/${m.url.join(
-                        '/',
-                      )}?onlyShowActivePath=true`
-                      if (
-                        window.matchMedia('(display-mode: standalone)').matches
-                      ) {
-                        return window.open(url, '_blank', 'toolbar=no')
+          <ScrollContainer>
+            {messageGroupsFiltered.map((messageGroup) => (
+              <StyledPaper
+                key={messageGroup.title}
+                elevation={2}
+              >
+                <Title>{messageGroup.title}</Title>
+                {messageGroup.messages.map((m, i) => (
+                  <Row key={`${m.text}Index${i}`}>
+                    <StyledA
+                      onClick={() =>
+                        openTree2WithActiveNodeArray({
+                          activeNodeArray: m.url,
+                          search,
+                          projekteTabs,
+                          setProjekteTabs,
+                          onlyShowActivePath: true,
+                        })
                       }
-                      window.open(url)
-                    }}
-                    title="in neuem Fenster öffnen"
-                  >
-                    <FaExternalLinkAlt />
-                  </OutsideLink>
-                </Row>
-              ))}
-            </StyledPaper>
-          ))}
+                      title="in Navigationsbaum 2 öffnen"
+                    >
+                      {m.text}
+                    </StyledA>
+                    <OutsideLink
+                      onClick={() => {
+                        const url = `${appBaseUrl()}Daten/${m.url.join(
+                          '/',
+                        )}?onlyShowActivePath=true`
+                        if (
+                          window.matchMedia('(display-mode: standalone)')
+                            .matches
+                        ) {
+                          return window.open(url, '_blank', 'toolbar=no')
+                        }
+                        window.open(url)
+                      }}
+                      title="in neuem Fenster öffnen"
+                    >
+                      <FaExternalLinkAlt />
+                    </OutsideLink>
+                  </Row>
+                ))}
+              </StyledPaper>
+            ))}
+          </ScrollContainer>
           {!loading2 && messageGroups.length === 0 && (
             <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
           )}
