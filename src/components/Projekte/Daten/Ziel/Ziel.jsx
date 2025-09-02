@@ -55,7 +55,7 @@ const fieldTypes = {
 
 const erreichungOptions = [
   { value: 'erreicht', label: 'erreicht' },
-  { value: 'nicht', label: 'nicht erreicht' },
+  { value: 'nicht erreicht', label: 'nicht erreicht' },
   { value: 'unsicher', label: 'unsicher' },
 ]
 
