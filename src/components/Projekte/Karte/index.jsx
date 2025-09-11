@@ -24,7 +24,6 @@ import { SwisstopoPixelFarbe } from './layers/SwisstopoPixelFarbe.jsx'
 import { SwisstopoPixelGrau } from './layers/SwisstopoPixelGrau.jsx'
 import { SwisstopoSiegfried } from './layers/SwisstopoSiegfried.jsx'
 import { SwisstopoDufour } from './layers/SwisstopoDufour.jsx'
-import { BingAerial } from './layers/BingAerial.jsx'
 import { ZhOrtho2014Rgb } from './layers/ZhOrtho2014Rgb.jsx'
 import { ZhOrtho2014Ir } from './layers/ZhOrtho2014Ir.jsx'
 import { ZhOrtho2015Rgb } from './layers/ZhOrtho2015Rgb.jsx'
@@ -502,7 +501,6 @@ export const Karte = memo(
         SwisstopoSiegfried: () => <SwisstopoSiegfried />,
         SwisstopoDufour: () => <SwisstopoDufour />,
         ZhUep: () => <ZhUep />,
-        BingAerial: () => <BingAerial />,
         ZhOrthoAktuellRgb: () => <ZhOrthoAktuellRgb />,
         ZhOrthoAktuellIr: () => <ZhOrthoAktuellIr />,
         ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
