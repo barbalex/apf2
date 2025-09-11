@@ -20,7 +20,7 @@ import { MapResizer } from './MapResizer.jsx'
 import { Control } from './Control.jsx'
 import { OsmColor } from './layers/OsmColor.jsx'
 import { OsmBw } from './layers/OsmBw.jsx'
-import { SwisstopoPixelFarbe } from './layers/SwisstopoPixelFarbe.jsx'
+import SwisstopoPixelFarbe from './layers/SwisstopoPixelFarbe.jsx'
 import { SwisstopoPixelGrau } from './layers/SwisstopoPixelGrau.jsx'
 import { SwisstopoSiegfried } from './layers/SwisstopoSiegfried.jsx'
 import { SwissTopoLuftbilderFarbe } from './layers/SwissTopoLuftbilderFarbe.jsx'
@@ -449,7 +449,7 @@ const OverlayComponents = {
 const BaseLayerComponents = {
   OsmColor: () => <OsmColor />,
   OsmBw: () => <OsmBw />,
-  SwissTopoPixelFarbe: () => <SwisstopoPixelFarbe />,
+  SwisstopoPixelFarbe: () => <SwisstopoPixelFarbe />,
   SwissTopoPixelGrau: () => <SwisstopoPixelGrau />,
   SwissTopoLuftbilderFarbe: () => <SwissTopoLuftbilderFarbe />,
   SwisstopoSiegfried: () => <SwisstopoSiegfried />,
@@ -541,6 +541,14 @@ export const Karte = memo(
     // see: https://github.com/barbalex/apf2/issues/467
 
     // console.log('map rendering')
+
+    console.log('Karte render', {
+      SwisstopoPixelFarbe: BaseLayerComponents.SwisstopoPixelFarbe,
+      activeBaseLayer,
+      BaseLayerComponent,
+      BaseLayerComponentXXX: BaseLayerComponents[activeBaseLayer],
+      BaseLayerComponents,
+    })
 
     return (
       <Container

@@ -1,3 +1,4 @@
+import { de } from 'date-fns/locale'
 import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
@@ -5,8 +6,8 @@ import { TileLayer, Pane } from 'react-leaflet'
 
 export const SwisstopoPixelFarbe = memo(() => (
   <Pane
-    className="SwissTopoPixelFarbe"
-    name="SwissTopoPixelFarbe"
+    className="SwisstopoPixelFarbe"
+    name="SwisstopoPixelFarbe"
     style={{ zIndex: 100 }}
   >
     <TileLayer
@@ -18,3 +19,5 @@ export const SwisstopoPixelFarbe = memo(() => (
     />
   </Pane>
 ))
+
+export default SwisstopoPixelFarbe
