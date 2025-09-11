@@ -3,7 +3,7 @@ import { lazy, Suspense, createRef } from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale/de'
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from "@apollo/client/react";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'

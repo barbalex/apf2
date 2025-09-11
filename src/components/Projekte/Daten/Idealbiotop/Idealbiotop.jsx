@@ -1,7 +1,8 @@
 import { memo, useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Form, useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.jsx'

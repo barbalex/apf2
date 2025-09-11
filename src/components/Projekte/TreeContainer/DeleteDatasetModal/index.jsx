@@ -4,7 +4,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from "@apollo/client/react";
 import { useLocation } from 'react-router'
 
 import { tables } from '../../../../modules/tables.js'

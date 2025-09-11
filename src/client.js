@@ -3,10 +3,12 @@ import {
   InMemoryCache,
   defaultDataIdFromObject,
   ApolloLink,
+  CombinedGraphQLErrors,
 } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
-import { onError } from '@apollo/client/link/error'
+import { ErrorLink } from '@apollo/client/link/error'
+import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-typename'
 import { jwtDecode } from 'jwt-decode'
 import uniqBy from 'lodash/uniqBy'
 
@@ -14,21 +16,10 @@ import { graphQlUri } from './modules/graphQlUri.js'
 import { existsPermissionError } from './modules/existsPermissionError.js'
 import { existsTooLargeError } from './modules/existsTooLargeError.js'
 
+const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
+
 export const buildClient = ({ store }) => {
   const { enqueNotification } = store
-  const cleanTypeName = new ApolloLink((operation, forward) => {
-    if (operation.variables) {
-      const omitTypename = (key, value) =>
-        key === '__typename' ? undefined : value
-      operation.variables = JSON.parse(
-        JSON.stringify(operation.variables),
-        omitTypename,
-      )
-    }
-    return forward(operation).map((data) => {
-      return data
-    })
-  })
 
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
@@ -51,9 +42,9 @@ export const buildClient = ({ store }) => {
     return { headers }
   })
 
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      const graphQLErrorsToShow = graphQLErrors.filter(({ message, path }) => {
+  const errorLink = new ErrorLink(({ error }) => {
+    if (CombinedGraphQLErrors.is(error)) {
+      const graphQLErrorsToShow = error.errors.filter(({ message, path }) => {
         if (
           path &&
           path.includes('historize') &&
@@ -101,10 +92,10 @@ export const buildClient = ({ store }) => {
         })
       }
     }
-    if (networkError) {
-      console.log(`apollo client Network error:`, networkError)
+    if (error) {
+      console.log(`apollo client Network error:`, error.message)
       enqueNotification({
-        message: `apollo client Network error: ${networkError}`,
+        message: `apollo client Network error: ${error.message}`,
         options: {
           variant: 'error',
         },
@@ -210,7 +201,12 @@ export const buildClient = ({ store }) => {
     // batchMax: 1,
   })
   const client = new ApolloClient({
-    link: ApolloLink.from([cleanTypeName, errorLink, authLink, batchHttpLink]),
+    link: ApolloLink.from([
+      cleanTypeNameLink,
+      errorLink,
+      authLink,
+      batchHttpLink,
+    ]),
     cache,
     defaultOptions: { fetchPolicy: 'cache-and-network' },
   })

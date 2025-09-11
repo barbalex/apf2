@@ -1,7 +1,8 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 

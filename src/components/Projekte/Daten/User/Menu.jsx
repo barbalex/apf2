@@ -1,5 +1,6 @@
 import { memo, useCallback, useContext, useState, useMemo } from 'react'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation, Link } from 'react-router'
 import { observer } from 'mobx-react-lite'

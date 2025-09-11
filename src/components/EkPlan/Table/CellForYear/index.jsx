@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 
 import { StyledTableCell } from '../index.jsx'
 import { EkIcon } from './EkIcon.jsx'

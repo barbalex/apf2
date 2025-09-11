@@ -1,7 +1,7 @@
 import { memo, useContext, useCallback, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import Button from '@mui/material/Button'
 
 const ApList = lazy(async () => ({

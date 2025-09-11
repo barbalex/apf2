@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from "@apollo/client/react";
 
 import { undelete } from './undelete/index.jsx'
 import { MobxContext } from '../../mobxContext.js'

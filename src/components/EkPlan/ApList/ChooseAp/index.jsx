@@ -1,7 +1,7 @@
 import { memo, useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from "@apollo/client/react";
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 

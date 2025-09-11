@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from "@apollo/client/react";
 
 import { query } from './query.js'
 import { TextField } from '../../../shared/TextField.jsx'

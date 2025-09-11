@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { observer } from 'mobx-react-lite'
 
 import { query } from './query.js'

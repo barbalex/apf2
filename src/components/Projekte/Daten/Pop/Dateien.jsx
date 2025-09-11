@@ -1,6 +1,8 @@
 import { memo } from 'react'
 import { useParams } from 'react-router'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient, useQuery } from "@apollo/client/react";
 
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'

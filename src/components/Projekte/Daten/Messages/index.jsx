@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'
 

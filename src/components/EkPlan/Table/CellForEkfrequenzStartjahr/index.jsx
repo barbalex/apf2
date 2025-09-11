@@ -1,6 +1,6 @@
 import { memo, useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from "@apollo/client/react";
 import styled from '@emotion/styled'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 

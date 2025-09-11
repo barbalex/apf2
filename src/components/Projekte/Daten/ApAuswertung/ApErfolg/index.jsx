@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import range from 'lodash/range'
 import min from 'lodash/min'
 import max from 'lodash/max'

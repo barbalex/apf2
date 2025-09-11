@@ -4,7 +4,7 @@ import uniq from 'lodash/uniq'
 import isEqual from 'lodash/isEqual'
 import upperFirst from 'lodash/upperFirst'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from "@apollo/client/react";
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'

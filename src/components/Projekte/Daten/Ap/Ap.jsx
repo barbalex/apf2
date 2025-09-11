@@ -3,7 +3,9 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient, useQuery } from "@apollo/client/react";
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import { TextField } from '../../../shared/TextField.jsx'

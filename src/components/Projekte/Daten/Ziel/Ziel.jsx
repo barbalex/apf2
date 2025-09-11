@@ -2,7 +2,8 @@ import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import isEqual from 'lodash/isEqual'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { useParams, useLocation, useNavigate } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'

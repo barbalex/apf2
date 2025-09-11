@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { Link } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'

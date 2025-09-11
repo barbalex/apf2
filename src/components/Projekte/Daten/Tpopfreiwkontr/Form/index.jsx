@@ -2,7 +2,8 @@ import { memo, useState, useCallback, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import sortBy from 'lodash/sortBy'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
 

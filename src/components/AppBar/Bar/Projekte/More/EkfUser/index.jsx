@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import styled from '@emotion/styled'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { useNavigate, useLocation } from 'react-router'
 
 import { Select } from '../../../../../shared/Select.jsx'

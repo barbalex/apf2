@@ -1,5 +1,5 @@
 import { memo, useContext, useMemo, useCallback, useState } from 'react'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'

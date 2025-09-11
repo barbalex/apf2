@@ -3,7 +3,7 @@ import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { Form, useParams } from 'react-router'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'

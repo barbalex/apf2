@@ -7,7 +7,7 @@ import Badge from '@mui/material/Badge'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useParams, useLocation, Form } from 'react-router'

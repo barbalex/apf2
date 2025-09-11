@@ -3,7 +3,9 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useQuery } from "@apollo/client/react";
 
 import { MobxContext } from '../../../../mobxContext.js'
 

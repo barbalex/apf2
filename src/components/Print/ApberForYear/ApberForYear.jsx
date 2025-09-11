@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from "@apollo/client/react";
 import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'

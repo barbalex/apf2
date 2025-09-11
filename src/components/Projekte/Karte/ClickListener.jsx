@@ -3,7 +3,8 @@ import * as ReactDOMServer from 'react-dom/server'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useMapEvent } from 'react-leaflet/hooks'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import L from 'leaflet'
 import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'

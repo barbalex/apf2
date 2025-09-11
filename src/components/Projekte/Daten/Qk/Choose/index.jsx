@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import CircularProgress from '@mui/material/CircularProgress'
 import { Form, useParams } from 'react-router'
 

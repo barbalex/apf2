@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import sortBy from 'lodash/sortBy'
 import {
   AreaChart,

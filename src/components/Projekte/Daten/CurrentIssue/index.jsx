@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 

@@ -21,7 +21,9 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient } from "@apollo/client/react";
 
 import { IdbContext } from '../idbContext.js'
 import { MobxContext } from '../mobxContext.js'

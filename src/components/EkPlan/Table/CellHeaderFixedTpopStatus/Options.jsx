@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import styled from '@emotion/styled'
 
 import { Option } from './Option.jsx'

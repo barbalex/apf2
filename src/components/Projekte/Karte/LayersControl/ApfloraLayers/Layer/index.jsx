@@ -15,7 +15,7 @@ import {
 import flatten from 'lodash/flatten'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { useMap } from 'react-leaflet'
 import { useParams } from 'react-router'
 

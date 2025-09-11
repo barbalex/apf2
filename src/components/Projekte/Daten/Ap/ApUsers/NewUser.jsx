@@ -1,5 +1,7 @@
 import { memo, useState, useCallback, useEffect } from 'react'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient, useQuery } from "@apollo/client/react";
 
 import { Select } from '../../../../shared/Select.jsx'
 

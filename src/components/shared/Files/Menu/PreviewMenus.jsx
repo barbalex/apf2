@@ -1,6 +1,7 @@
 import { useCallback, useState, useContext, memo, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import upperFirst from 'lodash/upperFirst'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'

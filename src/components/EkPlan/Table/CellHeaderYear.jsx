@@ -4,7 +4,9 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient, useQuery } from "@apollo/client/react";
 
 import { MobxContext } from '../../../mobxContext.js'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'

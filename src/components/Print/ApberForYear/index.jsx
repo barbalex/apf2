@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { gql, useQuery } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import { useParams } from 'react-router'
 
 import { ApberForYear } from './ApberForYear.jsx'

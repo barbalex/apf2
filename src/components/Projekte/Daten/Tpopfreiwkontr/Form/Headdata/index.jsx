@@ -1,7 +1,9 @@
 import { memo, useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient, useQuery } from "@apollo/client/react";
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
