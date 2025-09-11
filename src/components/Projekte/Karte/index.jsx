@@ -426,6 +426,25 @@ const StyledMapContainer = styled(MapContainer)`
  * So: need to use app level store state
  */
 
+const BaseLayerComponents = {
+  OsmColor: () => <OsmColor />,
+  OsmBw: () => <OsmBw />,
+  SwissTopoPixelFarbe: () => <SwisstopoPixelFarbe />,
+  SwissTopoPixelGrau: () => <SwisstopoPixelGrau />,
+  SwissTopoLuftbilderFarbe: () => <SwissTopoLuftbilderFarbe />,
+  SwisstopoSiegfried: () => <SwisstopoSiegfried />,
+  SwisstopoDufour: () => <SwisstopoDufour />,
+  ZhUep: () => <ZhUep />,
+  ZhOrthoAktuellRgb: () => <ZhOrthoAktuellRgb />,
+  ZhOrthoAktuellIr: () => <ZhOrthoAktuellIr />,
+  ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
+  ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
+  ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
+  ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
+  ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
+  ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
+}
+
 export const Karte = memo(
   observer(({ mapContainerRef }) => {
     const { apId } = useParams()
@@ -495,27 +514,7 @@ export const Karte = memo(
       }),
       [],
     )
-    const BaseLayerComponents = useMemo(
-      () => ({
-        OsmColor: () => <OsmColor />,
-        OsmBw: () => <OsmBw />,
-        SwissTopoPixelFarbe: () => <SwisstopoPixelFarbe />,
-        SwissTopoPixelGrau: () => <SwisstopoPixelGrau />,
-        SwissTopoLuftbilderFarbe: () => <SwissTopoLuftbilderFarbe />,
-        SwisstopoSiegfried: () => <SwisstopoSiegfried />,
-        SwisstopoDufour: () => <SwisstopoDufour />,
-        ZhUep: () => <ZhUep />,
-        ZhOrthoAktuellRgb: () => <ZhOrthoAktuellRgb />,
-        ZhOrthoAktuellIr: () => <ZhOrthoAktuellIr />,
-        ZhOrtho2018Rgb: () => <ZhOrtho2018Rgb />,
-        ZhOrtho2018Ir: () => <ZhOrtho2018Ir />,
-        ZhOrtho2015Rgb: () => <ZhOrtho2015Rgb />,
-        ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
-        ZhOrtho2014Rgb: () => <ZhOrtho2014Rgb />,
-        ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
-      }),
-      [],
-    )
+
     const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
     const activeOverlaysSorted = sortBy(activeOverlays, (activeOverlay) =>
       overlays.findIndex((o) => o.value === activeOverlay),
