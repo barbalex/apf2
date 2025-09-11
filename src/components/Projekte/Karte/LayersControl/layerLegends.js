@@ -91,6 +91,12 @@ export const layerLegends = ({ apId }) => ({
       url: 'https://wms.zh.ch/FnsLWZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=waldgesellschaften&format=image/png&STYLE=default',
     },
   ],
+  ZhForstreviereWms: [
+    {
+      name: 'Forstreviere',
+      url: 'https://wms.zh.ch/WaldEGZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=forstreviere&format=image/png&STYLE=default',
+    },
+  ],
   ZhSvoColor: [
     {
       name: 'Zonen Schutzverordnungen',

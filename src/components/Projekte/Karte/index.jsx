@@ -46,6 +46,7 @@ import { ZhLrVegKartierungen } from './layers/ZhLrVegKartierungen.jsx'
 import { ZhLichteWaelder } from './layers/ZhLichteWaelder.jsx'
 import { Gemeinden } from './layers/Gemeinden.jsx'
 import { ZhWaelderVegetation } from './layers/ZhWaelderVegetation.jsx'
+import { ZhForstreviereWms } from './layers/ZhForstreviereWms.jsx'
 import { ZhUepOverlay } from './layers/ZhUepOverlay.jsx'
 import { Pop } from './layers/Pop/index.jsx'
 import { Tpop } from './layers/Tpop/index.jsx'
@@ -490,6 +491,7 @@ export const Karte = memo(
         ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
         ZhLichteWaelder: () => <ZhLichteWaelder />,
         ZhWaelderVegetation: () => <ZhWaelderVegetation />,
+        ZhForstreviereWms: () => <ZhForstreviereWms />,
       }),
       [],
     )

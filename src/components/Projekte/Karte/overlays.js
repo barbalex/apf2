@@ -25,5 +25,6 @@ export const overlays = [
   },
   { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
   { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
+  { label: 'Forstreviere (WMS)', value: 'ZhForstreviereWms' },
   { label: 'Forstreviere. Stand: 2025.04.10', value: 'Forstreviere' },
 ]
