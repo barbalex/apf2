@@ -542,14 +542,6 @@ export const Karte = memo(
 
     // console.log('map rendering')
 
-    console.log('Karte render', {
-      SwisstopoPixelFarbe: BaseLayerComponents.SwisstopoPixelFarbe,
-      activeBaseLayer,
-      BaseLayerComponent,
-      BaseLayerComponentXXX: BaseLayerComponents[activeBaseLayer],
-      BaseLayerComponents,
-    })
-
     return (
       <Container
         data-id="karten-container1"
