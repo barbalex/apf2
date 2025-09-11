@@ -5,7 +5,7 @@
  *
  */
 
-import { useContext, useMemo, useState, useRef, memo } from 'react'
+import { useContext, useState, useRef, memo } from 'react'
 import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
 import styled from '@emotion/styled'
 import 'leaflet'
@@ -426,6 +426,26 @@ const StyledMapContainer = styled(MapContainer)`
  * So: need to use app level store state
  */
 
+const OverlayComponents = {
+  ZhUep: () => <ZhUepOverlay />,
+  // rebuild detailplaene on localizing change to close popups and rebuild without popups
+  Detailplaene: () => <Detailplaene />,
+  Markierungen: () => <Markierungen />,
+  MassnahmenFlaechen: () => <Massnahmen layer="flaechen" />,
+  MassnahmenLinien: () => <Massnahmen layer="linien" />,
+  MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
+  Betreuungsgebiete: () => <Betreuungsgebiete />,
+  Forstreviere: () => <Forstreviere />,
+  Gemeinden: () => <Gemeinden />,
+  ZhSvoColor: () => <ZhSvoColor />,
+  ZhSvoGrey: () => <ZhSvoGrey />,
+  ZhPflegeplan: () => <ZhPflegeplan />,
+  ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
+  ZhLichteWaelder: () => <ZhLichteWaelder />,
+  ZhWaelderVegetation: () => <ZhWaelderVegetation />,
+  ZhForstreviereWms: () => <ZhForstreviereWms />,
+}
+
 const BaseLayerComponents = {
   OsmColor: () => <OsmColor />,
   OsmBw: () => <OsmBw />,
@@ -491,28 +511,6 @@ export const Karte = memo(
     const clustered = !(
       assigningBeob ||
       activeApfloraLayers.includes('beobZugeordnetAssignPolylines')
-    )
-    const OverlayComponents = useMemo(
-      () => ({
-        ZhUep: () => <ZhUepOverlay />,
-        // rebuild detailplaene on localizing change to close popups and rebuild without popups
-        Detailplaene: () => <Detailplaene />,
-        Markierungen: () => <Markierungen />,
-        MassnahmenFlaechen: () => <Massnahmen layer="flaechen" />,
-        MassnahmenLinien: () => <Massnahmen layer="linien" />,
-        MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
-        Betreuungsgebiete: () => <Betreuungsgebiete />,
-        Forstreviere: () => <Forstreviere />,
-        Gemeinden: () => <Gemeinden />,
-        ZhSvoColor: () => <ZhSvoColor />,
-        ZhSvoGrey: () => <ZhSvoGrey />,
-        ZhPflegeplan: () => <ZhPflegeplan />,
-        ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
-        ZhLichteWaelder: () => <ZhLichteWaelder />,
-        ZhWaelderVegetation: () => <ZhWaelderVegetation />,
-        ZhForstreviereWms: () => <ZhForstreviereWms />,
-      }),
-      [],
     )
 
     const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
