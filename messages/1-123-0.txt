@@ -1,0 +1,1 @@
+Ab Version 1.123.0: Das Bing Luftbild musste entfernt werden, da Microsoft diesen Dienst eingestellt hat (https://www.bingmapsportal.com)
