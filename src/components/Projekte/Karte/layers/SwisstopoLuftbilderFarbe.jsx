@@ -3,10 +3,10 @@ import { TileLayer, Pane } from 'react-leaflet'
 
 // https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 
-export const SwissTopoLuftbilderFarbe = memo(() => (
+export const SwisstopoLuftbilderFarbe = memo(() => (
   <Pane
-    className="SwissTopoLuftbilderFarbe"
-    name="SwissTopoLuftbilderFarbe"
+    className="SwisstopoLuftbilderFarbe"
+    name="SwisstopoLuftbilderFarbe"
     style={{ zIndex: 100 }}
   >
     <TileLayer

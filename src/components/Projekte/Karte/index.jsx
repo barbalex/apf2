@@ -23,7 +23,7 @@ import { OsmBw } from './layers/OsmBw.jsx'
 import SwisstopoPixelFarbe from './layers/SwisstopoPixelFarbe.jsx'
 import { SwisstopoPixelGrau } from './layers/SwisstopoPixelGrau.jsx'
 import { SwisstopoSiegfried } from './layers/SwisstopoSiegfried.jsx'
-import { SwissTopoLuftbilderFarbe } from './layers/SwissTopoLuftbilderFarbe.jsx'
+import { SwisstopoLuftbilderFarbe } from './layers/SwisstopoLuftbilderFarbe.jsx'
 import { SwisstopoDufour } from './layers/SwisstopoDufour.jsx'
 import { ZhOrtho2014Rgb } from './layers/ZhOrtho2014Rgb.jsx'
 import { ZhOrtho2014Ir } from './layers/ZhOrtho2014Ir.jsx'
@@ -450,8 +450,8 @@ const BaseLayerComponents = {
   OsmColor: () => <OsmColor />,
   OsmBw: () => <OsmBw />,
   SwisstopoPixelFarbe: () => <SwisstopoPixelFarbe />,
-  SwissTopoPixelGrau: () => <SwisstopoPixelGrau />,
-  SwissTopoLuftbilderFarbe: () => <SwissTopoLuftbilderFarbe />,
+  SwisstopoPixelGrau: () => <SwisstopoPixelGrau />,
+  SwisstopoLuftbilderFarbe: () => <SwisstopoLuftbilderFarbe />,
   SwisstopoSiegfried: () => <SwisstopoSiegfried />,
   SwisstopoDufour: () => <SwisstopoDufour />,
   ZhUep: () => <ZhUep />,

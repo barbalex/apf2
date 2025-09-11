@@ -5,8 +5,8 @@ import { TileLayer, Pane } from 'react-leaflet'
 
 export const SwisstopoPixelGrau = memo(() => (
   <Pane
-    className="SwissTopoPixelGrau"
-    name="SwissTopoPixelGrau"
+    className="SwisstopoPixelGrau"
+    name="SwisstopoPixelGrau"
     style={{ zIndex: 100 }}
   >
     <TileLayer
