@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-// memoizing causes error: Component is not a function
 export const ZhLichteWaelder = memo(() => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsLWZHWMS"
