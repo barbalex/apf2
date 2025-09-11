@@ -11,8 +11,9 @@ const CardContent = styled.div`
 export const baseLayers = [
   { label: 'OpenStreetMap farbig', value: 'OsmColor', cors: true },
   { label: 'OpenStreetMap grau', value: 'OsmBw', cors: true },
-  { label: 'Swisstopo farbig', value: 'SwissTopoPixelFarbe', cors: false },
+  { label: 'Swisstopo farbig', value: 'SwisstopoPixelFarbe', cors: false },
   { label: 'Swisstopo grau', value: 'SwissTopoPixelGrau', cors: false },
+  { label: 'Swisstopo Luftbilder', value: 'SwissTopoLuftbilderFarbe', cors: false },
   {
     label: 'Swisstopo Siegfriedkarte (1870-1926)',
     value: 'SwisstopoSiegfried',
