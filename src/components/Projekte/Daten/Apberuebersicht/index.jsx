@@ -2,7 +2,8 @@ import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns/format'
 import { useParams } from 'react-router'

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import max from 'lodash/max'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { useParams } from 'react-router'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'

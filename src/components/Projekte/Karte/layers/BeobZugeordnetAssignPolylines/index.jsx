@@ -1,5 +1,5 @@
 import { memo, useContext } from 'react'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 

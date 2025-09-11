@@ -7,7 +7,8 @@ import TableRow from '@mui/material/TableRow'
 import styled from '@emotion/styled'
 import max from 'lodash/max'
 import groupBy from 'lodash/groupBy'
-import { useQuery, useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 

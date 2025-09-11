@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import { Link } from 'react-router'
 import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
 import Button from '@mui/material/Button'

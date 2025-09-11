@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import { useQuery } from '@tanstack/react-query'
 
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'

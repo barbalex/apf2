@@ -1,6 +1,8 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient } from "@apollo/client/react";
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'

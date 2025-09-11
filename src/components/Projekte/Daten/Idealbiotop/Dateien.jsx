@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { useParams } from 'react-router'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from "@apollo/client/react";
 
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { query } from './query.js'

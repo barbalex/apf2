@@ -5,7 +5,7 @@ import uniqBy from 'lodash/uniqBy'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { useQueryClient } from '@tanstack/react-query'
 
 import { Einheit } from './Einheit.jsx'

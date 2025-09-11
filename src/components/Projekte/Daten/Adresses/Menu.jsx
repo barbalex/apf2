@@ -1,5 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'

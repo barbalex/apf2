@@ -4,7 +4,9 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useApolloClient } from "@apollo/client/react";
 
 import { MobxContext } from '../../../../../mobxContext.js'
 

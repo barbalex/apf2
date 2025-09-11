@@ -1,6 +1,7 @@
 import { useCallback, useRef, useContext, memo, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import upperFirst from 'lodash/upperFirst'

@@ -1,7 +1,7 @@
 import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useApolloClient, useLazyQuery } from '@apollo/client'
+import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { useMapEvents } from 'react-leaflet'
 import cloneDeep from 'lodash/cloneDeep'
 import { useParams } from 'react-router'

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import sumBy from 'lodash/sumBy'
-import { useApolloClient, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 

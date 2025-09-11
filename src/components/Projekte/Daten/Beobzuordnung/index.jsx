@@ -5,7 +5,8 @@ import flatten from 'lodash/flatten'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { useParams, useLocation } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'

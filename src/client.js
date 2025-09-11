@@ -1,12 +1,9 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  defaultDataIdFromObject,
-  ApolloLink,
-} from '@apollo/client'
+import { ApolloClient, InMemoryCache, defaultDataIdFromObject, ApolloLink, HttpLink } from '@apollo/client';
+import { Defer20220824Handler } from "@apollo/client/incremental";
+import { LocalState } from "@apollo/client/local-state";
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
-import { onError } from '@apollo/client/link/error'
+import { ErrorLink } from '@apollo/client/link/error'
 import { jwtDecode } from 'jwt-decode'
 import uniqBy from 'lodash/uniqBy'
 
@@ -51,7 +48,7 @@ export const buildClient = ({ store }) => {
     return { headers }
   })
 
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
+  const errorLink = new ErrorLink(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
       const graphQLErrorsToShow = graphQLErrors.filter(({ message, path }) => {
         if (
@@ -213,6 +210,21 @@ export const buildClient = ({ store }) => {
     link: ApolloLink.from([cleanTypeName, errorLink, authLink, batchHttpLink]),
     cache,
     defaultOptions: { fetchPolicy: 'cache-and-network' },
+    link: new HttpLink({}),
+
+    /*
+    Inserted by Apollo Client 3->4 migration codemod.
+    If you are not using the `@client` directive in your application,
+    you can safely remove this option.
+    */
+    localState: new LocalState({}),
+
+    /*
+    Inserted by Apollo Client 3->4 migration codemod.
+    If you are not using the `@defer` directive in your application,
+    you can safely remove this option.
+    */
+    incrementalHandler: new Defer20220824Handler()
   })
   // make client available in store
   store.setClient(client)

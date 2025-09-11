@@ -1,7 +1,9 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client';
+
+import { useQuery } from "@apollo/client/react";
 
 import { ApErfolg } from './ApErfolg/index.jsx'
 import { PopStatus } from './PopStatus/index.jsx'

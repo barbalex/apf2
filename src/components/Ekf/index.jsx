@@ -2,7 +2,7 @@ import { memo, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { useQuery } from '@apollo/client'
+import { useQuery } from "@apollo/client/react";
 import sortBy from 'lodash/sortBy'
 
 // when Karte was loaded async, it did not load,

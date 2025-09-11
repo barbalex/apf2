@@ -8,7 +8,8 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
-import { gql, useApolloClient } from '@apollo/client'
+import { gql } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
