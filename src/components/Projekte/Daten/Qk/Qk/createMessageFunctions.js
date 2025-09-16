@@ -1263,10 +1263,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.tpopfeldkontrOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
 
     return tpopkontrNodes.map((n) => {
       const popId = n?.tpopByTpopId?.popByPopId?.id
@@ -1296,10 +1296,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.tpopfreiwkontrOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
     return tpopkontrNodes.map((n) => {
       const popId = n?.tpopByTpopId?.popByPopId?.id
       const popNr = n?.tpopByTpopId?.popByPopId?.nr
@@ -1328,10 +1328,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.tpopfeldkontrOhneBearb?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
     return tpopkontrNodes.map((n) => {
       const popId = n?.tpopByTpopId?.popByPopId?.id
       const popNr = n?.tpopByTpopId?.popByPopId?.nr
@@ -1360,10 +1360,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.tpopfreiwkontrOhneBearb?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
     return tpopkontrNodes.map((n) => {
       const popId = n?.tpopByTpopId?.popByPopId?.id
       const popNr = n?.tpopByTpopId?.popByPopId?.nr
