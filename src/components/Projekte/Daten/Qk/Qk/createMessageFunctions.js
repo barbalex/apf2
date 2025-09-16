@@ -1392,10 +1392,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.tpopfeldkontrOhneZaehlung?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
     return tpopkontrNodes
       .filter((n) => n?.tpopkontrzaehlsByTpopkontrId?.totalCount === 0)
       .map((n) => {
@@ -1426,10 +1426,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.tpopfreiwkontrOhneZaehlung?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
     return tpopkontrNodes
       .filter((n) => n?.tpopkontrzaehlsByTpopkontrId?.totalCount === 0)
       .map((n) => {
@@ -1460,13 +1460,13 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.feldkontrzaehlungOhneEinheit?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
-    const tpopkontrzaehlNodes = flatten(
-      tpopkontrNodes.map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
+    const tpopkontrzaehlNodes = tpopkontrNodes
+      .map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
+      .flat()
     return tpopkontrzaehlNodes.map((n) => {
       const popId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.id
       const popNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.nr
@@ -1499,13 +1499,13 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.freiwkontrzaehlungOhneEinheit?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
-    const tpopkontrzaehlNodes = flatten(
-      tpopkontrNodes.map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
+    const tpopkontrzaehlNodes = tpopkontrNodes
+      .map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
+      .flat()
     return tpopkontrzaehlNodes.map((n) => {
       const popId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.id
       const popNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.nr
@@ -1538,13 +1538,13 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.feldkontrzaehlungOhneMethode?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
-    const tpopkontrzaehlNodes = flatten(
-      tpopkontrNodes.map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
+    const tpopkontrzaehlNodes = tpopkontrNodes
+      .map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
+      .flat()
     return tpopkontrzaehlNodes.map((n) => {
       const popId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.id
       const popNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.nr
@@ -1577,10 +1577,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.freiwkontrzaehlungOhneMethode?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
     const tpopkontrMitZaehlungOhneMethode = tpopkontrNodes.filter((n) => {
       const anzZaehlungenMitMethode = (n?.zaehlungenMitMethode?.nodes ?? [])
         .length
@@ -1617,13 +1617,13 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.feldkontrzaehlungOhneAnzahl?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
-    const tpopkontrzaehlNodes = flatten(
-      tpopkontrNodes.map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
+    const tpopkontrzaehlNodes = tpopkontrNodes
+      .map((n) => n?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
+      .flat()
     return tpopkontrzaehlNodes.map((n) => {
       const popId = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.id
       const popNr = n?.tpopkontrByTpopkontrId?.tpopByTpopId?.popByPopId?.nr
