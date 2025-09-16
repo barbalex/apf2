@@ -1,6 +1,6 @@
 import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
-import sum from 'lodash/sum'
+import { sum } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'

@@ -1,6 +1,6 @@
 import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
-import sum from 'lodash/sum'
+import { sum } from 'es-toolkit'
 import { GoZap } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'
 

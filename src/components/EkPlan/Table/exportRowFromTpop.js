@@ -1,4 +1,4 @@
-import sum from 'lodash/sum'
+import { sum } from 'es-toolkit'
 
 import { appBaseUrl } from '../../../modules/appBaseUrl.js'
 
