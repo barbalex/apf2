@@ -6,7 +6,7 @@
  * - layer title
  * - properties
  */
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 
 import { xmlToJson } from './xmlToJson.js'
 
@@ -46,5 +46,5 @@ export const xmlToLayersData = (xml) => {
     returnValues.push({ label, properties: Object.entries(properties) })
   }
 
-  return sortBy(returnValues, 'label')
+  return sortBy(returnValues, ['label'])
 }
