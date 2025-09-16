@@ -1,6 +1,6 @@
 import { useContext, useCallback, useMemo, memo } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { uniqBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
@@ -227,13 +227,16 @@ export const Count = memo(
             (e) => e.id,
           )
         }
-        return sortBy(zaehleinheitWerte, (z) => {
-          const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-            (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
-          )
-          if (!ekzaehleinheitOriginal) return 999
-          return ekzaehleinheitOriginal.sort || 999
-        }).map((el) => ({
+        return sortBy(zaehleinheitWerte, [
+          (z) => {
+            const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
+              (e) =>
+                e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
+            )
+            if (!ekzaehleinheitOriginal) return 999
+            return ekzaehleinheitOriginal.sort || 999
+          },
+        ]).map((el) => ({
           value: el.code,
           label: el.text,
         }))
