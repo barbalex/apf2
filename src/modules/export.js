@@ -1,5 +1,6 @@
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
 //import exportKml from './exportKml_ogc'
+import { omit } from 'es-toolkit'
 
 export const exportModule = async ({
   data: dataPassed,
@@ -8,7 +9,6 @@ export const exportModule = async ({
   store,
 }) => {
   const { exportFileType } = store
-  const { default: omit } = await import('es-toolkit')
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   // TODO: filter by dataFilterState
