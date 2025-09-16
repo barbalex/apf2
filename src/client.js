@@ -10,7 +10,7 @@ import { setContext } from '@apollo/client/link/context'
 import { ErrorLink } from '@apollo/client/link/error'
 import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-typename'
 import { jwtDecode } from 'jwt-decode'
-import uniqBy from 'lodash/uniqBy'
+import { uniqBy } from 'es-toolkit'
 
 import { graphQlUri } from './modules/graphQlUri.js'
 import { existsPermissionError } from './modules/existsPermissionError.js'
@@ -55,7 +55,7 @@ export const buildClient = ({ store }) => {
         }
         return true
       })
-      const uniqueQraphQLErrors = uniqBy(graphQLErrorsToShow, 'message')
+      const uniqueQraphQLErrors = uniqBy(graphQLErrorsToShow, (e) => e.message)
       if (uniqueQraphQLErrors) {
         /**
          * TODO
