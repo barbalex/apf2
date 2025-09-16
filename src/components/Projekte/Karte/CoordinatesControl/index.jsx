@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useContext } from 'react'
 import 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 import styled from '@emotion/styled'
-import debounce from 'lodash/debounce'
+import { debounce } from 'es-toolkit'
 
 import { ShowCoordinates } from './ShowCoordinates.jsx'
 import { PanToCoordinates } from './PanToCoordinates.jsx'
