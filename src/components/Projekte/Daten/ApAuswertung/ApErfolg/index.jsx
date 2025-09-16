@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useQuery } from '@apollo/client/react'
-import range from 'lodash/range'
+import { range } from 'es-toolkit'
 import min from 'lodash/min'
 import {
   LineChart,
