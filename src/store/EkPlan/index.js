@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-import uniq from 'lodash/uniq'
+import { uniq } from 'es-toolkit'
 import groupBy from 'lodash/groupBy'
 
 import { Ap } from './Ap.js'

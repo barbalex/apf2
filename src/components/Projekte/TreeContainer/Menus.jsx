@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
-import uniq from 'lodash/uniq'
+import { uniq } from 'es-toolkit'
 import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'

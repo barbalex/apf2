@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { FaMap } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import uniq from 'lodash/uniq'
+import { uniq } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
