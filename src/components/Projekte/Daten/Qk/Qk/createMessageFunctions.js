@@ -314,9 +314,9 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
   popberOhneJahr: () => {
     const popNodes =
       data?.popberOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
-    const popberNodes = flatten(
-      popNodes.map((n) => n?.popbersByPopId?.nodes ?? []),
-    )
+    const popberNodes = popNodes
+      .map((n) => n?.popbersByPopId?.nodes ?? [])
+      .flat()
     return popberNodes.map((n) => ({
       url: [
         'Projekte',
@@ -337,9 +337,9 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.popberOhneEntwicklung?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
-    const popberNodes = flatten(
-      popNodes.map((n) => n?.popbersByPopId?.nodes ?? []),
-    )
+    const popberNodes = popNodes
+      .map((n) => n?.popbersByPopId?.nodes ?? [])
+      .flat()
     return popberNodes.map((n) => ({
       url: [
         'Projekte',
@@ -360,9 +360,9 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.popmassnberOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
-    const popberNodes = flatten(
-      popNodes.map((n) => n?.popmassnbersByPopId?.nodes ?? []),
-    )
+    const popberNodes = popNodes
+      .map((n) => n?.popmassnbersByPopId?.nodes ?? [])
+      .flat()
     return popberNodes.map((n) => ({
       url: [
         'Projekte',
@@ -383,9 +383,9 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.popmassnberOhneEntwicklung?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const popberNodes = flatten(
-      popNodes.map((n) => n?.popmassnbersByPopId?.nodes ?? []),
-    )
+    const popberNodes = popNodes
+      .map((n) => n?.popmassnbersByPopId?.nodes ?? [])
+      .flat()
     return popberNodes.map((n) => ({
       url: [
         'Projekte',

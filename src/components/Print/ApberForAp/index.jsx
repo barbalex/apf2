@@ -1,7 +1,6 @@
 import { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
-import flatten from 'lodash/flatten'
 import { format } from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
@@ -173,9 +172,9 @@ export const ApberForAp = ({
     (e) => e.bezeichnung,
   ])
   const pops = apData?.popsByApId?.nodes ?? []
-  const tpops = flatten(pops.map((p) => p?.tpopsByPopId?.nodes ?? []))
+  const tpops = pops.map((p) => p?.tpopsByPopId?.nodes ?? []).flat()
   const massns = sortBy(
-    flatten(tpops.map((t) => t?.tpopmassnsByTpopId?.nodes ?? [])),
+    tpops.map((t) => t?.tpopmassnsByTpopId?.nodes ?? []).flat(),
     [
       (m) => m?.tpopByTpopId?.popByPopId.nr,
       (m) => m?.tpopByTpopId?.nr,

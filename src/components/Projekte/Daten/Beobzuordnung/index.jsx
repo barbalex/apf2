@@ -1,7 +1,6 @@
 import { memo, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
-import flatten from 'lodash/flatten'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
@@ -266,7 +265,9 @@ export const Component = memo(
       // get all popIds of active ap
       const popList = ap?.popsByApId?.nodes ?? []
       // get all tpop
-      let tpopList = flatten(popList.map((p) => p?.tpopsByPopId?.nodes ?? []))
+      let tpopList = popList
+        .map((p) => p?.tpopsByPopId?.nodes ?? [])
+        .flat()
         // with coordinates
         // and also: even keep own tpop if it has no coordinates
         .filter((t) => !!t.lv95X || t.id === row.tpopId)
