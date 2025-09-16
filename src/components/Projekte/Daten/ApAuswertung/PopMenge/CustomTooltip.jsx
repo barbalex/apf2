@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 
 import { exists } from '../../../../../modules/exists.js'
 
@@ -31,11 +31,13 @@ const colorAngesiedelt = 'rgba(245,141,66,1)'
 
 export const CustomTooltip = memo(
   ({ payload = [], label, active, popsData }) => {
-    const payloadSorted = sortBy(payload, (p) => {
-      const pop = popsData.find((d) => d.id === p.dataKey)
-      if (pop) return pop.nr
-      return p.dataKey
-    })
+    const payloadSorted = sortBy(payload, [
+      (p) => {
+        const pop = popsData.find((d) => d.id === p.dataKey)
+        if (pop) return pop.nr
+        return p.dataKey
+      },
+    ])
 
     return (
       <Popup>

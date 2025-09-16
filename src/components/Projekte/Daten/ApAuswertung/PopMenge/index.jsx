@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { useQuery } from "@apollo/client/react";
-import sortBy from 'lodash/sortBy'
+import { useQuery } from '@apollo/client/react'
+import { sortBy } from 'es-toolkit'
 import {
   AreaChart,
   Area,
@@ -95,11 +95,13 @@ export const PopMenge = ({
       .map(([key, value]) => key),
   )
   const popIdsWithData = [...new Set(nonUniquePopIdsWithData)]
-  const popIdsWithDataSorted = sortBy(popIdsWithData, (id) => {
-    const pop = popsData.find((d) => d.id === id)
-    if (pop) return pop.nr
-    return id
-  })
+  const popIdsWithDataSorted = sortBy(popIdsWithData, [
+    (id) => {
+      const pop = popsData.find((d) => d.id === id)
+      if (pop) return pop.nr
+      return id
+    },
+  ])
 
   const zielEinheit =
     dataPopMenge?.allEkzaehleinheits?.nodes?.[0]
