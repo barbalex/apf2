@@ -1,9 +1,9 @@
 import { memo, useContext, useEffect, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import { useMap } from 'react-leaflet'
-import cloneDeep from 'lodash/cloneDeep'
+import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
 
 import { Marker } from './Marker.jsx'

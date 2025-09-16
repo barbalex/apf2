@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client/react'
 import { useMapEvents } from 'react-leaflet'
-import cloneDeep from 'lodash/cloneDeep'
+import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
 
 import { Marker } from './Marker.jsx'
