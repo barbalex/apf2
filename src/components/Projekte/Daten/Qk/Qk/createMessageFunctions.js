@@ -1,5 +1,3 @@
-import flatten from 'lodash/flatten'
-
 export const createMessageFunctions = ({ data, projId, apId }) => ({
   tpopsOutsideZh: () =>
     (data?.tpopsOutsideZh?.nodes ?? []).map((r) => ({
@@ -1656,10 +1654,10 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
     const popNodes =
       data?.freiwkontrzaehlungOhneAnzahl?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
-    const tpopNodes = flatten(popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []))
-    const tpopkontrNodes = flatten(
-      tpopNodes.map((n) => n?.tpopkontrsByTpopId?.nodes ?? []),
-    )
+    const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
+    const tpopkontrNodes = tpopNodes
+      .map((n) => n?.tpopkontrsByTpopId?.nodes ?? [])
+      .flat()
     const tpopkontrMitZaehlungOhneAnzahl = tpopkontrNodes.filter((n) => {
       const anzZaehlungenMitAnzahl = (n?.zaehlungenMitAnzahl?.nodes ?? [])
         .length
