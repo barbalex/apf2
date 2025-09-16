@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import sumBy from 'lodash/sumBy'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { sumBy } from 'es-toolkit'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -165,12 +165,12 @@ export const AktPopList = ({ year }) => {
       }),
   })
   const aps = data?.data?.jberAktPop?.nodes ?? []
-  const pop100 = sumBy(aps, 'pop100')
-  const pop200 = sumBy(aps, 'pop200')
-  const popsTotal = sumBy(aps, 'popTotal')
-  const pop100Diff = sumBy(aps, 'pop100Diff')
-  const pop200Diff = sumBy(aps, 'pop200Diff')
-  const popTotalDiff = sumBy(aps, 'popTotalDiff')
+  const pop100 = sumBy(aps, (e) => e.pop100)
+  const pop200 = sumBy(aps, (e) => e.pop200)
+  const popsTotal = sumBy(aps, (e) => e.popTotal)
+  const pop100Diff = sumBy(aps, (e) => e.pop100Diff)
+  const pop200Diff = sumBy(aps, (e) => e.pop200Diff)
+  const popTotalDiff = sumBy(aps, (e) => e.popTotalDiff)
 
   if (error) {
     return `Fehler: ${error.message}`
@@ -213,33 +213,30 @@ export const AktPopList = ({ year }) => {
             <TotalColumn>{ap?.popTotal}</TotalColumn>
             <UrsprColumn
               data-color={
-                ap?.pop100Diff > 0
-                  ? '#00ff00'
-                  : ap?.pop100Diff < 0
-                  ? 'red'
-                  : 'white'
+                ap?.pop100Diff > 0 ? '#00ff00'
+                : ap?.pop100Diff < 0 ?
+                  'red'
+                : 'white'
               }
             >
               {ap?.pop100Diff}
             </UrsprColumn>
             <AngesColumn
               data-color={
-                ap?.pop200Diff > 0
-                  ? '#00ff00'
-                  : ap?.pop200Diff < 0
-                  ? 'red'
-                  : 'white'
+                ap?.pop200Diff > 0 ? '#00ff00'
+                : ap?.pop200Diff < 0 ?
+                  'red'
+                : 'white'
               }
             >
               {ap?.pop200Diff}
             </AngesColumn>
             <TotalDiffColumn
               data-color={
-                ap?.popTotalDiff > 0
-                  ? '#00ff00'
-                  : ap?.popTotalDiff < 0
-                  ? 'red'
-                  : 'white'
+                ap?.popTotalDiff > 0 ? '#00ff00'
+                : ap?.popTotalDiff < 0 ?
+                  'red'
+                : 'white'
               }
             >
               {ap?.popTotalDiff}
@@ -253,21 +250,30 @@ export const AktPopList = ({ year }) => {
           <TotalColumn>{popsTotal}</TotalColumn>
           <UrsprColumn
             data-color={
-              pop100Diff > 0 ? '#00ff00' : pop100Diff < 0 ? 'red' : 'white'
+              pop100Diff > 0 ? '#00ff00'
+              : pop100Diff < 0 ?
+                'red'
+              : 'white'
             }
           >
             {pop100Diff}
           </UrsprColumn>
           <AngesColumn
             data-color={
-              pop200Diff > 0 ? '#00ff00' : pop200Diff < 0 ? 'red' : 'white'
+              pop200Diff > 0 ? '#00ff00'
+              : pop200Diff < 0 ?
+                'red'
+              : 'white'
             }
           >
             {pop200Diff}
           </AngesColumn>
           <TotalDiffColumn
             data-color={
-              popTotalDiff > 0 ? '#00ff00' : popTotalDiff < 0 ? 'red' : 'white'
+              popTotalDiff > 0 ? '#00ff00'
+              : popTotalDiff < 0 ?
+                'red'
+              : 'white'
             }
           >
             {popTotalDiff}
