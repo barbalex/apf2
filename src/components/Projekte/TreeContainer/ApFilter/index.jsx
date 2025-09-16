@@ -108,6 +108,7 @@ export const ApFilter = memo(
           />
           <StyledSwitch
             data-id="ap-filter"
+            id="ap-filter"
             checked={apFilter}
             onChange={onChange}
             color="primary"
