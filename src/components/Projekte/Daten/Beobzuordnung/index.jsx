@@ -1,12 +1,12 @@
 import { memo, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import flatten from 'lodash/flatten'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
@@ -288,7 +288,7 @@ export const Component = memo(
           }
         })
       // order them by distance
-      tpopList = sortBy(tpopList, 'distNr')
+      tpopList = sortBy(tpopList, ['distNr'])
       // return array of id, label
       return tpopList.map((t) => ({
         value: t.id,

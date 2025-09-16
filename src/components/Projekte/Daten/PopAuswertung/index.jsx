@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useQuery } from "@apollo/client/react";
-import sortBy from 'lodash/sortBy'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
+import { sortBy } from 'es-toolkit'
 import {
   AreaChart,
   Area,
@@ -59,9 +59,9 @@ const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 const formatNumber = (tickItem) => {
   const value =
-    exists(tickItem) && tickItem?.toLocaleString
-      ? tickItem.toLocaleString('de-ch')
-      : null
+    exists(tickItem) && tickItem?.toLocaleString ?
+      tickItem.toLocaleString('de-ch')
+    : null
   return value
 }
 
@@ -89,11 +89,13 @@ export const Component = ({ height = 400 }) => {
       .map(([key, value]) => key),
   )
   const tpopIdsWithData = [...new Set(nonUniqueTpopIdsWithData)]
-  const tpopIdsWithDataSorted = sortBy(tpopIdsWithData, (id) => {
-    const tpop = tpopsData.find((d) => d.id === id)
-    if (tpop) return tpop.nr
-    return id
-  })
+  const tpopIdsWithDataSorted = sortBy(tpopIdsWithData, [
+    (id) => {
+      const tpop = tpopsData.find((d) => d.id === id)
+      if (tpop) return tpop.nr
+      return id
+    },
+  ])
 
   const zielEinheit =
     data?.allEkzaehleinheits?.nodes?.[0]
@@ -118,12 +120,12 @@ export const Component = ({ height = 400 }) => {
     <>
       <FormTitle title={`${popLabel}: Auswertung`} />
       <>
-        {loading ? (
+        {loading ?
           <SpinnerContainer>
             <CircularProgress />
             <SpinnerText>lade Mengen nach Teil-Populationen...</SpinnerText>
           </SpinnerContainer>
-        ) : tpopMengeData.length ? (
+        : tpopMengeData.length ?
           <>
             <TitleRow>
               <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
@@ -137,7 +139,10 @@ export const Component = ({ height = 400 }) => {
                 </IconButton>
               </MuiTooltip>
             </TitleRow>
-            <Container width="99%" height={height}>
+            <Container
+              width="99%"
+              height={height}
+            >
               <AreaChart
                 width={600}
                 height={300}
@@ -162,9 +167,8 @@ export const Component = ({ height = 400 }) => {
                     color = 'grey'
                   } else {
                     const isUrspruenglich = tpop?.status < 200
-                    color = isUrspruenglich
-                      ? colorUrspruenglich
-                      : colorAngesiedelt
+                    color =
+                      isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
                   }
 
                   return (
@@ -181,12 +185,14 @@ export const Component = ({ height = 400 }) => {
                   )
                 })}
                 <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
-                <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal={false}
+                />
               </AreaChart>
             </Container>
           </>
-        ) : (
-          <>
+        : <>
             <TitleRow>
               <Title>{`"${zielEinheit}" nach Teil-Populationen`}</Title>
               <MuiTooltip title="Mehr Informationen">
@@ -201,7 +207,7 @@ export const Component = ({ height = 400 }) => {
             </TitleRow>
             <NoDataContainer>Keine Daten gefunden</NoDataContainer>
           </>
-        )}
+        }
       </>
     </>
   )
