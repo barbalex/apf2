@@ -8,7 +8,7 @@ import {
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useNavigate, useLocation } from 'react-router'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 import styled from '@emotion/styled'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'

@@ -1,4 +1,4 @@
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 import camelCase from 'lodash/camelCase'
 
 export const undelete = async ({

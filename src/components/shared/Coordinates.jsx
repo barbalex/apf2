@@ -7,7 +7,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client';
 import { useApolloClient } from "@apollo/client/react";
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 
 import { MobxContext } from '../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'

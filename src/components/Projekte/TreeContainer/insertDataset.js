@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 import camelCase from 'lodash/camelCase'
 import { getSnapshot } from 'mobx-state-tree'
 

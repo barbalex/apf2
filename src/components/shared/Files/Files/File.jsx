@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 import { TextField } from '../../TextField.jsx'

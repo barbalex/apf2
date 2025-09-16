@@ -1,5 +1,5 @@
 import { isEqual } from 'es-toolkit'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 import camelCase from 'lodash/camelCase'
 import omit from 'lodash/omit'
 import { gql } from '@apollo/client'

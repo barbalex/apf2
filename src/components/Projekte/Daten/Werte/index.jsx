@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client';
 import { useApolloClient, useQuery } from "@apollo/client/react";

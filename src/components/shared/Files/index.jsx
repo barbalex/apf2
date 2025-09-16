@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 import { useApolloClient } from "@apollo/client/react";
 import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 import { useNavigate, Outlet, useParams, useLocation } from 'react-router'
 
 import './index.css'

@@ -7,7 +7,7 @@ import InputLabel from '@mui/material/InputLabel'
 import Input from '@mui/material/Input'
 import Tooltip from '@mui/material/Tooltip'
 import { MdClear } from 'react-icons/md'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
