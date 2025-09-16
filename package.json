@@ -42,6 +42,7 @@
     "date-fns": "4.1.0",
     "dexie": "4.2.0",
     "diff": "8.0.2",
+    "es-toolkit": "1.39.10",
     "exceljs": "4.4.0",
     "file-saver": "2.0.5",
     "framer-motion": "12.23.13",
