@@ -1,7 +1,6 @@
 import { memo } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { range } from 'es-toolkit'
-import min from 'lodash/min'
 import {
   LineChart,
   XAxis,
@@ -54,7 +53,7 @@ const getErfolg = ({ jahr, erfolgRawData }) =>
   findErfolg({ jahr, erfolgRawData }) || makeErfolg(jahr)
 const addMissingErfolgData = (erfolgRawData) => {
   const years = erfolgRawData.map((e) => e.jahr)
-  const allYears = range(min(years), Math.max(...years) + 1)
+  const allYears = range(Math.min(...years), Math.max(...years) + 1)
   return allYears.map((jahr) => getErfolg({ jahr, erfolgRawData }))
 }
 
