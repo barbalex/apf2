@@ -6,9 +6,9 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import styled from '@emotion/styled'
 import max from 'lodash/max'
-import groupBy from 'lodash/groupBy'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { groupBy } from 'es-toolkit'
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -215,7 +215,7 @@ export const Component = () => {
         .filter((e) => e.jahr !== null)
         .map((t) => ({ ...t, is: 'ekplan' })),
     ],
-    'jahr',
+    (e) => e.jahr,
   )
 
   if (loadingEk) return <Spinner />

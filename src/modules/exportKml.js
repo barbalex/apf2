@@ -1,12 +1,12 @@
 import fileDownload from 'js-file-download'
 import { format } from 'date-fns/format'
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 
 import { removeKmlNogoChar } from './removeKmlNogoChar.js'
 
 export const exportKml = ({ fileName, data }) => {
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
-  const dataByArt = groupBy(data, 'art')
+  const dataByArt = groupBy(data, (e) => e.art)
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
     <Document>
       <name>${file}</name>

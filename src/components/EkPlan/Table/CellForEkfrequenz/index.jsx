@@ -1,13 +1,12 @@
 import { memo, useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import groupBy from 'lodash/groupBy'
 import max from 'lodash/max'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
@@ -100,7 +99,10 @@ export const CellForEkfrequenz = memo(
         >
           {valueToShow}
         </StyledCellForSelect>
-        <Dialog onClose={onClose} open={open}>
+        <Dialog
+          onClose={onClose}
+          open={open}
+        >
           <StyledDialogTitle>EK-Frequenz wählen:</StyledDialogTitle>
           <List sx={{ pt: 0 }}>
             <StyledListItem
