@@ -8,7 +8,7 @@ export const exportModule = async ({
   store,
 }) => {
   const { exportFileType } = store
-  const { default: omit } = await import('lodash/omit')
+  const { default: omit } = await import('es-toolkit')
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   // TODO: filter by dataFilterState

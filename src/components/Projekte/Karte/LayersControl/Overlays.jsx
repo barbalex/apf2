@@ -180,8 +180,8 @@ export const Overlays = memo(
       ({ active, over }) => {
         setDraggingOverlay(null)
         if (active.id !== over.id) {
-          const oldIndex = (overlays.findIndex, (e)?>e.value === active.id)
-          const newIndex = (overlays.findIndex, (e)?>e.value === over.id)
+          const oldIndex = overlays.findIndex((e) => e.value === active.id)
+          const newIndex = overlays.findIndex((e) => e.value === over.id)
 
           return setOverlays(arrayMoveImmutable(overlays, oldIndex, newIndex))
         }
