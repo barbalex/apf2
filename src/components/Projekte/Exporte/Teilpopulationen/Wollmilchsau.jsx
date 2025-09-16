@@ -1,8 +1,8 @@
 import { memo, useContext, useState } from 'react'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import styled from '@emotion/styled'
 
 import { exportModule } from '../../../../modules/export.js'
