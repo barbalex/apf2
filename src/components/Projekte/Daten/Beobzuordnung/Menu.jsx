@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import { useSetAtom, useAtom } from 'jotai'
 import {

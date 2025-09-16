@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import omit from 'lodash/omit'

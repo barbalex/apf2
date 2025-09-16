@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 

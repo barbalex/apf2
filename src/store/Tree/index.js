@@ -1,5 +1,5 @@
 import { types, getParent, getSnapshot } from 'mobx-state-tree'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import merge from 'lodash/merge'
 import queryString from 'query-string'
 import isUuid from 'is-uuid'

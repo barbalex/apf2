@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import { getSnapshot } from 'mobx-state-tree'
 
 export const closeLowerNodes = async ({ url, store, search }) => {

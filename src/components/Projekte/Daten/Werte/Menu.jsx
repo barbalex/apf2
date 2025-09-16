@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import upperFirst from 'lodash/upperFirst'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'

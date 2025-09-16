@@ -2,7 +2,7 @@ import { memo, useRef, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import { NodesList } from './NodesList/index.jsx'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import { Row } from './Row.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
