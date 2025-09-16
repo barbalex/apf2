@@ -1,7 +1,6 @@
 import { memo, useContext, useMemo, lazy, Suspense, useRef } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import intersection from 'lodash/intersection'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import { useAtom } from 'jotai'
@@ -71,8 +70,8 @@ export const ProjektContainer = memo(
     const [projekteTabs] = useProjekteTabs()
 
     const treeTabs = useMemo(
-      () => intersection(treeTabValues, projekteTabs),
-      [projekteTabs, treeTabValues],
+      () => [...new Set(treeTabValues).intersection(new Set(projekteTabs))],
+      [projekteTabs],
     )
 
     // console.log('ProjektContainer, treeTabs:', treeTabs)

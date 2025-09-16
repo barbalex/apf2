@@ -1,6 +1,5 @@
-import { memo, useContext, lazy, Suspense } from 'react'
+import { memo, useMemo, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
-import intersection from 'lodash/intersection'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
@@ -45,7 +44,10 @@ export const Component = memo(
     const { tree2Src } = store.tree
 
     const [projekteTabs] = useProjekteTabs()
-    const tree2Tabs = intersection(tree2TabValues, projekteTabs)
+    const tree2Tabs = useMemo(
+      () => [...new Set(tree2TabValues).intersection(new Set(projekteTabs))],
+      [projekteTabs],
+    )
 
     let iFrameSrc = tree2Src
     if (!tree2Src) {
