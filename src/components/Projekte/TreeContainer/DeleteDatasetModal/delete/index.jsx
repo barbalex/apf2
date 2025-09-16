@@ -1,6 +1,6 @@
 import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
-import camelCase from 'lodash/camelCase'
+import { camelCase } from 'es-toolkit'
 import omit from 'lodash/omit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'

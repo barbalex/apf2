@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import camelCase from 'lodash/camelCase'
+import { camelCase } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
 
 const createWerte = (table) => {
