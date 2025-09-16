@@ -1,5 +1,3 @@
-import max from 'lodash/max'
-
 import { queryEkfrequenz } from './queryEkfrequenz.js'
 import { queryTpopkontr } from './queryTpopkontr.js'
 import { queryTpopmassn } from './queryTpopmassn.js'
@@ -61,8 +59,8 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
         },
       })
     }
-    ekfrequenzStartjahr = max(
-      (result?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
+    ekfrequenzStartjahr = Math.max(
+      ...(result?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
         (n) => n.jahr,
       ),
     )
@@ -94,8 +92,8 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
         },
       })
     }
-    ekfrequenzStartjahr = max(
-      (result?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
+    ekfrequenzStartjahr = Math.max(
+      ...(result?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
         (n) => n.jahr,
       ),
     )

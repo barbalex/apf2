@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
-import max from 'lodash/max'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
@@ -44,8 +43,8 @@ export const Ek = ({ saveToDb, row, fieldErrors }) => {
   })
 
   const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
-  const longestAnwendungsfall = max(
-    ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
+  const longestAnwendungsfall = Math.max(
+    ...ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
   )
   const ekfrequenzOptions = ekfrequenzOptions0.map((o) => {
     const code = (o.code || '').padEnd(8)

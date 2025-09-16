@@ -7,7 +7,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import max from 'lodash/max'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { StyledCellForSelect } from '../index.jsx'
@@ -50,7 +49,7 @@ export const CellForEkfrequenz = memo(
     const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
     const maxCodeLength = useMemo(
-      () => max(allEkfrequenzs.map((a) => (a.code || '').length)),
+      () => Math.max(...allEkfrequenzs.map((a) => (a.code || '').length)),
       [allEkfrequenzs],
     )
 

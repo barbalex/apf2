@@ -5,7 +5,6 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import styled from '@emotion/styled'
-import max from 'lodash/max'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -193,8 +192,8 @@ export const Component = () => {
   })
 
   const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
-  const longestAnwendungsfall = max(
-    ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
+  const longestAnwendungsfall = Math.max(
+    ...ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
   )
   const ekfrequenzOptions = ekfrequenzOptions0.map((o) => {
     const code = (o.code || '').padEnd(8)
