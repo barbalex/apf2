@@ -1,10 +1,10 @@
 import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
-import countBy from 'lodash/countBy'
+import { countBy } from 'es-toolkit'
 
 import { MobxContext } from '../mobxContext.js'
 
@@ -68,14 +68,14 @@ export const useZieljahrsNavData = (props) => {
     [data?.data?.apById?.filteredZiels?.nodes],
   )
   const zieljahrsCount = useMemo(() => {
-    const jahrs = countBy(ziels, 'jahr')
+    const jahrs = countBy(ziels, (e) => e.jahr)
     const count = Object.keys(jahrs).length
     return count
   }, [ziels])
 
   const menus = useMemo(() => {
-    const countByJahr = countBy(filteredZiels, 'jahr')
-    const unfilteredCountByJahr = countBy(ziels, 'jahr')
+    const countByJahr = countBy(filteredZiels, (e) => e.jahr)
+    const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)
     // convert into array of objects with id=jahr and count
     const jahre = Object.keys(countByJahr).map((jahr) => ({
       id: +jahr,

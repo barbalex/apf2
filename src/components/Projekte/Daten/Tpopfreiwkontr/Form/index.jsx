@@ -1,9 +1,9 @@
 import { memo, useState, useCallback, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -165,13 +165,16 @@ export const Form = memo(
       .filter((n) => n !== null)
     const zaehls =
       data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
-    const zaehlsSorted = sortBy(zaehls, (z) => {
-      const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-        (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
-      )
-      if (!ekzaehleinheitOriginal) return 999
-      return ekzaehleinheitOriginal.sort || 999
-    })
+    const zaehlsSorted = sortBy(zaehls, [
+      (z) => {
+        const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
+          (e) =>
+            e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.einheit,
+        )
+        if (!ekzaehleinheitOriginal) return 999
+        return ekzaehleinheitOriginal.sort || 999
+      },
+    ])
     const zaehls1 = zaehlsSorted[0]
     const zaehls2 = zaehlsSorted[1]
     const zaehls3 = zaehlsSorted[2]

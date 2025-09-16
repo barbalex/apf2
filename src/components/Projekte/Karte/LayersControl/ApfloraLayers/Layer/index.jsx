@@ -12,10 +12,9 @@ import {
   MdFilterCenterFocus,
   MdRemove,
 } from 'react-icons/md'
-import flatten from 'lodash/flatten'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import { useMap } from 'react-leaflet'
 import { useParams } from 'react-router'
 
@@ -185,7 +184,7 @@ export const Layer = memo(
     if (apfloraLayer.value === 'tpop') {
       // but tpop is special...
       const tpops = data?.tpopByPop?.nodes ?? []
-      layerData = flatten(tpops.map((n) => n?.tpopsByPopId?.nodes ?? []))
+      layerData = tpops.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
     }
     const layerDataHighlighted = layerData.filter((o) => o.id === highlightedId)
 

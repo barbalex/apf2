@@ -8,8 +8,8 @@ import { useCallback, memo } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
-import get from 'lodash/get'
+import { useApolloClient } from '@apollo/client/react'
+import { get } from 'es-toolkit/compat'
 
 const Container = styled.div`
   display: flex;

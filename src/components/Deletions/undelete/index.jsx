@@ -1,5 +1,5 @@
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
+import { upperFirst } from 'es-toolkit'
+import { camelCase } from 'es-toolkit'
 
 export const undelete = async ({
   deletedDatasets,

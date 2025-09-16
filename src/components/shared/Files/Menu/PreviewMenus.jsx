@@ -2,7 +2,7 @@ import { useCallback, useState, useContext, memo, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client';
 import { useApolloClient } from "@apollo/client/react";
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'

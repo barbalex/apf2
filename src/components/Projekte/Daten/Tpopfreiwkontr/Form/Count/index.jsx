@@ -1,11 +1,10 @@
 import { useContext, useCallback, useMemo, memo } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
-import uniqBy from 'lodash/uniqBy'
+import { sortBy, uniqBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { Einheit } from './Einheit.jsx'
@@ -224,16 +223,19 @@ export const Count = memo(
         if (thisRowsEinheit) {
           zaehleinheitWerte = uniqBy(
             [thisRowsEinheit, ...zaehleinheitWerte],
-            'id',
+            (e) => e.id,
           )
         }
-        return sortBy(zaehleinheitWerte, (z) => {
-          const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
-            (e) => e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
-          )
-          if (!ekzaehleinheitOriginal) return 999
-          return ekzaehleinheitOriginal.sort || 999
-        }).map((el) => ({
+        return sortBy(zaehleinheitWerte, [
+          (z) => {
+            const ekzaehleinheitOriginal = ekzaehleinheitsOriginal.find(
+              (e) =>
+                e.tpopkontrzaehlEinheitWerteByZaehleinheitId.code === z.code,
+            )
+            if (!ekzaehleinheitOriginal) return 999
+            return ekzaehleinheitOriginal.sort || 999
+          },
+        ]).map((el) => ({
           value: el.code,
           label: el.text,
         }))

@@ -1,7 +1,7 @@
-import isEqual from 'lodash/isEqual'
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
-import omit from 'lodash/omit'
+import { isEqual } from 'es-toolkit'
+import { upperFirst } from 'es-toolkit'
+import { camelCase } from 'es-toolkit'
+import { omit } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -81,7 +81,7 @@ export const deleteModule = async ({ client, store, search }) => {
     })
   }
   let data = { ...result?.[`data.${camelCase(table)}ById`] }
-  data = omit(data, '__typename')
+  data = omit(data, ['__typename'])
 
   // add to datasetsDeleted
   addDeletedDataset({
@@ -150,36 +150,32 @@ export const deleteModule = async ({ client, store, search }) => {
   }
 
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr'
-      ? 'treeTpopfeldkontr'
-      : parentTable === 'tpopfreiwkontr'
-        ? 'treeTpopfreiwkontr'
-        : table === 'tpop_apberrelevant_grund_werte'
-          ? 'treeTpopApberrelevantGrundWerte'
-          : table === 'ek_abrechnungstyp_werte'
-            ? 'treeEkAbrechnungstypWerte'
-            : table === 'tpopkontrzaehl_einheit_werte'
-              ? 'treeTpopkontrzaehlEinheitWerte'
-              : `tree${upperFirst(table)}`
+    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontr'
+    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontr'
+    : table === 'tpop_apberrelevant_grund_werte' ?
+      'treeTpopApberrelevantGrundWerte'
+    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
+    : table === 'tpopkontrzaehl_einheit_werte' ?
+      'treeTpopkontrzaehlEinheitWerte'
+    : `tree${upperFirst(table)}`
   store.queryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
-  const queryKeyFolders = ['apberuebersicht'].includes(table)
-    ? 'treeRoot'
-    : table === 'ziel'
-      ? 'treeZiel'
-      : parentTable === 'tpopfeldkontr'
-        ? 'treeTpopfeldkontrzaehlFolders'
-        : parentTable === 'tpopfreiwkontr'
-          ? 'treeTpopfreiwkontrzaehlFolders'
-          : [
-                'adresse',
-                'tpop_apberrelevant_grund_werte',
-                'ek_abrechnungstyp_werte',
-                'tpopkontrzaehl_einheit_werte',
-              ].includes(table)
-            ? 'treeWerteFolders'
-            : `tree${upperFirst(parentTable)}Folders`
+  const queryKeyFolders =
+    ['apberuebersicht'].includes(table) ? 'treeRoot'
+    : table === 'ziel' ? 'treeZiel'
+    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
+    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
+    : (
+      [
+        'adresse',
+        'tpop_apberrelevant_grund_werte',
+        'ek_abrechnungstyp_werte',
+        'tpopkontrzaehl_einheit_werte',
+      ].includes(table)
+    ) ?
+      'treeWerteFolders'
+    : `tree${upperFirst(parentTable)}Folders`
   // console.log('Tree: deleting node', {
   //   queryKeyFoldersTable,parentTable,
   //   queryToInvalidate: `tree${upperFirst(queryKeyFoldersTable)}Folders`,

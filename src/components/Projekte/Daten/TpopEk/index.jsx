@@ -5,10 +5,9 @@ import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import styled from '@emotion/styled'
-import max from 'lodash/max'
-import groupBy from 'lodash/groupBy'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { groupBy } from 'es-toolkit'
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -193,8 +192,8 @@ export const Component = () => {
   })
 
   const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
-  const longestAnwendungsfall = max(
-    ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
+  const longestAnwendungsfall = Math.max(
+    ...ekfrequenzOptions0.map((a) => (a.anwendungsfall || '').length),
   )
   const ekfrequenzOptions = ekfrequenzOptions0.map((o) => {
     const code = (o.code || '').padEnd(8)
@@ -215,7 +214,7 @@ export const Component = () => {
         .filter((e) => e.jahr !== null)
         .map((t) => ({ ...t, is: 'ekplan' })),
     ],
-    'jahr',
+    (e) => e.jahr,
   )
 
   if (loadingEk) return <Spinner />

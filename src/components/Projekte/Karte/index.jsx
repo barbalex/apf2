@@ -11,7 +11,7 @@ import styled from '@emotion/styled'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
@@ -514,9 +514,9 @@ export const Karte = memo(
     )
 
     const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-    const activeOverlaysSorted = sortBy(activeOverlays, (activeOverlay) =>
-      overlays.findIndex((o) => o.value === activeOverlay),
-    )
+    const activeOverlaysSorted = sortBy(activeOverlays, [
+      (activeOverlay) => overlays.findIndex((o) => o.value === activeOverlay),
+    ])
 
     // explicitly sort Layers
     // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044

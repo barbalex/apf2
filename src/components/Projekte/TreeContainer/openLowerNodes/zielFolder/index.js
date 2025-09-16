@@ -4,7 +4,7 @@
  * 3. update openNodes
  * 4. refresh tree
  */
-import groupBy from 'lodash/groupBy'
+import { groupBy } from 'es-toolkit'
 
 import { query } from './query.js'
 
@@ -22,7 +22,10 @@ export const zielFolder = async ({
     query: query,
     variables: { id },
   })
-  const zielsGrouped = groupBy(data?.apById?.zielsByApId?.nodes ?? [], 'jahr')
+  const zielsGrouped = groupBy(
+    data?.apById?.zielsByApId?.nodes ?? [],
+    (e) => e.jahr,
+  )
 
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [['Projekte', projId, 'Arten', id, 'AP-Ziele']]

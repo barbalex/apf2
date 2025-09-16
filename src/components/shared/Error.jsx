@@ -1,7 +1,7 @@
 import { useContext, memo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import uniq from 'lodash/uniq'
+import { uniq } from 'es-toolkit'
 
 import { logout } from '../../modules/logout.js'
 import { IdbContext } from '../../idbContext.js'

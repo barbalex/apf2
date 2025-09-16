@@ -26,7 +26,6 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
 import { layerLegends } from './layerLegends.js'
-import findIndex from 'lodash/findIndex'
 
 import { Checkbox } from './shared/Checkbox.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -181,8 +180,8 @@ export const Overlays = memo(
       ({ active, over }) => {
         setDraggingOverlay(null)
         if (active.id !== over.id) {
-          const oldIndex = findIndex(overlays, ['value', active.id])
-          const newIndex = findIndex(overlays, ['value', over.id])
+          const oldIndex = overlays.findIndex((e) => e.value === active.id)
+          const newIndex = overlays.findIndex((e) => e.value === over.id)
 
           return setOverlays(arrayMoveImmutable(overlays, oldIndex, newIndex))
         }

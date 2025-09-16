@@ -68,7 +68,6 @@ export const CellHeaderFixedEkfrequenz = ({ column }) => {
   const [anchorEl, setAnchorEl] = useState(null)
 
   const closeMenu = useCallback(() => {
-    console.log('CellHeaderFixedEkfrequenz closing menu')
     setAnchorEl(null)
   }, [])
   const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])

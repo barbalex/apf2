@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'

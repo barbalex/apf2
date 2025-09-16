@@ -1,7 +1,7 @@
 import { memo, useContext, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import remove from 'lodash/remove'
+import { remove } from 'es-toolkit'
 import styled from '@emotion/styled'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'

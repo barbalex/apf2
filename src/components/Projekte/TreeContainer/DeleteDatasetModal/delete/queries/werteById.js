@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import camelCase from 'lodash/camelCase'
+import { camelCase } from 'es-toolkit'
 
 const werteById = (table) => {
   const tableName = camelCase(table)

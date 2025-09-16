@@ -1,8 +1,8 @@
 import { memo, useCallback, useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
-import uniq from 'lodash/uniq'
-import isEqual from 'lodash/isEqual'
-import upperFirst from 'lodash/upperFirst'
+import { uniq } from 'es-toolkit'
+import { isEqual } from 'es-toolkit'
+import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from "@apollo/client/react";
 import Button from '@mui/material/Button'

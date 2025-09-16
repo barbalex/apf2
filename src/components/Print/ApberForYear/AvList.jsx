@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
-import groupBy from 'lodash/groupBy'
-import sortBy from 'lodash/sortBy'
+import { groupBy } from 'es-toolkit'
+import { sortBy } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
@@ -50,7 +50,7 @@ export const AvList = memo(({ data }) => {
       av: ap?.bearbeiter ?? '(kein Wert)',
       art: ap?.artname ?? '(keine Art gewählt)',
     })),
-    'av',
+    (e) => e.av,
   )
   const avs = Object.keys(avGrouped).sort()
 
@@ -59,7 +59,7 @@ export const AvList = memo(({ data }) => {
       <Container>
         <Title>Artverantwortliche</Title>
         {avs.map((av) => {
-          const array = sortBy(avGrouped[av], 'art')
+          const array = sortBy(avGrouped[av], ['art'])
           return array.map((o, i) => {
             if (i === 0)
               return (

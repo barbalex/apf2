@@ -1,11 +1,10 @@
 import { types } from 'mobx-state-tree'
-import uniq from 'lodash/uniq'
-import groupBy from 'lodash/groupBy'
+import { uniq } from 'es-toolkit'
+import { groupBy } from 'es-toolkit'
 
 import { Ap } from './Ap.js'
 import { Hovered, defaultValue as defaultHovered } from './Hovered.js'
 import { fields } from '../../components/EkPlan/Table/fields.js'
-import { set } from 'lodash'
 
 export const defaultFields = [
   'ap',
@@ -225,7 +224,7 @@ export const EkPlan = types
       return self.aps.map((a) => a.value)
     },
     get einheitsByAp() {
-      const e = groupBy(self.apsData?.allAps?.nodes ?? [], 'id')
+      const e = groupBy(self.apsData?.allAps?.nodes ?? [], (e) => e.id)
       Object.keys(e).forEach(
         (apId) =>
           (e[apId] = (e?.[apId]?.[0]?.ekzaehleinheitsByApId?.nodes ?? []).map(

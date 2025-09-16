@@ -1,10 +1,10 @@
 import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
-import countBy from 'lodash/countBy'
+import { countBy } from 'es-toolkit'
 
 import { MobxContext } from '../mobxContext.js'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
@@ -296,10 +296,10 @@ export const useApNavData = (props) => {
   const popsCount = data?.data?.apById?.popsByApId?.totalCount ?? 0
   const filteredPopsCount = data?.data?.apById?.filteredPops?.totalCount ?? 0
   const apZiels = data?.data?.apById?.zielsByApId?.nodes ?? []
-  const apZielJahrs = countBy(apZiels, 'jahr')
+  const apZielJahrs = countBy(apZiels, (e) => e.jahr)
   const apZielJahrsCount = Object.keys(apZielJahrs).length
   const filteredApZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
-  const filteredApZielJahrs = countBy(filteredApZiels, 'jahr')
+  const filteredApZielJahrs = countBy(filteredApZiels, (e) => e.jahr)
   const filteredApZielJahrsCount = Object.keys(filteredApZielJahrs).length
   const erfkritsCount = data?.data?.apById?.erfkritsByApId?.totalCount ?? 0
   const filteredErfkritsCount =
@@ -489,8 +489,9 @@ export const useApNavData = (props) => {
           fetcherName: 'useBeobNichtBeurteiltsNavData',
           fetcherParams: { projId, apId },
           hasChildren: !!filteredBeobsNichtBeurteiltCount,
-          labelLeftElements: showBeobnichtbeurteiltIcon
-            ? [BeobnichtbeurteiltMapIcon]
+          labelLeftElements:
+            showBeobnichtbeurteiltIcon ?
+              [BeobnichtbeurteiltMapIcon]
             : undefined,
           component: NodeWithList,
         },
@@ -511,8 +512,9 @@ export const useApNavData = (props) => {
           fetcherName: 'useBeobNichtZuzuordnensNavData',
           fetcherParams: { projId, apId },
           hasChildren: !!filteredBeobsNichtZuzuordnenCount,
-          labelLeftElements: showBeobnichtzuzuordnenIcon
-            ? [BeobnichtzuzuordnenMapIcon]
+          labelLeftElements:
+            showBeobnichtzuzuordnenIcon ?
+              [BeobnichtzuzuordnenMapIcon]
             : undefined,
           component: NodeWithList,
         },

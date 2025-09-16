@@ -1,7 +1,6 @@
 import { useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
-import flatten from 'lodash/flatten'
+import { sortBy } from 'es-toolkit'
 import { format } from 'date-fns/format'
 import { MdPrint } from 'react-icons/md'
 import Fab from '@mui/material/Fab'
@@ -165,24 +164,23 @@ export const ApberForAp = ({
   const apData = isSubReport ? apDataPassed : apDataPassed.apById
   const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
   const apberDatum = apber?.datum
-  const erfkrit = sortBy(
-    apData?.erfkritsByApId?.nodes ?? [],
+  const erfkrit = sortBy(apData?.erfkritsByApId?.nodes ?? [], [
     (e) => e?.apErfkritWerteByErfolg?.sort,
-  )
-  const ziele = sortBy(apData?.zielsByApId?.nodes ?? [], (e) => [
-    e?.zielTypWerteByTyp?.sort,
-    e.bezeichnung,
+  ])
+  const ziele = sortBy(apData?.zielsByApId?.nodes ?? [], [
+    (e) => e?.zielTypWerteByTyp?.sort,
+    (e) => e.bezeichnung,
   ])
   const pops = apData?.popsByApId?.nodes ?? []
-  const tpops = flatten(pops.map((p) => p?.tpopsByPopId?.nodes ?? []))
+  const tpops = pops.map((p) => p?.tpopsByPopId?.nodes ?? []).flat()
   const massns = sortBy(
-    flatten(tpops.map((t) => t?.tpopmassnsByTpopId?.nodes ?? [])),
-    (m) => [
-      m?.tpopByTpopId?.popByPopId.nr,
-      m?.tpopByTpopId?.nr,
-      m?.datum,
-      m?.tpopmassnTypWerteByTyp?.text,
-      m?.beschreibung,
+    tpops.map((t) => t?.tpopmassnsByTpopId?.nodes ?? []).flat(),
+    [
+      (m) => m?.tpopByTpopId?.popByPopId.nr,
+      (m) => m?.tpopByTpopId?.nr,
+      (m) => m?.datum,
+      (m) => m?.tpopmassnTypWerteByTyp?.text,
+      (m) => m?.beschreibung,
     ],
   )
 

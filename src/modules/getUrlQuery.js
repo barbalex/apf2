@@ -1,5 +1,5 @@
 // seems not in use
-import isString from 'lodash/isString'
+import { isString } from 'es-toolkit'
 import queryString from 'query-string'
 
 export const getUrlQuery = () => {

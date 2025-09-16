@@ -1,6 +1,6 @@
 import { memo, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
@@ -39,7 +39,7 @@ export const EkplanTableHeader = memo(
           Object.values(fields).filter(
             (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
           ),
-          'sort',
+          ['sort'],
         ),
       [fieldsShown, fields],
     )
@@ -52,7 +52,10 @@ export const EkplanTableHeader = memo(
             const field = column.name
             if (field === 'ekfrequenz') {
               return (
-                <CellHeaderFixedEkfrequenz key={column.name} column={column} />
+                <CellHeaderFixedEkfrequenz
+                  key={column.name}
+                  column={column}
+                />
               )
             }
             if (field === 'ekfrequenzStartjahr') {
@@ -82,7 +85,12 @@ export const EkplanTableHeader = memo(
                 />
               )
             }
-            return <CellHeaderFixed key={column.name} column={column} />
+            return (
+              <CellHeaderFixed
+                key={column.name}
+                column={column}
+              />
+            )
           })}
           {years.map((year, index) => (
             <CellHeaderYear

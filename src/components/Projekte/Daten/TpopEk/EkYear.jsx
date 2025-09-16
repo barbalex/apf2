@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import styled from '@emotion/styled'
 
 const StyledTableRow = styled(TableRow)`
@@ -24,11 +24,11 @@ const typRenamed = (e) => {
 export const EkYear = memo(({ data }) => {
   const ekplans = sortBy(
     data.filter((o) => o.is === 'ekplan'),
-    'typ',
+    ['typ'],
   )
   const tpopkontrs = sortBy(
     data.filter((o) => o.is === 'ek'),
-    'typ',
+    ['typ'],
   )
 
   return (

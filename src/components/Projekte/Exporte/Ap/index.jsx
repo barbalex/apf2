@@ -66,7 +66,6 @@ export const Ap = () => {
             <Erfkrit />
             <Idealbiotop />
             <Assozart />
-            <InfoFlora />
           </StyledCardContent>
         : null}
       </Collapse>

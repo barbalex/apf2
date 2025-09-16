@@ -1,10 +1,10 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import styled from '@emotion/styled'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { exportModule } from '../../../../modules/export.js'

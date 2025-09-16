@@ -2,7 +2,7 @@ import { memo, useCallback, useContext, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import MenuItem from '@mui/material/MenuItem'
 import { useLocation, useNavigate } from 'react-router'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 import { MobxContext } from '../../../../mobxContext.js'

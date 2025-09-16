@@ -2,8 +2,8 @@ import { memo, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { useQuery } from "@apollo/client/react";
-import sortBy from 'lodash/sortBy'
+import { useQuery } from '@apollo/client/react'
+import { sortBy } from 'es-toolkit'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -116,7 +116,10 @@ export const Component = memo(
       return (
         <>
           {ekf.map((e) => (
-            <Tpopfreiwkontr id={e.id} key={e.id} />
+            <Tpopfreiwkontr
+              id={e.id}
+              key={e.id}
+            />
           ))}
         </>
       )
@@ -124,9 +127,15 @@ export const Component = memo(
 
     return (
       <Container>
-        <StyledSplitPane split="vertical" size="350px" minSize={100}>
+        <StyledSplitPane
+          split="vertical"
+          size="350px"
+          minSize={100}
+        >
           <EkfList ekf={ekf} />
-          {ekfId ? <Tpopfreiwkontr id={ekfId} /> : <InnerContainer />}
+          {ekfId ?
+            <Tpopfreiwkontr id={ekfId} />
+          : <InnerContainer />}
         </StyledSplitPane>
       </Container>
     )

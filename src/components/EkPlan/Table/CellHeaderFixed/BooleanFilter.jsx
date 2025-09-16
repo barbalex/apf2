@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { memo, useCallback, useContext } from 'react'
 import MenuItem from '@mui/material/MenuItem'
-import upperFirst from 'lodash/upperFirst'
+import { upperFirst } from 'es-toolkit'
 
 import { MobxContext } from '../../../../mobxContext.js'
 

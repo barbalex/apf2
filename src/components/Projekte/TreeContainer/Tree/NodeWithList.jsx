@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
-import isEqual from 'lodash/isEqual'
+import { isEqual } from 'es-toolkit'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { Row } from './Row.jsx'
