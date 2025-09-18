@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -24,7 +24,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId, taxonId } = useParams()
     const store = useContext(MobxContext)
 
@@ -52,18 +52,18 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApart`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
       const id = result?.data?.createApart?.apart?.id
       navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Taxa/${id}${search}`)
-    }, [apId, client, store, queryClient, navigate, search, projId])
+    }, [apId, client, store, tsQueryClient, navigate, search, projId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -100,13 +100,13 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApart`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
       // navigate to parent
@@ -114,7 +114,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      queryClient,
+      tsQueryClient,
       navigate,
       search,
       apId,

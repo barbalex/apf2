@@ -1,8 +1,8 @@
 import { memo, useCallback, useContext, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -126,6 +126,8 @@ export const Component = memo(
       },
       [client, fieldErrors, queryClient, row, store.user.name],
     )
+
+    console.log('render Tpopber')
 
     if (loading) return <Spinner />
 
