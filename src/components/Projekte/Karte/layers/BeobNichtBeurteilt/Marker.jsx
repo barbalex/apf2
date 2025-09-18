@@ -4,7 +4,7 @@ import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
@@ -39,7 +39,7 @@ export const Marker = memo(
     const navigate = useNavigate()
     const { search } = useLocation()
 
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const client = useApolloClient()
     const store = useContext(MobxContext)
@@ -97,11 +97,11 @@ export const Marker = memo(
             'BeobAssignLinesQuery',
           ],
         })
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeQuery`],
         })
       },
-      [apId, beob.id, client, navigate, projId, queryClient, search],
+      [apId, beob.id, client, navigate, projId, tsQueryClient, search],
     )
 
     const [projekteTabs, setProjekteTabs] = useProjekteTabs()

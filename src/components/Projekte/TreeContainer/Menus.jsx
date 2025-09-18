@@ -4,7 +4,7 @@ import { uniq } from 'es-toolkit'
 import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -323,7 +323,7 @@ export const Menus = memo(
     const { search } = useLocation()
 
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const {
@@ -470,7 +470,7 @@ export const Menus = memo(
               afterDeletionHook: () => {
                 const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
                 setOpenNodes(newOpenNodes)
-                tanstackQueryClient.invalidateQueries({
+                tsQueryClient.invalidateQueries({
                   queryKey: [`tree${upperFirst(table)}`],
                 })
               },
@@ -507,7 +507,7 @@ export const Menus = memo(
               id: nodeType === 'folder' ? parentId : id,
               store,
               client,
-              tanstackQueryClient,
+              tanstackQueryClient: tsQueryClient,
             })
           },
           markForCopying() {
@@ -533,7 +533,7 @@ export const Menus = memo(
               parentId: nodeType === 'folder' ? parentId : id,
               client,
               store,
-              tanstackQueryClient,
+              tanstackQueryClient: tsQueryClient,
             })
           },
           markForCopyingBiotop() {
@@ -556,7 +556,7 @@ export const Menus = memo(
               client,
               store,
               search,
-              tanstakQueryClient: tanstackQueryClient,
+              tanstakQueryClient: tsQueryClient,
             })
           },
           createNewTpopFromBeob() {
@@ -605,7 +605,7 @@ export const Menus = memo(
         setToDelete,
         openNodes,
         setOpenNodes,
-        tanstackQueryClient,
+        tsQueryClient,
         showMapIfNotYetVisible,
         projekteTabs,
         activeApfloraLayers,

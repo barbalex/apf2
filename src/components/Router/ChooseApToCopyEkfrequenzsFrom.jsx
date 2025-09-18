@@ -8,8 +8,8 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -72,7 +72,7 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
   observer(() => {
     const { apId } = useParams()
     const apolloClient = useApolloClient()
-    const tanstackClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
     const {
       user,
@@ -273,9 +273,9 @@ export const ChooseApToCopyEkfrequenzsFrom = memo(
             variant: 'info',
           },
         })
-        tanstackClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
-        tanstackClient.invalidateQueries({ queryKey: [`treeApFolders`] })
-        tanstackClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
+        tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeAp`],
         })
       },

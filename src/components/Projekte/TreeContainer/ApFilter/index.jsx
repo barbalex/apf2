@@ -31,7 +31,7 @@ export const ApFilter = memo(
     const { search } = useLocation()
 
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const {
@@ -49,10 +49,10 @@ export const ApFilter = memo(
       // console.log('ApFilter, onChange', { apFilter, previousApFilter })
       if (!previousApFilter) {
         // need to fetch previously not had aps
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeAp`],
         })
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeProject`],
         })
         // apFilter was set to true
@@ -92,7 +92,7 @@ export const ApFilter = memo(
       client,
       navigate,
       openNodes,
-      queryClient,
+      tsQueryClient,
       search,
       setApFilter,
       setOpenNodes,

@@ -7,7 +7,7 @@ import { MobxContext } from '../../mobxContext.js'
 
 export const QueryClientSetter = memo(
   observer(() => {
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
     const { setQueryClient } = store
 
@@ -20,9 +20,9 @@ export const QueryClientSetter = memo(
       if (wasSet.current) return
 
       // console.log('NavigateSetter setting navigate')
-      setQueryClient(queryClient)
+      setQueryClient(tsQueryClient)
       wasSet.current = true
-    }, [queryClient, setQueryClient, store.queryClient])
+    }, [tsQueryClient, setQueryClient, store.queryClient])
 
     return null
   }),
