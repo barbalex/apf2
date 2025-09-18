@@ -18,7 +18,7 @@ const iconStyle = { color: 'white' }
 // TODO: need to add menu to other beobs to enable filtering
 export const Menu = memo(
   observer(({ apfloraLayer, toggleFilterInput }) => {
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const { setActiveApfloraLayers, activeApfloraLayers } = store
