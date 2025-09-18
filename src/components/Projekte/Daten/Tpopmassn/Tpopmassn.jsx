@@ -1,8 +1,8 @@
 import { memo, useCallback, useContext, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -71,7 +71,7 @@ export const Component = memo(
     })
 
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -262,9 +262,9 @@ export const Component = memo(
               ${field === 'datum' ? '$jahr: Int' : ''}
               ${field === 'typ' ? '$zieleinheitEinheit: Int' : ''}
               ${
-                ['typ', 'anzTriebe', 'anzPflanzen'].includes(field)
-                  ? '$zieleinheitAnzahl: Int'
-                  : ''
+                ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
+                  '$zieleinheitAnzahl: Int'
+                : ''
               }
               $changedBy: String
             ) {
@@ -276,14 +276,14 @@ export const Component = memo(
                     ${field === 'jahr' ? 'datum: $datum' : ''}
                     ${field === 'datum' ? 'jahr: $jahr' : ''}
                     ${
-                      field === 'typ'
-                        ? 'zieleinheitEinheit: $zieleinheitEinheit'
-                        : ''
+                      field === 'typ' ?
+                        'zieleinheitEinheit: $zieleinheitEinheit'
+                      : ''
                     }
                     ${
-                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(field)
-                        ? 'zieleinheitAnzahl: $zieleinheitAnzahl'
-                        : ''
+                      ['typ', 'anzTriebe', 'anzPflanzen'].includes(field) ?
+                        'zieleinheitAnzahl: $zieleinheitAnzahl'
+                      : ''
                     }
                     changedBy: $changedBy
                   }
@@ -330,7 +330,7 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (['jahr', 'datum', 'typ'].includes(field)) {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopmassn`],
           })
         }
@@ -339,7 +339,7 @@ export const Component = memo(
         apId,
         client,
         notMassnCountUnit,
-        queryClient,
+        tsQueryClient,
         row.anzPflanzen,
         row.anzTriebe,
         row.id,
@@ -493,9 +493,9 @@ export const Component = memo(
               <TextField
                 name="zieleinheitAnzahl"
                 label={
-                  notMassnCountUnit === true
-                    ? 'Ziel-Einheit: Anzahl'
-                    : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
+                  notMassnCountUnit === true ?
+                    'Ziel-Einheit: Anzahl'
+                  : 'Ziel-Einheit: Anzahl (wird automatisch gesetzt)'
                 }
                 type="number"
                 value={row.zieleinheitAnzahl}
@@ -537,7 +537,12 @@ export const Component = memo(
             saveToDb={saveToDb}
             error={fieldErrors.vonAnzahlIndividuen}
           />
-          {!showFilter && <StringToCopy text={row.id} label="id" />}
+          {!showFilter && (
+            <StringToCopy
+              text={row.id}
+              label="id"
+            />
+          )}
         </Container>
       </ErrorBoundary>
     )

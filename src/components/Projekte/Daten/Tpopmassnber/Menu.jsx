@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -25,7 +25,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopmassnberId } = useParams()
     const store = useContext(MobxContext)
 
@@ -53,10 +53,10 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassnber`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
       const id = result?.data?.createTpopmassnber?.tpopmassnber?.id
@@ -67,7 +67,7 @@ export const Menu = memo(
       apId,
       client,
       store,
-      tanstackQueryClient,
+      tsQueryClient,
       navigate,
       search,
       projId,
@@ -110,10 +110,10 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassnber`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
       // navigate to parent
@@ -123,7 +123,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      tanstackQueryClient,
+      tsQueryClient,
       navigate,
       search,
       apId,

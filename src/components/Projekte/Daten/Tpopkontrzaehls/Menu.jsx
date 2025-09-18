@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -21,7 +21,7 @@ export const Menu = memo(
     const { search } = useLocation()
     const navigate = useNavigate()
     const apolloClient = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { tpopkontrId } = useParams()
     const store = useContext(MobxContext)
 
@@ -55,25 +55,18 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehl`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehlFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
       const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
       navigate(`./${id}${search}`)
-    }, [
-      apolloClient,
-      store,
-      tanstackQueryClient,
-      navigate,
-      search,
-      tpopkontrId,
-    ])
+    }, [apolloClient, store, tsQueryClient, navigate, search, tpopkontrId])
 
     return (
       <ErrorBoundary>
