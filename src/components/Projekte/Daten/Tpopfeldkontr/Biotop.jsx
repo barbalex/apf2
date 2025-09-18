@@ -17,7 +17,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { fieldTypes, FormContainer, Section } from './Tpopfeldkontr.jsx'
+import { fieldTypes, FormContainer, Section } from './Form.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 export const Component = memo(
