@@ -66,13 +66,11 @@ export const Component = memo(
         ${tpopber}
       `,
       {
-        variables: {
-          id: tpopberId,
-        },
+        variables: { id: tpopberId },
       },
     )
 
-    const row = useMemo(() => data?.tpopberById ?? {}, [data?.tpopberById])
+    const row = data?.tpopberById
 
     const saveToDb = useCallback(
       async (event) => {
@@ -87,29 +85,26 @@ export const Component = memo(
         try {
           await client.mutate({
             mutation: gql`
-          mutation updateTpopber(
-            $id: UUID!
-            $${field}: ${fieldTypes[field]}
-            $changedBy: String
-          ) {
-            updateTpopberById(
-              input: {
-                id: $id
-                tpopberPatch: {
-                  ${field}: $${field}
-                  changedBy: $changedBy
+              mutation updateTpopber(
+                $id: UUID!
+                $${field}: ${fieldTypes[field]}
+                $changedBy: String
+              ) {
+                updateTpopberById(
+                  input: {
+                    id: $id
+                    tpopberPatch: {
+                      ${field}: $${field}
+                      changedBy: $changedBy
+                    }
+                  }
+                ) {
+                  tpopber { ...TpopberFields }
                 }
               }
-            ) {
-              tpopber {
-                ...TpopberFields
-              }
-            }
-          }
-          ${tpopber}
-        `,
+              ${tpopber}
+            `,
             variables,
-            refetchQueries: ['tpopberByIdQuery'],
           })
         } catch (error) {
           return setFieldErrors({ [field]: error.message })
