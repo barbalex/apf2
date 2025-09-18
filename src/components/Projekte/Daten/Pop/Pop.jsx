@@ -8,8 +8,8 @@ import {
 } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -54,7 +54,7 @@ export const Component = memo(
     const { projId, apId, popId } = useParams()
 
     const store = useContext(MobxContext)
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const client = useApolloClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -118,12 +118,12 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (['name', 'nr'].includes(field)) {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treePop`],
           })
         }
       },
-      [client, queryClient, row, store.user.name],
+      [client, tsQueryClient, row, store.user.name],
     )
 
     if (error) return <Error error={error} />
