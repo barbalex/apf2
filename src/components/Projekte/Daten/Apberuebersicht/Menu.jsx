@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -23,10 +23,12 @@ export const Menu = memo(
   observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const queryClient = useQueryClient()
     const { projId, apberuebersichtId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const client = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
@@ -56,15 +58,15 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApberuebersicht`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],
       })
       const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
       navigate(`/Daten/Projekte/${projId}/AP-Berichte/${id}${search}`)
-    }, [projId, client, store, queryClient, navigate, search])
+    }, [projId, client, store, tsQueryClient, navigate, search])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -101,10 +103,10 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApberuebersicht`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],
       })
       // navigate to parent
@@ -112,7 +114,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      queryClient,
+      tsQueryClient,
       navigate,
       search,
       projId,

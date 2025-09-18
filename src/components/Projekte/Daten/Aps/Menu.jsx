@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -35,7 +35,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId } = useParams()
     const store = useContext(MobxContext)
 
@@ -66,22 +66,22 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],
       })
       const id = result?.data?.createAp?.ap?.id
       navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
-    }, [projId, client, store, tanstackQueryClient, navigate, search])
+    }, [projId, client, store, tsQueryClient, navigate, search])
 
     const onClickMoveHere = useCallback(() => {
       moveTo({
         id: apId,
         store,
         client,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
     }, [apId, store, client])
 
@@ -100,9 +100,9 @@ export const Menu = memo(
         parentId: apId,
         client,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [apId, client, store, tanstackQueryClient])
+    }, [apId, client, store, tsQueryClient])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({

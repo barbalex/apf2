@@ -2,8 +2,8 @@ import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns/format'
 import { useParams } from 'react-router'
@@ -75,13 +75,13 @@ export const Component = memo(
     const { apberuebersichtId } = useParams()
 
     const store = useContext(MobxContext)
-    const client = useApolloClient()
     const { user } = store
     const { token } = user
     const role = token ? jwtDecode(token).role : null
     const userIsManager = role === 'apflora_manager'
 
-    const queryClient = useQueryClient()
+    const client = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
     const [historizing, setHistorizing] = useState(false)
@@ -139,15 +139,15 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (field === 'jahr') {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeApberuebersicht`],
           })
         }
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`Apberuebersicht`],
         })
       },
-      [client, queryClient, row?.id, store.user.name],
+      [client, tsQueryClient, row?.id, store.user.name],
     )
 
     const isBeforeMarchOfFollowingYear = useMemo(() => {
@@ -174,11 +174,11 @@ export const Component = memo(
         return console.log('Apberuebersicht, onClickHistorize: year missing')
       setHistorizing(true)
       await historize({ store, apberuebersicht: row })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: ['Apberuebersicht'],
       })
       setHistorizing(false)
-    }, [queryClient, row, store])
+    }, [tsQueryClient, row, store])
 
     if (isLoading) return <Spinner />
 
