@@ -146,7 +146,7 @@ const fieldTypes = {
 export const Form = memo(
   observer(({ data, refetch, row, apId }) => {
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const { isPrint, user } = store
@@ -296,7 +296,7 @@ export const Form = memo(
           return setErrors({ [field]: error.message })
         }
         setErrors({})
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeTpopfreiwkontr`],
         })
       },
@@ -327,7 +327,7 @@ export const Form = memo(
         dataFilterSetValue,
         client,
         store.tree,
-        queryClient,
+        tsQueryClient,
       ],
     )
 

@@ -173,7 +173,7 @@ export const Count = memo(
       ekzaehleinheitsOriginal = [],
     }) => {
       const client = useApolloClient()
-      const queryClient = useQueryClient()
+      const tsQueryClient = useQueryClient()
 
       const store = useContext(MobxContext)
       const { setToDelete } = useContext(MobxContext)
@@ -201,10 +201,10 @@ export const Count = memo(
           })
           .then(() => {
             refetch()
-            queryClient.invalidateQueries({
+            tsQueryClient.invalidateQueries({
               queryKey: [`treeTpopfreiwkontrzaehl`],
             })
-            queryClient.invalidateQueries({
+            tsQueryClient.invalidateQueries({
               queryKey: [`treeTpopfreiwkontrzaehlFolders`],
             })
           })
@@ -253,10 +253,10 @@ export const Count = memo(
         ({ row }) => {
           const afterDeletionHook = () => {
             refetch()
-            queryClient.invalidateQueries({
+            tsQueryClient.invalidateQueries({
               queryKey: [`treeTpopfreiwkontrzaehl`],
             })
-            queryClient.invalidateQueries({
+            tsQueryClient.invalidateQueries({
               queryKey: [`treeTpopfreiwkontrzaehlFolders`],
             })
           }
@@ -268,7 +268,7 @@ export const Count = memo(
             afterDeletionHook,
           })
         },
-        [setToDelete, activeNodeArray, refetch, queryClient],
+        [setToDelete, activeNodeArray, refetch, tsQueryClient],
       )
 
       //console.log('Count, row:', row)

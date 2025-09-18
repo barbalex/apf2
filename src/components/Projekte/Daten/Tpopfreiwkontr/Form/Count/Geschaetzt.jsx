@@ -1,6 +1,6 @@
 import { memo, useContext, useCallback, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../../../shared/TextField.jsx'
@@ -12,7 +12,7 @@ export const Geschaetzt = memo(
   observer(({ row, refetch }) => {
     const store = useContext(MobxContext)
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const [errors, setErrors] = useState({})
 
@@ -42,13 +42,13 @@ export const Geschaetzt = memo(
           return setErrors({ anzahl: error.message })
         }
         refetch()
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeTpopfreiwkontrzaehl`],
         })
       },
       [
         client,
-        queryClient,
+        tsQueryClient,
         refetch,
         row.anzahl,
         row.einheit,
