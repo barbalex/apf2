@@ -44,7 +44,7 @@ export const Component = memo(
   observer(() => {
     const { adrId } = useParams()
     const store = useContext(MobxContext)
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const { data, error, loading } = useQuery(query, {
       variables: { id: adrId },
@@ -96,12 +96,12 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (field === 'name') {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeAdresse`],
           })
         }
       },
-      [client, queryClient, row.id, store.user.name],
+      [client, tsQueryClient, row.id, store.user.name],
     )
 
     if (loading) return <Spinner />
