@@ -2,8 +2,8 @@
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -50,7 +50,7 @@ export const TpopkontrzaehlEinheitWerte = memo(
     const { zaehleinheitId: id } = useParams()
 
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const { refetch: refetchTree } = store
@@ -128,13 +128,13 @@ export const TpopkontrzaehlEinheitWerte = memo(
         // for unknown reason refetching is necessary here
         refetchTree[refetchTableName] && refetchTree[refetchTableName]()
         setFieldErrors({})
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeTpopkontrzaehlEinheitWerte`],
         })
       },
       [
         client,
-        queryClient,
+        tsQueryClient,
         refetch,
         refetchTree,
         row.id,
