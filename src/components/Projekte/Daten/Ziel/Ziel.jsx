@@ -2,8 +2,8 @@ import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { isEqual } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
@@ -67,7 +67,7 @@ export const Component = memo(
     const navigate = useNavigate()
 
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const {
@@ -128,13 +128,13 @@ export const Component = memo(
           return setFieldErrors({ [field]: error.message })
         }
         setFieldErrors({})
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeZiel`],
         })
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeZieljahrs`],
         })
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeZielsOfJahr`],
         })
         // if jahr of ziel is updated, activeNodeArray und openNodes need to change
@@ -155,7 +155,7 @@ export const Component = memo(
       [
         row.id,
         store.user.name,
-        queryClient,
+        tsQueryClient,
         client,
         aNA,
         openNodes,

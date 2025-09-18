@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -24,7 +24,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId, jahr, zielId } = useParams()
     const store = useContext(MobxContext)
 
@@ -52,20 +52,20 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeZiel`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeZieljahrs`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeZielsOfJahr`],
       })
       const id = result?.data?.createZiel?.ziel?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${id}${search}`,
       )
-    }, [apId, client, store, queryClient, navigate, search, projId])
+    }, [apId, client, store, tsQueryClient, navigate, search, projId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -102,13 +102,13 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeZiel`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeZieljahrs`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeZielsOfJahr`],
       })
       // navigate to parent
@@ -118,7 +118,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      queryClient,
+      tsQueryClient,
       navigate,
       search,
       apId,
