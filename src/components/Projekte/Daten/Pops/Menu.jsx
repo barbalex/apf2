@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
@@ -36,7 +36,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId } = useParams()
     const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
@@ -65,18 +65,18 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
       const id = result?.data?.createPop?.pop?.id
       navigate(`./${id}${search}`)
-    }, [apId, client, store, tanstackQueryClient, navigate, search])
+    }, [apId, client, store, tsQueryClient, navigate, search])
 
     const onClickOpenLowerNodes = useCallback(() => {
       openLowerNodes({
@@ -104,9 +104,9 @@ export const Menu = memo(
         id: apId,
         client,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [client, store, tanstackQueryClient, apId])
+    }, [client, store, tsQueryClient, apId])
 
     const onClickStopMovingPop = useCallback(() => {
       setMoving({
@@ -125,9 +125,9 @@ export const Menu = memo(
         parentId: apId,
         client,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [apId, client, store, tanstackQueryClient])
+    }, [apId, client, store, tsQueryClient])
 
     const onClickStopCopyingPop = useCallback(() => {
       setCopying({

@@ -1,8 +1,8 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -84,7 +84,7 @@ export const Component = memo(
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const {
       data,
@@ -195,7 +195,7 @@ export const Component = memo(
           setFieldErrors({})
         }
         if (['nr', 'flurname'].includes(field)) {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeTpop`],
           })
         }
@@ -203,7 +203,7 @@ export const Component = memo(
       [
         client,
         fieldErrors,
-        queryClient,
+        tsQueryClient,
         row.id,
         row?.lv95X,
         row?.y,

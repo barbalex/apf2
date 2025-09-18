@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -93,7 +93,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId } = useParams()
     const store = useContext(MobxContext)
     const {
@@ -133,13 +133,13 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treePopFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
       const id = result?.data?.createTpop?.tpop?.id
@@ -150,7 +150,7 @@ export const Menu = memo(
       apId,
       client,
       store,
-      tanstackQueryClient,
+      tsQueryClient,
       navigate,
       search,
       projId,
@@ -193,13 +193,13 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treePopFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
       // navigate to parent
@@ -209,7 +209,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      tanstackQueryClient,
+      tsQueryClient,
       navigate,
       search,
       apId,
@@ -290,7 +290,7 @@ export const Menu = memo(
           id: popId,
           client,
           store,
-          tanstackQueryClient,
+          tanstackQueryClient: tsQueryClient,
         })
       }
       if (
@@ -303,7 +303,7 @@ export const Menu = memo(
           id: tpopId,
           client,
           store,
-          tanstackQueryClient,
+          tanstackQueryClient: tsQueryClient,
         })
       }
       setMoving({
@@ -320,7 +320,7 @@ export const Menu = memo(
       tpopId,
       client,
       store,
-      tanstackQueryClient,
+      tsQueryClient,
       isMovingTpop,
       isMovingTpopfeldkontr,
       isMovingTpopfreiwkontr,
@@ -355,7 +355,7 @@ export const Menu = memo(
           parentId: popId,
           client,
           store,
-          tanstackQueryClient,
+          tanstackQueryClient: tsQueryClient,
         })
       }
       if (isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn) {
@@ -364,7 +364,7 @@ export const Menu = memo(
           parentId: tpopId,
           client,
           store,
-          tanstackQueryClient,
+          tanstackQueryClient: tsQueryClient,
         })
       }
       setCopying({
@@ -380,7 +380,7 @@ export const Menu = memo(
       tpopId,
       client,
       store,
-      tanstackQueryClient,
+      tsQueryClient,
       row,
       setCopying,
       isCopyingTpop,
@@ -428,9 +428,9 @@ export const Menu = memo(
         parentId: tpopId,
         client,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [tpopId, client, store, tanstackQueryClient])
+    }, [tpopId, client, store, tsQueryClient])
 
     const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
