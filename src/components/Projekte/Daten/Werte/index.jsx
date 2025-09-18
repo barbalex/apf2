@@ -2,8 +2,8 @@ import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -46,7 +46,7 @@ export const Component = memo(
       : 'uups'
 
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -129,7 +129,7 @@ export const Component = memo(
         refetch()
         setFieldErrors({})
         if (['text', 'sort'].includes(field)) {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`tree${upperFirst(table)}`],
           })
         }
@@ -137,7 +137,7 @@ export const Component = memo(
       [
         client,
         codeGqlType,
-        queryClient,
+        tsQueryClient,
         refetch,
         row.id,
         store.user.name,

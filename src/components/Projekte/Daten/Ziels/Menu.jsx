@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
@@ -25,7 +25,7 @@ export const Menu = memo(
     const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId, jahr } = useParams()
     const store = useContext(MobxContext)
 
@@ -53,7 +53,7 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeZiel`],
       })
       queryClient.invalidateQueries({
@@ -62,15 +62,15 @@ export const Menu = memo(
       queryClient.invalidateQueries({
         queryKey: [`treeZielsOfJahr`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
       const id = result?.data?.createZiel?.ziel?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tanstackQueryClient, navigate, search, apId])
+    }, [client, store, tsQueryClient, navigate, search, apId])
 
     const onClickOpenLowerNodes = useCallback(() => {
       console.log('Menu onClickOpenLowerNodes', { projId, apId, jahr })

@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -25,7 +25,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const typename = upperFirst(table)
@@ -60,15 +60,15 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`tree${typename}`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeWerteFolders`],
       })
       const id = result?.data?.[`create${typename}`]?.[table]?.id
       navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
-    }, [client, store, queryClient, navigate, search, typename, table])
+    }, [client, store, tsQueryClient, navigate, search, typename, table])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -106,10 +106,10 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`tree${typename}`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeWerteFolders`],
       })
       // navigate to parent
@@ -117,7 +117,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      queryClient,
+      tsQueryClient,
       navigate,
       row.id,
       pathname,
