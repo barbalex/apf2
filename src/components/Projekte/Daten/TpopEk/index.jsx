@@ -82,7 +82,7 @@ export const Component = () => {
   const { tpopId, apId } = useParams()
   const store = useContext(MobxContext)
   const client = useApolloClient()
-  const queryClient = useQueryClient()
+  const tsQueryClient = useQueryClient()
 
   const {
     data,
@@ -164,7 +164,7 @@ export const Component = () => {
         setFieldErrors({})
       }
       if (['nr', 'flurname'].includes(field)) {
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeTpop`],
         })
       }
@@ -172,7 +172,7 @@ export const Component = () => {
     [
       client,
       fieldErrors,
-      queryClient,
+      tsQueryClient,
       row.id,
       row?.lv95X,
       row?.y,

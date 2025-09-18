@@ -45,7 +45,7 @@ export const Component = memo(
     const { tpopberId } = useParams()
 
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -119,12 +119,12 @@ export const Component = memo(
           setFieldErrors({})
         }
         if (['jahr', 'entwicklung'].includes(field)) {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopber`],
           })
         }
       },
-      [client, fieldErrors, queryClient, row, store.user.name],
+      [client, fieldErrors, tsQueryClient, row, store.user.name],
     )
 
     console.log('render Tpopber')
