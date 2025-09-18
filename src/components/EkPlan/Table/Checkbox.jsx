@@ -1,7 +1,7 @@
 import { memo, useCallback, useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import styled from '@emotion/styled'
 
 import { tpop } from '../../shared/fragments.js'

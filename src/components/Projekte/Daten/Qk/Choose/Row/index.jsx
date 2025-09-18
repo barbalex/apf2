@@ -1,9 +1,10 @@
 import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Checkbox from '@mui/material/Checkbox'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
@@ -29,6 +30,7 @@ const Beschreibung = styled.div`
 
 export const Row = memo(({ apId, qk }) => {
   const client = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
   const { data, error } = useQuery(query, {
     variables: { apId, qkName: qk.name },
@@ -65,13 +67,15 @@ export const Row = memo(({ apId, qk }) => {
           }
         `,
         variables,
-        refetchQueries: ['QkQueryForQkTopRouter'],
       })
     }
     // 3. refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['treeAp'],
+    })
     setTimeout(() =>
       client.refetchQueries({
-        include: ['QkQueryForQkTopRouter', 'apqkQueryForRow'],
+        include: ['apqkQueryForRow'],
       }),
     )
   }, [apId, checked, client, qk.name])
