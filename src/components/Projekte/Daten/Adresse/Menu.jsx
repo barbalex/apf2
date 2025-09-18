@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -24,7 +24,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
@@ -50,15 +50,15 @@ export const Menu = memo(
           },
         })
       }
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: ['treeWerteFolders'],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: ['treeAdresse'],
       })
       const id = result?.data?.createAdresse?.adresse?.id
       navigate(`/Daten/Werte-Listen/Adressen/${id}${search}`)
-    }, [client, store, queryClient, navigate, search])
+    }, [client, store, tsQueryClient, navigate, search])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -96,15 +96,15 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeWerteFolders`],
       })
-      queryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: ['treeAdresse'],
       })
       // navigate to parent
       navigate(`/Daten/Werte-Listen/Adressen${search}`)
-    }, [client, store, queryClient, navigate, search, pathname, adrId])
+    }, [client, store, tsQueryClient, navigate, search, pathname, adrId])
 
     return (
       <ErrorBoundary>

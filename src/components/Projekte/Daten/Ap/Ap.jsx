@@ -3,9 +3,9 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
@@ -78,7 +78,7 @@ export const Component = memo(
     const client = useApolloClient()
     const store = useContext(MobxContext)
     const { user } = store
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -133,12 +133,12 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (field === 'artId') {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeAp`],
           })
         }
       },
-      [client, queryClient, row.id, user.name],
+      [client, tsQueryClient, row.id, user.name],
     )
 
     const aeTaxonomiesfilterForData = useCallback(

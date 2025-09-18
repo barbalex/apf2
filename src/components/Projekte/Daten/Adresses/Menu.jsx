@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -20,7 +20,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {
@@ -45,15 +45,15 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAdresse`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeRoot`],
       })
       const id = result?.data?.createAdresse?.adresse?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tanstackQueryClient, navigate, search])
+    }, [client, store, tsQueryClient, navigate, search])
 
     return (
       <ErrorBoundary>
