@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -31,7 +31,7 @@ export const Menu = memo(
     const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { tpopId } = useParams()
     const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
@@ -62,15 +62,15 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassn`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
       const id = result?.data?.createTpopmassn?.tpopmassn?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tanstackQueryClient, navigate, search, tpopId])
+    }, [client, store, tsQueryClient, navigate, search, tpopId])
 
     const isMovingMassn = moving.table === 'tpopmassn'
     const onClickMoveMassnToHere = useCallback(() => {
@@ -78,9 +78,9 @@ export const Menu = memo(
         id: tpopId,
         client,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [tpopId, client, store, tanstackQueryClient, moveTo])
+    }, [tpopId, client, store, tsQueryClient, moveTo])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -98,9 +98,9 @@ export const Menu = memo(
         parentId: tpopId,
         client,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [copyTo, tpopId, client, store, tanstackQueryClient])
+    }, [copyTo, tpopId, client, store, tsQueryClient])
 
     const onClickStopCopying = useCallback(() => {
       setCopying({

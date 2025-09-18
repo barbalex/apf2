@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState, useMemo } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation, Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -45,7 +45,7 @@ export const Menu = memo(
       const { search, pathname } = useLocation()
       const navigate = useNavigate()
       const client = useApolloClient()
-      const queryClient = useQueryClient()
+      const tsQueryClient = useQueryClient()
       const store = useContext(MobxContext)
 
       const thisYear = new Date().getFullYear()
@@ -89,15 +89,15 @@ export const Menu = memo(
             },
           })
         }
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeUser`],
         })
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeRoot`],
         })
         const id = result?.data?.createUser?.user?.id
         navigate(`/Daten/Benutzer/${id}${search}`)
-      }, [client, store, queryClient, navigate, search])
+      }, [client, store, tsQueryClient, navigate, search])
 
       const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
       const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -134,15 +134,15 @@ export const Menu = memo(
         store.tree.setOpenNodes(newOpenNodes)
 
         // update tree query
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeUser`],
         })
-        queryClient.invalidateQueries({
+        tsQueryClient.invalidateQueries({
           queryKey: [`treeRoot`],
         })
         // navigate to parent
         navigate(`/Daten/Benutzer${search}`)
-      }, [client, store, queryClient, navigate, search, row, pathname])
+      }, [client, store, tsQueryClient, navigate, search, row, pathname])
 
       const onClickCreateEkfForms = useCallback(async () => {
         const errors = []
