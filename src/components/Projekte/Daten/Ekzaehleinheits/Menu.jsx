@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
@@ -19,7 +19,7 @@ export const Menu = memo(
     const { search } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { apId } = useParams()
     const store = useContext(MobxContext)
 
@@ -47,18 +47,18 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeEkzaehleinheit`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
       const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tanstackQueryClient, navigate, search, apId])
+    }, [client, store, tsQueryClient, navigate, search, apId])
 
     return (
       <ErrorBoundary>
