@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -42,7 +42,7 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const { projId, apId, popId } = useParams()
     const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
@@ -71,20 +71,20 @@ export const Menu = memo(
           },
         })
       }
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
       const id = result?.data?.createPop?.pop?.id
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${id}/Population${search}`,
       )
-    }, [apId, client, store, tanstackQueryClient, navigate, search, projId])
+    }, [apId, client, store, tsQueryClient, navigate, search, projId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -124,13 +124,13 @@ export const Menu = memo(
       store.tree.setOpenNodes(newOpenNodes)
 
       // update tree query
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeApFolders`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
       // navigate to parent
@@ -138,7 +138,7 @@ export const Menu = memo(
     }, [
       client,
       store,
-      tanstackQueryClient,
+      tsQueryClient,
       navigate,
       search,
       apId,
@@ -182,7 +182,7 @@ export const Menu = memo(
           id: popId,
           client,
           store,
-          tanstackQueryClient,
+          tanstackQueryClient: tsQueryClient,
         })
       }
       setMoving({
@@ -214,9 +214,9 @@ export const Menu = memo(
         parentId: popId,
         client,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [popId, client, store, tanstackQueryClient])
+    }, [popId, client, store, tsQueryClient])
 
     const onClickCopyPop = useCallback(
       (withNextLevel) => {
@@ -226,7 +226,7 @@ export const Menu = memo(
             parentId: apId,
             client,
             store,
-            tanstackQueryClient,
+            tanstackQueryClient: tsQueryClient,
           })
         }
         setCopying({
@@ -243,7 +243,7 @@ export const Menu = memo(
         apId,
         client,
         store,
-        tanstackQueryClient,
+        tsQueryClient,
         popId,
         row,
         setCopying,

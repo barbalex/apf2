@@ -1,8 +1,8 @@
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -79,7 +79,7 @@ export const Component = memo(
   observer(() => {
     const { ekfrequenzId: id } = useParams()
 
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const client = useApolloClient()
     const store = useContext(MobxContext)
 
@@ -144,13 +144,13 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (field === 'code') {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeEkfrequenz`],
           })
         }
         return
       },
-      [client, queryClient, row.id, store.user.name],
+      [client, tsQueryClient, row.id, store.user.name],
     )
 
     if (loading) return <Spinner />
