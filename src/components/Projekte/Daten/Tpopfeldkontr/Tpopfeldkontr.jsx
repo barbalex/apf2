@@ -1,8 +1,8 @@
 import { memo, useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams, useOutletContext } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -114,7 +114,7 @@ export const Component = memo(
     const row = data?.tpopkontrById ?? {}
 
     const client = useApolloClient()
-    const queryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -173,12 +173,12 @@ export const Component = memo(
         }
         setFieldErrors({})
         if (['jahr', 'datum', 'typ'].includes(field)) {
-          queryClient.invalidateQueries({
+          tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopfeldkontr`],
           })
         }
       },
-      [client, queryClient, row.id, store.user.name],
+      [client, tsQueryClient, row.id, store.user.name],
     )
 
     if (error) return <Error error={error} />

@@ -1,6 +1,6 @@
 import { memo, useCallback, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaFolderTree } from 'react-icons/fa6'
@@ -34,7 +34,7 @@ const iconStyle = { color: 'white' }
 export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const apolloClient = useApolloClient()
-    const tanstackQueryClient = useQueryClient()
+    const tsQueryClient = useQueryClient()
 
     const { search } = useLocation()
     const navigate = useNavigate()
@@ -111,19 +111,19 @@ export const Menu = memo(
       setOpenNodes(newOpenNodes)
 
       // 4. refresh tree
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
-      tanstackQueryClient.invalidateQueries({
+      tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontrzaehl`],
       })
 
       // 5. navigate to new tpopkontr
       navigate(`./${id}${search}`)
-    }, [apolloClient, store, tanstackQueryClient, navigate, search, tpopId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, tpopId])
 
     const onClickOpenLowerNodes = useCallback(() => {
       openLowerNodes({
@@ -161,9 +161,9 @@ export const Menu = memo(
         id: tpopId,
         client: apolloClient,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [tpopId, apolloClient, store, tanstackQueryClient, moveTo])
+    }, [tpopId, apolloClient, store, tsQueryClient, moveTo])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -183,9 +183,9 @@ export const Menu = memo(
         parentId: tpopId,
         client: apolloClient,
         store,
-        tanstackQueryClient,
+        tanstackQueryClient: tsQueryClient,
       })
-    }, [copyTo, tpopId, apolloClient, store, tanstackQueryClient])
+    }, [copyTo, tpopId, apolloClient, store, tsQueryClient])
 
     const onClickStopCopying = useCallback(() => {
       setCopying({
