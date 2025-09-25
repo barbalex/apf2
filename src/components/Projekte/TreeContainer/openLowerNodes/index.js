@@ -43,10 +43,10 @@ export const openLowerNodes = ({
       pop({ id, apId, projId, apolloClient, store })
       break
     case 'tpopFolder':
-      tpopFolder({ id, apId, projId, client: apolloClient, store })
+      tpopFolder({ id, apId, projId, apolloClient, store })
       break
     case 'tpop':
-      tpop({ id, popId, apId, projId, client: apolloClient, store })
+      tpop({ id, popId, apId, projId, apolloClient, store })
       break
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({
