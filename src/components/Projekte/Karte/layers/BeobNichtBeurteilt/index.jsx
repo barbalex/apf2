@@ -1,6 +1,7 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
@@ -32,10 +33,19 @@ const BeobNichtBeurteiltMarker = memo(
     const tree = store.tree
     const { beobGqlFilter } = tree
 
-    const { data, error } = useQuery(query, {
-      variables: {
-        beobFilter: beobGqlFilter('nichtBeurteilt').filtered,
-      },
+    const apolloClient = useApolloClient()
+
+    const { data, error } = useQuery({
+      queryKey: [
+        'BeobNichtBeurteiltForMapQuery',
+        beobGqlFilter('nichtBeurteilt').filtered,
+      ],
+      queryFn: async () =>
+        apolloClient.query({
+          query: query,
+          variables: { beobFilter: beobGqlFilter('nichtBeurteilt').filtered },
+          fetchPolicy: 'no-cache',
+        }),
     })
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -61,7 +71,7 @@ const BeobNichtBeurteiltMarker = memo(
       })
     }
 
-    const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
+    const beobMarkers = (data?.data?.allBeobs?.nodes ?? []).map((beob) => (
       <Marker
         key={beob.id}
         beob={beob}

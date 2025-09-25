@@ -1,5 +1,6 @@
 import { memo, useContext } from 'react'
-import { useQuery } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
@@ -13,8 +14,16 @@ const Polylines = memo(
     const { enqueNotification } = store
     const { beobGqlFilter } = store.tree
 
-    const { data, error } = useQuery(query, {
-      variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
+    const apolloClient = useApolloClient()
+
+    const { data, error } = useQuery({
+      queryKey: ['BeobAssignLinesQuery', beobGqlFilter('zugeordnet').filtered],
+      queryFn: async () =>
+        apolloClient.query({
+          query: query,
+          variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
+          fetchPolicy: 'no-cache',
+        }),
     })
 
     if (error) {
@@ -26,7 +35,7 @@ const Polylines = memo(
       })
     }
 
-    return (data?.allBeobs?.nodes ?? []).map((beob) => (
+    return (data?.data?.allBeobs?.nodes ?? []).map((beob) => (
       <Polyline
         key={beob.id}
         beob={beob}
