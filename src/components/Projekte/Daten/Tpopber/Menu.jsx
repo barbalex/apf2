@@ -24,15 +24,17 @@ export const Menu = memo(
   observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopberId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createTpopberForTpopberForm($tpopId: UUID!) {
               createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
@@ -65,7 +67,7 @@ export const Menu = memo(
       )
     }, [
       apId,
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -81,7 +83,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deleteTpopber($id: UUID!) {
               deleteTpopberById(input: { id: $id }) {
@@ -121,7 +123,7 @@ export const Menu = memo(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte${search}`,
       )
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,

@@ -44,9 +44,10 @@ export const Component = memo(
   observer(() => {
     const { tpopberId } = useParams()
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -83,7 +84,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
               mutation updateTpopber(
                 $id: UUID!
@@ -119,7 +120,7 @@ export const Component = memo(
           })
         }
       },
-      [client, fieldErrors, tsQueryClient, row, store.user.name],
+      [apolloClient, fieldErrors, tsQueryClient, row, store.user.name],
     )
 
     console.log('render Tpopber')

@@ -80,8 +80,10 @@ const EkplanTitle = styled.h5`
 
 export const Component = () => {
   const { tpopId, apId } = useParams()
+
   const store = useContext(MobxContext)
-  const client = useApolloClient()
+
+  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const {
@@ -90,9 +92,7 @@ export const Component = () => {
     error,
     refetch: refetchTpop,
   } = useQuery(tpopQuery, {
-    variables: {
-      id: tpopId,
-    },
+    variables: { id: tpopId },
   })
 
   const row = data?.tpopById ?? {}
@@ -108,7 +108,7 @@ export const Component = () => {
         changedBy: store.user.name,
       }
       try {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: gql`
             mutation updateTpop${field}(
               $id: UUID!
@@ -156,7 +156,7 @@ export const Component = () => {
             (field === 'lv95X' && row?.y))) ||
         (!value && (field === 'ylv95Y' || field === 'lv95X'))
       ) {
-        client.refetchQueries({
+        apolloClient.refetchQueries({
           include: ['TpopForMapQuery', 'PopForMapQuery'],
         })
       }
@@ -170,7 +170,7 @@ export const Component = () => {
       }
     },
     [
-      client,
+      apolloClient,
       fieldErrors,
       tsQueryClient,
       row.id,
