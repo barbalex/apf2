@@ -1,7 +1,7 @@
 import { useCallback, useState, useContext, memo } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import styled from '@emotion/styled'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -89,8 +89,9 @@ const fragmentObject = {
 
 export const File = memo(
   observer(({ file, parent, refetch }) => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -103,7 +104,7 @@ export const File = memo(
       // 1. remove dataset
       try {
         const mutationName = `delete${upperFirst(parent)}FileById`
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: gql`
           mutation deleteDataset {
             ${mutationName}(
@@ -129,7 +130,7 @@ export const File = memo(
       }
       refetch()
       setDelMenuAnchorEl(null)
-    }, [client, file.id, parent, refetch, tableName])
+    }, [apolloClient, file.id, parent, refetch, tableName])
 
     const onClickDownload = useCallback(
       () => window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`),
@@ -151,7 +152,7 @@ export const File = memo(
           const fields = `${upperFirst(parent)}FileFields`
           const fragment = fragmentObject[parent]
           const parentId = `${parent}Id`
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
               mutation UpdateFile(
                 $id: UUID!
@@ -189,7 +190,7 @@ export const File = memo(
         setFieldErrors({})
         refetch()
       },
-      [client, file.id, parent, refetch, store.user.name, tableName],
+      [apolloClient, file.id, parent, refetch, store.user.name, tableName],
     )
 
     if (!file) return null

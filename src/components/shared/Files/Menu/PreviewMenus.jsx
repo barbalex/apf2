@@ -1,7 +1,7 @@
 import { useCallback, useState, useContext, memo, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { upperFirst } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
@@ -31,7 +31,9 @@ export const PreviewMenus = memo(
     const { fileId } = useParams()
     const navigate = useNavigate()
     const { pathname, search } = useLocation()
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
+
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
 
@@ -63,7 +65,7 @@ export const PreviewMenus = memo(
       try {
         const tableName = `${parent}File`
         const mutationName = `delete${upperFirst(parent)}FileById`
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: gql`
           mutation deleteDataset {
             ${mutationName}(
@@ -93,7 +95,7 @@ export const PreviewMenus = memo(
     }, [
       fileId,
       files,
-      client,
+      apolloClient,
       parent,
       pathname,
       fileIndex,
