@@ -187,7 +187,7 @@ export const Component = memo(
     const onSaveTpopIdToDb = useCallback(
       (event) => {
         const { value } = event.target
-        saveTpopIdToDb({ value, id, type, client: apolloClient, store, search })
+        saveTpopIdToDb({ value, id, type, apolloClient, store, search })
       },
       [apolloClient, id, search, store, type],
     )

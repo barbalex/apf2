@@ -8,7 +8,7 @@ export const saveTpopIdToDb = async ({
   value,
   id,
   type,
-  client,
+  apolloClient,
   store,
   search,
 }) => {
@@ -19,7 +19,7 @@ export const saveTpopIdToDb = async ({
   if (value) variables.nichtZuordnen = false
   // if value, set nichtZuordnen false
   if (value) variables.nichtZuordnen = false
-  await client.mutate({
+  await apolloClient.mutate({
     mutation: updateBeobById,
     variables,
   })
@@ -33,7 +33,7 @@ export const saveTpopIdToDb = async ({
 
   if (value) {
     let result = {}
-    result = await client.query({
+    result = await apolloClient.query({
       query: gql`
         query saveTpopIdToDbQuery($id: UUID!) {
           tpopById(id: $id) {
