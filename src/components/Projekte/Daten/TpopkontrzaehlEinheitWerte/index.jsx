@@ -49,18 +49,16 @@ export const TpopkontrzaehlEinheitWerte = memo(
   observer(({ table }) => {
     const { zaehleinheitId: id } = useParams()
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
-
     const store = useContext(MobxContext)
     const { refetch: refetchTree } = store
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
     const { data, loading, error, refetch } = useQuery(query, {
-      variables: {
-        id,
-      },
+      variables: { id },
     })
 
     const row = useMemo(
@@ -116,7 +114,7 @@ export const TpopkontrzaehlEinheitWerte = memo(
               }
             }
           `
-          await client.mutate({
+          await apolloClient.mutate({
             mutation,
             variables,
           })
@@ -133,7 +131,7 @@ export const TpopkontrzaehlEinheitWerte = memo(
         })
       },
       [
-        client,
+        apolloClient,
         tsQueryClient,
         refetch,
         refetchTree,

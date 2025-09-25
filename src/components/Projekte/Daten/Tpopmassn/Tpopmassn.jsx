@@ -66,15 +66,16 @@ export const Component = memo(
   observer(({ showFilter = false }) => {
     const { tpopmassnId, apId } = useParams()
 
-    const { data, loading, error } = useQuery(query, {
-      variables: { id: tpopmassnId },
-    })
-
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
+
     const store = useContext(MobxContext)
 
     const [fieldErrors, setFieldErrors] = useState({})
+
+    const { data, loading, error } = useQuery(query, {
+      variables: { id: tpopmassnId },
+    })
 
     const notMassnCountUnit =
       data?.tpopmassnById?.tpopByTpopId?.popByPopId?.apByApId
@@ -107,7 +108,7 @@ export const Component = memo(
           // ekzaehleinheit with zielrelevant = true
           let zieleinheitIdResult
           try {
-            zieleinheitIdResult = await client.query({
+            zieleinheitIdResult = await apolloClient.query({
               query: gql`
                 query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
                   allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
@@ -167,7 +168,7 @@ export const Component = memo(
           // have to set zieleinheitAnzahl to anzTriebe
           let zieleinheitIdResult
           try {
-            zieleinheitIdResult = await client.query({
+            zieleinheitIdResult = await apolloClient.query({
               query: gql`
                 query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
                   allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
@@ -212,7 +213,7 @@ export const Component = memo(
           // have to set zieleinheitAnzahl to anzPflanzen
           let zieleinheitIdResult
           try {
-            zieleinheitIdResult = await client.query({
+            zieleinheitIdResult = await apolloClient.query({
               query: gql`
                 query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
                   allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
@@ -253,7 +254,7 @@ export const Component = memo(
           }
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateTpopmassn(
               $id: UUID!
@@ -337,7 +338,7 @@ export const Component = memo(
       },
       [
         apId,
-        client,
+        apolloClient,
         notMassnCountUnit,
         tsQueryClient,
         row.anzPflanzen,

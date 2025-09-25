@@ -36,16 +36,18 @@ export const Menu = memo(
   observer(({ row }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId, tpopmassnId } = useParams()
+
     const store = useContext(MobxContext)
     const { moving, setMoving, copying, setCopying } = store
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createTpopmassnForTpopmassnForm($tpopId: UUID!) {
               createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
@@ -80,7 +82,7 @@ export const Menu = memo(
       )
     }, [
       apId,
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -96,7 +98,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deleteTpopmassn($id: UUID!) {
               deleteTpopmassnById(input: { id: $id }) {
@@ -136,7 +138,7 @@ export const Menu = memo(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen${search}`,
       )
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -155,7 +157,7 @@ export const Menu = memo(
       if (isMovingTpopmassn) {
         return moveTo({
           id: tpopId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -166,7 +168,7 @@ export const Menu = memo(
         toTable: 'tpopmassn',
         fromParentId: tpopId,
       })
-    }, [row, setMoving, tpopId, moveTo, client, store])
+    }, [row, setMoving, tpopId, moveTo, apolloClient, store])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -185,7 +187,7 @@ export const Menu = memo(
         // copy to this tpop
         return copyTo({
           parentId: tpopId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -200,7 +202,7 @@ export const Menu = memo(
       copyTo,
       tpopId,
       tpopmassnId,
-      client,
+      apolloClient,
       store,
       row,
       setCopying,
