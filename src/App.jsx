@@ -3,7 +3,7 @@ import { lazy, Suspense, createRef } from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
 import { de } from 'date-fns/locale/de'
-import { ApolloProvider } from "@apollo/client/react";
+import { ApolloProvider } from '@apollo/client/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'
@@ -24,7 +24,7 @@ import { theme } from './utils/materialTheme.js'
 
 import { initializeIdb } from './modules/initializeIdb.js'
 import { MobxStore } from './store/index.js'
-import { buildClient } from './client.js'
+import { buildApolloClient } from './apolloClient.js'
 
 import { store as jotaiStore } from './JotaiStore/index.js'
 
@@ -83,7 +83,7 @@ const queryClient = new QueryClient({
 export const App = () => {
   const idb = initializeIdb()
   const store = MobxStore.create()
-  const client = buildClient({ store })
+  const apolloClient = buildApolloClient({ store })
   const idbContext = { idb }
   const uploaderRef = createRef(null)
 
@@ -93,7 +93,7 @@ export const App = () => {
     <JotaiProvider store={jotaiStore}>
       <IdbContext value={idbContext}>
         <MobxContext value={store}>
-          <ApolloProvider client={client}>
+          <ApolloProvider client={apolloClient}>
             <QueryClientProvider client={queryClient}>
               <StyledEngineProvider injectFirst>
                 <uc-upload-ctx-provider
@@ -121,7 +121,7 @@ export const App = () => {
                         <MouseWheelHandler />
                         <LegacyBrowserInformer />
                         <StorePersister
-                          client={client}
+                          client={apolloClient}
                           store={store}
                           idb={idb}
                         />

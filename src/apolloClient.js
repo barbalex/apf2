@@ -18,7 +18,7 @@ import { existsTooLargeError } from './modules/existsTooLargeError.js'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 
-export const buildClient = ({ store }) => {
+export const buildApolloClient = ({ store }) => {
   const { enqueNotification } = store
 
   // TODO: use new functionality
