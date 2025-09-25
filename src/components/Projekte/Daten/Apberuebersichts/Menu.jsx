@@ -31,15 +31,17 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apberuebersichtId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createApberuebersichtForApberuebersichtsForm(
               $projId: UUID!
@@ -72,7 +74,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
       navigate(`./${id}${search}`)
-    }, [projId, client, store, tsQueryClient, navigate, search])
+    }, [projId, apolloClient, store, tsQueryClient, navigate, search])
 
     return (
       <ErrorBoundary>

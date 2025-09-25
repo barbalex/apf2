@@ -80,7 +80,7 @@ export const Component = memo(
     const role = token ? jwtDecode(token).role : null
     const userIsManager = role === 'apflora_manager'
 
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -89,7 +89,7 @@ export const Component = memo(
     const { data, isLoading, error } = useQuery({
       queryKey: [`Apberuebersicht`, apberuebersichtId],
       queryFn: () =>
-        client.query({
+        apolloClient.query({
           query,
           variables: { id: apberuebersichtId },
           fetchPolicy: 'no-cache',
@@ -109,7 +109,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateApberuebersicht(
               $id: UUID!
@@ -147,7 +147,7 @@ export const Component = memo(
           queryKey: [`Apberuebersicht`],
         })
       },
-      [client, tsQueryClient, row?.id, store.user.name],
+      [apolloClient, tsQueryClient, row?.id, store.user.name],
     )
 
     const isBeforeMarchOfFollowingYear = useMemo(() => {

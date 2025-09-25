@@ -34,10 +34,12 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const { setMoving, moving, copying, setCopying } = store
     const [showTreeMenus] = useAtom(showTreeMenusAtom)
@@ -45,7 +47,7 @@ export const Menu = memo(
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createApForApsForm($projId: UUID!) {
               createAp(input: { ap: { projId: $projId } }) {
@@ -74,15 +76,15 @@ export const Menu = memo(
       })
       const id = result?.data?.createAp?.ap?.id
       navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
-    }, [projId, client, store, tsQueryClient, navigate, search])
+    }, [projId, apolloClient, store, tsQueryClient, navigate, search])
 
     const onClickMoveHere = useCallback(() => {
       moveTo({
         id: apId,
         store,
-        client,
+        client: apolloClient,
       })
-    }, [apId, store, client])
+    }, [apId, store, apolloClient])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -97,10 +99,10 @@ export const Menu = memo(
     const onClickCopyTo = useCallback(() => {
       copyTo({
         parentId: apId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [apId, client, store])
+    }, [apId, apolloClient, store])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({

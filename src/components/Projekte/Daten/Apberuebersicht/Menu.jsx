@@ -27,13 +27,13 @@ export const Menu = memo(
 
     const store = useContext(MobxContext)
 
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createApberuebersichtForApberuebersichtForm(
               $projId: UUID!
@@ -66,7 +66,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
       navigate(`/Daten/Projekte/${projId}/AP-Berichte/${id}${search}`)
-    }, [projId, client, store, tsQueryClient, navigate, search])
+    }, [projId, apolloClient, store, tsQueryClient, navigate, search])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -74,7 +74,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deleteApberuebersicht($id: UUID!) {
               deleteApberuebersichtById(input: { id: $id }) {
@@ -112,7 +112,7 @@ export const Menu = memo(
       // navigate to parent
       navigate(`/Daten/Projekte/${projId}/AP-Berichte${search}`)
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
