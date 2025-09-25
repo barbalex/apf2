@@ -1,8 +1,8 @@
 import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useApolloClient, useLazyQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
@@ -42,8 +42,15 @@ const ObservedTpop = memo(
     const tpopFilter = cloneDeep(tpopGqlFilter.filtered)
     tpopFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
 
-    const [fetchTpopDataForMap, { error: errorLoadingTpopForMap, data }] =
-      useLazyQuery(query)
+    const { data, error: errorLoadingTpopForMap } = useQuery({
+      queryKey: ['TpopForMapQuery', tpopFilter],
+      queryFn: async () =>
+        apolloClient.query({
+          query: query,
+          variables: { tpopFilter },
+          fetchPolicy: 'no-cache',
+        }),
+    })
 
     const leafletMap = useMapEvents({
       async dblclick(event) {
@@ -141,17 +148,7 @@ const ObservedTpop = memo(
       })
     }
 
-    useEffect(() => {
-      if (fetchTpopDataForMap !== undefined) {
-        fetchTpopDataForMap({
-          variables: {
-            tpopFilter,
-          },
-        })
-      }
-    }, [fetchTpopDataForMap, tpopFilter])
-
-    const tpopMarkers = (data?.allTpops?.nodes ?? []).map((tpop) => (
+    const tpopMarkers = (data?.data?.allTpops?.nodes ?? []).map((tpop) => (
       <Marker
         key={tpop.id}
         tpop={tpop}
