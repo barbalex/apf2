@@ -20,9 +20,10 @@ const EwmDiv = styled.div`
 
 export const Wollmilchsau = memo(
   observer(() => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
+
+    const apolloClient = useApolloClient()
 
     const [queryState, setQueryState] = useState()
 
@@ -34,7 +35,7 @@ export const Wollmilchsau = memo(
           setQueryState('lade Daten...')
           let result
           try {
-            result = await client.query({
+            result = await apolloClient.query({
               query: gql`
                 query tpopErsteUndLetzteKontrolleUndLetzterTpopbersQuery {
                   allTpops(

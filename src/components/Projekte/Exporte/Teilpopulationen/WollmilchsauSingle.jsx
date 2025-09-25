@@ -18,10 +18,10 @@ const AutocompleteContainer = styled.div`
 
 export const WollmilchsauSingle = memo(
   observer(() => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
-
     const { enqueNotification } = store
+
+    const apolloClient = useApolloClient()
 
     const [ewmMessage, setEwmMessage] = useState('')
 
@@ -53,7 +53,7 @@ export const WollmilchsauSingle = memo(
             )
             let result
             try {
-              result = await client.query({
+              result = await apolloClient.query({
                 query: gql`
                   query apByArtIdQuery($aeId: UUID!) {
                     apByArtId(artId: $aeId) {
@@ -70,7 +70,7 @@ export const WollmilchsauSingle = memo(
               })
             }
             const apId = result.data?.apByArtId?.id
-            const { data } = await client.query({
+            const { data } = await apolloClient.query({
               query: gql`
                 query tpopErsteUndLetzteKontrolleUndLetzterTpopbersFilteredQuery(
                   $apId: UUID!

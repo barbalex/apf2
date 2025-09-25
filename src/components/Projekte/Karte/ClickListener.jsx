@@ -3,8 +3,8 @@ import * as ReactDOMServer from 'react-dom/server'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useMapEvent } from 'react-leaflet/hooks'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import L from 'leaflet'
 import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
@@ -22,7 +22,7 @@ export const ClickListener = memo(
     const { activeOverlays: activeOverlaysRaw, enqueNotification } = store
     const activeOverlays = getSnapshot(activeOverlaysRaw)
 
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
 
     const map = useMapEvent('click', async (event) => {
       const { lat, lng } = event.latlng
@@ -58,7 +58,7 @@ export const ClickListener = memo(
       if (activeOverlays.includes('Gemeinden')) {
         let gemeindenData
         try {
-          gemeindenData = await client.query({
+          gemeindenData = await apolloClient.query({
             query: gql`query karteAdministrativeUnitsQuery {
           allChAdministrativeUnits(
             filter: { 
@@ -94,7 +94,7 @@ export const ClickListener = memo(
       if (activeOverlays.includes('Betreuungsgebiete')) {
         let betreuungsgebieteData
         try {
-          betreuungsgebieteData = await client.query({
+          betreuungsgebieteData = await apolloClient.query({
             query: gql`query karteBetreuungsgebietesQuery {
               allNsBetreuungs(
                 filter: { 
@@ -132,7 +132,7 @@ export const ClickListener = memo(
       if (activeOverlays.includes('Forstreviere')) {
         let forstreviereData
         try {
-          forstreviereData = await client.query({
+          forstreviereData = await apolloClient.query({
             query: gql`query karteForstrevieresQuery {
               allForstreviers(
                 filter: { 
@@ -165,7 +165,7 @@ export const ClickListener = memo(
       if (activeOverlays.includes('Detailplaene')) {
         let detailplaeneData
         try {
-          detailplaeneData = await client.query({
+          detailplaeneData = await apolloClient.query({
             query: gql`query karteDetailplaenesFilteredQuery {
           allDetailplaenes(
             filter: { 
@@ -210,7 +210,7 @@ export const ClickListener = memo(
           const coordinates = [lng, lat]
           const options = { steps: 8, units: 'meters' }
           const circle = ellipse(coordinates, radius, radius, options)
-          markierungenData = await client.query({
+          markierungenData = await apolloClient.query({
             query: gql`
               query KarteClickListenerQuery($polygon: GeoJSON!) {
                 allMarkierungens(

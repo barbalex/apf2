@@ -39,11 +39,11 @@ export const Marker = memo(
     const navigate = useNavigate()
     const { search } = useLocation()
 
-    const tsQueryClient = useQueryClient()
-
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { assigningBeob, openTree2WithActiveNodeArray } = store
+
+    const tsQueryClient = useQueryClient()
+    const apolloClient = useApolloClient()
 
     const isHighlighted = beobId === beob.id
     const isAbsenz = beob.absenz
@@ -78,9 +78,9 @@ export const Marker = memo(
         const nearestTpop = await getNearestTpop({
           apId,
           latLng: event.target._latlng,
-          client,
+          client: apolloClient,
         })
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: updateBeobById,
           variables: {
             id: beob.id,
@@ -90,7 +90,7 @@ export const Marker = memo(
         navigate(
           `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${nearestTpop.popId}/Teil-Populationen/${nearestTpop.id}/Beobachtungen/${beob.id}${search}`,
         )
-        client.refetchQueries({
+        apolloClient.refetchQueries({
           include: [
             'BeobZugeordnetForMapQuery',
             'BeobNichtBeurteiltForMapQuery',
@@ -101,7 +101,7 @@ export const Marker = memo(
           queryKey: [`treeQuery`],
         })
       },
-      [apId, beob.id, client, navigate, projId, tsQueryClient, search],
+      [apId, beob.id, apolloClient, navigate, projId, tsQueryClient, search],
     )
 
     const [projekteTabs, setProjekteTabs] = useProjekteTabs()
