@@ -1,8 +1,8 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -10,10 +10,11 @@ import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 export const BeobArtChanged = memo(
   observer(() => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { mapFilter } = store.tree
+
+    const apolloClient = useApolloClient()
 
     const [queryState, setQueryState] = useState()
 
@@ -24,7 +25,7 @@ export const BeobArtChanged = memo(
         // view: v_beob_art_changed
         result =
           mapFilter ?
-            await client.query({
+            await apolloClient.query({
               query: gql`
                 query allBeobsArtChangedFilteredByMap {
                   allVBeobArtChangeds {
@@ -68,7 +69,7 @@ export const BeobArtChanged = memo(
                 },
               },
             })
-          : await client.query({
+          : await apolloClient.query({
               query: gql`
                 query allBeobsArtChanged {
                   allVBeobArtChangeds {
@@ -131,7 +132,7 @@ export const BeobArtChanged = memo(
         store,
       })
       setQueryState(undefined)
-    }, [client, enqueNotification, mapFilter, store])
+    }, [apolloClient, enqueNotification, mapFilter, store])
 
     return (
       <DownloadCardButton
