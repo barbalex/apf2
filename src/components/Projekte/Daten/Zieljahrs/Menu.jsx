@@ -24,15 +24,17 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createZielForZieljahrs($apId: UUID!) {
               createZiel(input: { ziel: { apId: $apId, jahr: 1 } }) {
@@ -70,18 +72,18 @@ export const Menu = memo(
       })
       const id = result?.data?.createZiel?.ziel?.id
       navigate(`./1/${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search, apId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, apId])
 
     const onClickOpenLowerNodes = useCallback(() => {
       openLowerNodes({
         id: apId,
         projId,
         apId,
-        client,
+        client: apolloClient,
         store,
         menuType: 'zielFolder',
       })
-    }, [projId, apId, client, store])
+    }, [projId, apId, apolloClient, store])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({
