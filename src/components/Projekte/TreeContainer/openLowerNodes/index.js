@@ -14,7 +14,7 @@ export const openLowerNodes = ({
   apId,
   projId,
   menuType,
-  client,
+  client: apolloClient,
   store,
   jahr,
 }) => {
@@ -37,16 +37,16 @@ export const openLowerNodes = ({
   // })
   switch (menuType) {
     case 'popFolder':
-      popFolder({ id, projId, client, store })
+      popFolder({ id, projId, apolloClient, store })
       break
     case 'pop':
-      pop({ id, apId, projId, client, store })
+      pop({ id, apId, projId, apolloClient, store })
       break
     case 'tpopFolder':
-      tpopFolder({ id, apId, projId, client, store })
+      tpopFolder({ id, apId, projId, client: apolloClient, store })
       break
     case 'tpop':
-      tpop({ id, popId, apId, projId, client, store })
+      tpop({ id, popId, apId, projId, client: apolloClient, store })
       break
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({
@@ -54,7 +54,7 @@ export const openLowerNodes = ({
         apId,
         projId,
         popId,
-        client,
+        client: apolloClient,
         store,
       })
       break
@@ -64,12 +64,12 @@ export const openLowerNodes = ({
         apId,
         projId,
         popId,
-        client,
+        client: apolloClient,
         store,
       })
       break
     case 'zielFolder':
-      zielFolder({ id, projId, client, store })
+      zielFolder({ id, projId, client: apolloClient, store })
       break
     case 'zieljahrFolder':
       zieljahrFolder({
@@ -77,7 +77,7 @@ export const openLowerNodes = ({
         projId,
         parentId,
         store,
-        client,
+        client: apolloClient,
         jahr,
       })
       break
