@@ -1,6 +1,7 @@
 import { memo, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
@@ -33,11 +34,21 @@ const BeobNichtZuzuordnenMarker = memo(
     const { enqueNotification } = store
     const tree = store.tree
     const { beobGqlFilter } = tree
+    const apolloClient = useApolloClient()
 
-    const { data, error } = useQuery(query, {
-      variables: {
-        beobFilter: beobGqlFilter('nichtZuzuordnen').filtered,
-      },
+    const { data, error } = useQuery({
+      queryKey: [
+        'KarteBeobNichtZuzuordnenQuery',
+        beobGqlFilter('nichtZuzuordnen').filtered,
+      ],
+      queryFn: () =>
+        apolloClient.query({
+          query,
+          variables: {
+            beobFilter: beobGqlFilter('nichtZuzuordnen').filtered,
+          },
+          fetchPolicy: 'no-cache',
+        }),
     })
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -63,7 +74,7 @@ const BeobNichtZuzuordnenMarker = memo(
       })
     }
 
-    const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
+    const beobMarkers = (data?.data?.allBeobs?.nodes ?? []).map((beob) => (
       <Marker
         key={beob.id}
         beob={beob}

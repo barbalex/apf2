@@ -2,6 +2,7 @@ import { memo, useCallback, useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 
 import { tpop } from '../../shared/fragments.js'
@@ -36,6 +37,7 @@ export const Checkbox = memo(
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const client = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [checked, setChecked] = useState(value === null ? false : value)
     useEffect(() => {
@@ -74,7 +76,6 @@ export const Checkbox = memo(
             [field]: !checked,
             changedBy: store.user.name,
           },
-          refetchQueries: ['EkplanTpopQuery'],
         })
       } catch (error) {
         setChecked(!checked)
@@ -85,6 +86,9 @@ export const Checkbox = memo(
           },
         })
       }
+      tsQueryClient.invalidateQueries({
+        queryKey: ['EkplanTpopQuery'],
+      })
     }, [checked, client, field, row, store.user.name, enqueNotification])
 
     return (

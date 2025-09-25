@@ -4,9 +4,10 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
@@ -53,6 +54,7 @@ const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 export const CellHeaderYear = memo(
   observer(({ column, tpopFilter }) => {
     const client = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const {
@@ -130,7 +132,11 @@ export const CellHeaderYear = memo(
       if (!yearHasAnsiedlungen) return
       setFilterAnsiedlungYear(filterAnsiedlungYear ? null : column)
       setAnchorEl(null)
-      setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+      setTimeout(() =>
+        tsQueryClient.invalidateQueries({
+          queryKey: ['EkplanTpopQuery'],
+        }),
+      )
     }, [
       client,
       column,
@@ -142,7 +148,11 @@ export const CellHeaderYear = memo(
       if (!yearHasKontrollen) return
       setFilterKontrolleYear(filterKontrolleYear ? null : column)
       setAnchorEl(null)
-      setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+      setTimeout(() =>
+        tsQueryClient.invalidateQueries({
+          queryKey: ['EkplanTpopQuery'],
+        }),
+      )
     }, [
       client,
       column,
@@ -154,7 +164,11 @@ export const CellHeaderYear = memo(
       if (!yearHasEkplan) return
       setFilterEkplanYear(filterEkplanYear ? null : column)
       setAnchorEl(null)
-      setTimeout(() => client.refetchQueries({ include: ['EkplanTpopQuery'] }))
+      setTimeout(() =>
+        tsQueryClient.invalidateQueries({
+          queryKey: ['EkplanTpopQuery'],
+        }),
+      )
     }, [client, column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
 
     const onMouseEnter = useCallback(

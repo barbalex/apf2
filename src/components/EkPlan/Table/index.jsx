@@ -1,5 +1,6 @@
 import { memo, useContext, useMemo, useCallback, useState } from 'react'
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
@@ -117,7 +118,7 @@ const ExportButton = styled(Button)`
 
 export const EkPlanTable = memo(
   observer(() => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(MobxContext)
     const {
       aps,
@@ -291,14 +292,19 @@ export const EkPlanTable = memo(
       filterEkplanYear,
     ])
 
-    const { data, loading, error, refetch, networkStatus } = useQuery(
-      queryAll,
-      { variables: { tpopFilter }, notifyOnNetworkStatusChange: true },
-    )
+    const { data, error, isLoading, refetch } = useQuery({
+      queryKey: ['EkplanTpopQuery', tpopFilter],
+      queryFn: () =>
+        apolloClient.query({
+          query: queryAll,
+          variables: { tpopFilter },
+          fetchPolicy: 'no-cache',
+        }),
+    })
 
     const tpops = useMemo(
-      () => data?.allTpops?.nodes ?? [],
-      [data?.allTpops?.nodes, tpopFilter],
+      () => data?.data?.allTpops?.nodes ?? [],
+      [data?.data?.allTpops?.nodes, tpopFilter],
     )
     const years = useMemo(
       () => getYears(store.ekPlan.pastYears),
@@ -320,7 +326,7 @@ export const EkPlanTable = memo(
     const onClickExport = useCallback(async () => {
       let result
       try {
-        result = await client.query({
+        result = await apolloClient.query({
           query: queryForExport,
           variables: { tpopFilter, apIds: apValues },
         })
@@ -341,14 +347,13 @@ export const EkPlanTable = memo(
         data,
         fileName: 'ek-planung',
         store,
-        client,
+        client: apolloClient,
       })
-    }, [tpops, store, years, apValues, tpopFilter, client])
+    }, [tpops, store, years, apValues, tpopFilter, apolloClient])
 
     // console.log('EkPlanTable, render')
 
-    const showSpinner =
-      (aps.length > 0 && networkStatus === 1) || !tpops?.length
+    const showSpinner = (aps.length > 0 && isLoading) || !tpops?.length
 
     // TODO: give button to remove all filters in case something goes wrong
 
@@ -371,7 +376,7 @@ export const EkPlanTable = memo(
             <Spinner />
           : <YScrollContainer>
               <EkplanTableHeader
-                tpopLength={loading ? '...' : tpops.length}
+                tpopLength={isLoading ? '...' : tpops.length}
                 tpopFilter={tpopFilter}
                 refetch={refetch}
                 years={years}

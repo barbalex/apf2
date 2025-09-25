@@ -2,9 +2,10 @@
 import { memo, useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { tpop } from '../../shared/fragments.js'
 import { MobxContext } from '../../../mobxContext.js'
@@ -31,6 +32,7 @@ export const SelectComponent = memo(
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const client = useApolloClient()
+    const tsQueryClient = useQueryClient()
     const [focused, setFocused] = useState(false)
 
     const onChange = useCallback(
@@ -66,7 +68,6 @@ export const SelectComponent = memo(
               [field]: value,
               changedBy: store.user.name,
             },
-            refetchQueries: ['EkplanTpopQuery'],
           })
         } catch (error) {
           enqueNotification({
@@ -76,6 +77,9 @@ export const SelectComponent = memo(
             },
           })
         }
+        tsQueryClient.invalidateQueries({
+          queryKey: ['EkplanTpopQuery'],
+        })
       },
       [client, enqueNotification, field, row.id, store.user.name],
     )
