@@ -1,7 +1,7 @@
 import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -30,8 +30,9 @@ export const TpopFromBeobPopList = memo(
     const { projId, apId } = useParams()
     const { search } = useLocation()
 
-    const client = useApolloClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
 
     const query = gql`
       query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {
@@ -68,7 +69,7 @@ export const TpopFromBeobPopList = memo(
                   beobId,
                   projId,
                   apId,
-                  client,
+                  client: apolloClient,
                   store,
                   search,
                 })

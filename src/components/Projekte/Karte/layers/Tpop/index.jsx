@@ -27,8 +27,6 @@ const iconCreateFunction = (cluster) => {
 
 const ObservedTpop = memo(
   observer(({ clustered }) => {
-    const client = useApolloClient()
-
     const store = useContext(MobxContext)
     const {
       enqueNotification,
@@ -36,6 +34,8 @@ const ObservedTpop = memo(
       idOfTpopBeingLocalized,
     } = store
     const { tpopGqlFilter } = store.tree
+
+    const apolloClient = useApolloClient()
 
     const tpopFilter = cloneDeep(tpopGqlFilter.filtered)
     tpopFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
@@ -87,7 +87,7 @@ const ObservedTpop = memo(
          * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
          */
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: updateTpopById,
             variables: {
               id: idOfTpopBeingLocalized,
@@ -96,7 +96,7 @@ const ObservedTpop = memo(
           })
           // refetch so it appears on map
           // need to also refetch pop in case it was new
-          client.refetchQueries({
+          apolloClient.refetchQueries({
             include: ['TpopForMapQuery', 'PopForMapQuery'],
           })
         } catch (error) {

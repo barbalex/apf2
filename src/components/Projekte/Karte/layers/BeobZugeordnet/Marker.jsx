@@ -4,7 +4,7 @@ import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 
@@ -43,9 +43,10 @@ export const Marker = memo(
     const navigate = useNavigate()
     const { search } = useLocation()
 
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { assigningBeob, openTree2WithActiveNodeArray } = store
+
+    const apolloClient = useApolloClient()
 
     const isHighlighted = beobId === beob.id
     const isAbsenz = beob.absenz
@@ -80,7 +81,7 @@ export const Marker = memo(
         const nearestTpop = await getNearestTpop({
           apId,
           latLng: event.target._latlng,
-          client,
+          client: apolloClient,
         })
         const newActiveNodeArray = [
           'Projekte',
@@ -95,7 +96,7 @@ export const Marker = memo(
           beob.id,
         ]
         navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: updateBeobById,
           variables: {
             id: beob.id,
@@ -103,7 +104,7 @@ export const Marker = memo(
           },
         })
 
-        client.refetchQueries({
+        apolloClient.refetchQueries({
           include: [
             'BeobZugeordnetForMapQuery',
             'BeobNichtBeurteiltForMapQuery',
@@ -112,7 +113,7 @@ export const Marker = memo(
         })
         //map.redraw()
       },
-      [apId, client, projId, beob.id, navigate, search],
+      [apId, apolloClient, projId, beob.id, navigate, search],
     )
     const popId = beob?.tpopByTpopId?.popId ?? ''
     const tpopId = beob?.tpopByTpopId?.id ?? ''

@@ -30,9 +30,6 @@ export const ApFilter = memo(
     const navigate = useNavigate()
     const { search } = useLocation()
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
-
     const store = useContext(MobxContext)
     const {
       apFilter,
@@ -43,6 +40,9 @@ export const ApFilter = memo(
     } = store.tree
     const aNA = getSnapshot(activeNodeArray)
     const openNodes = getSnapshot(openNodesRaw)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onChange = useCallback(async () => {
       const previousApFilter = apFilter
@@ -59,7 +59,7 @@ export const ApFilter = memo(
         let result
         if (apId) {
           // check if this is real ap
-          result = await client.query({
+          result = await apolloClient.query({
             query: apById,
             variables: { id: apId },
           })
@@ -89,7 +89,7 @@ export const ApFilter = memo(
       aNA,
       apFilter,
       apId,
-      client,
+      apolloClient,
       navigate,
       openNodes,
       tsQueryClient,

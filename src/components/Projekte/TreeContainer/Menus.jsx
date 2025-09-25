@@ -322,9 +322,6 @@ export const Menus = memo(
     const { projId, apId, popId } = params
     const { search } = useLocation()
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
-
     const store = useContext(MobxContext)
     const {
       activeApfloraLayers,
@@ -340,6 +337,9 @@ export const Menus = memo(
     } = store
     const { setOpenNodes, openNodes: openNodesRaw } = store.tree
     const openNodes = getSnapshot(openNodesRaw)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
       newTpopFromBeobDialogOpenAtom,
@@ -435,7 +435,7 @@ export const Menus = memo(
               menuType,
               singleElementName,
               id,
-              client,
+              client: apolloClient,
               store,
               search,
               jahr,
@@ -449,7 +449,7 @@ export const Menus = memo(
               projId,
               popId,
               menuType,
-              client,
+              client: apolloClient,
               store,
               jahr,
             })
@@ -506,7 +506,7 @@ export const Menus = memo(
             moveTo({
               id: nodeType === 'folder' ? parentId : id,
               store,
-              client,
+              client: apolloClient,
             })
           },
           markForCopying() {
@@ -530,7 +530,7 @@ export const Menus = memo(
             // })
             copyTo({
               parentId: nodeType === 'folder' ? parentId : id,
-              client,
+              client: apolloClient,
               store,
             })
           },
@@ -541,17 +541,17 @@ export const Menus = memo(
             setCopyingBiotop({ id: null, label: null })
           },
           copyBiotop() {
-            copyBiotopTo({ id, copyingBiotop, client })
+            copyBiotopTo({ id, copyingBiotop, client: apolloClient })
           },
           copyTpopKoordToPop() {
-            copyTpopKoordToPop({ id, store, client })
+            copyTpopKoordToPop({ id, store, client: apolloClient })
           },
           createNewPopFromBeob() {
             createNewPopFromBeob({
               id,
               apId,
               projId,
-              client,
+              client: apolloClient,
               store,
               search,
             })
@@ -561,23 +561,35 @@ export const Menus = memo(
             setNewTpopFromBeobDialogOpen(true)
           },
           copyBeobZugeordnetKoordToTpop() {
-            copyBeobZugeordnetKoordToTpop({ id, store, client })
+            copyBeobZugeordnetKoordToTpop({ id, store, client: apolloClient })
           },
           async showCoordOfTpopOnMapsZhCh() {
-            showCoordOfTpopOnMapsZhCh({ id, enqueNotification, client })
+            showCoordOfTpopOnMapsZhCh({
+              id,
+              enqueNotification,
+              client: apolloClient,
+            })
           },
           async showCoordOfTpopOnMapGeoAdminCh() {
             showCoordOfTpopOnMapGeoAdminCh({
               id,
               enqueNotification,
-              client,
+              client: apolloClient,
             })
           },
           async showCoordOfBeobOnMapsZhCh() {
-            showCoordOfBeobOnMapsZhCh({ id, enqueNotification, client })
+            showCoordOfBeobOnMapsZhCh({
+              id,
+              enqueNotification,
+              client: apolloClient,
+            })
           },
           async showCoordOfBeobOnMapGeoAdminCh() {
-            showCoordOfBeobOnMapGeoAdminCh({ id, enqueNotification, client })
+            showCoordOfBeobOnMapGeoAdminCh({
+              id,
+              enqueNotification,
+              client: apolloClient,
+            })
           },
         }
         if (Object.keys(actions).includes(action)) {
@@ -593,7 +605,7 @@ export const Menus = memo(
       },
       [
         enqueNotification,
-        client,
+        apolloClient,
         store,
         search,
         apId,
