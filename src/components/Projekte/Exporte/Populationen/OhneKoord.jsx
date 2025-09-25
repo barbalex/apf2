@@ -11,9 +11,10 @@ import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 export const OhneKoord = memo(
   observer(() => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
+
+    const apolloClient = useApolloClient()
 
     const [queryState, setQueryState] = useState()
 
@@ -25,7 +26,7 @@ export const OhneKoord = memo(
           setQueryState('lade Daten...')
           let result
           try {
-            result = await client.query({
+            result = await apolloClient.query({
               query: gql`
                 query popOhneKoordsQuery {
                   allPops(filter: { vPopOhnekoordsByIdExist: true }) {
