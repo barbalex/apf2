@@ -3,7 +3,8 @@ import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { query } from './query.js'
@@ -34,10 +35,12 @@ const AllOkButton = styled(Button)`
 
 export const Messages = memo(
   observer(() => {
-    const apolloClient = useApolloClient()
     const store = useContext(MobxContext)
     const { user } = store
     const userName = user.name
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const aYearAgo = useMemo(() => {
       const now = new Date()
@@ -45,16 +48,21 @@ export const Messages = memo(
       return now.toISOString()
     }, [])
 
-    const { data, error, loading, refetch } = useQuery(query, {
-      fetchPolicy: 'network-only',
-      variables: { name: userName, aYearAgo },
+    const { data, error, isLoading, refetch } = useQuery({
+      queryKey: ['UsermessagesQuery', userName, aYearAgo],
+      queryFn: async () =>
+        apolloClient.query({
+          query,
+          variables: { name: userName, aYearAgo },
+          fetchPolicy: 'network-only',
+        }),
     })
     // ensure username exists
-    const userNames = (data?.allUsers?.nodes ?? []).map((u) => u.name)
+    const userNames = (data?.data?.allUsers?.nodes ?? []).map((u) => u.name)
     const userNameExists = userNames.includes(userName)
     // DANGER: if no userName or non-existing, results are returned!
     const allMessages =
-      userName && userNameExists ? (data?.allMessages?.nodes ?? []) : []
+      userName && userNameExists ? (data?.data?.allMessages?.nodes ?? []) : []
     const unreadMessages = allMessages.filter(
       (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
     )
@@ -76,7 +84,7 @@ export const Messages = memo(
     return (
       <ErrorBoundary>
         <StyledDialog
-          open={unreadMessages.length > 0 && !!userName && !loading}
+          open={unreadMessages.length > 0 && !!userName && !isLoading}
           aria-labelledby="dialog-title"
         >
           <TitleRow>
