@@ -36,7 +36,8 @@ const EinheitLabel = styled(Label)`
 export const Einheit = memo(
   observer(({ nr, row, refetch, zaehleinheitWerte }) => {
     const store = useContext(MobxContext)
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const [error, setErrors] = useState(null)
@@ -52,7 +53,7 @@ export const Einheit = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: updateTpopkontrzaehlById,
             variables,
           })
@@ -65,7 +66,7 @@ export const Einheit = memo(
         })
       },
       [
-        client,
+        apolloClient,
         tsQueryClient,
         refetch,
         row.anzahl,

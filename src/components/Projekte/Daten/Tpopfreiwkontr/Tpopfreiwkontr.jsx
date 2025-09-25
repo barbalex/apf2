@@ -1,7 +1,7 @@
 import { memo, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useLocation, useParams } from 'react-router'
 
 import { query } from './query.js'
@@ -42,11 +42,12 @@ const ScrollContainer = styled.div`
 export const Component = memo(
   observer(({ id: idPassed }) => {
     const params = useParams()
-
     const { pathname } = useLocation()
-    const client = useApolloClient()
-    const store = useContext(MobxContext)
+
     const { enqueNotification, isPrint, user } = store
+
+    const apolloClient = useApolloClient()
+    const store = useContext(MobxContext)
 
     const id = idPassed ?? params.tpopkontrId
     const { data, loading, error, refetch } = useQuery(query, {
@@ -84,7 +85,7 @@ export const Component = memo(
 
           Promise.all(
             ekzaehleinheits.map((z) =>
-              client.mutate({
+              apolloClient.mutate({
                 mutation: createTpopkontrzaehl,
                 variables: {
                   tpopkontrId: row.id,
@@ -116,7 +117,7 @@ export const Component = memo(
         isActive = false
       }
     }, [
-      client,
+      apolloClient,
       data,
       enqueNotification,
       loading,

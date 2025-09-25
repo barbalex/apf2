@@ -145,14 +145,14 @@ const fieldTypes = {
 
 export const Form = memo(
   observer(({ data, refetch, row, apId }) => {
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
-
     const store = useContext(MobxContext)
     const { isPrint, user } = store
     const { dataFilterSetValue } = store.tree
     const { token } = user
     const role = token ? jwtDecode(token).role : null
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [errors, setErrors] = useState({})
 
@@ -229,7 +229,7 @@ export const Form = memo(
         }
         if (field2) variables[field2] = value2
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateTpopkontrForEkf(
               $id: UUID!
@@ -325,7 +325,7 @@ export const Form = memo(
         row.tpopkontrzaehlsByTpopkontrId,
         user.name,
         dataFilterSetValue,
-        client,
+        apolloClient,
         store.tree,
         tsQueryClient,
       ],

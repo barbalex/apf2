@@ -12,7 +12,8 @@ import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumb
 export const Gezaehlt = memo(
   observer(({ row, refetch }) => {
     const store = useContext(MobxContext)
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const [errors, setErrors] = useState({})
@@ -30,7 +31,7 @@ export const Gezaehlt = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: updateTpopkontrzaehlById,
             variables,
           })
@@ -43,7 +44,7 @@ export const Gezaehlt = memo(
         })
       },
       [
-        client,
+        apolloClient,
         refetch,
         row.anzahl,
         row.einheit,
