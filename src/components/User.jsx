@@ -21,9 +21,9 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { IdbContext } from '../idbContext.js'
 import { MobxContext } from '../mobxContext.js'
@@ -55,7 +55,7 @@ function tokenStateReducer(state, action) {
 
 export const User = memo(
   observer(() => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const { idb } = useContext(IdbContext)
     const store = useContext(MobxContext)
     const { user } = store
@@ -83,7 +83,7 @@ export const User = memo(
           passwordPassed || password || passwordInput.current.value
         let result
         try {
-          result = await client.mutate({
+          result = await apolloClient.mutate({
             mutation: gql`
               mutation logIn($name: String, $password: String) {
                 login(input: { username: $name, pass: $password }) {
@@ -119,7 +119,7 @@ export const User = memo(
         // Need userId to navigate freiwillige to the correct path
         let userResult
         try {
-          userResult = await client.query({
+          userResult = await apolloClient.query({
             query: gql`
               query userLoginQuery($name: String!) {
                 userByName(name: $name) {
@@ -145,7 +145,7 @@ export const User = memo(
         // as client is rebuilt with new settings
         window.location.reload(true)
       },
-      [client, idb.currentUser, name, password],
+      [apolloClient, idb.currentUser, name, password],
     )
     const onBlurName = useCallback(
       (e) => {

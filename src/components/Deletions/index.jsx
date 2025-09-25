@@ -10,7 +10,7 @@ import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { undelete } from './undelete/index.jsx'
 import { MobxContext } from '../../mobxContext.js'
@@ -52,7 +52,7 @@ const StyledCheckbox = styled(Checkbox)`
 
 export const Deletions = memo(
   observer(() => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(MobxContext)
     const {
       removeDeletedDatasetById,
@@ -73,7 +73,7 @@ export const Deletions = memo(
               dataset: deletedDatasets.find((d) => d.id === id),
               setShowDeletions,
               removeDeletedDatasetById,
-              client,
+              client: apolloClient,
               store,
             }),
         ),
@@ -84,7 +84,7 @@ export const Deletions = memo(
       }
     }, [
       choosenDeletions,
-      client,
+      apolloClient,
       deletedDatasets,
       removeDeletedDatasetById,
       setShowDeletions,

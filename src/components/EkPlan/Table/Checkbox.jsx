@@ -36,7 +36,7 @@ export const Checkbox = memo(
   observer(({ row, value, field }) => {
     const store = useContext(MobxContext)
     const { enqueNotification } = store
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const [checked, setChecked] = useState(value === null ? false : value)
@@ -47,7 +47,7 @@ export const Checkbox = memo(
     const onClick = useCallback(async () => {
       setChecked(!checked)
       try {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: gql`
             mutation updateTpopCheckbox(
               $id: UUID!
@@ -89,7 +89,7 @@ export const Checkbox = memo(
       tsQueryClient.invalidateQueries({
         queryKey: ['EkplanTpopQuery'],
       })
-    }, [checked, client, field, row, store.user.name, enqueNotification])
+    }, [checked, apolloClient, field, row, store.user.name, enqueNotification])
 
     return (
       <CheckboxContainer onClick={onClick}>

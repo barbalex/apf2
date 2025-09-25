@@ -1,7 +1,7 @@
 import { memo, useContext, useCallback, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
@@ -78,7 +78,7 @@ export const ChooseAp = memo(
 
     const store = useContext(MobxContext)
     const { aps, addAp } = store.ekPlan
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
 
     const apValues = aps.map((a) => a.value)
 
@@ -100,7 +100,7 @@ export const ChooseAp = memo(
             }
         let result
         try {
-          result = await client.query({
+          result = await apolloClient.query({
             query: queryApsToChoose,
             variables: {
               filter,
@@ -113,7 +113,7 @@ export const ChooseAp = memo(
         const options = data.current?.allAps?.nodes ?? []
         cb(options)
       },
-      [apValues, client, projId],
+      [apValues, apolloClient, projId],
     )
 
     const onChange = (option) => {

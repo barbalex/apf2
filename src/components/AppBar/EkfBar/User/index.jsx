@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { query } from './query.js'
 import { TextField } from '../../../shared/TextField.jsx'
@@ -58,7 +58,7 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
   const { data, error, loading } = useQuery(query, {
     variables: { name: username },
   })
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const row = useMemo(() => data?.userByName ?? {}, [data?.userByName])
 
   const [fieldErrors, setFieldErrors] = useState({})
@@ -83,7 +83,7 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
         changedBy: store.user.name,
       }
       try {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: updateUserByIdGql,
           variables,
           refetchQueries: ['userByNameForEkfBar'],
@@ -93,7 +93,7 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
       }
       setFieldErrors({})
     },
-    [client, row.id, store.user.name],
+    [apolloClient, row.id, store.user.name],
   )
 
   const onBlurPassword = useCallback((e) => {
@@ -122,7 +122,7 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
         // edit password
         // then tell user if it worked
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: updateUserByIdGql,
             variables: {
               id: row?.id,
@@ -145,7 +145,7 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
         setEditPassword(false)
       }
     },
-    [client, password, row.id],
+    [apolloClient, password, row.id],
   )
 
   if (loading) return null

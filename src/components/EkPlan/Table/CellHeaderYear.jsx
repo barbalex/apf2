@@ -53,7 +53,7 @@ const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderYear = memo(
   observer(({ column, tpopFilter }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
@@ -138,7 +138,7 @@ export const CellHeaderYear = memo(
         }),
       )
     }, [
-      client,
+      apolloClient,
       column,
       filterAnsiedlungYear,
       setFilterAnsiedlungYear,
@@ -154,7 +154,7 @@ export const CellHeaderYear = memo(
         }),
       )
     }, [
-      client,
+      apolloClient,
       column,
       filterKontrolleYear,
       setFilterKontrolleYear,
@@ -169,7 +169,13 @@ export const CellHeaderYear = memo(
           queryKey: ['EkplanTpopQuery'],
         }),
       )
-    }, [client, column, filterEkplanYear, setFilterEkplanYear, yearHasEkplan])
+    }, [
+      apolloClient,
+      column,
+      filterEkplanYear,
+      setFilterEkplanYear,
+      yearHasEkplan,
+    ])
 
     const onMouseEnter = useCallback(
       () => hovered.setYear(column),
