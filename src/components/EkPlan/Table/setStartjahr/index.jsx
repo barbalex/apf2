@@ -3,13 +3,13 @@ import { queryTpopkontr } from './queryTpopkontr.js'
 import { queryTpopmassn } from './queryTpopmassn.js'
 import { mutationUpdateTpop } from './mutationUpdateTpop.js'
 
-export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
+export const setStartjahr = async ({ row, ekfrequenz, apolloClient, store }) => {
   const { enqueNotification } = store
 
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
   try {
-    ekfrequenzResult = await client.query({
+    ekfrequenzResult = await apolloClient.query({
       query: queryEkfrequenz,
       variables: { id: ekfrequenz },
     })
@@ -47,7 +47,7 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   if (kontrolljahreAb === 'EK') {
     let result
     try {
-      result = await client.query({
+      result = await apolloClient.query({
         query: queryTpopkontr,
         variables: { tpopId: row.id },
       })
@@ -80,7 +80,7 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
     // else: choose last anpflanzung
     let result
     try {
-      result = await client.query({
+      result = await apolloClient.query({
         query: queryTpopmassn,
         variables: { tpopId: row.id },
       })
@@ -108,7 +108,7 @@ export const setStartjahr = async ({ row, ekfrequenz, client, store }) => {
   }
   // 3 set tpop.ekfrequenzStartjahr
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: mutationUpdateTpop,
       variables: {
         id: row.id,

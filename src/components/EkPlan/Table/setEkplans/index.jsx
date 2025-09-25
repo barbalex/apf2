@@ -7,7 +7,7 @@ export const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
-  client,
+  apolloClient,
   store,
 }) => {
   // TODO:
@@ -19,7 +19,7 @@ export const setEkplans = async ({
   // 1. query all ekplans beginning with ekfrequenzStartJahr
   let ekplansToDeleteResult
   try {
-    ekplansToDeleteResult = await client.query({
+    ekplansToDeleteResult = await apolloClient.query({
       query: queryEkplans,
       fetchPolicy: 'network-only',
       variables: {
@@ -41,7 +41,7 @@ export const setEkplans = async ({
   // 2. delete them
   for (const id of ekplansToDelete) {
     try {
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: mutationDeleteEkplan,
         variables: {
           id,
@@ -59,7 +59,7 @@ export const setEkplans = async ({
   // 3. fetch ekfrequenz.kontrolljahre for this tpop.ekfrequenz
   let ekfrequenzsResult
   try {
-    ekfrequenzsResult = await client.query({
+    ekfrequenzsResult = await apolloClient.query({
       query: queryEkfrequenz,
       variables: {
         id: ekfrequenzValue,
@@ -87,7 +87,7 @@ export const setEkplans = async ({
   }
   // parallel execution:
   const mutationPromises = kontrolljahre.map((jahr) =>
-    client.mutate({
+    apolloClient.mutate({
       mutation: mutationCreateEkplan,
       variables: {
         tpopId,
