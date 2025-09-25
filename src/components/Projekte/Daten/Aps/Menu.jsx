@@ -81,7 +81,6 @@ export const Menu = memo(
         id: apId,
         store,
         client,
-        tanstackQueryClient: tsQueryClient,
       })
     }, [apId, store, client])
 
@@ -100,9 +99,8 @@ export const Menu = memo(
         parentId: apId,
         client,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [apId, client, store, tsQueryClient])
+    }, [apId, client, store])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({

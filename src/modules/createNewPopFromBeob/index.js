@@ -12,7 +12,6 @@ export const createNewPopFromBeob = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
   client,
-  tanstackQueryClient,
   store,
   search,
 }) => {
@@ -171,29 +170,33 @@ export const createNewPopFromBeob = async ({
   addOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
-  // TODO: use tanstack to get this to actually work...
-  client.refetchQueries({
-    include: [
-      'KarteBeobNichtZuzuordnenQuery',
-      'BeobZugeordnetForMapQuery',
-      'BeobNichtBeurteiltForMapQuery',
-      'BeobAssignLinesQuery',
-    ],
+  store.queryClient.invalidateQueries({
+    queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  tanstackQueryClient.invalidateQueries({
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobZugeordnetForMapQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobNichtBeurteiltForMapQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobAssignLinesQuery`],
+  })
+  store.queryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  tanstackQueryClient.invalidateQueries({
+  store.queryClient.invalidateQueries({
     queryKey: ['treeAp'],
   })
-  tanstackQueryClient.invalidateQueries({
+  store.queryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  tanstackQueryClient.invalidateQueries({
+  store.queryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  tanstackQueryClient.invalidateQueries({
+  store.queryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
+
   return
 }

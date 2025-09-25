@@ -8,12 +8,7 @@ import { updateTpopmassnById } from './updateTpopmassnById.js'
 import { updateTpopById } from './updateTpopById.js'
 import { updatePopById } from './updatePopById.js'
 
-export const moveTo = async ({
-  id: newParentId,
-  store,
-  client,
-  tanstackQueryClient,
-}) => {
+export const moveTo = async ({ id: newParentId, store, client }) => {
   const { enqueNotification, moving, setMoving } = store
   const table = moving?.table
   const id = moving?.id
@@ -82,48 +77,48 @@ export const moveTo = async ({
 
   // update tree ap queries, tree pop folder queries, tree pop queries
   if (table === 'pop') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeAp'],
     })
   }
   if (table === 'tpop') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treePopFolders'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
   }
   if (table === 'tpopmassn') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeTpopmassn`],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }
   if (table === 'tpopfeldkontr') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }
   if (table === 'tpopfreiwkontr') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontr`],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }

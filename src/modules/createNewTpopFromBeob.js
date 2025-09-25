@@ -235,12 +235,16 @@ export const createNewTpopFromBeob = async ({
   addOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
-  client.refetchQueries({
-    include: [
-      'KarteBeobNichtZuzuordnenQuery',
-      'BeobZugeordnetForMapQuery',
-      'BeobNichtBeurteiltForMapQuery',
-      'BeobAssignLinesQuery',
-    ],
+  store.queryClient.invalidateQueries({
+    queryKey: [`KarteBeobNichtZuzuordnenQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobZugeordnetForMapQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobNichtBeurteiltForMapQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobAssignLinesQuery`],
   })
 }

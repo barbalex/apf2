@@ -23,7 +23,6 @@ export const copyTo = async ({
   id: idPassed,
   client,
   store,
-  tanstackQueryClient,
 }) => {
   const { copying, enqueNotification } = store
   const table = tablePassed ?? copying.table
@@ -247,32 +246,32 @@ export const copyTo = async ({
   }
   // update tree data
   if (table === 'pop') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeApFolders'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeAp'],
     })
   }
   if (table === 'tpop') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treePopFolders'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
   }
   if (table === 'tpopmassn') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeTpopmassn'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
@@ -283,20 +282,19 @@ export const copyTo = async ({
       tpopkontrIdTo: newId,
       client,
       store,
-      tanstackQueryClient,
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeTpopfeldkontr'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
   if (table === 'tpopfreiwkontr') {
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeTpopfreiwkontr'],
     })
-    tanstackQueryClient.invalidateQueries({
+    store.queryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
@@ -308,7 +306,6 @@ export const copyTo = async ({
       popIdTo: newId,
       client,
       store,
-      tanstackQueryClient,
     })
   }
 }

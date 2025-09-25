@@ -104,9 +104,8 @@ export const Menu = memo(
         id: apId,
         client,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [client, store, tsQueryClient, apId])
+    }, [client, store, apId])
 
     const onClickStopMovingPop = useCallback(() => {
       setMoving({
@@ -125,9 +124,8 @@ export const Menu = memo(
         parentId: apId,
         client,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [apId, client, store, tsQueryClient])
+    }, [apId, client, store])
 
     const onClickStopCopyingPop = useCallback(() => {
       setCopying({

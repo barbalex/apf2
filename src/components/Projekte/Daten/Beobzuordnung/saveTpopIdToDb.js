@@ -214,13 +214,17 @@ export const saveTpopIdToDb = async ({
   }
   store.navigate(`/Daten/${newANA.join('/')}${search}`)
   setOpenNodes(newOpenNodes)
-  client.refetchQueries({
-    include: [
-      'KarteBeobNichtZuzuordnenQuery',
-      'BeobZugeordnetForMapQuery',
-      'BeobNichtBeurteiltForMapQuery',
-      'BeobAssignLinesQuery',
-    ],
+  store.queryClient.invalidateQueries({
+    queryKey: [`KarteBeobNichtZuzuordnenQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobZugeordnetForMapQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobNichtBeurteiltForMapQuery`],
+  })
+  store.queryClient.invalidateQueries({
+    queryKey: [`BeobAssignLinesQuery`],
   })
   store.queryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],

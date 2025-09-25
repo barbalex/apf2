@@ -211,7 +211,6 @@ export const Menu = memo(
           id: tpopId,
           client,
           store,
-          tanstackQueryClient: tsQueryClient,
         })
       }
       setMoving({
@@ -230,7 +229,6 @@ export const Menu = memo(
       moveTo,
       client,
       store,
-      tsQueryClient,
     ])
 
     const onClickStopMoving = useCallback(() => {
@@ -252,9 +250,8 @@ export const Menu = memo(
         parentId: tpopId,
         client,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [copyTo, tpopId, client, store, tsQueryClient])
+    }, [copyTo, tpopId, client, store])
     const onClickCopyBiotopToHere = useCallback(() => {
       copyBiotopTo({
         id: tpopkontrId,

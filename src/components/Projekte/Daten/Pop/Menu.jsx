@@ -182,7 +182,6 @@ export const Menu = memo(
           id: popId,
           client,
           store,
-          tanstackQueryClient: tsQueryClient,
         })
       }
       setMoving({
@@ -214,9 +213,8 @@ export const Menu = memo(
         parentId: popId,
         client,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [popId, client, store, tsQueryClient])
+    }, [popId, client, store])
 
     const onClickCopyPop = useCallback(
       (withNextLevel) => {
@@ -226,7 +224,6 @@ export const Menu = memo(
             parentId: apId,
             client,
             store,
-            tanstackQueryClient: tsQueryClient,
           })
         }
         setCopying({
@@ -237,17 +234,7 @@ export const Menu = memo(
         })
         setCopyMenuAnchorEl(null)
       },
-      [
-        isCopyingPop,
-        copyTo,
-        apId,
-        client,
-        store,
-        tsQueryClient,
-        popId,
-        row,
-        setCopying,
-      ],
+      [isCopyingPop, copyTo, apId, client, store, popId, row, setCopying],
     )
     const onClickCopyWithoutNextLevel = useCallback(
       () => onClickCopyPop(false),

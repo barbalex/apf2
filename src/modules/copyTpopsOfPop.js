@@ -2,13 +2,7 @@ import { gql } from '@apollo/client'
 
 import { copyTo } from './copyTo/index.js'
 
-export const copyTpopsOfPop = async ({
-  popIdFrom,
-  popIdTo,
-  client,
-  store,
-  tanstackQueryClient,
-}) => {
+export const copyTpopsOfPop = async ({ popIdFrom, popIdTo, client, store }) => {
   // 1. fetch all tpops
   const { data } = await client.query({
     query: gql`
@@ -32,7 +26,6 @@ export const copyTpopsOfPop = async ({
       id: tpop.id,
       client,
       store,
-      tanstackQueryClient,
     }),
   )
 }

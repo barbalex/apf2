@@ -120,9 +120,8 @@ export const Menu = memo(
         id: tpopId,
         client: apolloClient,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [tpopId, apolloClient, store, tsQueryClient, moveTo])
+    }, [tpopId, apolloClient, store, moveTo])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -140,9 +139,8 @@ export const Menu = memo(
         parentId: tpopId,
         client: apolloClient,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [copyTo, tpopId, apolloClient, store, tsQueryClient])
+    }, [copyTo, tpopId, apolloClient, store])
 
     const onClickStopCopying = useCallback(() => {
       setCopying({

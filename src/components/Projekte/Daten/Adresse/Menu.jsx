@@ -20,11 +20,12 @@ const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(() => {
+    const client = useApolloClient()
+    const tsQueryClient = useQueryClient()
+    
     const { adrId } = useParams()
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
 
     const onClickAdd = useCallback(async () => {

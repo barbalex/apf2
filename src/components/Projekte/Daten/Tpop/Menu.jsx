@@ -290,7 +290,6 @@ export const Menu = memo(
           id: popId,
           client,
           store,
-          tanstackQueryClient: tsQueryClient,
         })
       }
       if (
@@ -303,7 +302,6 @@ export const Menu = memo(
           id: tpopId,
           client,
           store,
-          tanstackQueryClient: tsQueryClient,
         })
       }
       setMoving({
@@ -320,7 +318,6 @@ export const Menu = memo(
       tpopId,
       client,
       store,
-      tsQueryClient,
       isMovingTpop,
       isMovingTpopfeldkontr,
       isMovingTpopfreiwkontr,
@@ -355,7 +352,6 @@ export const Menu = memo(
           parentId: popId,
           client,
           store,
-          tanstackQueryClient: tsQueryClient,
         })
       }
       if (isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn) {
@@ -364,7 +360,6 @@ export const Menu = memo(
           parentId: tpopId,
           client,
           store,
-          tanstackQueryClient: tsQueryClient,
         })
       }
       setCopying({
@@ -380,7 +375,6 @@ export const Menu = memo(
       tpopId,
       client,
       store,
-      tsQueryClient,
       row,
       setCopying,
       isCopyingTpop,
@@ -428,9 +422,8 @@ export const Menu = memo(
         parentId: tpopId,
         client,
         store,
-        tanstackQueryClient: tsQueryClient,
       })
-    }, [tpopId, client, store, tsQueryClient])
+    }, [tpopId, client, store])
 
     const [showTreeMenus] = useAtom(showTreeMenusAtom)
 

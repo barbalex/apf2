@@ -1,7 +1,6 @@
 import { memo, useCallback, useContext, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -27,7 +26,6 @@ export const Menu = memo(
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId, beobId, tpopId } = useParams()
     const store = useContext(MobxContext)
 
@@ -77,7 +75,6 @@ export const Menu = memo(
         client,
         store,
         search,
-        tanstackQueryClient: tsQueryClient,
       })
       setTimeout(() => {
         setCreatingNewPopFromBeob(false)

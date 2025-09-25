@@ -507,7 +507,6 @@ export const Menus = memo(
               id: nodeType === 'folder' ? parentId : id,
               store,
               client,
-              tanstackQueryClient: tsQueryClient,
             })
           },
           markForCopying() {
@@ -533,7 +532,6 @@ export const Menus = memo(
               parentId: nodeType === 'folder' ? parentId : id,
               client,
               store,
-              tanstackQueryClient: tsQueryClient,
             })
           },
           markForCopyingBiotop() {
@@ -556,7 +554,6 @@ export const Menus = memo(
               client,
               store,
               search,
-              tanstakQueryClient: tsQueryClient,
             })
           },
           createNewTpopFromBeob() {
