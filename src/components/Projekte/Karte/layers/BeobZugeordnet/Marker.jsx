@@ -5,6 +5,7 @@ import { isValid } from 'date-fns/isValid'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 
@@ -47,6 +48,7 @@ export const Marker = memo(
     const { assigningBeob, openTree2WithActiveNodeArray } = store
 
     const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const isHighlighted = beobId === beob.id
     const isAbsenz = beob.absenz
@@ -103,13 +105,14 @@ export const Marker = memo(
             tpopId: nearestTpop.id,
           },
         })
-
-        apolloClient.refetchQueries({
-          include: [
-            'BeobZugeordnetForMapQuery',
-            'BeobNichtBeurteiltForMapQuery',
-            'BeobAssignLinesQuery',
-          ],
+        tsQueryClient.invalidateQueries({
+          queryKey: [`BeobZugeordnetForMapQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`BeobNichtBeurteiltForMapQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`BeobAssignLinesQuery`],
         })
         //map.redraw()
       },

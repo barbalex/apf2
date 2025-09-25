@@ -90,15 +90,17 @@ export const Marker = memo(
         navigate(
           `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${nearestTpop.popId}/Teil-Populationen/${nearestTpop.id}/Beobachtungen/${beob.id}${search}`,
         )
-        apolloClient.refetchQueries({
-          include: [
-            'BeobZugeordnetForMapQuery',
-            'BeobNichtBeurteiltForMapQuery',
-            'BeobAssignLinesQuery',
-          ],
-        })
         tsQueryClient.invalidateQueries({
           queryKey: [`treeQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`BeobZugeordnetForMapQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`BeobNichtBeurteiltForMapQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`BeobAssignLinesQuery`],
         })
       },
       [apId, beob.id, apolloClient, navigate, projId, tsQueryClient, search],
