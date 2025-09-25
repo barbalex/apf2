@@ -6,7 +6,7 @@ export const saveNichtZuordnenToDb = async ({
   value,
   id,
   refetch: refetchPassed,
-  client,
+  apolloClient,
   store,
   search,
 }) => {
@@ -16,7 +16,7 @@ export const saveNichtZuordnenToDb = async ({
   }
   // if true, empty tpopId
   if (value) variables.tpopId = null
-  await client.mutate({
+  await apolloClient.mutate({
     mutation: updateBeobById,
     variables,
   })

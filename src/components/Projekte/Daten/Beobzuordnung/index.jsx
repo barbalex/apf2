@@ -167,7 +167,7 @@ export const Component = memo(
     const onSaveArtIdToDb = useCallback(
       (event) => {
         const { value } = event.target
-        saveArtIdToDb({ value, row, client: apolloClient, store, search })
+        saveArtIdToDb({ value, row, apolloClient, store, search })
       },
       [apolloClient, row, search, store],
     )
@@ -177,7 +177,7 @@ export const Component = memo(
           value,
           id,
           refetch,
-          client: apolloClient,
+          apolloClient,
           store,
           search,
         })

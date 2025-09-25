@@ -4,7 +4,13 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { updateBeobById } from './updateBeobById.js'
 
-export const saveArtIdToDb = async ({ value, row, client, store, search }) => {
+export const saveArtIdToDb = async ({
+  value,
+  row,
+  apolloClient,
+  store,
+  search,
+}) => {
   const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
@@ -15,13 +21,13 @@ export const saveArtIdToDb = async ({ value, row, client, store, search }) => {
     id: row.id,
     artId: value,
   }
-  await client.mutate({
+  await apolloClient.mutate({
     mutation: updateBeobById,
     variables,
   })
 
   let result = {}
-  result = await client.query({
+  result = await apolloClient.query({
     query: gql`
       query saveArtIdToDbQuery($id: UUID!) {
         aeTaxonomyById(id: $id) {
