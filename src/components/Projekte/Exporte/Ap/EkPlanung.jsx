@@ -1,8 +1,8 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -10,9 +10,10 @@ import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 export const EkPlanung = memo(
   observer(() => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
+
+    const apolloClient = useApolloClient()
 
     const [queryState, setQueryState] = useState()
 
@@ -20,7 +21,7 @@ export const EkPlanung = memo(
       setQueryState('lade Daten...')
       let result
       try {
-        result = await client.query({
+        result = await apolloClient.query({
           query: gql`
             query ekPlanungNachAbrechnungstyps {
               allVEkPlanungNachAbrechnungstyps {
@@ -74,7 +75,7 @@ export const EkPlanung = memo(
         store,
       })
       setQueryState(undefined)
-    }, [enqueNotification, client, store])
+    }, [enqueNotification, apolloClient, store])
 
     return (
       <DownloadCardButton

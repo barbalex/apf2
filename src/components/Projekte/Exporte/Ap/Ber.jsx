@@ -11,9 +11,10 @@ import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 export const Ber = memo(
   observer(() => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification } = store
+
+    const apolloClient = useApolloClient()
 
     const [queryState, setQueryState] = useState()
 
@@ -21,7 +22,7 @@ export const Ber = memo(
       setQueryState('lade Daten...')
       let result
       try {
-        result = await client.query({
+        result = await apolloClient.query({
           query: gql`
             query apbersForExportQuery {
               allApbers {
@@ -117,7 +118,7 @@ export const Ber = memo(
         store,
       })
       setQueryState(undefined)
-    }, [enqueNotification, client, store])
+    }, [enqueNotification, apolloClient, store])
 
     return (
       <DownloadCardButton
