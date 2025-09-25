@@ -25,9 +25,11 @@ export const Menu = memo(
   observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
     const { projId, apId, beobId, tpopId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
 
     const isBeobZugeordnet = !!tpopId
     const isBeobNichtBeurteilt =
@@ -43,27 +45,27 @@ export const Menu = memo(
       setCopyingBeobZugeordnetKoordToTpop(true)
       await copyBeobZugeordnetKoordToTpop({
         id: beobId,
-        client,
+        client: apolloClient,
         enqueNotification: store.enqueNotification,
       })
       setCopyingBeobZugeordnetKoordToTpop(false)
-    }, [beobId, client, store])
+    }, [beobId, apolloClient, store])
 
     const onClickShowCoordOfBeobOnMapGeoAdminCh = useCallback(() => {
       showCoordOfBeobOnMapGeoAdminCh({
         id: beobId,
-        client,
+        client: apolloClient,
         enqueNotification: store.enqueNotification,
       })
-    }, [beobId, client, store])
+    }, [beobId, apolloClient, store])
 
     const onClickShowCoordOfBeobOnMapsZhCh = useCallback(() => {
       showCoordOfBeobOnMapsZhCh({
         id: beobId,
-        client,
+        client: apolloClient,
         enqueNotification: store.enqueNotification,
       })
-    }, [beobId, client, store])
+    }, [beobId, apolloClient, store])
 
     const [creatingNewPopFromBeob, setCreatingNewPopFromBeob] = useState(false)
     const onClickCreateNewPopFromBeob = useCallback(async () => {
@@ -72,14 +74,14 @@ export const Menu = memo(
         id: beobId,
         apId,
         projId,
-        client,
+        client: apolloClient,
         store,
         search,
       })
       setTimeout(() => {
         setCreatingNewPopFromBeob(false)
       }, 500)
-    }, [beobId, apId, projId, client, store, search])
+    }, [beobId, apId, projId, apolloClient, store, search])
 
     const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
       newTpopFromBeobDialogOpenAtom,

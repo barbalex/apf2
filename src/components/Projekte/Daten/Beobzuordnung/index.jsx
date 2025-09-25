@@ -141,14 +141,12 @@ export const Component = memo(
       : pathname.includes('Beobachtungen') ? 'zugeordnet'
       : 'uups'
 
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
+
     const store = useContext(MobxContext)
 
     const { data, loading, error, refetch } = useQuery(query, {
-      variables: {
-        id,
-        apId,
-      },
+      variables: { id, apId },
     })
 
     const row = useMemo(() => data?.beobById ?? {}, [data?.beobById])
@@ -169,9 +167,9 @@ export const Component = memo(
     const onSaveArtIdToDb = useCallback(
       (event) => {
         const { value } = event.target
-        saveArtIdToDb({ value, row, client, store, search })
+        saveArtIdToDb({ value, row, client: apolloClient, store, search })
       },
-      [client, row, search, store],
+      [apolloClient, row, search, store],
     )
     const onSaveNichtZuordnenToDb = useCallback(
       (value) => {
@@ -179,24 +177,24 @@ export const Component = memo(
           value,
           id,
           refetch,
-          client,
+          client: apolloClient,
           store,
           search,
         })
       },
-      [client, id, refetch, search, store],
+      [apolloClient, id, refetch, search, store],
     )
     const onSaveTpopIdToDb = useCallback(
       (event) => {
         const { value } = event.target
-        saveTpopIdToDb({ value, id, type, client, store, search })
+        saveTpopIdToDb({ value, id, type, client: apolloClient, store, search })
       },
-      [client, id, search, store, type],
+      [apolloClient, id, search, store, type],
     )
     const onUpdateField = useCallback(
       (event) => {
         const changedField = event.target.name
-        client.mutate({
+        apolloClient.mutate({
           mutation: gql`
           mutation updateBeobForBeobzuordnung(
             $id: UUID!
@@ -258,7 +256,7 @@ export const Component = memo(
           },
         })
       },
-      [client, id, store.user.name],
+      [apolloClient, id, store.user.name],
     )
 
     const tpopZuordnenSource = useMemo(() => {

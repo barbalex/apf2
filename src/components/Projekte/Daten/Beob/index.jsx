@@ -1,7 +1,7 @@
 import { memo, useCallback, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -39,12 +39,13 @@ const Explainer = styled.p`
 export const Beob = memo(
   observer(() => {
     const { beobId: id } = useParams()
-    const client = useApolloClient()
 
     const store = useContext(MobxContext)
     const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
       store
     const sortedBeobFields = sortedBeobFieldsPassed.slice()
+
+    const apolloClient = useApolloClient()
 
     const sortFn = useCallback(
       (a, b) => {
@@ -71,7 +72,7 @@ export const Beob = memo(
     const { data, isLoading, error } = useQuery({
       queryKey: ['beobByIdQueryForBeob', id],
       queryFn: async () =>
-        client.query({
+        apolloClient.query({
           query,
           variables: {
             id,
