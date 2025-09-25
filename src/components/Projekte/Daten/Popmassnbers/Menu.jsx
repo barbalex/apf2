@@ -19,15 +19,17 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { popId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createPopmassnberForPopmassnbersForm($popId: UUID!) {
               createPopmassnber(input: { popmassnber: { popId: $popId } }) {
@@ -56,7 +58,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createPopmassnber?.popmassnber?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search, popId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, popId])
 
     return (
       <ErrorBoundary>

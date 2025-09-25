@@ -24,15 +24,17 @@ export const Menu = memo(
   observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId, popId, popmassnberId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createPopmassnberForPopmassnberForm($popId: UUID!) {
               createPopmassnber(input: { popmassnber: { popId: $popId } }) {
@@ -63,7 +65,16 @@ export const Menu = memo(
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte/${id}${search}`,
       )
-    }, [apId, client, store, tsQueryClient, navigate, search, projId, popId])
+    }, [
+      apId,
+      apolloClient,
+      store,
+      tsQueryClient,
+      navigate,
+      search,
+      projId,
+      popId,
+    ])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -71,7 +82,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deletePopmassnber($id: UUID!) {
               deletePopmassnberById(input: { id: $id }) {
@@ -111,7 +122,7 @@ export const Menu = memo(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte${search}`,
       )
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,

@@ -49,9 +49,10 @@ export const Component = memo(
   observer(() => {
     const { popmassnberId: id } = useParams()
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -77,7 +78,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updatePopmassnber(
               $id: UUID!
@@ -120,7 +121,7 @@ export const Component = memo(
           })
         }
       },
-      [client, tsQueryClient, row.id, store.user.name],
+      [apolloClient, tsQueryClient, row.id, store.user.name],
     )
 
     if (loading) return <Spinner />
