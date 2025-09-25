@@ -14,7 +14,7 @@ export const openLowerNodes = ({
   apId,
   projId,
   menuType,
-  client: apolloClient,
+  apolloClient,
   store,
   jahr,
 }) => {

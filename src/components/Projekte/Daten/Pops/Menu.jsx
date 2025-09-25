@@ -85,7 +85,7 @@ export const Menu = memo(
         id: apId,
         projId,
         apId,
-        client: apolloClient,
+        apolloClient,
         store,
         menuType: 'popFolder',
       })

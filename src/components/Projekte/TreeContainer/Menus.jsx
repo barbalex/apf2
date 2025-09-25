@@ -449,7 +449,7 @@ export const Menus = memo(
               projId,
               popId,
               menuType,
-              client: apolloClient,
+              apolloClient,
               store,
               jahr,
             })

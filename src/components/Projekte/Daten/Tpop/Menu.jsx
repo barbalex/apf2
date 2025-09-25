@@ -227,7 +227,7 @@ export const Menu = memo(
         projId,
         apId,
         popId,
-        client: apolloClient,
+        apolloClient,
         store,
         menuType: 'tpop',
         parentId: popId,

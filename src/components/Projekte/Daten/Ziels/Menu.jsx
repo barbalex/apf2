@@ -81,7 +81,7 @@ export const Menu = memo(
         projId,
         apId,
         parentId: apId,
-        client: apolloClient,
+        apolloClient,
         store,
         jahr,
         menuType: 'zieljahrFolder',
