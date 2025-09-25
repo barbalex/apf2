@@ -52,8 +52,12 @@ export const copyTpopKoordToPop = async ({ id, store, apolloClient }) => {
       },
     })
   }
-  apolloClient.refetchQueries({
-    include: ['TpopForMapQuery', 'PopForMapQuery'],
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`PopForMapQuery`],
   })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`TpopForMapQuery`],
+  })
+
   return
 }

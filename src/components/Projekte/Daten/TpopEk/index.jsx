@@ -156,8 +156,11 @@ export const Component = () => {
             (field === 'lv95X' && row?.y))) ||
         (!value && (field === 'ylv95Y' || field === 'lv95X'))
       ) {
-        apolloClient.refetchQueries({
-          include: ['TpopForMapQuery', 'PopForMapQuery'],
+        tsQueryClient.invalidateQueries({
+          queryKey: [`PopForMapQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`TpopForMapQuery`],
         })
       }
       if (Object.keys(fieldErrors).length) {

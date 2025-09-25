@@ -1,7 +1,8 @@
 import { memo, useContext, useEffect, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
@@ -32,13 +33,19 @@ const ObservedPop = memo(
     const tree = store.tree
     const { popGqlFilter } = tree
 
+    const apolloClient = useApolloClient()
+
     const popFilter = cloneDeep(popGqlFilter.filtered)
     popFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
 
-    const { data, error } = useQuery(query, {
-      variables: {
-        popFilter,
-      },
+    const { data, error } = useQuery({
+      queryKey: ['PopForMapQuery', popFilter],
+      queryFn: async () =>
+        apolloClient.query({
+          query: query,
+          variables: { popFilter },
+          fetchPolicy: 'no-cache',
+        }),
     })
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -72,7 +79,7 @@ const ObservedPop = memo(
         maxClusterRadius={66}
         iconCreateFunction={iconCreateFunction}
       >
-        {(data?.allPops?.nodes ?? []).map((pop) => (
+        {(data?.data?.allPops?.nodes ?? []).map((pop) => (
           <Marker
             key={pop.id}
             pop={pop}

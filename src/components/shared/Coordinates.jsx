@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
 
 import { MobxContext } from '../../mobxContext.js'
@@ -51,6 +52,7 @@ export const Coordinates = memo(
     const store = useContext(MobxContext)
 
     const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [lv95XState, setLv95XState] = useState(lv95X || '')
     const [lv95YState, setLv95YState] = useState(lv95Y || '')
@@ -123,8 +125,11 @@ export const Coordinates = memo(
             : setWgs84LatError(error.message)
         }
         // update on map
-        apolloClient.refetchQueries({
-          include: ['TpopForMapQuery', 'PopForMapQuery'],
+        tsQueryClient.invalidateQueries({
+          queryKey: [`PopForMapQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`TpopForMapQuery`],
         })
         // refetch form ONLY if id exists
         // if user has right clicked tpop without activating it, there is now row id

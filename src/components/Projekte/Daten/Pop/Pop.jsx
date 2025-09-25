@@ -113,8 +113,8 @@ export const Component = memo(
               (field === 'lv95X' && row.lv95Y))) ||
           (!value && (field === 'lv95Y' || field === 'lv95X'))
         ) {
-          apolloClient.refetchQueries({
-            include: ['PopForMapQuery'],
+          tsQueryClient.invalidateQueries({
+            queryKey: [`PopForMapQuery`],
           })
         }
         setFieldErrors({})

@@ -2,6 +2,7 @@ import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useApolloClient, useLazyQuery } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
@@ -36,6 +37,7 @@ const ObservedTpop = memo(
     const { tpopGqlFilter } = store.tree
 
     const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const tpopFilter = cloneDeep(tpopGqlFilter.filtered)
     tpopFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
@@ -96,8 +98,11 @@ const ObservedTpop = memo(
           })
           // refetch so it appears on map
           // need to also refetch pop in case it was new
-          apolloClient.refetchQueries({
-            include: ['TpopForMapQuery', 'PopForMapQuery'],
+          tsQueryClient.invalidateQueries({
+            queryKey: [`PopForMapQuery`],
+          })
+          tsQueryClient.invalidateQueries({
+            queryKey: [`TpopForMapQuery`],
           })
         } catch (error) {
           enqueNotification({
