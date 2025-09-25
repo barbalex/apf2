@@ -54,7 +54,7 @@ export const Menu = memo(
     const onClickShowCoordOfBeobOnMapGeoAdminCh = useCallback(() => {
       showCoordOfBeobOnMapGeoAdminCh({
         id: beobId,
-        client: apolloClient,
+        apolloClient,
         enqueNotification: store.enqueNotification,
       })
     }, [beobId, apolloClient, store])
@@ -62,7 +62,7 @@ export const Menu = memo(
     const onClickShowCoordOfBeobOnMapsZhCh = useCallback(() => {
       showCoordOfBeobOnMapsZhCh({
         id: beobId,
-        client: apolloClient,
+        apolloClient,
         enqueNotification: store.enqueNotification,
       })
     }, [beobId, apolloClient, store])

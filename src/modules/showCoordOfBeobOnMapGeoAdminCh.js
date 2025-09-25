@@ -3,12 +3,12 @@ import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBe
 export const showCoordOfBeobOnMapGeoAdminCh = async ({
   id,
   enqueNotification,
-  client,
+  apolloClient,
 }) => {
   const beob = await getAndValidateCoordinatesOfBeob({
     id,
     enqueNotification,
-    client,
+    apolloClient,
   })
   const lv95X = beob?.lv95X
   const lv95Y = beob?.lv95Y

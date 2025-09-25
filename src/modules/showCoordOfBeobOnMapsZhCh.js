@@ -4,12 +4,12 @@ import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBe
 export const showCoordOfBeobOnMapsZhCh = async ({
   id,
   enqueNotification,
-  client,
+  apolloClient,
 }) => {
   const { lv95X, lv95Y } = await getAndValidateCoordinatesOfBeob({
     id,
     enqueNotification,
-    client,
+    apolloClient,
   })
   if (lv95X && lv95Y) {
     window.open(

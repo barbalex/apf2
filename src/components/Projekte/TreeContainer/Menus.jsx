@@ -581,14 +581,14 @@ export const Menus = memo(
             showCoordOfBeobOnMapsZhCh({
               id,
               enqueNotification,
-              client: apolloClient,
+              apolloClient,
             })
           },
           async showCoordOfBeobOnMapGeoAdminCh() {
             showCoordOfBeobOnMapGeoAdminCh({
               id,
               enqueNotification,
-              client: apolloClient,
+              apolloClient,
             })
           },
         }

@@ -14,11 +14,11 @@ const beobById = gql`
 export const getAndValidateCoordinatesOfBeob = async ({
   id,
   enqueNotification,
-  client,
+  apolloClient,
 }) => {
   let beobResult
   try {
-    beobResult = await client.query({
+    beobResult = await apolloClient.query({
       query: beobById,
       variables: { id },
     })
