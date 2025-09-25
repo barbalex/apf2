@@ -7,14 +7,14 @@ import Badge from '@mui/material/Badge'
 import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useParams, useLocation, Form } from 'react-router'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { standardQkYear } from '../../../../../modules/standardQkYear.js'
-import { query as query2 } from './query.js'
+import { query } from './query.js'
 import { createMessageFunctions } from './createMessageFunctions.js'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
@@ -97,12 +97,7 @@ export const Qk = memo(
     const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
     const [filter, setFilter] = useState('')
 
-    const {
-      data: data2,
-      error: error2,
-      loading: loading2,
-      refetch: refetch2,
-    } = useQuery(query2, {
+    const { data, error, loading, refetch } = useQuery(query, {
       // want to explicitly show user re-loading
       fetchPolicy: 'no-cache',
       notifyOnNetworkStatusChange: true,
@@ -124,8 +119,16 @@ export const Qk = memo(
       [],
     )
 
+    console.log('Qk', {
+      apId,
+      projId,
+      berichtjahr,
+      tpopMitAktuellenKontrollenOhneZielrelevanteEinheitNodes:
+        data?.tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?.nodes,
+    })
+
     const messageFunctions = createMessageFunctions({
-      data: data2,
+      data,
       projId,
       apId,
     })
@@ -144,7 +147,7 @@ export const Qk = memo(
       return true
     })
 
-    if (error2) return <Error error={error2} />
+    if (error) return <Error error={error} />
     return (
       <ErrorBoundary>
         <FormTitle title="Qualitätskontrollen ausführen" />
@@ -174,9 +177,9 @@ export const Qk = memo(
               onChange={onChangeFilter}
             />
           </StyledFormControl>
-          {loading2 ?
+          {loading ?
             <AnalyzingButton
-              onClick={() => refetch2()}
+              onClick={() => refetch()}
               variant="outlined"
             >
               <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
@@ -188,7 +191,7 @@ export const Qk = memo(
                 color="primary"
               >
                 <AnalyzingButton
-                  onClick={() => refetch2()}
+                  onClick={() => refetch()}
                   variant="outlined"
                 >
                   neu analysieren
@@ -241,7 +244,7 @@ export const Qk = memo(
               </StyledPaper>
             ))}
           </ScrollContainer>
-          {!loading2 && messageGroups.length === 0 && (
+          {!loading && messageGroups.length === 0 && (
             <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
           )}
         </Container>
