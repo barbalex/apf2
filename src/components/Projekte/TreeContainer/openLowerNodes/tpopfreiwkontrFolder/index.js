@@ -12,13 +12,13 @@ export const tpopfreiwkontrFolder = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   popId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
-  client,
+  apolloClient,
   store,
 }) => {
   const tree = store.tree
   const { addOpenNodes } = tree
   // 1. load all data
-  const { data } = await client.query({
+  const { data } = await apolloClient.query({
     query: query,
     variables: { id },
   })
