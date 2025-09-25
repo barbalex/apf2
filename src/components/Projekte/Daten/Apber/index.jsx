@@ -71,7 +71,8 @@ export const Component = memo(
     const { apberId } = useParams()
 
     const store = useContext(MobxContext)
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -95,7 +96,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateApber(
               $id: UUID!
@@ -128,7 +129,7 @@ export const Component = memo(
           tsQueryClient.invalidateQueries({ queryKey: [`treeApber`] })
         }
       },
-      [client, tsQueryClient, row.id, store.user.name],
+      [apolloClient, tsQueryClient, row.id, store.user.name],
     )
 
     if (loading) return <Spinner />
