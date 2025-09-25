@@ -54,8 +54,9 @@ export const Component = memo(
     const { projId, apId, popId } = useParams()
 
     const store = useContext(MobxContext)
+
     const tsQueryClient = useQueryClient()
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -76,7 +77,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updatePopForPop(
               $id: UUID!
@@ -112,7 +113,7 @@ export const Component = memo(
               (field === 'lv95X' && row.lv95Y))) ||
           (!value && (field === 'lv95Y' || field === 'lv95X'))
         ) {
-          client.refetchQueries({
+          apolloClient.refetchQueries({
             include: ['PopForMapQuery'],
           })
         }
@@ -123,7 +124,7 @@ export const Component = memo(
           })
         }
       },
-      [client, tsQueryClient, row, store.user.name],
+      [apolloClient, tsQueryClient, row, store.user.name],
     )
 
     if (error) return <Error error={error} />

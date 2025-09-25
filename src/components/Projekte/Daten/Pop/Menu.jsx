@@ -41,16 +41,18 @@ export const Menu = memo(
   observer(({ row }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId, popId } = useParams()
+
     const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createPopForPopRouterForm($apId: UUID!) {
               createPop(input: { pop: { apId: $apId } }) {
@@ -84,7 +86,7 @@ export const Menu = memo(
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${id}/Population${search}`,
       )
-    }, [apId, client, store, tsQueryClient, navigate, search, projId])
+    }, [apId, apolloClient, store, tsQueryClient, navigate, search, projId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -95,7 +97,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deletePop($id: UUID!) {
               deletePopById(input: { id: $id }) {
@@ -136,7 +138,7 @@ export const Menu = memo(
       // navigate to parent
       navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Populationen${search}`)
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -153,12 +155,12 @@ export const Menu = memo(
         projId,
         apId,
         popId,
-        client,
+        client: apolloClient,
         store,
         menuType: 'pop',
         parentId: apId,
       })
-    }, [projId, apId, popId, client, store])
+    }, [projId, apId, popId, apolloClient, store])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({
@@ -180,7 +182,7 @@ export const Menu = memo(
       if (isTpopMoving) {
         return moveTo({
           id: popId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -211,10 +213,10 @@ export const Menu = memo(
     const onClickCopyTpopToHere = useCallback(() => {
       copyTo({
         parentId: popId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [popId, client, store])
+    }, [popId, apolloClient, store])
 
     const onClickCopyPop = useCallback(
       (withNextLevel) => {
@@ -222,7 +224,7 @@ export const Menu = memo(
           // copy to this ap
           return copyTo({
             parentId: apId,
-            client,
+            client: apolloClient,
             store,
           })
         }
@@ -234,7 +236,7 @@ export const Menu = memo(
         })
         setCopyMenuAnchorEl(null)
       },
-      [isCopyingPop, copyTo, apId, client, store, popId, row, setCopying],
+      [isCopyingPop, copyTo, apId, apolloClient, store, popId, row, setCopying],
     )
     const onClickCopyWithoutNextLevel = useCallback(
       () => onClickCopyPop(false),

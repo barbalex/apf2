@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
@@ -10,7 +10,6 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 export const Component = memo(() => {
   const { popId } = useParams()
 
-  const client = useApolloClient()
   const { data } = useQuery(
     gql`
       query popByIdForPopDateienQuery($id: UUID!) {

@@ -1,8 +1,8 @@
 import { memo, useState, useCallback, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { Form, useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.jsx'
@@ -60,7 +60,8 @@ export const Component = memo(
     const { apId } = useParams()
 
     const store = useContext(MobxContext)
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -85,7 +86,7 @@ export const Component = memo(
         }
 
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateIdealbiotop(
               $id: UUID!
@@ -115,7 +116,7 @@ export const Component = memo(
         }
         setFieldErrors({})
       },
-      [client, row, store.user.name],
+      [apolloClient, row, store.user.name],
     )
 
     if (loading) return <Spinner />
