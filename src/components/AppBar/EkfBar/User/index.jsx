@@ -12,7 +12,8 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { query } from './query.js'
 import { TextField } from '../../../shared/TextField.jsx'
@@ -55,11 +56,23 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(MobxContext)
   const { idb } = useContext(IdbContext)
 
-  const { data, error, loading } = useQuery(query, {
-    variables: { name: username },
-  })
   const apolloClient = useApolloClient()
-  const row = useMemo(() => data?.userByName ?? {}, [data?.userByName])
+  const tsQueryClient = useQueryClient()
+
+  const { data, error, isLoading } = useQuery({
+    queryKey: ['userByNameForEkfBar', username],
+    queryFn: async () =>
+      apolloClient.query({
+        query,
+        variables: { name: username },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+
+  const row = useMemo(
+    () => data?.data?.userByName ?? {},
+    [data?.data?.userByName],
+  )
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -86,11 +99,13 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
         await apolloClient.mutate({
           mutation: updateUserByIdGql,
           variables,
-          refetchQueries: ['userByNameForEkfBar'],
         })
       } catch (error) {
         return setFieldErrors({ [field]: error.message })
       }
+      tsQueryClient.invalidateQueries({
+        queryKey: ['userByNameForEkfBar'],
+      })
       setFieldErrors({})
     },
     [apolloClient, row.id, store.user.name],
@@ -148,7 +163,7 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
     [apolloClient, password, row.id],
   )
 
-  if (loading) return null
+  if (isLoading) return null
   if (error) return <Error error={error} />
 
   return (
