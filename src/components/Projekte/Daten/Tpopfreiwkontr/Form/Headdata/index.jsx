@@ -1,9 +1,9 @@
 import { memo, useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
@@ -82,11 +82,14 @@ const StatusLabel = styled(Label)`
 
 export const Headdata = memo(
   observer(({ pop, tpop, row }) => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { user, isPrint } = store
-    const { data, loading, error } = useQuery(query)
+
+    const apolloClient = useApolloClient()
+
     const [errors, setErrors] = useState(null)
+
+    const { data, loading, error } = useQuery(query)
 
     const saveToDb = useCallback(
       async (event) => {
@@ -97,7 +100,7 @@ export const Headdata = memo(
           changedBy: user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
               mutation updateTpopkontrForEkfHeaddata(
                 $id: UUID!
@@ -162,7 +165,7 @@ export const Headdata = memo(
         }
         setErrors(null)
       },
-      [row.id, user.name, client],
+      [row.id, user.name, apolloClient],
     )
 
     const userCount =

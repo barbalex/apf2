@@ -172,13 +172,12 @@ export const Count = memo(
       ekzaehleinheits = [],
       ekzaehleinheitsOriginal = [],
     }) => {
-      const client = useApolloClient()
-      const tsQueryClient = useQueryClient()
-
       const store = useContext(MobxContext)
-      const { setToDelete } = useContext(MobxContext)
-
+      const { setToDelete } = store
       const { activeNodeArray } = store.tree
+
+      const apolloClient = useApolloClient()
+      const tsQueryClient = useQueryClient()
 
       const {
         data,
@@ -194,7 +193,7 @@ export const Count = memo(
       const row = data?.tpopkontrzaehlById ?? {}
 
       const createNew = useCallback(() => {
-        client
+        apolloClient
           .mutate({
             mutation: createTpopkontrzaehl,
             variables: { tpopkontrId },
@@ -208,7 +207,7 @@ export const Count = memo(
               queryKey: [`treeTpopfreiwkontrzaehlFolders`],
             })
           })
-      }, [client, refetch, tpopkontrId])
+      }, [apolloClient, refetch, tpopkontrId])
 
       const zaehleinheitWerte = useMemo(() => {
         const allEinheits = data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []

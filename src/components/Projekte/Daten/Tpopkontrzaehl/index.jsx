@@ -45,9 +45,10 @@ export const Component = memo(
   observer(() => {
     const { tpopkontrzaehlId, tpopkontrId } = useParams()
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -84,7 +85,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateAnzahlForEkZaehl(
               $id: UUID!
@@ -117,7 +118,7 @@ export const Component = memo(
           queryKey: [`treeTpopfeldkontrzaehl`],
         })
       },
-      [client, tsQueryClient, row.id, store.user.name],
+      [apolloClient, tsQueryClient, row.id, store.user.name],
     )
 
     // console.log('Tpopkontrzaehl rendering')

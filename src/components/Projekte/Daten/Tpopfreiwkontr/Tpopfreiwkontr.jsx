@@ -44,10 +44,10 @@ export const Component = memo(
     const params = useParams()
     const { pathname } = useLocation()
 
+    const store = useContext(MobxContext)
     const { enqueNotification, isPrint, user } = store
 
     const apolloClient = useApolloClient()
-    const store = useContext(MobxContext)
 
     const id = idPassed ?? params.tpopkontrId
     const { data, loading, error, refetch } = useQuery(query, {
