@@ -1,12 +1,12 @@
 import { memo, useState, useCallback, useEffect } from 'react'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { Select } from '../../../../shared/Select.jsx'
 
 export const NewUser = memo(({ apId, apUsers, refetch }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const [error, setError] = useState(null)
 
@@ -41,7 +41,7 @@ export const NewUser = memo(({ apId, apUsers, refetch }) => {
     async (event) => {
       const name = event.target.value
       try {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: gql`
             mutation createApUserForApMutation($apId: UUID!, $name: String) {
               createApUser(
@@ -60,7 +60,7 @@ export const NewUser = memo(({ apId, apUsers, refetch }) => {
       }
       refetch()
     },
-    [apId, client, refetch],
+    [apId, apolloClient, refetch],
   )
 
   useEffect(() => {

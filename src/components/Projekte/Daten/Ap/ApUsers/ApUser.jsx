@@ -4,9 +4,9 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { MobxContext } from '../../../../../mobxContext.js'
 
@@ -18,12 +18,12 @@ const DelIcon = styled(IconButton)`
 
 export const ApUser = memo(
   observer(({ user, refetch }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const { enqueNotification } = useContext(MobxContext)
 
     const onClickDelete = useCallback(async () => {
       try {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: gql`
             mutation deleteApUserForApMutation($id: UUID!) {
               deleteApUserById(input: { id: $id }) {
@@ -42,7 +42,7 @@ export const ApUser = memo(
         })
       }
       refetch()
-    }, [client, enqueNotification, refetch, user.id])
+    }, [apolloClient, enqueNotification, refetch, user.id])
 
     const role = (user?.userByUserName?.role ?? '').replace('apflora_', '')
 

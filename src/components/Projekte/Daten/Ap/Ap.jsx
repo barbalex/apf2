@@ -75,10 +75,11 @@ export const Component = memo(
   observer(() => {
     const { apId } = useParams()
 
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { user } = store
+
     const tsQueryClient = useQueryClient()
+    const apolloClient = useApolloClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -99,7 +100,7 @@ export const Component = memo(
           changedBy: user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateAp(
               $id: UUID!
@@ -138,7 +139,7 @@ export const Component = memo(
           })
         }
       },
-      [client, tsQueryClient, row.id, user.name],
+      [apolloClient, tsQueryClient, row.id, user.name],
     )
 
     const aeTaxonomiesfilterForData = useCallback(

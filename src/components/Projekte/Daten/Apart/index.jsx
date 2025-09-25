@@ -47,7 +47,8 @@ export const Component = memo(
     const { taxonId: id } = useParams()
 
     const store = useContext(MobxContext)
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
@@ -94,7 +95,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateApart(
               $id: UUID!
@@ -129,7 +130,7 @@ export const Component = memo(
           queryKey: [`treeApart`],
         })
       },
-      [client, tsQueryClient, refetch, row.id, store.user.name],
+      [apolloClient, tsQueryClient, refetch, row.id, store.user.name],
     )
 
     if (loading) return <Spinner />
