@@ -35,16 +35,18 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId } = useParams()
+
     const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createPopForPopsForm($apId: UUID!) {
               createPop(input: { pop: { apId: $apId } }) {
@@ -76,18 +78,18 @@ export const Menu = memo(
       })
       const id = result?.data?.createPop?.pop?.id
       navigate(`./${id}${search}`)
-    }, [apId, client, store, tsQueryClient, navigate, search])
+    }, [apId, apolloClient, store, tsQueryClient, navigate, search])
 
     const onClickOpenLowerNodes = useCallback(() => {
       openLowerNodes({
         id: apId,
         projId,
         apId,
-        client,
+        client: apolloClient,
         store,
         menuType: 'popFolder',
       })
-    }, [projId, apId, client, store])
+    }, [projId, apId, apolloClient, store])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({
@@ -102,10 +104,10 @@ export const Menu = memo(
     const onClickMovePopToHere = useCallback(() => {
       moveTo({
         id: apId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [client, store, apId])
+    }, [apolloClient, store, apId])
 
     const onClickStopMovingPop = useCallback(() => {
       setMoving({
@@ -122,10 +124,10 @@ export const Menu = memo(
     const onClickCopyPopToHere = useCallback(() => {
       return copyTo({
         parentId: apId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [apId, client, store])
+    }, [apId, apolloClient, store])
 
     const onClickStopCopyingPop = useCallback(() => {
       setCopying({

@@ -92,9 +92,8 @@ export const Menu = memo(
   observer(({ row }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId, popId, tpopId } = useParams()
+
     const store = useContext(MobxContext)
     const {
       setIdOfTpopBeingLocalized,
@@ -107,10 +106,13 @@ export const Menu = memo(
       copying,
     } = store
 
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
+
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createTpopForTpopForm($popId: UUID!) {
               createTpop(input: { tpop: { popId: $popId } }) {
@@ -148,7 +150,7 @@ export const Menu = memo(
       )
     }, [
       apId,
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -164,7 +166,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deleteTpop($id: UUID!) {
               deleteTpopById(input: { id: $id }) {
@@ -207,7 +209,7 @@ export const Menu = memo(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen${search}`,
       )
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -225,12 +227,12 @@ export const Menu = memo(
         projId,
         apId,
         popId,
-        client,
+        client: apolloClient,
         store,
         menuType: 'tpop',
         parentId: popId,
       })
-    }, [projId, apId, popId, tpopId, client, store])
+    }, [projId, apId, popId, tpopId, apolloClient, store])
 
     const onClickCloseLowerNodes = useCallback(() => {
       closeLowerNodes({
@@ -288,7 +290,7 @@ export const Menu = memo(
         // move to this pop
         return moveTo({
           id: popId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -300,7 +302,7 @@ export const Menu = memo(
         // move to this tpop
         return moveTo({
           id: tpopId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -316,7 +318,7 @@ export const Menu = memo(
       setMoving,
       popId,
       tpopId,
-      client,
+      apolloClient,
       store,
       isMovingTpop,
       isMovingTpopfeldkontr,
@@ -350,7 +352,7 @@ export const Menu = memo(
         // copy to this pop
         return copyTo({
           parentId: popId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -358,7 +360,7 @@ export const Menu = memo(
         // copy to this tpop
         return copyTo({
           parentId: tpopId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -373,7 +375,7 @@ export const Menu = memo(
       copyTo,
       popId,
       tpopId,
-      client,
+      apolloClient,
       store,
       row,
       setCopying,
@@ -396,34 +398,34 @@ export const Menu = memo(
     const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
     const onCopyCoordToPop = useCallback(async () => {
       setCopyingCoordToTpop(true)
-      await copyTpopKoordToPop({ id: tpopId, store, client })
+      await copyTpopKoordToPop({ id: tpopId, store, client: apolloClient })
       setCopyingCoordToTpop(false)
-    }, [tpopId, store, client])
+    }, [tpopId, store, apolloClient])
 
     const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
       showCoordOfTpopOnMapGeoAdminCh({
         id: tpopId,
-        client,
+        client: apolloClient,
         enqueNotification: store.enqueNotification,
       })
-    }, [tpopId, client, store])
+    }, [tpopId, apolloClient, store])
 
     const onClickShowCoordOfTpopOnMapsZhCh = useCallback(() => {
       showCoordOfTpopOnMapsZhCh({
         id: tpopId,
-        client,
+        client: apolloClient,
         enqueNotification: store.enqueNotification,
       })
-    }, [tpopId, client, store])
+    }, [tpopId, apolloClient, store])
 
     // to paste copied feldkontr/frwkontr/massn
     const onClickCopyLowerElementToHere = useCallback(() => {
       copyTo({
         parentId: tpopId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [tpopId, client, store])
+    }, [tpopId, apolloClient, store])
 
     const [showTreeMenus] = useAtom(showTreeMenusAtom)
 

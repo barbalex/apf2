@@ -29,7 +29,7 @@ const Beschreibung = styled.div`
 `
 
 export const Row = memo(({ apId, qk }) => {
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const { data, error } = useQuery(query, {
@@ -44,7 +44,7 @@ export const Row = memo(({ apId, qk }) => {
     // 2. else create apqk
     const variables = { apId, qkName: qk.name }
     if (checked) {
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: gql`
           mutation deleteApqk($apId: UUID!, $qkName: String!) {
             deleteApqkByApIdAndQkName(input: { apId: $apId, qkName: $qkName }) {
@@ -55,7 +55,7 @@ export const Row = memo(({ apId, qk }) => {
         variables,
       })
     } else {
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: gql`
           mutation createApqk($apId: UUID!, $qkName: String!) {
             createApqk(input: { apqk: { apId: $apId, qkName: $qkName } }) {
@@ -74,11 +74,11 @@ export const Row = memo(({ apId, qk }) => {
       queryKey: ['treeAp'],
     })
     setTimeout(() =>
-      client.refetchQueries({
+      apolloClient.refetchQueries({
         include: ['apqkQueryForRow'],
       }),
     )
-  }, [apId, checked, client, qk.name])
+  }, [apId, checked, apolloClient, qk.name])
 
   if (error) return <Error error={error} />
   return (

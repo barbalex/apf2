@@ -81,9 +81,11 @@ export const fieldTypes = {
 export const Component = memo(
   observer(() => {
     const { tpopId } = useParams()
+
     const store = useContext(MobxContext)
     const { enqueNotification } = store
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const {
@@ -91,11 +93,7 @@ export const Component = memo(
       loading,
       error,
       refetch: refetchTpop,
-    } = useQuery(query, {
-      variables: {
-        id: tpopId,
-      },
-    })
+    } = useQuery(query, { variables: { id: tpopId } })
 
     const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
@@ -139,7 +137,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateTpop${field}(
               $id: UUID!
@@ -187,7 +185,7 @@ export const Component = memo(
               (field === 'lv95X' && row?.y))) ||
           (!value && (field === 'ylv95Y' || field === 'lv95X'))
         ) {
-          client.refetchQueries({
+          apolloClient.refetchQueries({
             include: ['TpopForMapQuery', 'PopForMapQuery'],
           })
         }
@@ -201,7 +199,7 @@ export const Component = memo(
         }
       },
       [
-        client,
+        apolloClient,
         fieldErrors,
         tsQueryClient,
         row.id,
@@ -313,7 +311,7 @@ export const Component = memo(
                 if (!geojsonParsed) return
                 let result
                 try {
-                  result = await client.query({
+                  result = await apolloClient.query({
                     // this is a hack
                     // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
                     query: gql`
