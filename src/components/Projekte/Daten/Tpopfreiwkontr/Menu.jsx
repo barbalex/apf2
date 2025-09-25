@@ -171,7 +171,7 @@ export const Menu = memo(
       if (isMovingTpopfreiwkontr) {
         return moveTo({
           id: tpopId,
-          client: apolloClient,
+          apolloClient,
           store,
         })
       }

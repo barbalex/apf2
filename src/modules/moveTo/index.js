@@ -8,7 +8,7 @@ import { updateTpopmassnById } from './updateTpopmassnById.js'
 import { updateTpopById } from './updateTpopById.js'
 import { updatePopById } from './updatePopById.js'
 
-export const moveTo = async ({ id: newParentId, store, client }) => {
+export const moveTo = async ({ id: newParentId, store, apolloClient }) => {
   const { enqueNotification, moving, setMoving } = store
   const table = moving?.table
   const id = moving?.id
@@ -39,25 +39,25 @@ export const moveTo = async ({ id: newParentId, store, client }) => {
   // move
   switch (dbTable) {
     case 'tpopkontr':
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: updateTpopkontrById,
         variables: { id, tpopId: newParentId },
       })
       break
     case 'tpopmassn':
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: updateTpopmassnById,
         variables: { id, tpopId: newParentId },
       })
       break
     case 'tpop':
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: updateTpopById,
         variables: { id, popId: newParentId },
       })
       break
     case 'pop':
-      await client.mutate({
+      await apolloClient.mutate({
         mutation: updatePopById,
         variables: { id, apId: newParentId },
       })

@@ -78,7 +78,7 @@ export const Menu = memo(
     const onClickMoveMassnToHere = useCallback(() => {
       return moveTo({
         id: tpopId,
-        client: apolloClient,
+        apolloClient,
         store,
       })
     }, [tpopId, apolloClient, store, moveTo])

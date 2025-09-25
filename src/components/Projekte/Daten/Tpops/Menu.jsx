@@ -112,7 +112,7 @@ export const Menu = memo(
     const onClickMoveTpopToHere = useCallback(() => {
       moveTo({
         id: popId,
-        client: apolloClient,
+        apolloClient,
         store,
       })
     }, [popId, apolloClient, store])

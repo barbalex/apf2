@@ -133,7 +133,7 @@ export const Menu = memo(
       moveTo({
         id: apId,
         store,
-        client: apolloClient,
+        apolloClient,
       })
     }, [apId, store, apolloClient])
 

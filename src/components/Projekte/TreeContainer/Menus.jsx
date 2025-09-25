@@ -506,7 +506,7 @@ export const Menus = memo(
             moveTo({
               id: nodeType === 'folder' ? parentId : id,
               store,
-              client: apolloClient,
+              apolloClient,
             })
           },
           markForCopying() {

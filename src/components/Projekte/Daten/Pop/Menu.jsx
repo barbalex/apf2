@@ -182,7 +182,7 @@ export const Menu = memo(
       if (isTpopMoving) {
         return moveTo({
           id: popId,
-          client: apolloClient,
+          apolloClient,
           store,
         })
       }

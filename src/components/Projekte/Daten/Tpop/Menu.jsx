@@ -290,7 +290,7 @@ export const Menu = memo(
         // move to this pop
         return moveTo({
           id: popId,
-          client: apolloClient,
+          apolloClient,
           store,
         })
       }
@@ -302,7 +302,7 @@ export const Menu = memo(
         // move to this tpop
         return moveTo({
           id: tpopId,
-          client: apolloClient,
+          apolloClient,
           store,
         })
       }
