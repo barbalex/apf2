@@ -1,11 +1,15 @@
 import { queryBeob } from './queryBeob.js'
 import { updateTpopById } from './updateTpopById.js'
 
-export const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
+export const copyBeobZugeordnetKoordToTpop = async ({
+  id,
+  store,
+  apolloClient,
+}) => {
   // fetch beob coodinates
   let beobResult
   try {
-    beobResult = await client.query({
+    beobResult = await apolloClient.query({
       query: queryBeob,
       variables: { id },
     })
@@ -33,7 +37,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id, store, client }) => {
 
   // set tpop coordinates
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: updateTpopById,
       variables: {
         id: tpopId,

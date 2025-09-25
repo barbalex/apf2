@@ -561,7 +561,7 @@ export const Menus = memo(
             setNewTpopFromBeobDialogOpen(true)
           },
           copyBeobZugeordnetKoordToTpop() {
-            copyBeobZugeordnetKoordToTpop({ id, store, client: apolloClient })
+            copyBeobZugeordnetKoordToTpop({ id, store, apolloClient })
           },
           async showCoordOfTpopOnMapsZhCh() {
             showCoordOfTpopOnMapsZhCh({

@@ -45,7 +45,7 @@ export const Menu = memo(
       setCopyingBeobZugeordnetKoordToTpop(true)
       await copyBeobZugeordnetKoordToTpop({
         id: beobId,
-        client: apolloClient,
+        apolloClient,
         enqueNotification: store.enqueNotification,
       })
       setCopyingBeobZugeordnetKoordToTpop(false)
