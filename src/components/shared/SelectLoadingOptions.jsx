@@ -88,7 +88,7 @@ export const SelectLoadingOptions = memo(
       filter,
       queryNodesName,
     }) => {
-      const client = useApolloClient()
+      const apolloClient = useApolloClient()
 
       const loadOptions = useCallback(
         async (inputValue, cb) => {
@@ -98,7 +98,7 @@ export const SelectLoadingOptions = memo(
             : { artname: { isNull: false } }
           let result
           try {
-            result = await client.query({
+            result = await apolloClient.query({
               query,
               variables: {
                 filter: filter ? filter(inputValue) : ownFilter,
@@ -111,7 +111,7 @@ export const SelectLoadingOptions = memo(
           const options = data?.[queryNodesName]?.nodes ?? []
           cb(options)
         },
-        [client, filter, query, queryNodesName],
+        [apolloClient, filter, query, queryNodesName],
       )
 
       const onChange = useCallback(

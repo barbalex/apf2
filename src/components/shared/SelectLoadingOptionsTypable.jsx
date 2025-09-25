@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect, memo } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 const Container = styled.div`
   display: flex;
@@ -77,7 +77,8 @@ export const SelectLoadingOptionsTypable = memo(
       query,
       queryNodesName,
     }) => {
-      const client = useApolloClient()
+      const apolloClient = useApolloClient()
+
       const [inputValue, setInputValue] = useState(row?.wirtspflanze || '')
 
       useEffect(() => {
@@ -90,7 +91,7 @@ export const SelectLoadingOptionsTypable = memo(
             inputValue ?
               { artname: { includesInsensitive: inputValue } }
             : { artname: { isNull: false } }
-          const { data } = await client.query({
+          const { data } = await apolloClient.query({
             query,
             variables: {
               filter,
@@ -99,7 +100,7 @@ export const SelectLoadingOptionsTypable = memo(
           const options = data?.[queryNodesName]?.nodes ?? []
           cb(options)
         },
-        [client, query, queryNodesName],
+        [apolloClient, query, queryNodesName],
       )
 
       const onChange = useCallback(

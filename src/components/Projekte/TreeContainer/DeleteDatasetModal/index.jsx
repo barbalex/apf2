@@ -4,7 +4,7 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import { useLocation } from 'react-router'
 
 import { tables } from '../../../../modules/tables.js'
@@ -22,9 +22,10 @@ export const DatasetDeleteModal = memo(
   observer(() => {
     const { search } = useLocation()
 
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = store
+
+    const apolloClient = useApolloClient()
 
     const table = tables.find((t) => t.table === toDeleteTable)
     let tableName = null
@@ -41,11 +42,11 @@ export const DatasetDeleteModal = memo(
     const onClickLoeschen = useCallback(
       () =>
         deleteModule({
-          client,
+          client: apolloClient,
           store,
           search,
         }),
-      [client, search, store],
+      [apolloClient, search, store],
     )
 
     return (

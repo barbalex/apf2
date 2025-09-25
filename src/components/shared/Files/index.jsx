@@ -1,7 +1,7 @@
 import { useCallback, useRef, useContext, memo, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import { upperFirst } from 'es-toolkit'
@@ -54,7 +54,9 @@ export const FilesRouter = memo(
     const { fileId } = useParams()
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
+
     const uploaderCtx = useContext(UploaderContext)
     const api = uploaderCtx?.current?.getAPI?.()
     const infoUuidsProcessed = useRef([])
@@ -82,7 +84,7 @@ export const FilesRouter = memo(
     const { data, error, isLoading, refetch } = useQuery({
       queryKey: ['FileQuery', parentId],
       queryFn: () =>
-        client.query({
+        apolloClient.query({
           query,
           variables: { parentId },
           fetchPolicy: 'no-cache',
@@ -102,7 +104,7 @@ export const FilesRouter = memo(
         // somehow this needs to be delayed or sometimes not all files will be uploaded
         setTimeout(() => refetch(), 500)
       },
-      [client, fields, fragment, parent, parentId, refetch],
+      [apolloClient, fields, fragment, parent, parentId, refetch],
     )
 
     // ISSUE: sometimes this is called multiple times with the same info.uuid
@@ -113,7 +115,7 @@ export const FilesRouter = memo(
           infoUuidsProcessed.current.push(info.uuid)
           let responce
           try {
-            responce = await client.mutate({
+            responce = await apolloClient.mutate({
               mutation: gql`
               mutation insertFile {
                 create${upperFirst(parent)}File(
@@ -154,7 +156,7 @@ export const FilesRouter = memo(
           }
         }
       },
-      [client, fields, fragment, parent, parentId, refetch, search],
+      [apolloClient, fields, fragment, parent, parentId, refetch, search],
     )
 
     const onFileUploadFailed = useCallback((error) => {

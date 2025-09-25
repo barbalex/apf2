@@ -5,8 +5,8 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { upperFirst } from 'es-toolkit'
 
 import { MobxContext } from '../../mobxContext.js'
@@ -48,8 +48,9 @@ export const Coordinates = memo(
     const wgs84Lat = row?.geomPoint?.x
     const wgs84Long = row?.geomPoint?.y
 
-    const client = useApolloClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
 
     const [lv95XState, setLv95XState] = useState(lv95X || '')
     const [lv95YState, setLv95YState] = useState(lv95Y || '')
@@ -84,7 +85,7 @@ export const Coordinates = memo(
           const mutationTitle = `update${upperFirst(table)}ByIdForCoordinates`
           const mutationName = `update${upperFirst(table)}ById`
           const patchName = `${table}Patch`
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation ${mutationTitle}(
               $id: UUID!
@@ -122,7 +123,7 @@ export const Coordinates = memo(
             : setWgs84LatError(error.message)
         }
         // update on map
-        client.refetchQueries({
+        apolloClient.refetchQueries({
           include: ['TpopForMapQuery', 'PopForMapQuery'],
         })
         // refetch form ONLY if id exists
@@ -134,7 +135,7 @@ export const Coordinates = memo(
         setWgs84LongError('')
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      [client, id, refetchForm, row, row.id, store.user.name, table],
+      [apolloClient, id, refetchForm, row, row.id, store.user.name, table],
     )
     const saveToDbLv95 = useCallback(
       (x, y) => {
