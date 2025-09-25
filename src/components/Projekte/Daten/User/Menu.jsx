@@ -44,9 +44,11 @@ export const Menu = memo(
     }) => {
       const { search, pathname } = useLocation()
       const navigate = useNavigate()
-      const client = useApolloClient()
-      const tsQueryClient = useQueryClient()
+
       const store = useContext(MobxContext)
+
+      const apolloClient = useApolloClient()
+      const tsQueryClient = useQueryClient()
 
       const thisYear = new Date().getFullYear()
       const { data, refetch } = useQuery(queryEkfTpops, {
@@ -70,7 +72,7 @@ export const Menu = memo(
       const onClickAdd = useCallback(async () => {
         let result
         try {
-          result = await client.mutate({
+          result = await apolloClient.mutate({
             mutation: gql`
               mutation createUserForUserForm {
                 createUser(input: { user: {} }) {
@@ -97,7 +99,7 @@ export const Menu = memo(
         })
         const id = result?.data?.createUser?.user?.id
         navigate(`/Daten/Benutzer/${id}${search}`)
-      }, [client, store, tsQueryClient, navigate, search])
+      }, [apolloClient, store, tsQueryClient, navigate, search])
 
       const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
       const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -105,7 +107,7 @@ export const Menu = memo(
       const onClickDelete = useCallback(async () => {
         let result
         try {
-          result = await client.mutate({
+          result = await apolloClient.mutate({
             mutation: gql`
               mutation deleteUser($id: UUID!) {
                 deleteUserById(input: { id: $id }) {
@@ -142,13 +144,13 @@ export const Menu = memo(
         })
         // navigate to parent
         navigate(`/Daten/Benutzer${search}`)
-      }, [client, store, tsQueryClient, navigate, search, row, pathname])
+      }, [apolloClient, store, tsQueryClient, navigate, search, row, pathname])
 
       const onClickCreateEkfForms = useCallback(async () => {
         const errors = []
         for (const tpopId of ekfTpopsWithoutEkfThisYear) {
           try {
-            await client.mutate({
+            await apolloClient.mutate({
               mutation: gql`
                 mutation createTpopkontrFromUser(
                   $typ: String
@@ -203,7 +205,7 @@ export const Menu = memo(
           refetch()
         }
       }, [
-        client,
+        apolloClient,
         ekfTpopsWithoutEkfThisYear,
         refetch,
         row.adresseId,

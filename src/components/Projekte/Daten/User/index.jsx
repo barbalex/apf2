@@ -85,7 +85,7 @@ const fieldTypes = {
 export const Component = () => {
   const { userId } = useParams()
 
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState({})
@@ -99,9 +99,7 @@ export const Component = () => {
   const [passwordMessage, setPasswordMessage] = useState('')
 
   const { data, loading, error } = useQuery(query, {
-    variables: {
-      id: userId,
-    },
+    variables: { id: userId },
   })
 
   const row = data?.userById ?? {}
@@ -115,7 +113,7 @@ export const Component = () => {
       const field = event.target.name
       const value = ifIsNumericAsNumber(event.target.value)
       try {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: gql`
             mutation updateUserForUser(
               $id: UUID!
@@ -151,7 +149,7 @@ export const Component = () => {
         })
       }
     },
-    [client, tsQueryClient, row.id],
+    [apolloClient, tsQueryClient, row.id],
   )
   const onBlurPassword = useCallback((event) => {
     setPasswordErrorText('')

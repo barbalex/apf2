@@ -30,16 +30,18 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { tpopId } = useParams()
+
     const store = useContext(MobxContext)
     const { setMoving, moving, setCopying, copying } = store
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createTpopmassnForTpopmassnsForm($tpopId: UUID!) {
               createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
@@ -70,16 +72,16 @@ export const Menu = memo(
       })
       const id = result?.data?.createTpopmassn?.tpopmassn?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search, tpopId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, tpopId])
 
     const isMovingMassn = moving.table === 'tpopmassn'
     const onClickMoveMassnToHere = useCallback(() => {
       return moveTo({
         id: tpopId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [tpopId, client, store, moveTo])
+    }, [tpopId, apolloClient, store, moveTo])
 
     const onClickStopMoving = useCallback(() => {
       setMoving({
@@ -95,10 +97,10 @@ export const Menu = memo(
     const onClickCopyMassnToHere = useCallback(() => {
       return copyTo({
         parentId: tpopId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [copyTo, tpopId, client, store])
+    }, [copyTo, tpopId, apolloClient, store])
 
     const onClickStopCopying = useCallback(() => {
       setCopying({
