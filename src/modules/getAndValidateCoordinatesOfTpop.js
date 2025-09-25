@@ -13,11 +13,11 @@ const tpopById = gql`
 export const getAndValidateCoordinatesOfTpop = async ({
   id,
   enqueNotification,
-  client,
+  apolloClient,
 }) => {
   let tpopResult
   try {
-    tpopResult = await client.query({
+    tpopResult = await apolloClient.query({
       query: tpopById,
       variables: { id },
     })

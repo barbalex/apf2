@@ -74,7 +74,7 @@ export const Menu = memo(
         id: beobId,
         apId,
         projId,
-        client: apolloClient,
+        apolloClient,
         store,
         search,
       })

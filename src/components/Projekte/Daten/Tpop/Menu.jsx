@@ -405,7 +405,7 @@ export const Menu = memo(
     const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
       showCoordOfTpopOnMapGeoAdminCh({
         id: tpopId,
-        client: apolloClient,
+        apolloClient,
         enqueNotification: store.enqueNotification,
       })
     }, [tpopId, apolloClient, store])
@@ -413,7 +413,7 @@ export const Menu = memo(
     const onClickShowCoordOfTpopOnMapsZhCh = useCallback(() => {
       showCoordOfTpopOnMapsZhCh({
         id: tpopId,
-        client: apolloClient,
+        apolloClient,
         enqueNotification: store.enqueNotification,
       })
     }, [tpopId, apolloClient, store])

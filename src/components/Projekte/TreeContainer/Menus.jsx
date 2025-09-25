@@ -551,7 +551,7 @@ export const Menus = memo(
               id,
               apId,
               projId,
-              client: apolloClient,
+              apolloClient,
               store,
               search,
             })
@@ -567,14 +567,14 @@ export const Menus = memo(
             showCoordOfTpopOnMapsZhCh({
               id,
               enqueNotification,
-              client: apolloClient,
+              apolloClient,
             })
           },
           async showCoordOfTpopOnMapGeoAdminCh() {
             showCoordOfTpopOnMapGeoAdminCh({
               id,
               enqueNotification,
-              client: apolloClient,
+              apolloClient,
             })
           },
           async showCoordOfBeobOnMapsZhCh() {

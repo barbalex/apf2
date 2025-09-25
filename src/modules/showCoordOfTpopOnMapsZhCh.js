@@ -3,12 +3,12 @@ import { getAndValidateCoordinatesOfTpop } from './getAndValidateCoordinatesOfTp
 export const showCoordOfTpopOnMapsZhCh = async ({
   id,
   enqueNotification,
-  client,
+  apolloClient,
 }) => {
   const { lv95X, lv95Y } = await getAndValidateCoordinatesOfTpop({
     id,
     enqueNotification,
-    client,
+    apolloClient,
   })
   if (lv95X && lv95Y) {
     window.open(

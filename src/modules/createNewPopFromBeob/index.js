@@ -11,7 +11,7 @@ export const createNewPopFromBeob = async ({
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
-  client,
+  apolloClient,
   store,
   search,
 }) => {
@@ -21,7 +21,7 @@ export const createNewPopFromBeob = async ({
 
   let beobResult
   try {
-    beobResult = await client.query({
+    beobResult = await apolloClient.query({
       query: queryBeob,
       variables: { id },
     })
@@ -44,7 +44,7 @@ export const createNewPopFromBeob = async ({
   // create new pop for ap
   let popResult
   try {
-    popResult = await client.mutate({
+    popResult = await apolloClient.mutate({
       mutation: createPop,
       variables: {
         apId,
@@ -65,7 +65,7 @@ export const createNewPopFromBeob = async ({
   // create new tpop for pop
   let tpopResult
   try {
-    tpopResult = await client.mutate({
+    tpopResult = await apolloClient.mutate({
       mutation: createTpop,
       variables: {
         popId: pop.id,
@@ -86,7 +86,7 @@ export const createNewPopFromBeob = async ({
   const tpop = tpopResult?.data?.createTpop?.tpop
 
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: updateBeobById,
       variables: {
         id,
