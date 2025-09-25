@@ -435,7 +435,7 @@ export const Menus = memo(
               menuType,
               singleElementName,
               id,
-              client: apolloClient,
+              apolloClient,
               store,
               search,
               jahr,

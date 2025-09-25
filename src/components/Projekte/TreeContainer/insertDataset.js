@@ -24,7 +24,7 @@ export const insertDataset = async ({
   menuType,
   singleElementUrlName: singleElementName,
   url,
-  client,
+  apolloClient,
   store,
   search,
   jahr: jahrPassed,
@@ -175,9 +175,9 @@ export const insertDataset = async ({
   let result
   try {
     if (Object.keys(variables).length) {
-      result = await client.mutate({ mutation, variables })
+      result = await apolloClient.mutate({ mutation, variables })
     } else {
-      result = await client.mutate({ mutation })
+      result = await apolloClient.mutate({ mutation })
     }
   } catch (error) {
     return enqueNotification({
@@ -202,7 +202,7 @@ export const insertDataset = async ({
   }
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
     // 1. add new zaehlung
-    const result = await client.mutate({
+    const result = await apolloClient.mutate({
       mutation: gql`
         mutation createWerte($parentId: UUID!) {
           createTpopkontrzaehl(
