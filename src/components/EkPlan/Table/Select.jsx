@@ -31,15 +31,16 @@ export const SelectComponent = memo(
   observer(({ options, row, val, field }) => {
     const store = useContext(MobxContext)
     const { enqueNotification } = store
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const [focused, setFocused] = useState(false)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onChange = useCallback(
       async (e) => {
         const value = e.target.value || null
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateTpopSelect(
               $id: UUID!
@@ -81,7 +82,7 @@ export const SelectComponent = memo(
           queryKey: ['EkplanTpopQuery'],
         })
       },
-      [client, enqueNotification, field, row.id, store.user.name],
+      [apolloClient, enqueNotification, field, row.id, store.user.name],
     )
     const onFocus = useCallback(() => {
       setFocused(true)

@@ -2,7 +2,7 @@ import { memo, useCallback, useContext } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
 
@@ -32,20 +32,20 @@ const OkButton = styled(Button)`
 
 export const Messages = memo(
   observer(({ unreadMessages }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(MobxContext)
     const { user } = store
     const userName = user.name
 
     const onClickRead = useCallback(
       async (message) => {
-        await client.mutate({
+        await apolloClient.mutate({
           mutation: createUsermessage,
           variables: { userName, id: message.id },
           refetchQueries: ['UsermessagesQuery'],
         })
       },
-      [client, userName],
+      [apolloClient, userName],
     )
 
     return (

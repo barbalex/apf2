@@ -133,13 +133,13 @@ const TotalDiffColumn = styled.div`
 export const AktPopList = ({ year }) => {
   const { projId = '99999999-9999-9999-9999-999999999999' } = useParams()
 
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const previousYear = year - 1
   const { data, isLoading, error } = useQuery({
     queryKey: ['jberAktPopQuery', projId, previousYear, year],
     queryFn: () =>
-      client.query({
+      apolloClient.query({
         query: gql`
           query AktPopListAps($jahr: Int!) {
             jberAktPop(jahr: $jahr) {

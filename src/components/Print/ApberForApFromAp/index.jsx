@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
@@ -11,12 +11,12 @@ import { Spinner } from '../../shared/Spinner.jsx'
 export const Component = () => {
   const { apberId, apId } = useParams()
 
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
     queryFn: async () => {
-      const { data: apberData, error: apberError } = await client.query({
+      const { data: apberData, error: apberError } = await apolloClient.query({
         query: gql`
           query apberById($apberId: UUID!) {
             apberById(id: $apberId) {
@@ -35,7 +35,7 @@ export const Component = () => {
       if (apberError) throw apberError
       if (!jahr) throw new Error('im AP-Bericht fehlt das Jahr')
 
-      const { data, error } = await client.query({
+      const { data, error } = await apolloClient.query({
         query: apByIdJahr,
         variables: { apId, jahr },
         fetchPolicy: 'no-cache',

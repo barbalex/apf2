@@ -3,7 +3,7 @@ import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import { query } from './query.js'
@@ -34,7 +34,7 @@ const AllOkButton = styled(Button)`
 
 export const Messages = memo(
   observer(() => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const store = useContext(MobxContext)
     const { user } = store
     const userName = user.name
@@ -62,14 +62,14 @@ export const Messages = memo(
     const onClickReadAll = useCallback(async () => {
       await Promise.all(
         unreadMessages.map(async (message) => {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: createUsermessage,
             variables: { userName, id: message.id },
           })
         }),
       )
       return refetch()
-    }, [client, refetch, unreadMessages, userName])
+    }, [apolloClient, refetch, unreadMessages, userName])
 
     if (error) return <Error error={error} />
 
