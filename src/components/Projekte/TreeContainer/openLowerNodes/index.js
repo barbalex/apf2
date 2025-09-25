@@ -69,7 +69,7 @@ export const openLowerNodes = ({
       })
       break
     case 'zielFolder':
-      zielFolder({ id, projId, client: apolloClient, store })
+      zielFolder({ id, projId, apolloClient, store })
       break
     case 'zieljahrFolder':
       zieljahrFolder({
@@ -77,7 +77,7 @@ export const openLowerNodes = ({
         projId,
         parentId,
         store,
-        client: apolloClient,
+        apolloClient,
         jahr,
       })
       break

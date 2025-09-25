@@ -9,7 +9,7 @@ import { query } from './query.js'
 export const zieljahrFolder = async ({
   parentId: apId,
   projId = '99999999-9999-9999-9999-999999999999',
-  client,
+  apolloClient,
   store,
   jahr: jahrString,
 }) => {
@@ -18,7 +18,7 @@ export const zieljahrFolder = async ({
   const { addOpenNodes } = tree
 
   // 1. load all data
-  const { data } = await client.query({
+  const { data } = await apolloClient.query({
     query: query,
     variables: { id: apId, jahr },
   })
