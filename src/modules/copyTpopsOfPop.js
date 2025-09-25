@@ -2,9 +2,14 @@ import { gql } from '@apollo/client'
 
 import { copyTo } from './copyTo/index.js'
 
-export const copyTpopsOfPop = async ({ popIdFrom, popIdTo, client, store }) => {
+export const copyTpopsOfPop = async ({
+  popIdFrom,
+  popIdTo,
+  apolloClient,
+  store,
+}) => {
   // 1. fetch all tpops
-  const { data } = await client.query({
+  const { data } = await apolloClient.query({
     query: gql`
       query tpopsForCopyTpopsOfPopQuery($popId: UUID!) {
         allTpops(filter: { popId: { equalTo: $popId } }) {
@@ -24,7 +29,7 @@ export const copyTpopsOfPop = async ({ popIdFrom, popIdTo, client, store }) => {
       parentId: popIdTo,
       table: 'tpop',
       id: tpop.id,
-      apolloClient: client,
+      apolloClient,
       store,
     }),
   )

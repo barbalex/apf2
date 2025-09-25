@@ -5,11 +5,11 @@ import { copyTo } from './copyTo/index.js'
 export const copyZaehlOfTpopKontr = async ({
   tpopkontrIdFrom,
   tpopkontrIdTo,
-  client,
+  apolloClient,
   store,
 }) => {
   // 1. fetch all tpopkontrzaehl
-  const { data } = await client.query({
+  const { data } = await apolloClient.query({
     query: gql`
       query tpopkontrzaehlsForCopyZaehlOfTpopkontrQuery($tpopkontrId: UUID!) {
         allTpopkontrzaehls(filter: { tpopkontrId: { equalTo: $tpopkontrId } }) {
@@ -31,7 +31,7 @@ export const copyZaehlOfTpopKontr = async ({
       parentId: tpopkontrIdTo,
       table: 'tpopkontrzaehl',
       id: zaehl.id,
-      apolloClient: client,
+      apolloClient,
       store,
     }),
   )

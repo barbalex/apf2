@@ -280,7 +280,7 @@ export const copyTo = async ({
     copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
-      client: apolloClient,
+      apolloClient,
       store,
     })
     store.queryClient.invalidateQueries({
@@ -304,7 +304,7 @@ export const copyTo = async ({
     copyTpopsOfPop({
       popIdFrom: id,
       popIdTo: newId,
-      client: apolloClient,
+      apolloClient,
       store,
     })
   }
