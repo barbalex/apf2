@@ -79,6 +79,7 @@ export const ApOhnePop = memo(
         data: rows,
         fileName: 'ApOhnePopulationen',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [apolloClient, enqueNotification, store])

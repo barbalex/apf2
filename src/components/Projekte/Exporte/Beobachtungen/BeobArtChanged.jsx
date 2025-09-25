@@ -130,6 +130,7 @@ export const BeobArtChanged = memo(
         data: rows,
         fileName: 'BeobachtungenArtVeraendert',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [apolloClient, enqueNotification, mapFilter, store])

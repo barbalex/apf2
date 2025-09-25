@@ -99,6 +99,7 @@ export const TPopFuerWebgisBun = memo(
             data: rows,
             fileName: 'TeilpopulationenWebGisBun',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

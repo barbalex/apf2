@@ -180,6 +180,7 @@ export const LetzteZaehlungInklAnpflanz = memo(
             fileName: 'PopLetzteZaehlungenInklMassn',
             idKey: 'pop_id',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

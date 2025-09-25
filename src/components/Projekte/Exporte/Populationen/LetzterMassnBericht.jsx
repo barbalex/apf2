@@ -146,6 +146,7 @@ export const LetzterMassnBericht = memo(
             data: sortBy(rows, ['artname', 'pop_nr']),
             fileName: 'allVPopMitLetzterPopmassnbers',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

@@ -67,6 +67,7 @@ export const TPopOhneBekanntSeit = memo(
             data: rows,
             fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

@@ -122,6 +122,7 @@ export const PriorisierungFuerEk = memo(
         data: rows,
         fileName: 'ApPriorisierungFuerEk',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

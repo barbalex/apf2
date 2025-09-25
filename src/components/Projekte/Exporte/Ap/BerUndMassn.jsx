@@ -102,6 +102,7 @@ export const BerUndMassn = memo(
         data: rows,
         fileName: 'ApJahresberichteUndMassnahmen',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

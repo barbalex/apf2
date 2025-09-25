@@ -82,6 +82,7 @@ export const AnzMassn = memo(
         data: rows,
         fileName: 'ApAnzahlMassnahmen',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

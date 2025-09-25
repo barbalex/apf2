@@ -80,6 +80,7 @@ export const PopsForGEArtname = memo(
             fileName: 'PopulationenNachNamen',
             store,
             kml: true,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

@@ -82,6 +82,7 @@ export const AnzKontr = memo(
         data: rows,
         fileName: 'ApAnzahlKontrollen',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

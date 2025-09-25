@@ -138,6 +138,7 @@ export const AnzMassnBerichtsjahr = memo(
             data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
             fileName: 'PopulationenAnzMassnProMassnber',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

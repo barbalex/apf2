@@ -666,6 +666,7 @@ export const WollmilchsauSingle = memo(
               data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
               fileName: 'anzkontrinklletzterundletztertpopber',
               store,
+              apolloClient,
             })
           }}
           query={gql`

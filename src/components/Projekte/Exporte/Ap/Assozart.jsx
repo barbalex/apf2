@@ -99,6 +99,7 @@ export const Assozart = memo(
         data: rows,
         fileName: 'AssoziierteArten',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

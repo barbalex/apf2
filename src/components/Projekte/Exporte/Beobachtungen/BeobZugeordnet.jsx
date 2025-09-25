@@ -73,6 +73,7 @@ export const BeobZugeordnet = memo(
             data: result?.data?.allVBeobZugeordnets?.nodes ?? [],
             fileName: 'BeobachtungenZugeordnet',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

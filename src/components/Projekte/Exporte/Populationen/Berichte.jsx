@@ -134,6 +134,7 @@ export const Berichte = memo(
             data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
             fileName: 'PopulationenPopUndMassnBerichte',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

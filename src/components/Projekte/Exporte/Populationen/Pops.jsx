@@ -118,6 +118,7 @@ export const Pops = memo(
             data: rows,
             fileName: `Populationen${filtered ? '_gefiltert' : ''}`,
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

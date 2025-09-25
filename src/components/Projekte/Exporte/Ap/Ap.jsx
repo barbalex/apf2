@@ -87,6 +87,7 @@ export const Ap = memo(
         data: rows,
         fileName: `Arten${filtered ? '_gefiltert' : ''}`,
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [apGqlFilter, apolloClient, enqueNotification, filtered, store])

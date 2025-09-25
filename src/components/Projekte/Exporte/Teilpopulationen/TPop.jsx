@@ -202,6 +202,7 @@ export const TPop = memo(
         data: enrichedData,
         fileName: 'Teilpopulationen',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
       //console.timeEnd('exporting')

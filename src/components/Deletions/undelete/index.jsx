@@ -6,7 +6,7 @@ export const undelete = async ({
   dataset,
   setShowDeletions,
   removeDeletedDatasetById,
-  client,
+  apolloClient,
   store,
 }) => {
   const { table, data, afterDeletionHook } = dataset
@@ -29,7 +29,7 @@ export const undelete = async ({
   }
   console.log('undelete', { isWerte, table, mutation })
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: isWerte ? mutation(table) : mutation,
       variables: data,
     })

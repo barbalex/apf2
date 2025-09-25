@@ -73,6 +73,7 @@ export const BeobNichtZuzuordnen = memo(
             data: result?.data?.allVBeobNichtZuzuordnens?.nodes ?? [],
             fileName: 'Beobachtungen',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

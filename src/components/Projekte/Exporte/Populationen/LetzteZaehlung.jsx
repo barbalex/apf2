@@ -151,6 +151,7 @@ export const LetzteZaehlung = memo(
             fileName: 'PopLetzteZaehlungen',
             idKey: 'pop_id',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

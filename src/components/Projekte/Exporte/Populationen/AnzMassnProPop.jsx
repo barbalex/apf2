@@ -98,6 +98,7 @@ export const AnzMassnProPop = memo(
             data: sortBy(rows, ['artname', 'nr']),
             fileName: 'PopulationenAnzahlMassnahmen',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

@@ -103,6 +103,7 @@ export const Ziele = memo(
         data: sortBy(rows, ['artname']),
         fileName: 'ApZiele',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

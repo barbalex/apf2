@@ -98,6 +98,7 @@ export const AnzKontrProPop = memo(
             data: sortBy(rows, ['artname', 'nr']),
             fileName: 'PopulationenAnzahlKontrollen',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

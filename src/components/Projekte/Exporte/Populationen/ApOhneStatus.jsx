@@ -84,6 +84,7 @@ export const ApOhneStatus = memo(
             data: sortBy(rows, ['artname', 'nr']),
             fileName: 'PopulationenVonApArtenOhneStatus',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

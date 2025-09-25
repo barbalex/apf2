@@ -257,6 +257,7 @@ export const Massnahmen = memo(
             data: rows,
             fileName: 'Massnahmen',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

@@ -116,6 +116,7 @@ export const Ber = memo(
         data: sortBy(rows, ['artname', 'jahr']),
         fileName: 'Jahresberichte',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

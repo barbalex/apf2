@@ -80,6 +80,7 @@ export const PopsForGoogleEarth = memo(
             fileName: 'Populationen',
             store,
             kml: true,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

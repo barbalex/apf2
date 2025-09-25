@@ -107,6 +107,7 @@ export const KontrFuerWebgisBun = memo(
             data: rows,
             fileName: 'KontrollenWebGisBun',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

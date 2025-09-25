@@ -102,6 +102,7 @@ export const OhneKoord = memo(
             data: sortBy(rows, ['artname', 'nr']),
             fileName: 'PopulationenOhneKoordinaten',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

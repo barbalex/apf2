@@ -99,6 +99,7 @@ export const LetzteZaehlungenInklAnpflanzungen = memo(
             fileName: 'TPopLetzteZaehlungenInklMassn',
             idKey: 'pop_id',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

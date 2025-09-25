@@ -78,6 +78,7 @@ export const TPopFuerGEArtname = memo(
             fileName: 'TeilpopulationenNachNamen',
             store,
             kml: true,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

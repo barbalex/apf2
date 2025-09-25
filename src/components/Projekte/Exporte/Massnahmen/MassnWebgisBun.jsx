@@ -93,6 +93,7 @@ export const MassnWebgisBun = memo(
             data: rows,
             fileName: 'MassnahmenWebGisBun',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

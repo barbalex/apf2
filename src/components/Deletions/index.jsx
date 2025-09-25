@@ -73,7 +73,7 @@ export const Deletions = memo(
               dataset: deletedDatasets.find((d) => d.id === id),
               setShowDeletions,
               removeDeletedDatasetById,
-              client: apolloClient,
+              apolloClient,
               store,
             }),
         ),

@@ -151,6 +151,7 @@ export const LetzterPopBericht = memo(
             data: sortBy(rows, ['artname', 'pop_nr']),
             fileName: 'PopulationenMitLetzemPopBericht',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

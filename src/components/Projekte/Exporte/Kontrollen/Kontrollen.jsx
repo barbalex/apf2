@@ -311,6 +311,7 @@ export const Kontrollen = memo(
             data: rows,
             fileName: 'Kontrollen',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

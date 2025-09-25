@@ -141,6 +141,7 @@ export const InfoFlora = memo(
         data: rows,
         fileName: 'KontrollenApFloraZhFuerInfoFlora',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

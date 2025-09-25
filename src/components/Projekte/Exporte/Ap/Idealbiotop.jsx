@@ -127,6 +127,7 @@ export const Idealbiotop = memo(
         data: sortBy(rows, ['artname']),
         fileName: 'Idealbiotope',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

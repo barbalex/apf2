@@ -73,6 +73,7 @@ export const EkPlanung = memo(
         data: rows,
         fileName: 'EkPlanungProJahrNachAbrechnungstyp',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

@@ -6,9 +6,9 @@ export const exportModule = async ({
   data: dataPassed,
   fileName,
   kml,
-  store,
+  apolloClient,
 }) => {
-  const { exportFileType } = store
+  const { exportFileType } = apolloClient
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   // TODO: filter by dataFilterState
@@ -16,7 +16,7 @@ export const exportModule = async ({
   // 2. depending on typename check if this table is filtered
   // 3. if yes: filter by dataFilterState by converting camelCase to lower_case
   if (data.length === 0) {
-    return store.enqueNotification({
+    return apolloClient.enqueNotification({
       message: 'Es gibt offenbar keine Daten, welche exportiert werden können',
       options: {
         variant: 'warning',
@@ -41,7 +41,7 @@ export const exportModule = async ({
     await exportXlsx({
       fileName,
       data,
-      store,
+      store: apolloClient,
     })
   }
 }

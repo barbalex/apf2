@@ -98,6 +98,7 @@ export const Erfkrit = memo(
         data: sortBy(rows, ['artname', 'beurteilung']),
         fileName: 'Erfolgskriterien',
         store,
+        apolloClient,
       })
       setQueryState(undefined)
     }, [enqueNotification, apolloClient, store])

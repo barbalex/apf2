@@ -78,6 +78,7 @@ export const TPopFuerGoogleEarth = memo(
             fileName: 'Teilpopulationen',
             store,
             kml: true,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

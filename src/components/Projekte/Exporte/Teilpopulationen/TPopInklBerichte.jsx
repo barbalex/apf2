@@ -109,6 +109,7 @@ export const TPopInklBerichte = memo(
             data: rows,
             fileName: 'TeilpopulationenTPopUndMassnBerichte',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

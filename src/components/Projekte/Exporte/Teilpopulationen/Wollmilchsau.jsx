@@ -636,6 +636,7 @@ export const Wollmilchsau = memo(
             fileName:
               'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
             store,
+            apolloClient,
           })
           setQueryState(undefined)
         }}

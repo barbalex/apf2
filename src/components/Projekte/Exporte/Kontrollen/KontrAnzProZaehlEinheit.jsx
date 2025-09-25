@@ -137,6 +137,7 @@ export const KontrAnzProZaehlEinheit = memo(
             data: rows,
             fileName: 'KontrollenAnzahlProZaehleinheit',
             store,
+            apolloClient,
           })
         }}
       >

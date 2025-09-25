@@ -347,7 +347,7 @@ export const EkPlanTable = memo(
         data,
         fileName: 'ek-planung',
         store,
-        client: apolloClient,
+        apolloClient,
       })
     }, [tpops, store, years, apValues, tpopFilter, apolloClient])
 
