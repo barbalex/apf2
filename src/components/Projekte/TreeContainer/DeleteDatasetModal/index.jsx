@@ -42,7 +42,7 @@ export const DatasetDeleteModal = memo(
     const onClickLoeschen = useCallback(
       () =>
         deleteModule({
-          client: apolloClient,
+          apolloClient,
           store,
           search,
         }),

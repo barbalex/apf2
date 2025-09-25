@@ -10,7 +10,7 @@ import { tables } from '../../../../../modules/tables.js'
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
-export const deleteModule = async ({ client, store, search }) => {
+export const deleteModule = async ({ apolloClient, store, search }) => {
   const {
     emptyToDelete,
     addDeletedDataset,
@@ -67,7 +67,7 @@ export const deleteModule = async ({ client, store, search }) => {
   }
   let result
   try {
-    result = await client.query({
+    result = await apolloClient.query({
       query,
       variables: { id: toDeleteId },
     })
@@ -95,7 +95,7 @@ export const deleteModule = async ({ client, store, search }) => {
   })
 
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: gql`
         mutation deleteSomething($id: UUID!) {
           delete${upperFirst(camelCase(table))}ById(input: { id: $id }) {
