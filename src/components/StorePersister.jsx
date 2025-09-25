@@ -16,7 +16,7 @@ const blacklist = [
   'sortedBeobFields', // 2023.10.26 added because needs to update when changed in code
 ]
 
-export const StorePersister = ({ client, store, idb }) => {
+export const StorePersister = ({ apolloClient, store, idb }) => {
   const visitedTopDomain = window.location.pathname === '/'
   useEffect(() => {
     persist('store', store, {
@@ -56,12 +56,12 @@ export const StorePersister = ({ client, store, idb }) => {
       const username = await setUserFromIdb({ idb, store })
       const isUser = !!username
 
-      if (window.Cypress) {
-        // enable directly using these in tests
-        window.__client__ = client
-        window.__store__ = store
-        window.__idb__ = idb
-      }
+      // if (window.Cypress) {
+      //   // enable directly using these in tests
+      //   window.__client__ = apolloClient
+      //   window.__store__ = store
+      //   window.__idb__ = idb
+      // }
 
       window.store = store
 
@@ -74,8 +74,7 @@ export const StorePersister = ({ client, store, idb }) => {
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client, idb, store])
+  }, [apolloClient, idb, store])
 
   return null
 }
-

@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client'
 
 export const historizeForAp = async ({ store, year, apId }) => {
-  const { enqueNotification, client } = store
+  const { enqueNotification, apolloClient } = store
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: gql`
         mutation historizeForAp($year: Int!, $apId: UUID!) {
           historizeForAp(input: { _year: $year, apId: $apId }) {

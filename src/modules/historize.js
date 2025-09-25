@@ -4,10 +4,10 @@ import { DateTime } from 'luxon'
 import { apberuebersicht } from '../components/shared/fragments.js'
 
 export const historize = async ({ store, apberuebersicht: row }) => {
-  const { enqueNotification, client } = store
+  const { enqueNotification, apolloClient } = store
   // 1. historize
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: gql`
         mutation historize($year: Int!) {
           historize(input: { _year: $year }) {
@@ -34,7 +34,7 @@ export const historize = async ({ store, apberuebersicht: row }) => {
       id: row?.id,
       historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
     }
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: gql`
         mutation updateApberuebersichtForHistoryDate(
           $id: UUID!

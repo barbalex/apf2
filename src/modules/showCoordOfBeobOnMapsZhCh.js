@@ -1,6 +1,5 @@
 import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBeob.js'
 
-// client is apollo client
 export const showCoordOfBeobOnMapsZhCh = async ({
   id,
   enqueNotification,

@@ -121,7 +121,7 @@ export const App = () => {
                         <MouseWheelHandler />
                         <LegacyBrowserInformer />
                         <StorePersister
-                          client={apolloClient}
+                          apolloClient={apolloClient}
                           store={store}
                           idb={idb}
                         />

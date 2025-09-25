@@ -122,11 +122,7 @@ export const MobxStore = types
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     notifications: [],
-    // apollographql client
-    // TODO: rename to apolloClient
-    client: null,
-    // tanstack query client
-    // TODO: rename to tsQueryClient
+    apolloClient: null,
     tsQueryClient: null,
     navigate: undefined,
   }))
@@ -144,7 +140,7 @@ export const MobxStore = types
       self.navigate = val
     },
     setApolloClient(val) {
-      self.client = val
+      self.apolloClient = val
     },
     setTsQueryClient(val) {
       self.tsQueryClient = val

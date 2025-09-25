@@ -10,7 +10,6 @@ const beobById = gql`
   }
 `
 
-// client is apollo client
 export const getAndValidateCoordinatesOfBeob = async ({
   id,
   enqueNotification,
