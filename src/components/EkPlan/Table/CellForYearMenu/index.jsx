@@ -6,7 +6,8 @@ import ListItemText from '@mui/material/ListItemText'
 import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.js'
 import { queryTpop } from './queryTpop.js'
@@ -48,8 +49,10 @@ const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 export const CellForYearMenu = memo(
   observer(() => {
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
+
     const store = useContext(MobxContext)
-    const client = useApolloClient()
     const {
       showEk,
       showEkf,
@@ -72,7 +75,7 @@ export const CellForYearMenu = memo(
       async (typ) => {
         let qResult
         try {
-          qResult = await client.query({
+          qResult = await apolloClient.query({
             query: queryEkplansOfTpop,
             variables: {
               tpopId,
@@ -90,12 +93,9 @@ export const CellForYearMenu = memo(
         }
         const id = qResult.data.allEkplans.nodes.find((o) => o.typ === typ).id
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: mutationDeleteEkplan,
-            variables: {
-              id,
-            },
-            refetchQueries: ['RowQueryForEkPlan'],
+            variables: { id },
           })
         } catch (error) {
           store.enqueNotification({
@@ -105,9 +105,12 @@ export const CellForYearMenu = memo(
             },
           })
         }
+        tsQueryClient.invalidateQueries({
+          queryKey: ['RowQueryForEkPlan'],
+        })
         closeYearCellMenu()
       },
-      [client, closeYearCellMenu, store, tpopId, year],
+      [apolloClient, closeYearCellMenu, store, tpopId, year],
     )
     const onClickEkEntfernen = useCallback(
       () => removeEkPlan('EK'),
@@ -127,10 +130,9 @@ export const CellForYearMenu = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: mutationCreateEkplan,
             variables,
-            refetchQueries: ['RowQueryForEkPlan'],
           })
         } catch (error) {
           store.enqueNotification({
@@ -140,9 +142,12 @@ export const CellForYearMenu = memo(
             },
           })
         }
+        tsQueryClient.invalidateQueries({
+          queryKey: ['RowQueryForEkPlan'],
+        })
         closeYearCellMenu()
       },
-      [client, closeYearCellMenu, store, tpopId, year],
+      [apolloClient, tsQueryClient, closeYearCellMenu, store, tpopId, year],
     )
     const onClickEkPlanen = useCallback(() => addEkPlan('EK'), [addEkPlan])
     const onClickEkfPlanen = useCallback(() => addEkPlan('EKF'), [addEkPlan])
@@ -176,40 +181,38 @@ export const CellForYearMenu = memo(
           <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
           {showEk && (
             <div>
-              {yearClicked.ekPlan ? (
+              {yearClicked.ekPlan ?
                 <StyledMenuItem onClick={onClickEkEntfernen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EK-Planung entfernen" />
                 </StyledMenuItem>
-              ) : (
-                <StyledMenuItem onClick={onClickEkPlanen}>
+              : <StyledMenuItem onClick={onClickEkPlanen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EK planen" />
                 </StyledMenuItem>
-              )}
+              }
             </div>
           )}
           {showEkf && (
             <div>
-              {yearClicked.ekfPlan ? (
+              {yearClicked.ekfPlan ?
                 <StyledMenuItem onClick={onClickEkfEntfernen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EKF-Planung entfernen" />
                 </StyledMenuItem>
-              ) : (
-                <StyledMenuItem onClick={onClickEkfPlanen}>
+              : <StyledMenuItem onClick={onClickEkfPlanen}>
                   <StyledListItemIcon>
                     <EditIcon />
                   </StyledListItemIcon>
                   <StyledListItemText primary="EKF planen" />
                 </StyledMenuItem>
-              )}
+              }
             </div>
           )}
           {showEk && !!eks.length && (

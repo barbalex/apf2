@@ -4,8 +4,8 @@ import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
@@ -53,7 +53,7 @@ const topFieldNames = [
 
 export const Data = memo(
   observer(({ id }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
 
     const store = useContext(MobxContext)
     const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
@@ -93,7 +93,7 @@ export const Data = memo(
     const { data, isLoading, error } = useQuery({
       queryKey: ['beobByIdQueryForBeob', id],
       queryFn: async () =>
-        client.query({
+        apolloClient.query({
           query: gql`
             query beobByIdQueryForBeobLayer($id: UUID!) {
               beobById(id: $id) {

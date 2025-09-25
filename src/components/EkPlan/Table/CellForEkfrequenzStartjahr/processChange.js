@@ -4,15 +4,16 @@ import { tpop } from '../../../shared/fragments.js'
 import { setEkplans } from '../setEkplans/index.jsx'
 
 export const processChange = async ({
-  client,
+  apolloClient,
   value,
   ekfrequenz,
   row,
   enqueNotification,
   store,
+  tsQueryClient,
 }) => {
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: gql`
         mutation updateTpopEkfrequenzStartjahr(
           $id: UUID!
@@ -55,12 +56,14 @@ export const processChange = async ({
     tpopId: row.id,
     ekfrequenz,
     ekfrequenzStartjahr: value,
-    client,
+    client: apolloClient,
     store,
   })
 
   // don't await as this would block the ui and it doesn't matter if user navigates away
-  client.refetchQueries({ include: ['RowQueryForEkPlan'] })
+  tsQueryClient.invalidateQueries({
+    queryKey: ['RowQueryForEkPlan'],
+  })
 
   return
 }

@@ -1,6 +1,7 @@
 import { memo, useContext, useCallback, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
@@ -25,11 +26,9 @@ const Container = styled.div`
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
   background: ${(props) =>
-    props['data-clicked']
-      ? 'rgb(255,211,167) !important'
-      : props['data-isodd']
-        ? 'rgb(255, 255, 252)'
-        : 'unset'};
+    props['data-clicked'] ? 'rgb(255,211,167) !important'
+    : props['data-isodd'] ? 'rgb(255, 255, 252)'
+    : 'unset'};
   &.tpop-hovered {
     background-color: hsla(45, 100%, 90%, 1);
   }
@@ -70,7 +69,9 @@ const Input = styled.input`
 export const CellForEkfrequenzStartjahr = memo(
   observer(
     ({ row, isOdd, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
-      const client = useApolloClient()
+      const apolloClient = useApolloClient()
+      const tsQueryClient = useQueryClient()
+
       const store = useContext(MobxContext)
       const { enqueNotification } = store
       const { hovered } = store.ekPlan
@@ -99,16 +100,17 @@ export const CellForEkfrequenzStartjahr = memo(
             e.target.value || e.target.value === 0 ? +e.target.value : null
           setProcessing(true)
           await processChangeWorker.processChange({
-            client,
+            apolloClient,
             value,
             ekfrequenz,
             row,
             enqueNotification,
             store,
+            tsQueryClient,
           })
           setProcessing(false)
         },
-        [row, client, store, enqueNotification, ekfrequenz],
+        [row, apolloClient, store, enqueNotification, ekfrequenz],
       )
 
       return (
@@ -119,7 +121,11 @@ export const CellForEkfrequenzStartjahr = memo(
           className={className}
           data-isodd={isOdd}
         >
-          <Input value={stateValue} onChange={onChange} onBlur={onBlur} />
+          <Input
+            value={stateValue}
+            onChange={onChange}
+            onBlur={onBlur}
+          />
         </Container>
       )
     },

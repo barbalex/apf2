@@ -1,7 +1,8 @@
 import { memo, useRef, useContext, useMemo } from 'react'
 import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
@@ -24,25 +25,40 @@ export const Visible = memo(
     const fieldsShown = store.ekPlan.fields
     const isOdd = isItOdd(index)
 
-    const { data, loading, error } = useQuery(queryRow, {
-      variables: {
-        apIds: store.ekPlan.apValues,
+    const apolloClient = useApolloClient()
+
+    const { data, isLoading, error } = useQuery({
+      queryKey: [
+        'RowQueryForEkPlan',
+        store.ekPlan.apValues,
         tpopId,
         years,
-        showEkf: fieldsShown.includes('ekfKontrolleur'),
-        showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
-        showBekanntSeit: fieldsShown.includes('bekanntSeit'),
-        showStatus: fieldsShown.includes('status'),
-        showFlurname: fieldsShown.includes('flurname'),
-        showGemeinde: fieldsShown.includes('gemeinde'),
-        showPopStatus: fieldsShown.includes('popStatus'),
-        showPopName: fieldsShown.includes('popName'),
-        showLv95X: fieldsShown.includes('lv95X'),
-        showLv95Y: fieldsShown.includes('lv95Y'),
-      },
+        fieldsShown,
+      ],
+      queryFn: async () =>
+        apolloClient.query({
+          query: queryRow,
+          variables: {
+            apIds: store.ekPlan.apValues,
+            tpopId,
+            years,
+            showEkf: fieldsShown.includes('ekfKontrolleur'),
+            showEkAbrechnungTyp: fieldsShown.includes('ekAbrechnungstyp'),
+            showBekanntSeit: fieldsShown.includes('bekanntSeit'),
+            showStatus: fieldsShown.includes('status'),
+            showFlurname: fieldsShown.includes('flurname'),
+            showGemeinde: fieldsShown.includes('gemeinde'),
+            showPopStatus: fieldsShown.includes('popStatus'),
+            showPopName: fieldsShown.includes('popName'),
+            showLv95X: fieldsShown.includes('lv95X'),
+            showLv95Y: fieldsShown.includes('lv95Y'),
+          },
+          fetchPolicy: 'no-cache',
+        }),
     })
-    const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
-    const tpop = data?.tpopById
+
+    const ekfrequenzs = data?.data?.allEkfrequenzs?.nodes ?? []
+    const tpop = data?.data?.tpopById
     const ekfrequenz = tpop?.ekfrequenz
     const ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr
     const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
@@ -96,7 +112,7 @@ export const Visible = memo(
                 key={value.name}
                 row={row}
                 isOdd={isOdd}
-                data={data}
+                data={data?.data}
                 field={value}
                 setProcessing={setProcessing}
                 width={width}

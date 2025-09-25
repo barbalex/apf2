@@ -1,6 +1,7 @@
 import { memo, useContext, useCallback, useState, useMemo } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -38,7 +39,9 @@ const AnwendungsfallText = styled.span`
 
 export const CellForEkfrequenz = memo(
   observer(({ row, isOdd, field, width, setProcessing, data }) => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
+
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { hovered, apValues } = store.ekPlan
@@ -63,11 +66,12 @@ export const CellForEkfrequenz = memo(
         console.log('CellForEkfrequenz, onChange, value:', value)
         setProcessing(true)
         await processChangeWorker.processChange({
-          client,
+          apolloClient,
           value,
           row,
           enqueNotification,
           store,
+          tsQueryClient,
         })
         setProcessing(false)
         setTimeout(() => {
@@ -75,7 +79,7 @@ export const CellForEkfrequenz = memo(
           // rowContainerRef.current.focus()
         }, 300)
       },
-      [row, client, store, enqueNotification],
+      [row, apolloClient, store, enqueNotification],
     )
     const valueToShow = useMemo(
       () => allEkfrequenzs?.find((e) => e.id === field.value)?.code,
