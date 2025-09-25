@@ -6,10 +6,10 @@ import { nearestPoint } from '@turf/nearest-point'
 import { featureCollection, point } from '@turf/helpers'
 import { gql } from '@apollo/client'
 
-export const getNearestTpop = async ({ latLng, client, apId }) => {
+export const getNearestTpop = async ({ latLng, apolloClient, apId }) => {
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
-  const { data } = await client.query({
+  const { data } = await apolloClient.query({
     query: gql`
       query getNearestTpopQuery($apId: UUID!) {
         apById(id: $apId) {

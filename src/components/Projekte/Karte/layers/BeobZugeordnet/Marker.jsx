@@ -81,7 +81,7 @@ export const Marker = memo(
         const nearestTpop = await getNearestTpop({
           apId,
           latLng: event.target._latlng,
-          client: apolloClient,
+          apolloClient,
         })
         const newActiveNodeArray = [
           'Projekte',
