@@ -1,9 +1,9 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 
 import { ApErfolg } from './ApErfolg/index.jsx'
 import { PopStatus } from './PopStatus/index.jsx'
@@ -23,13 +23,17 @@ const apAuswertungQuery = gql`
   }
 `
 
+const ScrollContainer = styled.div`
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  flex-shrink: 1;
+`
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
+  flex-shrink: 0;
   padding: 10px;
   padding-top: 0;
 `
@@ -45,12 +49,14 @@ export const Component = memo(() => {
   return (
     <>
       <FormTitle title={`${artname}: Auswertung`} />
-      <FormContainer>
-        <ApErfolg />
-        <PopStatus />
-        <PopMenge />
-        <TpopKontrolliert />
-      </FormContainer>
+      <ScrollContainer>
+        <FormContainer>
+          <ApErfolg />
+          <PopStatus />
+          <PopMenge />
+          <TpopKontrolliert />
+        </FormContainer>
+      </ScrollContainer>
     </>
   )
 })
