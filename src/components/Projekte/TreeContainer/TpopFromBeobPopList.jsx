@@ -69,7 +69,7 @@ export const TpopFromBeobPopList = memo(
                   beobId,
                   projId,
                   apId,
-                  client: apolloClient,
+                  apolloClient,
                   store,
                   search,
                 })

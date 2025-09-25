@@ -83,7 +83,7 @@ export const createNewTpopFromBeob = async ({
   beobId,
   projId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',
-  client,
+  apolloClient,
   store,
   search,
 }) => {
@@ -92,7 +92,7 @@ export const createNewTpopFromBeob = async ({
   const { addOpenNodes } = tree
   let beobResult
   try {
-    beobResult = await client.query({
+    beobResult = await apolloClient.query({
       query: gql`
         query creteNewTpopFromBeobQuery($beobId: UUID!) {
           beobById(id: $beobId) {
@@ -121,7 +121,7 @@ export const createNewTpopFromBeob = async ({
   // create new tpop for pop
   let tpopResult
   try {
-    tpopResult = await client.mutate({
+    tpopResult = await apolloClient.mutate({
       mutation: createTpop,
       variables: {
         popId: pop.id,
@@ -151,7 +151,7 @@ export const createNewTpopFromBeob = async ({
   }
 
   try {
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: updateBeobById,
       variables: {
         beobId,
