@@ -123,8 +123,6 @@ export const Component = memo(
       [apolloClient, fieldErrors, tsQueryClient, row, store.user.name],
     )
 
-    console.log('render Tpopber')
-
     if (loading) return <Spinner />
 
     if (error) return <Error error={error} />
