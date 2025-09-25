@@ -99,9 +99,10 @@ const tpopkontrTypWerte = [
 
 export const TpopfeldkontrForm = memo(
   observer(({ row, data }) => {
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -125,7 +126,7 @@ export const TpopfeldkontrForm = memo(
           variables.jahr = newJahr
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
               mutation updateTpopkontrForEk(
                 $id: UUID!
@@ -164,7 +165,7 @@ export const TpopfeldkontrForm = memo(
           })
         }
       },
-      [client, tsQueryClient, row.id, store.user.name],
+      [apolloClient, tsQueryClient, row.id, store.user.name],
     )
 
     return (

@@ -36,9 +36,6 @@ const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(({ row }) => {
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
-
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
     const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
@@ -54,11 +51,14 @@ export const Menu = memo(
     } = store
     const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
+
     const onClickAdd = useCallback(async () => {
       // 1. add new tpopkontr
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createTpopkontrForTpopfeldkontrForm($tpopId: UUID!) {
               createTpopkontr(input: { tpopkontr: { tpopId: $tpopId } }) {
@@ -85,7 +85,7 @@ export const Menu = memo(
       const id = result?.data?.createTpopkontr?.tpopkontr?.id
 
       // 2. add new tpopkontrzaehl
-      const resultZaehl = await client.mutate({
+      const resultZaehl = await apolloClient.mutate({
         mutation: gql`
           mutation createTpokontrzaehlForTpopfeldkontrForm($parentId: UUID!) {
             createTpopkontrzaehl(
@@ -132,7 +132,7 @@ export const Menu = memo(
       )
     }, [
       apId,
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -150,7 +150,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deleteTpopkontrForTpopfeldkontrRouter($id: UUID!) {
               deleteTpopkontrById(input: { id: $id }) {
@@ -190,7 +190,7 @@ export const Menu = memo(
         `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen${search}`,
       )
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
@@ -209,7 +209,7 @@ export const Menu = memo(
       if (isMovingFeldkontr) {
         return moveTo({
           id: tpopId,
-          client,
+          client: apolloClient,
           store,
         })
       }
@@ -227,7 +227,7 @@ export const Menu = memo(
       tpopkontrId,
       isMovingFeldkontr,
       moveTo,
-      client,
+      apolloClient,
       store,
     ])
 
@@ -248,17 +248,17 @@ export const Menu = memo(
     const onClickCopyFeldkontrToHere = useCallback(() => {
       copyTo({
         parentId: tpopId,
-        client,
+        client: apolloClient,
         store,
       })
-    }, [copyTo, tpopId, client, store])
+    }, [copyTo, tpopId, apolloClient, store])
     const onClickCopyBiotopToHere = useCallback(() => {
       copyBiotopTo({
         id: tpopkontrId,
         copyingBiotop,
-        client,
+        client: apolloClient,
       })
-    }, [copyBiotopTo, copyingBiotop, tpopkontrId, client])
+    }, [copyBiotopTo, copyingBiotop, tpopkontrId, apolloClient])
     const onClickSetFeldkontrCopying = useCallback(() => {
       setCopying({
         table: 'tpopfeldkontr',

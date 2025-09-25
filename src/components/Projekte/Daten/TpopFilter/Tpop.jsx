@@ -1,9 +1,9 @@
 import { memo, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
@@ -30,7 +30,8 @@ export const Tpop = memo(
   observer(({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
     const store = useContext(MobxContext)
     const { enqueNotification } = store
-    const client = useApolloClient()
+
+    const apolloClient = useApolloClient()
 
     //console.log('Tpop rendering')
 
@@ -150,7 +151,7 @@ export const Tpop = memo(
               if (!geojsonParsed) return
               let result
               try {
-                result = await client.query({
+                result = await apolloClient.query({
                   // this is a hack
                   // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
                   query: gql`

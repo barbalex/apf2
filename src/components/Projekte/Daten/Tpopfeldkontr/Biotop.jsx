@@ -24,9 +24,10 @@ export const Component = memo(
   observer(() => {
     const { tpopkontrId } = useParams()
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -58,7 +59,7 @@ export const Component = memo(
           variables.jahr = newJahr
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
               mutation updateTpopkontrForEk(
                 $id: UUID!
@@ -97,7 +98,7 @@ export const Component = memo(
           })
         }
       },
-      [client, tsQueryClient, row.id, store.user.name],
+      [apolloClient, tsQueryClient, row.id, store.user.name],
     )
 
     const aeLrWerte = (data?.allAeLrDelarzes?.nodes ?? [])
