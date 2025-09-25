@@ -31,7 +31,7 @@ export const copyZaehlOfTpopKontr = async ({
       parentId: tpopkontrIdTo,
       table: 'tpopkontrzaehl',
       id: zaehl.id,
-      client,
+      apolloClient: client,
       store,
     }),
   )

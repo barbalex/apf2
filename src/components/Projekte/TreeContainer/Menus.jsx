@@ -530,7 +530,7 @@ export const Menus = memo(
             // })
             copyTo({
               parentId: nodeType === 'folder' ? parentId : id,
-              client: apolloClient,
+              apolloClient,
               store,
             })
           },

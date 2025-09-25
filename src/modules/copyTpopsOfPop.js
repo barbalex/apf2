@@ -24,7 +24,7 @@ export const copyTpopsOfPop = async ({ popIdFrom, popIdTo, client, store }) => {
       parentId: popIdTo,
       table: 'tpop',
       id: tpop.id,
-      client,
+      apolloClient: client,
       store,
     }),
   )

@@ -248,7 +248,7 @@ export const Menu = memo(
     const onClickCopyFeldkontrToHere = useCallback(() => {
       copyTo({
         parentId: tpopId,
-        client: apolloClient,
+        apolloClient,
         store,
       })
     }, [copyTo, tpopId, apolloClient, store])

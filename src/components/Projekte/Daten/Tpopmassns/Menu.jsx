@@ -97,7 +97,7 @@ export const Menu = memo(
     const onClickCopyMassnToHere = useCallback(() => {
       return copyTo({
         parentId: tpopId,
-        client: apolloClient,
+        apolloClient,
         store,
       })
     }, [copyTo, tpopId, apolloClient, store])

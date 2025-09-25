@@ -180,7 +180,7 @@ export const Menu = memo(
     const onClickCopyEkfToHere = useCallback(() => {
       return copyTo({
         parentId: tpopId,
-        client: apolloClient,
+        apolloClient,
         store,
       })
     }, [copyTo, tpopId, apolloClient, store])

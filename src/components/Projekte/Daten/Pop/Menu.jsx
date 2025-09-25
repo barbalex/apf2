@@ -213,7 +213,7 @@ export const Menu = memo(
     const onClickCopyTpopToHere = useCallback(() => {
       copyTo({
         parentId: popId,
-        client: apolloClient,
+        apolloClient,
         store,
       })
     }, [popId, apolloClient, store])
@@ -224,7 +224,7 @@ export const Menu = memo(
           // copy to this ap
           return copyTo({
             parentId: apId,
-            client: apolloClient,
+            apolloClient,
             store,
           })
         }

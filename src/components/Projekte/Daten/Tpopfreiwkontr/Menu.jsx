@@ -209,7 +209,7 @@ export const Menu = memo(
         // copy to this tpop
         return copyTo({
           parentId: tpopId,
-          client: apolloClient,
+          apolloClient,
           store,
         })
       }

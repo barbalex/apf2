@@ -21,7 +21,7 @@ export const copyTo = async ({
   parentId,
   table: tablePassed,
   id: idPassed,
-  client,
+  apolloClient,
   store,
 }) => {
   const { copying, enqueNotification } = store
@@ -38,7 +38,7 @@ export const copyTo = async ({
   let row
   switch (dbTable) {
     case 'tpopkontrzaehl': {
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: queryTpopkontrzaehlById,
         variables: { id },
       })
@@ -46,7 +46,7 @@ export const copyTo = async ({
       break
     }
     case 'tpopkontr': {
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: queryTpopKontrById,
         variables: { id },
       })
@@ -54,7 +54,7 @@ export const copyTo = async ({
       break
     }
     case 'tpopmassn': {
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: queryTpopmassnById,
         variables: { id },
       })
@@ -62,7 +62,7 @@ export const copyTo = async ({
       break
     }
     case 'tpop': {
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: queryTpopById,
         variables: { id },
       })
@@ -70,7 +70,7 @@ export const copyTo = async ({
       break
     }
     case 'pop': {
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: queryPopById,
         variables: { id },
       })
@@ -97,7 +97,7 @@ export const copyTo = async ({
   switch (dbTable) {
     case 'tpopkontrzaehl':
       // TODO: this never happens, right?
-      response = await client.mutate({
+      response = await apolloClient.mutate({
         mutation: createTpopkontrzaehl,
         variables: {
           tpopkontrId: parentId,
@@ -109,7 +109,7 @@ export const copyTo = async ({
       newId = response?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
       break
     case 'tpopkontr':
-      response = await client.mutate({
+      response = await apolloClient.mutate({
         mutation: createTpopkontr,
         variables: {
           tpopId: parentId,
@@ -151,7 +151,7 @@ export const copyTo = async ({
       newId = response?.data?.createTpopkontr?.tpopkontr?.id
       break
     case 'tpopmassn':
-      response = await client.mutate({
+      response = await apolloClient.mutate({
         mutation: createTpopmassn,
         variables: {
           tpopId: parentId,
@@ -181,7 +181,7 @@ export const copyTo = async ({
       newId = response?.data?.createTpopmassn?.tpopmassn?.id
       break
     case 'tpop':
-      response = await client.mutate({
+      response = await apolloClient.mutate({
         mutation: createTpop,
         variables: {
           popId: parentId,
@@ -224,7 +224,7 @@ export const copyTo = async ({
       newId = response?.data?.createTpop?.tpop?.id
       break
     case 'pop':
-      response = await client.mutate({
+      response = await apolloClient.mutate({
         mutation: createPop,
         variables: {
           apId: parentId,
@@ -280,7 +280,7 @@ export const copyTo = async ({
     copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
-      client,
+      client: apolloClient,
       store,
     })
     store.queryClient.invalidateQueries({
@@ -304,7 +304,7 @@ export const copyTo = async ({
     copyTpopsOfPop({
       popIdFrom: id,
       popIdTo: newId,
-      client,
+      client: apolloClient,
       store,
     })
   }
