@@ -58,10 +58,10 @@ export const Menu = memo(
       tsQueryClient.invalidateQueries({
         queryKey: [`treeZiel`],
       })
-      queryClient.invalidateQueries({
+      apolloClient.invalidateQueries({
         queryKey: [`treeZieljahrs`],
       })
-      queryClient.invalidateQueries({
+      apolloClient.invalidateQueries({
         queryKey: [`treeZielsOfJahr`],
       })
       tsQueryClient.invalidateQueries({

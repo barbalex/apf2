@@ -20,10 +20,10 @@ export const saveNichtZuordnenToDb = async ({
     mutation: updateBeobById,
     variables,
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
   // need to update activeNodeArray and openNodes

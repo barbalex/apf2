@@ -72,10 +72,10 @@ export const saveArtIdToDb = async ({
   ]
   setOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newANA.join('/')}${search}`)
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
 }

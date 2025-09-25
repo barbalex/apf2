@@ -146,7 +146,7 @@ export const deleteModule = async ({ apolloClient, store, search }) => {
   store.tree.setOpenNodes(newOpenNodes)
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
-    store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+    store.tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
 
   const queryKeyTable =
@@ -158,7 +158,7 @@ export const deleteModule = async ({ apolloClient, store, search }) => {
     : table === 'tpopkontrzaehl_einheit_werte' ?
       'treeTpopkontrzaehlEinheitWerte'
     : `tree${upperFirst(table)}`
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
   const queryKeyFolders =
@@ -180,19 +180,19 @@ export const deleteModule = async ({ apolloClient, store, search }) => {
   //   queryKeyFoldersTable,parentTable,
   //   queryToInvalidate: `tree${upperFirst(queryKeyFoldersTable)}Folders`,
   // })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolders],
   })
   if (table === 'ziel') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
   }
   if (parentTable === 'tpopfeldkontr') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
   }

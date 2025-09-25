@@ -211,6 +211,6 @@ export const buildClient = ({ store }) => {
     defaultOptions: { fetchPolicy: 'cache-and-network' },
   })
   // make client available in store
-  store.setClient(client)
+  store.setApolloClient(client)
   return client
 }

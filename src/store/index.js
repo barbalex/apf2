@@ -123,9 +123,11 @@ export const MobxStore = types
     deletedDatasets: [],
     notifications: [],
     // apollographql client
+    // TODO: rename to apolloClient
     client: null,
     // tanstack query client
-    queryClient: null,
+    // TODO: rename to tsQueryClient
+    tsQueryClient: null,
     navigate: undefined,
   }))
   .actions((self) => ({
@@ -141,11 +143,11 @@ export const MobxStore = types
     setNavigate(val) {
       self.navigate = val
     },
-    setClient(val) {
+    setApolloClient(val) {
       self.client = val
     },
-    setQueryClient(val) {
-      self.queryClient = val
+    setTsQueryClient(val) {
+      self.tsQueryClient = val
     },
     setHideMapControls(val) {
       self.hideMapControls = val

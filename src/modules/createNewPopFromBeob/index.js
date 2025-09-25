@@ -170,31 +170,31 @@ export const createNewPopFromBeob = async ({
   addOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`BeobZugeordnetForMapQuery`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`BeobNichtBeurteiltForMapQuery`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`BeobAssignLinesQuery`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: ['treeAp'],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
 

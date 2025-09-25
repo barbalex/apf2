@@ -77,48 +77,48 @@ export const moveTo = async ({ id: newParentId, store, apolloClient }) => {
 
   // update tree ap queries, tree pop folder queries, tree pop queries
   if (table === 'pop') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: ['treeAp'],
     })
   }
   if (table === 'tpop') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: ['treePopFolders'],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
   }
   if (table === 'tpopmassn') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopmassn`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }
   if (table === 'tpopfeldkontr') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }
   if (table === 'tpopfreiwkontr') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontr`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }

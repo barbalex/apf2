@@ -226,25 +226,19 @@ export const insertDataset = async ({
   // console.log('insertDataset', { table, parentTable })
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
-    store.queryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+    store.tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr'
-      ? 'treeTpopfeldkontrzaehl'
-      : parentTable === 'tpopfreiwkontr'
-        ? 'treeTpopfreiwkontrzaehl'
-        : menuType.includes('tpopfeldkontr')
-          ? 'treeTpopfeldkontr'
-          : menuType.includes('tpopfreiwkontr')
-            ? 'treeTpopfreiwkontr'
-            : table === 'tpop_apberrelevant_grund_werte'
-              ? 'treeTpopApberrelevantGrundWerte'
-              : table === 'ek_abrechnungstyp_werte'
-                ? 'treeEkAbrechnungstypWerte'
-                : table === 'tpopkontrzaehl_einheit_werte'
-                  ? 'treePopkontrzaehlEinheitWerte'
-                  : `tree${upperFirst(table)}`
-  store.queryClient.invalidateQueries({
+    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
+    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehl'
+    : menuType.includes('tpopfeldkontr') ? 'treeTpopfeldkontr'
+    : menuType.includes('tpopfreiwkontr') ? 'treeTpopfreiwkontr'
+    : table === 'tpop_apberrelevant_grund_werte' ?
+      'treeTpopApberrelevantGrundWerte'
+    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
+    : table === 'tpopkontrzaehl_einheit_werte' ? 'treePopkontrzaehlEinheitWerte'
+    : `tree${upperFirst(table)}`
+  store.tsQueryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
   // console.log('insertDataset', {
@@ -253,22 +247,21 @@ export const insertDataset = async ({
   //   menuType,
   //   queryKeyTable,
   // })
-  const queryKeyFolder = ['apberuebersicht'].includes(table)
-    ? 'treeRoot'
-    : table === 'ziel'
-      ? 'treeZiel'
-      : parentTable === 'tpopfeldkontr'
-        ? 'treeTpopfeldkontrzaehlFolders'
-        : parentTable === 'tpopfreiwkontr'
-          ? 'treeTpopfreiwkontrzaehlFolders'
-          : [
-                'adresse',
-                'tpop_apberrelevant_grund_werte',
-                'ek_abrechnungstyp_werte',
-                'tpopkontrzaehl_einheit_werte',
-              ].includes(table)
-            ? 'treeWerteFolders'
-            : `tree${upperFirst(parentTable)}Folders`
+  const queryKeyFolder =
+    ['apberuebersicht'].includes(table) ? 'treeRoot'
+    : table === 'ziel' ? 'treeZiel'
+    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
+    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
+    : (
+      [
+        'adresse',
+        'tpop_apberrelevant_grund_werte',
+        'ek_abrechnungstyp_werte',
+        'tpopkontrzaehl_einheit_werte',
+      ].includes(table)
+    ) ?
+      'treeWerteFolders'
+    : `tree${upperFirst(parentTable)}Folders`
   // console.log('insertDataset', {
   //   table,
   //   parentTable,
@@ -277,27 +270,27 @@ export const insertDataset = async ({
   //   queryKeyTable,
   //   queryKeyFolder,
   // })
-  store.queryClient.invalidateQueries({
+  store.tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolder],
   })
   if (table === 'ziel') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
   }
   if (parentTable === 'tpopfeldkontr') {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
   }
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
-    store.queryClient.invalidateQueries({
+    store.tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }

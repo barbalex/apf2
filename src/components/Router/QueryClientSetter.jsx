@@ -9,20 +9,20 @@ export const QueryClientSetter = memo(
   observer(() => {
     const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
-    const { setQueryClient } = store
+    const { setTsQueryClient } = store
 
     const wasSet = useRef(false)
 
     useEffect(() => {
-      if (store.queryClient) return
+      if (store.tsQueryClient) return
       // prevent setting navigate twice
       // only because of strict mode?
       if (wasSet.current) return
 
       // console.log('NavigateSetter setting navigate')
-      setQueryClient(tsQueryClient)
+      setTsQueryClient(tsQueryClient)
       wasSet.current = true
-    }, [tsQueryClient, setQueryClient, store.queryClient])
+    }, [tsQueryClient, setTsQueryClient, store.tsQueryClient])
 
     return null
   }),
