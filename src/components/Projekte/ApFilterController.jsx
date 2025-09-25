@@ -1,15 +1,15 @@
 import { memo, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { MobxContext } from '../../mobxContext.js'
 
 export const ApFilterController = memo(
   observer(() => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const { apId } = useParams()
     const store = useContext(MobxContext)
     const { apFilter, setApFilter } = store.tree
@@ -20,7 +20,7 @@ export const ApFilterController = memo(
       if (!apId) return
       if (!apFilter) return
 
-      client
+      apolloClient
         .query({
           query: gql`
             query apFilterControllerQuery($id: UUID!) {
@@ -37,7 +37,7 @@ export const ApFilterController = memo(
           const isAp = bearbeitung > 0 && bearbeitung < 4
           if (!isAp) setApFilter(false)
         })
-    }, [apFilter, apId, client, setApFilter])
+    }, [apFilter, apId, apolloClient, setApFilter])
 
     return null
   }),

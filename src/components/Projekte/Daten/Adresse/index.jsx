@@ -1,7 +1,7 @@
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
@@ -49,7 +49,7 @@ export const Component = memo(
     const { data, error, loading } = useQuery(query, {
       variables: { id: adrId },
     })
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -66,7 +66,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateAdresse(
               $id: UUID!
@@ -101,7 +101,7 @@ export const Component = memo(
           })
         }
       },
-      [client, tsQueryClient, row.id, store.user.name],
+      [apolloClient, tsQueryClient, row.id, store.user.name],
     )
 
     if (loading) return <Spinner />
@@ -110,7 +110,10 @@ export const Component = memo(
     return (
       <ErrorBoundary>
         <Container>
-          <FormTitle title="Adresse" MenuBarComponent={Menu} />
+          <FormTitle
+            title="Adresse"
+            MenuBarComponent={Menu}
+          />
           <FieldsContainer>
             <FormContainer>
               <TextField

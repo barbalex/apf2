@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
@@ -105,13 +105,13 @@ const SecondPageText = styled.div`
 export const ApberForYear = memo(() => {
   const { apberuebersichtId, projId } = useParams()
 
-  const client = useApolloClient()
+  const apolloClient = useApolloClient()
 
   const { data, error, isLoading } = useQuery({
     queryKey: ['ApberForYearQuery', apberuebersichtId],
     queryFn: async () => {
       // first get year
-      const { data: data1 } = await client.query({
+      const { data: data1 } = await apolloClient.query({
         query: queryForApberuebersicht,
         variables: {
           id: apberuebersichtId,
@@ -120,7 +120,7 @@ export const ApberForYear = memo(() => {
       })
       const jahr = data1?.apberuebersichtById?.jahr
       // then get data
-      const { data } = await client.query({
+      const { data } = await apolloClient.query({
         query: query,
         variables: {
           projektId: projId,
@@ -131,7 +131,7 @@ export const ApberForYear = memo(() => {
       })
       // then get jber data
       // WARNING: this HAS to be queried later or somehow loading never ended
-      const { data: jberData } = await client.query({
+      const { data: jberData } = await apolloClient.query({
         query: jberQuery,
         variables: {
           jahr,

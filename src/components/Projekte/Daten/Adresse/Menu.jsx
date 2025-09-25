@@ -20,9 +20,9 @@ const iconStyle = { color: 'white' }
 
 export const Menu = memo(
   observer(() => {
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
-    
+
     const { adrId } = useParams()
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
@@ -31,7 +31,7 @@ export const Menu = memo(
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createAdresseForAdresseForm {
               createAdresse(input: { adresse: {} }) {
@@ -59,7 +59,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createAdresse?.adresse?.id
       navigate(`/Daten/Werte-Listen/Adressen/${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search])
+    }, [apolloClient, store, tsQueryClient, navigate, search])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -67,7 +67,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deleteAdresse($id: UUID!) {
               deleteAdresseById(input: { id: $id }) {
@@ -105,7 +105,7 @@ export const Menu = memo(
       })
       // navigate to parent
       navigate(`/Daten/Werte-Listen/Adressen${search}`)
-    }, [client, store, tsQueryClient, navigate, search, pathname, adrId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, pathname, adrId])
 
     return (
       <ErrorBoundary>

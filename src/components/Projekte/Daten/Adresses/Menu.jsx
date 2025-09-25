@@ -19,14 +19,16 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createAdresseForAdressesForm {
               createAdresse(input: { adresse: {} }) {
@@ -53,7 +55,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createAdresse?.adresse?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search])
+    }, [apolloClient, store, tsQueryClient, navigate, search])
 
     return (
       <ErrorBoundary>
