@@ -21,9 +21,10 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { apId } = useParams()
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const { setOpenChooseApToCopyEkfrequenzsFrom } = store
@@ -31,7 +32,7 @@ export const Menu = memo(
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createEkfrequenzForEkfrequenzsForm($apId: UUID!) {
               createEkfrequenz(input: { ekfrequenz: { apId: $apId } }) {
@@ -63,7 +64,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createEkfrequenz?.ekfrequenz?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search, apId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, apId])
 
     const onClickCopy = useCallback(
       () => setOpenChooseApToCopyEkfrequenzsFrom(true),
