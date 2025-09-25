@@ -2,8 +2,8 @@ import { memo, useState, useCallback, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-
 import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
@@ -86,6 +86,7 @@ export const Headdata = memo(
     const { user, isPrint } = store
 
     const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [errors, setErrors] = useState(null)
 
@@ -158,11 +159,13 @@ export const Headdata = memo(
               ${tpopkontrzaehlEinheitWerteFragment}
             `,
             variables,
-            refetchQueries: ['tpopkontrByIdQueryForEkf'],
           })
         } catch (error) {
           return setErrors(error.message)
         }
+        tsQueryClient.invalidateQueries({
+          queryKey: ['tpopkontrByIdQueryForEkf'],
+        })
         setErrors(null)
       },
       [row.id, user.name, apolloClient],

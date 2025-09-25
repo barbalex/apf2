@@ -1,7 +1,8 @@
 import { memo, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useLocation, useParams } from 'react-router'
 
 import { query } from './query.js'
@@ -50,24 +51,28 @@ export const Component = memo(
     const apolloClient = useApolloClient()
 
     const id = idPassed ?? params.tpopkontrId
-    const { data, loading, error, refetch } = useQuery(query, {
-      variables: {
-        id,
-      },
+    const { data, isLoading, error, refetch } = useQuery({
+      queryKey: ['TpopkontrQuery', id],
+      queryFn: async () =>
+        apolloClient.query({
+          query,
+          variables: { id },
+          fetchPolicy: 'no-cache',
+        }),
     })
     // DO NOT use apId from url because this form is also used for mass prints
     const apId =
-      data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
+      data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
       '99999999-9999-9999-9999-999999999999'
 
     const zaehls =
-      data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
 
-    const row = data?.tpopkontrById ?? {}
+    const row = data?.data?.tpopkontrById ?? {}
 
     useEffect(() => {
       let isActive = true
-      if (!loading) {
+      if (!isLoading) {
         // loading data just finished
         // check if tpopkontr exist
         const tpopkontrCount = zaehls.length
@@ -75,7 +80,7 @@ export const Component = memo(
           // add counts for all ekzaehleinheit
           // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id
           const ekzaehleinheits = (
-            data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
+            data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
               ?.ekzaehleinheitsByApId?.nodes ?? []
           )
             // remove ekzaehleinheits without zaehleinheit_id
@@ -120,14 +125,14 @@ export const Component = memo(
       apolloClient,
       data,
       enqueNotification,
-      loading,
+      isLoading,
       refetch,
       row.id,
       user.name,
       zaehls.length,
     ])
 
-    if (loading) return <Spinner />
+    if (isLoading) return <Spinner />
 
     if (error) return <Error error={error} />
 
@@ -148,14 +153,14 @@ export const Component = memo(
         )}
         {isPrint ?
           <Form
-            data={data}
+            data={data?.data}
             row={row}
             apId={apId}
             refetch={refetch}
           />
         : <ScrollContainer>
             <Form
-              data={data}
+              data={data?.data}
               row={row}
               apId={apId}
               refetch={refetch}
