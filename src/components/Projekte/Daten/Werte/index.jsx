@@ -45,9 +45,10 @@ export const Component = memo(
         'tpopkontrzaehlEinheitWerte'
       : 'uups'
 
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -119,7 +120,7 @@ export const Component = memo(
             }
           }
         `
-          await client.mutate({
+          await apolloClient.mutate({
             mutation,
             variables,
           })
@@ -135,7 +136,7 @@ export const Component = memo(
         }
       },
       [
-        client,
+        apolloClient,
         codeGqlType,
         tsQueryClient,
         refetch,

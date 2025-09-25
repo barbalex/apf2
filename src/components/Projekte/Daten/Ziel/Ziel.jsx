@@ -66,7 +66,7 @@ export const Component = memo(
     const { search } = useLocation()
     const navigate = useNavigate()
 
-    const client = useApolloClient()
+    const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
@@ -99,7 +99,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateZiel(
               $id: UUID!
@@ -156,7 +156,7 @@ export const Component = memo(
         row.id,
         store.user.name,
         tsQueryClient,
-        client,
+        apolloClient,
         aNA,
         openNodes,
         navigate,

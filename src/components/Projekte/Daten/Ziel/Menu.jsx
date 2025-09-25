@@ -23,15 +23,17 @@ export const Menu = memo(
   observer(() => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { projId, apId, jahr, zielId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createZielForZielForm($apId: UUID!) {
               createZiel(input: { ziel: { apId: $apId } }) {
@@ -65,7 +67,7 @@ export const Menu = memo(
       navigate(
         `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${id}${search}`,
       )
-    }, [apId, client, store, tsQueryClient, navigate, search, projId])
+    }, [apId, apolloClient, store, tsQueryClient, navigate, search, projId])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -73,7 +75,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation deleteZiel($id: UUID!) {
               deleteZielById(input: { id: $id }) {
@@ -116,7 +118,7 @@ export const Menu = memo(
         `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}${search}`,
       )
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,

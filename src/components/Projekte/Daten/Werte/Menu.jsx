@@ -24,9 +24,11 @@ export const Menu = memo(
   observer(({ row, table }) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const typename = upperFirst(table)
     const pathName =
@@ -38,7 +40,7 @@ export const Menu = memo(
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation create${typename}For${typename}Form {
               create${typename}(
@@ -68,7 +70,7 @@ export const Menu = memo(
       })
       const id = result?.data?.[`create${typename}`]?.[table]?.id
       navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search, typename, table])
+    }, [apolloClient, store, tsQueryClient, navigate, search, typename, table])
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
@@ -76,7 +78,7 @@ export const Menu = memo(
     const onClickDelete = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation delete${typename}($id: UUID!) {
               delete${typename}ById(input: { id: $id }) {
@@ -115,7 +117,7 @@ export const Menu = memo(
       // navigate to parent
       navigate(`/Daten/Werte-Listen/${pathName}${search}`)
     }, [
-      client,
+      apolloClient,
       store,
       tsQueryClient,
       navigate,
