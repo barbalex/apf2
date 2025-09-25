@@ -45,9 +45,10 @@ export const Component = memo(
   observer(() => {
     const { erfkritId: id } = useParams()
 
-    const tsQueryClient = useQueryClient()
-    const client = useApolloClient()
     const store = useContext(MobxContext)
+
+    const tsQueryClient = useQueryClient()
+    const apolloClient = useApolloClient()
 
     const [fieldErrors, setFieldErrors] = useState({})
 
@@ -76,7 +77,7 @@ export const Component = memo(
           changedBy: store.user.name,
         }
         try {
-          await client.mutate({
+          await apolloClient.mutate({
             mutation: gql`
             mutation updateErfkrit(
               $id: UUID!
@@ -109,7 +110,7 @@ export const Component = memo(
           queryKey: [`treeErfkrit`],
         })
       },
-      [client, tsQueryClient, row.id, store.user.name],
+      [apolloClient, tsQueryClient, row.id, store.user.name],
     )
 
     if (loading) return <Spinner />

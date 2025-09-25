@@ -18,15 +18,17 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { apId } = useParams()
+
     const store = useContext(MobxContext)
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createEkzaehleinheitForEkzaehleinheitsForm($apId: UUID!) {
               createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
@@ -58,7 +60,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search, apId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, apId])
 
     return (
       <ErrorBoundary>

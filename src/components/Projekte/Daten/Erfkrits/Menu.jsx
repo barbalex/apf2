@@ -20,9 +20,10 @@ export const Menu = memo(
   observer(({ toggleFilterInput }) => {
     const { search } = useLocation()
     const navigate = useNavigate()
-    const client = useApolloClient()
-    const tsQueryClient = useQueryClient()
     const { apId } = useParams()
+
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
     const store = useContext(MobxContext)
     const { setOpenChooseApToCopyErfkritsFrom } = store
@@ -30,7 +31,7 @@ export const Menu = memo(
     const onClickAdd = useCallback(async () => {
       let result
       try {
-        result = await client.mutate({
+        result = await apolloClient.mutate({
           mutation: gql`
             mutation createErfkritForErfkritsForm($apId: UUID!) {
               createErfkrit(input: { erfkrit: { apId: $apId } }) {
@@ -62,7 +63,7 @@ export const Menu = memo(
       })
       const id = result?.data?.createErfkrit?.erfkrit?.id
       navigate(`./${id}${search}`)
-    }, [client, store, tsQueryClient, navigate, search, apId])
+    }, [apolloClient, store, tsQueryClient, navigate, search, apId])
 
     const onClickCopy = useCallback(
       () => setOpenChooseApToCopyErfkritsFrom(true),
