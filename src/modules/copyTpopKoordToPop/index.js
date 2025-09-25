@@ -1,11 +1,11 @@
 import { queryTpop } from './queryTpop.js'
 import { updatePopById } from './updatePopById.js'
 
-export const copyTpopKoordToPop = async ({ id, store, client }) => {
+export const copyTpopKoordToPop = async ({ id, store, apolloClient }) => {
   // fetch tpop
   let tpopResult
   try {
-    tpopResult = await client.query({
+    tpopResult = await apolloClient.query({
       query: queryTpop,
       variables: { id },
     })
@@ -36,7 +36,7 @@ export const copyTpopKoordToPop = async ({ id, store, client }) => {
         },
       }
     }
-    await client.mutate({
+    await apolloClient.mutate({
       mutation: updatePopById,
       variables: {
         id: popId,
@@ -52,7 +52,7 @@ export const copyTpopKoordToPop = async ({ id, store, client }) => {
       },
     })
   }
-  client.refetchQueries({
+  apolloClient.refetchQueries({
     include: ['TpopForMapQuery', 'PopForMapQuery'],
   })
   return

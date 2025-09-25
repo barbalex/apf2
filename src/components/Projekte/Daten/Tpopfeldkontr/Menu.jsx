@@ -256,7 +256,7 @@ export const Menu = memo(
       copyBiotopTo({
         id: tpopkontrId,
         copyingBiotop,
-        client: apolloClient,
+        apolloClient,
       })
     }, [copyBiotopTo, copyingBiotop, tpopkontrId, apolloClient])
     const onClickSetFeldkontrCopying = useCallback(() => {

@@ -398,7 +398,7 @@ export const Menu = memo(
     const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
     const onCopyCoordToPop = useCallback(async () => {
       setCopyingCoordToTpop(true)
-      await copyTpopKoordToPop({ id: tpopId, store, client: apolloClient })
+      await copyTpopKoordToPop({ id: tpopId, store, apolloClient })
       setCopyingCoordToTpop(false)
     }, [tpopId, store, apolloClient])
 

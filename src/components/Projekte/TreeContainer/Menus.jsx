@@ -541,10 +541,10 @@ export const Menus = memo(
             setCopyingBiotop({ id: null, label: null })
           },
           copyBiotop() {
-            copyBiotopTo({ id, copyingBiotop, client: apolloClient })
+            copyBiotopTo({ id, copyingBiotop, apolloClient })
           },
           copyTpopKoordToPop() {
-            copyTpopKoordToPop({ id, store, client: apolloClient })
+            copyTpopKoordToPop({ id, store, apolloClient })
           },
           createNewPopFromBeob() {
             createNewPopFromBeob({
