@@ -3,8 +3,8 @@ import styled from '@emotion/styled'
 import Checkbox from '@mui/material/Checkbox'
 import { gql } from '@apollo/client'
 
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
@@ -32,10 +32,16 @@ export const Row = memo(({ apId, qk }) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data, error } = useQuery(query, {
-    variables: { apId, qkName: qk.name },
+  const { data, error } = useQuery({
+    queryKey: ['apqkQueryForRow', apId, qk.name],
+    queryFn: async () =>
+      apolloClient.query({
+        query: query,
+        variables: { apId, qkName: qk.name },
+        fetchPolicy: 'no-cache',
+      }),
   })
-  const apqk = data?.apqkByApIdAndQkName
+  const apqk = data?.data?.apqkByApIdAndQkName
 
   const checked = !!apqk
 
@@ -74,11 +80,11 @@ export const Row = memo(({ apId, qk }) => {
       queryKey: ['treeAp'],
     })
     setTimeout(() =>
-      apolloClient.refetchQueries({
-        include: ['apqkQueryForRow'],
+      tsQueryClient.invalidateQueries({
+        queryKey: [`apqkQueryForRow`],
       }),
     )
-  }, [apId, checked, apolloClient, qk.name])
+  }, [apId, checked, tsQueryClient, qk.name])
 
   if (error) return <Error error={error} />
   return (
