@@ -1,8 +1,8 @@
 import { memo, useContext, useState, useCallback } from 'react'
 import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -10,10 +10,11 @@ import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
 export const TPop = memo(
   observer(({ filtered = false }) => {
-    const client = useApolloClient()
     const store = useContext(MobxContext)
     const { enqueNotification, tableIsFiltered } = store
     const { tpopGqlFilter } = store.tree
+
+    const apolloClient = useApolloClient()
 
     const [queryState, setQueryState] = useState()
 
@@ -22,7 +23,7 @@ export const TPop = memo(
       //console.time('querying')
       let result
       try {
-        result = await client.query({
+        result = await apolloClient.query({
           query: gql`
             query tpopForExportQuery($filter: TpopFilter) {
               allTpops(
@@ -204,7 +205,13 @@ export const TPop = memo(
       })
       setQueryState(undefined)
       //console.timeEnd('exporting')
-    }, [client, enqueNotification, filtered, store, tpopGqlFilter.filtered])
+    }, [
+      apolloClient,
+      enqueNotification,
+      filtered,
+      store,
+      tpopGqlFilter.filtered,
+    ])
 
     const tpopIsFiltered = tableIsFiltered('tpop')
 
