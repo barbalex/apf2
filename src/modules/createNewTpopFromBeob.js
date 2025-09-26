@@ -247,4 +247,16 @@ export const createNewTpopFromBeob = async ({
   store.tsQueryClient.invalidateQueries({
     queryKey: [`BeobAssignLinesQuery`],
   })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeBeobZugeordnet`],
+  })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeBeobNichtZuzuordnen`],
+  })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeBeobNichtBeurteilt`],
+  })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeAp`],
+  })
 }

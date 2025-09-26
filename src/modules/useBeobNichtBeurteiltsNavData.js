@@ -1,6 +1,6 @@
 import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
@@ -46,7 +46,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeBeobNichtBeurteilts',
+      'treeBeobNichtBeurteilt',
       apId,
       store.tree.beobNichtBeurteiltGqlFilterForTree,
     ],
@@ -145,9 +145,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
           ],
           hasChildren: false,
           labelLeftElements:
-            showBeobnichtbeurteiltIcon && beobId === p.id
-              ? [BeobnichtbeurteiltFilteredMapIcon]
-              : undefined,
+            showBeobnichtbeurteiltIcon && beobId === p.id ?
+              [BeobnichtbeurteiltFilteredMapIcon]
+            : undefined,
         }),
       ),
     }),

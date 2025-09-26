@@ -1,6 +1,6 @@
 import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
@@ -45,7 +45,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeBeobNichtZuzuordnens',
+      'treeBeobNichtZuzuordnen',
       apId,
       store.tree.beobNichtZuzuordnenGqlFilterForTree,
     ],
@@ -145,9 +145,9 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
           ],
           hasChildren: false,
           labelLeftElements:
-            showBeobnichtzuzuordnenIcon && beobId === p.id
-              ? [BeobnichtzuzuordnenFilteredMapIcon]
-              : undefined,
+            showBeobnichtzuzuordnenIcon && beobId === p.id ?
+              [BeobnichtzuzuordnenFilteredMapIcon]
+            : undefined,
         }),
       ),
     }),

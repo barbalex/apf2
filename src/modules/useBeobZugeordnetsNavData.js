@@ -1,6 +1,6 @@
 import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
@@ -31,7 +31,7 @@ export const useBeobZugeordnetsNavData = (props) => {
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
-      'treeBeobZugeordnets',
+      'treeBeobZugeordnet',
       tpopId,
       store.tree.beobZugeordnetGqlFilterForTree,
     ],
@@ -126,9 +126,9 @@ export const useBeobZugeordnetsNavData = (props) => {
         ],
         hasChildren: false,
         labelLeftElements:
-          showBeobzugeordnetIcon && beobId === p.id
-            ? [BeobzugeordnetFilteredMapIcon]
-            : undefined,
+          showBeobzugeordnetIcon && beobId === p.id ?
+            [BeobzugeordnetFilteredMapIcon]
+          : undefined,
       })),
     }),
     [

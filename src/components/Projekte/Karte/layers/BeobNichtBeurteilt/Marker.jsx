@@ -102,6 +102,18 @@ export const Marker = memo(
         tsQueryClient.invalidateQueries({
           queryKey: [`BeobAssignLinesQuery`],
         })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`treeBeobZugeordnet`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`treeBeobNichtZuzuordnen`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`treeBeobNichtBeurteilt`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`treeAp`],
+        })
       },
       [apId, beob.id, apolloClient, navigate, projId, tsQueryClient, search],
     )

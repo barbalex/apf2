@@ -230,6 +230,12 @@ export const saveTpopIdToDb = async ({
     queryKey: [`treeBeobZugeordnet`],
   })
   store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeApFolders`],
+  })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeAp`],
+  })
+  store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobnichtbeurteilt`],
   })
   store.tsQueryClient.invalidateQueries({

@@ -78,4 +78,13 @@ export const saveArtIdToDb = async ({
   store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeApFolders`],
+  })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeAp`],
+  })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeBeobnichtbeurteilt`],
+  })
 }
