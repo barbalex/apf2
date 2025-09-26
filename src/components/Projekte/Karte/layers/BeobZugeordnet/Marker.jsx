@@ -126,6 +126,7 @@ export const Marker = memo(
         tsQueryClient.invalidateQueries({
           queryKey: [`treeAp`],
         })
+        store.tree.setLastTouchedNode(newActiveNodeArray)
         //map.redraw()
       },
       [apId, apolloClient, projId, beob.id, navigate, search],

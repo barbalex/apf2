@@ -51,5 +51,6 @@ export const saveNichtZuordnenToDb = async ({
   })
   addOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  store.tree.setLastTouchedNode(newActiveNodeArray)
   if (refetchPassed) refetchPassed()
 }

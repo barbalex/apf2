@@ -11,8 +11,9 @@ export const LastTouchedNodeSetter = memo(
 
     useEffect(() => {
       // set last touched node in case project is directly opened on it
-      setLastTouchedNode(getSnapshot(activeNodeArray))
-    }, [activeNodeArray, setLastTouchedNode])
+      const nodeArray = getSnapshot(store.tree.activeNodeArray)
+      setLastTouchedNode(nodeArray)
+    }, [store.tree.activeNodeArray, setLastTouchedNode])
 
     return null
   }),

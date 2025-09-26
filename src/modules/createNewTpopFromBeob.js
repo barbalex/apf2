@@ -259,4 +259,5 @@ export const createNewTpopFromBeob = async ({
   store.tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
+  store.tree.setLastTouchedNode(newActiveNodeArray)
 }

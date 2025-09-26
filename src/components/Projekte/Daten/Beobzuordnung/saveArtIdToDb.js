@@ -87,4 +87,8 @@ export const saveArtIdToDb = async ({
   store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobnichtbeurteilt`],
   })
+  store.tsQueryClient.invalidateQueries({
+    queryKey: [`treeBeobZugeordnet`],
+  })
+  store.tree.setLastTouchedNode(newANA)
 }

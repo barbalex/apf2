@@ -197,6 +197,7 @@ export const createNewPopFromBeob = async ({
   store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
+  store.tree.setLastTouchedNode(newActiveNodeArray)
 
   return
 }

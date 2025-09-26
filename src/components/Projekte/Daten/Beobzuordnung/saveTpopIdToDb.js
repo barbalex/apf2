@@ -241,4 +241,5 @@ export const saveTpopIdToDb = async ({
   store.tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
+  setTimeout(() => store.tree.setLastTouchedNode(newANA), 1000)
 }
