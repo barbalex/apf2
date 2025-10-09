@@ -2,7 +2,7 @@
   "name": "apflora",
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
-  "version": "1.124.10",
+  "version": "1.124.11",
   "type": "module",
   "repository": {
     "type": "git",
