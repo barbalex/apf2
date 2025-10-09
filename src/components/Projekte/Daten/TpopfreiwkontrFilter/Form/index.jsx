@@ -126,6 +126,7 @@ export const Form = memo(
             row={row}
           />
           <Map
+            key={`map${row?.planVorhanden}`}
             saveToDb={saveToDb}
             row={row}
           />
@@ -134,6 +135,7 @@ export const Form = memo(
             row={row}
           />
           <More
+            key={`more${row?.jungpflanzenVorhanden}`}
             saveToDb={saveToDb}
             row={row}
           />
@@ -150,6 +152,7 @@ export const Form = memo(
             row={row}
           />
           <Verification
+            key={`verification${row?.apberNichtRelevant}`}
             saveToDb={saveToDb}
             row={row}
           />

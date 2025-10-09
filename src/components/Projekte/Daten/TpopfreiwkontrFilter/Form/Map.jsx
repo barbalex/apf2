@@ -76,7 +76,7 @@ export const Map = memo(({ saveToDb, row }) => {
       <MapLabel1>ja</MapLabel1>
       <MapVal1 data-id="planVorhanden_true">
         <RadioButton
-          key={`${row?.id}planVorhanden`}
+          key={`${row?.id}planVorhanden${row?.planVorhanden}`}
           name="planVorhanden"
           value={row?.planVorhanden}
           saveToDb={onSaveTrue}

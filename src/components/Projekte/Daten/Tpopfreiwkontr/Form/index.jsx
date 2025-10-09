@@ -299,6 +299,9 @@ export const Form = memo(
         tsQueryClient.invalidateQueries({
           queryKey: [`treeTpopfreiwkontr`],
         })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`TpopkontrQuery`],
+        })
       },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [
