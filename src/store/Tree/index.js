@@ -655,7 +655,7 @@ export const Tree = types
       return entries.length > 0
     },
     get tpopGqlFilter() {
-      // 1. prepare hiearchy filter
+      // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
         apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
@@ -750,7 +750,9 @@ export const Tree = types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
+      // TODO: remove
       // console.log('tpopGqlFilter:', tpopGqlFilter)
+      console.log('Store.Tree.tpopGqlFilter, apId:', apId)
 
       return tpopGqlFilter
     },

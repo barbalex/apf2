@@ -1,4 +1,4 @@
-import { memo, useContext, useEffect } from 'react'
+import { memo, useContext, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useApolloClient } from '@apollo/client/react'
@@ -39,14 +39,19 @@ const ObservedTpop = memo(
     const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
-    const tpopFilter = cloneDeep(tpopGqlFilter.filtered)
-    tpopFilter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
+    const tpopFilter = useMemo(() => {
+      const filter = cloneDeep(tpopGqlFilter.filtered)
+      filter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
 
-    const { data, error: errorLoadingTpopForMap } = useQuery({
+      return filter
+    }, [tpopGqlFilter.filtered])
+    //
+
+    const { data, error } = useQuery({
       queryKey: ['TpopForMapQuery', tpopFilter],
       queryFn: async () =>
         apolloClient.query({
-          query: query,
+          query,
           variables: { tpopFilter },
           fetchPolicy: 'no-cache',
         }),
@@ -139,21 +144,25 @@ const ObservedTpop = memo(
       }
     }, [idOfTpopBeingLocalized, leafletMap._container])
 
-    if (errorLoadingTpopForMap) {
+    if (error) {
       enqueNotification({
-        message: `Fehler beim Laden der Teil-Populationen für die Karte: ${errorLoadingTpopForMap.message}`,
+        message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
         options: {
           variant: 'error',
         },
       })
     }
 
-    const tpopMarkers = (data?.data?.allTpops?.nodes ?? []).map((tpop) => (
-      <Marker
-        key={tpop.id}
-        tpop={tpop}
-      />
-    ))
+    const tpopMarkers = useMemo(
+      () =>
+        (data?.data?.allTpops?.nodes ?? []).map((tpop) => (
+          <Marker
+            key={tpop.id}
+            tpop={tpop}
+          />
+        )),
+      [data?.data?.allTpops?.nodes],
+    )
 
     if (clustered) {
       return (
@@ -165,6 +174,7 @@ const ObservedTpop = memo(
         </MarkerClusterGroup>
       )
     }
+
     return tpopMarkers
   }),
 )
