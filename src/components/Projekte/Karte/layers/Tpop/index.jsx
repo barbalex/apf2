@@ -1,16 +1,18 @@
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { observer } from 'mobx-react-lite'
-import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
 
+import MarkerClusterGroup from 'react-leaflet-markercluster'
+
 import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 import { updateTpopById } from './updateTpopById.js'
+import { tpop } from '../../../../shared/fragments.js'
 
 const iconCreateFunction = (cluster) => {
   const hasHighlightedTpop = cluster
@@ -164,11 +166,15 @@ const ObservedTpop = memo(
       [data?.data?.allTpops?.nodes],
     )
 
+    console.log('Karte.Tpop, marker count:', tpopMarkers.length)
+
     if (clustered) {
       return (
         <MarkerClusterGroup
+          key={tpopMarkers.toString()} // to force rerendering when data changes, see https://github.com/barbalex/apf2/issues/750
           maxClusterRadius={66}
           iconCreateFunction={iconCreateFunction}
+          chunkedLoading
         >
           {tpopMarkers}
         </MarkerClusterGroup>

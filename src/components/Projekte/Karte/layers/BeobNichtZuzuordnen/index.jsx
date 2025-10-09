@@ -84,6 +84,7 @@ const BeobNichtZuzuordnenMarker = memo(
     if (clustered) {
       return (
         <MarkerClusterGroup
+          key={beobMarkers.toString()} // to force rerendering when data changes, see https://github.com/barbalex/apf2/issues/750
           maxClusterRadius={66}
           iconCreateFunction={iconCreateFunction}
         >
