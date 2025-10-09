@@ -273,10 +273,8 @@ export const Tree = types
     },
     get apGqlFilter() {
       const store = getParent(self)
-      // 1. prepare hiearchy filter
-      const projId = self.projIdInActiveNodeArray
-      const singleFilterByHierarchy =
-        projId ? { projId: { equalTo: projId } } : {}
+      // 1. prepare hierarchy filter
+      const singleFilterByHierarchy = {}
       // 2. prepare data filter
       let filterArrayInStore =
         self.dataFilter.ap ? [...getSnapshot(self.dataFilter.ap)] : []
@@ -294,7 +292,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialAp)
       }
       let setApFilter = false
@@ -483,12 +481,10 @@ export const Tree = types
       return entries.length > 0
     },
     get popGqlFilter() {
-      // 1. prepare hiearchy filter
-      const projId = self.projIdInActiveNodeArray
+      // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
-      const projHiearchyFilter =
-        projId ? { apByApId: { projId: { equalTo: projId } } } : {}
+      const projHiearchyFilter = {}
       const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
@@ -654,20 +650,16 @@ export const Tree = types
         ...(self.popGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       const entries = Object.entries(firstFilterObject).filter(
-        (e) => !['projId', 'apId', 'apByApId', 'geomPoint'].includes(e[0]),
+        (e) => !['apId', 'apByApId', 'geomPoint'].includes(e[0]),
       )
       return entries.length > 0
     },
     get tpopGqlFilter() {
       // 1. prepare hiearchy filter
-      const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
         apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
-      const projHiearchyFilter =
-        projId ?
-          { popByPopId: { apByApId: { projId: { equalTo: projId } } } }
-        : {}
+      const projHiearchyFilter = {}
       const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
@@ -836,29 +828,18 @@ export const Tree = types
         ...(self.tpopGqlFilter?.filtered?.or?.[0] ?? {}),
       }
       const entries = Object.entries(firstFilterObject).filter(
-        (e) =>
-          !['projId', 'apId', 'popId', 'popByPopId', 'geomPoint'].includes(
-            e[0],
-          ),
+        (e) => !['apId', 'popId', 'popByPopId', 'geomPoint'].includes(e[0]),
       )
       return entries.length > 0
     },
     get tpopmassnGqlFilter() {
-      // 1. prepare hiearchy filter
-      const projId = self.projIdInActiveNodeArray
+      // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
         apId ?
           { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter =
-        projId ?
-          {
-            tpopByTpopId: {
-              popByPopId: { apByApId: { projId: { equalTo: projId } } },
-            },
-          }
-        : {}
+      const projHiearchyFilter = {}
       const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
@@ -1039,10 +1020,7 @@ export const Tree = types
       }
       // console.log('tpopmassnIsFiltered, firstFilterObject:', firstFilterObject)
       const entries = Object.entries(firstFilterObject).filter(
-        (e) =>
-          !['projId', 'apId', 'popId', 'tpopByTpopId', 'geomPoint'].includes(
-            e[0],
-          ),
+        (e) => !['apId', 'popId', 'tpopByTpopId', 'geomPoint'].includes(e[0]),
       )
       return entries.length > 0
     },
@@ -1135,12 +1113,7 @@ export const Tree = types
     },
     get apberuebersichtGqlFilterForTree() {
       const gqlFilter = {}
-      // 1. hierarchy filter
-      const projId = self.projIdInActiveNodeArray
-      if (projId) {
-        gqlFilter.projId = { equalTo: projId }
-      }
-      // 2. node label filter
+      // node label filter
       if (self.nodeLabelFilter.apberuebersicht) {
         gqlFilter.label = {
           includesInsensitive: self.nodeLabelFilter.apberuebersicht,
@@ -1354,20 +1327,12 @@ export const Tree = types
     },
     get ekGqlFilter() {
       // 1. prepare hierarchy filter
-      const projId = self.projIdInActiveNodeArray
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
         apId ?
           { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter =
-        projId ?
-          {
-            tpopByTpopId: {
-              popByPopId: { apByApId: { projId: { equalTo: projId } } },
-            },
-          }
-        : {}
+      const projHiearchyFilter = {}
       const singleFilterByHierarchy = merge(
         merge(
           {
@@ -1554,21 +1519,13 @@ export const Tree = types
       return entries.length > 0
     },
     get ekfGqlFilter() {
-      // 1. prepare hiearchy filter
-      const projId = self.projIdInActiveNodeArray
+      // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
         apId ?
           { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter =
-        projId ?
-          {
-            tpopByTpopId: {
-              popByPopId: { apByApId: { projId: { equalTo: projId } } },
-            },
-          }
-        : {}
+      const projHiearchyFilter = {}
       const singleFilterByHierarchy = merge(
         merge(
           { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
@@ -1799,14 +1756,7 @@ export const Tree = types
         apId ?
           { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
         : {}
-      const projHiearchyFilter =
-        projId ?
-          {
-            tpopByTpopId: {
-              popByPopId: { apByApId: { projId: { equalTo: projId } } },
-            },
-          }
-        : {}
+      const projHiearchyFilter = {}
       const singleFilterByHierarchy = merge(
         apHiearchyFilter,
         projHiearchyFilter,
