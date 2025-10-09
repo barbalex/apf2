@@ -166,8 +166,6 @@ const ObservedTpop = memo(
       [data?.data?.allTpops?.nodes],
     )
 
-    console.log('Karte.Tpop, marker count:', tpopMarkers.length)
-
     if (clustered) {
       return (
         <MarkerClusterGroup
