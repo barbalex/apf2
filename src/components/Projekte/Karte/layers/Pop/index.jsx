@@ -76,6 +76,7 @@ const ObservedPop = memo(
 
     return (
       <MarkerClusterGroup
+        key={data?.data?.allPops?.nodes.map((p) => p.id).toString()} // to force rerendering when data changes, see
         maxClusterRadius={66}
         iconCreateFunction={iconCreateFunction}
       >

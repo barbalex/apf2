@@ -750,10 +750,6 @@ export const Tree = types
         filtered: { or: filterArrayWithoutEmptyObjects },
       }
 
-      // TODO: remove
-      // console.log('tpopGqlFilter:', tpopGqlFilter)
-      console.log('Store.Tree.tpopGqlFilter, apId:', apId)
-
       return tpopGqlFilter
     },
     get tpopGqlFilterForTree() {
