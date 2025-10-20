@@ -1,10 +1,7 @@
-// not in use
-// https://github.com/Flexberry/leaflet-switch-scale-control
-// but due to semantic ui requirement using this instead:
-// https://github.com/victorzinho/leaflet-switch-scale-control
+
 import 'leaflet'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import SwitchScaleControl from 'leaflet-switch-scale-control'
+import SwitchScaleControl from '../../../modules/SwitchScaleControl.js'
 import { createControlComponent } from '@react-leaflet/core'
 
 const options = {
