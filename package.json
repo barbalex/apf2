@@ -2,7 +2,7 @@
   "name": "apflora",
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
-  "version": "1.124.13",
+  "version": "1.124.14",
   "type": "module",
   "repository": {
     "type": "git",
@@ -15,7 +15,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "cross-env NODE_ENV=dev playwright test",
-    "test-report": "playwright show-report"
+    "test-report": "playwright show-report",
+    "how-to-install-using-sfw":"sfw npm install -f"
   },
   "dependencies": {
     "@apollo/client": "4.0.7",
