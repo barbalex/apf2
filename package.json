@@ -114,6 +114,7 @@
     "@typescript-eslint/eslint-plugin": "8.46.0",
     "@typescript-eslint/parser": "8.46.0",
     "@vitejs/plugin-react": "5.0.4",
+    "babel-plugin-react-compiler": "1.0.0",
     "copyfiles": "2.4.1",
     "cross-env": "10.1.0",
     "cypress": "15.4.0",
