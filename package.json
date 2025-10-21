@@ -16,7 +16,8 @@
     "preview": "vite preview",
     "test": "cross-env NODE_ENV=dev playwright test",
     "test-report": "playwright show-report",
-    "how-to-install-using-sfw":"sfw npm install -f"
+    "how-to-install-using-sfw": "sfw npm install -f",
+    "ncu using cooldown": "ncu -c 5 -i"
   },
   "dependencies": {
     "@apollo/client": "4.0.7",
