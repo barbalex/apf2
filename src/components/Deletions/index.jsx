@@ -1,4 +1,4 @@
-import { memo, useContext, useState, useCallback } from 'react'
+import { useContext, useState } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -50,139 +50,126 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-export const Deletions = memo(
-  observer(() => {
-    const apolloClient = useApolloClient()
-    const store = useContext(MobxContext)
-    const {
-      removeDeletedDatasetById,
-      deletedDatasets,
-      showDeletions,
-      setShowDeletions,
-    } = store
+export const Deletions = observer(() => {
+  const apolloClient = useApolloClient()
+  const store = useContext(MobxContext)
+  const {
+    removeDeletedDatasetById,
+    deletedDatasets,
+    showDeletions,
+    setShowDeletions,
+  } = store
 
-    const [choosenDeletions, setChoosenDeletions] = useState([])
+  const [chosenDeletions, setChosenDeletions] = useState([])
 
-    const onClickUndo = useCallback(async () => {
-      // loop through all choosenDeletions
-      await Promise.all(
-        choosenDeletions.map(
-          async (id) =>
-            await undelete({
-              deletedDatasets,
-              dataset: deletedDatasets.find((d) => d.id === id),
-              setShowDeletions,
-              removeDeletedDatasetById,
-              apolloClient,
-              store,
-            }),
-        ),
-      )
-      setChoosenDeletions([])
-      if (choosenDeletions.length === deletedDatasets.length) {
-        setShowDeletions(false)
-      }
-    }, [
-      choosenDeletions,
-      apolloClient,
-      deletedDatasets,
-      removeDeletedDatasetById,
-      setShowDeletions,
-      store,
-    ])
-    const toggleChoosenDeletions = useCallback(
-      (event) => {
-        const id = event.target.value
-        let newChoosenDeletions
-        if (choosenDeletions.includes(id)) {
-          newChoosenDeletions = choosenDeletions.filter((d) => d !== id)
-        } else {
-          newChoosenDeletions = [...choosenDeletions, id]
-        }
-        setChoosenDeletions(newChoosenDeletions)
-      },
-      [choosenDeletions],
+  const onClickUndo = async () => {
+    // loop through all chosenDeletions
+    await Promise.all(
+      chosenDeletions.map(
+        async (id) =>
+          await undelete({
+            deletedDatasets,
+            dataset: deletedDatasets.find((d) => d.id === id),
+            setShowDeletions,
+            removeDeletedDatasetById,
+            apolloClient,
+            store,
+          }),
+      ),
     )
-    const onClickClose = useCallback(
-      () => setShowDeletions(false),
-      [setShowDeletions],
-    )
+    setChosenDeletions([])
+    if (chosenDeletions.length === deletedDatasets.length) {
+      setShowDeletions(false)
+    }
+  }
 
-    return (
-      <ErrorBoundary>
-        <Dialog
-          aria-labelledby="dialog-title"
-          open={showDeletions && deletedDatasets.length > 0}
-        >
-          <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
-          <DialogContent>
-            <List>
-              {deletedDatasets.map((ds, index) => {
-                // clone to remove keys _only_ for presentation
-                const dataset = { ...ds.data }
-                // remove null values
-                Object.keys(dataset).forEach(
-                  (key) => dataset[key] == null && delete dataset[key],
-                )
-                const time = DateTime.fromMillis(ds.time).toFormat(
-                  'yyyy.LL.dd HH:mm:ss',
-                )
+  const toggleChoosenDeletions = (event) => {
+    const id = event.target.value
+    let newChoosenDeletions
+    if (chosenDeletions.includes(id)) {
+      newChoosenDeletions = chosenDeletions.filter((d) => d !== id)
+    } else {
+      newChoosenDeletions = [...chosenDeletions, id]
+    }
+    setChosenDeletions(newChoosenDeletions)
+  }
 
-                return (
-                  <Row
-                    key={ds.id}
-                    data-withtopline={index > 0}
-                  >
-                    <StyledFormControlLabel
-                      control={
-                        <StyledCheckbox
-                          checked={choosenDeletions.includes(ds.id)}
-                          onChange={toggleChoosenDeletions}
-                          value={ds.id}
-                          color="primary"
-                        />
-                      }
+  const onClickClose = () => setShowDeletions(false)
+
+  return (
+    <ErrorBoundary>
+      <Dialog
+        aria-labelledby="dialog-title"
+        open={showDeletions && deletedDatasets.length > 0}
+      >
+        <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
+        <DialogContent>
+          <List>
+            {deletedDatasets.map((ds, index) => {
+              // clone to remove keys _only_ for presentation
+              const dataset = { ...ds.data }
+              // remove null values
+              Object.keys(dataset).forEach(
+                (key) => dataset[key] == null && delete dataset[key],
+              )
+              const time = DateTime.fromMillis(ds.time).toFormat(
+                'yyyy.LL.dd HH:mm:ss',
+              )
+
+              return (
+                <Row
+                  key={ds.id}
+                  data-withtopline={index > 0}
+                >
+                  <StyledFormControlLabel
+                    control={
+                      <StyledCheckbox
+                        checked={chosenDeletions.includes(ds.id)}
+                        onChange={toggleChoosenDeletions}
+                        value={ds.id}
+                        color="primary"
+                      />
+                    }
+                  />
+                  <TextContainer>
+                    <StyledTextField
+                      label="Lösch-Zeitpunkt"
+                      value={time}
+                      fullWidth
                     />
-                    <TextContainer>
-                      <StyledTextField
-                        label="Lösch-Zeitpunkt"
-                        value={time}
-                        fullWidth
-                      />
-                      <StyledTextField
-                        label="Tabelle"
-                        value={ds.table}
-                        fullWidth
-                      />
-                      <StyledTextField
-                        label="Daten"
-                        value={JSON.stringify(dataset, null, 2)}
-                        multiline
-                        fullWidth
-                      />
-                    </TextContainer>
-                  </Row>
-                )
-              })}
-            </List>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={onClickUndo}
-              disabled={choosenDeletions.length === 0}
-              color="inherit"
-            >
-              wiederherstellen
-            </Button>
-            <Button
-              color="primary"
-              onClick={onClickClose}
-            >
-              schliessen
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </ErrorBoundary>
-    )
-  }),
-)
+                    <StyledTextField
+                      label="Tabelle"
+                      value={ds.table}
+                      fullWidth
+                    />
+                    <StyledTextField
+                      label="Daten"
+                      value={JSON.stringify(dataset, null, 2)}
+                      multiline
+                      fullWidth
+                    />
+                  </TextContainer>
+                </Row>
+              )
+            })}
+          </List>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={onClickUndo}
+            disabled={chosenDeletions.length === 0}
+            color="inherit"
+          >
+            wiederherstellen
+          </Button>
+          <Button
+            color="primary"
+            onClick={onClickClose}
+          >
+            schliessen
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </ErrorBoundary>
+  )
+})
