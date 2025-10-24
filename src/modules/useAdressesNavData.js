@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -46,32 +46,29 @@ export const useAdressesNavData = () => {
   const count = data?.data?.allAdresses?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Adressen',
-      listFilter: 'adresse',
-      url: `/Daten/Werte-Listen/Adressen`,
-      label: `Adressen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'adresseFolder',
-      treeId: `AdresseFolder`,
-      treeUrl: ['Werte-Listen', 'Adressen'],
-      hasChildren: !!count,
-      fetcherName: 'useAdressesNavData',
-      fetcherParams: {},
-      component: NodeWithList,
-      menus: (data?.data?.allAdresses?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'adresse',
-        treeId: p.id,
-        treeUrl: ['Werte-Listen', 'Adressen', p.id],
-        hasChildren: false,
-      })),
-    }),
-    [count, data?.data?.allAdresses?.nodes, isLoading, totalCount],
-  )
+  const navData = {
+    id: 'Adressen',
+    listFilter: 'adresse',
+    url: `/Daten/Werte-Listen/Adressen`,
+    label: `Adressen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'adresseFolder',
+    treeId: `AdresseFolder`,
+    treeUrl: ['Werte-Listen', 'Adressen'],
+    hasChildren: !!count,
+    fetcherName: 'useAdressesNavData',
+    fetcherParams: {},
+    component: NodeWithList,
+    menus: (data?.data?.allAdresses?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'adresse',
+      treeId: p.id,
+      treeUrl: ['Werte-Listen', 'Adressen', p.id],
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }

@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -55,32 +55,22 @@ export const useApartsNavData = (props) => {
   const count = data?.data?.apById?.apartsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Taxa',
-      listFilter: 'apart',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Taxa`,
-      label: `Taxa (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus: (data?.data?.apById?.apartsByApId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'apart',
-        treeId: p.id,
-        treeParentTableId: apId,
-        treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa', p.id],
-        hasChildren: false,
-      })),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.apById?.apartsByApId?.nodes,
-      isLoading,
-      projId,
-      totalCount,
-    ],
-  )
+  const navData = {
+    id: 'Taxa',
+    listFilter: 'apart',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Taxa`,
+    label: `Taxa (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    menus: (data?.data?.apById?.apartsByApId?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'apart',
+      treeId: p.id,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa', p.id],
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
