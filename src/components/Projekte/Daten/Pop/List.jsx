@@ -1,12 +1,10 @@
-import { memo } from 'react'
-
 import { List as SharedList } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { usePopNavData } from '../../../../modules/usePopNavData.js'
 
-export const List = memo(() => {
+export const List = () => {
   const { navData, isLoading, error } = usePopNavData()
 
   if (isLoading) return <Spinner />
@@ -20,4 +18,4 @@ export const List = memo(() => {
       menuBarProps={{ row: navData }}
     />
   )
-})
+}
