@@ -1,6 +1,6 @@
-import { useMemo, useContext, useEffect } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useContext, useEffect } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
@@ -71,64 +71,53 @@ export const useProjektNavData = (props) => {
   const allApberuebersichtsCount =
     data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: projId,
-      url: `/Daten/Projekte/${projId}`,
-      label,
-      treeNodeType: 'table',
-      treeMenuType: 'projekt',
-      treeId: projId,
-      treeParentTableId: projId,
-      treeUrl: ['Projekte', projId],
-      hasChildren: true,
-      fetcherName: 'useProjektNavData',
-      fetcherParams: { projId },
-      component: NodeWithList,
-      menus: [
-        {
-          id: 'Projekt',
-          label: 'Projekt',
-          isSelf: true,
-        },
-        {
-          id: 'Arten',
-          label: `Arten (${isLoading ? '...' : `${artsCount}/${allArtsCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'apFolder',
-          treeId: `${projId}/ApFolder`,
-          treeParentTableId: projId,
-          treeUrl: ['Projekte', projId, 'Arten'],
-          hasChildren: !!artsCount,
-          fetcherName: 'useApsNavData',
-          fetcherParams: { projId },
-          component: NodeWithList,
-        },
-        {
-          id: 'AP-Berichte',
-          label: `AP-Berichte (${isLoading ? '...' : `${apberuebersichtsCount}/${allApberuebersichtsCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'apberuebersichtFolder',
-          treeId: `${projId}ApberuebersichtFolder`,
-          treeParentTableId: projId,
-          treeUrl: ['Projekte', projId, 'AP-Berichte'],
-          hasChildren: !!apberuebersichtsCount,
-          fetcherName: 'useApberuebersichtsNavData',
-          fetcherParams: { projId },
-          component: NodeWithList,
-        },
-      ],
-    }),
-    [
-      allApberuebersichtsCount,
-      allArtsCount,
-      apberuebersichtsCount,
-      artsCount,
-      isLoading,
-      label,
-      projId,
+  const navData = {
+    id: projId,
+    url: `/Daten/Projekte/${projId}`,
+    label,
+    treeNodeType: 'table',
+    treeMenuType: 'projekt',
+    treeId: projId,
+    treeParentTableId: projId,
+    treeUrl: ['Projekte', projId],
+    hasChildren: true,
+    fetcherName: 'useProjektNavData',
+    fetcherParams: { projId },
+    component: NodeWithList,
+    menus: [
+      {
+        id: 'Projekt',
+        label: 'Projekt',
+        isSelf: true,
+      },
+      {
+        id: 'Arten',
+        label: `Arten (${isLoading ? '...' : `${artsCount}/${allArtsCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'apFolder',
+        treeId: `${projId}/ApFolder`,
+        treeParentTableId: projId,
+        treeUrl: ['Projekte', projId, 'Arten'],
+        hasChildren: !!artsCount,
+        fetcherName: 'useApsNavData',
+        fetcherParams: { projId },
+        component: NodeWithList,
+      },
+      {
+        id: 'AP-Berichte',
+        label: `AP-Berichte (${isLoading ? '...' : `${apberuebersichtsCount}/${allApberuebersichtsCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'apberuebersichtFolder',
+        treeId: `${projId}ApberuebersichtFolder`,
+        treeParentTableId: projId,
+        treeUrl: ['Projekte', projId, 'AP-Berichte'],
+        hasChildren: !!apberuebersichtsCount,
+        fetcherName: 'useApberuebersichtsNavData',
+        fetcherParams: { projId },
+        component: NodeWithList,
+      },
     ],
-  )
+  }
 
   return { isLoading, error, navData }
 }

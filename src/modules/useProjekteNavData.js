@@ -1,6 +1,5 @@
-import { useMemo } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
 export const useProjekteNavData = () => {
@@ -27,18 +26,15 @@ export const useProjekteNavData = () => {
 
   const count = data?.data?.allProjekts?.nodes?.length ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'projekte',
-      url: '/Daten/Projekte',
-      label: `Projekte (${isLoading ? '...' : count})`,
-      menus: (data?.data?.allProjekts?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.name,
-      })),
-    }),
-    [count, data?.data?.allProjekts?.nodes, isLoading],
-  )
+  const navData = {
+    id: 'projekte',
+    url: '/Daten/Projekte',
+    label: `Projekte (${isLoading ? '...' : count})`,
+    menus: (data?.data?.allProjekts?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.name,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
