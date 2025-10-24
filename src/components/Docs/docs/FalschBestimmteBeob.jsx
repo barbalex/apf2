@@ -1,8 +1,6 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Falsch bestimmte Beobachtungen 👀</h1>
     <DokuDate>30.01.2019</DokuDate>
@@ -39,4 +37,4 @@ export const Component = memo(() => (
       denen die Art verändert wurde&quot;.
     </p>
   </>
-))
+)

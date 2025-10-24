@@ -1,8 +1,6 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Erfolgs-Kontrollen Freiwillige (EKF)</h1>
     <DokuDate>13.01.2020</DokuDate>
@@ -22,8 +20,8 @@ export const Component = memo(() => (
         integriert
       </li>
       <li>
-        Erstellt man eine neue EKF, werden die im Navigationsbaum unter der Art im
-        Knoten &quot;EK-Zähleinheiten&quot; aufgelisteten maximal 3
+        Erstellt man eine neue EKF, werden die im Navigationsbaum unter der Art
+        im Knoten &quot;EK-Zähleinheiten&quot; aufgelisteten maximal 3
         Zähleinheiten erzeugt
       </li>
       <li>
@@ -159,4 +157,4 @@ export const Component = memo(() => (
       </li>
     </ol>
   </>
-))
+)
