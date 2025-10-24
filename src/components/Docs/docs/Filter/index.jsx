@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../../DesktopDocs.jsx'
 import entfernen1 from './entfernen_1.png'
 import formularFilter1 from './formular_filter_1.png'
@@ -12,7 +10,7 @@ import uebersicht1 from './uebersicht_1.png'
 import zusammenspiel from './zusammenspiel.png'
 import kartenFilterEntfernen from './karten-filter-entfernen.gif'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Filter</h1>
     <DokuDate>22.11.2024</DokuDate>
@@ -126,10 +124,11 @@ export const Component = memo(() => (
     </p>
     <p>
       Filtern kann man im <code>Navigationsbaum</code> <em>und</em> im{' '}
-      <code>Navigationsbaum 2</code>. Öffnet man den <code>Navigationsbaum 2</code>,
-      entspricht er genau dem <code>Navigationsbaum</code>, d.h. es wird auch ein
-      allfälliger Filter kopiert. Danach sind die Filter unabhängig im
-      jeweiligen Navigationsbaum gültig.
+      <code>Navigationsbaum 2</code>. Öffnet man den{' '}
+      <code>Navigationsbaum 2</code>, entspricht er genau dem{' '}
+      <code>Navigationsbaum</code>, d.h. es wird auch ein allfälliger Filter
+      kopiert. Danach sind die Filter unabhängig im jeweiligen Navigationsbaum
+      gültig.
     </p>
     <h4>Und-Filter</h4>
     <p>
@@ -277,4 +276,4 @@ export const Component = memo(() => (
       />
     </p>
   </>
-))
+)

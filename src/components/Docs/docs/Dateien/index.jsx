@@ -1,8 +1,6 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Dateien anfügen 📸</h1>
     <DokuDate>21.12.2024</DokuDate>
@@ -40,4 +38,4 @@ export const Component = memo(() => (
       <li>Maximale Datei-Grösse ist 100MB</li>
     </ul>
   </>
-))
+)
