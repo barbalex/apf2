@@ -1,10 +1,8 @@
-import { memo, useCallback } from 'react'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { MdEditNote } from 'react-icons/md'
 import { remove } from 'es-toolkit'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { StyledButton, StyledIconButton } from './index.jsx'
@@ -14,14 +12,14 @@ import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
-export const Daten = memo(({ treeNr = '', hide = false }) => {
+export const Daten = ({ treeNr = '', hide = false }) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
   const isDaten = projekteTabs.includes(`daten${treeNr}`)
   const isTree = projekteTabs.includes(`tree${treeNr}`)
 
   const [isDesktopView] = useAtom(isDesktopViewAtom)
 
-  const onClickButton = useCallback(() => {
+  const onClickButton = () => {
     const copyOfProjekteTabs = [...projekteTabs]
     if (isDesktopView) {
       if (copyOfProjekteTabs.includes(`daten${treeNr}`)) {
@@ -34,7 +32,7 @@ export const Daten = memo(({ treeNr = '', hide = false }) => {
       // show one tab only
       setProjekteTabs([`daten${treeNr}`])
     }
-  }, [projekteTabs, setProjekteTabs, treeNr])
+  }
 
   let followed = projekteTabs.includes('filter')
   if (treeNr === '2') {
@@ -71,4 +69,4 @@ export const Daten = memo(({ treeNr = '', hide = false }) => {
       }
     </Tooltip>
   )
-})
+}
