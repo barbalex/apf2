@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -68,64 +68,52 @@ export const useTpopmassnbersNavData = (props) => {
   const count = data?.data?.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Massnahmen-Berichte',
-      listFilter: 'tpopmassnber',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen-Berichte`,
-      label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'tpopmassnberFolder',
-      treeId: `${tpopId}TpopmassnberFolder`,
-      treeParentTableId: tpopId,
-      treeUrl: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Massnahmen-Berichte',
-      ],
-      hasChildren: !!count,
-      component: NodeWithList,
-      menus: (data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []).map(
-        (p) => ({
-          id: p.id,
-          label: p.label,
-          treeNodeType: 'table',
-          treeMenuType: 'tpopmassnber',
-          treeId: p.id,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Massnahmen-Berichte',
-            p.id,
-          ],
-          hasChildren: false,
-        }),
-      ),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes,
-      isLoading,
-      popId,
+  const navData = {
+    id: 'Massnahmen-Berichte',
+    listFilter: 'tpopmassnber',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen-Berichte`,
+    label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'tpopmassnberFolder',
+    treeId: `${tpopId}TpopmassnberFolder`,
+    treeParentTableId: tpopId,
+    treeUrl: [
+      'Projekte',
       projId,
-      totalCount,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
       tpopId,
+      'Massnahmen-Berichte',
     ],
-  )
+    hasChildren: !!count,
+    component: NodeWithList,
+    menus: (data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []).map(
+      (p) => ({
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'tpopmassnber',
+        treeId: p.id,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Massnahmen-Berichte',
+          p.id,
+        ],
+        hasChildren: false,
+      }),
+    ),
+  }
 
   return { isLoading, error, navData }
 }

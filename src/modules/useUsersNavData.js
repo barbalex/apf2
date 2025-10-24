@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
@@ -47,31 +47,28 @@ export const useUsersNavData = () => {
   const count = data?.data?.allUsers?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Benutzer',
-      listFilter: 'user',
-      url: `/Daten/Benutzer`,
-      label: `Benutzer (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'userFolder',
-      treeId: 'Benutzer',
-      treeUrl: ['Benutzer'],
-      fetcherName: 'useUsersNavData',
-      hasChildren: !!count,
-      component: NodeWithList,
-      menus: (data?.data?.allUsers?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'user',
-        treeId: p.id,
-        treeUrl: ['Benutzer', p.id],
-        hasChildren: false,
-      })),
-    }),
-    [count, data?.data?.allUsers?.nodes, isLoading, totalCount],
-  )
+  const navData = {
+    id: 'Benutzer',
+    listFilter: 'user',
+    url: `/Daten/Benutzer`,
+    label: `Benutzer (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'userFolder',
+    treeId: 'Benutzer',
+    treeUrl: ['Benutzer'],
+    fetcherName: 'useUsersNavData',
+    hasChildren: !!count,
+    component: NodeWithList,
+    menus: (data?.data?.allUsers?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'user',
+      treeId: p.id,
+      treeUrl: ['Benutzer', p.id],
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
