@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
@@ -12,18 +12,15 @@ const Container = styled.div`
   justify-content: center;
 `
 
-export const CellForValue = memo(
-  observer(({ field, width, row, isOdd, firstChild }) => {
+export const CellForValue = observer(
+  ({ field, width, row, isOdd, firstChild }) => {
     const store = useContext(MobxContext)
 
     const { value } = field
 
     const { hovered } = store.ekPlan
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
-    const onMouseEnter = useCallback(
-      () => hovered.setTpopId(row.id),
-      [hovered, row.id],
-    )
+    const onMouseEnter = () => hovered.setTpopId(row.id)
 
     return (
       <StyledTableCell
@@ -39,5 +36,5 @@ export const CellForValue = memo(
         </Container>
       </StyledTableCell>
     )
-  }),
+  },
 )
