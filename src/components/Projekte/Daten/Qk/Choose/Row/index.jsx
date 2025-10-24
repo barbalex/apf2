@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
 import Checkbox from '@mui/material/Checkbox'
 import { gql } from '@apollo/client'
@@ -28,7 +27,7 @@ const Beschreibung = styled.div`
   align-items: center;
 `
 
-export const Row = memo(({ apId, qk }) => {
+export const Row = ({ apId, qk }) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -45,7 +44,7 @@ export const Row = memo(({ apId, qk }) => {
 
   const checked = !!apqk
 
-  const onChange = useCallback(async () => {
+  const onChange = async () => {
     // 1. if checked, delete apqk
     // 2. else create apqk
     const variables = { apId, qkName: qk.name }
@@ -84,7 +83,7 @@ export const Row = memo(({ apId, qk }) => {
         queryKey: [`apqkQueryForRow`],
       }),
     )
-  }, [apId, checked, tsQueryClient, qk.name])
+  }
 
   if (error) return <Error error={error} />
   return (
@@ -100,4 +99,4 @@ export const Row = memo(({ apId, qk }) => {
       <Beschreibung>{qk.beschreibung}</Beschreibung>
     </RowDiv>
   )
-})
+}

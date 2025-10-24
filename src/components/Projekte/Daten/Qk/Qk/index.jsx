@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -84,171 +84,162 @@ const ScrollContainer = styled.div`
   overflow-y: auto;
 `
 
-export const Qk = memo(
-  observer(({ qkNameQueries, qks }) => {
-    const { apId, projId } = useParams()
-    const { search } = useLocation()
+export const Qk = observer(({ qkNameQueries, qks }) => {
+  const { apId, projId } = useParams()
+  const { search } = useLocation()
 
-    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
+  const [projekteTabs, setProjekteTabs] = useProjekteTabs()
 
-    const store = useContext(MobxContext)
-    const { openTree2WithActiveNodeArray } = store
+  const store = useContext(MobxContext)
+  const { openTree2WithActiveNodeArray } = store
 
-    const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
-    const [filter, setFilter] = useState('')
+  const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
+  const [filter, setFilter] = useState('')
 
-    const { data, error, loading, refetch } = useQuery(query, {
-      // want to explicitly show user re-loading
-      fetchPolicy: 'no-cache',
-      notifyOnNetworkStatusChange: true,
-      variables: {
-        ...qkNameQueries,
-        berichtjahr,
-        notIsBerichtjahr: !berichtjahr,
-        apId,
-        projId,
-      },
-    })
-
-    const onChangeBerichtjahr = useCallback(
-      (event) => setBerichtjahr(+event.target.value),
-      [],
-    )
-    const onChangeFilter = useCallback(
-      (event) => setFilter(event.target.value),
-      [],
-    )
-
-    console.log('Qk', {
-      apId,
-      projId,
+  const { data, error, loading, refetch } = useQuery(query, {
+    // want to explicitly show user re-loading
+    fetchPolicy: 'no-cache',
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      ...qkNameQueries,
       berichtjahr,
-      tpopMitAktuellenKontrollenOhneZielrelevanteEinheitNodes:
-        data?.tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?.nodes,
-    })
-
-    const messageFunctions = createMessageFunctions({
-      data,
-      projId,
+      notIsBerichtjahr: !berichtjahr,
       apId,
-    })
-    const messageGroups = qks
-      .filter((qk) => !!messageFunctions[qk.name])
-      .map((qk) => ({
-        title: qk.titel,
-        messages: messageFunctions[qk.name](),
-      }))
-      .filter((q) => q.messages.length)
+      projId,
+    },
+  })
 
-    const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
-      if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
-        return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
-      }
-      return true
-    })
+  const onChangeBerichtjahr = (event) => setBerichtjahr(+event.target.value)
+  const onChangeFilter = (event) => setFilter(event.target.value)
 
-    if (error) return <Error error={error} />
-    return (
-      <ErrorBoundary>
-        <FormTitle title="Qualitätskontrollen ausführen" />
-        <Container>
-          <BerichtjahrControl
-            fullWidth
-            variant="standard"
+  console.log('Qk', {
+    apId,
+    projId,
+    berichtjahr,
+    tpopMitAktuellenKontrollenOhneZielrelevanteEinheitNodes:
+      data?.tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?.nodes,
+  })
+
+  const messageFunctions = createMessageFunctions({
+    data,
+    projId,
+    apId,
+  })
+  const messageGroups = qks
+    .filter((qk) => !!messageFunctions[qk.name])
+    .map((qk) => ({
+      title: qk.titel,
+      messages: messageFunctions[qk.name](),
+    }))
+    .filter((q) => q.messages.length)
+
+  const messageGroupsFiltered = messageGroups.filter((messageGroup) => {
+    if (!!filter && messageGroup.title && messageGroup.title.toLowerCase) {
+      return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
+    }
+    return true
+  })
+
+  if (error) return <Error error={error} />
+  return (
+    <ErrorBoundary>
+      <FormTitle title="Qualitätskontrollen ausführen" />
+      <Container>
+        <BerichtjahrControl
+          fullWidth
+          variant="standard"
+        >
+          <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+          <Input
+            id="berichtjahr"
+            value={berichtjahr}
+            type="number"
+            onChange={onChangeBerichtjahr}
+          />
+        </BerichtjahrControl>
+        <StyledFormControl
+          fullWidth
+          variant="standard"
+        >
+          <InputLabel htmlFor="filter">
+            nach Abschnitts-Titel filtern
+          </InputLabel>
+          <Input
+            id="filter"
+            value={filter}
+            onChange={onChangeFilter}
+          />
+        </StyledFormControl>
+        {loading ?
+          <AnalyzingButton
+            onClick={() => refetch()}
+            variant="outlined"
           >
-            <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-            <Input
-              id="berichtjahr"
-              value={berichtjahr}
-              type="number"
-              onChange={onChangeBerichtjahr}
-            />
-          </BerichtjahrControl>
-          <StyledFormControl
-            fullWidth
-            variant="standard"
-          >
-            <InputLabel htmlFor="filter">
-              nach Abschnitts-Titel filtern
-            </InputLabel>
-            <Input
-              id="filter"
-              value={filter}
-              onChange={onChangeFilter}
-            />
-          </StyledFormControl>
-          {loading ?
-            <AnalyzingButton
-              onClick={() => refetch()}
-              variant="outlined"
+            <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
+            <CircularProgress />
+          </AnalyzingButton>
+        : <div>
+            <Badge
+              badgeContent={messageGroupsFiltered.length}
+              color="primary"
             >
-              <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
-              <CircularProgress />
-            </AnalyzingButton>
-          : <div>
-              <Badge
-                badgeContent={messageGroupsFiltered.length}
-                color="primary"
+              <AnalyzingButton
+                onClick={() => refetch()}
+                variant="outlined"
               >
-                <AnalyzingButton
-                  onClick={() => refetch()}
-                  variant="outlined"
-                >
-                  neu analysieren
-                </AnalyzingButton>
-              </Badge>
-            </div>
-          }
-          <ScrollContainer>
-            {messageGroupsFiltered.map((messageGroup) => (
-              <StyledPaper
-                key={messageGroup.title}
-                elevation={2}
-              >
-                <Title>{messageGroup.title}</Title>
-                {messageGroup.messages.map((m, i) => (
-                  <Row key={`${m.text}Index${i}`}>
-                    <StyledA
-                      onClick={() =>
-                        openTree2WithActiveNodeArray({
-                          activeNodeArray: m.url,
-                          search,
-                          projekteTabs,
-                          setProjekteTabs,
-                          onlyShowActivePath: true,
-                        })
+                neu analysieren
+              </AnalyzingButton>
+            </Badge>
+          </div>
+        }
+        <ScrollContainer>
+          {messageGroupsFiltered.map((messageGroup) => (
+            <StyledPaper
+              key={messageGroup.title}
+              elevation={2}
+            >
+              <Title>{messageGroup.title}</Title>
+              {messageGroup.messages.map((m, i) => (
+                <Row key={`${m.text}Index${i}`}>
+                  <StyledA
+                    onClick={() =>
+                      openTree2WithActiveNodeArray({
+                        activeNodeArray: m.url,
+                        search,
+                        projekteTabs,
+                        setProjekteTabs,
+                        onlyShowActivePath: true,
+                      })
+                    }
+                    title="in Navigationsbaum 2 öffnen"
+                  >
+                    {m.text}
+                  </StyledA>
+                  <OutsideLink
+                    onClick={() => {
+                      const url = `${appBaseUrl()}Daten/${m.url.join(
+                        '/',
+                      )}?onlyShowActivePath=true`
+                      if (
+                        window.matchMedia('(display-mode: standalone)').matches
+                      ) {
+                        return window.open(url, '_blank', 'toolbar=no')
                       }
-                      title="in Navigationsbaum 2 öffnen"
-                    >
-                      {m.text}
-                    </StyledA>
-                    <OutsideLink
-                      onClick={() => {
-                        const url = `${appBaseUrl()}Daten/${m.url.join(
-                          '/',
-                        )}?onlyShowActivePath=true`
-                        if (
-                          window.matchMedia('(display-mode: standalone)')
-                            .matches
-                        ) {
-                          return window.open(url, '_blank', 'toolbar=no')
-                        }
-                        window.open(url)
-                      }}
-                      title="in neuem Fenster öffnen"
-                    >
-                      <FaExternalLinkAlt />
-                    </OutsideLink>
-                  </Row>
-                ))}
-              </StyledPaper>
-            ))}
-          </ScrollContainer>
-          {!loading && messageGroups.length === 0 && (
-            <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
-          )}
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+                      window.open(url)
+                    }}
+                    title="in neuem Fenster öffnen"
+                  >
+                    <FaExternalLinkAlt />
+                  </OutsideLink>
+                </Row>
+              ))}
+            </StyledPaper>
+          ))}
+        </ScrollContainer>
+        {!loading && messageGroups.length === 0 && (
+          <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
+        )}
+      </Container>
+    </ErrorBoundary>
+  )
+})
