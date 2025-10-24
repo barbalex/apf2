@@ -4,5 +4,8 @@
     "**/.pnp.*": true
   },
   "eslint.nodePath": "",
-  "prettier.prettierPath": ""
+  "prettier.prettierPath": "",
+  "cSpell.words": [
+    "assozarten"
+  ]
 }

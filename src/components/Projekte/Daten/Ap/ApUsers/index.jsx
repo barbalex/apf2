@@ -1,7 +1,5 @@
-import { memo } from 'react'
-import { observer } from 'mobx-react-lite'
-import { gql } from '@apollo/client';
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router'
 
@@ -34,95 +32,91 @@ const InfoRow = styled.li`
   margin-bottom: 0;
 `
 
-export const ApUsers = memo(
-  observer(() => {
-    const { apId } = useParams()
+export const ApUsers = () => {
+  const { apId } = useParams()
 
-    const { data, error, loading, refetch } = useQuery(
-      gql`
-        query apUsersForApQuery($apId: UUID!) {
-          allApUsers(
-            filter: {
-              apId: { equalTo: $apId }
-              # uncommented because ap_writer's dont see other names otherwise
-              # userByUserName: {
-              #   role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
-              # }
-            }
-          ) {
-            nodes {
+  const { data, error, loading, refetch } = useQuery(
+    gql`
+      query apUsersForApQuery($apId: UUID!) {
+        allApUsers(
+          filter: {
+            apId: { equalTo: $apId }
+            # uncommented because ap_writer's dont see other names otherwise
+            # userByUserName: {
+            #   role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
+            # }
+          }
+        ) {
+          nodes {
+            id
+            userName
+            userByUserName {
               id
-              userName
-              userByUserName {
-                id
-                role
-              }
+              role
             }
           }
         }
-      `,
-      {
-        variables: { apId },
-      },
-    )
-    const apUsers = data ? (data?.allApUsers?.nodes ?? []) : []
+      }
+    `,
+    {
+      variables: { apId },
+    },
+  )
+  const apUsers = data ? (data?.allApUsers?.nodes ?? []) : []
 
-    if (loading) {
-      return (
-        <Container>
-          <Label label={'Benutzer mit Zugriff'} />
-          lade Daten...
-        </Container>
-      )
-    }
-
-    if (error) return <Error error={error} />
-
+  if (loading) {
     return (
       <Container>
         <Label label={'Benutzer mit Zugriff'} />
-        <NewUserContainer>
-          {apUsers.length ?
-            apUsers.map((user) => (
-              <ApUser
-                key={user.id}
-                user={user}
-                refetch={refetch}
-              />
-            ))
-          : 'Es wurden noch keine Zugriffe erteilt'}
-          <Info>
-            <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
-            <InfoList>
-              <InfoRow>
-                {
-                  '"ap_writer" haben Schreib-Rechte, wenn sie oben aufgelistet sind'
-                }
-              </InfoRow>
-              <InfoRow>
-                {
-                  '"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'
-                }
-              </InfoRow>
-            </InfoList>
-            <InfoTitle>Darüber hinaus haben immer Zugriff:</InfoTitle>
-            <InfoList>
-              <InfoRow>{'"manager" (Schreib-Rechte)'}</InfoRow>
-              <InfoRow>{'"reader" (Lese-Rechte)'}</InfoRow>
-            </InfoList>
-            <InfoTitle>
-              {
-                'Nur "manager" sehen die Rollen von Benutzern (Benutzer-Infos sind geschützt).'
-              }
-            </InfoTitle>
-          </Info>
-        </NewUserContainer>
-        <NewUser
-          apId={apId}
-          apUsers={apUsers}
-          refetch={refetch}
-        />
+        lade Daten...
       </Container>
     )
-  }),
-)
+  }
+
+  if (error) return <Error error={error} />
+
+  return (
+    <Container>
+      <Label label={'Benutzer mit Zugriff'} />
+      <NewUserContainer>
+        {apUsers.length ?
+          apUsers.map((user) => (
+            <ApUser
+              key={user.id}
+              user={user}
+              refetch={refetch}
+            />
+          ))
+        : 'Es wurden noch keine Zugriffe erteilt'}
+        <Info>
+          <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
+          <InfoList>
+            <InfoRow>
+              {
+                '"ap_writer" haben Schreib-Rechte, wenn sie oben aufgelistet sind'
+              }
+            </InfoRow>
+            <InfoRow>
+              {'"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'}
+            </InfoRow>
+          </InfoList>
+          <InfoTitle>Darüber hinaus haben immer Zugriff:</InfoTitle>
+          <InfoList>
+            <InfoRow>{'"manager" (Schreib-Rechte)'}</InfoRow>
+            <InfoRow>{'"reader" (Lese-Rechte)'}</InfoRow>
+          </InfoList>
+          <InfoTitle>
+            {
+              'Nur "manager" sehen die Rollen von Benutzern (Benutzer-Infos sind geschützt).'
+            }
+          </InfoTitle>
+        </Info>
+      </NewUserContainer>
+      <NewUser
+        apId={apId}
+        apUsers={apUsers}
+        refetch={refetch}
+      />
+    </Container>
+  )
+}

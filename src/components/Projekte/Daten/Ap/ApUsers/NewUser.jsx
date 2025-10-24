@@ -1,11 +1,11 @@
-import { memo, useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { gql } from '@apollo/client'
 
 import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { Select } from '../../../../shared/Select.jsx'
 
-export const NewUser = memo(({ apId, apUsers, refetch }) => {
+export const NewUser = ({ apId, apUsers, refetch }) => {
   const apolloClient = useApolloClient()
 
   const [error, setError] = useState(null)
@@ -37,31 +37,26 @@ export const NewUser = memo(({ apId, apUsers, refetch }) => {
       label: `${d.name ?? '(kein Name)'} (${d.role.replace('apflora_', '')})`,
     }))
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const name = event.target.value
-      try {
-        await apolloClient.mutate({
-          mutation: gql`
-            mutation createApUserForApMutation($apId: UUID!, $name: String) {
-              createApUser(
-                input: { apUser: { apId: $apId, userName: $name } }
-              ) {
-                apUser {
-                  id
-                }
+  const saveToDb = async (event) => {
+    const name = event.target.value
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
+          mutation createApUserForApMutation($apId: UUID!, $name: String) {
+            createApUser(input: { apUser: { apId: $apId, userName: $name } }) {
+              apUser {
+                id
               }
             }
-          `,
-          variables: { apId, name },
-        })
-      } catch (error) {
-        return setError(error.message)
-      }
-      refetch()
-    },
-    [apId, apolloClient, refetch],
-  )
+          }
+        `,
+        variables: { apId, name },
+      })
+    } catch (error) {
+      return setError(error.message)
+    }
+    refetch()
+  }
 
   useEffect(() => {
     if (queryError) setError(queryError.message)
@@ -79,4 +74,4 @@ export const NewUser = memo(({ apId, apUsers, refetch }) => {
       saveToDb={saveToDb}
     />
   )
-})
+}
