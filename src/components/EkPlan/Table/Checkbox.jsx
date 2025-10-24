@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -32,23 +32,22 @@ const StyledCheckbox = styled.div`
   }
 `
 
-export const Checkbox = memo(
-  observer(({ row, value, field }) => {
-    const store = useContext(MobxContext)
-    const { enqueNotification } = store
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+export const Checkbox = observer(({ row, value, field }) => {
+  const store = useContext(MobxContext)
+  const { enqueNotification } = store
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [checked, setChecked] = useState(value === null ? false : value)
-    useEffect(() => {
-      setChecked(row[field] === true)
-    }, [field, row, value])
+  const [checked, setChecked] = useState(value === null ? false : value)
+  useEffect(() => {
+    setChecked(row[field] === true)
+  }, [field, row, value])
 
-    const onClick = useCallback(async () => {
-      setChecked(!checked)
-      try {
-        await apolloClient.mutate({
-          mutation: gql`
+  const onClick = async () => {
+    setChecked(!checked)
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateTpopCheckbox(
               $id: UUID!
               $${field}: Boolean
@@ -71,34 +70,33 @@ export const Checkbox = memo(
             }
             ${tpop}
           `,
-          variables: {
-            id: row.id,
-            [field]: !checked,
-            changedBy: store.user.name,
-          },
-        })
-      } catch (error) {
-        setChecked(!checked)
-        enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: ['EkplanTpopQuery'],
+        variables: {
+          id: row.id,
+          [field]: !checked,
+          changedBy: store.user.name,
+        },
       })
-    }, [checked, apolloClient, field, row, store.user.name, enqueNotification])
+    } catch (error) {
+      setChecked(!checked)
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: ['EkplanTpopQuery'],
+    })
+  }
 
-    return (
-      <CheckboxContainer onClick={onClick}>
-        <StyledCheckbox checked={checked}>
-          <Icon viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12" />
-          </Icon>
-        </StyledCheckbox>
-      </CheckboxContainer>
-    )
-  }),
-)
+  return (
+    <CheckboxContainer onClick={onClick}>
+      <StyledCheckbox checked={checked}>
+        <Icon viewBox="0 0 24 24">
+          <polyline points="20 6 9 17 4 12" />
+        </Icon>
+      </StyledCheckbox>
+    </CheckboxContainer>
+  )
+})

@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
@@ -27,21 +27,17 @@ const TpopTitle = styled.h4`
   top: -20px;
 `
 
-export const EkplanTableHeader = memo(
-  observer(({ tpopLength, refetch, tpopFilter, years }) => {
+export const EkplanTableHeader = observer(
+  ({ tpopLength, refetch, tpopFilter, years }) => {
     const store = useContext(MobxContext)
     // without snapshot headerFieldsFixed does not update correctly (?) when fields change
     const fieldsShown = getSnapshot(store.ekPlan.fields)
 
-    const headerFieldsFixed = useMemo(
-      () =>
-        sortBy(
-          Object.values(fields).filter(
-            (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
-          ),
-          ['sort'],
-        ),
-      [fieldsShown, fields],
+    const headerFieldsFixed = sortBy(
+      Object.values(fields).filter(
+        (o) => fieldsShown.includes(o.name) || !!o.alwaysShow,
+      ),
+      ['sort'],
     )
 
     return (
@@ -102,5 +98,5 @@ export const EkplanTableHeader = memo(
         </HeaderContainer>
       </ErrorBoundary>
     )
-  }),
+  },
 )

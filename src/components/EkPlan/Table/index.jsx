@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, useCallback, useState } from 'react'
+import { useContext, useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import styled from '@emotion/styled'
@@ -116,285 +116,298 @@ const ExportButton = styled(Button)`
   z-index: 5;
 `
 
-export const EkPlanTable = memo(
-  observer(() => {
-    const apolloClient = useApolloClient()
-    const store = useContext(MobxContext)
-    const {
-      aps,
-      apValues,
-      yearMenuAnchor,
-      showEk,
-      showEkf,
-      showMassn,
-      filterAp,
-      filterPopNr,
-      filterPopName,
-      filterPopStatus,
-      filterNr,
-      filterGemeinde,
-      filterFlurname,
-      filterStatus,
-      filterBekanntSeit,
-      filterLv95X,
-      filterLv95Y,
-      filterEkfKontrolleur,
-      filterEkfrequenzAbweichend,
-      filterEkAbrechnungstyp,
-      filterEkfrequenz,
-      filterEkfrequenzStartjahr,
-      filterEkfrequenzEmpty,
-      filterEkfrequenzStartjahrEmpty,
-      filterAnsiedlungYear,
-      filterKontrolleYear,
-      filterEkplanYear,
-    } = store.ekPlan
+const getTpopFilter = ({
+  apValues,
+  filterAp,
+  filterPopNr,
+  filterPopName,
+  filterPopStatus,
+  filterNr,
+  filterGemeinde,
+  filterFlurname,
+  filterStatus,
+  filterBekanntSeit,
+  filterLv95X,
+  filterLv95Y,
+  filterEkfKontrolleur,
+  filterEkfrequenzAbweichend,
+  filterEkAbrechnungstyp,
+  filterEkfrequenz,
+  filterEkfrequenzStartjahr,
+  filterEkfrequenzEmpty,
+  filterEkfrequenzStartjahrEmpty,
+  filterAnsiedlungYear,
+  filterKontrolleYear,
+  filterEkplanYear,
+}) => {
+  const tpopFilter = { popByPopId: { apId: { in: apValues } } }
+  if (filterAp) {
+    tpopFilter.apName = { includesInsensitive: filterAp }
+  }
+  if (filterPopNr) {
+    tpopFilter.popByPopId.nr = { equalTo: filterPopNr }
+  }
+  if (filterPopName) {
+    tpopFilter.popByPopId.name = { includesInsensitive: filterPopName }
+  }
+  if (filterPopStatus) {
+    tpopFilter.popByPopId.popStatusWerteByStatus = {
+      code: {
+        in: filterPopStatus,
+      },
+    }
+  }
+  if (filterNr) {
+    tpopFilter.nr = { equalTo: filterNr }
+  }
+  if (filterGemeinde) {
+    tpopFilter.gemeinde = { includesInsensitive: filterGemeinde }
+  }
+  if (filterFlurname) {
+    tpopFilter.flurname = { includesInsensitive: filterFlurname }
+  }
+  if (filterStatus?.length) {
+    tpopFilter.popStatusWerteByStatus = {
+      code: {
+        in: filterStatus,
+      },
+    }
+  }
+  if (filterBekanntSeit) {
+    tpopFilter.bekanntSeit = { equalTo: filterBekanntSeit }
+  }
+  if (filterLv95X) {
+    tpopFilter.lv95X = { equalTo: filterLv95X }
+  }
+  if (filterLv95Y) {
+    tpopFilter.lv95Y = { equalTo: filterLv95Y }
+  }
+  if (filterEkfKontrolleur) {
+    tpopFilter.adresseByEkfKontrolleur = {
+      name: { includesInsensitive: filterEkfKontrolleur },
+    }
+  }
+  if (filterEkfrequenzAbweichend) {
+    tpopFilter.ekfrequenzAbweichend = {
+      equalTo: filterEkfrequenzAbweichend,
+    }
+  }
+  if (filterEkAbrechnungstyp) {
+    tpopFilter.ekfrequenzByEkfrequenz = {
+      ekAbrechnungstyp: {
+        includesInsensitive: filterEkAbrechnungstyp,
+      },
+    }
+  }
+  if (filterEkfrequenz) {
+    tpopFilter.ekfrequenzByEkfrequenz = {
+      code: {
+        includesInsensitive: filterEkfrequenz,
+      },
+    }
+  }
+  if (filterEkfrequenzStartjahr) {
+    tpopFilter.ekfrequenzStartjahr = { equalTo: filterEkfrequenzStartjahr }
+  }
+  if (filterEkfrequenzEmpty) {
+    tpopFilter.ekfrequenz = { isNull: true }
+  }
+  if (filterEkfrequenzStartjahrEmpty) {
+    tpopFilter.ekfrequenzStartjahr = { isNull: true }
+  }
+  if (filterKontrolleYear) {
+    tpopFilter.tpopkontrsByTpopId = {
+      some: { jahr: { equalTo: filterKontrolleYear } },
+    }
+  }
+  if (filterAnsiedlungYear) {
+    tpopFilter.tpopmassnsByTpopId = {
+      some: {
+        jahr: { equalTo: filterAnsiedlungYear },
+        tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
+      },
+    }
+  }
+  if (filterEkplanYear) {
+    tpopFilter.ekplansByTpopId = {
+      some: { jahr: { equalTo: filterEkplanYear } },
+    }
+  }
+  return tpopFilter
+}
 
-    const [processing, setProcessing] = useState(false)
+export const EkPlanTable = observer(() => {
+  const apolloClient = useApolloClient()
+  const store = useContext(MobxContext)
+  const {
+    aps,
+    apValues,
+    yearMenuAnchor,
+    showEk,
+    showEkf,
+    showMassn,
+    filterAp,
+    filterPopNr,
+    filterPopName,
+    filterPopStatus,
+    filterNr,
+    filterGemeinde,
+    filterFlurname,
+    filterStatus,
+    filterBekanntSeit,
+    filterLv95X,
+    filterLv95Y,
+    filterEkfKontrolleur,
+    filterEkfrequenzAbweichend,
+    filterEkAbrechnungstyp,
+    filterEkfrequenz,
+    filterEkfrequenzStartjahr,
+    filterEkfrequenzEmpty,
+    filterEkfrequenzStartjahrEmpty,
+    filterAnsiedlungYear,
+    filterKontrolleYear,
+    filterEkplanYear,
+  } = store.ekPlan
 
-    /**
-     * BIG TROUBLE with height
-     * ideally we would use flex with column and let css do the sizing
-     * BUT: Chrome goes crazy when two columnal flexes are stacked
-     * it keeps changing size by a fraction of a point permanently
-     * which wrecks EVERYTHING as table rerenders permanently
-     * So we need to:
-     * 1. know appBarHeight
-     * 2. NOT use columnal flex but boxes with calculated size
-     */
-    const {
-      width = 0,
-      height = 0,
-      ref: resizeRef,
-    } = useResizeDetector({
-      refreshMode: 'debounce',
-      refreshRate: 100,
-      refreshOptions: { leading: true },
-    })
+  const [processing, setProcessing] = useState(false)
 
-    const tpopFilter = useMemo(() => {
-      const tpopFilter = { popByPopId: { apId: { in: apValues } } }
-      if (filterAp) {
-        tpopFilter.apName = { includesInsensitive: filterAp }
-      }
-      if (filterPopNr) {
-        tpopFilter.popByPopId.nr = { equalTo: filterPopNr }
-      }
-      if (filterPopName) {
-        tpopFilter.popByPopId.name = { includesInsensitive: filterPopName }
-      }
-      if (filterPopStatus) {
-        tpopFilter.popByPopId.popStatusWerteByStatus = {
-          code: {
-            in: filterPopStatus,
-          },
-        }
-      }
-      if (filterNr) {
-        tpopFilter.nr = { equalTo: filterNr }
-      }
-      if (filterGemeinde) {
-        tpopFilter.gemeinde = { includesInsensitive: filterGemeinde }
-      }
-      if (filterFlurname) {
-        tpopFilter.flurname = { includesInsensitive: filterFlurname }
-      }
-      if (filterStatus?.length) {
-        tpopFilter.popStatusWerteByStatus = {
-          code: {
-            in: filterStatus,
-          },
-        }
-      }
-      if (filterBekanntSeit) {
-        tpopFilter.bekanntSeit = { equalTo: filterBekanntSeit }
-      }
-      if (filterLv95X) {
-        tpopFilter.lv95X = { equalTo: filterLv95X }
-      }
-      if (filterLv95Y) {
-        tpopFilter.lv95Y = { equalTo: filterLv95Y }
-      }
-      if (filterEkfKontrolleur) {
-        tpopFilter.adresseByEkfKontrolleur = {
-          name: { includesInsensitive: filterEkfKontrolleur },
-        }
-      }
-      if (filterEkfrequenzAbweichend) {
-        tpopFilter.ekfrequenzAbweichend = {
-          equalTo: filterEkfrequenzAbweichend,
-        }
-      }
-      if (filterEkAbrechnungstyp) {
-        tpopFilter.ekfrequenzByEkfrequenz = {
-          ekAbrechnungstyp: {
-            includesInsensitive: filterEkAbrechnungstyp,
-          },
-        }
-      }
-      if (filterEkfrequenz) {
-        tpopFilter.ekfrequenzByEkfrequenz = {
-          code: {
-            includesInsensitive: filterEkfrequenz,
-          },
-        }
-      }
-      if (filterEkfrequenzStartjahr) {
-        tpopFilter.ekfrequenzStartjahr = { equalTo: filterEkfrequenzStartjahr }
-      }
-      if (filterEkfrequenzEmpty) {
-        tpopFilter.ekfrequenz = { isNull: true }
-      }
-      if (filterEkfrequenzStartjahrEmpty) {
-        tpopFilter.ekfrequenzStartjahr = { isNull: true }
-      }
-      if (filterKontrolleYear) {
-        tpopFilter.tpopkontrsByTpopId = {
-          some: { jahr: { equalTo: filterKontrolleYear } },
-        }
-      }
-      if (filterAnsiedlungYear) {
-        tpopFilter.tpopmassnsByTpopId = {
-          some: {
-            jahr: { equalTo: filterAnsiedlungYear },
-            tpopmassnTypWerteByTyp: { ansiedlung: { equalTo: true } },
-          },
-        }
-      }
-      if (filterEkplanYear) {
-        tpopFilter.ekplansByTpopId = {
-          some: { jahr: { equalTo: filterEkplanYear } },
-        }
-      }
-      return tpopFilter
-    }, [
-      apValues,
-      filterAp,
-      filterPopNr,
-      filterPopName,
-      filterPopStatus,
-      filterNr,
-      filterGemeinde,
-      filterFlurname,
-      filterStatus,
-      filterBekanntSeit,
-      filterLv95X,
-      filterLv95Y,
-      filterEkfKontrolleur,
-      filterEkfrequenzAbweichend,
-      filterEkAbrechnungstyp,
-      filterEkfrequenz,
-      filterEkfrequenzStartjahr,
-      filterEkfrequenzEmpty,
-      filterEkfrequenzStartjahrEmpty,
-      filterAnsiedlungYear,
-      filterKontrolleYear,
-      filterEkplanYear,
-    ])
+  /**
+   * BIG TROUBLE with height
+   * ideally we would use flex with column and let css do the sizing
+   * BUT: Chrome goes crazy when two columnal flexes are stacked
+   * it keeps changing size by a fraction of a point permanently
+   * which wrecks EVERYTHING as table rerenders permanently
+   * So we need to:
+   * 1. know appBarHeight
+   * 2. NOT use columnal flex but boxes with calculated size
+   */
+  const {
+    width = 0,
+    height = 0,
+    ref: resizeRef,
+  } = useResizeDetector({
+    refreshMode: 'debounce',
+    refreshRate: 100,
+    refreshOptions: { leading: true },
+  })
 
-    const { data, error, isLoading, refetch } = useQuery({
-      queryKey: ['EkplanTpopQuery', tpopFilter],
-      queryFn: () =>
-        apolloClient.query({
-          query: queryAll,
-          variables: { tpopFilter },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+  const tpopFilter = getTpopFilter({
+    apValues,
+    filterAp,
+    filterPopNr,
+    filterPopName,
+    filterPopStatus,
+    filterNr,
+    filterGemeinde,
+    filterFlurname,
+    filterStatus,
+    filterBekanntSeit,
+    filterLv95X,
+    filterLv95Y,
+    filterEkfKontrolleur,
+    filterEkfrequenzAbweichend,
+    filterEkAbrechnungstyp,
+    filterEkfrequenz,
+    filterEkfrequenzStartjahr,
+    filterEkfrequenzEmpty,
+    filterEkfrequenzStartjahrEmpty,
+    filterAnsiedlungYear,
+    filterKontrolleYear,
+    filterEkplanYear,
+  })
 
-    const tpops = useMemo(
-      () => data?.data?.allTpops?.nodes ?? [],
-      [data?.data?.allTpops?.nodes, tpopFilter],
-    )
-    const years = useMemo(
-      () => getYears(store.ekPlan.pastYears),
-      [store.ekPlan.pastYears],
-    )
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['EkplanTpopQuery', tpopFilter],
+    queryFn: () =>
+      apolloClient.query({
+        query: queryAll,
+        variables: { tpopFilter },
+        fetchPolicy: 'no-cache',
+      }),
+  })
 
-    // when this value changes, year columns are re-rendered as it is added as key
-    // needed because otherwise when changing filters column widths can be off
-    const yearHeaderRerenderValue = useMemo(
-      () =>
-        JSON.stringify([
-          filterAnsiedlungYear,
-          filterKontrolleYear,
-          filterEkplanYear,
-        ]),
-      [filterAnsiedlungYear, filterEkplanYear, filterKontrolleYear],
-    )
+  const tpops = data?.data?.allTpops?.nodes ?? []
+  const years = getYears(store.ekPlan.pastYears)
 
-    const onClickExport = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.query({
-          query: queryForExport,
-          variables: { tpopFilter, apIds: apValues },
-        })
-      } catch (error) {
-        return enqueNotification({
-          message: `Fehler beim Abfragen für den Export: ${error.message}`,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      const tpops = result?.data?.allTpops?.nodes ?? []
-      const ekfrequenzs = result?.data?.allEkfrequenzs?.nodes ?? []
-      const data = tpops.map((tpop) =>
-        exportRowFromTpop({ tpop, years, store, ekfrequenzs }),
-      )
-      exportModule({
-        data,
-        fileName: 'ek-planung',
-        store,
-        apolloClient,
+  // when this value changes, year columns are re-rendered as it is added as key
+  // needed because otherwise when changing filters column widths can be off
+  const yearHeaderRerenderValue = JSON.stringify([
+    filterAnsiedlungYear,
+    filterKontrolleYear,
+    filterEkplanYear,
+  ])
+
+  const onClickExport = async () => {
+    let result
+    try {
+      result = await apolloClient.query({
+        query: queryForExport,
+        variables: { tpopFilter, apIds: apValues },
       })
-    }, [tpops, store, years, apValues, tpopFilter, apolloClient])
+    } catch (error) {
+      return enqueNotification({
+        message: `Fehler beim Abfragen für den Export: ${error.message}`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const tpops = result?.data?.allTpops?.nodes ?? []
+    const ekfrequenzs = result?.data?.allEkfrequenzs?.nodes ?? []
+    const data = tpops.map((tpop) =>
+      exportRowFromTpop({ tpop, years, store, ekfrequenzs }),
+    )
+    exportModule({
+      data,
+      fileName: 'ek-planung',
+      store,
+      apolloClient,
+    })
+  }
 
-    // console.log('EkPlanTable, render')
+  // console.log('EkPlanTable, render')
 
-    const showSpinner = (aps.length > 0 && isLoading) || !tpops?.length
+  const showSpinner = (aps.length > 0 && isLoading) || !tpops?.length
 
-    // TODO: give button to remove all filters in case something goes wrong
+  // TODO: give button to remove all filters in case something goes wrong
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <ErrorBoundary>
-        {processing && (
-          <SpinnerOverlay message="Startjahr und EK-Pläne werden gesetzt" />
-        )}
-        <ExportButton
-          variant="outlined"
-          onClick={onClickExport}
-          color="inherit"
-        >
-          exportieren
-        </ExportButton>
-        <Container ref={resizeRef}>
-          {showSpinner ?
-            <Spinner />
-          : <YScrollContainer>
-              <EkplanTableHeader
-                tpopLength={isLoading ? '...' : tpops.length}
-                tpopFilter={tpopFilter}
-                refetch={refetch}
+  return (
+    <ErrorBoundary>
+      {processing && (
+        <SpinnerOverlay message="Startjahr und EK-Pläne werden gesetzt" />
+      )}
+      <ExportButton
+        variant="outlined"
+        onClick={onClickExport}
+        color="inherit"
+      >
+        exportieren
+      </ExportButton>
+      <Container ref={resizeRef}>
+        {showSpinner ?
+          <Spinner />
+        : <YScrollContainer>
+            <EkplanTableHeader
+              tpopLength={isLoading ? '...' : tpops.length}
+              tpopFilter={tpopFilter}
+              refetch={refetch}
+              years={years}
+            />
+            {tpops.map((tpop, index) => (
+              <TpopRow
+                key={tpop.id}
+                tpopId={tpop.id}
+                index={index}
+                setProcessing={setProcessing}
                 years={years}
               />
-              {tpops.map((tpop, index) => (
-                <TpopRow
-                  key={tpop.id}
-                  tpopId={tpop.id}
-                  index={index}
-                  setProcessing={setProcessing}
-                  years={years}
-                />
-              ))}
-            </YScrollContainer>
-          }
-        </Container>
-        {!!yearMenuAnchor && <CellForYearMenu />}
-      </ErrorBoundary>
-    )
-  }),
-)
+            ))}
+          </YScrollContainer>
+        }
+      </Container>
+      {!!yearMenuAnchor && <CellForYearMenu />}
+    </ErrorBoundary>
+  )
+})
