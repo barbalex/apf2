@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -69,43 +69,37 @@ export const useZielsOfJahrNavData = (props) => {
   )
 
   const count = data?.data?.apById?.zielsByApId?.totalCount ?? 0
-  const filteredZiels = useMemo(
-    () => data?.data?.apById?.filteredZiels?.nodes ?? [],
-    [data?.data?.apById?.filteredZiels?.nodes],
-  )
+  const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
 
-  const navData = useMemo(
-    () => ({
-      id: jahr,
-      listFilter: 'ziel',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}`,
-      label: `Ziele für ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
-      labelShort: `${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'zielJahrFolder',
-      treeId: `${apId}ApzielJahrFolder`,
+  const navData = {
+    id: jahr,
+    listFilter: 'ziel',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}`,
+    label: `Ziele für ${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
+    labelShort: `${jahr} (${isLoading ? '...' : `${filteredZiels.length}/${count}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'zielJahrFolder',
+    treeId: `${apId}ApzielJahrFolder`,
+    treeParentTableId: apId,
+    treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr],
+    hasChildren: !!filteredZiels.length,
+    fetcherName: 'useZielsOfJahrNavData',
+    fetcherParams: { projId, apId, jahr },
+    component: NodeWithList,
+    menus: filteredZiels.map((p) => ({
+      id: p.id,
+      label: p.label,
+      jahr: p.jahr,
+      treeNodeType: 'table',
+      treeMenuType: 'ziel',
+      treeId: p.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, p.id],
+      fetcherName: 'useZielNavData',
+      fetcherParams: { projId, apId, jahr, zielId: p.id },
       hasChildren: !!filteredZiels.length,
-      fetcherName: 'useZielsOfJahrNavData',
-      fetcherParams: { projId, apId, jahr },
-      component: NodeWithList,
-      menus: filteredZiels.map((p) => ({
-        id: p.id,
-        label: p.label,
-        jahr: p.jahr,
-        treeNodeType: 'table',
-        treeMenuType: 'ziel',
-        treeId: p.id,
-        treeParentTableId: apId,
-        treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, p.id],
-        fetcherName: 'useZielNavData',
-        fetcherParams: { projId, apId, jahr, zielId: p.id },
-        hasChildren: !!filteredZiels.length,
-      })),
-    }),
-    [apId, count, filteredZiels, isLoading, jahr, projId],
-  )
+    })),
+  }
 
   return { isLoading, error, navData }
 }

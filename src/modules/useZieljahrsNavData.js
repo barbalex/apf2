@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -7,6 +7,12 @@ import { useParams } from 'react-router'
 import { countBy } from 'es-toolkit'
 
 import { MobxContext } from '../mobxContext.js'
+
+const getZieljahrsCount = (ziels) => {
+  const jahrs = countBy(ziels, (e) => e.jahr)
+  const count = Object.keys(jahrs).length
+  return count
+}
 
 export const useZieljahrsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -59,21 +65,11 @@ export const useZieljahrsNavData = (props) => {
     [],
   )
 
-  const ziels = useMemo(
-    () => data?.data?.apById?.zielsByApId?.nodes ?? [],
-    [data?.data?.apById?.zielsByApId?.nodes],
-  )
-  const filteredZiels = useMemo(
-    () => data?.data?.apById?.filteredZiels?.nodes ?? [],
-    [data?.data?.apById?.filteredZiels?.nodes],
-  )
-  const zieljahrsCount = useMemo(() => {
-    const jahrs = countBy(ziels, (e) => e.jahr)
-    const count = Object.keys(jahrs).length
-    return count
-  }, [ziels])
+  const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
+  const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
+  const zieljahrsCount = getZieljahrsCount(ziels)
 
-  const menus = useMemo(() => {
+  const menus = () => {
     const countByJahr = countBy(filteredZiels, (e) => e.jahr)
     const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)
     // convert into array of objects with id=jahr and count
@@ -92,26 +88,23 @@ export const useZieljahrsNavData = (props) => {
     }))
 
     return jahre
-  }, [apId, filteredZiels, projId, ziels])
+  }
 
-  const navData = useMemo(
-    () => ({
-      id: 'AP-Ziele',
-      label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
-      listFilter: 'ziel',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
-      treeNodeType: 'folder',
-      treeMenuType: 'zieljahrsFolder',
-      treeId: `${apId}ZieljahrsFolder`,
-      treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
-      hasChildren: !!zieljahrsCount,
-      fetcherName: 'useZieljahrsNavData',
-      fetcherParams: { projId, apId },
-      menus,
-    }),
-    [apId, menus, isLoading, projId, zieljahrsCount],
-  )
+  const navData = {
+    id: 'AP-Ziele',
+    label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
+    listFilter: 'ziel',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
+    treeNodeType: 'folder',
+    treeMenuType: 'zieljahrsFolder',
+    treeId: `${apId}ZieljahrsFolder`,
+    treeParentTableId: apId,
+    treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
+    hasChildren: !!zieljahrsCount,
+    fetcherName: 'useZieljahrsNavData',
+    fetcherParams: { projId, apId },
+    menus,
+  }
 
   return { isLoading, error, navData }
 }

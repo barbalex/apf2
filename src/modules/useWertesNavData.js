@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
@@ -118,82 +118,69 @@ export const useWertesNavData = () => {
   const tpopkontrzaehlEinheitWerteFilteredCount =
     data?.data?.filteredTpopkontrzaehlEinheitWertes?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'WerteListen',
-      url: '/Daten/Werte-Listen',
-      label: `Werte-Listen`,
-      treeNodeType: 'folder',
-      treeMenuType: 'projekt',
-      treeUrl: ['Werte-Listen'],
-      hasChildren: true,
-      fetcherName: 'useWertesNavData',
-      fetcherParams: {},
-      component: NodeWithList,
-      // leave totalCount undefined as the menus are folders
-      menus: [
-        {
-          id: 'Adressen',
-          label: `Adressen (${isLoading ? '...' : `${adressesFilteredCount}/${adressesCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'adresseFolder',
-          treeId: `AdresseFolder`,
-          treeUrl: ['Werte-Listen', 'Adressen'],
-          hasChildren: !!adressesFilteredCount,
-          fetcherName: 'useAdressesNavData',
-          fetcherParams: {},
-          component: NodeWithList,
-        },
-        {
-          id: 'ApberrelevantGrundWerte',
-          label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${tpopApberrelevantGrundWerteFilteredCount}/${tpopApberrelevantGrundWerteCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopApberrelevantGrundWerteFolder',
-          treeId: `tpopApberrelevantGrundWerteFolder`,
-          treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte'],
-          hasChildren: !!tpopApberrelevantGrundWerteFilteredCount,
-          fetcherName: 'useTpopApberrelevantGrundWertesNavData',
-          fetcherParams: {},
-          component: NodeWithList,
-        },
-        {
-          id: 'EkAbrechnungstypWerte',
-          label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${ekAbrechnungstypWerteFilteredCount}/${ekAbrechnungstypWerteCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'ekAbrechnungstypWerteFolder',
-          treeId: `EkAbrechnungstypWerteFolder`,
-          treeUrl: ['Werte-Listen', 'EkAbrechnungstypWerte'],
-          hasChildren: !!ekAbrechnungstypWerteFilteredCount,
-          fetcherName: 'useEkAbrechnungstypWertesNavData',
-          fetcherParams: {},
-          component: NodeWithList,
-        },
-        {
-          id: 'TpopkontrzaehlEinheitWerte',
-          label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${tpopkontrzaehlEinheitWerteFilteredCount}/${tpopkontrzaehlEinheitWerteCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'TpopkontrzaehlEinheitWerte',
-          treeId: `tpopkontrzaehlEinheitWerteFolder`,
-          treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
-          hasChildren: !!tpopkontrzaehlEinheitWerteFilteredCount,
-          fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
-          fetcherParams: {},
-          component: NodeWithList,
-        },
-      ],
-    }),
-    [
-      adressesCount,
-      adressesFilteredCount,
-      ekAbrechnungstypWerteCount,
-      ekAbrechnungstypWerteFilteredCount,
-      isLoading,
-      tpopApberrelevantGrundWerteCount,
-      tpopApberrelevantGrundWerteFilteredCount,
-      tpopkontrzaehlEinheitWerteCount,
-      tpopkontrzaehlEinheitWerteFilteredCount,
+  const navData = {
+    id: 'WerteListen',
+    url: '/Daten/Werte-Listen',
+    label: `Werte-Listen`,
+    treeNodeType: 'folder',
+    treeMenuType: 'projekt',
+    treeUrl: ['Werte-Listen'],
+    hasChildren: true,
+    fetcherName: 'useWertesNavData',
+    fetcherParams: {},
+    component: NodeWithList,
+    // leave totalCount undefined as the menus are folders
+    menus: [
+      {
+        id: 'Adressen',
+        label: `Adressen (${isLoading ? '...' : `${adressesFilteredCount}/${adressesCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'adresseFolder',
+        treeId: `AdresseFolder`,
+        treeUrl: ['Werte-Listen', 'Adressen'],
+        hasChildren: !!adressesFilteredCount,
+        fetcherName: 'useAdressesNavData',
+        fetcherParams: {},
+        component: NodeWithList,
+      },
+      {
+        id: 'ApberrelevantGrundWerte',
+        label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${tpopApberrelevantGrundWerteFilteredCount}/${tpopApberrelevantGrundWerteCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopApberrelevantGrundWerteFolder',
+        treeId: `tpopApberrelevantGrundWerteFolder`,
+        treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte'],
+        hasChildren: !!tpopApberrelevantGrundWerteFilteredCount,
+        fetcherName: 'useTpopApberrelevantGrundWertesNavData',
+        fetcherParams: {},
+        component: NodeWithList,
+      },
+      {
+        id: 'EkAbrechnungstypWerte',
+        label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${ekAbrechnungstypWerteFilteredCount}/${ekAbrechnungstypWerteCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'ekAbrechnungstypWerteFolder',
+        treeId: `EkAbrechnungstypWerteFolder`,
+        treeUrl: ['Werte-Listen', 'EkAbrechnungstypWerte'],
+        hasChildren: !!ekAbrechnungstypWerteFilteredCount,
+        fetcherName: 'useEkAbrechnungstypWertesNavData',
+        fetcherParams: {},
+        component: NodeWithList,
+      },
+      {
+        id: 'TpopkontrzaehlEinheitWerte',
+        label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${tpopkontrzaehlEinheitWerteFilteredCount}/${tpopkontrzaehlEinheitWerteCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'TpopkontrzaehlEinheitWerte',
+        treeId: `tpopkontrzaehlEinheitWerteFolder`,
+        treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
+        hasChildren: !!tpopkontrzaehlEinheitWerteFilteredCount,
+        fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
+        fetcherParams: {},
+        component: NodeWithList,
+      },
     ],
-  )
+  }
 
   return { isLoading, error, navData }
 }
