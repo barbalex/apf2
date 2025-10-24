@@ -289,8 +289,6 @@ export const useApNavData = (props) => {
     [],
   )
 
-  console.log('useApNavData', { data, isLoading, error, projId, apId })
-
   const label = data?.data?.apById?.label
   const popsCount = data?.data?.apById?.popsByApId?.totalCount ?? 0
   const filteredPopsCount = data?.data?.apById?.filteredPops?.totalCount ?? 0

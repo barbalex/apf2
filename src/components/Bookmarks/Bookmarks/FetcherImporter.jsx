@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 
 import { Fetcher } from './Fetcher.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
@@ -10,7 +10,6 @@ export const FetcherImporter = ({ match, ...other }) => {
   const fetcherName = match.handle?.bookmarkFetcherName
 
   useEffect(() => {
-    // console.log('FetcherImporter.useEffect', { fetcherName, fetcherModule })
     if (fetcherModule || !fetcherName) return
 
     // return the module, not the hook as that would already be called
@@ -19,23 +18,14 @@ export const FetcherImporter = ({ match, ...other }) => {
     )
   }, [fetcherName, fetcherModule])
 
-  // console.log('FetcherImporter render 1', {
-  //   fetcherName,
-  //   fetcherModule,
-  //   params: match.params,
-  // })
-
   if (!fetcherModule || !fetcherName) {
-    // console.log('no fetcherModule yet for', fetcherName)
-    // return null
-    return <Spinner />
+    return null
+    // return <Spinner />
   }
-
-  // console.log('FetcherImporter render 2', { fetcherName, fetcherModule })
 
   return (
     <Fetcher
-      match={match}
+      params={match.params}
       fetcherModule={fetcherModule[fetcherName]}
       {...other}
     />
