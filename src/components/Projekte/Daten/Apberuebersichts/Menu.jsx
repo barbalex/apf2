@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -27,68 +27,66 @@ const Fitter = styled.div`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ toggleFilterInput }) => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
-    const { projId, apberuebersichtId } = useParams()
+export const Menu = observer(({ toggleFilterInput }) => {
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
+  const { projId, apberuebersichtId } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createApberuebersichtForApberuebersichtsForm(
-              $projId: UUID!
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createApberuebersichtForApberuebersichtsForm(
+            $projId: UUID!
+          ) {
+            createApberuebersicht(
+              input: { apberuebersicht: { projId: $projId } }
             ) {
-              createApberuebersicht(
-                input: { apberuebersicht: { projId: $projId } }
-              ) {
-                apberuebersicht {
-                  id
-                  projId
-                }
+              apberuebersicht {
+                id
+                projId
               }
             }
-          `,
-          variables: { projId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeApberuebersicht`],
+          }
+        `,
+        variables: { projId },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeRoot`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
-      navigate(`./${id}${search}`)
-    }, [projId, apolloClient, store, tsQueryClient, navigate, search])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApberuebersicht`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
+    navigate(`./${id}${search}`)
+  }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar>
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Neuen AP-Bericht erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <MenuBar>
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Neuen AP-Bericht erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})
