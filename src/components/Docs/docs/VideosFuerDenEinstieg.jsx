@@ -1,9 +1,7 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../DesktopDocs.jsx'
 import { YoutubeEmbed } from '../../shared/YoutubeEmbed.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Videos für den Einstieg</h1>
     <DokuDate>15.09.2017</DokuDate>
@@ -28,4 +26,4 @@ export const Component = memo(() => (
     <h3>Beobachtungen zuordnen</h3>
     <YoutubeEmbed embedId={'Oy-TDV37xhI'} />
   </>
-))
+)
