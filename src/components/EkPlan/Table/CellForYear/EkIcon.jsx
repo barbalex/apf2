@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { sum } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
@@ -49,62 +49,60 @@ const SumCounted = styled.div`
   overflow: hidden;
 `
 
-export const EkIcon = memo(
-  observer(({ planned, eks, einheits }) => {
-    const store = useContext(MobxContext)
-    const { showCount, showEkCount } = store.ekPlan
+export const EkIcon = observer(({ planned, eks, einheits }) => {
+  const store = useContext(MobxContext)
+  const { showCount, showEkCount } = store.ekPlan
 
-    //console.log('EkIcon', { planned, eks, einheits })
+  //console.log('EkIcon', { planned, eks, einheits })
 
-    if (!planned && !eks.length) {
-      return <CheckboxContainer>&nbsp;</CheckboxContainer>
-    }
-    let sumCounted = null
-    let eksHaveCountedZielrelevanteEinheits = false
-    if (einheits && einheits.length) {
-      eksHaveCountedZielrelevanteEinheits =
-        eks
-          .flatMap((ek) =>
-            (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []).filter(
-              (z) =>
-                einheits.includes(z.einheit) &&
-                z.anzahl !== null &&
-                z?.tpopkontrzaehlEinheitWerteByEinheit
-                  ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
-            ),
+  if (!planned && !eks.length) {
+    return <CheckboxContainer>&nbsp;</CheckboxContainer>
+  }
+  let sumCounted = null
+  let eksHaveCountedZielrelevanteEinheits = false
+  if (einheits && einheits.length) {
+    eksHaveCountedZielrelevanteEinheits =
+      eks
+        .flatMap((ek) =>
+          (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []).filter(
+            (z) =>
+              einheits.includes(z.einheit) &&
+              z.anzahl !== null &&
+              z?.tpopkontrzaehlEinheitWerteByEinheit
+                ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
+          ),
+        )
+        .filter((o) => !!o).length > 0
+  }
+  if (eksHaveCountedZielrelevanteEinheits) {
+    sumCounted = sum(
+      eks.flatMap((ek) =>
+        (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
+          .filter(
+            (z) =>
+              einheits.includes(z.einheit) &&
+              z.anzahl !== null &&
+              z?.tpopkontrzaehlEinheitWerteByEinheit
+                ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
           )
-          .filter((o) => !!o).length > 0
-    }
-    if (eksHaveCountedZielrelevanteEinheits) {
-      sumCounted = sum(
-        eks.flatMap((ek) =>
-          (ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? [])
-            .filter(
-              (z) =>
-                einheits.includes(z.einheit) &&
-                z.anzahl !== null &&
-                z?.tpopkontrzaehlEinheitWerteByEinheit
-                  ?.ekzaehleinheitsByZaehleinheitId?.totalCount > 0,
-            )
-            .flatMap((z) => z.anzahl),
-        ),
-      )
-    }
-
-    return (
-      <CheckboxContainer showcount={showCount}>
-        <StyledCheckbox planned={planned}>
-          {!!eks.length && (
-            <Icon viewBox="0 0 24 24">
-              <polyline points="20 6 9 17 4 12" />
-            </Icon>
-          )}
-          {showEkCount && eks.length > 1 && <NrOfEk>{eks.length}</NrOfEk>}
-        </StyledCheckbox>
-        {showCount && (
-          <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
-        )}
-      </CheckboxContainer>
+          .flatMap((z) => z.anzahl),
+      ),
     )
-  }),
-)
+  }
+
+  return (
+    <CheckboxContainer showcount={showCount}>
+      <StyledCheckbox planned={planned}>
+        {!!eks.length && (
+          <Icon viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </Icon>
+        )}
+        {showEkCount && eks.length > 1 && <NrOfEk>{eks.length}</NrOfEk>}
+      </StyledCheckbox>
+      {showCount && (
+        <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
+      )}
+    </CheckboxContainer>
+  )
+})

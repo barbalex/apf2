@@ -1,6 +1,6 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 
 import { StyledTableCell } from '../index.jsx'
 import { EkIcon } from './EkIcon.jsx'
@@ -10,8 +10,8 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.js'
 import { yearColumnWidth } from './yearColumnWidth.js'
 
-export const CellForYear = memo(
-  observer(({ year, row, isOdd, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
+export const CellForYear = observer(
+  ({ year, row, isOdd, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
     const store = useContext(MobxContext)
     const {
       showEk,
@@ -24,38 +24,24 @@ export const CellForYear = memo(
       hovered,
     } = store.ekPlan
 
-    const onMouseEnter = useCallback(
-      () => hovered.set({ year, tpopId: row.id }),
-      [hovered, year, row.id],
-    )
+    const onMouseEnter = () => hovered.set({ year, tpopId: row.id })
     const clicked = yearClicked.year === year && yearClicked.tpopId === row.id
     const einheits = einheitsByAp[row.apId]
-    const onClickCell = useCallback(
-      (event) => {
-        setYearClicked({
-          year,
-          tpopId: row.id,
-          title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${year}`,
-          ekPlan,
-          ekfPlan,
-        })
-        // can't pass currentTarget directly as anchorEl
-        // because it does not exist any more until the menu wants to look it up
-        // need to pass measurements instead
-        setYearMenuAnchor(event.currentTarget.getBoundingClientRect())
-      },
-      [
+
+    const onClickCell = (event) => {
+      setYearClicked({
         year,
-        row.ap.value,
-        row.id,
-        row.nr.value,
-        row.popNr.value,
-        setYearClicked,
-        setYearMenuAnchor,
+        tpopId: row.id,
+        title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${year}`,
         ekPlan,
         ekfPlan,
-      ],
-    )
+      })
+      // can't pass currentTarget directly as anchorEl
+      // because it does not exist any more until the menu wants to look it up
+      // need to pass measurements instead
+      setYearMenuAnchor(event.currentTarget.getBoundingClientRect())
+    }
+
     const classes = []
     if (hovered.year === year) classes.push('column-hovered')
     if (hovered.tpopId === row.id) classes.push('tpop-hovered')
@@ -72,11 +58,21 @@ export const CellForYear = memo(
         className={className}
       >
         <InfoRow>
-          {showEk && <EkIcon planned={ekPlan} eks={eks} einheits={einheits} />}
+          {showEk && (
+            <EkIcon
+              planned={ekPlan}
+              eks={eks}
+              einheits={einheits}
+            />
+          )}
         </InfoRow>
         <InfoRow>
           {showEkf && (
-            <EkIcon planned={ekfPlan} eks={ekfs} einheits={einheits} />
+            <EkIcon
+              planned={ekfPlan}
+              eks={ekfs}
+              einheits={einheits}
+            />
           )}
         </InfoRow>
         <InfoRow>
@@ -84,5 +80,5 @@ export const CellForYear = memo(
         </InfoRow>
       </StyledTableCell>
     )
-  }),
+  },
 )
