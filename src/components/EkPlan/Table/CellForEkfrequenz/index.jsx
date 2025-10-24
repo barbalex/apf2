@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback, useState, useMemo } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -37,8 +37,8 @@ const AnwendungsfallText = styled.span`
   font-size: 0.85rem;
 `
 
-export const CellForEkfrequenz = memo(
-  observer(({ row, isOdd, field, width, setProcessing, data }) => {
+export const CellForEkfrequenz = observer(
+  ({ row, isOdd, field, width, setProcessing, data }) => {
     const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
@@ -51,44 +51,31 @@ export const CellForEkfrequenz = memo(
 
     const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
-    const maxCodeLength = useMemo(
-      () => Math.max(...allEkfrequenzs.map((a) => (a.code || '').length)),
-      [allEkfrequenzs],
+    const maxCodeLength = Math.max(
+      ...allEkfrequenzs.map((a) => (a.code || '').length),
     )
 
-    const onMouseEnter = useCallback(
-      () => hovered.setTpopId(row.id),
-      [hovered, row.id],
-    )
-    const onChange = useCallback(
-      async (e) => {
-        const value = e.target.value || null
-        console.log('CellForEkfrequenz, onChange, value:', value)
-        setProcessing(true)
-        await processChangeWorker.processChange({
-          apolloClient,
-          value,
-          row,
-          enqueNotification,
-          store,
-          tsQueryClient,
-        })
-        setProcessing(false)
-        setTimeout(() => {
-          // TODO: needed?
-          // rowContainerRef.current.focus()
-        }, 300)
-      },
-      [row, apolloClient, store, enqueNotification],
-    )
-    const valueToShow = useMemo(
-      () => allEkfrequenzs?.find((e) => e.id === field.value)?.code,
-      [allEkfrequenzs, field.value],
-    )
+    const onMouseEnter = () => hovered.setTpopId(row.id)
+
+    const onChange = async (e) => {
+      const value = e.target.value || null
+      setProcessing(true)
+      await processChangeWorker.processChange({
+        apolloClient,
+        value,
+        row,
+        enqueNotification,
+        store,
+        tsQueryClient,
+      })
+      setProcessing(false)
+    }
+
+    const valueToShow = allEkfrequenzs?.find((e) => e.id === field.value)?.code
 
     const [open, setOpen] = useState(false)
-    const onOpen = useCallback(() => setOpen(true), [])
-    const onClose = useCallback(() => setOpen(false), [])
+    const onOpen = () => setOpen(true)
+    const onClose = () => setOpen(false)
 
     return (
       <>
@@ -138,5 +125,5 @@ export const CellForEkfrequenz = memo(
         </Dialog>
       </>
     )
-  }),
+  },
 )

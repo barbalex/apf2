@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback, useState, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -66,68 +66,61 @@ const Input = styled.input`
   }
 `
 
-export const CellForEkfrequenzStartjahr = memo(
-  observer(
-    ({ row, isOdd, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
-      const apolloClient = useApolloClient()
-      const tsQueryClient = useQueryClient()
+export const CellForEkfrequenzStartjahr = observer(
+  ({ row, isOdd, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
-      const store = useContext(MobxContext)
-      const { enqueNotification } = store
-      const { hovered } = store.ekPlan
-      const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+    const store = useContext(MobxContext)
+    const { enqueNotification } = store
+    const { hovered } = store.ekPlan
+    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
-      const processChangeWorker = useWorker(processChangeWorkerFactory)
+    const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-      const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
-      useEffect(
-        () => setStateValue(ekfrequenzStartjahr ?? ''),
-        [ekfrequenzStartjahr],
-      )
+    const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
+    useEffect(
+      () => setStateValue(ekfrequenzStartjahr ?? ''),
+      [ekfrequenzStartjahr],
+    )
 
-      const onMouseEnter = useCallback(
-        () => hovered.setTpopId(row.id),
-        [hovered, row.id],
-      )
-      const onChange = useCallback((e) => {
-        const value =
-          e.target.value || e.target.value === 0 ? e.target.value : ''
-        setStateValue(value)
-      }, [])
-      const onBlur = useCallback(
-        async (e) => {
-          const value =
-            e.target.value || e.target.value === 0 ? +e.target.value : null
-          setProcessing(true)
-          await processChangeWorker.processChange({
-            apolloClient,
-            value,
-            ekfrequenz,
-            row,
-            enqueNotification,
-            store,
-            tsQueryClient,
-          })
-          setProcessing(false)
-        },
-        [row, apolloClient, store, enqueNotification, ekfrequenz],
-      )
+    const onMouseEnter = () => hovered.setTpopId(row.id)
 
-      return (
-        <Container
-          width={width}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={hovered.reset}
-          className={className}
-          data-isodd={isOdd}
-        >
-          <Input
-            value={stateValue}
-            onChange={onChange}
-            onBlur={onBlur}
-          />
-        </Container>
-      )
-    },
-  ),
+    const onChange = (e) => {
+      const value = e.target.value || e.target.value === 0 ? e.target.value : ''
+      setStateValue(value)
+    }
+
+    const onBlur = async (e) => {
+      const value =
+        e.target.value || e.target.value === 0 ? +e.target.value : null
+      setProcessing(true)
+      await processChangeWorker.processChange({
+        apolloClient,
+        value,
+        ekfrequenz,
+        row,
+        enqueNotification,
+        store,
+        tsQueryClient,
+      })
+      setProcessing(false)
+    }
+
+    return (
+      <Container
+        width={width}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={hovered.reset}
+        className={className}
+        data-isodd={isOdd}
+      >
+        <Input
+          value={stateValue}
+          onChange={onChange}
+          onBlur={onBlur}
+        />
+      </Container>
+    )
+  },
 )
