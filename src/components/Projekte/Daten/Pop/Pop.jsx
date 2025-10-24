@@ -1,11 +1,4 @@
-import {
-  memo,
-  useContext,
-  useCallback,
-  useState,
-  useMemo,
-  Suspense,
-} from 'react'
+import { useContext, useState, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -49,36 +42,34 @@ const fieldTypes = {
   bekanntSeit: 'Int',
 }
 
-export const Component = memo(
-  observer(() => {
-    const { projId, apId, popId } = useParams()
+export const Component = observer(() => {
+  const { projId, apId, popId } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const tsQueryClient = useQueryClient()
-    const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const { data, error, refetch } = useQuery(query, {
-      variables: { id: popId },
-    })
+  const { data, error, refetch } = useQuery(query, {
+    variables: { id: popId },
+  })
 
-    const row = useMemo(() => data?.popById ?? {}, [data?.popById])
+  const row = data?.popById ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
 
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updatePopForPop(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -100,92 +91,89 @@ export const Component = memo(
             }
             ${pop}
           `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        // update pop on map
-        if (
-          (value &&
-            row &&
-            ((field === 'lv95Y' && row.lv95X) ||
-              (field === 'lv95X' && row.lv95Y))) ||
-          (!value && (field === 'lv95Y' || field === 'lv95X'))
-        ) {
-          tsQueryClient.invalidateQueries({
-            queryKey: [`PopForMapQuery`],
-          })
-        }
-        setFieldErrors({})
-        if (['name', 'nr'].includes(field)) {
-          tsQueryClient.invalidateQueries({
-            queryKey: [`treePop`],
-          })
-        }
-      },
-      [apolloClient, tsQueryClient, row, store.user.name],
-    )
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    // update pop on map
+    if (
+      (value &&
+        row &&
+        ((field === 'lv95Y' && row.lv95X) ||
+          (field === 'lv95X' && row.lv95Y))) ||
+      (!value && (field === 'lv95Y' || field === 'lv95X'))
+    ) {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`PopForMapQuery`],
+      })
+    }
+    setFieldErrors({})
+    if (['name', 'nr'].includes(field)) {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treePop`],
+      })
+    }
+  }
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <ErrorBoundary>
-        <Suspense fallback={<Spinner />}>
-          <FormTitle
-            title="Population"
-            MenuBarComponent={Menu}
-            menuBarProps={{ row }}
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={<Spinner />}>
+        <FormTitle
+          title="Population"
+          MenuBarComponent={Menu}
+          menuBarProps={{ row }}
+        />
+        <FormContainer>
+          <TextField
+            label="Nr."
+            name="nr"
+            type="number"
+            value={row.nr}
+            saveToDb={saveToDb}
+            error={fieldErrors.nr}
           />
-          <FormContainer>
-            <TextField
-              label="Nr."
-              name="nr"
-              type="number"
-              value={row.nr}
-              saveToDb={saveToDb}
-              error={fieldErrors.nr}
-            />
-            <TextFieldWithInfo
-              label="Name"
-              name="name"
-              type="text"
-              popover="Dieses Feld möglichst immer ausfüllen"
-              value={row.name}
-              saveToDb={saveToDb}
-              error={fieldErrors.name}
-            />
-            <Status
-              apJahr={row?.apByApId?.startJahr}
-              showFilter={false}
-              row={row}
-              saveToDb={saveToDb}
-              error={fieldErrors}
-            />
-            <Checkbox2States
-              label="Status unklar"
-              name="statusUnklar"
-              value={row.statusUnklar}
-              saveToDb={saveToDb}
-              error={fieldErrors.statusUnklar}
-            />
-            <TextField
-              label="Begründung"
-              name="statusUnklarBegruendung"
-              type="text"
-              multiLine
-              value={row.statusUnklarBegruendung}
-              saveToDb={saveToDb}
-              error={fieldErrors.statusUnklarBegruendung}
-            />
-            <Coordinates
-              row={row}
-              refetchForm={refetch}
-              table="pop"
-            />
-          </FormContainer>
-        </Suspense>
-      </ErrorBoundary>
-    )
-  }),
-)
+          <TextFieldWithInfo
+            label="Name"
+            name="name"
+            type="text"
+            popover="Dieses Feld möglichst immer ausfüllen"
+            value={row.name}
+            saveToDb={saveToDb}
+            error={fieldErrors.name}
+          />
+          <Status
+            apJahr={row?.apByApId?.startJahr}
+            showFilter={false}
+            row={row}
+            saveToDb={saveToDb}
+            error={fieldErrors}
+          />
+          <Checkbox2States
+            label="Status unklar"
+            name="statusUnklar"
+            value={row.statusUnklar}
+            saveToDb={saveToDb}
+            error={fieldErrors.statusUnklar}
+          />
+          <TextField
+            label="Begründung"
+            name="statusUnklarBegruendung"
+            type="text"
+            multiLine
+            value={row.statusUnklarBegruendung}
+            saveToDb={saveToDb}
+            error={fieldErrors.statusUnklarBegruendung}
+          />
+          <Coordinates
+            row={row}
+            refetchForm={refetch}
+            table="pop"
+          />
+        </FormContainer>
+      </Suspense>
+    </ErrorBoundary>
+  )
+})

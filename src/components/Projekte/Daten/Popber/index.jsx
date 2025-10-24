@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -41,38 +41,36 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-export const Component = memo(
-  observer(() => {
-    const { popberId: id } = useParams()
+export const Component = observer(() => {
+  const { popberId: id } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const { data, loading, error } = useQuery(query, {
-      variables: {
-        id,
-      },
-    })
+  const { data, loading, error } = useQuery(query, {
+    variables: {
+      id,
+    },
+  })
 
-    const row = useMemo(() => data?.popberById ?? {}, [data?.popberById])
+  const row = data?.popberById ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
 
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
           mutation updatePopber(
             $id: UUID!
             $${field}: ${fieldTypes[field]}
@@ -102,65 +100,62 @@ export const Component = memo(
           ${popber}
           ${tpopEntwicklungWerte}
         `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        // only set if necessary (to reduce renders)
-        if (Object.keys(fieldErrors).length) {
-          setFieldErrors({})
-        }
-        if (['jahr', 'entwicklung'].includes(field)) {
-          tsQueryClient.invalidateQueries({
-            queryKey: [`treePopber`],
-          })
-        }
-      },
-      [apolloClient, fieldErrors, tsQueryClient, row.id, store.user.name],
-    )
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    // only set if necessary (to reduce renders)
+    if (Object.keys(fieldErrors).length) {
+      setFieldErrors({})
+    }
+    if (['jahr', 'entwicklung'].includes(field)) {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treePopber`],
+      })
+    }
+  }
 
-    if (loading) return <Spinner />
+  if (loading) return <Spinner />
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title="Kontroll-Bericht Population"
-            MenuBarComponent={Menu}
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="Kontroll-Bericht Population"
+          MenuBarComponent={Menu}
+        />
+        <FormContainer>
+          <TextField
+            name="jahr"
+            label="Jahr"
+            type="number"
+            value={row.jahr}
+            saveToDb={saveToDb}
+            error={fieldErrors.jahr}
           />
-          <FormContainer>
-            <TextField
-              name="jahr"
-              label="Jahr"
-              type="number"
-              value={row.jahr}
-              saveToDb={saveToDb}
-              error={fieldErrors.jahr}
-            />
-            <RadioButtonGroup
-              name="entwicklung"
-              label="Entwicklung"
-              dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-              loading={loading}
-              value={row.entwicklung}
-              saveToDb={saveToDb}
-              error={fieldErrors.entwicklung}
-            />
-            <TextField
-              name="bemerkungen"
-              label="Bemerkungen"
-              type="text"
-              value={row.bemerkungen}
-              multiLine
-              saveToDb={saveToDb}
-              error={fieldErrors.bemerkungen}
-            />
-          </FormContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+          <RadioButtonGroup
+            name="entwicklung"
+            label="Entwicklung"
+            dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
+            loading={loading}
+            value={row.entwicklung}
+            saveToDb={saveToDb}
+            error={fieldErrors.entwicklung}
+          />
+          <TextField
+            name="bemerkungen"
+            label="Bemerkungen"
+            type="text"
+            value={row.bemerkungen}
+            multiLine
+            saveToDb={saveToDb}
+            error={fieldErrors.bemerkungen}
+          />
+        </FormContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
