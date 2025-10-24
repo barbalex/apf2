@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
@@ -70,47 +70,53 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-export const Component = memo(
-  observer(() => {
-    const { apberuebersichtId } = useParams()
+const getIsBeforeMarchOfFollowingYear = (jahr) => {
+  const now = new Date()
+  const currentMonth = now.getMonth()
+  const currentYear = now.getFullYear()
+  const previousYear = currentYear - 1
+  return (currentMonth < 3 && previousYear === jahr) || currentYear === jahr
+}
 
-    const store = useContext(MobxContext)
-    const { user } = store
-    const { token } = user
-    const role = token ? jwtDecode(token).role : null
-    const userIsManager = role === 'apflora_manager'
+export const Component = observer(() => {
+  const { apberuebersichtId } = useParams()
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const store = useContext(MobxContext)
+  const { user } = store
+  const { token } = user
+  const role = token ? jwtDecode(token).role : null
+  const userIsManager = role === 'apflora_manager'
 
-    const [fieldErrors, setFieldErrors] = useState({})
-    const [historizing, setHistorizing] = useState(false)
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const { data, isLoading, error } = useQuery({
-      queryKey: [`Apberuebersicht`, apberuebersichtId],
-      queryFn: () =>
-        apolloClient.query({
-          query,
-          variables: { id: apberuebersichtId },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+  const [fieldErrors, setFieldErrors] = useState({})
+  const [historizing, setHistorizing] = useState(false)
 
-    const row = data?.data?.apberuebersichtById
+  const { data, isLoading, error } = useQuery({
+    queryKey: [`Apberuebersicht`, apberuebersichtId],
+    queryFn: () =>
+      apolloClient.query({
+        query,
+        variables: { id: apberuebersichtId },
+        fetchPolicy: 'no-cache',
+      }),
+  })
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
+  const row = data?.data?.apberuebersichtById
 
-        const variables = {
-          id: row?.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
+
+    const variables = {
+      id: row?.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateApberuebersicht(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -132,127 +138,117 @@ export const Component = memo(
             }
             ${apberuebersicht}
           `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        setFieldErrors({})
-        if (field === 'jahr') {
-          tsQueryClient.invalidateQueries({
-            queryKey: [`treeApberuebersicht`],
-          })
-        }
-        tsQueryClient.invalidateQueries({
-          queryKey: [`Apberuebersicht`],
-        })
-      },
-      [apolloClient, tsQueryClient, row?.id, store.user.name],
-    )
-
-    const isBeforeMarchOfFollowingYear = useMemo(() => {
-      const now = new Date()
-      const currentMonth = now.getMonth()
-      const currentYear = now.getFullYear()
-      const previousYear = currentYear - 1
-      return (
-        (currentMonth < 3 && previousYear === row?.jahr) ||
-        currentYear === row?.jahr
-      )
-    }, [row?.jahr])
-    const showHistorize = userIsManager && isBeforeMarchOfFollowingYear
-    // console.log('Apberuebersicht', {
-    //   showHistorize,
-    //   isBeforeMarchOfFollowingYear,
-    //   userIsManager,
-    //   row,
-    //   jahr: row?.jahr,
-    // })
-
-    const onClickHistorize = useCallback(async () => {
-      if (!row?.jahr)
-        return console.log('Apberuebersicht, onClickHistorize: year missing')
-      setHistorizing(true)
-      await historize({ store, apberuebersicht: row })
-      tsQueryClient.invalidateQueries({
-        queryKey: ['Apberuebersicht'],
+        variables,
       })
-      setHistorizing(false)
-    }, [tsQueryClient, row, store])
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    setFieldErrors({})
+    if (field === 'jahr') {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeApberuebersicht`],
+      })
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`Apberuebersicht`],
+    })
+  }
 
-    if (isLoading) return <Spinner />
+  const isBeforeMarchOfFollowingYear = getIsBeforeMarchOfFollowingYear(
+    row?.jahr,
+  )
+  const showHistorize = userIsManager && isBeforeMarchOfFollowingYear
+  // console.log('Apberuebersicht', {
+  //   showHistorize,
+  //   isBeforeMarchOfFollowingYear,
+  //   userIsManager,
+  //   row,
+  //   jahr: row?.jahr,
+  // })
 
-    if (error) return <Error error={error} />
+  const onClickHistorize = async () => {
+    if (!row?.jahr)
+      return console.log('Apberuebersicht, onClickHistorize: year missing')
+    setHistorizing(true)
+    await historize({ store, apberuebersicht: row })
+    tsQueryClient.invalidateQueries({
+      queryKey: ['Apberuebersicht'],
+    })
+    setHistorizing(false)
+  }
 
-    if (!row) return null
+  if (isLoading) return <Spinner />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title="AP-Bericht Jahresübersicht"
-            MenuBarComponent={Menu}
-          />
-          <FieldsContainer>
-            <FormContainer>
-              <TextField
-                name="jahr"
-                label="Jahr"
-                type="number"
-                value={row.jahr}
-                saveToDb={saveToDb}
-                error={fieldErrors.jahr}
+  if (error) return <Error error={error} />
+
+  if (!row) return null
+
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="AP-Bericht Jahresübersicht"
+          MenuBarComponent={Menu}
+        />
+        <FieldsContainer>
+          <FormContainer>
+            <TextField
+              name="jahr"
+              label="Jahr"
+              type="number"
+              value={row.jahr}
+              saveToDb={saveToDb}
+              error={fieldErrors.jahr}
+            />
+            {!!row.historyDate && (
+              <TextFieldNonUpdatable
+                value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
+                label="Datum, an dem Arten, Pop und TPop historisiert wurden"
               />
-              {!!row.historyDate && (
-                <TextFieldNonUpdatable
-                  value={format(new Date(row.historyDate), 'dd.MM.yyyy')}
-                  label="Datum, an dem Arten, Pop und TPop historisiert wurden"
-                />
-              )}
-              {showHistorize && (
-                <>
-                  <HistorizeButton
-                    variant="outlined"
-                    onClick={onClickHistorize}
-                    title="historisieren"
-                    color="inherit"
-                    data-historizing={historizing}
-                    disabled={historizing || row?.historyFixed}
-                  >
-                    <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
-                    <Explainer>
-                      {historizing ?
-                        'Bitte warten, das dauert eine Weile...'
-                      : <>
-                          Diese Option ist nur sichtbar:
-                          <br /> 1. Wenn der Benutzer Manager ist
-                          <br /> 2. Von Beginn des Berichtjahrs bis zum März des
-                          Folgejahrs
-                        </>
-                      }
-                    </Explainer>
-                  </HistorizeButton>
-                </>
-              )}
-              <Checkbox2States
-                label="Historisierung fixieren"
-                name="historyFixed"
-                value={row?.historyFixed}
-                saveToDb={saveToDb}
-                helperText="Bewahrt die letze Historisierung als offiziellen Jahresbericht"
-                disabled={!row?.historyDate}
-              />
-              <MarkdownField
-                name="bemerkungen"
-                label="Bemerkungen"
-                value={row.bemerkungen}
-                saveToDb={saveToDb}
-                error={fieldErrors.bemerkungen}
-              />
-            </FormContainer>
-          </FieldsContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+            )}
+            {showHistorize && (
+              <>
+                <HistorizeButton
+                  variant="outlined"
+                  onClick={onClickHistorize}
+                  title="historisieren"
+                  color="inherit"
+                  data-historizing={historizing}
+                  disabled={historizing || row?.historyFixed}
+                >
+                  <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
+                  <Explainer>
+                    {historizing ?
+                      'Bitte warten, das dauert eine Weile...'
+                    : <>
+                        Diese Option ist nur sichtbar:
+                        <br /> 1. Wenn der Benutzer Manager ist
+                        <br /> 2. Von Beginn des Berichtjahrs bis zum März des
+                        Folgejahrs
+                      </>
+                    }
+                  </Explainer>
+                </HistorizeButton>
+              </>
+            )}
+            <Checkbox2States
+              label="Historisierung fixieren"
+              name="historyFixed"
+              value={row?.historyFixed}
+              saveToDb={saveToDb}
+              helperText="Bewahrt die letze Historisierung als offiziellen Jahresbericht"
+              disabled={!row?.historyDate}
+            />
+            <MarkdownField
+              name="bemerkungen"
+              label="Bemerkungen"
+              value={row.bemerkungen}
+              saveToDb={saveToDb}
+              error={fieldErrors.bemerkungen}
+            />
+          </FormContainer>
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
