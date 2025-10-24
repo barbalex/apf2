@@ -1,4 +1,4 @@
-import { memo, useContext, useState, useCallback, forwardRef } from 'react'
+import { useContext, useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
@@ -41,8 +41,8 @@ const Version = styled.div`
   user-select: none;
 `
 
-export const More = memo(
-  observer(({ onClickExporte: passedOnClickExporte, role }) => {
+export const More = observer(
+  ({ onClickExporte: passedOnClickExporte, role }) => {
     const { projId } = useParams()
 
     const [isMobileView] = useAtom(isMobileViewAtom)
@@ -52,7 +52,7 @@ export const More = memo(
     const { idb } = useContext(IdbContext)
 
     const [anchorEl, setAnchorEl] = useState(null)
-    const closeMenu = useCallback(() => setAnchorEl(null), [])
+    const closeMenu = () => setAnchorEl(null)
 
     /**
      * need to clone projekteTabs
@@ -61,30 +61,28 @@ export const More = memo(
     const [projekteTabs] = useProjekteTabs()
     const exporteIsActive = !!projId
 
-    const showDeletedDatasets = useCallback(() => {
+    const showDeletedDatasets = () => {
       closeMenu()
       // prevent following from happening
       // before setAnchor has finished
       setTimeout(() => setShowDeletions(true))
-    }, [closeMenu, setShowDeletions])
-    const onClickMehrButton = useCallback(
-      (event) => setAnchorEl(event.currentTarget),
-      [],
-    )
-    const onClickExporte = useCallback(() => {
+    }
+
+    const onClickMehrButton = (event) => setAnchorEl(event.currentTarget)
+
+    const onClickExporte = () => {
       closeMenu()
       // prevent following from happening
       // before setAnchor has finished
       setTimeout(() => passedOnClickExporte())
-    }, [closeMenu, passedOnClickExporte])
-    const onClickLogout = useCallback(() => {
-      logout(idb)
-    }, [idb])
+    }
 
-    const onClickUptime = useCallback(() => {
+    const onClickLogout = () => logout(idb)
+
+    const onClickUptime = () => {
       window.open('https://uptime.apflora.ch')
       setAnchorEl(null)
-    }, [])
+    }
 
     return (
       <Tooltip title="Mehr Befehle">
@@ -157,5 +155,5 @@ export const More = memo(
         </Menu>
       </Tooltip>
     )
-  }),
+  },
 )

@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { Tooltip } from '@mui/material'
@@ -11,13 +10,11 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   margin-right: 0 !important;
 `
 
-export const ShowBookmarksMenu = memo(() => {
+export const ShowBookmarksMenu = () => {
   const [showBookmarksMenu, setShowBookmarksMenu] = useAtom(
     showBookmarksMenuAtom,
   )
-  const toggleShowBookmarksMenu = useCallback(() => {
-    setShowBookmarksMenu(!showBookmarksMenu)
-  }, [showBookmarksMenu, setShowBookmarksMenu])
+  const toggleShowBookmarksMenu = () => setShowBookmarksMenu(!showBookmarksMenu)
 
   return (
     <Tooltip
@@ -35,4 +32,4 @@ export const ShowBookmarksMenu = memo(() => {
       />
     </Tooltip>
   )
-})
+}

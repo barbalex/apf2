@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { Tooltip } from '@mui/material'
@@ -15,14 +14,13 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   margin-right: 0 !important;
 `
 
-export const EnforceMobileNavigation = memo(() => {
+export const EnforceMobileNavigation = () => {
   const [enforceMobileNavigation] = useAtom(enforceMobileNavigationAtom)
   const [, setEnforceMobileNavigation] = useAtom(
     writeEnforceMobileNavigationAtom,
   )
-  const toggleEnforceMobileNavigation = useCallback(() => {
+  const toggleEnforceMobileNavigation = () =>
     setEnforceMobileNavigation(!enforceMobileNavigation)
-  }, [enforceMobileNavigation, setEnforceMobileNavigation])
 
   return (
     <Tooltip
@@ -40,4 +38,4 @@ export const EnforceMobileNavigation = memo(() => {
       />
     </Tooltip>
   )
-})
+}
