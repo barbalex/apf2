@@ -1,6 +1,4 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { DateField } from '../../../../shared/Date.jsx'
 
@@ -37,18 +35,16 @@ const DateVal = styled.div`
   }
 `
 
-export const Date = memo(
-  observer(({ saveToDb, row }) => (
-    <Container>
-      <DateLabel>Aufnahme-datum</DateLabel>
-      <DateVal>
-        <DateField
-          key={`${row?.id}datum`}
-          name="datum"
-          value={row?.datum}
-          saveToDb={saveToDb}
-        />
-      </DateVal>
-    </Container>
-  )),
+export const Date = ({ saveToDb, row }) => (
+  <Container>
+    <DateLabel>Aufnahme-datum</DateLabel>
+    <DateVal>
+      <DateField
+        key={`${row?.id}datum`}
+        name="datum"
+        value={row?.datum}
+        saveToDb={saveToDb}
+      />
+    </DateVal>
+  </Container>
 )

@@ -1,6 +1,4 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { TextField2 } from '../../../../shared/TextField2.jsx'
 import anteilImg from './anteil.png'
@@ -78,41 +76,39 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-export const Cover = memo(
-  observer(({ saveToDb, row }) => {
-    //console.log('Cover rendering')
+export const Cover = ({ saveToDb, row }) => {
+  //console.log('Cover rendering')
 
-    return (
-      <Container>
-        <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
-        <DeckApArtVal>
-          <TextField2
-            key={`${row?.id}deckungApArt`}
-            name="deckungApArt"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-          />
-        </DeckApArtVal>
-        <DeckApArtMass>%</DeckApArtMass>
-        <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
-        <DeckNaBoVal>
-          <TextField2
-            key={`${row?.id}deckungNackterBoden`}
-            name="deckungNackterBoden"
-            row={row}
-            type="number"
-            saveToDb={saveToDb}
-          />
-        </DeckNaBoVal>
-        <DeckNaBoMass>%</DeckNaBoMass>
-        <DeckImage>
-          <Img
-            src={anteilImg}
-            alt="Flächen-Anteile"
-          />
-        </DeckImage>
-      </Container>
-    )
-  }),
-)
+  return (
+    <Container>
+      <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
+      <DeckApArtVal>
+        <TextField2
+          key={`${row?.id}deckungApArt`}
+          name="deckungApArt"
+          row={row}
+          type="number"
+          saveToDb={saveToDb}
+        />
+      </DeckApArtVal>
+      <DeckApArtMass>%</DeckApArtMass>
+      <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
+      <DeckNaBoVal>
+        <TextField2
+          key={`${row?.id}deckungNackterBoden`}
+          name="deckungNackterBoden"
+          row={row}
+          type="number"
+          saveToDb={saveToDb}
+        />
+      </DeckNaBoVal>
+      <DeckNaBoMass>%</DeckNaBoMass>
+      <DeckImage>
+        <Img
+          src={anteilImg}
+          alt="Flächen-Anteile"
+        />
+      </DeckImage>
+    </Container>
+  )
+}

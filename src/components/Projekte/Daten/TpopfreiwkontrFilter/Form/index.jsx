@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -96,69 +96,62 @@ const GridContainer = styled.div`
   }
 `
 
-export const Form = memo(
-  observer(({ row, activeTab }) => {
-    const store = useContext(MobxContext)
-    const { dataFilterSetValue } = store.tree
+export const Form = observer(({ row, activeTab }) => {
+  const store = useContext(MobxContext)
+  const { dataFilterSetValue } = store.tree
 
-    const saveToDb = useCallback(
-      async (event) => {
-        console.log('TpopfreiwkontrForm, saveToDb, event:', event)
-        dataFilterSetValue({
-          table: 'tpopfreiwkontr',
-          key: event.target.name,
-          value: ifIsNumericAsNumber(event.target.value),
-          index: activeTab,
-        })
-      },
-      [activeTab, dataFilterSetValue],
-    )
+  const saveToDb = (event) =>
+    dataFilterSetValue({
+      table: 'tpopfreiwkontr',
+      key: event.target.name,
+      value: ifIsNumericAsNumber(event.target.value),
+      index: activeTab,
+    })
 
-    return (
-      <FormContainer>
-        <GridContainer>
-          <Headdata
-            row={row}
-            activeTab={activeTab}
-          />
-          <Date
-            saveToDb={saveToDb}
-            row={row}
-          />
-          <Map
-            key={`map${row?.planVorhanden}`}
-            saveToDb={saveToDb}
-            row={row}
-          />
-          <Cover
-            saveToDb={saveToDb}
-            row={row}
-          />
-          <More
-            key={`more${row?.jungpflanzenVorhanden}`}
-            saveToDb={saveToDb}
-            row={row}
-          />
-          <Danger
-            saveToDb={saveToDb}
-            row={row}
-          />
-          <Remarks
-            saveToDb={saveToDb}
-            row={row}
-          />
-          <EkfRemarks
-            saveToDb={saveToDb}
-            row={row}
-          />
-          <Verification
-            key={`verification${row?.apberNichtRelevant}`}
-            saveToDb={saveToDb}
-            row={row}
-          />
-        </GridContainer>
-        <div style={{ height: '64px' }} />
-      </FormContainer>
-    )
-  }),
-)
+  return (
+    <FormContainer>
+      <GridContainer>
+        <Headdata
+          row={row}
+          activeTab={activeTab}
+        />
+        <Date
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Map
+          key={`map${row?.planVorhanden}`}
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Cover
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <More
+          key={`more${row?.jungpflanzenVorhanden}`}
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Danger
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Remarks
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <EkfRemarks
+          saveToDb={saveToDb}
+          row={row}
+        />
+        <Verification
+          key={`verification${row?.apberNichtRelevant}`}
+          saveToDb={saveToDb}
+          row={row}
+        />
+      </GridContainer>
+      <div style={{ height: '64px' }} />
+    </FormContainer>
+  )
+})
