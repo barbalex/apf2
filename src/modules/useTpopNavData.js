@@ -1,6 +1,6 @@
-import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useContext, useEffect, useState } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
@@ -16,6 +16,20 @@ import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+
+const getLabelRightElements = ({ movingId, copyingId, tpopId }) => {
+  const labelRightElements = []
+  const isMoving = movingId === tpopId
+  if (isMoving) {
+    labelRightElements.push(MovingIcon)
+  }
+  const isCopying = copyingId === tpopId
+  if (isCopying) {
+    labelRightElements.push(CopyingIcon)
+  }
+
+  return labelRightElements
+}
 
 export const useTpopNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -33,7 +47,7 @@ export const useTpopNavData = (props) => {
   const showBeobzugeordnetIcon =
     store.activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -222,297 +236,257 @@ export const useTpopNavData = (props) => {
   const tpopIconName = store.map.tpopIcon
 
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
-  const TpopIcon = status
-    ? tpopIconIsHighlighted
-      ? tpopIcons[tpopIconName][status + 'Highlighted']
+  const TpopIcon =
+    status ?
+      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
       : tpopIcons[tpopIconName][status]
-    : tpopIconIsHighlighted
-      ? TpopIconQHighlighted
-      : TpopIconQ
+    : tpopIconIsHighlighted ? TpopIconQHighlighted
+    : TpopIconQ
 
-  const labelRightElements = useMemo(() => {
-    const labelRightElements = []
-    const isMoving = store.moving.id === tpopId
-    if (isMoving) {
-      labelRightElements.push(MovingIcon)
-    }
-    const isCopying = store.copying.id === tpopId
-    if (isCopying) {
-      labelRightElements.push(CopyingIcon)
-    }
+  const labelRightElements = getLabelRightElements({
+    movingId: store.moving.id,
+    copyingId: store.copying.id,
+    tpopId,
+  })
 
-    return labelRightElements
-  }, [store.moving.id, store.copying.id, tpopId])
-
-  const navData = useMemo(
-    () => ({
-      id: tpopId,
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}`,
-      label,
-      treeNodeType: 'table',
-      treeMenuType: 'tpop',
-      treeId: tpopId,
-      treeParentTableId: popId,
-      treeUrl: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-      ],
-      fetcherName: 'useTpopNavData',
-      fetcherParams: { projId, apId, popId, tpopId },
-      hasChildren: true,
-      // TODO: show only if map is visible and tpop layer active
-      labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
-      labelRightElements: labelRightElements.length
-        ? labelRightElements
-        : undefined,
-      component: NodeWithList,
-      menus: [
-        {
-          id: 'Teil-Population',
-          label: `Teil-Population`,
-          isSelf: true,
-          labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
-          labelRightElements: labelRightElements.length
-            ? labelRightElements
-            : undefined,
-        },
-        {
-          id: 'Massnahmen',
-          label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopmassnFolder',
-          treeId: `${tpopId}TpopmassnFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Massnahmen',
-          ],
-          fetcherName: 'useTpopmassnsNavData',
-          fetcherParams: { projId, apId, popId, tpopId },
-          hasChildren: !!filteredMassnCount,
-          component: NodeWithList,
-        },
-        {
-          id: 'Massnahmen-Berichte',
-          label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredTpopmassnbersCount}/${popmassnbersCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopmassnberFolder',
-          treeId: `${tpopId}MassnberFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Massnahmen-Berichte',
-          ],
-          fetcherName: 'useTpopmassnbersNavData',
-          fetcherParams: { projId, apId, popId, tpopId },
-          hasChildren: !!filteredTpopmassnbersCount,
-          component: NodeWithList,
-        },
-        {
-          id: 'Feld-Kontrollen',
-          label: `Feld-Kontrollen (${isLoading ? '...' : `${filteredFeldkontrCount}/${feldkontrCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopfeldkontrFolder',
-          treeId: `${tpopId}FeldkontrFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Feld-Kontrollen',
-          ],
-          fetcherName: 'useTpopfeldkontrsNavData',
-          fetcherParams: { projId, apId, popId, tpopId },
-          hasChildren: !!filteredFeldkontrCount,
-        },
-        {
-          id: 'Freiwilligen-Kontrollen',
-          label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${filteredFreiwkontrCount}/${freiwkontrCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopfreiwkontrFolder',
-          treeId: `${tpopId}FreiwkontrFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Freiwilligen-Kontrollen',
-          ],
-          fetcherName: 'useTpopfreiwkontrsNavData',
-          fetcherParams: { projId, apId, popId, tpopId },
-          hasChildren: !!filteredFreiwkontrCount,
-        },
-        {
-          id: 'Kontroll-Berichte',
-          label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredTpopbersCount}/${tpopbersCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopberFolder',
-          treeId: `${tpopId}TpopberFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Kontroll-Berichte',
-          ],
-          fetcherName: 'useTpopbersNavData',
-          fetcherParams: { projId, apId, popId, tpopId },
-          hasChildren: !!filteredTpopbersCount,
-          component: NodeWithList,
-        },
-        {
-          id: 'Beobachtungen',
-          label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'beobZugeordnetFolder',
-          treeId: `${tpopId}BeobZugeordnetFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Beobachtungen',
-          ],
-          fetcherName: 'useBeobZugeordnetsNavData',
-          fetcherParams: { projId, apId, popId, tpopId },
-          hasChildren: !!filteredBeobZugeordnetCount,
-          labelLeftElements: showBeobzugeordnetIcon
-            ? [BeobzugeordnetMapIcon]
-            : undefined,
-          component: NodeWithList,
-        },
-        {
-          id: 'EK',
-          label: `EK`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopEkFolder',
-          treeId: `${tpopId}EkFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'EK',
-          ],
-          hasChildren: false,
-          component: Node,
-        },
-        {
-          id: 'Dateien',
-          label: `Dateien (${filesCount})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopDateienFolder',
-          treeId: `${tpopId}DateienFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Dateien',
-          ],
-          hasChildren: false,
-          component: Node,
-        },
-        {
-          id: 'Historien',
-          label: `Historien (${historiesCount})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopHistorienFolder',
-          treeId: `${tpopId}HistorienFolder`,
-          treeParentTableId: tpopId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Historien',
-          ],
-          hasChildren: false,
-          component: Node,
-        },
-      ],
-    }),
-    [
-      TpopIcon,
-      apId,
-      beobZugeordnetCount,
-      feldkontrCount,
-      filesCount,
-      filteredBeobZugeordnetCount,
-      filteredFeldkontrCount,
-      filteredFreiwkontrCount,
-      filteredMassnCount,
-      filteredTpopmassnbersCount,
-      filteredTpopbersCount,
-      freiwkontrCount,
-      historiesCount,
-      isLoading,
-      label,
-      labelRightElements,
-      massnCount,
-      popId,
-      popmassnbersCount,
+  const navData = {
+    id: tpopId,
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}`,
+    label,
+    treeNodeType: 'table',
+    treeMenuType: 'tpop',
+    treeId: tpopId,
+    treeParentTableId: popId,
+    treeUrl: [
+      'Projekte',
       projId,
-      showBeobzugeordnetIcon,
-      store.tree.showTpopIcon,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
       tpopId,
-      tpopbersCount,
     ],
-  )
+    fetcherName: 'useTpopNavData',
+    fetcherParams: { projId, apId, popId, tpopId },
+    hasChildren: true,
+    // TODO: show only if map is visible and tpop layer active
+    labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+    labelRightElements:
+      labelRightElements.length ? labelRightElements : undefined,
+    component: NodeWithList,
+    menus: [
+      {
+        id: 'Teil-Population',
+        label: `Teil-Population`,
+        isSelf: true,
+        labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
+      },
+      {
+        id: 'Massnahmen',
+        label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopmassnFolder',
+        treeId: `${tpopId}TpopmassnFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Massnahmen',
+        ],
+        fetcherName: 'useTpopmassnsNavData',
+        fetcherParams: { projId, apId, popId, tpopId },
+        hasChildren: !!filteredMassnCount,
+        component: NodeWithList,
+      },
+      {
+        id: 'Massnahmen-Berichte',
+        label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredTpopmassnbersCount}/${popmassnbersCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopmassnberFolder',
+        treeId: `${tpopId}MassnberFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Massnahmen-Berichte',
+        ],
+        fetcherName: 'useTpopmassnbersNavData',
+        fetcherParams: { projId, apId, popId, tpopId },
+        hasChildren: !!filteredTpopmassnbersCount,
+        component: NodeWithList,
+      },
+      {
+        id: 'Feld-Kontrollen',
+        label: `Feld-Kontrollen (${isLoading ? '...' : `${filteredFeldkontrCount}/${feldkontrCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopfeldkontrFolder',
+        treeId: `${tpopId}FeldkontrFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Feld-Kontrollen',
+        ],
+        fetcherName: 'useTpopfeldkontrsNavData',
+        fetcherParams: { projId, apId, popId, tpopId },
+        hasChildren: !!filteredFeldkontrCount,
+      },
+      {
+        id: 'Freiwilligen-Kontrollen',
+        label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${filteredFreiwkontrCount}/${freiwkontrCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopfreiwkontrFolder',
+        treeId: `${tpopId}FreiwkontrFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Freiwilligen-Kontrollen',
+        ],
+        fetcherName: 'useTpopfreiwkontrsNavData',
+        fetcherParams: { projId, apId, popId, tpopId },
+        hasChildren: !!filteredFreiwkontrCount,
+      },
+      {
+        id: 'Kontroll-Berichte',
+        label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredTpopbersCount}/${tpopbersCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopberFolder',
+        treeId: `${tpopId}TpopberFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Kontroll-Berichte',
+        ],
+        fetcherName: 'useTpopbersNavData',
+        fetcherParams: { projId, apId, popId, tpopId },
+        hasChildren: !!filteredTpopbersCount,
+        component: NodeWithList,
+      },
+      {
+        id: 'Beobachtungen',
+        label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'beobZugeordnetFolder',
+        treeId: `${tpopId}BeobZugeordnetFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Beobachtungen',
+        ],
+        fetcherName: 'useBeobZugeordnetsNavData',
+        fetcherParams: { projId, apId, popId, tpopId },
+        hasChildren: !!filteredBeobZugeordnetCount,
+        labelLeftElements:
+          showBeobzugeordnetIcon ? [BeobzugeordnetMapIcon] : undefined,
+        component: NodeWithList,
+      },
+      {
+        id: 'EK',
+        label: `EK`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopEkFolder',
+        treeId: `${tpopId}EkFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'EK',
+        ],
+        hasChildren: false,
+        component: Node,
+      },
+      {
+        id: 'Dateien',
+        label: `Dateien (${filesCount})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopDateienFolder',
+        treeId: `${tpopId}DateienFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Dateien',
+        ],
+        hasChildren: false,
+        component: Node,
+      },
+      {
+        id: 'Historien',
+        label: `Historien (${historiesCount})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopHistorienFolder',
+        treeId: `${tpopId}HistorienFolder`,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Historien',
+        ],
+        hasChildren: false,
+        component: Node,
+      },
+    ],
+  }
 
   return { isLoading, error, navData }
 }
