@@ -1,9 +1,8 @@
-import { memo } from 'react'
 import { Link } from 'react-router'
 
 import { DokuDate } from '../../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Technologien</h1>
     <DokuDate>1.1.2023</DokuDate>
@@ -168,4 +167,4 @@ export const Component = memo(() => (
       </li>
     </ul>
   </>
-))
+)
