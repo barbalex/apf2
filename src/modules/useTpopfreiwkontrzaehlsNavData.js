@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -69,15 +69,40 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
   const totalCount = data?.data?.tpopkontrById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Zaehlungen',
-      listFilter: 'tpopkontrzaehl',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}/Zaehlungen`,
-      label: `Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'tpopfreiwkontrzaehlFolder',
-      treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
+  const navData = {
+    id: 'Zaehlungen',
+    listFilter: 'tpopkontrzaehl',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}/Zaehlungen`,
+    label: `Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'tpopfreiwkontrzaehlFolder',
+    treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
+    treeParentTableId: tpopkontrId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+      'Freiwilligen-Kontrollen',
+      tpopkontrId,
+      'Zaehlungen',
+    ],
+    fetcherName: 'useTpopfreiwkontrzaehlsNavData',
+    fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+    hasChildren: !!count,
+    alwaysOpen: true,
+    menus: (
+      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+    ).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopfreiwkontrzaehl',
+      treeId: p.id,
       treeParentTableId: tpopkontrId,
       treeUrl: [
         'Projekte',
@@ -91,49 +116,11 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
         'Freiwilligen-Kontrollen',
         tpopkontrId,
         'Zaehlungen',
+        p.id,
       ],
-      fetcherName: 'useTpopfreiwkontrzaehlsNavData',
-      fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
-      hasChildren: !!count,
-      alwaysOpen: true,
-      menus: (
-        data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
-      ).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'tpopfreiwkontrzaehl',
-        treeId: p.id,
-        treeParentTableId: tpopkontrId,
-        treeUrl: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
-          popId,
-          'Teil-Populationen',
-          tpopId,
-          'Freiwilligen-Kontrollen',
-          tpopkontrId,
-          'Zaehlungen',
-          p.id,
-        ],
-        hasChildren: false,
-      })),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes,
-      isLoading,
-      popId,
-      projId,
-      totalCount,
-      tpopId,
-      tpopkontrId,
-    ],
-  )
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }

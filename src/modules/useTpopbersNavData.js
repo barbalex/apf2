@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -61,15 +61,34 @@ export const useTpopbersNavData = (props) => {
   const count = data?.data?.tpopById?.tpopbersByTpopId?.totalCount ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Kontroll-Berichte',
-      listFilter: 'tpopber',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte`,
-      label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      menuType: 'tpopberFolder',
-      treeId: `${tpopId}TpopberFolder`,
+  const navData = {
+    id: 'Kontroll-Berichte',
+    listFilter: 'tpopber',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte`,
+    label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    menuType: 'tpopberFolder',
+    treeId: `${tpopId}TpopberFolder`,
+    treeParentTableId: tpopId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+      'Kontroll-Berichte',
+    ],
+    hasChildren: count > 0,
+    component: NodeWithList,
+    menus: (data?.data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopber',
+      treeId: p.id,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -81,42 +100,11 @@ export const useTpopbersNavData = (props) => {
         'Teil-Populationen',
         tpopId,
         'Kontroll-Berichte',
+        p.id,
       ],
-      hasChildren: count > 0,
-      component: NodeWithList,
-      menus: (data?.data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'tpopber',
-        treeId: p.id,
-        treeParentTableId: tpopId,
-        treeUrl: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
-          popId,
-          'Teil-Populationen',
-          tpopId,
-          'Kontroll-Berichte',
-          p.id,
-        ],
-        hasChildren: false,
-      })),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.tpopById?.tpopbersByTpopId?.nodes,
-      isLoading,
-      popId,
-      projId,
-      totalCount,
-      tpopId,
-    ],
-  )
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }

@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
@@ -59,39 +59,31 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
   const count = data?.data?.allTpopApberrelevantGrundWertes?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'ApberrelevantGrundWerte',
-      listFilter: 'tpopApberrelevantGrundWerte',
-      url: `/Daten/Werte-Listen/ApberrelevantGrundWerte`,
-      label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'tpopApberrelevantGrundWerteFolder',
-      treeId: `tpopApberrelevantGrundWerteFolder`,
-      treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte'],
-      hasChildren: !!count,
-      fetcherName: 'useTpopApberrelevantGrundWertesNavData',
-      fetcherParams: {},
-      component: NodeWithList,
-      menus: (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
-        (p) => ({
-          id: p.id,
-          label: p.label,
-          treeNodeType: 'table',
-          treeMenuType: 'tpopApberrelevantGrundWerte',
-          treeId: p.id,
-          treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte', p.id],
-          hasChildren: false,
-        }),
-      ),
-    }),
-    [
-      count,
-      data?.data?.allTpopApberrelevantGrundWertes?.nodes,
-      isLoading,
-      totalCount,
-    ],
-  )
+  const navData = {
+    id: 'ApberrelevantGrundWerte',
+    listFilter: 'tpopApberrelevantGrundWerte',
+    url: `/Daten/Werte-Listen/ApberrelevantGrundWerte`,
+    label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'tpopApberrelevantGrundWerteFolder',
+    treeId: `tpopApberrelevantGrundWerteFolder`,
+    treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte'],
+    hasChildren: !!count,
+    fetcherName: 'useTpopApberrelevantGrundWertesNavData',
+    fetcherParams: {},
+    component: NodeWithList,
+    menus: (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
+      (p) => ({
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'tpopApberrelevantGrundWerte',
+        treeId: p.id,
+        treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte', p.id],
+        hasChildren: false,
+      }),
+    ),
+  }
 
   return { isLoading, error, navData }
 }
