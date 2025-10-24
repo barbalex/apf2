@@ -1,4 +1,4 @@
-import { memo, useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
@@ -7,38 +7,36 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { MobxContext } from '../../mobxContext.js'
 
-export const ApFilterController = memo(
-  observer(() => {
-    const apolloClient = useApolloClient()
-    const { apId } = useParams()
-    const store = useContext(MobxContext)
-    const { apFilter, setApFilter } = store.tree
+export const ApFilterController = observer(() => {
+  const apolloClient = useApolloClient()
+  const { apId } = useParams()
+  const store = useContext(MobxContext)
+  const { apFilter, setApFilter } = store.tree
 
-    useEffect(() => {
-      // if active apId is not an ap and apFilter is true,
-      // turn apFilter off to show the active path
-      if (!apId) return
-      if (!apFilter) return
+  useEffect(() => {
+    // if active apId is not an ap and apFilter is true,
+    // turn apFilter off to show the active path
+    if (!apId) return
+    if (!apFilter) return
 
-      apolloClient
-        .query({
-          query: gql`
-            query apFilterControllerQuery($id: UUID!) {
-              apById(id: $id) {
-                id
-                bearbeitung
-              }
+    apolloClient
+      .query({
+        query: gql`
+          query apFilterControllerQuery($id: UUID!) {
+            apById(id: $id) {
+              id
+              bearbeitung
             }
-          `,
-          variables: { id: apId },
-        })
-        .then(({ data }) => {
-          const bearbeitung = data.apById.bearbeitung
-          const isAp = bearbeitung > 0 && bearbeitung < 4
-          if (!isAp) setApFilter(false)
-        })
-    }, [apFilter, apId, apolloClient, setApFilter])
+          }
+        `,
+        variables: { id: apId },
+      })
+      .then(({ data }) => {
+        const bearbeitung = data.apById.bearbeitung
+        const isAp = bearbeitung > 0 && bearbeitung < 4
+        if (!isAp) setApFilter(false)
+      })
+  }, [apFilter, apId, apolloClient, setApFilter])
 
-    return null
-  }),
-)
+  return null
+})

@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import { groupBy } from 'es-toolkit'
 import { sortBy } from 'es-toolkit'
@@ -43,7 +42,7 @@ const Title = styled.p`
   margin-bottom: 4px;
 `
 
-export const AvList = memo(({ data }) => {
+export const AvList = ({ data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
   const avGrouped = groupBy(
     nodes.map((ap) => ({
@@ -79,4 +78,4 @@ export const AvList = memo(({ data }) => {
       </Container>
     </ErrorBoundary>
   )
-})
+}

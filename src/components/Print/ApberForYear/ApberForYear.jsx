@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import { useApolloClient } from '@apollo/client/react'
@@ -102,7 +101,7 @@ const SecondPageText = styled.div`
   padding-top: 0.2cm;
 `
 
-export const ApberForYear = memo(() => {
+export const ApberForYear = () => {
   const { apberuebersichtId, projId } = useParams()
 
   const apolloClient = useApolloClient()
@@ -202,4 +201,4 @@ export const ApberForYear = memo(() => {
       </Container>
     </ErrorBoundary>
   )
-})
+}
