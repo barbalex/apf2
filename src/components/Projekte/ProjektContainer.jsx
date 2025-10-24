@@ -1,4 +1,4 @@
-import { useContext, useMemo, lazy, Suspense, useRef } from 'react'
+import { useContext, lazy, Suspense, useRef } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
@@ -54,10 +54,6 @@ export const ProjektContainer = observer(() => {
 
   const [hideBookmarks] = useAtom(hideBookmarksAtom)
 
-  // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
-  // to prevent it from causing unnessecary renders
-  // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
-  /// eslint-disable-next-line react-hooks/exhaustive-deps
   const treeTabValues = [
     'tree',
     'daten',

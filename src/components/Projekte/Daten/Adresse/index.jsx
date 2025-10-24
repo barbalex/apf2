@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -40,34 +40,32 @@ const fieldTypes = {
   freiwErfko: 'Boolean',
 }
 
-export const Component = memo(
-  observer(() => {
-    const { adrId } = useParams()
-    const store = useContext(MobxContext)
-    const tsQueryClient = useQueryClient()
+export const Component = observer(() => {
+  const { adrId } = useParams()
+  const store = useContext(MobxContext)
+  const tsQueryClient = useQueryClient()
 
-    const { data, error, loading } = useQuery(query, {
-      variables: { id: adrId },
-    })
-    const apolloClient = useApolloClient()
+  const { data, error, loading } = useQuery(query, {
+    variables: { id: adrId },
+  })
+  const apolloClient = useApolloClient()
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const row = useMemo(() => data?.adresseById ?? {}, [data?.adresseById])
+  const row = data?.adresseById ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
 
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateAdresse(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -89,76 +87,73 @@ export const Component = memo(
             }
             ${adresse}
           `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        setFieldErrors({})
-        if (field === 'name') {
-          tsQueryClient.invalidateQueries({
-            queryKey: [`treeAdresse`],
-          })
-        }
-      },
-      [apolloClient, tsQueryClient, row.id, store.user.name],
-    )
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    setFieldErrors({})
+    if (field === 'name') {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeAdresse`],
+      })
+    }
+  }
 
-    if (loading) return <Spinner />
-    if (error) return <Error error={error} />
+  if (loading) return <Spinner />
+  if (error) return <Error error={error} />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title="Adresse"
-            MenuBarComponent={Menu}
-          />
-          <FieldsContainer>
-            <FormContainer>
-              <TextField
-                name="name"
-                label="Name"
-                type="text"
-                value={row.name}
-                saveToDb={saveToDb}
-                error={fieldErrors.name}
-              />
-              <TextField
-                name="adresse"
-                label="Adresse"
-                type="text"
-                value={row.adresse}
-                saveToDb={saveToDb}
-                error={fieldErrors.adresse}
-              />
-              <TextField
-                name="telefon"
-                label="Telefon"
-                type="text"
-                value={row.telefon}
-                saveToDb={saveToDb}
-                error={fieldErrors.telefon}
-              />
-              <TextField
-                name="email"
-                label="Email"
-                type="email"
-                value={row.email}
-                saveToDb={saveToDb}
-                error={fieldErrors.email}
-              />
-              <Checkbox2States
-                name="freiwErfko"
-                label="freiwillige ErfolgskontrolleurIn"
-                value={row.freiwErfko}
-                saveToDb={saveToDb}
-                error={fieldErrors.freiwErfko}
-              />
-            </FormContainer>
-          </FieldsContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="Adresse"
+          MenuBarComponent={Menu}
+        />
+        <FieldsContainer>
+          <FormContainer>
+            <TextField
+              name="name"
+              label="Name"
+              type="text"
+              value={row.name}
+              saveToDb={saveToDb}
+              error={fieldErrors.name}
+            />
+            <TextField
+              name="adresse"
+              label="Adresse"
+              type="text"
+              value={row.adresse}
+              saveToDb={saveToDb}
+              error={fieldErrors.adresse}
+            />
+            <TextField
+              name="telefon"
+              label="Telefon"
+              type="text"
+              value={row.telefon}
+              saveToDb={saveToDb}
+              error={fieldErrors.telefon}
+            />
+            <TextField
+              name="email"
+              label="Email"
+              type="email"
+              value={row.email}
+              saveToDb={saveToDb}
+              error={fieldErrors.email}
+            />
+            <Checkbox2States
+              name="freiwErfko"
+              label="freiwillige ErfolgskontrolleurIn"
+              value={row.freiwErfko}
+              saveToDb={saveToDb}
+              error={fieldErrors.freiwErfko}
+            />
+          </FormContainer>
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
