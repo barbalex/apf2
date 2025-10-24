@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 import { countBy } from 'es-toolkit'
 
@@ -16,8 +15,8 @@ import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()
-  const { projId, apId: apIdFromParams } = useParams()
-  const apId = props?.apId ?? apIdFromParams
+  const projId = props?.projId
+  const apId = props?.apId
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -30,6 +29,7 @@ export const useApNavData = (props) => {
     store.activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const showBeobnichtzuzuordnenIcon =
     store.activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
+
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
@@ -60,7 +60,8 @@ export const useApNavData = (props) => {
     },
   }
 
-  // TODO: somehow in bookmarks where this is dynamically imported, isLoading never goes to false
+  // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
+  // but only on first load?
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
       'treeAp',

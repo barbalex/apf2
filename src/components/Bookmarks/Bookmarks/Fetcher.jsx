@@ -1,13 +1,11 @@
-import { memo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Spinner } from '../../shared/Spinner.jsx'
 import { Error } from '../../shared/Error.jsx'
 import { Bookmark } from '../Bookmark/index.jsx'
 
-// pass on TransitionGroup's props
-export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
-  const fetcherName = match.handle?.bookmarkFetcherName
-
+// pass on TransitionGroup's props as other
+export const Fetcher = ({ match, fetcherModule, ...other }) => {
   // need to pass in params
   // If not: When navigating up the tree while transitioning out lower levels,
   // those bookmark components will not have their params anymore and error
@@ -15,11 +13,26 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
   // there is a weird * param containing the pathname. Remove it
   delete params['*']
 
-  const { navData, isLoading, error } = fetcherModule?.[fetcherName](params)
+  console.log('Fetcher render 1', {
+    fetcherName: match.handle?.bookmarkFetcherName,
+    fetcherModule,
+    params,
+  })
 
-  if (isLoading) return <Spinner />
+  const { navData, isLoading, error } = fetcherModule(params)
+
+  console.log('Fetcher render 2', {
+    fetcherName: match.handle?.bookmarkFetcherName,
+    navData,
+    isLoading,
+    error,
+  })
 
   if (error) return <Error error={error} />
+
+  // somehow isLoading is way too often true
+  // so only show spinner if no navData yet
+  if (!navData) return <Spinner />
 
   return (
     <Bookmark
@@ -28,4 +41,4 @@ export const Fetcher = memo(({ match, fetcherModule, ...other }) => {
       {...other}
     />
   )
-})
+}
