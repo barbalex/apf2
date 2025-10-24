@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Input from '@mui/material/Input'
 import styled from '@emotion/styled'
 
@@ -12,41 +12,40 @@ const StyledInput = styled(Input)`
   }
 `
 
-export const KontrolljahrField = memo(
-  ({ saveToDb, name = 'kontrolljahre', index, kontrolljahre, refetch }) => {
-    const [value, setValue] = useState(kontrolljahre[index])
-    useEffect(() => {
-      setValue(kontrolljahre[index])
-    }, [index, kontrolljahre])
+export const KontrolljahrField = ({
+  saveToDb,
+  name = 'kontrolljahre',
+  index,
+  kontrolljahre,
+  refetch,
+}) => {
+  const [value, setValue] = useState(kontrolljahre[index])
+  useEffect(() => {
+    setValue(kontrolljahre[index])
+  }, [index, kontrolljahre])
 
-    const onChange = useCallback((event) => {
-      setValue(ifIsNumericAsNumber(event.target.value))
-    }, [])
+  const onChange = (event) => setValue(ifIsNumericAsNumber(event.target.value))
 
-    const onBlur = useCallback(async () => {
-      const newVal = [...kontrolljahre]
-      if (value || value === 0) {
-        newVal[index] = value
-      } else {
-        newVal.splice(index, 1)
-      }
-      await saveToDb({ target: { name, value: newVal } })
-      refetch()
-    }, [kontrolljahre, value, saveToDb, name, refetch, index])
+  const onBlur = async () => {
+    const newVal = [...kontrolljahre]
+    if (value || value === 0) {
+      newVal[index] = value
+    } else {
+      newVal.splice(index, 1)
+    }
+    await saveToDb({ target: { name, value: newVal } })
+    refetch()
+  }
 
-    const onKeyDown = useCallback(
-      (e) => e.key === 'Enter' && onBlur(),
-      [onBlur],
-    )
+  const onKeyDown = (e) => e.key === 'Enter' && onBlur()
 
-    return (
-      <StyledInput
-        value={value}
-        type="number"
-        onChange={onChange}
-        onBlur={onBlur}
-        onKeyDown={onKeyDown}
-      />
-    )
-  },
-)
+  return (
+    <StyledInput
+      value={value}
+      type="number"
+      onChange={onChange}
+      onBlur={onBlur}
+      onKeyDown={onKeyDown}
+    />
+  )
+}
