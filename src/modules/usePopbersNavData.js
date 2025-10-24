@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -55,15 +55,31 @@ export const usePopbersNavData = (props) => {
   const count = data?.data?.popById?.popbersByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Kontroll-Berichte',
-      listFilter: 'popber',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte`,
-      label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'popberFolder',
-      treeId: `${popId}popberFolder`,
+  const navData = {
+    id: 'Kontroll-Berichte',
+    listFilter: 'popber',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Kontroll-Berichte`,
+    label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'popberFolder',
+    treeId: `${popId}popberFolder`,
+    treeParentTableId: popId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Kontroll-Berichte',
+    ],
+    hasChildren: !!count,
+    menus: (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'popber',
+      treeId: p.id,
       treeParentTableId: popId,
       treeUrl: [
         'Projekte',
@@ -73,38 +89,11 @@ export const usePopbersNavData = (props) => {
         'Populationen',
         popId,
         'Kontroll-Berichte',
+        p.id,
       ],
-      hasChildren: !!count,
-      menus: (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'popber',
-        treeId: p.id,
-        treeParentTableId: popId,
-        treeUrl: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
-          popId,
-          'Kontroll-Berichte',
-          p.id,
-        ],
-        hasChildren: false,
-      })),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.popById?.popbersByPopId?.nodes,
-      isLoading,
-      popId,
-      projId,
-      totalCount,
-    ],
-  )
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }

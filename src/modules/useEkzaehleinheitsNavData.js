@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -62,39 +62,33 @@ export const useEkzaehleinheitsNavData = (props) => {
     [],
   )
 
-  const rows = useMemo(
-    () => data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? [],
-    [data],
-  )
+  const rows = data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? []
   const count = rows.length
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'EK-Zähleinheiten',
-      listFilter: 'ekzaehleinheit',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
-      label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'ekzaehleinheitFolder',
-      treeId: `${apId}EkzaehleinheitFolder`,
+  const navData = {
+    id: 'EK-Zähleinheiten',
+    listFilter: 'ekzaehleinheit',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
+    label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'ekzaehleinheitFolder',
+    treeId: `${apId}EkzaehleinheitFolder`,
+    treeParentTableId: apId,
+    treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
+    hasChildren: !!count,
+    component: NodeWithList,
+    menus: rows.map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'ekzaehleinheit',
+      treeId: p.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
-      hasChildren: !!count,
-      component: NodeWithList,
-      menus: rows.map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'ekzaehleinheit',
-        treeId: p.id,
-        treeParentTableId: apId,
-        treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', p.id],
-        hasChildren: false,
-      })),
-    }),
-    [apId, count, isLoading, projId, rows, totalCount],
-  )
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', p.id],
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }

@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -56,37 +56,31 @@ export const useEkfrequenzsNavData = (props) => {
   )
 
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
-  const rows = useMemo(
-    () => data?.data?.apById?.ekfrequenzsByApId?.nodes ?? [],
-    [data?.data?.apById?.ekfrequenzsByApId?.nodes],
-  )
+  const rows = data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []
 
-  const navData = useMemo(
-    () => ({
-      id: 'EK-Frequenzen',
-      listFilter: 'ekfrequenz',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
-      label: `EK-Frequenzen (${isLoading ? '...' : `${rows.length}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'ekfrequenzFolder',
-      treeId: `${apId}EkfrequenzFolder`,
+  const navData = {
+    id: 'EK-Frequenzen',
+    listFilter: 'ekfrequenz',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
+    label: `EK-Frequenzen (${isLoading ? '...' : `${rows.length}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'ekfrequenzFolder',
+    treeId: `${apId}EkfrequenzFolder`,
+    treeParentTableId: apId,
+    treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
+    hasChildren: !!rows.length,
+    component: NodeWithList,
+    menus: rows.map((p) => ({
+      id: p.id,
+      label: p.label ?? '(kein Kürzel)',
+      treeNodeType: 'table',
+      treeMenuType: 'ekfrequenz',
+      treeId: p.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
-      hasChildren: !!rows.length,
-      component: NodeWithList,
-      menus: rows.map((p) => ({
-        id: p.id,
-        label: p.label ?? '(kein Kürzel)',
-        treeNodeType: 'table',
-        treeMenuType: 'ekfrequenz',
-        treeId: p.id,
-        treeParentTableId: apId,
-        treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', p.id],
-        hasChildren: false,
-      })),
-    }),
-    [apId, isLoading, projId, rows, totalCount],
-  )
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', p.id],
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
