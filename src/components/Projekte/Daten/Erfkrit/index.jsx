@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -41,44 +41,42 @@ const fieldTypes = {
   kriterien: 'String',
 }
 
-export const Component = memo(
-  observer(() => {
-    const { erfkritId: id } = useParams()
+export const Component = observer(() => {
+  const { erfkritId: id } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const tsQueryClient = useQueryClient()
-    const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const { data, loading, error } = useQuery(query, {
-      variables: {
-        id,
-      },
-    })
+  const { data, loading, error } = useQuery(query, {
+    variables: {
+      id,
+    },
+  })
 
-    const {
-      data: dataLists,
-      loading: loadingLists,
-      error: errorLists,
-    } = useQuery(queryLists)
+  const {
+    data: dataLists,
+    loading: loadingLists,
+    error: errorLists,
+  } = useQuery(queryLists)
 
-    const row = useMemo(() => data?.erfkritById ?? {}, [data?.erfkritById])
+  const row = data?.erfkritById ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
 
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateErfkrit(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -100,56 +98,53 @@ export const Component = memo(
             }
             ${erfkrit}
           `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        setFieldErrors({})
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeErfkrit`],
-        })
-      },
-      [apolloClient, tsQueryClient, row.id, store.user.name],
-    )
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    setFieldErrors({})
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeErfkrit`],
+    })
+  }
 
-    if (loading) return <Spinner />
+  if (loading) return <Spinner />
 
-    const errors = [
-      ...(error ? [error] : []),
-      ...(errorLists ? [errorLists] : []),
-    ]
-    if (errors.length) return <Error errors={errors} />
+  const errors = [
+    ...(error ? [error] : []),
+    ...(errorLists ? [errorLists] : []),
+  ]
+  if (errors.length) return <Error errors={errors} />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title="Erfolgs-Kriterium"
-            MenuBarComponent={Menu}
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="Erfolgs-Kriterium"
+          MenuBarComponent={Menu}
+        />
+        <FormContainer>
+          <RadioButtonGroup
+            name="erfolg"
+            label="Beurteilung"
+            dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
+            loading={loadingLists}
+            value={row.erfolg}
+            saveToDb={saveToDb}
+            error={fieldErrors.erfolg}
           />
-          <FormContainer>
-            <RadioButtonGroup
-              name="erfolg"
-              label="Beurteilung"
-              dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
-              loading={loadingLists}
-              value={row.erfolg}
-              saveToDb={saveToDb}
-              error={fieldErrors.erfolg}
-            />
-            <TextField
-              name="kriterien"
-              label="Kriterien"
-              type="text"
-              multiLine
-              value={row.kriterien}
-              saveToDb={saveToDb}
-              error={fieldErrors.kriterien}
-            />
-          </FormContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+          <TextField
+            name="kriterien"
+            label="Kriterien"
+            type="text"
+            multiLine
+            value={row.kriterien}
+            saveToDb={saveToDb}
+            error={fieldErrors.kriterien}
+          />
+        </FormContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
