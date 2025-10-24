@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
@@ -58,39 +58,31 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
   const count = data?.data?.allTpopkontrzaehlEinheitWertes?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'TpopkontrzaehlEinheitWerte',
-      listFilter: 'tpopkontrzaehlEinheitWerte',
-      url: `/Daten/Werte-Listen/TpopkontrzaehlEinheitWerte`,
-      label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'TpopkontrzaehlEinheitWerte',
-      treeId: `tpopkontrzaehlEinheitWerteFolder`,
-      treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
-      hasChildren: !!count,
-      fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
-      fetcherParams: {},
-      component: NodeWithList,
-      menus: (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
-        (p) => ({
-          id: p.id,
-          label: p.label,
-          treeNodeType: 'table',
-          treeMenuType: 'tpopkontrzaehlEinheitWerte',
-          treeId: p.id,
-          treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', p.id],
-          hasChildren: false,
-        }),
-      ),
-    }),
-    [
-      count,
-      data?.data?.allTpopkontrzaehlEinheitWertes?.nodes,
-      isLoading,
-      totalCount,
-    ],
-  )
+  const navData = {
+    id: 'TpopkontrzaehlEinheitWerte',
+    listFilter: 'tpopkontrzaehlEinheitWerte',
+    url: `/Daten/Werte-Listen/TpopkontrzaehlEinheitWerte`,
+    label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'TpopkontrzaehlEinheitWerte',
+    treeId: `tpopkontrzaehlEinheitWerteFolder`,
+    treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
+    hasChildren: !!count,
+    fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
+    fetcherParams: {},
+    component: NodeWithList,
+    menus: (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
+      (p) => ({
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'tpopkontrzaehlEinheitWerte',
+        treeId: p.id,
+        treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', p.id],
+        hasChildren: false,
+      }),
+    ),
+  }
 
   return { isLoading, error, navData }
 }

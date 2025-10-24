@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext, useState } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -64,7 +64,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
     [],
   )
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => reaction(() => store.moving.id, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,86 +79,69 @@ export const useTpopfreiwkontrsNavData = (props) => {
   const count = data?.data?.tpopById?.tpopkontrsByTpopId?.totalCount ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Freiwilligen-Kontrollen',
-      listFilter: 'tpopkontr',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen`,
-      label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      labelShort: `EKF (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'tpopfreiwkontrFolder',
-      treeId: `${tpopId}TpopfreiwkontrFolder`,
-      treeParentTableId: tpopId,
-      treeUrl: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Freiwilligen-Kontrollen',
-      ],
-      fetcherName: 'useTpopfreiwkontrsNavData',
-      fetcherParams: { projId, apId, popId, tpopId },
-      hasChildren: !!count,
-      menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
-        (p) => {
-          const labelRightElements = []
-          const isMoving = store.moving.id === p.id
-          if (isMoving) {
-            labelRightElements.push(MovingIcon)
-          }
-          const isCopying = store.copying.id === p.id
-          if (isCopying) {
-            labelRightElements.push(CopyingIcon)
-          }
-
-          return {
-            id: p.id,
-            label: p.label,
-            treeNodeType: 'table',
-            treeMenuType: 'tpopfreiwkontr',
-            treeId: p.id,
-            treeParentTableId: tpopId,
-            treeUrl: [
-              'Projekte',
-              projId,
-              'Arten',
-              apId,
-              'Populationen',
-              popId,
-              'Teil-Populationen',
-              tpopId,
-              'Freiwilligen-Kontrollen',
-              p.id,
-            ],
-            fetcherName: 'useTpopfreiwkontrNavData',
-            fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
-            singleElementName: 'Freiwilligen-Kontrolle',
-            hasChildren: true,
-            labelRightElements: labelRightElements.length
-              ? labelRightElements
-              : undefined,
-          }
-        },
-      ),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.tpopById?.tpopkontrsByTpopId?.nodes,
-      isLoading,
-      popId,
+  const navData = {
+    id: 'Freiwilligen-Kontrollen',
+    listFilter: 'tpopkontr',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen`,
+    label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    labelShort: `EKF (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'tpopfreiwkontrFolder',
+    treeId: `${tpopId}TpopfreiwkontrFolder`,
+    treeParentTableId: tpopId,
+    treeUrl: [
+      'Projekte',
       projId,
-      store.copying.id,
-      store.moving.id,
-      totalCount,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
       tpopId,
+      'Freiwilligen-Kontrollen',
     ],
-  )
+    fetcherName: 'useTpopfreiwkontrsNavData',
+    fetcherParams: { projId, apId, popId, tpopId },
+    hasChildren: !!count,
+    menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map((p) => {
+      const labelRightElements = []
+      const isMoving = store.moving.id === p.id
+      if (isMoving) {
+        labelRightElements.push(MovingIcon)
+      }
+      const isCopying = store.copying.id === p.id
+      if (isCopying) {
+        labelRightElements.push(CopyingIcon)
+      }
+
+      return {
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'tpopfreiwkontr',
+        treeId: p.id,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Freiwilligen-Kontrollen',
+          p.id,
+        ],
+        fetcherName: 'useTpopfreiwkontrNavData',
+        fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
+        singleElementName: 'Freiwilligen-Kontrolle',
+        hasChildren: true,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
+      }
+    }),
+  }
 
   return { isLoading, error, navData }
 }

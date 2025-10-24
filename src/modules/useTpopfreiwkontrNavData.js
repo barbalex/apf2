@@ -1,6 +1,6 @@
-import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useContext, useEffect, useState } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
@@ -10,6 +10,20 @@ import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+
+const getLabelRightElements = ({ copyingId, movingId, tpopkontrId }) => {
+  const labelRightElements = []
+  const isMoving = movingId === tpopkontrId
+  if (isMoving) {
+    labelRightElements.push(MovingIcon)
+  }
+  const isCopying = copyingId === tpopkontrId
+  if (isCopying) {
+    labelRightElements.push(CopyingIcon)
+  }
+
+  return labelRightElements
+}
 
 export const useTpopfreiwkontrNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -65,7 +79,7 @@ export const useTpopfreiwkontrNavData = (props) => {
     [],
   )
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => reaction(() => store.moving.id, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,125 +99,100 @@ export const useTpopfreiwkontrNavData = (props) => {
   const filesCount =
     data?.data?.tpopkontrById?.tpopkontrFilesByTpopkontrId?.totalCount ?? 0
 
-  const labelRightElements = useMemo(() => {
-    const labelRightElements = []
-    const isMoving = store.moving.id === tpopkontrId
-    if (isMoving) {
-      labelRightElements.push(MovingIcon)
-    }
-    const isCopying = store.copying.id === tpopkontrId
-    if (isCopying) {
-      labelRightElements.push(CopyingIcon)
-    }
+  const labelRightElements = getLabelRightElements({
+    copyingId: store.copying.id,
+    movingId: store.moving.id,
+    tpopkontrId,
+  })
 
-    return labelRightElements
-  }, [store.copying.id, store.moving.id, tpopkontrId])
-
-  const navData = useMemo(
-    () => ({
-      id: tpopkontrId,
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}`,
-      label,
-      treeNodeType: 'table',
-      treeMenuType: 'tpopfreiwkontr',
-      treeId: tpopkontrId,
-      treeParentTableId: tpopId,
-      treeUrl: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Freiwilligen-Kontrollen',
-        tpopkontrId,
-      ],
-      fetcherName: 'useTpopfreiwkontrNavData',
-      fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
-      singleElementName: 'Freiwilligen-Kontrolle',
-      hasChildren: true,
-      childrenAreFolders: true,
-      labelRightElements: labelRightElements.length
-        ? labelRightElements
-        : undefined,
-      // leave totalCount undefined as the menus are folders
-      menus: [
-        {
-          id: 'Freiwilligen-Kontrolle',
-          label: `Freiwilligen-Kontrolle`,
-          isSelf: true,
-          labelRightElements: labelRightElements.length
-            ? labelRightElements
-            : undefined,
-        },
-        {
-          id: 'Zaehlungen',
-          label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
-          hideInNavList: true,
-          treeNodeType: 'folder',
-          treeMenuType: 'tpopfreiwkontrzaehlFolder',
-          treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
-          treeParentTableId: tpopkontrId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Freiwilligen-Kontrollen',
-            tpopkontrId,
-            'Zaehlungen',
-          ],
-          fetcherName: 'useTpopfreiwkontrzaehlsNavData',
-          fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
-          component: NodeWithList,
-          hasChildren: !!filteredTpopkontrzaehlCount,
-          alwaysOpen: true,
-        },
-        {
-          id: 'Dateien',
-          label: `Dateien (${filesCount})`,
-          treeNodeType: 'folder',
-          treeMenuType: 'dateienFolder',
-          treeId: `${tpopkontrId}DateienFolder`,
-          treeParentTableId: tpopkontrId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Teil-Populationen',
-            tpopId,
-            'Freiwilligen-Kontrollen',
-            tpopkontrId,
-            'Dateien',
-          ],
-          component: Node,
-          hasChildren: false,
-        },
-      ],
-    }),
-    [
-      apId,
-      filesCount,
-      filteredTpopkontrzaehlCount,
-      isLoading,
-      label,
-      labelRightElements,
-      popId,
+  const navData = {
+    id: tpopkontrId,
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}`,
+    label,
+    treeNodeType: 'table',
+    treeMenuType: 'tpopfreiwkontr',
+    treeId: tpopkontrId,
+    treeParentTableId: tpopId,
+    treeUrl: [
+      'Projekte',
       projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
       tpopId,
+      'Freiwilligen-Kontrollen',
       tpopkontrId,
-      tpopkontrzaehlCount,
     ],
-  )
+    fetcherName: 'useTpopfreiwkontrNavData',
+    fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+    singleElementName: 'Freiwilligen-Kontrolle',
+    hasChildren: true,
+    childrenAreFolders: true,
+    labelRightElements:
+      labelRightElements.length ? labelRightElements : undefined,
+    // leave totalCount undefined as the menus are folders
+    menus: [
+      {
+        id: 'Freiwilligen-Kontrolle',
+        label: `Freiwilligen-Kontrolle`,
+        isSelf: true,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
+      },
+      {
+        id: 'Zaehlungen',
+        label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
+        hideInNavList: true,
+        treeNodeType: 'folder',
+        treeMenuType: 'tpopfreiwkontrzaehlFolder',
+        treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
+        treeParentTableId: tpopkontrId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Freiwilligen-Kontrollen',
+          tpopkontrId,
+          'Zaehlungen',
+        ],
+        fetcherName: 'useTpopfreiwkontrzaehlsNavData',
+        fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
+        component: NodeWithList,
+        hasChildren: !!filteredTpopkontrzaehlCount,
+        alwaysOpen: true,
+      },
+      {
+        id: 'Dateien',
+        label: `Dateien (${filesCount})`,
+        treeNodeType: 'folder',
+        treeMenuType: 'dateienFolder',
+        treeId: `${tpopkontrId}DateienFolder`,
+        treeParentTableId: tpopkontrId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Freiwilligen-Kontrollen',
+          tpopkontrId,
+          'Dateien',
+        ],
+        component: Node,
+        hasChildren: false,
+      },
+    ],
+  }
 
   return { isLoading, error, navData }
 }
