@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { remove } from 'es-toolkit'
@@ -96,290 +96,267 @@ const DokuButton = styled(Button)`
     props.inmenu === 'true' && `border: 1px solid #ab9518 !important;`};
 `
 
-export const ProjekteMenus = memo(
-  observer(() => {
-    const { projId } = useParams()
-    const { search } = useLocation()
-    const navigate = useNavigate()
+export const ProjekteMenus = observer(() => {
+  const { projId } = useParams()
+  const { search } = useLocation()
+  const navigate = useNavigate()
 
-    const [isDesktopView] = useAtom(isDesktopViewAtom)
-    const isMobileView = !isDesktopView
+  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const isMobileView = !isDesktopView
 
-    const [hideTree] = useAtom(hideTreeAtom)
+  const [hideTree] = useAtom(hideTreeAtom)
 
-    const store = useContext(MobxContext)
-    const { user } = store
-    const { resetTree2Src } = store.tree
+  const store = useContext(MobxContext)
+  const { user } = store
+  const { resetTree2Src } = store.tree
 
-    const token = user?.token
-    const tokenDecoded = token ? jwtDecode(token) : null
-    const role = tokenDecoded ? tokenDecoded.role : null
+  const token = user?.token
+  const tokenDecoded = token ? jwtDecode(token) : null
+  const role = tokenDecoded ? tokenDecoded.role : null
 
-    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
+  const [projekteTabs, setProjekteTabs] = useProjekteTabs()
 
-    const onClickButton = useCallback(
-      (name) => {
-        if (isMobileView) {
-          // show one tab only
-          if (projekteTabs.length === 1) {
-            setProjekteTabs([name])
-          } else {
-            // if multiple tabs are visible, close the clicked one
-            // UNLESS the clicked one was not yet visible - then open it and close non tree ones
-            if (projekteTabs.includes(name)) {
-              setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
-            } else {
-              setProjekteTabs([
-                ...projekteTabs.filter((el) => el === 'tree'),
-                name,
-              ])
-            }
-          }
+  const onClickButton = (name) => {
+    if (isMobileView) {
+      // show one tab only
+      if (projekteTabs.length === 1) {
+        setProjekteTabs([name])
+      } else {
+        // if multiple tabs are visible, close the clicked one
+        // UNLESS the clicked one was not yet visible - then open it and close non tree ones
+        if (projekteTabs.includes(name)) {
+          setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
         } else {
-          const newProjekteTabs = [...projekteTabs]
-          if (newProjekteTabs.includes(name)) {
-            remove(newProjekteTabs, (el) => el === name)
-            if (name === 'tree2') {
-              // close all tree2-tabs
-              remove(newProjekteTabs, (el) => el.includes('2'))
-            }
-          } else {
-            newProjekteTabs.push(name)
-          }
-          setProjekteTabs(newProjekteTabs)
+          setProjekteTabs([...projekteTabs.filter((el) => el === 'tree'), name])
         }
-      },
-      [isMobileView, setProjekteTabs, projekteTabs],
-    )
-    const onClickTree = useCallback(
-      () => onClickButton('tree'),
-      [onClickButton],
-    )
-    const onClickKarte = useCallback(
-      () => onClickButton('karte'),
-      [onClickButton],
-    )
-    const onClickFilter = useCallback(
-      () => onClickButton('filter'),
-      [onClickButton],
-    )
-    const onClickFilter2 = useCallback(
-      () => onClickButton('filter2'),
-      [onClickButton],
-    )
-    // need to not use Link in appbar because:
-    // long press on mobile opens context menu AND tooltip...
-    const onClickDocs = useCallback(
-      () => navigate(`/Dokumentation/${search}`),
-      [search],
-    )
-    const onClickEkPlanung = useCallback(
-      () => navigate(`/Daten/Projekte/${projId}/EK-Planung${search}`),
-      [projId, search],
-    )
-    const onClickExporte = useCallback(
-      () => onClickButton('exporte'),
-      [onClickButton],
-    )
-    const onClickTree2 = useCallback(() => {
-      resetTree2Src()
-      onClickButton('tree2')
-    }, [onClickButton, resetTree2Src])
+      }
+    } else {
+      const newProjekteTabs = [...projekteTabs]
+      if (newProjekteTabs.includes(name)) {
+        remove(newProjekteTabs, (el) => el === name)
+        if (name === 'tree2') {
+          // close all tree2-tabs
+          remove(newProjekteTabs, (el) => el.includes('2'))
+        }
+      } else {
+        newProjekteTabs.push(name)
+      }
+      setProjekteTabs(newProjekteTabs)
+    }
+  }
 
-    const treeIsVisible = projekteTabs.includes('tree')
-    const datenIsVisible = projekteTabs.includes('daten')
-    const filterIsVisible = projekteTabs.includes('filter')
-    const exporteIsVisible = projekteTabs.includes('exporte')
-    const karteIsVisible = projekteTabs.includes('karte')
-    const tree2IsVisible = projekteTabs.includes('tree2')
-    const daten2IsVisible = projekteTabs.includes('daten2')
-    const filter2IsVisible = projekteTabs.includes('filter2')
-    const karte2IsVisible = projekteTabs.includes('karte2')
+  const onClickTree = () => onClickButton('tree')
+  const onClickKarte = () => onClickButton('karte')
+  const onClickFilter = () => onClickButton('filter')
+  const onClickFilter2 = () => onClickButton('filter2')
 
-    // ISSUE: refs are sometimes/often not set on first render
-    // trying to measure widths of menus leads to complete chaos
-    // so passing in static widths instead
+  // need to not use Link in AppBar because:
+  // long press on mobile opens context menu AND tooltip...
+  const onClickDocs = () => navigate(`/Dokumentation/${search}`)
 
-    return (
-      <MenuBar
-        rerenderer={`${projId}/${isDesktopView}/${projekteTabs}`}
-        bgColor="rgb(46, 125, 50)"
-        addMargin={false}
-      >
-        {isDesktopView && (
-          <Tooltip title="Navigationsbaum anzeigen">
-            <StyledButton
-              variant={treeIsVisible ? 'outlined' : 'text'}
-              followed={datenIsVisible?.toString()}
-              onClick={onClickTree}
-              data-id="nav-tree1"
-              width={150}
-            >
-              Navigationsbaum
-            </StyledButton>
-          </Tooltip>
-        )}
-        {/* in mobile view: only show if user did not decide to always show */}
-        {/* do not hide if tree is visible - user can't close it! */}
-        {isMobileView && (!hideTree || treeIsVisible) && (
-          <Tooltip title="Navigationsbaum anzeigen">
-            <StyledIconButton
-              variant={treeIsVisible ? 'outlined' : 'text'}
-              followed={datenIsVisible?.toString()}
-              onClick={onClickTree}
-              data-id="nav-tree1"
-              width={46}
-            >
-              <VscListTree />
-            </StyledIconButton>
-          </Tooltip>
-        )}
-        <Daten width={77} />
-        <Tooltip title="Daten filtern">
+  const onClickEkPlanung = () =>
+    navigate(`/Daten/Projekte/${projId}/EK-Planung${search}`)
+
+  const onClickExporte = () => onClickButton('exporte')
+
+  const onClickTree2 = () => {
+    resetTree2Src()
+    onClickButton('tree2')
+  }
+
+  const treeIsVisible = projekteTabs.includes('tree')
+  const datenIsVisible = projekteTabs.includes('daten')
+  const filterIsVisible = projekteTabs.includes('filter')
+  const exporteIsVisible = projekteTabs.includes('exporte')
+  const karteIsVisible = projekteTabs.includes('karte')
+  const tree2IsVisible = projekteTabs.includes('tree2')
+  const daten2IsVisible = projekteTabs.includes('daten2')
+  const filter2IsVisible = projekteTabs.includes('filter2')
+  const karte2IsVisible = projekteTabs.includes('karte2')
+
+  // ISSUE: refs are sometimes/often not set on first render
+  // trying to measure widths of menus leads to complete chaos
+  // so passing in static widths instead
+
+  return (
+    <MenuBar
+      rerenderer={`${projId}/${isDesktopView}/${projekteTabs}`}
+      bgColor="rgb(46, 125, 50)"
+      addMargin={false}
+    >
+      {isDesktopView && (
+        <Tooltip title="Navigationsbaum anzeigen">
+          <StyledButton
+            variant={treeIsVisible ? 'outlined' : 'text'}
+            followed={datenIsVisible?.toString()}
+            onClick={onClickTree}
+            data-id="nav-tree1"
+            width={150}
+          >
+            Navigationsbaum
+          </StyledButton>
+        </Tooltip>
+      )}
+      {/* in mobile view: only show if user did not decide to always show */}
+      {/* do not hide if tree is visible - user can't close it! */}
+      {isMobileView && (!hideTree || treeIsVisible) && (
+        <Tooltip title="Navigationsbaum anzeigen">
+          <StyledIconButton
+            variant={treeIsVisible ? 'outlined' : 'text'}
+            followed={datenIsVisible?.toString()}
+            onClick={onClickTree}
+            data-id="nav-tree1"
+            width={46}
+          >
+            <VscListTree />
+          </StyledIconButton>
+        </Tooltip>
+      )}
+      <Daten width={77} />
+      <Tooltip title="Daten filtern">
+        {isDesktopView ?
+          <StyledButton
+            variant={filterIsVisible ? 'outlined' : 'text'}
+            preceded={datenIsVisible?.toString()}
+            followed={karteIsVisible?.toString()}
+            onClick={onClickFilter}
+            data-id="nav-filter1"
+            width={70}
+          >
+            Filter
+          </StyledButton>
+        : <StyledIconButton
+            variant={filterIsVisible ? 'outlined' : 'text'}
+            onClick={onClickFilter}
+            data-id="nav-filter1"
+            width={46}
+          >
+            <MdFilterAlt />
+          </StyledIconButton>
+        }
+      </Tooltip>
+      <Tooltip title="Karte anzeigen">
+        {isDesktopView ?
+          <StyledButton
+            variant={karteIsVisible ? 'outlined' : 'text'}
+            preceded={filterIsVisible?.toString()}
+            followed={(
+              (!!projId && exporteIsVisible) ||
+              (isDesktopView && !projId && tree2IsVisible)
+            )?.toString()}
+            onClick={onClickKarte}
+            data-id="nav-karte1"
+            width={70}
+          >
+            Karte
+          </StyledButton>
+        : <StyledIconButton
+            variant={karteIsVisible ? 'outlined' : 'text'}
+            onClick={onClickKarte}
+            data-id="nav-karte1"
+            width={46}
+          >
+            <TbMap2 />
+          </StyledIconButton>
+        }
+      </Tooltip>
+      {!!projId && (
+        <Tooltip title="Exporte anzeigen">
           {isDesktopView ?
             <StyledButton
-              variant={filterIsVisible ? 'outlined' : 'text'}
-              preceded={datenIsVisible?.toString()}
-              followed={karteIsVisible?.toString()}
-              onClick={onClickFilter}
-              data-id="nav-filter1"
-              width={70}
+              variant={exporteIsVisible ? 'outlined' : 'text'}
+              preceded={karteIsVisible?.toString()}
+              followed={(isDesktopView && tree2IsVisible)?.toString()}
+              onClick={onClickExporte}
+              data-id="nav-exporte"
+              width={74}
             >
-              Filter
+              Exporte
             </StyledButton>
           : <StyledIconButton
-              variant={filterIsVisible ? 'outlined' : 'text'}
-              onClick={onClickFilter}
-              data-id="nav-filter1"
+              variant={exporteIsVisible ? 'outlined' : 'text'}
+              onClick={onClickExporte}
+              data-id="nav-exporte"
               width={46}
             >
-              <MdFilterAlt />
+              <FaDownload />
             </StyledIconButton>
           }
         </Tooltip>
-        <Tooltip title="Karte anzeigen">
-          {isDesktopView ?
-            <StyledButton
-              variant={karteIsVisible ? 'outlined' : 'text'}
-              preceded={filterIsVisible?.toString()}
-              followed={(
-                (!!projId && exporteIsVisible) ||
-                (isDesktopView && !projId && tree2IsVisible)
-              )?.toString()}
-              onClick={onClickKarte}
-              data-id="nav-karte1"
-              width={70}
-            >
-              Karte
-            </StyledButton>
-          : <StyledIconButton
-              variant={karteIsVisible ? 'outlined' : 'text'}
-              onClick={onClickKarte}
-              data-id="nav-karte1"
-              width={46}
-            >
-              <TbMap2 />
-            </StyledIconButton>
-          }
+      )}
+      {(isDesktopView || tree2IsVisible) && (
+        <Tooltip title="Navigationsbaum 2 anzeigen">
+          <StyledButton
+            variant={tree2IsVisible ? 'outlined' : 'text'}
+            preceded={(
+              (!!projId && exporteIsVisible) ||
+              (!projId && karteIsVisible)
+            )?.toString()}
+            followed={daten2IsVisible?.toString()}
+            onClick={onClickTree2}
+            data-id="nav-tree2"
+            width={165}
+          >
+            Navigationsbaum 2
+          </StyledButton>
         </Tooltip>
-        {!!projId && (
-          <Tooltip title="Exporte anzeigen">
-            {isDesktopView ?
-              <StyledButton
-                variant={exporteIsVisible ? 'outlined' : 'text'}
-                preceded={karteIsVisible?.toString()}
-                followed={(isDesktopView && tree2IsVisible)?.toString()}
-                onClick={onClickExporte}
-                data-id="nav-exporte"
-                width={74}
-              >
-                Exporte
-              </StyledButton>
-            : <StyledIconButton
-                variant={exporteIsVisible ? 'outlined' : 'text'}
-                onClick={onClickExporte}
-                data-id="nav-exporte"
-                width={46}
-              >
-                <FaDownload />
-              </StyledIconButton>
-            }
-          </Tooltip>
-        )}
-        {(isDesktopView || tree2IsVisible) && (
-          <Tooltip title="Navigationsbaum 2 anzeigen">
-            <StyledButton
-              variant={tree2IsVisible ? 'outlined' : 'text'}
-              preceded={(
-                (!!projId && exporteIsVisible) ||
-                (!projId && karteIsVisible)
-              )?.toString()}
-              followed={daten2IsVisible?.toString()}
-              onClick={onClickTree2}
-              data-id="nav-tree2"
-              width={165}
-            >
-              Navigationsbaum 2
-            </StyledButton>
-          </Tooltip>
-        )}
-        {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
-          <Daten
-            treeNr="2"
-            width={73}
-          />
-        )}
-        {((isDesktopView && tree2IsVisible) || filter2IsVisible) && (
-          <Tooltip title="Daten filtern">
-            <StyledButton
-              variant={filter2IsVisible ? 'outlined' : 'text'}
-              preceded={daten2IsVisible?.toString()}
-              followed={karte2IsVisible?.toString()}
-              onClick={onClickFilter2}
-              data-id="nav-filter2"
-              width={70}
-            >
-              Filter 2
-            </StyledButton>
-          </Tooltip>
-        )}
-        {isDesktopView && !!projId && (
-          <Tooltip title="EK und EKF planen">
-            <StyledButton
-              variant="text"
-              preceded={false?.toString()}
-              followed={false.toString()}
-              onClick={onClickEkPlanung}
-              width={101}
-            >
-              EK-Planung
-            </StyledButton>
-          </Tooltip>
-        )}
-        <Tooltip title="Dokumentation anzeigen">
-          {isDesktopView ?
-            <DokuButton
-              variant="text"
-              onClick={onClickDocs}
-              width={129}
-            >
-              Dokumentation
-            </DokuButton>
-          : <StyledIconButton
-              variant="text"
-              onClick={onClickDocs}
-              width={46}
-            >
-              <MdInfoOutline />
-            </StyledIconButton>
-          }
-        </Tooltip>
-        <More
-          onClickExporte={onClickExporte}
-          role={role}
-          width={70}
+      )}
+      {((isDesktopView && tree2IsVisible) || daten2IsVisible) && (
+        <Daten
+          treeNr="2"
+          width={73}
         />
-      </MenuBar>
-    )
-  }),
-)
+      )}
+      {((isDesktopView && tree2IsVisible) || filter2IsVisible) && (
+        <Tooltip title="Daten filtern">
+          <StyledButton
+            variant={filter2IsVisible ? 'outlined' : 'text'}
+            preceded={daten2IsVisible?.toString()}
+            followed={karte2IsVisible?.toString()}
+            onClick={onClickFilter2}
+            data-id="nav-filter2"
+            width={70}
+          >
+            Filter 2
+          </StyledButton>
+        </Tooltip>
+      )}
+      {isDesktopView && !!projId && (
+        <Tooltip title="EK und EKF planen">
+          <StyledButton
+            variant="text"
+            preceded={false?.toString()}
+            followed={false.toString()}
+            onClick={onClickEkPlanung}
+            width={101}
+          >
+            EK-Planung
+          </StyledButton>
+        </Tooltip>
+      )}
+      <Tooltip title="Dokumentation anzeigen">
+        {isDesktopView ?
+          <DokuButton
+            variant="text"
+            onClick={onClickDocs}
+            width={129}
+          >
+            Dokumentation
+          </DokuButton>
+        : <StyledIconButton
+            variant="text"
+            onClick={onClickDocs}
+            width={46}
+          >
+            <MdInfoOutline />
+          </StyledIconButton>
+        }
+      </Tooltip>
+      <More
+        onClickExporte={onClickExporte}
+        role={role}
+        width={70}
+      />
+    </MenuBar>
+  )
+})

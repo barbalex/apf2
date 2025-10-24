@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { Tooltip } from '@mui/material'
@@ -12,11 +11,9 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   margin-right: 0 !important;
 `
 
-export const AlwaysShowTree = memo(() => {
+export const AlwaysShowTree = () => {
   const [alwaysShowTree, setAlwaysShowTree] = useAtom(alwaysShowTreeAtom)
-  const toggleAlwaysShowTree = useCallback(() => {
-    setAlwaysShowTree(!alwaysShowTree)
-  }, [alwaysShowTree, setAlwaysShowTree])
+  const toggleAlwaysShowTree = () => setAlwaysShowTree(!alwaysShowTree)
 
   return (
     <Tooltip
@@ -42,4 +39,4 @@ export const AlwaysShowTree = memo(() => {
       />
     </Tooltip>
   )
-})
+}
