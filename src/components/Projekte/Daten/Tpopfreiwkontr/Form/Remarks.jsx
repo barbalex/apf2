@@ -1,6 +1,4 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { TextField2 } from '../../../../shared/TextField2.jsx'
 
@@ -34,27 +32,25 @@ const RemarksVal = styled.div`
   }
 `
 
-export const Remarks = memo(
-  observer(({ saveToDb, row, errors }) => (
-    <Container>
-      <RemarksLabel>
-        Spezielle Bemerkungen
-        <RemarksSubLabel>
-          (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
-          Begebenheiten)
-        </RemarksSubLabel>
-      </RemarksLabel>
-      <RemarksVal>
-        <TextField2
-          key={`${row.id}bemerkungen`}
-          name="bemerkungen"
-          row={row}
-          type="text"
-          multiLine
-          saveToDb={saveToDb}
-          errors={errors}
-        />
-      </RemarksVal>
-    </Container>
-  )),
+export const Remarks = ({ saveToDb, row, errors }) => (
+  <Container>
+    <RemarksLabel>
+      Spezielle Bemerkungen
+      <RemarksSubLabel>
+        (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
+        Begebenheiten)
+      </RemarksSubLabel>
+    </RemarksLabel>
+    <RemarksVal>
+      <TextField2
+        key={`${row.id}bemerkungen`}
+        name="bemerkungen"
+        row={row}
+        type="text"
+        multiLine
+        saveToDb={saveToDb}
+        errors={errors}
+      />
+    </RemarksVal>
+  </Container>
 )
