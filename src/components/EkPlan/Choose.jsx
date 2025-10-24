@@ -1,11 +1,4 @@
-import {
-  memo,
-  useContext,
-  useCallback,
-  useState,
-  useMemo,
-  useEffect,
-} from 'react'
+import { useContext, useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -80,186 +73,166 @@ const DenserCheckbox = (props) => (
   <CheckboxDensifier>{props.children}</CheckboxDensifier>
 )
 
-export const Choose = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const {
-      fields,
-      showEk,
-      setShowEk,
-      showEkf,
-      setShowEkf,
-      showCount,
-      setShowCount,
-      showEkCount,
-      setShowEkCount,
-      showMassn,
-      setShowMassn,
-      pastYears,
-      setPastYears,
-    } = store.ekPlan
+export const Choose = observer(() => {
+  const store = useContext(MobxContext)
+  const {
+    fields,
+    showEk,
+    setShowEk,
+    showEkf,
+    setShowEkf,
+    showCount,
+    setShowCount,
+    showEkCount,
+    setShowEkCount,
+    showMassn,
+    setShowMassn,
+    pastYears,
+    setPastYears,
+  } = store.ekPlan
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const onChangeShowEk = useCallback(() => setShowEk(!showEk), [showEk])
-    const onChangeShowEkf = useCallback(
-      () => setShowEkf(!showEkf),
-      [setShowEkf, showEkf],
-    )
-    const onChangeShowCount = useCallback(
-      () => setShowCount(!showCount),
-      [setShowCount, showCount],
-    )
-    const onChangeShowEkCount = useCallback(
-      () => setShowEkCount(!showEkCount),
-      [setShowEkCount, showEkCount],
-    )
-    const onChangeShowMassn = useCallback(
-      () => setShowMassn(!showMassn),
-      [setShowMassn, showMassn],
-    )
-    const [fieldsDialogOpen, setFieldsDialogOpen] = useState(false)
-    const onClickChooseFields = useCallback(() => setFieldsDialogOpen(true), [])
-    const closeFieldsDialog = useCallback(() => setFieldsDialogOpen(false), [])
-    const felderButtonTitle = useMemo(
-      () => `Felder wählen (${fields.length}/${allFields.length})`,
-      [fields.length],
-    )
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onChangeShowEk = () => setShowEk(!showEk)
+  const onChangeShowEkf = () => setShowEkf(!showEkf)
+  const onChangeShowCount = () => setShowCount(!showCount)
+  const onChangeShowEkCount = () => setShowEkCount(!showEkCount)
+  const onChangeShowMassn = () => setShowMassn(!showMassn)
+  const [fieldsDialogOpen, setFieldsDialogOpen] = useState(false)
+  const onClickChooseFields = () => setFieldsDialogOpen(true)
+  const closeFieldsDialog = () => setFieldsDialogOpen(false)
+  const felderButtonTitle = `Felder wählen (${fields.length}/${allFields.length})`
 
-    const [pastYearsLocal, setPastYearsLocal] = useState(pastYears)
-    useEffect(() => {
-      setPastYearsLocal(pastYears)
-    }, [pastYears])
-    const onChangePastYears = useCallback(
-      (event) => {
-        const value =
-          event.target.value || event.target.value === 0 ?
-            +event.target.value
-          : ''
-        setPastYearsLocal(value)
-      },
-      [setPastYearsLocal],
-    )
-    const onBlurPastYears = useCallback(() => {
-      let value = pastYearsLocal
-      if (pastYearsLocal === '') value = 5
-      setPastYears(value)
-    }, [pastYearsLocal, setPastYears])
+  const [pastYearsLocal, setPastYearsLocal] = useState(pastYears)
+  useEffect(() => {
+    setPastYearsLocal(pastYears)
+  }, [pastYears])
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <Title>anzeigen:</Title>
-        </Container>
-        <ChooseContainer>
-          <PastYearsContainer>
-            <StyledTextField
-              label="vergangene Jahre"
-              variant="outlined"
-              value={pastYearsLocal}
-              onChange={onChangePastYears}
-              onBlur={onBlurPastYears}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter') {
-                  onBlurPastYears(e)
-                }
-              }}
-              size="small"
-              type="number"
-              slotProps={{ inputLabel: { shrink: true } }}
-            />
-          </PastYearsContainer>
-          <FelderButton
+  const onChangePastYears = (event) => {
+    const value =
+      event.target.value || event.target.value === 0 ? +event.target.value : ''
+    setPastYearsLocal(value)
+  }
+
+  const onBlurPastYears = () => {
+    let value = pastYearsLocal
+    if (pastYearsLocal === '') value = 5
+    setPastYears(value)
+  }
+
+  return (
+    <ErrorBoundary>
+      <Container>
+        <Title>anzeigen:</Title>
+      </Container>
+      <ChooseContainer>
+        <PastYearsContainer>
+          <StyledTextField
+            label="vergangene Jahre"
             variant="outlined"
+            value={pastYearsLocal}
+            onChange={onChangePastYears}
+            onBlur={onBlurPastYears}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                onBlurPastYears(e)
+              }
+            }}
             size="small"
-            onClick={onClickChooseFields}
+            type="number"
+            slotProps={{ inputLabel: { shrink: true } }}
+          />
+        </PastYearsContainer>
+        <FelderButton
+          variant="outlined"
+          size="small"
+          onClick={onClickChooseFields}
+          color="inherit"
+        >
+          {felderButtonTitle}
+        </FelderButton>
+        <Label
+          control={
+            <DenserCheckbox>
+              <Checkbox
+                checked={showEk}
+                onChange={onChangeShowEk}
+                color="primary"
+              />
+            </DenserCheckbox>
+          }
+          label="EK"
+          labelPlacement="start"
+        />
+        <Label
+          control={
+            <DenserCheckbox>
+              <Checkbox
+                checked={showEkf}
+                onChange={onChangeShowEkf}
+                color="primary"
+              />
+            </DenserCheckbox>
+          }
+          label="EKF"
+          labelPlacement="start"
+        />
+        <Label
+          control={
+            <DenserCheckbox>
+              <Checkbox
+                checked={showMassn}
+                onChange={onChangeShowMassn}
+                color="primary"
+              />
+            </DenserCheckbox>
+          }
+          label="Ansiedlungen"
+          labelPlacement="start"
+        />
+        <Label
+          control={
+            <DenserCheckbox>
+              <Checkbox
+                checked={showCount}
+                onChange={onChangeShowCount}
+                color="primary"
+              />
+            </DenserCheckbox>
+          }
+          label="Zählungen"
+          labelPlacement="start"
+        />
+        <Label
+          control={
+            <DenserCheckbox>
+              <Checkbox
+                checked={showEkCount}
+                onChange={onChangeShowEkCount}
+                color="primary"
+              />
+            </DenserCheckbox>
+          }
+          label="mehrmals ausgeführt"
+          labelPlacement="start"
+        />
+      </ChooseContainer>
+      <StyledDialog
+        open={fieldsDialogOpen}
+        onClose={closeFieldsDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{'Felder wählen:'}</DialogTitle>
+        <Fields />
+        <DialogActions>
+          <Button
+            onClick={closeFieldsDialog}
             color="inherit"
           >
-            {felderButtonTitle}
-          </FelderButton>
-          <Label
-            control={
-              <DenserCheckbox>
-                <Checkbox
-                  checked={showEk}
-                  onChange={onChangeShowEk}
-                  color="primary"
-                />
-              </DenserCheckbox>
-            }
-            label="EK"
-            labelPlacement="start"
-          />
-          <Label
-            control={
-              <DenserCheckbox>
-                <Checkbox
-                  checked={showEkf}
-                  onChange={onChangeShowEkf}
-                  color="primary"
-                />
-              </DenserCheckbox>
-            }
-            label="EKF"
-            labelPlacement="start"
-          />
-          <Label
-            control={
-              <DenserCheckbox>
-                <Checkbox
-                  checked={showMassn}
-                  onChange={onChangeShowMassn}
-                  color="primary"
-                />
-              </DenserCheckbox>
-            }
-            label="Ansiedlungen"
-            labelPlacement="start"
-          />
-          <Label
-            control={
-              <DenserCheckbox>
-                <Checkbox
-                  checked={showCount}
-                  onChange={onChangeShowCount}
-                  color="primary"
-                />
-              </DenserCheckbox>
-            }
-            label="Zählungen"
-            labelPlacement="start"
-          />
-          <Label
-            control={
-              <DenserCheckbox>
-                <Checkbox
-                  checked={showEkCount}
-                  onChange={onChangeShowEkCount}
-                  color="primary"
-                />
-              </DenserCheckbox>
-            }
-            label="mehrmals ausgeführt"
-            labelPlacement="start"
-          />
-        </ChooseContainer>
-        <StyledDialog
-          open={fieldsDialogOpen}
-          onClose={closeFieldsDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{'Felder wählen:'}</DialogTitle>
-          <Fields />
-          <DialogActions>
-            <Button
-              onClick={closeFieldsDialog}
-              color="inherit"
-            >
-              schliessen
-            </Button>
-          </DialogActions>
-        </StyledDialog>
-      </ErrorBoundary>
-    )
-  }),
-)
+            schliessen
+          </Button>
+        </DialogActions>
+      </StyledDialog>
+    </ErrorBoundary>
+  )
+})
