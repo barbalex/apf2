@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext, useState } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -63,7 +63,7 @@ export const useTpopmassnsNavData = (props) => {
     [],
   )
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => reaction(() => store.moving.id, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,85 +78,68 @@ export const useTpopmassnsNavData = (props) => {
   const count = data?.data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Massnahmen',
-      listFilter: 'tpopmassn',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen`,
-      label: `Massnahmen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'tpopmassnFolder',
-      treeId: `${tpopId}TpopmassnFolder`,
-      treeParentTableId: tpopId,
-      treeUrl: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Massnahmen',
-      ],
-      fetcherName: 'useTpopmassnsNavData',
-      fetcherParams: { projId, apId, popId, tpopId },
-      hasChildren: !!count,
-      component: NodeWithList,
-      menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map(
-        (p) => {
-          const labelRightElements = []
-          const isMoving = store.moving.id === p.id
-          if (isMoving) {
-            labelRightElements.push(MovingIcon)
-          }
-          const isCopying = store.copying.id === p.id
-          if (isCopying) {
-            labelRightElements.push(CopyingIcon)
-          }
-
-          return {
-            id: p.id,
-            label: p.label,
-            treeNodeType: 'table',
-            treeMenuType: 'tpopmassn',
-            treeId: p.id,
-            treeParentTableId: tpopId,
-            treeUrl: [
-              'Projekte',
-              projId,
-              'Arten',
-              apId,
-              'Populationen',
-              popId,
-              'Teil-Populationen',
-              tpopId,
-              'Massnahmen',
-              p.id,
-            ],
-            hasChildren: true,
-            fetcherName: 'useTpopmassnNavData',
-            fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
-            labelRightElements: labelRightElements.length
-              ? labelRightElements
-              : undefined,
-          }
-        },
-      ),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.tpopById?.tpopmassnsByTpopId?.nodes,
-      isLoading,
-      popId,
+  const navData = {
+    id: 'Massnahmen',
+    listFilter: 'tpopmassn',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen`,
+    label: `Massnahmen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'tpopmassnFolder',
+    treeId: `${tpopId}TpopmassnFolder`,
+    treeParentTableId: tpopId,
+    treeUrl: [
+      'Projekte',
       projId,
-      store.copying.id,
-      store.moving.id,
-      totalCount,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
       tpopId,
+      'Massnahmen',
     ],
-  )
+    fetcherName: 'useTpopmassnsNavData',
+    fetcherParams: { projId, apId, popId, tpopId },
+    hasChildren: !!count,
+    component: NodeWithList,
+    menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map((p) => {
+      const labelRightElements = []
+      const isMoving = store.moving.id === p.id
+      if (isMoving) {
+        labelRightElements.push(MovingIcon)
+      }
+      const isCopying = store.copying.id === p.id
+      if (isCopying) {
+        labelRightElements.push(CopyingIcon)
+      }
+
+      return {
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'tpopmassn',
+        treeId: p.id,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Massnahmen',
+          p.id,
+        ],
+        hasChildren: true,
+        fetcherName: 'useTpopmassnNavData',
+        fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
+      }
+    }),
+  }
 
   return { isLoading, error, navData }
 }

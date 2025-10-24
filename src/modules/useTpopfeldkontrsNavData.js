@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext, useState } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -70,7 +70,7 @@ export const useTpopfeldkontrsNavData = (props) => {
     [],
   )
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => reaction(() => store.moving.id, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,92 +85,74 @@ export const useTpopfeldkontrsNavData = (props) => {
   const count = data?.data?.tpopById?.tpopkontrsByTpopId?.totalCount ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Feld-Kontrollen',
-      listFilter: 'tpopkontr',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
-      label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'tpopfeldkontr',
-      treeId: `${tpopId}FeldkontrFolder`,
-      treeParentTableId: tpopId,
-      treeUrl: [
-        'Projekte',
-        projId,
-        'Arten',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Feld-Kontrollen',
-      ],
-      fetcherName: 'useTpopfeldkontrsNavData',
-      fetcherParams: { projId, apId, popId, tpopId },
-      hasChildren: !!count,
-      component: NodeWithList,
-      menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
-        (p) => {
-          const labelRightElements = []
-          const isMoving = store.moving.id === p.id
-          if (isMoving) {
-            labelRightElements.push(MovingIcon)
-          }
-          const isCopying = store.copying.id === p.id
-          if (isCopying) {
-            labelRightElements.push(CopyingIcon)
-          }
-          const isCopyingBiotop = store.copyingBiotop.id === p.id
-          if (isCopyingBiotop) {
-            labelRightElements.push(BiotopCopyingIcon)
-          }
-
-          return {
-            id: p.id,
-            label: p.label,
-            treeNodeType: 'table',
-            treeMenuType: 'tpopfeldkontr',
-            treeId: p.id,
-            treeParentTableId: tpopId,
-            treeUrl: [
-              'Projekte',
-              projId,
-              'Arten',
-              apId,
-              'Populationen',
-              popId,
-              'Teil-Populationen',
-              tpopId,
-              'Feld-Kontrollen',
-              p.id,
-            ],
-            fetcherName: 'useTpopfeldkontrNavData',
-            fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
-            treeSingleElementName: 'Feld-Kontrolle',
-            hasChildren: true,
-            labelRightElements: labelRightElements.length
-              ? labelRightElements
-              : undefined,
-          }
-        },
-      ),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.tpopById?.tpopkontrsByTpopId?.nodes,
-      isLoading,
-      popId,
+  const navData = {
+    id: 'Feld-Kontrollen',
+    listFilter: 'tpopkontr',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
+    label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'tpopfeldkontr',
+    treeId: `${tpopId}FeldkontrFolder`,
+    treeParentTableId: tpopId,
+    treeUrl: [
+      'Projekte',
       projId,
-      store.copying.id,
-      store.copyingBiotop.id,
-      store.moving.id,
-      totalCount,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
       tpopId,
+      'Feld-Kontrollen',
     ],
-  )
+    fetcherName: 'useTpopfeldkontrsNavData',
+    fetcherParams: { projId, apId, popId, tpopId },
+    hasChildren: !!count,
+    component: NodeWithList,
+    menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map((p) => {
+      const labelRightElements = []
+      const isMoving = store.moving.id === p.id
+      if (isMoving) {
+        labelRightElements.push(MovingIcon)
+      }
+      const isCopying = store.copying.id === p.id
+      if (isCopying) {
+        labelRightElements.push(CopyingIcon)
+      }
+      const isCopyingBiotop = store.copyingBiotop.id === p.id
+      if (isCopyingBiotop) {
+        labelRightElements.push(BiotopCopyingIcon)
+      }
+
+      return {
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'tpopfeldkontr',
+        treeId: p.id,
+        treeParentTableId: tpopId,
+        treeUrl: [
+          'Projekte',
+          projId,
+          'Arten',
+          apId,
+          'Populationen',
+          popId,
+          'Teil-Populationen',
+          tpopId,
+          'Feld-Kontrollen',
+          p.id,
+        ],
+        fetcherName: 'useTpopfeldkontrNavData',
+        fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
+        treeSingleElementName: 'Feld-Kontrolle',
+        hasChildren: true,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
+      }
+    }),
+  }
 
   return { isLoading, error, navData }
 }
