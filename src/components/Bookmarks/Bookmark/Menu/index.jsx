@@ -1,12 +1,4 @@
-import {
-  memo,
-  useState,
-  useCallback,
-  useMemo,
-  useContext,
-  useRef,
-  useEffect,
-} from 'react'
+import { useState, useContext, useRef, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -39,94 +31,92 @@ const StyledMenu = styled(MuiMenu)`
 // do NOT use a MenuList. Reason: grabs key input to navigate to menu items
 // thus filter input does not work
 
-export const Menu = memo(
-  observer(({ navData }) => {
-    const store = useContext(MobxContext)
-    const { nodeLabelFilter, activeFilterTable, activeNodeArray } = store.tree
-    const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+export const Menu = observer(({ navData }) => {
+  const store = useContext(MobxContext)
+  const { nodeLabelFilter, activeFilterTable, activeNodeArray } = store.tree
+  const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
 
-    const [anchorEl, setAnchorEl] = useState(null)
-    const previousAnchorEl = usePrevious(anchorEl)
-    const open = Boolean(anchorEl)
-    const onClick = useCallback((event) => setAnchorEl(event.currentTarget), [])
-    const onClose = useCallback(() => setAnchorEl(null), [])
+  const [anchorEl, setAnchorEl] = useState(null)
+  const previousAnchorEl = usePrevious(anchorEl)
+  const open = Boolean(anchorEl)
+  const onClick = (event) => setAnchorEl(event.currentTarget)
+  const onClose = () => setAnchorEl(null)
 
-    const iconId = `${navData.id}/MenuIcon`
-    const menuId = `${navData.id}/Menu`
+  const iconId = `${navData.id}/MenuIcon`
+  const menuId = `${navData.id}/Menu`
 
-    const { width, ref } = useResizeDetector({
-      handleHeight: false,
-      refreshMode: 'debounce',
-      refreshRate: 300,
-      refreshOptions: { leading: false, trailing: true },
-    })
+  const { width, ref } = useResizeDetector({
+    handleHeight: false,
+    refreshMode: 'debounce',
+    refreshRate: 300,
+    refreshOptions: { leading: false, trailing: true },
+  })
 
-    const [filterInputIsVisible, setFilterInputIsVisible] =
-      useState(!!filterValue)
-    const filterInputRef = useRef(null)
-    const toggleFilterInput = useCallback(() => {
-      if (filterInputIsVisible) {
-        setFilterInputIsVisible(false)
-      } else {
-        setFilterInputIsVisible(true)
-        setTimeout(() => filterInputRef?.current?.focus?.(), 0)
-      }
-    }, [filterInputIsVisible])
-    const [titleWidth, setTitleWidth] = useState(0)
+  const [filterInputIsVisible, setFilterInputIsVisible] =
+    useState(!!filterValue)
+  const filterInputRef = useRef(null)
+  const toggleFilterInput = () => {
+    if (filterInputIsVisible) {
+      setFilterInputIsVisible(false)
+    } else {
+      setFilterInputIsVisible(true)
+      setTimeout(() => filterInputRef?.current?.focus?.(), 0)
+    }
+  }
+  const [titleWidth, setTitleWidth] = useState(0)
 
-    return (
-      <>
-        <StyledIconButton
-          id={iconId}
-          aria-controls={open ? menuId : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={onClick}
-        >
-          <BsCaretDown />
-        </StyledIconButton>
-        <StyledMenu
-          id={menuId}
-          anchorEl={anchorEl}
-          open={open}
-          onClose={onClose}
-          MenuListProps={{
-            'aria-labelledby': iconId,
-          }}
+  return (
+    <>
+      <StyledIconButton
+        id={iconId}
+        aria-controls={open ? menuId : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={onClick}
+      >
+        <BsCaretDown />
+      </StyledIconButton>
+      <StyledMenu
+        id={menuId}
+        anchorEl={anchorEl}
+        open={open}
+        onClose={onClose}
+        MenuListProps={{
+          'aria-labelledby': iconId,
+        }}
+        minwidth={titleWidth}
+      >
+        <Title
+          navData={navData}
+          width={width}
+          filterInputIsVisible={filterInputIsVisible}
+          toggleFilterInput={toggleFilterInput}
+          ref={filterInputRef}
+          setTitleWidth={setTitleWidth}
+        />
+        <motion.div
+          ref={ref}
           minwidth={titleWidth}
+          style={{ minWidth: titleWidth ?? 'unset' }}
+          initial={{
+            marginTop:
+              previousAnchorEl === null ? 40
+              : filterInputIsVisible ? 40
+              : 100,
+          }}
+          animate={{ marginTop: filterInputIsVisible ? 100 : 40 }}
+          transition={{ duration: 0.2, delay: 0, ease: 'linear' }}
         >
-          <Title
-            navData={navData}
-            width={width}
-            filterInputIsVisible={filterInputIsVisible}
-            toggleFilterInput={toggleFilterInput}
-            ref={filterInputRef}
-            setTitleWidth={setTitleWidth}
-          />
-          <motion.div
-            ref={ref}
-            minwidth={titleWidth}
-            style={{ minWidth: titleWidth ?? 'unset' }}
-            initial={{
-              marginTop:
-                previousAnchorEl === null ? 40
-                : filterInputIsVisible ? 40
-                : 100,
-            }}
-            animate={{ marginTop: filterInputIsVisible ? 100 : 40 }}
-            transition={{ duration: 0.2, delay: 0, ease: 'linear' }}
-          >
-            {navData.menus.map((menu) => (
-              <Item
-                key={menu.id}
-                menu={menu}
-                baseUrl={navData.url}
-                onClose={onClose}
-              />
-            ))}
-          </motion.div>
-        </StyledMenu>
-      </>
-    )
-  }),
-)
+          {navData.menus.map((menu) => (
+            <Item
+              key={menu.id}
+              menu={menu}
+              baseUrl={navData.url}
+              onClose={onClose}
+            />
+          ))}
+        </motion.div>
+      </StyledMenu>
+    </>
+  )
+})
