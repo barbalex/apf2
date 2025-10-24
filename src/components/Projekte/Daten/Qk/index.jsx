@@ -1,5 +1,4 @@
-import { memo } from 'react'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { Qk } from './Qk/index.jsx'
@@ -8,7 +7,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
-export const Component = memo(() => {
+export const Component = () => {
   const { apId } = useParams()
 
   const { data, loading, error } = useQuery(query, {
@@ -45,4 +44,4 @@ export const Component = memo(() => {
       />
     </ErrorBoundary>
   )
-})
+}

@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -31,178 +31,171 @@ const CopyIcon = styled(MdContentCopy)`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ toggleFilterInput }) => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
-    const { projId, apId } = useParams()
+export const Menu = observer(({ toggleFilterInput }) => {
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
+  const { projId, apId } = useParams()
 
-    const store = useContext(MobxContext)
-    const { setMoving, moving, setCopying, copying } = store
+  const store = useContext(MobxContext)
+  const { setMoving, moving, setCopying, copying } = store
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createPopForPopsForm($apId: UUID!) {
-              createPop(input: { pop: { apId: $apId } }) {
-                pop {
-                  id
-                  apId
-                }
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createPopForPopsForm($apId: UUID!) {
+            createPop(input: { pop: { apId: $apId } }) {
+              pop {
+                id
+                apId
               }
             }
-          `,
-          variables: { apId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treePop`],
+          }
+        `,
+        variables: { apId },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeApFolders`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeAp`],
-      })
-      const id = result?.data?.createPop?.pop?.id
-      navigate(`./${id}${search}`)
-    }, [apId, apolloClient, store, tsQueryClient, navigate, search])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treePop`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApFolders`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeAp`],
+    })
+    const id = result?.data?.createPop?.pop?.id
+    navigate(`./${id}${search}`)
+  }
 
-    const onClickOpenLowerNodes = useCallback(() => {
-      openLowerNodes({
-        id: apId,
-        projId,
-        apId,
-        apolloClient,
-        store,
-        menuType: 'popFolder',
-      })
-    }, [projId, apId, apolloClient, store])
+  const onClickOpenLowerNodes = () =>
+    openLowerNodes({
+      id: apId,
+      projId,
+      apId,
+      apolloClient,
+      store,
+      menuType: 'popFolder',
+    })
 
-    const onClickCloseLowerNodes = useCallback(() => {
-      closeLowerNodes({
-        url: ['Projekte', projId, 'Arten', apId, 'Populationen'],
-        store,
-        search,
-      })
-    }, [projId, apId, store, search])
+  const onClickCloseLowerNodes = () =>
+    closeLowerNodes({
+      url: ['Projekte', projId, 'Arten', apId, 'Populationen'],
+      store,
+      search,
+    })
 
-    const isMovingPop = moving.table === 'pop'
-    const popMovingFromThisAp = moving.fromParentId === apId
-    const onClickMovePopToHere = useCallback(() => {
-      moveTo({
-        id: apId,
-        apolloClient,
-        store,
-      })
-    }, [apolloClient, store, apId])
+  const isMovingPop = moving.table === 'pop'
+  const popMovingFromThisAp = moving.fromParentId === apId
 
-    const onClickStopMovingPop = useCallback(() => {
-      setMoving({
-        table: null,
-        id: '99999999-9999-9999-9999-999999999999',
-        label: null,
-        toTable: null,
-        fromParentId: null,
-      })
-    }, [setMoving])
+  const onClickMovePopToHere = () =>
+    moveTo({
+      id: apId,
+      apolloClient,
+      store,
+    })
 
-    const isCopyingPop = copying.table === 'pop'
+  const onClickStopMovingPop = () =>
+    setMoving({
+      table: null,
+      id: '99999999-9999-9999-9999-999999999999',
+      label: null,
+      toTable: null,
+      fromParentId: null,
+    })
 
-    const onClickCopyPopToHere = useCallback(() => {
-      return copyTo({
-        parentId: apId,
-        apolloClient,
-        store,
-      })
-    }, [apId, apolloClient, store])
+  const isCopyingPop = copying.table === 'pop'
 
-    const onClickStopCopyingPop = useCallback(() => {
-      setCopying({
-        table: null,
-        id: '99999999-9999-9999-9999-999999999999',
-        label: null,
-        withNextLevel: false,
-      })
-    }, [setCopying])
+  const onClickCopyPopToHere = () =>
+    copyTo({
+      parentId: apId,
+      apolloClient,
+      store,
+    })
 
-    const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const onClickStopCopyingPop = () =>
+    setCopying({
+      table: null,
+      id: '99999999-9999-9999-9999-999999999999',
+      label: null,
+      withNextLevel: false,
+    })
 
-    return (
-      <ErrorBoundary>
-        <MenuBar
-          rerenderer={`${isMovingPop}/${isCopyingPop}/${popMovingFromThisAp}/${showTreeMenus}`}
-        >
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Neue Population erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
+  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+
+  return (
+    <ErrorBoundary>
+      <MenuBar
+        rerenderer={`${isMovingPop}/${isCopyingPop}/${popMovingFromThisAp}/${showTreeMenus}`}
+      >
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Neue Population erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum öffnen">
+            <IconButton onClick={onClickOpenLowerNodes}>
+              <FaFolderTree style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum öffnen">
-              <IconButton onClick={onClickOpenLowerNodes}>
-                <FaFolderTree style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum schliessen">
-              <IconButton onClick={onClickCloseLowerNodes}>
-                <RiFolderCloseFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isMovingPop && (
-            <Tooltip
-              title={
-                popMovingFromThisAp ?
-                  `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
-                : `Verschiebe '${moving.label}' zu dieser Art`
-              }
-            >
-              <IconButton onClick={onClickMovePopToHere}>
-                <MoveIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isMovingPop && (
-            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
-              <IconButton onClick={onClickStopMovingPop}>
-                <BsSignStopFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isCopyingPop && (
-            <Tooltip title={`Kopiere '${copying.label}' in diese Art`}>
-              <IconButton onClick={onClickCopyPopToHere}>
-                <CopyIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isCopyingPop && (
-            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
-              <IconButton onClick={onClickStopCopyingPop}>
-                <BsSignStopFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+        )}
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum schliessen">
+            <IconButton onClick={onClickCloseLowerNodes}>
+              <RiFolderCloseFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isMovingPop && (
+          <Tooltip
+            title={
+              popMovingFromThisAp ?
+                `'${moving.label}' zur selben Art zu vershieben, macht keinen Sinn`
+              : `Verschiebe '${moving.label}' zu dieser Art`
+            }
+          >
+            <IconButton onClick={onClickMovePopToHere}>
+              <MoveIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isMovingPop && (
+          <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+            <IconButton onClick={onClickStopMovingPop}>
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isCopyingPop && (
+          <Tooltip title={`Kopiere '${copying.label}' in diese Art`}>
+            <IconButton onClick={onClickCopyPopToHere}>
+              <CopyIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isCopyingPop && (
+          <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+            <IconButton onClick={onClickStopCopyingPop}>
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})
