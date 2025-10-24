@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -31,36 +31,30 @@ const MenuTitleLink = styled(Link)`
   }
 `
 
-export const Sidebar = memo(
-  observer(() => {
-    const { search } = useLocation()
+export const Sidebar = observer(() => {
+  const { search } = useLocation()
 
-    const store = useContext(MobxContext)
-    const { setKey: setNodeLabelFilterKey } = store.tree.nodeLabelFilter
-    const setFilter = useCallback(
-      (val) => {
-        setNodeLabelFilterKey({
-          value: val,
-          key: 'doc',
-        })
-      },
-      [setNodeLabelFilterKey],
-    )
+  const store = useContext(MobxContext)
+  const { setKey: setNodeLabelFilterKey } = store.tree.nodeLabelFilter
+  const setFilter = (val) =>
+    setNodeLabelFilterKey({
+      value: val,
+      key: 'doc',
+    })
 
-    return (
-      <Menu>
-        <MenuTitle>
-          <MenuTitleLink to={`/Dokumentation/${search}`}>
-            Dokumentation
-          </MenuTitleLink>
-          <Filter
-            filter={store.tree.nodeLabelFilter.doc ?? ''}
-            setFilter={setFilter}
-          />
-        </MenuTitle>
-        <MenuItems />
-        <IntoViewScroller />
-      </Menu>
-    )
-  }),
-)
+  return (
+    <Menu>
+      <MenuTitle>
+        <MenuTitleLink to={`/Dokumentation/${search}`}>
+          Dokumentation
+        </MenuTitleLink>
+        <Filter
+          filter={store.tree.nodeLabelFilter.doc ?? ''}
+          setFilter={setFilter}
+        />
+      </MenuTitle>
+      <MenuItems />
+      <IntoViewScroller />
+    </Menu>
+  )
+})
