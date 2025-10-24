@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -62,46 +62,29 @@ export const useErfkritsNavData = (props) => {
   const count = data?.data?.apById?.erfkritsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'AP-Erfolgskriterien',
-      listFilter: 'erfkrit',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien`,
-      label: `AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'erfkritFolder',
-      treeId: `${apId}ErfkritFolder`,
+  const navData = {
+    id: 'AP-Erfolgskriterien',
+    listFilter: 'erfkrit',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien`,
+    label: `AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'erfkritFolder',
+    treeId: `${apId}ErfkritFolder`,
+    treeParentTableId: apId,
+    treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
+    hasChildren: !!count,
+    component: NodeWithList,
+    menus: (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'erfkrit',
+      treeId: p.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
-      hasChildren: !!count,
-      component: NodeWithList,
-      menus: (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'erfkrit',
-        treeId: p.id,
-        treeParentTableId: apId,
-        treeUrl: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'AP-Erfolgskriterien',
-          p.id,
-        ],
-        hasChildren: false,
-      })),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.apById?.erfkritsByApId?.nodes,
-      isLoading,
-      projId,
-      totalCount,
-    ],
-  )
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien', p.id],
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
