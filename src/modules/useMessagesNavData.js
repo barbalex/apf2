@@ -1,6 +1,5 @@
-import { useMemo } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
@@ -29,21 +28,18 @@ export const useMessagesNavData = () => {
 
   const count = data?.data?.allMessages?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Mitteilungen',
-      url: `/Daten/Mitteilungen`,
-      label: `Mitteilungen (${isLoading ? '...' : count})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'messagesFolder',
-      treeId: 'Mitteilungen',
-      treeUrl: ['Mitteilungen'],
-      fetcherName: 'useMessagesNavData',
-      component: Node,
-      hasChildren: false,
-    }),
-    [count, isLoading],
-  )
+  const navData = {
+    id: 'Mitteilungen',
+    url: `/Daten/Mitteilungen`,
+    label: `Mitteilungen (${isLoading ? '...' : count})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'messagesFolder',
+    treeId: 'Mitteilungen',
+    treeUrl: ['Mitteilungen'],
+    fetcherName: 'useMessagesNavData',
+    component: Node,
+    hasChildren: false,
+  }
 
   return { isLoading, error, navData }
 }

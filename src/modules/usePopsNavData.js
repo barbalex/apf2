@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext, useState, useCallback } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext, useState } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -126,7 +126,7 @@ export const usePopsNavData = (props) => {
     [],
   )
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => reaction(() => store.map.popIcon, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -153,76 +153,59 @@ export const usePopsNavData = (props) => {
 
   const popIconName = store.map.popIcon
 
-  const navData = useMemo(
-    () => ({
-      id: 'Populationen',
-      listFilter: 'pop',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
-      label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'popFolder',
-      treeId: `${apId}PopFolder`,
-      treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
-      fetcherName: 'usePopsNavData',
-      fetcherParams: { projId, apId },
-      hasChildren: !!count,
-      labelLeftElements: store.tree.showPopIcon ? [PopMapIcon] : undefined,
-      component: NodeWithList,
-      menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
-        const labelRightElements = []
-        const isMoving = store.moving.id === p.id
-        if (isMoving) {
-          labelRightElements.push(MovingIcon)
-        }
-        const isCopying = store.copying.id === p.id
-        if (isCopying) {
-          labelRightElements.push(CopyingIcon)
-        }
+  const navData = {
+    id: 'Populationen',
+    listFilter: 'pop',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
+    label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'popFolder',
+    treeId: `${apId}PopFolder`,
+    treeParentTableId: apId,
+    treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
+    fetcherName: 'usePopsNavData',
+    fetcherParams: { projId, apId },
+    hasChildren: !!count,
+    labelLeftElements: store.tree.showPopIcon ? [PopMapIcon] : undefined,
+    component: NodeWithList,
+    menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
+      const labelRightElements = []
+      const isMoving = store.moving.id === p.id
+      if (isMoving) {
+        labelRightElements.push(MovingIcon)
+      }
+      const isCopying = store.copying.id === p.id
+      if (isCopying) {
+        labelRightElements.push(CopyingIcon)
+      }
 
-        const popIconIsHighlighted = p.id === popId
-        const PopIcon = p.status
-          ? popIconIsHighlighted
-            ? popIcons[popIconName][p.status + 'Highlighted']
-            : popIcons[popIconName][p.status]
-          : popIconIsHighlighted
-            ? PopIconQHighlighted
-            : PopIconQ
+      const popIconIsHighlighted = p.id === popId
+      const PopIcon =
+        p.status ?
+          popIconIsHighlighted ? popIcons[popIconName][p.status + 'Highlighted']
+          : popIcons[popIconName][p.status]
+        : popIconIsHighlighted ? PopIconQHighlighted
+        : PopIconQ
 
-        return {
-          id: p.id,
-          label: p.label,
-          treeNodeType: 'table',
-          treeMenuType: 'pop',
-          treeSingleElementName: 'Population',
-          treeId: p.id,
-          treeParentTableId: apId,
-          treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', p.id],
-          hasChildren: true,
-          fetcherName: 'usePopNavData',
-          fetcherParams: { projId, apId, popId: p.id },
-          status: p.status,
-          labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
-          labelRightElements: labelRightElements.length
-            ? labelRightElements
-            : undefined,
-        }
-      }),
+      return {
+        id: p.id,
+        label: p.label,
+        treeNodeType: 'table',
+        treeMenuType: 'pop',
+        treeSingleElementName: 'Population',
+        treeId: p.id,
+        treeParentTableId: apId,
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', p.id],
+        hasChildren: true,
+        fetcherName: 'usePopNavData',
+        fetcherParams: { projId, apId, popId: p.id },
+        status: p.status,
+        labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
+      }
     }),
-    [
-      apId,
-      count,
-      data?.data?.apById?.popsByApId?.nodes,
-      isLoading,
-      popIconName,
-      popId,
-      projId,
-      store.copying.id,
-      store.moving.id,
-      store.tree.showPopIcon,
-      totalCount,
-    ],
-  )
+  }
 
   return { isLoading, error, navData }
 }
