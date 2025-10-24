@@ -1,4 +1,4 @@
-import { memo, useMemo, useContext, lazy, Suspense } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
@@ -36,88 +36,85 @@ const StyledIframe = styled.iframe`
 
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
-export const Component = memo(
-  observer(() => {
-    const { pathname, search } = useLocation()
-    const store = useContext(MobxContext)
-    const { isPrint } = store
-    const { tree2Src } = store.tree
+export const Component = observer(() => {
+  const { pathname, search } = useLocation()
+  const store = useContext(MobxContext)
+  const { isPrint } = store
+  const { tree2Src } = store.tree
 
-    const [projekteTabs] = useProjekteTabs()
-    const tree2Tabs = useMemo(
-      () => [...new Set(tree2TabValues).intersection(new Set(projekteTabs))],
-      [projekteTabs],
-    )
+  const [projekteTabs] = useProjekteTabs()
+  const tree2Tabs = [
+    ...new Set(tree2TabValues).intersection(new Set(projekteTabs)),
+  ]
 
-    let iFrameSrc = tree2Src
-    if (!tree2Src) {
-      // build search string for iframe
-      const iFrameSearch = queryString.parse(search)
-      // need to alter projekteTabs:
-      if (Array.isArray(iFrameSearch.projekteTabs)) {
-        iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
-          // - remove non-tree2 values
-          .filter((t) => t.includes('2'))
-          // - rewrite tree2 values to tree values
-          .map((t) => t.replace('2', ''))
-      } else if (iFrameSearch.projekteTabs) {
-        iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
-          // - remove non-tree2 values
-          .filter((t) => t.includes('2'))
-          // - rewrite tree2 values to tree values
-          .map((t) => t.replace('2', ''))
-      }
-      const newSearch = queryString.stringify(iFrameSearch)
-      // pass this via src to iframe
-      iFrameSrc = `${appBaseUrl().slice(0, -1)}${pathname}?${newSearch}`
+  let iFrameSrc = tree2Src
+  if (!tree2Src) {
+    // build search string for iframe
+    const iFrameSearch = queryString.parse(search)
+    // need to alter projekteTabs:
+    if (Array.isArray(iFrameSearch.projekteTabs)) {
+      iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
+        // - remove non-tree2 values
+        .filter((t) => t.includes('2'))
+        // - rewrite tree2 values to tree values
+        .map((t) => t.replace('2', ''))
+    } else if (iFrameSearch.projekteTabs) {
+      iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
+        // - remove non-tree2 values
+        .filter((t) => t.includes('2'))
+        // - rewrite tree2 values to tree values
+        .map((t) => t.replace('2', ''))
     }
+    const newSearch = queryString.stringify(iFrameSearch)
+    // pass this via src to iframe
+    iFrameSrc = `${appBaseUrl().slice(0, -1)}${pathname}?${newSearch}`
+  }
 
-    if (isInIframe) {
-      // inside iframe app bar should be hidden
-      return (
-        <Container>
-          {tree2Tabs.length === 0 || isPrint ?
-            <ProjektContainer />
-          : <StyledSplitPane
-              split="vertical"
-              defaultSize="50%"
-            >
-              <ProjektContainer />
-              <StyledIframe
-                src={iFrameSrc}
-                title="tree2"
-                width="100%"
-                height="100%"
-              />
-            </StyledSplitPane>
-          }
-        </Container>
-      )
-    }
-
+  if (isInIframe) {
+    // inside iframe app bar should be hidden
     return (
-      <>
-        <Suspense fallback={null}>
-          <ApFilterController />
-        </Suspense>
-        <Container>
-          {tree2Tabs.length === 0 || isPrint ?
+      <Container>
+        {tree2Tabs.length === 0 || isPrint ?
+          <ProjektContainer />
+        : <StyledSplitPane
+            split="vertical"
+            defaultSize="50%"
+          >
             <ProjektContainer />
-          : <StyledSplitPane
-              split="vertical"
-              defaultSize="50%"
-            >
-              <ProjektContainer />
-              <StyledIframe
-                src={iFrameSrc}
-                title="tree2"
-                width="100%"
-                height="100%"
-              />
-            </StyledSplitPane>
-          }
-        </Container>
-      </>
+            <StyledIframe
+              src={iFrameSrc}
+              title="tree2"
+              width="100%"
+              height="100%"
+            />
+          </StyledSplitPane>
+        }
+      </Container>
     )
-  }),
-)
+  }
+
+  return (
+    <>
+      <Suspense fallback={null}>
+        <ApFilterController />
+      </Suspense>
+      <Container>
+        {tree2Tabs.length === 0 || isPrint ?
+          <ProjektContainer />
+        : <StyledSplitPane
+            split="vertical"
+            defaultSize="50%"
+          >
+            <ProjektContainer />
+            <StyledIframe
+              src={iFrameSrc}
+              title="tree2"
+              width="100%"
+              height="100%"
+            />
+          </StyledSplitPane>
+        }
+      </Container>
+    </>
+  )
+})

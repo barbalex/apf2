@@ -1,4 +1,4 @@
-import { memo, useContext, useMemo, lazy, Suspense, useRef } from 'react'
+import { useContext, useMemo, lazy, Suspense, useRef } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
@@ -45,158 +45,155 @@ const InnerContainer = styled.div`
   height: 100%;
 `
 
-export const ProjektContainer = memo(
-  observer(() => {
-    const { projId, apberuebersichtId, apberId } = useParams()
-    const { pathname } = useLocation()
+export const ProjektContainer = observer(() => {
+  const { projId, apberuebersichtId, apberId } = useParams()
+  const { pathname } = useLocation()
 
-    const store = useContext(MobxContext)
-    const { isPrint } = store
+  const store = useContext(MobxContext)
+  const { isPrint } = store
 
-    const [hideBookmarks] = useAtom(hideBookmarksAtom)
+  const [hideBookmarks] = useAtom(hideBookmarksAtom)
 
-    // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
-    // to prevent it from causing unnessecary renders
-    // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    const treeTabValues = [
-      'tree',
-      'daten',
-      'filter',
-      'karte',
-      ...(projId ? ['exporte'] : []),
-    ]
+  // react hooks 'exhaustive-deps' rule wants to move treeTabValues into own useMemo
+  // to prevent it from causing unnessecary renders
+  // BUT: this prevents necessary renders: clicking tabs does not cause re-render!
+  /// eslint-disable-next-line react-hooks/exhaustive-deps
+  const treeTabValues = [
+    'tree',
+    'daten',
+    'filter',
+    'karte',
+    ...(projId ? ['exporte'] : []),
+  ]
 
-    const [projekteTabs] = useProjekteTabs()
+  const [projekteTabs] = useProjekteTabs()
 
-    const treeTabs = useMemo(
-      () => [...new Set(treeTabValues).intersection(new Set(projekteTabs))],
-      [projekteTabs],
-    )
+  const treeTabs = [
+    ...new Set(treeTabValues).intersection(new Set(projekteTabs)),
+  ]
 
-    // console.log('ProjektContainer, treeTabs:', treeTabs)
+  // console.log('ProjektContainer, treeTabs:', treeTabs)
 
-    const showApberForArt = apberId && pathname.endsWith('print')
-    const showApberForAll = apberuebersichtId && pathname.endsWith('print')
+  const showApberForArt = apberId && pathname.endsWith('print')
+  const showApberForAll = apberuebersichtId && pathname.endsWith('print')
 
-    // need this to prevent map from greying out on resize
-    // https://github.com/PaulLeCam/react-leaflet/issues/1074
-    const mapContainerRef = useRef(null)
+  // need this to prevent map from greying out on resize
+  // https://github.com/PaulLeCam/react-leaflet/issues/1074
+  const mapContainerRef = useRef(null)
 
-    const elObj = {
-      tree: (
-        <InnerContainer>
-          <Suspense fallback={<Spinner />}>
-            <TreeContainer />
-          </Suspense>
-        </InnerContainer>
-      ),
-      daten: (
-        <InnerContainer>
-          <Suspense fallback={<Spinner />}>
-            <Outlet />
-          </Suspense>
-        </InnerContainer>
-      ),
-      filter: (
-        <InnerContainer>
-          <Suspense fallback={<Spinner />}>
-            <Filter />
-          </Suspense>
-        </InnerContainer>
-      ),
-      karte: (
-        <InnerContainer ref={mapContainerRef}>
-          <Suspense fallback={<Spinner />}>
-            <Karte mapContainerRef={mapContainerRef} />
-          </Suspense>
-        </InnerContainer>
-      ),
-      exporte: (
-        <InnerContainer>
-          <Suspense fallback={<Spinner />}>
-            <Exporte />
-          </Suspense>
-        </InnerContainer>
-      ),
-    }
+  const elObj = {
+    tree: (
+      <InnerContainer>
+        <Suspense fallback={<Spinner />}>
+          <TreeContainer />
+        </Suspense>
+      </InnerContainer>
+    ),
+    daten: (
+      <InnerContainer>
+        <Suspense fallback={<Spinner />}>
+          <Outlet />
+        </Suspense>
+      </InnerContainer>
+    ),
+    filter: (
+      <InnerContainer>
+        <Suspense fallback={<Spinner />}>
+          <Filter />
+        </Suspense>
+      </InnerContainer>
+    ),
+    karte: (
+      <InnerContainer ref={mapContainerRef}>
+        <Suspense fallback={<Spinner />}>
+          <Karte mapContainerRef={mapContainerRef} />
+        </Suspense>
+      </InnerContainer>
+    ),
+    exporte: (
+      <InnerContainer>
+        <Suspense fallback={<Spinner />}>
+          <Exporte />
+        </Suspense>
+      </InnerContainer>
+    ),
+  }
 
-    if (isPrint) {
-      return <Outlet />
-    }
+  if (isPrint) {
+    return <Outlet />
+  }
 
-    return (
-      <OuterContainer>
-        {!hideBookmarks && <Bookmarks />}
-        <Container height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}>
-          <StyledSplitPane
-            split="vertical"
-            size={
-              treeTabs.length === 2 && treeTabs[0] === 'tree' ?
-                '33%'
-              : `${100 / treeTabs.length}%`
-            }
-            maxSize={-10}
-            overflowPane1={
-              treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
-                'auto'
-              : 'hidden'
-            }
-            overflowPane2={
-              (
-                treeTabs[1] === 'daten' &&
-                treeTabs.length === 2 &&
-                (showApberForAll || showApberForArt)
-              ) ?
-                'auto'
-              : 'hidden'
-            }
-          >
-            {elObj[treeTabs[0]]}
-            {treeTabs.length === 1 && <></>}
-            {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
-            {treeTabs.length > 2 && (
-              <StyledSplitPane
-                split="vertical"
-                size={`${100 / (treeTabs.length - 1)}%`}
-                maxSize={-10}
-                overflowPane1={
-                  (
-                    treeTabs[1] === 'daten' &&
-                    treeTabs.length > 2 &&
-                    (showApberForAll || showApberForArt)
-                  ) ?
-                    'auto'
-                  : 'hidden'
-                }
-              >
-                {elObj[treeTabs[1]]}
-                {treeTabs.length === 3 && elObj[treeTabs[2]]}
-                {treeTabs.length > 3 && (
-                  <StyledSplitPane
-                    split="vertical"
-                    size={`${100 / (treeTabs.length - 2)}%`}
-                    maxSize={-10}
-                  >
-                    {elObj[treeTabs[2]]}
-                    {treeTabs.length === 4 && elObj[treeTabs[3]]}
-                    {treeTabs.length === 5 && (
-                      <StyledSplitPane
-                        split="vertical"
-                        size="50%"
-                        maxSize={-10}
-                      >
-                        {elObj[treeTabs[3]]}
-                        {elObj[treeTabs[4]]}
-                      </StyledSplitPane>
-                    )}
-                  </StyledSplitPane>
-                )}
-              </StyledSplitPane>
-            )}
-          </StyledSplitPane>
-        </Container>
-      </OuterContainer>
-    )
-  }),
-)
+  return (
+    <OuterContainer>
+      {!hideBookmarks && <Bookmarks />}
+      <Container height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}>
+        <StyledSplitPane
+          split="vertical"
+          size={
+            treeTabs.length === 2 && treeTabs[0] === 'tree' ?
+              '33%'
+            : `${100 / treeTabs.length}%`
+          }
+          maxSize={-10}
+          overflowPane1={
+            treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
+              'auto'
+            : 'hidden'
+          }
+          overflowPane2={
+            (
+              treeTabs[1] === 'daten' &&
+              treeTabs.length === 2 &&
+              (showApberForAll || showApberForArt)
+            ) ?
+              'auto'
+            : 'hidden'
+          }
+        >
+          {elObj[treeTabs[0]]}
+          {treeTabs.length === 1 && <></>}
+          {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
+          {treeTabs.length > 2 && (
+            <StyledSplitPane
+              split="vertical"
+              size={`${100 / (treeTabs.length - 1)}%`}
+              maxSize={-10}
+              overflowPane1={
+                (
+                  treeTabs[1] === 'daten' &&
+                  treeTabs.length > 2 &&
+                  (showApberForAll || showApberForArt)
+                ) ?
+                  'auto'
+                : 'hidden'
+              }
+            >
+              {elObj[treeTabs[1]]}
+              {treeTabs.length === 3 && elObj[treeTabs[2]]}
+              {treeTabs.length > 3 && (
+                <StyledSplitPane
+                  split="vertical"
+                  size={`${100 / (treeTabs.length - 2)}%`}
+                  maxSize={-10}
+                >
+                  {elObj[treeTabs[2]]}
+                  {treeTabs.length === 4 && elObj[treeTabs[3]]}
+                  {treeTabs.length === 5 && (
+                    <StyledSplitPane
+                      split="vertical"
+                      size="50%"
+                      maxSize={-10}
+                    >
+                      {elObj[treeTabs[3]]}
+                      {elObj[treeTabs[4]]}
+                    </StyledSplitPane>
+                  )}
+                </StyledSplitPane>
+              )}
+            </StyledSplitPane>
+          )}
+        </StyledSplitPane>
+      </Container>
+    </OuterContainer>
+  )
+})
