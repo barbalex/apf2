@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
@@ -10,7 +9,7 @@ import { Menu } from './Menu.jsx'
 import { query } from './query.js'
 import { TpopfeldkontrForm } from './Form.jsx'
 
-export const Component = memo(() => {
+export const Component = () => {
   const { tpopkontrId } = useParams()
 
   const { data, loading, error } = useQuery(query, {
@@ -36,4 +35,4 @@ export const Component = memo(() => {
       />
     </ErrorBoundary>
   )
-})
+}

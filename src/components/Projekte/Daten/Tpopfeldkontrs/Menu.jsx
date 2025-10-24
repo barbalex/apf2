@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -31,231 +31,224 @@ const CopyIcon = styled(MdContentCopy)`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ toggleFilterInput }) => {
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+export const Menu = observer(({ toggleFilterInput }) => {
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const { search } = useLocation()
-    const navigate = useNavigate()
-    const { projId, apId, popId, tpopId } = useParams()
+  const { search } = useLocation()
+  const navigate = useNavigate()
+  const { projId, apId, popId, tpopId } = useParams()
 
-    const store = useContext(MobxContext)
-    const {
-      setMoving,
-      moving,
-      setCopying,
-      copying,
-      copyingBiotop,
-      setCopyingBiotop,
-    } = store
-    const { activeNodeArray, openNodes, setOpenNodes } = store.tree
+  const store = useContext(MobxContext)
+  const {
+    setMoving,
+    moving,
+    setCopying,
+    copying,
+    copyingBiotop,
+    setCopyingBiotop,
+  } = store
+  const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
-    const onClickAdd = useCallback(async () => {
-      // 1. create new tpopkontr
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createTpopfeldkontrForTpopfeldkontrForm($tpopId: UUID!) {
-              createTpopkontr(input: { tpopkontr: { tpopId: $tpopId } }) {
-                tpopkontr {
-                  id
-                  tpopId
-                }
-              }
-            }
-          `,
-          variables: {
-            tpopId,
-          },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      const id = result?.data?.createTpopkontr?.tpopkontr?.id
-
-      // 2. add new tpopkontrzaehl
-      const resultZaehl = await apolloClient.mutate({
+  const onClickAdd = async () => {
+    // 1. create new tpopkontr
+    let result
+    try {
+      result = await apolloClient.mutate({
         mutation: gql`
-          mutation createTpokontrzaehlForTpopfeldkontrs($parentId: UUID!) {
-            createTpopkontrzaehl(
-              input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
-            ) {
-              tpopkontrzaehl {
+          mutation createTpopfeldkontrForTpopfeldkontrForm($tpopId: UUID!) {
+            createTpopkontr(input: { tpopkontr: { tpopId: $tpopId } }) {
+              tpopkontr {
                 id
+                tpopId
               }
             }
           }
         `,
-        variables: { parentId: id },
-      })
-
-      // 3. open the tpopkontrzaehl Folder
-      const zaehlId =
-        resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
-      const tpopkontrNode = [...activeNodeArray, id]
-      const zaehlungenFolderNode = [...tpopkontrNode, 'Zaehlungen']
-      const zaehlungNode = [...zaehlungenFolderNode, zaehlId]
-      const newOpenNodes = [
-        ...openNodes,
-        tpopkontrNode,
-        zaehlungenFolderNode,
-        zaehlungNode,
-      ]
-      setOpenNodes(newOpenNodes)
-
-      // 4. refresh tree
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontr`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpop`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontrzaehl`],
-      })
-
-      // 5. navigate to new tpopkontr
-      navigate(`./${id}${search}`)
-    }, [apolloClient, store, tsQueryClient, navigate, search, tpopId])
-
-    const onClickOpenLowerNodes = useCallback(() => {
-      openLowerNodes({
-        id: tpopId,
-        projId,
-        apId,
-        popId,
-        apolloClient,
-        store,
-        menuType: 'tpopfeldkontrFolder',
-      })
-    }, [projId, apId, popId, apolloClient, store])
-
-    const onClickCloseLowerNodes = useCallback(() => {
-      closeLowerNodes({
-        url: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
-          popId,
-          'Teil-Populationen',
+        variables: {
           tpopId,
-          'Feld-Kontrollen',
-        ],
-        store,
-        search,
+        },
       })
-    }, [projId, apId, popId, store, search])
-
-    const isMovingEk = moving.table === 'tpopfeldkontr'
-    const onClickMoveEkfToHere = useCallback(() => {
-      return moveTo({
-        id: tpopId,
-        apolloClient,
-        store,
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-    }, [tpopId, apolloClient, store, moveTo])
+    }
+    const id = result?.data?.createTpopkontr?.tpopkontr?.id
 
-    const onClickStopMoving = useCallback(() => {
-      setMoving({
-        table: null,
-        id: '99999999-9999-9999-9999-999999999999',
-        label: null,
-        toTable: null,
-        fromParentId: null,
-      })
-    }, [setMoving])
+    // 2. add new tpopkontrzaehl
+    const resultZaehl = await apolloClient.mutate({
+      mutation: gql`
+        mutation createTpokontrzaehlForTpopfeldkontrs($parentId: UUID!) {
+          createTpopkontrzaehl(
+            input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
+          ) {
+            tpopkontrzaehl {
+              id
+            }
+          }
+        }
+      `,
+      variables: { parentId: id },
+    })
 
-    const isCopyingEk = copying.table === 'tpopfeldkontr'
-    const isCopyingBiotop = !!copyingBiotop.id
-    const isCopying = isCopyingEk || isCopyingBiotop
-    const onClickCopyEkfToHere = useCallback(() => {
-      return copyTo({
-        parentId: tpopId,
-        apolloClient,
-        store,
-      })
-    }, [copyTo, tpopId, apolloClient, store])
+    // 3. open the tpopkontrzaehl Folder
+    const zaehlId = resultZaehl?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+    const tpopkontrNode = [...activeNodeArray, id]
+    const zaehlungenFolderNode = [...tpopkontrNode, 'Zaehlungen']
+    const zaehlungNode = [...zaehlungenFolderNode, zaehlId]
+    const newOpenNodes = [
+      ...openNodes,
+      tpopkontrNode,
+      zaehlungenFolderNode,
+      zaehlungNode,
+    ]
+    setOpenNodes(newOpenNodes)
 
-    const onClickStopCopying = useCallback(() => {
-      setCopying({
-        table: null,
-        id: '99999999-9999-9999-9999-999999999999',
-        label: null,
-        withNextLevel: false,
-      })
-      setCopyingBiotop({ id: null, label: null })
-    }, [setCopying, setCopyingBiotop])
+    // 4. refresh tree
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontr`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpop`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontrzaehl`],
+    })
 
-    const [showTreeMenus] = useAtom(showTreeMenusAtom)
+    // 5. navigate to new tpopkontr
+    navigate(`./${id}${search}`)
+  }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar
-          rerenderer={`${moving.label}/${copying.label}/${copyingBiotop.label}/${isMovingEk}/${isCopyingEk}/${showTreeMenus}`}
-        >
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Neue Feld-Kontrolle erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
+  const onClickOpenLowerNodes = () =>
+    openLowerNodes({
+      id: tpopId,
+      projId,
+      apId,
+      popId,
+      apolloClient,
+      store,
+      menuType: 'tpopfeldkontrFolder',
+    })
+
+  const onClickCloseLowerNodes = () =>
+    closeLowerNodes({
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Feld-Kontrollen',
+      ],
+      store,
+      search,
+    })
+
+  const isMovingEk = moving.table === 'tpopfeldkontr'
+  const onClickMoveEkfToHere = () =>
+    moveTo({
+      id: tpopId,
+      apolloClient,
+      store,
+    })
+
+  const onClickStopMoving = () =>
+    setMoving({
+      table: null,
+      id: '99999999-9999-9999-9999-999999999999',
+      label: null,
+      toTable: null,
+      fromParentId: null,
+    })
+
+  const isCopyingEk = copying.table === 'tpopfeldkontr'
+  const isCopyingBiotop = !!copyingBiotop.id
+  const isCopying = isCopyingEk || isCopyingBiotop
+
+  const onClickCopyEkfToHere = () =>
+    copyTo({
+      parentId: tpopId,
+      apolloClient,
+      store,
+    })
+
+  const onClickStopCopying = () => {
+    setCopying({
+      table: null,
+      id: '99999999-9999-9999-9999-999999999999',
+      label: null,
+      withNextLevel: false,
+    })
+    setCopyingBiotop({ id: null, label: null })
+  }
+
+  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+
+  return (
+    <ErrorBoundary>
+      <MenuBar
+        rerenderer={`${moving.label}/${copying.label}/${copyingBiotop.label}/${isMovingEk}/${isCopyingEk}/${showTreeMenus}`}
+      >
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Neue Feld-Kontrolle erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum öffnen">
+            <IconButton onClick={onClickOpenLowerNodes}>
+              <FaFolderTree style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum öffnen">
-              <IconButton onClick={onClickOpenLowerNodes}>
-                <FaFolderTree style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum schliessen">
-              <IconButton onClick={onClickCloseLowerNodes}>
-                <RiFolderCloseFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isMovingEk && (
-            <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
-              <IconButton onClick={onClickMoveEkfToHere}>
-                <MoveIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isMovingEk && (
-            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
-              <IconButton onClick={onClickStopMoving}>
-                <BsSignStopFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isCopyingEk && (
-            <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
-              <IconButton onClick={onClickCopyEkfToHere}>
-                <CopyIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-          {isCopying && (
-            <Tooltip
-              title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}
-            >
-              <IconButton onClick={onClickStopCopying}>
-                <BsSignStopFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+        )}
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum schliessen">
+            <IconButton onClick={onClickCloseLowerNodes}>
+              <RiFolderCloseFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isMovingEk && (
+          <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
+            <IconButton onClick={onClickMoveEkfToHere}>
+              <MoveIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isMovingEk && (
+          <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+            <IconButton onClick={onClickStopMoving}>
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isCopyingEk && (
+          <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
+            <IconButton onClick={onClickCopyEkfToHere}>
+              <CopyIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        {isCopying && (
+          <Tooltip
+            title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}
+          >
+            <IconButton onClick={onClickStopCopying}>
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})
