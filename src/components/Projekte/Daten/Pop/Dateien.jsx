@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
 
@@ -7,7 +6,7 @@ import { useQuery } from '@apollo/client/react'
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-export const Component = memo(() => {
+export const Component = () => {
   const { popId } = useParams()
 
   const { data } = useQuery(
@@ -34,4 +33,4 @@ export const Component = memo(() => {
       />
     </>
   )
-})
+}
