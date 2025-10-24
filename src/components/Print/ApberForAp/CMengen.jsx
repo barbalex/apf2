@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -71,7 +70,7 @@ const PopSeit = styled(Number)`
 `
 const TpopSeit = styled(Number)``
 
-export const CMengen = memo(({ jahr, loading, node }) => {
+export const CMengen = ({ jahr, loading, node }) => {
   const c1LPop = loading ? '...' : node?.c1LPop
   const c1LTpop = loading ? '...' : node?.c1LTpop
   const c1RPop = loading ? '...' : node?.c1RPop
@@ -156,4 +155,4 @@ export const CMengen = memo(({ jahr, loading, node }) => {
       </Row>
     </Container>
   )
-})
+}
