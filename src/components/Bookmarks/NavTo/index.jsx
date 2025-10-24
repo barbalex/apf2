@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { useMatches, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
@@ -17,7 +16,7 @@ const Container = styled.nav`
   scrollbar-width: thin;
 `
 
-export const NavTo = memo(() => {
+export const NavTo = () => {
   const { pathname } = useLocation()
   const allMatches = useMatches()
   // get match that contains the current pathname minus the last slash - if it ends with a slash
@@ -38,4 +37,4 @@ export const NavTo = memo(() => {
       : null}
     </Container>
   )
-})
+}

@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useMemo, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Collapse from '@mui/material/Collapse'
@@ -58,80 +58,75 @@ const ApFilterFitter = styled.div`
   width: 58px;
 `
 
-export const Title = memo(
-  ({
-    navData,
-    width: parentWidth,
-    filterInputIsVisible,
-    toggleFilterInput,
-    setTitleWidth,
-    ref: filterInputRef,
-  }) => {
-    const isUuidList = useMemo(
-      () => navData.menus.some((menu) => isUuid.anyNonNil(menu.id)),
-      [navData.menus],
+export const Title = ({
+  navData,
+  width: parentWidth,
+  filterInputIsVisible,
+  toggleFilterInput,
+  setTitleWidth,
+  ref: filterInputRef,
+}) => {
+  const isUuidList = navData.menus.some((menu) => isUuid.anyNonNil(menu.id))
+
+  // if is Aps, need to add ApFilter
+  const isAps = navData.id === 'Arten'
+
+  const { width: titleWidth, ref } = useResizeDetector({
+    handleHeight: false,
+    refreshMode: 'debounce',
+    refreshRate: 300,
+    refreshOptions: { leading: false, trailing: true },
+  })
+  useEffect(() => {
+    setTitleWidth(
+      (titleWidth ?? 40) +
+        (isUuidList ?
+          isAps ? 40 + 58
+          : 40
+        : 0) +
+        32 +
+        8,
     )
+  }, [titleWidth, setTitleWidth, isUuidList])
 
-    // if is Aps, need to add ApFilter
-    const isAps = navData.id === 'Arten'
+  // minWidth is the larger of parentWidth and width
+  const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
 
-    const { width: titleWidth, ref } = useResizeDetector({
-      handleHeight: false,
-      refreshMode: 'debounce',
-      refreshRate: 300,
-      refreshOptions: { leading: false, trailing: true },
-    })
-    useEffect(() => {
-      setTitleWidth(
-        (titleWidth ?? 40) +
-          (isUuidList ?
-            isAps ? 40 + 58
-            : 40
-          : 0) +
-          32 +
-          8,
-      )
-    }, [titleWidth, setTitleWidth, isUuidList])
-
-    // minWidth is the larger of parentWidth and width
-    const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
-
-    return (
-      <Container minwidth={minWidth}>
-        <ContentWrapper minwidth={minWidth}>
-          <MenuTitle>
-            <TitleDiv ref={ref}>{navData.label}</TitleDiv>
-            {!!parentWidth && (
-              <Filters>
-                <StyledTooltip
-                  title="Filtern"
-                  show={isUuidList.toString()}
+  return (
+    <Container minwidth={minWidth}>
+      <ContentWrapper minwidth={minWidth}>
+        <MenuTitle>
+          <TitleDiv ref={ref}>{navData.label}</TitleDiv>
+          {!!parentWidth && (
+            <Filters>
+              <StyledTooltip
+                title="Filtern"
+                show={isUuidList.toString()}
+              >
+                <IconButton
+                  aria-label="Filtern"
+                  onClick={toggleFilterInput}
                 >
-                  <IconButton
-                    aria-label="Filtern"
-                    onClick={toggleFilterInput}
-                  >
-                    <MdFilterAlt />
-                  </IconButton>
-                </StyledTooltip>
-                {isAps && (
-                  <ApFilterFitter>
-                    <ApFilter />
-                  </ApFilterFitter>
-                )}
-              </Filters>
-            )}
-          </MenuTitle>
-          <Collapse in={filterInputIsVisible}>
-            <FilterInput
-              width={parentWidth}
-              filterInputIsVisible={filterInputIsVisible}
-              toggleFilterInput={toggleFilterInput}
-              ref={filterInputRef}
-            />
-          </Collapse>
-        </ContentWrapper>
-      </Container>
-    )
-  },
-)
+                  <MdFilterAlt />
+                </IconButton>
+              </StyledTooltip>
+              {isAps && (
+                <ApFilterFitter>
+                  <ApFilter />
+                </ApFilterFitter>
+              )}
+            </Filters>
+          )}
+        </MenuTitle>
+        <Collapse in={filterInputIsVisible}>
+          <FilterInput
+            width={parentWidth}
+            filterInputIsVisible={filterInputIsVisible}
+            toggleFilterInput={toggleFilterInput}
+            ref={filterInputRef}
+          />
+        </Collapse>
+      </ContentWrapper>
+    </Container>
+  )
+}

@@ -1,4 +1,4 @@
-import { memo, useMemo, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMatches } from 'react-router'
 import styled from '@emotion/styled'
 import { TransitionGroup } from 'react-transition-group'
@@ -27,10 +27,10 @@ const matchesFromAllMatches = (allMatches) =>
     .reverse()
 
 // this component extracts matches
-export const Bookmarks = memo(() => {
+export const Bookmarks = () => {
   const allMatches = useMatches()
 
-  const matches = useMemo(() => matchesFromAllMatches(allMatches), [allMatches])
+  const matches = matchesFromAllMatches(allMatches)
 
   // flex-direction row-reverse combined with reverse order of matches
   // to align bookmarks to the right, but still have them in order
@@ -46,4 +46,4 @@ export const Bookmarks = memo(() => {
       </TransitionGroup>
     </Container>
   )
-})
+}
