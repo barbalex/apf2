@@ -1,4 +1,4 @@
-import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -27,7 +27,7 @@ export const useBeobZugeordnetsNavData = (props) => {
   const showBeobzugeordnetIcon =
     store.activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -81,16 +81,35 @@ export const useBeobZugeordnetsNavData = (props) => {
   const count = data?.data?.beobsZugeordnet?.totalCount ?? 0
   const filteredCount = data?.data?.filteredBeobsZugeordnet?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Beobachtungen',
-      listFilter: 'beobZugeordnet',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen`,
-      label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      labelShort: `Beob. zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'beobZugeordnetFolder',
-      treeId: `${tpopId}BeobZugeordnetFolder`,
+  const navData = {
+    id: 'Beobachtungen',
+    listFilter: 'beobZugeordnet',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen`,
+    label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    labelShort: `Beob. zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'beobZugeordnetFolder',
+    treeId: `${tpopId}BeobZugeordnetFolder`,
+    treeParentTableId: tpopId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Teil-Populationen',
+      tpopId,
+      'Beobachtungen',
+    ],
+    hasChildren: !!filteredCount,
+    component: NodeWithList,
+    menus: (data?.data?.filteredBeobsZugeordnet?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'beobZugeordnet',
+      treeId: p.id,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -102,48 +121,15 @@ export const useBeobZugeordnetsNavData = (props) => {
         'Teil-Populationen',
         tpopId,
         'Beobachtungen',
+        p.id,
       ],
-      hasChildren: !!filteredCount,
-      component: NodeWithList,
-      menus: (data?.data?.filteredBeobsZugeordnet?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'beobZugeordnet',
-        treeId: p.id,
-        treeParentTableId: tpopId,
-        treeUrl: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
-          popId,
-          'Teil-Populationen',
-          tpopId,
-          'Beobachtungen',
-          p.id,
-        ],
-        hasChildren: false,
-        labelLeftElements:
-          showBeobzugeordnetIcon && beobId === p.id ?
-            [BeobzugeordnetFilteredMapIcon]
-          : undefined,
-      })),
-    }),
-    [
-      apId,
-      beobId,
-      count,
-      data?.data?.filteredBeobsZugeordnet?.nodes,
-      filteredCount,
-      isLoading,
-      popId,
-      projId,
-      showBeobzugeordnetIcon,
-      tpopId,
-    ],
-  )
+      hasChildren: false,
+      labelLeftElements:
+        showBeobzugeordnetIcon && beobId === p.id ?
+          [BeobzugeordnetFilteredMapIcon]
+        : undefined,
+    })),
+  }
 
   return { isLoading, error, navData }
 }

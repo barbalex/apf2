@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -51,38 +51,35 @@ export const useApsNavData = (props) => {
   const count = data?.data?.allAps?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Arten',
-      listFilter: 'ap',
-      url: `/Daten/Projekte/${projId}/Arten`,
-      label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'apFolder',
-      treeId: `${projId}ApFolder`,
+  const navData = {
+    id: 'Arten',
+    listFilter: 'ap',
+    url: `/Daten/Projekte/${projId}/Arten`,
+    label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'apFolder',
+    treeId: `${projId}ApFolder`,
+    treeParentTableId: projId,
+    treeUrl: [`Daten`, `Projekte`, projId, `Arten`],
+    hasChildren: !!count,
+    fetcherName: 'useApsNavData',
+    fetcherParams: { projId },
+    component: NodeWithList,
+    menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'ap',
+      singleElementName: 'Art',
+      treeId: p.id,
       treeParentTableId: projId,
-      treeUrl: [`Daten`, `Projekte`, projId, `Arten`],
-      hasChildren: !!count,
-      fetcherName: 'useApsNavData',
-      fetcherParams: { projId },
+      treeUrl: ['Projekte', projId, 'Arten', p.id],
+      hasChildren: true,
+      fetcherName: 'useApNavData',
+      fetcherParams: { projId, apId: p.id },
       component: NodeWithList,
-      menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'ap',
-        singleElementName: 'Art',
-        treeId: p.id,
-        treeParentTableId: projId,
-        treeUrl: ['Projekte', projId, 'Arten', p.id],
-        hasChildren: true,
-        fetcherName: 'useApNavData',
-        fetcherParams: { projId, apId: p.id },
-        component: NodeWithList,
-      })),
-    }),
-    [count, data?.data?.allAps?.nodes, isLoading, projId, totalCount],
-  )
+    })),
+  }
 
   return { isLoading, error, navData }
 }
