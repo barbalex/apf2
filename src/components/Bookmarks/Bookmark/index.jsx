@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react'
+import { useRef } from 'react'
 import { Menu } from './Menu/index.jsx'
 import styled from '@emotion/styled'
 import { Transition } from 'react-transition-group'
@@ -67,7 +67,7 @@ const transitionStyles = {
   exited: { opacity: 0 },
 }
 
-export const Bookmark = memo(({ navData, in: inProp }) => {
+export const Bookmark = ({ navData, in: inProp }) => {
   const [showBookmarksMenu] = useAtom(showBookmarksMenuAtom)
 
   const outerContainerRef = useRef(null)
@@ -97,4 +97,4 @@ export const Bookmark = memo(({ navData, in: inProp }) => {
       )}
     </Transition>
   )
-})
+}
