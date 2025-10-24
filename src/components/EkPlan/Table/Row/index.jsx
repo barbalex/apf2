@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react'
+import { useRef } from 'react'
 import styled from '@emotion/styled'
 
 import { useOnScreen } from '../../../../modules/useOnScreen.js'
@@ -12,7 +12,7 @@ const RowContainer = styled.div`
   contain-intrinsic-size: auto 60px;
 `
 
-export const TpopRow = memo(({ tpopId, index, setProcessing, years }) => {
+export const TpopRow = ({ tpopId, index, setProcessing, years }) => {
   const ref = useRef(null)
   const isVisible = useOnScreen(ref)
 
@@ -28,4 +28,4 @@ export const TpopRow = memo(({ tpopId, index, setProcessing, years }) => {
       )}
     </RowContainer>
   )
-})
+}

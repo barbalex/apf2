@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
@@ -33,72 +33,72 @@ const AllOkButton = styled(Button)`
   right: 25px;
 `
 
-export const Messages = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const { user } = store
-    const userName = user.name
+const getAYearAgo = () => {
+  const now = new Date()
+  now.setDate(now.getDate() - 365)
+  return now.toISOString()
+}
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+export const Messages = observer(() => {
+  const store = useContext(MobxContext)
+  const { user } = store
+  const userName = user.name
 
-    const aYearAgo = useMemo(() => {
-      const now = new Date()
-      now.setDate(now.getDate() - 365)
-      return now.toISOString()
-    }, [])
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const { data, error, isLoading, refetch } = useQuery({
-      queryKey: ['UsermessagesQuery', userName, aYearAgo],
-      queryFn: async () =>
-        apolloClient.query({
-          query,
-          variables: { name: userName, aYearAgo },
-          fetchPolicy: 'network-only',
-        }),
-    })
-    // ensure username exists
-    const userNames = (data?.data?.allUsers?.nodes ?? []).map((u) => u.name)
-    const userNameExists = userNames.includes(userName)
-    // DANGER: if no userName or non-existing, results are returned!
-    const allMessages =
-      userName && userNameExists ? (data?.data?.allMessages?.nodes ?? []) : []
-    const unreadMessages = allMessages.filter(
-      (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
+  const aYearAgo = getAYearAgo()
+
+  const { data, error, isLoading, refetch } = useQuery({
+    queryKey: ['UsermessagesQuery', userName, aYearAgo],
+    queryFn: async () =>
+      apolloClient.query({
+        query,
+        variables: { name: userName, aYearAgo },
+        fetchPolicy: 'network-only',
+      }),
+  })
+  // ensure username exists
+  const userNames = (data?.data?.allUsers?.nodes ?? []).map((u) => u.name)
+  const userNameExists = userNames.includes(userName)
+  // DANGER: if no userName or non-existing, results are returned!
+  const allMessages =
+    userName && userNameExists ? (data?.data?.allMessages?.nodes ?? []) : []
+  const unreadMessages = allMessages.filter(
+    (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
+  )
+
+  const onClickReadAll = async () => {
+    await Promise.all(
+      unreadMessages.map(async (message) => {
+        await apolloClient.mutate({
+          mutation: createUsermessage,
+          variables: { userName, id: message.id },
+        })
+      }),
     )
+    return refetch()
+  }
 
-    const onClickReadAll = useCallback(async () => {
-      await Promise.all(
-        unreadMessages.map(async (message) => {
-          await apolloClient.mutate({
-            mutation: createUsermessage,
-            variables: { userName, id: message.id },
-          })
-        }),
-      )
-      return refetch()
-    }, [apolloClient, refetch, unreadMessages, userName])
+  if (error) return <Error error={error} />
 
-    if (error) return <Error error={error} />
-
-    return (
-      <ErrorBoundary>
-        <StyledDialog
-          open={unreadMessages.length > 0 && !!userName && !isLoading}
-          aria-labelledby="dialog-title"
-        >
-          <TitleRow>
-            <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-            <AllOkButton
-              onClick={onClickReadAll}
-              color="inherit"
-            >
-              alle o.k.
-            </AllOkButton>
-          </TitleRow>
-          <MessagesList unreadMessages={unreadMessages} />
-        </StyledDialog>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <StyledDialog
+        open={unreadMessages.length > 0 && !!userName && !isLoading}
+        aria-labelledby="dialog-title"
+      >
+        <TitleRow>
+          <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
+          <AllOkButton
+            onClick={onClickReadAll}
+            color="inherit"
+          >
+            alle o.k.
+          </AllOkButton>
+        </TitleRow>
+        <MessagesList unreadMessages={unreadMessages} />
+      </StyledDialog>
+    </ErrorBoundary>
+  )
+})
