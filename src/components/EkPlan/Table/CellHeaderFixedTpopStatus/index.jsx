@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, memo } from 'react'
+import { useState, useContext } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
@@ -57,49 +57,52 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedTpopStatus = memo(
-  ({ column, refetch, type = 'tpop' }) => {
-    const store = useContext(MobxContext)
-    const filterStatus =
-      type === 'tpop' ? store.ekPlan.filterStatus : store.ekPlan.filterPopStatus
+export const CellHeaderFixedTpopStatus = ({
+  column,
+  refetch,
+  type = 'tpop',
+}) => {
+  const store = useContext(MobxContext)
+  const filterStatus =
+    type === 'tpop' ? store.ekPlan.filterStatus : store.ekPlan.filterPopStatus
 
-    const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState(null)
 
-    const closeMenu = useCallback(() => {
-      setAnchorEl(null)
-      // needed to update after changing tpop status
-      refetch()
-    }, [])
-    const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
+  const closeMenu = () => {
+    setAnchorEl(null)
+    // needed to update after changing tpop status
+    refetch()
+  }
 
-    const { label } = column
+  const onClickCell = (e) => setAnchorEl(e.currentTarget)
 
-    return (
-      <>
-        <StyledCell
-          aria-controls={`${type}StatusHeaderMenu`}
-          aria-haspopup="true"
-          onClick={onClickCell}
-          width={column.width}
-        >
-          <Title>{label}</Title>
-          <Dropdown>
-            {filterStatus?.length ?
-              <StyledFaFilter />
-            : <Caret />}
-          </Dropdown>
-        </StyledCell>
-        <StyledMenu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={closeMenu}
-          anchorOrigin={anchorOrigin}
-        >
-          <TextFilterContainer>
-            <Options type={type} />
-          </TextFilterContainer>
-        </StyledMenu>
-      </>
-    )
-  },
-)
+  const { label } = column
+
+  return (
+    <>
+      <StyledCell
+        aria-controls={`${type}StatusHeaderMenu`}
+        aria-haspopup="true"
+        onClick={onClickCell}
+        width={column.width}
+      >
+        <Title>{label}</Title>
+        <Dropdown>
+          {filterStatus?.length ?
+            <StyledFaFilter />
+          : <Caret />}
+        </Dropdown>
+      </StyledCell>
+      <StyledMenu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={closeMenu}
+        anchorOrigin={anchorOrigin}
+      >
+        <TextFilterContainer>
+          <Options type={type} />
+        </TextFilterContainer>
+      </StyledMenu>
+    </>
+  )
+}

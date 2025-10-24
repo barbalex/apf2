@@ -1,7 +1,6 @@
-import { memo } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import styled from '@emotion/styled'
 
 import { Option } from './Option.jsx'
@@ -11,7 +10,7 @@ const StyledFormGroup = styled(FormGroup)`
   padding-top: 8px;
 `
 
-export const Options = memo(({ type }) => {
+export const Options = ({ type }) => {
   const { data } = useQuery(query)
   const options = data?.allPopStatusWertes?.nodes ?? []
 
@@ -27,4 +26,4 @@ export const Options = memo(({ type }) => {
       ))}
     </StyledFormGroup>
   )
-})
+}
