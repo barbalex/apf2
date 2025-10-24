@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import { DokuDate, Code } from '../../DesktopDocs.jsx'
 import image001 from './image001.png'
 import image002 from './image002.png'
@@ -8,7 +6,7 @@ import image004 from './image004.png'
 import image005 from './image005.png'
 import image006 from './image006.png'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Navigation 📱💻</h1>
     <DokuDate>20.12.2024</DokuDate>
@@ -45,12 +43,18 @@ export const Component = memo(() => (
       besteht, sie ungewollt zu aktivieren, v.a. bei Nässe. Neu gibt es Menüs in
       den Formularköpfen, die sich dynamisch an die verfügbare Breite anpassen.
     </p>
-    <img src={image001} alt="UI-Elemente" />
+    <img
+      src={image001}
+      alt="UI-Elemente"
+    />
     <p>
       In der Mobil-Ansicht wird einem angezeigt, was die verschiedenen Menüs
       auslösen, wenn man lange darauf drückt:
     </p>
-    <img src={image002} alt="Tooltip" />
+    <img
+      src={image002}
+      alt="Tooltip"
+    />
     <h2>Wechsel zwischen Mobile und Desktop-Version</h2>
     <p>
       Mobile und Desktop sind nicht immer klar abzugrenzen. Es gibt sehr grosse
@@ -76,7 +80,10 @@ export const Component = memo(() => (
         werden.
       </li>
     </ul>
-    <img src={image003} alt="Menüs" />
+    <img
+      src={image003}
+      alt="Menüs"
+    />
     <p>
       Die bisherigen Tabs (z.B. Auswertung, Dateien, Biotop, Historien) wurden
       bei der Implementation der Mobil-Navigation in die normale Navigation
@@ -102,7 +109,14 @@ export const Component = memo(() => (
       2/4). Dies ist vor allem nützlich um zu sehen, ob noch ein Filter aktiv
       ist.
     </p>
-    <img src={image004} alt="Ehemalige Tabs" width={558} />
-    <img src={image005} alt="Ehemalige Tabs" />
+    <img
+      src={image004}
+      alt="Ehemalige Tabs"
+      width={558}
+    />
+    <img
+      src={image005}
+      alt="Ehemalige Tabs"
+    />
   </>
-))
+)
