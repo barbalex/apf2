@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { memo, useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
@@ -54,60 +54,55 @@ const StyledFaFilter = styled(FaFilter)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixed = memo(
-  observer(({ column }) => {
-    const { name, label, nofilter } = column
-    const store = useContext(MobxContext)
+export const CellHeaderFixed = observer(({ column }) => {
+  const { name, label, nofilter } = column
+  const store = useContext(MobxContext)
 
-    const filterValue = store.ekPlan?.[`filter${upperFirst(name)}`]
+  const filterValue = store.ekPlan?.[`filter${upperFirst(name)}`]
 
-    const [anchorEl, setAnchorEl] = useState(null)
-    const closeMenu = useCallback(() => setAnchorEl(null), [])
-    const onClickCell = useCallback(
-      (e) => !anchorEl && setAnchorEl(e.currentTarget),
-      [],
-    )
+  const [anchorEl, setAnchorEl] = useState(null)
+  const closeMenu = () => setAnchorEl(null)
+  const onClickCell = (e) => !anchorEl && setAnchorEl(e.currentTarget)
 
-    const typeIsBoolean = ['ekfrequenzAbweichend'].includes(name)
+  const typeIsBoolean = ['ekfrequenzAbweichend'].includes(name)
 
-    return (
-      <>
-        <StyledCell
-          aria-controls={`${name}ColumnHeaderMenu`}
-          aria-haspopup="true"
-          onClick={onClickCell}
-          width={column.width}
-        >
-          <Title data-label={label}>{label}</Title>
-          {!nofilter && (
-            <Dropdown>
-              {filterValue ?
-                <StyledFaFilter />
-              : <Caret />}
-            </Dropdown>
-          )}
-        </StyledCell>
-        <Menu
-          id={`${name}ColumnHeaderMenu`}
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={closeMenu}
-          anchorOrigin={anchorOrigin}
-        >
-          {typeIsBoolean ?
-            <BooleanFilter
+  return (
+    <>
+      <StyledCell
+        aria-controls={`${name}ColumnHeaderMenu`}
+        aria-haspopup="true"
+        onClick={onClickCell}
+        width={column.width}
+      >
+        <Title data-label={label}>{label}</Title>
+        {!nofilter && (
+          <Dropdown>
+            {filterValue ?
+              <StyledFaFilter />
+            : <Caret />}
+          </Dropdown>
+        )}
+      </StyledCell>
+      <Menu
+        id={`${name}ColumnHeaderMenu`}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={closeMenu}
+        anchorOrigin={anchorOrigin}
+      >
+        {typeIsBoolean ?
+          <BooleanFilter
+            column={column}
+            closeMenu={closeMenu}
+          />
+        : <MenuItem dense>
+            <TextFilter
               column={column}
               closeMenu={closeMenu}
             />
-          : <MenuItem dense>
-              <TextFilter
-                column={column}
-                closeMenu={closeMenu}
-              />
-            </MenuItem>
-          }
-        </Menu>
-      </>
-    )
-  }),
-)
+          </MenuItem>
+        }
+      </Menu>
+    </>
+  )
+})

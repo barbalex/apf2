@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import { upperFirst } from 'es-toolkit'
 
@@ -8,7 +7,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450
 // and: https://reactjs.org/docs/forwarding-refs.html
-export const BooleanFilter = memo(({ column, closeMenu, ref }) => {
+export const BooleanFilter = ({ column, closeMenu, ref }) => {
   const store = useContext(MobxContext)
   const { name } = column
 
@@ -20,10 +19,10 @@ export const BooleanFilter = memo(({ column, closeMenu, ref }) => {
     valueText = 'abweichende'
   }
 
-  const onClick = useCallback(() => {
+  const onClick = () => {
     storeSetFunction(!storeValue)
     closeMenu()
-  }, [])
+  }
 
   return (
     <MenuItem
@@ -34,4 +33,4 @@ export const BooleanFilter = memo(({ column, closeMenu, ref }) => {
       {!storeValue ? `${valueText} filtern` : `${valueText} nicht filtern`}
     </MenuItem>
   )
-})
+}
