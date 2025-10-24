@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
@@ -38,7 +37,7 @@ const FormContainer = styled.div`
   padding-top: 0;
 `
 
-export const Component = memo(() => {
+export const Component = () => {
   const { apId } = useParams()
   const { data } = useQuery(apAuswertungQuery, {
     variables: { apId },
@@ -59,4 +58,4 @@ export const Component = memo(() => {
       </ScrollContainer>
     </>
   )
-})
+}

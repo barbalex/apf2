@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { range } from 'es-toolkit'
 import {
@@ -57,7 +56,7 @@ const addMissingErfolgData = (erfolgRawData) => {
   return allYears.map((jahr) => getErfolg({ jahr, erfolgRawData }))
 }
 
-export const ApErfolg = memo(() => {
+export const ApErfolg = () => {
   const { apId: id } = useParams()
 
   const {
@@ -137,4 +136,4 @@ export const ApErfolg = memo(() => {
       }
     </>
   )
-})
+}
