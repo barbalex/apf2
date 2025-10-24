@@ -1,8 +1,6 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Historisierung</h1>
     <DokuDate>10.12.2020</DokuDate>
@@ -233,4 +231,4 @@ export const Component = memo(() => (
       </tbody>
     </table>
   </>
-))
+)
