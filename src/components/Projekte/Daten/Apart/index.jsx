@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -42,61 +42,56 @@ const fieldTypes = {
   artId: 'UUID',
 }
 
-export const Component = memo(
-  observer(() => {
-    const { taxonId: id } = useParams()
+export const Component = observer(() => {
+  const { taxonId: id } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const { data, loading, error, refetch } = useQuery(query, {
-      variables: { id },
-    })
+  const { data, loading, error, refetch } = useQuery(query, {
+    variables: { id },
+  })
 
-    const row = useMemo(() => data?.apartById ?? {}, [data?.apartById])
+  const row = data?.apartById ?? {}
 
-    // do not include already choosen assozarten
-    const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes ?? [])
-      .map((o) => o.artId)
-      // but do include the art included in the row
-      .filter((o) => o !== row.artId)
-      // no null values
-      .filter((o) => !!o)
-    const aeTaxonomiesfilter = useCallback(
-      (inputValue) =>
-        inputValue ?
-          apartenOfAp.length ?
-            {
-              taxArtName: { includesInsensitive: inputValue },
-              id: { notIn: apartenOfAp },
-            }
-          : { taxArtName: { includesInsensitive: inputValue } }
-        : { taxArtName: { isNull: false } },
-      [apartenOfAp],
-    )
-
-    // do not show any artId's that have been used?
-    // Nope: because some species have already been worked as separate ap
-    // because apart did not exist...
-    // maybe do later
-
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
-
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
+  // do not include already chosen assozarten
+  const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes ?? [])
+    .map((o) => o.artId)
+    // but do include the art included in the row
+    .filter((o) => o !== row.artId)
+    // no null values
+    .filter((o) => !!o)
+  const aeTaxonomiesfilter = (inputValue) =>
+    inputValue ?
+      apartenOfAp.length ?
+        {
+          taxArtName: { includesInsensitive: inputValue },
+          id: { notIn: apartenOfAp },
         }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+      : { taxArtName: { includesInsensitive: inputValue } }
+    : { taxArtName: { isNull: false } }
+
+  // do not show any artId's that have been used?
+  // Nope: because some species have already been worked as separate ap
+  // because apart did not exist...
+  // maybe do later
+
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
+
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateApart(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -118,78 +113,75 @@ export const Component = memo(
             }
             ${apart}
           `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        // without refetch artname is not renewed
-        refetch()
-        setFieldErrors({})
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeApart`],
-        })
-      },
-      [apolloClient, tsQueryClient, refetch, row.id, store.user.name],
-    )
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    // without refetch artname is not renewed
+    refetch()
+    setFieldErrors({})
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApart`],
+    })
+  }
 
-    if (loading) return <Spinner />
+  if (loading) return <Spinner />
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title="Taxon"
-            MenuBarComponent={Menu}
-          />
-          <FieldsContainer>
-            <div>
-              In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
-              Gründe um mehrere zu erfassen:
-              <ul>
-                <li>Die Art hat Synonyme</li>
-                <li>
-                  Die Art umfasst eng verwandte Arten, die nicht synonym sind
-                  (z.B. Unterarten)
-                </li>
-                <li>
-                  Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
-                  SISF (2005) und DB-TAXREF (2017)
-                </li>
-              </ul>
-            </div>
-            <div>
-              {
-                'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
-              }
-              <br />
-              <br />
-            </div>
-            <div>
-              Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
-              werden auch die Kontrollen an InfoFlora geliefert.
-              <br />
-              <br />
-            </div>
-            <FormContainer>
-              <SelectLoadingOptions
-                field="artId"
-                valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
-                label="Taxon"
-                row={row}
-                query={queryAeTaxonomies}
-                filter={aeTaxonomiesfilter}
-                queryNodesName="allAeTaxonomies"
-                saveToDb={saveToDb}
-                error={fieldErrors.artId}
-              />
-              <Spacer />
-            </FormContainer>
-          </FieldsContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="Taxon"
+          MenuBarComponent={Menu}
+        />
+        <FieldsContainer>
+          <div>
+            In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
+            Gründe um mehrere zu erfassen:
+            <ul>
+              <li>Die Art hat Synonyme</li>
+              <li>
+                Die Art umfasst eng verwandte Arten, die nicht synonym sind
+                (z.B. Unterarten)
+              </li>
+              <li>
+                Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
+                SISF (2005) und DB-TAXREF (2017)
+              </li>
+            </ul>
+          </div>
+          <div>
+            {
+              'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
+            }
+            <br />
+            <br />
+          </div>
+          <div>
+            Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
+            werden auch die Kontrollen an InfoFlora geliefert.
+            <br />
+            <br />
+          </div>
+          <FormContainer>
+            <SelectLoadingOptions
+              field="artId"
+              valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
+              label="Taxon"
+              row={row}
+              query={queryAeTaxonomies}
+              filter={aeTaxonomiesfilter}
+              queryNodesName="allAeTaxonomies"
+              saveToDb={saveToDb}
+              error={fieldErrors.artId}
+            />
+            <Spacer />
+          </FormContainer>
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})

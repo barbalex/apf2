@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -19,140 +19,128 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(() => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
-    const { projId, apId, taxonId } = useParams()
+export const Menu = observer(() => {
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
+  const { projId, apId, taxonId } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createApartForApartForm($apId: UUID!) {
-              createApart(input: { apart: { apId: $apId } }) {
-                apart {
-                  id
-                  apId
-                }
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createApartForApartForm($apId: UUID!) {
+            createApart(input: { apart: { apId: $apId } }) {
+              apart {
+                id
+                apId
               }
             }
-          `,
-          variables: { apId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeApart`],
+          }
+        `,
+        variables: { apId },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeApFolders`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeAp`],
-      })
-      const id = result?.data?.createApart?.apart?.id
-      navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Taxa/${id}${search}`)
-    }, [apId, apolloClient, store, tsQueryClient, navigate, search, projId])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApart`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApFolders`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeAp`],
+    })
+    const id = result?.data?.createApart?.apart?.id
+    navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Taxa/${id}${search}`)
+  }
 
-    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
-    const delMenuOpen = Boolean(delMenuAnchorEl)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const delMenuOpen = Boolean(delMenuAnchorEl)
 
-    const onClickDelete = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation deleteApart($id: UUID!) {
-              deleteApartById(input: { id: $id }) {
-                apart {
-                  id
-                }
+  const onClickDelete = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation deleteApart($id: UUID!) {
+            deleteApartById(input: { id: $id }) {
+              apart {
+                id
               }
             }
-          `,
-          variables: { id: taxonId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-
-      // remove active path from openNodes
-      const openNodesRaw = store?.tree?.openNodes
-      const openNodes = getSnapshot(openNodesRaw)
-      const activePath = pathname.split('/').filter((p) => !!p)
-      const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-      store.tree.setOpenNodes(newOpenNodes)
-
-      // update tree query
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeApart`],
+          }
+        `,
+        variables: { id: taxonId },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeApFolders`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeAp`],
-      })
-      // navigate to parent
-      navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Taxa${search}`)
-    }, [
-      apolloClient,
-      store,
-      tsQueryClient,
-      navigate,
-      search,
-      apId,
-      projId,
-      taxonId,
-      pathname,
-    ])
+    }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar>
-          <Tooltip title="Neuen AP-Bericht erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Löschen">
-            <IconButton
-              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              aria-owns={delMenuOpen ? 'apartDelMenu' : undefined}
-            >
-              <FaMinus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-        <MuiMenu
-          id="apartDelMenu"
-          anchorEl={delMenuAnchorEl}
-          open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
-        >
-          <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-        </MuiMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+    // remove active path from openNodes
+    const openNodesRaw = store?.tree?.openNodes
+    const openNodes = getSnapshot(openNodesRaw)
+    const activePath = pathname.split('/').filter((p) => !!p)
+    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
+    store.tree.setOpenNodes(newOpenNodes)
+
+    // update tree query
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApart`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApFolders`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeAp`],
+    })
+    // navigate to parent
+    navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Taxa${search}`)
+  }
+
+  return (
+    <ErrorBoundary>
+      <MenuBar>
+        <Tooltip title="Neuen AP-Bericht erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Löschen">
+          <IconButton
+            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            aria-owns={delMenuOpen ? 'apartDelMenu' : undefined}
+          >
+            <FaMinus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+      <MuiMenu
+        id="apartDelMenu"
+        anchorEl={delMenuAnchorEl}
+        open={delMenuOpen}
+        onClose={() => setDelMenuAnchorEl(null)}
+      >
+        <MenuTitle>löschen?</MenuTitle>
+        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+      </MuiMenu>
+    </ErrorBoundary>
+  )
+})
