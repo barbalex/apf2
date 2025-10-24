@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react'
+import { useRef } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
@@ -48,7 +48,7 @@ export const MenuDiv = styled.div`
   overflow: hidden;
 `
 
-export const Bar = memo(() => {
+export const Bar = () => {
   const { search, pathname } = useLocation()
   const showHome = pathname === '/' || pathname.startsWith('/Dokumentation')
   const showEkPlan = pathname.includes('/EK-Planung')
@@ -88,4 +88,4 @@ export const Bar = memo(() => {
       </MenuDiv>
     </Container>
   )
-})
+}

@@ -1,4 +1,4 @@
-import { memo, Suspense, useEffect, useContext } from 'react'
+import { Suspense, useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
@@ -46,46 +46,44 @@ const Appbar = styled.div`
   }
 `
 
-export const Component = memo(
-  observer(() => {
-    const navigate = useNavigate()
-    const { userId } = useParams()
-    const { pathname, search } = useLocation()
+export const Component = observer(() => {
+  const navigate = useNavigate()
+  const { userId } = useParams()
+  const { pathname, search } = useLocation()
 
-    const store = useContext(MobxContext)
-    const activeNodeArray = store.tree.activeNodeArray
+  const store = useContext(MobxContext)
+  const activeNodeArray = store.tree.activeNodeArray
 
-    const [isMobileView] = useAtom(isMobileViewAtom)
+  const [isMobileView] = useAtom(isMobileViewAtom)
 
-    useEffect(() => {
-      if (isInIframe) return
+  useEffect(() => {
+    if (isInIframe) return
 
-      // if app was opened on top level, navigate to last active node
-      // but only if activeNodeArray is not empty
-      // otherwise first time users are navigated to the login
-      if (pathname === '/' && activeNodeArray.length > 0) {
-        navigate('/Daten/' + activeNodeArray.join('/') + search)
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    // if app was opened on top level, navigate to last active node
+    // but only if activeNodeArray is not empty
+    // otherwise first time users are navigated to the login
+    if (pathname === '/' && activeNodeArray.length > 0) {
+      navigate('/Daten/' + activeNodeArray.join('/') + search)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-    if (isInIframe) return <Outlet />
+  if (isInIframe) return <Outlet />
 
-    const showEkf =
-      !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
+  const showEkf =
+    !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
 
-    return (
-      <Container>
-        <IsDesktopViewSetter />
-        <Appbar mobile={isMobileView.toString()}>
-          {showEkf ?
-            <EkfBar />
-          : <Bar />}
-        </Appbar>
-        <Suspense fallback={<Spinner />}>
-          <Outlet />
-        </Suspense>
-      </Container>
-    )
-  }),
-)
+  return (
+    <Container>
+      <IsDesktopViewSetter />
+      <Appbar mobile={isMobileView.toString()}>
+        {showEkf ?
+          <EkfBar />
+        : <Bar />}
+      </Appbar>
+      <Suspense fallback={<Spinner />}>
+        <Outlet />
+      </Suspense>
+    </Container>
+  )
+})
