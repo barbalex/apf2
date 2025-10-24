@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -80,134 +80,128 @@ const StatusLabel = styled(Label)`
   grid-area: statusVal;
 `
 
-export const Headdata = memo(
-  observer(({ pop, tpop, row }) => {
-    const store = useContext(MobxContext)
-    const { user, isPrint } = store
+export const Headdata = observer(({ pop, tpop, row }) => {
+  const store = useContext(MobxContext)
+  const { user, isPrint } = store
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [errors, setErrors] = useState(null)
+  const [errors, setErrors] = useState(null)
 
-    const { data, loading, error } = useQuery(query)
+  const { data, loading, error } = useQuery(query)
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const { value } = event.target
-        const variables = {
-          id: row.id,
-          bearbeiter: value,
-          changedBy: user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
-              mutation updateTpopkontrForEkfHeaddata(
-                $id: UUID!
-                $bearbeiter: UUID
-                $changedBy: String
-              ) {
-                updateTpopkontrById(
-                  input: {
-                    id: $id
-                    tpopkontrPatch: {
-                      bearbeiter: $bearbeiter
-                      changedBy: $changedBy
-                    }
+  const saveToDb = async (event) => {
+    const { value } = event.target
+    const variables = {
+      id: row.id,
+      bearbeiter: value,
+      changedBy: user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
+          mutation updateTpopkontrForEkfHeaddata(
+            $id: UUID!
+            $bearbeiter: UUID
+            $changedBy: String
+          ) {
+            updateTpopkontrById(
+              input: {
+                id: $id
+                tpopkontrPatch: {
+                  bearbeiter: $bearbeiter
+                  changedBy: $changedBy
+                }
+              }
+            ) {
+              tpopkontr {
+                ...TpopfreiwkontrFields
+                adresseByBearbeiter {
+                  ...AdresseFields
+                  usersByAdresseId {
+                    totalCount
                   }
-                ) {
-                  tpopkontr {
-                    ...TpopfreiwkontrFields
-                    adresseByBearbeiter {
-                      ...AdresseFields
-                      usersByAdresseId {
-                        totalCount
-                      }
-                    }
-                    tpopByTpopId {
-                      ...TpopFields
-                      popByPopId {
-                        ...PopFields
-                        apByApId {
+                }
+                tpopByTpopId {
+                  ...TpopFields
+                  popByPopId {
+                    ...PopFields
+                    apByApId {
+                      id
+                      ekzaehleinheitsByApId {
+                        nodes {
                           id
-                          ekzaehleinheitsByApId {
-                            nodes {
-                              id
-                              tpopkontrzaehlEinheitWerteByZaehleinheitId {
-                                ...TpopkontrzaehlEinheitWerteFields
-                              }
-                            }
+                          tpopkontrzaehlEinheitWerteByZaehleinheitId {
+                            ...TpopkontrzaehlEinheitWerteFields
                           }
                         }
                       }
                     }
-                    tpopkontrzaehlsByTpopkontrId {
-                      nodes {
-                        id
-                        anzahl
-                        einheit
-                      }
-                    }
+                  }
+                }
+                tpopkontrzaehlsByTpopkontrId {
+                  nodes {
+                    id
+                    anzahl
+                    einheit
                   }
                 }
               }
-              ${adresseFragment}
-              ${popFragment}
-              ${tpopFragment}
-              ${tpopfreiwkontrFragment}
-              ${tpopkontrzaehlEinheitWerteFragment}
-            `,
-            variables,
-          })
-        } catch (error) {
-          return setErrors(error.message)
-        }
-        tsQueryClient.invalidateQueries({
-          queryKey: ['tpopkontrByIdQueryForEkf'],
-        })
-        setErrors(null)
-      },
-      [row.id, user.name, apolloClient],
-    )
-
-    const userCount =
-      row?.adresseByBearbeiter?.usersByAdresseId?.totalCount ?? 0
-
-    const statusValue = tpop?.status ?? ''
-    const status =
-      [200, 201, 202].includes(statusValue) ? 'angesiedelt' : 'natürlich'
-
-    if (error) return <Error error={error} />
-    return (
-      <Container>
-        <PopLabel>Population</PopLabel>
-        <PopVal>{pop?.name ?? ''}</PopVal>
-        <TpopLabel>Teilpopulation</TpopLabel>
-        <TpopVal>{tpop?.flurname ?? ''}</TpopVal>
-        <KoordLabel>Koordinaten</KoordLabel>
-        <KoordVal>{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</KoordVal>
-        <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-        <TpopNrVal>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</TpopNrVal>
-        <BearbLabel>BeobachterIn</BearbLabel>
-        <BearbVal>
-          <Select
-            key={`${row.id}bearbeiter`}
-            name="bearbeiter"
-            value={row.bearbeiter}
-            field="bearbeiter"
-            options={data?.allAdresses?.nodes ?? []}
-            loading={loading}
-            saveToDb={saveToDb}
-            error={
-              row.bearbeiter && !userCount && !isPrint ?
-                'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
-              : errors
             }
-          />
-        </BearbVal>
-        <StatusLabel>{status}</StatusLabel>
-      </Container>
-    )
-  }),
-)
+          }
+          ${adresseFragment}
+          ${popFragment}
+          ${tpopFragment}
+          ${tpopfreiwkontrFragment}
+          ${tpopkontrzaehlEinheitWerteFragment}
+        `,
+        variables,
+      })
+    } catch (error) {
+      return setErrors(error.message)
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: ['tpopkontrByIdQueryForEkf'],
+    })
+    setErrors(null)
+  }
+
+  const userCount = row?.adresseByBearbeiter?.usersByAdresseId?.totalCount ?? 0
+
+  const statusValue = tpop?.status ?? ''
+  const status =
+    [200, 201, 202].includes(statusValue) ? 'angesiedelt' : 'natürlich'
+
+  if (error) return <Error error={error} />
+  return (
+    <Container>
+      <PopLabel>Population</PopLabel>
+      <PopVal>{pop?.name ?? ''}</PopVal>
+      <TpopLabel>Teilpopulation</TpopLabel>
+      <TpopVal>{tpop?.flurname ?? ''}</TpopVal>
+      <KoordLabel>Koordinaten</KoordLabel>
+      <KoordVal>{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</KoordVal>
+      <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
+      <TpopNrVal>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</TpopNrVal>
+      <BearbLabel>BeobachterIn</BearbLabel>
+      <BearbVal>
+        <Select
+          key={`${row.id}bearbeiter`}
+          name="bearbeiter"
+          value={row.bearbeiter}
+          field="bearbeiter"
+          options={data?.allAdresses?.nodes ?? []}
+          loading={loading}
+          saveToDb={saveToDb}
+          error={
+            row.bearbeiter && !userCount && !isPrint ?
+              'Es ist kein Benutzer mit dieser Adresse verbunden. Damit dieser Benutzer Kontrollen erfassen kann, muss er ein Benutzerkonto haben, dem diese Adresse zugeordnet wurde.'
+            : errors
+          }
+        />
+      </BearbVal>
+      <StatusLabel>{status}</StatusLabel>
+    </Container>
+  )
+})

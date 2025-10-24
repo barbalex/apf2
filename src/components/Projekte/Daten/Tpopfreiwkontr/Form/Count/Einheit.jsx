@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
@@ -33,64 +33,51 @@ const EinheitLabel = styled(Label)`
   margin-top: 5px;
 `
 
-export const Einheit = memo(
-  observer(({ nr, row, refetch, zaehleinheitWerte }) => {
-    const store = useContext(MobxContext)
+export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [error, setErrors] = useState(null)
+  const [error, setErrors] = useState(null)
 
-    const onChange = useCallback(
-      async (event) => {
-        const val = ifIsNumericAsNumber(event.target.value)
-        const variables = {
-          id: row.id,
-          anzahl: row.anzahl,
-          methode: row.methode,
-          einheit: val,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: updateTpopkontrzaehlById,
-            variables,
-          })
-        } catch (error) {
-          return setErrors(error.message)
-        }
-        refetch()
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeTpopfreiwkontrzaehl`],
-        })
-      },
-      [
-        apolloClient,
-        tsQueryClient,
-        refetch,
-        row.anzahl,
-        row.id,
-        row.methode,
-        store.user.name,
-      ],
-    )
+  const onChange = async (event) => {
+    const val = ifIsNumericAsNumber(event.target.value)
+    const variables = {
+      id: row.id,
+      anzahl: row.anzahl,
+      methode: row.methode,
+      einheit: val,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: updateTpopkontrzaehlById,
+        variables,
+      })
+    } catch (error) {
+      return setErrors(error.message)
+    }
+    refetch()
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfreiwkontrzaehl`],
+    })
+  }
 
-    return (
-      <>
-        <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-        <EinheitVal>
-          <Select
-            value={row.einheit}
-            label=""
-            name="einheit"
-            error={error}
-            options={zaehleinheitWerte}
-            saveToDb={onChange}
-            noCaret
-          />
-        </EinheitVal>
-      </>
-    )
-  }),
-)
+  return (
+    <>
+      <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
+      <EinheitVal>
+        <Select
+          value={row.einheit}
+          label=""
+          name="einheit"
+          error={error}
+          options={zaehleinheitWerte}
+          saveToDb={onChange}
+          noCaret
+        />
+      </EinheitVal>
+    </>
+  )
+})
