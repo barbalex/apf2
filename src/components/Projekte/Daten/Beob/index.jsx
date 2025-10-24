@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useEffect } from 'react'
+import { useCallback, useContext, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
@@ -36,132 +36,118 @@ const Explainer = styled.p`
   color: rgba(0, 0, 0, 0.54);
 `
 
-export const Beob = memo(
-  observer(() => {
-    const { beobId: id } = useParams()
+export const Beob = observer(() => {
+  const { beobId: id } = useParams()
 
-    const store = useContext(MobxContext)
-    const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
-      store
-    const sortedBeobFields = sortedBeobFieldsPassed.slice()
+  const store = useContext(MobxContext)
+  const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
+    store
+  const sortedBeobFields = sortedBeobFieldsPassed.slice()
 
-    const apolloClient = useApolloClient()
+  const apolloClient = useApolloClient()
 
-    const sortFn = useCallback(
-      (a, b) => {
-        const keyA = a[0]
-        const keyB = b[0]
-        const indexOfA = sortedBeobFields.indexOf(keyA)
-        const indexOfB = sortedBeobFields.indexOf(keyB)
-        const sortByA = indexOfA > -1
-        const sortByB = indexOfB > -1
+  const sortFn = (a, b) => {
+    const keyA = a[0]
+    const keyB = b[0]
+    const indexOfA = sortedBeobFields.indexOf(keyA)
+    const indexOfB = sortedBeobFields.indexOf(keyB)
+    const sortByA = indexOfA > -1
+    const sortByB = indexOfB > -1
 
-        if (sortByA && sortByB) {
-          return sortedBeobFields.indexOf(keyA) - sortedBeobFields.indexOf(keyB)
-        }
-        // if (sortByA || sortByB) {
-        //   return 1
-        // }
-        if (keyA?.toLowerCase?.() > keyB?.toLowerCase?.()) return 1
-        if (keyA?.toLowerCase?.() < keyB?.toLowerCase?.()) return -1
-        return 0
-      },
-      [sortedBeobFields],
-    )
+    if (sortByA && sortByB) {
+      return sortedBeobFields.indexOf(keyA) - sortedBeobFields.indexOf(keyB)
+    }
+    // if (sortByA || sortByB) {
+    //   return 1
+    // }
+    if (keyA?.toLowerCase?.() > keyB?.toLowerCase?.()) return 1
+    if (keyA?.toLowerCase?.() < keyB?.toLowerCase?.()) return -1
+    return 0
+  }
 
-    const { data, isLoading, error } = useQuery({
-      queryKey: ['beobByIdQueryForBeob', id],
-      queryFn: async () =>
-        apolloClient.query({
-          query,
-          variables: {
-            id,
-          },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['beobByIdQueryForBeob', id],
+    queryFn: async () =>
+      apolloClient.query({
+        query,
+        variables: {
+          id,
+        },
+        fetchPolicy: 'no-cache',
+      }),
+  })
 
-    const row = data?.data?.beobById ?? {}
-    const rowData = row.data ? JSON.parse(row.data) : {}
-    const fields = Object.entries(rowData)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-      .filter(([key, value]) => exists(value))
-      .sort(sortFn)
-    const keys = fields.map((f) => f[0])
+  const row = data?.data?.beobById ?? {}
+  const rowData = row.data ? JSON.parse(row.data) : {}
+  const fields = Object.entries(rowData)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+    .filter(([key, value]) => exists(value))
+    .sort(sortFn)
+  const keys = fields.map((f) => f[0])
 
-    useEffect(() => {
-      // add missing keys to sortedBeobFields
-      const additionalKeys = []
-      for (const key of keys) {
-        if (!sortedBeobFields.includes(key)) {
-          additionalKeys.push(key)
-        }
+  useEffect(() => {
+    // add missing keys to sortedBeobFields
+    const additionalKeys = []
+    for (const key of keys) {
+      if (!sortedBeobFields.includes(key)) {
+        additionalKeys.push(key)
       }
-      if (!additionalKeys.length) return
-      setSortedBeobFields([...sortedBeobFields, ...additionalKeys])
-    }, [keys, setSortedBeobFields, sortedBeobFields])
+    }
+    if (!additionalKeys.length) return
+    setSortedBeobFields([...sortedBeobFields, ...additionalKeys])
+  }, [keys, setSortedBeobFields, sortedBeobFields])
 
-    const moveField = useCallback(
-      (dragIndex, hoverIndex) => {
-        // get item from keys
-        const itemBeingDragged = keys[dragIndex]
-        const itemBeingHovered = keys[hoverIndex]
-        // move from dragIndex to hoverIndex
-        // in sortedBeobFields
-        const fromIndex = sortedBeobFields.indexOf(itemBeingDragged)
-        const toIndex = sortedBeobFields.indexOf(itemBeingHovered)
-        // catch some edge cases
-        if (fromIndex === toIndex) return
-        if (fromIndex === -1) return
-        if (toIndex === -1) return
-        // move
-        const newArray = arrayMoveImmutable(
-          sortedBeobFields,
-          fromIndex,
-          toIndex,
-        )
-        setSortedBeobFields(newArray)
-      },
-      [keys, setSortedBeobFields, sortedBeobFields],
-    )
-    const renderField = useCallback(
-      (field, index) => (
-        <BeobField
-          key={field[0]}
-          label={field[0]}
-          value={field[1]}
-          index={index}
-          moveField={moveField}
-        />
-      ),
-      [moveField],
-    )
+  const moveField = (dragIndex, hoverIndex) => {
+    // get item from keys
+    const itemBeingDragged = keys[dragIndex]
+    const itemBeingHovered = keys[hoverIndex]
+    // move from dragIndex to hoverIndex
+    // in sortedBeobFields
+    const fromIndex = sortedBeobFields.indexOf(itemBeingDragged)
+    const toIndex = sortedBeobFields.indexOf(itemBeingHovered)
+    // catch some edge cases
+    if (fromIndex === toIndex) return
+    if (fromIndex === -1) return
+    if (toIndex === -1) return
+    // move
+    const newArray = arrayMoveImmutable(sortedBeobFields, fromIndex, toIndex)
+    setSortedBeobFields(newArray)
+  }
 
-    if (!row) return null
-    if (!fields || fields.length === 0) return null
-    if (isLoading) return <Spinner />
-    if (error) return <Error error={error} />
+  const renderField = (field, index) => (
+    <BeobField
+      key={field[0]}
+      label={field[0]}
+      value={field[1]}
+      index={index}
+      moveField={moveField}
+    />
+  )
 
-    // Issue: only one instance of HTML5Backend can be used at a time
-    // https://github.com/react-dnd/react-dnd/issues/3178
-    // Solution: use the same instance for all components
-    // NEW: alternative solution: https://github.com/react-dnd/react-dnd/issues/3257#issuecomment-1239254032
-    return (
-      <ErrorBoundary>
-        <OuterContainer>
-          <Explainer>
-            Die Felder können beliebig sortiert werden (drag and drop).
-          </Explainer>
-          <Container>
-            <DndProvider
-              backend={HTML5Backend}
-              context={window}
-            >
-              {fields.map((field, i) => renderField(field, i))}
-            </DndProvider>
-          </Container>
-        </OuterContainer>
-      </ErrorBoundary>
-    )
-  }),
-)
+  if (!row) return null
+  if (!fields || fields.length === 0) return null
+  if (isLoading) return <Spinner />
+  if (error) return <Error error={error} />
+
+  // Issue: only one instance of HTML5Backend can be used at a time
+  // https://github.com/react-dnd/react-dnd/issues/3178
+  // Solution: use the same instance for all components
+  // NEW: alternative solution: https://github.com/react-dnd/react-dnd/issues/3257#issuecomment-1239254032
+  return (
+    <ErrorBoundary>
+      <OuterContainer>
+        <Explainer>
+          Die Felder können beliebig sortiert werden (drag and drop).
+        </Explainer>
+        <Container>
+          <DndProvider
+            backend={HTML5Backend}
+            context={window}
+          >
+            {fields.map((field, i) => renderField(field, i))}
+          </DndProvider>
+        </Container>
+      </OuterContainer>
+    </ErrorBoundary>
+  )
+})
