@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
@@ -21,38 +21,36 @@ const Link = styled.div`
   }
 `
 
-export const CellForTpopLink = memo(
-  observer(({ field, width, row, isOdd }) => {
-    const store = useContext(MobxContext)
+export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
+  const store = useContext(MobxContext)
 
-    const { hovered } = store.ekPlan
-    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
-    const onMouseEnter = useCallback(
-      () => hovered.setTpopId(row.id),
-      [hovered, row.id],
-    )
+  const { hovered } = store.ekPlan
+  const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+  const onMouseEnter = () => hovered.setTpopId(row.id)
 
-    const onClickLink = useCallback(() => {
-      if (window.matchMedia('(display-mode: standalone)').matches) {
-        window.open(field.value, '_blank', 'toolbar=no')
-      }
-      window.open(field.value)
-    }, [field.value])
+  const onClickLink = () => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      window.open(field.value, '_blank', 'toolbar=no')
+    }
+    window.open(field.value)
+  }
 
-    return (
-      <StyledTableCell
-        width={width}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={hovered.reset}
-        className={className}
-        data-isodd={isOdd}
+  return (
+    <StyledTableCell
+      width={width}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={hovered.reset}
+      className={className}
+      data-isodd={isOdd}
+    >
+      <Link
+        onClick={onClickLink}
+        title="in neuem Fenster öffnen"
       >
-        <Link onClick={onClickLink} title="in neuem Fenster öffnen">
-          <div>
-            <FaExternalLinkAlt />
-          </div>
-        </Link>
-      </StyledTableCell>
-    )
-  }),
-)
+        <div>
+          <FaExternalLinkAlt />
+        </div>
+      </Link>
+    </StyledTableCell>
+  )
+})
