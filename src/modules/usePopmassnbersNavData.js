@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -66,16 +66,33 @@ export const usePopmassnbersNavData = (props) => {
   const count = data?.data?.popById?.popmassnbersByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'Massnahmen-Berichte',
-      listFilter: 'popmassnber',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte`,
-      label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      labelShort: `Massn.-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'popmassnberFolder',
-      treeId: `${popId}PopmassnberFolder`,
+  const navData = {
+    id: 'Massnahmen-Berichte',
+    listFilter: 'popmassnber',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte`,
+    label: `Massnahmen-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    labelShort: `Massn.-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'popmassnberFolder',
+    treeId: `${popId}PopmassnberFolder`,
+    treeParentTableId: popId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Massnahmen-Berichte',
+    ],
+    hasChildren: count > 0,
+    component: NodeWithList,
+    menus: (data?.data?.popById?.popmassnbersByPopId?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'popmassnber',
+      treeId: p.id,
       treeParentTableId: popId,
       treeUrl: [
         'Projekte',
@@ -85,41 +102,11 @@ export const usePopmassnbersNavData = (props) => {
         'Populationen',
         popId,
         'Massnahmen-Berichte',
+        p.id,
       ],
-      hasChildren: count > 0,
-      component: NodeWithList,
-      menus: (data?.data?.popById?.popmassnbersByPopId?.nodes ?? []).map(
-        (p) => ({
-          id: p.id,
-          label: p.label,
-          treeNodeType: 'table',
-          treeMenuType: 'popmassnber',
-          treeId: p.id,
-          treeParentTableId: popId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'Populationen',
-            popId,
-            'Massnahmen-Berichte',
-            p.id,
-          ],
-          hasChildren: false,
-        }),
-      ),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.popById?.popmassnbersByPopId?.nodes,
-      isLoading,
-      popId,
-      projId,
-      totalCount,
-    ],
-  )
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
