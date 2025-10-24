@@ -1,5 +1,4 @@
-import { memo } from 'react'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import { Link } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
@@ -13,7 +12,7 @@ import { Menus } from './Menus.jsx'
 
 const minWidthToShowTitle = 800
 
-export const EkfBar = memo(() => {
+export const EkfBar = () => {
   const { userId } = useParams()
   const { search } = useLocation()
 
@@ -56,4 +55,4 @@ export const EkfBar = memo(() => {
       </MenuDiv>
     </Container>
   )
-})
+}
