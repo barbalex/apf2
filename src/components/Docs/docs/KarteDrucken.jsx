@@ -1,8 +1,6 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Karte: Drucken 🖨</h1>
     <DokuDate>14.09.2019</DokuDate>
@@ -36,4 +34,4 @@ export const Component = memo(() => (
       aufzubauen. Das macht ihr, indem ihr sie aus- und wieder einblendet.
     </p>
   </>
-))
+)
