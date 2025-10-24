@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
@@ -15,27 +15,24 @@ const StyledDivider = styled(Divider)`
   background: unset !important;
 `
 
-export const MenuItems = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const nodesFiltered = menus.filter(
-      (node) =>
-        node.label
-          ?.toLowerCase?.()
-          ?.includes?.(store.tree.nodeLabelFilter.doc) ?? true,
-    )
+export const MenuItems = observer(() => {
+  const store = useContext(MobxContext)
+  const nodesFiltered = menus.filter(
+    (node) =>
+      node.label?.toLowerCase?.()?.includes?.(store.tree.nodeLabelFilter.doc) ??
+      true,
+  )
 
-    return (
-      <List component="nav">
-        <StyledDivider />
-        {nodesFiltered.map((node) => (
-          <MenuItem
-            key={node?.id}
-            node={node}
-            highlightSearchString={store.tree.nodeLabelFilter.doc}
-          />
-        ))}
-      </List>
-    )
-  }),
-)
+  return (
+    <List component="nav">
+      <StyledDivider />
+      {nodesFiltered.map((node) => (
+        <MenuItem
+          key={node?.id}
+          node={node}
+          highlightSearchString={store.tree.nodeLabelFilter.doc}
+        />
+      ))}
+    </List>
+  )
+})
