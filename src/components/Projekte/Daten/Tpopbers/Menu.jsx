@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -15,64 +15,62 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ toggleFilterInput }) => {
-    const { search } = useLocation()
-    const navigate = useNavigate()
-    const { tpopId } = useParams()
+export const Menu = observer(({ toggleFilterInput }) => {
+  const { search } = useLocation()
+  const navigate = useNavigate()
+  const { tpopId } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createTpopberForTpopbersForm($tpopId: UUID!) {
-              createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
-                tpopber {
-                  id
-                  tpopId
-                }
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createTpopberForTpopbersForm($tpopId: UUID!) {
+            createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
+              tpopber {
+                id
+                tpopId
               }
             }
-          `,
-          variables: { tpopId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopber`],
+          }
+        `,
+        variables: { tpopId },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpop`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      const id = result?.data?.createTpopber?.tpopber?.id
-      navigate(`./${id}${search}`)
-    }, [apolloClient, store, tsQueryClient, navigate, search, tpopId])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopber`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpop`],
+    })
+    const id = result?.data?.createTpopber?.tpopber?.id
+    navigate(`./${id}${search}`)
+  }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar>
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Neuen Kontroll-Bericht erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <MenuBar>
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Neuen Kontroll-Bericht erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})

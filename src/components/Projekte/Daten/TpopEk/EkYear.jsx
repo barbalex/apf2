@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { sortBy } from 'es-toolkit'
@@ -21,7 +20,7 @@ const typRenamed = (e) => {
   }
 }
 
-export const EkYear = memo(({ data }) => {
+export const EkYear = ({ data }) => {
   const ekplans = sortBy(
     data.filter((o) => o.is === 'ekplan'),
     ['typ'],
@@ -46,4 +45,4 @@ export const EkYear = memo(({ data }) => {
       </TableCell>
     </StyledTableRow>
   )
-})
+}
