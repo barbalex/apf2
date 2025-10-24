@@ -1,8 +1,7 @@
-import { memo } from 'react'
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
@@ -19,7 +18,7 @@ const apFilesQuery = gql`
   }
 `
 
-export const Component = memo(() => {
+export const Component = () => {
   const { apId } = useParams()
   const { data } = useQuery(apFilesQuery, {
     variables: { apId },
@@ -36,4 +35,4 @@ export const Component = memo(() => {
       />
     </>
   )
-})
+}
