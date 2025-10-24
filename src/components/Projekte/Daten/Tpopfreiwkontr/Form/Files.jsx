@@ -1,6 +1,4 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { FilesRouter } from '../../../../shared/Files/index.jsx'
 
@@ -19,16 +17,14 @@ const RemarksVal = styled.div`
   margin-bottom: -10px;
 `
 
-export const Files = memo(
-  observer(({ row }) => (
-    <Container>
-      <RemarksLabel>Dateien</RemarksLabel>
-      <RemarksVal>
-        <FilesRouter
-          parentId={row.id}
-          parent="tpopkontr"
-        />
-      </RemarksVal>
-    </Container>
-  )),
+export const Files = ({ row }) => (
+  <Container>
+    <RemarksLabel>Dateien</RemarksLabel>
+    <RemarksVal>
+      <FilesRouter
+        parentId={row.id}
+        parent="tpopkontr"
+      />
+    </RemarksVal>
+  </Container>
 )
