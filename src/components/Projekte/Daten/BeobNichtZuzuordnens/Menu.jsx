@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { FaMap } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
@@ -16,46 +16,37 @@ const iconStyle = { color: 'white' }
 
 // TODO: how to pass both props?
 // TODO: need to add menu to other beobs to enable filtering
-export const Menu = memo(
-  observer(({ apfloraLayer, toggleFilterInput }) => {
-    const tsQueryClient = useQueryClient()
+export const Menu = observer(({ apfloraLayer, toggleFilterInput }) => {
+  const tsQueryClient = useQueryClient()
 
-    const store = useContext(MobxContext)
-    const { setActiveApfloraLayers, activeApfloraLayers } = store
+  const store = useContext(MobxContext)
+  const { setActiveApfloraLayers, activeApfloraLayers } = store
 
-    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
-    const showMapIfNotYetVisible = useCallback(
-      (projekteTabs) => {
-        const isVisible = projekteTabs.includes('karte')
-        if (!isVisible) {
-          setProjekteTabs([...projekteTabs, 'karte'])
-        }
-      },
-      [setProjekteTabs],
-    )
-    const onClickShowOnMap = useCallback(() => {
-      showMapIfNotYetVisible(projekteTabs)
-      setActiveApfloraLayers(uniq([...activeApfloraLayers, apfloraLayer]))
-    }, [
-      showMapIfNotYetVisible,
-      projekteTabs,
-      setActiveApfloraLayers,
-      activeApfloraLayers,
-    ])
+  const [projekteTabs, setProjekteTabs] = useProjekteTabs()
+  const showMapIfNotYetVisible = (projekteTabs) => {
+    const isVisible = projekteTabs.includes('karte')
+    if (!isVisible) {
+      setProjekteTabs([...projekteTabs, 'karte'])
+    }
+  }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar>
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Zeige auf Karte">
-            <IconButton onClick={onClickShowOnMap}>
-              <FaMap style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+  const onClickShowOnMap = () => {
+    showMapIfNotYetVisible(projekteTabs)
+    setActiveApfloraLayers(uniq([...activeApfloraLayers, apfloraLayer]))
+  }
+
+  return (
+    <ErrorBoundary>
+      <MenuBar>
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Zeige auf Karte">
+          <IconButton onClick={onClickShowOnMap}>
+            <FaMap style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})

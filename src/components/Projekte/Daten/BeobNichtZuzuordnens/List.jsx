@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
@@ -10,24 +10,22 @@ import { Error } from '../../../shared/Error.jsx'
 
 const menuBarProps = { apfloraLayer: 'beobNichtZuzuordnen' }
 
-export const List = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const { nodeLabelFilter } = store.tree
+export const List = observer(() => {
+  const store = useContext(MobxContext)
+  const { nodeLabelFilter } = store.tree
 
-    const { navData, isLoading, error } = useBeobNichtZuzuordnensNavData()
+  const { navData, isLoading, error } = useBeobNichtZuzuordnensNavData()
 
-    if (isLoading) return <Spinner />
+  if (isLoading) return <Spinner />
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <SharedList
-        navData={navData}
-        MenuBarComponent={Menu}
-        menuBarProps={menuBarProps}
-        highlightSearchString={nodeLabelFilter.beob}
-      />
-    )
-  }),
-)
+  return (
+    <SharedList
+      navData={navData}
+      MenuBarComponent={Menu}
+      menuBarProps={menuBarProps}
+      highlightSearchString={nodeLabelFilter.beob}
+    />
+  )
+})
