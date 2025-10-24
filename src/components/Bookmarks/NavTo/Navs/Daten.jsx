@@ -1,11 +1,9 @@
-import { memo } from 'react'
-
 import { useRootNavData } from '../../../../modules/useRootNavData.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Nav } from '../Nav.jsx'
 
-export const Menu = memo(() => {
+export const Menu = () => {
   const { navData, isLoading, error } = useRootNavData()
 
   if (isLoading) return <Spinner />
@@ -20,4 +18,4 @@ export const Menu = memo(() => {
       needsBorderRight={index < navData.menus.length - 1}
     />
   ))
-})
+}

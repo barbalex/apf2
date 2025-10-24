@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
@@ -19,7 +18,7 @@ const StyledLink = styled(Link)`
   }
 `
 
-export const Nav = memo(({ item, baseUrl, needsBorderRight = false }) => {
+export const Nav = ({ item, baseUrl, needsBorderRight = false }) => {
   const { pathname, search } = useLocation()
 
   // issue: relative paths are not working!!!???
@@ -38,4 +37,4 @@ export const Nav = memo(({ item, baseUrl, needsBorderRight = false }) => {
       </StyledLink>
     </Tooltip>
   )
-})
+}

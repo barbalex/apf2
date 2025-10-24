@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import { Nav } from '../Nav.jsx'
 
 export const navData = {
@@ -15,7 +13,7 @@ export const navData = {
   ],
 }
 
-export const Menu = memo(() => {
+export const Menu = () => {
   return navData.menus.map((item, index) => (
     <Nav
       key={item.id}
@@ -24,4 +22,4 @@ export const Menu = memo(() => {
       needsBorderRight={index < navData.menus.length - 1}
     />
   ))
-})
+}
