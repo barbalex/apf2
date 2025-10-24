@@ -1,10 +1,10 @@
-import { memo, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Fetcher } from './Fetcher.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
 // pass on TransitionGroup's props
-export const FetcherImporter = memo(({ match, ...other }) => {
+export const FetcherImporter = ({ match, ...other }) => {
   const [fetcherModule, setFetcherModule] = useState(null)
 
   const fetcherName = match.handle?.bookmarkFetcherName
@@ -40,4 +40,4 @@ export const FetcherImporter = memo(({ match, ...other }) => {
       {...other}
     />
   )
-})
+}
