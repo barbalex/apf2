@@ -1,12 +1,10 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../../DesktopDocs.jsx'
 import mapMeasure from './mapMeasure.png'
 import mapScale from './mapScale.png'
 import mapScaleOpen from './mapScaleOpen.png'
 import mapScaleSet from './mapScaleSet.png'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Karte: Massstab 📏</h1>
     <DokuDate>18.04.2019</DokuDate>
@@ -71,4 +69,4 @@ export const Component = memo(() => (
       </li>
     </ul>
   </>
-))
+)

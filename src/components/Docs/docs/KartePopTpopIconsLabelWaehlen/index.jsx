@@ -1,11 +1,9 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../../DesktopDocs.jsx'
 import tpopSymbols1 from './tpopSymbols1.png'
 import tpopSymbols2 from './tpopSymbols2.png'
 import tpopSymbols3 from './tpopSymbols3.png'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Karte: Symbole und Label für (Teil-)Populationen wählen</h1>
     <DokuDate>30.01.2019</DokuDate>Seit dem 26.12.2018 ist das Blumen-Symbol für
@@ -54,4 +52,4 @@ export const Component = memo(() => (
     </ul>
     <br />
   </>
-))
+)
