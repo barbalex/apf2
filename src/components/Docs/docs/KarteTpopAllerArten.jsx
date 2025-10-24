@@ -1,8 +1,6 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Karte: (Teil-)Populationen aller Arten anzeigen</h1>
     <DokuDate>20.12.2024</DokuDate>
@@ -28,4 +26,4 @@ export const Component = memo(() => (
     </p>
     <p>Wurde am 11.12.2018 eingeführt. Und am 20.5.2020 verbessert.</p>
   </>
-))
+)

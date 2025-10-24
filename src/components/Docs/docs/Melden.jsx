@@ -1,8 +1,6 @@
-import { memo } from 'react'
-
 import { DokuDate } from '../DesktopDocs.jsx'
 
-export const Component = memo(() => (
+export const Component = () => (
   <>
     <h1>Fehler, Ideen, Vorschläge melden</h1>
     <DokuDate>16.04.2019</DokuDate>
@@ -47,4 +45,4 @@ export const Component = memo(() => (
       <a href="mailto:alex@gabriel-software.ch">email</a> melden.
     </p>
   </>
-))
+)
