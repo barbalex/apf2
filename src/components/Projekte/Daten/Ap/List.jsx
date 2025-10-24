@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { useParams } from 'react-router'
 
 import { List as SharedList } from '../../../shared/List/index.jsx'
@@ -7,7 +6,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { useApNavData } from '../../../../modules/useApNavData.js'
 
-export const List = memo(() => {
+export const List = () => {
   const params = useParams()
   const { navData, isLoading, error } = useApNavData(params)
 
@@ -21,4 +20,4 @@ export const List = memo(() => {
       MenuBarComponent={Menu}
     />
   )
-})
+}
