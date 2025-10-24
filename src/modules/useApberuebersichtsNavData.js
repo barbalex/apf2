@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
@@ -61,24 +61,22 @@ export const useApberuebersichtsNavData = (props) => {
   const totalCount =
     data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'AP-Berichte',
-      listFilter: 'apberuebersicht',
-      url: `/Daten/Projekte/${projId}/AP-Berichte`,
-      label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
-      treeNodeType: 'folder',
-      treeMenuType: 'apberuebersichtFolder',
-      treeId: `${projId}/ApberuebersichtFolder`,
-      treeParentTableId: projId,
-      treeUrl: ['Projekte', projId, 'AP-Berichte'],
-      hasChildren: !!count,
-      fetcherName: 'useApberuebersichtsNavData',
-      fetcherParams: { projId },
-      component: NodeWithList,
-      menus: (
-        data?.data?.projektById?.apberuebersichtsByProjId?.nodes ?? []
-      ).map((p) => ({
+  const navData = {
+    id: 'AP-Berichte',
+    listFilter: 'apberuebersicht',
+    url: `/Daten/Projekte/${projId}/AP-Berichte`,
+    label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
+    treeNodeType: 'folder',
+    treeMenuType: 'apberuebersichtFolder',
+    treeId: `${projId}/ApberuebersichtFolder`,
+    treeParentTableId: projId,
+    treeUrl: ['Projekte', projId, 'AP-Berichte'],
+    hasChildren: !!count,
+    fetcherName: 'useApberuebersichtsNavData',
+    fetcherParams: { projId },
+    component: NodeWithList,
+    menus: (data?.data?.projektById?.apberuebersichtsByProjId?.nodes ?? []).map(
+      (p) => ({
         id: p.id,
         label: p.label,
         treeNodeType: 'table',
@@ -87,16 +85,9 @@ export const useApberuebersichtsNavData = (props) => {
         treeParentTableId: projId,
         treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
         hasChildren: false,
-      })),
-    }),
-    [
-      count,
-      data?.data?.projektById?.apberuebersichtsByProjId?.nodes,
-      isLoading,
-      projId,
-      totalCount,
-    ],
-  )
+      }),
+    ),
+  }
 
   return { isLoading, error, navData }
 }

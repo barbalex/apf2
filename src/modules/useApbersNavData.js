@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useContext } from 'react'
-import { gql } from '@apollo/client';
-import { useApolloClient } from "@apollo/client/react";
+import { useEffect, useContext } from 'react'
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
@@ -55,32 +55,22 @@ export const useApbersNavData = (props) => {
   const count = data?.data?.apById?.apbersByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'AP-Berichte',
-      listFilter: 'apber',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
-      label: `AP-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
-      menus: (data?.data?.apById?.apbersByApId?.nodes ?? []).map((p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'apber',
-        treeId: p.id,
-        treeParentTableId: apId,
-        treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', p.id],
-        hasChildren: false,
-      })),
-    }),
-    [
-      apId,
-      count,
-      data?.data?.apById?.apbersByApId?.nodes,
-      isLoading,
-      projId,
-      totalCount,
-    ],
-  )
+  const navData = {
+    id: 'AP-Berichte',
+    listFilter: 'apber',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
+    label: `AP-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    menus: (data?.data?.apById?.apbersByApId?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'apber',
+      treeId: p.id,
+      treeParentTableId: apId,
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', p.id],
+      hasChildren: false,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
