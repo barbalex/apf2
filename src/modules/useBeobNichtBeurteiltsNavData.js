@@ -1,4 +1,4 @@
-import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -25,24 +25,21 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
   const showBeobnichtbeurteiltIcon =
     store.activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const allBeobNichtBeurteiltFilter = useMemo(
-    () => ({
-      tpopId: { isNull: true },
-      nichtZuordnen: { equalTo: false },
-      aeTaxonomyByArtId: {
-        apartsByArtId: {
-          some: {
-            apByApId: {
-              id: { equalTo: apId },
-            },
+  const allBeobNichtBeurteiltFilter = {
+    tpopId: { isNull: true },
+    nichtZuordnen: { equalTo: false },
+    aeTaxonomyByArtId: {
+      apartsByArtId: {
+        some: {
+          apByApId: {
+            id: { equalTo: apId },
           },
         },
       },
-    }),
-    [apId],
-  )
+    },
+  }
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -107,16 +104,31 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
   const count = data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
   const filteredCount = data?.data?.filteredBeobsNichtBeurteilt?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'nicht-beurteilte-Beobachtungen',
-      listFilter: 'beobNichtBeurteilt',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen`,
-      label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      labelShort: `Beob. nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      treeNodeType: 'folder',
-      treeNodeMenuType: 'beobNichtBeurteiltFolder',
-      treeId: `${apId}BeobNichtBeurteiltFolder`,
+  const navData = {
+    id: 'nicht-beurteilte-Beobachtungen',
+    listFilter: 'beobNichtBeurteilt',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen`,
+    label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    labelShort: `Beob. nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    treeNodeType: 'folder',
+    treeNodeMenuType: 'beobNichtBeurteiltFolder',
+    treeId: `${apId}BeobNichtBeurteiltFolder`,
+    treeParentTableId: apId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'nicht-beurteilte-Beobachtungen',
+    ],
+    hasChildren: !!filteredCount,
+    component: NodeWithList,
+    menus: (data?.data?.filteredBeobsNichtBeurteilt?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'beobNichtBeurteilt',
+      treeId: p.id,
       treeParentTableId: apId,
       treeUrl: [
         'Projekte',
@@ -124,44 +136,15 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
         'Arten',
         apId,
         'nicht-beurteilte-Beobachtungen',
+        p.id,
       ],
-      hasChildren: !!filteredCount,
-      component: NodeWithList,
-      menus: (data?.data?.filteredBeobsNichtBeurteilt?.nodes ?? []).map(
-        (p) => ({
-          id: p.id,
-          label: p.label,
-          treeNodeType: 'table',
-          treeMenuType: 'beobNichtBeurteilt',
-          treeId: p.id,
-          treeParentTableId: apId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'nicht-beurteilte-Beobachtungen',
-            p.id,
-          ],
-          hasChildren: false,
-          labelLeftElements:
-            showBeobnichtbeurteiltIcon && beobId === p.id ?
-              [BeobnichtbeurteiltFilteredMapIcon]
-            : undefined,
-        }),
-      ),
-    }),
-    [
-      projId,
-      apId,
-      beobId,
-      count,
-      data?.data?.filteredBeobsNichtBeurteilt?.nodes,
-      filteredCount,
-      isLoading,
-      showBeobnichtbeurteiltIcon,
-    ],
-  )
+      hasChildren: false,
+      labelLeftElements:
+        showBeobnichtbeurteiltIcon && beobId === p.id ?
+          [BeobnichtbeurteiltFilteredMapIcon]
+        : undefined,
+    })),
+  }
 
   return { isLoading, error, navData }
 }

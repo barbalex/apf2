@@ -1,4 +1,4 @@
-import { useMemo, useContext, useEffect, useState, useCallback } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -25,23 +25,20 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
   const showBeobnichtzuzuordnenIcon =
     store.activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
   const [, setRerenderer] = useState(0)
-  const rerender = useCallback(() => setRerenderer((prev) => prev + 1), [])
+  const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const allBeobNichtZuzuordnenFilter = useMemo(
-    () => ({
-      nichtZuordnen: { equalTo: true },
-      aeTaxonomyByArtId: {
-        apartsByArtId: {
-          some: {
-            apByApId: {
-              id: { equalTo: apId },
-            },
+  const allBeobNichtZuzuordnenFilter = {
+    nichtZuordnen: { equalTo: true },
+    aeTaxonomyByArtId: {
+      apartsByArtId: {
+        some: {
+          apByApId: {
+            id: { equalTo: apId },
           },
         },
       },
-    }),
-    [apId],
-  )
+    },
+  }
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: [
@@ -107,16 +104,31 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
   const filteredCount =
     data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
 
-  const navData = useMemo(
-    () => ({
-      id: 'nicht-zuzuordnende-Beobachtungen',
-      listFilter: 'beobNichtZuzuordnen',
-      url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen`,
-      label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      labelShort: `Beob. nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-      treeNodeType: 'folder',
-      treeMenuType: 'beobNichtZuzuordnenFolder',
-      treeId: `${apId}BeobNichtZuzuordnenFolder`,
+  const navData = {
+    id: 'nicht-zuzuordnende-Beobachtungen',
+    listFilter: 'beobNichtZuzuordnen',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen`,
+    label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    labelShort: `Beob. nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'beobNichtZuzuordnenFolder',
+    treeId: `${apId}BeobNichtZuzuordnenFolder`,
+    treeParentTableId: apId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'nicht-zuzuordnende-Beobachtungen',
+    ],
+    hasChildren: !!filteredCount,
+    component: NodeWithList,
+    menus: (data?.data?.filteredBeobsNichtZuzuordnen?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'beobNichtZuzuordnen',
+      treeId: p.id,
       treeParentTableId: apId,
       treeUrl: [
         'Projekte',
@@ -124,44 +136,15 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
         'Arten',
         apId,
         'nicht-zuzuordnende-Beobachtungen',
+        p.id,
       ],
-      hasChildren: !!filteredCount,
-      component: NodeWithList,
-      menus: (data?.data?.filteredBeobsNichtZuzuordnen?.nodes ?? []).map(
-        (p) => ({
-          id: p.id,
-          label: p.label,
-          treeNodeType: 'table',
-          treeMenuType: 'beobNichtZuzuordnen',
-          treeId: p.id,
-          treeParentTableId: apId,
-          treeUrl: [
-            'Projekte',
-            projId,
-            'Arten',
-            apId,
-            'nicht-zuzuordnende-Beobachtungen',
-            p.id,
-          ],
-          hasChildren: false,
-          labelLeftElements:
-            showBeobnichtzuzuordnenIcon && beobId === p.id ?
-              [BeobnichtzuzuordnenFilteredMapIcon]
-            : undefined,
-        }),
-      ),
-    }),
-    [
-      apId,
-      beobId,
-      count,
-      data?.data?.filteredBeobsNichtZuzuordnen?.nodes,
-      filteredCount,
-      isLoading,
-      projId,
-      showBeobnichtzuzuordnenIcon,
-    ],
-  )
+      hasChildren: false,
+      labelLeftElements:
+        showBeobnichtzuzuordnenIcon && beobId === p.id ?
+          [BeobnichtzuzuordnenFilteredMapIcon]
+        : undefined,
+    })),
+  }
 
   return { isLoading, error, navData }
 }
