@@ -1,22 +1,17 @@
-import { memo, useMemo } from 'react'
-
 import { List as SharedList } from '../../../shared/List/index.jsx'
 import { Menu } from './Menu.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { useTpopfreiwkontrNavData } from '../../../../modules/useTpopfreiwkontrNavData.js'
 
-export const List = memo(() => {
+export const List = () => {
   const { navData, isLoading, error } = useTpopfreiwkontrNavData()
 
   // BEWARE: Zählungen need to be hidden in this list
-  const navDataToPass = useMemo(
-    () => ({
-      ...navData,
-      menus: navData.menus.filter((m) => !m.hideInNavList),
-    }),
-    [navData],
-  )
+  const navDataToPass = {
+    ...navData,
+    menus: navData.menus.filter((m) => !m.hideInNavList),
+  }
 
   if (isLoading) return <Spinner />
 
@@ -29,4 +24,4 @@ export const List = memo(() => {
       menuBarProps={{ row: navData }}
     />
   )
-})
+}

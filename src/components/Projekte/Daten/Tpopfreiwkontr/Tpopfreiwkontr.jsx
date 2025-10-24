@@ -1,4 +1,4 @@
-import { memo, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
@@ -40,134 +40,130 @@ const ScrollContainer = styled.div`
   scrollbar-width: thin;
 `
 
-export const Component = memo(
-  observer(({ id: idPassed }) => {
-    const params = useParams()
-    const { pathname } = useLocation()
+export const Component = observer(({ id: idPassed }) => {
+  const params = useParams()
+  const { pathname } = useLocation()
 
-    const store = useContext(MobxContext)
-    const { enqueNotification, isPrint, user } = store
+  const store = useContext(MobxContext)
+  const { enqueNotification, isPrint, user } = store
 
-    const apolloClient = useApolloClient()
+  const apolloClient = useApolloClient()
 
-    const id = idPassed ?? params.tpopkontrId
-    const { data, isLoading, error, refetch } = useQuery({
-      queryKey: ['TpopkontrQuery', id],
-      queryFn: async () =>
-        apolloClient.query({
-          query,
-          variables: { id },
-          fetchPolicy: 'no-cache',
-        }),
-    })
-    // DO NOT use apId from url because this form is also used for mass prints
-    const apId =
-      data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
-      '99999999-9999-9999-9999-999999999999'
+  const id = idPassed ?? params.tpopkontrId
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['TpopkontrQuery', id],
+    queryFn: async () =>
+      apolloClient.query({
+        query,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      }),
+  })
+  // DO NOT use apId from url because this form is also used for mass prints
+  const apId =
+    data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
+    '99999999-9999-9999-9999-999999999999'
 
-    const zaehls =
-      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+  const zaehls =
+    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
 
-    const row = data?.data?.tpopkontrById ?? {}
+  const row = data?.data?.tpopkontrById ?? {}
 
-    useEffect(() => {
-      let isActive = true
-      if (!isLoading) {
-        // loading data just finished
-        // check if tpopkontr exist
-        const tpopkontrCount = zaehls.length
-        if (tpopkontrCount === 0) {
-          // add counts for all ekzaehleinheit
-          // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id
-          const ekzaehleinheits = (
-            data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
-              ?.ekzaehleinheitsByApId?.nodes ?? []
-          )
-            // remove ekzaehleinheits without zaehleinheit_id
-            .filter(
-              (z) => !!z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code,
-            )
+  useEffect(() => {
+    let isActive = true
+    if (!isLoading) {
+      // loading data just finished
+      // check if tpopkontr exist
+      const tpopkontrCount = zaehls.length
+      if (tpopkontrCount === 0) {
+        // add counts for all ekzaehleinheit
+        // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id
+        const ekzaehleinheits = (
+          data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
+            ?.ekzaehleinheitsByApId?.nodes ?? []
+        )
+          // remove ekzaehleinheits without zaehleinheit_id
+          .filter((z) => !!z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code)
 
-          Promise.all(
-            ekzaehleinheits.map((z) =>
-              apolloClient.mutate({
-                mutation: createTpopkontrzaehl,
-                variables: {
-                  tpopkontrId: row.id,
-                  einheit:
-                    z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
-                  changedBy: user.name,
-                },
-              }),
-            ),
-          )
-            .then(() => {
-              if (!isActive) return
+        Promise.all(
+          ekzaehleinheits.map((z) =>
+            apolloClient.mutate({
+              mutation: createTpopkontrzaehl,
+              variables: {
+                tpopkontrId: row.id,
+                einheit:
+                  z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
+                changedBy: user.name,
+              },
+            }),
+          ),
+        )
+          .then(() => {
+            if (!isActive) return
 
-              refetch()
+            refetch()
+          })
+          .catch((error) => {
+            if (!isActive) return
+
+            enqueNotification({
+              message: error.message,
+              options: {
+                variant: 'error',
+              },
             })
-            .catch((error) => {
-              if (!isActive) return
-
-              enqueNotification({
-                message: error.message,
-                options: {
-                  variant: 'error',
-                },
-              })
-            })
-        }
+          })
       }
-      return () => {
-        isActive = false
-      }
-    }, [
-      apolloClient,
-      data,
-      enqueNotification,
-      isLoading,
-      refetch,
-      row.id,
-      user.name,
-      zaehls.length,
-    ])
+    }
+    return () => {
+      isActive = false
+    }
+  }, [
+    apolloClient,
+    data,
+    enqueNotification,
+    isLoading,
+    refetch,
+    row.id,
+    user.name,
+    zaehls.length,
+  ])
 
-    if (isLoading) return <Spinner />
+  if (isLoading) return <Spinner />
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    if (Object.keys(row).length === 0) return null
+  if (Object.keys(row).length === 0) return null
 
-    // console.log('Tpopfreiwkontr, isPrint:', isPrint)
+  // console.log('Tpopfreiwkontr, isPrint:', isPrint)
 
-    return (
-      <Container>
-        {!pathname.includes('EKF') && (
-          <>
-            <FormTitle
-              title="Freiwilligen-Kontrolle"
-              MenuBarComponent={Menu}
-              menuBarProps={{ row }}
-            />
-          </>
-        )}
-        {isPrint ?
+  return (
+    <Container>
+      {!pathname.includes('EKF') && (
+        <>
+          <FormTitle
+            title="Freiwilligen-Kontrolle"
+            MenuBarComponent={Menu}
+            menuBarProps={{ row }}
+          />
+        </>
+      )}
+      {isPrint ?
+        <Form
+          data={data?.data}
+          row={row}
+          apId={apId}
+          refetch={refetch}
+        />
+      : <ScrollContainer>
           <Form
             data={data?.data}
             row={row}
             apId={apId}
             refetch={refetch}
           />
-        : <ScrollContainer>
-            <Form
-              data={data?.data}
-              row={row}
-              apId={apId}
-              refetch={refetch}
-            />
-          </ScrollContainer>
-        }
-      </Container>
-    )
-  }),
-)
+        </ScrollContainer>
+      }
+    </Container>
+  )
+})
