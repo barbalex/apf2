@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -88,475 +88,404 @@ export const StyledButton = styled(Button)`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ row }) => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
-    const { projId, apId, popId, tpopId } = useParams()
+export const Menu = observer(({ row }) => {
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
+  const { projId, apId, popId, tpopId } = useParams()
 
-    const store = useContext(MobxContext)
-    const {
-      setIdOfTpopBeingLocalized,
-      idOfTpopBeingLocalized,
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      setMoving,
-      moving,
-      setCopying,
-      copying,
-    } = store
+  const store = useContext(MobxContext)
+  const {
+    setIdOfTpopBeingLocalized,
+    idOfTpopBeingLocalized,
+    activeApfloraLayers,
+    setActiveApfloraLayers,
+    setMoving,
+    moving,
+    setCopying,
+    copying,
+  } = store
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createTpopForTpopForm($popId: UUID!) {
-              createTpop(input: { tpop: { popId: $popId } }) {
-                tpop {
-                  id
-                  popId
-                }
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createTpopForTpopForm($popId: UUID!) {
+            createTpop(input: { tpop: { popId: $popId } }) {
+              tpop {
+                id
+                popId
               }
             }
-          `,
-          variables: {
-            popId,
-          },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpop`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treePopFolders`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treePop`],
-      })
-      const id = result?.data?.createTpop?.tpop?.id
-      navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${id}/Teil-Population${search}`,
-      )
-    }, [
-      apId,
-      apolloClient,
-      store,
-      tsQueryClient,
-      navigate,
-      search,
-      projId,
-      popId,
-      tpopId,
-    ])
-
-    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
-    const delMenuOpen = Boolean(delMenuAnchorEl)
-
-    const onClickDelete = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation deleteTpop($id: UUID!) {
-              deleteTpopById(input: { id: $id }) {
-                tpop {
-                  id
-                }
-              }
-            }
-          `,
-          variables: { id: tpopId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-
-      // remove active path from openNodes
-      const openNodesRaw = store?.tree?.openNodes
-      const openNodes = getSnapshot(openNodesRaw)
-      const activePath = pathname.split('/').filter((p) => !!p)
-      const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-      store.tree.setOpenNodes(newOpenNodes)
-
-      // update tree query
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpop`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treePopFolders`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treePop`],
-      })
-      // navigate to parent
-      navigate(
-        `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen${search}`,
-      )
-    }, [
-      apolloClient,
-      store,
-      tsQueryClient,
-      navigate,
-      search,
-      apId,
-      projId,
-      popId,
-      tpopId,
-      pathname,
-    ])
-
-    const onClickOpenLowerNodes = useCallback(() => {
-      openLowerNodes({
-        id: tpopId,
-        projId,
-        apId,
-        popId,
-        apolloClient,
-        store,
-        menuType: 'tpop',
-        parentId: popId,
-      })
-    }, [projId, apId, popId, tpopId, apolloClient, store])
-
-    const onClickCloseLowerNodes = useCallback(() => {
-      closeLowerNodes({
-        url: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
+          }
+        `,
+        variables: {
           popId,
-          'Teil-Populationen',
-          tpopId,
-        ],
-        store,
-        search,
+        },
       })
-    }, [projId, apId, popId, tpopId, store, search])
-
-    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
-    const showMapIfNotYetVisible = useCallback(
-      (projekteTabs) => {
-        const isVisible = projekteTabs.includes('karte')
-        if (!isVisible) {
-          setProjekteTabs([...projekteTabs, 'karte'])
-        }
-      },
-      [setProjekteTabs],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpop`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treePopFolders`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treePop`],
+    })
+    const id = result?.data?.createTpop?.tpop?.id
+    navigate(
+      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${id}/Teil-Population${search}`,
     )
-    const isLocalizing = !!idOfTpopBeingLocalized
-    const onClickLocalizeOnMap = useCallback(() => {
-      if (isLocalizing) {
-        return setIdOfTpopBeingLocalized(null)
-      }
-      setIdOfTpopBeingLocalized(tpopId)
-      showMapIfNotYetVisible(projekteTabs)
-      setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
-    }, [
-      setIdOfTpopBeingLocalized,
-      tpopId,
-      showMapIfNotYetVisible,
-      projekteTabs,
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      idOfTpopBeingLocalized,
-    ])
+  }
 
-    const isMovingTpop = moving.table === 'tpop'
-    const thisTpopIsMoving = moving.id === tpopId
-    const movingFromThisPop = moving.fromParentId === popId
-    const isMovingTpopfeldkontr = moving.table === 'tpopfeldkontr'
-    const isMovingTpopfreiwkontr = moving.table === 'tpopfreiwkontr'
-    const isMovingTpopmassn = moving.table === 'tpopmassn'
-    const onClickMoveInTree = useCallback(() => {
-      if (isMovingTpop) {
-        // move to this pop
-        return moveTo({
-          id: popId,
-          apolloClient,
-          store,
-        })
-      }
-      if (
-        isMovingTpopfeldkontr ||
-        isMovingTpopfreiwkontr ||
-        isMovingTpopmassn
-      ) {
-        // move to this tpop
-        return moveTo({
-          id: tpopId,
-          apolloClient,
-          store,
-        })
-      }
-      setMoving({
-        id: row.id,
-        label: row.label,
-        table: 'tpop',
-        toTable: 'tpop',
-        fromParentId: popId,
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const delMenuOpen = Boolean(delMenuAnchorEl)
+
+  const onClickDelete = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation deleteTpop($id: UUID!) {
+            deleteTpopById(input: { id: $id }) {
+              tpop {
+                id
+              }
+            }
+          }
+        `,
+        variables: { id: tpopId },
       })
-    }, [
-      row,
-      setMoving,
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+
+    // remove active path from openNodes
+    const openNodesRaw = store?.tree?.openNodes
+    const openNodes = getSnapshot(openNodesRaw)
+    const activePath = pathname.split('/').filter((p) => !!p)
+    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
+    store.tree.setOpenNodes(newOpenNodes)
+
+    // update tree query
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpop`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treePopFolders`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treePop`],
+    })
+    // navigate to parent
+    navigate(
+      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen${search}`,
+    )
+  }
+
+  const onClickOpenLowerNodes = () =>
+    openLowerNodes({
+      id: tpopId,
+      projId,
+      apId,
       popId,
-      tpopId,
       apolloClient,
       store,
-      isMovingTpop,
-      isMovingTpopfeldkontr,
-      isMovingTpopfreiwkontr,
-      isMovingTpopmassn,
-      moveTo,
-    ])
+      menuType: 'tpop',
+      parentId: popId,
+    })
 
-    const onClickStopMoving = useCallback(() => {
-      setMoving({
-        table: null,
-        id: '99999999-9999-9999-9999-999999999999',
-        label: null,
-        toTable: null,
-        fromParentId: null,
-      })
-    }, [setMoving])
-
-    const isCopyingTpop = copying.table === 'tpop'
-    const thisTpopIsCopying = copying.id === tpopId
-    const isCopyingFeldkontr = copying.table === 'tpopfeldkontr'
-    const isCopyingFreiwkontr = copying.table === 'tpopfreiwkontr'
-    const isCopyingMassn = copying.table === 'tpopmassn'
-    const isCopying =
-      isCopyingTpop ||
-      isCopyingFeldkontr ||
-      isCopyingFreiwkontr ||
-      isCopyingMassn
-    const onClickCopy = useCallback(() => {
-      if (isCopyingTpop) {
-        // copy to this pop
-        return copyTo({
-          parentId: popId,
-          apolloClient,
-          store,
-        })
-      }
-      if (isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn) {
-        // copy to this tpop
-        return copyTo({
-          parentId: tpopId,
-          apolloClient,
-          store,
-        })
-      }
-      setCopying({
-        table: 'tpop',
-        id: tpopId,
-        label: row.label,
-        withNextLevel: false,
-      })
-    }, [
-      isCopying,
-      copyTo,
-      popId,
-      tpopId,
-      apolloClient,
+  const onClickCloseLowerNodes = () =>
+    closeLowerNodes({
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+      ],
       store,
-      row,
-      setCopying,
-      isCopyingTpop,
-      isCopyingFeldkontr,
-      isCopyingFreiwkontr,
-      isCopyingMassn,
-    ])
+      search,
+    })
 
-    const onClickStopCopying = useCallback(() => {
-      setCopying({
-        table: null,
-        id: '99999999-9999-9999-9999-999999999999',
-        label: null,
-        withNextLevel: false,
+  const [projekteTabs, setProjekteTabs] = useProjekteTabs()
+  const showMapIfNotYetVisible = (projekteTabs) => {
+    const isVisible = projekteTabs.includes('karte')
+    if (!isVisible) {
+      setProjekteTabs([...projekteTabs, 'karte'])
+    }
+  }
+
+  const isLocalizing = !!idOfTpopBeingLocalized
+  const onClickLocalizeOnMap = () => {
+    if (isLocalizing) {
+      return setIdOfTpopBeingLocalized(null)
+    }
+    setIdOfTpopBeingLocalized(tpopId)
+    showMapIfNotYetVisible(projekteTabs)
+    setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
+  }
+
+  const isMovingTpop = moving.table === 'tpop'
+  const thisTpopIsMoving = moving.id === tpopId
+  const movingFromThisPop = moving.fromParentId === popId
+  const isMovingTpopfeldkontr = moving.table === 'tpopfeldkontr'
+  const isMovingTpopfreiwkontr = moving.table === 'tpopfreiwkontr'
+  const isMovingTpopmassn = moving.table === 'tpopmassn'
+
+  const onClickMoveInTree = () => {
+    if (isMovingTpop) {
+      // move to this pop
+      return moveTo({
+        id: popId,
+        apolloClient,
+        store,
       })
-    }, [setCopying])
-
-    const tpopHasCoord = !!row.lv95X && !!row.lv95Y
-    const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
-    const onCopyCoordToPop = useCallback(async () => {
-      setCopyingCoordToTpop(true)
-      await copyTpopKoordToPop({ id: tpopId, store, apolloClient })
-      setCopyingCoordToTpop(false)
-    }, [tpopId, store, apolloClient])
-
-    const onClickShowCoordOfTpopOnMapGeoAdminCh = useCallback(() => {
-      showCoordOfTpopOnMapGeoAdminCh({
+    }
+    if (isMovingTpopfeldkontr || isMovingTpopfreiwkontr || isMovingTpopmassn) {
+      // move to this tpop
+      return moveTo({
         id: tpopId,
         apolloClient,
-        enqueNotification: store.enqueNotification,
+        store,
       })
-    }, [tpopId, apolloClient, store])
+    }
+    setMoving({
+      id: row.id,
+      label: row.label,
+      table: 'tpop',
+      toTable: 'tpop',
+      fromParentId: popId,
+    })
+  }
 
-    const onClickShowCoordOfTpopOnMapsZhCh = useCallback(() => {
-      showCoordOfTpopOnMapsZhCh({
-        id: tpopId,
+  const onClickStopMoving = () =>
+    setMoving({
+      table: null,
+      id: '99999999-9999-9999-9999-999999999999',
+      label: null,
+      toTable: null,
+      fromParentId: null,
+    })
+
+  const isCopyingTpop = copying.table === 'tpop'
+  const thisTpopIsCopying = copying.id === tpopId
+  const isCopyingFeldkontr = copying.table === 'tpopfeldkontr'
+  const isCopyingFreiwkontr = copying.table === 'tpopfreiwkontr'
+  const isCopyingMassn = copying.table === 'tpopmassn'
+  const isCopying =
+    isCopyingTpop || isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn
+
+  const onClickCopy = () => {
+    if (isCopyingTpop) {
+      // copy to this pop
+      return copyTo({
+        parentId: popId,
         apolloClient,
-        enqueNotification: store.enqueNotification,
+        store,
       })
-    }, [tpopId, apolloClient, store])
-
-    // to paste copied feldkontr/frwkontr/massn
-    const onClickCopyLowerElementToHere = useCallback(() => {
-      copyTo({
+    }
+    if (isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn) {
+      // copy to this tpop
+      return copyTo({
         parentId: tpopId,
         apolloClient,
         store,
       })
-    }, [tpopId, apolloClient, store])
+    }
+    setCopying({
+      table: 'tpop',
+      id: tpopId,
+      label: row.label,
+      withNextLevel: false,
+    })
+  }
 
-    const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const onClickStopCopying = () =>
+    setCopying({
+      table: null,
+      id: '99999999-9999-9999-9999-999999999999',
+      label: null,
+      withNextLevel: false,
+    })
 
-    // ISSUE: refs are sometimes/often not set on first render
-    // trying to measure widths of menus leads to complete chaos
-    // so passing in static widths instead
+  const tpopHasCoord = !!row.lv95X && !!row.lv95Y
+  const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
 
-    return (
-      <ErrorBoundary>
-        <MenuBar
-          rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${showTreeMenus}`}
+  const onCopyCoordToPop = async () => {
+    setCopyingCoordToTpop(true)
+    await copyTpopKoordToPop({ id: tpopId, store, apolloClient })
+    setCopyingCoordToTpop(false)
+  }
+
+  const onClickShowCoordOfTpopOnMapGeoAdminCh = () =>
+    showCoordOfTpopOnMapGeoAdminCh({
+      id: tpopId,
+      apolloClient,
+      enqueNotification: store.enqueNotification,
+    })
+
+  const onClickShowCoordOfTpopOnMapsZhCh = () =>
+    showCoordOfTpopOnMapsZhCh({
+      id: tpopId,
+      apolloClient,
+      enqueNotification: store.enqueNotification,
+    })
+
+  // to paste copied feldkontr/freiwkontr/massn
+  const onClickCopyLowerElementToHere = () =>
+    copyTo({
+      parentId: tpopId,
+      apolloClient,
+      store,
+    })
+
+  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+
+  // ISSUE: refs are sometimes/often not set on first render
+  // trying to measure widths of menus leads to complete chaos
+  // so passing in static widths instead
+
+  return (
+    <ErrorBoundary>
+      <MenuBar
+        rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${showTreeMenus}`}
+      >
+        <Tooltip title="Neue Teil-Population erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Löschen">
+          <IconButton
+            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            aria-owns={delMenuOpen ? 'tpopDelMenu' : undefined}
+          >
+            <FaMinus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum öffnen">
+            <IconButton onClick={onClickOpenLowerNodes}>
+              <FaFolderTree style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum schliessen">
+            <IconButton onClick={onClickCloseLowerNodes}>
+              <RiFolderCloseFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+        <Tooltip title="Auf Karte verorten (mit Doppelklick)">
+          <RoundToggleButton
+            value={idOfTpopBeingLocalized ?? ''}
+            onChange={onClickLocalizeOnMap}
+            selected={isLocalizing}
+          >
+            <FaMapLocationDot style={iconStyle} />
+          </RoundToggleButton>
+        </Tooltip>
+        <Tooltip
+          title={
+            !isMovingTpop ? `'${row.label}' hierhin verschieben`
+            : thisTpopIsMoving ?
+              'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
+            : movingFromThisPop ?
+              `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
+            : `Verschiebe '${moving.label}' zu dieser Population`
+          }
         >
-          <Tooltip title="Neue Teil-Population erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
+          <IconButton onClick={onClickMoveInTree}>
+            <MoveIcon moving={(isMovingTpop && thisTpopIsMoving).toString()} />
+          </IconButton>
+        </Tooltip>
+        {isMovingTpop && (
+          <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+            <IconButton onClick={onClickStopMoving}>
+              <BsSignStopFill style={iconStyle} />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Löschen">
-            <IconButton
-              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              aria-owns={delMenuOpen ? 'tpopDelMenu' : undefined}
-            >
-              <FaMinus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum öffnen">
-              <IconButton onClick={onClickOpenLowerNodes}>
-                <FaFolderTree style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum schliessen">
-              <IconButton onClick={onClickCloseLowerNodes}>
-                <RiFolderCloseFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          <Tooltip title="Auf Karte verorten (mit Doppelklick)">
-            <RoundToggleButton
-              value={idOfTpopBeingLocalized ?? ''}
-              onChange={onClickLocalizeOnMap}
-              selected={isLocalizing}
-            >
-              <FaMapLocationDot style={iconStyle} />
-            </RoundToggleButton>
-          </Tooltip>
-          <Tooltip
-            title={
-              !isMovingTpop ? `'${row.label}' hierhin verschieben`
-              : thisTpopIsMoving ?
-                'Zum Verschieben gemerkt, bereit um in einer anderen Population einzufügen'
-              : movingFromThisPop ?
-                `'${moving.label}' zur selben Population zu vershieben, macht keinen Sinn`
-              : `Verschiebe '${moving.label}' zu dieser Population`
-            }
-          >
-            <IconButton onClick={onClickMoveInTree}>
-              <MoveIcon
-                moving={(isMovingTpop && thisTpopIsMoving).toString()}
-              />
-            </IconButton>
-          </Tooltip>
-          {isMovingTpop && (
-            <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
-              <IconButton onClick={onClickStopMoving}>
-                <BsSignStopFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          <Tooltip
-            title={
-              isCopying ?
-                `Kopiere '${copying.label}' in diese Population`
-              : 'Kopieren'
-            }
-          >
-            <IconButton onClick={onClickCopy}>
-              <CopyIcon copying={thisTpopIsCopying.toString()} />
-            </IconButton>
-          </Tooltip>
-          {isCopying && (
-            <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
-              <IconButton onClick={onClickStopCopying}>
-                <BsSignStopFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {tpopHasCoord && (
-            <StyledLoadingButton
-              variant="outlined"
-              onClick={onCopyCoordToPop}
-              loading={copyingCoordToTpop}
-              width={155}
-            >
-              Koordinaten auf die
-              <br />
-              Population kopieren
-            </StyledLoadingButton>
-          )}
-          <StyledButton
-            variant="outlined"
-            onClick={onClickShowCoordOfTpopOnMapsZhCh}
-            width={103}
-          >
-            zeige auf
-            <br />
-            maps.zh.ch
-          </StyledButton>
-          <StyledButton
-            variant="outlined"
-            onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
-            width={146}
-          >
-            zeige auf
-            <br />
-            map.geo.admin.ch
-          </StyledButton>
-        </MenuBar>
-        <MuiMenu
-          id="tpopDelMenu"
-          anchorEl={delMenuAnchorEl}
-          open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
+        )}
+        <Tooltip
+          title={
+            isCopying ?
+              `Kopiere '${copying.label}' in diese Population`
+            : 'Kopieren'
+          }
         >
-          <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-        </MuiMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+          <IconButton onClick={onClickCopy}>
+            <CopyIcon copying={thisTpopIsCopying.toString()} />
+          </IconButton>
+        </Tooltip>
+        {isCopying && (
+          <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
+            <IconButton onClick={onClickStopCopying}>
+              <BsSignStopFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {tpopHasCoord && (
+          <StyledLoadingButton
+            variant="outlined"
+            onClick={onCopyCoordToPop}
+            loading={copyingCoordToTpop}
+            width={155}
+          >
+            Koordinaten auf die
+            <br />
+            Population kopieren
+          </StyledLoadingButton>
+        )}
+        <StyledButton
+          variant="outlined"
+          onClick={onClickShowCoordOfTpopOnMapsZhCh}
+          width={103}
+        >
+          zeige auf
+          <br />
+          maps.zh.ch
+        </StyledButton>
+        <StyledButton
+          variant="outlined"
+          onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
+          width={146}
+        >
+          zeige auf
+          <br />
+          map.geo.admin.ch
+        </StyledButton>
+      </MenuBar>
+      <MuiMenu
+        id="tpopDelMenu"
+        anchorEl={delMenuAnchorEl}
+        open={delMenuOpen}
+        onClose={() => setDelMenuAnchorEl(null)}
+      >
+        <MenuTitle>löschen?</MenuTitle>
+        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+      </MuiMenu>
+    </ErrorBoundary>
+  )
+})
