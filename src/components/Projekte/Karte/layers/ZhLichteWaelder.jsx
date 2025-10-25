@@ -1,7 +1,6 @@
-import { memo } from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-export const ZhLichteWaelder = memo(() => (
+export const ZhLichteWaelder = () => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsLWZHWMS"
     layers="objekte-lichte-waelder-kanton-zuerich"
@@ -13,4 +12,4 @@ export const ZhLichteWaelder = memo(() => (
     minZoom={0}
     maxZoom={22}
   />
-))
+)
