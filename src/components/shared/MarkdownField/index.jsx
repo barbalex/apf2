@@ -1,4 +1,3 @@
-import { memo } from 'react'
 // extracted to shared component due to peer dependency to old react version
 // import { FocusWithin } from 'react-focus-within'
 
@@ -12,7 +11,7 @@ import { FocusWithin } from '../FocusWithin.jsx'
 // - markdown presenter if value exists
 // - markdown editor if is focused
 // problems with react-focus-within: maybe use https://stackoverflow.com/a/63857071/712005
-export const MarkdownField = memo((props) => {
+export const MarkdownField = (props) => {
   const { label, value } = props
 
   return (
@@ -31,4 +30,4 @@ export const MarkdownField = memo((props) => {
       )}
     </FocusWithin>
   )
-})
+}
