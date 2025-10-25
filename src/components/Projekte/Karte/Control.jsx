@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const OuterDiv = styled.div`
@@ -21,7 +20,7 @@ const POSITION_CLASSES = {
   topright: 'leaflet-top leaflet-right',
 }
 
-export const Control = memo(({ children, position, visible = true }) => {
+export const Control = ({ children, position, visible = true }) => {
   const positionClass =
     (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright
 
@@ -35,4 +34,4 @@ export const Control = memo(({ children, position, visible = true }) => {
       </div>
     </OuterDiv>
   )
-})
+}
