@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { useLocation, useParams } from 'react-router'
 import styled from '@emotion/styled'
 
@@ -19,7 +18,7 @@ export const MenuTitle = styled.h3`
   }
 `
 
-export const Menu = memo(({ parent, files, refetch, containerRef }) => {
+export const Menu = ({ parent, files, refetch, containerRef }) => {
   const { fileId } = useParams()
   const { pathname } = useLocation()
   // also show preview if Vorschau is omitted (until that rout is used for something else)
@@ -57,4 +56,4 @@ export const Menu = memo(({ parent, files, refetch, containerRef }) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

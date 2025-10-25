@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import { useOutletContext } from 'react-router'
 
@@ -15,7 +14,7 @@ const Container = styled.div`
   scrollbar-width: thin;
 `
 
-export const Component = memo(() => {
+export const Component = () => {
   const { parent, files, refetch } = useOutletContext()
 
   return (
@@ -32,4 +31,4 @@ export const Component = memo(() => {
       </Container>
     </ErrorBoundary>
   )
-})
+}

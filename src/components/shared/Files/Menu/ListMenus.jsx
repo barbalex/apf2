@@ -1,4 +1,4 @@
-import { useCallback, useContext, memo } from 'react'
+import { useContext } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { FaPlus, FaEye } from 'react-icons/fa6'
@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from 'react-router'
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 import { UploaderContext } from '../../../../UploaderContext.js'
 
-export const ListMenus = memo(({ files }) => {
+export const ListMenus = ({ files }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const uploaderCtx = useContext(UploaderContext)
@@ -15,9 +15,7 @@ export const ListMenus = memo(({ files }) => {
 
   const firstFileId = files?.[0]?.fileId
 
-  const onClickPreview = useCallback(() => {
-    navigate(`${firstFileId}/Vorschau${search}`)
-  }, [firstFileId, search, navigate])
+  const onClickPreview = () => navigate(`${firstFileId}/Vorschau${search}`)
 
   return (
     <ErrorBoundary>
@@ -42,4 +40,4 @@ export const ListMenus = memo(({ files }) => {
       </Tooltip>
     </ErrorBoundary>
   )
-})
+}
