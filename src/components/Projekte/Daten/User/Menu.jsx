@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState, useMemo } from 'react'
+import { useContext, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -33,249 +33,236 @@ const StyledButton = styled(Button)`
 
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(
-    ({
-      row,
-      editPassword,
-      setEditPassword,
-      passwordMessage,
-      setPasswordMessage,
-    }) => {
-      const { search, pathname } = useLocation()
-      const navigate = useNavigate()
+export const Menu = observer(
+  ({
+    row,
+    editPassword,
+    setEditPassword,
+    passwordMessage,
+    setPasswordMessage,
+  }) => {
+    const { search, pathname } = useLocation()
+    const navigate = useNavigate()
 
-      const store = useContext(MobxContext)
+    const store = useContext(MobxContext)
 
-      const apolloClient = useApolloClient()
-      const tsQueryClient = useQueryClient()
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
-      const thisYear = new Date().getFullYear()
-      const { data, refetch } = useQuery(queryEkfTpops, {
-        variables: {
-          id: row.adresseId || '9999999999999999999999999',
-          jahr: thisYear,
-          include: !!row.adresseId,
-        },
+    const thisYear = new Date().getFullYear()
+    const { data, refetch } = useQuery(queryEkfTpops, {
+      variables: {
+        id: row.adresseId || '9999999999999999999999999',
+        jahr: thisYear,
+        include: !!row.adresseId,
+      },
+    })
+    const ekfTpops = data?.ekfTpops?.nodes ?? []
+    const hasEkfTpops = !!ekfTpops.length
+    const ekfTpopsWithoutEkfThisYear = ekfTpops
+      .filter((e) => e?.ekfInJahr?.totalCount === 0)
+      .map((e) => e.id)
+    const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
+
+    const onClickAdd = async () => {
+      let result
+      try {
+        result = await apolloClient.mutate({
+          mutation: gql`
+            mutation createUserForUserForm {
+              createUser(input: { user: {} }) {
+                user {
+                  id
+                }
+              }
+            }
+          `,
+        })
+      } catch (error) {
+        return store.enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeUser`],
       })
-      const ekfTpops = data?.ekfTpops?.nodes ?? []
-      const hasEkfTpops = !!ekfTpops.length
-      const ekfTpopsWithoutEkfThisYear = useMemo(
-        () =>
-          ekfTpops
-            .filter((e) => e?.ekfInJahr?.totalCount === 0)
-            .map((e) => e.id),
-        [ekfTpops],
-      )
-      const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeRoot`],
+      })
+      const id = result?.data?.createUser?.user?.id
+      navigate(`/Daten/Benutzer/${id}${search}`)
+    }
 
-      const onClickAdd = useCallback(async () => {
-        let result
-        try {
-          result = await apolloClient.mutate({
-            mutation: gql`
-              mutation createUserForUserForm {
-                createUser(input: { user: {} }) {
-                  user {
-                    id
-                  }
+    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+    const delMenuOpen = Boolean(delMenuAnchorEl)
+
+    const onClickDelete = async () => {
+      let result
+      try {
+        result = await apolloClient.mutate({
+          mutation: gql`
+            mutation deleteUser($id: UUID!) {
+              deleteUserById(input: { id: $id }) {
+                user {
+                  id
                 }
               }
-            `,
-          })
-        } catch (error) {
-          return store.enqueNotification({
-            message: error.message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeUser`],
+            }
+          `,
+          variables: { id: row.id },
         })
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeRoot`],
+      } catch (error) {
+        return store.enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
         })
-        const id = result?.data?.createUser?.user?.id
-        navigate(`/Daten/Benutzer/${id}${search}`)
-      }, [apolloClient, store, tsQueryClient, navigate, search])
+      }
 
-      const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
-      const delMenuOpen = Boolean(delMenuAnchorEl)
+      // remove active path from openNodes
+      const openNodesRaw = store?.tree?.openNodes
+      const openNodes = getSnapshot(openNodesRaw)
+      const activePath = pathname.split('/').filter((p) => !!p)
+      const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
+      store.tree.setOpenNodes(newOpenNodes)
 
-      const onClickDelete = useCallback(async () => {
-        let result
+      // update tree query
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeUser`],
+      })
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeRoot`],
+      })
+      // navigate to parent
+      navigate(`/Daten/Benutzer${search}`)
+    }
+
+    const onClickCreateEkfForms = async () => {
+      const errors = []
+      for (const tpopId of ekfTpopsWithoutEkfThisYear) {
         try {
-          result = await apolloClient.mutate({
+          await apolloClient.mutate({
             mutation: gql`
-              mutation deleteUser($id: UUID!) {
-                deleteUserById(input: { id: $id }) {
-                  user {
-                    id
+              mutation createTpopkontrFromUser(
+                $typ: String
+                $tpopId: UUID
+                $bearbeiter: UUID
+                $jahr: Int
+              ) {
+                createTpopkontr(
+                  input: {
+                    tpopkontr: {
+                      typ: $typ
+                      tpopId: $tpopId
+                      bearbeiter: $bearbeiter
+                      jahr: $jahr
+                    }
                   }
-                }
-              }
-            `,
-            variables: { id: row.id },
-          })
-        } catch (error) {
-          return store.enqueNotification({
-            message: error.message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-
-        // remove active path from openNodes
-        const openNodesRaw = store?.tree?.openNodes
-        const openNodes = getSnapshot(openNodesRaw)
-        const activePath = pathname.split('/').filter((p) => !!p)
-        const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-        store.tree.setOpenNodes(newOpenNodes)
-
-        // update tree query
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeUser`],
-        })
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeRoot`],
-        })
-        // navigate to parent
-        navigate(`/Daten/Benutzer${search}`)
-      }, [apolloClient, store, tsQueryClient, navigate, search, row, pathname])
-
-      const onClickCreateEkfForms = useCallback(async () => {
-        const errors = []
-        for (const tpopId of ekfTpopsWithoutEkfThisYear) {
-          try {
-            await apolloClient.mutate({
-              mutation: gql`
-                mutation createTpopkontrFromUser(
-                  $typ: String
-                  $tpopId: UUID
-                  $bearbeiter: UUID
-                  $jahr: Int
                 ) {
-                  createTpopkontr(
-                    input: {
-                      tpopkontr: {
-                        typ: $typ
-                        tpopId: $tpopId
-                        bearbeiter: $bearbeiter
-                        jahr: $jahr
-                      }
-                    }
-                  ) {
-                    tpopkontr {
-                      ...TpopkontrFields
-                    }
+                  tpopkontr {
+                    ...TpopkontrFields
                   }
                 }
-                ${tpopkontrFragment}
-              `,
-              variables: {
-                tpopId,
-                typ: 'Freiwilligen-Erfolgskontrolle',
-                bearbeiter: row.adresseId,
-                jahr: thisYear,
-              },
-            })
-          } catch (error) {
-            errors.push(error)
-          }
-        }
-        if (errors.length) {
-          errors.forEach((error) =>
-            store.enqueNotification({
-              message: error.message,
-              options: {
-                variant: 'error',
-              },
-            }),
-          )
-        } else {
-          store.enqueNotification({
-            message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
-            options: {
-              variant: 'info',
+              }
+              ${tpopkontrFragment}
+            `,
+            variables: {
+              tpopId,
+              typ: 'Freiwilligen-Erfolgskontrolle',
+              bearbeiter: row.adresseId,
+              jahr: thisYear,
             },
           })
-          refetch()
+        } catch (error) {
+          errors.push(error)
         }
-      }, [
-        apolloClient,
-        ekfTpopsWithoutEkfThisYear,
-        refetch,
-        row.adresseId,
-        store,
-        thisYear,
-      ])
+      }
+      if (errors.length) {
+        errors.forEach((error) =>
+          store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          }),
+        )
+      } else {
+        store.enqueNotification({
+          message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
+          options: {
+            variant: 'info',
+          },
+        })
+        refetch()
+      }
+    }
 
-      return (
-        <ErrorBoundary>
-          <MenuBar>
-            <Tooltip title="Neuen Benutzer erstellen">
-              <IconButton onClick={onClickAdd}>
-                <FaPlus style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Löschen">
-              <IconButton
-                onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-                aria-owns={delMenuOpen ? 'userDelMenu' : undefined}
-              >
-                <FaMinus style={iconStyle} />
-              </IconButton>
-            </Tooltip>
+    return (
+      <ErrorBoundary>
+        <MenuBar>
+          <Tooltip title="Neuen Benutzer erstellen">
+            <IconButton onClick={onClickAdd}>
+              <FaPlus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Löschen">
+            <IconButton
+              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+              aria-owns={delMenuOpen ? 'userDelMenu' : undefined}
+            >
+              <FaMinus style={iconStyle} />
+            </IconButton>
+          </Tooltip>
 
-            {!editPassword && !passwordMessage && (
-              <StyledButton
-                variant="outlined"
-                onClick={() => {
-                  setEditPassword(true)
-                  setPasswordMessage('')
-                }}
-              >
-                Passwort ändern
-              </StyledButton>
-            )}
-            {hasEkfTpopsWithoutEkfThisYear && (
-              <StyledButton
-                variant="outlined"
-                onClick={onClickCreateEkfForms}
-                title={`Erzeugt in ${ekfTpops.length} Teil-Population${
-                  ekfTpops.length > 1 ? 'en' : ''
-                }, in de${
-                  ekfTpops.length > 1 ? 'nen' : 'r'
-                } dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
-              >
-                {`(Fehlende) EKF-Formulare für ${thisYear} erzeugen`}
-              </StyledButton>
-            )}
-            {hasEkfTpops && (
-              <StyledButton
-                variant="outlined"
-                component={Link}
-                to={`/Daten/Benutzer/${row.id}/EKF/${thisYear}${search}`}
-              >
-                {`EKF-Formulare für ${thisYear} öffnen`}
-              </StyledButton>
-            )}
-          </MenuBar>
-          <MuiMenu
-            id="userDelMenu"
-            anchorEl={delMenuAnchorEl}
-            open={delMenuOpen}
-            onClose={() => setDelMenuAnchorEl(null)}
-          >
-            <MenuTitle>löschen?</MenuTitle>
-            <MenuItem onClick={onClickDelete}>ja</MenuItem>
-            <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-          </MuiMenu>
-        </ErrorBoundary>
-      )
-    },
-  ),
+          {!editPassword && !passwordMessage && (
+            <StyledButton
+              variant="outlined"
+              onClick={() => {
+                setEditPassword(true)
+                setPasswordMessage('')
+              }}
+            >
+              Passwort ändern
+            </StyledButton>
+          )}
+          {hasEkfTpopsWithoutEkfThisYear && (
+            <StyledButton
+              variant="outlined"
+              onClick={onClickCreateEkfForms}
+              title={`Erzeugt in ${ekfTpops.length} Teil-Population${
+                ekfTpops.length > 1 ? 'en' : ''
+              }, in de${
+                ekfTpops.length > 1 ? 'nen' : 'r'
+              } dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
+            >
+              {`(Fehlende) EKF-Formulare für ${thisYear} erzeugen`}
+            </StyledButton>
+          )}
+          {hasEkfTpops && (
+            <StyledButton
+              variant="outlined"
+              component={Link}
+              to={`/Daten/Benutzer/${row.id}/EKF/${thisYear}${search}`}
+            >
+              {`EKF-Formulare für ${thisYear} öffnen`}
+            </StyledButton>
+          )}
+        </MenuBar>
+        <MuiMenu
+          id="userDelMenu"
+          anchorEl={delMenuAnchorEl}
+          open={delMenuOpen}
+          onClose={() => setDelMenuAnchorEl(null)}
+        >
+          <MenuTitle>löschen?</MenuTitle>
+          <MenuItem onClick={onClickDelete}>ja</MenuItem>
+          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+        </MuiMenu>
+      </ErrorBoundary>
+    )
+  },
 )
