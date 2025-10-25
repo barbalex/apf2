@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -16,71 +16,69 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ toggleFilterInput }) => {
-    const { search } = useLocation()
-    const navigate = useNavigate()
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
-    const { tpopkontrId } = useParams()
-    const store = useContext(MobxContext)
+export const Menu = observer(({ toggleFilterInput }) => {
+  const { search } = useLocation()
+  const navigate = useNavigate()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
+  const { tpopkontrId } = useParams()
+  const store = useContext(MobxContext)
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createTpopkontrzaehlForTpopkontrzaehlsForm(
-              $tpopkontrId: UUID!
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createTpopkontrzaehlForTpopkontrzaehlsForm(
+            $tpopkontrId: UUID!
+          ) {
+            createTpopkontrzaehl(
+              input: { tpopkontrzaehl: { tpopkontrId: $tpopkontrId } }
             ) {
-              createTpopkontrzaehl(
-                input: { tpopkontrzaehl: { tpopkontrId: $tpopkontrId } }
-              ) {
-                tpopkontrzaehl {
-                  id
-                  tpopkontrId
-                }
+              tpopkontrzaehl {
+                id
+                tpopkontrId
               }
             }
-          `,
-          variables: {
-            tpopkontrId,
-          },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontrzaehl`],
+          }
+        `,
+        variables: {
+          tpopkontrId,
+        },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontrzaehlFolders`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopfeldkontr`],
-      })
-      const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
-      navigate(`./${id}${search}`)
-    }, [apolloClient, store, tsQueryClient, navigate, search, tpopkontrId])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontrzaehl`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontrzaehlFolders`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontr`],
+    })
+    const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+    navigate(`./${id}${search}`)
+  }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar>
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Neue Zählung erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <MenuBar>
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Neue Zählung erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})
