@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
 
 import { TextField2 } from '../../../../shared/TextField2.jsx'
@@ -142,8 +141,8 @@ const Img = styled.img`
   max-width: inherit;
 `
 
-export const More = memo(({ saveToDb, row }) => {
-  const jungpflanzenVorhandenOnSaveFalse = useCallback(() => {
+export const More = ({ saveToDb, row }) => {
+  const jungpflanzenVorhandenOnSaveFalse = () => {
     const fakeEvent = {
       target: {
         name: 'jungpflanzenVorhanden',
@@ -151,8 +150,9 @@ export const More = memo(({ saveToDb, row }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [row?.jungpflanzenVorhanden, saveToDb])
-  const jungpflanzenVorhandenOnSaveTrue = useCallback(() => {
+  }
+
+  const jungpflanzenVorhandenOnSaveTrue = () => {
     const fakeEvent = {
       target: {
         name: 'jungpflanzenVorhanden',
@@ -160,7 +160,7 @@ export const More = memo(({ saveToDb, row }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [row?.jungpflanzenVorhanden, saveToDb])
+  }
 
   return (
     <Container>
@@ -228,4 +228,4 @@ export const More = memo(({ saveToDb, row }) => {
       <VeghoeheMinLabel>(Minimum)</VeghoeheMinLabel>
     </Container>
   )
-})
+}

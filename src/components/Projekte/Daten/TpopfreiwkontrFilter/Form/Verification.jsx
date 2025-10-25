@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import styled from '@emotion/styled'
 
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
@@ -41,8 +40,8 @@ const Grund = styled.div`
   }
 `
 
-export const Verification = memo(({ saveToDb, row }) => {
-  const onSaveTrue = useCallback(() => {
+export const Verification = ({ saveToDb, row }) => {
+  const onSaveTrue = () => {
     const fakeEvent = {
       target: {
         name: 'apberNichtRelevant',
@@ -50,7 +49,7 @@ export const Verification = memo(({ saveToDb, row }) => {
       },
     }
     saveToDb(fakeEvent)
-  }, [row?.apberNichtRelevant, saveToDb])
+  }
 
   return (
     <Container>
@@ -76,4 +75,4 @@ export const Verification = memo(({ saveToDb, row }) => {
       </Grund>
     </Container>
   )
-})
+}
