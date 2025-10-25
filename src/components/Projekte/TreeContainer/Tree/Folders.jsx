@@ -1,4 +1,4 @@
-import { memo, useRef, useMemo } from 'react'
+import { useRef } from 'react'
 import { Transition } from 'react-transition-group'
 import styled from '@emotion/styled'
 
@@ -10,14 +10,11 @@ const Container = styled.div`
   transition: opacity 300ms ease-in-out;
 `
 
-export const Folders = memo(({ navData, in: inProp }) => {
+export const Folders = ({ navData, in: inProp }) => {
   const ref = useRef(null)
 
   // self menu has no component
-  const menus = useMemo(
-    () => (navData?.menus ?? []).filter((m) => !!m.component),
-    [navData],
-  )
+  const menus = (navData?.menus ?? []).filter((m) => !!m.component)
 
   return (
     <Transition
@@ -42,4 +39,4 @@ export const Folders = memo(({ navData, in: inProp }) => {
       )}
     </Transition>
   )
-})
+}
