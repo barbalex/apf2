@@ -1,4 +1,4 @@
-import { memo, useContext, lazy, Suspense } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
@@ -58,59 +58,57 @@ const Container = styled.div`
   }
 `
 
-export const Component = memo(
-  observer(() => {
-    const { pathname, search } = useLocation()
-    const { userId } = useParams()
+export const Component = observer(() => {
+  const { pathname, search } = useLocation()
+  const { userId } = useParams()
 
-    const store = useContext(MobxContext)
-    const { showDeletions, user } = store
+  const store = useContext(MobxContext)
+  const { showDeletions, user } = store
 
-    const token = user?.token
-    const tokenDecoded = token ? jwtDecode(token) : null
-    const role = tokenDecoded ? tokenDecoded.role : null
-    const isFreiwillig = role === 'apflora_freiwillig'
-    const userIdToUse = userId ?? user?.id
+  const token = user?.token
+  const tokenDecoded = token ? jwtDecode(token) : null
+  const role = tokenDecoded ? tokenDecoded.role : null
+  const isFreiwillig = role === 'apflora_freiwillig'
+  const userIdToUse = userId ?? user?.id
 
-    // if user is freiwillig
-    // and path is not in /Benutzer/:userId
-    // then redirect to /Benutzer/:userId/EKF
-    // userId was undefined thus not navigating
-    const shouldNavigate =
-      isFreiwillig &&
-      userIdToUse &&
-      !pathname.includes(`Daten/Benutzer/${userIdToUse}`)
-    if (shouldNavigate) {
-      return (
-        <Navigate
-          to={`/Daten/Benutzer/${userIdToUse}/EKF/${new Date().getFullYear()}${search}`}
-        />
-      )
-    }
-
+  // if user is freiwillig
+  // and path is not in /Benutzer/:userId
+  // then redirect to /Benutzer/:userId/EKF
+  // userId was undefined thus not navigating
+  const shouldNavigate =
+    isFreiwillig &&
+    userIdToUse &&
+    !pathname.includes(`Daten/Benutzer/${userIdToUse}`)
+  if (shouldNavigate) {
     return (
-      <Container data-isiniframe={isInIframe}>
-        {!!user.token && (
-          <>
-            <Outlet />
-            <Suspense fallback={<Spinner />}>
-              {!isFreiwillig && !isInIframe && <Messages />}
-              {!isFreiwillig && showDeletions && <Deletions />}
-            </Suspense>
-            <Suspense fallback={null}>
-              <ActiveNodeArraySetter />
-              <NavigateSetter />
-              <QueryClientSetter />
-              <ChooseApToCopyEkfrequenzsFrom />
-              <ChooseApToCopyErfkritsFrom />
-              <ApfLayerNotifier />
-            </Suspense>
-          </>
-        )}
-        <Suspense fallback={null}>
-          <User />
-        </Suspense>
-      </Container>
+      <Navigate
+        to={`/Daten/Benutzer/${userIdToUse}/EKF/${new Date().getFullYear()}${search}`}
+      />
     )
-  }),
-)
+  }
+
+  return (
+    <Container data-isiniframe={isInIframe}>
+      {!!user.token && (
+        <>
+          <Outlet />
+          <Suspense fallback={<Spinner />}>
+            {!isFreiwillig && !isInIframe && <Messages />}
+            {!isFreiwillig && showDeletions && <Deletions />}
+          </Suspense>
+          <Suspense fallback={null}>
+            <ActiveNodeArraySetter />
+            <NavigateSetter />
+            <QueryClientSetter />
+            <ChooseApToCopyEkfrequenzsFrom />
+            <ChooseApToCopyErfkritsFrom />
+            <ApfLayerNotifier />
+          </Suspense>
+        </>
+      )}
+      <Suspense fallback={null}>
+        <User />
+      </Suspense>
+    </Container>
+  )
+})
