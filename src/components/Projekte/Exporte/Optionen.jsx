@@ -1,4 +1,4 @@
-import { memo, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -24,51 +24,49 @@ const StyledCheckbox = styled(Checkbox)`
   height: 30px !important;
 `
 
-export const Optionen = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const { setExportFileType, exportFileType } = store
-    const [expanded, setExpanded] = useState(false)
+export const Optionen = observer(() => {
+  const store = useContext(MobxContext)
+  const { setExportFileType, exportFileType } = store
+  const [expanded, setExpanded] = useState(false)
 
-    return (
-      <StyledCard>
-        <StyledCardActions
-          disableSpacing
-          onClick={() => setExpanded(!expanded)}
-        >
-          <CardActionTitle>Optionen</CardActionTitle>
-          <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
-            <CardActionIconButton
-              data-expanded={expanded}
-              aria-expanded={expanded}
-              aria-label={expanded ? 'schliessen' : 'öffnen'}
-            >
-              <ExpandMoreIcon />
-            </CardActionIconButton>
-          </Tooltip>
-        </StyledCardActions>
-        <Collapse
-          in={expanded}
-          timeout="auto"
-          unmountOnExit
-        >
-          <StyledCardContent>
-            <StyledFormControlLabel
-              control={
-                <StyledCheckbox
-                  checked={exportFileType === 'csv'}
-                  onChange={() =>
-                    setExportFileType(exportFileType === 'csv' ? 'xlsx' : 'csv')
-                  }
-                  value={exportFileType}
-                  color="primary"
-                />
-              }
-              label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
-            />
-          </StyledCardContent>
-        </Collapse>
-      </StyledCard>
-    )
-  }),
-)
+  return (
+    <StyledCard>
+      <StyledCardActions
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
+        <CardActionTitle>Optionen</CardActionTitle>
+        <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label={expanded ? 'schliessen' : 'öffnen'}
+          >
+            <ExpandMoreIcon />
+          </CardActionIconButton>
+        </Tooltip>
+      </StyledCardActions>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        <StyledCardContent>
+          <StyledFormControlLabel
+            control={
+              <StyledCheckbox
+                checked={exportFileType === 'csv'}
+                onChange={() =>
+                  setExportFileType(exportFileType === 'csv' ? 'xlsx' : 'csv')
+                }
+                value={exportFileType}
+                color="primary"
+              />
+            }
+            label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
+          />
+        </StyledCardContent>
+      </Collapse>
+    </StyledCard>
+  )
+})

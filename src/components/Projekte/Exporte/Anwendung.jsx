@@ -1,4 +1,4 @@
-import { memo, useState, useCallback } from 'react'
+import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
@@ -13,13 +13,11 @@ import {
   DownloadCardButton,
 } from './index.jsx'
 
-export const Anwendung = memo(() => {
+export const Anwendung = () => {
   const [expanded, setExpanded] = useState(false)
 
-  const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
-  const onClickGrafisch = useCallback(() => {
-    window.open(beziehungen)
-  }, [])
+  const onClickAction = () => setExpanded(!expanded)
+  const onClickGrafisch = () => window.open(beziehungen)
 
   return (
     <StyledCard>
@@ -57,4 +55,4 @@ export const Anwendung = memo(() => {
       </Collapse>
     </StyledCard>
   )
-})
+}
