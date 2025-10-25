@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdFilterAlt } from 'react-icons/md'
@@ -8,10 +7,8 @@ const StyledButton = styled(IconButton)`
   color: white;
 `
 
-export const FilterButton = memo(({ toggleFilterInput }) => {
-  const onClick = useCallback(() => {
-    toggleFilterInput()
-  }, [toggleFilterInput])
+export const FilterButton = ({ toggleFilterInput }) => {
+  const onClick = () => toggleFilterInput()
 
   return (
     <Tooltip title="Filtern">
@@ -23,4 +20,4 @@ export const FilterButton = memo(({ toggleFilterInput }) => {
       </StyledButton>
     </Tooltip>
   )
-})
+}
