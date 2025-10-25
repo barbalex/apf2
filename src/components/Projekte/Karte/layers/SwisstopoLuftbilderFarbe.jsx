@@ -1,9 +1,8 @@
-import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
 // https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 
-export const SwisstopoLuftbilderFarbe = memo(() => (
+export const SwisstopoLuftbilderFarbe = () => (
   <Pane
     className="SwisstopoLuftbilderFarbe"
     name="SwisstopoLuftbilderFarbe"
@@ -18,4 +17,4 @@ export const SwisstopoLuftbilderFarbe = memo(() => (
       maxZoom={23}
     />
   </Pane>
-))
+)

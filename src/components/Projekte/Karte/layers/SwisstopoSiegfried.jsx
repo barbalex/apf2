@@ -1,9 +1,8 @@
-import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
 // https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 
-export const SwisstopoSiegfried = memo(() => (
+export const SwisstopoSiegfried = () => (
   <Pane
     className="SwisstopoSiegfried"
     name="SwisstopoSiegfried"
@@ -17,4 +16,4 @@ export const SwisstopoSiegfried = memo(() => (
       maxZoom={23}
     />
   </Pane>
-))
+)
