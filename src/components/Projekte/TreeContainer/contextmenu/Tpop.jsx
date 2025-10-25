@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -57,114 +57,112 @@ const showCoordOfTpopOnMapGeoAdminChData = {
   action: 'showCoordOfTpopOnMapGeoAdminCh',
 }
 
-export const Tpop = memo(
-  observer(({ onClick }) => {
-    const { copying, user, moving } = useContext(MobxContext)
+export const Tpop = observer(({ onClick }) => {
+  const { copying, user, moving } = useContext(MobxContext)
 
-    const isMoving =
-      moving.table &&
-      ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(moving.table)
-    const isCopying =
-      copying.table &&
-      ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(copying.table)
+  const isMoving =
+    moving.table &&
+    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(moving.table)
+  const isCopying =
+    copying.table &&
+    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(copying.table)
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treeTpop"
-          hideOnLeave={true}
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treeTpop"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">Teil-Population</div>
+        <MenuItem
+          onClick={onClick}
+          data={openLowerNodesData}
         >
-          <div className="react-contextmenu-title">Teil-Population</div>
-          <MenuItem
-            onClick={onClick}
-            data={openLowerNodesData}
-          >
-            alle öffnen
-          </MenuItem>
-          <MenuItem
-            onClick={onClick}
-            data={closeLowerNodesData}
-          >
-            alle schliessen
-          </MenuItem>
-          {!userIsReadOnly(user.token) && (
-            <>
+          alle öffnen
+        </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={closeLowerNodesData}
+        >
+          alle schliessen
+        </MenuItem>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
+              erstelle neue
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
+              lösche
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={localizeOnMapData}
+            >
+              verorte auf Karte (mit Doppel-Klick)
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={markForMovingData}
+            >
+              verschiebe
+            </MenuItem>
+            {isMoving && (
               <MenuItem
                 onClick={onClick}
-                data={insertData}
+                data={moveData}
               >
-                erstelle neue
+                {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
+            )}
+            <MenuItem
+              onClick={onClick}
+              data={markForCopyingData}
+            >
+              kopiere
+            </MenuItem>
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
-                data={deleteData}
+                data={copyData}
               >
-                lösche
+                {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
+            )}
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
-                data={localizeOnMapData}
+                data={resetCopyingData}
               >
-                verorte auf Karte (mit Doppel-Klick)
+                Kopieren aufheben
               </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={markForMovingData}
-              >
-                verschiebe
-              </MenuItem>
-              {isMoving && (
-                <MenuItem
-                  onClick={onClick}
-                  data={moveData}
-                >
-                  {`verschiebe '${moving.label}' hierhin`}
-                </MenuItem>
-              )}
-              <MenuItem
-                onClick={onClick}
-                data={markForCopyingData}
-              >
-                kopiere
-              </MenuItem>
-              {isCopying && (
-                <MenuItem
-                  onClick={onClick}
-                  data={copyData}
-                >
-                  {`kopiere '${copying.label}' hierhin`}
-                </MenuItem>
-              )}
-              {isCopying && (
-                <MenuItem
-                  onClick={onClick}
-                  data={resetCopyingData}
-                >
-                  Kopieren aufheben
-                </MenuItem>
-              )}
-              <MenuItem
-                onClick={onClick}
-                data={copyTpopKoordToPopData}
-              >
-                Kopiere Koordinaten in die Population
-              </MenuItem>
-            </>
-          )}
-          <MenuItem
-            onClick={onClick}
-            data={showCoordOfTpopOnMapsZhChData}
-          >
-            Zeige auf maps.zh.ch
-          </MenuItem>
-          <MenuItem
-            onClick={onClick}
-            data={showCoordOfTpopOnMapGeoAdminChData}
-          >
-            Zeige auf map.geo.admin.ch
-          </MenuItem>
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+            )}
+            <MenuItem
+              onClick={onClick}
+              data={copyTpopKoordToPopData}
+            >
+              Kopiere Koordinaten in die Population
+            </MenuItem>
+          </>
+        )}
+        <MenuItem
+          onClick={onClick}
+          data={showCoordOfTpopOnMapsZhChData}
+        >
+          Zeige auf maps.zh.ch
+        </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={showCoordOfTpopOnMapGeoAdminChData}
+        >
+          Zeige auf map.geo.admin.ch
+        </MenuItem>
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})
