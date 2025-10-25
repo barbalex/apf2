@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -11,7 +9,7 @@ const insertData = {
   table: 'ek_abrechnungstyp_werte',
 }
 
-export const EkAbrechnungstypWerteFolder = memo(({ onClick }) => (
+export const EkAbrechnungstypWerteFolder = ({ onClick }) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeEkAbrechnungstypWerteFolder"
@@ -26,4 +24,4 @@ export const EkAbrechnungstypWerteFolder = memo(({ onClick }) => (
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
-))
+)

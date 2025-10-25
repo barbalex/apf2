@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
@@ -28,55 +28,53 @@ const showCoordOfBeobOnMapGeoAdminChData = {
   action: 'showCoordOfBeobOnMapGeoAdminCh',
 }
 
-export const BeobNichtZuzuordnen = memo(
-  observer(({ onClick }) => {
-    const { user } = useContext(MobxContext)
+export const BeobNichtZuzuordnen = observer(({ onClick }) => {
+  const { user } = useContext(MobxContext)
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treeBeobNichtZuzuordnen"
-          hideOnLeave={true}
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treeBeobNichtZuzuordnen"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">Beobachtung</div>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={createNewPopFromBeobData}
+            >
+              neue Population und Teil-Population gründen
+              <br />
+              <SecondLine>
+                und Beobachtung der Teil-Population zuordnen
+              </SecondLine>
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={createNewTpopFromBeobData}
+            >
+              neue Teil-Population in bestehender Population gründen
+              <br />
+              <SecondLine>
+                und Beobachtung der Teil-Population zuordnen
+              </SecondLine>
+            </MenuItem>
+          </>
+        )}
+        <MenuItem
+          onClick={onClick}
+          data={showCoordOfBeobOnMapsZhChData}
         >
-          <div className="react-contextmenu-title">Beobachtung</div>
-          {!userIsReadOnly(user.token) && (
-            <>
-              <MenuItem
-                onClick={onClick}
-                data={createNewPopFromBeobData}
-              >
-                neue Population und Teil-Population gründen
-                <br />
-                <SecondLine>
-                  und Beobachtung der Teil-Population zuordnen
-                </SecondLine>
-              </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={createNewTpopFromBeobData}
-              >
-                neue Teil-Population in bestehender Population gründen
-                <br />
-                <SecondLine>
-                  und Beobachtung der Teil-Population zuordnen
-                </SecondLine>
-              </MenuItem>
-            </>
-          )}
-          <MenuItem
-            onClick={onClick}
-            data={showCoordOfBeobOnMapsZhChData}
-          >
-            Zeige auf maps.zh.ch
-          </MenuItem>
-          <MenuItem
-            onClick={onClick}
-            data={showCoordOfBeobOnMapGeoAdminChData}
-          >
-            Zeige auf map.geo.admin.ch
-          </MenuItem>
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+          Zeige auf maps.zh.ch
+        </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={showCoordOfBeobOnMapGeoAdminChData}
+        >
+          Zeige auf map.geo.admin.ch
+        </MenuItem>
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})
