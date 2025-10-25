@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import {
   ContextMenu,
@@ -15,7 +13,7 @@ const insertData = {
   table: 'adresse',
 }
 
-export const Adressefolder = memo(({ onClick }) => (
+export const Adressefolder = ({ onClick }) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeAdresseFolder"
@@ -36,4 +34,4 @@ export const Adressefolder = memo(({ onClick }) => (
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
-))
+)
