@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { isEqual } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
@@ -60,47 +60,41 @@ const erreichungOptions = [
   { value: 'unsicher', label: 'unsicher' },
 ]
 
-export const Component = memo(
-  observer(() => {
-    const { zielId: id } = useParams()
-    const { search } = useLocation()
-    const navigate = useNavigate()
+export const Component = observer(() => {
+  const { zielId: id } = useParams()
+  const { search } = useLocation()
+  const navigate = useNavigate()
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const store = useContext(MobxContext)
-    const {
-      activeNodeArray,
-      openNodes: openNodesRaw,
-      setOpenNodes,
-    } = store.tree
-    const aNA = getSnapshot(activeNodeArray)
-    const openNodes = getSnapshot(openNodesRaw)
+  const store = useContext(MobxContext)
+  const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
+  const aNA = getSnapshot(activeNodeArray)
+  const openNodes = getSnapshot(openNodesRaw)
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const { data, loading, error } = useQuery(query, {
-      variables: {
-        id,
-      },
-    })
+  const { data, loading, error } = useQuery(query, {
+    variables: {
+      id,
+    },
+  })
 
-    const row = useMemo(() => data?.zielById ?? {}, [data?.zielById])
+  const row = data?.zielById ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
 
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateZiel(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -122,109 +116,96 @@ export const Component = memo(
             }
             ${zielFragment}
           `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        setFieldErrors({})
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeZiel`],
-        })
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeZieljahrs`],
-        })
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeZielsOfJahr`],
-        })
-        // if jahr of ziel is updated, activeNodeArray und openNodes need to change
-        if (field === 'jahr') {
-          const newActiveNodeArray = [...aNA]
-          newActiveNodeArray[5] = +value
-          const oldParentNodeUrl = aNA.toSpliced(-1)
-          const newParentNodeUrl = newActiveNodeArray.toSpliced(-1)
-          const newOpenNodes = openNodes.map((n) => {
-            if (isEqual(n, aNA)) return newActiveNodeArray
-            if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
-            return n
-          })
-          navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-          setOpenNodes(newOpenNodes)
-        }
-      },
-      [
-        row.id,
-        store.user.name,
-        tsQueryClient,
-        apolloClient,
-        aNA,
-        openNodes,
-        navigate,
-        search,
-        setOpenNodes,
-      ],
-    )
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    setFieldErrors({})
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeZiel`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeZieljahrs`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeZielsOfJahr`],
+    })
+    // if jahr of ziel is updated, activeNodeArray und openNodes need to change
+    if (field === 'jahr') {
+      const newActiveNodeArray = [...aNA]
+      newActiveNodeArray[5] = +value
+      const oldParentNodeUrl = aNA.toSpliced(-1)
+      const newParentNodeUrl = newActiveNodeArray.toSpliced(-1)
+      const newOpenNodes = openNodes.map((n) => {
+        if (isEqual(n, aNA)) return newActiveNodeArray
+        if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
+        return n
+      })
+      navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+      setOpenNodes(newOpenNodes)
+    }
+  }
 
-    if (loading) return <Spinner />
+  if (loading) return <Spinner />
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title="Ziel"
-            MenuBarComponent={Menu}
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="Ziel"
+          MenuBarComponent={Menu}
+        />
+        <FormContainer>
+          <TextField
+            name="jahr"
+            label="Jahr"
+            type="number"
+            value={row.jahr}
+            saveToDb={saveToDb}
+            error={fieldErrors.jahr}
           />
-          <FormContainer>
-            <TextField
-              name="jahr"
-              label="Jahr"
-              type="number"
-              value={row.jahr}
-              saveToDb={saveToDb}
-              error={fieldErrors.jahr}
-            />
-            <RadioButtonGroup
-              name="typ"
-              label="Zieltyp"
-              dataSource={data?.allZielTypWertes?.nodes ?? []}
-              loading={loading}
-              value={row.typ}
-              saveToDb={saveToDb}
-              error={fieldErrors.typ}
-            />
-            <TextField
-              name="bezeichnung"
-              label="Ziel"
-              type="text"
-              multiLine
-              value={row.bezeichnung}
-              saveToDb={saveToDb}
-              error={fieldErrors.bezeichnung}
-            />
-            <Subtitle>Beurteilung</Subtitle>
-            <Select
-              name="erreichung"
-              label="Ziel-Erreichung"
-              options={erreichungOptions}
-              loading={false}
-              value={row.erreichung}
-              saveToDb={saveToDb}
-              error={fieldErrors.erreichung}
-            />
-            <TextField
-              name="bemerkungen"
-              label="Bemerkungen"
-              type="text"
-              multiLine
-              value={row.bemerkungen}
-              saveToDb={saveToDb}
-              error={fieldErrors.bemerkungen}
-            />
-          </FormContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+          <RadioButtonGroup
+            name="typ"
+            label="Zieltyp"
+            dataSource={data?.allZielTypWertes?.nodes ?? []}
+            loading={loading}
+            value={row.typ}
+            saveToDb={saveToDb}
+            error={fieldErrors.typ}
+          />
+          <TextField
+            name="bezeichnung"
+            label="Ziel"
+            type="text"
+            multiLine
+            value={row.bezeichnung}
+            saveToDb={saveToDb}
+            error={fieldErrors.bezeichnung}
+          />
+          <Subtitle>Beurteilung</Subtitle>
+          <Select
+            name="erreichung"
+            label="Ziel-Erreichung"
+            options={erreichungOptions}
+            loading={false}
+            value={row.erreichung}
+            saveToDb={saveToDb}
+            error={fieldErrors.erreichung}
+          />
+          <TextField
+            name="bemerkungen"
+            label="Bemerkungen"
+            type="text"
+            multiLine
+            value={row.bemerkungen}
+            saveToDb={saveToDb}
+            error={fieldErrors.bemerkungen}
+          />
+        </FormContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
