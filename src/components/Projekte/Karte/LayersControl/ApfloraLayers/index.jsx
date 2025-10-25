@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 
@@ -14,25 +14,23 @@ const CardContent = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `
 
-export const ApfloraLayers = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const { apfloraLayers } = store
+export const ApfloraLayers = observer(() => {
+  const store = useContext(MobxContext)
+  const { apfloraLayers } = store
 
-    return (
-      <CardContent>
-        {apfloraLayers
-          // prevent deprecated layer from showing in case some users still have it in layers
-          .filter((l) => l.value !== 'mapFilter')
-          .map((apfloraLayer, index) => (
-            <Layer
-              key={index}
-              apfloraLayer={apfloraLayer}
-            />
-          ))}
-        <ShowForMultipleAps />
-        <KtZhFilter />
-      </CardContent>
-    )
-  }),
-)
+  return (
+    <CardContent>
+      {apfloraLayers
+        // prevent deprecated layer from showing in case some users still have it in layers
+        .filter((l) => l.value !== 'mapFilter')
+        .map((apfloraLayer, index) => (
+          <Layer
+            key={index}
+            apfloraLayer={apfloraLayer}
+          />
+        ))}
+      <ShowForMultipleAps />
+      <KtZhFilter />
+    </CardContent>
+  )
+})
