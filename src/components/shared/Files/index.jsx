@@ -1,4 +1,4 @@
-import { useCallback, useRef, useContext, memo, Suspense } from 'react'
+import { useRef, useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -48,8 +48,8 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-export const FilesRouter = memo(
-  observer(({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
+export const FilesRouter = observer(
+  ({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
     const store = useContext(MobxContext)
     const { fileId } = useParams()
     const { search } = useLocation()
@@ -93,30 +93,26 @@ export const FilesRouter = memo(
 
     const files = data?.data?.[`all${upperFirst(parent)}Files`].nodes ?? []
 
-    const onCommonUploadSuccess = useCallback(
-      async (info) => {
-        // reset infoUuidsProcessed
-        infoUuidsProcessed.current = []
-        // close the uploader or it will be open when navigating to the list
-        api?.doneFlow?.()
-        // clear the uploader or it will show the last uploaded file when opened next time
-        api?.removeAllFiles?.()
-        // somehow this needs to be delayed or sometimes not all files will be uploaded
-        setTimeout(() => refetch(), 500)
-      },
-      [apolloClient, fields, fragment, parent, parentId, refetch],
-    )
+    const onCommonUploadSuccess = (info) => {
+      // reset infoUuidsProcessed
+      infoUuidsProcessed.current = []
+      // close the uploader or it will be open when navigating to the list
+      api?.doneFlow?.()
+      // clear the uploader or it will show the last uploaded file when opened next time
+      api?.removeAllFiles?.()
+      // somehow this needs to be delayed or sometimes not all files will be uploaded
+      setTimeout(() => refetch(), 500)
+    }
 
     // ISSUE: sometimes this is called multiple times with the same info.uuid
-    const onFileUploadSuccess = useCallback(
-      async (info) => {
-        if (info) {
-          if (infoUuidsProcessed.current.includes(info.uuid)) return
-          infoUuidsProcessed.current.push(info.uuid)
-          let responce
-          try {
-            responce = await apolloClient.mutate({
-              mutation: gql`
+    const onFileUploadSuccess = async (info) => {
+      if (info) {
+        if (infoUuidsProcessed.current.includes(info.uuid)) return
+        infoUuidsProcessed.current.push(info.uuid)
+        let responce
+        try {
+          responce = await apolloClient.mutate({
+            mutation: gql`
               mutation insertFile {
                 create${upperFirst(parent)}File(
                   input: {
@@ -135,31 +131,27 @@ export const FilesRouter = memo(
               }
               ${fragment}
             `,
-            })
-          } catch (error) {
-            console.log(error)
-            store.enqueNotification({
-              message: error.message,
-              options: {
-                variant: 'error',
-              },
-            })
-          }
-          // console.log('FilesRouter.onFileUploadSuccess', { info, responce })
-          // navigate to the new file
-          const newFile =
-            responce?.data?.[`create${upperFirst(parent)}File`]?.[
-              `${parent}File`
-            ]
-          if (newFile) {
-            navigate(`${newFile.fileId}/Vorschau${search}`)
-          }
+          })
+        } catch (error) {
+          console.log(error)
+          store.enqueNotification({
+            message: error.message,
+            options: {
+              variant: 'error',
+            },
+          })
         }
-      },
-      [apolloClient, fields, fragment, parent, parentId, refetch, search],
-    )
+        // console.log('FilesRouter.onFileUploadSuccess', { info, responce })
+        // navigate to the new file
+        const newFile =
+          responce?.data?.[`create${upperFirst(parent)}File`]?.[`${parent}File`]
+        if (newFile) {
+          navigate(`${newFile.fileId}/Vorschau${search}`)
+        }
+      }
+    }
 
-    const onFileUploadFailed = useCallback((error) => {
+    const onFileUploadFailed = (error) => {
       console.error('Upload failed:', error)
       store.enqueNotification({
         message: error?.message ?? 'Upload fehlgeschlagen',
@@ -173,7 +165,7 @@ export const FilesRouter = memo(
       api?.removeAllFiles?.()
       // somehow this needs to be delayed or sometimes not all files will be uploaded
       setTimeout(() => refetch(), 500)
-    }, [])
+    }
 
     if (isLoading) return <Spinner />
 
@@ -201,5 +193,5 @@ export const FilesRouter = memo(
         </Container>
       </ErrorBoundary>
     )
-  }),
+  },
 )

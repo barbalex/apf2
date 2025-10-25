@@ -1,6 +1,4 @@
-import { memo } from 'react'
-
-export const YoutubeEmbed = memo(({ embedId }) => (
+export const YoutubeEmbed = ({ embedId }) => (
   <div className="video-responsive">
     <iframe
       width="853"
@@ -12,4 +10,4 @@ export const YoutubeEmbed = memo(({ embedId }) => (
       title="Embedded youtube"
     />
   </div>
-))
+)
