@@ -1,10 +1,9 @@
 import { de } from 'date-fns/locale'
-import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
 // https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 
-export const SwisstopoPixelFarbe = memo(() => (
+export const SwisstopoPixelFarbe = () => (
   <Pane
     className="SwisstopoPixelFarbe"
     name="SwisstopoPixelFarbe"
@@ -18,6 +17,4 @@ export const SwisstopoPixelFarbe = memo(() => (
       maxZoom={23}
     />
   </Pane>
-))
-
-export default SwisstopoPixelFarbe
+)

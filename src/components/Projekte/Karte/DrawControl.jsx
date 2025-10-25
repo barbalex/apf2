@@ -1,4 +1,4 @@
-import { memo, useEffect, useContext, useCallback } from 'react'
+import { useEffect, useContext } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
@@ -42,98 +42,96 @@ window.L.drawLocal.edit.handlers.edit.tooltip.subtext =
   'Punkte ziehen, um Filter-Umriss zu ändern'
 window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
 
-export const DrawControl = memo(
-  observer(() => {
-    const map = useMap()
-    const store = useContext(MobxContext)
-    const { setMapFilter, mapFilter, mapFilterResetter } = store.tree
+export const DrawControl = observer(() => {
+  const map = useMap()
+  const store = useContext(MobxContext)
+  const { setMapFilter, mapFilter, mapFilterResetter } = store.tree
 
-    useEffect(() => {
-      // solution to allow only one geometry to be drawn
-      // see: https://github.com/Leaflet/Leaflet.draw/issues/315#issuecomment-500246272
-      // also: pass in mapFilter if exists
-      const drawnItems =
-        mapFilter ? window.L.geoJSON(mapFilter) : new window.L.FeatureGroup()
-      map.addLayer(drawnItems)
+  useEffect(() => {
+    // solution to allow only one geometry to be drawn
+    // see: https://github.com/Leaflet/Leaflet.draw/issues/315#issuecomment-500246272
+    // also: pass in mapFilter if exists
+    const drawnItems =
+      mapFilter ? window.L.geoJSON(mapFilter) : new window.L.FeatureGroup()
+    map.addLayer(drawnItems)
 
-      const drawControlFull = new window.L.Control.Draw({
-        draw: {
-          marker: false,
-          polyline: false,
-          circle: false,
-          circlemarker: false,
-          rectangle: false,
-        },
-        // edit: {
-        //   featureGroup: drawnItems,
-        // },
-      })
-      const drawControlEditOnly = new window.L.Control.Draw({
-        draw: false,
-        edit: {
-          featureGroup: drawnItems,
-        },
-      })
+    const drawControlFull = new window.L.Control.Draw({
+      draw: {
+        marker: false,
+        polyline: false,
+        circle: false,
+        circlemarker: false,
+        rectangle: false,
+      },
+      // edit: {
+      //   featureGroup: drawnItems,
+      // },
+    })
+    const drawControlEditOnly = new window.L.Control.Draw({
+      draw: false,
+      edit: {
+        featureGroup: drawnItems,
+      },
+    })
 
-      if (mapFilter) {
-        drawControlFull.remove(map)
-        drawControlEditOnly.addTo(map)
-      } else {
-        map.addControl(drawControlFull)
-      }
+    if (mapFilter) {
+      drawControlFull.remove(map)
+      drawControlEditOnly.addTo(map)
+    } else {
+      map.addControl(drawControlFull)
+    }
 
-      const onDrawCreated = (e) => {
-        // console.log('map, draw:created')
-        drawnItems.addLayer(e.layer)
-        drawControlFull.remove(map)
-        drawControlEditOnly.addTo(map)
-        setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
-      }
-      const onDrawEdited = () => {
-        // console.log('map, draw:edited')
-        setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
-      }
-      const onDrawDeleted = () => {
-        // console.log('map, draw:deleted')
-        setMapFilter(undefined)
-        if (drawnItems.getLayers().length === 0) {
-          drawControlEditOnly.remove(map)
-          drawControlFull.remove(map)
-          drawControlFull.addTo(map)
-        }
-      }
-      const onDrawDeletedFromOutside = () => {
-        // console.log('map, draw:deletedFromOutside')
+    const onDrawCreated = (e) => {
+      // console.log('map, draw:created')
+      drawnItems.addLayer(e.layer)
+      drawControlFull.remove(map)
+      drawControlEditOnly.addTo(map)
+      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
+    }
+    const onDrawEdited = () => {
+      // console.log('map, draw:edited')
+      setMapFilter(drawnItems.toGeoJSON()?.features?.[0]?.geometry)
+    }
+    const onDrawDeleted = () => {
+      // console.log('map, draw:deleted')
+      setMapFilter(undefined)
+      if (drawnItems.getLayers().length === 0) {
         drawControlEditOnly.remove(map)
         drawControlFull.remove(map)
         drawControlFull.addTo(map)
       }
-      const onDrawClearFromOutside = () => {
-        // console.log('map, draw:clearFromOutside')
-        drawnItems.clearLayers()
-      }
+    }
+    const onDrawDeletedFromOutside = () => {
+      // console.log('map, draw:deletedFromOutside')
+      drawControlEditOnly.remove(map)
+      drawControlFull.remove(map)
+      drawControlFull.addTo(map)
+    }
+    const onDrawClearFromOutside = () => {
+      // console.log('map, draw:clearFromOutside')
+      drawnItems.clearLayers()
+    }
 
-      map.on('draw:created', onDrawCreated)
-      map.on('draw:edited', onDrawEdited)
-      map.on('draw:deleted', onDrawDeleted)
-      map.on('draw:deletedFromOutside', onDrawDeletedFromOutside)
-      map.on('draw:clearFromOutside', onDrawClearFromOutside)
+    map.on('draw:created', onDrawCreated)
+    map.on('draw:edited', onDrawEdited)
+    map.on('draw:deleted', onDrawDeleted)
+    map.on('draw:deletedFromOutside', onDrawDeletedFromOutside)
+    map.on('draw:clearFromOutside', onDrawClearFromOutside)
 
-      return () => {
-        map.removeLayer(drawnItems)
-        drawControlFull.remove(map)
-        drawControlEditOnly.remove(map)
-        map.off('draw:created', onDrawCreated)
-        map.off('draw:edited', onDrawEdited)
-        map.off('draw:deleted', onDrawDeleted)
-        map.off('draw:deletedFromOutside', onDrawDeletedFromOutside)
-        map.off('draw:clearFromOutside', onDrawClearFromOutside)
-        // setMapFilter(undefined)
-      }
-      // do not want this to re-run on every change of mapFilter!
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [map, setMapFilter, mapFilterResetter])
+    return () => {
+      map.removeLayer(drawnItems)
+      drawControlFull.remove(map)
+      drawControlEditOnly.remove(map)
+      map.off('draw:created', onDrawCreated)
+      map.off('draw:edited', onDrawEdited)
+      map.off('draw:deleted', onDrawDeleted)
+      map.off('draw:deletedFromOutside', onDrawDeletedFromOutside)
+      map.off('draw:clearFromOutside', onDrawClearFromOutside)
+      // setMapFilter(undefined)
+    }
+    // do not want this to re-run on every change of mapFilter!
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, setMapFilter, mapFilterResetter])
 
-    return <div style={{ display: 'none' }} />
-  }),
-)
+  return <div style={{ display: 'none' }} />
+})
