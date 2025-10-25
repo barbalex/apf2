@@ -1,4 +1,4 @@
-import { memo, useContext, useEffect, useMemo } from 'react'
+import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -28,178 +28,171 @@ const iconCreateFunction = (cluster) => {
   })
 }
 
-const ObservedTpop = memo(
-  observer(({ clustered }) => {
-    const store = useContext(MobxContext)
-    const {
-      enqueNotification,
-      setIdOfTpopBeingLocalized,
-      idOfTpopBeingLocalized,
-    } = store
-    const { tpopGqlFilter } = store.tree
+const getTpopFilter = (tpopGqlFilter) => {
+  const filter = cloneDeep(tpopGqlFilter.filtered)
+  filter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  return filter
+}
 
-    const tpopFilter = useMemo(() => {
-      const filter = cloneDeep(tpopGqlFilter.filtered)
-      filter.or.forEach((f) => (f.wgs84Lat = { isNull: false }))
+const ObservedTpop = observer(({ clustered }) => {
+  const store = useContext(MobxContext)
+  const {
+    enqueNotification,
+    setIdOfTpopBeingLocalized,
+    idOfTpopBeingLocalized,
+  } = store
+  const { tpopGqlFilter } = store.tree
 
-      return filter
-    }, [tpopGqlFilter.filtered])
-    //
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const { data, error } = useQuery({
-      queryKey: ['TpopForMapQuery', tpopFilter],
-      queryFn: async () =>
-        apolloClient.query({
-          query,
-          variables: { tpopFilter },
-          fetchPolicy: 'no-cache',
-        }),
-    })
+  const tpopFilter = getTpopFilter(tpopGqlFilter)
 
-    const leafletMap = useMapEvents({
-      async dblclick(event) {
-        //console.log('doubleclick')
+  const { data, error } = useQuery({
+    queryKey: ['TpopForMapQuery', tpopFilter],
+    queryFn: async () =>
+      apolloClient.query({
+        query,
+        variables: { tpopFilter },
+        fetchPolicy: 'no-cache',
+      }),
+  })
 
-        // since 2018 10 31 using idOfTpopBeingLocalized directly
-        // returns null, so need to use store.idOfTpopBeingLocalized
-        const { idOfTpopBeingLocalized } = store
-        //console.log('Tpop, on dblclick', { idOfTpopBeingLocalized })
-        if (!idOfTpopBeingLocalized) return
-        /**
-         * TODO
-         * When clicking on Layertool
-         * somehow Mapelement grabs the click event
-         * although Layertool lies _over_ map element ??!!
-         * So when localizing, if user wants to change base map,
-         * click on Layertool sets new coordinates!
-         */
-        const { lat, lng } = event.latlng
-        const geomPoint = {
-          type: 'Point',
-          coordinates: [lng, lat],
-          // need to add crs otherwise PostGIS v2.5 (on server) errors
-          crs: {
-            type: 'name',
-            properties: {
-              name: 'urn:ogc:def:crs:EPSG::4326',
-            },
+  const leafletMap = useMapEvents({
+    async dblclick(event) {
+      //console.log('doubleclick')
+
+      // since 2018 10 31 using idOfTpopBeingLocalized directly
+      // returns null, so need to use store.idOfTpopBeingLocalized
+      const { idOfTpopBeingLocalized } = store
+      //console.log('Tpop, on dblclick', { idOfTpopBeingLocalized })
+      if (!idOfTpopBeingLocalized) return
+      /**
+       * TODO
+       * When clicking on Layertool
+       * somehow Mapelement grabs the click event
+       * although Layertool lies _over_ map element ??!!
+       * So when localizing, if user wants to change base map,
+       * click on Layertool sets new coordinates!
+       */
+      const { lat, lng } = event.latlng
+      const geomPoint = {
+        type: 'Point',
+        coordinates: [lng, lat],
+        // need to add crs otherwise PostGIS v2.5 (on server) errors
+        crs: {
+          type: 'name',
+          properties: {
+            name: 'urn:ogc:def:crs:EPSG::4326',
           },
-        }
-        // TODO:
-        // Idea: set Gemeinde?
-        //console.log('Tpop, on dblclick', { lat, lng, geomPoint })
-        // DANGER:
-        // need to stop propagation of the event
-        // if not it is called a second time
-        // the crazy thing is:
-        // in some areas (not all) the second event
-        // has wrong coordinates!!!!
-        window.L.DomEvent.stopPropagation(event)
-        /**
-         * how to update a geometry value?
-         * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
-         */
-        try {
-          await apolloClient.mutate({
-            mutation: updateTpopById,
-            variables: {
-              id: idOfTpopBeingLocalized,
-              geomPoint,
-            },
-          })
-          // refetch so it appears on map
-          // need to also refetch pop in case it was new
-          tsQueryClient.invalidateQueries({
-            queryKey: [`PopForMapQuery`],
-          })
-          tsQueryClient.invalidateQueries({
-            queryKey: [`TpopForMapQuery`],
-          })
-        } catch (error) {
-          enqueNotification({
-            message: error.message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setIdOfTpopBeingLocalized(null)
-      },
-    })
-
-    useEffect(() => {
-      if (idOfTpopBeingLocalized) {
-        // see: https://stackoverflow.com/a/28724847/712005
-        // altering the maps css corrupted the map ui
-        window.L.DomUtil.addClass(
-          leafletMap._container,
-          'crosshair-cursor-enabled',
-        )
-      } else {
-        window.L.DomUtil.removeClass(
-          leafletMap._container,
-          'crosshair-cursor-enabled',
-        )
-      }
-    }, [idOfTpopBeingLocalized, leafletMap._container])
-
-    if (error) {
-      enqueNotification({
-        message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
-        options: {
-          variant: 'error',
         },
-      })
-    }
+      }
+      // TODO:
+      // Idea: set Gemeinde?
+      //console.log('Tpop, on dblclick', { lat, lng, geomPoint })
+      // DANGER:
+      // need to stop propagation of the event
+      // if not it is called a second time
+      // the crazy thing is:
+      // in some areas (not all) the second event
+      // has wrong coordinates!!!!
+      window.L.DomEvent.stopPropagation(event)
+      /**
+       * how to update a geometry value?
+       * v1: "SRID=4326;POINT(long lat)" https://github.com/graphile/postgraphile/issues/575#issuecomment-372030995
+       */
+      try {
+        await apolloClient.mutate({
+          mutation: updateTpopById,
+          variables: {
+            id: idOfTpopBeingLocalized,
+            geomPoint,
+          },
+        })
+        // refetch so it appears on map
+        // need to also refetch pop in case it was new
+        tsQueryClient.invalidateQueries({
+          queryKey: [`PopForMapQuery`],
+        })
+        tsQueryClient.invalidateQueries({
+          queryKey: [`TpopForMapQuery`],
+        })
+      } catch (error) {
+        enqueNotification({
+          message: error.message,
+          options: {
+            variant: 'error',
+          },
+        })
+      }
+      setIdOfTpopBeingLocalized(null)
+    },
+  })
 
-    const tpopMarkers = useMemo(
-      () =>
-        (data?.data?.allTpops?.nodes ?? []).map((tpop) => (
-          <Marker
-            key={tpop.id}
-            tpop={tpop}
-          />
-        )),
-      [data?.data?.allTpops?.nodes],
-    )
-
-    if (clustered) {
-      return (
-        <MarkerClusterGroup
-          key={tpopMarkers.toString()} // to force rerendering when data changes, see https://github.com/barbalex/apf2/issues/750
-          maxClusterRadius={66}
-          iconCreateFunction={iconCreateFunction}
-          chunkedLoading
-        >
-          {tpopMarkers}
-        </MarkerClusterGroup>
+  useEffect(() => {
+    if (idOfTpopBeingLocalized) {
+      // see: https://stackoverflow.com/a/28724847/712005
+      // altering the maps css corrupted the map ui
+      window.L.DomUtil.addClass(
+        leafletMap._container,
+        'crosshair-cursor-enabled',
+      )
+    } else {
+      window.L.DomUtil.removeClass(
+        leafletMap._container,
+        'crosshair-cursor-enabled',
       )
     }
+  }, [idOfTpopBeingLocalized, leafletMap._container])
 
-    return tpopMarkers
-  }),
-)
+  if (error) {
+    enqueNotification({
+      message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
-export const Tpop = memo(
-  observer(({ clustered }) => {
-    const store = useContext(MobxContext)
-    const tree = store.tree
-    const { tpopGqlFilter } = tree
+  const tpopMarkers = (data?.data?.allTpops?.nodes ?? []).map((tpop) => (
+    <Marker
+      key={tpop.id}
+      tpop={tpop}
+    />
+  ))
 
-    const { apId } = useParams()
+  if (clustered) {
+    return (
+      <MarkerClusterGroup
+        key={tpopMarkers.toString()} // to force rerendering when data changes, see https://github.com/barbalex/apf2/issues/750
+        maxClusterRadius={66}
+        iconCreateFunction={iconCreateFunction}
+        chunkedLoading
+      >
+        {tpopMarkers}
+      </MarkerClusterGroup>
+    )
+  }
 
-    // Problem: gqlFilter updates AFTER apId
-    // if navigating from ap to pop, apId is set before gqlFilter
-    // thus query fetches data for all aps
-    // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
-    const gqlFilterHasApId = !!tpopGqlFilter.filtered?.or?.[0]?.popByPopId?.apId
-    const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+  return tpopMarkers
+})
 
-    if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+export const Tpop = observer(({ clustered }) => {
+  const store = useContext(MobxContext)
+  const tree = store.tree
+  const { tpopGqlFilter } = tree
 
-    return <ObservedTpop clustered={clustered} />
-  }),
-)
+  const { apId } = useParams()
+
+  // Problem: gqlFilter updates AFTER apId
+  // if navigating from ap to pop, apId is set before gqlFilter
+  // thus query fetches data for all aps
+  // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
+  const gqlFilterHasApId = !!tpopGqlFilter.filtered?.or?.[0]?.popByPopId?.apId
+  const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
+
+  if (apIdExistsButGqlFilterDoesNotKnowYet) return null
+
+  return <ObservedTpop clustered={clustered} />
+})
