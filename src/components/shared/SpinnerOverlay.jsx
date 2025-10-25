@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 import Dialog from '@mui/material/Dialog'
@@ -16,7 +15,7 @@ const SpinnerText = styled.div`
   padding: 10px;
 `
 
-export const SpinnerOverlay = memo(({ message, onClose }) => (
+export const SpinnerOverlay = ({ message, onClose }) => (
   <Dialog
     open
     onClose={onClose}
@@ -27,4 +26,4 @@ export const SpinnerOverlay = memo(({ message, onClose }) => (
       {!!message && <SpinnerText>{message}</SpinnerText>}
     </SpinnerContainer>
   </Dialog>
-))
+)

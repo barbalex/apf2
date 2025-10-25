@@ -1,8 +1,7 @@
-import { useState, useCallback, memo } from 'react'
+import { useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
@@ -46,39 +45,37 @@ const StyledLabel = styled.div`
   padding-bottom: 8px;
 `
 
-export const StringToCopy = memo(
-  observer(({ text, label }) => {
-    const [copied, setCopied] = useState(false)
-    const onCopy = useCallback(() => {
-      setCopied(true)
-      // can fire after component was unmounted...
-      setTimeout(() => {
-        setCopied(false)
-      }, 3000)
-    }, [])
+export const StringToCopy = ({ text, label }) => {
+  const [copied, setCopied] = useState(false)
+  const onCopy = () => {
+    setCopied(true)
+    // can fire after component was unmounted...
+    setTimeout(() => {
+      setCopied(false)
+    }, 3000)
+  }
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <StyledLabel>{label}</StyledLabel>
-          <StringToCopyContainer>
-            <GuidContainer>{text}</GuidContainer>
-            <CopyButtonContainer>
-              <CopyToClipboard
-                text={text}
+  return (
+    <ErrorBoundary>
+      <Container>
+        <StyledLabel>{label}</StyledLabel>
+        <StringToCopyContainer>
+          <GuidContainer>{text}</GuidContainer>
+          <CopyButtonContainer>
+            <CopyToClipboard
+              text={text}
+              onCopy={onCopy}
+            >
+              <Button
+                color="primary"
                 onCopy={onCopy}
               >
-                <Button
-                  color="primary"
-                  onCopy={onCopy}
-                >
-                  {copied ? `${label} kopiert` : `${label} kopieren`}
-                </Button>
-              </CopyToClipboard>
-            </CopyButtonContainer>
-          </StringToCopyContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+                {copied ? `${label} kopiert` : `${label} kopieren`}
+              </Button>
+            </CopyToClipboard>
+          </CopyButtonContainer>
+        </StringToCopyContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
