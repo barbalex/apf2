@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext, memo, useEffect } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -25,8 +25,8 @@ import { UploaderContext } from '../../../../UploaderContext.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from './index.jsx'
 
-export const PreviewMenus = memo(
-  observer(({ parent, files, refetch, containerRef }) => {
+export const PreviewMenus = observer(
+  ({ parent, files, refetch, containerRef }) => {
     const store = useContext(MobxContext)
     const { fileId } = useParams()
     const navigate = useNavigate()
@@ -40,16 +40,17 @@ export const PreviewMenus = memo(
     const file = files.find((f) => f.fileId === fileId)
     const fileIndex = files.findIndex((f) => f.fileId === fileId)
 
-    const onClickClosePreview = useCallback(() => {
+    const onClickClosePreview = () => {
       // relative navigation using ../.. does not work here
       const fileIdBeginsAt = pathname.indexOf(fileId)
       const newPathname = pathname.slice(0, fileIdBeginsAt)
       navigate(`${newPathname}${search}`)
-    }, [pathname, fileId, search, navigate])
+    }
 
     const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
-    const onClickDelete = useCallback(async () => {
+
+    const onClickDelete = async () => {
       const indexOfFileInPathname = pathname.indexOf(fileId)
       // delete file with fileId
       // first get fileId of next file to navigate to it after deleting this one
@@ -92,29 +93,18 @@ export const PreviewMenus = memo(
       setDelMenuAnchorEl(null)
       refetch()
       navigate(`${nextPathname}${search}`)
-    }, [
-      fileId,
-      files,
-      apolloClient,
-      parent,
-      pathname,
-      fileIndex,
-      refetch,
-      store,
-      navigate,
-      search,
-    ])
+    }
 
-    const onClickNext = useCallback(() => {
+    const onClickNext = () => {
       const nextFileIndex = fileIndex + 1
       const nextFile = files[nextFileIndex] ?? files[0]
       navigate(`${nextFile.fileId}/Vorschau${search}`)
-    }, [fileIndex, files, navigate, search])
+    }
 
-    const onClickPrev = useCallback(() => {
+    const onClickPrev = () => {
       const prevFile = files[fileIndex - 1] ?? files[files.length - 1]
       navigate(`${prevFile.fileId}/Vorschau${search}`)
-    }, [fileIndex, files, navigate, search])
+    }
 
     // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
@@ -123,10 +113,8 @@ export const PreviewMenus = memo(
       return () => screenfull.off('change')
     }, [])
 
-    const onClickDownload = useCallback(
-      () => window.open(`https://ucarecdn.com/${fileId}/-/inline/no/`),
-      [fileId],
-    )
+    const onClickDownload = () =>
+      window.open(`https://ucarecdn.com/${fileId}/-/inline/no/`)
 
     return (
       <ErrorBoundary>
@@ -206,5 +194,5 @@ export const PreviewMenus = memo(
         </MuiMenu>
       </ErrorBoundary>
     )
-  }),
+  },
 )

@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react'
+import { useRef } from 'react'
 import { useOutletContext, useParams } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
@@ -30,7 +30,7 @@ const imageStyle = {
   margin: 'auto',
 }
 
-export const Component = memo(() => {
+export const Component = () => {
   const { files } = useOutletContext()
   const { fileId } = useParams()
   const previewRef = useRef(null)
@@ -111,4 +111,4 @@ export const Component = memo(() => {
       )}
     </FileDiv>
   )
-})
+}

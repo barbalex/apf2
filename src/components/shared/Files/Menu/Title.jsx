@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { Tooltip } from '@mui/material'
 import styled from '@emotion/styled'
 
@@ -32,7 +31,7 @@ const Content = styled.div`
   row-gap: 2px;
 `
 
-const FileNameForTooltip = memo(({ file, props, ref }) => (
+const FileNameForTooltip = ({ file, props, ref }) => (
   <TitleContainer
     ref={ref}
     {...props}
@@ -58,9 +57,9 @@ const FileNameForTooltip = memo(({ file, props, ref }) => (
       )}
     </Content>
   </TitleContainer>
-))
+)
 
-export const Title = memo(({ file, numbers, titleComponentWidth }) => {
+export const Title = ({ file, numbers, titleComponentWidth }) => {
   if (!file && numbers === undefined) return null
 
   return (
@@ -70,4 +69,4 @@ export const Title = memo(({ file, numbers, titleComponentWidth }) => {
       </Tooltip>
     </ErrorBoundary>
   )
-})
+}
