@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,111 +20,106 @@ import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ toggleFilterInput }) => {
-    const { search } = useLocation()
-    const navigate = useNavigate()
-    const { projId, apId, jahr } = useParams()
+export const Menu = observer(({ toggleFilterInput }) => {
+  const { search } = useLocation()
+  const navigate = useNavigate()
+  const { projId, apId, jahr } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createZielForZielsForm($apId: UUID!) {
-              createZiel(input: { ziel: { apId: $apId } }) {
-                ziel {
-                  id
-                  apId
-                }
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createZielForZielsForm($apId: UUID!) {
+            createZiel(input: { ziel: { apId: $apId } }) {
+              ziel {
+                id
+                apId
               }
             }
-          `,
-          variables: { apId },
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeZiel`],
+          }
+        `,
+        variables: { apId },
       })
-      apolloClient.invalidateQueries({
-        queryKey: [`treeZieljahrs`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      apolloClient.invalidateQueries({
-        queryKey: [`treeZielsOfJahr`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeApFolders`],
-      })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeAp`],
-      })
-      const id = result?.data?.createZiel?.ziel?.id
-      navigate(`./${id}${search}`)
-    }, [apolloClient, store, tsQueryClient, navigate, search, apId])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeZiel`],
+    })
+    apolloClient.invalidateQueries({
+      queryKey: [`treeZieljahrs`],
+    })
+    apolloClient.invalidateQueries({
+      queryKey: [`treeZielsOfJahr`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeApFolders`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeAp`],
+    })
+    const id = result?.data?.createZiel?.ziel?.id
+    navigate(`./${id}${search}`)
+  }
 
-    const onClickOpenLowerNodes = useCallback(() => {
-      console.log('Menu onClickOpenLowerNodes', { projId, apId, jahr })
-      openLowerNodes({
-        id: apId,
-        projId,
-        apId,
-        parentId: apId,
-        apolloClient,
-        store,
-        jahr,
-        menuType: 'zieljahrFolder',
-      })
-    }, [projId, apId, apolloClient, store, jahr])
+  const onClickOpenLowerNodes = () =>
+    openLowerNodes({
+      id: apId,
+      projId,
+      apId,
+      parentId: apId,
+      apolloClient,
+      store,
+      jahr,
+      menuType: 'zieljahrFolder',
+    })
 
-    const onClickCloseLowerNodes = useCallback(() => {
-      closeLowerNodes({
-        url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', +jahr],
-        store,
-        search,
-      })
-    }, [projId, apId, store, search, jahr])
+  const onClickCloseLowerNodes = () =>
+    closeLowerNodes({
+      url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', +jahr],
+      store,
+      search,
+    })
 
-    const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
-    return (
-      <ErrorBoundary>
-        <MenuBar rerenderer={showTreeMenus}>
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Neues Ziel erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
+  return (
+    <ErrorBoundary>
+      <MenuBar rerenderer={showTreeMenus}>
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Neues Ziel erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum öffnen">
+            <IconButton onClick={onClickOpenLowerNodes}>
+              <FaFolderTree style={iconStyle} />
             </IconButton>
           </Tooltip>
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum öffnen">
-              <IconButton onClick={onClickOpenLowerNodes}>
-                <FaFolderTree style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-          {showTreeMenus && (
-            <Tooltip title="Ordner im Navigationsbaum schliessen">
-              <IconButton onClick={onClickCloseLowerNodes}>
-                <RiFolderCloseFill style={iconStyle} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+        )}
+        {showTreeMenus && (
+          <Tooltip title="Ordner im Navigationsbaum schliessen">
+            <IconButton onClick={onClickCloseLowerNodes}>
+              <RiFolderCloseFill style={iconStyle} />
+            </IconButton>
+          </Tooltip>
+        )}
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})
