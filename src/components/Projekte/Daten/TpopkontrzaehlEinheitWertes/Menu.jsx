@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -27,66 +27,64 @@ const Fitter = styled.div`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ toggleFilterInput }) => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
-    const { projId, tpopkontrzaehlEinheitWerteId } = useParams()
+export const Menu = observer(({ toggleFilterInput }) => {
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
+  const { projId, tpopkontrzaehlEinheitWerteId } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
-            mutation createTpopkontrzaehlEinheitWerteForTpopkontrzaehlEinheitWerteForm {
-              createTpopkontrzaehlEinheitWerte(
-                input: { tpopkontrzaehlEinheitWerte: {} }
-              ) {
-                tpopkontrzaehlEinheitWerte {
-                  id
-                }
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
+          mutation createTpopkontrzaehlEinheitWerteForTpopkontrzaehlEinheitWerteForm {
+            createTpopkontrzaehlEinheitWerte(
+              input: { tpopkontrzaehlEinheitWerte: {} }
+            ) {
+              tpopkontrzaehlEinheitWerte {
+                id
               }
             }
-          `,
-        })
-      } catch (error) {
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeTpopkontrzaehlEinheitWerte`],
+          }
+        `,
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeRoot`],
+    } catch (error) {
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      const id =
-        result?.data?.createTpopkontrzaehlEinheitWerte
-          ?.tpopkontrzaehlEinheitWerte?.id
-      navigate(`./${id}${search}`)
-    }, [apolloClient, store, tsQueryClient, navigate, search])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopkontrzaehlEinheitWerte`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeRoot`],
+    })
+    const id =
+      result?.data?.createTpopkontrzaehlEinheitWerte?.tpopkontrzaehlEinheitWerte
+        ?.id
+    navigate(`./${id}${search}`)
+  }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar>
-          {!!toggleFilterInput && (
-            <FilterButton toggleFilterInput={toggleFilterInput} />
-          )}
-          <Tooltip title="Neue Zähl-Einheit erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <MenuBar>
+        {!!toggleFilterInput && (
+          <FilterButton toggleFilterInput={toggleFilterInput} />
+        )}
+        <Tooltip title="Neue Zähl-Einheit erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+    </ErrorBoundary>
+  )
+})
