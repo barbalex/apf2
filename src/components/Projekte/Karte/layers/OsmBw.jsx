@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 import styled from '@emotion/styled'
 
@@ -8,7 +7,7 @@ const StyledTileLayer = styled(TileLayer)`
   }
 `
 
-export const OsmBw = memo(() => (
+export const OsmBw = () => (
   <Pane
     className="OsmBw"
     name="OsmBw"
@@ -22,4 +21,4 @@ export const OsmBw = memo(() => (
       maxZoom={23}
     />
   </Pane>
-))
+)

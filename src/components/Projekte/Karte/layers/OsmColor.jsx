@@ -1,7 +1,6 @@
-import { memo } from 'react'
 import { TileLayer, Pane } from 'react-leaflet'
 
-export const OsmColor = memo(() => (
+export const OsmColor = () => (
   <Pane
     className="OsmColor"
     name="OsmColor"
@@ -18,4 +17,4 @@ export const OsmColor = memo(() => (
       maxZoom={23}
     />
   </Pane>
-))
+)
