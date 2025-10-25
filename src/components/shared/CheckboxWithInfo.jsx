@@ -1,4 +1,3 @@
-import { useCallback, memo } from 'react'
 import FormGroup from '@mui/material/FormGroup'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -32,9 +31,9 @@ const StyledFormControlLabel = styled(FormControlLabel)`
   }
 `
 
-export const CheckboxWithInfo = memo(
-  observer(({ value = null, label, name, popover, saveToDb, error }) => {
-    const onCheck = useCallback((e, val) => saveToDb(val), [saveToDb])
+export const CheckboxWithInfo = observer(
+  ({ value = null, label, name, popover, saveToDb, error }) => {
+    const onCheck = (e, val) => saveToDb(val)
 
     return (
       <Container>
@@ -67,5 +66,5 @@ export const CheckboxWithInfo = memo(
         </div>
       </Container>
     )
-  }),
+  },
 )

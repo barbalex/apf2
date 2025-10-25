@@ -1,4 +1,4 @@
-import { useContext, useCallback, memo } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'
@@ -45,8 +45,8 @@ const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
 `
 const StyledInfoIcon = styled(MdInfoOutline)``
 
-export const FilterTitle = memo(
-  observer(({ title, table, totalNr, filteredNr, activeTab }) => {
+export const FilterTitle = observer(
+  ({ title, table, totalNr, filteredNr, activeTab }) => {
     const store = useContext(MobxContext)
     const { tableIsFiltered, dataFilterTreeIsFiltered } = store
     const {
@@ -60,28 +60,23 @@ export const FilterTitle = memo(
     const existsTableFilter = tableIsFiltered(table)
     const existsTreeFilter = dataFilterTreeIsFiltered()
 
-    const onEmptyTab = useCallback(
-      () => dataFilterEmptyTab({ table, activeTab }),
-      [dataFilterEmptyTab, table, activeTab],
-    )
-    const onEmptyTable = useCallback(
-      () => dataFilterEmptyTable({ table }),
-      [dataFilterEmptyTable, table],
-    )
-    const onEmptyTree = useCallback(() => {
+    const onEmptyTab = () => dataFilterEmptyTab({ table, activeTab })
+    const onEmptyTable = () => dataFilterEmptyTable({ table })
+
+    const onEmptyTree = () => {
       store.tree.nodeLabelFilter.empty()
       dataFilterEmpty()
       emptyMapFilter()
       setApFilter(false)
-    }, [dataFilterEmpty, emptyMapFilter, setApFilter, store])
+    }
 
-    const onClickInfo = useCallback(() => {
+    const onClickInfo = () => {
       const url = `${appBaseUrl()}Dokumentation/filter`
       if (window.matchMedia('(display-mode: standalone)').matches) {
         return window.open(url, '_blank', 'toolbar=no')
       }
       window.open(url)
-    }, [])
+    }
 
     return (
       <Container>
@@ -143,5 +138,5 @@ export const FilterTitle = memo(
         </TitleRow>
       </Container>
     )
-  }),
+  },
 )
