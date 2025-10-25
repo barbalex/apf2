@@ -2,7 +2,7 @@
 // but: querying did not work
 // and covers background
 // so: not used
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { useMap, WMSTileLayer } from 'react-leaflet'
 import styled from '@emotion/styled'
 import { useMapEvent } from 'react-leaflet'
@@ -39,165 +39,163 @@ const layer = {
   wms_base_url: `https://wms.geo.admin.ch/`,
 }
 
-export const WMS = memo(
-  observer(() => {
-    const map = useMap()
-    const store = useContext(MobxContext)
+export const WMS = observer(() => {
+  const map = useMap()
+  const store = useContext(MobxContext)
 
-    useMapEvent('click', async (e) => {
-      // console.log({ layer })
-      if (layer.wms_queryable === 0) return
-      const mapSize = map.getSize()
-      const bounds = map.getBounds()
-      let res
-      let failedToFetch = false
-      try {
-        const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
-        const params = {
-          service: 'WMS',
-          version: layer.wms_version,
-          request: 'GetFeatureInfo',
-          layers: layer.wms_layers,
-          crs: 'EPSG:4326',
-          format: layer.wms_format,
-          info_format: layer.wms_info_format ?? 'application/vnd.ogc.gml',
-          // info_format: 'text/plain',
-          query_layers: layer.wms_layers,
-          x: e.containerPoint.x,
-          y: e.containerPoint.y,
-          width: mapSize.x,
-          height: mapSize.y,
-          bbox,
-        }
-        res = await axios({
-          method: 'get',
-          url: layer.wms_base_url,
-          params,
-        })
-      } catch (error) {
-        // console.log(`error fetching ${row.label}`, error?.toJSON())
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.error('error.response.data', error.response.data)
-          console.error('error.response.status', error.response.status)
-          console.error('error.response.headers', error.response.headers)
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.error('error.request:', error.request)
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error('error.message', error.message)
-        }
-        if (error.message?.toLowerCase()?.includes('failed to fetch')) {
-          failedToFetch = true
-        } else {
-          return
-        }
+  useMapEvent('click', async (e) => {
+    // console.log({ layer })
+    if (layer.wms_queryable === 0) return
+    const mapSize = map.getSize()
+    const bounds = map.getBounds()
+    let res
+    let failedToFetch = false
+    try {
+      const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+      const params = {
+        service: 'WMS',
+        version: layer.wms_version,
+        request: 'GetFeatureInfo',
+        layers: layer.wms_layers,
+        crs: 'EPSG:4326',
+        format: layer.wms_format,
+        info_format: layer.wms_info_format ?? 'application/vnd.ogc.gml',
+        // info_format: 'text/plain',
+        query_layers: layer.wms_layers,
+        x: e.containerPoint.x,
+        y: e.containerPoint.y,
+        width: mapSize.x,
+        height: mapSize.y,
+        bbox,
       }
-
-      // console.log({ mapSize, y: mapSize.y })
-
-      // build popup depending on wms_info_format
-      let popupContent
-      // see for values: https://docs.geoserver.org/stable/en/user/services/wms/reference.html#getfeatureinfo
-      if (failedToFetch) {
-        popupContent = ReactDOMServer.renderToString(
-          <PopupContainer>
-            <StyledPopupContent>{`Sie könnten offline sein.\n\nOffline können keine WMS-Informationen\nabgerufen werden.`}</StyledPopupContent>
-          </PopupContainer>,
-        )
+      res = await axios({
+        method: 'get',
+        url: layer.wms_base_url,
+        params,
+      })
+    } catch (error) {
+      // console.log(`error fetching ${row.label}`, error?.toJSON())
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('error.response.data', error.response.data)
+        console.error('error.response.status', error.response.status)
+        console.error('error.response.headers', error.response.headers)
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.error('error.request:', error.request)
       } else {
-        switch (layer.wms_info_format) {
-          case 'application/vnd.ogc.gml':
-          case 'application/vnd.ogc.gml/3.1.1': {
-            const parser = new window.DOMParser()
-            const layersData = xmlToLayersData(
-              parser.parseFromString(res.data, 'text/html'),
-            )
+        // Something happened in setting up the request that triggered an Error
+        console.error('error.message', error.message)
+      }
+      if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+        failedToFetch = true
+      } else {
+        return
+      }
+    }
 
-            // do not open empty popups
-            if (!layersData.length) return
+    // console.log({ mapSize, y: mapSize.y })
 
-            popupContent = ReactDOMServer.renderToString(
-              <Popup
-                layersData={layersData}
-                mapSize={mapSize}
-              />,
-            )
-            break
-          }
-          // TODO: test
-          case 'text/html': {
-            popupContent = (
-              <PopupContainer maxheight={mapSize.y - 40}>
-                <div dangerouslySetInnerHTML={{ __html: res.data }} />
-              </PopupContainer>
-            )
-            break
-          }
-          // TODO: test
-          case 'application/json':
-          case 'text/javascript': {
-            // do not open empty popups
-            if (!res.data?.length) return
-            if (res.data.includes('no results')) return
+    // build popup depending on wms_info_format
+    let popupContent
+    // see for values: https://docs.geoserver.org/stable/en/user/services/wms/reference.html#getfeatureinfo
+    if (failedToFetch) {
+      popupContent = ReactDOMServer.renderToString(
+        <PopupContainer>
+          <StyledPopupContent>{`Sie könnten offline sein.\n\nOffline können keine WMS-Informationen\nabgerufen werden.`}</StyledPopupContent>
+        </PopupContainer>,
+      )
+    } else {
+      switch (layer.wms_info_format) {
+        case 'application/vnd.ogc.gml':
+        case 'application/vnd.ogc.gml/3.1.1': {
+          const parser = new window.DOMParser()
+          const layersData = xmlToLayersData(
+            parser.parseFromString(res.data, 'text/html'),
+          )
 
-            popupContent = ReactDOMServer.renderToString(
-              <PopupContainer maxheight={mapSize.y - 40}>
-                <StyledPopupContent>
-                  {JSON.stringify(res.data)}
-                </StyledPopupContent>
-              </PopupContainer>,
-            )
-            break
-          }
-          case 'text/plain':
-          default: {
-            // do not open empty popups
-            if (!res.data?.length) return
-            if (res.data.includes('no results')) return
+          // do not open empty popups
+          if (!layersData.length) return
 
-            popupContent = ReactDOMServer.renderToString(
-              <PopupContainer maxheight={mapSize.y - 40}>
-                <StyledPopupContent>{res.data}</StyledPopupContent>
-              </PopupContainer>,
-            )
-            break
-          }
+          popupContent = ReactDOMServer.renderToString(
+            <Popup
+              layersData={layersData}
+              mapSize={mapSize}
+            />,
+          )
+          break
+        }
+        // TODO: test
+        case 'text/html': {
+          popupContent = (
+            <PopupContainer maxheight={mapSize.y - 40}>
+              <div dangerouslySetInnerHTML={{ __html: res.data }} />
+            </PopupContainer>
+          )
+          break
+        }
+        // TODO: test
+        case 'application/json':
+        case 'text/javascript': {
+          // do not open empty popups
+          if (!res.data?.length) return
+          if (res.data.includes('no results')) return
+
+          popupContent = ReactDOMServer.renderToString(
+            <PopupContainer maxheight={mapSize.y - 40}>
+              <StyledPopupContent>
+                {JSON.stringify(res.data)}
+              </StyledPopupContent>
+            </PopupContainer>,
+          )
+          break
+        }
+        case 'text/plain':
+        default: {
+          // do not open empty popups
+          if (!res.data?.length) return
+          if (res.data.includes('no results')) return
+
+          popupContent = ReactDOMServer.renderToString(
+            <PopupContainer maxheight={mapSize.y - 40}>
+              <StyledPopupContent>{res.data}</StyledPopupContent>
+            </PopupContainer>,
+          )
+          break
         }
       }
+    }
 
-      window.L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map)
-    })
+    window.L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map)
+  })
 
-    const onTileErrorDebounced = useDebouncedCallback(
-      onTileError.bind(this, store, map, layer),
-      600,
-    )
+  const onTileErrorDebounced = useDebouncedCallback(
+    onTileError.bind(this, store, map, layer),
+    600,
+  )
 
-    // TODO:
-    // leaflet calls server internally
-    // BUT: if call errors, leaflet does not surface the error
-    // instead ALL WMS LAYERS FAIL!!!!!!!!
-    return (
-      <WMSTileLayer
-        url={layer.wms_base_url}
-        layers={layer.wms_layers}
-        version={layer.wms_version}
-        format={layer.wms_format}
-        maxNativeZoom={23}
-        minZoom={0}
-        maxZoom={23}
-        opacity={0.5}
-        transparent={false}
-        // exceptions="inimage"
-        eventHandlers={{
-          tileerror: onTileErrorDebounced,
-        }}
-      />
-    )
-  }),
-)
+  // TODO:
+  // leaflet calls server internally
+  // BUT: if call errors, leaflet does not surface the error
+  // instead ALL WMS LAYERS FAIL!!!!!!!!
+  return (
+    <WMSTileLayer
+      url={layer.wms_base_url}
+      layers={layer.wms_layers}
+      version={layer.wms_version}
+      format={layer.wms_format}
+      maxNativeZoom={23}
+      minZoom={0}
+      maxZoom={23}
+      opacity={0.5}
+      transparent={false}
+      // exceptions="inimage"
+      eventHandlers={{
+        tileerror: onTileErrorDebounced,
+      }}
+    />
+  )
+})

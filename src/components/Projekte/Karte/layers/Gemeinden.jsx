@@ -1,7 +1,7 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
-import { gql } from '@apollo/client';
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
@@ -17,49 +17,47 @@ const style = () => ({
   opacity: 1,
 })
 
-export const Gemeinden = memo(
-  observer(() => {
-    const { enqueNotification } = useContext(MobxContext)
+export const Gemeinden = observer(() => {
+  const { enqueNotification } = useContext(MobxContext)
 
-    const { data, error } = useQuery(gql`
-      query karteGemeindesQuery {
-        allChAdministrativeUnits(
-          filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
-        ) {
-          nodes {
-            id
-            geom {
-              geojson
-            }
+  const { data, error } = useQuery(gql`
+    query karteGemeindesQuery {
+      allChAdministrativeUnits(
+        filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
+      ) {
+        nodes {
+          id
+          geom {
+            geojson
           }
         }
       }
-    `)
-
-    if (error) {
-      enqueNotification({
-        message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
-      })
     }
+  `)
 
-    if (!data) return null
+  if (error) {
+    enqueNotification({
+      message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
-    const nodes = data?.allChAdministrativeUnits?.nodes ?? []
-    const gemeinden = nodes.map((n) => ({
-      type: 'Feature',
-      properties: { Gemeinde: n.text ?? '' },
-      geometry: JSON.parse(n?.geom?.geojson),
-    }))
+  if (!data) return null
 
-    return (
-      <GeoJSON
-        data={gemeinden}
-        style={style}
-        interactive={false}
-      />
-    )
-  }),
-)
+  const nodes = data?.allChAdministrativeUnits?.nodes ?? []
+  const gemeinden = nodes.map((n) => ({
+    type: 'Feature',
+    properties: { Gemeinde: n.text ?? '' },
+    geometry: JSON.parse(n?.geom?.geojson),
+  }))
+
+  return (
+    <GeoJSON
+      data={gemeinden}
+      style={style}
+      interactive={false}
+    />
+  )
+})

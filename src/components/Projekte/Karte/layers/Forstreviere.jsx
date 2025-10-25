@@ -1,11 +1,11 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
-import { gql } from '@apollo/client';
+import { gql } from '@apollo/client'
 
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
@@ -20,49 +20,47 @@ const style = () => ({
   opacity: 1,
 })
 
-export const Forstreviere = memo(
-  observer(() => {
-    const { enqueNotification } = useContext(MobxContext)
+export const Forstreviere = observer(() => {
+  const { enqueNotification } = useContext(MobxContext)
 
-    const { data, error } = useQuery(gql`
-      query forstrevierQuery {
-        allForstreviers {
-          nodes {
-            id: ogcFid
-            forevnr
-            revName
-            geom: wkbGeometry {
-              geojson
-            }
+  const { data, error } = useQuery(gql`
+    query forstrevierQuery {
+      allForstreviers {
+        nodes {
+          id: ogcFid
+          forevnr
+          revName
+          geom: wkbGeometry {
+            geojson
           }
         }
       }
-    `)
-
-    if (error) {
-      enqueNotification({
-        message: `Fehler beim Laden der Forstreviere: ${error.message}`,
-        options: {
-          variant: 'error',
-        },
-      })
     }
+  `)
 
-    if (!data) return null
+  if (error) {
+    enqueNotification({
+      message: `Fehler beim Laden der Forstreviere: ${error.message}`,
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
-    const nodes = data?.allForstreviers?.nodes ?? []
-    const forstReviereData = nodes.map((n) => ({
-      type: 'Feature',
-      properties: {},
-      geometry: JSON.parse(n?.geom?.geojson),
-    }))
+  if (!data) return null
 
-    return (
-      <GeoJSON
-        data={forstReviereData}
-        style={style}
-        interactive={false}
-      />
-    )
-  }),
-)
+  const nodes = data?.allForstreviers?.nodes ?? []
+  const forstReviereData = nodes.map((n) => ({
+    type: 'Feature',
+    properties: {},
+    geometry: JSON.parse(n?.geom?.geojson),
+  }))
+
+  return (
+    <GeoJSON
+      data={forstReviereData}
+      style={style}
+      interactive={false}
+    />
+  )
+})
