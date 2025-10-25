@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useMemo } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -31,6 +31,26 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   font-size: 1.5rem;
 `
 
+const getValues = ({ activeFilterTable, nodeLabelFilter }) => {
+  let labelText = '(filtern nicht möglich)'
+  let filterValue = ''
+
+  if (activeFilterTable) {
+    filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+    // make sure 0 is kept
+    if (!filterValue && filterValue !== 0) filterValue = ''
+    // should be to_under_score_case
+    const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
+    const tableLabel = table ? table.label : null
+    // danger: Projekte can not be filtered because no parent folder
+    if (tableLabel !== 'Projekte') {
+      labelText = `${tableLabel} filtern`
+    }
+  }
+
+  return { labelText, filterValue }
+}
+
 export const LabelFilter = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter: nodeLabelFilterRaw, activeFilterTable } = store.tree
@@ -39,25 +59,10 @@ export const LabelFilter = observer(() => {
   const empty = store.tree.nodeLabelFilter.empty
   const isFiltered = store.tree.nodeLabelFilter.isFiltered()
 
-  const { labelText, filterValue } = useMemo(() => {
-    let labelText = '(filtern nicht möglich)'
-    let filterValue = ''
-
-    if (activeFilterTable) {
-      filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
-      // make sure 0 is kept
-      if (!filterValue && filterValue !== 0) filterValue = ''
-      // should be to_under_score_case
-      const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
-      const tableLabel = table ? table.label : null
-      // danger: Projekte can not be filtered because no parent folder
-      if (tableLabel !== 'Projekte') {
-        labelText = `${tableLabel} filtern`
-      }
-    }
-
-    return { labelText, filterValue }
-  }, [activeFilterTable, nodeLabelFilter])
+  const { labelText, filterValue } = getValues({
+    activeFilterTable,
+    nodeLabelFilter,
+  })
 
   const [value, setValue] = useState(filterValue)
   // value should update when changed from outside

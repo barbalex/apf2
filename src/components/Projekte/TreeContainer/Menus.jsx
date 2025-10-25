@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, lazy, Suspense } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { uniq } from 'es-toolkit'
 import { isEqual } from 'es-toolkit'
@@ -316,404 +316,373 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-export const Menus = memo(
-  observer(() => {
-    const params = useParams()
-    const { projId, apId, popId } = params
-    const { search } = useLocation()
+export const Menus = observer(() => {
+  const params = useParams()
+  const { projId, apId, popId } = params
+  const { search } = useLocation()
 
-    const store = useContext(MobxContext)
-    const {
-      activeApfloraLayers,
-      setActiveApfloraLayers,
-      setIdOfTpopBeingLocalized,
-      enqueNotification,
-      toDeleteId,
-      setToDelete,
-      setCopying,
-      setMoving,
-      copyingBiotop,
-      setCopyingBiotop,
-    } = store
-    const { setOpenNodes, openNodes: openNodesRaw } = store.tree
-    const openNodes = getSnapshot(openNodesRaw)
+  const store = useContext(MobxContext)
+  const {
+    activeApfloraLayers,
+    setActiveApfloraLayers,
+    setIdOfTpopBeingLocalized,
+    enqueNotification,
+    toDeleteId,
+    setToDelete,
+    setCopying,
+    setMoving,
+    copyingBiotop,
+    setCopyingBiotop,
+  } = store
+  const { setOpenNodes, openNodes: openNodesRaw } = store.tree
+  const openNodes = getSnapshot(openNodesRaw)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
-      newTpopFromBeobDialogOpenAtom,
+  const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
+    newTpopFromBeobDialogOpenAtom,
+  )
+  const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useAtom(
+    newTpopFromBeobBeobIdAtom,
+  )
+  const closeNewTpopFromBeobDialog = () => setNewTpopFromBeobDialogOpen(false)
+
+  const [projekteTabs, setProjekteTabs] = useProjekteTabs()
+  const showMapIfNotYetVisible = (projekteTabs) => {
+    const isVisible = projekteTabs.includes('karte')
+    if (!isVisible) {
+      setProjekteTabs([...projekteTabs, 'karte'])
+    }
+  }
+
+  const handleClick = (e, data, element) => {
+    // console.log('TreeContainer, handleClick', { e, data, element })
+    if (!data) {
+      return enqueNotification({
+        message: 'no data passed with click',
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    if (!element) {
+      return enqueNotification({
+        message: 'no element passed with click',
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const { table, action, actionTable } = data
+    const { firstElementChild } = element
+    if (!firstElementChild) {
+      return enqueNotification({
+        message: 'no firstElementChild passed with click',
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    const id = firstElementChild.getAttribute('data-id')
+    const parentId = firstElementChild.getAttribute('data-parentid')
+    const urlPassed = firstElementChild.getAttribute('data-url')
+    const url = JSON.parse(urlPassed)
+    const label = firstElementChild.getAttribute('data-label')
+    const nodeType = firstElementChild.getAttribute('data-nodetype')
+    const menuType = firstElementChild.getAttribute('data-menutype')
+    const singleElementName = firstElementChild.getAttribute(
+      'data-singleelementname',
     )
-    const [newTpopFromBeobBeobId, setNewTpopFromBeobBeobId] = useAtom(
-      newTpopFromBeobBeobIdAtom,
-    )
-    const closeNewTpopFromBeobDialog = useCallback(
-      () => setNewTpopFromBeobDialogOpen(false),
-      [],
-    )
-
-    const [projekteTabs, setProjekteTabs] = useProjekteTabs()
-    const showMapIfNotYetVisible = useCallback(
-      (projekteTabs) => {
-        const isVisible = projekteTabs.includes('karte')
-        if (!isVisible) {
-          setProjekteTabs([...projekteTabs, 'karte'])
+    const jahr = firstElementChild.getAttribute('data-jahr')
+    // console.log('TreeContainer.Menus.handleClick', {
+    //   table,
+    //   action,
+    //   actionTable,
+    //   firstElementChild,
+    //   id,
+    //   parentId,
+    //   urlPassed,
+    //   url,
+    //   label,
+    //   nodeType,
+    //   menuType,
+    //   singleElementName,
+    //   jahr,
+    // })
+    const actions = {
+      insert() {
+        const urlForInsert = [...url]
+        // when inserting on same level, remove last url element
+        if (nodeType === 'table') {
+          urlForInsert.pop()
+        }
+        if (menuType === 'zielFolder') {
+          // db sets year 1 as standard
+          urlForInsert.push(1)
+        }
+        insertDataset({
+          tablePassed: table,
+          parentId: parentId || id,
+          url: urlForInsert,
+          menuType,
+          singleElementName,
+          id,
+          apolloClient,
+          store,
+          search,
+          jahr,
+        })
+      },
+      openLowerNodes() {
+        openLowerNodes({
+          id,
+          parentId,
+          apId,
+          projId,
+          popId,
+          menuType,
+          apolloClient,
+          store,
+          jahr,
+        })
+      },
+      closeLowerNodes() {
+        closeLowerNodes({
+          url,
+          store,
+          search,
+        })
+      },
+      delete() {
+        setToDelete({
+          table,
+          id,
+          label,
+          url,
+          afterDeletionHook: () => {
+            const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
+            setOpenNodes(newOpenNodes)
+            tsQueryClient.invalidateQueries({
+              queryKey: [`tree${upperFirst(table)}`],
+            })
+          },
+        })
+      },
+      showBeobOnMap() {
+        // 1. open map if not yet open
+        showMapIfNotYetVisible(projekteTabs)
+        // 2 add layer for actionTable
+        if (activeApfloraLayers.includes(actionTable)) {
+          setActiveApfloraLayers(
+            activeApfloraLayers.filter((o) => o !== actionTable),
+          )
+        } else {
+          setActiveApfloraLayers([...activeApfloraLayers, actionTable])
         }
       },
-      [setProjekteTabs],
-    )
-    const handleClick = useCallback(
-      (e, data, element) => {
-        // console.log('TreeContainer, handleClick', { e, data, element })
-        if (!data) {
-          return enqueNotification({
-            message: 'no data passed with click',
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        if (!element) {
-          return enqueNotification({
-            message: 'no element passed with click',
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        const { table, action, actionTable } = data
-        const { firstElementChild } = element
-        if (!firstElementChild) {
-          return enqueNotification({
-            message: 'no firstElementChild passed with click',
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        const id = firstElementChild.getAttribute('data-id')
-        const parentId = firstElementChild.getAttribute('data-parentid')
-        const urlPassed = firstElementChild.getAttribute('data-url')
-        const url = JSON.parse(urlPassed)
-        const label = firstElementChild.getAttribute('data-label')
-        const nodeType = firstElementChild.getAttribute('data-nodetype')
-        const menuType = firstElementChild.getAttribute('data-menutype')
-        const singleElementName = firstElementChild.getAttribute(
-          'data-singleelementname',
-        )
-        const jahr = firstElementChild.getAttribute('data-jahr')
-        // console.log('TreeContainer.Menus.handleClick', {
-        //   table,
-        //   action,
-        //   actionTable,
-        //   firstElementChild,
+      localizeOnMap() {
+        setIdOfTpopBeingLocalized(id)
+        showMapIfNotYetVisible(projekteTabs)
+        setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
+      },
+      markForMoving() {
+        setMoving({
+          table,
+          id,
+          label,
+          toTable: actionTable,
+          fromParentId: apId,
+        })
+      },
+      move() {
+        moveTo({
+          id: nodeType === 'folder' ? parentId : id,
+          store,
+          apolloClient,
+        })
+      },
+      markForCopying() {
+        setCopying({ table, id, label, withNextLevel: false })
+      },
+      markForCopyingWithNextLevel() {
+        setCopying({ table, id, label, withNextLevel: true })
+      },
+      resetCopying() {
+        setCopying({
+          table: null,
+          id: '99999999-9999-9999-9999-999999999999',
+          label: null,
+          withNextLevel: false,
+        })
+      },
+      copy() {
+        // console.log('TreeContainer.Menus.handleClick.copy', {
         //   id,
         //   parentId,
-        //   urlPassed,
-        //   url,
-        //   label,
-        //   nodeType,
-        //   menuType,
-        //   singleElementName,
-        //   jahr,
         // })
-        const actions = {
-          insert() {
-            const urlForInsert = [...url]
-            // when inserting on same level, remove last url element
-            if (nodeType === 'table') {
-              urlForInsert.pop()
-            }
-            if (menuType === 'zielFolder') {
-              // db sets year 1 as standard
-              urlForInsert.push(1)
-            }
-            insertDataset({
-              tablePassed: table,
-              parentId: parentId || id,
-              url: urlForInsert,
-              menuType,
-              singleElementName,
-              id,
-              apolloClient,
-              store,
-              search,
-              jahr,
-            })
-          },
-          openLowerNodes() {
-            openLowerNodes({
-              id,
-              parentId,
-              apId,
-              projId,
-              popId,
-              menuType,
-              apolloClient,
-              store,
-              jahr,
-            })
-          },
-          closeLowerNodes() {
-            closeLowerNodes({
-              url,
-              store,
-              search,
-            })
-          },
-          delete() {
-            setToDelete({
-              table,
-              id,
-              label,
-              url,
-              afterDeletionHook: () => {
-                const newOpenNodes = openNodes.filter((n) => !isEqual(n, url))
-                setOpenNodes(newOpenNodes)
-                tsQueryClient.invalidateQueries({
-                  queryKey: [`tree${upperFirst(table)}`],
-                })
-              },
-            })
-          },
-          showBeobOnMap() {
-            // 1. open map if not yet open
-            showMapIfNotYetVisible(projekteTabs)
-            // 2 add layer for actionTable
-            if (activeApfloraLayers.includes(actionTable)) {
-              setActiveApfloraLayers(
-                activeApfloraLayers.filter((o) => o !== actionTable),
-              )
-            } else {
-              setActiveApfloraLayers([...activeApfloraLayers, actionTable])
-            }
-          },
-          localizeOnMap() {
-            setIdOfTpopBeingLocalized(id)
-            showMapIfNotYetVisible(projekteTabs)
-            setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
-          },
-          markForMoving() {
-            setMoving({
-              table,
-              id,
-              label,
-              toTable: actionTable,
-              fromParentId: apId,
-            })
-          },
-          move() {
-            moveTo({
-              id: nodeType === 'folder' ? parentId : id,
-              store,
-              apolloClient,
-            })
-          },
-          markForCopying() {
-            setCopying({ table, id, label, withNextLevel: false })
-          },
-          markForCopyingWithNextLevel() {
-            setCopying({ table, id, label, withNextLevel: true })
-          },
-          resetCopying() {
-            setCopying({
-              table: null,
-              id: '99999999-9999-9999-9999-999999999999',
-              label: null,
-              withNextLevel: false,
-            })
-          },
-          copy() {
-            // console.log('TreeContainer.Menus.handleClick.copy', {
-            //   id,
-            //   parentId,
-            // })
-            copyTo({
-              parentId: nodeType === 'folder' ? parentId : id,
-              apolloClient,
-              store,
-            })
-          },
-          markForCopyingBiotop() {
-            setCopyingBiotop({ id, label })
-          },
-          resetCopyingBiotop() {
-            setCopyingBiotop({ id: null, label: null })
-          },
-          copyBiotop() {
-            copyBiotopTo({ id, copyingBiotop, apolloClient })
-          },
-          copyTpopKoordToPop() {
-            copyTpopKoordToPop({ id, store, apolloClient })
-          },
-          createNewPopFromBeob() {
-            createNewPopFromBeob({
-              id,
-              apId,
-              projId,
-              apolloClient,
-              store,
-              search,
-            })
-          },
-          createNewTpopFromBeob() {
-            setNewTpopFromBeobBeobId(id)
-            setNewTpopFromBeobDialogOpen(true)
-          },
-          copyBeobZugeordnetKoordToTpop() {
-            copyBeobZugeordnetKoordToTpop({ id, store, apolloClient })
-          },
-          async showCoordOfTpopOnMapsZhCh() {
-            showCoordOfTpopOnMapsZhCh({
-              id,
-              enqueNotification,
-              apolloClient,
-            })
-          },
-          async showCoordOfTpopOnMapGeoAdminCh() {
-            showCoordOfTpopOnMapGeoAdminCh({
-              id,
-              enqueNotification,
-              apolloClient,
-            })
-          },
-          async showCoordOfBeobOnMapsZhCh() {
-            showCoordOfBeobOnMapsZhCh({
-              id,
-              enqueNotification,
-              apolloClient,
-            })
-          },
-          async showCoordOfBeobOnMapGeoAdminCh() {
-            showCoordOfBeobOnMapGeoAdminCh({
-              id,
-              enqueNotification,
-              apolloClient,
-            })
-          },
-        }
-        if (Object.keys(actions).includes(action)) {
-          actions[action]()
-        } else {
-          enqueNotification({
-            message: `action "${action}" unknown, therefore not executed`,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
+        copyTo({
+          parentId: nodeType === 'folder' ? parentId : id,
+          apolloClient,
+          store,
+        })
       },
-      [
-        enqueNotification,
-        apolloClient,
-        store,
-        search,
-        apId,
-        projId,
-        popId,
-        setToDelete,
-        openNodes,
-        setOpenNodes,
-        tsQueryClient,
-        showMapIfNotYetVisible,
-        projekteTabs,
-        activeApfloraLayers,
-        setActiveApfloraLayers,
-        setIdOfTpopBeingLocalized,
-        setMoving,
-        setCopying,
-        setCopyingBiotop,
-        copyingBiotop,
-      ],
-    )
+      markForCopyingBiotop() {
+        setCopyingBiotop({ id, label })
+      },
+      resetCopyingBiotop() {
+        setCopyingBiotop({ id: null, label: null })
+      },
+      copyBiotop() {
+        copyBiotopTo({ id, copyingBiotop, apolloClient })
+      },
+      copyTpopKoordToPop() {
+        copyTpopKoordToPop({ id, store, apolloClient })
+      },
+      createNewPopFromBeob() {
+        createNewPopFromBeob({
+          id,
+          apId,
+          projId,
+          apolloClient,
+          store,
+          search,
+        })
+      },
+      createNewTpopFromBeob() {
+        setNewTpopFromBeobBeobId(id)
+        setNewTpopFromBeobDialogOpen(true)
+      },
+      copyBeobZugeordnetKoordToTpop() {
+        copyBeobZugeordnetKoordToTpop({ id, store, apolloClient })
+      },
+      async showCoordOfTpopOnMapsZhCh() {
+        showCoordOfTpopOnMapsZhCh({
+          id,
+          enqueNotification,
+          apolloClient,
+        })
+      },
+      async showCoordOfTpopOnMapGeoAdminCh() {
+        showCoordOfTpopOnMapGeoAdminCh({
+          id,
+          enqueNotification,
+          apolloClient,
+        })
+      },
+      async showCoordOfBeobOnMapsZhCh() {
+        showCoordOfBeobOnMapsZhCh({
+          id,
+          enqueNotification,
+          apolloClient,
+        })
+      },
+      async showCoordOfBeobOnMapGeoAdminCh() {
+        showCoordOfBeobOnMapGeoAdminCh({
+          id,
+          enqueNotification,
+          apolloClient,
+        })
+      },
+    }
+    if (Object.keys(actions).includes(action)) {
+      actions[action]()
+    } else {
+      enqueNotification({
+        message: `action "${action}" unknown, therefore not executed`,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+  }
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <Suspense fallback={null}>
-            <CmApFolder onClick={handleClick} />
-            <CmAp onClick={handleClick} />
-            <CmApberuebersichtFolder onClick={handleClick} />
-            <CmApberuebersicht onClick={handleClick} />
-            <CmAssozartFolder onClick={handleClick} />
-            <CmAssozart onClick={handleClick} />
-            <CmEkzaehleinheitFolder onClick={handleClick} />
-            <CmEkzaehleinheit onClick={handleClick} />
-            <CmEkfrequenzFolder onClick={handleClick} />
-            <CmEkfrequenz onClick={handleClick} />
-            <CmApartFolder onClick={handleClick} />
-            <CmApart onClick={handleClick} />
-            <CmBeobZugeordnetFolder onClick={handleClick} />
-            <CmApberFolder onClick={handleClick} />
-            <CmApber onClick={handleClick} />
-            <CmErfkritFolder onClick={handleClick} />
-            <CmErfkrit onClick={handleClick} />
-            <CmZielFolder onClick={handleClick} />
-            <CmZielJahrFolder onClick={handleClick} />
-            <CmZiel onClick={handleClick} />
-            <CmPopFolder onClick={handleClick} />
-            <CmPop onClick={handleClick} />
-            <CmPopmassnberFolder onClick={handleClick} />
-            <CmPopmassnber onClick={handleClick} />
-            <CmPopberFolder onClick={handleClick} />
-            <CmPopber onClick={handleClick} />
-            <CmProjekt onClick={handleClick} />
-            <CmWerteListen onClick={handleClick} />
-            <CmTpopFolder onClick={handleClick} />
-            <CmTpop onClick={handleClick} />
-            <CmTpopberFolder onClick={handleClick} />
-            <CmTpopber onClick={handleClick} />
-            <CmBeobZugeordnet onClick={handleClick} />
-            <CmBeobnichtbeurteilt onClick={handleClick} />
-            <CmBeobNichtZuzuordnen onClick={handleClick} />
-            <CmTpopfreiwkontrFolder onClick={handleClick} />
-            <CmTpopfreiwkontr onClick={handleClick} />
-            <CmTpopfeldkontrFolder onClick={handleClick} />
-            <CmTpopfeldkontr onClick={handleClick} />
-            <CmTpopfeldkontrzaehlFolder onClick={handleClick} />
-            <CmTpopfeldkontrzaehl onClick={handleClick} />
-            <CmTpopmassnberFolder onClick={handleClick} />
-            <CmTpopmassnber onClick={handleClick} />
-            <CmTpopmassnFolder onClick={handleClick} />
-            <CmTpopmassn onClick={handleClick} />
-            <CmUserFolder onClick={handleClick} />
-            <CmUser onClick={handleClick} />
-            <CmAdresseFolder onClick={handleClick} />
-            <CmTpopApberrelevantGrundWerteFolder onClick={handleClick} />
-            <CmEkAbrechnungstypWerteFolder onClick={handleClick} />
-            <CmEkAbrechnungstypWerte onClick={handleClick} />
-            <CmTpopkontrzaehlEinheitWerteFolder onClick={handleClick} />
-            <CmTpopkontrzaehlEinheitWerte onClick={handleClick} />
-            <CmAdresse onClick={handleClick} />
-            <CmTpopApberrelevantGrundWerte onClick={handleClick} />
-            <StyledDialog
-              open={newTpopFromBeobDialogOpen}
-              onClose={closeNewTpopFromBeobDialog}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-              maxWidth="xl"
-            >
-              <DialogTitle id="alert-dialog-title">
-                {'Population wählen:'}
-              </DialogTitle>
-              <DialogContent dividers={false}>
-                <TpopFromBeobPopList
-                  beobId={newTpopFromBeobBeobId}
-                  closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
-                />
-              </DialogContent>
-              <DialogActions>
-                <Button
-                  onClick={closeNewTpopFromBeobDialog}
-                  color="inherit"
-                >
-                  abbrechen
-                </Button>
-              </DialogActions>
-            </StyledDialog>
-          </Suspense>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <Container>
+        <Suspense fallback={null}>
+          <CmApFolder onClick={handleClick} />
+          <CmAp onClick={handleClick} />
+          <CmApberuebersichtFolder onClick={handleClick} />
+          <CmApberuebersicht onClick={handleClick} />
+          <CmAssozartFolder onClick={handleClick} />
+          <CmAssozart onClick={handleClick} />
+          <CmEkzaehleinheitFolder onClick={handleClick} />
+          <CmEkzaehleinheit onClick={handleClick} />
+          <CmEkfrequenzFolder onClick={handleClick} />
+          <CmEkfrequenz onClick={handleClick} />
+          <CmApartFolder onClick={handleClick} />
+          <CmApart onClick={handleClick} />
+          <CmBeobZugeordnetFolder onClick={handleClick} />
+          <CmApberFolder onClick={handleClick} />
+          <CmApber onClick={handleClick} />
+          <CmErfkritFolder onClick={handleClick} />
+          <CmErfkrit onClick={handleClick} />
+          <CmZielFolder onClick={handleClick} />
+          <CmZielJahrFolder onClick={handleClick} />
+          <CmZiel onClick={handleClick} />
+          <CmPopFolder onClick={handleClick} />
+          <CmPop onClick={handleClick} />
+          <CmPopmassnberFolder onClick={handleClick} />
+          <CmPopmassnber onClick={handleClick} />
+          <CmPopberFolder onClick={handleClick} />
+          <CmPopber onClick={handleClick} />
+          <CmProjekt onClick={handleClick} />
+          <CmWerteListen onClick={handleClick} />
+          <CmTpopFolder onClick={handleClick} />
+          <CmTpop onClick={handleClick} />
+          <CmTpopberFolder onClick={handleClick} />
+          <CmTpopber onClick={handleClick} />
+          <CmBeobZugeordnet onClick={handleClick} />
+          <CmBeobnichtbeurteilt onClick={handleClick} />
+          <CmBeobNichtZuzuordnen onClick={handleClick} />
+          <CmTpopfreiwkontrFolder onClick={handleClick} />
+          <CmTpopfreiwkontr onClick={handleClick} />
+          <CmTpopfeldkontrFolder onClick={handleClick} />
+          <CmTpopfeldkontr onClick={handleClick} />
+          <CmTpopfeldkontrzaehlFolder onClick={handleClick} />
+          <CmTpopfeldkontrzaehl onClick={handleClick} />
+          <CmTpopmassnberFolder onClick={handleClick} />
+          <CmTpopmassnber onClick={handleClick} />
+          <CmTpopmassnFolder onClick={handleClick} />
+          <CmTpopmassn onClick={handleClick} />
+          <CmUserFolder onClick={handleClick} />
+          <CmUser onClick={handleClick} />
+          <CmAdresseFolder onClick={handleClick} />
+          <CmTpopApberrelevantGrundWerteFolder onClick={handleClick} />
+          <CmEkAbrechnungstypWerteFolder onClick={handleClick} />
+          <CmEkAbrechnungstypWerte onClick={handleClick} />
+          <CmTpopkontrzaehlEinheitWerteFolder onClick={handleClick} />
+          <CmTpopkontrzaehlEinheitWerte onClick={handleClick} />
+          <CmAdresse onClick={handleClick} />
+          <CmTpopApberrelevantGrundWerte onClick={handleClick} />
+          <StyledDialog
+            open={newTpopFromBeobDialogOpen}
+            onClose={closeNewTpopFromBeobDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            maxWidth="xl"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {'Population wählen:'}
+            </DialogTitle>
+            <DialogContent dividers={false}>
+              <TpopFromBeobPopList
+                beobId={newTpopFromBeobBeobId}
+                closeNewTpopFromBeobDialog={closeNewTpopFromBeobDialog}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={closeNewTpopFromBeobDialog}
+                color="inherit"
+              >
+                abbrechen
+              </Button>
+            </DialogActions>
+          </StyledDialog>
+        </Suspense>
+      </Container>
+    </ErrorBoundary>
+  )
+})
