@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
@@ -11,20 +11,18 @@ import { useWertesNavData } from '../../../../modules/useWertesNavData.js'
 import { useMessagesNavData } from '../../../../modules/useMessagesNavData.js'
 import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.js'
 
-export const Root = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const token = store.user?.token
-    const role = token ? jwtDecode(token).role : null
+export const Root = observer(() => {
+  const store = useContext(MobxContext)
+  const token = store.user?.token
+  const role = token ? jwtDecode(token).role : null
 
-    return (
-      <>
-        <RootNode fetcher={useProjektNavData} />
-        <RootNode fetcher={useUsersNavData} />
-        {role === 'apflora_manager' && <RootNode fetcher={useWertesNavData} />}
-        <RootNode fetcher={useMessagesNavData} />
-        <RootNode fetcher={useCurrentissuesNavData} />
-      </>
-    )
-  }),
-)
+  return (
+    <>
+      <RootNode fetcher={useProjektNavData} />
+      <RootNode fetcher={useUsersNavData} />
+      {role === 'apflora_manager' && <RootNode fetcher={useWertesNavData} />}
+      <RootNode fetcher={useMessagesNavData} />
+      <RootNode fetcher={useCurrentissuesNavData} />
+    </>
+  )
+})
