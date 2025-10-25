@@ -1,4 +1,4 @@
-import { memo, useContext, useState, useCallback, useEffect } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -32,106 +32,97 @@ const StyledTextField = styled(TextField)`
   }
 `
 
-export const FilterInput = memo(
-  observer(
-    ({ filterInputIsVisible, toggleFilterInputIsVisible, ref: inputRef }) => {
-      const store = useContext(MobxContext)
-      const { nodeLabelFilter, activeFilterTable: activeFilterTableIn } =
-        store.tree
-      // ISSUE: doc is not covered by active node array
-      // thus activeFilterTable is not set for /Dokumentation
-      const { pathname } = useLocation()
-      const isDocs = pathname.includes('/Dokumentation')
-      const activeFilterTable = isDocs ? 'doc' : activeFilterTableIn
+export const FilterInput = observer(
+  ({ filterInputIsVisible, toggleFilterInputIsVisible, ref: inputRef }) => {
+    const store = useContext(MobxContext)
+    const { nodeLabelFilter, activeFilterTable: activeFilterTableIn } =
+      store.tree
+    // ISSUE: doc is not covered by active node array
+    // thus activeFilterTable is not set for /Dokumentation
+    const { pathname } = useLocation()
+    const isDocs = pathname.includes('/Dokumentation')
+    const activeFilterTable = isDocs ? 'doc' : activeFilterTableIn
 
-      const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
-        nodeLabelFilter
-      const isFiltered = runIsFiltered()
+    const { setKey: setNodeLabelFilterKey, isFiltered: runIsFiltered } =
+      nodeLabelFilter
+    const isFiltered = runIsFiltered()
 
-      const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
-      const [value, setValue] = useState(filterValue)
-      // value should update when changed from outside
-      useEffect(() => {
-        if (filterValue === value) return
-        setValue(filterValue)
-      }, [filterValue])
+    const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+    const [value, setValue] = useState(filterValue)
+    // value should update when changed from outside
+    useEffect(() => {
+      if (filterValue === value) return
+      setValue(filterValue)
+    }, [filterValue])
 
-      const setNodeLabelFilter = useCallback(
-        (val) => {
-          setNodeLabelFilterKey({
-            value: val,
-            key: activeFilterTable,
-          })
-        },
-        [setNodeLabelFilterKey, activeFilterTable],
-      )
+    const setNodeLabelFilter = (val) =>
+      setNodeLabelFilterKey({
+        value: val,
+        key: activeFilterTable,
+      })
 
-      const onChange = useCallback((e) => {
-        // remove some values as they can cause exceptions in regular expressions
-        const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
-        setValue(val)
-      }, [])
+    const onChange = (e) => {
+      // remove some values as they can cause exceptions in regular expressions
+      const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
+      setValue(val)
+    }
 
-      const onKeyUp = useCallback(
-        (e) => {
-          if (e.key === 'Enter') {
-            setNodeLabelFilter(value)
-            // on coarse pointers, move focus out to close the keyboard
-            if (matchMedia('(pointer: coarse)').matches) {
-              inputRef.current.blur()
-            }
-          }
-        },
-        [setNodeLabelFilter, value],
-      )
+    const onKeyUp = (e) => {
+      if (e.key === 'Enter') {
+        setNodeLabelFilter(value)
+        // on coarse pointers, move focus out to close the keyboard
+        if (matchMedia('(pointer: coarse)').matches) {
+          inputRef.current.blur()
+        }
+      }
+    }
 
-      const onClickEmpty = useCallback(() => {
-        toggleFilterInputIsVisible()
-        setValue('')
-        setNodeLabelFilter('')
-      }, [setNodeLabelFilter, setValue])
+    const onClickEmpty = () => {
+      toggleFilterInputIsVisible()
+      setValue('')
+      setNodeLabelFilter('')
+    }
 
-      // if no activeFilterTable, show nothing
-      if (!activeFilterTable) return null
+    // if no activeFilterTable, show nothing
+    if (!activeFilterTable) return null
 
-      return (
-        <Container show={filterInputIsVisible.toString()}>
-          <StyledTextField
-            inputRef={inputRef}
-            label="Filter"
-            variant="standard"
-            fullWidth
-            value={value}
-            onChange={onChange}
-            onKeyUp={onKeyUp}
-            spellCheck="false"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            // autofocus leads to focus being stolen from other filter inputs
-            // but necessary because rerenders happen (?)
-            autoFocus={true}
-            slotProps={{
-              input: {
-                endAdornment:
-                  isFiltered || value?.length ?
-                    <InputAdornment position="end">
-                      <Tooltip title="Filter entfernen">
-                        <StyledIconButton
-                          aria-label="Filter entfernen"
-                          onClick={onClickEmpty}
-                          fontSize="small"
-                        >
-                          <FaTimes />
-                        </StyledIconButton>
-                      </Tooltip>
-                    </InputAdornment>
-                  : null,
-              },
-            }}
-          />
-        </Container>
-      )
-    },
-  ),
+    return (
+      <Container show={filterInputIsVisible.toString()}>
+        <StyledTextField
+          inputRef={inputRef}
+          label="Filter"
+          variant="standard"
+          fullWidth
+          value={value}
+          onChange={onChange}
+          onKeyUp={onKeyUp}
+          spellCheck="false"
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          // autofocus leads to focus being stolen from other filter inputs
+          // but necessary because rerenders happen (?)
+          autoFocus={true}
+          slotProps={{
+            input: {
+              endAdornment:
+                isFiltered || value?.length ?
+                  <InputAdornment position="end">
+                    <Tooltip title="Filter entfernen">
+                      <StyledIconButton
+                        aria-label="Filter entfernen"
+                        onClick={onClickEmpty}
+                        fontSize="small"
+                      >
+                        <FaTimes />
+                      </StyledIconButton>
+                    </Tooltip>
+                  </InputAdornment>
+                : null,
+            },
+          }}
+        />
+      </Container>
+    )
+  },
 )
