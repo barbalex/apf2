@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 
 const StyledLabel = styled.div`
@@ -11,6 +10,6 @@ const StyledLabel = styled.div`
   padding-bottom: 4px;
 `
 
-export const Label = memo(({ label, color = 'rgba(0, 0, 0, 0.5)' }) => (
+export const Label = ({ label, color = 'rgba(0, 0, 0, 0.5)' }) => (
   <StyledLabel color={color}>{label}</StyledLabel>
-))
+)
