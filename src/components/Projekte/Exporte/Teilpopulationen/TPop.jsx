@@ -1,4 +1,4 @@
-import { memo, useContext, useState, useCallback } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
@@ -8,225 +8,217 @@ import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-export const TPop = memo(
-  observer(({ filtered = false }) => {
-    const store = useContext(MobxContext)
-    const { enqueNotification, tableIsFiltered } = store
-    const { tpopGqlFilter } = store.tree
+export const TPop = observer(({ filtered = false }) => {
+  const store = useContext(MobxContext)
+  const { enqueNotification, tableIsFiltered } = store
+  const { tpopGqlFilter } = store.tree
 
-    const apolloClient = useApolloClient()
+  const apolloClient = useApolloClient()
 
-    const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState()
 
-    const onClickTPop = useCallback(async () => {
-      setQueryState('lade Daten...')
-      //console.time('querying')
-      let result
-      try {
-        result = await apolloClient.query({
-          query: gql`
-            query tpopForExportQuery($filter: TpopFilter) {
-              allTpops(
-                filter: $filter
-                orderBy: [AP_NAME_ASC, POP_BY_POP_ID__NR_ASC, NR_ASC]
-              ) {
-                nodes {
-                  popByPopId {
+  const onClickTPop = async () => {
+    setQueryState('lade Daten...')
+    //console.time('querying')
+    let result
+    try {
+      result = await apolloClient.query({
+        query: gql`
+          query tpopForExportQuery($filter: TpopFilter) {
+            allTpops(
+              filter: $filter
+              orderBy: [AP_NAME_ASC, POP_BY_POP_ID__NR_ASC, NR_ASC]
+            ) {
+              nodes {
+                popByPopId {
+                  id
+                  apByApId {
                     id
-                    apByApId {
+                    aeTaxonomyByArtId {
                       id
-                      aeTaxonomyByArtId {
-                        id
-                        artname
-                        familie
-                      }
-                      apBearbstandWerteByBearbeitung {
-                        id
-                        text
-                      }
-                      startJahr
-                      apUmsetzungWerteByUmsetzung {
-                        id
-                        text
-                      }
+                      artname
+                      familie
                     }
-                    id
-                    nr
-                    name
-                    popStatusWerteByStatus {
+                    apBearbstandWerteByBearbeitung {
                       id
                       text
                     }
-                    bekanntSeit
-                    statusUnklar
-                    statusUnklarBegruendung
-                    x: lv95X
-                    y: lv95Y
+                    startJahr
+                    apUmsetzungWerteByUmsetzung {
+                      id
+                      text
+                    }
                   }
                   id
                   nr
-                  gemeinde
-                  flurname
-                  status
+                  name
                   popStatusWerteByStatus {
                     id
                     text
                   }
                   bekanntSeit
                   statusUnklar
-                  statusUnklarGrund
+                  statusUnklarBegruendung
                   x: lv95X
                   y: lv95Y
-                  radius
-                  hoehe
-                  exposition
-                  klima
-                  neigung
-                  beschreibung
-                  katasterNr
-                  apberRelevant
-                  apberRelevantGrund
-                  eigentuemer
-                  kontakt
-                  nutzungszone
-                  bewirtschafter
-                  bewirtschaftung
-                  ekfrequenz
-                  ekfrequenzAbweichend
-                  adresseByEkfKontrolleur {
-                    id
-                    name
-                  }
-                  createdAt
-                  updatedAt
-                  changedBy
                 }
+                id
+                nr
+                gemeinde
+                flurname
+                status
+                popStatusWerteByStatus {
+                  id
+                  text
+                }
+                bekanntSeit
+                statusUnklar
+                statusUnklarGrund
+                x: lv95X
+                y: lv95Y
+                radius
+                hoehe
+                exposition
+                klima
+                neigung
+                beschreibung
+                katasterNr
+                apberRelevant
+                apberRelevantGrund
+                eigentuemer
+                kontakt
+                nutzungszone
+                bewirtschafter
+                bewirtschaftung
+                ekfrequenz
+                ekfrequenzAbweichend
+                adresseByEkfKontrolleur {
+                  id
+                  name
+                }
+                createdAt
+                updatedAt
+                changedBy
               }
             }
-          `,
-          variables: {
-            filter: filtered ? tpopGqlFilter.filtered : { or: [] },
-            // seems to have no or little influence on ram usage:
-            //fetchPolicy: 'no-cache',
-          },
-        })
-      } catch (error) {
-        enqueNotification({
-          message: error.message,
-          options: { variant: 'error' },
-        })
-      }
-      //console.timeEnd('querying')
-      setQueryState('verarbeite...')
-      //console.time('processing')
-      const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
-        apId: n?.popByPopId?.apByApId?.id ?? null,
-        apFamilie: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ?? null,
-        apArtname: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? null,
-        apBearbeitung:
-          n?.popByPopId?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? null,
-        apStartJahr: n?.popByPopId?.apByApId?.startJahr ?? null,
-        apUmsetzung:
-          n?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? null,
-        popId: n?.popByPopId?.id ?? null,
-        popNr: n?.popByPopId?.nr ?? null,
-        popName: n?.popByPopId?.name ?? null,
-        popStatus: n?.popByPopId?.popStatusWerteByStatus?.text ?? null,
-        popBekanntSeit: n?.popByPopId?.bekanntSeit ?? null,
-        popStatusUnklar: n?.popByPopId?.statusUnklar ?? null,
-        popStatusUnklarBegruendung:
-          n?.popByPopId?.statusUnklarBegruendung ?? null,
-        popX: n?.popByPopId?.x ?? null,
-        popY: n?.popByPopId?.y ?? null,
-        id: n.id,
-        nr: n.nr,
-        gemeinde: n.gemeinde,
-        flurname: n.flurname,
-        status: n.status,
-        statusDecodiert: n?.popStatusWerteByStatus?.text ?? null,
-        bekanntSeit: n.bekanntSeit,
-        statusUnklar: n.statusUnklar,
-        statusUnklarGrund: n.statusUnklarGrund,
-        x: n.x,
-        y: n.y,
-        radius: n.radius,
-        hoehe: n.hoehe,
-        exposition: n.exposition,
-        klima: n.klima,
-        neigung: n.neigung,
-        beschreibung: n.beschreibung,
-        katasterNr: n.katasterNr,
-        apberRelevant: n.apberRelevant,
-        apberRelevantGrund: n.apberRelevantGrund,
-        eigentuemer: n.eigentuemer,
-        kontakt: n.kontakt,
-        nutzungszone: n.nutzungszone,
-        bewirtschafter: n.bewirtschafter,
-        bewirtschaftung: n.bewirtschaftung,
-        ekfrequenz: n.ekfrequenz,
-        ekfrequenzAbweichend: n.ekfrequenzAbweichend,
-        ekfKontrolleur: n?.adresseByEkfKontrolleur?.name ?? null,
-        createdAt: n.createdAt,
-        updatedAt: n.updatedAt,
-        changedBy: n.changedBy,
-      }))
-      const enrichedData = rows.map((oWithout) => {
-        let o = { ...oWithout }
-        let nachBeginnAp = null
-        if (
-          o.apStartJahr &&
-          o.bekanntSeit &&
-          [200, 201, 202].includes(o.status)
-        ) {
-          if (o.apStartJahr <= o.bekanntSeit) {
-            nachBeginnAp = true
-          } else {
-            nachBeginnAp = false
           }
+        `,
+        variables: {
+          filter: filtered ? tpopGqlFilter.filtered : { or: [] },
+          // seems to have no or little influence on ram usage:
+          //fetchPolicy: 'no-cache',
+        },
+      })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: { variant: 'error' },
+      })
+    }
+    //console.timeEnd('querying')
+    setQueryState('verarbeite...')
+    //console.time('processing')
+    const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
+      apId: n?.popByPopId?.apByApId?.id ?? null,
+      apFamilie: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ?? null,
+      apArtname: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? null,
+      apBearbeitung:
+        n?.popByPopId?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? null,
+      apStartJahr: n?.popByPopId?.apByApId?.startJahr ?? null,
+      apUmsetzung:
+        n?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? null,
+      popId: n?.popByPopId?.id ?? null,
+      popNr: n?.popByPopId?.nr ?? null,
+      popName: n?.popByPopId?.name ?? null,
+      popStatus: n?.popByPopId?.popStatusWerteByStatus?.text ?? null,
+      popBekanntSeit: n?.popByPopId?.bekanntSeit ?? null,
+      popStatusUnklar: n?.popByPopId?.statusUnklar ?? null,
+      popStatusUnklarBegruendung:
+        n?.popByPopId?.statusUnklarBegruendung ?? null,
+      popX: n?.popByPopId?.x ?? null,
+      popY: n?.popByPopId?.y ?? null,
+      id: n.id,
+      nr: n.nr,
+      gemeinde: n.gemeinde,
+      flurname: n.flurname,
+      status: n.status,
+      statusDecodiert: n?.popStatusWerteByStatus?.text ?? null,
+      bekanntSeit: n.bekanntSeit,
+      statusUnklar: n.statusUnklar,
+      statusUnklarGrund: n.statusUnklarGrund,
+      x: n.x,
+      y: n.y,
+      radius: n.radius,
+      hoehe: n.hoehe,
+      exposition: n.exposition,
+      klima: n.klima,
+      neigung: n.neigung,
+      beschreibung: n.beschreibung,
+      katasterNr: n.katasterNr,
+      apberRelevant: n.apberRelevant,
+      apberRelevantGrund: n.apberRelevantGrund,
+      eigentuemer: n.eigentuemer,
+      kontakt: n.kontakt,
+      nutzungszone: n.nutzungszone,
+      bewirtschafter: n.bewirtschafter,
+      bewirtschaftung: n.bewirtschaftung,
+      ekfrequenz: n.ekfrequenz,
+      ekfrequenzAbweichend: n.ekfrequenzAbweichend,
+      ekfKontrolleur: n?.adresseByEkfKontrolleur?.name ?? null,
+      createdAt: n.createdAt,
+      updatedAt: n.updatedAt,
+      changedBy: n.changedBy,
+    }))
+    const enrichedData = rows.map((oWithout) => {
+      let o = { ...oWithout }
+      let nachBeginnAp = null
+      if (
+        o.apStartJahr &&
+        o.bekanntSeit &&
+        [200, 201, 202].includes(o.status)
+      ) {
+        if (o.apStartJahr <= o.bekanntSeit) {
+          nachBeginnAp = true
+        } else {
+          nachBeginnAp = false
         }
-        o.angesiedeltNachBeginnAp = nachBeginnAp
-        return o
-      })
-      //console.timeEnd('processing')
-      //console.time('exporting')
-      if (rows.length === 0) {
-        setQueryState(undefined)
-        return enqueNotification({
-          message: 'Die Abfrage retournierte 0 Datensätze',
-          options: {
-            variant: 'warning',
-          },
-        })
       }
-      await exportModule({
-        data: enrichedData,
-        fileName: 'Teilpopulationen',
-        store,
-        apolloClient,
-      })
+      o.angesiedeltNachBeginnAp = nachBeginnAp
+      return o
+    })
+    //console.timeEnd('processing')
+    //console.time('exporting')
+    if (rows.length === 0) {
       setQueryState(undefined)
-      //console.timeEnd('exporting')
-    }, [
-      apolloClient,
-      enqueNotification,
-      filtered,
+      return enqueNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    await exportModule({
+      data: enrichedData,
+      fileName: 'Teilpopulationen',
       store,
-      tpopGqlFilter.filtered,
-    ])
+      apolloClient,
+    })
+    setQueryState(undefined)
+    //console.timeEnd('exporting')
+  }
 
-    const tpopIsFiltered = tableIsFiltered('tpop')
+  const tpopIsFiltered = tableIsFiltered('tpop')
 
-    return (
-      <DownloadCardButton
-        onClick={onClickTPop}
-        color="inherit"
-        disabled={!!queryState || (filtered && !tpopIsFiltered)}
-      >
-        {filtered ? 'Teilpopulationen (gefiltert)' : 'Teilpopulationen'}
-        {queryState ?
-          <StyledProgressText>{queryState}</StyledProgressText>
-        : null}
-      </DownloadCardButton>
-    )
-  }),
-)
+  return (
+    <DownloadCardButton
+      onClick={onClickTPop}
+      color="inherit"
+      disabled={!!queryState || (filtered && !tpopIsFiltered)}
+    >
+      {filtered ? 'Teilpopulationen (gefiltert)' : 'Teilpopulationen'}
+      {queryState ?
+        <StyledProgressText>{queryState}</StyledProgressText>
+      : null}
+    </DownloadCardButton>
+  )
+})

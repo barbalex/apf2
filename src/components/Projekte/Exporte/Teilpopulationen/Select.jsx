@@ -1,5 +1,4 @@
 // seems not to be used
-import { memo, useCallback } from 'react'
 import Select from 'react-select'
 import styled from '@emotion/styled'
 
@@ -45,40 +44,35 @@ const StyledSelect = styled(Select)`
   }
 `
 
-export const SharedSelect = memo(
-  ({
-    value,
-    field = '',
-    label,
-    error,
-    options,
-    saveToDb,
-    maxHeight = null,
-  }) => {
-    const onChange = useCallback(
-      (option) => saveToDb(option ? option.value : null),
-      [saveToDb],
-    )
+export const SharedSelect = ({
+  value,
+  field = '',
+  label,
+  error,
+  options,
+  saveToDb,
+  maxHeight = null,
+}) => {
+  const onChange = (option) => saveToDb(option ? option.value : null)
 
-    return (
-      <Container>
-        {label && <Label>{label}</Label>}
-        <StyledSelect
-          id={field}
-          name={field}
-          defaultValue={options.find((o) => o.value === value)}
-          options={options}
-          onChange={onChange}
-          hideSelectedOptions
-          placeholder=""
-          isClearable
-          isSearchable
-          noOptionsMessage={() => '(keine)'}
-          maxheight={maxHeight}
-          classNamePrefix="react-select"
-        />
-        {error && <Error>{error}</Error>}
-      </Container>
-    )
-  },
-)
+  return (
+    <Container>
+      {label && <Label>{label}</Label>}
+      <StyledSelect
+        id={field}
+        name={field}
+        defaultValue={options.find((o) => o.value === value)}
+        options={options}
+        onChange={onChange}
+        hideSelectedOptions
+        placeholder=""
+        isClearable
+        isSearchable
+        noOptionsMessage={() => '(keine)'}
+        maxheight={maxHeight}
+        classNamePrefix="react-select"
+      />
+      {error && <Error>{error}</Error>}
+    </Container>
+  )
+}
