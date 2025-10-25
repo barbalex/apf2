@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -25,7 +25,7 @@ const Fitter = styled.div`
 `
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(({ toggleFilterInput }) => {
+export const Menu = ({ toggleFilterInput }) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, userId } = useParams()
@@ -33,7 +33,7 @@ export const Menu = memo(({ toggleFilterInput }) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const onClickAdd = useCallback(async () => {
+  const onClickAdd = async () => {
     let result
     try {
       result = await apolloClient.mutate({
@@ -63,7 +63,7 @@ export const Menu = memo(({ toggleFilterInput }) => {
     })
     const id = result?.data?.createUser?.user?.id
     navigate(`./${id}${search}`)
-  }, [apolloClient, store, tsQueryClient, navigate, search])
+  }
 
   return (
     <ErrorBoundary>
@@ -79,4 +79,4 @@ export const Menu = memo(({ toggleFilterInput }) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

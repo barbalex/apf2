@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,28 +20,27 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 
 const iconStyle = { color: 'white' }
 
-export const Menu = memo(
-  observer(({ row, table }) => {
-    const { search, pathname } = useLocation()
-    const navigate = useNavigate()
+export const Menu = observer(({ row, table }) => {
+  const { search, pathname } = useLocation()
+  const navigate = useNavigate()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const typename = upperFirst(table)
-    const pathName =
-      table === 'tpopApberrelevantGrundWerte' ? 'ApberrelevantGrundWerte'
-      : table === 'ekAbrechnungstypWerte' ? 'EkAbrechnungstypWerte'
-      : table === 'tpopkontrzaehlEinheitWerte' ? 'TpopkontrzaehlEinheitWerte'
-      : 'uups'
+  const typename = upperFirst(table)
+  const pathName =
+    table === 'tpopApberrelevantGrundWerte' ? 'ApberrelevantGrundWerte'
+    : table === 'ekAbrechnungstypWerte' ? 'EkAbrechnungstypWerte'
+    : table === 'tpopkontrzaehlEinheitWerte' ? 'TpopkontrzaehlEinheitWerte'
+    : 'uups'
 
-    const onClickAdd = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
+  const onClickAdd = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
             mutation create${typename}For${typename}Form {
               create${typename}(
                 input: { ${table}: {  } }
@@ -52,34 +51,34 @@ export const Menu = memo(
               }
             }
           `,
-        })
-      } catch (error) {
-        console.log('error', error)
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: [`tree${typename}`],
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeWerteFolders`],
+    } catch (error) {
+      console.log('error', error)
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      const id = result?.data?.[`create${typename}`]?.[table]?.id
-      navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
-    }, [apolloClient, store, tsQueryClient, navigate, search, typename, table])
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: [`tree${typename}`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeWerteFolders`],
+    })
+    const id = result?.data?.[`create${typename}`]?.[table]?.id
+    navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
+  }
 
-    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
-    const delMenuOpen = Boolean(delMenuAnchorEl)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const delMenuOpen = Boolean(delMenuAnchorEl)
 
-    const onClickDelete = useCallback(async () => {
-      let result
-      try {
-        result = await apolloClient.mutate({
-          mutation: gql`
+  const onClickDelete = async () => {
+    let result
+    try {
+      result = await apolloClient.mutate({
+        mutation: gql`
             mutation delete${typename}($id: UUID!) {
               delete${typename}ById(input: { id: $id }) {
                 ${table} {
@@ -88,74 +87,63 @@ export const Menu = memo(
               }
             }
           `,
-          variables: { id: row.id },
-        })
-      } catch (error) {
-        console.log('error', error)
-        return store.enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-
-      // remove active path from openNodes
-      const openNodesRaw = store?.tree?.openNodes
-      const openNodes = getSnapshot(openNodesRaw)
-      const activePath = pathname.split('/').filter((p) => !!p)
-      const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-      store.tree.setOpenNodes(newOpenNodes)
-
-      // update tree query
-      tsQueryClient.invalidateQueries({
-        queryKey: [`tree${typename}`],
+        variables: { id: row.id },
       })
-      tsQueryClient.invalidateQueries({
-        queryKey: [`treeWerteFolders`],
+    } catch (error) {
+      console.log('error', error)
+      return store.enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
       })
-      // navigate to parent
-      navigate(`/Daten/Werte-Listen/${pathName}${search}`)
-    }, [
-      apolloClient,
-      store,
-      tsQueryClient,
-      navigate,
-      row.id,
-      pathname,
-      search,
-      table,
-      typename,
-    ])
+    }
 
-    return (
-      <ErrorBoundary>
-        <MenuBar>
-          <Tooltip title="Neuen Wert erstellen">
-            <IconButton onClick={onClickAdd}>
-              <FaPlus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Löschen">
-            <IconButton
-              onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-              aria-owns={delMenuOpen ? 'wertDelMenu' : undefined}
-            >
-              <FaMinus style={iconStyle} />
-            </IconButton>
-          </Tooltip>
-        </MenuBar>
-        <MuiMenu
-          id="wertDelMenu"
-          anchorEl={delMenuAnchorEl}
-          open={delMenuOpen}
-          onClose={() => setDelMenuAnchorEl(null)}
-        >
-          <MenuTitle>löschen?</MenuTitle>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
-          <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-        </MuiMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+    // remove active path from openNodes
+    const openNodesRaw = store?.tree?.openNodes
+    const openNodes = getSnapshot(openNodesRaw)
+    const activePath = pathname.split('/').filter((p) => !!p)
+    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
+    store.tree.setOpenNodes(newOpenNodes)
+
+    // update tree query
+    tsQueryClient.invalidateQueries({
+      queryKey: [`tree${typename}`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeWerteFolders`],
+    })
+    // navigate to parent
+    navigate(`/Daten/Werte-Listen/${pathName}${search}`)
+  }
+
+  return (
+    <ErrorBoundary>
+      <MenuBar>
+        <Tooltip title="Neuen Wert erstellen">
+          <IconButton onClick={onClickAdd}>
+            <FaPlus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Löschen">
+          <IconButton
+            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            aria-owns={delMenuOpen ? 'wertDelMenu' : undefined}
+          >
+            <FaMinus style={iconStyle} />
+          </IconButton>
+        </Tooltip>
+      </MenuBar>
+      <MuiMenu
+        id="wertDelMenu"
+        anchorEl={delMenuAnchorEl}
+        open={delMenuOpen}
+        onClose={() => setDelMenuAnchorEl(null)}
+      >
+        <MenuTitle>löschen?</MenuTitle>
+        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+      </MuiMenu>
+    </ErrorBoundary>
+  )
+})

@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
@@ -32,27 +32,25 @@ const FormContainer = styled.div`
   padding: 10px;
 `
 
-export const Component = memo(
-  observer(() => {
-    const { wertId: id } = useParams()
-    const location = useLocation()
-    const { pathname } = location
-    const table =
-      pathname.includes('ApberrelevantGrundWerte') ?
-        'tpopApberrelevantGrundWerte'
-      : pathname.includes('EkAbrechnungstypWerte') ? 'ekAbrechnungstypWerte'
-      : pathname.includes('TpopkontrzaehlEinheitWerte') ?
-        'tpopkontrzaehlEinheitWerte'
-      : 'uups'
+export const Component = observer(() => {
+  const { wertId: id } = useParams()
+  const location = useLocation()
+  const { pathname } = location
+  const table =
+    pathname.includes('ApberrelevantGrundWerte') ? 'tpopApberrelevantGrundWerte'
+    : pathname.includes('EkAbrechnungstypWerte') ? 'ekAbrechnungstypWerte'
+    : pathname.includes('TpopkontrzaehlEinheitWerte') ?
+      'tpopkontrzaehlEinheitWerte'
+    : 'uups'
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const query = gql`
+  const query = gql`
     query werteByIdQuery($id: UUID!) {
       ${table}ById(id: $id) {
         id
@@ -62,35 +60,34 @@ export const Component = memo(
       }
     }
   `
-    const { data, loading, error, refetch } = useQuery(query, {
-      variables: {
-        id,
-      },
-    })
+  const { data, loading, error, refetch } = useQuery(query, {
+    variables: {
+      id,
+    },
+  })
 
-    const row = useMemo(() => data?.[`${table}ById`] ?? {}, [data, table])
+  const row = data?.[`${table}ById`] ?? {}
 
-    let codeGqlType = 'Int'
-    let codeFieldType = 'number'
-    if (['ekAbrechnungstypWerte'].includes(table)) {
-      codeGqlType = 'String'
-      codeFieldType = 'text'
+  let codeGqlType = 'Int'
+  let codeFieldType = 'number'
+  if (['ekAbrechnungstypWerte'].includes(table)) {
+    codeGqlType = 'String'
+    codeFieldType = 'text'
+  }
+
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
+
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
     }
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
-
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-
-        const typename = upperFirst(table)
-        try {
-          const mutation = gql`
+    const typename = upperFirst(table)
+    try {
+      const mutation = gql`
           mutation updateWert(
             $id: UUID!
             $code: ${codeGqlType}
@@ -120,72 +117,61 @@ export const Component = memo(
             }
           }
         `
-          await apolloClient.mutate({
-            mutation,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        refetch()
-        setFieldErrors({})
-        if (['text', 'sort'].includes(field)) {
-          tsQueryClient.invalidateQueries({
-            queryKey: [`tree${upperFirst(table)}`],
-          })
-        }
-      },
-      [
-        apolloClient,
-        codeGqlType,
-        tsQueryClient,
-        refetch,
-        row.id,
-        store.user.name,
-        table,
-      ],
-    )
+      await apolloClient.mutate({
+        mutation,
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    refetch()
+    setFieldErrors({})
+    if (['text', 'sort'].includes(field)) {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`tree${upperFirst(table)}`],
+      })
+    }
+  }
 
-    if (loading) return <Spinner />
+  if (loading) return <Spinner />
 
-    if (error) return <Error error={error} />
+  if (error) return <Error error={error} />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title={table}
-            MenuBarComponent={Menu}
-            menuBarProps={{ row, table }}
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title={table}
+          MenuBarComponent={Menu}
+          menuBarProps={{ row, table }}
+        />
+        <FormContainer>
+          <TextField
+            name="text"
+            label="Text"
+            type="text"
+            value={row.text}
+            saveToDb={saveToDb}
+            error={fieldErrors.text}
           />
-          <FormContainer>
-            <TextField
-              name="text"
-              label="Text"
-              type="text"
-              value={row.text}
-              saveToDb={saveToDb}
-              error={fieldErrors.text}
-            />
-            <TextField
-              name="code"
-              label="Code"
-              type={codeFieldType}
-              value={row.code}
-              saveToDb={saveToDb}
-              error={fieldErrors.code}
-            />
-            <TextField
-              name="sort"
-              label="Sort"
-              type="number"
-              value={row.sort}
-              saveToDb={saveToDb}
-              error={fieldErrors.sort}
-            />
-          </FormContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+          <TextField
+            name="code"
+            label="Code"
+            type={codeFieldType}
+            value={row.code}
+            saveToDb={saveToDb}
+            error={fieldErrors.code}
+          />
+          <TextField
+            name="sort"
+            label="Sort"
+            type="number"
+            value={row.sort}
+            saveToDb={saveToDb}
+            error={fieldErrors.sort}
+          />
+        </FormContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
