@@ -4,10 +4,8 @@
  * BUT DOES NOT SHOW THEM WHEN USER ENTERS FIELD
  */
 
-import { useCallback, memo } from 'react'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { get } from 'es-toolkit/compat'
 
@@ -73,94 +71,84 @@ const StyledSelect = styled(AsyncSelect)`
   }
 `
 
-export const SelectLoadingOptions = memo(
-  observer(
-    ({
-      row,
-      valueLabelPath,
-      valueLabel,
-      field = '',
-      label,
-      labelSize,
-      error: saveToDbError,
-      saveToDb,
-      query,
-      filter,
-      queryNodesName,
-    }) => {
-      const apolloClient = useApolloClient()
+export const SelectLoadingOptions = ({
+  row,
+  valueLabelPath,
+  valueLabel,
+  field = '',
+  label,
+  labelSize,
+  error: saveToDbError,
+  saveToDb,
+  query,
+  filter,
+  queryNodesName,
+}) => {
+  const apolloClient = useApolloClient()
 
-      const loadOptions = useCallback(
-        async (inputValue, cb) => {
-          const ownFilter =
-            inputValue ?
-              { artname: { includesInsensitive: inputValue } }
-            : { artname: { isNull: false } }
-          let result
-          try {
-            result = await apolloClient.query({
-              query,
-              variables: {
-                filter: filter ? filter(inputValue) : ownFilter,
-              },
-            })
-          } catch (error) {
-            console.log({ error })
-          }
-          const { data } = result
-          const options = data?.[queryNodesName]?.nodes ?? []
-          cb(options)
+  const loadOptions = async (inputValue, cb) => {
+    const ownFilter =
+      inputValue ?
+        { artname: { includesInsensitive: inputValue } }
+      : { artname: { isNull: false } }
+    let result
+    try {
+      result = await apolloClient.query({
+        query,
+        variables: {
+          filter: filter ? filter(inputValue) : ownFilter,
         },
-        [apolloClient, filter, query, queryNodesName],
-      )
+      })
+    } catch (error) {
+      console.log({ error })
+    }
+    const { data } = result
+    const options = data?.[queryNodesName]?.nodes ?? []
+    cb(options)
+  }
 
-      const onChange = useCallback(
-        (option) => {
-          const value = option && option.value ? option.value : null
-          const fakeEvent = {
-            target: {
-              name: field,
-              value,
-            },
-          }
-          saveToDb(fakeEvent)
-        },
-        [field, saveToDb],
-      )
+  const onChange = (option) => {
+    const value = option && option.value ? option.value : null
+    const fakeEvent = {
+      target: {
+        name: field,
+        value,
+      },
+    }
+    saveToDb(fakeEvent)
+  }
 
-      const value = {
-        value: row[field] ?? '',
-        label: valueLabel ? valueLabel : (get(row, valueLabelPath) ?? ''),
-      }
+  const value = {
+    value: row[field] ?? '',
+    label: valueLabel ? valueLabel : (get(row, valueLabelPath) ?? ''),
+  }
 
-      return (
-        <Container data-id={field}>
-          {label && <Label labelsize={labelSize}>{label}</Label>}
-          <StyledSelect
-            id={field}
-            defaultOptions
-            name={field}
-            onChange={onChange}
-            value={value}
-            hideSelectedOptions
-            placeholder=""
-            isClearable
-            isSearchable
-            // remove as can't select without typing
-            nocaret
-            // don't show a no options message if a value exists
-            noOptionsMessage={() =>
-              value.value ? null : '(Bitte Tippen für Vorschläge)'
-            }
-            // enable deleting typed values
-            backspaceRemovesValue
-            classNamePrefix="react-select"
-            loadOptions={loadOptions}
-            openMenuOnFocus
-          />
-          {saveToDbError && <Error>{saveToDbError}</Error>}
-        </Container>
-      )
-    },
-  ),
-)
+  return (
+    <Container data-id={field}>
+      {label && <Label labelsize={labelSize}>{label}</Label>}
+      <StyledSelect
+        id={field}
+        defaultOptions
+        name={field}
+        onChange={onChange}
+        value={value}
+        hideSelectedOptions
+        placeholder=""
+        isClearable
+        isSearchable
+        // remove as can't select without typing
+        nocaret
+        // don't show a no options message if a value exists
+        noOptionsMessage={() =>
+          value.value ? null : '(Bitte Tippen für Vorschläge)'
+        }
+        // enable deleting typed values
+        backspaceRemovesValue
+        classNamePrefix="react-select"
+        loadOptions={loadOptions}
+        openMenuOnFocus
+      />
+      {saveToDbError && <Error>{saveToDbError}</Error>}
+    </Container>
+  )
+}
