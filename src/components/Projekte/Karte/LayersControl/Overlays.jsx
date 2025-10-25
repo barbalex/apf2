@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import {
@@ -89,156 +89,153 @@ const IconsDiv = styled.div`
 // TODO: add icon: https://material.io/icons/#ic_info
 // for layers with legend
 
-const SortableItem = memo(
-  ({ id, overlay, activeOverlays, setActiveOverlays, apId }) => {
-    const { attributes, listeners, setNodeRef, transform, transition } =
-      useSortable({ id })
+const SortableItem = ({
+  id,
+  overlay,
+  activeOverlays,
+  setActiveOverlays,
+  apId,
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id })
 
-    const style = {
-      transform: CSS.Transform.toString(transform),
-      transition,
-    }
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  }
 
-    return (
-      <LayerDiv
-        ref={setNodeRef}
-        style={style}
-        {...attributes}
-        {...listeners}
-      >
-        <LabelDiv>
-          <CheckDiv>
-            <Checkbox
-              value={overlay.value}
-              label={overlay.label}
-              checked={activeOverlays.includes(overlay.value)}
-              onChange={async () => {
-                if (activeOverlays.includes(overlay.value)) {
-                  return setActiveOverlays(
-                    activeOverlays.filter((o) => o !== overlay.value),
-                  )
-                }
-                return setActiveOverlays([...activeOverlays, overlay.value])
-              }}
-            />
-          </CheckDiv>
-          <InfoIconsDivs>
-            {(layerLegends({ apId })[overlay.value] || [])
-              .filter((layer) => !!layer.url)
-              .map((layer) => (
-                <IconsDiv key={layer.name}>
-                  <div>
-                    <StyledIconButton
-                      color="inherit"
-                      title={`Legende für ${layer.name} öffnen`}
-                      onClick={() => window.open(layer.url, '_blank')}
-                    >
-                      <StyledLegendIcon />
-                    </StyledIconButton>
-                  </div>
-                </IconsDiv>
-              ))}
-          </InfoIconsDivs>
-        </LabelDiv>
+  return (
+    <LayerDiv
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    >
+      <LabelDiv>
+        <CheckDiv>
+          <Checkbox
+            value={overlay.value}
+            label={overlay.label}
+            checked={activeOverlays.includes(overlay.value)}
+            onChange={async () => {
+              if (activeOverlays.includes(overlay.value)) {
+                return setActiveOverlays(
+                  activeOverlays.filter((o) => o !== overlay.value),
+                )
+              }
+              return setActiveOverlays([...activeOverlays, overlay.value])
+            }}
+          />
+        </CheckDiv>
+        <InfoIconsDivs>
+          {(layerLegends({ apId })[overlay.value] || [])
+            .filter((layer) => !!layer.url)
+            .map((layer) => (
+              <IconsDiv key={layer.name}>
+                <div>
+                  <StyledIconButton
+                    color="inherit"
+                    title={`Legende für ${layer.name} öffnen`}
+                    onClick={() => window.open(layer.url, '_blank')}
+                  >
+                    <StyledLegendIcon />
+                  </StyledIconButton>
+                </div>
+              </IconsDiv>
+            ))}
+        </InfoIconsDivs>
+      </LabelDiv>
+      <IconsDiv>
         <IconsDiv>
-          <IconsDiv>
-            <div>
-              <StyledIconButton
-                title="ziehen, um Layer höher/tiefer zu stapeln"
-                color="inherit"
-              >
-                <StyledDragHandleIcon />
-              </StyledIconButton>
-            </div>
-          </IconsDiv>
+          <div>
+            <StyledIconButton
+              title="ziehen, um Layer höher/tiefer zu stapeln"
+              color="inherit"
+            >
+              <StyledDragHandleIcon />
+            </StyledIconButton>
+          </div>
         </IconsDiv>
-      </LayerDiv>
-    )
-  },
-)
+      </IconsDiv>
+    </LayerDiv>
+  )
+}
 
-export const Overlays = memo(
-  observer(() => {
-    const { apId } = useParams()
+export const Overlays = observer(() => {
+  const { apId } = useParams()
 
-    const store = useContext(MobxContext)
-    const {
-      overlays: overlaysIn,
-      activeOverlays: activeOverlaysIn,
-      setOverlays,
-      setActiveOverlays,
-    } = store
-    const overlays = getSnapshot(overlaysIn)
-    const activeOverlays = getSnapshot(activeOverlaysIn)
+  const store = useContext(MobxContext)
+  const {
+    overlays: overlaysIn,
+    activeOverlays: activeOverlaysIn,
+    setOverlays,
+    setActiveOverlays,
+  } = store
+  const overlays = getSnapshot(overlaysIn)
+  const activeOverlays = getSnapshot(activeOverlaysIn)
 
-    const [draggingOverlay, setDraggingOverlay] = useState(null)
-    const onDragStart = useCallback(
-      ({ active }) => setDraggingOverlay(active),
-      [],
-    )
-    const onDragEnd = useCallback(
-      ({ active, over }) => {
-        setDraggingOverlay(null)
-        if (active.id !== over.id) {
-          const oldIndex = overlays.findIndex((e) => e.value === active.id)
-          const newIndex = overlays.findIndex((e) => e.value === over.id)
+  const [draggingOverlay, setDraggingOverlay] = useState(null)
+  const onDragStart = ({ active }) => setDraggingOverlay(active)
 
-          return setOverlays(arrayMoveImmutable(overlays, oldIndex, newIndex))
-        }
+  const onDragEnd = ({ active, over }) => {
+    setDraggingOverlay(null)
+    if (active.id !== over.id) {
+      const oldIndex = overlays.findIndex((e) => e.value === active.id)
+      const newIndex = overlays.findIndex((e) => e.value === over.id)
+
+      return setOverlays(arrayMoveImmutable(overlays, oldIndex, newIndex))
+    }
+  }
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
       },
-      [overlays, setOverlays],
-    )
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  )
 
-    const sensors = useSensors(
-      useSensor(PointerSensor, {
-        activationConstraint: {
-          distance: 5,
-        },
-      }),
-      useSensor(KeyboardSensor, {
-        coordinateGetter: sortableKeyboardCoordinates,
-      }),
-    )
+  // console.log('Overlays', overlays)
 
-    // console.log('Overlays', overlays)
-
-    return (
-      <CardContent>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={onDragEnd}
-          onDragStart={onDragStart}
+  return (
+    <CardContent>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+        onDragStart={onDragStart}
+      >
+        <SortableContext
+          items={overlays.map((overlay) => overlay.value)}
+          strategy={verticalListSortingStrategy}
         >
-          <SortableContext
-            items={overlays.map((overlay) => overlay.value)}
-            strategy={verticalListSortingStrategy}
-          >
-            {overlays.map((overlay) => (
+          {overlays.map((overlay) => (
+            <SortableItem
+              key={overlay.value}
+              id={overlay.value}
+              overlay={overlay}
+              activeOverlays={activeOverlays}
+              setActiveOverlays={setActiveOverlays}
+              apId={apId}
+            />
+          ))}
+          <DragOverlay>
+            {draggingOverlay ?
               <SortableItem
-                key={overlay.value}
-                id={overlay.value}
-                overlay={overlay}
+                key={draggingOverlay.value}
+                id={draggingOverlay.value}
+                overlay={draggingOverlay}
                 activeOverlays={activeOverlays}
                 setActiveOverlays={setActiveOverlays}
                 apId={apId}
               />
-            ))}
-            <DragOverlay>
-              {draggingOverlay ?
-                <SortableItem
-                  key={draggingOverlay.value}
-                  id={draggingOverlay.value}
-                  overlay={draggingOverlay}
-                  activeOverlays={activeOverlays}
-                  setActiveOverlays={setActiveOverlays}
-                  apId={apId}
-                />
-              : null}
-            </DragOverlay>
-          </SortableContext>
-        </DndContext>
-      </CardContent>
-    )
-  }),
-)
+            : null}
+          </DragOverlay>
+        </SortableContext>
+      </DndContext>
+    </CardContent>
+  )
+})
