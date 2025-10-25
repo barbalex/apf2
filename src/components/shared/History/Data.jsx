@@ -1,7 +1,5 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 import { diffSentences } from 'diff'
-import { observer } from 'mobx-react-lite'
 
 import { toStringIfPossible } from '../../../modules/toStringIfPossible.js'
 import { Spinner } from '../Spinner'
@@ -37,48 +35,46 @@ const styles = {
   },
 }
 
-export const Data = memo(
-  observer(({ dataArray = [], loading }) => {
-    if (loading) return <Spinner />
+export const Data = ({ dataArray = [], loading }) => {
+  if (loading) return <Spinner />
 
-    return (dataArray ?? [])?.map((d, index) => {
-      // need to use get to enable passing paths as key, for instance 'person.name'
-      // also stringify because Diff split's it
-      let inputA = toStringIfPossible(d.valueInRow) ?? '(nichts)'
-      let inputB = toStringIfPossible(d.valueInHist) ?? '(nichts)'
-      // explicitly show when only one of the values is empty
-      if (inputA !== inputB) {
-        inputA = inputA ?? '(nichts)'
-        inputB = inputB ?? '(nichts)'
-      }
+  return (dataArray ?? [])?.map((d, index) => {
+    // need to use get to enable passing paths as key, for instance 'person.name'
+    // also stringify because Diff split's it
+    let inputA = toStringIfPossible(d.valueInRow) ?? '(nichts)'
+    let inputB = toStringIfPossible(d.valueInHist) ?? '(nichts)'
+    // explicitly show when only one of the values is empty
+    if (inputA !== inputB) {
+      inputA = inputA ?? '(nichts)'
+      inputB = inputB ?? '(nichts)'
+    }
 
-      const showDiff = !['geändert', 'geändert von'].includes(d.label)
+    const showDiff = !['geändert', 'geändert von'].includes(d.label)
 
-      return (
-        <Row
-          key={d.label}
-          data-last={index + 1 === (dataArray ?? []).length}
-        >
-          <Key>{`${d.label}:`}</Key>
-          {showDiff ?
-            <>
-              {(diffSentences(inputB, inputA) ?? []).map((group) => (
-                <span
-                  key={group.value}
-                  style={
-                    group.added ? styles.added
-                    : group.removed ?
-                      styles.removed
-                    : {}
-                  }
-                >
-                  {group.value}
-                </span>
-              ))}
-            </>
-          : <div>{inputB}</div>}
-        </Row>
-      )
-    })
-  }),
-)
+    return (
+      <Row
+        key={d.label}
+        data-last={index + 1 === (dataArray ?? []).length}
+      >
+        <Key>{`${d.label}:`}</Key>
+        {showDiff ?
+          <>
+            {(diffSentences(inputB, inputA) ?? []).map((group) => (
+              <span
+                key={group.value}
+                style={
+                  group.added ? styles.added
+                  : group.removed ?
+                    styles.removed
+                  : {}
+                }
+              >
+                {group.value}
+              </span>
+            ))}
+          </>
+        : <div>{inputB}</div>}
+      </Row>
+    )
+  })
+}

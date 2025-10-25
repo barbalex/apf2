@@ -1,4 +1,3 @@
-import { memo, useCallback } from 'react'
 import { useNavigate, useLocation } from 'react-router'
 import styled from '@emotion/styled'
 import Highlighter from 'react-highlight-words'
@@ -40,59 +39,52 @@ const Row = styled.div`
   }
 `
 
-export const List = memo(
-  ({
-    navData,
-    MenuBarComponent = null,
-    menuBarProps = {},
-    highlightSearchString,
-  }) => {
-    const navigate = useNavigate()
-    const { search } = useLocation()
+export const List = ({
+  navData,
+  MenuBarComponent = null,
+  menuBarProps = {},
+  highlightSearchString,
+}) => {
+  const navigate = useNavigate()
+  const { search } = useLocation()
 
-    const onClickRow = useCallback(
-      (item) => navigate(`./${item.id}${search}`),
-      [navigate, search],
-    )
+  const onClickRow = (item) => navigate(`./${item.id}${search}`)
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title={navData.label}
-            listFilter={navData.listFilter}
-            MenuBarComponent={MenuBarComponent}
-            menuBarProps={menuBarProps}
-          />
-          <ListContainer>
-            {navData.menus.map((item) => {
-              const label = item.label ?? item.labelEkf ?? item.labelEk
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title={navData.label}
+          listFilter={navData.listFilter}
+          MenuBarComponent={MenuBarComponent}
+          menuBarProps={menuBarProps}
+        />
+        <ListContainer>
+          {navData.menus.map((item) => {
+            const label = item.label ?? item.labelEkf ?? item.labelEk
 
-              return (
-                <Row
-                  key={item.id}
-                  onClick={onClickRow.bind(this, item)}
-                >
-                  {!!item.labelLeftElements?.length &&
-                    item.labelLeftElements.map((El, index) => (
-                      <El key={index} />
-                    ))}
-                  {highlightSearchString ?
-                    <Highlighter
-                      searchWords={[highlightSearchString]}
-                      textToHighlight={label?.toString()}
-                    />
-                  : label}
-                  {!!item.labelRightElements?.length &&
-                    item.labelRightElements.map((El, index) => (
-                      <El key={index} />
-                    ))}
-                </Row>
-              )
-            })}
-          </ListContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  },
-)
+            return (
+              <Row
+                key={item.id}
+                onClick={onClickRow.bind(this, item)}
+              >
+                {!!item.labelLeftElements?.length &&
+                  item.labelLeftElements.map((El, index) => <El key={index} />)}
+                {highlightSearchString ?
+                  <Highlighter
+                    searchWords={[highlightSearchString]}
+                    textToHighlight={label?.toString()}
+                  />
+                : label}
+                {!!item.labelRightElements?.length &&
+                  item.labelRightElements.map((El, index) => (
+                    <El key={index} />
+                  ))}
+              </Row>
+            )
+          })}
+        </ListContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+}
