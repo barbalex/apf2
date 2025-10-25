@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -30,55 +30,53 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const Tpopmassn = memo(
-  observer(({ onClick }) => {
-    const { copying, user } = useContext(MobxContext)
+export const Tpopmassn = observer(({ onClick }) => {
+  const { copying, user } = useContext(MobxContext)
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treeTpopmassn"
-          hideOnLeave={true}
-        >
-          <div className="react-contextmenu-title">Massnahme</div>
-          {!userIsReadOnly(user.token) && (
-            <>
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treeTpopmassn"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">Massnahme</div>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
+              erstelle neue
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
+              lösche
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={markForMovingData}
+            >
+              verschiebe
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={markForCopyingData}
+            >
+              kopiere
+            </MenuItem>
+            {copying.table && (
               <MenuItem
                 onClick={onClick}
-                data={insertData}
+                data={resetCopyingData}
               >
-                erstelle neue
+                Kopieren aufheben
               </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={deleteData}
-              >
-                lösche
-              </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={markForMovingData}
-              >
-                verschiebe
-              </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={markForCopyingData}
-              >
-                kopiere
-              </MenuItem>
-              {copying.table && (
-                <MenuItem
-                  onClick={onClick}
-                  data={resetCopyingData}
-                >
-                  Kopieren aufheben
-                </MenuItem>
-              )}
-            </>
-          )}
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+            )}
+          </>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})

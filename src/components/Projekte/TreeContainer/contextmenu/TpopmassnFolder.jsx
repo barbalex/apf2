@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -24,56 +24,54 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const TpopmassnFolder = memo(
-  observer(({ onClick }) => {
-    const { copying, user, moving } = useContext(MobxContext)
+export const TpopmassnFolder = observer(({ onClick }) => {
+  const { copying, user, moving } = useContext(MobxContext)
 
-    const isMoving = moving.table && moving.table === 'tpopmassn'
-    const isCopying = copying.table && copying.table === 'tpopmassn'
+  const isMoving = moving.table && moving.table === 'tpopmassn'
+  const isCopying = copying.table && copying.table === 'tpopmassn'
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treeTpopmassnFolder"
-          hideOnLeave={true}
-        >
-          <div className="react-contextmenu-title">Massnahmen</div>
-          {!userIsReadOnly(user.token) && (
-            <>
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treeTpopmassnFolder"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">Massnahmen</div>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
+              erstelle neue
+            </MenuItem>
+            {isMoving && (
               <MenuItem
                 onClick={onClick}
-                data={insertData}
+                data={moveData}
               >
-                erstelle neue
+                {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
-              {isMoving && (
-                <MenuItem
-                  onClick={onClick}
-                  data={moveData}
-                >
-                  {`verschiebe '${moving.label}' hierhin`}
-                </MenuItem>
-              )}
-              {isCopying && (
-                <MenuItem
-                  onClick={onClick}
-                  data={copyData}
-                >
-                  {`kopiere '${copying.label}' hierhin`}
-                </MenuItem>
-              )}
-              {copying.table && (
-                <MenuItem
-                  onClick={onClick}
-                  data={resetCopyingData}
-                >
-                  Kopieren aufheben
-                </MenuItem>
-              )}
-            </>
-          )}
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+            )}
+            {isCopying && (
+              <MenuItem
+                onClick={onClick}
+                data={copyData}
+              >
+                {`kopiere '${copying.label}' hierhin`}
+              </MenuItem>
+            )}
+            {copying.table && (
+              <MenuItem
+                onClick={onClick}
+                data={resetCopyingData}
+              >
+                Kopieren aufheben
+              </MenuItem>
+            )}
+          </>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})
