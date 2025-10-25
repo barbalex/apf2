@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -15,29 +15,27 @@ const insertData = {
   table: 'apart',
 }
 
-export const ApartFolder = memo(
-  observer(({ onClick }) => {
-    const { user } = useContext(MobxContext)
+export const ApartFolder = observer(({ onClick }) => {
+  const { user } = useContext(MobxContext)
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treeApartFolder"
-          hideOnLeave={true}
-        >
-          <div className="react-contextmenu-title">Taxa</div>
-          {!userIsReadOnly(user.token) && (
-            <>
-              <MenuItem
-                onClick={onClick}
-                data={insertData}
-              >
-                erstelle neue
-              </MenuItem>
-            </>
-          )}
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treeApartFolder"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">Taxa</div>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
+              erstelle neue
+            </MenuItem>
+          </>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})

@@ -1,4 +1,4 @@
-import { memo, Fragment, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -25,53 +25,51 @@ const moveData = {
   action: 'move',
 }
 
-export const Ap = memo(
-  observer(({ onClick }) => {
-    const store = useContext(MobxContext)
-    const { user, moving } = store
+export const Ap = observer(({ onClick }) => {
+  const store = useContext(MobxContext)
+  const { user, moving } = store
 
-    const isMoving = moving.table && moving.table === 'pop'
-    const mayWrite = !userIsReadOnly(user.token)
+  const isMoving = moving.table && moving.table === 'pop'
+  const mayWrite = !userIsReadOnly(user.token)
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treeAp"
-          hideOnLeave={true}
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treeAp"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">Art</div>
+        <MenuItem
+          onClick={onClick}
+          data={closeLowerNodesData}
         >
-          <div className="react-contextmenu-title">Art</div>
-          <MenuItem
-            onClick={onClick}
-            data={closeLowerNodesData}
-          >
-            alle schliessen
-          </MenuItem>
-          {mayWrite && (
-            <>
-              <MenuItem
-                onClick={onClick}
-                data={insertData}
-              >
-                erstelle neue
-              </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={deleteData}
-              >
-                lösche
-              </MenuItem>
-            </>
-          )}
-          {isMoving && (
+          alle schliessen
+        </MenuItem>
+        {mayWrite && (
+          <>
             <MenuItem
               onClick={onClick}
-              data={moveData}
+              data={insertData}
             >
-              {`verschiebe '${moving.label}' hierhin`}
+              erstelle neue
             </MenuItem>
-          )}
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
+              lösche
+            </MenuItem>
+          </>
+        )}
+        {isMoving && (
+          <MenuItem
+            onClick={onClick}
+            data={moveData}
+          >
+            {`verschiebe '${moving.label}' hierhin`}
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})
