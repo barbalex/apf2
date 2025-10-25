@@ -1,4 +1,4 @@
-import { memo, useContext, useState, useCallback } from 'react'
+import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
@@ -8,116 +8,114 @@ import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { DownloadCardButton, StyledProgressText } from '../index.jsx'
 
-export const BerUndMassn = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const { enqueNotification } = store
+export const BerUndMassn = observer(() => {
+  const store = useContext(MobxContext)
+  const { enqueNotification } = store
 
-    const apolloClient = useApolloClient()
+  const apolloClient = useApolloClient()
 
-    const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState()
 
-    const onClickApBerUndMassn = useCallback(async () => {
-      setQueryState('lade Daten...')
-      let result
-      try {
-        result = await apolloClient.query({
-          query: gql`
-            query ApApberUndMassnsForExportQuery {
-              allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
-                nodes {
+  const onClickApBerUndMassn = async () => {
+    setQueryState('lade Daten...')
+    let result
+    try {
+      result = await apolloClient.query({
+        query: gql`
+          query ApApberUndMassnsForExportQuery {
+            allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
+              nodes {
+                id
+                aeTaxonomyByArtId {
                   id
-                  aeTaxonomyByArtId {
-                    id
-                    artname
-                    artwert
-                  }
-                  apBearbstandWerteByBearbeitung {
-                    id
-                    text
-                  }
-                  startJahr
-                  apUmsetzungWerteByUmsetzung {
-                    id
-                    text
-                  }
-                  adresseByBearbeiter {
-                    id
-                    name
-                  }
-                  vApApberundmassnsById {
-                    nodes {
-                      id
-                      massnJahr
-                      massnAnzahl
-                      massnAnzahlBisher
-                      berichtErstellt
-                    }
-                  }
-                  createdAt
-                  updatedAt
-                  changedBy
+                  artname
+                  artwert
                 }
+                apBearbstandWerteByBearbeitung {
+                  id
+                  text
+                }
+                startJahr
+                apUmsetzungWerteByUmsetzung {
+                  id
+                  text
+                }
+                adresseByBearbeiter {
+                  id
+                  name
+                }
+                vApApberundmassnsById {
+                  nodes {
+                    id
+                    massnJahr
+                    massnAnzahl
+                    massnAnzahlBisher
+                    berichtErstellt
+                  }
+                }
+                createdAt
+                updatedAt
+                changedBy
               }
             }
-          `,
-        })
-      } catch (error) {
-        enqueNotification({
-          message: error.message,
-          options: {
-            variant: 'error',
-          },
-        })
-      }
-      setQueryState('verarbeite...')
-      const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
-        ap_id: z.id,
-        artname: z?.aeTaxonomyByArtId?.artname ?? '',
-        ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-        ap_start_jahr: z.startJahr,
-        ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-        ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
-        artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
-        massn_jahr: z?.vApApberundmassnsById?.nodes?.[0]?.massnJahr ?? '',
-        massn_anzahl: z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahl ?? '',
-        massn_anzahl_bisher:
-          z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahlBisher ?? '',
-        bericht_erstellt:
-          z?.vApApberundmassnsById?.nodes?.[0]?.berichtErstellt ?? '',
-        created_at: z.createdAt,
-        updated_at: z.updatedAt,
-        changed_by: z.changedBy,
-      }))
-      if (rows.length === 0) {
-        setQueryState(undefined)
-        return enqueNotification({
-          message: 'Die Abfrage retournierte 0 Datensätze',
-          options: {
-            variant: 'warning',
-          },
-        })
-      }
-      exportModule({
-        data: rows,
-        fileName: 'ApJahresberichteUndMassnahmen',
-        store,
-        apolloClient,
+          }
+        `,
       })
+    } catch (error) {
+      enqueNotification({
+        message: error.message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
+      ap_id: z.id,
+      artname: z?.aeTaxonomyByArtId?.artname ?? '',
+      ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
+      ap_start_jahr: z.startJahr,
+      ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
+      artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
+      massn_jahr: z?.vApApberundmassnsById?.nodes?.[0]?.massnJahr ?? '',
+      massn_anzahl: z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahl ?? '',
+      massn_anzahl_bisher:
+        z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahlBisher ?? '',
+      bericht_erstellt:
+        z?.vApApberundmassnsById?.nodes?.[0]?.berichtErstellt ?? '',
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
+      changed_by: z.changedBy,
+    }))
+    if (rows.length === 0) {
       setQueryState(undefined)
-    }, [enqueNotification, apolloClient, store])
+      return enqueNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    exportModule({
+      data: rows,
+      fileName: 'ApJahresberichteUndMassnahmen',
+      store,
+      apolloClient,
+    })
+    setQueryState(undefined)
+  }
 
-    return (
-      <DownloadCardButton
-        onClick={onClickApBerUndMassn}
-        color="inherit"
-        disabled={!!queryState}
-      >
-        AP-Berichte und Massnahmen
-        {queryState ?
-          <StyledProgressText>{queryState}</StyledProgressText>
-        : null}
-      </DownloadCardButton>
-    )
-  }),
-)
+  return (
+    <DownloadCardButton
+      onClick={onClickApBerUndMassn}
+      color="inherit"
+      disabled={!!queryState}
+    >
+      AP-Berichte und Massnahmen
+      {queryState ?
+        <StyledProgressText>{queryState}</StyledProgressText>
+      : null}
+    </DownloadCardButton>
+  )
+})
