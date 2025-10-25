@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import {
   ContextMenu,
@@ -46,92 +46,90 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const Pop = memo(
-  observer(({ onClick }) => {
-    const { copying, user, moving } = useContext(MobxContext)
+export const Pop = observer(({ onClick }) => {
+  const { copying, user, moving } = useContext(MobxContext)
 
-    const isMoving = moving.table && moving.table === 'tpop'
-    const isCopying = copying.table && copying.table === 'tpop'
+  const isMoving = moving.table && moving.table === 'tpop'
+  const isCopying = copying.table && copying.table === 'tpop'
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treePop"
-          hideOnLeave={true}
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treePop"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">Population</div>
+        <MenuItem
+          onClick={onClick}
+          data={openLowerNodesData}
         >
-          <div className="react-contextmenu-title">Population</div>
-          <MenuItem
-            onClick={onClick}
-            data={openLowerNodesData}
-          >
-            alle öffnen
-          </MenuItem>
-          <MenuItem
-            onClick={onClick}
-            data={closeLowerNodesData}
-          >
-            alle schliessen
-          </MenuItem>
-          {!userIsReadOnly(user.token) && (
-            <>
+          alle öffnen
+        </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={closeLowerNodesData}
+        >
+          alle schliessen
+        </MenuItem>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
+              erstelle neue
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
+              lösche
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={markForMovingData}
+            >
+              verschiebe
+            </MenuItem>
+            {isMoving && (
               <MenuItem
                 onClick={onClick}
-                data={insertData}
+                data={moveHereData}
               >
-                erstelle neue
+                {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
+            )}
+            <MenuItem
+              onClick={onClick}
+              data={markForCopyingData}
+            >
+              kopiere
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={markForCopyingWithNextLevelData}
+            >
+              kopiere inklusive Teilpopulationen
+            </MenuItem>
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
-                data={deleteData}
+                data={copyData}
               >
-                lösche
+                {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
+            )}
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
-                data={markForMovingData}
+                data={resetCopyingData}
               >
-                verschiebe
+                Kopieren aufheben
               </MenuItem>
-              {isMoving && (
-                <MenuItem
-                  onClick={onClick}
-                  data={moveHereData}
-                >
-                  {`verschiebe '${moving.label}' hierhin`}
-                </MenuItem>
-              )}
-              <MenuItem
-                onClick={onClick}
-                data={markForCopyingData}
-              >
-                kopiere
-              </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={markForCopyingWithNextLevelData}
-              >
-                kopiere inklusive Teilpopulationen
-              </MenuItem>
-              {isCopying && (
-                <MenuItem
-                  onClick={onClick}
-                  data={copyData}
-                >
-                  {`kopiere '${copying.label}' hierhin`}
-                </MenuItem>
-              )}
-              {isCopying && (
-                <MenuItem
-                  onClick={onClick}
-                  data={resetCopyingData}
-                >
-                  Kopieren aufheben
-                </MenuItem>
-              )}
-            </>
-          )}
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+            )}
+          </>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})
