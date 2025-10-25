@@ -1,7 +1,6 @@
-import { memo } from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-export const ZhSvoColor = memo(() => (
+export const ZhSvoColor = () => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsSVOZHWMS"
     layers="zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte,svo-zonen-labels,schutzverordnungsobjekt-nr"
@@ -13,4 +12,4 @@ export const ZhSvoColor = memo(() => (
     minZoom={0}
     maxZoom={22}
   />
-))
+)
