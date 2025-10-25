@@ -1,10 +1,8 @@
-import { memo } from 'react'
-
 import Icon from './201.svg'
 import { IconContainer } from '../../../../../NavElements/IconContainer.jsx'
 
-export const PopIcon201 = memo(() => (
+export const PopIcon201 = () => (
   <IconContainer className="iconContainer">
     <Icon />
   </IconContainer>
-))
+)
