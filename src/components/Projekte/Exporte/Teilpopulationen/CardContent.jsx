@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import { TPop } from './TPop.jsx'
 import { TPopFuerWebgisBun } from './TPopFuerWebgisBun.jsx'
 import { TPopFuerGoogleEarth } from './TPopFuerGoogleEarth.jsx'
@@ -14,7 +12,7 @@ import { LetzteZaehlungen } from './LetzteZaehlungen.jsx'
 import { LetzteZaehlungenInklAnpflanzungen } from './LetzteZaehlungenInklAnpflanzungen.jsx'
 import { StyledCardContent } from '../index.jsx'
 
-export const CardContent = memo(() => (
+export const CardContent = () => (
   <StyledCardContent>
     <TPop />
     <TPop filtered={true} />
@@ -30,4 +28,4 @@ export const CardContent = memo(() => (
     <LetzteZaehlungen />
     <LetzteZaehlungenInklAnpflanzungen />
   </StyledCardContent>
-))
+)
