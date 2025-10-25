@@ -1,4 +1,3 @@
-import { memo } from 'react'
 import styled from '@emotion/styled'
 
 import { BaseLayer } from './BaseLayer.jsx'
@@ -13,7 +12,11 @@ export const baseLayers = [
   { label: 'OpenStreetMap grau', value: 'OsmBw', cors: true },
   { label: 'Swisstopo farbig', value: 'SwisstopoPixelFarbe', cors: false },
   { label: 'Swisstopo grau', value: 'SwisstopoPixelGrau', cors: false },
-  { label: 'Swisstopo Luftbilder', value: 'SwisstopoLuftbilderFarbe', cors: false },
+  {
+    label: 'Swisstopo Luftbilder',
+    value: 'SwisstopoLuftbilderFarbe',
+    cors: false,
+  },
   {
     label: 'Swisstopo Siegfriedkarte (1870-1926)',
     value: 'SwisstopoSiegfried',
@@ -69,7 +72,7 @@ export const baseLayers = [
   },
 ]
 
-export const BaseLayers = memo(() => (
+export const BaseLayers = () => (
   <CardContent>
     {baseLayers.map((layer, index) => (
       <BaseLayer
@@ -78,4 +81,4 @@ export const BaseLayers = memo(() => (
       />
     ))}
   </CardContent>
-))
+)

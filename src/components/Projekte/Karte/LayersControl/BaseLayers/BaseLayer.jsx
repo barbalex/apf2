@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
@@ -13,34 +13,29 @@ const LayerDiv = styled.div`
   padding-bottom: 4px;
 `
 
-export const BaseLayer = memo(
-  observer(({ layer }) => {
-    const store = useContext(MobxContext)
-    const { activeBaseLayer, setActiveBaseLayer } = store
-    const onChange = useCallback(
-      () => setActiveBaseLayer(layer.value),
-      [layer.value, setActiveBaseLayer],
-    )
+export const BaseLayer = observer(({ layer }) => {
+  const store = useContext(MobxContext)
+  const { activeBaseLayer, setActiveBaseLayer } = store
+  const onChange = () => setActiveBaseLayer(layer.value)
 
-    return (
-      <LayerDiv
-        onClick={(event) => {
-          if (layer.value === activeBaseLayer) {
-            setActiveBaseLayer(null)
-            // prevent click bubbling to Radio
-            // then triggering change...
-            event.preventDefault()
-          }
-        }}
-      >
-        <Radio
-          name="baseLayers"
-          value={layer.value}
-          label={layer.label}
-          checked={activeBaseLayer === layer.value}
-          onChange={onChange}
-        />
-      </LayerDiv>
-    )
-  }),
-)
+  return (
+    <LayerDiv
+      onClick={(event) => {
+        if (layer.value === activeBaseLayer) {
+          setActiveBaseLayer(null)
+          // prevent click bubbling to Radio
+          // then triggering change...
+          event.preventDefault()
+        }
+      }}
+    >
+      <Radio
+        name="baseLayers"
+        value={layer.value}
+        label={layer.label}
+        checked={activeBaseLayer === layer.value}
+        onChange={onChange}
+      />
+    </LayerDiv>
+  )
+})
