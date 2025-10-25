@@ -1,5 +1,5 @@
 // seems not in use
-import { useState, useCallback, useEffect, memo } from 'react'
+import { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -71,93 +71,90 @@ const StyledSelect = styled(CreatableSelect)`
   }
 `
 
-export const SelectCreatable = memo(
-  observer(
-    ({
-      value,
-      field = '',
-      label,
-      name,
-      error,
-      options: optionsIn,
-      loading,
-      maxHeight = null,
-      noCaret = false,
-      saveToDb,
-    }) => {
-      const [stateValue, setStateValue] = useState(null)
+export const SelectCreatable = observer(
+  ({
+    value,
+    field = '',
+    label,
+    name,
+    error,
+    options: optionsIn,
+    loading,
+    maxHeight = null,
+    noCaret = false,
+    saveToDb,
+  }) => {
+    const [stateValue, setStateValue] = useState(null)
 
-      const onChange = useCallback(
-        (option) => {
-          const fakeEvent = {
-            target: {
-              name,
-              value: option ? option.value : null,
-            },
-          }
-          saveToDb(fakeEvent)
+    const onChange = (option) => {
+      const fakeEvent = {
+        target: {
+          name,
+          value: option ? option.value : null,
         },
-        [name, saveToDb],
-      )
-      const onInputChange = useCallback((value) => setStateValue(value), [])
-      const onBlur = useCallback(() => {
-        if (stateValue) {
-          const fakeEvent = {
-            target: {
-              name,
-              value: stateValue,
-            },
-          }
-          saveToDb(fakeEvent)
-        }
-      }, [stateValue, name, saveToDb])
-
-      useEffect(() => {
-        setStateValue(value)
-      }, [value])
-
-      // need to add value to options list if it is not yet included
-      const valuesArray = optionsIn.map((o) => o.value)
-      const options = [...optionsIn]
-      if (value && !valuesArray.includes(value)) {
-        options.push({ label: value, value })
       }
+      saveToDb(fakeEvent)
+    }
 
-      // filter out historic options - if they are not the value set
-      const realOptions = options.filter((o) => {
-        const dontShowHistoric = !exists(value) || value !== o.value
-        if (dontShowHistoric) return !o.historic
-        return true
-      })
+    const onInputChange = (value) => setStateValue(value)
 
-      // show ... while options are loading
-      const loadingOptions = [{ value, label: '...' }]
-      const optionsToUse = loading && value ? loadingOptions : realOptions
-      const selectValue = optionsToUse.find((o) => o.value === value)
+    const onBlur = () => {
+      if (stateValue) {
+        const fakeEvent = {
+          target: {
+            name,
+            value: stateValue,
+          },
+        }
+        saveToDb(fakeEvent)
+      }
+    }
 
-      return (
-        <Container>
-          {label && <Label>{label}</Label>}
-          <StyledSelect
-            id={field}
-            name={field}
-            defaultValue={selectValue}
-            options={realOptions}
-            onChange={onChange}
-            onBlur={onBlur}
-            onInputChange={onInputChange}
-            hideSelectedOptions
-            placeholder=""
-            isClearable
-            isSearchable
-            noOptionsMessage={() => '(keine)'}
-            maxheight={maxHeight}
-            classNamePrefix="react-select"
-            nocaret={noCaret}
-          />
-          {error && <Error>{error}</Error>}
-        </Container>
-      )
-    },
-  ),
+    useEffect(() => {
+      setStateValue(value)
+    }, [value])
+
+    // need to add value to options list if it is not yet included
+    const valuesArray = optionsIn.map((o) => o.value)
+    const options = [...optionsIn]
+    if (value && !valuesArray.includes(value)) {
+      options.push({ label: value, value })
+    }
+
+    // filter out historic options - if they are not the value set
+    const realOptions = options.filter((o) => {
+      const dontShowHistoric = !exists(value) || value !== o.value
+      if (dontShowHistoric) return !o.historic
+      return true
+    })
+
+    // show ... while options are loading
+    const loadingOptions = [{ value, label: '...' }]
+    const optionsToUse = loading && value ? loadingOptions : realOptions
+    const selectValue = optionsToUse.find((o) => o.value === value)
+
+    return (
+      <Container>
+        {label && <Label>{label}</Label>}
+        <StyledSelect
+          id={field}
+          name={field}
+          defaultValue={selectValue}
+          options={realOptions}
+          onChange={onChange}
+          onBlur={onBlur}
+          onInputChange={onInputChange}
+          hideSelectedOptions
+          placeholder=""
+          isClearable
+          isSearchable
+          noOptionsMessage={() => '(keine)'}
+          maxheight={maxHeight}
+          classNamePrefix="react-select"
+          nocaret={noCaret}
+        />
+        {error && <Error>{error}</Error>}
+      </Container>
+    )
+  },
 )
