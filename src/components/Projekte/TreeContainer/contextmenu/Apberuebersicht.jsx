@@ -1,4 +1,4 @@
-import { memo, useContext } from 'react'
+import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
@@ -19,35 +19,33 @@ const deleteData = {
   table: 'apberuebersicht',
 }
 
-export const Apberuebersicht = memo(
-  observer(({ onClick }) => {
-    const { user } = useContext(MobxContext)
+export const Apberuebersicht = observer(({ onClick }) => {
+  const { user } = useContext(MobxContext)
 
-    return (
-      <ErrorBoundary>
-        <ContextMenu
-          id="treeApberuebersicht"
-          hideOnLeave={true}
-        >
-          <div className="react-contextmenu-title">AP-Bericht</div>
-          {!userIsReadOnly(user.token) && (
-            <>
-              <MenuItem
-                onClick={onClick}
-                data={insertData}
-              >
-                erstelle neuen
-              </MenuItem>
-              <MenuItem
-                onClick={onClick}
-                data={deleteData}
-              >
-                lösche
-              </MenuItem>
-            </>
-          )}
-        </ContextMenu>
-      </ErrorBoundary>
-    )
-  }),
-)
+  return (
+    <ErrorBoundary>
+      <ContextMenu
+        id="treeApberuebersicht"
+        hideOnLeave={true}
+      >
+        <div className="react-contextmenu-title">AP-Bericht</div>
+        {!userIsReadOnly(user.token) && (
+          <>
+            <MenuItem
+              onClick={onClick}
+              data={insertData}
+            >
+              erstelle neuen
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={deleteData}
+            >
+              lösche
+            </MenuItem>
+          </>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
+  )
+})
