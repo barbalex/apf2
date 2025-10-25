@@ -1,4 +1,4 @@
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -41,52 +41,47 @@ const fieldTypes = {
   methode: 'Int',
 }
 
-export const Component = memo(
-  observer(() => {
-    const { tpopkontrzaehlId, tpopkontrId } = useParams()
+export const Component = observer(() => {
+  const { tpopkontrzaehlId, tpopkontrId } = useParams()
 
-    const store = useContext(MobxContext)
+  const store = useContext(MobxContext)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState({})
 
-    const { data, loading, error } = useQuery(query, {
-      variables: {
-        id: tpopkontrzaehlId,
-        tpopkontrId,
-      },
-    })
+  const { data, loading, error } = useQuery(query, {
+    variables: {
+      id: tpopkontrzaehlId,
+      tpopkontrId,
+    },
+  })
 
-    const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
-      .map((n) => n.einheit)
-      // prevent null values which cause error in query
-      .filter((e) => !!e)
+  const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
+    .map((n) => n.einheit)
+    // prevent null values which cause error in query
+    .filter((e) => !!e)
 
-    // filter out already used in other zaehlung of same kontr
-    const zaehlEinheitOptions = (
-      data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-    ).filter((o) => !zaehlEinheitCodesAlreadyUsed.includes(o.value))
+  // filter out already used in other zaehlung of same kontr
+  const zaehlEinheitOptions = (
+    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+  ).filter((o) => !zaehlEinheitCodesAlreadyUsed.includes(o.value))
 
-    const row = useMemo(
-      () => data?.tpopkontrzaehlById ?? {},
-      [data?.tpopkontrzaehlById],
-    )
+  const row = data?.tpopkontrzaehlById ?? {}
 
-    const saveToDb = useCallback(
-      async (event) => {
-        const field = event.target.name
-        const value = ifIsNumericAsNumber(event.target.value)
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
 
-        const variables = {
-          id: row.id,
-          [field]: value,
-          changedBy: store.user.name,
-        }
-        try {
-          await apolloClient.mutate({
-            mutation: gql`
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateAnzahlForEkZaehl(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -108,61 +103,58 @@ export const Component = memo(
             }
             ${tpopkontrzaehl}
           `,
-            variables,
-          })
-        } catch (error) {
-          return setFieldErrors({ [field]: error.message })
-        }
-        setFieldErrors({})
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeTpopfeldkontrzaehl`],
-        })
-      },
-      [apolloClient, tsQueryClient, row.id, store.user.name],
-    )
+        variables,
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    setFieldErrors({})
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopfeldkontrzaehl`],
+    })
+  }
 
-    // console.log('Tpopkontrzaehl rendering')
+  // console.log('Tpopkontrzaehl rendering')
 
-    if (loading) return <Spinner />
+  if (loading) return <Spinner />
 
-    if (error) return <Error errors={[error]} />
+  if (error) return <Error errors={[error]} />
 
-    return (
-      <ErrorBoundary>
-        <Container>
-          <FormTitle
-            title="Zählung"
-            MenuBarComponent={Menu}
+  return (
+    <ErrorBoundary>
+      <Container>
+        <FormTitle
+          title="Zählung"
+          MenuBarComponent={Menu}
+        />
+        <FormContainer>
+          <Select
+            name="einheit"
+            label="Einheit"
+            options={zaehlEinheitOptions}
+            loading={loading}
+            value={row.einheit}
+            saveToDb={saveToDb}
+            error={fieldErrors.einheit}
           />
-          <FormContainer>
-            <Select
-              name="einheit"
-              label="Einheit"
-              options={zaehlEinheitOptions}
-              loading={loading}
-              value={row.einheit}
-              saveToDb={saveToDb}
-              error={fieldErrors.einheit}
-            />
-            <TextField
-              name="anzahl"
-              label="Anzahl"
-              type="number"
-              value={row.anzahl}
-              saveToDb={saveToDb}
-              error={fieldErrors.anzahl}
-            />
-            <RadioButtonGroup
-              name="methode"
-              label="Methode"
-              dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
-              value={row.methode}
-              saveToDb={saveToDb}
-              error={fieldErrors.methode}
-            />
-          </FormContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+          <TextField
+            name="anzahl"
+            label="Anzahl"
+            type="number"
+            value={row.anzahl}
+            saveToDb={saveToDb}
+            error={fieldErrors.anzahl}
+          />
+          <RadioButtonGroup
+            name="methode"
+            label="Methode"
+            dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
+            value={row.methode}
+            saveToDb={saveToDb}
+            error={fieldErrors.methode}
+          />
+        </FormContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+})
