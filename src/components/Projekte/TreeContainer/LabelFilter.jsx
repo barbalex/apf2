@@ -1,11 +1,4 @@
-import {
-  memo,
-  useCallback,
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -38,105 +31,89 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
   font-size: 1.5rem;
 `
 
-export const LabelFilter = memo(
-  observer(() => {
-    const store = useContext(MobxContext)
-    const { nodeLabelFilter: nodeLabelFilterRaw, activeFilterTable } =
-      store.tree
-    const nodeLabelFilter = getSnapshot(nodeLabelFilterRaw)
-    const setNodeLabelFilterKey = store.tree.nodeLabelFilter.setKey
-    const empty = store.tree.nodeLabelFilter.empty
-    const isFiltered = store.tree.nodeLabelFilter.isFiltered()
+export const LabelFilter = observer(() => {
+  const store = useContext(MobxContext)
+  const { nodeLabelFilter: nodeLabelFilterRaw, activeFilterTable } = store.tree
+  const nodeLabelFilter = getSnapshot(nodeLabelFilterRaw)
+  const setNodeLabelFilterKey = store.tree.nodeLabelFilter.setKey
+  const empty = store.tree.nodeLabelFilter.empty
+  const isFiltered = store.tree.nodeLabelFilter.isFiltered()
 
-    const { labelText, filterValue } = useMemo(() => {
-      let labelText = '(filtern nicht möglich)'
-      let filterValue = ''
+  const { labelText, filterValue } = useMemo(() => {
+    let labelText = '(filtern nicht möglich)'
+    let filterValue = ''
 
-      if (activeFilterTable) {
-        filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
-        // make sure 0 is kept
-        if (!filterValue && filterValue !== 0) filterValue = ''
-        // should be to_under_score_case
-        const table = tables.find(
-          (t) => t.table === snakeCase(activeFilterTable),
-        )
-        const tableLabel = table ? table.label : null
-        // danger: Projekte can not be filtered because no parent folder
-        if (tableLabel !== 'Projekte') {
-          labelText = `${tableLabel} filtern`
-        }
+    if (activeFilterTable) {
+      filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+      // make sure 0 is kept
+      if (!filterValue && filterValue !== 0) filterValue = ''
+      // should be to_under_score_case
+      const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
+      const tableLabel = table ? table.label : null
+      // danger: Projekte can not be filtered because no parent folder
+      if (tableLabel !== 'Projekte') {
+        labelText = `${tableLabel} filtern`
       }
+    }
 
-      return { labelText, filterValue }
-    }, [activeFilterTable, nodeLabelFilter])
+    return { labelText, filterValue }
+  }, [activeFilterTable, nodeLabelFilter])
 
-    const [value, setValue] = useState(filterValue)
-    // value should update when changed from outside
-    useEffect(() => {
-      if (filterValue === value) return
-      setValue(filterValue)
-    }, [filterValue])
+  const [value, setValue] = useState(filterValue)
+  // value should update when changed from outside
+  useEffect(() => {
+    if (filterValue === value) return
+    setValue(filterValue)
+  }, [filterValue])
 
-    const setNodeLabelFilter = useCallback(
-      (val) =>
-        setNodeLabelFilterKey({
-          value: val,
-          key: activeFilterTable,
-        }),
-      [setNodeLabelFilterKey, activeFilterTable],
-    )
+  const setNodeLabelFilter = (val) =>
+    setNodeLabelFilterKey({
+      value: val,
+      key: activeFilterTable,
+    })
 
-    const onChange = useCallback(
-      (e) => {
-        if (labelText === '(filtern nicht möglich)') return
+  const onChange = (e) => {
+    if (labelText === '(filtern nicht möglich)') return
 
-        // remove some values as they can cause exceptions in regular expressions
-        const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
-        setValue(val)
-      },
-      [labelText],
-    )
+    // remove some values as they can cause exceptions in regular expressions
+    const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
+    setValue(val)
+  }
 
-    const onKeyUp = useCallback(
-      (e) => {
-        if (e.key === 'Enter') setNodeLabelFilter(value)
-      },
-      [setNodeLabelFilter, value],
-    )
+  const onKeyUp = (e) => e.key === 'Enter' && setNodeLabelFilter(value)
 
-    const onClickEmptyFilter = useCallback(() => {
-      empty()
-      setValue('')
-    }, [empty])
+  const onClickEmptyFilter = () => {
+    empty()
+    setValue('')
+  }
 
-    return (
-      <StyledFormControl
-        fullWidth
-        variant="standard"
-      >
-        <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
-        <StyledInput
-          id={labelText}
-          value={value}
-          onChange={onChange}
-          onKeyUp={onKeyUp}
-          spellCheck="false"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          endAdornment={
-            isFiltered || value?.length ?
-              <InputAdornment
-                position="end"
-                onClick={onClickEmptyFilter}
-                title="Alle Filter entfernen"
-              >
-                <StyledDeleteFilterIcon />
-              </InputAdornment>
-            : null
-          }
-        />
-      </StyledFormControl>
-    )
-  }),
-)
+  return (
+    <StyledFormControl
+      fullWidth
+      variant="standard"
+    >
+      <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
+      <StyledInput
+        id={labelText}
+        value={value}
+        onChange={onChange}
+        onKeyUp={onKeyUp}
+        spellCheck="false"
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        endAdornment={
+          isFiltered || value?.length ?
+            <InputAdornment
+              position="end"
+              onClick={onClickEmptyFilter}
+              title="Alle Filter entfernen"
+            >
+              <StyledDeleteFilterIcon />
+            </InputAdornment>
+          : null
+        }
+      />
+    </StyledFormControl>
+  )
+})

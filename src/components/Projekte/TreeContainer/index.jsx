@@ -1,4 +1,4 @@
-import { memo, useContext, lazy, Suspense } from 'react'
+import { useContext, lazy, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
@@ -46,45 +46,43 @@ const LabelFilterContainer = styled.div`
   margin-bottom: 8px;
 `
 
-export const TreeContainer = memo(
-  observer(() => {
-    const params = useParams()
-    const { projId } = params
+export const TreeContainer = observer(() => {
+  const params = useParams()
+  const { projId } = params
 
-    const store = useContext(MobxContext)
-    const { toDeleteId } = store
+  const store = useContext(MobxContext)
+  const { toDeleteId } = store
 
-    //console.log('TreeContainer',{data})
-    // console.log('TreeContainer rendering')
+  //console.log('TreeContainer',{data})
+  // console.log('TreeContainer rendering')
 
-    return (
-      <ErrorBoundary>
-        <Container data-id="tree-container1">
-          {!!toDeleteId && (
-            <Suspense fallback={null}>
-              <DeleteDatasetModal />
-            </Suspense>
-          )}
-          <LabelFilterContainer>
-            <Suspense fallback={null}>
-              <LabelFilter />
-            </Suspense>
-            {!!projId && (
-              <Suspense fallback={null}>
-                <ApFilter />
-              </Suspense>
-            )}
-          </LabelFilterContainer>
-          <Suspense fallback={<Spinner />}>
-            <TreeComponent />
+  return (
+    <ErrorBoundary>
+      <Container data-id="tree-container1">
+        {!!toDeleteId && (
+          <Suspense fallback={null}>
+            <DeleteDatasetModal />
           </Suspense>
-          {!matchMedia('(pointer: coarse)').matches && (
+        )}
+        <LabelFilterContainer>
+          <Suspense fallback={null}>
+            <LabelFilter />
+          </Suspense>
+          {!!projId && (
             <Suspense fallback={null}>
-              <Menus />
+              <ApFilter />
             </Suspense>
           )}
-        </Container>
-      </ErrorBoundary>
-    )
-  }),
-)
+        </LabelFilterContainer>
+        <Suspense fallback={<Spinner />}>
+          <TreeComponent />
+        </Suspense>
+        {!matchMedia('(pointer: coarse)').matches && (
+          <Suspense fallback={null}>
+            <Menus />
+          </Suspense>
+        )}
+      </Container>
+    </ErrorBoundary>
+  )
+})
