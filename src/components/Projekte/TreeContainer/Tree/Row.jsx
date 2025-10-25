@@ -1,4 +1,4 @@
-import { memo, useContext, useCallback } from 'react'
+import { useContext } from 'react'
 import {
   MdExpandMore,
   MdChevronRight,
@@ -106,139 +106,130 @@ export const transitionStyles = {
   exited: { opacity: 0 },
 }
 
-export const Row = memo(
-  observer(({ node, transitionState, ref }) => {
-    const navigate = useNavigate()
-    const { search } = useLocation()
+export const Row = observer(({ node, transitionState, ref }) => {
+  const navigate = useNavigate()
+  const { search } = useLocation()
 
-    const store = useContext(MobxContext)
-    const { openNodes, nodeLabelFilter, activeNodeArray } = store.tree
-    const activeId = activeNodeArray[activeNodeArray.length - 1]
-    const nodeIsActive = node.id === activeId
+  const store = useContext(MobxContext)
+  const { openNodes, nodeLabelFilter, activeNodeArray } = store.tree
+  const activeId = activeNodeArray[activeNodeArray.length - 1]
+  const nodeIsActive = node.id === activeId
 
-    const nodeIsInActiveNodePath = isNodeInActiveNodePath({
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath({
+    node,
+    activeNodeArray,
+  })
+  const nodeIsOpen = isNodeOpen({ openNodes, url: node.url })
+
+  const [onlyShowActivePathString] = useSearchParamsState(
+    'onlyShowActivePath',
+    'false',
+  )
+  const onlyShowActivePath = onlyShowActivePathString === 'true'
+
+  // only calculate if needed
+  const nodeOrParentIsInActivePath =
+    onlyShowActivePath ?
+      isNodeOrParentInActiveNodePath({ node, activeNodeArray })
+    : false
+
+  // build symbols
+  let useSymbolIcon = true
+  let useSymbolSpan = false
+  let symbolIcon
+  if (node.hasChildren && (nodeIsOpen || node.alwaysOpen)) {
+    symbolIcon = 'expandMore'
+  } else if (node.hasChildren) {
+    symbolIcon = 'chevronRight'
+  } else if (node.label === 'lade Daten...') {
+    symbolIcon = 'moreHoriz'
+  } else {
+    useSymbolSpan = true
+    useSymbolIcon = false
+  }
+  const dataUrl = JSON.stringify(node.url)
+  const level =
+    node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
+
+  const onClickNode = () =>
+    toggleNode({
       node,
-      activeNodeArray,
+      store,
+      navigate,
+      search,
+      onlyShowActivePath,
     })
-    const nodeIsOpen = isNodeOpen({ openNodes, url: node.url })
 
-    const [onlyShowActivePathString] = useSearchParamsState(
-      'onlyShowActivePath',
-      'false',
-    )
-    const onlyShowActivePath = onlyShowActivePathString === 'true'
+  const onClickNodeSymbol = () =>
+    toggleNodeSymbol({ node, store, search, navigate })
 
-    // only calculate if needed
-    const nodeOrParentIsInActivePath =
-      onlyShowActivePath ?
-        isNodeOrParentInActiveNodePath({ node, activeNodeArray })
-      : false
+  if (onlyShowActivePath && !nodeOrParentIsInActivePath) return null
 
-    // build symbols
-    let useSymbolIcon = true
-    let useSymbolSpan = false
-    let symbolIcon
-    if (node.hasChildren && (nodeIsOpen || node.alwaysOpen)) {
-      symbolIcon = 'expandMore'
-    } else if (node.hasChildren) {
-      symbolIcon = 'chevronRight'
-    } else if (node.label === 'lade Daten...') {
-      symbolIcon = 'moreHoriz'
-    } else {
-      useSymbolSpan = true
-      useSymbolIcon = false
-    }
-    const dataUrl = JSON.stringify(node.url)
-    const level =
-      node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
-
-    const onClickNode = useCallback(
-      () =>
-        toggleNode({
-          node,
-          store,
-          navigate,
-          search,
-          onlyShowActivePath,
-        }),
-      [navigate, node, search, store, onlyShowActivePath],
-    )
-
-    const onClickNodeSymbol = useCallback(
-      () => toggleNodeSymbol({ node, store, search, navigate }),
-      [navigate, node, search, store],
-    )
-
-    // console.log('Row, node:', node)
-
-    if (onlyShowActivePath && !nodeOrParentIsInActivePath) return null
-
-    return (
-      <ContextMenuTrigger
-        // need this id for the menu to work
-        id={`tree${upperFirst(node.menuType)}`}
-        //collect={(props) => ({ key: index })}
-        collect={(props) => props}
-        nodeId={node.id}
-        tableId={node.tableId}
-        nodeLabel={node.label}
+  return (
+    <ContextMenuTrigger
+      // need this id for the menu to work
+      id={`tree${upperFirst(node.menuType)}`}
+      //collect={(props) => ({ key: index })}
+      collect={(props) => props}
+      nodeId={node.id}
+      tableId={node.tableId}
+      nodeLabel={node.label}
+    >
+      <StyledNode
+        data-level={level}
+        data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+        data-id={node.tableId || node.id}
+        data-parentid={node.parentTableId || node.parentId}
+        data-url={dataUrl}
+        data-nodetype={node.nodeType}
+        data-label={node.label}
+        data-menutype={node.menuType}
+        data-singleelementname={node.singleElementName}
+        data-jahr={node.jahr}
+        // need this id to scroll elements into view
+        id={node.id}
+        ref={ref}
+        style={transitionState ? transitionStyles[transitionState] : {}}
       >
-        <StyledNode
-          data-level={level}
-          data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-          data-id={node.tableId || node.id}
-          data-parentid={node.parentTableId || node.parentId}
-          data-url={dataUrl}
-          data-nodetype={node.nodeType}
-          data-label={node.label}
-          data-menutype={node.menuType}
-          data-singleelementname={node.singleElementName}
-          data-jahr={node.jahr}
-          // need this id to scroll elements into view
-          id={node.id}
-          ref={ref}
-          style={transitionState ? transitionStyles[transitionState] : {}}
-        >
-          {useSymbolIcon && (
-            <SymbolDiv onClick={onClickNodeSymbol}>
-              {symbolIcon === 'expandMore' && (
-                <StyledExpandMoreIcon
-                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                  viewBox="4 3 17 17"
-                  height={23}
-                />
-              )}
-              {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
-              {symbolIcon === 'moreHoriz' && (
-                <StyledMoreHorizIcon
-                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                />
-              )}
-            </SymbolDiv>
-          )}
-          {useSymbolSpan && (
-            <SymbolDiv onClick={onClickNode}>
-              <StyledRemoveIcon />
-            </SymbolDiv>
-          )}
-          {node.labelLeftElements?.length &&
-            node.labelLeftElements.map((El, index) => <El key={index} />)}
-          <TextSpan
-            data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-            node={node}
-            onClick={onClickNode}
-          >
-            {nodeLabelFilter?.[node.menuType] ?
-              <Highlighter
-                searchWords={[nodeLabelFilter[node.menuType]]}
-                textToHighlight={node.label}
+        {useSymbolIcon && (
+          <SymbolDiv onClick={onClickNodeSymbol}>
+            {symbolIcon === 'expandMore' && (
+              <StyledExpandMoreIcon
+                data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+                viewBox="4 3 17 17"
+                height={23}
               />
-            : node.label}
-          </TextSpan>
-          {node.labelRightElements?.length &&
-            node.labelRightElements.map((El, index) => <El key={index} />)}
-        </StyledNode>
-      </ContextMenuTrigger>
-    )
-  }),
-)
+            )}
+            {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
+            {symbolIcon === 'moreHoriz' && (
+              <StyledMoreHorizIcon
+                data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+              />
+            )}
+          </SymbolDiv>
+        )}
+        {useSymbolSpan && (
+          <SymbolDiv onClick={onClickNode}>
+            <StyledRemoveIcon />
+          </SymbolDiv>
+        )}
+        {node.labelLeftElements?.length &&
+          node.labelLeftElements.map((El, index) => <El key={index} />)}
+        <TextSpan
+          data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+          node={node}
+          onClick={onClickNode}
+        >
+          {nodeLabelFilter?.[node.menuType] ?
+            <Highlighter
+              searchWords={[nodeLabelFilter[node.menuType]]}
+              textToHighlight={node.label}
+            />
+          : node.label}
+        </TextSpan>
+        {node.labelRightElements?.length &&
+          node.labelRightElements.map((El, index) => <El key={index} />)}
+      </StyledNode>
+    </ContextMenuTrigger>
+  )
+})
