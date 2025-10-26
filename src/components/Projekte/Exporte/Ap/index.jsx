@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
@@ -26,7 +26,7 @@ import { Assozart } from './Assozart.jsx'
 export const Ap = () => {
   const [expanded, setExpanded] = useState(false)
 
-  const onClickAction = useCallback(() => setExpanded(!expanded), [expanded])
+  const onClickAction = () => setExpanded(!expanded)
 
   return (
     <StyledCard>

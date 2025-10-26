@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -108,13 +108,12 @@ export const Component = () => {
     setErrors({})
   }, [row.id])
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
-      try {
-        await apolloClient.mutate({
-          mutation: gql`
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateUserForUser(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -134,24 +133,23 @@ export const Component = () => {
             }
             ${userFragment}
           `,
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
-        })
-      } catch (error) {
-        return setErrors({ [field]: error.message })
-      }
-      setErrors({})
-      if (field === 'name') {
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeUser`],
-        })
-      }
-    },
-    [apolloClient, tsQueryClient, row.id],
-  )
-  const onBlurPassword = useCallback((event) => {
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+      })
+    } catch (error) {
+      return setErrors({ [field]: error.message })
+    }
+    setErrors({})
+    if (field === 'name') {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeUser`],
+      })
+    }
+  }
+
+  const onBlurPassword = (event) => {
     setPasswordErrorText('')
     const password = event.target.value
     setPassword(password)
@@ -160,42 +158,40 @@ export const Component = () => {
     } else {
       setPassword2('')
     }
-  }, [])
-  const onBlurPassword2 = useCallback(
-    async (event) => {
-      setPassword2ErrorText('')
-      const password2 = event.target.value
-      setPassword2(password2)
-      if (!password2) {
-        setPassword2ErrorText('Bitte Passwort eingeben')
-      } else if (password !== password2) {
-        setPassword2ErrorText('Die Passwörter stimmen nicht überein')
-      } else {
-        // edit password
-        // then tell user if it worked
-        try {
-          const fakeEvent = { target: { name: 'pass', value: password2 } }
-          await saveToDb(fakeEvent)
-        } catch (error) {
-          setErrors({ pass: error.message })
-          return setPasswordMessage(error.message)
-        }
-        setPasswordMessage(
-          'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
-        )
-        // can fire after component was unmounted...
-        setTimeout(() => {
-          setPasswordMessage('')
-        }, 5000)
-        setPassword('')
-        setPassword2('')
-        setShowPass(false)
-        setShowPass2(false)
-        setEditPassword(false)
+  }
+
+  const onBlurPassword2 = async (event) => {
+    setPassword2ErrorText('')
+    const password2 = event.target.value
+    setPassword2(password2)
+    if (!password2) {
+      setPassword2ErrorText('Bitte Passwort eingeben')
+    } else if (password !== password2) {
+      setPassword2ErrorText('Die Passwörter stimmen nicht überein')
+    } else {
+      // edit password
+      // then tell user if it worked
+      try {
+        const fakeEvent = { target: { name: 'pass', value: password2 } }
+        await saveToDb(fakeEvent)
+      } catch (error) {
+        setErrors({ pass: error.message })
+        return setPasswordMessage(error.message)
       }
-    },
-    [password, saveToDb],
-  )
+      setPasswordMessage(
+        'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
+      )
+      // can fire after component was unmounted...
+      setTimeout(() => {
+        setPasswordMessage('')
+      }, 5000)
+      setPassword('')
+      setPassword2('')
+      setShowPass(false)
+      setShowPass2(false)
+      setEditPassword(false)
+    }
+  }
 
   if (loading) return <Spinner />
 
