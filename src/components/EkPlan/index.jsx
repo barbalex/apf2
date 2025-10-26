@@ -163,7 +163,7 @@ export const Component = observer(() => {
                 </ButtonContainer>
                 <Choose />
               </Header>
-              <Table />
+              {!!aps.length && <Table />}
             </>
           )}
           <User />
