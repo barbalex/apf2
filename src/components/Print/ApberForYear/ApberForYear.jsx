@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import { useApolloClient } from '@apollo/client/react'
@@ -106,7 +107,7 @@ export const ApberForYear = () => {
 
   const apolloClient = useApolloClient()
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['ApberForYearQuery', apberuebersichtId],
     queryFn: async () => {
       // first get year
@@ -142,63 +143,63 @@ export const ApberForYear = () => {
     },
   })
 
-  if (error) {
-    return `Fehler: ${error.message}`
-  }
+  if (error) return `Fehler: ${error.message}`
 
-  // DANGER: without rerendering when loading mutates from true to false
-  // data remains undefined
-  // BUT WITH IT PRINT SOMETIMES ONLY SHOWS THE SPINNER!!!!!!!!!!!!!!!
-  if (isLoading) return <Spinner />
+  // // DANGER: without rerendering when loading mutates from true to false
+  // // data remains undefined
+  // // BUT WITH IT PRINT SOMETIMES ONLY SHOWS THE SPINNER!!!!!!!!!!!!!!!
+  // if (isLoading) return <Spinner />
 
   const jahr = data?.jahr
   const apberuebersicht = data?.data?.apberuebersichtById
 
   return (
     <ErrorBoundary>
-      <Container>
-        <ContentContainer>
-          <FirstPageTitle>
-            Umsetzung der Aktionspläne Flora
-            <br />
-            im Kanton Zürich
-          </FirstPageTitle>
-          <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
-          <FirstPageFnsLogo
-            src={fnslogo}
-            alt="FNS"
-            width="350"
-          />
-          <FirstPageDate>
-            {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
-          </FirstPageDate>
-          <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
-          {!!apberuebersicht?.bemerkungen && (
-            <SecondPage>
-              <SecondPageTop />
-              <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-              <SecondPageText>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(apberuebersicht.bemerkungen),
-                  }}
-                />
-              </SecondPageText>
-            </SecondPage>
-          )}
-          <AvList data={data?.jberData} />
-          <ErfolgList
-            jahr={jahr}
-            data={data?.jberData}
-          />
-          <AktPopList year={jahr} />
-          <ApberForAps
-            jahr={jahr}
-            data={data?.data}
-            jberData={data?.jberData}
-          />
-        </ContentContainer>
-      </Container>
+      <Suspense fallback={<Spinner />}>
+        <Container>
+          <ContentContainer>
+            <FirstPageTitle>
+              Umsetzung der Aktionspläne Flora
+              <br />
+              im Kanton Zürich
+            </FirstPageTitle>
+            <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
+            <FirstPageFnsLogo
+              src={fnslogo}
+              alt="FNS"
+              width="350"
+            />
+            <FirstPageDate>
+              {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
+            </FirstPageDate>
+            <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+            {!!apberuebersicht?.bemerkungen && (
+              <SecondPage>
+                <SecondPageTop />
+                <SecondPageTitle>Zusammenfassung</SecondPageTitle>
+                <SecondPageText>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(apberuebersicht.bemerkungen),
+                    }}
+                  />
+                </SecondPageText>
+              </SecondPage>
+            )}
+            <AvList data={data?.jberData} />
+            <ErfolgList
+              jahr={jahr}
+              data={data?.jberData}
+            />
+            <AktPopList year={jahr} />
+            <ApberForAps
+              jahr={jahr}
+              data={data?.data}
+              jberData={data?.jberData}
+            />
+          </ContentContainer>
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 }
