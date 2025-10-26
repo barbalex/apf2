@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, useContext } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 import styled from '@emotion/styled'
@@ -23,18 +24,15 @@ const Container = styled.div`
   margin-bottom: 10px !important;
 `
 
-export const CoordinatesControl = () => {
+export const CoordinatesControl = observer(() => {
   const { setMapMouseCoordinates } = useContext(MobxContext)
   const [controlType, setControlType] = useState('coordinates')
 
-  const setMouseCoords = useCallback(
-    (e) => {
-      // console.log('setMouseCoordinates')
-      const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
-      setMapMouseCoordinates({ x, y })
-    },
-    [setMapMouseCoordinates],
-  )
+  const setMouseCoords = (e) => {
+    // console.log('setMouseCoordinates')
+    const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
+    setMapMouseCoordinates({ x, y })
+  }
 
   const onMouseMove = debounce(setMouseCoords, 50)
 
@@ -60,4 +58,4 @@ export const CoordinatesControl = () => {
       }
     </Container>
   )
-}
+})

@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
 import 'leaflet'
 import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
@@ -49,7 +50,7 @@ const StyledInput = styled(Input)`
 const xIsValid = (x) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y) => !y || (y >= 1075346 && y < 1299942)
 
-export const PanToCoordinates = ({ setControlType, map }) => {
+export const PanToCoordinates = observer(({ setControlType, map }) => {
   const xkoordField = useRef(null)
 
   useEffect(() => {
@@ -66,20 +67,22 @@ export const PanToCoordinates = ({ setControlType, map }) => {
   const [timeoutId, changeTimeoutId] = useState('')
   const [gotoFocused, changeGotoFocused] = useState(false)
 
-  const onFocusGotoContainer = useCallback(() => {
+  const onFocusGotoContainer = () => {
     clearTimeout(timeoutId)
     if (!gotoFocused) {
       changeGotoFocused(true)
     }
-  }, [gotoFocused, timeoutId])
-  const onClickClear = useCallback(() => {
+  }
+
+  const onClickClear = () => {
     setMarker(null)
     if (marker) map.removeLayer(marker)
     setX('')
     setY('')
     setControlType('coordinates')
-  }, [marker, map, setControlType])
-  const onBlurGotoContainer = useCallback(() => {
+  }
+
+  const onBlurGotoContainer = () => {
     const newTimeoutId = setTimeout(() => {
       if (gotoFocused) {
         changeGotoFocused(false)
@@ -87,7 +90,8 @@ export const PanToCoordinates = ({ setControlType, map }) => {
       }
     })
     changeTimeoutId(newTimeoutId)
-  }, [gotoFocused, setControlType])
+  }
+
   /**
    * for unknown reason
    * onClickGoto happens TWICE
@@ -95,7 +99,7 @@ export const PanToCoordinates = ({ setControlType, map }) => {
    * is added to the map
    * but marker passed second time is saved in state...
    */
-  const onClickGoto = useCallback(() => {
+  const onClickGoto = () => {
     if (x && y && !xError && !yError) {
       const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
       map.flyTo(latLng)
@@ -110,41 +114,39 @@ export const PanToCoordinates = ({ setControlType, map }) => {
       newMarker.addTo(map)
       setMarker(newMarker)
     }
-  }, [x, y, xError, yError, map, marker])
-  const onChangeX = useCallback((event) => {
+  }
+
+  const onChangeX = (event) => {
     let { value } = event.target
     // convert string to number
     value = value ? +value : value
     setX(value)
     // immediately cancel possible existing error
     if (xIsValid(value)) changeXError('')
-  }, [])
-  const onChangeY = useCallback((event) => {
+  }
+
+  const onChangeY = (event) => {
     let { value } = event.target
     // convert string to number
     value = value ? +value : value
     setY(value)
     // immediately cancel possible existing error
     if (yIsValid(value)) changeYError('')
-  }, [])
-  const onBlurX = useCallback(
-    (event) => {
-      // prevent onBlurGotoContainer
-      event.stopPropagation()
-      if (xIsValid(x)) return changeXError('')
-      changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
-    },
-    [x],
-  )
-  const onBlurY = useCallback(
-    (event) => {
-      // prevent onBlurGotoContainer
-      event.stopPropagation()
-      if (yIsValid(y)) return changeYError('')
-      changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
-    },
-    [y],
-  )
+  }
+
+  const onBlurX = (event) => {
+    // prevent onBlurGotoContainer
+    event.stopPropagation()
+    if (xIsValid(x)) return changeXError('')
+    changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
+  }
+
+  const onBlurY = (event) => {
+    // prevent onBlurGotoContainer
+    event.stopPropagation()
+    if (yIsValid(y)) return changeYError('')
+    changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
+  }
 
   return (
     <Container
@@ -209,4 +211,4 @@ export const PanToCoordinates = ({ setControlType, map }) => {
       </Tooltip>
     </Container>
   )
-}
+})

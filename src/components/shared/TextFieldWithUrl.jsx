@@ -46,12 +46,7 @@ export const TextFieldWithUrl = ({
 
   const urls = value ? getUrls(value) : []
 
-  const onKeyPress = useCallback(
-    (event) => {
-      event.key === 'Enter' && handleSubmit()
-    },
-    [handleSubmit],
-  )
+  const onKeyPress = (event) => event.key === 'Enter' && handleSubmit()
 
   return (
     <Container>
