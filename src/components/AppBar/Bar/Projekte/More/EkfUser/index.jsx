@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client/react'
 import { useNavigate, useLocation } from 'react-router'
@@ -17,7 +18,7 @@ export const EkfUser = ({ closeMenu }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
-  const { data, error, loading } = useQuery(queryAdresses)
+  const { data, error } = useQuery(queryAdresses)
 
   const choose = (event) => {
     const value = event.target.value
@@ -28,20 +29,20 @@ export const EkfUser = ({ closeMenu }) => {
     )
   }
 
-  if (loading) return <Container>{'lade...'}</Container>
-
   if (error) return <Error error={error} />
 
   return (
     <Container>
-      <Select
-        value={''}
-        label="EKF sehen als"
-        options={data?.allUsers?.nodes ?? []}
-        loading={loading}
-        saveToDb={choose}
-        maxHeight={120}
-      />
+      <Suspense fallback={'lade...'}>
+        <Select
+          value={''}
+          label="EKF sehen als"
+          options={data?.allUsers?.nodes ?? []}
+          loading={false}
+          saveToDb={choose}
+          maxHeight={120}
+        />
+      </Suspense>
     </Container>
   )
 }
