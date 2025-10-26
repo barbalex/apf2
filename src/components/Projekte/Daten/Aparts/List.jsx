@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
@@ -12,17 +12,17 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, isLoading, error } = useApartsNavData()
-
-  if (isLoading) return <Spinner />
+  const { navData, error } = useApartsNavData()
 
   if (error) return <Error error={error} />
 
   return (
-    <SharedList
-      navData={navData}
-      MenuBarComponent={Menu}
-      highlightSearchString={nodeLabelFilter.apart}
-    />
+    <Suspense fallback={<Spinner />}>
+      <SharedList
+        navData={navData}
+        MenuBarComponent={Menu}
+        highlightSearchString={nodeLabelFilter.apart}
+      />
+    </Suspense>
   )
 })
