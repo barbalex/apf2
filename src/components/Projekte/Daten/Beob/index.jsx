@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, Suspense } from 'react'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
@@ -65,7 +65,7 @@ export const Beob = observer(() => {
     return 0
   }
 
-  const { data, isLoading, error } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['beobByIdQueryForBeob', id],
     queryFn: async () =>
       apolloClient.query({
@@ -124,9 +124,6 @@ export const Beob = observer(() => {
     />
   )
 
-  if (!row) return null
-  if (!fields || fields.length === 0) return null
-  if (isLoading) return <Spinner />
   if (error) return <Error error={error} />
 
   // Issue: only one instance of HTML5Backend can be used at a time
@@ -140,12 +137,14 @@ export const Beob = observer(() => {
           Die Felder können beliebig sortiert werden (drag and drop).
         </Explainer>
         <Container>
-          <DndProvider
-            backend={HTML5Backend}
-            context={window}
-          >
-            {fields.map((field, i) => renderField(field, i))}
-          </DndProvider>
+          <Suspense fallback={<Spinner />}>
+            <DndProvider
+              backend={HTML5Backend}
+              context={window}
+            >
+              {fields.map((field, i) => renderField(field, i))}
+            </DndProvider>
+          </Suspense>
         </Container>
       </OuterContainer>
     </ErrorBoundary>
