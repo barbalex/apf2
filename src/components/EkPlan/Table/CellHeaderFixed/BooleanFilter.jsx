@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import MenuItem from '@mui/material/MenuItem'
 import { upperFirst } from 'es-toolkit'
 
@@ -7,7 +8,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450
 // and: https://reactjs.org/docs/forwarding-refs.html
-export const BooleanFilter = ({ column, closeMenu, ref }) => {
+export const BooleanFilter = observer(({ column, closeMenu, ref }) => {
   const store = useContext(MobxContext)
   const { name } = column
 
@@ -33,4 +34,4 @@ export const BooleanFilter = ({ column, closeMenu, ref }) => {
       {!storeValue ? `${valueText} filtern` : `${valueText} nicht filtern`}
     </MenuItem>
   )
-}
+})

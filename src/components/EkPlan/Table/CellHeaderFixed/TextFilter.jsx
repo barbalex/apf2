@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useContext, useEffect, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
@@ -23,7 +24,7 @@ const valForState = (valPassed) => {
   return val
 }
 
-export const TextFilter = ({ column, closeMenu }) => {
+export const TextFilter = observer(({ column, closeMenu }) => {
   const store = useContext(MobxContext)
   const { setFilterEmptyEkfrequenz, setFilterEmptyEkfrequenzStartjahr } =
     store.ekPlan
@@ -124,4 +125,4 @@ export const TextFilter = ({ column, closeMenu }) => {
       />
     </FormControl>
   )
-}
+})
