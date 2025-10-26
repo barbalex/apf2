@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { sumBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
@@ -130,13 +131,22 @@ const TotalDiffColumn = styled.div`
   }
 `
 
+const fallback = (
+  <ErrorBoundary>
+    <Container>
+      <Title>Übersicht über aktuelle Populationen aller AP-Arten</Title>
+      <TitleRow1>Lade Daten...</TitleRow1>
+    </Container>
+  </ErrorBoundary>
+)
+
 export const AktPopList = ({ year }) => {
   const { projId = '99999999-9999-9999-9999-999999999999' } = useParams()
 
   const apolloClient = useApolloClient()
 
   const previousYear = year - 1
-  const { data, isLoading, error } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['jberAktPopQuery', projId, previousYear, year],
     queryFn: () =>
       apolloClient.query({
@@ -172,114 +182,103 @@ export const AktPopList = ({ year }) => {
   const pop200Diff = sumBy(aps, (e) => e.pop200Diff)
   const popTotalDiff = sumBy(aps, (e) => e.popTotalDiff)
 
-  if (error) {
-    return `Fehler: ${error.message}`
-  }
-
-  if (isLoading) {
-    return (
-      <ErrorBoundary>
-        <Container>
-          <Title>Übersicht über aktuelle Populationen aller AP-Arten</Title>
-          <TitleRow1>Lade Daten...</TitleRow1>
-        </Container>
-      </ErrorBoundary>
-    )
-  }
+  if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>
-      <Container>
-        <Title>Übersicht über aktuelle Populationen aller AP-Arten</Title>
-        <TitleRow1>
-          <DiffLeftColumn />
-          <DataColumn>aktuelle Werte</DataColumn>
-          <DiffColumn>Differenz zum Vorjahr</DiffColumn>
-        </TitleRow1>
-        <TitleRow2>
-          <ApColumn>Aktionsplan</ApColumn>
-          <UrsprColumn>ursprünglich</UrsprColumn>
-          <AngesColumn>angesiedelt</AngesColumn>
-          <TotalColumn>total</TotalColumn>
-          <UrsprColumn>ursprünglich</UrsprColumn>
-          <AngesColumn>angesiedelt</AngesColumn>
-          <TotalDiffColumn>total</TotalDiffColumn>
-        </TitleRow2>
-        {aps.map((ap) => (
-          <ApRow key={ap?.artname}>
-            <ApColumn>{ap?.artname}</ApColumn>
-            <UrsprColumn>{ap?.pop100}</UrsprColumn>
-            <AngesColumn>{ap?.pop200}</AngesColumn>
-            <TotalColumn>{ap?.popTotal}</TotalColumn>
+      <Suspense fallback={fallback}>
+        <Container>
+          <Title>Übersicht über aktuelle Populationen aller AP-Arten</Title>
+          <TitleRow1>
+            <DiffLeftColumn />
+            <DataColumn>aktuelle Werte</DataColumn>
+            <DiffColumn>Differenz zum Vorjahr</DiffColumn>
+          </TitleRow1>
+          <TitleRow2>
+            <ApColumn>Aktionsplan</ApColumn>
+            <UrsprColumn>ursprünglich</UrsprColumn>
+            <AngesColumn>angesiedelt</AngesColumn>
+            <TotalColumn>total</TotalColumn>
+            <UrsprColumn>ursprünglich</UrsprColumn>
+            <AngesColumn>angesiedelt</AngesColumn>
+            <TotalDiffColumn>total</TotalDiffColumn>
+          </TitleRow2>
+          {aps.map((ap) => (
+            <ApRow key={ap?.artname}>
+              <ApColumn>{ap?.artname}</ApColumn>
+              <UrsprColumn>{ap?.pop100}</UrsprColumn>
+              <AngesColumn>{ap?.pop200}</AngesColumn>
+              <TotalColumn>{ap?.popTotal}</TotalColumn>
+              <UrsprColumn
+                data-color={
+                  ap?.pop100Diff > 0 ? '#00ff00'
+                  : ap?.pop100Diff < 0 ?
+                    'red'
+                  : 'white'
+                }
+              >
+                {ap?.pop100Diff}
+              </UrsprColumn>
+              <AngesColumn
+                data-color={
+                  ap?.pop200Diff > 0 ? '#00ff00'
+                  : ap?.pop200Diff < 0 ?
+                    'red'
+                  : 'white'
+                }
+              >
+                {ap?.pop200Diff}
+              </AngesColumn>
+              <TotalDiffColumn
+                data-color={
+                  ap?.popTotalDiff > 0 ? '#00ff00'
+                  : ap?.popTotalDiff < 0 ?
+                    'red'
+                  : 'white'
+                }
+              >
+                {ap?.popTotalDiff}
+              </TotalDiffColumn>
+            </ApRow>
+          ))}
+          <TotalRow>
+            <ApColumn>{aps.length}</ApColumn>
+            <UrsprColumn>{pop100}</UrsprColumn>
+            <AngesColumn>{pop200}</AngesColumn>
+            <TotalColumn>{popsTotal}</TotalColumn>
             <UrsprColumn
               data-color={
-                ap?.pop100Diff > 0 ? '#00ff00'
-                : ap?.pop100Diff < 0 ?
+                pop100Diff > 0 ? '#00ff00'
+                : pop100Diff < 0 ?
                   'red'
                 : 'white'
               }
             >
-              {ap?.pop100Diff}
+              {pop100Diff}
             </UrsprColumn>
             <AngesColumn
               data-color={
-                ap?.pop200Diff > 0 ? '#00ff00'
-                : ap?.pop200Diff < 0 ?
+                pop200Diff > 0 ? '#00ff00'
+                : pop200Diff < 0 ?
                   'red'
                 : 'white'
               }
             >
-              {ap?.pop200Diff}
+              {pop200Diff}
             </AngesColumn>
             <TotalDiffColumn
               data-color={
-                ap?.popTotalDiff > 0 ? '#00ff00'
-                : ap?.popTotalDiff < 0 ?
+                popTotalDiff > 0 ? '#00ff00'
+                : popTotalDiff < 0 ?
                   'red'
                 : 'white'
               }
             >
-              {ap?.popTotalDiff}
+              {popTotalDiff}
             </TotalDiffColumn>
-          </ApRow>
-        ))}
-        <TotalRow>
-          <ApColumn>{aps.length}</ApColumn>
-          <UrsprColumn>{pop100}</UrsprColumn>
-          <AngesColumn>{pop200}</AngesColumn>
-          <TotalColumn>{popsTotal}</TotalColumn>
-          <UrsprColumn
-            data-color={
-              pop100Diff > 0 ? '#00ff00'
-              : pop100Diff < 0 ?
-                'red'
-              : 'white'
-            }
-          >
-            {pop100Diff}
-          </UrsprColumn>
-          <AngesColumn
-            data-color={
-              pop200Diff > 0 ? '#00ff00'
-              : pop200Diff < 0 ?
-                'red'
-              : 'white'
-            }
-          >
-            {pop200Diff}
-          </AngesColumn>
-          <TotalDiffColumn
-            data-color={
-              popTotalDiff > 0 ? '#00ff00'
-              : popTotalDiff < 0 ?
-                'red'
-              : 'white'
-            }
-          >
-            {popTotalDiff}
-          </TotalDiffColumn>
-        </TotalRow>
-      </Container>
+          </TotalRow>
+        </Container>
+      </Suspense>
     </ErrorBoundary>
   )
 }
