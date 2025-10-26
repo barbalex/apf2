@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useCallback, useContext, useEffect, useRef } from 'react'
+import { useState, useContext, useEffect, useRef } from 'react'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
@@ -53,39 +53,34 @@ export const TextFilter = ({ column, closeMenu }) => {
 
   const inputRef = useRef(null)
 
-  const onChange = useCallback((event) => {
-    setLocalValue(valForState(event.target.value))
-  }, [])
-  const onBlur = useCallback(
-    (event) => {
-      if (
-        event.target.value != storeValue && // eslint-disable-line eqeqeq
-        !(event.target.value === '' && storeValue === null)
-      ) {
-        storeSetFunction(valForStore(event.target.value))
-        if (name === 'ekfrequenz') setFilterEmptyEkfrequenz(false)
-        if (name === 'ekfrequenzStartjahr')
-          setFilterEmptyEkfrequenzStartjahr(false)
-        closeMenu()
-      }
-    },
-    [storeValue, storeValue],
-  )
-  const onClickEmpty = useCallback(
-    (event) => {
-      // prevent blur event which would close menu
-      event.stopPropagation()
-      if (localValue) {
-        setLocalValue('')
-      }
-      inputRef.current.focus()
-    },
-    [localValue],
-  )
+  const onChange = (event) => setLocalValue(valForState(event.target.value))
+
+  const onBlur = (event) => {
+    if (
+      event.target.value != storeValue && // eslint-disable-line eqeqeq
+      !(event.target.value === '' && storeValue === null)
+    ) {
+      storeSetFunction(valForStore(event.target.value))
+      if (name === 'ekfrequenz') setFilterEmptyEkfrequenz(false)
+      if (name === 'ekfrequenzStartjahr')
+        setFilterEmptyEkfrequenzStartjahr(false)
+      closeMenu()
+    }
+  }
+
+  const onClickEmpty = (event) => {
+    // prevent blur event which would close menu
+    event.stopPropagation()
+    if (localValue) {
+      setLocalValue('')
+    }
+    inputRef.current.focus()
+  }
+
   useEffect(() => {
     inputRef.current && inputRef.current.focus()
   }, [inputRef.current])
-  const onKeyDown = useCallback((event) => {
+  const onKeyDown = (event) => {
     // need to stop propagation
     // menu focuses next label if that's first character is pressed
     // this blurs the textfield, so the filter can't be entered
@@ -95,7 +90,7 @@ export const TextFilter = ({ column, closeMenu }) => {
     if (event.key === 'Enter') {
       onBlur(event)
     }
-  }, [])
+  }
 
   return (
     <FormControl>

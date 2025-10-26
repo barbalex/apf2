@@ -1,4 +1,5 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import { format } from 'date-fns/format'
@@ -144,312 +145,319 @@ const ChartContainer = styled.div`
   }
 `
 
-export const ApberForAp = ({
-  apId,
-  jahr,
-  apData: apDataPassed,
-  node,
-  /**
-   * when ApberForAp is called from ApberForYear
-   * isSubReport is passed
-   */
-  isSubReport = false,
-  // and need to build print button only once
-  // so only when index is 0
-  subReportIndex,
-}) => {
-  const store = useContext(MobxContext)
-  const { setIsPrint } = store
+export const ApberForAp = observer(
+  ({
+    apId,
+    jahr,
+    apData: apDataPassed,
+    node,
+    /**
+     * when ApberForAp is called from ApberForYear
+     * isSubReport is passed
+     */
+    isSubReport = false,
+    // and need to build print button only once
+    // so only when index is 0
+    subReportIndex,
+  }) => {
+    const store = useContext(MobxContext)
+    const { setIsPrint } = store
 
-  const apData = isSubReport ? apDataPassed : apDataPassed.apById
-  const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
-  const apberDatum = apber?.datum
-  const erfkrit = sortBy(apData?.erfkritsByApId?.nodes ?? [], [
-    (e) => e?.apErfkritWerteByErfolg?.sort,
-  ])
-  const ziele = sortBy(apData?.zielsByApId?.nodes ?? [], [
-    (e) => e?.zielTypWerteByTyp?.sort,
-    (e) => e.bezeichnung,
-  ])
-  const pops = apData?.popsByApId?.nodes ?? []
-  const tpops = pops.map((p) => p?.tpopsByPopId?.nodes ?? []).flat()
-  const massns = sortBy(
-    tpops.map((t) => t?.tpopmassnsByTpopId?.nodes ?? []).flat(),
-    [
-      (m) => m?.tpopByTpopId?.popByPopId.nr,
-      (m) => m?.tpopByTpopId?.nr,
-      (m) => m?.datum,
-      (m) => m?.tpopmassnTypWerteByTyp?.text,
-      (m) => m?.beschreibung,
-    ],
-  )
-
-  const onClickPrint = useCallback(() => {
-    setIsPrint(true)
-    // need a long enough timeout
-    // because the component is loaded anew
-    // otherwise the graphics are not shown
-    setTimeout(() => {
-      window.print()
-      setIsPrint(false)
-    }, 15000)
-  }, [setIsPrint])
-
-  if (!node) {
-    return (
-      <NoDataContainer issubreport={isSubReport}>
-        <div>Sorry, es gibt nicht ausreichend Daten.</div>
-        <div>
-          Kann es sein, dass es sich nicht um einen gültigen Aktionsplan
-          handelt?
-        </div>
-      </NoDataContainer>
+    const apData = isSubReport ? apDataPassed : apDataPassed.apById
+    const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
+    const apberDatum = apber?.datum
+    const erfkrit = sortBy(apData?.erfkritsByApId?.nodes ?? [], [
+      (e) => e?.apErfkritWerteByErfolg?.sort,
+    ])
+    const ziele = sortBy(apData?.zielsByApId?.nodes ?? [], [
+      (e) => e?.zielTypWerteByTyp?.sort,
+      (e) => e.bezeichnung,
+    ])
+    const pops = apData?.popsByApId?.nodes ?? []
+    const tpops = pops.map((p) => p?.tpopsByPopId?.nodes ?? []).flat()
+    const massns = sortBy(
+      tpops.map((t) => t?.tpopmassnsByTpopId?.nodes ?? []).flat(),
+      [
+        (m) => m?.tpopByTpopId?.popByPopId.nr,
+        (m) => m?.tpopByTpopId?.nr,
+        (m) => m?.datum,
+        (m) => m?.tpopmassnTypWerteByTyp?.text,
+        (m) => m?.beschreibung,
+      ],
     )
-  }
 
-  return (
-    <ErrorBoundary>
-      <Container issubreport={isSubReport}>
-        {!subReportIndex && (
-          <StyledFab
-            onClick={onClickPrint}
-            title="drucken"
-            aria-label="drucken"
-            color="primary"
-          >
-            <MdPrint />
-          </StyledFab>
-        )}
-        <ContentContainer issubreport={isSubReport}>
-          <Header>
-            {`Jahresbericht ${jahr},
+    const onClickPrint = () => {
+      setIsPrint(true)
+      // need a long enough timeout
+      // because the component is loaded anew
+      // otherwise the graphics are not shown
+      setTimeout(() => {
+        window.print()
+        setIsPrint(false)
+      }, 15000)
+    }
+
+    if (!node) {
+      return (
+        <NoDataContainer issubreport={isSubReport}>
+          <div>Sorry, es gibt nicht ausreichend Daten.</div>
+          <div>
+            Kann es sein, dass es sich nicht um einen gültigen Aktionsplan
+            handelt?
+          </div>
+        </NoDataContainer>
+      )
+    }
+
+    return (
+      <ErrorBoundary>
+        <Container issubreport={isSubReport}>
+          {!subReportIndex && (
+            <StyledFab
+              onClick={onClickPrint}
+              title="drucken"
+              aria-label="drucken"
+              color="primary"
+            >
+              <MdPrint />
+            </StyledFab>
+          )}
+          <ContentContainer issubreport={isSubReport}>
+            <Header>
+              {`Jahresbericht ${jahr},
               ${node?.artname ?? ''},
               ${format(new Date(), 'dd.MM.yyyy')}`}
-          </Header>
+            </Header>
 
-          <Title1>{node?.artname ?? ''}</Title1>
+            <Title1>{node?.artname ?? ''}</Title1>
 
-          <Row>
-            <p>{`Start Programm: ${
-              node?.startJahr ?? '(Start-Jahr fehlt)'
-            }`}</p>
-            <p>{`Erste Massnahme: ${node?.firstMassn ?? ''}`}</p>
-            <p>{`Erste Kontrolle: ${node?.b1FirstYear ?? ''}`}</p>
-          </Row>
+            <Row>
+              <p>{`Start Programm: ${
+                node?.startJahr ?? '(Start-Jahr fehlt)'
+              }`}</p>
+              <p>{`Erste Massnahme: ${node?.firstMassn ?? ''}`}</p>
+              <p>{`Erste Kontrolle: ${node?.b1FirstYear ?? ''}`}</p>
+            </Row>
 
-          <AMengen
-            loading={false}
-            node={node}
-            jahr={jahr}
-          />
-          {!!apber.biotopeNeue && (
-            <FieldRowFullWidth>
-              <TitledLabel>
-                Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope
-              </TitledLabel>
-              <FullWidthField>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(apber?.biotopeNeue ?? ''),
-                  }}
-                />
-              </FullWidthField>
-            </FieldRowFullWidth>
-          )}
-          <BMengen
-            apId={apId}
-            jahr={jahr}
-            loading={false}
-            node={node}
-          />
-          <ChartContainer>
-            <TpopKontrolliert
+            <AMengen
+              loading={false}
+              node={node}
+              jahr={jahr}
+            />
+            {!!apber.biotopeNeue && (
+              <FieldRowFullWidth>
+                <TitledLabel>
+                  Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope
+                </TitledLabel>
+                <FullWidthField>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(apber?.biotopeNeue ?? ''),
+                    }}
+                  />
+                </FullWidthField>
+              </FieldRowFullWidth>
+            )}
+            <BMengen
               apId={apId}
               jahr={jahr}
-              height={250}
-              print
-              isSubReport={isSubReport}
+              loading={false}
+              node={node}
             />
-          </ChartContainer>
-          <ChartContainer>
-            <PopStatus
-              apId={apId}
-              year={jahr}
-              height={250}
-              print
-              isSubReport={isSubReport}
-            />
-          </ChartContainer>
-          <ChartContainer>
-            <PopMenge
-              apId={apId}
+            <ChartContainer>
+              <TpopKontrolliert
+                apId={apId}
+                jahr={jahr}
+                height={250}
+                print
+                isSubReport={isSubReport}
+              />
+            </ChartContainer>
+            <ChartContainer>
+              <PopStatus
+                apId={apId}
+                year={jahr}
+                height={250}
+                print
+                isSubReport={isSubReport}
+              />
+            </ChartContainer>
+            <ChartContainer>
+              <PopMenge
+                apId={apId}
+                jahr={jahr}
+                height={250}
+                print
+                isSubReport={isSubReport}
+              />
+            </ChartContainer>
+            {!!apber.biotopeOptimieren && (
+              <FieldRowFullWidth>
+                <TitledLabel>
+                  Bemerkungen / Folgerungen für nächstes Jahr: Optimierung
+                  Biotope
+                </TitledLabel>
+                <FullWidthField>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(apber?.biotopeOptimieren ?? ''),
+                    }}
+                  />
+                </FullWidthField>
+              </FieldRowFullWidth>
+            )}
+
+            <CMengen
               jahr={jahr}
-              height={250}
-              print
-              isSubReport={isSubReport}
+              loading={false}
+              node={node}
             />
-          </ChartContainer>
-          {!!apber.biotopeOptimieren && (
-            <FieldRowFullWidth>
-              <TitledLabel>
-                Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope
-              </TitledLabel>
-              <FullWidthField>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(apber?.biotopeOptimieren ?? ''),
-                  }}
-                />
-              </FullWidthField>
-            </FieldRowFullWidth>
-          )}
+            {!!apber.massnahmenPlanungVsAusfuehrung && (
+              <FieldRowFullWidth>
+                <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
+                <FullWidthField>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(
+                        apber?.massnahmenPlanungVsAusfuehrung ?? '',
+                      ),
+                    }}
+                  />
+                </FullWidthField>
+              </FieldRowFullWidth>
+            )}
+            {!!apber.massnahmenOptimieren && (
+              <FieldRowFullWidth>
+                <TitledLabel>
+                  Bemerkungen / Folgerungen für nächstes Jahr: Optimierung
+                  Massnahmen
+                </TitledLabel>
+                <FullWidthField>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(
+                        apber?.massnahmenOptimieren ?? '',
+                      ),
+                    }}
+                  />
+                </FullWidthField>
+              </FieldRowFullWidth>
+            )}
+            {!!apber.massnahmenApBearb && (
+              <FieldRowFullWidth>
+                <TitledLabel>
+                  Weitere Aktivitäten der Art-Verantwortlichen
+                </TitledLabel>
+                <FullWidthField>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(apber?.massnahmenApBearb ?? ''),
+                    }}
+                  />
+                </FullWidthField>
+              </FieldRowFullWidth>
+            )}
+            {!!massns.length && <Massnahmen massns={massns} />}
 
-          <CMengen
-            jahr={jahr}
-            loading={false}
-            node={node}
-          />
-          {!!apber.massnahmenPlanungVsAusfuehrung && (
-            <FieldRowFullWidth>
-              <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
-              <FullWidthField>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(
-                      apber?.massnahmenPlanungVsAusfuehrung ?? '',
-                    ),
-                  }}
-                />
-              </FullWidthField>
-            </FieldRowFullWidth>
-          )}
-          {!!apber.massnahmenOptimieren && (
-            <FieldRowFullWidth>
-              <TitledLabel>
-                Bemerkungen / Folgerungen für nächstes Jahr: Optimierung
-                Massnahmen
-              </TitledLabel>
-              <FullWidthField>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(apber?.massnahmenOptimieren ?? ''),
-                  }}
-                />
-              </FullWidthField>
-            </FieldRowFullWidth>
-          )}
-          {!!apber.massnahmenApBearb && (
-            <FieldRowFullWidth>
-              <TitledLabel>
-                Weitere Aktivitäten der Art-Verantwortlichen
-              </TitledLabel>
-              <FullWidthField>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(apber?.massnahmenApBearb ?? ''),
-                  }}
-                />
-              </FullWidthField>
-            </FieldRowFullWidth>
-          )}
-          {!!massns.length && <Massnahmen massns={massns} />}
-
-          <Title1>
-            D. Einschätzung der Wirkung des AP insgesamt auf die Art
-          </Title1>
-          {!!apber.vergleichVorjahrGesamtziel && (
-            <FieldRow>
-              <FieldLabel>
-                Vergleich zu Vorjahr - Ausblick auf Gesamtziel
-              </FieldLabel>
-              <Field>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(
-                      apber?.vergleichVorjahrGesamtziel ?? '',
-                    ),
-                  }}
-                />
-              </Field>
-            </FieldRow>
-          )}
-          {!!ziele.length && <Ziele ziele={ziele} />}
-          {!!erfkrit.length && (
-            <FieldRow>
-              <FieldLabel>Beurteilungsskala</FieldLabel>
-              <Field>
-                {erfkrit.map((e) => (
-                  <ErfkritRow key={e.id}>
-                    <ErfkritErfolg>{`${
-                      e?.apErfkritWerteByErfolg?.text ?? '(fehlt)'
-                    }:`}</ErfkritErfolg>
-                    <ErfkritKriterium>
-                      {e.kriterien || '(fehlt)'}
-                    </ErfkritKriterium>
-                  </ErfkritRow>
-                ))}
-              </Field>
-            </FieldRow>
-          )}
-          {!!apber.apErfkritWerteByBeurteilung && (
-            <FieldRowBold>
-              <FieldLabel>Beurteilung</FieldLabel>
-              <Field>{apber?.apErfkritWerteByBeurteilung?.text ?? ''}</Field>
-            </FieldRowBold>
-          )}
-          {!!apber.wirkungAufArt && (
-            <FieldRow>
-              <FieldLabel>Bemerkungen</FieldLabel>
-              <Field>{apber?.wirkungAufArt ?? ''}</Field>
-            </FieldRow>
-          )}
-          {!!apber.apberAnalyse && (
-            <FieldRow>
-              <FieldLabel>Analyse</FieldLabel>
-              <Field>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(apber?.apberAnalyse ?? ''),
-                  }}
-                />
-              </Field>
-            </FieldRow>
-          )}
-          {!!apber.konsequenzenUmsetzung && (
-            <FieldRow>
-              <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
-              <Field>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(apber?.konsequenzenUmsetzung ?? ''),
-                  }}
-                />
-              </Field>
-            </FieldRow>
-          )}
-          {!!apber.konsequenzenErfolgskontrolle && (
-            <FieldRow>
-              <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
-              <Field>
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: mdParser.render(
-                      apber?.konsequenzenErfolgskontrolle ?? '',
-                    ),
-                  }}
-                />
-              </Field>
-            </FieldRow>
-          )}
-          <Row>
-            {`${
-              apberDatum ?
-                format(new Date(apberDatum), 'dd.MM.yyyy')
-              : '(Datum fehlt)'
-            } / ${node?.bearbeiter ?? '(kein Bearbeiter)'}`}
-          </Row>
-        </ContentContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+            <Title1>
+              D. Einschätzung der Wirkung des AP insgesamt auf die Art
+            </Title1>
+            {!!apber.vergleichVorjahrGesamtziel && (
+              <FieldRow>
+                <FieldLabel>
+                  Vergleich zu Vorjahr - Ausblick auf Gesamtziel
+                </FieldLabel>
+                <Field>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(
+                        apber?.vergleichVorjahrGesamtziel ?? '',
+                      ),
+                    }}
+                  />
+                </Field>
+              </FieldRow>
+            )}
+            {!!ziele.length && <Ziele ziele={ziele} />}
+            {!!erfkrit.length && (
+              <FieldRow>
+                <FieldLabel>Beurteilungsskala</FieldLabel>
+                <Field>
+                  {erfkrit.map((e) => (
+                    <ErfkritRow key={e.id}>
+                      <ErfkritErfolg>{`${
+                        e?.apErfkritWerteByErfolg?.text ?? '(fehlt)'
+                      }:`}</ErfkritErfolg>
+                      <ErfkritKriterium>
+                        {e.kriterien || '(fehlt)'}
+                      </ErfkritKriterium>
+                    </ErfkritRow>
+                  ))}
+                </Field>
+              </FieldRow>
+            )}
+            {!!apber.apErfkritWerteByBeurteilung && (
+              <FieldRowBold>
+                <FieldLabel>Beurteilung</FieldLabel>
+                <Field>{apber?.apErfkritWerteByBeurteilung?.text ?? ''}</Field>
+              </FieldRowBold>
+            )}
+            {!!apber.wirkungAufArt && (
+              <FieldRow>
+                <FieldLabel>Bemerkungen</FieldLabel>
+                <Field>{apber?.wirkungAufArt ?? ''}</Field>
+              </FieldRow>
+            )}
+            {!!apber.apberAnalyse && (
+              <FieldRow>
+                <FieldLabel>Analyse</FieldLabel>
+                <Field>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(apber?.apberAnalyse ?? ''),
+                    }}
+                  />
+                </Field>
+              </FieldRow>
+            )}
+            {!!apber.konsequenzenUmsetzung && (
+              <FieldRow>
+                <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
+                <Field>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(
+                        apber?.konsequenzenUmsetzung ?? '',
+                      ),
+                    }}
+                  />
+                </Field>
+              </FieldRow>
+            )}
+            {!!apber.konsequenzenErfolgskontrolle && (
+              <FieldRow>
+                <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
+                <Field>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: mdParser.render(
+                        apber?.konsequenzenErfolgskontrolle ?? '',
+                      ),
+                    }}
+                  />
+                </Field>
+              </FieldRow>
+            )}
+            <Row>
+              {`${
+                apberDatum ?
+                  format(new Date(apberDatum), 'dd.MM.yyyy')
+                : '(Datum fehlt)'
+              } / ${node?.bearbeiter ?? '(kein Bearbeiter)'}`}
+            </Row>
+          </ContentContainer>
+        </Container>
+      </ErrorBoundary>
+    )
+  },
+)
