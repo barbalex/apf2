@@ -353,6 +353,8 @@ import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 export const Router = () => {
   const [isDesktopView] = useAtom(isDesktopViewAtom)
 
+  // TODO: error in dev-tools
+  // Cannot update a component (`Unknown`) while rendering a different component (`Unknown`). To locate the bad setState() call inside `Unknown`, follow the stack trace as described in https://react.dev/link/setstate-in-render
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route

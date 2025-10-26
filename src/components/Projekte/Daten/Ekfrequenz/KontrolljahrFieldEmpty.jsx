@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import Input from '@mui/material/Input'
 import styled from '@emotion/styled'
 
@@ -20,19 +20,16 @@ export const KontrolljahrFieldEmpty = ({
 }) => {
   const [value, setValue] = useState('')
 
-  const onChange = useCallback(
-    (event) => setValue(ifIsNumericAsNumber(event.target.value)),
-    [],
-  )
+  const onChange = (event) => setValue(ifIsNumericAsNumber(event.target.value))
 
-  const onBlur = useCallback(async () => {
+  const onBlur = async () => {
     if (value === '') return
     const newVal = [...kontrolljahre, value]
     await saveToDb({ target: { name, value: newVal } })
     refetch()
-  }, [value, kontrolljahre, saveToDb, name, refetch])
+  }
 
-  const onKeyDown = useCallback((e) => e.key === 'Enter' && onBlur(), [onBlur])
+  const onKeyDown = (e) => e.key === 'Enter' && onBlur()
 
   return (
     <StyledInput
