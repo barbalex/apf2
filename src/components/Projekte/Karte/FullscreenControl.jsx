@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa'
 import screenfull from 'screenfull'
@@ -22,7 +23,7 @@ const Button = styled.button`
   margin-top: 7px;
 `
 
-export const FullscreenControl = ({ mapRef }) => {
+export const FullscreenControl = observer(({ mapRef }) => {
   // need to test if screenfull (i.e. the fullscreen api) is supported - iPhones don't support it
   // https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API/Guide
   const store = useContext(MobxContext)
@@ -40,32 +41,28 @@ export const FullscreenControl = ({ mapRef }) => {
   }
 
   return <FullscreenController mapRef={mapRef} />
-}
+})
 
 const FullscreenController = ({ mapRef }) => {
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const onFullscreenChange = useCallback(
-    () => setIsFullscreen(screenfull.isFullscreen),
-    [],
-  )
+  const onFullscreenChange = () => setIsFullscreen(screenfull.isFullscreen)
+
   useEffect(() => {
     screenfull.on('change', onFullscreenChange)
     return () => screenfull.off('change', onFullscreenChange)
   }, [onFullscreenChange])
 
-  const onClick = useCallback(() => {
-    if (screenfull.isEnabled) {
-      screenfull.toggle(mapRef.current)
-    }
-  }, [mapRef])
+  const onClick = () =>
+    screenfull.isEnabled && screenfull.toggle(mapRef.current)
 
   return (
     <Button
       onClick={onClick}
       title={isFullscreen ? 'Karte verkleinern' : 'Karte maximieren'}
     >
-      {isFullscreen ? <FaCompressArrowsAlt /> : <FaExpandArrowsAlt />}
+      {isFullscreen ?
+        <FaCompressArrowsAlt />
+      : <FaExpandArrowsAlt />}
     </Button>
   )
 }
-

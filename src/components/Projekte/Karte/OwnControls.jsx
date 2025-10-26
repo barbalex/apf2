@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { useDebouncedCallback } from 'use-debounce'
@@ -14,13 +13,9 @@ const Container = styled.div`
 `
 
 export const OwnControls = ({ setControlHeight, mapRef }) => {
-  const onResize = useCallback(
-    ({ width, height }) => {
-      //console.log('height:', height)
-      setControlHeight(Math.round(height ?? 167))
-    },
-    [setControlHeight],
-  )
+  const onResize = ({ width, height }) =>
+    setControlHeight(Math.round(height ?? 167))
+
   const onResizeDebounced = useDebouncedCallback(onResize, 10)
   const { ref: resizeRef } = useResizeDetector({
     onResize: onResizeDebounced,
