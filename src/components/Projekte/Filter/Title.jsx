@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
@@ -35,10 +34,7 @@ const titleObject = {
 }
 
 export const Title = ({ activeTab, setActiveTab }) => {
-  const onChangeTab = useCallback(
-    (event, value) => setActiveTab(value),
-    [setActiveTab],
-  )
+  const onChangeTab = (event, value) => setActiveTab(value)
 
   return (
     <TitleRow>
