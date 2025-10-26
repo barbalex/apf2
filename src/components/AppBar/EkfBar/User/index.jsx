@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useContext } from 'react'
+import { useState, useContext } from 'react'
 import styled from '@emotion/styled'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -69,10 +69,7 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
       }),
   })
 
-  const row = useMemo(
-    () => data?.data?.userByName ?? {},
-    [data?.data?.userByName],
-  )
+  const row = data?.data?.userByName ?? {}
 
   const [fieldErrors, setFieldErrors] = useState({})
 
@@ -85,33 +82,30 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: row.id,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      try {
-        await apolloClient.mutate({
-          mutation: updateUserByIdGql,
-          variables,
-        })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      tsQueryClient.invalidateQueries({
-        queryKey: ['userByNameForEkfBar'],
+    const variables = {
+      id: row.id,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: updateUserByIdGql,
+        variables,
       })
-      setFieldErrors({})
-    },
-    [apolloClient, row.id, store.user.name],
-  )
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    tsQueryClient.invalidateQueries({
+      queryKey: ['userByNameForEkfBar'],
+    })
+    setFieldErrors({})
+  }
 
-  const onBlurPassword = useCallback((e) => {
+  const onBlurPassword = (e) => {
     setPasswordErrorText('')
     const password = e.target.value
     setPassword(password)
@@ -120,48 +114,45 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
     } else {
       setPassword2('')
     }
-  }, [])
+  }
 
-  const onBlurPassword2 = useCallback(
-    async (event) => {
-      let value = event.target.value
-      if ([undefined, ''].includes(value)) value = null
-      setPassword2ErrorText('')
-      const password2 = event.target.value
-      setPassword2(password2)
-      if (!password2) {
-        setPassword2ErrorText('Bitte Passwort eingeben')
-      } else if (password !== password2) {
-        setPassword2ErrorText('Die Passwörter stimmen nicht überein')
-      } else {
-        // edit password
-        // then tell user if it worked
-        try {
-          await apolloClient.mutate({
-            mutation: updateUserByIdGql,
-            variables: {
-              id: row?.id,
-              pass: password2,
-            },
-          })
-        } catch (error) {
-          return setPasswordMessage(error.message)
-        }
-        setPasswordMessage(
-          'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
-        )
-        setTimeout(() => {
-          setPasswordMessage('')
-        }, 5000)
-        setPassword('')
-        setPassword2('')
-        setShowPass(false)
-        setShowPass2(false)
-        setEditPassword(false)
+  const onBlurPassword2 = async (event) => {
+    let value = event.target.value
+    if ([undefined, ''].includes(value)) value = null
+    setPassword2ErrorText('')
+    const password2 = event.target.value
+    setPassword2(password2)
+    if (!password2) {
+      setPassword2ErrorText('Bitte Passwort eingeben')
+    } else if (password !== password2) {
+      setPassword2ErrorText('Die Passwörter stimmen nicht überein')
+    } else {
+      // edit password
+      // then tell user if it worked
+      try {
+        await apolloClient.mutate({
+          mutation: updateUserByIdGql,
+          variables: {
+            id: row?.id,
+            pass: password2,
+          },
+        })
+      } catch (error) {
+        return setPasswordMessage(error.message)
       }
-    },
-    [apolloClient, password, row.id],
-  )
+      setPasswordMessage(
+        'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
+      )
+      setTimeout(() => {
+        setPasswordMessage('')
+      }, 5000)
+      setPassword('')
+      setPassword2('')
+      setShowPass(false)
+      setShowPass2(false)
+      setEditPassword(false)
+    }
+  }
 
   if (isLoading) return null
   if (error) return <Error error={error} />

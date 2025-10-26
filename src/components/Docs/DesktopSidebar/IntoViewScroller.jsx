@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect } from 'react'
 import { useLocation } from 'react-router'
 
 import { isElementInViewport } from '../../../modules/isElementInViewport.js'
@@ -7,7 +7,7 @@ export const IntoViewScroller = () => {
   const { pathname } = useLocation()
   const slug = pathname.split('/')[2]
 
-  const scroller = useCallback(() => {
+  const scroller = () => {
     // 1. Get id from url
     if (!slug) return
     // 2. Get its element
@@ -22,7 +22,7 @@ export const IntoViewScroller = () => {
       block: 'center',
       inline: 'center',
     })
-  }, [slug])
+  }
 
   useEffect(() => {
     scroller()

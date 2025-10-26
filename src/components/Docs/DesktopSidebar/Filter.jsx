@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -23,8 +22,8 @@ const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
 `
 
 export const Filter = ({ filter, setFilter }) => {
-  const onChange = useCallback((e) => setFilter(e.target.value), [setFilter])
-  const onClickEmptyFilter = useCallback(() => setFilter(''), [setFilter])
+  const onChange = (e) => setFilter(e.target.value)
+  const onClickEmptyFilter = () => setFilter('')
 
   return (
     <FormControl
