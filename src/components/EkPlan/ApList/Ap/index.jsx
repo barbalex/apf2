@@ -1,8 +1,9 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
@@ -26,11 +27,12 @@ const DelIcon = styled(IconButton)`
   padding-bottom: 0 !important;
 `
 
-export const Ap = ({ ap }) => {
+export const Ap = observer(({ ap }) => {
   const store = useContext(MobxContext)
   const { removeAp, apsData, apsDataLoading } = store.ekPlan
 
-  const onClickDelete = useCallback(() => removeAp(ap), [ap, removeAp])
+  const onClickDelete = () => removeAp(ap)
+
   const thisApData = (apsData?.allAps?.nodes ?? []).find(
     (a) => a.id === ap.value,
   )
@@ -66,4 +68,4 @@ export const Ap = ({ ap }) => {
       )}
     </Container>
   )
-}
+})

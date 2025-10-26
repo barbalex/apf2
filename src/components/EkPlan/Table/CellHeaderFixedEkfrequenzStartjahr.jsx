@@ -1,4 +1,5 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
@@ -57,7 +58,7 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedEkfrequenzStartjahr = ({ column }) => {
+export const CellHeaderFixedEkfrequenzStartjahr = observer(({ column }) => {
   const store = useContext(MobxContext)
   const {
     filterEkfrequenzStartjahrEmpty,
@@ -68,20 +69,17 @@ export const CellHeaderFixedEkfrequenzStartjahr = ({ column }) => {
 
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const closeMenu = useCallback(() => setAnchorEl(null), [])
-  const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
-  const onClickFilterEmptyValues = useCallback(() => {
+  const closeMenu = () => setAnchorEl(null)
+
+  const onClickCell = (e) => setAnchorEl(e.currentTarget)
+
+  const onClickFilterEmptyValues = () => {
     if (!filterEkfrequenzStartjahrEmpty && filterEkfrequenzStartjahr) {
       setFilterEkfrequenzStartjahr(null)
     }
     setFilterEmptyEkfrequenzStartjahr(!filterEkfrequenzStartjahrEmpty)
     setAnchorEl(null)
-  }, [
-    filterEkfrequenzStartjahrEmpty,
-    setFilterEkfrequenzStartjahr,
-    setFilterEmptyEkfrequenzStartjahr,
-    filterEkfrequenzStartjahr,
-  ])
+  }
 
   const { label } = column
 
@@ -123,4 +121,4 @@ export const CellHeaderFixedEkfrequenzStartjahr = ({ column }) => {
       </StyledMenu>
     </>
   )
-}
+})

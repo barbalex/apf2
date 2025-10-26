@@ -1,8 +1,9 @@
-import { useState, useCallback, useContext } from 'react'
+import { useState, useContext } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import styled from '@emotion/styled'
+import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
@@ -56,7 +57,7 @@ const StyledMenu = styled(Menu)`
 `
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedEkfrequenz = ({ column }) => {
+export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
   const store = useContext(MobxContext)
   const {
     filterEkfrequenzEmpty,
@@ -67,22 +68,17 @@ export const CellHeaderFixedEkfrequenz = ({ column }) => {
 
   const [anchorEl, setAnchorEl] = useState(null)
 
-  const closeMenu = useCallback(() => {
-    setAnchorEl(null)
-  }, [])
-  const onClickCell = useCallback((e) => setAnchorEl(e.currentTarget), [])
-  const onClickFilterEmptyValues = useCallback(() => {
+  const closeMenu = () => setAnchorEl(null)
+
+  const onClickCell = (e) => setAnchorEl(e.currentTarget)
+
+  const onClickFilterEmptyValues = () => {
     if (!filterEkfrequenzEmpty && filterEkfrequenz) {
       setFilterEkfrequenz(null)
     }
     setFilterEmptyEkfrequenz(!filterEkfrequenzEmpty)
     setAnchorEl(null)
-  }, [
-    filterEkfrequenzEmpty,
-    setFilterEkfrequenz,
-    setFilterEmptyEkfrequenz,
-    filterEkfrequenz,
-  ])
+  }
 
   const { label } = column
 
@@ -124,4 +120,4 @@ export const CellHeaderFixedEkfrequenz = ({ column }) => {
       </StyledMenu>
     </>
   )
-}
+})
