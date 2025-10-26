@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -52,7 +52,7 @@ const OutsideLink = styled.div`
 
 export const Eks = ({ tpop, ek, border }) => {
   const [open, setOpen] = useState(true)
-  const toggleOpen = useCallback(() => setOpen(!open), [open])
+  const toggleOpen = () => setOpen(!open)
   const zaehls = ek?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
   const bearbeiter = ek?.adresseByBearbeiter?.name ?? '(kein Bearbeiter)'
   const title = `${ek.datum || '(kein Datum)'}: ${ek.typ}, ${bearbeiter}`

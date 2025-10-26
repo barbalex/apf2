@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import { ListItemButton } from '@mui/material'
@@ -52,7 +52,7 @@ const OutsideLink = styled.div`
 
 export const Massn = ({ tpop, massn, border }) => {
   const [open, setOpen] = useState(true)
-  const toggleOpen = useCallback(() => setOpen(!open), [open])
+  const toggleOpen = () => setOpen(!open)
   const bearbeiter = massn?.adresseByBearbeiter?.name ?? '(kein Bearbeiter)'
   const typ = massn?.tpopmassnTypWerteByTyp?.text ?? '(kein Typ)'
   const title = `${massn.datum || '(kein Datum)'}: ${typ}, ${bearbeiter}`
