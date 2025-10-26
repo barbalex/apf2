@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -13,7 +14,7 @@ export const Component = () => {
 
   const apolloClient = useApolloClient()
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error } = useQuery({
     queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
     queryFn: async () => {
       const { data: apberData, error: apberError } = await apolloClient.query({
@@ -47,17 +48,18 @@ export const Component = () => {
 
   const jahr = data?.jahr
 
-  if (isLoading) return <Spinner />
   if (error) return `Fehler: ${error.message}`
 
   return (
     <ErrorBoundary>
-      <ApberForAp
-        apId={apId}
-        jahr={jahr}
-        apData={data?.data}
-        node={data?.data?.jberAbcByApId?.nodes?.[0]}
-      />
+      <Suspense fallback={<Spinner />}>
+        <ApberForAp
+          apId={apId}
+          jahr={jahr}
+          apData={data?.data}
+          node={data?.data?.jberAbcByApId?.nodes?.[0]}
+        />
+      </Suspense>
     </ErrorBoundary>
   )
 }

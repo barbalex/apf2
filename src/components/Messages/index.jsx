@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Suspense } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
@@ -49,7 +49,7 @@ export const Messages = observer(() => {
 
   const aYearAgo = getAYearAgo()
 
-  const { data, error, isLoading, refetch } = useQuery({
+  const { data, error, refetch } = useQuery({
     queryKey: ['UsermessagesQuery', userName, aYearAgo],
     queryFn: async () =>
       apolloClient.query({
@@ -84,21 +84,23 @@ export const Messages = observer(() => {
 
   return (
     <ErrorBoundary>
-      <StyledDialog
-        open={unreadMessages.length > 0 && !!userName && !isLoading}
-        aria-labelledby="dialog-title"
-      >
-        <TitleRow>
-          <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-          <AllOkButton
-            onClick={onClickReadAll}
-            color="inherit"
-          >
-            alle o.k.
-          </AllOkButton>
-        </TitleRow>
-        <MessagesList unreadMessages={unreadMessages} />
-      </StyledDialog>
+      <Suspense fallback={null}>
+        <StyledDialog
+          open={unreadMessages.length > 0 && !!userName}
+          aria-labelledby="dialog-title"
+        >
+          <TitleRow>
+            <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
+            <AllOkButton
+              onClick={onClickReadAll}
+              color="inherit"
+            >
+              alle o.k.
+            </AllOkButton>
+          </TitleRow>
+          <MessagesList unreadMessages={unreadMessages} />
+        </StyledDialog>
+      </Suspense>
     </ErrorBoundary>
   )
 })
