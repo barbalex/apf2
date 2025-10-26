@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -30,7 +31,7 @@ const PlusIcon = styled(IconButton)`
   padding-bottom: 4px !important;
 `
 
-export const ApList = () => {
+export const ApList = observer(() => {
   const store = useContext(MobxContext)
   const { aps } = store.ekPlan
 
@@ -63,4 +64,4 @@ export const ApList = () => {
       )}
     </Container>
   )
-}
+})

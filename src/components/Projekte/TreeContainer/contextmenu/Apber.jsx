@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -18,7 +19,7 @@ const deleteData = {
   table: 'apber',
 }
 
-export const Apber = ({ onClick }) => {
+export const Apber = observer(({ onClick }) => {
   const { user } = useContext(MobxContext)
   const isReadOnly = userIsReadOnly(user.token)
 
@@ -48,4 +49,4 @@ export const Apber = ({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-}
+})

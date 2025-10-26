@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -52,7 +53,7 @@ const AbmeldenButton = styled(Button)`
   margin-top: 8px;
 `
 
-export const User = ({ username, userOpen, toggleUserOpen }) => {
+export const User = observer(({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(MobxContext)
   const { idb } = useContext(IdbContext)
 
@@ -302,4 +303,4 @@ export const User = ({ username, userOpen, toggleUserOpen }) => {
       </DialogActions>
     </Dialog>
   )
-}
+})

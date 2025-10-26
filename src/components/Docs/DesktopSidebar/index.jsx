@@ -1,7 +1,7 @@
 import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { MenuItems } from './MenuItems.jsx'

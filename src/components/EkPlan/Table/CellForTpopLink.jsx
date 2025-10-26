@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import styled from '@emotion/styled'
 
 import { StyledTableCell } from './index.jsx'

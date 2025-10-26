@@ -1,7 +1,7 @@
 // seems not in use
 import { useState, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
+import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'

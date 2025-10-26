@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -7,7 +8,6 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
-import { observer } from 'mobx-react-lite'
 
 import { Fields } from './Fields.jsx'
 import { MobxContext } from '../../mobxContext.js'

@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
 import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useAtom } from 'jotai'
 

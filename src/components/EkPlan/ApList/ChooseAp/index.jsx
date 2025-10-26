@@ -1,8 +1,8 @@
 import { useContext, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
 import AsyncSelect from 'react-select/async'
 import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { queryApsToChoose } from './queryApsToChoose.js'

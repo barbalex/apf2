@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import styled from '@emotion/styled'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { Bar } from './Bar/index.jsx'
