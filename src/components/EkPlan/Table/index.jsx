@@ -318,7 +318,7 @@ export const EkPlanTable = observer(() => {
     filterEkplanYear,
   })
 
-  const { data, error, isLoading, refetch } = useQuery({
+  const { data, error, refetch } = useQuery({
     queryKey: ['EkplanTpopQuery', tpopFilter],
     queryFn: () =>
       apolloClient.query({
@@ -367,10 +367,6 @@ export const EkPlanTable = observer(() => {
     })
   }
 
-  // console.log('EkPlanTable, render')
-
-  const showSpinner = isLoading || !tpops?.length
-
   // TODO: give button to remove all filters in case something goes wrong
 
   if (error) return <Error error={error} />
@@ -380,37 +376,34 @@ export const EkPlanTable = observer(() => {
       {processing && (
         <SpinnerOverlay message="Startjahr und EK-Pläne werden gesetzt" />
       )}
-      {showSpinner ?
-        <Spinner />
-      : <>
-          <ExportButton
-            variant="outlined"
-            onClick={onClickExport}
-            color="inherit"
-          >
-            exportieren
-          </ExportButton>
-          <Container ref={resizeRef}>
-            <YScrollContainer>
-              <EkplanTableHeader
-                tpopLength={isLoading ? '...' : tpops.length}
-                tpopFilter={tpopFilter}
-                refetch={refetch}
+      <Suspense fallback={<Spinner />}>
+        <ExportButton
+          variant="outlined"
+          onClick={onClickExport}
+          color="inherit"
+        >
+          exportieren
+        </ExportButton>
+        <Container ref={resizeRef}>
+          <YScrollContainer>
+            <EkplanTableHeader
+              tpopLength={tpops.length !== 0 ? tpops.length : '...'}
+              tpopFilter={tpopFilter}
+              refetch={refetch}
+              years={years}
+            />
+            {tpops.map((tpop, index) => (
+              <TpopRow
+                key={tpop.id}
+                tpopId={tpop.id}
+                index={index}
+                setProcessing={setProcessing}
                 years={years}
               />
-              {tpops.map((tpop, index) => (
-                <TpopRow
-                  key={tpop.id}
-                  tpopId={tpop.id}
-                  index={index}
-                  setProcessing={setProcessing}
-                  years={years}
-                />
-              ))}
-            </YScrollContainer>
-          </Container>
-        </>
-      }
+            ))}
+          </YScrollContainer>
+        </Container>
+      </Suspense>
       {!!yearMenuAnchor && <CellForYearMenu />}
     </ErrorBoundary>
   )
