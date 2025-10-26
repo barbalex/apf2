@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import styled from '@emotion/styled'
 
 const Container = styled.div`
@@ -47,10 +47,7 @@ export const Image = ({ artname, apId }) => {
   // show notification if image is not found
   // also: do not show image when notification is shown
   //       because hideous placeholder is shown
-  const onError = useCallback(
-    () => setNotif(`Für ${artname} wurde kein Bild gefunden`),
-    [artname],
-  )
+  const onError = () => setNotif(`Für ${artname} wurde kein Bild gefunden`)
 
   return (
     <Container>
