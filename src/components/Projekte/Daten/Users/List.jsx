@@ -12,7 +12,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, isLoading, error } = useUsersNavData()
+  const { navData, error } = useUsersNavData()
 
   if (error) return <Error error={error} />
 
