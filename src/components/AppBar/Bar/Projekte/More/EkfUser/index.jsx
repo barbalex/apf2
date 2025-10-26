@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
 import styled from '@emotion/styled'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import { useNavigate, useLocation } from 'react-router'
 
 import { Select } from '../../../../../shared/Select.jsx'
@@ -20,17 +19,14 @@ export const EkfUser = ({ closeMenu }) => {
 
   const { data, error, loading } = useQuery(queryAdresses)
 
-  const choose = useCallback(
-    async (event) => {
-      const value = event.target.value
-      closeMenu()
-      // prevent this happening before seAnchor happened
-      setTimeout(() =>
-        navigate(`/Daten/Benutzer/${value}/EKF/${ekfRefYear}${search}`),
-      )
-    },
-    [closeMenu, navigate, search],
-  )
+  const choose = (event) => {
+    const value = event.target.value
+    closeMenu()
+    // prevent this happening before setAnchor happened
+    setTimeout(() =>
+      navigate(`/Daten/Benutzer/${value}/EKF/${ekfRefYear}${search}`),
+    )
+  }
 
   if (loading) return <Container>{'lade...'}</Container>
 

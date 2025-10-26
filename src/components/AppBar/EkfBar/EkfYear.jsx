@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import Tooltip from '@mui/material/Tooltip'
 import styled from '@emotion/styled'
@@ -34,17 +34,15 @@ export const EkfYear = () => {
 
   useEffect(() => setStateValue(ekfYear), [ekfYear])
 
-  const onBlur = useCallback(
-    (event) => {
-      const newValue = event.target.value ? +event.target.value : ekfRefYear
-      navigate(`/Daten/Benutzer/${userId}/EKF/${newValue}${search}`)
-    },
-    [navigate, search, userId],
-  )
-  const onChange = useCallback((event) => {
+  const onBlur = (event) => {
+    const newValue = event.target.value ? +event.target.value : ekfRefYear
+    navigate(`/Daten/Benutzer/${userId}/EKF/${newValue}${search}`)
+  }
+
+  const onChange = (event) => {
     setStateValue(event.target.value ? +event.target.value : '')
     if (event.target.value.length === 4) onBlur(event)
-  }, [])
+  }
 
   return (
     <Tooltip title="Zu kontrollierendes Jahr wählen">
