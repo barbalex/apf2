@@ -271,8 +271,6 @@ export const EkPlanTable = observer(() => {
 
   const [processing, setProcessing] = useState(false)
 
-  console.log('EkPlanTable', { apValues, aps })
-
   /**
    * BIG TROUBLE with height
    * ideally we would use flex with column and let css do the sizing
