@@ -68,8 +68,6 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
     .filter((o) => !!o.name)
     .filter((o) => store.ekPlan.fields.includes(o.name) || !!o.alwaysShow)
 
-  // console.log('Visible Row rendering')
-
   if (error) return `Fehler: ${error.message}`
 
   return (

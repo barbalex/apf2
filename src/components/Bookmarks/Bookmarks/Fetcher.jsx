@@ -12,13 +12,9 @@ export const Fetcher = ({ params, fetcherModule, ...other }) => {
   // there is a weird * param containing the pathname. Remove it
   delete params['*']
 
-  const { navData, isLoading, error } = fetcherModule(params)
+  const { navData, error } = fetcherModule(params)
 
   if (error) return <Error error={error} />
-
-  // somehow isLoading is way too often true
-  // so only show spinner if no navData yet
-  // if (!navData) return <Spinner />
 
   return (
     <Suspense fallback={<Spinner />}>
