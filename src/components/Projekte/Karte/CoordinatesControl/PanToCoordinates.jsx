@@ -148,6 +148,12 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
     changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
   }
 
+  const centerOnCoordsDisabled = !(!!x && !!y && xIsValid(x) && yIsValid(y))
+  const centerOnCoordsTitle =
+    centerOnCoordsDisabled ?
+      'x- und y-Koordinaten eingeben, um darauf zu zentrieren'
+    : 'auf Koordinaten zentrieren'
+
   return (
     <Container
       onBlur={onBlurGotoContainer}
@@ -190,16 +196,16 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
         />
         <FormHelperText id="yhelper">{yError}</FormHelperText>
       </FormControl>
-      <Tooltip title="auf Koordinaten zentrieren">
-        <StyledIconButton
-          aria-label="auf Koordinaten zentrieren"
-          onClick={onClickGoto}
-          disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
-        >
-          <StyledPanIcon
-            disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
-          />
-        </StyledIconButton>
+      <Tooltip title={centerOnCoordsTitle}>
+        <span>
+          <StyledIconButton
+            aria-label={centerOnCoordsTitle}
+            onClick={onClickGoto}
+            disabled={centerOnCoordsDisabled}
+          >
+            <StyledPanIcon disabled={centerOnCoordsDisabled} />
+          </StyledIconButton>
+        </span>
       </Tooltip>
       <Tooltip title="schliessen">
         <StyledIconButton
