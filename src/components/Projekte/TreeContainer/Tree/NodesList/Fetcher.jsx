@@ -14,7 +14,6 @@ export const Fetcher = ({
   const result = fetcherModule?.[fetcherName]?.(fetcherParams)
 
   const navData = result?.navData
-  const isLoading = result?.isLoading
   const error = result?.error
 
   if (error) {
