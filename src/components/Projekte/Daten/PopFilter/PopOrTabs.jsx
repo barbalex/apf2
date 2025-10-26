@@ -1,4 +1,5 @@
-import { useCallback, useContext } from 'react'
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import styled from '@emotion/styled'
@@ -23,7 +24,7 @@ const StyledTab = styled(Tab)`
   text-transform: none !important;
 `
 
-export const PopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
+export const PopOrTabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(MobxContext)
   const { dataFilterAddOr } = store.tree
 
@@ -32,17 +33,14 @@ export const PopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
       (v) => v !== null,
     ).length === 0
 
-  const onChangeTab = useCallback(
-    (event, value) => {
-      if (value > dataFilter.length - 1) {
-        dataFilterAddOr({ table: 'pop', val: pop })
-        setTimeout(() => setActiveTab(value), 0)
-        return
-      }
-      setActiveTab(value)
-    },
-    [dataFilter.length, dataFilterAddOr, setActiveTab],
-  )
+  const onChangeTab = (event, value) => {
+    if (value > dataFilter.length - 1) {
+      dataFilterAddOr({ table: 'pop', val: pop })
+      setTimeout(() => setActiveTab(value), 0)
+      return
+    }
+    setActiveTab(value)
+  }
 
   return (
     <Row>
@@ -71,4 +69,4 @@ export const PopOrTabs = ({ activeTab, setActiveTab, dataFilter }) => {
       </StyledTabs>
     </Row>
   )
-}
+})

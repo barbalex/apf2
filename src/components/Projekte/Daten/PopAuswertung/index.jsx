@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { sortBy } from 'es-toolkit'
@@ -101,13 +100,13 @@ export const Component = ({ height = 400 }) => {
     data?.allEkzaehleinheits?.nodes?.[0]
       ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text ?? '(keine Zielenheit)'
 
-  const onClickMoreInfo = useCallback(() => {
+  const onClickMoreInfo = () => {
     const url = 'https://apflora.ch/Dokumentation/art-auswertung-pop-menge'
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }, [])
+  }
 
   if (error) return <Error error={error} />
 

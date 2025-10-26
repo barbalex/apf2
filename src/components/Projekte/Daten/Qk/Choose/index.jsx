@@ -1,9 +1,9 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Form, useParams } from 'react-router'
 
@@ -46,10 +46,8 @@ export const Component = ({ refetchTab }) => {
   const rows = data?.allQks?.nodes
 
   const [filter, setFilter] = useState('')
-  const onChangeFilter = useCallback(
-    (event) => setFilter(event.target.value),
-    [],
-  )
+  const onChangeFilter = (event) => setFilter(event.target.value)
+
   const rowsFiltered =
     filter ?
       rows.filter((r) => {
