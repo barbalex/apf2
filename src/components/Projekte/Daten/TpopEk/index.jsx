@@ -1,4 +1,5 @@
-import { useContext, useState, useCallback } from 'react'
+import { useContext, useState } from 'react'
+import { observer } from 'mobx-react-lite'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -78,7 +79,7 @@ const EkplanTitle = styled.h5`
   margin-bottom: 10px;
 `
 
-export const Component = () => {
+export const Component = observer(() => {
   const { tpopId, apId } = useParams()
 
   const store = useContext(MobxContext)
@@ -97,19 +98,19 @@ export const Component = () => {
 
   const row = data?.tpopById ?? {}
   const [fieldErrors, setFieldErrors] = useState({})
-  const saveToDb = useCallback(
-    async (event) => {
-      const field = event.target.name
-      const value = ifIsNumericAsNumber(event.target.value)
 
-      const variables = {
-        id: tpopId,
-        [field]: value,
-        changedBy: store.user.name,
-      }
-      try {
-        await apolloClient.mutate({
-          mutation: gql`
+  const saveToDb = async (event) => {
+    const field = event.target.name
+    const value = ifIsNumericAsNumber(event.target.value)
+
+    const variables = {
+      id: tpopId,
+      [field]: value,
+      changedBy: store.user.name,
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
             mutation updateTpop${field}(
               $id: UUID!
               $${field}: ${fieldTypes[field]}
@@ -143,45 +144,35 @@ export const Component = () => {
             ${tpop}
             ${tpopApberrelevantGrundWerte}
           `,
-          variables,
-          // no optimistic responce as geomPoint
-        })
-      } catch (error) {
-        return setFieldErrors({ [field]: error.message })
-      }
-      // update tpop on map
-      if (
-        (value &&
-          ((field === 'ylv95Y' && row?.lv95X) ||
-            (field === 'lv95X' && row?.y))) ||
-        (!value && (field === 'ylv95Y' || field === 'lv95X'))
-      ) {
-        tsQueryClient.invalidateQueries({
-          queryKey: [`PopForMapQuery`],
-        })
-        tsQueryClient.invalidateQueries({
-          queryKey: [`TpopForMapQuery`],
-        })
-      }
-      if (Object.keys(fieldErrors).length) {
-        setFieldErrors({})
-      }
-      if (['nr', 'flurname'].includes(field)) {
-        tsQueryClient.invalidateQueries({
-          queryKey: [`treeTpop`],
-        })
-      }
-    },
-    [
-      apolloClient,
-      fieldErrors,
-      tsQueryClient,
-      row.id,
-      row?.lv95X,
-      row?.y,
-      store.user.name,
-    ],
-  )
+        variables,
+        // no optimistic responce as geomPoint
+      })
+    } catch (error) {
+      return setFieldErrors({ [field]: error.message })
+    }
+    // update tpop on map
+    if (
+      (value &&
+        ((field === 'ylv95Y' && row?.lv95X) ||
+          (field === 'lv95X' && row?.y))) ||
+      (!value && (field === 'ylv95Y' || field === 'lv95X'))
+    ) {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`PopForMapQuery`],
+      })
+      tsQueryClient.invalidateQueries({
+        queryKey: [`TpopForMapQuery`],
+      })
+    }
+    if (Object.keys(fieldErrors).length) {
+      setFieldErrors({})
+    }
+    if (['nr', 'flurname'].includes(field)) {
+      tsQueryClient.invalidateQueries({
+        queryKey: [`treeTpop`],
+      })
+    }
+  }
 
   const {
     data: dataEk,
@@ -297,4 +288,4 @@ export const Component = () => {
       </Container>
     </ErrorBoundary>
   )
-}
+})

@@ -1,7 +1,6 @@
-import { useCallback } from 'react'
 import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { Spinner } from '../../../shared/Spinner.jsx'
@@ -173,13 +172,13 @@ export const Component = () => {
   const row = data?.tpopById
   const rows = data?.allTpopHistories.nodes ?? []
 
-  const openDocs = useCallback(() => {
+  const openDocs = () => {
     const url = `${appBaseUrl()}/Dokumentation/historisierung`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }, [])
+  }
 
   if (loading) return <Spinner />
 
