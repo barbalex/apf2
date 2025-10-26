@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { useNavigate, useParams, useLocation } from 'react-router'
 
@@ -37,11 +36,8 @@ export const Item = ({ projektCount, row }) => {
   const navigate = useNavigate()
   const innerContainerHeight = projektCount > 1 ? 110 : 91
 
-  const onClick = useCallback(
-    () =>
-      navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${row.id}${search}`),
-    [ekfYear, navigate, row.id, search, userId],
-  )
+  const onClick = () =>
+    navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${row.id}${search}`)
 
   return (
     <OuterContainer

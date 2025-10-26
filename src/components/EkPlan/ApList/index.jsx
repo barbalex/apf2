@@ -1,4 +1,4 @@
-import { useCallback, useState, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -35,7 +35,7 @@ export const ApList = () => {
   const { aps } = store.ekPlan
 
   const [showChoose, setShowChoose] = useState(aps.length === 0)
-  const onClickAdd = useCallback(() => setShowChoose(true), [])
+  const onClickAdd = () => setShowChoose(true)
 
   return (
     <Container>

@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { useLocation, useNavigate } from 'react-router'
@@ -12,9 +11,7 @@ export const MenuItem = ({ node, highlightSearchString }) => {
   const activeUrl = `/Dokumentation/${id}`
   const active = activeUrl === pathname || `${activeUrl}/` === pathname
 
-  const onClickMenuItem = useCallback(() => {
-    navigate(`${activeUrl}/${search}`)
-  }, [activeUrl, navigate, search])
+  const onClickMenuItem = () => navigate(`${activeUrl}/${search}`)
 
   return (
     <>
