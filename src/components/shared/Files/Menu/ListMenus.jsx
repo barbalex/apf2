@@ -23,12 +23,14 @@ export const ListMenus = ({ files }) => {
         key="vorschau_oeffnen"
         title="Vorschau öffnen"
       >
-        <IconButton
-          onClick={onClickPreview}
-          disabled={!firstFileId}
-        >
-          <FaEye />
-        </IconButton>
+        <span>
+          <IconButton
+            onClick={onClickPreview}
+            disabled={!firstFileId}
+          >
+            <FaEye />
+          </IconButton>
+        </span>
       </Tooltip>
       <Tooltip
         key="dateien_hochladen"

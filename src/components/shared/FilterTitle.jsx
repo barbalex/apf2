@@ -96,35 +96,41 @@ export const FilterTitle = observer(
           </FilterNumbers>
           {activeTab !== undefined && (
             <Tooltip title={`Aktuelles Filter-Kriterium entfernen`}>
-              <IconButton
-                aria-label={`Aktuelles Filter-Kriterium entfernen`}
-                onClick={onEmptyTab}
-                size="small"
-                disabled={!existsTableFilter}
-              >
-                <StyledDeleteFilterIcon3 />
-              </IconButton>
+              <span>
+                <IconButton
+                  aria-label={`Aktuelles Filter-Kriterium entfernen`}
+                  onClick={onEmptyTab}
+                  size="small"
+                  disabled={!existsTableFilter}
+                >
+                  <StyledDeleteFilterIcon3 />
+                </IconButton>
+              </span>
             </Tooltip>
           )}
           <Tooltip title={`${title}-Filter entfernen`}>
-            <IconButton
-              aria-label={`${title}-Filter entfernen`}
-              onClick={onEmptyTable}
-              size="small"
-              disabled={!existsTableFilter}
-            >
-              <StyledDeleteFilterIcon2 />
-            </IconButton>
+            <span>
+              <IconButton
+                aria-label={`${title}-Filter entfernen`}
+                onClick={onEmptyTable}
+                size="small"
+                disabled={!existsTableFilter}
+              >
+                <StyledDeleteFilterIcon2 />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Alle Filter entfernen">
-            <IconButton
-              aria-label="Alle Filter entfernen"
-              onClick={onEmptyTree}
-              size="small"
-              disabled={!existsTreeFilter}
-            >
-              <StyledDeleteFilterIcon />
-            </IconButton>
+            <span>
+              <IconButton
+                aria-label="Alle Filter entfernen"
+                onClick={onEmptyTree}
+                size="small"
+                disabled={!existsTreeFilter}
+              >
+                <StyledDeleteFilterIcon />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Filter-Dokumentation">
             <IconButton

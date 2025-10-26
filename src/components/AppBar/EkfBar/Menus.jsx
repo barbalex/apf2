@@ -122,12 +122,14 @@ export const Menus = observer(() => {
         </StyledBadge>
       )}
       <Tooltip title="Angezeigte EKF drucken">
-        <StyledIconButton
-          onClick={onClickPrintSingle}
-          disabled={!ekfIsActive}
-        >
-          <MdPrint />
-        </StyledIconButton>
+        <span>
+          <StyledIconButton
+            onClick={onClickPrintSingle}
+            disabled={!ekfIsActive}
+          >
+            <MdPrint />
+          </StyledIconButton>
+        </span>
       </Tooltip>
       <EkfYear />
       {!isFreiwillig && (
