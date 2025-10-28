@@ -1,0 +1,19 @@
+.outerContainer {
+  container-type: inline-size;
+  padding: 0 10px 0 10px;
+}
+
+.container {
+  @container (min-width: calc(var(--column-width)*1.7px)) {
+    columns: 2;
+  }
+  @container (min-width: calc(var(--column-width)px + calc(var(--column-width)*1.7px))) {
+    columns: 3;
+  }
+}
+
+.explainer {
+  padding: 10px 5px;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
+}

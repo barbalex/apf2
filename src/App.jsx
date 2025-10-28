@@ -32,6 +32,8 @@ import { MobxContext } from './mobxContext.js'
 import { IdbContext } from './idbContext.js'
 import { UploaderContext } from './UploaderContext.js'
 
+import './app.css'
+
 const Notifier = lazy(async () => ({
   default: (await import('./components/shared/Notifier.jsx')).Notifier,
 }))
