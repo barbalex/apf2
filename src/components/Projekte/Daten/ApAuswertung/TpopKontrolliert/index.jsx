@@ -10,40 +10,20 @@ import {
   Tooltip,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from '@emotion/styled'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { CustomTooltip } from '../CustomTooltip.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
-const SpinnerContainer = styled.div`
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-const SpinnerText = styled.div`
-  padding: 10px;
-`
-const NoDataContainer = styled.div`
-  margin: 20px;
-  margin-bottom: 40px;
-  text-align: center;
-`
-const Title = styled.h4`
-  width: 100%;
-  text-align: center;
-  margin-bottom: 0;
-  margin-top: 15px;
-`
-const TitleTitle = styled.span`
-  color: #2e7d32;
-`
-const TitleKontr = styled.span`
-  color: red;
-`
+import {
+  spinnerContainer,
+  spinnerText,
+  noDataContainer,
+  title,
+  titleTitle,
+  titleKontr,
+} from './index.module.css'
 
 const color = {
   'Teil-Populationen': '#2e7d32',
@@ -77,16 +57,16 @@ export const TpopKontrolliert = ({
   return (
     <>
       {loading ?
-        <SpinnerContainer>
+        <div className={spinnerContainer}>
           <CircularProgress />
-          <SpinnerText>lade kontrollierte TPop...</SpinnerText>
-        </SpinnerContainer>
+          <div className={spinnerText}>lade kontrollierte TPop...</div>
+        </div>
       : erfolgData.length ?
         <>
-          <Title>
-            (<TitleKontr>kontrollierte</TitleKontr>){' '}
-            <TitleTitle>Teil-Populationen</TitleTitle>
-          </Title>
+          <h4 className={title}>
+            (<span className={titleKontr}>kontrollierte</span>){' '}
+            <span className={titleTitle}>Teil-Populationen</span>
+          </h4>
           <ResponsiveContainer
             width="99%"
             height={height}
@@ -148,11 +128,11 @@ export const TpopKontrolliert = ({
           </ResponsiveContainer>
         </>
       : <>
-          <Title>
-            (<TitleKontr>kontrollierte</TitleKontr>){' '}
-            <TitleTitle>Teil-Populationen</TitleTitle>
-          </Title>
-          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+          <h4 className={title}>
+            (<span className={titleKontr}>kontrollierte</span>){' '}
+            <span className={titleTitle}>Teil-Populationen</span>
+          </h4>
+          <div className={noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
