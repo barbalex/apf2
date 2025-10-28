@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -18,19 +17,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { adresse } from '../../../shared/fragments.js'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FormContainer = styled.div`
-  padding: 10px;
-`
-const FieldsContainer = styled.div`
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
+import { container, formContainer, fieldsContainer } from './index.module.css'
 
 const fieldTypes = {
   name: 'String',
@@ -105,13 +92,13 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="Adresse"
           MenuBarComponent={Menu}
         />
-        <FieldsContainer>
-          <FormContainer>
+        <div className={fieldsContainer}>
+          <div className={formContainer}>
             <TextField
               name="name"
               label="Name"
@@ -151,9 +138,9 @@ export const Component = observer(() => {
               saveToDb={saveToDb}
               error={fieldErrors.freiwErfko}
             />
-          </FormContainer>
-        </FieldsContainer>
-      </Container>
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
