@@ -97,7 +97,7 @@
     "use-debounce": "10.0.6"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.27.1",
+    "@babel/preset-react": "7.28.5",
     "@emotion/babel-plugin": "11.13.5",
     "@eslint/compat": "1.4.0",
     "@eslint/eslintrc": "3.3.1",
@@ -129,7 +129,7 @@
     "tslint-config-prettier": "1.18.0",
     "typescript": "5.9.3",
     "vercel": "48.2.9",
-    "vite": "7.1.9",
+    "vite": "7.1.12",
     "vite-plugin-pwa": "1.1.0",
     "vite-plugin-svgr": "4.5.0"
   },
