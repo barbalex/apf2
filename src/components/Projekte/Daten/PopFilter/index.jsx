@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -16,35 +15,12 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { PopOrTabs } from './PopOrTabs.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #ffd3a7;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  padding: 10px;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const FilterCommentTitle = styled.div`
-  margin-top: -10px;
-  margin-bottom: -10px;
-  padding: 0 10px;
-  font-size: 0.75em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
-`
-const FilterCommentList = styled.ul``
-const FilterComment = styled.li`
-  padding: 0 10px;
-  font-size: 0.75em;
-`
+import {
+  container,
+  formContainer,
+  filterCommentTitle,
+  filterComment,
+} from './index.module.css'
 
 export const PopFilter = observer(() => {
   const { apId } = useParams()
@@ -118,7 +94,7 @@ export const PopFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FilterTitle
           title="Population"
           table="pop"
@@ -128,24 +104,24 @@ export const PopFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
-            <FilterCommentList>
+            <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <ul>
               {!!navApFilterComment && (
-                <FilterComment>{navApFilterComment}</FilterComment>
+                <li className={filterComment}>{navApFilterComment}</li>
               )}
               {!!navHiearchyComment && (
-                <FilterComment>{navHiearchyComment}</FilterComment>
+                <li className={filterComment}>{navHiearchyComment}</li>
               )}
               {!!navLabelComment && (
-                <FilterComment>{navLabelComment}</FilterComment>
+                <li className={filterComment}>{navLabelComment}</li>
               )}
               {!!hierarchyComment && (
-                <FilterComment>{hierarchyComment}</FilterComment>
+                <li className={filterComment}>{hierarchyComment}</li>
               )}
               {!!mapFilterComment && (
-                <FilterComment>{mapFilterComment}</FilterComment>
+                <li className={filterComment}>{mapFilterComment}</li>
               )}
-            </FilterCommentList>
+            </ul>
           </>
         )}
         <PopOrTabs
@@ -153,7 +129,7 @@ export const PopFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <FormContainer>
+        <div className={formContainer}>
           <TextField
             label="Nr."
             name="nr"
@@ -189,8 +165,8 @@ export const PopFilter = observer(() => {
             value={row?.statusUnklarBegruendung}
             saveToDb={saveToDb}
           />
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
