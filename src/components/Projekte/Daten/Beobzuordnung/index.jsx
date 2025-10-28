@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
@@ -33,75 +32,19 @@ import {
 } from '../../../shared/fragments.js'
 import { Menu } from './Menu.jsx'
 
-const PopoverContainer = styled.div`
-  overflow-x: auto;
-  scrollbar-width: thin;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-`
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-`
-const FormContainer = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const DataContainer = styled.div``
-const FieldsContainer = styled.div`
-  padding: 10px;
-  padding-bottom: 0;
-`
-const Title = styled.div`
-  padding: 10px 10px 0 10px;
-  color: #b3b3b3;
-  font-weight: bold;
-  background-color: #424242;
-  padding-bottom: 10px;
-`
-const LabelPopoverRow = styled.div`
-  padding: 2px 5px 2px 5px;
-`
-const LabelPopoverTitleRow = styled(LabelPopoverRow)`
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  background-color: rgb(46, 125, 50);
-  color: white;
-`
-const LabelPopoverContentRow = styled(LabelPopoverRow)`
-  display: flex;
-  border-color: grey;
-  border-width: thin;
-  border-style: solid;
-  border-top-style: none;
-  &:last-child {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-`
-const OriginalArtDiv = styled.div`
-  margin-bottom: 10px;
-`
-const InfofloraRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`
-const EmailButton = styled(Button)`
-  margin-top: 12px !important;
-  margin-left: 15px !important;
-  flex-basis: 320px;
-  height: 36px;
-  text-transform: none !important;
-`
-const StyledSendIcon = styled(SendIcon)`
-  margin-right: 8px;
-`
+import {
+  popoverContainer,
+  container,
+  formContainer,
+  fieldsContainer,
+  title,
+  labelPopoverTitleRow,
+  labelPopoverContentRow,
+  originalArtDiv,
+  infofloraRow,
+  emailButton,
+  styledSendIcon,
+} from './index.module.css'
 
 const fieldTypes = {
   idField: 'String',
@@ -119,16 +62,16 @@ const fieldTypes = {
 }
 
 const nichtZuordnenPopover = (
-  <PopoverContainer>
-    <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-    <LabelPopoverContentRow>
+  <div className={popoverContainer}>
+    <div className={labelPopoverTitleRow}>Legende</div>
+    <div className={labelPopoverContentRow}>
       {'Will heissen: Die Beobachtung kann nicht zugeordnet werden.'}
       <br />
       {'Mögliche Gründe: Unsichere Bestimmung, nicht lokalisierbar.'}
       <br />
       {'Bitte im Bemerkungsfeld begründen.'}
-    </LabelPopoverContentRow>
-  </PopoverContainer>
+    </div>
+  </div>
 )
 
 const getTpopZuordnenSource = ({ row, ap }) => {
@@ -295,17 +238,17 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="Beobachtung"
           MenuBarComponent={Menu}
         />
-        <FormContainer>
-          <FieldsContainer>
+        <div className={formContainer}>
+          <div className={fieldsContainer}>
             {row && row.artId !== row.artIdOriginal && (
-              <OriginalArtDiv>{`Art gemäss Original-Meldung: ${
+              <div className={originalArtDiv}>{`Art gemäss Original-Meldung: ${
                 row?.aeTaxonomyByArtIdOriginal?.artname ?? '(kein Name)'
-              }`}</OriginalArtDiv>
+              }`}</div>
             )}
             <SelectLoadingOptions
               key={`${row.id}artId`}
@@ -344,7 +287,7 @@ export const Component = observer(() => {
               multiLine
               saveToDb={onUpdateField}
             />
-            <InfofloraRow>
+            <div className={infofloraRow}>
               <DateField
                 key={`${row.id}infofloraInformiertDatum`}
                 name="infofloraInformiertDatum"
@@ -352,7 +295,7 @@ export const Component = observer(() => {
                 value={row.infofloraInformiertDatum}
                 saveToDb={onUpdateField}
               />
-              <EmailButton
+              <Button
                 variant="outlined"
                 color="inherit"
                 onClick={() => {
@@ -384,18 +327,19 @@ export const Component = observer(() => {
                     body,
                   })
                 }}
+                className={emailButton}
               >
-                <StyledSendIcon />
+                <SendIcon className={styledSendIcon} />
                 Email an Info Flora
-              </EmailButton>
-            </InfofloraRow>
-          </FieldsContainer>
-          <Title>{`Informationen aus ${
+              </Button>
+            </div>
+          </div>
+          <div className={title}>{`Informationen aus ${
             row?.quelle ?? '?'
-          } (nicht veränderbar)`}</Title>
+          } (nicht veränderbar)`}</div>
           <Beob />
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
