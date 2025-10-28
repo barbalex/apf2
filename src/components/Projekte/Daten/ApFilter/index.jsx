@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 
@@ -19,43 +18,18 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Tabs } from './Tabs.jsx'
 
-import classes from './index.module.css'
-
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #ffd3a7;
-`
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const FormContainer = styled.div`
-  padding: 10px;
-`
-const FieldContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-const FilterCommentTitle = styled.div`
-  margin-top: -10px;
-  margin-bottom: -10px;
-  padding: 0 10px;
-  font-size: 0.75em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
-`
-const FilterCommentList = styled.ul``
-const FilterComment = styled.li`
-  padding: 0 10px;
-  font-size: 0.75em;
-`
+import {
+  popover,
+  title,
+  row,
+  columnLeft,
+  container,
+  fieldsContainer,
+  formContainer,
+  fieldContainer,
+  filterCommentTitle,
+  filterComment,
+} from './index.module.css'
 
 export const ApFilter = observer(() => {
   const store = useContext(MobxContext)
@@ -156,7 +130,7 @@ export const ApFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FilterTitle
           title="Art"
           table="ap"
@@ -169,15 +143,15 @@ export const ApFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
-            <FilterCommentList>
+            <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <ul>
               {!!navApFilterComment && (
-                <FilterComment>{navApFilterComment}</FilterComment>
+                <li className={filterComment}>{navApFilterComment}</li>
               )}
               {!!navLabelComment && (
-                <FilterComment>{navLabelComment}</FilterComment>
+                <li className={filterComment}>{navLabelComment}</li>
               )}
-            </FilterCommentList>
+            </ul>
           </>
         )}
         <Tabs
@@ -185,8 +159,8 @@ export const ApFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <FieldsContainer>
-          <FormContainer>
+        <div className={fieldsContainer}>
+          <div className={formContainer}>
             <SelectLoadingOptions
               field="artId"
               valueLabelPath="aeTaxonomyByArtId.artname"
@@ -210,14 +184,14 @@ export const ApFilter = observer(() => {
               dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
               loading={loadingLists}
               popover={
-                <div className={classes.popover}>
-                  <div className={classes.title}>Legende</div>
-                  <div className={classes.row}>
-                    <div className={classes.columnLeft}>keiner:</div>
+                <div className={popover}>
+                  <div className={title}>Legende</div>
+                  <div className={row}>
+                    <div className={columnLeft}>keiner:</div>
                     <div>kein Aktionsplan vorgesehen</div>
                   </div>
-                  <div className={classes.row}>
-                    <div className={classes.columnLeft}>erstellt:</div>
+                  <div className={row}>
+                    <div className={columnLeft}>erstellt:</div>
                     <div>Aktionsplan fertig, auf der Webseite der FNS</div>
                   </div>
                 </div>
@@ -233,24 +207,24 @@ export const ApFilter = observer(() => {
               value={row?.startJahr}
               saveToDb={saveToDb}
             />
-            <FieldContainer>
+            <div className={fieldContainer}>
               <RadioButtonGroupWithInfo
                 name="umsetzung"
                 dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
                 loading={loadingLists}
                 popover={
-                  <div className={classes.popover}>
-                    <div className={classes.title}>Legende</div>
-                    <div className={classes.row}>
-                      <div className={classes.columnLeft}>
+                  <div className={popover}>
+                    <div className={title}>Legende</div>
+                    <div className={row}>
+                      <div className={columnLeft}>
                         noch keine
                         <br />
                         Umsetzung:
                       </div>
                       <div>noch keine Massnahmen ausgeführt</div>
                     </div>
-                    <div className={classes.row}>
-                      <div className={classes.columnLeft}>in Umsetzung:</div>
+                    <div className={row}>
+                      <div className={columnLeft}>in Umsetzung:</div>
                       <div>
                         bereits Massnahmen ausgeführt (auch wenn AP noch nicht
                         erstellt)
@@ -262,7 +236,7 @@ export const ApFilter = observer(() => {
                 value={row?.umsetzung}
                 saveToDb={saveToDb}
               />
-            </FieldContainer>
+            </div>
             <Select
               name="bearbeiter"
               label="Verantwortlich"
@@ -278,9 +252,9 @@ export const ApFilter = observer(() => {
               value={row?.ekfBeobachtungszeitpunkt}
               saveToDb={saveToDb}
             />
-          </FormContainer>
-        </FieldsContainer>
-      </Container>
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
