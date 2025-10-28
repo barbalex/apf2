@@ -1,16 +1,11 @@
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 
 import { KontrolljahrField } from './KontrolljahrField.jsx'
 import { KontrolljahrFieldEmpty } from './KontrolljahrFieldEmpty.jsx'
 
-const DelIcon = styled(IconButton)`
-  font-size: 1.1rem !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-`
+import { delIcon } from './Kontrolljahre.module.css'
 
 export const Kontrolljahre = ({ kontrolljahre = [], saveToDb, refetch }) => {
   const kontrolljahreSorted = [...kontrolljahre].sort(
@@ -27,7 +22,7 @@ export const Kontrolljahre = ({ kontrolljahre = [], saveToDb, refetch }) => {
           refetch={refetch}
         />
         <Tooltip title={`${kontrolljahreSorted[index]} entfernen`}>
-          <DelIcon
+          <IconButton
             aria-label={`${kontrolljahreSorted[index]} entfernen`}
             onClick={async () => {
               const newVal = [...kontrolljahreSorted]
@@ -37,9 +32,10 @@ export const Kontrolljahre = ({ kontrolljahre = [], saveToDb, refetch }) => {
               })
               refetch()
             }}
+            className={delIcon}
           >
             <FaTimes />
-          </DelIcon>
+          </IconButton>
         </Tooltip>
       </div>
     )),

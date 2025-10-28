@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -20,39 +19,13 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-`
-const KontrolljahrContainer = styled.div`
-  margin-bottom: 20px;
-`
-const LabelRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  margin-top: -5px;
-`
-const StyledLabel = styled.div`
-  margin-top: 10px;
-  cursor: text;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-  user-select: none;
-  padding-bottom: 6px;
-`
+import {
+  container,
+  formContainer,
+  kontrolljahrContainer,
+  labelRow,
+  styledLabel,
+} from './index.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -152,12 +125,12 @@ export const Component = observer(() => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="EK-Frequenz"
           MenuBarComponent={Menu}
         />
-        <FormContainer>
+        <div className={formContainer}>
           <TextField
             name="code"
             label="Kürzel"
@@ -183,19 +156,19 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.ektyp}
           />
-          <KontrolljahrContainer>
-            <LabelRow>
-              <StyledLabel>
+          <div className={kontrolljahrContainer}>
+            <div className={labelRow}>
+              <div className={styledLabel}>
                 Kontrolljahre (= Anzahl Jahre nach Start bzw. Ansiedlung)
-              </StyledLabel>
-            </LabelRow>
+              </div>
+            </div>
             <Kontrolljahre
               kontrolljahre={row?.kontrolljahre?.slice()}
               saveToDb={saveToDb}
               refetch={refetch}
               //kontrolljahreString={JSON.stringify(row.kontrolljahre)}
             />
-          </KontrolljahrContainer>
+          </div>
           <RadioButtonGroup
             name="kontrolljahreAb"
             dataSource={kontrolljahreAbWertes}
@@ -238,8 +211,8 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.sort}
           />
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
