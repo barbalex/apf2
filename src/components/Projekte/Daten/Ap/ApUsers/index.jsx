@@ -8,6 +8,8 @@ import { NewUser } from './NewUser.jsx'
 import { Label } from '../../../../shared/Label.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
+import { container } from './index.module.css'
+
 const Container = styled.div`
   margin-top: 10px;
   margin-bottom: 20px;
@@ -24,7 +26,6 @@ const Info = styled.div`
   font-size: 0.8rem;
   color: rgba(0, 0, 0, 0.54);
 `
-const InfoTitle = styled.div``
 const InfoList = styled.ul`
   margin-bottom: 5px;
 `
@@ -66,17 +67,17 @@ export const ApUsers = () => {
 
   if (loading) {
     return (
-      <Container>
+      <div className={container}>
         <Label label={'Benutzer mit Zugriff'} />
         lade Daten...
-      </Container>
+      </div>
     )
   }
 
   if (error) return <Error error={error} />
 
   return (
-    <Container>
+    <div className={container}>
       <Label label={'Benutzer mit Zugriff'} />
       <NewUserContainer>
         {apUsers.length ?
@@ -89,7 +90,7 @@ export const ApUsers = () => {
           ))
         : 'Es wurden noch keine Zugriffe erteilt'}
         <Info>
-          <InfoTitle>Zugriff hängt von der Rolle des Benutzers ab:</InfoTitle>
+          <div>Zugriff hängt von der Rolle des Benutzers ab:</div>
           <InfoList>
             <InfoRow>
               {
@@ -100,16 +101,16 @@ export const ApUsers = () => {
               {'"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'}
             </InfoRow>
           </InfoList>
-          <InfoTitle>Darüber hinaus haben immer Zugriff:</InfoTitle>
+          <div>Darüber hinaus haben immer Zugriff:</div>
           <InfoList>
             <InfoRow>{'"manager" (Schreib-Rechte)'}</InfoRow>
             <InfoRow>{'"reader" (Lese-Rechte)'}</InfoRow>
           </InfoList>
-          <InfoTitle>
+          <div>
             {
               'Nur "manager" sehen die Rollen von Benutzern (Benutzer-Infos sind geschützt).'
             }
-          </InfoTitle>
+          </div>
         </Info>
       </NewUserContainer>
       <NewUser
@@ -117,6 +118,6 @@ export const ApUsers = () => {
         apUsers={apUsers}
         refetch={refetch}
       />
-    </Container>
+    </div>
   )
 }

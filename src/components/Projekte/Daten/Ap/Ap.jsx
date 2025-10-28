@@ -20,7 +20,7 @@ import { query } from './query.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.jsx'
 
-import classes from './Ap.module.css'
+import { formContainer, popover, title, row, columnLeft } from './Ap.module.css'
 
 const fieldTypes = {
   bearbeitung: 'Int',
@@ -121,7 +121,7 @@ export const Component = observer(() => {
         title="Art"
         MenuBarComponent={Menu}
       />
-      <div className={classes.formContainer}>
+      <div className={formContainer}>
         <SelectLoadingOptions
           field="artId"
           valueLabelPath="aeTaxonomyByArtId.taxArtName"
@@ -139,19 +139,19 @@ export const Component = observer(() => {
           dataSource={data?.allApBearbstandWertes?.nodes ?? []}
           loading={false}
           popover={
-            <div className={classes.popover}>
+            <div className={popover}>
               <div
-                className={classes.title}
+                className={title}
                 data-id="info-icon-popover"
               >
                 Legende
               </div>
-              <div className={classes.row}>
-                <div className={classes.columnLeft}>keiner:</div>
+              <div className={row}>
+                <div className={columnLeft}>keiner:</div>
                 <div>kein Aktionsplan vorgesehen</div>
               </div>
-              <div className={classes.row}>
-                <div className={classes.columnLeft}>erstellt:</div>
+              <div className={row}>
+                <div className={columnLeft}>erstellt:</div>
                 <div>Aktionsplan fertig, auf der Webseite der FNS</div>
               </div>
             </div>
@@ -174,23 +174,23 @@ export const Component = observer(() => {
           dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
           loading={false}
           popover={
-            <div className={classes.popover}>
+            <div className={popover}>
               <div
-                className={classes.title}
+                className={title}
                 data-id="info-icon-popover"
               >
                 Legende
               </div>
-              <div className={classes.row}>
-                <div className={classes.columnLeft}>
+              <div className={row}>
+                <div className={columnLeft}>
                   noch keine
                   <br />
                   Umsetzung:
                 </div>
                 <div>noch keine Massnahmen ausgeführt</div>
               </div>
-              <div className={classes.row}>
-                <div className={classes.columnLeft}>in Umsetzung:</div>
+              <div className={row}>
+                <div className={columnLeft}>in Umsetzung:</div>
                 <div>
                   bereits Massnahmen ausgeführt (auch wenn AP noch nicht
                   erstellt)

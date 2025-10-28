@@ -1,0 +1,26 @@
+.container {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 1px rgba(46, 125, 50, 0.4) solid;
+  padding: 0 10px;
+}
+
+.newUserContainer {
+  margin-bottom: 5px;
+}
+
+.info {
+  margin-top: 7px;
+  margin-bottom: 12px;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.infoList {
+  margin-bottom: 5px;
+}
+
+.infoRow {
+  margin-bottom: 0;
+}
