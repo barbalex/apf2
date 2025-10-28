@@ -1,0 +1,15 @@
+.formContainer {
+  padding: 10px;
+  height: 100%;
+  column-width: var(--column-width);
+}
+
+.section {
+  padding-top: 20px;
+  padding-bottom: 7px;
+  font-weight: bold;
+  break-after: avoid;
+  &:after {
+    content: ':';
+  }
+}

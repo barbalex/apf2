@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -17,20 +16,8 @@ import { idealbiotop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-const FormContainer = styled.div`
-  padding: 10px;
-  height: 100%;
-  column-width: ${constants.columnWidth}px;
-`
-const Section = styled.div`
-  padding-top: 20px;
-  padding-bottom: 7px;
-  font-weight: bold;
-  break-after: avoid;
-  &:after {
-    content: ':';
-  }
-`
+import { formContainer, section } from './Idealbiotop.module.css'
+
 const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 const fieldTypes = {
@@ -119,7 +106,7 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <FormTitle title="Idealbiotop" />
-      <FormContainer>
+      <div className={formContainer}>
         <DateField
           name="erstelldatum"
           label="Erstelldatum"
@@ -127,7 +114,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.erstelldatum}
         />
-        <Section>Lage</Section>
+        <div className={section}>Lage</div>
         <TextField
           name="hoehenlage"
           label="Höhe"
@@ -173,7 +160,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.hangneigung}
         />
-        <Section>Boden</Section>
+        <div className={section}>Boden</div>
         <TextField
           name="bodenTyp"
           label="Typ"
@@ -228,7 +215,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.wasserhaushalt}
         />
-        <Section>Vegetation</Section>
+        <div className={section}>Vegetation</div>
         <TextField
           name="konkurrenz"
           label="Konkurrenz"
@@ -283,7 +270,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.bemerkungen}
         />
-      </FormContainer>
+      </div>
     </ErrorBoundary>
   )
 })
