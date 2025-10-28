@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react'
 import Input from '@mui/material/Input'
-import styled from '@emotion/styled'
 
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 
-const StyledInput = styled(Input)`
-  width: 45px;
-  touch-action: none;
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import { styledInput } from './KontrolljahrField.module.css'
 
 export const KontrolljahrField = ({
   saveToDb,
@@ -40,12 +33,13 @@ export const KontrolljahrField = ({
   const onKeyDown = (e) => e.key === 'Enter' && onBlur()
 
   return (
-    <StyledInput
+    <Input
       value={value}
       type="number"
       onChange={onChange}
       onBlur={onBlur}
       onKeyDown={onKeyDown}
+      className={styledInput}
     />
   )
 }
