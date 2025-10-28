@@ -19,6 +19,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Tabs } from './Tabs.jsx'
 
+import classes from './index.module.css'
+
 const Container = styled.div`
   flex-grow: 1;
   display: flex;
@@ -40,32 +42,6 @@ const FormContainer = styled.div`
 const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
-`
-const LabelPopoverRow = styled.div`
-  padding: 2px 5px 2px 5px;
-`
-const LabelPopoverTitleRow = styled(LabelPopoverRow)`
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  background-color: rgb(46, 125, 50);
-  color: white;
-`
-const LabelPopoverContentRow = styled(LabelPopoverRow)`
-  display: flex;
-  border-color: grey;
-  border-width: thin;
-  border-style: solid;
-  border-top-style: none;
-  &:last-child {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-`
-const LabelPopoverRowColumnLeft = styled.div`
-  width: 110px;
-`
-const LabelPopoverRowColumnRight = styled.div`
-  padding-left: 5px;
 `
 const FilterCommentTitle = styled.div`
   margin-top: -10px;
@@ -234,25 +210,17 @@ export const ApFilter = observer(() => {
               dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
               loading={loadingLists}
               popover={
-                <>
-                  <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                  <LabelPopoverContentRow>
-                    <LabelPopoverRowColumnLeft>
-                      keiner:
-                    </LabelPopoverRowColumnLeft>
-                    <LabelPopoverRowColumnRight>
-                      kein Aktionsplan vorgesehen
-                    </LabelPopoverRowColumnRight>
-                  </LabelPopoverContentRow>
-                  <LabelPopoverContentRow>
-                    <LabelPopoverRowColumnLeft>
-                      erstellt:
-                    </LabelPopoverRowColumnLeft>
-                    <LabelPopoverRowColumnRight>
-                      Aktionsplan fertig, auf der Webseite der FNS
-                    </LabelPopoverRowColumnRight>
-                  </LabelPopoverContentRow>
-                </>
+                <div className={classes.popover}>
+                  <div className={classes.title}>Legende</div>
+                  <div className={classes.row}>
+                    <div className={classes.columnLeft}>keiner:</div>
+                    <div>kein Aktionsplan vorgesehen</div>
+                  </div>
+                  <div className={classes.row}>
+                    <div className={classes.columnLeft}>erstellt:</div>
+                    <div>Aktionsplan fertig, auf der Webseite der FNS</div>
+                  </div>
+                </div>
               }
               label="Aktionsplan"
               value={row?.bearbeitung}
@@ -271,28 +239,24 @@ export const ApFilter = observer(() => {
                 dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
                 loading={loadingLists}
                 popover={
-                  <>
-                    <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                    <LabelPopoverContentRow>
-                      <LabelPopoverRowColumnLeft>
+                  <div className={classes.popover}>
+                    <div className={classes.title}>Legende</div>
+                    <div className={classes.row}>
+                      <div className={classes.columnLeft}>
                         noch keine
                         <br />
                         Umsetzung:
-                      </LabelPopoverRowColumnLeft>
-                      <LabelPopoverRowColumnRight>
-                        noch keine Massnahmen ausgeführt
-                      </LabelPopoverRowColumnRight>
-                    </LabelPopoverContentRow>
-                    <LabelPopoverContentRow>
-                      <LabelPopoverRowColumnLeft>
-                        in Umsetzung:
-                      </LabelPopoverRowColumnLeft>
-                      <LabelPopoverRowColumnRight>
+                      </div>
+                      <div>noch keine Massnahmen ausgeführt</div>
+                    </div>
+                    <div className={classes.row}>
+                      <div className={classes.columnLeft}>in Umsetzung:</div>
+                      <div>
                         bereits Massnahmen ausgeführt (auch wenn AP noch nicht
                         erstellt)
-                      </LabelPopoverRowColumnRight>
-                    </LabelPopoverContentRow>
-                  </>
+                      </div>
+                    </div>
+                  </div>
                 }
                 label="Stand Umsetzung"
                 value={row?.umsetzung}
