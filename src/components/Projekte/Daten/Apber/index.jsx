@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { gql } from '@apollo/client'
@@ -22,24 +21,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  flex-grow: 1;
-  padding: 10px;
-  column-width: ${constants.columnWidth}px;
-`
+import { container, formContainer } from './index.module.css'
 
 const veraenGegenVorjahrWerte = [
   { value: '+', label: '+' },
@@ -134,12 +116,15 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="AP-Bericht"
           MenuBarComponent={Menu}
         />
-        <FormContainer>
+        <div
+          className={formContainer}
+          style={{ columnWidth: constants.columnWidth }}
+        >
           <TextField
             name="jahr"
             label="Jahr"
@@ -252,8 +237,8 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.bearbeiter}
           />
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
