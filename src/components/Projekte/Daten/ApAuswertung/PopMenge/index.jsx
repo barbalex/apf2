@@ -10,7 +10,6 @@ import {
   CartesianGrid,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from '@emotion/styled'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MuiTooltip from '@mui/material/Tooltip'
@@ -21,33 +20,13 @@ import { CustomTooltip } from './CustomTooltip.jsx'
 import { exists } from '../../../../../modules/exists.js'
 import { Error } from '../../../../shared/Error.jsx'
 
-const SpinnerContainer = styled.div`
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-const SpinnerText = styled.div`
-  padding: 10px;
-`
-const NoDataContainer = styled.div`
-  margin: 20px;
-  margin-bottom: 40px;
-  text-align: center;
-`
-const TitleRow = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-`
-const Title = styled.h4`
-  margin-bottom: 0;
-  margin-top: 0;
-  padding: 0 10px;
-`
+import {
+  spinnerContainer,
+  spinnerText,
+  noDataContainer,
+  titleRow,
+  title,
+} from './index.module.css'
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
@@ -124,14 +103,14 @@ export const PopMenge = ({
   return (
     <>
       {loadingPopMenge ?
-        <SpinnerContainer>
+        <div className={spinnerContainer}>
           <CircularProgress />
-          <SpinnerText>lade Mengen nach Populationen...</SpinnerText>
-        </SpinnerContainer>
+          <div className={spinnerText}>lade Mengen nach Populationen...</div>
+        </div>
       : popMengeData.length ?
         <>
-          <TitleRow>
-            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          <div className={titleRow}>
+            <h4 className={title}>{`"${zielEinheit}" nach Populationen`}</h4>
             {!print && (
               <MuiTooltip title="Mehr Informationen">
                 <IconButton
@@ -143,7 +122,7 @@ export const PopMenge = ({
                 </IconButton>
               </MuiTooltip>
             )}
-          </TitleRow>
+          </div>
           <ResponsiveContainer
             width="99%"
             height={height}
@@ -200,8 +179,8 @@ export const PopMenge = ({
           </ResponsiveContainer>
         </>
       : <>
-          <TitleRow>
-            <Title>{`"${zielEinheit}" nach Populationen`}</Title>
+          <div className={titleRow}>
+            <h4 className={title}>{`"${zielEinheit}" nach Populationen`}</h4>
             {!print && (
               <MuiTooltip title="Mehr Informationen">
                 <IconButton
@@ -213,8 +192,8 @@ export const PopMenge = ({
                 </IconButton>
               </MuiTooltip>
             )}
-          </TitleRow>
-          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+          </div>
+          <div className={noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
