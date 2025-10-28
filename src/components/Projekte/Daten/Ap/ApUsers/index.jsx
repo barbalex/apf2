@@ -8,30 +8,13 @@ import { NewUser } from './NewUser.jsx'
 import { Label } from '../../../../shared/Label.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
-import { container } from './index.module.css'
-
-const Container = styled.div`
-  margin-top: 10px;
-  margin-bottom: 20px;
-  border: 1px rgba(46, 125, 50, 0.4) solid;
-  padding: 0 10px;
-`
-const NewUserContainer = styled.div`
-  margin-bottom: 5px;
-`
-const Info = styled.div`
-  margin-top: 7px;
-  margin-bottom: 12px;
-  font-style: italic;
-  font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.54);
-`
-const InfoList = styled.ul`
-  margin-bottom: 5px;
-`
-const InfoRow = styled.li`
-  margin-bottom: 0;
-`
+import {
+  container,
+  newUserContainer,
+  info,
+  infoList,
+  infoRow,
+} from './index.module.css'
 
 export const ApUsers = () => {
   const { apId } = useParams()
@@ -79,7 +62,7 @@ export const ApUsers = () => {
   return (
     <div className={container}>
       <Label label={'Benutzer mit Zugriff'} />
-      <NewUserContainer>
+      <div className={newUserContainer}>
         {apUsers.length ?
           apUsers.map((user) => (
             <ApUser
@@ -89,30 +72,30 @@ export const ApUsers = () => {
             />
           ))
         : 'Es wurden noch keine Zugriffe erteilt'}
-        <Info>
+        <div className={info}>
           <div>Zugriff hängt von der Rolle des Benutzers ab:</div>
-          <InfoList>
-            <InfoRow>
+          <div className={infoList}>
+            <div className={infoRow}>
               {
                 '"ap_writer" haben Schreib-Rechte, wenn sie oben aufgelistet sind'
               }
-            </InfoRow>
-            <InfoRow>
+            </div>
+            <div className={infoRow}>
               {'"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'}
-            </InfoRow>
-          </InfoList>
+            </div>
+          </div>
           <div>Darüber hinaus haben immer Zugriff:</div>
-          <InfoList>
-            <InfoRow>{'"manager" (Schreib-Rechte)'}</InfoRow>
-            <InfoRow>{'"reader" (Lese-Rechte)'}</InfoRow>
-          </InfoList>
+          <div className={infoList}>
+            <div className={infoRow}>{'"manager" (Schreib-Rechte)'}</div>
+            <div className={infoRow}>{'"reader" (Lese-Rechte)'}</div>
+          </div>
           <div>
             {
               'Nur "manager" sehen die Rollen von Benutzern (Benutzer-Infos sind geschützt).'
             }
           </div>
-        </Info>
-      </NewUserContainer>
+        </div>
+      </div>
       <NewUser
         apId={apId}
         apUsers={apUsers}
