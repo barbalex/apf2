@@ -1,0 +1,16 @@
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+}
