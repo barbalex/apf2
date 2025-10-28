@@ -14,7 +14,6 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
@@ -27,14 +26,6 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-const MoveIcon = styled(MdOutlineMoveDown)`
-  color: ${(props) =>
-    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
-const CopyIcon = styled(MdContentCopy)`
-  color: ${(props) =>
-    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }) => {
@@ -281,7 +272,14 @@ export const Menu = observer(({ row }) => {
           }
         >
           <IconButton onClick={onClickMoveInTree}>
-            <MoveIcon moving={(isMoving && thisPopIsMoving).toString()} />
+            <MdOutlineMoveDown
+              style={{
+                color:
+                  isMoving && thisPopIsMoving ?
+                    'rgb(255, 90, 0) !important'
+                  : 'white',
+              }}
+            />
           </IconButton>
         </Tooltip>
         {isMoving && (
@@ -307,7 +305,12 @@ export const Menu = observer(({ row }) => {
             }
             aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
           >
-            <CopyIcon copying={thisPopIsCopying.toString()} />
+            <MdContentCopy
+              style={{
+                color:
+                  thisPopIsCopying ? 'rgb(255, 90, 0) !important' : 'white',
+              }}
+            />
           </IconButton>
         </Tooltip>
         {(isCopyingPop || isCopyingTpop) && (
