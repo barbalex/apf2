@@ -1,0 +1,17 @@
+.title {
+  margin-top: -8px;
+  margin-bottom: -8px;
+  font-size: 0.75em;
+  padding-left: 10px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.styledTabs {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.styledTab {
+  min-width: 70px !important;
+  text-transform: none !important;
+}
