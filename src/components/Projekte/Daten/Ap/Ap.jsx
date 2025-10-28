@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
@@ -141,24 +140,22 @@ export const Component = observer(() => {
           dataSource={data?.allApBearbstandWertes?.nodes ?? []}
           loading={false}
           popover={
-            <>
+            <div className={classes.popover}>
               <div
-                className={classes.labelPopoverTitleRow}
+                className={classes.title}
                 data-id="info-icon-popover"
               >
                 Legende
               </div>
-              <div className={classes.labelPopoverContentRow}>
-                <div className={classes.labelPopoverRowColumnLeft}>keiner:</div>
+              <div className={classes.row}>
+                <div className={classes.columnLeft}>keiner:</div>
                 <div>kein Aktionsplan vorgesehen</div>
               </div>
-              <div className={classes.labelPopoverContentRow}>
-                <div className={classes.labelPopoverRowColumnLeft}>
-                  erstellt:
-                </div>
+              <div className={classes.row}>
+                <div className={classes.columnLeft}>erstellt:</div>
                 <div>Aktionsplan fertig, auf der Webseite der FNS</div>
               </div>
-            </>
+            </div>
           }
           label="Aktionsplan"
           value={row.bearbeitung}
@@ -178,31 +175,29 @@ export const Component = observer(() => {
           dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
           loading={false}
           popover={
-            <>
+            <div className={classes.popover}>
               <div
-                className={classes.labelPopoverTitleRow}
+                className={classes.title}
                 data-id="info-icon-popover"
               >
                 Legende
               </div>
-              <div className={classes.labelPopoverContentRow}>
-                <div className={classes.labelPopoverRowColumnLeft}>
+              <div className={classes.row}>
+                <div className={classes.columnLeft}>
                   noch keine
                   <br />
                   Umsetzung:
                 </div>
                 <div>noch keine Massnahmen ausgeführt</div>
               </div>
-              <div className={classes.labelPopoverContentRow}>
-                <div className={classes.labelPopoverRowColumnLeft}>
-                  in Umsetzung:
-                </div>
+              <div className={classes.row}>
+                <div className={classes.columnLeft}>in Umsetzung:</div>
                 <div>
                   bereits Massnahmen ausgeführt (auch wenn AP noch nicht
                   erstellt)
                 </div>
               </div>
-            </>
+            </div>
           }
           label="Stand Umsetzung"
           value={row.umsetzung}
