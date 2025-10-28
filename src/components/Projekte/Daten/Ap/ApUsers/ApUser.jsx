@@ -3,18 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { MobxContext } from '../../../../../mobxContext.js'
-
-const DelIcon = styled(IconButton)`
-  font-size: 1rem !important;
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
-`
+import { delIcon } from './ApUser.module.css'
 
 export const ApUser = observer(({ user, refetch }) => {
   const apolloClient = useApolloClient()
@@ -35,9 +29,7 @@ export const ApUser = observer(({ user, refetch }) => {
     } catch (error) {
       enqueNotification({
         message: error.message,
-        options: {
-          variant: 'error',
-        },
+        options: { variant: 'error' },
       })
     }
     refetch()
@@ -51,12 +43,13 @@ export const ApUser = observer(({ user, refetch }) => {
       {user.userName}
       {!!role && <span>{` (${role})`}</span>}
       <Tooltip title={`${user.userName} entfernen`}>
-        <DelIcon
+        <IconButton
           aria-label={`${user.userName} entfernen`}
           onClick={onClickDelete}
+          className={delIcon}
         >
           <FaTimes />
-        </DelIcon>
+        </IconButton>
       </Tooltip>
     </div>
   )

@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
-import styled from '@emotion/styled'
 import { useParams } from 'react-router'
 
 import { ApUser } from './ApUser.jsx'
