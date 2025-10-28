@@ -173,7 +173,7 @@ export const Component = () => {
   const rows = data?.allTpopHistories.nodes ?? []
 
   const openDocs = () => {
-    const url = `${appBaseUrl()}/Dokumentation/historisierung`
+    const url = `${appBaseUrl()}Dokumentation/historisierung`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }

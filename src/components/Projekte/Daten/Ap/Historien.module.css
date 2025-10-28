@@ -1,0 +1,31 @@
+.innerContainer {
+  padding: 10px;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.errorContainer {
+  padding: 25px;
+}
+
+.docLink {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.docLine {
+  margin-bottom: 0;
+  &:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.aenderung {
+  background-color: rgba(216, 67, 21, 0.2);
+}
+
+.aktuell {
+  background-color: rgb(201, 238, 211);
+}

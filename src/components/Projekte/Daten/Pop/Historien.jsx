@@ -116,7 +116,7 @@ export const Component = () => {
   const label = row?.label ?? 'Population'
 
   const openDocs = () => {
-    const url = `${appBaseUrl()}/Dokumentation/historisierung`
+    const url = `${appBaseUrl()}Dokumentation/historisierung`
     if (window.matchMedia('(display-mode: standalone)').matches) {
       return window.open(url, '_blank', 'toolbar=no')
     }
