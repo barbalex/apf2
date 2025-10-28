@@ -10,7 +10,6 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
@@ -24,10 +23,8 @@ import { ApFilter } from '../../TreeContainer/ApFilter/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-const Fitter = styled.div`
-  margin-top: ${(props) => (props.inmenu === 'true' ? -8 : -15)}px;
-  padding-left: 5px;
-`
+import { fitter } from './Menu.module.css'
+
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }) => {
@@ -166,9 +163,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
             </IconButton>
           </Tooltip>
         )}
-        <Fitter>
+        <div className={fitter}>
           <ApFilter color="white" />
-        </Fitter>
+        </div>
       </MenuBar>
     </ErrorBoundary>
   )
