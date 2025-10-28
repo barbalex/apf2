@@ -3,7 +3,6 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { gql } from '@apollo/client'
-
 import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
