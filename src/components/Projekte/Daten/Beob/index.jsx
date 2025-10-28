@@ -8,7 +8,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
-import { constants } from '../../../../modules/constants.js'
 import { exists } from '../../../../modules/exists.js'
 import { query } from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -18,16 +17,6 @@ import { Field as BeobField } from './Field.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import { outerContainer, container, explainer } from './index.module.css'
-
-const Container = styled.div`
-  @container (min-width: ${constants.columnWidth * 1.7}px) {
-    columns: 2;
-  }
-  @container (min-width: ${constants.columnWidth +
-  constants.columnWidth * 1.7}px) {
-    columns: 3;
-  }
-`
 
 export const Beob = observer(() => {
   const { beobId: id } = useParams()
@@ -129,7 +118,7 @@ export const Beob = observer(() => {
         <p className={explainer}>
           Die Felder können beliebig sortiert werden (drag and drop).
         </p>
-        <Container>
+        <div className={container}>
           <Suspense fallback={<Spinner />}>
             <DndProvider
               backend={HTML5Backend}
@@ -138,7 +127,7 @@ export const Beob = observer(() => {
               {fields.map((field, i) => renderField(field, i))}
             </DndProvider>
           </Suspense>
-        </Container>
+        </div>
       </div>
     </ErrorBoundary>
   )

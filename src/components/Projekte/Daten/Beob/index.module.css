@@ -3,11 +3,21 @@
   padding: 0 10px 0 10px;
 }
 
-.container {
-  @container (min-width: calc(var(--column-width)*1.7px)) {
+/* this does not work as using variables inside media queries does not seem to work*/
+/* .container {
+  @container (min-width: calc(var(--column-width)*1.7)) {
     columns: 2;
   }
-  @container (min-width: calc(var(--column-width)px + calc(var(--column-width)*1.7px))) {
+  @container (min-width: calc(var(--column-width) + calc(var(--column-width)*1.7))) {
+    columns: 3;
+  }
+} */
+
+.container {
+  @container (min-width: calc(600px*1.7)) {
+    columns: 2;
+  }
+  @container (min-width: calc(600px + calc(600px*1.7))) {
     columns: 3;
   }
 }
