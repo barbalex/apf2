@@ -1,0 +1,39 @@
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.fieldsContainer {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  flex-grow: 1;
+}
+
+.historizeButton {
+  text-transform: none !important;
+  border-color: rgba(46, 125, 50, 0.3) !important;
+  margin-bottom: 15px !important;
+  display: block;
+  /* animation: blinker 1s linear infinite; */
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+  &:hover {
+    background-color: rgba(46, 125, 50, 0.1) !important;
+  }
+}
+
+.explainer {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.7rem;
+  font-weight: normal;
+  line-height: 0.9rem;
+}
+
+.formContainer {
+  padding: 10px;
+}

@@ -1,5 +1,4 @@
 import { useContext, useState, Suspense } from 'react'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -25,42 +24,13 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { historize } from '../../../../modules/historize.js'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FieldsContainer = styled.div`
-  overflow-y: auto;
-  scrollbar-width: thin;
-  flex-grow: 1;
-`
-const HistorizeButton = styled(Button)`
-  text-transform: none !important;
-  border-color: rgba(46, 125, 50, 0.3) !important;
-  margin-bottom: 15px !important;
-  display: block;
-  ${(props) =>
-    props['data-historizing'] && 'animation: blinker 1s linear infinite;'}
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-  &:hover {
-    background-color: rgba(46, 125, 50, 0.1) !important;
-  }
-`
-const Explainer = styled.div`
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 0.7rem;
-  font-weight: normal;
-  line-height: 0.9rem;
-`
-const FormContainer = styled.div`
-  padding: 10px;
-`
+import {
+  container,
+  fieldsContainer,
+  historizeButton,
+  explainer,
+  formContainer,
+} from './index.module.css'
 
 const fieldTypes = {
   projId: 'UUID',
@@ -170,20 +140,23 @@ export const Component = observer(() => {
     setHistorizing(false)
   }
 
+  const historizeButtonStyle =
+    historizing ? { animation: 'blinker 1s linear infinite' } : {}
+
   if (error) return <Error error={error} />
 
   if (!row) return null
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="AP-Bericht Jahresübersicht"
           MenuBarComponent={Menu}
         />
         <Suspense fallback={<Spinner />}>
-          <FieldsContainer>
-            <FormContainer>
+          <div className={fieldsContainer}>
+            <div className={formContainer}>
               <TextField
                 name="jahr"
                 label="Jahr"
@@ -200,16 +173,17 @@ export const Component = observer(() => {
               )}
               {showHistorize && (
                 <>
-                  <HistorizeButton
+                  <Button
                     variant="outlined"
                     onClick={onClickHistorize}
                     title="historisieren"
                     color="inherit"
-                    data-historizing={historizing}
                     disabled={historizing || row?.historyFixed}
+                    style={historizeButtonStyle}
+                    className={historizeButton}
                   >
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
-                    <Explainer>
+                    <div className={explainer}>
                       {historizing ?
                         'Bitte warten, das dauert eine Weile...'
                       : <>
@@ -219,8 +193,8 @@ export const Component = observer(() => {
                           Folgejahrs
                         </>
                       }
-                    </Explainer>
-                  </HistorizeButton>
+                    </div>
+                  </Button>
                 </>
               )}
               <Checkbox2States
@@ -238,10 +212,10 @@ export const Component = observer(() => {
                 saveToDb={saveToDb}
                 error={fieldErrors.bemerkungen}
               />
-            </FormContainer>
-          </FieldsContainer>
+            </div>
+          </div>
         </Suspense>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
