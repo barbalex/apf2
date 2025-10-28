@@ -1,34 +1,10 @@
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
-import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 
-const Row = styled.div`
-  display: flex;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  border-collapse: collapse;
-  cursor: move;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-`
-const Label = styled.div`
-  color: rgb(0, 0, 0, 0.54);
-  width: 200px;
-  min-width: 200px;
-  padding: 5px;
-  overflow-wrap: break-word;
-`
-const Value = styled.div`
-  padding: 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
+import { rowClass, labelClass, valueClass } from './Field.module.css'
 
-const ItemTypes = {
-  CARD: 'card',
-}
+const ItemTypes = { CARD: 'card' }
 
 export const Field = ({ label, value, index, moveField }) => {
   const ref = useRef(null)
@@ -91,15 +67,16 @@ export const Field = ({ label, value, index, moveField }) => {
   drag(drop(ref))
 
   return (
-    <Row
+    <div
       ref={ref}
       style={{ opacity }}
+      className={rowClass}
       data-handler-id={handlerId}
     >
-      <Label>{label}</Label>
-      <Value>
+      <div className={labelClass}>{label}</div>
+      <div className={valueClass}>
         <Linkify properties={{ target: '_blank' }}>{value}</Linkify>
-      </Value>
-    </Row>
+      </div>
+    </div>
   )
 }
