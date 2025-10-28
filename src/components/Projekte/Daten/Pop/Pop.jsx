@@ -1,5 +1,4 @@
 import { useContext, useState, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -21,16 +20,7 @@ import { query } from './query.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.jsx'
 
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-  height: 100%;
-`
+import { formContainer } from './Pop.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -126,7 +116,7 @@ export const Component = observer(() => {
           MenuBarComponent={Menu}
           menuBarProps={{ row }}
         />
-        <FormContainer>
+        <div className={formContainer}>
           <TextField
             label="Nr."
             name="nr"
@@ -172,7 +162,7 @@ export const Component = observer(() => {
             refetchForm={refetch}
             table="pop"
           />
-        </FormContainer>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )
