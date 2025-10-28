@@ -1,6 +1,5 @@
-import styled from '@emotion/styled'
-import { gql } from '@apollo/client';
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
@@ -10,24 +9,9 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
-const mdParser = new MarkdownIt({ breaks: true })
+import { container, fieldsContainer, content } from './index.module.css'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FieldsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const Content = styled.div`
-  padding: 10px;
-`
+const mdParser = new MarkdownIt({ breaks: true })
 
 const query = gql`
   query currentissueById($id: UUID!) {
@@ -57,16 +41,17 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle title={row.title} />
-        <FieldsContainer>
-          <Content
+        <div className={fieldsContainer}>
+          <div
+            className={content}
             dangerouslySetInnerHTML={{
               __html: mdParser.render(row.issue),
             }}
           />
-        </FieldsContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 }
