@@ -22,44 +22,7 @@ import { query } from './query.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.jsx'
 
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-`
-const FieldContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-const LabelPopoverRow = styled.div`
-  padding: 2px 5px 2px 5px;
-`
-const LabelPopoverTitleRow = styled(LabelPopoverRow)`
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  background-color: rgb(46, 125, 50);
-  color: white;
-`
-const LabelPopoverContentRow = styled(LabelPopoverRow)`
-  display: flex;
-  border-color: grey;
-  border-width: thin;
-  border-style: solid;
-  border-top-style: none;
-  &:last-child {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-`
-const LabelPopoverRowColumnLeft = styled.div`
-  width: 110px;
-`
-const LabelPopoverRowColumnRight = styled.div`
-  padding-left: 5px;
-`
+import classes from './Ap.module.css'
 
 const fieldTypes = {
   bearbeitung: 'Int',
@@ -160,7 +123,7 @@ export const Component = observer(() => {
         title="Art"
         MenuBarComponent={Menu}
       />
-      <FormContainer>
+      <div className={classes.formContainer}>
         <SelectLoadingOptions
           field="artId"
           valueLabelPath="aeTaxonomyByArtId.taxArtName"
@@ -179,21 +142,22 @@ export const Component = observer(() => {
           loading={false}
           popover={
             <>
-              <LabelPopoverTitleRow data-id="info-icon-popover">
+              <div
+                className={classes.labelPopoverTitleRow}
+                data-id="info-icon-popover"
+              >
                 Legende
-              </LabelPopoverTitleRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  kein Aktionsplan vorgesehen
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>erstellt:</LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  Aktionsplan fertig, auf der Webseite der FNS
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
+              </div>
+              <div className={classes.labelPopoverContentRow}>
+                <div className={classes.labelPopoverRowColumnLeft}>keiner:</div>
+                <div>kein Aktionsplan vorgesehen</div>
+              </div>
+              <div className={classes.labelPopoverContentRow}>
+                <div className={classes.labelPopoverRowColumnLeft}>
+                  erstellt:
+                </div>
+                <div>Aktionsplan fertig, auf der Webseite der FNS</div>
+              </div>
             </>
           }
           label="Aktionsplan"
@@ -209,43 +173,42 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.startJahr}
         />
-        <FieldContainer>
-          <RadioButtonGroupWithInfo
-            name="umsetzung"
-            dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
-            loading={false}
-            popover={
-              <>
-                <LabelPopoverTitleRow data-id="info-icon-popover">
-                  Legende
-                </LabelPopoverTitleRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>
-                    noch keine
-                    <br />
-                    Umsetzung:
-                  </LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    noch keine Massnahmen ausgeführt
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>
-                    in Umsetzung:
-                  </LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                    erstellt)
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-              </>
-            }
-            label="Stand Umsetzung"
-            value={row.umsetzung}
-            saveToDb={saveToDb}
-            error={fieldErrors.umsetzung}
-          />
-        </FieldContainer>
+        <RadioButtonGroupWithInfo
+          name="umsetzung"
+          dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
+          loading={false}
+          popover={
+            <>
+              <div
+                className={classes.labelPopoverTitleRow}
+                data-id="info-icon-popover"
+              >
+                Legende
+              </div>
+              <div className={classes.labelPopoverContentRow}>
+                <div className={classes.labelPopoverRowColumnLeft}>
+                  noch keine
+                  <br />
+                  Umsetzung:
+                </div>
+                <div>noch keine Massnahmen ausgeführt</div>
+              </div>
+              <div className={classes.labelPopoverContentRow}>
+                <div className={classes.labelPopoverRowColumnLeft}>
+                  in Umsetzung:
+                </div>
+                <div>
+                  bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                  erstellt)
+                </div>
+              </div>
+            </>
+          }
+          label="Stand Umsetzung"
+          value={row.umsetzung}
+          saveToDb={saveToDb}
+          error={fieldErrors.umsetzung}
+        />
         <Select
           name="bearbeiter"
           label="Verantwortlich"
@@ -271,7 +234,7 @@ export const Component = observer(() => {
             row?.aeTaxonomyByArtId?.artwert ?? 'Diese Art hat keinen Artwert'
           }
         />
-      </FormContainer>
+      </div>
     </ErrorBoundary>
   )
 })
