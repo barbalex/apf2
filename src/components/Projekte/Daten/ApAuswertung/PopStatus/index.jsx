@@ -10,34 +10,18 @@ import {
   CartesianGrid,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from '@emotion/styled'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { CustomTooltip } from '../CustomTooltip.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
-const SpinnerContainer = styled.div`
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-const SpinnerText = styled.div`
-  padding: 10px;
-`
-const NoDataContainer = styled.div`
-  margin: 20px;
-  margin-bottom: 40px;
-  text-align: center;
-`
-const Title = styled.h4`
-  width: 100%;
-  text-align: center;
-  margin-bottom: 0;
-  margin-top: 15px;
-`
+import {
+  spinnerContainer,
+  spinnerText,
+  noDataContainer,
+  title,
+} from './index.module.css'
 
 const color = {
   'ursprünglich, aktuell': '#2e7d32',
@@ -92,13 +76,13 @@ export const PopStatus = ({
   return (
     <>
       {loadingPopStati ?
-        <SpinnerContainer>
+        <div className={spinnerContainer}>
           <CircularProgress />
-          <SpinnerText>lade Populations-Stati...</SpinnerText>
-        </SpinnerContainer>
+          <div className={spinnerText}>lade Populations-Stati...</div>
+        </div>
       : rows.length ?
         <>
-          <Title>Populationen nach Status</Title>
+          <h4 className={title}>Populationen nach Status</h4>
           <ResponsiveContainer
             width="99%"
             height={height}
@@ -206,8 +190,8 @@ export const PopStatus = ({
           </ResponsiveContainer>
         </>
       : <>
-          <Title>Populationen nach Status</Title>
-          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+          <h4 className={title}>Populationen nach Status</h4>
+          <div className={noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
