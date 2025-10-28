@@ -1,0 +1,7 @@
+.styledInput {
+  width: 45px;
+  touch-action: none;
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
