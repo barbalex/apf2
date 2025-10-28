@@ -1,29 +1,5 @@
-import styled from '@emotion/styled'
-
 import { exists } from '../../../../modules/exists.js'
-
-const Popup = styled.div`
-  background-color: white;
-  border: 1px solid #2e7d32;
-  opacity: 0.8;
-  padding: 8px;
-`
-const Title = styled.div`
-  font-size: 1em;
-  font-weight: 700;
-`
-const Row = styled.div`
-  font-size: 0.8em;
-  font-weight: 700;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  color: ${(props) => props.color};
-`
-const Label = styled.div`
-  padding-right: 5px;
-`
-const Value = styled.div``
+import { popup, title, row, label } from './CustomTooltip.module.css'
 
 export const CustomTooltip = ({
   payload = [],
@@ -35,8 +11,8 @@ export const CustomTooltip = ({
   const data = reverse ? payload : (payload?.reverse() ?? [])
 
   return (
-    <Popup>
-      <Title>{label}</Title>
+    <div className={popup}>
+      <div className={title}>{label}</div>
       {data.map((o, i) => {
         const value =
           exists(o.value) && o.value?.toLocaleString ?
@@ -44,15 +20,16 @@ export const CustomTooltip = ({
           : null
 
         return (
-          <Row
+          <div
             key={`${i}/${o.dataKey}`}
-            color={color[o.dataKey]}
+            style={{ color: color[o.dataKey] }}
+            className={row}
           >
-            <Label>{`${o.dataKey}:`}</Label>
-            <Value>{value}</Value>
-          </Row>
+            <div className={label}>{`${o.dataKey}:`}</div>
+            <div>{value}</div>
+          </div>
         )
       })}
-    </Popup>
+    </div>
   )
 }
