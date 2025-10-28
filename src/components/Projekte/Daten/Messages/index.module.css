@@ -1,0 +1,44 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.scrollContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+  height: 100%;
+}
+
+.messageRow {
+  display: flex;
+  padding: 10px;
+  border-bottom: solid #f0f0f0;
+}
+
+.date {
+  flex-basis: 110px;
+  flex-shrink: 0;
+}
+
+.titleRow {
+  display: flex;
+  justify-content: space-between;
+  background-color: #388e3c;
+  padding-bottom: 10px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  padding: 10px 10px 0 10px;
+  color: white;
+  font-weight: bold;
+}
