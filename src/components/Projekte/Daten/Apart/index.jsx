@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -39,7 +39,7 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState({})
 
-  const { data, loading, error, refetch } = useQuery(query, {
+  const { data, error, refetch } = useQuery(query, {
     variables: { id },
   })
 
@@ -113,8 +113,6 @@ export const Component = observer(() => {
     })
   }
 
-  if (loading) return <Spinner />
-
   if (error) return <Error error={error} />
 
   return (
@@ -125,48 +123,50 @@ export const Component = observer(() => {
           MenuBarComponent={Menu}
         />
         <div className={fieldsContainer}>
-          <div>
-            In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
-            Gründe um mehrere zu erfassen:
-            <ul>
-              <li>Die Art hat Synonyme</li>
-              <li>
-                Die Art umfasst eng verwandte Arten, die nicht synonym sind
-                (z.B. Unterarten)
-              </li>
-              <li>
-                Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
-                SISF (2005) und DB-TAXREF (2017)
-              </li>
-            </ul>
-          </div>
-          <div>
-            {
-              'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
-            }
-            <br />
-            <br />
-          </div>
-          <div>
-            Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
-            werden auch die Kontrollen an InfoFlora geliefert.
-            <br />
-            <br />
-          </div>
-          <div className={formContainer}>
-            <SelectLoadingOptions
-              field="artId"
-              valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
-              label="Taxon"
-              row={row}
-              query={queryAeTaxonomies}
-              filter={aeTaxonomiesfilter}
-              queryNodesName="allAeTaxonomies"
-              saveToDb={saveToDb}
-              error={fieldErrors.artId}
-            />
-            <div className={spacer} />
-          </div>
+          <Suspense fallback={<Spinner />}>
+            <div>
+              In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
+              Gründe um mehrere zu erfassen:
+              <ul>
+                <li>Die Art hat Synonyme</li>
+                <li>
+                  Die Art umfasst eng verwandte Arten, die nicht synonym sind
+                  (z.B. Unterarten)
+                </li>
+                <li>
+                  Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
+                  SISF (2005) und DB-TAXREF (2017)
+                </li>
+              </ul>
+            </div>
+            <div>
+              {
+                'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
+              }
+              <br />
+              <br />
+            </div>
+            <div>
+              Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
+              werden auch die Kontrollen an InfoFlora geliefert.
+              <br />
+              <br />
+            </div>
+            <div className={formContainer}>
+              <SelectLoadingOptions
+                field="artId"
+                valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
+                label="Taxon"
+                row={row}
+                query={queryAeTaxonomies}
+                filter={aeTaxonomiesfilter}
+                queryNodesName="allAeTaxonomies"
+                saveToDb={saveToDb}
+                error={fieldErrors.artId}
+              />
+              <div className={spacer} />
+            </div>
+          </Suspense>
         </div>
       </div>
     </ErrorBoundary>

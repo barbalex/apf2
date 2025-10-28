@@ -1,0 +1,15 @@
+.scrollContainer {
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  flex-shrink: 1;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-shrink: 0;
+  padding: 10px;
+  padding-top: 0;
+}

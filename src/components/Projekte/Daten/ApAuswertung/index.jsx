@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
 
@@ -9,6 +8,8 @@ import { PopStatus } from './PopStatus/index.jsx'
 import { PopMenge } from './PopMenge/index.jsx'
 import { TpopKontrolliert } from './TpopKontrolliert/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+
+import { scrollContainer, formContainer } from './index.module.css'
 
 const apAuswertungQuery = gql`
   query apAuswertungQuery($apId: UUID!) {
@@ -22,21 +23,6 @@ const apAuswertungQuery = gql`
   }
 `
 
-const ScrollContainer = styled.div`
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  flex-shrink: 1;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  flex-shrink: 0;
-  padding: 10px;
-  padding-top: 0;
-`
-
 export const Component = () => {
   const { apId } = useParams()
   const { data } = useQuery(apAuswertungQuery, {
@@ -48,14 +34,14 @@ export const Component = () => {
   return (
     <>
       <FormTitle title={`${artname}: Auswertung`} />
-      <ScrollContainer>
-        <FormContainer>
+      <div className={scrollContainer}>
+        <div className={formContainer}>
           <ApErfolg />
           <PopStatus />
           <PopMenge />
           <TpopKontrolliert />
-        </FormContainer>
-      </ScrollContainer>
+        </div>
+      </div>
     </>
   )
 }
