@@ -9,34 +9,18 @@ import {
   CartesianGrid,
 } from 'recharts'
 import CircularProgress from '@mui/material/CircularProgress'
-import styled from '@emotion/styled'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
 import { CustomTick } from './CustomTick.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
-const SpinnerContainer = styled.div`
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-const SpinnerText = styled.div`
-  padding: 10px;
-`
-const NoDataContainer = styled.div`
-  margin: 20px;
-  margin-bottom: 40px;
-  text-align: center;
-`
-const Title = styled.h4`
-  width: 100%;
-  text-align: center;
-  margin-bottom: 0;
-  margin-top: 15px;
-`
+import {
+  spinnerContainer,
+  spinnerText,
+  noDataContainer,
+  title,
+} from './index.module.css'
 
 const erfValueFromCode = {
   3: 1, // nicht erfolgreich
@@ -82,13 +66,13 @@ export const ApErfolg = () => {
   return (
     <>
       {loadingErfolg ?
-        <SpinnerContainer>
+        <div className={spinnerContainer}>
           <CircularProgress />
-          <SpinnerText>lade AP-Erfolg...</SpinnerText>
-        </SpinnerContainer>
+          <div className={spinnerText}>lade AP-Erfolg...</div>
+        </div>
       : erfolgRawData.length ?
         <>
-          <Title>Erfolg des Aktionsplans</Title>
+          <h4 className={title}>Erfolg des Aktionsplans</h4>
           <ResponsiveContainer
             width="99%"
             height={400}
@@ -130,8 +114,8 @@ export const ApErfolg = () => {
           </ResponsiveContainer>
         </>
       : <>
-          <Title>Erfolg des Aktionsplans</Title>
-          <NoDataContainer>Keine Daten gefunden</NoDataContainer>
+          <h4 className={title}>Erfolg des Aktionsplans</h4>
+          <div className={noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
