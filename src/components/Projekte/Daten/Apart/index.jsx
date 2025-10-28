@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -18,24 +17,12 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FieldsContainer = styled.div`
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px 10px 0 10px;
-`
-const FormContainer = styled.div`
-  padding: 10px 0;
-`
-const Spacer = styled.div`
-  height: 500px;
-`
+import {
+  container,
+  fieldsContainer,
+  formContainer,
+  spacer,
+} from './index.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -132,12 +119,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="Taxon"
           MenuBarComponent={Menu}
         />
-        <FieldsContainer>
+        <div className={fieldsContainer}>
           <div>
             In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
             Gründe um mehrere zu erfassen:
@@ -166,7 +153,7 @@ export const Component = observer(() => {
             <br />
             <br />
           </div>
-          <FormContainer>
+          <div className={formContainer}>
             <SelectLoadingOptions
               field="artId"
               valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
@@ -178,10 +165,10 @@ export const Component = observer(() => {
               saveToDb={saveToDb}
               error={fieldErrors.artId}
             />
-            <Spacer />
-          </FormContainer>
-        </FieldsContainer>
-      </Container>
+            <div className={spacer} />
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
