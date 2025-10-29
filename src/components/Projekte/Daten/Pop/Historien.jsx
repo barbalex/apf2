@@ -126,14 +126,8 @@ export const Component = () => {
           ).
         </p>
         <p className={docLine}>
-          <span
-            className={aenderung}
-            className={aenderung}
-          >
-            Änderungen
-          </span>{' '}
-          zum <span className={aktuell}>aktuellen Zustand</span> sind
-          hervorgehoben.
+          <span className={aenderung}>Änderungen</span> zum{' '}
+          <span className={aktuell}>aktuellen Zustand</span> sind hervorgehoben.
         </p>
         {rows.map((r) => {
           const dataArray = [
