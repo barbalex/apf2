@@ -76,6 +76,7 @@ export const useZieljahrsNavData = (props) => {
   const zieljahrsCount = getZieljahrsCount(ziels)
 
   // ISSUE: menus does not update when removing useMemo
+  // thus users cant enter submenus
   const menus = useMemo(() => {
     const countByJahr = countBy(filteredZiels, (e) => e.jahr)
     const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)
