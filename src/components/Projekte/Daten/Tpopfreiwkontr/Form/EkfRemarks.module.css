@@ -1,0 +1,23 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  break-inside: avoid;
+  grid-area: ekfRemarks;
+}
+
+.label {
+  font-weight: 700;
+  margin-bottom: -10px;
+}
+
+.val {
+  > div {
+    margin-bottom: -25px;
+  }
+  textarea {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
+}
