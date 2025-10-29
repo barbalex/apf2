@@ -1,0 +1,40 @@
+/* unfortunately, toggle buttons are different from icon buttons... */
+.roundToggleButton {
+  border-radius: 50%;
+  border-width: 0;
+  padding: 8px;
+  svg {
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.styledLoadingButton {
+  margin: 0 5px;
+  padding: 3px 10px;
+  text-transform: none;
+  line-height: 1.1;
+  font-size: 0.8rem;
+  max-height: 40px;
+  color: white;
+  border-width: 0.67px;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  /* prevent text from breaking into multiple lines */
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.styledButton {
+  margin: 0 5px;
+  padding: 3px 10px;
+  text-transform: none;
+  line-height: 1.1;
+  font-size: 0.8rem;
+  max-height: 40px;
+  color: white;
+  border-width: 0.67px;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  /* prevent text from breaking into multiple lines */
+  flex-shrink: 0;
+  flex-grow: 0;
+}

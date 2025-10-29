@@ -23,7 +23,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
-import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
@@ -40,52 +39,12 @@ import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfT
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-// unfortunately, toggle buttons are different from icon buttons...
-const RoundToggleButton = styled(ToggleButton)`
-  border-radius: 50%;
-  border-width: 0;
-  padding: 8px;
-  svg {
-    height: 24px;
-    width: 24px;
-  }
-`
-const MoveIcon = styled(MdOutlineMoveDown)`
-  color: ${(props) =>
-    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
-const CopyIcon = styled(MdContentCopy)`
-  color: ${(props) =>
-    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
-export const StyledLoadingButton = styled(Button)`
-  margin: 0 5px;
-  padding: 3px 10px;
-  text-transform: none;
-  line-height: 1.1;
-  font-size: 0.8rem;
-  max-height: 40px;
-  color: white;
-  border-width: 0.67px;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  // prevent text from breaking into multiple lines
-  flex-shrink: 0;
-  flex-grow: 0;
-`
-export const StyledButton = styled(Button)`
-  margin: 0 5px;
-  padding: 3px 10px;
-  text-transform: none;
-  line-height: 1.1;
-  font-size: 0.8rem;
-  max-height: 40px;
-  color: white;
-  border-width: 0.67px;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  // prevent text from breaking into multiple lines
-  flex-shrink: 0;
-  flex-grow: 0;
-`
+import {
+  roundToggleButton,
+  styledLoadingButton,
+  styledButton,
+} from './Menu.module.css'
+
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }) => {
@@ -398,13 +357,14 @@ export const Menu = observer(({ row }) => {
           </Tooltip>
         )}
         <Tooltip title="Auf Karte verorten (mit Doppelklick)">
-          <RoundToggleButton
+          <ToggleButton
             value={idOfTpopBeingLocalized ?? ''}
             onChange={onClickLocalizeOnMap}
             selected={isLocalizing}
+            className={roundToggleButton}
           >
             <FaMapLocationDot style={iconStyle} />
-          </RoundToggleButton>
+          </ToggleButton>
         </Tooltip>
         <Tooltip
           title={
@@ -417,7 +377,14 @@ export const Menu = observer(({ row }) => {
           }
         >
           <IconButton onClick={onClickMoveInTree}>
-            <MoveIcon moving={(isMovingTpop && thisTpopIsMoving).toString()} />
+            <MdOutlineMoveDown
+              style={{
+                color:
+                  isMovingTpop && thisTpopIsMoving ?
+                    'rgb(255, 90, 0) !important'
+                  : 'white',
+              }}
+            />
           </IconButton>
         </Tooltip>
         {isMovingTpop && (
@@ -435,7 +402,12 @@ export const Menu = observer(({ row }) => {
           }
         >
           <IconButton onClick={onClickCopy}>
-            <CopyIcon copying={thisTpopIsCopying.toString()} />
+            <MdContentCopy
+              style={{
+                color:
+                  thisTpopIsCopying ? 'rgb(255, 90, 0) !important' : 'white',
+              }}
+            />
           </IconButton>
         </Tooltip>
         {isCopying && (
@@ -446,35 +418,38 @@ export const Menu = observer(({ row }) => {
           </Tooltip>
         )}
         {tpopHasCoord && (
-          <StyledLoadingButton
+          <Button
             variant="outlined"
             onClick={onCopyCoordToPop}
             loading={copyingCoordToTpop}
             width={155}
+            className={styledLoadingButton}
           >
             Koordinaten auf die
             <br />
             Population kopieren
-          </StyledLoadingButton>
+          </Button>
         )}
-        <StyledButton
+        <Button
           variant="outlined"
           onClick={onClickShowCoordOfTpopOnMapsZhCh}
           width={103}
+          className={styledButton}
         >
           zeige auf
           <br />
           maps.zh.ch
-        </StyledButton>
-        <StyledButton
+        </Button>
+        <Button
           variant="outlined"
           onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
           width={146}
+          className={styledButton}
         >
           zeige auf
           <br />
           map.geo.admin.ch
-        </StyledButton>
+        </Button>
       </MenuBar>
       <MuiMenu
         id="tpopDelMenu"
