@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -13,31 +12,13 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 10px 0;
-`
-const SpinnerContainer = styled.div`
-  height: 400px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-const SpinnerText = styled.div`
-  padding: 10px;
-`
-const FilterContainer = styled.div`
-  padding: 0 60px;
-`
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import {
+  container,
+  spinnerContainer,
+  spinnerText,
+  filterContainer,
+  styledFormControl,
+} from './index.module.css'
 
 export const Component = ({ refetchTab }) => {
   const { apId } = useParams()
@@ -62,21 +43,23 @@ export const Component = ({ refetchTab }) => {
 
   if (loading) {
     return (
-      <SpinnerContainer>
+      <div className={spinnerContainer}>
         <CircularProgress />
-        <SpinnerText>lade Daten...</SpinnerText>
-      </SpinnerContainer>
+        <div className={spinnerText}>lade Daten...</div>
+      </div>
     )
   }
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <FormTitle title="Qualitätskontrollen wählen" />
-      <Container>
-        <FilterContainer>
-          <StyledFormControl
+      <div className={container}>
+        <div className={filterContainer}>
+          <FormControl
+            className={container}
             fullWidth
             variant="standard"
+            className={styledFormControl}
           >
             <InputLabel htmlFor="filter">{label}</InputLabel>
             <Input
@@ -84,8 +67,8 @@ export const Component = ({ refetchTab }) => {
               value={filter}
               onChange={onChangeFilter}
             />
-          </StyledFormControl>
-        </FilterContainer>
+          </FormControl>
+        </div>
         {rowsFiltered.map((row) => (
           <Row
             key={row.name}
@@ -94,7 +77,7 @@ export const Component = ({ refetchTab }) => {
             refetchTab={refetchTab}
           />
         ))}
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 }

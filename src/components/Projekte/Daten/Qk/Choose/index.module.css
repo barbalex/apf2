@@ -1,0 +1,29 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+
+.spinnerContainer {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerText {
+  padding: 10px;
+}
+
+.filterContainer {
+  padding: 0 60px;
+}
+
+.styledFormControl {
+  padding-bottom: 19px !important;
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
