@@ -1,0 +1,7 @@
+.container {
+  height: 100%;
+  padding: 0 10px;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}

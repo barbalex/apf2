@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
@@ -16,13 +15,7 @@ import { TpopAbBerRelevantInfoPopover } from '../TpopAbBerRelevantInfoPopover.js
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const Container = styled.div`
-  height: 100%;
-  padding: 0 10px;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
+import { container } from './Tpop.module.css'
 
 export const Tpop = observer(
   ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
@@ -65,7 +58,7 @@ export const Tpop = observer(
     if (!row) return null
 
     return (
-      <Container>
+      <div className={container}>
         <TextField
           name="nr"
           label="Nr."
@@ -356,7 +349,7 @@ export const Tpop = observer(
           saveToDb={saveToDb}
           error={fieldErrors.bemerkungen}
         />
-      </Container>
+      </div>
     )
   },
 )
