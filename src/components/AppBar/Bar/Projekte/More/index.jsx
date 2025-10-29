@@ -151,7 +151,7 @@ export const More = observer(
           <MenuItem onClick={onClickUptime}>
             Verfügbarkeit der Server von apflora.ch
           </MenuItem>
-          <Version>Version: 1.124.22 vom 29.10.2025</Version>
+          <Version>Version: 1.124.23 vom 29.10.2025</Version>
         </Menu>
       </Tooltip>
     )
