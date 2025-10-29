@@ -1,0 +1,154 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  break-inside: avoid;
+  grid-area: more;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-column-gap: 5px;
+  grid-template-areas:
+    'flLabel flLabel flLabel flVal flVal flVal flVal flVal flVal flVal flVal flMeasure'
+    'jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0'
+    'jungPflLabel1 jungPflVal1 jungPflLabel2 jungPflVal2 . . . . . . . .'
+    'veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0'
+    'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxVal veghoeheMaxVal'
+    'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittVal veghoeheMittVal'
+    'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel . .';
+  align-items: center;
+  @media print {
+    grid-template-areas:
+      'flLabel flLabel flLabel flVal flVal flVal flVal flVal flVal flVal flVal flMeasure'
+      'jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0 jungPflLabel0'
+      'jungPflLabel1 jungPflVal1 jungPflLabel2 jungPflVal2 . . . . . . . .'
+      'veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0 veghoeheLabel0'
+      'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxLabel veghoeheMaxVal veghoeheMaxVal veghoeheMaxVal'
+      'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittLabel veghoeheMittVal veghoeheMittVal veghoeheMittVal'
+      'veghoeheImg veghoeheImg veghoeheImg veghoeheImg veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel veghoeheMinLabel . . .';
+  }
+}
+
+.flLabel {
+  grid-area: flLabel;
+  font-weight: 700;
+}
+
+.flVal {
+  grid-area: flVal;
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
+}
+
+.flMeasure {
+  grid-area: flMeasure;
+}
+
+.jungPflLabel0 {
+  grid-area: jungPflLabel0;
+  font-weight: 700;
+  padding-bottom: 5px;
+}
+
+.jungPflLabel1 {
+  grid-area: jungPflLabel1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.jungPflVal1 {
+  grid-area: jungPflVal1;
+}
+
+.jungPflLabel2 {
+  grid-area: jungPflLabel2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.jungPflVal2 {
+  grid-area: jungPflVal2;
+}
+
+.veghoeheLabel0 {
+  grid-area: veghoeheLabel0;
+  font-weight: 700;
+}
+
+.veghoeheMaxLabel {
+  grid-area: veghoeheMaxLabel;
+  align-self: start;
+  margin-top: 10px;
+  @media print {
+    margin-top: 5px;
+  }
+}
+
+.veghoeheMaxVal {
+  grid-area: veghoeheMaxVal;
+  align-self: start;
+  margin-top: -11px;
+  @media print {
+    margin-top: -16px;
+  }
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
+}
+
+.veghoeheMittLabel {
+  grid-area: veghoeheMittLabel;
+  align-self: start;
+  margin-top: 30px;
+  @media print {
+    margin-top: 3px;
+  }
+}
+
+.veghoeheMittVal {
+  grid-area: veghoeheMittVal;
+  align-self: start;
+  margin-top: 8px;
+  @media print {
+    margin-top: -19px;
+  }
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
+}
+
+.veghoeheMinLabel {
+  grid-area: veghoeheMinLabel;
+  align-self: start;
+  margin-top: -11px;
+  @media print {
+    margin-top: -13px;
+  }
+}
+
+/* https://www.voorhoede.nl/en/blog/say-no-to-image-reflow */
+.veghoeheImg {
+  grid-area: veghoeheImg;
+  display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 86.813%;
+}
+
+.img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: inherit;
+}
