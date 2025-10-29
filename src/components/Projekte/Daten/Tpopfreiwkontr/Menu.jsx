@@ -13,7 +13,6 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -22,14 +21,6 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 
-const MoveIcon = styled(MdOutlineMoveDown)`
-  color: ${(props) =>
-    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
-const CopyIcon = styled(MdContentCopy)`
-  color: ${(props) =>
-    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }) => {
@@ -235,10 +226,13 @@ export const Menu = observer(({ row }) => {
           }
         >
           <IconButton onClick={onClickMoveInTree}>
-            <MoveIcon
-              moving={(
-                isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving
-              ).toString()}
+            <MdOutlineMoveDown
+              style={{
+                color:
+                  isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving ?
+                    'rgb(255, 90, 0) !important'
+                  : 'white',
+              }}
             />
           </IconButton>
         </Tooltip>
@@ -257,7 +251,14 @@ export const Menu = observer(({ row }) => {
           }
         >
           <IconButton onClick={onClickCopy}>
-            <CopyIcon copying={thisTpopfreiwkontrIsCopying.toString()} />
+            <MdContentCopy
+              style={{
+                color:
+                  thisTpopfreiwkontrIsCopying ?
+                    'rgb(255, 90, 0) !important'
+                  : 'white',
+              }}
+            />
           </IconButton>
         </Tooltip>
         {isCopyingTpopfreiwkontr && (
