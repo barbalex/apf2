@@ -1,47 +1,15 @@
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
-
 import { TextField2 } from '../../../../shared/TextField2.jsx'
+import { container, label, subLabel, val } from './Danger.module.css'
 
-const Container = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-  break-inside: avoid;
-  grid-area: danger;
-`
-const DangerLabel = styled.div`
-  font-weight: 700;
-  margin-bottom: -10px;
-`
-const DangerSubLabel = styled.span`
-  padding-left: 5px;
-  font-weight: 700;
-  font-size: 14px;
-  @media print {
-    font-size: 11px;
-  }
-`
-const DangerVal = styled.div`
-  > div {
-    margin-bottom: -25px;
-  }
-  textarea {
-    @media print {
-      font-size: 11px !important;
-    }
-  }
-`
-
-export const Danger = observer(({ saveToDb, row, errors }) => (
-  <Container>
-    <DangerLabel>
+export const Danger = ({ saveToDb, row, errors }) => (
+  <div className={container}>
+    <div className={label}>
       Gefährdung{' '}
-      <DangerSubLabel>
+      <span className={subLabel}>
         (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
-      </DangerSubLabel>
-    </DangerLabel>
-    <DangerVal>
+      </span>
+    </div>
+    <div className={val}>
       <TextField2
         key={`${row.id}gefaehrdung`}
         name="gefaehrdung"
@@ -51,6 +19,6 @@ export const Danger = observer(({ saveToDb, row, errors }) => (
         saveToDb={saveToDb}
         errors={errors}
       />
-    </DangerVal>
-  </Container>
-))
+    </div>
+  </div>
+)
