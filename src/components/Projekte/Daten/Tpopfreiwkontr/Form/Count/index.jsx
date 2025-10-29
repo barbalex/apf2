@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { sortBy, uniqBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
@@ -16,148 +15,25 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { Error } from '../../../../../shared/Error.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
-const AddIcon = styled(MdAddCircleOutline)`
-  font-size: 1.5rem;
-`
-const DeleteIcon = styled(MdDeleteForever)`
-  font-size: 1.5rem;
-`
-const Container = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-  grid-area: ${(props) => `count${props.nr}`};
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-areas: ${(props) =>
-    props.showempty ?
-      `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
-       'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-       'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
-    : props.shownew ?
-      `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
-         'showNew showNew showNew showNew showNew showNew showNew showNew'`
-    : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-           'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-           'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
-  grid-column-gap: 10px;
-  break-inside: avoid;
-  @media print {
-    grid-template-areas: ${(props) =>
-      props.showempty ?
-        `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
-       'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-       'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`
-      : props.shownew ?
-        `'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
-         'showNew showNew showNew showNew showNew showNew showNew showNew'`
-      : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-           'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-           'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
-  }
-`
-const StyledForm = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-  margin-bottom: 0;
-  grid-area: ${(props) => `count${props.nr}`};
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-areas: ${(props) =>
-    props.showdelete === 'true' ?
-      `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
-             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete'`
-    : `'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-             'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-             'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal'`};
-  grid-column-gap: 10px;
-  break-inside: avoid;
-  @media print {
-    grid-template-areas:
-      'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
-      'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
-      'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
-  }
-`
-const Label = styled.div`
-  font-weight: 700;
-`
-const EinheitLabel = styled(Label)`
-  grid-area: einheitLabel;
-  hyphens: auto;
-  margin-top: 5px;
-`
-const GezaehltLabel = styled.div`
-  grid-area: gezaehltLabel;
-  justify-self: center;
-  align-self: end;
-  padding-top: 8px;
-`
-const GezaehltVal = styled.div`
-  grid-area: gezaehltVal;
-  > div {
-    margin-top: -15px;
-    padding-bottom: 0 !important;
-  }
-  > div > div > input {
-    text-align: center;
-    @media print {
-      padding-top: 3px;
-      padding-bottom: 2px;
-      font-size: 11px;
-    }
-  }
-`
-const GeschaetztLabel = styled.div`
-  grid-area: geschaetztLabel;
-  justify-self: center;
-  align-self: end;
-  padding-top: 8px;
-`
-const GeschaetztVal = styled.div`
-  grid-area: geschaetztVal;
-  > div {
-    margin-top: -15px;
-    padding-bottom: 0 !important;
-  }
-  > div > div > input {
-    text-align: center;
-    @media print {
-      padding-top: 3px;
-      padding-bottom: 2px;
-      font-size: 11px;
-    }
-  }
-`
-const Delete = styled.div`
-  grid-area: delete;
-  justify-self: end;
-  align-self: end;
-  @media print {
-    grid-area: geschaetztVal;
-    button {
-      display: none;
-    }
-  }
-`
-const StyledDeleteButton = styled(Button)`
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  min-width: 40px !important;
-`
-const StyledAddIcon = styled(AddIcon)`
-  padding-right: 8px;
-`
-const ShowNew = styled.div`
-  grid-area: showNew;
-  @media print {
-    button {
-      display: none;
-    }
-  }
-`
+import {
+  deleteIcon,
+  containerBase,
+  containerEmpty,
+  containerNew,
+  containerElse,
+  formBase,
+  formShowDelete,
+  formElse,
+  einheitLabel,
+  gezaehltLabel,
+  gezaehltVal,
+  geschaetztLabel,
+  geschaetztVal,
+  deleteClass,
+  styledDeleteButton,
+  styledAddIcon,
+  showNew,
+} from './index.module.css'
 
 const getZaehleinheitWerte = ({
   data,
@@ -272,32 +148,45 @@ export const Count = observer(
       })
     }
 
+    const containerStyle = {
+      gridArea: `count${nr}`,
+    }
+    const containerClass =
+      showNew ? containerNew
+      : showEmpty ? containerEmpty
+      : containerElse
+
+    const formStyle = {
+      gridArea: `count${nr}`,
+    }
+    const formClass = showDelete ? formShowDelete : formElse
+
     if (showNew) {
       return (
-        <Container
-          nr={nr}
-          shownew={showNew}
+        <div
+          style={containerStyle}
+          className={`${containerBase} ${containerClass}`}
         >
-          <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-          <ShowNew>
+          <div className={einheitLabel}>{`Zähleinheit ${nr}`}</div>
+          <div className={showNew}>
             <Button
               color="primary"
               onClick={createNew}
             >
-              <StyledAddIcon /> Neu
+              <MdAddCircleOutline className={styledAddIcon} /> Neu
             </Button>
-          </ShowNew>
-        </Container>
+          </div>
+        </div>
       )
     }
     if (showEmpty) {
       return (
-        <Container
-          nr={nr}
-          showempty={showEmpty}
+        <div
+          style={containerStyle}
+          className={`${containerBase} ${containerClass}`}
         >
-          <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-        </Container>
+          <div className={einheitLabel}>{`Zähleinheit ${nr}`}</div>
+        </div>
       )
     }
     if (loading) return <Spinner />
@@ -305,10 +194,12 @@ export const Count = observer(
     if (error) return <Error error={error} />
 
     return (
-      <StyledForm
+      <div
         nr={nr}
         data-id={`count${nr}`}
         showdelete={showDelete.toString()}
+        style={formStyle}
+        className={`${containerBase} ${formClass}`}
       >
         <Einheit
           row={row}
@@ -316,32 +207,33 @@ export const Count = observer(
           zaehleinheitWerte={zaehleinheitWerte}
           nr={nr}
         />
-        <GezaehltLabel>gezählt</GezaehltLabel>
-        <GeschaetztLabel>geschätzt</GeschaetztLabel>
-        <GezaehltVal>
+        <div className={gezaehltLabel}>gezählt</div>
+        <div className={geschaetztLabel}>geschätzt</div>
+        <div className={gezaehltVal}>
           <Gezaehlt
             row={row}
             refetch={refetchMe}
           />
-        </GezaehltVal>
-        <GeschaetztVal>
+        </div>
+        <div className={geschaetztVal}>
           <Geschaetzt
             row={row}
             refetch={refetchMe}
           />
-        </GeschaetztVal>
+        </div>
         {showDelete && (
-          <Delete>
-            <StyledDeleteButton
+          <div className={deleteClass}>
+            <Button
               title="löschen"
               onClick={() => remove({ row })}
               color="inherit"
+              className={styledDeleteButton}
             >
-              <DeleteIcon />
-            </StyledDeleteButton>
-          </Delete>
+              <MdDeleteForever className={deleteIcon} />
+            </Button>
+          </div>
         )}
-      </StyledForm>
+      </div>
     )
   },
 )

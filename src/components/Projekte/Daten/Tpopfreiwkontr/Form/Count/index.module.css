@@ -1,0 +1,182 @@
+.deleteIcon {
+  font-size: 1.5rem;
+}
+
+.containerBase {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-column-gap: 10px;
+  break-inside: avoid;
+}
+
+.containerEmpty {
+  grid-template-areas:
+    'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+  @media print {
+    grid-template-areas:
+      'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+      'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+      'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+  }
+}
+
+.containerNew {
+  grid-template-areas:
+    'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+    'showNew showNew showNew showNew showNew showNew showNew showNew';
+  @media print {
+    grid-template-areas:
+      'einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel einheitLabel'
+      'showNew showNew showNew showNew showNew showNew showNew showNew';
+  }
+}
+
+.containerElse {
+  grid-template-areas:
+    'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+  @media print {
+    grid-template-areas:
+      'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+      'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+      'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+  }
+}
+
+.formBase {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-column-gap: 10px;
+  break-inside: avoid;
+  @media print {
+    grid-template-areas:
+      'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+      'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+      'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+  }
+}
+
+.formShowDelete {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-column-gap: 10px;
+  break-inside: avoid;
+  grid-template-areas:
+    'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel .'
+    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal delete';
+}
+
+.formElse {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-column-gap: 10px;
+  break-inside: avoid;
+  grid-template-areas:
+    'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
+}
+
+.einheitLabel {
+  font-weight: 700;
+  grid-area: einheitLabel;
+  hyphens: auto;
+  margin-top: 5px;
+}
+
+.gezaehltLabel {
+  grid-area: gezaehltLabel;
+  justify-self: center;
+  align-self: end;
+  padding-top: 8px;
+}
+
+.gezaehltVal {
+  grid-area: gezaehltVal;
+  > div {
+    margin-top: -15px;
+    padding-bottom: 0 !important;
+  }
+  > div > div > input {
+    text-align: center;
+    @media print {
+      padding-top: 3px;
+      padding-bottom: 2px;
+      font-size: 11px;
+    }
+  }
+}
+
+.geschaetztLabel {
+  grid-area: geschaetztLabel;
+  justify-self: center;
+  align-self: end;
+  padding-top: 8px;
+}
+
+.geschaetztVal {
+  grid-area: geschaetztVal;
+  > div {
+    margin-top: -15px;
+    padding-bottom: 0 !important;
+  }
+  > div > div > input {
+    text-align: center;
+    @media print {
+      padding-top: 3px;
+      padding-bottom: 2px;
+      font-size: 11px;
+    }
+  }
+}
+
+.deleteClass {
+  grid-area: delete;
+  justify-self: end;
+  align-self: end;
+  @media print {
+    grid-area: geschaetztVal;
+    button {
+      display: none;
+    }
+  }
+}
+
+.styledDeleteButton {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  min-width: 40px !important;
+}
+
+.styledAddIcon {
+  font-size: 1.5rem;
+  padding-right: 8px;
+}
+
+.showNew {
+  grid-area: showNew;
+  @media print {
+    button {
+      display: none;
+    }
+  }
+}
