@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  padding: 5px;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.check {
+  padding: 0 5px;
+}
+
+.titel {
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+}
+
+.beschreibung {
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+}

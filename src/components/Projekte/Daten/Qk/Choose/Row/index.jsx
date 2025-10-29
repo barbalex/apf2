@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import Checkbox from '@mui/material/Checkbox'
 import { gql } from '@apollo/client'
 
@@ -8,24 +7,7 @@ import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
-const RowDiv = styled.div`
-  display: flex;
-  padding: 5px;
-  border-bottom: 1px solid #e8e8e8;
-`
-const Check = styled.div`
-  padding: 0 5px;
-`
-const Titel = styled.div`
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-`
-const Beschreibung = styled.div`
-  padding: 0 5px;
-  display: flex;
-  align-items: center;
-`
+import { container, check, titel, beschreibung } from './index.module.css'
 
 export const Row = ({ apId, qk }) => {
   const apolloClient = useApolloClient()
@@ -86,17 +68,18 @@ export const Row = ({ apId, qk }) => {
   }
 
   if (error) return <Error error={error} />
+
   return (
-    <RowDiv>
-      <Check>
+    <div className={container}>
+      <div className={check}>
         <Checkbox
           checked={checked}
           onChange={onChange}
           color="primary"
         />
-      </Check>
-      <Titel>{qk.titel}</Titel>
-      <Beschreibung>{qk.beschreibung}</Beschreibung>
-    </RowDiv>
+      </div>
+      <div className={titel}>{qk.titel}</div>
+      <div className={beschreibung}>{qk.beschreibung}</div>
+    </div>
   )
 }
