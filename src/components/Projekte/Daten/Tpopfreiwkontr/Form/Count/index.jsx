@@ -32,7 +32,7 @@ import {
   deleteClass,
   styledDeleteButton,
   styledAddIcon,
-  showNew,
+  showNewClass,
 } from './index.module.css'
 
 const getZaehleinheitWerte = ({
@@ -168,7 +168,7 @@ export const Count = observer(
           className={`${containerBase} ${containerClass}`}
         >
           <div className={einheitLabel}>{`Zähleinheit ${nr}`}</div>
-          <div className={showNew}>
+          <div className={showNewClass}>
             <Button
               color="primary"
               onClick={createNew}

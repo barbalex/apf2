@@ -172,7 +172,7 @@
   padding-right: 8px;
 }
 
-.showNew {
+.showNewClass {
   grid-area: showNew;
   @media print {
     button {
