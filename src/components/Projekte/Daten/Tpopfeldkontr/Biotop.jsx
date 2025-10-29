@@ -15,8 +15,10 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { fieldTypes, FormContainer, Section } from './Form.jsx'
+import { fieldTypes } from './Form.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+
+import { formContainer, section } from './Form.module.css'
 
 export const Component = observer(() => {
   const { tpopkontrId } = useParams()
@@ -107,7 +109,7 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <FormTitle title="Biotop" />
-      <FormContainer>
+      <div className={formContainer}>
         <TextField
           name="flaeche"
           label="Fläche"
@@ -116,7 +118,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.flaeche}
         />
-        <Section>Vegetation</Section>
+        <div className={section}>Vegetation</div>
         <Select
           data-id="lrDelarze"
           name="lrDelarze"
@@ -184,7 +186,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.baumschicht}
         />
-        <Section>Beurteilung</Section>
+        <div className={section}>Beurteilung</div>
         <TextField
           name="handlungsbedarf"
           label="Handlungsbedarf"
@@ -203,7 +205,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.idealbiotopUebereinstimmung}
         />
-      </FormContainer>
+      </div>
     </ErrorBoundary>
   )
 })
