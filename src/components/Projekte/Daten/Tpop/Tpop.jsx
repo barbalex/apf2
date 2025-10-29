@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -30,16 +29,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { query } from './query.js'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-  column-width: ${constants.columnWidth}px;
-`
+import { container } from './Tpop.module.css'
 
 export const fieldTypes = {
   popId: 'UUID',
@@ -211,7 +201,7 @@ export const Component = observer(() => {
         MenuBarComponent={Menu}
         menuBarProps={{ row }}
       />
-      <Container>
+      <div className={container}>
         <TextField
           name="nr"
           label="Nr."
@@ -507,7 +497,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.bewirtschaftung}
         />
-      </Container>
+      </div>
     </>
   )
 })

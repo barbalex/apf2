@@ -5,6 +5,7 @@ import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { isEqual } from 'es-toolkit'
+import Button from '@mui/material/Button'
 
 import { useSetAtom, useAtom } from 'jotai'
 import {
@@ -19,7 +20,8 @@ import { showCoordOfBeobOnMapsZhCh } from '../../../../modules/showCoordOfBeobOn
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfBeobOnMapGeoAdminCh.js'
 import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/index.js'
-import { StyledLoadingButton, StyledButton } from '../Tpop/Menu.jsx'
+
+import { styledLoadingButton, styledButton } from '../Tpop/Menu.module.css'
 
 export const Menu = observer(() => {
   const { search, pathname } = useLocation()
@@ -105,58 +107,63 @@ export const Menu = observer(() => {
         rerenderer={`${copyingBeobZugeordnetKoordToTpop}/${isBeobZugeordnet}/${isBeobNichtBeurteilt}/${creatingNewPopFromBeob}`}
       >
         {isBeobZugeordnet && (
-          <StyledLoadingButton
+          <Button
             variant="outlined"
             onClick={onClickCopyingBeobZugeordnetKoordToTpop}
             loading={copyingBeobZugeordnetKoordToTpop}
             width={190}
+            className={styledLoadingButton}
           >
             Koordinaten auf die
             <br />
             Teilpopulation übertragen
-          </StyledLoadingButton>
+          </Button>
         )}
         {isBeobNichtBeurteilt && (
-          <StyledLoadingButton
+          <Button
             variant="outlined"
             onClick={onClickCreateNewPopFromBeob}
             loading={creatingNewPopFromBeob}
             width={245}
+            className={styledLoadingButton}
           >
             {'Pop. und TPop. gründen >'}
             <br />
             {'Beobachtung der TPop. zuordnen'}
-          </StyledLoadingButton>
+          </Button>
         )}
         {isBeobNichtBeurteilt && (
-          <StyledButton
+          <Button
             variant="outlined"
             onClick={onClickNewTpopFromBeob}
             width={258}
+            className={styledButton}
           >
             {'TPop. in bestehender Pop. gründen'}
             <br />
             {'> Beobachtung der TPop. zuordnen'}
-          </StyledButton>
+          </Button>
         )}
-        <StyledButton
+        <Button
           variant="outlined"
           onClick={onClickShowCoordOfBeobOnMapsZhCh}
           width={105}
+          className={styledButton}
         >
           zeige auf
           <br />
           maps.zh.ch
-        </StyledButton>
-        <StyledButton
+        </Button>
+        <Button
           variant="outlined"
           onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
           width={147}
+          className={styledButton}
         >
           zeige auf
           <br />
           map.geo.admin.ch
-        </StyledButton>
+        </Button>
       </MenuBar>
     </ErrorBoundary>
   )

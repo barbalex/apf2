@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+  column-width: var(--column-width);
+}
