@@ -21,7 +21,7 @@ export const Fetcher = ({
     return null
   }
   // do not want to show self i.e. 'Massnahme' in 'Massnahmen'
-  const menus = navData?.menus?.filter((m) => !m.isSelf)
+  const menus = navData?.menus?.filter?.((m) => !m.isSelf)
 
   if (!menus?.length) return null
 
