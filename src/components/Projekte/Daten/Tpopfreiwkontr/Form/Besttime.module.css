@@ -1,0 +1,21 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  break-inside: avoid;
+  grid-area: besttime;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: 'besttimeLabel besttimeVal besttimeVal';
+  grid-column-gap: 10px;
+  align-items: center;
+}
+
+.label {
+  font-weight: 700;
+  grid-area: besttimeLabel;
+}
+
+.val {
+  grid-area: besttimeVal;
+}
