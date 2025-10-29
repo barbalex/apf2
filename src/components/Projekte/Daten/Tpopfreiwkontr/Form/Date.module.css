@@ -1,0 +1,35 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  break-inside: avoid;
+  grid-area: date;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: 'dateLabel dateVal dateVal';
+  grid-column-gap: 10px;
+  align-items: center;
+}
+
+.label {
+  font-weight: 700;
+  grid-area: dateLabel;
+  align-items: center;
+}
+
+.val {
+  grid-area: dateVal;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  > div {
+    padding-bottom: 0 !important;
+    align-items: center;
+    margin-bottom: 0 !important;
+  }
+  @media print {
+    input {
+      font-size: 11px;
+    }
+  }
+}
