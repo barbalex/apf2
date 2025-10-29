@@ -1,0 +1,25 @@
+.container {
+  height: 100%;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  @media print {
+    font-size: 11px;
+    height: auto;
+    width: inherit;
+    margin: 0 !important;
+    padding: 0.5cm !important;
+    overflow: hidden;
+    page-break-after: always;
+  }
+}
+
+.scrollContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}

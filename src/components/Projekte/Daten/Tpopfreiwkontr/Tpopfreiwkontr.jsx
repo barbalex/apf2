@@ -1,5 +1,4 @@
 import { useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -14,31 +13,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Form } from './Form/index.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  flex-grow: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  @media print {
-    font-size: 11px;
-    height: auto;
-    width: inherit;
-    margin: 0 !important;
-    padding: 0.5cm !important;
-    overflow: hidden;
-    page-break-after: always;
-  }
-`
-// somehow scrollbars were not shown without explicitly setting height
-const ScrollContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
+import { container, scrollContainer } from './Tpopfreiwkontr.module.css'
 
 export const Component = observer(({ id: idPassed }) => {
   const params = useParams()
@@ -138,7 +113,7 @@ export const Component = observer(({ id: idPassed }) => {
   // console.log('Tpopfreiwkontr, isPrint:', isPrint)
 
   return (
-    <Container>
+    <div className={container}>
       {!pathname.includes('EKF') && (
         <>
           <FormTitle
@@ -155,15 +130,15 @@ export const Component = observer(({ id: idPassed }) => {
           apId={apId}
           refetch={refetch}
         />
-      : <ScrollContainer>
+      : <div className={scrollContainer}>
           <Form
             data={data?.data}
             row={row}
             apId={apId}
             refetch={refetch}
           />
-        </ScrollContainer>
+        </div>
       }
-    </Container>
+    </div>
   )
 })
