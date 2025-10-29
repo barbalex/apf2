@@ -17,6 +17,7 @@
 
 .docLine {
   margin-bottom: 0;
+  margin-top: 8px;
   &:first-of-type {
     margin-top: 0;
   }
