@@ -1,4 +1,4 @@
-.einheitVal {
+.val {
   grid-area: einheitVal;
   > div {
     margin-top: -5px;
@@ -16,9 +16,6 @@
 
 .label {
   font-weight: 700;
-}
-
-.einheitLabel {
   grid-area: einheitLabel;
   hyphens: auto;
   margin-top: 5px;

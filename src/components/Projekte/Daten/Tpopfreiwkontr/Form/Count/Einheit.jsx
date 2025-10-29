@@ -8,7 +8,7 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
-import { einheitVal, label, einheitLabel } from './Einheit.module.css'
+import { val, label } from './Einheit.module.css'
 
 export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
   const store = useContext(MobxContext)
@@ -43,11 +43,8 @@ export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
 
   return (
     <>
-      <div
-        className={label}
-        className={einheitLabel}
-      >{`Zähleinheit ${nr}`}</div>
-      <div className={einheitVal}>
+      <div className={label}>{`Zähleinheit ${nr}`}</div>
+      <div className={val}>
         <Select
           value={row.einheit}
           label=""
