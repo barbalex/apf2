@@ -1,0 +1,42 @@
+.container {
+  grid-area: image;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  break-inside: avoid;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 20fr;
+  grid-template-areas:
+    'title'
+    'myImage';
+  container-type: size;
+  min-height: 250px;
+  @media print {
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+.imageContainer {
+  grid-area: myImage;
+  height: calc(100cqh - 20px);
+}
+
+.img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.title {
+  grid-area: title;
+  font-weight: 700;
+  justify-self: center;
+}
+
+.notifContainer {
+  grid-area: myImage;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
