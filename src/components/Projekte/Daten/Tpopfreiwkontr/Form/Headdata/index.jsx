@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -17,68 +16,20 @@ import {
 } from '../../../../../shared/fragments.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
-const Area = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-  break-inside: avoid;
-`
-const Container = styled(Area)`
-  grid-area: headdata;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas:
-    'popLabel popVal popVal'
-    'tpopLabel tpopVal tpopVal'
-    'koordLabel koordVal koordVal'
-    'tpopNrLabel tpopNrVal statusVal'
-    'bearbLabel bearbVal bearbVal';
-  grid-column-gap: 10px;
-  div:nth-of-type(n + 3) {
-    padding-top: 10px;
-  }
-`
-const Label = styled.div`
-  font-weight: 700;
-`
-const PopLabel = styled(Label)`
-  grid-area: popLabel;
-`
-const PopVal = styled.div`
-  grid-area: popVal;
-`
-const TpopLabel = styled(Label)`
-  grid-area: tpopLabel;
-`
-const TpopVal = styled.div`
-  grid-area: tpopVal;
-`
-const KoordLabel = styled(Label)`
-  grid-area: koordLabel;
-`
-const KoordVal = styled.div`
-  grid-area: koordVal;
-`
-const TpopNrLabel = styled(Label)`
-  grid-area: tpopNrLabel;
-`
-const TpopNrVal = styled.div`
-  grid-area: tpopNrVal;
-`
-const BearbLabel = styled(Label)`
-  grid-area: bearbLabel;
-  margin-top: 5px;
-`
-const BearbVal = styled.div`
-  grid-area: bearbVal;
-  > div {
-    margin-top: -5px;
-    padding-bottom: 0;
-  }
-`
-const StatusLabel = styled(Label)`
-  grid-area: statusVal;
-`
+import {
+  container,
+  popLabel,
+  popVal,
+  tpopLabel,
+  tpopVal,
+  koordLabel,
+  koordVal,
+  tpopNrLabel,
+  tpopNrVal,
+  bearbLabel,
+  bearbVal,
+  statusLabel,
+} from './index.module.css'
 
 export const Headdata = observer(({ pop, tpop, row }) => {
   const store = useContext(MobxContext)
@@ -175,17 +126,19 @@ export const Headdata = observer(({ pop, tpop, row }) => {
 
   if (error) return <Error error={error} />
   return (
-    <Container>
-      <PopLabel>Population</PopLabel>
-      <PopVal>{pop?.name ?? ''}</PopVal>
-      <TpopLabel>Teilpopulation</TpopLabel>
-      <TpopVal>{tpop?.flurname ?? ''}</TpopVal>
-      <KoordLabel>Koordinaten</KoordLabel>
-      <KoordVal>{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</KoordVal>
-      <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-      <TpopNrVal>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</TpopNrVal>
-      <BearbLabel>BeobachterIn</BearbLabel>
-      <BearbVal>
+    <div className={container}>
+      <div className={popLabel}>Population</div>
+      <div className={popVal}>{pop?.name ?? ''}</div>
+      <div className={tpopLabel}>Teilpopulation</div>
+      <div className={tpopVal}>{tpop?.flurname ?? ''}</div>
+      <div className={koordLabel}>Koordinaten</div>
+      <div
+        className={koordVal}
+      >{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</div>
+      <div className={tpopNrLabel}>Teilpop.Nr.</div>
+      <div className={tpopNrVal}>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</div>
+      <div className={bearbLabel}>BeobachterIn</div>
+      <div className={bearbVal}>
         <Select
           key={`${row.id}bearbeiter`}
           name="bearbeiter"
@@ -200,8 +153,8 @@ export const Headdata = observer(({ pop, tpop, row }) => {
             : errors
           }
         />
-      </BearbVal>
-      <StatusLabel>{status}</StatusLabel>
-    </Container>
+      </div>
+      <div className={statusLabel}>{status}</div>
+    </div>
   )
 })
