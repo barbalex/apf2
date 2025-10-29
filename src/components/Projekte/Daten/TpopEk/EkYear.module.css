@@ -1,0 +1,5 @@
+.styledTableRow {
+  &:hover {
+    background: rgba(255, 211, 167, 0.3) !important;
+  }
+}
