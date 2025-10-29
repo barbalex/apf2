@@ -31,7 +31,7 @@ export const baseLayers = [
   { label: 'ZH Übersichtsplan', value: 'ZhUep', cors: true },
   // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
   {
-    label: 'ZH Orthofoto aktuell',
+    label: 'ZH Orthofoto aktuell (2024)',
     value: 'ZhOrthoAktuellRgb',
     cors: true,
   },

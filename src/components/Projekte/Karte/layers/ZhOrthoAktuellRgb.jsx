@@ -1,14 +1,6 @@
 import { WMSTileLayer, Pane } from 'react-leaflet'
 
 // https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
-/**
- * neu:
- * - ortho_s_fcir_2020 (Orthofoto ZH Sommer FCIR 2020)
- * - ortho_s_2020 (Orthofoto ZH Sommer 2020)
- * - ortho_w_fcir_2021 (Orthofoto ZH Frühjahr FCIR 2021)
- * - ortho_w_2021 (Orthofoto ZH Frühjahr 2021)
- *
- */
 
 export const ZhOrthoAktuellRgb = () => (
   <Pane
@@ -18,7 +10,11 @@ export const ZhOrthoAktuellRgb = () => (
   >
     <WMSTileLayer
       url="//wms.zh.ch/OGDOrthoZH"
-      layers="OGDOrthoZH"
+      // layers="OGDOrthoZH"
+      // above layer adds tiling which is not desired here
+      // WARNING: when updating, also update layer name here:
+      // ../LayersControl/BaseLayers/index.jsx
+      layers="ortho_s_2024"
       version="1.3.0"
       format="image/png"
       maxNativeZoom={18}
