@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+  padding-bottom: 35px;
+}
+
+.ekfrequenzOptionsContainer {
+  label:hover {
+    background: rgba(128, 128, 128, 0.2);
+  }
+  span {
+    font-family: 'Roboto Mono' !important;
+    font-size: 14px;
+    white-space: pre;
+    line-height: 1.5rem;
+    font-weight: 500;
+  }
+}

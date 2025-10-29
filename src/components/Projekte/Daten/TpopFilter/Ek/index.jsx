@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
@@ -10,33 +9,12 @@ import { query } from './query.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-  padding-bottom: 35px;
-`
-const EkfrequenzOptionsContainer = styled.div`
-  label:hover {
-    background: rgba(128, 128, 128, 0.2);
-  }
-  span {
-    font-family: 'Roboto Mono' !important;
-    font-size: 14px;
-    white-space: pre;
-    line-height: 1.5rem;
-    font-weight: 500;
-  }
-`
+import { container, ekfrequenzOptionsContainer } from './index.module.css'
 
 export const Ek = ({ saveToDb, row, fieldErrors }) => {
   const { apId } = useParams()
 
-  const { data: dataEk, loading: loadingEk } = useQuery(query, {
+  const { data: dataEk, loading } = useQuery(query, {
     variables: {
       apId,
     },
@@ -56,24 +34,24 @@ export const Ek = ({ saveToDb, row, fieldErrors }) => {
     }
   })
 
-  if (loadingEk) return <Spinner />
+  if (loading) return <Spinner />
 
   if (!row) return null
 
   return (
     <ErrorBoundary>
-      <Container>
-        <EkfrequenzOptionsContainer>
+      <div className={container}>
+        <div className={ekfrequenzOptionsContainer}>
           <RadioButtonGroup
             name="ekfrequenz"
             dataSource={ekfrequenzOptions}
-            loading={loadingEk}
+            loading={loading}
             label="EK-Frequenz"
             value={row.ekfrequenz}
             saveToDb={saveToDb}
             error={fieldErrors.ekfrequenz}
           />
-        </EkfrequenzOptionsContainer>
+        </div>
         <Checkbox2States
           name="ekfrequenzAbweichend"
           label="EK-Frequenz abweichend"
@@ -93,12 +71,12 @@ export const Ek = ({ saveToDb, row, fieldErrors }) => {
           name="ekfKontrolleur"
           label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
           options={dataEk?.allAdresses?.nodes ?? []}
-          loading={loadingEk}
+          loading={loading}
           value={row.ekfKontrolleur}
           saveToDb={saveToDb}
           error={fieldErrors.ekfKontrolleur}
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 }
