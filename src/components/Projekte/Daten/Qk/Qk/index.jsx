@@ -63,14 +63,6 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
   const onChangeBerichtjahr = (event) => setBerichtjahr(+event.target.value)
   const onChangeFilter = (event) => setFilter(event.target.value)
 
-  console.log('Qk', {
-    apId,
-    projId,
-    berichtjahr,
-    tpopMitAktuellenKontrollenOhneZielrelevanteEinheitNodes:
-      data?.tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?.nodes,
-  })
-
   const messageFunctions = createMessageFunctions({
     data,
     projId,

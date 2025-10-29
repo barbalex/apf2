@@ -129,6 +129,15 @@ const query = gql`
   }
 `
 
+import {
+  container,
+  errorContainer,
+  docLink,
+  docLine,
+  aenderung,
+  aktuell,
+} from './Historien.module.css'
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
