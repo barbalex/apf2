@@ -13,7 +13,6 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -24,14 +23,6 @@ import { copyBiotopTo } from '../../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { is } from 'date-fns/locale'
 
-const MoveIcon = styled(MdOutlineMoveDown)`
-  color: ${(props) =>
-    props.moving === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
-const CopyIcon = styled(MdContentCopy)`
-  color: ${(props) =>
-    props.copying === 'true' ? 'rgb(255, 90, 0) !important' : 'white'};
-`
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }) => {
@@ -285,10 +276,13 @@ export const Menu = observer(({ row }) => {
           }
         >
           <IconButton onClick={onClickMoveInTree}>
-            <MoveIcon
-              moving={(
-                isMovingFeldkontr && thisTpopfeldkontrIsMoving
-              ).toString()}
+            <MdOutlineMoveDown
+              style={{
+                color:
+                  isMovingFeldkontr && thisTpopfeldkontrIsMoving ?
+                    'rgb(255, 90, 0) !important'
+                  : 'white',
+              }}
             />
           </IconButton>
         </Tooltip>
@@ -302,7 +296,14 @@ export const Menu = observer(({ row }) => {
         {isCopyingTpopfeldkontr ?
           <Tooltip title={`Kopiere '${copying.label}' in diese Teilpopulation`}>
             <IconButton onClick={onClickCopyFeldkontrToHere}>
-              <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
+              <MdContentCopy
+                style={{
+                  color:
+                    thisTpopfeldkontrIsCopying === 'true' ?
+                      'rgb(255, 90, 0) !important'
+                    : 'white',
+                }}
+              />
             </IconButton>
           </Tooltip>
         : isCopyingBiotop ?
@@ -310,7 +311,7 @@ export const Menu = observer(({ row }) => {
             title={`Kopiere Biotop von '${copyingBiotop.label}' hierhin`}
           >
             <IconButton onClick={onClickCopyBiotopToHere}>
-              <CopyIcon copying={'false'} />
+              <MdContentCopy style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
         : <Tooltip title="Kopieren">
@@ -320,7 +321,14 @@ export const Menu = observer(({ row }) => {
               }
               aria-owns={copyBiotopMenuOpen ? 'copyBiotopMenu' : undefined}
             >
-              <CopyIcon copying={thisTpopfeldkontrIsCopying.toString()} />
+              <MdContentCopy
+                style={{
+                  color:
+                    thisTpopfeldkontrIsCopying === 'true' ?
+                      'rgb(255, 90, 0) !important'
+                    : 'white',
+                }}
+              />
             </IconButton>
           </Tooltip>
         }
