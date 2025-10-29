@@ -1,47 +1,16 @@
-import styled from '@emotion/styled'
-
 import { TextField2 } from '../../../../shared/TextField2.jsx'
-
-const Container = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-  break-inside: avoid;
-  grid-area: remarks;
-`
-const RemarksLabel = styled.div`
-  font-weight: 700;
-  margin-bottom: -10px;
-`
-const RemarksSubLabel = styled.span`
-  padding-left: 5px;
-  font-weight: 700;
-  font-size: 14px;
-  @media print {
-    font-size: 11px;
-  }
-`
-const RemarksVal = styled.div`
-  > div {
-    margin-bottom: -25px;
-  }
-  textarea {
-    @media print {
-      font-size: 11px !important;
-    }
-  }
-`
+import { container, label, subLabel, val } from './Remarks.module.css'
 
 export const Remarks = ({ saveToDb, row, errors }) => (
-  <Container>
-    <RemarksLabel>
+  <div className={container}>
+    <div className={label}>
       Spezielle Bemerkungen
-      <RemarksSubLabel>
+      <span className={subLabel}>
         (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung, spezielle
         Begebenheiten)
-      </RemarksSubLabel>
-    </RemarksLabel>
-    <RemarksVal>
+      </span>
+    </div>
+    <div className={val}>
       <TextField2
         key={`${row.id}bemerkungen`}
         name="bemerkungen"
@@ -51,6 +20,6 @@ export const Remarks = ({ saveToDb, row, errors }) => (
         saveToDb={saveToDb}
         errors={errors}
       />
-    </RemarksVal>
-  </Container>
+    </div>
+  </div>
 )
