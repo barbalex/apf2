@@ -42,7 +42,7 @@ export const PopFilter = observer(() => {
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
     if (dataFilter.pop.length - 1 < activeTab) {
-      // filter was emtied, need to set correct tab
+      // filter was emptied, need to set correct tab
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.pop.length])
