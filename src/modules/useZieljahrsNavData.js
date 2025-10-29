@@ -1,4 +1,4 @@
-import { useEffect, useContext } from 'react'
+import { useEffect, useContext, useMemo } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -65,11 +65,18 @@ export const useZieljahrsNavData = (props) => {
     [],
   )
 
-  const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
-  const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
+  const ziels = useMemo(
+    () => data?.data?.apById?.zielsByApId?.nodes ?? [],
+    [data?.data?.apById?.zielsByApId?.nodes],
+  )
+  const filteredZiels = useMemo(
+    () => data?.data?.apById?.filteredZiels?.nodes ?? [],
+    [data?.data?.apById?.filteredZiels?.nodes],
+  )
   const zieljahrsCount = getZieljahrsCount(ziels)
 
-  const menus = () => {
+  // ISSUE: menus does not update when removing useMemo
+  const menus = useMemo(() => {
     const countByJahr = countBy(filteredZiels, (e) => e.jahr)
     const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)
     // convert into array of objects with id=jahr and count
@@ -88,7 +95,7 @@ export const useZieljahrsNavData = (props) => {
     }))
 
     return jahre
-  }
+  }, [apId, filteredZiels, projId, ziels])
 
   const navData = {
     id: 'AP-Ziele',
