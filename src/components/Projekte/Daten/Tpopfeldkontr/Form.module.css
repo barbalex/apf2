@@ -1,0 +1,21 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+  height: 100%;
+}
+
+/* not used in own form, but was exported */
+.section {
+  padding-top: 20px;
+  padding-bottom: 5px;
+  font-weight: bold;
+  break-after: avoid;
+  &:after {
+    content: ':';
+  }
+}

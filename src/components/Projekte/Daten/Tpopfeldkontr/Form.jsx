@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -20,25 +19,7 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-export const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-  height: 100%;
-`
-export const Section = styled.div`
-  padding-top: 20px;
-  padding-bottom: 5px;
-  font-weight: bold;
-  break-after: avoid;
-  &:after {
-    content: ':';
-  }
-`
+import { formContainer } from './Form.module.css'
 
 export const fieldTypes = {
   typ: 'String',
@@ -163,7 +144,7 @@ export const TpopfeldkontrForm = observer(({ row, data }) => {
 
   return (
     <ErrorBoundary>
-      <FormContainer>
+      <div className={formContainer}>
         <TextField
           name="jahr"
           label="Jahr"
@@ -302,7 +283,7 @@ export const TpopfeldkontrForm = observer(({ row, data }) => {
           text={row.id}
           label="id"
         />
-      </FormContainer>
+      </div>
     </ErrorBoundary>
   )
 })
