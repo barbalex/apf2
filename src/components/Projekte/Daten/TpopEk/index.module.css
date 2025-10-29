@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.formContainerNoColumnsInner {
+  padding: 10px;
+  padding-bottom: 35px;
+}
+
+.ekfrequenzOptionsContainer {
+  label:hover {
+    background: rgba(128, 128, 128, 0.2);
+  }
+  span {
+    font-family: 'Roboto Mono' !important;
+    font-size: 14px;
+    white-space: pre;
+    line-height: 1.5rem;
+    font-weight: 500;
+  }
+}
+
+.styledTable {
+  padding-left: 10px;
+  padding-right: 10px;
+  thead {
+    background: rgba(128, 128, 128, 0.2);
+  }
+  thead tr th {
+    font-size: 0.875rem;
+    color: black;
+  }
+  tbody tr:nth-of-type(even) {
+    background: rgba(128, 128, 128, 0.05);
+  }
+  th:first-of-type,
+  td:first-of-type {
+    padding-left: 10px;
+  }
+}
+
+.ekplanTitle {
+  margin-top: -30px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}

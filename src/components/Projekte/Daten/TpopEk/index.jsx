@@ -5,7 +5,6 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import styled from '@emotion/styled'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -31,53 +30,13 @@ import {
 import { fieldTypes } from '../Tpop/Tpop.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const FormContainerNoColumnsInner = styled.div`
-  padding: 10px;
-  padding-bottom: 35px;
-`
-const EkfrequenzOptionsContainer = styled.div`
-  label:hover {
-    background: rgba(128, 128, 128, 0.2);
-  }
-  span {
-    font-family: 'Roboto Mono' !important;
-    font-size: 14px;
-    white-space: pre;
-    line-height: 1.5rem;
-    font-weight: 500;
-  }
-`
-const StyledTable = styled(Table)`
-  padding-left: 10px;
-  padding-right: 10px;
-  thead {
-    background: rgba(128, 128, 128, 0.2);
-  }
-  thead tr th {
-    font-size: 0.875rem;
-    color: black;
-  }
-  tbody tr:nth-of-type(even) {
-    background: rgba(128, 128, 128, 0.05);
-  }
-  th:first-of-type,
-  td:first-of-type {
-    padding-left: 10px;
-  }
-`
-const EkplanTitle = styled.h5`
-  margin-top: -30px;
-  margin-left: 10px;
-  margin-bottom: 10px;
-`
+import {
+  container,
+  formContainerNoColumnsInner,
+  ekfrequenzOptionsContainer,
+  styledTable,
+  ekplanTitle,
+} from './index.module.css'
 
 export const Component = observer(() => {
   const { tpopId, apId } = useParams()
@@ -218,9 +177,9 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <FormTitle title="EK" />
-      <Container>
-        <FormContainerNoColumnsInner>
-          <EkfrequenzOptionsContainer>
+      <div className={container}>
+        <div className={formContainerNoColumnsInner}>
+          <div className={ekfrequenzOptionsContainer}>
             <RadioButtonGroup
               name="ekfrequenz"
               dataSource={ekfrequenzOptions}
@@ -230,7 +189,7 @@ export const Component = observer(() => {
               saveToDb={saveToDb}
               error={fieldErrors.ekfrequenz}
             />
-          </EkfrequenzOptionsContainer>
+          </div>
           <Checkbox2States
             name="ekfrequenzAbweichend"
             label="EK-Frequenz abweichend"
@@ -255,9 +214,12 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.ekfKontrolleur}
           />
-        </FormContainerNoColumnsInner>
-        <EkplanTitle>EK-Plan</EkplanTitle>
-        <StyledTable size="small">
+        </div>
+        <h5 className={ekplanTitle}>EK-Plan</h5>
+        <Table
+          size="small"
+          className={styledTable}
+        >
           <TableHead>
             <TableRow>
               <TableCell>Jahr</TableCell>
@@ -284,8 +246,8 @@ export const Component = observer(() => {
                 ))
             }
           </TableBody>
-        </StyledTable>
-      </Container>
+        </Table>
+      </div>
     </ErrorBoundary>
   )
 })
