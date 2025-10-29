@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import { Form, useParams } from 'react-router'
@@ -25,48 +24,14 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Tabs } from './Tabs.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  background-color: #ffd3a7;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-  height: 100%;
-`
-const Section = styled.div`
-  padding-top: 20px;
-  padding-bottom: 5px;
-  font-weight: bold;
-  break-after: avoid;
-  &:after {
-    content: ':';
-  }
-`
-const StyledTab = styled(Tab)`
-  text-transform: none !important;
-`
-const FilterCommentTitle = styled.div`
-  margin-top: -10px;
-  margin-bottom: -10px;
-  padding: 0 10px;
-  font-size: 0.75em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
-`
-const FilterCommentList = styled.ul``
-const FilterComment = styled.li`
-  padding: 0 10px;
-  font-size: 0.75em;
-`
+import {
+  container,
+  formContainer,
+  section,
+  styledTab,
+  filterCommentTitle,
+  filterComment,
+} from './index.module.css'
 
 const tpopkontrTypWerte = [
   {
@@ -177,7 +142,7 @@ export const TpopfeldkontrFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FilterTitle
           title="Feld-Kontrollen"
           table="tpopfeldkontr"
@@ -187,30 +152,30 @@ export const TpopfeldkontrFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
-            <FilterCommentList>
+            <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <ul>
               {!!navApFilterComment && (
-                <FilterComment>{navApFilterComment}</FilterComment>
+                <li className={filterComment}>{navApFilterComment}</li>
               )}
               {!!navHiearchyComment && (
-                <FilterComment>{navHiearchyComment}</FilterComment>
+                <li className={filterComment}>{navHiearchyComment}</li>
               )}
               {!!navLabelComment && (
-                <FilterComment>{navLabelComment}</FilterComment>
+                <li className={filterComment}>{navLabelComment}</li>
               )}
               {!!artHierarchyComment && (
-                <FilterComment>{artHierarchyComment}</FilterComment>
+                <li className={filterComment}>{artHierarchyComment}</li>
               )}
               {!!popHierarchyComment && (
-                <FilterComment>{popHierarchyComment}</FilterComment>
+                <li className={filterComment}>{popHierarchyComment}</li>
               )}
               {!!tpopHierarchyComment && (
-                <FilterComment>{tpopHierarchyComment}</FilterComment>
+                <li className={filterComment}>{tpopHierarchyComment}</li>
               )}
               {!!mapFilterComment && (
-                <FilterComment>{mapFilterComment}</FilterComment>
+                <li className={filterComment}>{mapFilterComment}</li>
               )}
-            </FilterCommentList>
+            </ul>
           </>
         )}
         <Tabs
@@ -225,18 +190,20 @@ export const TpopfeldkontrFilter = observer(() => {
           textColor="primary"
           centered
         >
-          <StyledTab
+          <Tab
             label="Entwicklung"
             value="entwicklung"
             data-id="entwicklung"
+            className={styledTab}
           />
-          <StyledTab
+          <Tab
             label="Biotop"
             value="biotop"
             data-id="biotop"
+            className={styledTab}
           />
         </MuiTabs>
-        <FormContainer>
+        <div className={formContainer}>
           {tab === 'entwicklung' && (
             <>
               <TextField
@@ -368,7 +335,7 @@ export const TpopfeldkontrFilter = observer(() => {
                 value={row?.flaeche}
                 saveToDb={saveToDb}
               />
-              <Section>Vegetation</Section>
+              <div className={section}>Vegetation</div>
               <Select
                 data-id="lrDelarze"
                 name="lrDelarze"
@@ -428,7 +395,7 @@ export const TpopfeldkontrFilter = observer(() => {
                 value={row?.baumschicht}
                 saveToDb={saveToDb}
               />
-              <Section>Beurteilung</Section>
+              <div className={section}>Beurteilung</div>
               <TextField
                 name="handlungsbedarf"
                 label="Handlungsbedarf"
@@ -449,8 +416,8 @@ export const TpopfeldkontrFilter = observer(() => {
               />
             </>
           )}
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
