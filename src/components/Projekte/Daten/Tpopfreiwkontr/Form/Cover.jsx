@@ -1,86 +1,22 @@
-import styled from '@emotion/styled'
-import { observer } from 'mobx-react-lite'
-
 import { TextField2 } from '../../../../shared/TextField2.jsx'
 import anteilImg from './anteil.png'
 
-const Area = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-  break-inside: avoid;
-`
-const Container = styled(Area)`
-  grid-area: cover;
-  display: grid;
-  grid-template-columns: 4fr 3fr 15px;
-  grid-template-areas:
-    'deckApArtLabel deckApArtVal deckApArtMass'
-    'deckNaBoLabel deckNaBoVal deckNaBoMass'
-    'deckImage deckImage deckImage';
-  grid-column-gap: 10px;
-`
-const Label = styled.div`
-  font-weight: 700;
-`
-const DeckApArtLabel = styled(Label)`
-  grid-area: deckApArtLabel;
-`
-const DeckApArtVal = styled.div`
-  grid-area: deckApArtVal;
-  > div {
-    margin-top: -20px;
-    padding-bottom: 5px !important;
-  }
-  > div > div > input {
-    @media print {
-      font-size: 11px !important;
-    }
-  }
-`
-const DeckApArtMass = styled.div`
-  grid-area: deckApArtMass;
-`
-const DeckNaBoLabel = styled(Label)`
-  grid-area: deckNaBoLabel;
-`
-const DeckNaBoVal = styled.div`
-  grid-area: deckNaBoVal;
-  > div {
-    margin-top: -25px;
-    padding-bottom: 5px !important;
-  }
-  > div > div > input {
-    @media print {
-      font-size: 11px !important;
-    }
-  }
-`
-const DeckNaBoMass = styled.div`
-  grid-area: deckNaBoMass;
-`
-// https://www.voorhoede.nl/en/blog/say-no-to-image-reflow
-const DeckImage = styled.div`
-  grid-area: deckImage;
-  display: block;
-  position: relative;
-  height: 0;
-  overflow: hidden;
-  padding-bottom: 59.061%;
-`
-const Img = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  max-width: inherit;
-`
+import {
+  container,
+  deckApArtLabel,
+  deckApArtVal,
+  deckApArtMass,
+  deckNaBoLabel,
+  deckNaBoVal,
+  deckNaBoMass,
+  deckImage,
+  img,
+} from './Cover.module.css'
 
-export const Cover = observer(({ saveToDb, row, errors }) => (
-  <Container>
-    <DeckApArtLabel>Deckung überprüfte Art</DeckApArtLabel>
-    <DeckApArtVal>
+export const Cover = ({ saveToDb, row, errors }) => (
+  <div className={container}>
+    <div className={deckApArtLabel}>Deckung überprüfte Art</div>
+    <div className={deckApArtVal}>
       <TextField2
         key={`${row.id}deckungApArt`}
         name="deckungApArt"
@@ -89,10 +25,10 @@ export const Cover = observer(({ saveToDb, row, errors }) => (
         saveToDb={saveToDb}
         errors={errors}
       />
-    </DeckApArtVal>
-    <DeckApArtMass>%</DeckApArtMass>
-    <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
-    <DeckNaBoVal>
+    </div>
+    <div className={deckApArtMass}>%</div>
+    <div className={deckNaBoLabel}>Flächenanteil nackter Boden</div>
+    <div className={deckNaBoVal}>
       <TextField2
         key={`${row.id}deckungNackterBoden`}
         name="deckungNackterBoden"
@@ -101,13 +37,14 @@ export const Cover = observer(({ saveToDb, row, errors }) => (
         saveToDb={saveToDb}
         errors={errors}
       />
-    </DeckNaBoVal>
-    <DeckNaBoMass>%</DeckNaBoMass>
-    <DeckImage>
-      <Img
+    </div>
+    <div className={deckNaBoMass}>%</div>
+    <div className={deckImage}>
+      <img
+        className={img}
         src={anteilImg}
         alt="Flächen-Anteile"
       />
-    </DeckImage>
-  </Container>
-))
+    </div>
+  </div>
+)

@@ -1,0 +1,77 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  break-inside: avoid;
+  grid-area: cover;
+  display: grid;
+  grid-template-columns: 4fr 3fr 15px;
+  grid-template-areas:
+    'deckApArtLabel deckApArtVal deckApArtMass'
+    'deckNaBoLabel deckNaBoVal deckNaBoMass'
+    'deckImage deckImage deckImage';
+  grid-column-gap: 10px;
+}
+
+.deckApArtLabel {
+  font-weight: 700;
+  grid-area: deckApArtLabel;
+}
+
+.deckApArtVal {
+  grid-area: deckApArtVal;
+  > div {
+    margin-top: -20px;
+    padding-bottom: 5px !important;
+  }
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
+}
+
+.deckApArtMass {
+  grid-area: deckApArtMass;
+}
+
+.deckNaBoLabel {
+  font-weight: 700;
+  grid-area: deckNaBoLabel;
+}
+
+.deckNaBoVal {
+  grid-area: deckNaBoVal;
+  > div {
+    margin-top: -25px;
+    padding-bottom: 5px !important;
+  }
+  > div > div > input {
+    @media print {
+      font-size: 11px !important;
+    }
+  }
+}
+
+.deckNaBoMass {
+  grid-area: deckNaBoMass;
+}
+
+/* https://www.voorhoede.nl/en/blog/say-no-to-image-reflow */
+.deckImage {
+  grid-area: deckImage;
+  display: block;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  padding-bottom: 59.061%;
+}
+
+.img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  max-width: inherit;
+}
