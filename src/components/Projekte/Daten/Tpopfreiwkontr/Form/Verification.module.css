@@ -1,0 +1,36 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  border-color: red;
+  padding: 10px;
+  break-inside: avoid;
+  legend,
+  label {
+    color: rgba(0, 0, 0, 0.87) !important;
+    font-weight: bold;
+  }
+  grid-area: verification;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-areas:
+    'title title'
+    'relevant grund';
+  grid-column-gap: 10px;
+}
+
+.relevant {
+  grid-area: relevant;
+  fieldset {
+    border-collapse: separate;
+  }
+  fieldset > legend {
+    padding-top: 0 !important;
+  }
+}
+
+.grund {
+  grid-area: grund;
+  > div {
+    margin-bottom: -25px;
+  }
+}
