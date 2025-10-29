@@ -1,0 +1,25 @@
+.einheitVal {
+  grid-area: einheitVal;
+  > div {
+    margin-top: -5px;
+    padding-bottom: 0;
+    @media print {
+      margin-bottom: 0;
+    }
+  }
+  @media print {
+    input {
+      font-size: 11px;
+    }
+  }
+}
+
+.label {
+  font-weight: 700;
+}
+
+.einheitLabel {
+  grid-area: einheitLabel;
+  hyphens: auto;
+  margin-top: 5px;
+}

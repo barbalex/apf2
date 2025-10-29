@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,29 +8,7 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
-const EinheitVal = styled.div`
-  grid-area: einheitVal;
-  > div {
-    margin-top: -5px;
-    padding-bottom: 0;
-    @media print {
-      margin-bottom: 0;
-    }
-  }
-  @media print {
-    input {
-      font-size: 11px;
-    }
-  }
-`
-const Label = styled.div`
-  font-weight: 700;
-`
-const EinheitLabel = styled(Label)`
-  grid-area: einheitLabel;
-  hyphens: auto;
-  margin-top: 5px;
-`
+import { einheitVal, label, einheitLabel } from './Einheit.module.css'
 
 export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
   const store = useContext(MobxContext)
@@ -66,8 +43,11 @@ export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
 
   return (
     <>
-      <EinheitLabel>{`Zähleinheit ${nr}`}</EinheitLabel>
-      <EinheitVal>
+      <div
+        className={label}
+        className={einheitLabel}
+      >{`Zähleinheit ${nr}`}</div>
+      <div className={einheitVal}>
         <Select
           value={row.einheit}
           label=""
@@ -77,7 +57,7 @@ export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
           saveToDb={onChange}
           noCaret
         />
-      </EinheitVal>
+      </div>
     </>
   )
 })
