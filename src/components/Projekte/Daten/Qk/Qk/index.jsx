@@ -4,7 +4,6 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 import Badge from '@mui/material/Badge'
-import styled from '@emotion/styled'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
@@ -22,67 +21,19 @@ import { Error } from '../../../../shared/Error.jsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  overflow: hidden;
-`
-const StyledPaper = styled(Paper)`
-  padding: 10px;
-  margin-bottom: 12px !important;
-  background-color: transparent !important;
-`
-const Title = styled.div`
-  font-weight: bold;
-`
-const StyledA = styled.p`
-  color: inherit;
-  font-weight: normal;
-  font-size: 12px;
-  text-decoration-line: underline;
-  cursor: pointer;
-  margin-bottom: 0;
-  margin-top: 0;
-  padding: 2px 0;
-`
-const Row = styled.div`
-  display: flex;
-`
-const OutsideLink = styled.div`
-  margin-left: 8px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  svg {
-    font-size: 0.9em;
-    color: rgba(0, 0, 0, 0.77);
-  }
-`
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const BerichtjahrControl = styled(FormControl)`
-  padding-bottom: 9px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const AnalyzingButton = styled(Button)`
-  margin-bottom: 15px !important;
-  margin-top: -5px !important;
-  color: rgb(46, 125, 50) !important;
-  text-transform: none !important;
-`
-const AnalyzingSpan = styled.span`
-  padding-right: 13px;
-`
-const ScrollContainer = styled.div`
-  overflow-y: auto;
-`
+import {
+  container,
+  scrollContainer,
+  styledPaper,
+  title,
+  styledA,
+  row,
+  outsideLink,
+  styledFormControl,
+  berichtjahrControl,
+  analyzingButton,
+  analyzingSpan,
+} from './index.module.css'
 
 export const Qk = observer(({ qkNameQueries, qks }) => {
   const { apId, projId } = useParams()
@@ -144,10 +95,11 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
   return (
     <ErrorBoundary>
       <FormTitle title="Qualitätskontrollen ausführen" />
-      <Container>
-        <BerichtjahrControl
+      <div className={container}>
+        <FormControl
           fullWidth
           variant="standard"
+          className={berichtjahrControl}
         >
           <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
           <Input
@@ -156,10 +108,11 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
             type="number"
             onChange={onChangeBerichtjahr}
           />
-        </BerichtjahrControl>
-        <StyledFormControl
+        </FormControl>
+        <FormControl
           fullWidth
           variant="standard"
+          className={styledFormControl}
         >
           <InputLabel htmlFor="filter">
             nach Abschnitts-Titel filtern
@@ -169,39 +122,46 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
             value={filter}
             onChange={onChangeFilter}
           />
-        </StyledFormControl>
+        </FormControl>
         {loading ?
-          <AnalyzingButton
-            onClick={() => refetch()}
+          <Button
+            onClick={refetch}
             variant="outlined"
+            className={analyzingButton}
           >
-            <AnalyzingSpan>Die Daten werden analysiert</AnalyzingSpan>
+            <span className={analyzingSpan}>Die Daten werden analysiert</span>
             <CircularProgress />
-          </AnalyzingButton>
+          </Button>
         : <div>
             <Badge
               badgeContent={messageGroupsFiltered.length}
               color="primary"
             >
-              <AnalyzingButton
+              <Button
                 onClick={() => refetch()}
                 variant="outlined"
+                className={analyzingButton}
               >
                 neu analysieren
-              </AnalyzingButton>
+              </Button>
             </Badge>
           </div>
         }
-        <ScrollContainer>
+        <div className={scrollContainer}>
           {messageGroupsFiltered.map((messageGroup) => (
-            <StyledPaper
+            <Paper
               key={messageGroup.title}
               elevation={2}
+              className={styledPaper}
             >
-              <Title>{messageGroup.title}</Title>
+              <div className={title}>{messageGroup.title}</div>
               {messageGroup.messages.map((m, i) => (
-                <Row key={`${m.text}Index${i}`}>
-                  <StyledA
+                <div
+                  className={row}
+                  key={`${m.text}Index${i}`}
+                >
+                  <p
+                    className={styledA}
                     onClick={() =>
                       openTree2WithActiveNodeArray({
                         activeNodeArray: m.url,
@@ -214,8 +174,9 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
                     title="in Navigationsbaum 2 öffnen"
                   >
                     {m.text}
-                  </StyledA>
-                  <OutsideLink
+                  </p>
+                  <div
+                    className={outsideLink}
                     onClick={() => {
                       const url = `${appBaseUrl()}Daten/${m.url.join(
                         '/',
@@ -230,16 +191,16 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
                     title="in neuem Fenster öffnen"
                   >
                     <FaExternalLinkAlt />
-                  </OutsideLink>
-                </Row>
+                  </div>
+                </div>
               ))}
-            </StyledPaper>
+            </Paper>
           ))}
-        </ScrollContainer>
+        </div>
         {!loading && messageGroups.length === 0 && (
           <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
         )}
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
