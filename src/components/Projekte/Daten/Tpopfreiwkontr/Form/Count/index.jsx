@@ -195,9 +195,7 @@ export const Count = observer(
 
     return (
       <div
-        nr={nr}
         data-id={`count${nr}`}
-        showdelete={showDelete.toString()}
         style={formStyle}
         className={`${containerBase} ${formClass}`}
       >
