@@ -23,7 +23,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 import {
-  spinnterContainer,
+  spinnerContainer,
   spinnerText,
   noDataContainer,
   titleRow,
@@ -97,7 +97,7 @@ export const Component = ({ height = 400 }) => {
       <FormTitle title={`${popLabel}: Auswertung`} />
       <>
         {loading ?
-          <div className={spinnterContainer}>
+          <div className={spinnerContainer}>
             <CircularProgress />
             <div className={spinnerText}>
               lade Mengen nach Teil-Populationen...
