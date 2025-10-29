@@ -1,5 +1,4 @@
 import { useState, useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -32,95 +31,7 @@ import {
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../shared/fragments.js'
 
-const FormContainer = styled.div`
-  padding: 10px;
-  box-sizing: border-box;
-  container-type: inline-size;
-`
-const GridContainer = styled.div`
-  display: grid;
-  @container (max-width: 600px) {
-    grid-template-areas:
-      'title'
-      'image'
-      'headdata'
-      'besttime'
-      'date'
-      'map'
-      'count1'
-      'count2'
-      'count3'
-      'cover'
-      'more'
-      'danger'
-      'remarks'
-      'ekfRemarks'
-      'files'
-      'verification';
-    grid-template-columns: 1fr;
-  }
-  @container (min-width: 600px) and (max-width: 800px) {
-    grid-template-areas:
-      'title title'
-      'image image'
-      'headdata headdata'
-      'besttime besttime'
-      'date map'
-      'count1 count1'
-      'count2 count2'
-      'count3 count3'
-      'cover cover'
-      'more more'
-      'danger danger'
-      'remarks remarks'
-      'ekfRemarks ekfRemarks'
-      'files files'
-      'verification verification';
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @container (min-width: 800px) {
-    grid-template-areas:
-      'title title title image image image'
-      'headdata headdata headdata image image image'
-      'besttime besttime besttime image image image'
-      'date date map image image image'
-      'count1 count1 count2 count2 count3 count3'
-      'cover cover cover more more more'
-      'danger danger danger danger danger danger'
-      'remarks remarks remarks remarks remarks remarks'
-      'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks'
-      'files files files files files files'
-      'verification verification verification verification verification verification';
-    grid-template-columns: repeat(6, 1fr);
-  }
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
-  justify-items: stretch;
-  align-items: stretch;
-  justify-content: stretch;
-  box-sizing: border-box;
-  border-collapse: collapse;
-  @media print {
-    grid-template-areas:
-      'title title title image image image'
-      'headdata headdata headdata image image image'
-      'besttime besttime besttime image image image'
-      'date date map image image image'
-      'count1 count1 count2 count2 count3 count3'
-      'cover cover cover more more more'
-      'danger danger danger danger danger danger'
-      'remarks remarks remarks remarks remarks remarks'
-      'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks';
-    grid-template-columns: repeat(6, 1fr);
-  }
-`
-const CountHint = styled.div`
-  grid-area: 5 / 1 / 5 / 7;
-  color: red;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-`
+import { formContainer, gridContainer, countHint } from './index.module.css'
 
 const fieldTypes = {
   typ: 'String',
@@ -305,8 +216,8 @@ export const Form = observer(({ data, refetch, row, apId }) => {
   }, [row.id])
 
   return (
-    <FormContainer>
-      <GridContainer>
+    <div className={formContainer}>
+      <div className={gridContainer}>
         <Title row={row} />
         <Headdata
           pop={pop}
@@ -342,10 +253,10 @@ export const Form = observer(({ data, refetch, row, apId }) => {
           />
         )}
         {zaehl1ShowEmpty && (
-          <CountHint>
+          <div className={countHint}>
             Sie müssen auf Ebene Art EK-Zähleinheiten definieren, um hier
             Zählungen erfassen zu können.
-          </CountHint>
+          </div>
         )}
         {zaehls2 && (
           <Count
@@ -456,7 +367,7 @@ export const Form = observer(({ data, refetch, row, apId }) => {
             errors={errors}
           />
         )}
-      </GridContainer>
+      </div>
       {!isPrint && !isFreiwillig && (
         <StringToCopyOnlyButton
           text={row.id}
@@ -464,6 +375,6 @@ export const Form = observer(({ data, refetch, row, apId }) => {
         />
       )}
       {!isPrint && <div style={{ height: '64px' }} />}
-    </FormContainer>
+    </div>
   )
 })
