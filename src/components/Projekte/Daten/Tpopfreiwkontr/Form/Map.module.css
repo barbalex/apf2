@@ -1,0 +1,49 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+  break-inside: avoid;
+  grid-area: map;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    'label0 label1 val1'
+    'label0 label2 val2';
+  grid-column-gap: 10px;
+  align-items: center;
+}
+
+.label0 {
+  grid-area: label0;
+  font-weight: 700;
+}
+
+.label1 {
+  grid-area: label1;
+  justify-self: end;
+}
+
+.label2 {
+  grid-area: label2;
+  justify-self: end;
+}
+
+.val1 {
+  grid-area: val1;
+  > fieldset {
+    padding-bottom: 0 !important;
+  }
+  > fieldset > legend {
+    padding-top: 0 !important;
+  }
+}
+
+.val2 {
+  grid-area: val2;
+  > fieldset {
+    padding-bottom: 0 !important;
+  }
+  > fieldset > legend {
+    padding-top: 0 !important;
+  }
+}
