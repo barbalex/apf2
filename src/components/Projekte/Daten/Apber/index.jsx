@@ -11,7 +11,6 @@ import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { DateField } from '../../../shared/Date.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { constants } from '../../../../modules/constants.js'
 import { query } from './query.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
@@ -123,7 +122,6 @@ export const Component = observer(() => {
         />
         <div
           className={formContainer}
-          style={{ columnWidth: constants.columnWidth }}
         >
           <TextField
             name="jahr"

@@ -12,7 +12,6 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { DateField } from '../../../shared/Date.jsx'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { constants } from '../../../../modules/constants.js'
 import { query } from './query.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -38,7 +37,6 @@ const FormScrollContainer = styled.div`
 `
 const ColumnContainer = styled.div`
   padding: 10px;
-  column-width: ${constants.columnWidth}px;
 `
 const FilterCommentTitle = styled.div`
   margin-top: -10px;

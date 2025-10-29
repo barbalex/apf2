@@ -6,5 +6,4 @@
   overflow-y: auto;
   scrollbar-width: thin;
   padding: 10px;
-  column-width: var(--column-width);
 }

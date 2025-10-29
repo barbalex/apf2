@@ -17,7 +17,6 @@ import { Daten } from './Daten.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
-import { constants } from '../../../../modules/constants.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 

@@ -14,13 +14,11 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import { TpopAbBerRelevantInfoPopover } from '../TpopAbBerRelevantInfoPopover.jsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
-import { constants } from '../../../../modules/constants.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
 const Container = styled.div`
   height: 100%;
   padding: 0 10px;
-  column-width: ${constants.columnWidth}px;
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;

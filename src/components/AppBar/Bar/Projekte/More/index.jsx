@@ -18,7 +18,6 @@ import { ShowBookmarksMenu } from './ShowBookmarksMenu.jsx'
 import { EnforceDesktopNavigation } from './EnforceDesktopNavigation.jsx'
 import { EnforceMobileNavigation } from './EnforceMobileNavigation.jsx'
 import { AlwaysShowTree } from './AlwaysShowTree.jsx'
-import { constants } from '../../../../../modules/constants.js'
 import {
   isMobileViewAtom,
   isDesktopViewAtom,

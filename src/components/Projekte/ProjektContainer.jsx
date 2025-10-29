@@ -21,7 +21,6 @@ import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.jsx'
-import { constants } from '../../modules/constants.js'
 import { hideBookmarksAtom } from '../../JotaiStore/index.js'
 
 const OuterContainer = styled.div`

@@ -15,7 +15,6 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { DateField } from '../../../shared/Date.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { TpopfeldkontrentwicklungPopover } from '../TpopfeldkontrentwicklungPopover.jsx'
-import { constants } from '../../../../modules/constants.js'
 import { query } from './query.js'
 import { queryTpopkontrs } from './queryTpopkontrs.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -42,7 +41,6 @@ const FormContainer = styled.div`
   scrollbar-width: thin;
   padding: 10px;
   height: 100%;
-  column-width: ${constants.columnWidth}px;
 `
 const Section = styled.div`
   padding-top: 20px;

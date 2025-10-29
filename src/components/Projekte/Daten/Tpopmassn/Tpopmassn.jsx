@@ -14,7 +14,6 @@ import { SelectLoadingOptionsTypable } from '../../../shared/SelectLoadingOption
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { DateField } from '../../../shared/Date.jsx'
 import { StringToCopy } from '../../../shared/StringToCopy.jsx'
-import { constants } from '../../../../modules/constants.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -34,7 +33,6 @@ const Container = styled.div`
   overflow-y: auto;
   scrollbar-width: thin;
   padding: 10px;
-  column-width: ${constants.columnWidth}px;
 `
 
 const fieldTypes = {
