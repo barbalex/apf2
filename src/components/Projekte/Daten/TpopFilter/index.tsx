@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 
@@ -17,16 +16,7 @@ import { Tabs } from './Tabs.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { ActiveFilters } from './ActiveFilters.js'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #ffd3a7;
-`
-const StyledTab = styled(Tab)`
-  text-transform: none !important;
-`
+import { container, styledTab } from './index.module.css'
 
 export const TpopFilter = observer(() => {
   const store = useContext(MobxContext)
@@ -66,7 +56,7 @@ export const TpopFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FilterTitle
           title="Teil-Population"
           table="tpop"
@@ -87,15 +77,17 @@ export const TpopFilter = observer(() => {
           textColor="primary"
           centered
         >
-          <StyledTab
+          <Tab
             label="Teil-Population"
             value="tpop"
             data-id="tpop"
+            className={styledTab}
           />
-          <StyledTab
+          <Tab
             label="EK"
             value="ek"
             data-id="ek"
+            className={styledTab}
           />
         </MuiTabs>
         {tab === 'tpop' ?
@@ -112,7 +104,7 @@ export const TpopFilter = observer(() => {
             row={row}
           />
         }
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
