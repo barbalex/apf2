@@ -65,38 +65,26 @@ export const useZieljahrsNavData = (props) => {
     [],
   )
 
-  const ziels = useMemo(
-    () => data?.data?.apById?.zielsByApId?.nodes ?? [],
-    [data?.data?.apById?.zielsByApId?.nodes],
-  )
-  const filteredZiels = useMemo(
-    () => data?.data?.apById?.filteredZiels?.nodes ?? [],
-    [data?.data?.apById?.filteredZiels?.nodes],
-  )
+  const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
+  const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
   const zieljahrsCount = getZieljahrsCount(ziels)
+  const countByJahr = countBy(filteredZiels, (e) => e.jahr)
+  const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)
 
-  // ISSUE: menus does not update when removing useMemo
-  // thus users cant enter submenus
-  const menus = useMemo(() => {
-    const countByJahr = countBy(filteredZiels, (e) => e.jahr)
-    const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)
-    // convert into array of objects with id=jahr and count
-    const jahre = Object.keys(countByJahr).map((jahr) => ({
-      id: +jahr,
-      label: `${jahr} (${countByJahr[jahr]}/${unfilteredCountByJahr[jahr]})`,
-      jahr: +jahr,
-      treeNodeType: 'folder',
-      treeMenuType: 'zieljahrFolder',
-      treeId: `${apId}ZielJahreFolder`,
-      treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', +jahr],
-      fetcherName: 'useZielsOfJahrNavData',
-      fetcherParams: { projId, apId, jahr: +jahr },
-      hasChildren: !!countByJahr[jahr],
-    }))
-
-    return jahre
-  }, [apId, filteredZiels, projId, ziels])
+  // convert into array of objects with id=jahr and count
+  const menus = Object.keys(countByJahr).map((jahr) => ({
+    id: +jahr,
+    label: `${jahr} (${countByJahr[jahr]}/${unfilteredCountByJahr[jahr]})`,
+    jahr: +jahr,
+    treeNodeType: 'folder',
+    treeMenuType: 'zieljahrFolder',
+    treeId: `${apId}ZielJahreFolder`,
+    treeParentTableId: apId,
+    treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', +jahr],
+    fetcherName: 'useZielsOfJahrNavData',
+    fetcherParams: { projId, apId, jahr: +jahr },
+    hasChildren: !!countByJahr[jahr],
+  }))
 
   const navData = {
     id: 'AP-Ziele',
