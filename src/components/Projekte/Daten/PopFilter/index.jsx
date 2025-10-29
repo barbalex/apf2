@@ -36,7 +36,7 @@ export const PopFilter = observer(() => {
     dataFilterSetValue,
   } = store.tree
 
-  // somenow to live updates without this
+  // somehow to live updates without this
   const dataFilter = dataFilterRaw.toJSON()
 
   const [activeTab, setActiveTab] = useState(0)
