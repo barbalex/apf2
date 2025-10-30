@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react'
-import styled from '@emotion/styled'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
@@ -20,27 +19,13 @@ import { MobxContext } from '../../../../../mobxContext.js'
 import { beob } from '../../../../shared/fragments.js'
 import { Info } from '../BeobZugeordnet/Marker.jsx'
 
-const TopFieldContainer = styled.div`
-  padding-top: 4px;
-  padding-bottom: 4px;
-`
-const Container = styled.div`
-  margin-left: -10px;
-  margin-right: -10px;
-`
-const StyledAccordion = styled(Accordion)``
-const StyledAccordionSummary = styled(AccordionSummary)`
-  margin: 0;
-  padding: 0 10px;
-  min-height: 28px;
-  font-weight: 600;
-  > div {
-    margin: 0;
-  }
-`
-const StyledAccordionDetails = styled(AccordionDetails)`
-  padding: 4px 8px;
-`
+import {
+  topFieldsContainer,
+  dataContainer,
+  dataSummary,
+  dataDetails,
+} from './index.module.css'
+
 const AbsenzStyle = { fontWeight: 'bold', color: 'red' }
 
 const topFieldNames = [
@@ -163,7 +148,7 @@ export const Data = observer(({ id }) => {
   return (
     <ErrorBoundary>
       {!!topFields.length && (
-        <TopFieldContainer>
+        <div className={topFieldsContainer}>
           <Info>
             {topFields.map(([key, value]) => {
               const isAbsenz =
@@ -181,26 +166,26 @@ export const Data = observer(({ id }) => {
               )
             })}
           </Info>
-        </TopFieldContainer>
+        </div>
       )}
-      <Container>
-        <StyledAccordion
+      <div className={dataContainer}>
+        <Accordion
           expanded={beobDetailsOpen}
           onChange={onClickDetails}
           disableGutters
           elevation={1}
         >
-          <StyledAccordionSummary>Daten</StyledAccordionSummary>
-          <StyledAccordionDetails>
+          <AccordionSummary className={dataSummary}>Daten</AccordionSummary>
+          <AccordionDetails className={dataDetails}>
             <DndProvider
               backend={HTML5Backend}
               context={window}
             >
               {fields.map((field, i) => renderField(field, i))}
             </DndProvider>
-          </StyledAccordionDetails>
-        </StyledAccordion>
-      </Container>
+          </AccordionDetails>
+        </Accordion>
+      </div>
     </ErrorBoundary>
   )
 })

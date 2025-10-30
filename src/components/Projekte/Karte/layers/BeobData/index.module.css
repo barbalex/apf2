@@ -1,0 +1,23 @@
+.topFieldsContainer {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.dataContainer {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.dataSummary {
+  margin: 0;
+  padding: 0 10px;
+  min-height: 28px;
+  font-weight: 600;
+  > div {
+    margin: 0;
+  }
+}
+
+.dataDetails {
+  padding: 4px 8px;
+}
