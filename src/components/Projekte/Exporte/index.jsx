@@ -20,13 +20,6 @@ import {
   exporteContainer,
 } from './index.module.css'
 
-export const CardActionIconButton = styled(IconButton)`
-  transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
-`
-// export const actionButtonStyle = {
-//   transform: expanded ? 'rotate(180deg)' : 'none',
-// }
-
 export const Exporte = () => (
   <div
     className={exporteContainer}

@@ -11,7 +11,6 @@ import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
 import { BeobZugeordnet } from './BeobZugeordnet.jsx'
 import { BeobArtChanged } from './BeobArtChanged.jsx'
 
-import { CardActionIconButton } from '../index.jsx'
 import {
   cardContent,
   actionTitle,
@@ -33,14 +32,14 @@ export const Beobachtungen = () => {
       >
         <div className={actionTitle}>Beobachtungen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
-          <CardActionIconButton
-            data-expanded={expanded}
+          <IconButton
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             aria-expanded={expanded}
             aria-label={expanded ? 'schliessen' : 'öffnen'}
             color="inherit"
           >
             <ExpandMoreIcon />
-          </CardActionIconButton>
+          </IconButton>
         </Tooltip>
       </CardActions>
       <Collapse

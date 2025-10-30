@@ -14,7 +14,6 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../mobxContext.js'
 
 import { formControlLabel, checkbox } from './Optionen.module.css'
-import { CardActionIconButton } from './index.jsx'
 import { cardContent, actionTitle, card, cardActions } from './index.module.css'
 
 export const Optionen = observer(() => {
@@ -31,13 +30,13 @@ export const Optionen = observer(() => {
       >
         <div className={actionTitle}>Optionen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
-          <CardActionIconButton
-            data-expanded={expanded}
+          <IconButton
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             aria-expanded={expanded}
             aria-label={expanded ? 'schliessen' : 'öffnen'}
           >
             <ExpandMoreIcon />
-          </CardActionIconButton>
+          </IconButton>
         </Tooltip>
       </CardActions>
       <Collapse
