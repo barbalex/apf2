@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -18,21 +17,7 @@ import { tpopmassnber } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-`
+import { container, formContainer } from './index.module.css'
 
 const fieldTypes = {
   tpopId: 'UUID',
@@ -118,12 +103,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="Massnahmen-Bericht Teil-Population"
           MenuBarComponent={Menu}
         />
-        <FormContainer>
+        <div className={formContainer}>
           <TextField
             name="jahr"
             label="Jahr"
@@ -150,8 +135,8 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.bemerkungen}
           />
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
