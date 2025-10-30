@@ -6,11 +6,11 @@ export const DateField = ({ saveToDb, row, errors }) => (
     <div className={label}>Aufnahme-datum</div>
     <div className={val}>
       <DateFieldComponent
-        key={`${row.id}datum`}
+        key={`${row?.id}datum`}
         name="datum"
-        value={row.datum}
+        value={row?.datum}
         saveToDb={saveToDb}
-        error={errors.datum}
+        error={errors?.datum}
       />
     </div>
   </div>
