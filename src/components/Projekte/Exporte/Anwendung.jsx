@@ -4,6 +4,7 @@ import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import beziehungen from '../../../etc/beziehungen.png'

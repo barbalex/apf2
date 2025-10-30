@@ -3,6 +3,7 @@ import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { StyledCardActions, CardActionIconButton } from '../index.jsx'
