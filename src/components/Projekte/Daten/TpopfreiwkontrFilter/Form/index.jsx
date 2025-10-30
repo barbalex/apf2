@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { Headdata } from './Headdata/index.jsx'
@@ -14,87 +13,10 @@ import { Verification } from '../../Tpopfreiwkontr/Form/Verification.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 
-const FormContainer = styled.div`
-  padding: 10px;
-  container-type: inline-size;
-`
-const GridContainer = styled.div`
-  display: grid;
-  @container (max-width: 600px) {
-    grid-template-areas:
-      'title'
-      'image'
-      'headdata'
-      'besttime'
-      'date'
-      'map'
-      'count1'
-      'count2'
-      'count3'
-      'cover'
-      'more'
-      'danger'
-      'remarks'
-      'ekfRemarks'
-      'files'
-      'verification';
-    grid-template-columns: 1fr;
-  }
-  @container (min-width: 600px) and (max-width: 800px) {
-    grid-template-areas:
-      'title title'
-      'image image'
-      'headdata headdata'
-      'besttime besttime'
-      'date map'
-      'count1 count1'
-      'count2 count2'
-      'count3 count3'
-      'cover cover'
-      'more more'
-      'danger danger'
-      'remarks remarks'
-      'ekfRemarks ekfRemarks'
-      'files files'
-      'verification verification';
-    grid-template-columns: repeat(2, 1fr);
-  }
-  @container (min-width: 800px) {
-    grid-template-areas:
-      'title title title image image image'
-      'headdata headdata headdata image image image'
-      'besttime besttime besttime image image image'
-      'date date map image image image'
-      'count1 count1 count2 count2 count3 count3'
-      'cover cover cover more more more'
-      'danger danger danger danger danger danger'
-      'remarks remarks remarks remarks remarks remarks'
-      'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks'
-      'files files files files files files'
-      'verification verification verification verification verification verification';
-    grid-template-columns: repeat(6, 1fr);
-  }
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
-  justify-items: stretch;
-  align-items: stretch;
-  justify-content: stretch;
-  box-sizing: border-box;
-  border-collapse: collapse;
-  @media print {
-    grid-template-areas:
-      'title title title image image image'
-      'headdata headdata headdata image image image'
-      'besttime besttime besttime image image image'
-      'date date map image image image'
-      'count1 count1 count2 count2 count3 count3'
-      'cover cover cover more more more'
-      'danger danger danger danger danger danger'
-      'remarks remarks remarks remarks remarks remarks'
-      'ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks ekfRemarks';
-    grid-template-columns: repeat(6, 1fr);
-  }
-`
+import {
+  formContainer,
+  gridContainer,
+} from '../../Tpopfreiwkontr/Form/index.module.css'
 
 export const Form = observer(({ row, activeTab }) => {
   const store = useContext(MobxContext)
@@ -109,8 +31,8 @@ export const Form = observer(({ row, activeTab }) => {
     })
 
   return (
-    <FormContainer>
-      <GridContainer>
+    <div className={formContainer}>
+      <div className={gridContainer}>
         <Headdata
           row={row}
           activeTab={activeTab}
@@ -150,8 +72,8 @@ export const Form = observer(({ row, activeTab }) => {
           saveToDb={saveToDb}
           row={row}
         />
-      </GridContainer>
+      </div>
       <div style={{ height: '64px' }} />
-    </FormContainer>
+    </div>
   )
 })
