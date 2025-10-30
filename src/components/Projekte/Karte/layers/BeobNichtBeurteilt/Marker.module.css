@@ -1,0 +1,14 @@
+.h3 {
+  margin: 7px 0;
+}
+
+.button {
+  text-transform: none;
+  justify-content: left;
+  padding: 2px 0;
+}
+
+.absenz {
+  color: red;
+  font-weight: bold;
+}
