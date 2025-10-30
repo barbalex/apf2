@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -16,21 +15,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-`
+import { container, formContainer } from './index.module.css'
 
 export const Component = observer(() => {
   const { wertId: id } = useParams()
@@ -133,20 +118,19 @@ export const Component = observer(() => {
     }
   }
 
-
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title={table}
           MenuBarComponent={Menu}
           menuBarProps={{ row, table }}
         />
-        <FormContainer>
+        <div className={formContainer}>
           <TextField
             name="text"
             label="Text"
@@ -171,8 +155,8 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.sort}
           />
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
