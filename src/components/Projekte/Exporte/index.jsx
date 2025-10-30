@@ -22,17 +22,6 @@ import {
   exporteContainer,
 } from './index.module.css'
 
-export const StyledProgressText = styled.span`
-  margin-left: 10px;
-  font-style: italic;
-  animation: blinker 1s linear infinite;
-  white-space: nowrap;
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-`
 export const StyledProgressTextNewLine = styled.div`
   font-style: italic;
   animation: blinker 1s linear infinite;

@@ -10,7 +10,6 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 import { StyledProgressTextNewLine } from '../index.jsx'
 import { button } from '../index.module.css'
-
 import { li, ewm } from './Wollmilchsau.module.css'
 
 export const Wollmilchsau = observer(() => {
