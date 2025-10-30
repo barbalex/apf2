@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
@@ -23,15 +22,6 @@ import {
   exporteContainer,
 } from './index.module.css'
 
-export const DownloadCardButton = styled(Button)`
-  flex-basis: 450px;
-  text-transform: none !important;
-  font-weight: 500;
-  display: block;
-  text-align: left;
-  justify-content: flex-start !important;
-  user-select: none;
-`
 export const StyledProgressText = styled.span`
   margin-left: 10px;
   font-style: italic;

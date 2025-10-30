@@ -2,14 +2,12 @@ import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
-
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { StyledProgressText } from '../index.jsx'
-import { button } from '../index.module.css'
+import { button, progress } from '../index.module.css'
 
 export const AnzKontr = observer(() => {
   const store = useContext(MobxContext)
@@ -98,7 +96,7 @@ export const AnzKontr = observer(() => {
     >
       Anzahl Kontrollen pro Art
       {queryState ?
-        <StyledProgressText>{queryState}</StyledProgressText>
+        <span className={progress}>{queryState}</span>
       : null}
     </Button>
   )

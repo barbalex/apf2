@@ -35,7 +35,7 @@
   user-select: none;
 }
 
-.styledProgressText {
+.progress {
   margin-left: 10px;
   font-style: italic;
   animation: blinker 1s linear infinite;

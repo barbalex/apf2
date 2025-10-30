@@ -8,7 +8,8 @@ import Button from '@mui/material/Button'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { DownloadCardButton, StyledProgressTextNewLine } from '../index.jsx'
+import { StyledProgressTextNewLine } from '../index.jsx'
+import { button } from '../index.module.css'
 
 import { li, ewm } from './Wollmilchsau.module.css'
 
@@ -21,7 +22,8 @@ export const Wollmilchsau = observer(() => {
   const [queryState, setQueryState] = useState()
 
   return (
-    <DownloadCardButton
+    <Button
+      className={button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -655,6 +657,6 @@ export const Wollmilchsau = observer(() => {
       {queryState ?
         <StyledProgressTextNewLine>{queryState}</StyledProgressTextNewLine>
       : null}
-    </DownloadCardButton>
+    </Button>
   )
 })
