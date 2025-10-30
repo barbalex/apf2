@@ -11,19 +11,15 @@ import { CsvProgramm } from './CsvProgramm.jsx'
 import { DatenChaotisch } from './DatenChaotisch.jsx'
 import { ZuVieleDaten } from './ZuVieleDaten.jsx'
 
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
+import { StyledCardActions, CardActionIconButton } from '../index.jsx'
 import { ownCardContent, cardContent } from './index.module.css'
-import { actionTitle } from '../index.module.css'
+import { actionTitle, card } from '../index.module.css'
 
 export const Tipps = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
@@ -54,6 +50,6 @@ export const Tipps = () => {
           </CardContent>
         : null}
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }
