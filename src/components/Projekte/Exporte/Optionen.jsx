@@ -13,8 +13,8 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../mobxContext.js'
 
 import { formControlLabel, checkbox } from './Optionen.module.css'
-import { StyledCardActions, CardActionIconButton } from './index.jsx'
-import { cardContent, actionTitle, card } from './index.module.css'
+import { CardActionIconButton } from './index.jsx'
+import { cardContent, actionTitle, card, cardActions } from './index.module.css'
 
 export const Optionen = observer(() => {
   const store = useContext(MobxContext)
@@ -23,7 +23,8 @@ export const Optionen = observer(() => {
 
   return (
     <Card className={card}>
-      <StyledCardActions
+      <CardActions
+        className={cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
@@ -37,7 +38,7 @@ export const Optionen = observer(() => {
             <ExpandMoreIcon />
           </CardActionIconButton>
         </Tooltip>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"

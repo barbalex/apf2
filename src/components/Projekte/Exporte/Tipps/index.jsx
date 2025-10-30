@@ -3,6 +3,7 @@ import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { WasIstCsv } from './WasIstCsv.jsx'
@@ -11,16 +12,17 @@ import { CsvProgramm } from './CsvProgramm.jsx'
 import { DatenChaotisch } from './DatenChaotisch.jsx'
 import { ZuVieleDaten } from './ZuVieleDaten.jsx'
 
-import { StyledCardActions, CardActionIconButton } from '../index.jsx'
+import { CardActionIconButton } from '../index.jsx'
 import { ownCardContent, cardContent } from './index.module.css'
-import { actionTitle, card } from '../index.module.css'
+import { actionTitle, card, cardActions } from '../index.module.css'
 
 export const Tipps = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <Card className={card}>
-      <StyledCardActions
+      <CardActions
+        className={cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
@@ -34,7 +36,7 @@ export const Tipps = () => {
             <ExpandMoreIcon />
           </CardActionIconButton>
         </Tooltip>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"

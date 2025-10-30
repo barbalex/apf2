@@ -3,19 +3,21 @@ import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CsvInExcelOeffnen } from './CsvInExcelOeffnen.jsx'
-import { StyledCardActions, CardActionIconButton } from '../index.jsx'
+import { CardActionIconButton } from '../index.jsx'
 import { cardContent } from './index.module.css'
-import { actionTitle, card } from '../index.module.css'
+import { actionTitle, card, cardActions } from '../index.module.css'
 
 export const CsvProgramm = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <Card className={card}>
-      <StyledCardActions
+      <CardActions
+        className={cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
@@ -31,7 +33,7 @@ export const CsvProgramm = () => {
             <ExpandMoreIcon />
           </CardActionIconButton>
         </Tooltip>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"
