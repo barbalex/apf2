@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 
@@ -8,41 +7,11 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
-const Area = styled.div`
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  border-radius: 6px;
-  padding: 10px;
-  break-inside: avoid;
-`
-const Container = styled(Area)`
-  grid-area: headdata;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas:
-    'popLabel popVal popVal'
-    'tpopLabel tpopVal tpopVal'
-    'koordLabel koordVal koordVal'
-    'tpopNrLabel tpopNrVal statusVal'
-    'bearbLabel bearbVal bearbVal';
-  grid-column-gap: 10px;
-  div:nth-of-type(n + 3) {
-    padding-top: 10px;
-  }
-`
-const Label = styled.div`
-  font-weight: 700;
-`
-const BearbLabel = styled(Label)`
-  grid-area: bearbLabel;
-  margin-top: 5px;
-`
-const BearbVal = styled.div`
-  grid-area: bearbVal;
-  > div {
-    margin-top: -5px;
-    padding-bottom: 0;
-  }
-`
+import {
+  container,
+  bearbLabel,
+  bearbVal,
+} from '../../../Tpopfreiwkontr/Form/Headdata/index.module.css'
 
 export const Headdata = observer(({ row, activeTab }) => {
   const store = useContext(MobxContext)
@@ -60,9 +29,9 @@ export const Headdata = observer(({ row, activeTab }) => {
   if (error) return <Error error={error} />
 
   return (
-    <Container>
-      <BearbLabel>BeobachterIn</BearbLabel>
-      <BearbVal>
+    <div className={container}>
+      <div className={bearbLabel}>BeobachterIn</div>
+      <div className={bearbVal}>
         <Select
           key={`${row?.id}${activeTab}bearbeiter`}
           name="bearbeiter"
@@ -72,7 +41,7 @@ export const Headdata = observer(({ row, activeTab }) => {
           loading={loading}
           saveToDb={saveToDb}
         />
-      </BearbVal>
-    </Container>
+      </div>
+    </div>
   )
 })
