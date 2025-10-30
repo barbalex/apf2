@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'

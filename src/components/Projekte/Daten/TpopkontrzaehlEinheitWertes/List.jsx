@@ -14,8 +14,6 @@ export const List = observer(() => {
 
   const { navData, error } = useTpopkontrzaehlEinheitWertesNavData()
 
-  console.log('TpopkontrzaehlEinheitWertes List render')
-
   if (error) return <Error error={error} />
 
   return (
