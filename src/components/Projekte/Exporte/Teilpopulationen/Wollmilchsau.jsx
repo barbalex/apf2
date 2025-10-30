@@ -3,20 +3,12 @@ import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import styled from '@emotion/styled'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { DownloadCardButton, StyledProgressTextNewLine } from '../index.jsx'
 
-const Li = styled.li`
-  margin-top: -6px;
-  margin-bottom: -3px;
-`
-const EwmDiv = styled.div`
-  margin-top: -14px;
-  margin-bottom: 3px;
-`
+import { li, ewm } from './Wollmilchsau.module.css'
 
 export const Wollmilchsau = observer(() => {
   const store = useContext(MobxContext)
@@ -648,16 +640,16 @@ export const Wollmilchsau = observer(() => {
           marginBottom: '10px',
         }}
       >
-        <Li>Anzahl Kontrollen</Li>
-        <Li>erste Kontrolle</Li>
-        <Li>erste Zählung</Li>
-        <Li>letzte Kontrolle</Li>
-        <Li>letzte Zählung</Li>
-        <Li>letzter Teilpopulationsbericht</Li>
+        <li className={li}>Anzahl Kontrollen</li>
+        <li className={li}>erste Kontrolle</li>
+        <li className={li}>erste Zählung</li>
+        <li className={li}>letzte Kontrolle</li>
+        <li className={li}>letzte Zählung</li>
+        <li className={li}>letzter Teilpopulationsbericht</li>
       </ul>
-      <EwmDiv>
+      <div className={ewm}>
         {'= "Eier legende Wollmilchsau". Vorsicht: kann > 2 Minuten dauern!'}
-      </EwmDiv>
+      </div>
       {queryState ?
         <StyledProgressTextNewLine>{queryState}</StyledProgressTextNewLine>
       : null}
