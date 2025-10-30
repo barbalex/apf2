@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 
@@ -22,10 +21,6 @@ import {
   exporteContainer,
 } from './index.module.css'
 
-export const StyledCard = styled(Card)`
-  margin: 10px 0;
-  background-color: #fff8e1 !important;
-`
 export const StyledCardActions = styled(CardActions)`
   justify-content: space-between;
   cursor: pointer;
