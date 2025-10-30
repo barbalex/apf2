@@ -140,7 +140,13 @@ export const Component = observer(() => {
     : { artname: { isNull: false }, apartsByArtIdExist: true }
 
   const onSaveArtIdToDb = (event) =>
-    saveArtIdToDb({ value: event.target, row, apolloClient, store, search })
+    saveArtIdToDb({
+      value: event.target.value,
+      row,
+      apolloClient,
+      store,
+      search,
+    })
 
   const onSaveNichtZuordnenToDb = (value) =>
     saveNichtZuordnenToDb({
@@ -154,7 +160,7 @@ export const Component = observer(() => {
 
   const onSaveTpopIdToDb = (event) =>
     saveTpopIdToDb({
-      value: event.target,
+      value: event.target.value,
       id,
       type,
       apolloClient,
