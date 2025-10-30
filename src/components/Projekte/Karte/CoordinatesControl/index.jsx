@@ -2,13 +2,14 @@ import { useState, useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import 'leaflet'
 import { useMapEvents } from 'react-leaflet'
-import styled from '@emotion/styled'
 import { debounce } from 'es-toolkit'
 
 import { ShowCoordinates } from './ShowCoordinates.jsx'
 import { PanToCoordinates } from './PanToCoordinates.jsx'
 import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.js'
 import { MobxContext } from '../../../../mobxContext.js'
+
+import { container } from './index.module.css'
 
 /**
  * onClick coordinates container: render coordinate-field-pair and go-to button
@@ -19,10 +20,6 @@ import { MobxContext } from '../../../../mobxContext.js'
  * - move to coordinates
  * - render coordinates
  */
-
-const Container = styled.div`
-  margin-bottom: 10px !important;
-`
 
 export const CoordinatesControl = observer(() => {
   const { setMapMouseCoordinates } = useContext(MobxContext)
@@ -48,7 +45,7 @@ export const CoordinatesControl = observer(() => {
   }, [])
 
   return (
-    <Container>
+    <div className={container}>
       {controlType === 'coordinates' ?
         <ShowCoordinates setControlType={setControlType} />
       : <PanToCoordinates
@@ -56,6 +53,6 @@ export const CoordinatesControl = observer(() => {
           map={map}
         />
       }
-    </Container>
+    </div>
   )
 })
