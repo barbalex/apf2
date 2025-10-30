@@ -18,7 +18,7 @@ export const Map = observer(({ saveToDb, row, errors }) => {
   }
 
   // in print nein shall not be set as it is preset in db
-  const falseValue = isPrint ? false : row.planVorhanden === false
+  const falseValue = isPrint ? false : row?.planVorhanden === false
 
   return (
     <div className={container}>
@@ -29,9 +29,9 @@ export const Map = observer(({ saveToDb, row, errors }) => {
         data-id="planVorhanden_true"
       >
         <RadioButton
-          key={`${row.id}planVorhanden`}
+          key={`${row?.id}planVorhanden`}
           name="planVorhanden"
-          value={row.planVorhanden}
+          value={row?.planVorhanden}
           saveToDb={saveToDb}
         />
       </div>
@@ -41,11 +41,11 @@ export const Map = observer(({ saveToDb, row, errors }) => {
         data-id="planVorhanden_false"
       >
         <RadioButton
-          key={`${row.id}planVorhanden2`}
+          key={`${row?.id}planVorhanden2`}
           name="planVorhanden"
           value={falseValue}
           saveToDb={onSaveFalse}
-          error={errors.planVorhanden}
+          error={errors?.planVorhanden}
         />
       </div>
     </div>
