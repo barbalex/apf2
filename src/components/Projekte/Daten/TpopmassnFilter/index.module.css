@@ -1,0 +1,34 @@
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffd3a7;
+}
+
+.scrollContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.columnContainer {
+  padding: 10px;
+}
+
+.commentTitle {
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding: 0 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.comment {
+  padding: 0 10px;
+  font-size: 0.75em;
+}

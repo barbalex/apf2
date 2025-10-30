@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -20,37 +19,13 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Tabs } from './Tabs.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #ffd3a7;
-`
-const FormScrollContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const ColumnContainer = styled.div`
-  padding: 10px;
-`
-const FilterCommentTitle = styled.div`
-  margin-top: -10px;
-  margin-bottom: -10px;
-  padding: 0 10px;
-  font-size: 0.75em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
-`
-const FilterCommentList = styled.ul``
-const FilterComment = styled.li`
-  padding: 0 10px;
-  font-size: 0.75em;
-`
+import {
+  container,
+  scrollContainer,
+  columnContainer,
+  commentTitle,
+  comment,
+} from './index.module.css'
 
 export const TpopmassnFilter = observer(() => {
   const { apId } = useParams()
@@ -142,7 +117,7 @@ export const TpopmassnFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FilterTitle
           title="Massnahmen"
           table="tpopmassn"
@@ -152,30 +127,30 @@ export const TpopmassnFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
-            <FilterCommentList>
+            <div className={commentTitle}>Zusätzlich aktive Filter:</div>
+            <ul>
               {!!navApFilterComment && (
-                <FilterComment>{navApFilterComment}</FilterComment>
+                <li className={comment}>{navApFilterComment}</li>
               )}
               {!!navHiearchyComment && (
-                <FilterComment>{navHiearchyComment}</FilterComment>
+                <li className={comment}>{navHiearchyComment}</li>
               )}
               {!!navLabelComment && (
-                <FilterComment>{navLabelComment}</FilterComment>
+                <li className={comment}>{navLabelComment}</li>
               )}
               {!!artHierarchyComment && (
-                <FilterComment>{artHierarchyComment}</FilterComment>
+                <li className={comment}>{artHierarchyComment}</li>
               )}
               {!!popHierarchyComment && (
-                <FilterComment>{popHierarchyComment}</FilterComment>
+                <li className={comment}>{popHierarchyComment}</li>
               )}
               {!!tpopHierarchyComment && (
-                <FilterComment>{tpopHierarchyComment}</FilterComment>
+                <li className={comment}>{tpopHierarchyComment}</li>
               )}
               {!!mapFilterComment && (
-                <FilterComment>{mapFilterComment}</FilterComment>
+                <li className={comment}>{mapFilterComment}</li>
               )}
-            </FilterCommentList>
+            </ul>
           </>
         )}
         <Tabs
@@ -183,8 +158,8 @@ export const TpopmassnFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <FormScrollContainer>
-          <ColumnContainer>
+        <div className={scrollContainer}>
+          <div className={columnContainer}>
             <TextField
               name="jahr"
               label="Jahr"
@@ -340,9 +315,9 @@ export const TpopmassnFilter = observer(() => {
               value={row?.vonAnzahlIndividuen}
               saveToDb={saveToDb}
             />
-          </ColumnContainer>
-        </FormScrollContainer>
-      </Container>
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
