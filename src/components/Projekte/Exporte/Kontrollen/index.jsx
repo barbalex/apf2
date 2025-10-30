@@ -10,18 +10,14 @@ import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
 import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
 import { InfoFlora } from './InfoFlora.jsx'
 
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
-import { cardContent, actionTitle } from '../index.module.css'
+import { StyledCardActions, CardActionIconButton } from '../index.jsx'
+import { cardContent, actionTitle, card } from '../index.module.css'
 
 export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
@@ -53,6 +49,6 @@ export const Kontrollen = () => {
           </CardContent>
         : null}
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }

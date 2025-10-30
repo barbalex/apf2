@@ -5,12 +5,8 @@ import Card from '@mui/material/Card'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CardContent } from './CardContent.jsx'
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
-import { actionTitle } from '../index.module.css'
+import { StyledCardActions, CardActionIconButton } from '../index.jsx'
+import { actionTitle, card } from '../index.module.css'
 
 export const Teilpopulationen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -18,7 +14,7 @@ export const Teilpopulationen = () => {
   const onClickAction = () => setExpanded(!expanded)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={onClickAction}
@@ -44,6 +40,6 @@ export const Teilpopulationen = () => {
           <CardContent />
         : null}
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }

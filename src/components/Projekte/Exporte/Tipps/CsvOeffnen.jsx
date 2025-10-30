@@ -5,19 +5,15 @@ import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
+import { StyledCardActions, CardActionIconButton } from '../index.jsx'
 import { cardContent } from './index.module.css'
-import { actionTitle } from '../index.module.css'
+import { actionTitle, card } from '../index.module.css'
 
 export const CsvOeffnen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
@@ -64,6 +60,6 @@ export const CsvOeffnen = () => {
           </ol>
         </CardContent>
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }
