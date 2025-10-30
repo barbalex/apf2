@@ -12,7 +12,20 @@ export const Map = observer(({ saveToDb, row, errors }) => {
 
   const onSaveFalse = () => {
     const fakeEvent = {
-      target: { name: 'planVorhanden', value: false },
+      target: {
+        name: 'planVorhanden',
+        value: row?.planVorhanden === false ? null : false,
+      },
+    }
+    saveToDb(fakeEvent)
+  }
+
+  const onSaveTrue = () => {
+    const fakeEvent = {
+      target: {
+        name: 'planVorhanden',
+        value: row?.planVorhanden === true ? null : true,
+      },
     }
     saveToDb(fakeEvent)
   }
@@ -32,7 +45,7 @@ export const Map = observer(({ saveToDb, row, errors }) => {
           key={`${row?.id}planVorhanden`}
           name="planVorhanden"
           value={row?.planVorhanden}
-          saveToDb={saveToDb}
+          saveToDb={onSaveTrue}
         />
       </div>
       <div className={label2}>nein</div>

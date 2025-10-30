@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 
 import { Headdata } from './Headdata/index.jsx'
 import { DateField as Date } from '../../Tpopfreiwkontr/Form/Date.jsx'
-import { Map } from './Map.jsx'
+import { Map } from '../../Tpopfreiwkontr/Form/Map.jsx'
 import { Cover } from '../../Tpopfreiwkontr/Form/Cover.jsx'
 import { More } from './More.jsx'
 import { Danger } from '../../Tpopfreiwkontr/Form/Danger.jsx'
