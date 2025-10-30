@@ -8,8 +8,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { StyledProgressText } from '../index.jsx'
-import { button } from '../index.module.css'
+import { button, progress } from '../index.module.css'
 
 export const Idealbiotop = observer(() => {
   const store = useContext(MobxContext)
@@ -142,7 +141,7 @@ export const Idealbiotop = observer(() => {
     >
       Idealbiotope
       {queryState ?
-        <StyledProgressText>{queryState}</StyledProgressText>
+        <span className={progress}>{queryState}</span>
       : null}
     </Button>
   )
