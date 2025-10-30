@@ -11,7 +11,6 @@ import {
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
-  DownloadCardButton,
 } from './index.jsx'
 import { cardContent, actionTitle, button } from './index.module.css'
 
@@ -46,12 +45,13 @@ export const Anwendung = () => {
       >
         {expanded ?
           <CardContent className={cardContent}>
-            <DownloadCardButton
+            <Button
+              className={button}
               onClick={onClickGrafisch}
               color="inherit"
             >
               Datenstruktur grafisch dargestellt
-            </DownloadCardButton>
+            </Button>
           </CardContent>
         : null}
       </Collapse>

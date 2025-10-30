@@ -2,12 +2,13 @@ import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
-
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { DownloadCardButton, StyledProgressText } from '../index.jsx'
+
+import { StyledProgressText } from '../index.jsx'
+import { button } from '../index.module.css'
 
 export const ApOhnePop = observer(() => {
   const store = useContext(MobxContext)
@@ -85,7 +86,8 @@ export const ApOhnePop = observer(() => {
   }
 
   return (
-    <DownloadCardButton
+    <Button
+      className={button}
       onClick={onClickApOhnePop}
       color="inherit"
       disabled={!!queryState}
@@ -94,6 +96,6 @@ export const ApOhnePop = observer(() => {
       {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
       : null}
-    </DownloadCardButton>
+    </Button>
   )
 })

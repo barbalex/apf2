@@ -7,7 +7,9 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { DownloadCardButton, StyledProgressText } from '../index.jsx'
+
+import { StyledProgressText } from '../index.jsx'
+import { button } from '../index.module.css'
 
 export const AnzMassn = observer(() => {
   const store = useContext(MobxContext)
@@ -88,7 +90,8 @@ export const AnzMassn = observer(() => {
   }
 
   return (
-    <DownloadCardButton
+    <Button
+      className={button}
       onClick={onClickAnzMassnProAp}
       color="inherit"
       disabled={!!queryState}
@@ -97,6 +100,6 @@ export const AnzMassn = observer(() => {
       {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
       : null}
-    </DownloadCardButton>
+    </Button>
   )
 })
