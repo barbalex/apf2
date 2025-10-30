@@ -8,7 +8,6 @@ import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
@@ -18,12 +17,6 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const MoveIcon = styled(MdOutlineMoveDown)`
-  color: white;
-`
-const CopyIcon = styled(MdContentCopy)`
-  color: white;
-`
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }) => {
@@ -122,7 +115,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
         {isMovingMassn && (
           <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
             <IconButton onClick={onClickMoveMassnToHere}>
-              <MoveIcon />
+              <MdOutlineMoveDown style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
@@ -136,7 +129,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
         {isCopyingMassn && (
           <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
             <IconButton onClick={onClickCopyMassnToHere}>
-              <CopyIcon />
+              <MdContentCopy style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
