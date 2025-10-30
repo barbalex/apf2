@@ -8,7 +8,6 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
