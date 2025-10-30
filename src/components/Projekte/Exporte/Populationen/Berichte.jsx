@@ -8,8 +8,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { StyledProgressText } from '../index.jsx'
-import { button } from '../index.module.css'
+import { button, progress } from '../index.module.css'
 
 export const Berichte = observer(() => {
   const store = useContext(MobxContext)
@@ -141,7 +140,7 @@ export const Berichte = observer(() => {
     >
       Populationen inkl. Populations- und Massnahmen-Berichte
       {queryState ?
-        <StyledProgressText>{queryState}</StyledProgressText>
+        <span className={progress}>{queryState}</span>
       : null}
     </Button>
   )
