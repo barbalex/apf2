@@ -133,6 +133,7 @@ export const Component = observer(() => {
     }
   }
 
+
   if (loading) return <Spinner />
 
   if (error) return <Error error={error} />
