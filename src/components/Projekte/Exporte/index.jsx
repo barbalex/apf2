@@ -1,5 +1,4 @@
 import styled from '@emotion/styled'
-import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 
 import { FormTitle } from '../../shared/FormTitle/index.jsx'
@@ -21,11 +20,6 @@ import {
   exporteContainer,
 } from './index.module.css'
 
-export const StyledCardActions = styled(CardActions)`
-  justify-content: space-between;
-  cursor: pointer;
-  height: auto !important;
-`
 export const CardActionIconButton = styled(IconButton)`
   transform: ${(props) => (props['data-expanded'] ? 'rotate(180deg)' : 'none')};
 `
