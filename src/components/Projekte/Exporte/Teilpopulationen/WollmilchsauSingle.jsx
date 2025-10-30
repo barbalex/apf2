@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -10,11 +9,7 @@ import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const AutocompleteContainer = styled.div`
-  flex-basis: 450px;
-  padding-left: 8px;
-  padding-right: 8px;
-`
+import { container } from './WollmilchsauSingle.module.css'
 
 export const WollmilchsauSingle = observer(() => {
   const store = useContext(MobxContext)
@@ -34,12 +29,12 @@ export const WollmilchsauSingle = observer(() => {
     : { artname: { isNull: false } }
 
   return (
-    <AutocompleteContainer>
+    <div className={container}>
       <SelectLoadingOptions
         row={{}}
         field="ewm"
         valueLabelPath="aeTaxonomyByArtId.artname"
-        label={`"Eier legende Wollmilchsau" für einzelne Arten's: Art wählen`}
+        label={`"Eier legende Wollmilchsau" für einzelne Arten: Art wählen`}
         labelSize={14}
         saveToDb={async (e) => {
           const aeId = e.target.value
@@ -678,6 +673,6 @@ export const WollmilchsauSingle = observer(() => {
         queryNodesName="allAeTaxonomies"
         error={ewmMessage}
       />
-    </AutocompleteContainer>
+    </div>
   )
 })
