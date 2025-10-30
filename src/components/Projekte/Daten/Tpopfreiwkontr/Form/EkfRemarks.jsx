@@ -6,7 +6,7 @@ export const EkfRemarks = ({ saveToDb, row, errors }) => (
     <div className={label}>Mitteilungen zwischen AV/Topos und Freiwilligen</div>
     <div className={val}>
       <TextField2
-        key={`${row.id}ekfBemerkungen`}
+        key={`${row?.id}ekfBemerkungen`}
         name="ekfBemerkungen"
         row={row}
         type="text"
