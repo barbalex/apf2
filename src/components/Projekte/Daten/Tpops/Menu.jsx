@@ -9,7 +9,6 @@ import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
@@ -23,12 +22,6 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-const MoveIcon = styled(MdOutlineMoveDown)`
-  color: white;
-`
-const CopyIcon = styled(MdContentCopy)`
-  color: white;
-`
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }) => {
@@ -169,14 +162,14 @@ export const Menu = observer(({ toggleFilterInput }) => {
         {isTpopMoving && (
           <Tooltip title={`Verschiebe '${moving.label}' zu dieser Population`}>
             <IconButton onClick={onClickMoveTpopToHere}>
-              <MoveIcon />
+              <MdOutlineMoveDown style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {isCopyingTpop && (
           <Tooltip title={`Kopiere '${copying.label}' in diese Population`}>
             <IconButton onClick={onClickCopyTpopToHere}>
-              <CopyIcon />
+              <MdContentCopy style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
