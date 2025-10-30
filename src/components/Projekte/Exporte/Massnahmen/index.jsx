@@ -10,7 +10,6 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { Massnahmen as MassnahmenComponent } from './Massnahmen.jsx'
 import { MassnWebgisBun } from './MassnWebgisBun.jsx'
 
-import { CardActionIconButton } from '../index.jsx'
 import {
   cardContent,
   actionTitle,
@@ -30,14 +29,14 @@ export const Massnahmen = () => {
       >
         <div className={actionTitle}>Massnahmen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
-          <CardActionIconButton
-            data-expanded={expanded}
+          <IconButton
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             aria-expanded={expanded}
             aria-label={expanded ? 'schliessen' : 'öffnen'}
             color="inherit"
           >
             <ExpandMoreIcon />
-          </CardActionIconButton>
+          </IconButton>
         </Tooltip>
       </CardActions>
       <Collapse

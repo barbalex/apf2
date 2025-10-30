@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CardContent } from './CardContent.jsx'
-import { CardActionIconButton } from '../index.jsx'
 import { actionTitle, card, cardActions } from '../index.module.css'
 
 export const Teilpopulationen = () => {
@@ -24,14 +23,14 @@ export const Teilpopulationen = () => {
       >
         <div className={actionTitle}>Teilpopulationen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
-          <CardActionIconButton
-            data-expanded={expanded}
+          <IconButton
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             aria-expanded={expanded}
             aria-label={expanded ? 'schliessen' : 'öffnen'}
             color="inherit"
           >
             <ExpandMoreIcon />
-          </CardActionIconButton>
+          </IconButton>
         </Tooltip>
       </CardActions>
       <Collapse
