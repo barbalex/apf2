@@ -26,29 +26,12 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const ScrollContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-`
-const StyledInput = styled(Input)`
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const PasswordMessage = styled.div`
-  padding-bottom: 10px;
-`
+import {
+  container,
+  scrollContainer,
+  input,
+  passwordMessage,
+} from './index.module.css'
 
 const roleWerte = [
   {
@@ -201,7 +184,7 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="Benutzer"
           MenuBarComponent={Menu}
@@ -214,7 +197,7 @@ export const Component = () => {
           }}
         />
 
-        <ScrollContainer>
+        <div className={scrollContainer}>
           <TextField2
             key={`${row.id}name`}
             name="name"
@@ -253,7 +236,7 @@ export const Component = () => {
             error={errors.adresseId}
           />
           {!!passwordMessage && (
-            <PasswordMessage>{passwordMessage}</PasswordMessage>
+            <div className={passwordMessage}>{passwordMessage}</div>
           )}
           {(editPassword || errors.pass) && (
             <FormControl
@@ -263,7 +246,7 @@ export const Component = () => {
               variant="standard"
             >
               <InputLabel htmlFor="passwort">Neues Passwort</InputLabel>
-              <StyledInput
+              <Input
                 id="passwort"
                 name="pass"
                 type={showPass ? 'text' : 'password'}
@@ -293,6 +276,7 @@ export const Component = () => {
                     </Tooltip>
                   </InputAdornment>
                 }
+                className={input}
               />
               <FormHelperText id="passwortHelper">
                 {passwordErrorText || (errors && !!errors.pass) ?
@@ -312,7 +296,7 @@ export const Component = () => {
               <InputLabel htmlFor="passwort">
                 Neues Passwort wiederholen
               </InputLabel>
-              <StyledInput
+              <Input
                 id="passwort2"
                 name="pass"
                 type={showPass2 ? 'text' : 'password'}
@@ -340,14 +324,15 @@ export const Component = () => {
                     </Tooltip>
                   </InputAdornment>
                 }
+                className={input}
               />
               <FormHelperText id="passwortHelper">
                 {password2ErrorText}
               </FormHelperText>
             </FormControl>
           )}
-        </ScrollContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 }

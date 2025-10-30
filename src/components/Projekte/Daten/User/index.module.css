@@ -1,0 +1,26 @@
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.scrollContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 10px;
+}
+
+.input {
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.passwordMessage {
+  padding-bottom: 10px;
+}
