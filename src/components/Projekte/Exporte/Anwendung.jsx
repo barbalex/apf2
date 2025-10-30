@@ -3,16 +3,13 @@ import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
+import Card from '@mui/material/Card'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import beziehungen from '../../../etc/beziehungen.png'
 
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from './index.jsx'
-import { cardContent, actionTitle, button } from './index.module.css'
+import { StyledCardActions, CardActionIconButton } from './index.jsx'
+import { cardContent, actionTitle, button, card } from './index.module.css'
 
 export const Anwendung = () => {
   const [expanded, setExpanded] = useState(false)
@@ -21,7 +18,7 @@ export const Anwendung = () => {
   const onClickGrafisch = () => window.open(beziehungen)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={onClickAction}
@@ -55,6 +52,6 @@ export const Anwendung = () => {
           </CardContent>
         : null}
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }

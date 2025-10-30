@@ -7,3 +7,15 @@
   margin-top: -14px;
   margin-bottom: 3px;
 }
+
+
+
+.progress {
+  font-style: italic;
+  animation: blinker 1s linear infinite;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+}

@@ -4,6 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
@@ -11,12 +12,8 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../mobxContext.js'
 
 import { formControlLabel, checkbox } from './Optionen.module.css'
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from './index.jsx'
-import { cardContent, actionTitle } from './index.module.css'
+import { StyledCardActions, CardActionIconButton } from './index.jsx'
+import { cardContent, actionTitle, card } from './index.module.css'
 
 export const Optionen = observer(() => {
   const store = useContext(MobxContext)
@@ -24,7 +21,7 @@ export const Optionen = observer(() => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={() => setExpanded(!expanded)}
@@ -63,6 +60,6 @@ export const Optionen = observer(() => {
           />
         </CardContent>
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 })

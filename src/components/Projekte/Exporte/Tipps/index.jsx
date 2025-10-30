@@ -2,6 +2,7 @@ import { useState } from 'react'
 import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
+import Card from '@mui/material/Card'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { WasIstCsv } from './WasIstCsv.jsx'

@@ -22,15 +22,6 @@ import {
   exporteContainer,
 } from './index.module.css'
 
-export const StyledProgressTextNewLine = styled.div`
-  font-style: italic;
-  animation: blinker 1s linear infinite;
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-`
 export const StyledCard = styled(Card)`
   margin: 10px 0;
   background-color: #fff8e1 !important;

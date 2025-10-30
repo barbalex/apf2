@@ -2,18 +2,15 @@ import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
 import { BeobZugeordnet } from './BeobZugeordnet.jsx'
 import { BeobArtChanged } from './BeobArtChanged.jsx'
 
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
-import { cardContent, actionTitle } from '../index.module.css'
+import { StyledCardActions, CardActionIconButton } from '../index.jsx'
+import { cardContent, actionTitle, card } from '../index.module.css'
 
 export const Beobachtungen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -21,7 +18,7 @@ export const Beobachtungen = () => {
   const onClickAction = () => setExpanded(!expanded)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={onClickAction}
@@ -51,6 +48,6 @@ export const Beobachtungen = () => {
           </CardContent>
         : null}
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }

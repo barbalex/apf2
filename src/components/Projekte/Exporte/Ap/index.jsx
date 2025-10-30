@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { Ap as ApComponent } from './Ap.jsx'
@@ -17,12 +18,8 @@ import { Erfkrit } from './Erfkrit.jsx'
 import { Idealbiotop } from './Idealbiotop.jsx'
 import { Assozart } from './Assozart.jsx'
 
-import {
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
-import { cardContent, actionTitle } from '../index.module.css'
+import { StyledCardActions, CardActionIconButton } from '../index.jsx'
+import { cardContent, actionTitle, card } from '../index.module.css'
 
 export const Ap = () => {
   const [expanded, setExpanded] = useState(false)
@@ -30,7 +27,7 @@ export const Ap = () => {
   const onClickAction = () => setExpanded(!expanded)
 
   return (
-    <StyledCard>
+    <Card className={card}>
       <StyledCardActions
         disableSpacing
         onClick={onClickAction}
@@ -70,6 +67,6 @@ export const Ap = () => {
           </CardContent>
         : null}
       </Collapse>
-    </StyledCard>
+    </Card>
   )
 }

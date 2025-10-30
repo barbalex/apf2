@@ -8,9 +8,8 @@ import Button from '@mui/material/Button'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { StyledProgressTextNewLine } from '../index.jsx'
 import { button } from '../index.module.css'
-import { li, ewm } from './Wollmilchsau.module.css'
+import { li, ewm, progress } from './Wollmilchsau.module.css'
 
 export const Wollmilchsau = observer(() => {
   const store = useContext(MobxContext)
@@ -654,7 +653,7 @@ export const Wollmilchsau = observer(() => {
         {'= "Eier legende Wollmilchsau". Vorsicht: kann > 2 Minuten dauern!'}
       </div>
       {queryState ?
-        <StyledProgressTextNewLine>{queryState}</StyledProgressTextNewLine>
+        <div className={progress}>{queryState}</div>
       : null}
     </Button>
   )

@@ -47,16 +47,6 @@
   }
 }
 
-.styledProgressTextNewLine {
-  font-style: italic;
-  animation: blinker 1s linear infinite;
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-}
-
 .cardContent {
   margin: -15px 0 0 0;
   display: flex;
@@ -73,12 +63,12 @@
   user-select: none;
 }
 
-.styledCard {
+.card {
   margin: 10px 0;
   background-color: #fff8e1 !important;
 }
 
-.styledCardActions {
+.cardActions {
   justify-content: space-between;
   cursor: pointer;
   height: auto !important;
