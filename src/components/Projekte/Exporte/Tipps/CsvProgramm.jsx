@@ -6,12 +6,12 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CsvInExcelOeffnen } from './CsvInExcelOeffnen.jsx'
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
 import { cardContent } from './index.module.css'
+import { actionTitle } from '../index.module.css'
 
 export const CsvProgramm = () => {
   const [expanded, setExpanded] = useState(false)
@@ -22,9 +22,9 @@ export const CsvProgramm = () => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>
+        <div className={actionTitle}>
           Welches Programm soll ich dazu verwenden?
-        </CardActionTitle>
+        </div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

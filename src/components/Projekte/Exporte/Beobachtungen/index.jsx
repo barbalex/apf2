@@ -9,12 +9,11 @@ import { BeobZugeordnet } from './BeobZugeordnet.jsx'
 import { BeobArtChanged } from './BeobArtChanged.jsx'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { cardContent } from '../index.module.css'
+import { cardContent, actionTitle } from '../index.module.css'
 
 export const Beobachtungen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -27,7 +26,7 @@ export const Beobachtungen = () => {
         disableSpacing
         onClick={onClickAction}
       >
-        <CardActionTitle>Beobachtungen</CardActionTitle>
+        <div className={actionTitle}>Beobachtungen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

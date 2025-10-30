@@ -5,11 +5,11 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CardContent } from './CardContent.jsx'
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
+import { actionTitle } from '../index.module.css'
 
 export const Teilpopulationen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -22,7 +22,7 @@ export const Teilpopulationen = () => {
         disableSpacing
         onClick={onClickAction}
       >
-        <CardActionTitle>Teilpopulationen</CardActionTitle>
+        <div className={actionTitle}>Teilpopulationen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

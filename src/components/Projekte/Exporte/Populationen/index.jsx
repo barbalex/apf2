@@ -19,12 +19,11 @@ import { LetzteZaehlung } from './LetzteZaehlung.jsx'
 import { LetzteZaehlungInklAnpflanz } from './LetzteZaehlungInklAnpflanz.jsx'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { cardContent } from '../index.module.css'
+import { cardContent, actionTitle } from '../index.module.css'
 
 export const Populationen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -35,7 +34,7 @@ export const Populationen = () => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>Populationen</CardActionTitle>
+        <div className={actionTitle}>Populationen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

@@ -5,12 +5,12 @@ import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
 import { cardContent } from './index.module.css'
+import { actionTitle } from '../index.module.css'
 
 export const ZuVieleDaten = () => {
   const [expanded, setExpanded] = useState(false)
@@ -21,7 +21,7 @@ export const ZuVieleDaten = () => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>Hilfe, das sind viel zu viele Daten!</CardActionTitle>
+        <div className={actionTitle}>Hilfe, das sind viel zu viele Daten!</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

@@ -8,12 +8,11 @@ import { Massnahmen as MassnahmenComponent } from './Massnahmen.jsx'
 import { MassnWebgisBun } from './MassnWebgisBun.jsx'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { cardContent } from '../index.module.css'
+import { cardContent, actionTitle } from '../index.module.css'
 
 export const Massnahmen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -24,7 +23,7 @@ export const Massnahmen = () => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>Massnahmen</CardActionTitle>
+        <div className={actionTitle}>Massnahmen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

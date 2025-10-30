@@ -10,12 +10,11 @@ import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
 import { InfoFlora } from './InfoFlora.jsx'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { cardContent } from '../index.module.css'
+import { cardContent, actionTitle } from '../index.module.css'
 
 export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -26,7 +25,7 @@ export const Kontrollen = () => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>Kontrollen</CardActionTitle>
+        <div className={actionTitle}>Kontrollen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

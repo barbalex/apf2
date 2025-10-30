@@ -5,12 +5,12 @@ import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
 import { cardContent } from './index.module.css'
+import { actionTitle } from '../index.module.css'
 
 export const CsvOeffnen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -21,7 +21,7 @@ export const CsvOeffnen = () => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>Wie öffne ich eine .csv-Datei?</CardActionTitle>
+        <div className={actionTitle}>Wie öffne ich eine .csv-Datei?</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

@@ -5,12 +5,12 @@ import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
 import { cardContent } from './index.module.css'
+import { actionTitle } from '../index.module.css'
 
 export const DatenChaotisch = () => {
   const [expanded, setExpanded] = useState(false)
@@ -21,9 +21,9 @@ export const DatenChaotisch = () => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>
+        <div className={actionTitle}>
           Sind die Daten ungeordnet und chaotisch?
-        </CardActionTitle>
+        </div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

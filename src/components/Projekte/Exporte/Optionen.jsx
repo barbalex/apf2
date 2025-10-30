@@ -12,12 +12,11 @@ import { MobxContext } from '../../../mobxContext.js'
 
 import { formControlLabel, checkbox } from './Optionen.module.css'
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from './index.jsx'
-import { cardContent } from './index.module.css'
+import { cardContent, actionTitle } from './index.module.css'
 
 export const Optionen = observer(() => {
   const store = useContext(MobxContext)
@@ -30,7 +29,7 @@ export const Optionen = observer(() => {
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <CardActionTitle>Optionen</CardActionTitle>
+        <div className={actionTitle}>Optionen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}

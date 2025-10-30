@@ -7,13 +7,12 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import beziehungen from '../../../etc/beziehungen.png'
 
 import {
-  CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
   DownloadCardButton,
 } from './index.jsx'
-import { cardContent } from './index.module.css'
+import { cardContent, actionTitle } from './index.module.css'
 
 export const Anwendung = () => {
   const [expanded, setExpanded] = useState(false)
@@ -27,7 +26,7 @@ export const Anwendung = () => {
         disableSpacing
         onClick={onClickAction}
       >
-        <CardActionTitle>Anwendung</CardActionTitle>
+        <div className={actionTitle}>Anwendung</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <CardActionIconButton
             data-expanded={expanded}
