@@ -52,12 +52,6 @@ export const StyledProgressTextNewLine = styled.div`
     }
   }
 `
-export const CardActionTitle = styled.div`
-  padding-left: 8px;
-  font-weight: bold;
-  word-break: break-word;
-  user-select: none;
-`
 export const StyledCard = styled(Card)`
   margin: 10px 0;
   background-color: #fff8e1 !important;

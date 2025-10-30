@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import CardContent from '@mui/material/CardContent'
+import Button from '@mui/material/Button'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import beziehungen from '../../../etc/beziehungen.png'
@@ -12,7 +13,7 @@ import {
   CardActionIconButton,
   DownloadCardButton,
 } from './index.jsx'
-import { cardContent, actionTitle } from './index.module.css'
+import { cardContent, actionTitle, button } from './index.module.css'
 
 export const Anwendung = () => {
   const [expanded, setExpanded] = useState(false)

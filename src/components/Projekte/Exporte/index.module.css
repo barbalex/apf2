@@ -25,7 +25,7 @@
   height: 100%;
 }
 
-.downloadCardButton {
+.button {
   flex-basis: 450px;
   text-transform: none !important;
   font-weight: 500;
