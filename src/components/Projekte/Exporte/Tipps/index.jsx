@@ -13,7 +13,6 @@ import { CsvProgramm } from './CsvProgramm.jsx'
 import { DatenChaotisch } from './DatenChaotisch.jsx'
 import { ZuVieleDaten } from './ZuVieleDaten.jsx'
 
-import { CardActionIconButton } from '../index.jsx'
 import { ownCardContent, cardContent } from './index.module.css'
 import { actionTitle, card, cardActions } from '../index.module.css'
 
@@ -29,13 +28,13 @@ export const Tipps = () => {
       >
         <div className={actionTitle}>Tipps und Tricks</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
-          <CardActionIconButton
-            data-expanded={expanded}
+          <IconButton
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             aria-expanded={expanded}
             aria-label={expanded ? 'schliessen' : 'öffnen'}
           >
             <ExpandMoreIcon />
-          </CardActionIconButton>
+          </IconButton>
         </Tooltip>
       </CardActions>
       <Collapse

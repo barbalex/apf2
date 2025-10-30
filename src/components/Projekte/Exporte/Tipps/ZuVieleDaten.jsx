@@ -7,7 +7,6 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { CardActionIconButton } from '../index.jsx'
 import { cardContent } from './index.module.css'
 import { actionTitle, card, cardActions } from '../index.module.css'
 
@@ -23,13 +22,13 @@ export const ZuVieleDaten = () => {
       >
         <div className={actionTitle}>Hilfe, das sind viel zu viele Daten!</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
-          <CardActionIconButton
-            data-expanded={expanded}
+          <IconButton
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
             aria-expanded={expanded}
             aria-label={expanded ? 'schliessen' : 'öffnen'}
           >
             <ExpandMoreIcon />
-          </CardActionIconButton>
+          </IconButton>
         </Tooltip>
       </CardActions>
       <Collapse
