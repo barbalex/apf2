@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
@@ -9,7 +10,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { StyledCardContent } from './index.jsx'
+import { cardContent } from './index.module.css'
 
 export const DatenChaotisch = () => {
   const [expanded, setExpanded] = useState(false)
@@ -38,7 +39,7 @@ export const DatenChaotisch = () => {
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           {
             'Das Programm hat wohl beim Öffnen die Feld-Grenzen nicht richtig erkannt.'
           }
@@ -60,7 +61,7 @@ export const DatenChaotisch = () => {
               }
             </li>
           </ul>
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
     </StyledCard>
   )

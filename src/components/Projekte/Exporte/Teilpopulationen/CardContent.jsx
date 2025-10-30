@@ -1,3 +1,6 @@
+
+import MuiCardContent from '@mui/material/CardContent'
+
 import { TPop } from './TPop.jsx'
 import { TPopFuerWebgisBun } from './TPopFuerWebgisBun.jsx'
 import { TPopFuerGoogleEarth } from './TPopFuerGoogleEarth.jsx'

@@ -3,7 +3,6 @@ import CardContent from '@mui/material/CardContent'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 
 import { WasIstCsv } from './WasIstCsv.jsx'
 import { CsvOeffnen } from './CsvOeffnen.jsx'
@@ -17,18 +16,7 @@ import {
   CardActionIconButton,
 } from '../index.jsx'
 
-const OwnStyledCardContent = styled(CardContent)`
-  margin: -15px 0 0 0;
-`
-export const StyledCardContent = styled(CardContent)`
-  margin: -15px 0 0 0;
-  ol {
-    -webkit-padding-start: 16px;
-  }
-  li {
-    margin-top: 4px;
-  }
-`
+import { ownCardContent, cardContent } from './index.module.css'
 
 export const Tipps = () => {
   const [expanded, setExpanded] = useState(false)
@@ -56,13 +44,13 @@ export const Tipps = () => {
         unmountOnExit
       >
         {expanded ?
-          <OwnStyledCardContent>
+          <CardContent className={ownCardContent}>
             <WasIstCsv />
             <CsvOeffnen />
             <CsvProgramm />
             <DatenChaotisch />
             <ZuVieleDaten />
-          </OwnStyledCardContent>
+          </CardContent>
         : null}
       </Collapse>
     </StyledCard>

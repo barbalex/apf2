@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
@@ -9,7 +10,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { StyledCardContent } from './index.jsx'
+import { cardContent } from './index.module.css'
 
 export const ZuVieleDaten = () => {
   const [expanded, setExpanded] = useState(false)
@@ -36,7 +37,7 @@ export const ZuVieleDaten = () => {
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           {'Meist werden alle verfügbaren Datensätze und Felder exportiert.'}
           <br />
           {
@@ -46,7 +47,7 @@ export const ZuVieleDaten = () => {
             <li>Filtern Sie die Zeilen nach gewünschten Kriterien</li>
             <li>Blenden Sie unerwünschte Spalten aus oder löschen Sie sie</li>
           </ul>
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
     </StyledCard>
   )

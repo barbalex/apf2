@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
@@ -9,7 +10,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { StyledCardContent } from './index.jsx'
+import { cardContent } from './index.module.css'
 
 export const WasIstCsv = () => {
   const [expanded, setExpanded] = useState(false)
@@ -36,7 +37,7 @@ export const WasIstCsv = () => {
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           {'Eine reine Textdatei, deren Name mit ".csv" endet.'}
           <br />
           {'"csv" steht für: "comma separated values".'}
@@ -62,7 +63,7 @@ export const WasIstCsv = () => {
               }
             </li>
           </ol>
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
     </StyledCard>
   )

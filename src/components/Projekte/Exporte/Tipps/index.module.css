@@ -1,0 +1,13 @@
+.ownCardContent {
+  margin: -15px 0 0 0;
+}
+
+.cardContent {
+  margin: -15px 0 0 0;
+  ol {
+    -webkit-padding-start: 16px;
+  }
+  li {
+    margin-top: 4px;
+  }
+}

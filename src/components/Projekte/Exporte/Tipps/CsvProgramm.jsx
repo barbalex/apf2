@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CsvInExcelOeffnen } from './CsvInExcelOeffnen.jsx'
@@ -10,7 +11,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { StyledCardContent } from './index.jsx'
+import { cardContent } from './index.module.css'
 
 export const CsvProgramm = () => {
   const [expanded, setExpanded] = useState(false)
@@ -39,7 +40,7 @@ export const CsvProgramm = () => {
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           {
             'Um die Datei das erste Mal zu öffnen eignet sich Libre Office am besten: '
           }
@@ -60,7 +61,7 @@ export const CsvProgramm = () => {
             }
           </p>
           <CsvInExcelOeffnen />
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
     </StyledCard>
   )

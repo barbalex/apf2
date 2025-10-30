@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import {
@@ -9,7 +10,7 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { StyledCardContent } from './index.jsx'
+import { cardContent } from './index.module.css'
 
 export const CsvOeffnen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -36,7 +37,7 @@ export const CsvOeffnen = () => {
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           Es gibt zwei Möglichkeiten:
           <ol>
             <li>
@@ -60,7 +61,7 @@ export const CsvOeffnen = () => {
               }
             </li>
           </ol>
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
     </StyledCard>
   )
