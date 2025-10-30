@@ -1,5 +1,3 @@
-import styled from '@emotion/styled'
-
 import { ApFilter } from '../Daten/ApFilter/index.jsx'
 import { PopFilter } from '../Daten/PopFilter/index.jsx'
 import { TpopFilter } from '../Daten/TpopFilter/index.tsx'
@@ -10,20 +8,14 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Title } from './Title.jsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #ffd3a7;
-`
+import { container } from './index.module.css'
 
 export const Filter = () => {
   const [tab, setTab] = useSearchParamsState('filterTab', 'ap')
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <Title
           activeTab={tab}
           setActiveTab={setTab}
@@ -34,7 +26,7 @@ export const Filter = () => {
         {tab === 'tpopmassn' && <TpopmassnFilter />}
         {tab === 'tpopfeldkontr' && <TpopfeldkontrFilter />}
         {tab === 'tpopfreiwkontr' && <TpopfreiwkontrFilter />}
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 }
