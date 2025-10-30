@@ -1,0 +1,7 @@
+.formControlLabel {
+  margin-left: 0 !important;
+}
+.checkbox {
+  width: 30px !important;
+  height: 30px !important;
+}

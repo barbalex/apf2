@@ -9,6 +9,7 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
+import { formControlLabel, checkbox } from './Optionen.module.css'
 import {
   StyledCardContent,
   CardActionTitle,
@@ -16,14 +17,6 @@ import {
   StyledCardActions,
   CardActionIconButton,
 } from './index.jsx'
-
-const StyledFormControlLabel = styled(FormControlLabel)`
-  margin-left: 0 !important;
-`
-const StyledCheckbox = styled(Checkbox)`
-  width: 30px !important;
-  height: 30px !important;
-`
 
 export const Optionen = observer(() => {
   const store = useContext(MobxContext)
@@ -53,18 +46,20 @@ export const Optionen = observer(() => {
         unmountOnExit
       >
         <StyledCardContent>
-          <StyledFormControlLabel
+          <FormControlLabel
             control={
-              <StyledCheckbox
+              <Checkbox
                 checked={exportFileType === 'csv'}
                 onChange={() =>
                   setExportFileType(exportFileType === 'csv' ? 'xlsx' : 'csv')
                 }
                 value={exportFileType}
                 color="primary"
+                className={checkbox}
               />
             }
             label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
+            className={formControlLabel}
           />
         </StyledCardContent>
       </Collapse>
