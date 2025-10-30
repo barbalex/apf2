@@ -1,28 +1,7 @@
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 
-const StyledTabs = styled(Tabs)`
-  [role='tab'][aria-selected='false'],
-  svg {
-    color: white !important;
-  }
-`
-const StyledTab = styled(Tab)`
-  min-width: 70px !important;
-  text-transform: none !important;
-  &.Mui-selected {
-    font-weight: 900;
-  }
-`
-const TitleRow = styled.div`
-  background-color: #d84315;
-`
-const TitleDiv = styled.div`
-  padding: 10px 10px 0 10px;
-  color: white;
-  font-weight: bold;
-`
+import { tab, tabs, container, title } from './Title.module.css'
 
 const titleObject = {
   ap: 'Art Filter',
@@ -37,9 +16,15 @@ export const Title = ({ activeTab, setActiveTab }) => {
   const onChangeTab = (event, value) => setActiveTab(value)
 
   return (
-    <TitleRow>
-      <TitleDiv data-id="form-title">{titleObject[activeTab]}</TitleDiv>
-      <StyledTabs
+    <div className={container}>
+      <div
+        className={title}
+        data-id="form-title"
+      >
+        {titleObject[activeTab]}
+      </div>
+      <Tabs
+        className={tabs}
         value={activeTab}
         onChange={onChangeTab}
         indicatorColor="primary"
@@ -47,37 +32,43 @@ export const Title = ({ activeTab, setActiveTab }) => {
         variant="scrollable"
         scrollButtons="auto"
       >
-        <StyledTab
+        <Tab
+          className={tab}
           label="Art"
           value="ap"
           data-id="ap"
         />
-        <StyledTab
+        <Tab
+          className={tab}
           label="Pop"
           value="pop"
           data-id="pop"
         />
-        <StyledTab
+        <Tab
+          className={tab}
           label="T-Pop"
           value="tpop"
           data-id="tpop"
         />
-        <StyledTab
+        <Tab
+          className={tab}
           label="Massn"
           value="tpopmassn"
           data-id="tpopmassn"
         />
-        <StyledTab
+        <Tab
+          className={tab}
           label="EK"
           value="tpopfeldkontr"
           data-id="tpopfeldkontr"
         />
-        <StyledTab
+        <Tab
+          className={tab}
           label="EKF"
           value="tpopfreiwkontr"
           data-id="tpopfreiwkontr"
         />
-      </StyledTabs>
-    </TitleRow>
+      </Tabs>
+    </div>
   )
 }

@@ -1,0 +1,24 @@
+.tabs {
+  [role='tab'][aria-selected='false'],
+  svg {
+    color: white !important;
+  }
+}
+
+.tab {
+  min-width: 70px !important;
+  text-transform: none !important;
+  &.Mui-selected {
+    font-weight: 900;
+  }
+}
+
+.container {
+  background-color: #d84315;
+}
+
+.title {
+  padding: 10px 10px 0 10px;
+  color: white;
+  font-weight: bold;
+}
