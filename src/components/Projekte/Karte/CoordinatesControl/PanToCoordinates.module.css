@@ -1,0 +1,31 @@
+.panIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.clearIcon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  cursor: pointer !important;
+}
+
+.container {
+  display: flex;
+  background-color: white;
+  border-radius: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin-bottom: 2px !important;
+  max-width: 380px;
+}
+
+.iconButton {
+  margin-top: 8px !important;
+  max-width: 30px !important;
+}
+
+.input {
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}

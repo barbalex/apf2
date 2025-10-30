@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import 'leaflet'
-import styled from '@emotion/styled'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -13,39 +12,13 @@ import { MdMyLocation, MdClear } from 'react-icons/md'
 import { epsg2056to4326 } from '../../../../modules/epsg2056to4326.js'
 import panCentreIcon from '../../../../etc/panTo.png'
 
-const PanIcon = styled(MdMyLocation)`
-  font-size: 1.5rem;
-  flex-shrink: 0;
-`
-const ClearIcon = styled(MdClear)`
-  font-size: 1.5rem;
-  flex-shrink: 0;
-`
-const Container = styled.div`
-  display: flex;
-  background-color: white;
-  border-radius: 3px;
-  padding-left: 5px;
-  padding-right: 5px;
-  margin-bottom: 2px !important;
-  max-width: 380px;
-`
-const StyledIconButton = styled(IconButton)`
-  margin-top: 8px !important;
-  max-width: 30px !important;
-  cursor: ${(props) => (props.disabled ? 'pointer !important' : 'default')};
-`
-const StyledPanIcon = styled(PanIcon)`
-  color: ${(props) => (props.disabled ? 'grey !important' : 'unset')};
-`
-const StyledClearIcon = styled(ClearIcon)`
-  cursor: pointer !important;
-`
-const StyledInput = styled(Input)`
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import {
+  panIcon,
+  container,
+  iconButton,
+  clearIcon,
+  input,
+} from './PanToCoordinates.module.css'
 
 const xIsValid = (x) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y) => !y || (y >= 1075346 && y < 1299942)
@@ -155,7 +128,8 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
     : 'auf Koordinaten zentrieren'
 
   return (
-    <Container
+    <div
+      className={container}
       onBlur={onBlurGotoContainer}
       onFocus={onFocusGotoContainer}
     >
@@ -166,7 +140,7 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
         variant="standard"
       >
         <InputLabel htmlFor="XKoordinate">X-Koordinate</InputLabel>
-        <StyledInput
+        <Input
           id="XKoordinate"
           value={x}
           type="number"
@@ -175,6 +149,7 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
           onChange={onChangeX}
           onBlur={onBlurX}
           ref={xkoordField}
+          className={input}
         />
         <FormHelperText id="xhelper">{xError}</FormHelperText>
       </FormControl>
@@ -185,7 +160,7 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
         variant="standard"
       >
         <InputLabel htmlFor="YKoordinate">Y-Koordinate</InputLabel>
-        <StyledInput
+        <Input
           id="YKoordinate"
           value={y}
           type="number"
@@ -193,28 +168,38 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
           max="1299942"
           onChange={onChangeY}
           onBlur={onBlurY}
+          className={input}
         />
         <FormHelperText id="yhelper">{yError}</FormHelperText>
       </FormControl>
       <Tooltip title={centerOnCoordsTitle}>
         <span>
-          <StyledIconButton
+          <IconButton
             aria-label={centerOnCoordsTitle}
             onClick={onClickGoto}
-            disabled={centerOnCoordsDisabled}
+            style={{
+              cursor: centerOnCoordsDisabled ? 'pointer !important' : 'default',
+            }}
+            className={iconButton}
           >
-            <StyledPanIcon disabled={centerOnCoordsDisabled} />
-          </StyledIconButton>
+            <MdMyLocation
+              style={{
+                color: centerOnCoordsDisabled ? 'grey !important' : 'unset',
+              }}
+              className={panIcon}
+            />
+          </IconButton>
         </span>
       </Tooltip>
       <Tooltip title="schliessen">
-        <StyledIconButton
+        <IconButton
           aria-label="schliessen"
           onClick={onClickClear}
+          className={iconButton}
         >
-          <StyledClearIcon />
-        </StyledIconButton>
+          <MdClear className={clearIcon} />
+        </IconButton>
       </Tooltip>
-    </Container>
+    </div>
   )
 })
