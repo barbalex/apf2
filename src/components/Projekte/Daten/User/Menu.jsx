@@ -12,7 +12,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import styled from '@emotion/styled'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -21,15 +20,7 @@ import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.js'
 import { queryEkfTpops } from './queryEkfTpops.js'
 
-const StyledButton = styled(Button)`
-  text-transform: none !important;
-  margin-right: 10px !important;
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  &:hover {
-    background-color: rgba(28, 74, 30, 0.2) !important;
-  }
-`
+import { button } from './Menu.module.css'
 
 const iconStyle = { color: 'white' }
 
@@ -219,18 +210,19 @@ export const Menu = observer(
           </Tooltip>
 
           {!editPassword && !passwordMessage && (
-            <StyledButton
+            <Button
               variant="outlined"
               onClick={() => {
                 setEditPassword(true)
                 setPasswordMessage('')
               }}
+              className={button}
             >
               Passwort ändern
-            </StyledButton>
+            </Button>
           )}
           {hasEkfTpopsWithoutEkfThisYear && (
-            <StyledButton
+            <Button
               variant="outlined"
               onClick={onClickCreateEkfForms}
               title={`Erzeugt in ${ekfTpops.length} Teil-Population${
@@ -238,18 +230,20 @@ export const Menu = observer(
               }, in de${
                 ekfTpops.length > 1 ? 'nen' : 'r'
               } dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
+              className={button}
             >
               {`(Fehlende) EKF-Formulare für ${thisYear} erzeugen`}
-            </StyledButton>
+            </Button>
           )}
           {hasEkfTpops && (
-            <StyledButton
+            <Button
               variant="outlined"
               component={Link}
               to={`/Daten/Benutzer/${row.id}/EKF/${thisYear}${search}`}
+              className={button}
             >
               {`EKF-Formulare für ${thisYear} öffnen`}
-            </StyledButton>
+            </Button>
           )}
         </MenuBar>
         <MuiMenu
