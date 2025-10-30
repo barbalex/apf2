@@ -1,19 +1,20 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
-import MuiCardContent from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
+import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
+import { BeobZugeordnet } from './BeobZugeordnet.jsx'
+import { BeobArtChanged } from './BeobArtChanged.jsx'
+
 import {
-  StyledCardContent,
   CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
-import { BeobZugeordnet } from './BeobZugeordnet.jsx'
-import { BeobArtChanged } from './BeobArtChanged.jsx'
+import { cardContent } from '../index.module.css'
 
 export const Beobachtungen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -44,11 +45,11 @@ export const Beobachtungen = () => {
         unmountOnExit
       >
         {expanded ?
-          <StyledCardContent>
+          <CardContent className={cardContent}>
             <BeobArtChanged t />
             <BeobZugeordnet />
             <BeobNichtZuzuordnen />
-          </StyledCardContent>
+          </CardContent>
         : null}
       </Collapse>
     </StyledCard>

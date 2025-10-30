@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
-import MuiCardContent from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import beziehungen from '../../../etc/beziehungen.png'
+
 import {
-  StyledCardContent,
   CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
   DownloadCardButton,
 } from './index.jsx'
+import { cardContent } from './index.module.css'
 
 export const Anwendung = () => {
   const [expanded, setExpanded] = useState(false)
@@ -44,14 +45,14 @@ export const Anwendung = () => {
         unmountOnExit
       >
         {expanded ?
-          <StyledCardContent>
+          <CardContent className={cardContent}>
             <DownloadCardButton
               onClick={onClickGrafisch}
               color="inherit"
             >
               Datenstruktur grafisch dargestellt
             </DownloadCardButton>
-          </StyledCardContent>
+          </CardContent>
         : null}
       </Collapse>
     </StyledCard>

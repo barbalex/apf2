@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
-import MuiCardContent from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
+import { Massnahmen as MassnahmenComponent } from './Massnahmen.jsx'
+import { MassnWebgisBun } from './MassnWebgisBun.jsx'
+
 import {
-  StyledCardContent,
   CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { Massnahmen as MassnahmenComponent } from './Massnahmen.jsx'
-import { MassnWebgisBun } from './MassnWebgisBun.jsx'
+import { cardContent } from '../index.module.css'
 
 export const Massnahmen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -41,11 +42,11 @@ export const Massnahmen = () => {
         unmountOnExit
       >
         {expanded ?
-          <StyledCardContent>
+          <CardContent className={cardContent}>
             <MassnahmenComponent />
             <MassnahmenComponent filtered={true} />
             <MassnWebgisBun />
-          </StyledCardContent>
+          </CardContent>
         : null}
       </Collapse>
     </StyledCard>

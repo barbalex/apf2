@@ -1,4 +1,3 @@
-
 import MuiCardContent from '@mui/material/CardContent'
 
 import { TPop } from './TPop.jsx'
@@ -13,10 +12,11 @@ import { WollmilchsauSingle } from './WollmilchsauSingle.jsx'
 import { TPopInklBerichte } from './TPopInklBerichte.jsx'
 import { LetzteZaehlungen } from './LetzteZaehlungen.jsx'
 import { LetzteZaehlungenInklAnpflanzungen } from './LetzteZaehlungenInklAnpflanzungen.jsx'
-import { StyledCardContent } from '../index.jsx'
+
+import { cardContent } from '../index.module.css'
 
 export const CardContent = () => (
-  <StyledCardContent>
+  <MuiCardContent className={cardContent}>
     <TPop />
     <TPop filtered={true} />
     <TPopFuerWebgisBun />
@@ -30,5 +30,5 @@ export const CardContent = () => (
     <TPopInklBerichte />
     <LetzteZaehlungen />
     <LetzteZaehlungenInklAnpflanzungen />
-  </StyledCardContent>
+  </MuiCardContent>
 )

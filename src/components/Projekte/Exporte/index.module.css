@@ -1,0 +1,85 @@
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  @media print {
+    display: none !important;
+  }
+}
+
+.scrollContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.innerContainer {
+  padding: 10px;
+}
+
+.exporteContainer {
+  height: 100%;
+}
+
+.downloadCardButton {
+  flex-basis: 450px;
+  text-transform: none !important;
+  font-weight: 500;
+  display: block;
+  text-align: left;
+  justify-content: flex-start !important;
+  user-select: none;
+}
+
+.styledProgressText {
+  margin-left: 10px;
+  font-style: italic;
+  animation: blinker 1s linear infinite;
+  white-space: nowrap;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+.styledProgressTextNewLine {
+  font-style: italic;
+  animation: blinker 1s linear infinite;
+  @keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+}
+
+.cardContent {
+  margin: -15px 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: stretch;
+  align-content: stretch;
+}
+
+.cardActionTitle {
+  padding-left: 8px;
+  font-weight: bold;
+  word-break: break-word;
+  user-select: none;
+}
+
+.styledCard {
+  margin: 10px 0;
+  background-color: #fff8e1 !important;
+}
+
+.styledCardActions {
+  justify-content: space-between;
+  cursor: pointer;
+  height: auto !important;
+}

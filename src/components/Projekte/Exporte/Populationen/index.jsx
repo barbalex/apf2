@@ -1,16 +1,9 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
-import MuiCardContent from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import {
-  StyledCardContent,
-  CardActionTitle,
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
 import { Pops } from './Pops.jsx'
 import { PopsForGoogleEarth } from './PopsForGoogleEarth.jsx'
 import { PopsForGEArtname } from './PopsForGEArtname.jsx'
@@ -24,6 +17,14 @@ import { LetzterPopBericht } from './LetzterPopBericht.jsx'
 import { LetzterMassnBericht } from './LetzterMassnBericht.jsx'
 import { LetzteZaehlung } from './LetzteZaehlung.jsx'
 import { LetzteZaehlungInklAnpflanz } from './LetzteZaehlungInklAnpflanz.jsx'
+
+import {
+  CardActionTitle,
+  StyledCard,
+  StyledCardActions,
+  CardActionIconButton,
+} from '../index.jsx'
+import { cardContent } from '../index.module.css'
 
 export const Populationen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -52,7 +53,7 @@ export const Populationen = () => {
         unmountOnExit
       >
         {expanded ?
-          <StyledCardContent>
+          <CardContent className={cardContent}>
             <Pops />
             <Pops filtered={true} />
             <PopsForGoogleEarth />
@@ -67,7 +68,7 @@ export const Populationen = () => {
             <LetzterMassnBericht />
             <LetzteZaehlung />
             <LetzteZaehlungInklAnpflanz />
-          </StyledCardContent>
+          </CardContent>
         : null}
       </Collapse>
     </StyledCard>

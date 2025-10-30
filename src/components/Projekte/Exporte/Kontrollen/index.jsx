@@ -1,20 +1,21 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
-import MuiCardContent from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
+import { Kontrollen as KontrollenComponent } from './Kontrollen.jsx'
+import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
+import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
+import { InfoFlora } from './InfoFlora.jsx'
+
 import {
-  StyledCardContent,
   CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from '../index.jsx'
-import { Kontrollen as KontrollenComponent } from './Kontrollen.jsx'
-import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
-import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
-import { InfoFlora } from './InfoFlora.jsx'
+import { cardContent } from '../index.module.css'
 
 export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -43,13 +44,13 @@ export const Kontrollen = () => {
         unmountOnExit
       >
         {expanded ?
-          <StyledCardContent>
+          <CardContent className={cardContent}>
             <KontrollenComponent />
             <KontrollenComponent filtered={true} />
             <KontrFuerWebgisBun />
             <KontrAnzProZaehlEinheit />
             <InfoFlora />
-          </StyledCardContent>
+          </CardContent>
         : null}
       </Collapse>
     </StyledCard>

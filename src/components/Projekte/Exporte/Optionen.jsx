@@ -3,20 +3,21 @@ import Collapse from '@mui/material/Collapse'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import Tooltip from '@mui/material/Tooltip'
-import MuiCardContent from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
+
 import { formControlLabel, checkbox } from './Optionen.module.css'
 import {
-  StyledCardContent,
   CardActionTitle,
   StyledCard,
   StyledCardActions,
   CardActionIconButton,
 } from './index.jsx'
+import { cardContent } from './index.module.css'
 
 export const Optionen = observer(() => {
   const store = useContext(MobxContext)
@@ -45,7 +46,7 @@ export const Optionen = observer(() => {
         timeout="auto"
         unmountOnExit
       >
-        <StyledCardContent>
+        <CardContent className={cardContent}>
           <FormControlLabel
             control={
               <Checkbox
@@ -61,7 +62,7 @@ export const Optionen = observer(() => {
             label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
             className={formControlLabel}
           />
-        </StyledCardContent>
+        </CardContent>
       </Collapse>
     </StyledCard>
   )

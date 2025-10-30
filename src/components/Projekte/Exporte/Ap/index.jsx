@@ -1,16 +1,9 @@
 import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import Tooltip from '@mui/material/Tooltip'
-import MuiCardContent from '@mui/material/CardContent'
+import CardContent from '@mui/material/CardContent'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import {
-  StyledCardContent,
-  CardActionTitle,
-  StyledCard,
-  StyledCardActions,
-  CardActionIconButton,
-} from '../index.jsx'
 import { Ap as ApComponent } from './Ap.jsx'
 import { ApOhnePop } from './ApOhnePop.jsx'
 import { AnzMassn } from './AnzMassn.jsx'
@@ -23,6 +16,14 @@ import { Ziele } from './Ziele.jsx'
 import { Erfkrit } from './Erfkrit.jsx'
 import { Idealbiotop } from './Idealbiotop.jsx'
 import { Assozart } from './Assozart.jsx'
+
+import {
+  CardActionTitle,
+  StyledCard,
+  StyledCardActions,
+  CardActionIconButton,
+} from '../index.jsx'
+import { cardContent } from '../index.module.css'
 
 export const Ap = () => {
   const [expanded, setExpanded] = useState(false)
@@ -53,7 +54,7 @@ export const Ap = () => {
         unmountOnExit
       >
         {expanded ?
-          <StyledCardContent>
+          <CardContent className={cardContent}>
             <ApComponent />
             <ApComponent filtered={true} />
             <ApOhnePop />
@@ -67,7 +68,7 @@ export const Ap = () => {
             <Erfkrit />
             <Idealbiotop />
             <Assozart />
-          </StyledCardContent>
+          </CardContent>
         : null}
       </Collapse>
     </StyledCard>

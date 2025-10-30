@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import CardContent from '@mui/material/CardContent'
 import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
@@ -17,29 +16,13 @@ import { Anwendung } from './Anwendung.jsx'
 import { Optionen } from './Optionen.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  @media print {
-    display: none !important;
-  }
-`
-const ScrollContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const InnerContainer = styled.div`
-  padding: 10px;
-`
-const ExporteContainer = styled.div`
-  height: 100%;
-`
+import {
+  container,
+  scrollContainer,
+  innerContainer,
+  exporteContainer,
+} from './index.module.css'
+
 export const DownloadCardButton = styled(Button)`
   flex-basis: 450px;
   text-transform: none !important;
@@ -69,14 +52,6 @@ export const StyledProgressTextNewLine = styled.div`
     }
   }
 `
-export const StyledCardContent = styled(CardContent)`
-  margin: -15px 0 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  align-content: stretch;
-`
 export const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
@@ -97,15 +72,18 @@ export const CardActionIconButton = styled(IconButton)`
 `
 
 export const Exporte = () => (
-  <ExporteContainer data-id="exporte-container">
+  <div
+    className={exporteContainer}
+    data-id="exporte-container"
+  >
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="Exporte"
           noTestDataMessage={true}
         />
-        <ScrollContainer>
-          <InnerContainer>
+        <div className={scrollContainer}>
+          <div className={innerContainer}>
             <Optionen />
             <Tipps />
             <Ap />
@@ -115,9 +93,9 @@ export const Exporte = () => (
             <Massnahmen />
             <Beobachtungen />
             <Anwendung />
-          </InnerContainer>
-        </ScrollContainer>
-      </Container>
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
-  </ExporteContainer>
+  </div>
 )
