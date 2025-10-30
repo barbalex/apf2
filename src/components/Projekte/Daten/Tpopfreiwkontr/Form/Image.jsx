@@ -21,18 +21,20 @@ export const Image = ({ artname, apId }) => {
       <div className={title}>{artname}</div>
       {!notif && (
         <div className={imageContainer}>
-          <picture>
-            <source
-              srcSet={`/${apId}.avif`}
-              type="image/avif"
-            />
-            <img
-              className={img}
-              src={`/${apId}.webp`}
-              onError={onError}
-              alt={artname}
-            />
-          </picture>
+          {!!apId && (
+            <picture>
+              <source
+                srcSet={`/${apId}.avif`}
+                type="image/avif"
+              />
+              <img
+                className={img}
+                src={`/${apId}.webp`}
+                onError={onError}
+                alt={artname}
+              />
+            </picture>
+          )}
         </div>
       )}
       {!!notif && <div className={notifContainer}>{notif}</div>}

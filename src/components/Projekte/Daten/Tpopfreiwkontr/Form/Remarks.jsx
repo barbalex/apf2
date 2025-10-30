@@ -12,7 +12,7 @@ export const Remarks = ({ saveToDb, row, errors }) => (
     </div>
     <div className={val}>
       <TextField2
-        key={`${row.id}bemerkungen`}
+        key={`${row?.id}bemerkungen`}
         name="bemerkungen"
         row={row}
         type="text"
