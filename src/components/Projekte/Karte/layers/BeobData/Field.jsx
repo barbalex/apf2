@@ -1,35 +1,13 @@
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
-import styled from '@emotion/styled'
 
-const Row = styled.div`
-  display: flex;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  border-collapse: collapse;
-  font-size: 0.75rem;
-  cursor: move;
-  &:nth-of-type(odd) {
-    background-color: rgba(0, 0, 0, 0.01);
-  }
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-`
-const Label = styled.div`
-  color: rgb(0, 0, 0, 0.54);
-  width: 110px;
-  min-width: 110px;
-  padding: 0 2px;
-  overflow-wrap: break-word;
-`
-const Value = styled.div`
-  padding: 0 2px;
-`
+import {
+  row,
+  label as labelClass,
+  value as valueClass,
+} from './Field.module.css'
 
-const ItemTypes = {
-  CARD: 'card',
-}
+const ItemTypes = { CARD: 'card' }
 
 export const Field = ({ label, value, index, moveField }) => {
   const ref = useRef(null)
@@ -92,13 +70,14 @@ export const Field = ({ label, value, index, moveField }) => {
   drag(drop(ref))
 
   return (
-    <Row
+    <div
+      className={row}
       ref={ref}
       style={{ opacity }}
       data-handler-id={handlerId}
     >
-      <Label>{label}</Label>
-      <Value>{value}</Value>
-    </Row>
+      <div className={labelClass}>{label}</div>
+      <div className={valueClass}>{value}</div>
+    </div>
   )
 }

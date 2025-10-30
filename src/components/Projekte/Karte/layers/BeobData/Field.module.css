@@ -1,0 +1,26 @@
+.row {
+  display: flex;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  cursor: move;
+  &:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.01);
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.label {
+  color: rgb(0, 0, 0, 0.54);
+  width: 110px;
+  min-width: 110px;
+  padding: 0 2px;
+  overflow-wrap: break-word;
+}
+
+.value {
+  padding: 0 2px;
+}
