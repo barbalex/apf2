@@ -20,15 +20,21 @@ import { LetzterMassnBericht } from './LetzterMassnBericht.jsx'
 import { LetzteZaehlung } from './LetzteZaehlung.jsx'
 import { LetzteZaehlungInklAnpflanz } from './LetzteZaehlungInklAnpflanz.jsx'
 
-import { StyledCardActions, CardActionIconButton } from '../index.jsx'
-import { cardContent, actionTitle, card } from '../index.module.css'
+import { CardActionIconButton } from '../index.jsx'
+import {
+  cardContent,
+  actionTitle,
+  card,
+  cardActions,
+} from '../index.module.css'
 
 export const Populationen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <Card className={card}>
-      <StyledCardActions
+      <CardActions
+        className={cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
@@ -43,7 +49,7 @@ export const Populationen = () => {
             <ExpandMoreIcon />
           </CardActionIconButton>
         </Tooltip>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"

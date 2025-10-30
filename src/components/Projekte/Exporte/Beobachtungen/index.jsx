@@ -10,8 +10,13 @@ import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
 import { BeobZugeordnet } from './BeobZugeordnet.jsx'
 import { BeobArtChanged } from './BeobArtChanged.jsx'
 
-import { StyledCardActions, CardActionIconButton } from '../index.jsx'
-import { cardContent, actionTitle, card } from '../index.module.css'
+import { CardActionIconButton } from '../index.jsx'
+import {
+  cardContent,
+  actionTitle,
+  card,
+  cardActions,
+} from '../index.module.css'
 
 export const Beobachtungen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -20,7 +25,8 @@ export const Beobachtungen = () => {
 
   return (
     <Card className={card}>
-      <StyledCardActions
+      <CardActions
+        className={cardActions}
         disableSpacing
         onClick={onClickAction}
       >
@@ -35,7 +41,7 @@ export const Beobachtungen = () => {
             <ExpandMoreIcon />
           </CardActionIconButton>
         </Tooltip>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"

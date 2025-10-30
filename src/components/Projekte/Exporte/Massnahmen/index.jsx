@@ -9,15 +9,21 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { Massnahmen as MassnahmenComponent } from './Massnahmen.jsx'
 import { MassnWebgisBun } from './MassnWebgisBun.jsx'
 
-import { StyledCardActions, CardActionIconButton } from '../index.jsx'
-import { cardContent, actionTitle, card } from '../index.module.css'
+import { CardActionIconButton } from '../index.jsx'
+import {
+  cardContent,
+  actionTitle,
+  card,
+  cardActions,
+} from '../index.module.css'
 
 export const Massnahmen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <Card className={card}>
-      <StyledCardActions
+      <CardActions
+        className={cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
@@ -32,7 +38,7 @@ export const Massnahmen = () => {
             <ExpandMoreIcon />
           </CardActionIconButton>
         </Tooltip>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"

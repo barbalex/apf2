@@ -11,15 +11,21 @@ import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
 import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
 import { InfoFlora } from './InfoFlora.jsx'
 
-import { StyledCardActions, CardActionIconButton } from '../index.jsx'
-import { cardContent, actionTitle, card } from '../index.module.css'
+import { CardActionIconButton } from '../index.jsx'
+import {
+  cardContent,
+  actionTitle,
+  card,
+  cardActions,
+} from '../index.module.css'
 
 export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
     <Card className={card}>
-      <StyledCardActions
+      <CardActions
+        className={cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
@@ -34,7 +40,7 @@ export const Kontrollen = () => {
             <ExpandMoreIcon />
           </CardActionIconButton>
         </Tooltip>
-      </StyledCardActions>
+      </CardActions>
       <Collapse
         in={expanded}
         timeout="auto"
