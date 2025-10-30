@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -25,15 +24,7 @@ import { query } from './query.js'
 import { Menu } from './Menu.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-`
+import { container } from './Tpopmassn.module.css'
 
 const fieldTypes = {
   typ: 'Int',
@@ -337,7 +328,7 @@ export const Component = observer(({ showFilter = false }) => {
         MenuBarComponent={Menu}
         menuBarProps={{ row }}
       />
-      <Container>
+      <div className={container}>
         <TextField
           name="jahr"
           label="Jahr"
@@ -521,7 +512,7 @@ export const Component = observer(({ showFilter = false }) => {
             label="id"
           />
         )}
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
