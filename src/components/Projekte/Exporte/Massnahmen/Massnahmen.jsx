@@ -6,7 +6,9 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { DownloadCardButton, StyledProgressText } from '../index.jsx'
+
+import { StyledProgressText } from '../index.jsx'
+import { button } from '../index.module.css'
 
 export const Massnahmen = observer(({ filtered = false }) => {
   const store = useContext(MobxContext)
@@ -20,7 +22,8 @@ export const Massnahmen = observer(({ filtered = false }) => {
   const tpopmassnIsFiltered = tableIsFiltered('tpopmassn')
 
   return (
-    <DownloadCardButton
+    <Button
+      className={button}
       color="inherit"
       disabled={!!queryState || (filtered && !tpopmassnIsFiltered)}
       onClick={async () => {
@@ -264,6 +267,6 @@ export const Massnahmen = observer(({ filtered = false }) => {
       {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
       : null}
-    </DownloadCardButton>
+    </Button>
   )
 })

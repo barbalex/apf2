@@ -6,7 +6,9 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { DownloadCardButton, StyledProgressText } from '../index.jsx'
+
+import { StyledProgressText } from '../index.jsx'
+import { button } from '../index.module.css'
 
 export const KontrAnzProZaehlEinheit = observer(() => {
   const store = useContext(MobxContext)
@@ -17,7 +19,8 @@ export const KontrAnzProZaehlEinheit = observer(() => {
   const [queryState, setQueryState] = useState()
 
   return (
-    <DownloadCardButton
+    <Button
+      className={button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -144,6 +147,6 @@ export const KontrAnzProZaehlEinheit = observer(() => {
       {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
       : null}
-    </DownloadCardButton>
+    </Button>
   )
 })

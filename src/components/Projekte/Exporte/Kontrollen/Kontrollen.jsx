@@ -6,7 +6,9 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { DownloadCardButton, StyledProgressText } from '../index.jsx'
+
+import { StyledProgressText } from '../index.jsx'
+import { button } from '../index.module.css'
 
 export const Kontrollen = observer(({ filtered = false }) => {
   const store = useContext(MobxContext)
@@ -18,7 +20,8 @@ export const Kontrollen = observer(({ filtered = false }) => {
   const [queryState, setQueryState] = useState()
 
   return (
-    <DownloadCardButton
+    <Button
+      className={button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -318,6 +321,6 @@ export const Kontrollen = observer(({ filtered = false }) => {
       {queryState ?
         <StyledProgressText>{queryState}</StyledProgressText>
       : null}
-    </DownloadCardButton>
+    </Button>
   )
 })
