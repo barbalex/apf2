@@ -1,7 +1,6 @@
 // TODO: let each item call it's data itself
 
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import {
   MdPauseCircleOutline,
@@ -24,90 +23,19 @@ import { query } from './query.js'
 import { PopIcon } from './PopIcon.jsx'
 import { TpopIcon } from './TpopIcon.jsx'
 
-const PauseCircleOutlineIcon = styled(MdPauseCircleOutline)`
-  font-size: 1.5rem;
-`
-const PlayCircleOutlineIcon = styled(MdPlayCircleOutline)`
-  font-size: 1.5rem;
-`
-const LocalFloristIcon = styled(MdLocalFlorist)`
-  font-size: 1.5rem;
-`
-const FilterCenterFocusIcon = styled(MdFilterCenterFocus)`
-  font-size: 1.5rem;
-`
-const RemoveIcon = styled(MdRemove)`
-  font-size: 1.5rem;
-`
-const StyledIconButton = styled(Button)`
-  max-width: 18px;
-  min-height: 20px !important;
-  min-width: 20px !important;
-  padding: 0 !important;
-  margin-top: -3px !important;
-`
-const StyledPauseCircleOutlineIcon = styled(PauseCircleOutlineIcon)`
-  cursor: ${(props) =>
-    props['data-assigningispossible'] ? 'pointer' : 'not-allowed'};
-`
-const StyledPlayCircleOutlineIcon = styled(PlayCircleOutlineIcon)`
-  color: ${(props) =>
-    props['data-assigningispossible'] ? 'black' : 'rgba(0,0,0,0.2) !important'};
-  cursor: ${(props) =>
-    props['data-assigningispossible'] ? 'pointer' : 'not-allowed'};
-`
-const ZoomToIcon = styled(FilterCenterFocusIcon)`
-  height: 20px !important;
-`
-const LayerDiv = styled.div`
-  display: flex;
-  min-height: 24px;
-  justify-content: space-between;
-  padding-top: 4px;
-  &:not(:last-of-type) {
-    border-bottom: 1px solid #ececec;
-  }
-  /*
-   * z-index is needed because leaflet
-   * sets high one for controls
-   */
-  z-index: 2000;
-  /*
-   * font-size is lost while moving a layer
-   * because it is inherited from higher up
-   */
-  font-size: 12px;
-`
-const IconsDiv = styled.div`
-  display: flex;
-`
-const ZuordnenDiv = styled.div``
-const ZoomToDiv = styled.div`
-  padding-left: 3px;
-  min-width: 18px;
-`
-const MapIcon = styled(LocalFloristIcon)`
-  margin-right: -0.1em;
-  height: 20px !important;
-  paint-order: stroke;
-  stroke-width: 1px;
-  stroke: black;
-`
-const BeobNichtBeurteiltMapIcon = styled(MapIcon)`
-  color: #9a009a !important;
-`
-const BeobNichtZuzuordnenMapIcon = styled(MapIcon)`
-  color: #ffe4ff !important;
-`
-const BeobZugeordnetMapIcon = styled(MapIcon)`
-  color: #ff00ff !important;
-`
-const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
-  margin-right: -0.1em;
-  height: 20px !important;
-  color: #ff00ff !important;
-`
-const MapIconDiv = styled.div``
+import {
+  icon,
+  iconButton,
+  zoomToIcon,
+  layer as layerClass,
+  icons,
+  zoomTo,
+  mapIcon,
+  beobNichtBeurteiltMapIcon,
+  beobNichtZuzuordnenMapIcon,
+  beobZugeordnetMapIcon,
+  beobZugeordnetAssignPolylinesIcon,
+} from './index.module.css'
 
 export const Layer = observer(({ apfloraLayer }) => {
   const { apId, popId, tpopId, beobId } = useParams()
@@ -260,33 +188,44 @@ export const Layer = observer(({ apfloraLayer }) => {
   if (error) return <Error error={error} />
 
   return (
-    <LayerDiv>
+    <div className={layerClass}>
       <Checkbox
         value={apfloraLayer.value}
         label={apfloraLayer.label}
         checked={activeApfloraLayers.includes(apfloraLayer.value)}
         onChange={onChangeCheckbox}
       />
-      <IconsDiv>
+      <div className={icons}>
         {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
           apfloraLayer.value,
         ) && (
-          <ZuordnenDiv>
-            <StyledIconButton
+          <div>
+            <Button
               title={zuordnenTitle}
               onClick={onClickZuordnen}
               color="inherit"
+              className={iconButton}
             >
               {assigningBeob ?
-                <StyledPauseCircleOutlineIcon
-                  data-assigningispossible={assigningispossible}
+                <MdPauseCircleOutline
+                  style={{
+                    cursor: assigningispossible ? 'pointer' : 'not-allowed',
+                  }}
+                  className={icon}
                 />
-              : <StyledPlayCircleOutlineIcon
-                  data-assigningispossible={assigningispossible}
+              : <MdPlayCircleOutline
+                  style={{
+                    color:
+                      assigningispossible ? 'black' : (
+                        'rgba(0,0,0,0.2) !important'
+                      ),
+                    cursor: assigningispossible ? 'pointer' : 'not-allowed',
+                  }}
+                  className={icon}
                 />
               }
-            </StyledIconButton>
-          </ZuordnenDiv>
+            </Button>
+          </div>
         )}
         {apfloraLayer.value === 'pop' &&
           activeApfloraLayers.includes('pop') && <PopIcon />}
@@ -294,52 +233,69 @@ export const Layer = observer(({ apfloraLayer }) => {
           activeApfloraLayers.includes('tpop') && <TpopIcon />}
         {apfloraLayer.value === 'beobNichtBeurteilt' &&
           activeApfloraLayers.includes('beobNichtBeurteilt') && (
-            <MapIconDiv>
-              <BeobNichtBeurteiltMapIcon id="BeobNichtBeurteiltMapIcon" />
-            </MapIconDiv>
+            <div>
+              <MdLocalFlorist
+                id="BeobNichtBeurteiltMapIcon"
+                className={`${mapIcon} ${beobNichtBeurteiltMapIcon}`}
+              />
+            </div>
           )}
         {apfloraLayer.value === 'beobNichtZuzuordnen' &&
           activeApfloraLayers.includes('beobNichtZuzuordnen') && (
-            <MapIconDiv>
-              <BeobNichtZuzuordnenMapIcon id="BeobNichtZuzuordnenMapIcon" />
-            </MapIconDiv>
+            <div>
+              <MdLocalFlorist
+                id="BeobNichtZuzuordnenMapIcon"
+                className={`${mapIcon} ${beobNichtZuzuordnenMapIcon}`}
+              />
+            </div>
           )}
         {apfloraLayer.value === 'beobZugeordnet' &&
           activeApfloraLayers.includes('beobZugeordnet') && (
-            <MapIconDiv>
-              <BeobZugeordnetMapIcon id="BeobZugeordnetMapIcon" />
-            </MapIconDiv>
+            <div>
+              <MdLocalFlorist
+                id="BeobZugeordnetMapIcon"
+                className={`${mapIcon} ${beobZugeordnetMapIcon}`}
+              />
+            </div>
           )}
         {apfloraLayer.value === 'beobZugeordnetAssignPolylines' &&
           activeApfloraLayers.includes('beobZugeordnetAssignPolylines') && (
-            <MapIconDiv>
-              <BeobZugeordnetAssignPolylinesIcon
+            <div>
+              <MdRemove
                 id="BeobZugeordnetAssignPolylinesMapIcon"
-                className="material-icons"
+                className={`material-icons ${beobZugeordnetAssignPolylinesIcon}`}
               >
                 remove
-              </BeobZugeordnetAssignPolylinesIcon>
-            </MapIconDiv>
+              </MdRemove>
+            </div>
           )}
-        <ZoomToDiv>
-          <StyledIconButton
+        <div className={zoomTo}>
+          <Button
             title={`auf alle ${apfloraLayer.label} zoomen`}
             onClick={onClickZoomToAll}
             color="inherit"
+            className={iconButton}
           >
-            <ZoomToIcon style={zoomToAllIconStyle} />
-          </StyledIconButton>
-        </ZoomToDiv>
-        <ZoomToDiv>
-          <StyledIconButton
+            <MdFilterCenterFocus
+              style={zoomToAllIconStyle}
+              className={zoomToIcon}
+            />
+          </Button>
+        </div>
+        <div className={zoomTo}>
+          <Button
             title={`auf aktive ${apfloraLayer.label} zoomen`}
             onClick={onClickZoomToActive}
             color="inherit"
+            className={iconButton}
           >
-            <ZoomToIcon style={zoomToActiveIconStyle} />
-          </StyledIconButton>
-        </ZoomToDiv>
-      </IconsDiv>
-    </LayerDiv>
+            <MdFilterCenterFocus
+              style={zoomToActiveIconStyle}
+              className={zoomToIcon}
+            />
+          </Button>
+        </div>
+      </div>
+    </div>
   )
 })
