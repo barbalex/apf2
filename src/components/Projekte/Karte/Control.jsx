@@ -1,16 +1,4 @@
-import styled from '@emotion/styled'
-
-const OuterDiv = styled.div`
-  ${(props) => !props['data-visible'] && 'visibility: hidden;'}
-`
-const InnerDiv = styled.div`
-  border: none !important;
-  box-shadow: none !important;
-  /* float children right */
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-`
+import { innerDiv } from './Control.module.css'
 
 // Classes used by Leaflet to position controls
 const POSITION_CLASSES = {
@@ -25,13 +13,15 @@ export const Control = ({ children, position, visible = true }) => {
     (position && POSITION_CLASSES[position]) || POSITION_CLASSES.topright
 
   return (
-    <OuterDiv
+    <div
       className="leaflet-control-container first"
-      data-visible={visible}
+      style={{ visibility: visible ? 'visible' : 'hidden' }}
     >
       <div className={positionClass}>
-        <InnerDiv className="leaflet-control leaflet-bar">{children}</InnerDiv>
+        <div className={`leaflet-control leaflet-bar ${innerDiv}`}>
+          {children}
+        </div>
       </div>
-    </OuterDiv>
+    </div>
   )
 }
