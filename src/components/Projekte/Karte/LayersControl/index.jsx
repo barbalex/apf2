@@ -8,13 +8,7 @@ import { ApfloraLayers } from './ApfloraLayers/index.jsx'
 import { BaseLayers } from './BaseLayers/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const ExpandMoreIcon = styled(MdExpandMore)`
-  font-size: 1.5rem;
-`
-const ExpandLessIcon = styled(MdExpandLess)`
-  font-size: 1.5rem;
-`
-const CardContainer = styled.div`
+const Container = styled.div`
   background-color: white;
   background-clip: padding-box;
   border-radius: 5px;
@@ -22,11 +16,7 @@ const CardContainer = styled.div`
 `
 const Card = styled.div`
   padding-top: 3px;
-  /* padding-bottom: 3px; */
   color: rgb(48, 48, 48);
-  /* &:nth-of-type(3) {
-    border-top: 1px solid rgba(0, 0, 0, 0.2);
-  } */
 `
 const CardHeader = styled.div`
   display: flex;
@@ -41,16 +31,19 @@ const CardHeader = styled.div`
 const CardTitle = styled.div`
   padding-right: 5px;
 `
-const CardTitleApfloraOpen = styled(CardTitle)`
+const CardTitleApfloraOpen = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 70px;
+  padding-right: 5px;
 `
-const StyledExpandLessIcon = styled(ExpandLessIcon)`
+const ExpandLessIcon = styled(MdExpandLess)`
+  font-size: 1.5rem;
   height: 18px !important;
 `
-const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
+const ExpandMoreIcon = styled(MdExpandMore)`
+  font-size: 1.5rem;
   height: 18px !important;
 `
 
@@ -114,14 +107,14 @@ export const LayersControl = observer(() => {
   }, [])
 
   return (
-    <CardContainer ref={ref}>
+    <Container ref={ref}>
       <Card>
         <CardHeader onClick={onToggleApfloraLayersExpanded}>
           <ApfloraCard>apflora</ApfloraCard>
           <div>
             {apfloraLayersExpanded ?
-              <StyledExpandLessIcon />
-            : <StyledExpandMoreIcon />}
+              <ExpandLessIcon />
+            : <ExpandMoreIcon />}
           </div>
         </CardHeader>
         {apfloraLayersExpanded && (
@@ -139,8 +132,8 @@ export const LayersControl = observer(() => {
           <CardTitle>überlagernd</CardTitle>
           <div>
             {overlaysExpanded ?
-              <StyledExpandLessIcon />
-            : <StyledExpandMoreIcon />}
+              <ExpandLessIcon />
+            : <ExpandMoreIcon />}
           </div>
         </CardHeader>
         {overlaysExpanded && (
@@ -158,12 +151,12 @@ export const LayersControl = observer(() => {
           <CardTitle>Hintergrund</CardTitle>
           <div>
             {baseLayersExpanded ?
-              <StyledExpandLessIcon />
-            : <StyledExpandMoreIcon />}
+              <ExpandLessIcon />
+            : <ExpandMoreIcon />}
           </div>
         </CardHeader>
         {baseLayersExpanded && <BaseLayers />}
       </Card>
-    </CardContainer>
+    </Container>
   )
 })
