@@ -227,90 +227,9 @@ import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidate
 import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.js'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 
-const Container = styled.div`
-  .react-contextmenu {
-    display: flex;
-    flex-direction: column;
-    min-width: 100px;
-    padding: 5px 0;
-    margin: -1px;
-    font-size: 14px;
-    text-align: left;
-    background-color: rgb(66, 66, 66);
-    background-clip: padding-box;
-    border: 1px solid grey;
-    border-radius: 0.25rem;
-    outline: none;
-    opacity: 0;
-    pointer-events: none;
-    font-family: 'Roboto', sans-serif;
-  }
+import { dialog } from './Menus.module.css'
 
-  .react-contextmenu.react-contextmenu--visible {
-    color: white;
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 1000;
-  }
-
-  .react-contextmenu-title {
-    opacity: 0;
-  }
-
-  .react-contextmenu--visible .react-contextmenu-title {
-    color: #b3b3b3;
-    padding-left: 10px;
-    padding-right: 15px;
-    padding-bottom: 3px;
-    opacity: 1;
-  }
-
-  .react-contextmenu-title::after {
-    content: ':';
-  }
-
-  .react-contextmenu > .react-contextmenu-item {
-    display: inline-block;
-    padding: 3px 20px;
-    clear: both;
-    font-weight: 400;
-    line-height: 1.5;
-    color: white;
-    text-align: inherit;
-    white-space: nowrap;
-    background: 0 0;
-    border: 0;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .react-contextmenu-item.active,
-  .react-contextmenu-item:hover {
-    color: #f57c00;
-    border-color: #0275d8;
-    text-decoration: none;
-  }
-
-  .react-contextmenu-divider {
-    border-top: 1px solid grey;
-    margin-top: 4px;
-    margin-bottom: 7px;
-  }
-
-  .react-contextmenu-submenu {
-    padding-right: 27px !important;
-  }
-
-  .react-contextmenu-submenu:after {
-    content: '▶';
-    display: inline-block;
-    position: absolute;
-    right: 7px;
-    bottom: 3px;
-  }
-`
 const StyledDialog = styled(Dialog)`
-  /*overflow-y: hidden;*/
   .MuiDialog-paper {
     overflow-y: hidden;
   }
@@ -599,7 +518,7 @@ export const Menus = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className="tree-menu-container">
         <Suspense fallback={null}>
           <CmApFolder onClick={handleClick} />
           <CmAp onClick={handleClick} />
@@ -682,7 +601,7 @@ export const Menus = observer(() => {
             </DialogActions>
           </StyledDialog>
         </Suspense>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
