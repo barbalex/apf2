@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useLocation } from 'react-router'
@@ -12,11 +11,7 @@ import { deleteModule } from './delete/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const StyledDialog = styled(Dialog)`
-  > div > div {
-    padding: 24px 24px 0 24px;
-  }
-`
+import { dialog } from './index.module.css'
 
 export const DatasetDeleteModal = observer(() => {
   const { search } = useLocation()
@@ -47,7 +42,10 @@ export const DatasetDeleteModal = observer(() => {
 
   return (
     <ErrorBoundary>
-      <StyledDialog open={!!toDeleteId}>
+      <Dialog
+        open={!!toDeleteId}
+        className={dialog}
+      >
         {question}
         <DialogActions>
           <Button
@@ -63,7 +61,7 @@ export const DatasetDeleteModal = observer(() => {
             Löschen
           </Button>
         </DialogActions>
-      </StyledDialog>
+      </Dialog>
     </ErrorBoundary>
   )
 })
