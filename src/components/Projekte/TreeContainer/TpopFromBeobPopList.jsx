@@ -1,9 +1,7 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router'
@@ -14,16 +12,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Error } from '../../shared/Error.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
-const StyledListItem = styled(ListItem)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
-const StyledListItemButton = styled(ListItemButton)`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
+import { listItem } from './TpopFromBeobPopList.module.css'
 
 export const TpopFromBeobPopList = observer(
   ({ closeNewTpopFromBeobDialog, beobId }) => {
@@ -61,7 +50,7 @@ export const TpopFromBeobPopList = observer(
       <ErrorBoundary>
         <List dense>
           {pops.map((pop) => (
-            <StyledListItemButton
+            <ListItemButton
               key={pop.id}
               onClick={() => {
                 createNewTpopFromBeob({
@@ -75,9 +64,10 @@ export const TpopFromBeobPopList = observer(
                 })
                 closeNewTpopFromBeobDialog()
               }}
+              className={listItem}
             >
               {pop.label}
-            </StyledListItemButton>
+            </ListItemButton>
           ))}
         </List>
       </ErrorBoundary>
