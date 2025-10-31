@@ -1,10 +1,7 @@
 import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
-import {
-  MdDragHandle as DragHandleIcon,
-  MdInfoOutline as InfoOutlineIcon,
-} from 'react-icons/md'
+import { MdDragHandle, MdInfoOutline } from 'react-icons/md'
 import {
   DndContext,
   closestCenter,
@@ -30,31 +27,31 @@ import { layerLegends } from './layerLegends.js'
 import { Checkbox } from './shared/Checkbox.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const CardContent = styled.div`
+const Container = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
   padding-right: 5px;
   padding-bottom: 3px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 `
-const StyledIconButton = styled(Button)`
+const IconButton = styled(Button)`
   max-width: 18px;
   min-height: 20px !important;
   min-width: 20px !important;
   padding: 0 !important;
   margin-top: -3px !important;
 `
-const StyledDragHandleIcon = styled(DragHandleIcon)`
+const DragHandleIcon = styled(MdDragHandle)`
   height: 20px !important;
   color: #7b7b7b !important;
   cursor: grab;
 `
-const StyledLegendIcon = styled(InfoOutlineIcon)`
+const LegendIcon = styled(MdInfoOutline)`
   height: 20px !important;
   color: #7b7b7b !important;
   cursor: pointer;
 `
-const LayerDiv = styled.div`
+const Layer = styled.div`
   display: grid;
   grid-template-columns: 360px 20px;
   padding-top: 4px;
@@ -72,18 +69,18 @@ const LayerDiv = styled.div`
    */
   font-size: 12px;
 `
-const LabelDiv = styled.div`
+const Label = styled.div`
   display: flex;
 `
-const CheckDiv = styled.div`
+const Check = styled.div`
   flex-grow: 1;
 `
-const InfoIconsDivs = styled.div`
+const InfoIcons = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
 `
-const IconsDiv = styled.div`
+const Icons = styled.div`
   display: flex;
 `
 // TODO: add icon: https://material.io/icons/#ic_info
@@ -105,14 +102,14 @@ const SortableItem = ({
   }
 
   return (
-    <LayerDiv
+    <Layer
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
-      <LabelDiv>
-        <CheckDiv>
+      <Label>
+        <Check>
           <Checkbox
             value={overlay.value}
             label={overlay.label}
@@ -126,38 +123,38 @@ const SortableItem = ({
               return setActiveOverlays([...activeOverlays, overlay.value])
             }}
           />
-        </CheckDiv>
-        <InfoIconsDivs>
+        </Check>
+        <InfoIcons>
           {(layerLegends({ apId })[overlay.value] || [])
             .filter((layer) => !!layer.url)
             .map((layer) => (
-              <IconsDiv key={layer.name}>
+              <Icons key={layer.name}>
                 <div>
-                  <StyledIconButton
+                  <IconButton
                     color="inherit"
                     title={`Legende für ${layer.name} öffnen`}
                     onClick={() => window.open(layer.url, '_blank')}
                   >
-                    <StyledLegendIcon />
-                  </StyledIconButton>
+                    <LegendIcon />
+                  </IconButton>
                 </div>
-              </IconsDiv>
+              </Icons>
             ))}
-        </InfoIconsDivs>
-      </LabelDiv>
-      <IconsDiv>
-        <IconsDiv>
+        </InfoIcons>
+      </Label>
+      <Icons>
+        <Icons>
           <div>
-            <StyledIconButton
+            <IconButton
               title="ziehen, um Layer höher/tiefer zu stapeln"
               color="inherit"
             >
-              <StyledDragHandleIcon />
-            </StyledIconButton>
+              <DragHandleIcon />
+            </IconButton>
           </div>
-        </IconsDiv>
-      </IconsDiv>
-    </LayerDiv>
+        </Icons>
+      </Icons>
+    </Layer>
   )
 }
 
@@ -201,7 +198,7 @@ export const Overlays = observer(() => {
   // console.log('Overlays', overlays)
 
   return (
-    <CardContent>
+    <Container>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -236,6 +233,6 @@ export const Overlays = observer(() => {
           </DragOverlay>
         </SortableContext>
       </DndContext>
-    </CardContent>
+    </Container>
   )
 })
