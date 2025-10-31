@@ -30,20 +30,6 @@ import {
   label as labelClass,
 } from './Row.module.css'
 
-const OpenNode = styled(MdExpandMore)`
-  cursor: pointer;
-  font-size: 1.1rem;
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
-const ClosedNodeWithChildren = styled(MdChevronRight)`
-  cursor: pointer;
-  font-size: 1.5rem;
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
 const Loading = styled(MdMoreHoriz)`
   font-size: 1.5rem;
   cursor: pointer;
@@ -181,17 +167,18 @@ export const Row = observer(({ node, transitionState, ref }) => {
         {useSymbolIcon && (
           <Symbol onClick={onClickNodeSymbol}>
             {symbolIcon === 'openNodeIcon' && (
-              <OpenNode
+              <MdExpandMore
                 viewBox="4 3 17 17"
                 height={23}
                 style={{
                   color:
                     nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
                 }}
+                className={openNode}
               />
             )}
             {symbolIcon === 'closedNodeWithChildrenIcon' && (
-              <ClosedNodeWithChildren />
+              <MdChevronRight className={closedNodeWithChildren} />
             )}
             {symbolIcon === 'loadingIcon' && (
               <Loading
