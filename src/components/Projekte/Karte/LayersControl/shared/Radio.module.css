@@ -1,0 +1,9 @@
+.input {
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+.label {
+  padding-right: 4px;
+  user-select: none;
+}
