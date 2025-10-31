@@ -1,5 +1,11 @@
-:root {
+html {
   --column-width: 600px;
+  /**
+   * need to pass the height of the self built controls
+   * to move controls built by leaflet when layer menu changes height
+   * Beware: If initial value is wrong, map will render twice
+   */
+  --map-control-height: 167px;
 }
 
 .OsmBw {

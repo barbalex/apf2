@@ -12,9 +12,18 @@ const Container = styled.div`
   align-items: flex-end;
 `
 
-export const OwnControls = ({ setControlHeight, mapRef }) => {
-  const onResize = ({ width, height }) =>
-    setControlHeight(Math.round(height ?? 167))
+export const OwnControls = ({  mapRef }) => {
+  /**
+   * need to pass the height of the self built controls
+   * to move controls built by leaflet when layer menu changes height
+   * Beware: If initial value is wrong, map will render twice
+   */
+  const onResize = ({ width, height }) => {
+    document.documentElement.style.setProperty(
+      '--map-control-height',
+      `${height ?? 167}px`,
+    )
+  }
 
   const onResizeDebounced = useDebouncedCallback(onResize, 10)
   const { ref: resizeRef } = useResizeDetector({
