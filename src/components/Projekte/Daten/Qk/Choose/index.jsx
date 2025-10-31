@@ -56,7 +56,6 @@ export const Component = ({ refetchTab }) => {
       <div className={container}>
         <div className={filterContainer}>
           <FormControl
-            className={container}
             fullWidth
             variant="standard"
             className={styledFormControl}
