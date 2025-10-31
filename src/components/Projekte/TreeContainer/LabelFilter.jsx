@@ -4,7 +4,6 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { snakeCase } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -12,24 +11,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { tables } from '../../../modules/tables.js'
 import { MobxContext } from '../../../mobxContext.js'
 
-const StyledFormControl = styled(FormControl)`
-  padding-right: 0.8em !important;
-`
-const StyledInput = styled(Input)`
-  div hr {
-    width: calc(100% - 20px) !important;
-  }
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
-  cursor: pointer;
-  pointer-events: auto;
-  padding-top: 5px;
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 1.5rem;
-`
+import { formControl, input, deleteFilterIcon } from './LabelFilter.module.css'
 
 const getValues = ({ activeFilterTable, nodeLabelFilter }) => {
   let labelText = '(filtern nicht möglich)'
@@ -93,12 +75,13 @@ export const LabelFilter = observer(() => {
   }
 
   return (
-    <StyledFormControl
+    <FormControl
       fullWidth
       variant="standard"
+      className={formControl}
     >
       <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
-      <StyledInput
+      <Input
         id={labelText}
         value={value}
         onChange={onChange}
@@ -114,11 +97,12 @@ export const LabelFilter = observer(() => {
               onClick={onClickEmptyFilter}
               title="Alle Filter entfernen"
             >
-              <StyledDeleteFilterIcon />
+              <MdDeleteSweep className={deleteFilterIcon} />
             </InputAdornment>
           : null
         }
+        className={input}
       />
-    </StyledFormControl>
+    </FormControl>
   )
 })
