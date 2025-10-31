@@ -1,12 +1,6 @@
-import styled from '@emotion/styled'
-
 import { BaseLayer } from './BaseLayer.jsx'
+import { container } from '../ApfloraLayers/index.module.css'
 
-const CardContent = styled.div`
-  color: rgb(48, 48, 48);
-  padding-left: 5px;
-  padding-right: 5px;
-`
 export const baseLayers = [
   { label: 'OpenStreetMap farbig', value: 'OsmColor', cors: true },
   { label: 'OpenStreetMap grau', value: 'OsmBw', cors: true },
@@ -73,12 +67,12 @@ export const baseLayers = [
 ]
 
 export const BaseLayers = () => (
-  <CardContent>
+  <div className={container}>
     {baseLayers.map((layer, index) => (
       <BaseLayer
         key={index}
         layer={layer}
       />
     ))}
-  </CardContent>
+  </div>
 )
