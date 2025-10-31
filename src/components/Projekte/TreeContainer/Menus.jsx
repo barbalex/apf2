@@ -1,5 +1,4 @@
 import { useContext, lazy, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { uniq } from 'es-toolkit'
 import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
@@ -228,12 +227,6 @@ import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMap
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 
 import { dialog } from './Menus.module.css'
-
-const StyledDialog = styled(Dialog)`
-  .MuiDialog-paper {
-    overflow-y: hidden;
-  }
-`
 
 export const Menus = observer(() => {
   const params = useParams()
@@ -575,12 +568,13 @@ export const Menus = observer(() => {
           <CmTpopkontrzaehlEinheitWerte onClick={handleClick} />
           <CmAdresse onClick={handleClick} />
           <CmTpopApberrelevantGrundWerte onClick={handleClick} />
-          <StyledDialog
+          <Dialog
             open={newTpopFromBeobDialogOpen}
             onClose={closeNewTpopFromBeobDialog}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             maxWidth="xl"
+            className={dialog}
           >
             <DialogTitle id="alert-dialog-title">
               {'Population wählen:'}
@@ -599,7 +593,7 @@ export const Menus = observer(() => {
                 abbrechen
               </Button>
             </DialogActions>
-          </StyledDialog>
+          </Dialog>
         </Suspense>
       </div>
     </ErrorBoundary>
