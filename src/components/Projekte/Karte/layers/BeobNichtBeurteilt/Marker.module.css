@@ -12,3 +12,15 @@
   color: red;
   font-weight: bold;
 }
+
+.info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 5px;
+}
+
+.tooltip {
+  &:before {
+    content: none !important;
+  }
+}

@@ -19,8 +19,7 @@ import { updateBeobById } from './updateBeobById.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
 
-import { h3, button, absenz } from '../BeobNichtBeurteilt/Marker.module.css'
-import { info } from './Marker.module.css'
+import { h3, button, absenz, info } from '../BeobNichtBeurteilt/Marker.module.css'
 
 export const Marker = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
