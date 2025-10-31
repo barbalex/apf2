@@ -1,0 +1,45 @@
+.container {
+  position: absolute;
+  top: -2px;
+  right: 6px;
+}
+
+.menu {
+  ul {
+    padding: 0;
+  }
+}
+
+.section {
+  padding: 8px 0;
+  &:not(:first-of-type) {
+    border-top: 1px solid #ccc;
+  }
+}
+
+.title {
+  font-size: 14px !important;
+  padding: 5px 14px;
+  margin: 0;
+  font-weight: 700;
+  &:focus {
+    outline: none;
+  }
+  &:not(:first-of-type) {
+    padding-top: 8px;
+  }
+}
+
+.item {
+  font-size: 14px !important;
+  padding: 5px 14px 5px 15px !important;
+}
+
+.checkIcon {
+  padding-right: 5px;
+  color: #2e7d32;
+}
+
+.faCog {
+  color: #2e7d32;
+}

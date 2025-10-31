@@ -1,6 +1,5 @@
 import { useState, useContext } from 'react'
 import { FaCog, FaCheck } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -10,45 +9,15 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../../mobxContext.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-const Container = styled.div`
-  position: absolute;
-  top: -2px;
-  right: 6px;
-`
-const MyMenu = styled(MuiMenu)`
-  ul {
-    padding: 0;
-  }
-`
-const Section = styled.section`
-  padding: 8px 0;
-  &:not(:first-of-type) {
-    border-top: 1px solid #ccc;
-  }
-`
-const MenuTitle = styled.h4`
-  font-size: 14px !important;
-  padding: 5px 14px;
-  margin: 0;
-  font-weight: 700;
-  &:focus {
-    outline: none;
-  }
-  &:not(:first-of-type) {
-    padding-top: 8px;
-  }
-`
-const StyledMenuItem = styled(MenuItem)`
-  font-size: 14px !important;
-  padding: 5px 14px 5px 15px !important;
-`
-const CheckIcon = styled(FaCheck)`
-  padding-right: 5px;
-  color: #2e7d32;
-`
-const StyledFaCog = styled(FaCog)`
-  color: #2e7d32;
-`
+import {
+  container,
+  menu,
+  section,
+  title,
+  item,
+  checkIcon,
+  faCog,
+} from './Menu.module.css'
 
 export const Menu = observer(() => {
   const store = useContext(MobxContext)
@@ -109,7 +78,7 @@ export const Menu = observer(() => {
     setOnlyShowActivePath(!onlyShowActivePath)
 
   return (
-    <Container>
+    <div className={container}>
       <Tooltip title="Einstellungen">
         <IconButton
           size="small"
@@ -117,60 +86,100 @@ export const Menu = observer(() => {
           aria-owns={anchorEl ? 'menu' : null}
           onClick={onClickConfig}
         >
-          <StyledFaCog />
+          <FaCog className={faCog} />
         </IconButton>
       </Tooltip>
-      <MyMenu
+      <MuiMenu
         id="menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={onClose}
+        className={menu}
       >
-        <Section>
-          <StyledMenuItem onClick={onClickOnlyShowActivePath}>
-            {onlyShowActivePath && <CheckIcon />}
+        <section className={section}>
+          <MenuItem
+            className={item}
+            onClick={onClickOnlyShowActivePath}
+          >
+            {onlyShowActivePath && <FaCheck className={checkIcon} />}
             {`nur den aktiven Pfad anzeigen`}
-          </StyledMenuItem>
-        </Section>
-        <Section>
-          <MenuTitle>Symbole für Populationen:</MenuTitle>
-          <StyledMenuItem onClick={onClickAllPopSame}>
-            {showPopIcon && popIcon === 'normal' && <CheckIcon />}
+          </MenuItem>
+        </section>
+        <section className={section}>
+          <h4 className={title}>Symbole für Populationen:</h4>
+          <MenuItem
+            className={item}
+            onClick={onClickAllPopSame}
+          >
+            {showPopIcon && popIcon === 'normal' && (
+              <FaCheck className={checkIcon} />
+            )}
             {`alle gleich (Blume)`}
-          </StyledMenuItem>
-          <StyledMenuItem onClick={onClickPopByStatusGroup}>
-            {showPopIcon && popIcon === 'statusGroup' && <CheckIcon />}
+          </MenuItem>
+          <MenuItem
+            className={item}
+            onClick={onClickPopByStatusGroup}
+          >
+            {showPopIcon && popIcon === 'statusGroup' && (
+              <FaCheck className={checkIcon} />
+            )}
             {`nach Status, mit Buchstaben`}
-          </StyledMenuItem>
-          <StyledMenuItem onClick={onClickPopByStatusGroupSymbols}>
-            {showPopIcon && popIcon === 'statusGroupSymbols' && <CheckIcon />}
+          </MenuItem>
+          <MenuItem
+            className={item}
+            onClick={onClickPopByStatusGroupSymbols}
+          >
+            {showPopIcon && popIcon === 'statusGroupSymbols' && (
+              <FaCheck className={checkIcon} />
+            )}
             {`nach Status, mit Symbolen`}
-          </StyledMenuItem>
-          <StyledMenuItem onClick={onClickPopNoSymbols}>
-            {!showPopIcon && <CheckIcon />}
+          </MenuItem>
+          <MenuItem
+            className={item}
+            onClick={onClickPopNoSymbols}
+          >
+            {!showPopIcon && <FaCheck className={checkIcon} />}
             {`keine`}
-          </StyledMenuItem>
-        </Section>
-        <Section>
-          <MenuTitle>Symbole für Teil-Populationen:</MenuTitle>
-          <StyledMenuItem onClick={onClickAllTpopSame}>
-            {showTpopIcon && tpopIcon === 'normal' && <CheckIcon />}
+          </MenuItem>
+        </section>
+        <section className={section}>
+          <h4 className={title}>Symbole für Teil-Populationen:</h4>
+          <MenuItem
+            className={item}
+            onClick={onClickAllTpopSame}
+          >
+            {showTpopIcon && tpopIcon === 'normal' && (
+              <FaCheck className={checkIcon} />
+            )}
             {`alle gleich (Blume)`}
-          </StyledMenuItem>
-          <StyledMenuItem onClick={onClickTpopByStatusGroup}>
-            {showTpopIcon && tpopIcon === 'statusGroup' && <CheckIcon />}
+          </MenuItem>
+          <MenuItem
+            className={item}
+            onClick={onClickTpopByStatusGroup}
+          >
+            {showTpopIcon && tpopIcon === 'statusGroup' && (
+              <FaCheck className={checkIcon} />
+            )}
             {`nach Status, mit Buchstaben`}
-          </StyledMenuItem>
-          <StyledMenuItem onClick={onClickTpopByStatusGroupSymbols}>
-            {showTpopIcon && tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
+          </MenuItem>
+          <MenuItem
+            className={item}
+            onClick={onClickTpopByStatusGroupSymbols}
+          >
+            {showTpopIcon && tpopIcon === 'statusGroupSymbols' && (
+              <FaCheck className={checkIcon} />
+            )}
             {`nach Status, mit Symbolen`}
-          </StyledMenuItem>
-          <StyledMenuItem onClick={onClickTpopNoSymbols}>
-            {!showTpopIcon && <CheckIcon />}
+          </MenuItem>
+          <MenuItem
+            className={item}
+            onClick={onClickTpopNoSymbols}
+          >
+            {!showTpopIcon && <FaCheck className={checkIcon} />}
             {`keine`}
-          </StyledMenuItem>
-        </Section>
-      </MyMenu>
-    </Container>
+          </MenuItem>
+        </section>
+      </MuiMenu>
+    </div>
   )
 })
