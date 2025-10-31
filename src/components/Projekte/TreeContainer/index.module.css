@@ -1,0 +1,19 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+  @media print {
+    display: none !important;
+  }
+}
+
+.labelFilterContainer {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 12px;
+  padding-top: 5px;
+  margin-bottom: 8px;
+}

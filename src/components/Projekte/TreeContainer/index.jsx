@@ -1,5 +1,4 @@
 import { useContext, lazy, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
@@ -26,25 +25,7 @@ const Spinner = lazy(async () => ({
 }))
 
 import { MobxContext } from '../../../mobxContext.js'
-
-const Container = styled.div`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  overflow: hidden;
-  @media print {
-    display: none !important;
-  }
-`
-const LabelFilterContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-left: 12px;
-  padding-top: 5px;
-  margin-bottom: 8px;
-`
+import { container, labelFilterContainer } from './index.module.css'
 
 export const TreeContainer = observer(() => {
   const params = useParams()
@@ -58,13 +39,16 @@ export const TreeContainer = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container data-id="tree-container1">
+      <div
+        className={container}
+        data-id="tree-container1"
+      >
         {!!toDeleteId && (
           <Suspense fallback={null}>
             <DeleteDatasetModal />
           </Suspense>
         )}
-        <LabelFilterContainer>
+        <div className={labelFilterContainer}>
           <Suspense fallback={null}>
             <LabelFilter />
           </Suspense>
@@ -73,7 +57,7 @@ export const TreeContainer = observer(() => {
               <ApFilter />
             </Suspense>
           )}
-        </LabelFilterContainer>
+        </div>
         <Suspense fallback={<Spinner />}>
           <TreeComponent />
         </Suspense>
@@ -82,7 +66,7 @@ export const TreeContainer = observer(() => {
             <Menus />
           </Suspense>
         )}
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
