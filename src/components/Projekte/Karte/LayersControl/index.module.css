@@ -1,0 +1,39 @@
+.container {
+  background-color: white;
+  background-clip: padding-box;
+  border-radius: 5px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.card {
+  padding-top: 3px;
+  color: rgb(48, 48, 48);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 6px;
+  padding-right: 2px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: bold;
+  user-select: none;
+}
+
+.cardTitle {
+  padding-right: 5px;
+}
+
+.cardTitleApfloraOpen {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70px;
+  padding-right: 5px;
+}
+
+.expandIcon {
+  font-size: 1.5rem;
+  height: 18px !important;
+}

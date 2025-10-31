@@ -1,5 +1,4 @@
 import { useContext, useState, useEffect, useRef } from 'react'
-import styled from '@emotion/styled'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
@@ -8,44 +7,14 @@ import { ApfloraLayers } from './ApfloraLayers/index.jsx'
 import { BaseLayers } from './BaseLayers/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const Container = styled.div`
-  background-color: white;
-  background-clip: padding-box;
-  border-radius: 5px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-`
-const Card = styled.div`
-  padding-top: 3px;
-  color: rgb(48, 48, 48);
-`
-const CardHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-left: 6px;
-  padding-right: 2px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  font-weight: bold;
-  user-select: none;
-`
-const CardTitle = styled.div`
-  padding-right: 5px;
-`
-const CardTitleApfloraOpen = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 70px;
-  padding-right: 5px;
-`
-const ExpandLessIcon = styled(MdExpandLess)`
-  font-size: 1.5rem;
-  height: 18px !important;
-`
-const ExpandMoreIcon = styled(MdExpandMore)`
-  font-size: 1.5rem;
-  height: 18px !important;
-`
+import {
+  container,
+  card,
+  cardHeader,
+  cardTitle,
+  cardTitleApfloraOpen,
+  expandIcon,
+} from './index.module.css'
 
 export const LayersControl = observer(() => {
   const store = useContext(MobxContext)
@@ -86,10 +55,10 @@ export const LayersControl = observer(() => {
     }
   }
 
-  const ApfloraCard =
+  const apfloraCardClass =
     baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
-      CardTitle
-    : CardTitleApfloraOpen
+      cardTitle
+    : cardTitleApfloraOpen
 
   // hack to get control to show on first load
   // depends on state being changed, so needs to be true above
@@ -107,16 +76,22 @@ export const LayersControl = observer(() => {
   }, [])
 
   return (
-    <Container ref={ref}>
-      <Card>
-        <CardHeader onClick={onToggleApfloraLayersExpanded}>
-          <ApfloraCard>apflora</ApfloraCard>
+    <div
+      className={container}
+      ref={ref}
+    >
+      <div className={card}>
+        <div
+          className={cardHeader}
+          onClick={onToggleApfloraLayersExpanded}
+        >
+          <div className={apfloraCardClass}>apflora</div>
           <div>
             {apfloraLayersExpanded ?
-              <ExpandLessIcon />
-            : <ExpandMoreIcon />}
+              <MdExpandLess className={expandIcon} />
+            : <MdExpandMore className={expandIcon} />}
           </div>
-        </CardHeader>
+        </div>
         {apfloraLayersExpanded && (
           <ApfloraLayers
             /**
@@ -126,16 +101,19 @@ export const LayersControl = observer(() => {
             apfloraLayersString={apfloraLayers.map((o) => o.value).join()}
           />
         )}
-      </Card>
-      <Card>
-        <CardHeader onClick={onToggleOverlaysExpanded}>
-          <CardTitle>überlagernd</CardTitle>
+      </div>
+      <div className={card}>
+        <div
+          className={cardHeader}
+          onClick={onToggleOverlaysExpanded}
+        >
+          <div className={cardTitle}>überlagernd</div>
           <div>
             {overlaysExpanded ?
-              <ExpandLessIcon />
-            : <ExpandMoreIcon />}
+              <MdExpandLess className={expandIcon} />
+            : <MdExpandMore className={expandIcon} />}
           </div>
-        </CardHeader>
+        </div>
         {overlaysExpanded && (
           <Overlays
             /**
@@ -145,18 +123,21 @@ export const LayersControl = observer(() => {
             overlaysString={overlays.map((o) => o.value).join()}
           />
         )}
-      </Card>
-      <Card>
-        <CardHeader onClick={onToggleBaseLayersExpanded}>
-          <CardTitle>Hintergrund</CardTitle>
+      </div>
+      <div className={card}>
+        <div
+          className={cardHeader}
+          onClick={onToggleBaseLayersExpanded}
+        >
+          <div className={cardTitle}>Hintergrund</div>
           <div>
             {baseLayersExpanded ?
-              <ExpandLessIcon />
-            : <ExpandMoreIcon />}
+              <MdExpandLess className={expandIcon} />
+            : <MdExpandMore className={expandIcon} />}
           </div>
-        </CardHeader>
+        </div>
         {baseLayersExpanded && <BaseLayers />}
-      </Card>
-    </Container>
+      </div>
+    </div>
   )
 })
