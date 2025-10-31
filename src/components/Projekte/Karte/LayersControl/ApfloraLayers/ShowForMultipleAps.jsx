@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
@@ -9,35 +8,7 @@ import { useQuery } from '@apollo/client/react'
 import { Checkbox } from '../shared/Checkbox.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 
-const LayerDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 24px;
-  padding-top: 4px;
-  &:not(:last-of-type) {
-    border-bottom: 1px solid #ececec;
-  }
-  /*
-   * z-index is needed because leaflet
-   * sets high one for controls
-   */
-  z-index: 2000;
-  /*
-   * font-size is lost while moving a layer
-   * because it is inherited from higher up
-   */
-  font-size: 12px;
-`
-const Comments = styled.div`
-  padding-left: 21px;
-`
-const Comment1 = styled.span`
-  font-weight: 700;
-  ${(props) => props['data-color'] && `color: ${props['data-color']};`}
-`
-const Comment2 = styled.span`
-  padding-left: 3px;
-`
+import { layer, comments, comment2 } from './ShowForMultipleAps.module.css'
 
 export const ShowForMultipleAps = observer(() => {
   const { apId } = useParams()
@@ -71,7 +42,7 @@ export const ShowForMultipleAps = observer(() => {
     : ''
 
   return (
-    <LayerDiv>
+    <div className={layer}>
       <Checkbox
         value={showApfLayersForMultipleAps}
         label="Layer auch anzeigen, wenn mehr als eine Art aktiv ist"
@@ -80,12 +51,16 @@ export const ShowForMultipleAps = observer(() => {
       />
       {!apId && showApfLayersForMultipleAps && (
         <>
-          <Comments>
-            <Comment1 data-color={color}>{comment}</Comment1>
-            <Comment2>Je mehr, desto langsamer wird die App</Comment2>
-          </Comments>
+          <div className={comments}>
+            <span style={{ fontWeight: 700, color: color ?? 'inherit' }}>
+              {comment}
+            </span>
+            <span className={comment2}>
+              Je mehr, desto langsamer wird die App
+            </span>
+          </div>
         </>
       )}
-    </LayerDiv>
+    </div>
   )
 })
