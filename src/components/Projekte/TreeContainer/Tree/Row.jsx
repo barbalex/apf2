@@ -9,7 +9,6 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useNavigate, useLocation } from 'react-router'
 import { upperFirst } from 'es-toolkit'
-import styled from '@emotion/styled'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'
 import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePath.js'
@@ -25,48 +24,10 @@ import {
   openNode,
   closedNodeWithChildren,
   loading,
-  remove,
+  leaf,
   symbol,
   label as labelClass,
 } from './Row.module.css'
-
-const Loading = styled(MdMoreHoriz)`
-  font-size: 1.5rem;
-  cursor: pointer;
-  &:hover {
-    color: #f57c00 !important;
-  }
-`
-const Remove = styled(MdRemove)`
-  padding-left: 6px;
-  padding-right: 2px;
-  height: 22px !important;
-  width: 16px !important;
-  font-size: 1.5rem;
-`
-const Symbol = styled.div`
-  flex-basis: 23px;
-  flex-grow: 0;
-  flex-shrink: 0;
-  cursor: pointer;
-  align-self: flex-start;
-  svg {
-    display: block;
-    margin: auto;
-  }
-`
-const Label = styled.span`
-  margin-left: 0;
-  padding-right: 5px;
-  font-size: 16px !important;
-  white-space: normal;
-  text-overflow: ellipsis;
-  overflow: hidden !important;
-  cursor: pointer;
-  &:hover {
-    color: #f57c00;
-  }
-`
 
 const transitionStyles = {
   entering: { opacity: 1 },
@@ -165,7 +126,10 @@ export const Row = observer(({ node, transitionState, ref }) => {
         style={nodeStyle}
       >
         {useSymbolIcon && (
-          <Symbol onClick={onClickNodeSymbol}>
+          <div
+            className={symbol}
+            onClick={onClickNodeSymbol}
+          >
             {symbolIcon === 'openNodeIcon' && (
               <MdExpandMore
                 viewBox="4 3 17 17"
@@ -181,23 +145,28 @@ export const Row = observer(({ node, transitionState, ref }) => {
               <MdChevronRight className={closedNodeWithChildren} />
             )}
             {symbolIcon === 'loadingIcon' && (
-              <Loading
+              <MdMoreHoriz
                 style={{
                   color:
                     nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
                 }}
+                className={loading}
               />
             )}
-          </Symbol>
+          </div>
         )}
         {useSymbolSpan && (
-          <Symbol onClick={onClickNode}>
-            <Remove />
-          </Symbol>
+          <div
+            className={symbol}
+            onClick={onClickNode}
+          >
+            <MdRemove className={leaf} />
+          </div>
         )}
         {node.labelLeftElements?.length &&
           node.labelLeftElements.map((El, index) => <El key={index} />)}
-        <Label
+        <span
+          className={labelClass}
           node={node}
           onClick={onClickNode}
           style={{
@@ -211,7 +180,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
               textToHighlight={node.label}
             />
           : node.label}
-        </Label>
+        </span>
         {node.labelRightElements?.length &&
           node.labelRightElements.map((El, index) => <El key={index} />)}
       </div>
