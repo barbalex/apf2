@@ -1,25 +1,19 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../../../mobxContext.js'
 import { Layer } from './Layer/index.jsx'
 import { ShowForMultipleAps } from './ShowForMultipleAps.jsx'
 import { KtZhFilter } from './KtZhFilter/index.jsx'
 
-const CardContent = styled.div`
-  color: rgb(48, 48, 48);
-  padding-left: 5px;
-  padding-right: 4px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-`
+import { container } from './index.module.css'
 
 export const ApfloraLayers = observer(() => {
   const store = useContext(MobxContext)
   const { apfloraLayers } = store
 
   return (
-    <CardContent>
+    <div className={container}>
       {apfloraLayers
         // prevent deprecated layer from showing in case some users still have it in layers
         .filter((l) => l.value !== 'mapFilter')
@@ -31,6 +25,6 @@ export const ApfloraLayers = observer(() => {
         ))}
       <ShowForMultipleAps />
       <KtZhFilter />
-    </CardContent>
+    </div>
   )
 })
