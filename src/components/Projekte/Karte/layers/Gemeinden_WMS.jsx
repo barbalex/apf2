@@ -4,7 +4,7 @@
 // so: not used
 import { useContext } from 'react'
 import { useMap, WMSTileLayer } from 'react-leaflet'
-import styled from '@emotion/styled'
+// import styled from '@emotion/styled'
 import { useMapEvent } from 'react-leaflet'
 import axios from 'redaxios'
 import * as ReactDOMServer from 'react-dom/server'
