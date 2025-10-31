@@ -21,7 +21,6 @@ import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
 const StyledNode = styled.div`
-  padding-left: ${(props) => `${Number(props['data-level']) * 17 - 10}px`};
   box-sizing: border-box;
   margin: 0;
   display: flex;
@@ -29,8 +28,6 @@ const StyledNode = styled.div`
   align-items: center;
   white-space: nowrap;
   user-select: none;
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
   content-visibility: auto;
   contain-intrinsic-size: auto 23px;
   transition: opacity 300ms ease-in-out;
@@ -41,8 +38,6 @@ const StyledNode = styled.div`
   }
 `
 const StyledExpandMoreIcon = styled(MdExpandMore)`
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   cursor: pointer;
   font-size: 1.1rem;
   &:hover {
@@ -163,6 +158,12 @@ export const Row = observer(({ node, transitionState, ref }) => {
   const onClickNodeSymbol = () =>
     toggleNodeSymbol({ node, store, search, navigate })
 
+  const nodeStyle = {
+    ...(transitionState ? transitionStyles[transitionState] : {}),
+    color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+    paddingLeft: `${Number(level) * 17 - 10}px`,
+  }
+
   if (onlyShowActivePath && !nodeOrParentIsInActivePath) return null
 
   return (
@@ -176,8 +177,6 @@ export const Row = observer(({ node, transitionState, ref }) => {
       nodeLabel={node.label}
     >
       <StyledNode
-        data-level={level}
-        data-nodeisinactivenodepath={nodeIsInActiveNodePath}
         data-id={node.tableId || node.id}
         data-parentid={node.parentTableId || node.parentId}
         data-url={dataUrl}
@@ -189,15 +188,18 @@ export const Row = observer(({ node, transitionState, ref }) => {
         // need this id to scroll elements into view
         id={node.id}
         ref={ref}
-        style={transitionState ? transitionStyles[transitionState] : {}}
+        style={nodeStyle}
       >
         {useSymbolIcon && (
           <SymbolDiv onClick={onClickNodeSymbol}>
             {symbolIcon === 'expandMore' && (
               <StyledExpandMoreIcon
-                data-nodeisinactivenodepath={nodeIsInActiveNodePath}
                 viewBox="4 3 17 17"
                 height={23}
+                style={{
+                  color:
+                    nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
+                }}
               />
             )}
             {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
