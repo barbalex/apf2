@@ -1,19 +1,13 @@
 import { TileLayer, Pane } from 'react-leaflet'
-import styled from '@emotion/styled'
 
-const StyledTileLayer = styled(TileLayer)`
-  .leaflet-tile-container {
-    filter: grayscale(100%) !important;
-  }
-`
-
+// Pane and TileLayer seem not to accept className from css module, so using global css for OsmBw (inside app.css)
 export const OsmBw = () => (
   <Pane
     className="OsmBw"
     name="OsmBw"
     style={{ zIndex: 100 }}
   >
-    <StyledTileLayer
+    <TileLayer
       url="//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       attribution='&copy; <a href="//osm.org/copyright">OpenStreetMap</a>'
       maxNativeZoom={19}
