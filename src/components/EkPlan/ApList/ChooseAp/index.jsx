@@ -54,7 +54,6 @@ const StyledSelect = styled(AsyncSelect)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
     z-index: 4;
   }
 `
@@ -149,6 +148,7 @@ export const ChooseAp = observer(({ setShowChoose }) => {
           loadOptions={loadOptions}
           openMenuOnFocus
           autoFocus
+          className='ekplan-aplist-chooseap select-height-limited select-nocaret'
         />
         {error.current && <Error>{error.current.message}</Error>}
       </SelectContainer>

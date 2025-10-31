@@ -133,6 +133,11 @@ export const SelectCreatable = observer(
     const optionsToUse = loading && value ? loadingOptions : realOptions
     const selectValue = optionsToUse.find((o) => o.value === value)
 
+    const style =
+      maxHeight ?
+        { '--react-select-menu-list-max-height': `${maxHeight}px` }
+      : {}
+
     return (
       <Container>
         {label && <Label>{label}</Label>}
@@ -152,6 +157,8 @@ export const SelectCreatable = observer(
           maxheight={maxHeight}
           classNamePrefix="react-select"
           nocaret={noCaret}
+          className={`select-height-limited ${noCaret ? 'select-nocaret' : ''}`}
+          style={style}
         />
         {error && <Error>{error}</Error>}
       </Container>

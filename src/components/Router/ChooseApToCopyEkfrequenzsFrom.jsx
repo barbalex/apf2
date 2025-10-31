@@ -353,6 +353,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
               classNamePrefix="react-select"
               loadOptions={apOptions}
               openMenuOnFocus
+              className="select-nocaret"
             />
             {apOptionsError && <Error>{apOptionsError}</Error>}
           </SelectContainer>

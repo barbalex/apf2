@@ -43,26 +43,36 @@ const StyledSelect = styled(AsyncSelect)`
   }
   .react-select__clear-indicator {
     /* ability to hide caret when not enough space */
-    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
+    padding-right: 8px;
   }
   .react-select__dropdown-indicator {
     /* ability to hide caret when not enough space */
-    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
+    display: flex;
   }
   .react-select__indicator-separator {
     /* ability to hide caret when not enough space */
-    width: ${(props) => (props.nocaret ? '0' : '1px')};
+    width: 1px;
   }
-  input {
-    @media print {
-      padding-top: 3px;
-      padding-bottom: 0;
-    }
+  .select-nocaret .react-select__clear-indicator {
+    /* ability to hide caret when not enough space */
+    padding-right: 0;
   }
-  .react-select__menu,
-  .react-select__menu-list {
-    height: 130px;
-    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
+  .select-nocaret .react-select__dropdown-indicator {
+    /* ability to hide caret when not enough space */
+    display: none;
+  }
+  .select-nocaret .react-select__indicator-separator {
+    /* ability to hide caret when not enough space */
+    width: 0;
+  }
+  .select-height-limited .react-select__menu,
+  .select-height-limited .react-select__menu-list {
+    // height: 130px;
+    // height: var(--react-select-menu-list-max-height, unset);
+  }
+  // only for ApList.ChooseAp
+  .ekplan-aplist-chooseap .react-select__menu-list {
+    z-index: 4;
   }
 `
 

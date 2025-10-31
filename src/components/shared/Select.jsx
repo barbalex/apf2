@@ -99,6 +99,8 @@ export const Select = ({
   const loadingOptions = [{ value, label: '...' }]
   const optionsToUse = loading && value ? loadingOptions : realOptions
   const selectValue = optionsToUse.find((o) => o.value === value)
+  const style =
+    maxHeight ? { '--react-select-menu-list-max-height': `${maxHeight}px` } : {}
 
   return (
     <Container data-id={field}>
@@ -122,6 +124,8 @@ export const Select = ({
         maxheight={maxHeight}
         classNamePrefix="react-select"
         nocaret={noCaret}
+        style={style}
+        className={`select-height-limited ${noCaret ? 'select-nocaret' : ''}`}
       />
       {error && <Error>{error}</Error>}
     </Container>

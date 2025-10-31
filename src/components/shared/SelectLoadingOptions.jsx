@@ -67,7 +67,6 @@ const StyledSelect = styled(AsyncSelect)`
   .react-select__menu,
   .react-select__menu-list {
     height: 130px;
-    height: ${(props) => (props.maxheight ? `${props.maxheight}px` : 'unset')};
   }
 `
 
@@ -147,6 +146,7 @@ export const SelectLoadingOptions = ({
         classNamePrefix="react-select"
         loadOptions={loadOptions}
         openMenuOnFocus
+        className='select-height-limited select-nocaret'
       />
       {saveToDbError && <Error>{saveToDbError}</Error>}
     </Container>

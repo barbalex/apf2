@@ -143,6 +143,9 @@ export const SelectCreatableGemeinde = ({
   const optionsToUse = loading && value ? loadingOptions : realOptions
   const selectValue = optionsToUse.find((o) => o.value === value)
 
+  const style =
+    maxHeight ? { '--react-select-menu-list-max-height': `${maxHeight}px` } : {}
+
   return (
     <Container data-id={name}>
       {label && <Label error={!!error}>{label}</Label>}
@@ -163,6 +166,8 @@ export const SelectCreatableGemeinde = ({
           maxheight={maxHeight}
           classNamePrefix="react-select"
           nocaret={noCaret}
+          className={`select-height-limited ${noCaret ? 'select-nocaret' : ''}`}
+          style={style}
         />
         {showLocate && (
           <Tooltip title="Mit Hilfe der Koordinaten automatisch setzen">
