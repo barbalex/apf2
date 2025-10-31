@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { Polyline as LeafletPolyline, Popup } from 'react-leaflet'
-import styled from '@emotion/styled'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { observer } from 'mobx-react-lite'
@@ -12,19 +11,7 @@ import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
 
-const StyledH3 = styled.h3`
-  margin: 7px 0;
-`
-const StyledButton = styled(Button)`
-  text-transform: none;
-  justify-content: left;
-  padding: 2px 0;
-`
-const Info = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 5px;
-`
+import { h3, button, info } from '../BeobNichtBeurteilt/Marker.module.css'
 
 export const Polyline = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
@@ -115,9 +102,9 @@ export const Polyline = observer(({ beob }) => {
     >
       <Popup>
         <>
-          <StyledH3>Zuordnung</StyledH3>
+          <h3 className={h3}>Zuordnung</h3>
           <div>einer Beobachtung</div>
-          <Info>
+          <div className={info}>
             <div>von:</div>
             <div>{beob?.aeTaxonomyByArtId?.artname ?? ''}</div>
             <div>am:</div>
@@ -136,43 +123,47 @@ export const Polyline = observer(({ beob }) => {
             }`}</div>
             <div>Quelle:</div>
             <div>{quelle}</div>
-          </Info>
-          <StyledButton
+          </div>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openBeobInTab}
             fullWidth
+            className={button}
           >
             Beob. in neuem Fenster öffnen
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openBeobInTree2}
             fullWidth
+            className={button}
           >
             Beob. in Navigationsbaum 2 öffnen
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openTpopInTab}
             fullWidth
+            className={button}
           >
             TPop. in neuem Fenster öffnen
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openTpopInTree2}
             fullWidth
+            className={button}
           >
             TPop. in Navigationsbaum 2 öffnen
-          </StyledButton>
+          </Button>
           <Data id={beob.id} />
         </>
       </Popup>
