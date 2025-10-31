@@ -1,5 +1,4 @@
 import { useContext, lazy, Suspense, useRef } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
@@ -23,26 +22,11 @@ import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.jsx'
 import { hideBookmarksAtom } from '../../JotaiStore/index.js'
 
-const OuterContainer = styled.div`
-  display: block;
-  height: 100%;
-  overflow: hidden;
-`
-const Container = styled.div`
-  height: ${(props) => props.height};
-  position: relative;
-
-  @media print {
-    display: block;
-    height: auto !important;
-  }
-`
-const InnerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-`
+import {
+  outerContainer,
+  container,
+  innerContainer,
+} from './ProjektContainer.module.css'
 
 export const ProjektContainer = observer(() => {
   const { projId, apberuebersichtId, apberId } = useParams()
@@ -78,39 +62,42 @@ export const ProjektContainer = observer(() => {
 
   const elObj = {
     tree: (
-      <InnerContainer>
+      <div className={innerContainer}>
         <Suspense fallback={<Spinner />}>
           <TreeContainer />
         </Suspense>
-      </InnerContainer>
+      </div>
     ),
     daten: (
-      <InnerContainer>
+      <div className={innerContainer}>
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>
-      </InnerContainer>
+      </div>
     ),
     filter: (
-      <InnerContainer>
+      <div className={innerContainer}>
         <Suspense fallback={<Spinner />}>
           <Filter />
         </Suspense>
-      </InnerContainer>
+      </div>
     ),
     karte: (
-      <InnerContainer ref={mapContainerRef}>
+      <div
+        className={innerContainer}
+        ref={mapContainerRef}
+      >
         <Suspense fallback={<Spinner />}>
           <Karte mapContainerRef={mapContainerRef} />
         </Suspense>
-      </InnerContainer>
+      </div>
     ),
     exporte: (
-      <InnerContainer>
+      <div className={innerContainer}>
         <Suspense fallback={<Spinner />}>
           <Exporte />
         </Suspense>
-      </InnerContainer>
+      </div>
     ),
   }
 
@@ -119,9 +106,13 @@ export const ProjektContainer = observer(() => {
   }
 
   return (
-    <OuterContainer>
+    <div className={outerContainer}>
       {!hideBookmarks && <Bookmarks />}
-      <Container height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}>
+      <div
+        className={container}
+        height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}
+        style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
+      >
         <StyledSplitPane
           split="vertical"
           size={
@@ -188,7 +179,7 @@ export const ProjektContainer = observer(() => {
             </StyledSplitPane>
           )}
         </StyledSplitPane>
-      </Container>
-    </OuterContainer>
+      </div>
+    </div>
   )
 })
