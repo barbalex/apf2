@@ -1,0 +1,18 @@
+.container {
+  height: 100%;
+  overflow: hidden;
+}
+
+/**
+ * 140 > 128
+ * so: height - 12
+ */
+.mapContainer {
+  height: calc(100%);
+
+  @media print {
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+  }
+}

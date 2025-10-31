@@ -1,7 +1,6 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 import { useContext, useState, useRef } from 'react'
 import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
-import styled from '@emotion/styled'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
@@ -64,6 +63,8 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 
 import { MobxContext } from '../../../mobxContext.js'
 
+import { container, mapContainer } from './index.module.css'
+
 // this does not work
 // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
 /*
@@ -76,346 +77,10 @@ const crs = new window.L.Proj.CRS(
   }
 )*/
 
-const Container = styled.div`
-  height: 100%;
-  overflow: hidden;
-  .map-control-scalebar-text {
-    width: 83px;
-  }
-  .leaflet-container.crosshair-cursor-enabled {
-    cursor: crosshair;
-  }
-
-  .leaflet-control-container:not(.first) {
-    .leaflet-top.leaflet-right {
-      top: ${(props) => props['data-control-height'] - 6}px !important;
-    }
-  }
-`
-/**
- * 140 > 128
- * so: height - 12
- */
-const StyledMapContainer = styled(MapContainer)`
-  height: calc(100%);
-
-  @media print {
-    height: 100%;
-    width: 100%;
-    overflow: visible;
-  }
-
-  /*
-  * leaflet tooltips
-  */
-
-  .mapTooltip {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 4px 2px 0 2px;
-    width: 150px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: center;
-    text-shadow:
-      0 1px 0 white,
-      -0 -1px 0 white,
-      1px 0 0 white,
-      -1px 0 0 white,
-      0 2px 1px white,
-      -0 -2px 1px white,
-      2px 0 1px white,
-      -2px 0 1px white,
-      0 3px 2px white,
-      -0 -3px 2px white,
-      3px 0 2px white,
-      -3px 0 2px white;
-  }
-
-  .leaflet-tooltip {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  .leaflet-tooltip-bottom.mapTooltip:before {
-    border-bottom-color: transparent;
-  }
-
-  .leaflet-tooltip-left.mapTooltip::before {
-    border-left-color: transparent;
-  }
-
-  .leaflet-tooltip-right.mapTooltip::before {
-    border-right-color: transparent;
-  }
-
-  /**
-  * leaflet-measure
-  */
-
-  .leaflet-control-measure {
-    color: black;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    background-clip: padding-box;
-    box-shadow: none;
-  }
-
-  /**
-  * leaflet maps
-  */
-
-  .popCluster {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #9c8001;
-    /*font-size: 24px;*/
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .popClusterHighlighted {
-    width: 40px;
-    height: 40px;
-    line-height: 28px;
-    text-align: center;
-    background-color: #9c8001;
-    border: 7px solid yellow;
-    box-sizing: border-box;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .popCluster span {
-    line-height: 30px;
-  }
-
-  .tpopCluster {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #006d11;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .tpopClusterHighlighted {
-    width: 40px;
-    height: 40px;
-    line-height: 28px;
-    text-align: center;
-    background-color: #006d11;
-    border: 7px solid yellow;
-    box-sizing: border-box;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .tpopCluster span {
-    line-height: 30px;
-  }
-
-  .beobCluster {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #9a009a;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobClusterHighlighted {
-    width: 40px;
-    height: 40px;
-    line-height: 28px;
-    text-align: center;
-    background-color: #9a009a;
-    border: 7px solid yellow;
-    box-sizing: border-box;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobNichtBeurteiltCluster {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #9a009a;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobNichtBeurteiltClusterHighlighted {
-    width: 40px;
-    height: 40px;
-    line-height: 28px;
-    text-align: center;
-    background-color: #9a009a;
-    border: 7px solid yellow;
-    box-sizing: border-box;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobZugeordnetCluster {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #ff00ff;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobZugeordnetClusterHighlighted {
-    width: 40px;
-    height: 40px;
-    line-height: 28px;
-    text-align: center;
-    background-color: #ff00ff;
-    border: 7px solid yellow;
-    box-sizing: border-box;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobNichtZuzuordnenCluster {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    background-color: #ffe4ff;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobNichtZuzuordnenClusterHighlighted {
-    width: 40px;
-    height: 40px;
-    line-height: 28px;
-    text-align: center;
-    background-color: #ffe4ff;
-    border: 7px solid yellow;
-    box-sizing: border-box;
-    background-clip: padding-box;
-    border-radius: 20px;
-  }
-
-  .beobCluster span {
-    line-height: 30px;
-  }
-
-  .easyPrintHolder {
-    height: 36px !important;
-  }
-
-  /*
-   * leaflet-switch-scale-control
-   */
-  .map-control-scalebar-scale-item {
-    cursor: pointer;
-    padding: 2px 5px;
-  }
-
-  .map-control-scalebar-scale-item:hover {
-    background: lightgray;
-  }
-
-  .map-control-scalebar-text {
-    cursor: pointer;
-    height: 20px;
-    border: 2px solid #777;
-    border-top: none;
-    padding: 2px 5px 1px;
-    background: rgba(255, 255, 255, 0.9);
-    text-align: center;
-  }
-
-  .map-control-scalebar-custom-scale {
-    padding: 0.2em;
-    width: 10em;
-  }
-
-  .map-control-scalebar-dropdown {
-    border: 2px solid #777;
-    border-bottom: none;
-    background: white;
-    max-height: 30em;
-    overflow-y: hidden;
-    -webkit-transition: max-height 0.2s ease-in-out;
-    -moz-transition: max-height 0.2s ease-in-out;
-    -o-transition: max-height 0.2s ease-in-out;
-    transition: max-height 0.2s ease-in-out;
-  }
-
-  .map-control-scalebar-custom-scale {
-    font-size: 11px;
-  }
-
-  /*
-   * leaflet-control-scale-line
-   */
-  .leaflet-control-scale-line {
-    background: rgba(255, 255, 255, 0.9) !important;
-  }
-
-  /* one selector per rule as explained here : https://www.sitepoint.com/html5-full-screen-api/ */
-
-  .leaflet-container:-webkit-full-screen {
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 99999;
-  }
-
-  .leaflet-container:-ms-fullscreen {
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 99999;
-  }
-
-  .leaflet-container:full-screen {
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 99999;
-  }
-
-  .leaflet-container:fullscreen {
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 99999;
-  }
-
-  .leaflet-pseudo-fullscreen {
-    position: fixed !important;
-    width: 100% !important;
-    height: 100% !important;
-    top: 0px !important;
-    left: 0px !important;
-    z-index: 99999;
-  }
-
-  @media print {
-    .leaflet-control-container {
-      display: none !important;
-    }
-  }
-`
-
-/*const LoadingContainer = styled.div`
-  padding: 15px;
-`*/
-
 /**
  * DO NOT use component state / props to track mouseCoordinates
  * Reason: when state variable is updated, map is re-drawn
- * which results in a hideous flash (and unusability if not debounced)
+ * which results in a hideous flash (and un-usability if not debounced)
  * So: need to use app level store state
  */
 
@@ -522,7 +187,6 @@ export const Karte = observer(({ mapContainerRef }) => {
   //   activeBaseLayer,
   //   activeOverlaysSorted,
   //   activeApfloraLayers,
-  //   controlHeight,
   //   bounds,
   //   mapContainerRef,
   // })
@@ -535,13 +199,13 @@ export const Karte = observer(({ mapContainerRef }) => {
   // console.log('map rendering')
 
   return (
-    <Container
+    <div
+      className={`outer-map-container ${container}`}
       data-id="karten-container1"
-      data-control-height={controlHeight}
       ref={mapRef}
     >
       <ErrorBoundary>
-        <StyledMapContainer
+        <MapContainer
           // bounds need to be set using map.fitBounds sice v3
           // but keep bounds in store as last bound will be reapplied
           // when map is re-opened
@@ -553,6 +217,7 @@ export const Karte = observer(({ mapContainerRef }) => {
           minZoom={0}
           doubleClickZoom={false}
           zoomControl={false}
+          className={`map-container ${mapContainer}`}
         >
           {activeBaseLayer && (
             <MapResizer mapContainerRef={mapContainerRef}>
@@ -632,7 +297,6 @@ export const Karte = observer(({ mapContainerRef }) => {
             visible={!hideMapControls}
           >
             <OwnControls
-              setControlHeight={setControlHeight}
               // this enforces rerendering when sorting changes
               activeOverlaysString={activeOverlays.join()}
               activeApfloraLayersString={activeApfloraLayers.join()}
@@ -647,8 +311,8 @@ export const Karte = observer(({ mapContainerRef }) => {
             <CoordinatesControl />
           </Control>
           <MapFilterListener />
-        </StyledMapContainer>
+        </MapContainer>
       </ErrorBoundary>
-    </Container>
+    </div>
   )
 })
