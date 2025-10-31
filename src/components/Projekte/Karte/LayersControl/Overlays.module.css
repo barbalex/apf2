@@ -1,0 +1,64 @@
+.container {
+  color: rgb(48, 48, 48);
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.iconButton {
+  max-width: 18px;
+  min-height: 20px !important;
+  min-width: 20px !important;
+  padding: 0 !important;
+  margin-top: -3px !important;
+}
+
+.dragHandleIcon {
+  height: 20px !important;
+  color: #7b7b7b !important;
+  cursor: grab;
+}
+
+.legendIcon {
+  height: 20px !important;
+  color: #7b7b7b !important;
+  cursor: pointer;
+}
+
+.layer {
+  display: grid;
+  grid-template-columns: 360px 20px;
+  padding-top: 4px;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #ececec;
+  }
+  /*
+   * z-index is needed because leaflet
+   * sets high one for controls
+   */
+  z-index: 2000;
+  /*
+   * font-size is lost while moving a layer
+   * because it is inherited from higher up
+   */
+  font-size: 12px;
+}
+
+.label {
+  display: flex;
+}
+
+.check {
+  flex-grow: 1;
+}
+
+.infoIcons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.icons {
+  display: flex;
+}

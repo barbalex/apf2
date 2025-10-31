@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 import { MdDragHandle, MdInfoOutline } from 'react-icons/md'
 import {
@@ -27,64 +26,17 @@ import { layerLegends } from './layerLegends.js'
 import { Checkbox } from './shared/Checkbox.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const Container = styled.div`
-  color: rgb(48, 48, 48);
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-bottom: 3px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-`
-const IconButton = styled(Button)`
-  max-width: 18px;
-  min-height: 20px !important;
-  min-width: 20px !important;
-  padding: 0 !important;
-  margin-top: -3px !important;
-`
-const DragHandleIcon = styled(MdDragHandle)`
-  height: 20px !important;
-  color: #7b7b7b !important;
-  cursor: grab;
-`
-const LegendIcon = styled(MdInfoOutline)`
-  height: 20px !important;
-  color: #7b7b7b !important;
-  cursor: pointer;
-`
-const Layer = styled.div`
-  display: grid;
-  grid-template-columns: 360px 20px;
-  padding-top: 4px;
-  &:not(:last-of-type) {
-    border-bottom: 1px solid #ececec;
-  }
-  /*
-   * z-index is needed because leaflet
-   * sets high one for controls
-   */
-  z-index: 2000;
-  /*
-   * font-size is lost while moving a layer
-   * because it is inherited from higher up
-   */
-  font-size: 12px;
-`
-const Label = styled.div`
-  display: flex;
-`
-const Check = styled.div`
-  flex-grow: 1;
-`
-const InfoIcons = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-`
-const Icons = styled.div`
-  display: flex;
-`
-// TODO: add icon: https://material.io/icons/#ic_info
-// for layers with legend
+import {
+  container,
+  iconButton,
+  dragHandleIcon,
+  legendIcon,
+  layer as layerClass,
+  label,
+  check,
+  infoIcons,
+  icons,
+} from './Overlays.module.css'
 
 const SortableItem = ({
   id,
@@ -102,14 +54,15 @@ const SortableItem = ({
   }
 
   return (
-    <Layer
+    <div
+      className={layerClass}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
-      <Label>
-        <Check>
+      <div className={label}>
+        <div className={check}>
           <Checkbox
             value={overlay.value}
             label={overlay.label}
@@ -123,38 +76,41 @@ const SortableItem = ({
               return setActiveOverlays([...activeOverlays, overlay.value])
             }}
           />
-        </Check>
-        <InfoIcons>
+        </div>
+        <div className={infoIcons}>
           {(layerLegends({ apId })[overlay.value] || [])
             .filter((layer) => !!layer.url)
             .map((layer) => (
-              <Icons key={layer.name}>
+              <div
+                className={icons}
+                key={layer.name}
+              >
                 <div>
-                  <IconButton
+                  <Button
+                    className={iconButton}
                     color="inherit"
                     title={`Legende für ${layer.name} öffnen`}
                     onClick={() => window.open(layer.url, '_blank')}
                   >
-                    <LegendIcon />
-                  </IconButton>
+                    <MdInfoOutline className={legendIcon} />
+                  </Button>
                 </div>
-              </Icons>
+              </div>
             ))}
-        </InfoIcons>
-      </Label>
-      <Icons>
-        <Icons>
-          <div>
-            <IconButton
-              title="ziehen, um Layer höher/tiefer zu stapeln"
-              color="inherit"
-            >
-              <DragHandleIcon />
-            </IconButton>
-          </div>
-        </Icons>
-      </Icons>
-    </Layer>
+        </div>
+      </div>
+      <div className={icons}>
+        <div>
+          <Button
+            className={iconButton}
+            title="ziehen, um Layer höher/tiefer zu stapeln"
+            color="inherit"
+          >
+            <MdDragHandle className={dragHandleIcon} />
+          </Button>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -198,7 +154,7 @@ export const Overlays = observer(() => {
   // console.log('Overlays', overlays)
 
   return (
-    <Container>
+    <div className={container}>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -233,6 +189,6 @@ export const Overlays = observer(() => {
           </DragOverlay>
         </SortableContext>
       </DndContext>
-    </Container>
+    </div>
   )
 })
