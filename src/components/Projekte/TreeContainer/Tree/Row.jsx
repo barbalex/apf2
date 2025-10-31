@@ -20,23 +20,16 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-const Node = styled.div`
-  box-sizing: border-box;
-  margin: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  white-space: nowrap;
-  user-select: none;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 23px;
-  transition: opacity 300ms ease-in-out;
-  // a child .iconContainer needs some love
-  .iconContainer {
-    align-self: flex-start !important;
-    margin-top: 3px !important;
-  }
-`
+import {
+  node as nodeClass,
+  openNode,
+  closedNodeWithChildren,
+  loading,
+  remove,
+  symbol,
+  label as labelClass,
+} from './Row.module.css'
+
 const OpenNode = styled(MdExpandMore)`
   cursor: pointer;
   font-size: 1.1rem;
@@ -170,7 +163,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
       tableId={node.tableId}
       nodeLabel={node.label}
     >
-      <Node
+      <div
         data-id={node.tableId || node.id}
         data-parentid={node.parentTableId || node.parentId}
         data-url={dataUrl}
@@ -182,6 +175,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
         // need this id to scroll elements into view
         id={node.id}
         ref={ref}
+        className={nodeClass}
         style={nodeStyle}
       >
         {useSymbolIcon && (
@@ -233,7 +227,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
         </Label>
         {node.labelRightElements?.length &&
           node.labelRightElements.map((El, index) => <El key={index} />)}
-      </Node>
+      </div>
     </ContextMenuTrigger>
   )
 })

@@ -1,0 +1,74 @@
+.node {
+  box-sizing: border-box;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  user-select: none;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 23px;
+  transition: opacity 300ms ease-in-out;
+  /* a child .iconContainer needs some love */
+  .iconContainer {
+    align-self: flex-start !important;
+    margin-top: 3px !important;
+  }
+}
+
+.openNode {
+  cursor: pointer;
+  font-size: 1.1rem;
+  &:hover {
+    color: #f57c00 !important;
+  }
+}
+
+.closedNodeWithChildren {
+  cursor: pointer;
+  font-size: 1.5rem;
+  &:hover {
+    color: #f57c00 !important;
+  }
+}
+
+.loading {
+  font-size: 1.5rem;
+  cursor: pointer;
+  &:hover {
+    color: #f57c00 !important;
+  }
+}
+
+.remove {
+  padding-left: 6px;
+  padding-right: 2px;
+  height: 22px !important;
+  width: 16px !important;
+  font-size: 1.5rem;
+}
+
+.symbol {
+  flex-basis: 23px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  align-self: flex-start;
+  svg {
+    display: block;
+    margin: auto;
+  }
+}
+
+.label {
+  margin-left: 0;
+  padding-right: 5px;
+  font-size: 16px !important;
+  white-space: normal;
+  text-overflow: ellipsis;
+  overflow: hidden !important;
+  cursor: pointer;
+  &:hover {
+    color: #f57c00;
+  }
+}
