@@ -1,0 +1,14 @@
+.container {
+  height: 100%;
+  position: relative;
+
+  @media print {
+    height: auto !important;
+    overflow: visible !important;
+    display: block;
+  }
+}
+
+.iframe {
+  border: none;
+}

@@ -1,5 +1,4 @@
 import { useContext, lazy, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
@@ -18,21 +17,9 @@ const ApFilterController = lazy(async () => ({
   default: (await import('./ApFilterController.jsx')).ApFilterController,
 }))
 
+import { container, iframe } from './index.module.css'
+
 const isInIframe = inIframe()
-
-const Container = styled.div`
-  height: 100%;
-  position: relative;
-
-  @media print {
-    height: auto !important;
-    overflow: visible !important;
-    display: block;
-  }
-`
-const StyledIframe = styled.iframe`
-  border: none;
-`
 
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
@@ -73,7 +60,7 @@ export const Component = observer(() => {
   if (isInIframe) {
     // inside iframe app bar should be hidden
     return (
-      <Container>
+      <div className={container}>
         {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
         : <StyledSplitPane
@@ -81,7 +68,8 @@ export const Component = observer(() => {
             defaultSize="50%"
           >
             <ProjektContainer />
-            <StyledIframe
+            <iframe
+              className={iframe}
               src={iFrameSrc}
               title="tree2"
               width="100%"
@@ -89,7 +77,7 @@ export const Component = observer(() => {
             />
           </StyledSplitPane>
         }
-      </Container>
+      </div>
     )
   }
 
@@ -98,7 +86,7 @@ export const Component = observer(() => {
       <Suspense fallback={null}>
         <ApFilterController />
       </Suspense>
-      <Container>
+      <div className={container}>
         {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
         : <StyledSplitPane
@@ -106,7 +94,8 @@ export const Component = observer(() => {
             defaultSize="50%"
           >
             <ProjektContainer />
-            <StyledIframe
+            <iframe
+              className={iframe}
               src={iFrameSrc}
               title="tree2"
               width="100%"
@@ -114,7 +103,7 @@ export const Component = observer(() => {
             />
           </StyledSplitPane>
         }
-      </Container>
+      </div>
     </>
   )
 })
