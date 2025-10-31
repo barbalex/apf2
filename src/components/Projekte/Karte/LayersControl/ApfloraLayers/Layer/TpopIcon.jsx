@@ -58,13 +58,12 @@ export const TpopIcon = observer(() => {
   return (
     <>
       <div
-        className={iconContainer}
         aria-label="Symbole und Beschriftung wählen"
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         onClick={onClickIconContainer}
         title="Symbole und Beschriftung wählen"
-        className="iconContainer"
+        className={`iconContainer ${iconContainer}`}
       >
         <MdLocalFlorist
           id="TpopMapIcon"
