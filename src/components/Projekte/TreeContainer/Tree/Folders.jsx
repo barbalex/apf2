@@ -1,11 +1,17 @@
 import { useRef } from 'react'
 import { Transition } from 'react-transition-group'
 
-import { transitionStyles } from './Row.jsx'
 import { Node } from './Node.jsx'
 import { NodeWithList } from './NodeWithList.jsx'
 
 import { container } from './Folders.module.css'
+
+const transitionStyles = {
+  entering: { opacity: 1 },
+  entered: { opacity: 1 },
+  exiting: { opacity: 0 },
+  exited: { opacity: 0 },
+}
 
 export const Folders = ({ navData, in: inProp }) => {
   const ref = useRef(null)

@@ -92,7 +92,7 @@ const TextSpan = styled.span`
   }
 `
 
-export const transitionStyles = {
+const transitionStyles = {
   entering: { opacity: 1 },
   entered: { opacity: 1 },
   exiting: { opacity: 0 },
@@ -202,7 +202,6 @@ export const Row = observer(({ node, transitionState, ref }) => {
             {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
             {symbolIcon === 'moreHoriz' && (
               <StyledMoreHorizIcon
-                // data-nodeisinactivenodepath={nodeIsInActiveNodePath}
                 style={{
                   color:
                     nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
@@ -219,11 +218,10 @@ export const Row = observer(({ node, transitionState, ref }) => {
         {node.labelLeftElements?.length &&
           node.labelLeftElements.map((El, index) => <El key={index} />)}
         <TextSpan
-          data-nodeisinactivenodepath={nodeIsInActiveNodePath}
           node={node}
           onClick={onClickNode}
           style={{
-            fontWeight: nodeIsInActiveNodePath ? '700 !important' : 'inherit',
+            fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
             color: nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
           }}
         >
