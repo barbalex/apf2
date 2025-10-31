@@ -6,19 +6,15 @@ import { LayersControl } from './LayersControl/index.jsx'
 import { FullscreenControl } from './FullscreenControl.jsx'
 import { PngControl } from './PngControl.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-`
+import { container } from './OwnControls.module.css'
 
-export const OwnControls = ({  mapRef }) => {
+export const OwnControls = ({ mapRef }) => {
   /**
    * need to pass the height of the self built controls
    * to move controls built by leaflet when layer menu changes height
    * Beware: If initial value is wrong, map will render twice
    */
-  const onResize = ({ width, height }) => {
+  const onResize = ({ height }) => {
     document.documentElement.style.setProperty(
       '--map-control-height',
       `${height ?? 167}px`,
@@ -31,10 +27,13 @@ export const OwnControls = ({  mapRef }) => {
   })
 
   return (
-    <Container ref={resizeRef}>
+    <div
+      className={container}
+      ref={resizeRef}
+    >
       <LayersControl />
       <FullscreenControl mapRef={mapRef} />
       <PngControl />
-    </Container>
+    </div>
   )
 }
