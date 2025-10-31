@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react'
-import styled from '@emotion/styled'
 import { MdLocalFlorist } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
@@ -8,33 +7,13 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../../../mobxContext.js'
 
-const MapIcon = styled(MdLocalFlorist)`
-  margin-right: -0.1em;
-  height: 20px !important;
-  paint-order: stroke;
-  stroke-width: 1px;
-  stroke: black;
-  color: #947500 !important;
-  font-size: 1.5rem;
-`
-const IconContainer = styled.div`
-  cursor: pointer;
-`
-const MenuTitle = styled.div`
-  font-size: 14px !important;
-  padding: 2px 14px;
-  font-weight: 700;
-  &:focus {
-    outline: none;
-  }
-`
-const StyledMenuItem = styled(MenuItem)`
-  font-size: 14px !important;
-  padding: 5px 14px !important;
-`
-const CheckIcon = styled(FaCheck)`
-  padding-right: 5px;
-`
+import {
+  mapIcon,
+  iconContainer,
+  menuTitle,
+  menuItem,
+  checkIcon,
+} from './PopIcon.module.css'
 
 export const PopIcon = observer(() => {
   const store = useContext(MobxContext)
@@ -77,49 +56,72 @@ export const PopIcon = observer(() => {
 
   return (
     <>
-      <IconContainer
+      <div
         aria-label="Symbole und Beschriftung wählen"
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
         onClick={onClickIconContainer}
         title="Symbole und Beschriftung wählen"
-        className="iconContainer"
+        className={`iconContainer ${iconContainer}`}
       >
-        <MapIcon id="PopMapIcon" />
-      </IconContainer>
+        <MdLocalFlorist
+          id="PopMapIcon"
+          className={mapIcon}
+        />
+      </div>
       <Menu
         id="menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <MenuTitle>Symbole wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickAllSame}>
-          {popIcon === 'normal' && <CheckIcon />}
+        <div className={menuTitle}>Symbole wählen:</div>
+        <MenuItem
+          onClick={onClickAllSame}
+          className={menuItem}
+        >
+          {popIcon === 'normal' && <FaCheck className={checkIcon} />}
           {'alle gleich (Blume)'}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickByStatusGroup}>
-          {popIcon === 'statusGroup' && <CheckIcon />}
+        </MenuItem>
+        <MenuItem
+          onClick={onClickByStatusGroup}
+          className={menuItem}
+        >
+          {popIcon === 'statusGroup' && <FaCheck className={checkIcon} />}
           {`nach Status, mit Buchstaben`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
-          {popIcon === 'statusGroupSymbols' && <CheckIcon />}
+        </MenuItem>
+        <MenuItem
+          onClick={onClickByStatusGroupSymbols}
+          className={menuItem}
+        >
+          {popIcon === 'statusGroupSymbols' && (
+            <FaCheck className={checkIcon} />
+          )}
           {`nach Status, mit Symbolen`}
-        </StyledMenuItem>
-        <MenuTitle>Beschriftung wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickPopTpopNr}>
-          {popLabel === 'nr' && <CheckIcon />}
+        </MenuItem>
+        <div className={menuTitle}>Beschriftung wählen:</div>
+        <MenuItem
+          onClick={onClickPopTpopNr}
+          className={menuItem}
+        >
+          {popLabel === 'nr' && <FaCheck className={checkIcon} />}
           {'Nr.'}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickFlurname}>
-          {popLabel === 'name' && <CheckIcon />}
+        </MenuItem>
+        <MenuItem
+          onClick={onClickFlurname}
+          className={menuItem}
+        >
+          {popLabel === 'name' && <FaCheck className={checkIcon} />}
           {'Name'}
-        </StyledMenuItem>
+        </MenuItem>
         {/* TODO: add none to Markers */}
-        <StyledMenuItem onClick={onClickNoLabel}>
-          {popLabel === 'none' && <CheckIcon />}
+        <MenuItem
+          onClick={onClickNoLabel}
+          className={menuItem}
+        >
+          {popLabel === 'none' && <FaCheck className={checkIcon} />}
           {`keine`}
-        </StyledMenuItem>
+        </MenuItem>
       </Menu>
     </>
   )

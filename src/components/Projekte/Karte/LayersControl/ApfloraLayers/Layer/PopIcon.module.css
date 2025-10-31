@@ -1,0 +1,31 @@
+.mapIcon {
+  margin-right: -0.1em;
+  height: 20px !important;
+  paint-order: stroke;
+  stroke-width: 1px;
+  stroke: black;
+  color: #947500 !important;
+  font-size: 1.5rem;
+}
+
+.iconContainer {
+  cursor: pointer;
+}
+
+.menuTitle {
+  font-size: 14px !important;
+  padding: 2px 14px;
+  font-weight: 700;
+  &:focus {
+    outline: none;
+  }
+}
+
+.menuItem {
+  font-size: 14px !important;
+  padding: 5px 14px !important;
+}
+
+.checkIcon {
+  padding-right: 5px;
+}
