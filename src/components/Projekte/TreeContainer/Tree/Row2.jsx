@@ -80,8 +80,6 @@ const TextSpan = styled.span`
   margin-left: 0;
   padding-right: 5px;
   font-size: 16px !important;
-  font-weight: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '700 !important' : 'inherit'};
   // line-height: 23px;
   white-space: normal;
   text-overflow: ellipsis;
@@ -158,7 +156,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
 
   const nodeStyle = {
     ...(transitionState ? transitionStyles[transitionState] : {}),
-    color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
+    color: nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
     paddingLeft: `${Number(level) * 17 - 10}px`,
   }
 
@@ -168,6 +166,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
     <ContextMenuTrigger
       // need this id for the menu to work
       id={`tree${upperFirst(node.menuType)}`}
+      //collect={(props) => ({ key: index })}
       collect={(props) => props}
       nodeId={node.id}
       tableId={node.tableId}
@@ -202,7 +201,6 @@ export const Row = observer(({ node, transitionState, ref }) => {
             {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
             {symbolIcon === 'moreHoriz' && (
               <StyledMoreHorizIcon
-                // data-nodeisinactivenodepath={nodeIsInActiveNodePath}
                 style={{
                   color:
                     nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
@@ -219,7 +217,6 @@ export const Row = observer(({ node, transitionState, ref }) => {
         {node.labelLeftElements?.length &&
           node.labelLeftElements.map((El, index) => <El key={index} />)}
         <TextSpan
-          data-nodeisinactivenodepath={nodeIsInActiveNodePath}
           node={node}
           onClick={onClickNode}
           style={{
