@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
@@ -31,24 +30,12 @@ import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 
-const StyledH3 = styled.h3`
-  margin: 7px 0;
-`
-const StyledTooltip = styled(Tooltip)`
-  &:before {
-    content: none !important;
-  }
-`
-const StyledButton = styled(Button)`
-  text-transform: none;
-  justify-content: left;
-  padding: 2px 0;
-`
-const Info = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 5px;
-`
+import {
+  h3,
+  button,
+  info,
+  tooltip,
+} from '../BeobNichtBeurteilt/Marker.module.css'
 
 const getIconHtml = ({ isHighlighted, tpop, tpopIconName }) => {
   let html = isHighlighted ? tpopIconHighlighted : tpopIcon
@@ -142,12 +129,12 @@ export const Marker = observer(({ tpop }) => {
       <Popup>
         <>
           <div>Teil-Population</div>
-          <StyledH3>
+          <h3 className={h3}>
             {`${tpop.nr ?? '(keine Nr)'}: ${
               tpop.flurname ?? '(kein Flurname)'
             }`}
-          </StyledH3>
-          <Info>
+          </h3>
+          <div className={info}>
             <div>Art:</div>
             <div>{artname}</div>
             <div>Population:</div>
@@ -166,34 +153,37 @@ export const Marker = observer(({ tpop }) => {
             <div>{`${
               tpop?.popStatusWerteByStatus?.text ?? '(kein Status)'
             }`}</div>
-          </Info>
-          <StyledButton
+          </div>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openTpopInTab}
             fullWidth
+            className={button}
           >
             Formular in neuem Fenster öffnen
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openTpopInTree2}
             fullWidth
+            className={button}
           >
             Formular in Navigationsbaum 2 öffnen
-          </StyledButton>
+          </Button>
         </>
       </Popup>
-      <StyledTooltip
+      <Tooltip
         direction="bottom"
         opacity={1}
         permanent
+        className={tooltip}
       >
         <span className="mapTooltip">{title}</span>
-      </StyledTooltip>
+      </Tooltip>
     </LeafletMarker>
   )
 })
