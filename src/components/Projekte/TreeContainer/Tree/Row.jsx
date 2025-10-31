@@ -52,8 +52,6 @@ const StyledChevronRightIcon = styled(MdChevronRight)`
   }
 `
 const StyledMoreHorizIcon = styled(MdMoreHoriz)`
-  color: ${(props) =>
-    props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   font-size: 1.5rem;
   cursor: pointer;
   &:hover {
@@ -170,7 +168,6 @@ export const Row = observer(({ node, transitionState, ref }) => {
     <ContextMenuTrigger
       // need this id for the menu to work
       id={`tree${upperFirst(node.menuType)}`}
-      //collect={(props) => ({ key: index })}
       collect={(props) => props}
       nodeId={node.id}
       tableId={node.tableId}
@@ -205,7 +202,11 @@ export const Row = observer(({ node, transitionState, ref }) => {
             {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
             {symbolIcon === 'moreHoriz' && (
               <StyledMoreHorizIcon
-                data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+                // data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+                style={{
+                  color:
+                    nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
+                }}
               />
             )}
           </SymbolDiv>
