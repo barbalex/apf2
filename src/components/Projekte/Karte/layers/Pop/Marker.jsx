@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
@@ -31,24 +30,12 @@ import { svg300 } from './statusGroupSymbols/300.js'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 
-const StyledH3 = styled.h3`
-  margin: 7px 0;
-`
-const StyledTooltip = styled(Tooltip)`
-  &:before {
-    content: none !important;
-  }
-`
-const StyledButton = styled(Button)`
-  text-transform: none;
-  justify-content: left;
-  padding: 2px 0;
-`
-const Info = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 5px;
-`
+import {
+  h3,
+  button,
+  info,
+  tooltip,
+} from '../BeobNichtBeurteilt/Marker.module.css'
 
 const getIconHtml = ({ isHighlighted, pop, popIconName }) => {
   let iconHtml = isHighlighted ? popHighlightedIconString : popIconString
@@ -143,10 +130,10 @@ export const Marker = observer(({ pop }) => {
       <Popup>
         <>
           <div>Population</div>
-          <StyledH3>
+          <h3 className={h3}>
             {`${pop.nr ?? '(keine Nummer)'}: ${pop.name ?? '(kein Name)'}`}
-          </StyledH3>
-          <Info>
+          </h3>
+          <div className={info}>
             <div>Art:</div>
             <div>{artname}</div>
             <div>Koordinaten:</div>
@@ -159,34 +146,37 @@ export const Marker = observer(({ pop }) => {
             <div>{`${
               pop?.popStatusWerteByStatus?.text ?? '(kein Status)'
             }`}</div>
-          </Info>
-          <StyledButton
+          </div>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openPopInTab}
             fullWidth
+            className={button}
           >
             Formular in neuem Fenster öffnen
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             onClick={openPopInTree2}
             fullWidth
+            className={button}
           >
             Formular in Navigationsbaum 2 öffnen
-          </StyledButton>
+          </Button>
         </>
       </Popup>
-      <StyledTooltip
+      <Tooltip
         direction="bottom"
         opacity={1}
         permanent
+        className={tooltip}
       >
         <span className="mapTooltip">{title}</span>
-      </StyledTooltip>
+      </Tooltip>
     </LeafletMarker>
   )
 })
