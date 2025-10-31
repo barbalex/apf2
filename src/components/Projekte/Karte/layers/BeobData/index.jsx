@@ -18,15 +18,13 @@ import { Field } from './Field.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { beob } from '../../../../shared/fragments.js'
 
-import { info } from '../BeobZugeordnet/Marker.module.css'
+import { info, absenz } from '../BeobNichtBeurteilt/Marker.module.css'
 import {
   topFieldsContainer,
   dataContainer,
   dataSummary,
   dataDetails,
 } from './index.module.css'
-
-const AbsenzStyle = { fontWeight: 'bold', color: 'red' }
 
 const topFieldNames = [
   'PRESENCE',
@@ -153,12 +151,11 @@ export const Data = observer(({ id }) => {
             {topFields.map(([key, value]) => {
               const isAbsenz =
                 key?.toLowerCase?.()?.includes?.('presence') && row?.absenz
-              const style = isAbsenz ? AbsenzStyle : {}
 
               return (
                 <div
                   key={key}
-                  style={style}
+                  className={isAbsenz ? absenz : ''}
                 >
                   <div>{`${key}:`}</div>
                   <div>{value}</div>
