@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react'
-import styled from '@emotion/styled'
 import { MdLocalFlorist } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
@@ -8,33 +7,14 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../../../mobxContext.js'
 
-const MapIcon = styled(MdLocalFlorist)`
-  margin-right: -0.1em;
-  height: 20px !important;
-  paint-order: stroke;
-  stroke-width: 1px;
-  stroke: black;
-  color: #016f19 !important;
-  font-size: 1.5rem;
-`
-const IconContainer = styled.div`
-  cursor: pointer;
-`
-const MenuTitle = styled.div`
-  font-size: 14px !important;
-  padding: 2px 14px;
-  font-weight: 700;
-  &:focus {
-    outline: none;
-  }
-`
-const StyledMenuItem = styled(MenuItem)`
-  font-size: 14px !important;
-  padding: 5px 14px !important;
-`
-const CheckIcon = styled(FaCheck)`
-  padding-right: 5px;
-`
+import {
+  mapIcon,
+  mapIconColorTpop,
+  iconContainer,
+  menuTitle,
+  menuItem,
+  checkIcon,
+} from './PopIcon.module.css'
 
 export const TpopIcon = observer(() => {
   const store = useContext(MobxContext)
@@ -77,7 +57,8 @@ export const TpopIcon = observer(() => {
 
   return (
     <>
-      <IconContainer
+      <div
+        className={iconContainer}
         aria-label="Symbole und Beschriftung wählen"
         aria-owns={anchorEl ? 'menu' : null}
         aria-haspopup="true"
@@ -85,40 +66,63 @@ export const TpopIcon = observer(() => {
         title="Symbole und Beschriftung wählen"
         className="iconContainer"
       >
-        <MapIcon id="TpopMapIcon" />
-      </IconContainer>
+        <MdLocalFlorist
+          id="TpopMapIcon"
+          className={`${mapIcon} ${mapIconColorTpop}`}
+        />
+      </div>
       <Menu
         id="menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <MenuTitle>Symbole wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickAllSame}>
-          {tpopIcon === 'normal' && <CheckIcon />}
+        <div className={menuTitle}>Symbole wählen:</div>
+        <MenuItem
+          className={menuItem}
+          onClick={onClickAllSame}
+        >
+          {tpopIcon === 'normal' && <FaCheck className={checkIcon} />}
           {`alle gleich (Blume)`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickByStatusGroup}>
-          {tpopIcon === 'statusGroup' && <CheckIcon />}
+        </MenuItem>
+        <MenuItem
+          className={menuItem}
+          onClick={onClickByStatusGroup}
+        >
+          {tpopIcon === 'statusGroup' && <FaCheck className={checkIcon} />}
           {`nach Status, mit Buchstaben`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickByStatusGroupSymbols}>
-          {tpopIcon === 'statusGroupSymbols' && <CheckIcon />}
+        </MenuItem>
+        <MenuItem
+          className={menuItem}
+          onClick={onClickByStatusGroupSymbols}
+        >
+          {tpopIcon === 'statusGroupSymbols' && (
+            <FaCheck className={checkIcon} />
+          )}
           {`nach Status, mit Symbolen`}
-        </StyledMenuItem>
-        <MenuTitle>Beschriftung wählen:</MenuTitle>
-        <StyledMenuItem onClick={onClickPopTpopNr}>
-          {tpopLabel === 'nr' && <CheckIcon />}
+        </MenuItem>
+        <div className={menuTitle}>Beschriftung wählen:</div>
+        <MenuItem
+          className={menuItem}
+          onClick={onClickPopTpopNr}
+        >
+          {tpopLabel === 'nr' && <FaCheck className={checkIcon} />}
           {`Pop-Nr / TPop-Nr`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickFlurname}>
-          {tpopLabel === 'name' && <CheckIcon />}
+        </MenuItem>
+        <MenuItem
+          className={menuItem}
+          onClick={onClickFlurname}
+        >
+          {tpopLabel === 'name' && <FaCheck className={checkIcon} />}
           {`Flurname`}
-        </StyledMenuItem>
-        <StyledMenuItem onClick={onClickNoLabel}>
-          {tpopLabel === 'none' && <CheckIcon />}
+        </MenuItem>
+        <MenuItem
+          className={menuItem}
+          onClick={onClickNoLabel}
+        >
+          {tpopLabel === 'none' && <FaCheck className={checkIcon} />}
           {`keine`}
-        </StyledMenuItem>
+        </MenuItem>
       </Menu>
     </>
   )
