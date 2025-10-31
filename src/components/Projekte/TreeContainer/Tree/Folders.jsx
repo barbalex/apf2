@@ -1,14 +1,11 @@
 import { useRef } from 'react'
 import { Transition } from 'react-transition-group'
-import styled from '@emotion/styled'
 
 import { transitionStyles } from './Row.jsx'
 import { Node } from './Node.jsx'
 import { NodeWithList } from './NodeWithList.jsx'
 
-const Container = styled.div`
-  transition: opacity 300ms ease-in-out;
-`
+import { container } from './Folders.module.css'
 
 export const Folders = ({ navData, in: inProp }) => {
   const ref = useRef(null)
@@ -25,7 +22,8 @@ export const Folders = ({ navData, in: inProp }) => {
       nodeRef={ref}
     >
       {(state) => (
-        <Container
+        <div
+          className={container}
           ref={ref}
           style={transitionStyles[state]}
         >
@@ -35,7 +33,7 @@ export const Folders = ({ navData, in: inProp }) => {
               key={menu.id}
             />
           ))}
-        </Container>
+        </div>
       )}
     </Transition>
   )
