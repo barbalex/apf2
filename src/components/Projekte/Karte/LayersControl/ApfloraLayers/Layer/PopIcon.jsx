@@ -9,6 +9,7 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 
 import {
   mapIcon,
+  mapIconColorPop,
   iconContainer,
   menuTitle,
   menuItem,
@@ -66,7 +67,7 @@ export const PopIcon = observer(() => {
       >
         <MdLocalFlorist
           id="PopMapIcon"
-          className={mapIcon}
+          className={`${mapIcon} ${mapIconColorPop}`}
         />
       </div>
       <Menu

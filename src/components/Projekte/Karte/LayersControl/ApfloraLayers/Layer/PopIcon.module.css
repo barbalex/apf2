@@ -4,8 +4,15 @@
   paint-order: stroke;
   stroke-width: 1px;
   stroke: black;
-  color: #947500 !important;
   font-size: 1.5rem;
+}
+
+.mapIconColorPop {
+  color: #947500 !important;
+}
+
+.mapIconColorTpop {
+  color: #016f19 !important;
 }
 
 .iconContainer {
