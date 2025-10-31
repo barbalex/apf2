@@ -17,8 +17,8 @@ import { Spinner } from '../../../../shared/Spinner.jsx'
 import { Field } from './Field.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { beob } from '../../../../shared/fragments.js'
-import { Info } from '../BeobZugeordnet/Marker.jsx'
 
+import { info } from '../BeobZugeordnet/Marker.module.css'
 import {
   topFieldsContainer,
   dataContainer,
@@ -149,7 +149,7 @@ export const Data = observer(({ id }) => {
     <ErrorBoundary>
       {!!topFields.length && (
         <div className={topFieldsContainer}>
-          <Info>
+          <div className={info}>
             {topFields.map(([key, value]) => {
               const isAbsenz =
                 key?.toLowerCase?.()?.includes?.('presence') && row?.absenz
@@ -165,7 +165,7 @@ export const Data = observer(({ id }) => {
                 </div>
               )
             })}
-          </Info>
+          </div>
         </div>
       )}
       <div className={dataContainer}>

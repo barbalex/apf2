@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,23 +19,8 @@ import { updateBeobById } from './updateBeobById.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
 
-const StyledH3 = styled.h3`
-  margin: 7px 0;
-`
-const StyledButton = styled(Button)`
-  text-transform: none;
-  justify-content: left;
-  padding: 2px 0;
-`
-export const Info = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 15px;
-`
-const AbsenzDiv = styled.div`
-  color: red;
-  font-weight: bold;
-`
+import { h3, button, absenz } from '../BeobNichtBeurteilt/Marker.module.css'
+import { info } from './Marker.module.css'
 
 export const Marker = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
@@ -176,10 +160,10 @@ export const Marker = observer(({ beob }) => {
             beob?.aeTaxonomyByArtId?.artname ?? ''
           }`}</div>
           {beob?.absenz ?
-            <AbsenzDiv>Absenzmeldung</AbsenzDiv>
+            <div className={absenz}>Absenzmeldung</div>
           : null}
-          <StyledH3>{label}</StyledH3>
-          <Info>
+          <h3 className={h3}>{label}</h3>
+          <div className={info}>
             <div>Koordinaten:</div>
             <div>
               {`${beob.lv95X?.toLocaleString(
@@ -192,25 +176,27 @@ export const Marker = observer(({ beob }) => {
             <div>{`${beob?.tpopByTpopId?.nr ?? '(keine Nr)'}: ${
               beob?.tpopByTpopId?.flurname ?? '(kein Flurname)'
             }`}</div>
-          </Info>
-          <StyledButton
+          </div>
+          <Button
             size="small"
             variant="text"
             onClick={openBeobInTab}
             color="inherit"
             fullWidth
+            className={button}
           >
             Formular in neuem Fenster öffnen
-          </StyledButton>
-          <StyledButton
+          </Button>
+          <Button
             size="small"
             variant="text"
             color="inherit"
             fullWidth
             onClick={openBeobInTree2}
+            className={button}
           >
             Formular in Navigationsbaum 2 öffnen
-          </StyledButton>
+          </Button>
           <Data id={beob.id} />
         </>
       </Popup>
