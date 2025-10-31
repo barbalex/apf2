@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import Switch from '@mui/material/Switch'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
@@ -12,17 +11,7 @@ import { Label } from '../../../shared/Label.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-right: 5px;
-  min-width: 40px;
-  margin-bottom: -14px;
-`
-const StyledSwitch = styled(Switch)`
-  margin-left: -13px;
-  margin-top: -15px;
-`
+import { container, switchClass } from './index.module.css'
 
 export const ApFilter = observer(({ color }) => {
   const { apId } = useParams()
@@ -88,20 +77,21 @@ export const ApFilter = observer(({ color }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <Label
           label="nur AP"
           color={color}
           htmlFor="ap-filter"
         />
-        <StyledSwitch
+        <Switch
           data-id="ap-filter"
           id="ap-filter"
           checked={apFilter}
           onChange={onChange}
           color="primary"
+          className={switchClass}
         />
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
