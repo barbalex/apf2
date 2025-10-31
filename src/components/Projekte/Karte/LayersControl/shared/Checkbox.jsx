@@ -1,28 +1,16 @@
-import styled from '@emotion/styled'
-
-const Container = styled.div`
-  margin-left: 18px;
-`
-const Input = styled.input`
-  margin-right: 4px;
-  vertical-align: -2px;
-`
-const Label = styled.label`
-  margin-left: -18px;
-  padding-right: 4px;
-  user-select: none;
-`
+import { container, input, label as labelClass } from './Checkbox.module.css'
 
 export const Checkbox = ({ value, label, checked, onChange }) => (
-  <Container>
-    <Label>
-      <Input
+  <div className={container}>
+    <label className={labelClass}>
+      <input
         type="checkbox"
         value={value}
         checked={checked}
         onChange={onChange}
+        className={input}
       />
       {label}
-    </Label>
-  </Container>
+    </label>
+  </div>
 )

@@ -1,0 +1,14 @@
+.container {
+  margin-left: 18px;
+}
+
+.input {
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+.label {
+  margin-left: -18px;
+  padding-right: 4px;
+  user-select: none;
+}
