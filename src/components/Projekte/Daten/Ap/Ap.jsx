@@ -130,7 +130,6 @@ export const Component = observer(() => {
           query={queryAeTaxonomies}
           filter={aeTaxonomiesfilterForData}
           queryNodesName="allAeTaxonomies"
-          //value={row.artId}
           saveToDb={saveToDb}
           error={fieldErrors.artId}
         />
