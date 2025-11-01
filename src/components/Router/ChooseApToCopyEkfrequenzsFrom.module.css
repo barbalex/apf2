@@ -1,0 +1,15 @@
+.selectContainer {
+  padding-top: 15px;
+  min-height: 360px;
+  max-height: 360px;
+}
+
+.selectLabel {
+  font-size: 12px;
+  color: rgb(0, 0, 0, 0.54);
+}
+
+.errorClass {
+  font-size: 12px;
+  color: red;
+}
