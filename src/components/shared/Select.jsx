@@ -71,9 +71,7 @@ export const Select = ({
         isClearable
         isSearchable
         noOptionsMessage={() => '(keine)'}
-        maxheight={maxHeight}
         classNamePrefix="react-select"
-        nocaret={noCaret}
         className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${select}`}
       />
       {error && <div className={errorClass}>{error}</div>}
