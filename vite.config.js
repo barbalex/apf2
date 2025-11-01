@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
+// activating the analyzer breaks the build on vercel
 // import { analyzer } from 'vite-bundle-analyzer'
 
 // https://vitejs.dev/config/

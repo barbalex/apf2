@@ -95,11 +95,14 @@ export const SelectAsync = ({
     saveToDb(fakeEvent)
   }
 
-  const style =
+  const styleMeantForSelect =
     maxHeight ? { '--react-select-menu-list-max-height': `${maxHeight}px` } : {}
 
   return (
-    <Container data-id={field}>
+    <Container
+      data-id={field}
+      style={styleMeantForSelect}
+    >
       {label && <Label labelsize={labelSize}>{label}</Label>}
       <StyledSelect
         id={field}
@@ -115,7 +118,6 @@ export const SelectAsync = ({
         nocaret={noCaret}
         onInputChange={onInputChange}
         className={`select-height-limited ${noCaret ? 'select-nocaret' : ''}`}
-        style={style}
       />
       {error && <Error>{error}</Error>}
     </Container>
