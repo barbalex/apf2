@@ -85,7 +85,7 @@ export default defineConfig({
         plugins: ['babel-plugin-react-compiler', '@emotion/babel-plugin'],
       },
     }),
-    analyzer(),
+    // analyzer(),
   ],
   css: {
     modules: {
