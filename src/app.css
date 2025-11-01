@@ -7,7 +7,8 @@ html {
    */
   --map-control-height: 167px;
   --react-select-menu-list-max-height: unset;
-  --min-width-to-show-title: 1040px;
+  --min-width-to-show-title-appbar: 1040px;
+  --min-width-to-show-title-ekfbar: 800px;
 }
 
 /* leaflet elements do not inherit nested css modules */

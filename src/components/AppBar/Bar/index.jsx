@@ -11,7 +11,7 @@ import { ProjekteMenus } from './Projekte/index.jsx'
 import { constants } from '../../../modules/constants.js'
 import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 
-export const Container = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: ${(props) =>

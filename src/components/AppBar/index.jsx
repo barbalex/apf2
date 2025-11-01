@@ -36,7 +36,7 @@ const Appbar = styled.div`
   background-color: #2e7d32;
   height: 38px;
 
-  @media (max-width: var(--min-width-to-show-title)) {
+  @media (max-width: var(--min-width-to-show-title-appbar)) {
     justify-content: flex-end;
   }
 
