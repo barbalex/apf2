@@ -33,11 +33,10 @@ const Appbar = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: ${(props) => (props.mobile === 'true' ? 0 : 4)}px 0;
   background-color: #2e7d32;
   height: 38px;
 
-  @media (max-width: ${constants.minWidthToShowTitle - 1}px) {
+  @media (max-width: var(--min-width-to-show-title)) {
     justify-content: flex-end;
   }
 
@@ -76,7 +75,7 @@ export const Component = observer(() => {
   return (
     <Container>
       <IsDesktopViewSetter />
-      <Appbar mobile={isMobileView.toString()}>
+      <Appbar style={{ padding: isMobileView ? 0 : 4 }}>
         {showEkf ?
           <EkfBar />
         : <Bar />}
