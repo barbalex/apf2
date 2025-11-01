@@ -1,6 +1,5 @@
 import { useContext, useRef } from 'react'
 import AsyncSelect from 'react-select/async'
-import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
@@ -9,67 +8,7 @@ import { queryApsToChoose } from './queryApsToChoose.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const StyledSelect = styled(AsyncSelect)`
-  .react-select__control {
-    background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-  }
-  .react-select__control:hover {
-    border-bottom-width: 2px;
-  }
-  .react-select__control:focus-within {
-    border-bottom-color: rgba(28, 80, 31, 1) !important;
-    box-shadow: none;
-  }
-  .react-select__value-container {
-    padding-left: 0;
-  }
-  .react-select__indicators {
-    @media print {
-      display: none;
-    }
-  }
-  .react-select__clear-indicator {
-    /* ability to hide caret when not enough space */
-    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
-  }
-  .react-select__dropdown-indicator {
-    /* ability to hide caret when not enough space */
-    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
-  }
-  .react-select__indicator-separator {
-    /* ability to hide caret when not enough space */
-    width: ${(props) => (props.nocaret ? '0' : '1px')};
-  }
-  input {
-    @media print {
-      padding-top: 3px;
-      padding-bottom: 0;
-    }
-  }
-  .react-select__menu,
-  .react-select__menu-list {
-    height: 130px;
-    z-index: 4;
-  }
-`
-const SelectContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
-`
-const Label = styled.div`
-  font-size: 12px;
-  color: rgb(0, 0, 0, 0.54);
-`
-const Error = styled.div`
-  font-size: 12px;
-  color: red;
-`
+import { select, container, labelClass, errorClass } from './index.module.css'
 
 export const ChooseAp = observer(({ setShowChoose }) => {
   const { projId } = useParams()
@@ -126,9 +65,9 @@ export const ChooseAp = observer(({ setShowChoose }) => {
 
   return (
     <ErrorBoundary>
-      <SelectContainer>
-        <Label>{label}</Label>
-        <StyledSelect
+      <div className={container}>
+        <div className={labelClass}>{label}</div>
+        <AsyncSelect
           defaultOptions
           onChange={onChange}
           onBlur={() => setShowChoose(false)}
@@ -148,10 +87,12 @@ export const ChooseAp = observer(({ setShowChoose }) => {
           loadOptions={loadOptions}
           openMenuOnFocus
           autoFocus
-          className='ekplan-aplist-chooseap select-height-limited select-nocaret'
+          className={`ekplan-aplist-chooseap select-height-limited select-nocaret ${select}`}
         />
-        {error.current && <Error>{error.current.message}</Error>}
-      </SelectContainer>
+        {error.current && (
+          <div className={errorClass}>{error.current.message}</div>
+        )}
+      </div>
     </ErrorBoundary>
   )
 })
