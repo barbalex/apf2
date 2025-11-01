@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 import styled from '@emotion/styled'
+import Button from '@mui/material/Button'
 
 import { EkfYear } from './EkfYear.jsx'
 import { User } from './User/index.jsx'
