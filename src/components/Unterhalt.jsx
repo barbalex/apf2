@@ -1,47 +1,24 @@
-// This is the entry file for the application
-import styled from '@emotion/styled'
-
-const Container = styled.div`
-  font:
-    20px Helvetica,
-    sans-serif;
-  color: #333;
-  text-align: center;
-  padding: 150px;
-  height: 100%;
-  background-color: #fffde7;
-`
-const Article = styled.article`
-  display: block;
-  text-align: left;
-  max-width: 650px;
-  margin: 0 auto;
-`
-const Titel = styled.h1`
-  font-size: 50px;
-`
-const A = styled.a`
-  color: #dc8100;
-  text-decoration: none;
-  &:hover {
-    color: #333;
-    text-decoration: none;
-  }
-`
+import { container, article, titel, a } from './Unterhalt.module.css'
 
 export const Unterhalt = () => (
-  <Container>
-    <Article>
-      <Titel>Wir sind bald zurück!</Titel>
+  <div className={container}>
+    <article className={article}>
+      <h1 className={titel}>Wir sind bald zurück!</h1>
       <div>
         <p>apflora erhält gerade eine neue Datenbank</p>
         <p>
           Wenn nötig sind wir per{' '}
-          <A href="mailto:alex@gabriel-software.ch">email</A> erreichbar,
+          <a
+            className={a}
+            href="mailto:alex@gabriel-software.ch"
+          >
+            email
+          </a>{' '}
+          erreichbar,
           <br />
           ansonsten sind wir bald wieder online
         </p>
       </div>
-    </Article>
-  </Container>
+    </article>
+  </div>
 )
