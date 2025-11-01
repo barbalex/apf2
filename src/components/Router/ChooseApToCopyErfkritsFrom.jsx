@@ -7,7 +7,6 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -17,56 +16,11 @@ import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const SelectContainer = styled.div`
-  padding-top: 15px;
-  min-height: 360px;
-  max-height: 360px;
-`
-const SelectLabel = styled.div`
-  font-size: 12px;
-  color: rgb(0, 0, 0, 0.54);
-`
-const SelectStyled = styled(AsyncSelect)`
-  .react-select__control {
-    background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-  }
-  .react-select__control:hover {
-    border-bottom-width: 2px;
-  }
-  .react-select__control:focus-within {
-    border-bottom-color: rgba(28, 80, 31, 1) !important;
-    box-shadow: none;
-  }
-  .react-select__select-container {
-    padding-top: 5px;
-  }
-  .react-select__value-container {
-    padding-left: 0;
-  }
-  .react-select__clear-indicator {
-    /* ability to hide caret when not enough space */
-    padding-right: ${(props) => (props.nocaret ? '0' : '8px')};
-  }
-  .react-select__dropdown-indicator {
-    /* ability to hide caret when not enough space */
-    display: ${(props) => (props.nocaret ? 'none' : 'flex')};
-  }
-  .react-select__indicator-separator {
-    /* ability to hide caret when not enough space */
-    width: ${(props) => (props.nocaret ? '0' : '1px')};
-  }
-`
-const Error = styled.div`
-  font-size: 12px;
-  color: red;
-`
-
-// const textEncoder = new TextEncoder()
+import {
+  selectContainer,
+  selectLabel,
+  errorClass,
+} from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
 export const ChooseApToCopyErfkritsFrom = observer(() => {
   const { apId } = useParams()
@@ -284,9 +238,11 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
             Achtung: Allfällige bestehende Erfolgskriterien werden gelöscht und
             mit den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
           </DialogContentText>
-          <SelectContainer>
-            <SelectLabel>Art (nur solche mit Erfolgskriterien)</SelectLabel>
-            <SelectStyled
+          <div className={selectContainer}>
+            <div className={selectLabel}>
+              Art (nur solche mit Erfolgskriterien)
+            </div>
+            <AsyncSelect
               autoFocus
               defaultOptions
               name="ap"
@@ -305,9 +261,12 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
               classNamePrefix="react-select"
               loadOptions={apOptions}
               openMenuOnFocus
+              className="select-nocaret"
             />
-            {apOptionsError && <Error>{apOptionsError}</Error>}
-          </SelectContainer>
+            {apOptionsError && (
+              <div className={errorClass}>{apOptionsError}</div>
+            )}
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={onCloseChooseApDialog}>abbrechen</Button>

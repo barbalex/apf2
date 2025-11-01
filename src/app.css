@@ -6,6 +6,7 @@ html {
    * Beware: If initial value is wrong, map will render twice
    */
   --map-control-height: 167px;
+  --react-select-menu-list-max-height: unset;
 }
 
 /* leaflet elements do not inherit nested css modules */
@@ -416,4 +417,62 @@ html {
     right: 7px;
     bottom: 3px;
   }
+}
+
+/* react-select */
+
+.react-select__control {
+  background-color: rgba(0, 0, 0, 0) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
+}
+.react-select__control:hover {
+  border-bottom-width: 2px;
+}
+.react-select__control:focus-within {
+  border-bottom-color: rgba(28, 80, 31, 1) !important;
+  box-shadow: none;
+}
+.react-select__value-container {
+  padding-left: 0;
+}
+.react-select__indicators {
+  @media print {
+    display: none;
+  }
+}
+.react-select__clear-indicator {
+  /* ability to hide caret when not enough space */
+  padding-right: 8px;
+}
+.react-select__dropdown-indicator {
+  /* ability to hide caret when not enough space */
+  display: flex;
+}
+.react-select__indicator-separator {
+  /* ability to hide caret when not enough space */
+  width: 1px;
+}
+.select-nocaret .react-select__clear-indicator {
+  /* ability to hide caret when not enough space */
+  padding-right: 0;
+}
+.select-nocaret .react-select__dropdown-indicator {
+  /* ability to hide caret when not enough space */
+  display: none;
+}
+.select-nocaret .react-select__indicator-separator {
+  /* ability to hide caret when not enough space */
+  width: 0;
+}
+.select-height-limited .react-select__menu,
+.select-height-limited .react-select__menu-list {
+  height: var(--react-select-menu-list-max-height, 'unset'); /* was 130 */
+}
+/* only for ApList.ChooseAp */
+.ekplan-aplist-chooseap .react-select__menu-list {
+  z-index: 4;
 }
