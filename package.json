@@ -118,7 +118,6 @@
     "copyfiles": "2.4.1",
     "cross-env": "10.1.0",
     "cypress": "15.5.0",
-    "emotion-swc-plugin": "0.0.5",
     "eslint": "9.38.0",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-react-hooks": "7.0.1",
