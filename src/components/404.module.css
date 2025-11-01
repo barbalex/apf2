@@ -1,0 +1,99 @@
+.img {
+  display: block;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.outerContainer {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.innerContainer {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  /* prevent layout shift when scrollbar appears */
+  scrollbar-gutter: stable;
+  color: black !important;
+}
+
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  position: relative;
+  @media (min-width: 700px) {
+    padding: 20px;
+  }
+  @media (min-width: 1200px) {
+    padding: 25px;
+  }
+  @media (min-width: 1700px) {
+    padding: 25px;
+  }
+  p {
+    margin-bottom: 10px !important;
+  }
+  p:last-of-type {
+    margin-bottom: 0 !important;
+    margin-top: 10px !important;
+  }
+}
+
+.pageTitle {
+  font-size: 2em !important;
+  padding-top: 15px;
+  padding-bottom: 0;
+  font-weight: 700 !important;
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
+    -2px 2px 3px white;
+  @media (min-width: 700px) {
+    padding-top: 20px;
+    padding-bottom: 5;
+  }
+  @media (min-width: 1200px) {
+    padding-top: 25px;
+    padding-bottom: 10px;
+  }
+  @media (min-width: 1700px) {
+    padding-top: 30px;
+    padding-bottom: 15px;
+  }
+}
+
+.textContainer {
+  display: flex;
+  justify-content: center;
+  font-weight: 700 !important;
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
+    -2px 2px 3px white;
+}
+
+.text {
+  font-size: 1.5em !important;
+  padding: 15px;
+  font-weight: 700 !important;
+}
+
+.button {
+  text-shadow:
+    2px 2px 3px white,
+    -2px -2px 3px white,
+    2px -2px 3px white,
+    -2px 2px 3px white;
+  border-color: white !important;
+  margin-top: 10px !important;
+}
