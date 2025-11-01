@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
@@ -22,17 +21,7 @@ import { MobxContext } from '../mobxContext.js'
 import { getUserFromIdb } from '../modules/getUserFromIdb.js'
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 
-const StyledDialog = styled(Dialog)``
-const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 0 24px;
-`
-const StyledInput = styled(Input)`
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import { div, input } from './User.module.css'
 
 function tokenStateReducer(state, action) {
   switch (action.type) {
@@ -187,12 +176,12 @@ export const User = observer(() => {
 
   return (
     <ErrorBoundary>
-      <StyledDialog
+      <Dialog
         aria-labelledby="dialog-title"
         open={!token && !fetchingToken}
       >
         <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-        <StyledDiv>
+        <div className={div}>
           <FormControl
             error={!!nameErrorText}
             fullWidth
@@ -200,7 +189,7 @@ export const User = observer(() => {
             variant="standard"
           >
             <InputLabel htmlFor="name">Name</InputLabel>
-            <StyledInput
+            <Input
               id="name"
               inputRef={nameInput}
               className="user-name"
@@ -208,6 +197,7 @@ export const User = observer(() => {
               onBlur={onBlurName}
               autoFocus
               onKeyPress={onKeyPressName}
+              className={input}
             />
             <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
           </FormControl>
@@ -218,7 +208,7 @@ export const User = observer(() => {
             variant="standard"
           >
             <InputLabel htmlFor="passwort">Passwort</InputLabel>
-            <StyledInput
+            <Input
               id="passwort"
               inputRef={passwordInput}
               className="user-passwort"
@@ -244,12 +234,13 @@ export const User = observer(() => {
                   </Tooltip>
                 </InputAdornment>
               }
+              className={input}
             />
             <FormHelperText id="passwortHelper">
               {passwordErrorText}
             </FormHelperText>
           </FormControl>
-        </StyledDiv>
+        </div>
         <DialogActions>
           <Button
             color="primary"
@@ -258,7 +249,7 @@ export const User = observer(() => {
             anmelden
           </Button>
         </DialogActions>
-      </StyledDialog>
+      </Dialog>
     </ErrorBoundary>
   )
 })

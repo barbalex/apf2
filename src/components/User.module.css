@@ -1,0 +1,11 @@
+.div {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+}
+
+.input {
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
