@@ -1,0 +1,13 @@
+.artenButton {
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  text-transform: none !important;
+  width: 140px !important;
+}
+
+.dokuButton {
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  text-transform: none !important;
+  width: 130px !important;
+}
