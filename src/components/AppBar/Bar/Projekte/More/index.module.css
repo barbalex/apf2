@@ -1,0 +1,13 @@
+.mehrButton {
+  color: white !important;
+  text-transform: none !important;
+  /* prevent text from breaking into multiple lines */
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.version {
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.54);
+  user-select: none;
+}

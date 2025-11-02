@@ -4,7 +4,6 @@ import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useAtom } from 'jotai'
@@ -27,19 +26,7 @@ import {
 } from '../../../../../JotaiStore/index.js'
 
 import { iconButton } from '../index.module.css'
-
-const MehrButton = styled(Button)`
-  color: white !important;
-  text-transform: none !important;
-  // prevent text from breaking into multiple lines
-  flex-shrink: 0;
-  flex-grow: 0;
-`
-const Version = styled.div`
-  padding: 12px 16px;
-  color: rgba(0, 0, 0, 0.54);
-  user-select: none;
-`
+import { mehrButton, version } from './index.module.css'
 
 export const More = observer(
   ({ onClickExporte: passedOnClickExporte, role }) => {
@@ -98,15 +85,16 @@ export const More = observer(
           >
             <FaBars />
           </Button>
-        : <MehrButton
+        : <Button
             aria-label="Mehr"
             aria-owns={anchorEl ? 'appbar-more-menu' : null}
             aria-haspopup="true"
             onClick={onClickMehrButton}
             data-id="appbar-more"
+            className={mehrButton}
           >
             Mehr
-          </MehrButton>
+          </Button>
         }
         <Menu
           id="appbar-more-menu"
@@ -152,7 +140,7 @@ export const More = observer(
           <MenuItem onClick={onClickUptime}>
             Verfügbarkeit der Server von apflora.ch
           </MenuItem>
-          <Version>Version: 1.124.25 vom 30.10.2025</Version>
+          <div className={version}>Version: 1.124.25 vom 30.10.2025</div>
         </Menu>
       </Tooltip>
     )
