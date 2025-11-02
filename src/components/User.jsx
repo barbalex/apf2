@@ -211,7 +211,6 @@ export const User = observer(() => {
             <Input
               id="passwort"
               inputRef={passwordInput}
-              className="user-passwort"
               type={showPass ? 'text' : 'password'}
               defaultValue={password}
               onBlur={onBlurPassword}
@@ -234,7 +233,7 @@ export const User = observer(() => {
                   </Tooltip>
                 </InputAdornment>
               }
-              className={input}
+              className={`user-passwort ${input}`}
             />
             <FormHelperText id="passwortHelper">
               {passwordErrorText}
