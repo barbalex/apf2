@@ -2,7 +2,6 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { Tooltip } from '@mui/material'
 import { useAtom } from 'jotai'
-import styled from '@emotion/styled'
 
 import {
   enforceMobileNavigationAtom,
@@ -10,9 +9,7 @@ import {
 } from '../../../../../JotaiStore/index.js'
 import { constants } from '../../../../../modules/constants.js'
 
-const StyledFormControlLabel = styled(FormControlLabel)`
-  margin-right: 0 !important;
-`
+import { formControlLabel } from './AlwaysShowTree.module.css'
 
 export const EnforceMobileNavigation = () => {
   const [enforceMobileNavigation] = useAtom(enforceMobileNavigationAtom)
@@ -27,7 +24,7 @@ export const EnforceMobileNavigation = () => {
       title={`Mobile-Navigation funktioniert mit Bookmarks und Navigationslisten. Sie wird normalerweise nur auf kleinen Bildschirmen verwendet (unter ${constants.mobileViewMaxWidth + 1} Pixeln Breite).`}
       placement={window.innerWidth > 730 ? 'left' : 'bottom'}
     >
-      <StyledFormControlLabel
+      <FormControlLabel
         control={
           <Checkbox
             checked={enforceMobileNavigation}
@@ -35,6 +32,7 @@ export const EnforceMobileNavigation = () => {
           />
         }
         label="Mobile-Navigation erzwingen"
+        className={formControlLabel}
       />
     </Tooltip>
   )

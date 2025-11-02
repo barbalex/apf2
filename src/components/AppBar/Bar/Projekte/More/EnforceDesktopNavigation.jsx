@@ -9,7 +9,7 @@ import {
 } from '../../../../../JotaiStore/index.js'
 import { constants } from '../../../../../modules/constants.js'
 
-import { formControlLabel } from './EnforceDesktopNavigation.module.css'
+import { formControlLabel } from './AlwaysShowTree.module.css'
 
 export const EnforceDesktopNavigation = () => {
   const [enforceDesktopNavigation] = useAtom(enforceDesktopNavigationAtom)
