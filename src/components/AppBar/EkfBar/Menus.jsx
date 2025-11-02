@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { keyframes } from '@emotion/react'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
