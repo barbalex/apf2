@@ -1,0 +1,23 @@
+.button {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  text-transform: none;
+  text-wrap: none;
+  /* prevent text from breaking into multiple lines */
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.preceded {
+  border-left-color: rgba(255, 255, 255, 0.25);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.followed {
+  border-right-color: rgba(255, 255, 255, 0.25);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: -1px;
+}

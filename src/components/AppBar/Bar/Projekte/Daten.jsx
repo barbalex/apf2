@@ -5,9 +5,11 @@ import { remove } from 'es-toolkit'
 import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 
-import { StyledButton, StyledIconButton } from './index.jsx'
+import { StyledIconButton } from './index.jsx'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+
+import { button, preceded, followed as followedClass } from './index.module.css'
 
 export const Daten = ({ treeNr = '', hide = false }) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
@@ -45,15 +47,14 @@ export const Daten = ({ treeNr = '', hide = false }) => {
       }
     >
       {isDesktopView ?
-        <StyledButton
+        <Button
           variant={isDaten ? 'outlined' : 'text'}
-          preceded={isTree.toString()}
-          followed={followed.toString()}
           onClick={onClickButton}
           data-id={`nav-daten${treeNr || 1}`}
+          className={`${button} ${isTree ? preceded : ''} ${followed ? followedClass : ''}`}
         >
           {`Daten${treeNr === '2' ? ' 2' : ''}`}
-        </StyledButton>
+        </Button>
       : <StyledIconButton
           variant={isDaten ? 'outlined' : 'text'}
           preceded={isTree.toString()}
