@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import styled from '@emotion/styled'
 import { useQuery } from '@apollo/client/react'
 import { useNavigate, useLocation } from 'react-router'
 
@@ -7,9 +6,7 @@ import { Select } from '../../../../../shared/Select.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 import { queryAdresses } from './queryAdresses.js'
 
-const Container = styled.div`
-  padding: 0 16px;
-`
+import { container } from './index.module.css'
 
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
@@ -32,7 +29,7 @@ export const EkfUser = ({ closeMenu }) => {
   if (error) return <Error error={error} />
 
   return (
-    <Container>
+    <div className={container}>
       <Suspense fallback={'lade...'}>
         <Select
           value={''}
@@ -43,6 +40,6 @@ export const EkfUser = ({ closeMenu }) => {
           maxHeight={120}
         />
       </Suspense>
-    </Container>
+    </div>
   )
 }
