@@ -7,6 +7,7 @@ import { ApolloProvider } from '@apollo/client/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'
+import { Analytics } from '@vercel/analytics/next'
 //import { onPatch } from 'mobx-state-tree'
 
 // see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
@@ -136,6 +137,7 @@ export const App = () => {
           </ApolloProvider>
         </MobxContext>
       </IdbContext>
+      <Analytics />
     </JotaiProvider>
   )
 }
