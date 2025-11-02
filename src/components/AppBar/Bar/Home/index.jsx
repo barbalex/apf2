@@ -6,9 +6,6 @@ import { Dokumentation } from './Dokumentation.jsx'
 
 const StyledButton = styled(Button)`
   color: white !important;
-  ${(props) =>
-    props.border === 'true' &&
-    'border-color: rgba(255, 255, 255, 0.5) !important;'}
   text-transform: none !important;
   white-space: nowrap !important;
   overflow: hidden !important;
