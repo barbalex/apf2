@@ -1,26 +1,9 @@
 import { useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { useParams, useNavigate, useLocation } from 'react-router'
 
-const StyledInput = styled(Input)`
-  width: 60px;
-  color: white !important;
-  padding-left: 5px;
-  &:before {
-    border: none !important;
-  }
-`
-const Container = styled.div`
-  display: flex;
-  padding-left: 20px;
-`
-const Jahr = styled.p`
-  margin-top: auto;
-  margin-bottom: auto;
-  color: white;
-`
+import { input, container, jahr } from './EkfYear.module.css'
 
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
@@ -46,16 +29,17 @@ export const EkfYear = () => {
 
   return (
     <Tooltip title="Zu kontrollierendes Jahr wählen">
-      <Container>
-        <Jahr>Jahr:</Jahr>
-        <StyledInput
+      <div className={container}>
+        <p className={jahr}>Jahr:</p>
+        <Input
           value={stateValue}
           type="number"
           onChange={onChange}
           onBlur={onBlur}
           placeholder="Jahr"
+          className={input}
         />
-      </Container>
+      </div>
     </Tooltip>
   )
 }

@@ -1,0 +1,19 @@
+.input {
+  width: 60px;
+  color: white !important;
+  padding-left: 5px;
+  &:before {
+    border: none !important;
+  }
+}
+
+.container {
+  display: flex;
+  padding-left: 20px;
+}
+
+.jahr {
+  margin-top: auto;
+  margin-bottom: auto;
+  color: white;
+}
