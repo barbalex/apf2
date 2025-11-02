@@ -7,6 +7,8 @@ html {
    */
   --map-control-height: 167px;
   --react-select-menu-list-max-height: unset;
+  /* Unfortunately it is not possible to reference css variables in media queries */
+  /* So not really used? Instead hard coded... */
   --min-width-to-show-title-appbar: 1040px;
   --min-width-to-show-title-ekfbar: 800px;
 }
