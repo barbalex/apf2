@@ -2,7 +2,6 @@ import { useRef } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
-import { useResizeDetector } from 'react-resize-detector'
 import { useAtom } from 'jotai'
 
 import { HomeMenus } from './Home/index.jsx'
@@ -14,13 +13,16 @@ import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: ${(props) =>
-    props.alignflexend === 'true' ? 'flex-end' : 'space-between'};
+  justify-content: space-between;
   align-items: center;
   flex-grow: 1;
   overflow: hidden;
+
+  @media (max-width: 1040px) {
+    justify-content: flex-end;
+  }
 `
-export const SiteTitle = styled(Button)`
+const SiteTitle = styled(Button)`
   display: ${(props) => (props.hide === 'true' ? 'none' : 'block')} !important;
   max-width: 110px;
   flex-grow: 0;
@@ -31,16 +33,18 @@ export const SiteTitle = styled(Button)`
   border-width: 0 !important;
   text-transform: none !important;
   white-space: nowrap !important;
-  transform: ${(props) =>
-    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
-  // need to take hidden elements out of flow
-  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
 
   :hover {
     border-width: 1px !important;
   }
+
+  @media (max-width: 1040px) {
+    transform: translateX(-9999px);
+    // need to take hidden elements out of flow
+    position: absolute;
+  }
 `
-export const MenuDiv = styled.div`
+const MenuDiv = styled.div`
   display: flex;
   flex-wrap: nowrap;
   flex-grow: 1;
@@ -55,27 +59,16 @@ export const Bar = () => {
 
   const [isMobileView] = useAtom(isMobileViewAtom)
 
-  const { width, ref } = useResizeDetector({
-    handleHeight: false,
-    refreshMode: 'debounce',
-    refreshRate: 500,
-    refreshOptions: { leading: false, trailing: true },
-  })
-
   const menuDivRef = useRef(null)
   const menuDivWidth = menuDivRef.current?.offsetWidth ?? 0
 
   return (
-    <Container
-      ref={ref}
-      alignflexend={(width < constants.minWidthToShowTitle).toString()}
-    >
+    <Container>
       <SiteTitle
         variant="outlined"
         component={Link}
         to={`/${search}`}
         title="Home"
-        hide={(width <= constants.minWidthToShowTitle && !showHome).toString()}
       >
         AP Flora
       </SiteTitle>

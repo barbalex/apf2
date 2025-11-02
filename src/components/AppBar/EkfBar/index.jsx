@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client/react'
 import { Link } from 'react-router'
 import { useParams, useLocation } from 'react-router'
-import { useResizeDetector } from 'react-resize-detector'
 import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
@@ -10,19 +9,20 @@ import { User } from './User/index.jsx'
 import { query } from './query.js'
 import { Menus } from './Menus.jsx'
 
-const minWidthToShowTitle = 800
-
 const Container = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: ${(props) =>
-    props.alignflexend === 'true' ? 'flex-end' : 'space-between'};
+  justify-content: space-between;
   align-items: center;
   flex-grow: 1;
   overflow: hidden;
+
+  @media (max-width: 800px) {
+    justify-content: flex-end;
+  }
 `
-export const SiteTitle = styled(Button)`
-  display: ${(props) => (props.hide === 'true' ? 'none' : 'block')} !important;
+const SiteTitle = styled(Button)`
+  display: block;
   max-width: 110px;
   flex-grow: 0;
   flex-shrink: 1;
@@ -32,16 +32,18 @@ export const SiteTitle = styled(Button)`
   border-width: 0 !important;
   text-transform: none !important;
   white-space: nowrap !important;
-  transform: ${(props) =>
-    props.hide === 'true' ? 'translateX(-9999px)' : 'none'};
-  // need to take hidden elements out of flow
-  position: ${(props) => (props.hide === 'true' ? 'absolute' : 'unset')};
 
   :hover {
     border-width: 1px !important;
   }
+
+  // hide title on small screens
+  @media (max-width: 800px) {
+    transform: translateX(-9999px);
+    position: absolute;
+  }
 `
-export const MenuDiv = styled.div`
+const MenuDiv = styled.div`
   display: flex;
   flex-wrap: nowrap;
   flex-grow: 1;
@@ -62,31 +64,18 @@ export const EkfBar = () => {
 
   const userName = userData?.userById?.name ?? null
 
-  const { width, ref } = useResizeDetector({
-    handleHeight: false,
-    refreshMode: 'debounce',
-    refreshRate: 500,
-    refreshOptions: { leading: false, trailing: true },
-  })
-  const showTitle = width >= minWidthToShowTitle
-
   return (
-    <Container
-      ref={ref}
-      alignFlexEnd={(width < minWidthToShowTitle).toString()}
-    >
-      {showTitle && (
-        <SiteTitle
-          variant="outlined"
-          component={Link}
-          to={`/${search}`}
-          title="Home"
-        >
-          {userName ?
-            `AP Flora: EKF von ${userName}`
-          : 'AP Flora: Erfolgs-Kontrolle Freiwillige'}
-        </SiteTitle>
-      )}
+    <Container>
+      <SiteTitle
+        variant="outlined"
+        component={Link}
+        to={`/${search}`}
+        title="Home"
+      >
+        {userName ?
+          `AP Flora: EKF von ${userName}`
+        : 'AP Flora: Erfolgs-Kontrolle Freiwillige'}
+      </SiteTitle>
       <MenuDiv>
         <Menus />
       </MenuDiv>
