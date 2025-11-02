@@ -1,0 +1,22 @@
+.link {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+  align-content: center;
+  transition: opacity 700ms ease-in-out;
+  user-select: none;
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: rgba(55, 118, 28, 0.5);
+  }
+}
+
+.text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  align-content: center;
+  transition: opacity 700ms ease-in-out;
+  user-select: none;
+}

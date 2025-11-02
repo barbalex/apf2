@@ -1,33 +1,12 @@
 import { useContext } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { toggleNodeSymbol } from '../../Projekte/TreeContainer/Tree/toggleNodeSymbol.js'
 import { MobxContext } from '../../../mobxContext.js'
 
-const StyledLink = styled(Link)`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-decoration: none;
-  align-content: center;
-  transition: opacity 700ms ease-in-out;
-  user-select: none;
-  &:hover {
-    text-decoration: underline;
-    text-decoration-color: rgba(55, 118, 28, 0.5);
-  }
-`
-const StyledText = styled.div`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  align-content: center;
-  transition: opacity 700ms ease-in-out;
-  user-select: none;
-`
+import { link, text } from './Label.module.css'
 
 export const Label = observer(
   ({ navData, outerContainerRef, labelStyle, ref }) => {
@@ -67,20 +46,22 @@ export const Label = observer(
 
     const label =
       linksToSomewhereElse ?
-        <StyledLink
+        <Link
           to={{ pathname: navData.url, search }}
           onClick={onClick}
           ref={ref}
           style={{ ...labelStyle }}
+          className={link}
         >
           {navData.labelShort ?? navData.label}
-        </StyledLink>
-      : <StyledText
+        </Link>
+      : <div
+          className={text}
           ref={ref}
           style={{ ...labelStyle }}
         >
           {navData.labelShort ?? navData.label}
-        </StyledText>
+        </div>
 
     // tooltip can mess with touch, so hide it on touch devices
     if (!matchMedia('(pointer: coarse)').matches) {
