@@ -1,0 +1,33 @@
+.button {
+  color: white !important;
+  text-transform: none !important;
+}
+
+.iconButton {
+  color: white !important;
+  span {
+    top: -5px !important;
+    right: -5px !important;
+  }
+}
+
+.badge {
+  span {
+    top: 9px !important;
+    right: 9px !important;
+    color: white !important;
+  }
+}
+
+@keyframes spinning {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.hourglass {
+  animation: 3s linear infinite spinning;
+}
