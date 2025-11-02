@@ -7,7 +7,6 @@ import { useAtom } from 'jotai'
 import { HomeMenus } from './Home/index.jsx'
 import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
-import { constants } from '../../../modules/constants.js'
 import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 
 const Container = styled.div`

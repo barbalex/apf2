@@ -9,7 +9,6 @@ import { EkfBar } from './EkfBar/index.jsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.jsx'
 import { MobxContext } from '../../mobxContext.js'
-import { constants } from '../../modules/constants.js'
 import { isMobileViewAtom } from '../../JotaiStore/index.js'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.jsx'
 

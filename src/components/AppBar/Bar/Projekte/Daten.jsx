@@ -6,11 +6,8 @@ import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 
 import { StyledButton, StyledIconButton } from './index.jsx'
-import { constants } from '../../../../modules/constants.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
-
-const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 
 export const Daten = ({ treeNr = '', hide = false }) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
