@@ -46,8 +46,6 @@ export const StyledButton = styled(Button)`
   margin-right: ${(props) =>
     props.followed === 'true' ? '-1px' : 'unset'} !important;
   text-transform: none !important;
-  ${(props) =>
-    props.inmenu === 'true' && `border: 1px solid #ab9518 !important;`}
   text-wrap: none;
   // prevent text from breaking into multiple lines
   flex-shrink: 0;
@@ -91,8 +89,6 @@ const DokuButton = styled(Button)`
   flex-grow: 0;
   text-transform: none !important;
   text-wrap: none;
-  ${(props) =>
-    props.inmenu === 'true' && `border: 1px solid #ab9518 !important;`};
 `
 
 export const ProjekteMenus = observer(() => {
