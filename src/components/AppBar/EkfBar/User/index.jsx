@@ -1,6 +1,5 @@
 import { useState, useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'
@@ -26,32 +25,14 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { logout } from '../../../../modules/logout.js'
 import { IdbContext } from '../../../../idbContext.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const FieldsContainer = styled.div`
-  padding: 24px;
-  padding-top: 0;
-  overflow: auto !important;
-  scrollbar-width: thin;
-  height: 100%;
-`
-const StyledInput = styled(Input)`
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const PasswordMessage = styled.div`
-  padding-bottom: 10px;
-`
-const FormContainer = styled.div`
-  padding: 10px;
-`
-const AbmeldenButton = styled(Button)`
-  margin-top: 8px;
-`
+import {
+  container,
+  fieldsContainer,
+  input,
+  passwordMessage as passwordMessageClass,
+  formContainer,
+  abmeldenButton,
+} from './index.module.css'
 
 export const User = observer(({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(MobxContext)
@@ -166,9 +147,9 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
         {error ?
           <Error error={error} />
         : <ErrorBoundary>
-            <Container>
-              <FieldsContainer>
-                <FormContainer>
+            <div className={container}>
+              <div className={fieldsContainer}>
+                <div className={formContainer}>
                   <TextField
                     name="email"
                     label="Email"
@@ -179,7 +160,9 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                     error={fieldErrors.email}
                   />
                   {!!passwordMessage && (
-                    <PasswordMessage>{passwordMessage}</PasswordMessage>
+                    <div className={passwordMessageClass}>
+                      {passwordMessage}
+                    </div>
                   )}
                   {!editPassword && !passwordMessage && (
                     <div>
@@ -195,7 +178,8 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                       </Button>
                     </div>
                   )}
-                  <AbmeldenButton
+                  <Button
+                    className={abmeldenButton}
                     variant="outlined"
                     color="primary"
                     onClick={() => {
@@ -203,7 +187,7 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                     }}
                   >
                     Abmelden
-                  </AbmeldenButton>
+                  </Button>
                   {editPassword && (
                     <FormControl
                       error={!!passwordErrorText}
@@ -212,7 +196,8 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                       variant="standard"
                     >
                       <InputLabel htmlFor="passwort">Passwort</InputLabel>
-                      <StyledInput
+                      <Input
+                        className={input}
                         id="passwort"
                         type={showPass ? 'text' : 'password'}
                         defaultValue={password}
@@ -258,7 +243,8 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                       <InputLabel htmlFor="passwort">
                         Passwort wiederholen
                       </InputLabel>
-                      <StyledInput
+                      <Input
+                        className={input}
                         id="passwort2"
                         type={showPass2 ? 'text' : 'password'}
                         defaultValue={password2}
@@ -293,9 +279,9 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                       </FormHelperText>
                     </FormControl>
                   )}
-                </FormContainer>
-              </FieldsContainer>
-            </Container>
+                </div>
+              </div>
+            </div>
           </ErrorBoundary>
         }
         <DialogActions>
