@@ -20,39 +20,8 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
-import { button, preceded, followed } from './index.module.css'
+import { button, preceded, followed, iconButton } from './index.module.css'
 
-export const StyledIconButton = styled(Button)`
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.5) !important;
-  border-right-color: ${(props) =>
-    props.followed === 'true' ?
-      ' rgba(255, 255, 255, 0.25)'
-    : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-left-color: ${(props) =>
-    props.preceded === 'true' ?
-      ' rgba(255, 255, 255, 0.25)'
-    : ' rgba(255, 255, 255, 0.5)'} !important;
-  border-top-left-radius: ${(props) =>
-    props.preceded === 'true' ? '0' : '4px'} !important;
-  border-bottom-left-radius: ${(props) =>
-    props.preceded === 'true' ? '0' : '4px'} !important;
-  border-top-right-radius: ${(props) =>
-    props.followed === 'true' ? '0' : '4px'} !important;
-  border-bottom-right-radius: ${(props) =>
-    props.followed === 'true' ? '0' : '4px'} !important;
-  margin-right: ${(props) =>
-    props.followed === 'true' ? '-1px' : 'unset'} !important;
-  border-radius: 4px !important;
-  flex-shrink: 0;
-  flex-grow: 0;
-  // icon specific
-  align-self: stretch;
-  margin: 2px 0;
-  padding: 5px 10px;
-  font-size: 1.5em;
-  min-width: unset !important;
-`
 const DokuButton = styled(Button)`
   color: white !important;
   text-transform: none !important;
@@ -167,15 +136,15 @@ export const ProjekteMenus = observer(() => {
       {/* do not hide if tree is visible - user can't close it! */}
       {isMobileView && (!hideTree || treeIsVisible) && (
         <Tooltip title="Navigationsbaum anzeigen">
-          <StyledIconButton
+          <Button
             variant={treeIsVisible ? 'outlined' : 'text'}
-            followed={datenIsVisible?.toString()}
             onClick={onClickTree}
             data-id="nav-tree1"
             width={46}
+            className={iconButton}
           >
             <VscListTree />
-          </StyledIconButton>
+          </Button>
         </Tooltip>
       )}
       <Daten width={77} />
@@ -190,14 +159,15 @@ export const ProjekteMenus = observer(() => {
           >
             Filter
           </Button>
-        : <StyledIconButton
+        : <Button
             variant={filterIsVisible ? 'outlined' : 'text'}
             onClick={onClickFilter}
             data-id="nav-filter1"
             width={46}
+            className={iconButton}
           >
             <MdFilterAlt />
-          </StyledIconButton>
+          </Button>
         }
       </Tooltip>
       <Tooltip title="Karte anzeigen">
@@ -208,24 +178,22 @@ export const ProjekteMenus = observer(() => {
             data-id="nav-karte1"
             width={70}
             className={`${button} ${filterIsVisible ? preceded : ''} ${
-              (
-                (!!projId && exporteIsVisible) ||
-                (isDesktopView && !projId && tree2IsVisible)
-              ) ?
+              (!!projId && exporteIsVisible) || (!projId && tree2IsVisible) ?
                 followed
               : ''
             }`}
           >
             Karte
           </Button>
-        : <StyledIconButton
+        : <Button
             variant={karteIsVisible ? 'outlined' : 'text'}
             onClick={onClickKarte}
             data-id="nav-karte1"
             width={46}
+            className={iconButton}
           >
             <TbMap2 />
-          </StyledIconButton>
+          </Button>
         }
       </Tooltip>
       {!!projId && (
@@ -242,14 +210,15 @@ export const ProjekteMenus = observer(() => {
             >
               Exporte
             </Button>
-          : <StyledIconButton
+          : <Button
               variant={exporteIsVisible ? 'outlined' : 'text'}
               onClick={onClickExporte}
               data-id="nav-exporte"
               width={46}
+              className={iconButton}
             >
               <FaDownload />
-            </StyledIconButton>
+            </Button>
           }
         </Tooltip>
       )}
@@ -312,13 +281,14 @@ export const ProjekteMenus = observer(() => {
           >
             Dokumentation
           </DokuButton>
-        : <StyledIconButton
+        : <Button
             variant="text"
             onClick={onClickDocs}
             width={46}
+            className={iconButton}
           >
             <MdInfoOutline />
-          </StyledIconButton>
+          </Button>
         }
       </Tooltip>
       <More

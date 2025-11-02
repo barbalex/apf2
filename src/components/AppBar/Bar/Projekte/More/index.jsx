@@ -25,7 +25,8 @@ import {
   enforceMobileNavigationAtom,
   writeEnforceDesktopNavigationAtom,
 } from '../../../../../JotaiStore/index.js'
-import { StyledIconButton } from '../index.jsx'
+
+import { iconButton } from '../index.module.css'
 
 const MehrButton = styled(Button)`
   color: white !important;
@@ -86,16 +87,17 @@ export const More = observer(
     return (
       <Tooltip title="Mehr Befehle">
         {isMobileView ?
-          <StyledIconButton
+          <Button
             aria-label="Mehr"
             aria-owns={anchorEl ? 'appbar-more-menu' : null}
             aria-haspopup="true"
             onClick={onClickMehrButton}
             data-id="appbar-more"
             width={42}
+            className={iconButton}
           >
             <FaBars />
-          </StyledIconButton>
+          </Button>
         : <MehrButton
             aria-label="Mehr"
             aria-owns={anchorEl ? 'appbar-more-menu' : null}

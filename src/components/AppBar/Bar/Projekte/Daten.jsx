@@ -2,14 +2,17 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { MdEditNote } from 'react-icons/md'
 import { remove } from 'es-toolkit'
-import styled from '@emotion/styled'
 import { useAtom } from 'jotai'
 
-import { StyledIconButton } from './index.jsx'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 
-import { button, preceded, followed as followedClass } from './index.module.css'
+import {
+  button,
+  preceded,
+  followed as followedClass,
+  iconButton,
+} from './index.module.css'
 
 export const Daten = ({ treeNr = '', hide = false }) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
@@ -55,15 +58,14 @@ export const Daten = ({ treeNr = '', hide = false }) => {
         >
           {`Daten${treeNr === '2' ? ' 2' : ''}`}
         </Button>
-      : <StyledIconButton
+      : <Button
           variant={isDaten ? 'outlined' : 'text'}
-          preceded={isTree.toString()}
-          followed={followed.toString()}
           onClick={onClickButton}
           data-id={`nav-daten${treeNr || 1}`}
+          className={`${iconButton} ${isTree ? preceded : ''} ${followed ? followedClass : ''}`}
         >
           <MdEditNote />
-        </StyledIconButton>
+        </Button>
       }
     </Tooltip>
   )
