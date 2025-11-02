@@ -192,12 +192,11 @@ export const User = observer(() => {
             <Input
               id="name"
               inputRef={nameInput}
-              className="user-name"
               defaultValue={name}
               onBlur={onBlurName}
               autoFocus
               onKeyPress={onKeyPressName}
-              className={input}
+              className={`user-name ${input}`}
             />
             <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
           </FormControl>
