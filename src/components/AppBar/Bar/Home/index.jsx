@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 import { Dokumentation } from './Dokumentation.jsx'
 
-export const StyledButton = styled(Button)`
+const StyledButton = styled(Button)`
   color: white !important;
   ${(props) =>
     props.border === 'true' &&

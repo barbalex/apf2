@@ -1,7 +1,7 @@
-import styled from '@emotion/styled'
 import { useLocation, Link } from 'react-router'
+import Button from '@mui/material/Button'
 
-import { StyledButton } from './index.jsx'
+import { button } from './Dokumentation.module.css'
 
 const style = { marginRight: 8 }
 
@@ -9,15 +9,16 @@ export const Dokumentation = () => {
   const { pathname, search } = useLocation()
   const isDocs = pathname.startsWith('/Dokumentation')
 
+  if (isDocs) return null
+
   return (
-    <StyledButton
-      variant={isDocs ? 'outlined' : 'text'}
+    <Button
+      variant="text"
       component={Link}
       to={`/Dokumentation/${search}`}
-      border={isDocs.toString()}
-      style={style}
+      className={button}
     >
       Dokumentation
-    </StyledButton>
+    </Button>
   )
 }
