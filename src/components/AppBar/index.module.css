@@ -1,0 +1,26 @@
+.container {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media print {
+    height: auto;
+    overflow: visible !important;
+  }
+}
+
+.appbar {
+  position: static;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2e7d32;
+  height: 38px;
+
+  @media print {
+    display: none !important;
+  }
+}

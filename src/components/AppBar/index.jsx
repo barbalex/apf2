@@ -1,5 +1,4 @@
 import { Suspense, useEffect, useContext } from 'react'
-import styled from '@emotion/styled'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
@@ -12,33 +11,9 @@ import { MobxContext } from '../../mobxContext.js'
 import { isMobileViewAtom } from '../../JotaiStore/index.js'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.jsx'
 
+import { container, appbar } from './index.module.css'
+
 const isInIframe = inIframe()
-
-const Container = styled.div`
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-
-  @media print {
-    height: auto;
-    overflow: visible !important;
-  }
-`
-const Appbar = styled.div`
-  position: static;
-  top: 0;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #2e7d32;
-  height: 38px;
-
-  @media print {
-    display: none !important;
-  }
-`
 
 export const Component = observer(() => {
   const navigate = useNavigate()
@@ -68,16 +43,19 @@ export const Component = observer(() => {
     !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
 
   return (
-    <Container>
+    <div className={container}>
       <IsDesktopViewSetter />
-      <Appbar style={{ padding: isMobileView ? 0 : 4 }}>
+      <div
+        className={appbar}
+        style={{ padding: isMobileView ? 0 : 4 }}
+      >
         {showEkf ?
           <EkfBar />
         : <Bar />}
-      </Appbar>
+      </div>
       <Suspense fallback={<Spinner />}>
         <Outlet />
       </Suspense>
-    </Container>
+    </div>
   )
 })
