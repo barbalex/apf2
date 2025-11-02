@@ -20,16 +20,13 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
-import { button, preceded, followed, iconButton } from './index.module.css'
-
-const DokuButton = styled(Button)`
-  color: white !important;
-  text-transform: none !important;
-  flex-shrink: 0;
-  flex-grow: 0;
-  text-transform: none !important;
-  text-wrap: none;
-`
+import {
+  button,
+  preceded,
+  followed,
+  iconButton,
+  dokuButton,
+} from './index.module.css'
 
 export const ProjekteMenus = observer(() => {
   const { projId } = useParams()
@@ -266,7 +263,7 @@ export const ProjekteMenus = observer(() => {
             variant="text"
             onClick={onClickEkPlanung}
             width={101}
-            className="button"
+            className={button}
           >
             EK-Planung
           </Button>
@@ -274,13 +271,14 @@ export const ProjekteMenus = observer(() => {
       )}
       <Tooltip title="Dokumentation anzeigen">
         {isDesktopView ?
-          <DokuButton
+          <Button
             variant="text"
             onClick={onClickDocs}
             width={129}
+            className={dokuButton}
           >
             Dokumentation
-          </DokuButton>
+          </Button>
         : <Button
             variant="text"
             onClick={onClickDocs}
