@@ -1,0 +1,15 @@
+.container {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  flex-shrink: 0;
+  padding: 0 3px;
+  min-height: 40px;
+  border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}

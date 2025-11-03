@@ -1,25 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useMatches } from 'react-router'
-import styled from '@emotion/styled'
 import { TransitionGroup } from 'react-transition-group'
 
 import { FetcherImporter } from './FetcherImporter.jsx'
-
-const Container = styled.nav`
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  fex-grow: 1;
-  flex-shrink: 0;
-  padding: 0 3px;
-  min-height: 40px;
-  border-bottom: rgba(46, 125, 50, 0.5) solid 1px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
-`
+import { container } from './index.module.css'
 
 const matchesFromAllMatches = (allMatches) =>
   allMatches
@@ -35,7 +19,7 @@ export const Bookmarks = () => {
   // flex-direction row-reverse combined with reverse order of matches
   // to align bookmarks to the right, but still have them in order
   return (
-    <Container>
+    <div className={container}>
       <TransitionGroup component={null}>
         {matches.map((match) => (
           <FetcherImporter
@@ -44,6 +28,6 @@ export const Bookmarks = () => {
           />
         ))}
       </TransitionGroup>
-    </Container>
+    </div>
   )
 }
