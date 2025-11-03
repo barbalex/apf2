@@ -16,27 +16,6 @@ import {
   textFilterContainer,
 } from './CellHeaderFixedEkfrequenz.module.css'
 
-// TODO: replace imports
-export const StyledCell = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-weight: 500;
-  font-size: 0.75rem;
-  color: black;
-  line-height: 60px;
-  border-left: solid hsla(120, 25%, 70%, 1) 1px;
-  border-right: solid hsla(120, 25%, 70%, 1) 1px;
-  border-bottom: solid #e6e6e6 1px;
-  background: hsla(120, 25%, 88%, 1);
-  padding: 0 4px;
-  cursor: pointer;
-  box-sizing: border-box;
-  height: 60px;
-  &.column-hovered {
-    background: hsla(120, 25%, 82%, 1) !important;
-    font-weight: 700 !important;
-  }
-`
 const StyledMenu = styled(Menu)`
   & .MuiPaper-root {
     overflow: hidden !important;
