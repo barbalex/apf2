@@ -14,63 +14,29 @@ import { MobxContext } from '../../mobxContext.js'
 import { allFields } from '../../store/EkPlan/index.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-`
-const ChooseContainer = styled.div`
-  position: relative;
-  flex-basis: 430px;
-  flex-shrink: 0;
-  flex-grow: 0;
-  align-self: flex-start;
-  justify-self: end;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  height: 88px;
-  margin-bottom: -7px;
-`
-const Title = styled.h5`
-  top: 3px;
-  margin: 0 8px 0 0;
-  hyphens: none;
-`
-const Label = styled(FormControlLabel)`
-  float: right;
-  span {
-    font-size: 0.75rem;
-  }
-`
+import {
+  container,
+  chooseContainer,
+  title,
+  label,
+  felderButton,
+  pastYearsContainer,
+  textField,
+  checkboxDensifier,
+} from './Choose.module.css'
+
 const StyledDialog = styled(Dialog)`
   overflow-y: hidden;
   .MuiDialog-paper {
     overflow-y: hidden;
   }
 `
-const FelderButton = styled(Button)`
-  text-transform: none !important;
-  font-size: 0.75rem !important;
-  width: 150px;
-`
-const PastYearsContainer = styled.div`
-  padding-top: 5px;
-  padding-bottom: 5px;
-  width: 150px;
-`
-const StyledTextField = styled(TextField)`
-  input {
-    font-size: 13px;
-  }
-`
-const CheckboxDensifier = styled.div`
-  margin: -8px 2px -8px -4px;
-`
 
 // placing material-ui checkboxes denser
 // see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
 // but styling with styled-components
 const DenserCheckbox = (props) => (
-  <CheckboxDensifier>{props.children}</CheckboxDensifier>
+  <div className={checkboxDensifier}>{props.children}</div>
 )
 
 export const Choose = observer(() => {
@@ -121,12 +87,13 @@ export const Choose = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <Title>anzeigen:</Title>
-      </Container>
-      <ChooseContainer>
-        <PastYearsContainer>
-          <StyledTextField
+      <div className={container}>
+        <h5 className={title}>anzeigen:</h5>
+      </div>
+      <div className={chooseContainer}>
+        <div className={pastYearsContainer}>
+          <TextField
+            className={textField}
             label="vergangene Jahre"
             variant="outlined"
             value={pastYearsLocal}
@@ -141,16 +108,18 @@ export const Choose = observer(() => {
             type="number"
             slotProps={{ inputLabel: { shrink: true } }}
           />
-        </PastYearsContainer>
-        <FelderButton
+        </div>
+        <Button
+          className={felderButton}
           variant="outlined"
           size="small"
           onClick={onClickChooseFields}
           color="inherit"
         >
           {felderButtonTitle}
-        </FelderButton>
-        <Label
+        </Button>
+        <FormControlLabel
+          className={label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -163,7 +132,8 @@ export const Choose = observer(() => {
           label="EK"
           labelPlacement="start"
         />
-        <Label
+        <FormControlLabel
+          className={label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -176,7 +146,8 @@ export const Choose = observer(() => {
           label="EKF"
           labelPlacement="start"
         />
-        <Label
+        <FormControlLabel
+          className={label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -189,7 +160,8 @@ export const Choose = observer(() => {
           label="Ansiedlungen"
           labelPlacement="start"
         />
-        <Label
+        <FormControlLabel
+          className={label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -202,7 +174,8 @@ export const Choose = observer(() => {
           label="Zählungen"
           labelPlacement="start"
         />
-        <Label
+        <FormControlLabel
+          className={label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -215,7 +188,7 @@ export const Choose = observer(() => {
           label="mehrmals ausgeführt"
           labelPlacement="start"
         />
-      </ChooseContainer>
+      </div>
       <StyledDialog
         open={fieldsDialogOpen}
         onClose={closeFieldsDialog}

@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+}
+
+.chooseContainer {
+  position: relative;
+  flex-basis: 430px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  align-self: flex-start;
+  justify-self: end;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 88px;
+  margin-bottom: -7px;
+}
+
+.title {
+  top: 3px;
+  margin: 0 8px 0 0;
+  hyphens: none;
+}
+
+.label {
+  float: right;
+  span {
+    font-size: 0.75rem;
+  }
+}
+
+.felderButton {
+  text-transform: none !important;
+  font-size: 0.75rem !important;
+  width: 150px;
+}
+
+.pastYearsContainer {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  width: 150px;
+}
+
+.textField {
+  input {
+    font-size: 13px;
+  }
+}
+
+.checkboxDensifier {
+  margin: -8px 2px -8px -4px;
+}
