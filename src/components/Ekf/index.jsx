@@ -1,5 +1,4 @@
 import { useContext, useEffect } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQuery } from '@apollo/client/react'
@@ -15,26 +14,7 @@ import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'
 import { Error } from '../shared/Error.jsx'
 
-const Container = styled.div`
-  flex-grow: 0;
-  overflow: hidden;
-
-  .SplitPane {
-    position: relative !important;
-  }
-
-  @media print {
-    display: block;
-    height: auto !important;
-  }
-`
-const InnerContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`
-const NoDataContainer = styled.div`
-  padding: 15px;
-`
+import { container, innerContainer, noDataContainer } from './index.module.css'
 
 const getEkfFromData = ({ data }) => {
   const ekfNodes =
@@ -99,9 +79,9 @@ export const Component = observer(() => {
 
   if (!loading && ekf.length === 0) {
     return (
-      <NoDataContainer>
+      <div className={noDataContainer}>
         {`Für das Jahr ${ekfYear} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
-      </NoDataContainer>
+      </div>
     )
   }
 
@@ -123,7 +103,7 @@ export const Component = observer(() => {
   }
 
   return (
-    <Container>
+    <div className={container}>
       <StyledSplitPane
         split="vertical"
         size="350px"
@@ -132,8 +112,8 @@ export const Component = observer(() => {
         <EkfList ekf={ekf} />
         {ekfId ?
           <Tpopfreiwkontr id={ekfId} />
-        : <InnerContainer />}
+        : <div className={innerContainer} />}
       </StyledSplitPane>
-    </Container>
+    </div>
   )
 })
