@@ -5,43 +5,14 @@ import { FaBars } from 'react-icons/fa6'
 import styled from '@emotion/styled'
 import { useDebouncedCallback } from 'use-debounce'
 
-const buttonHeight = 40
+import {
+  measuredOuterContainer,
+  stylingContainer,
+  menuContent,
+} from './index.module.css'
+
 export const buttonWidth = 40
 
-const MeasuredOuterContainer = styled.div`
-  overflow: hidden;
-  min-height: ${buttonHeight}px;
-  max-height: ${buttonHeight}px;
-  min-width: ${buttonWidth};
-  flex-basis: ${buttonWidth}px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  justify-content: flex-end;
-  flex-grow: 1;
-  flex-shrink: 0;
-  column-gap: 0;
-  // needed (not transparent) as in fullscreen backed by black
-  background-color: ${(props) => props.bgColor};
-  border-top: 1px solid rgba(46, 125, 50, 0.15);
-  border-bottom: 1px solid rgba(46, 125, 50, 0.15);
-`
-// StylingContainer overflows parent????!!!!
-// Possible solution: pass in max-width
-const StylingContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-wrap: nowrap;
-  column-gap: 0;
-  min-height: ${buttonHeight}px;
-  max-height: ${buttonHeight}px;
-  max-width: ${(props) => props.width}px;
-  overflow: hidden;
-`
 // remove the margin mui adds to top and bottom of menu
 const StyledMenu = styled(Menu)`
   background-color: ${(props) => props.bgColor};
@@ -49,14 +20,6 @@ const StyledMenu = styled(Menu)`
   ul {
     padding: 0 !important;
   }
-`
-const MenuContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  row-gap: 3px;
-  background-color: ${(props) => props.bgColor};
-  overflow: hidden;
-  padding: 3px !important;
 `
 
 const getChildren = ({ addMargin, children }) => {
@@ -213,13 +176,18 @@ export const MenuBar = ({
   const onClickMenuButton = (event) => setMenuAnchor(event.currentTarget)
 
   return (
-    <MeasuredOuterContainer
+    <div
+      className={measuredOuterContainer}
       ref={outerContainerRef}
-      bgColor={bgColor}
+      style={{ backgroundColor: bgColor }}
     >
       {titleComponent}
-      <StylingContainer
-        width={Math.abs(outerContainerWidth ?? 0) - (titleComponentWidth ?? 0)}
+      <div
+        className={stylingContainer}
+        style={{
+          maxWidth:
+            Math.abs(outerContainerWidth ?? 0) - (titleComponentWidth ?? 0),
+        }}
       >
         {buttons}
         {!!menus.length && (
@@ -237,20 +205,21 @@ export const MenuBar = ({
               anchorEl={menuAnchor}
               open={menuIsOpen}
               onClose={onCloseMenu}
+              // style={{ backgroundColor: bgColor }}
             >
-              <MenuContent
-                bgColor={bgColor}
-                className="menubar-more-menus"
+              <div
                 // GOAL: close menu on click on menu item
                 // TODO: prevents more menu opening on very narrow screens
                 onClick={onCloseMenu}
+                style={{ backgroundColor: bgColor }}
+                className={`menubar-more-menus ${menuContent}`}
               >
                 {menus}
-              </MenuContent>
+              </div>
             </StyledMenu>
           </>
         )}
-      </StylingContainer>
-    </MeasuredOuterContainer>
+      </div>
+    </div>
   )
 }
