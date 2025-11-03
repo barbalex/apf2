@@ -7,6 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
+import { styled } from '@mui/material/styles'
 import { upperFirst } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
@@ -35,6 +36,13 @@ import {
   beschreibungField,
   menuTitle,
 } from './File.module.css'
+
+const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
+  '& .MuiPaper-root': {
+    maxHeight: 48 * 4.5,
+    width: 120,
+  },
+}))
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -213,22 +221,16 @@ export const File = observer(({ file, parent, refetch }) => {
             <FaTimes />
           </IconButton>
         </Tooltip>
-        <Menu
+        <StyledMenu
           id="delMenu"
           anchorEl={delMenuAnchorEl}
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
-          PaperProps={{
-            style: {
-              maxHeight: 48 * 4.5,
-              width: 120,
-            },
-          }}
         >
           <h3 className={menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
-        </Menu>
+        </StyledMenu>
       </div>
     </ErrorBoundary>
   )
