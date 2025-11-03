@@ -1,11 +1,10 @@
 import { Link } from 'react-router'
-
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Daten sichern 🔒</h1>
-    <DokuDate>18.04.2019</DokuDate>
+    <p className={dokuDate}>18.04.2019</p>
     <p>
       Täglich nach Mitternacht wird von der Datenbank ein SQL-Dumpfile erstellt
       und in eine Dropbox übermittelt. Diese wird mehrfach auf Festplatten

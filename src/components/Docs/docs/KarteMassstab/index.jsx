@@ -1,13 +1,14 @@
-import { DokuDate } from '../../DesktopDocs.jsx'
 import mapMeasure from './mapMeasure.png'
 import mapScale from './mapScale.png'
 import mapScaleOpen from './mapScaleOpen.png'
 import mapScaleSet from './mapScaleSet.png'
 
+import { dokuDate } from '../../DesktopDocs.module.css'
+
 export const Component = () => (
   <>
     <h1>Karte: Massstab 📏</h1>
-    <DokuDate>18.04.2019</DokuDate>
+    <p className={dokuDate}>18.04.2019</p>
     <p>Wurde am 14.09.2018 eingeführt.</p>
     <p>
       Ihr findet das Massstab-Werkzeug unten links auf der Karte, oberhalb des
