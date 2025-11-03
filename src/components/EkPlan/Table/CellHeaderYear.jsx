@@ -8,7 +8,6 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
 
 import { cell, title, dropdown } from './CellHeaderYear.module.css'
 
@@ -138,11 +137,10 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
       <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
-        className={`${className} ${cell}`}
         aria-controls="yearHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
-        style={{ width: yearColumnWidth, maxWidth: yearColumnWidth }}
+        className={`${className} ${cell}`}
       >
         <div className={title}>{column}</div>
         <div className={dropdown}>

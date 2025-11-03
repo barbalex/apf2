@@ -3,8 +3,9 @@ import { observer } from 'mobx-react-lite'
 
 import { StyledTableCell, InfoRow } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
+import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
 
-export const CellForYearTitle = observer(({ width, row, isOdd }) => {
+export const CellForYearTitle = observer(({ row, isOdd }) => {
   const store = useContext(MobxContext)
   const { showEk, showEkf, showMassn, hovered } = store.ekPlan
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
@@ -12,7 +13,7 @@ export const CellForYearTitle = observer(({ width, row, isOdd }) => {
 
   return (
     <StyledTableCell
-      width={width}
+      width={yearColumnWidth}
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}

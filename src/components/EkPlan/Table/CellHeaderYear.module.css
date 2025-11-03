@@ -12,6 +12,9 @@
   cursor: pointer;
   box-sizing: border-box;
   height: 60px;
+  flex-basis: 54px;
+  flex-grow: 0;
+  flex-shrink: 0;
   &.column-hovered {
     background: hsla(120, 25%, 82%, 1) !important;
     font-weight: 700 !important;

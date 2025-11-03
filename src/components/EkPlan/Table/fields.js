@@ -1,3 +1,5 @@
+import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
+
 export const fields = {
   ap: {
     name: 'ap',
@@ -106,9 +108,8 @@ export const fields = {
     name: 'yearTitle',
     label: 'Ereig- nisse',
     sort: 18,
-    width: 50,
+    width: yearColumnWidth,
     alwaysShow: true,
     nofilter: true,
   },
 }
-
