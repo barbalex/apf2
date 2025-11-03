@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Karte: Drucken 🖨</h1>
-    <DokuDate>14.09.2019</DokuDate>
+    <p className={dokuDate}>14.09.2019</p>
     <p>Auf der Karte gibt es zwei Schaltflächen, um:</p>
     <ol>
       <li>Die Karte als png-Datei zu speichern</li>
