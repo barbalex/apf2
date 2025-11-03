@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Anleitung zur Eingabe (inhaltlich), topos</h1>
-    <DokuDate>14.02.2022</DokuDate>
+    <p className={dokuDate}>14.02.2022</p>
     <object
       data="https://ucarecdn.com/a6435d2d-a3dd-47ee-adae-25f3f47b5bc6/APFloraDB_Anleitung_inhaltlich_topos_20220214.pdf"
       type="application/pdf"

@@ -1,10 +1,11 @@
-import { DokuDate } from '../../DesktopDocs.jsx'
 import installieren from './installieren.png'
+
+import { dokuDate } from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Progressive Web App</h1>
-    <DokuDate>21.12.2024</DokuDate>
+    <p className={dokuDate}>21.12.2024</p>
     <p>
       apflora.ch ist eine{' '}
       <a
