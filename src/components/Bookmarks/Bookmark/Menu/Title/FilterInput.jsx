@@ -6,19 +6,10 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
 import { MdFilterAlt } from 'react-icons/md'
-import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../../../mobxContext.js'
 
-const height = 40
-
-const Container = styled.div`
-  padding: 4px 16px 4px 16px;
-  ${(props) => (props.show === 'true' ? '' : 'display: none;')}
-`
-const StyledTextField = styled(TextField)`
-  width: ${(props) => (props.width ?? 32) - 32}px;
-`
+import { container } from './FilterInput.module.css'
 
 export const FilterInput = observer(
   ({ width, filterInputIsVisible, toggleFilterInput, ref: inputRef }) => {
@@ -70,12 +61,14 @@ export const FilterInput = observer(
     if (!activeFilterTable) return null
 
     return (
-      <Container show={filterInputIsVisible.toString()}>
-        <StyledTextField
+      <div
+        className={container}
+        style={filterInputIsVisible ? {} : { display: 'none' }}
+      >
+        <TextField
           inputRef={inputRef}
           label="Filter"
           variant="standard"
-          width={width}
           value={value}
           onChange={onChange}
           onKeyUp={onKeyUp}
@@ -103,8 +96,9 @@ export const FilterInput = observer(
                 : null,
             },
           }}
+          style={{ width: (width ?? 32) - 32 }}
         />
-      </Container>
+      </div>
     )
   },
 )
