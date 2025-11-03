@@ -1,9 +1,5 @@
-import styled from '@emotion/styled'
 import { dokuDate } from '../DesktopDocs.module.css'
-
-const LI = styled.li`
-  list-style-type: none;
-`
+import { list } from './Testen.module.css'
 
 export const Component = () => (
   <>
@@ -27,74 +23,74 @@ export const Component = () => (
       <li>
         alle Struktur-Elemente im Baum:
         <ul>
-          <LI>✅ laden</LI>
-          <LI>◻️ filtern</LI>
-          <LI>✅ Änderung speichern</LI>
-          <LI>◻️ Kontextmenus ausführen</LI>
-          <LI>◻️ AP-Berichte testen</LI>
+          <li className={list}>✅ laden</li>
+          <li className={list}>◻️ filtern</li>
+          <li className={list}>✅ Änderung speichern</li>
+          <li className={list}>◻️ Kontextmenus ausführen</li>
+          <li className={list}>◻️ AP-Berichte testen</li>
         </ul>
       </li>
-      <LI>◻️ Formular-Filter</LI>
+      <li className={list}>◻️ Formular-Filter</li>
       <li>
         Karte
         <ul>
           <li>
             alle Layer
             <ul>
-              <LI>◻️ anzeigen</LI>
-              <LI>◻️ Legenden anzeigen</LI>
-              <LI>◻️ stapeln</LI>
-              <LI>◻️ auf alle zoomen (apflora)</LI>
-              <LI>◻️ auf markierten zoomen (apflora)</LI>
+              <li className={list}>◻️ anzeigen</li>
+              <li className={list}>◻️ Legenden anzeigen</li>
+              <li className={list}>◻️ stapeln</li>
+              <li className={list}>◻️ auf alle zoomen (apflora)</li>
+              <li className={list}>◻️ auf markierten zoomen (apflora)</li>
             </ul>
           </li>
           <li>
             Karten-Filter
             <ul>
-              <LI>◻️ zeichnen</LI>
-              <LI>◻️ löschen</LI>
-              <LI>◻️ im Navigationsbaum zeigen</LI>
-              <LI>◻️ in Exporten verwenden</LI>
+              <li className={list}>◻️ zeichnen</li>
+              <li className={list}>◻️ löschen</li>
+              <li className={list}>◻️ im Navigationsbaum zeigen</li>
+              <li className={list}>◻️ in Exporten verwenden</li>
             </ul>
           </li>
-          <LI>◻️ zoomen</LI>
-          <LI>◻️ maximieren</LI>
-          <LI>◻️ Messen</LI>
-          <LI>◻️ Download</LI>
+          <li className={list}>◻️ zoomen</li>
+          <li className={list}>◻️ maximieren</li>
+          <li className={list}>◻️ Messen</li>
+          <li className={list}>◻️ Download</li>
           <li>
             Koordinaten
             <ul>
-              <LI>◻️ anzeigen</LI>
-              <LI>◻️ springen</LI>
+              <li className={list}>◻️ anzeigen</li>
+              <li className={list}>◻️ springen</li>
             </ul>
           </li>
           <li>
             Massstab
             <ul>
-              <LI>◻️ anzeigen</LI>
-              <LI>◻️ wählen</LI>
+              <li className={list}>◻️ anzeigen</li>
+              <li className={list}>◻️ wählen</li>
             </ul>
           </li>
-          <LI>◻️ Distanz zeigen</LI>
-          <LI>◻️ Beobachtungen zuordnen</LI>
+          <li className={list}>◻️ Distanz zeigen</li>
+          <li className={list}>◻️ Beobachtungen zuordnen</li>
         </ul>
       </li>
-      <LI>◻️ Exporte</LI>
+      <li className={list}>◻️ Exporte</li>
       <li>
         Layout und Navigation
         <ul>
-          <LI>◻️ back und forward des Browsers</LI>
-          <LI>☑️Tabs ein-/ausblenden</LI>
-          <LI>◻️ breite variieren</LI>
-          <LI>◻️ Anpassung an kleine Bildschirme</LI>
+          <li className={list}>◻️ back und forward des Browsers</li>
+          <li className={list}>☑️Tabs ein-/ausblenden</li>
+          <li className={list}>◻️ breite variieren</li>
+          <li className={list}>◻️ Anpassung an kleine Bildschirme</li>
         </ul>
       </li>
     </ul>
     <p>Symbole:</p>
     <ul>
-      <LI>✅: automatisiert</LI>
-      <LI>☑️: teilweise automatisiert</LI>
-      <LI>◻️: todo</LI>
+      <li className={list}>✅: automatisiert</li>
+      <li className={list}>☑️: teilweise automatisiert</li>
+      <li className={list}>◻️: todo</li>
     </ul>
   </>
 )
