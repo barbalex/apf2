@@ -1,25 +1,11 @@
 import { useContext } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { StyledTableCell } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
-const Link = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 100%;
-  div {
-    margin: auto;
-  }
-  svg {
-    font-size: 0.9em;
-    color: rgba(0, 0, 0, 0.77);
-  }
-`
+import { link } from './CellForTpopLink.module.css'
 
 export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
   const store = useContext(MobxContext)
@@ -43,14 +29,15 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
       className={className}
       data-isodd={isOdd}
     >
-      <Link
+      <div
+        className={link}
         onClick={onClickLink}
         title="in neuem Fenster öffnen"
       >
         <div>
           <FaExternalLinkAlt />
         </div>
-      </Link>
+      </div>
     </StyledTableCell>
   )
 })
