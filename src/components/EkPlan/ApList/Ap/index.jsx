@@ -2,30 +2,11 @@ import { useContext } from 'react'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
-const ApDiv = styled.div`
-  padding-right: 10px;
-`
-const EinheitsDiv = styled.div`
-  color: ${(props) => (props['data-warn'] ? 'red' : 'unset')};
-`
-const Label = styled.span`
-  color: grey;
-  padding-right: 4px;
-`
-const DelIcon = styled(IconButton)`
-  font-size: 1rem !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-`
+import { container, apClass, label, delIcon } from './index.module.css'
 
 export const Ap = observer(({ ap }) => {
   const store = useContext(MobxContext)
@@ -49,23 +30,28 @@ export const Ap = observer(({ ap }) => {
     : 'Zielrelevante Zähleinheit:'
 
   return (
-    <Container>
-      <ApDiv>{`${ap.label}.`}</ApDiv>
+    <div className={container}>
+      <div className={apClass}>{`${ap.label}.`}</div>
       {!apsDataLoading && (
         <>
-          <EinheitsDiv data-warn={einheits.length === 0}>
-            <Label>{labelText}</Label> {einheitsText}
-          </EinheitsDiv>
+          <div
+            style={{
+              color: einheits.length === 0 ? 'red' : 'unset',
+            }}
+          >
+            <span className={label}>{labelText}</span> {einheitsText}
+          </div>
           <Tooltip title={`${ap.label} entfernen`}>
-            <DelIcon
+            <IconButton
               aria-label={`${ap.label} entfernen`}
               onClick={onClickDelete}
+              className={delIcon}
             >
               <FaTimes />
-            </DelIcon>
+            </IconButton>
           </Tooltip>
         </>
       )}
-    </Container>
+    </div>
   )
 })

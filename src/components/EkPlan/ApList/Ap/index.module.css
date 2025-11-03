@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.apClass {
+  padding-right: 10px;
+}
+
+.label {
+  color: grey;
+  padding-right: 4px;
+}
+
+.delIcon {
+  font-size: 1rem !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
