@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.img {
+  margin-right: 10px;
+  width: 80px;
+  height: 50px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.imgReplacement {
+  min-width: 80px;
+  margin-right: 10px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.38);
+  font-size: 1rem;
+  padding-top: 19px;
+}
+
+.delIcon {
+  margin-bottom: 20px !important;
+  height: 40px;
+}
+
+.downloadIcon {
+  margin-bottom: 20px !important;
+  height: 40px;
+}
+
+.spacer {
+  min-width: 12px;
+}
+
+.dateiTypField {
+  min-width: 200px;
+  flex-grow: 0;
+}
+
+.dateiNameField {
+  min-width: 215px;
+  flex-grow: 0;
+}
+
+.beschreibungField {
+  flex-grow: 1;
+}
+
+.menuTitle {
+  padding-top: 8px;
+  padding-left: 15px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  &:focus {
+    outline: none;
+  }
+}

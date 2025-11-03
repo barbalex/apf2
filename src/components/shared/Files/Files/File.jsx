@@ -2,7 +2,6 @@ import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import styled from '@emotion/styled'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
@@ -24,59 +23,18 @@ import { isImageFile } from '../isImageFile.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const Container = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-  width: 100%;
-`
-const Img = styled.img`
-  margin-right: 10px;
-  width: 80px;
-  height: 50px;
-  object-fit: contain;
-  margin-bottom: 1rem;
-`
-const ImgReplacement = styled.div`
-  min-width: 80px;
-  margin-right: 10px;
-  text-align: center;
-  color: rgba(0, 0, 0, 0.38);
-  font-size: 1rem;
-  padding-top: 19px;
-`
-const DelIcon = styled(IconButton)`
-  margin-bottom: 20px !important;
-  height: 40px;
-`
-const DownloadIcon = styled(IconButton)`
-  margin-bottom: 20px !important;
-  height: 40px;
-`
-const Spacer = styled.div`
-  min-width: 12px;
-`
-const DateiTypField = styled.div`
-  min-width: 200px;
-  flex-grow: 0;
-`
-const DateiNameField = styled.div`
-  min-width: 215px;
-  flex-grow: 0;
-`
-const BeschreibungField = styled.div`
-  flex-grow: 1;
-`
-const MenuTitle = styled.h3`
-  padding-top: 8px;
-  padding-left: 15px;
-  padding-right: 16px;
-  padding-bottom: 0;
-  margin-bottom: 3px;
-  &:focus {
-    outline: none;
-  }
-`
+import {
+  container,
+  img,
+  imgReplacement,
+  delIcon,
+  downloadIcon,
+  spacer,
+  dateiTypField,
+  dateiNameField,
+  beschreibungField,
+  menuTitle,
+} from './File.module.css'
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -193,14 +151,15 @@ export const File = observer(({ file, parent, refetch }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         {isImage ?
-          <Img
+          <img
             src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
             alt={file.name}
+            className={img}
           />
-        : <ImgReplacement>...</ImgReplacement>}
-        <DateiTypField>
+        : <div className={imgReplacement}>...</div>}
+        <div className={dateiTypField}>
           <TextField
             name="fileMimeType"
             label="Datei-Typ"
@@ -210,9 +169,9 @@ export const File = observer(({ file, parent, refetch }) => {
             saveToDb={saveToDb}
             error={fieldErrors.fileMimeType}
           />
-        </DateiTypField>
-        <Spacer />
-        <DateiNameField>
+        </div>
+        <div className={spacer} />
+        <div className={dateiNameField}>
           <TextField
             name="name"
             label="Datei-Name"
@@ -222,9 +181,9 @@ export const File = observer(({ file, parent, refetch }) => {
             saveToDb={saveToDb}
             error={fieldErrors.name}
           />
-        </DateiNameField>
-        <Spacer />
-        <BeschreibungField>
+        </div>
+        <div className={spacer} />
+        <div className={beschreibungField}>
           <TextField
             name="beschreibung"
             label="Beschreibung"
@@ -234,21 +193,25 @@ export const File = observer(({ file, parent, refetch }) => {
             saveToDb={saveToDb}
             error={fieldErrors.beschreibung}
           />
-        </BeschreibungField>
+        </div>
         <Tooltip title="herunterladen">
-          <DownloadIcon onClick={onClickDownload}>
+          <IconButton
+            onClick={onClickDownload}
+            className={downloadIcon}
+          >
             <FaDownload />
-          </DownloadIcon>
+          </IconButton>
         </Tooltip>
         <Tooltip title="löschen">
-          <DelIcon
+          <IconButton
             aria-label="löschen"
             aria-owns={delMenuOpen ? 'delMenu' : undefined}
             aria-haspopup="true"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            className={delIcon}
           >
             <FaTimes />
-          </DelIcon>
+          </IconButton>
         </Tooltip>
         <Menu
           id="delMenu"
@@ -262,11 +225,11 @@ export const File = observer(({ file, parent, refetch }) => {
             },
           }}
         >
-          <MenuTitle>löschen?</MenuTitle>
+          <h3 className={menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </Menu>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
