@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Big apflora is watching you 😉</h1>
-    <DokuDate>24.06.2022</DokuDate>
+    <p className={dokuDate}>24.06.2022</p>
     <p>Wurde am 8.7.2019 eingeführt.</p>
     <p>
       Wenn ihr arbeitet, speichert apflora den aktuellen Zustand. Zum Beispiel:
