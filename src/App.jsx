@@ -20,7 +20,6 @@ import '@fontsource/roboto/700.css'
 import 'react-leaflet-markercluster/styles'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { GlobalStyle } from './components/GlobalStyle.jsx'
 import { theme } from './utils/materialTheme.js'
 
 import { initializeIdb } from './modules/initializeIdb.js'
@@ -112,7 +111,6 @@ export const App = () => {
                     action={(key) => <NotificationDismisser nKey={key} />}
                   >
                     <UploaderContext value={uploaderRef}>
-                      <GlobalStyle />
                       <Suspense fallback={<Spinner />}>
                         <Router />
                         {/*<UnterhaltsRouter />*/}
