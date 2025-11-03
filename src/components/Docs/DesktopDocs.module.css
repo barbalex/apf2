@@ -1,11 +1,11 @@
-container {
+.container {
   height: 100%;
   display: flex;
   overflow: hidden;
   background-color: #fffde7;
 }
 
-doku {
+.doku {
   height: 100%;
   width: 100%;
   padding: 0 25px 25px 25px;
@@ -57,12 +57,12 @@ doku {
   }
 }
 
-dokuDate {
+.dokuDate {
   margin-bottom: 15px !important;
   color: grey;
 }
 
-code {
+.code {
   background-color: rgba(0, 0, 0, 0.05);
   padding: 0 3px;
 }
