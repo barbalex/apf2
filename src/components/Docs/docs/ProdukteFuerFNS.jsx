@@ -1,11 +1,10 @@
 import { Link } from 'react-router'
-
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Produkte für die Fachstelle Naturschutz 🛒</h1>
-    <DokuDate>1.1.2023</DokuDate>
+    <p className={dokuDate}>1.1.2023</p>
     <p>Die FNS erhält aus apflora folgende Produkte:</p>
     <ul>
       <li>Den Jahresbericht (pdf oder Ausdruck)</li>

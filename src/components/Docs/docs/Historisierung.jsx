@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Historisierung</h1>
-    <DokuDate>10.12.2020</DokuDate>
+    <p className={dokuDate}>10.12.2020</p>
     <h2>Wunsch</h2>
     <p>Stand: Ende 2019</p>
     <p>Die Daten in apflora werden je länger je intensiver ausgewertet. </p>

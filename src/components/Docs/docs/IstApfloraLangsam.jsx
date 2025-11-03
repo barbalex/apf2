@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Ist apflora langsam? 🐌</h1>
-    <DokuDate>18.04.2019</DokuDate>
+    <p className={dokuDate}>18.04.2019</p>
     <p>Normalerweise sollte apflora nicht langsam wirken.</p>
     <h2>1. Das Problem</h2>
     <p>
