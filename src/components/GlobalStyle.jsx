@@ -50,16 +50,6 @@ export const GlobalStyle = () => (
         border: 1px solid #ab9518 !important;
       }
 
-      /* scrollbars */
-
-      .simplebar-scrollbar:before {
-        background: #2e7d32 !important;
-      }
-      /* hide native scrollbar */
-      .simplebar-content-wrapper::-webkit-scrollbar {
-        display: none;
-      }
-
       /* newer syntax for firefox */
       // somehow scrollbar-width is seen at lower levels but not applied !!??
       html {
