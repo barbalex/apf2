@@ -15,7 +15,6 @@ import {
   faFilter,
   textFilterContainer,
 } from './CellHeaderFixedEkfrequenz.module.css'
-import { theme } from '../../../utils/materialTheme.js'
 
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
@@ -57,7 +56,6 @@ export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
         aria-controls="ekfrequenzHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
-        width={column.width}
         style={{
           width: column.width,
           minWidth: column.width,
