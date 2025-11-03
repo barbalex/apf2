@@ -1,0 +1,6 @@
+/* don't know why but divider is too thick, */
+/* thicker than ListItemButton divider */
+.divider {
+  height: unset !important;
+  background: unset !important;
+}
