@@ -1,9 +1,9 @@
-import { DokuDate } from '../../DesktopDocs.jsx'
+import { dokuDate } from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Dateien anfügen 📸</h1>
-    <DokuDate>21.12.2024</DokuDate>
+    <p className={dokuDate}>21.12.2024</p>
     <p>Wurde am 27.05.2019 eingeführt.</p>
     <p>
       Dateien können <strong>in folgenden Formularen</strong> angefügt werden:
