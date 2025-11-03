@@ -1,0 +1,13 @@
+.link {
+  text-decoration: none;
+  padding: 0 9px;
+  min-width: 50px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  &:hover {
+    text-decoration: underline;
+    text-decoration-color: rgba(55, 118, 28, 0.5);
+  }
+}
