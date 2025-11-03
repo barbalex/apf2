@@ -17,7 +17,7 @@ import { usePrevious } from '../../../../modules/usePrevious.js'
 import { iconButton } from './index.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
-const StyledMenu = styled((props) => <MuiMenu {...props} />)((theme) => ({
+const StyledMenu = styled((props) => <MuiMenu {...props} />)(() => ({
   '& .MuiPaper-root': {
     scrollbarWidth: 'thin',
     minWidth: (props) => (props.minwidth ? `${props.minwidth}px` : 'unset'),

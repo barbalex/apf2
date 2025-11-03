@@ -2,7 +2,7 @@ import { useState, useContext } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
@@ -15,12 +15,14 @@ import {
   faFilter,
   textFilterContainer,
 } from './CellHeaderFixedEkfrequenz.module.css'
+import { theme } from '../../../utils/materialTheme.js'
 
-const StyledMenu = styled(Menu)`
-  & .MuiPaper-root {
-    overflow: hidden !important;
-  }
-`
+const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
+  '& .MuiPaper-root': {
+    overflow: 'hidden !important',
+  },
+}))
+
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
