@@ -3,33 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import styled from '@emotion/styled'
 
 import { Ap } from './Ap/index.jsx'
 import { ChooseAp } from './ChooseAp/index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  font-size: 0.8rem !important;
-  line-height: 1rem !important;
-  padding-bottom: 5px;
-`
-const TitleRow = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-`
-const ApTitle = styled.h4`
-  margin: 4px 0;
-`
-const PlusIcon = styled(IconButton)`
-  font-size: 1rem !important;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-`
+import { container, titleRow, apTitle, plusIcon } from './index.module.css'
 
 export const ApList = observer(() => {
   const store = useContext(MobxContext)
@@ -39,20 +18,21 @@ export const ApList = observer(() => {
   const onClickAdd = () => setShowChoose(true)
 
   return (
-    <Container>
-      <TitleRow>
-        <ApTitle>Arten</ApTitle>
+    <div className={container}>
+      <div className={titleRow}>
+        <div className={apTitle}>Arten</div>
         {!showChoose && (
           <Tooltip title="Art hinzufügen">
-            <PlusIcon
+            <IconButton
               aria-label="Art hinzufügen"
               onClick={onClickAdd}
+              className={plusIcon}
             >
               <FaPlus />
-            </PlusIcon>
+            </IconButton>
           </Tooltip>
         )}
-      </TitleRow>
+      </div>
       {aps.map((ap) => (
         <Ap
           key={ap.value}
@@ -62,6 +42,6 @@ export const ApList = observer(() => {
       {(aps.length === 0 || showChoose) && (
         <ChooseAp setShowChoose={setShowChoose} />
       )}
-    </Container>
+    </div>
   )
 })

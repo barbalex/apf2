@@ -619,7 +619,3 @@ a {
 .select-height-limited .react-select__menu-list {
   height: var(--react-select-menu-list-max-height, 'unset'); /* was 130 */
 }
-/* only for ApList.ChooseAp */
-.ekplan-aplist-chooseap .react-select__menu-list {
-  z-index: 4;
-}

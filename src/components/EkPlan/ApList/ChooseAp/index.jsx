@@ -88,6 +88,8 @@ export const ChooseAp = observer(({ setShowChoose }) => {
           openMenuOnFocus
           autoFocus
           className={`ekplan-aplist-chooseap select-height-limited select-nocaret ${select}`}
+          menuPortalTarget={document.body}
+          styles={{ menuPortal: (base) => ({ ...base, zIndex: 4 }) }}
         />
         {error.current && (
           <div className={errorClass}>{error.current.message}</div>
