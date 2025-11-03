@@ -1,11 +1,11 @@
 import { Link } from 'react-router'
 
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Was kann man mit apflora.ch machen? 💪</h1>
-    <DokuDate>20.12.2024</DokuDate>
+    <p className={dokuDate}>20.12.2024</p>
     <h3>Arten verwalten</h3>
     <ul>
       <li>Arten, Populationen und Teilpopulationen beschreiben</li>

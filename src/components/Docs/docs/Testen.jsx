@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
-
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 const LI = styled.li`
   list-style-type: none;
@@ -9,7 +8,7 @@ const LI = styled.li`
 export const Component = () => (
   <>
     <h1>Funktionalität testen</h1>
-    <DokuDate>18.04.2019</DokuDate>
+    <p className={dokuDate}>18.04.2019</p>
     <p>
       Nachfolgend eine Liste der Funktionalitäten, die getestet werden sollen,
       wenn grössere Änderungen umgesetzt wurden.

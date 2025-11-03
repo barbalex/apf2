@@ -1,11 +1,11 @@
 import { Link } from 'react-router'
 
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Tipps für den Einstieg</h1>
-    <DokuDate>20.12.2024</DokuDate>
+    <p className={dokuDate}>20.12.2024</p>
     <ul>
       <li>
         Die <strong>Anwendung</strong> ist hier:{' '}
