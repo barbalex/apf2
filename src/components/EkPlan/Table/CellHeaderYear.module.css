@@ -1,0 +1,33 @@
+.cell {
+  display: flex;
+  justify-content: space-evenly;
+  color: black;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 60px;
+  border-left: solid hsla(120, 25%, 70%, 1) 1px;
+  border-right: solid hsla(120, 25%, 70%, 1) 1px;
+  border-bottom: solid #e6e6e6 1px;
+  background: hsla(120, 25%, 88%, 1);
+  cursor: pointer;
+  box-sizing: border-box;
+  height: 60px;
+  &.column-hovered {
+    background: hsla(120, 25%, 82%, 1) !important;
+    font-weight: 700 !important;
+  }
+}
+
+.title {
+  text-align: left;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  padding: 2px 0 2px 5px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.dropdown {
+  font-size: 1.3em;
+}

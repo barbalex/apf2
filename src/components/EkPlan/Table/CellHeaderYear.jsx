@@ -3,52 +3,15 @@ import { observer } from 'mobx-react-lite'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import { gql } from '@apollo/client'
-
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
 
-const StyledCell = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  color: black;
-  font-weight: 500;
-  font-size: 0.75rem;
-  line-height: 60px;
-  border-left: solid hsla(120, 25%, 70%, 1) 1px;
-  border-right: solid hsla(120, 25%, 70%, 1) 1px;
-  border-bottom: solid #e6e6e6 1px;
-  background: hsla(120, 25%, 88%, 1);
-  cursor: pointer;
-  width: ${(props) => props.width}px;
-  min-width: ${(props) => props.width}px;
-  box-sizing: border-box;
-  height: 60px;
-  &.column-hovered {
-    background: hsla(120, 25%, 82%, 1) !important;
-    font-weight: 700 !important;
-  }
-`
-const Title = styled.div`
-  text-align: left;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
-  padding: 2px 0 2px 5px;
-  margin-top: auto;
-  margin-bottom: auto;
-`
-const Dropdown = styled.div`
-  font-size: 1.3em;
-`
-const StyledMenuItem = styled(MenuItem)`
-  color: ${(props) =>
-    props.active === 1 ? 'black' : 'rgba(0,0,0,0.3) !important'};
-`
+import { cell, title, dropdown } from './CellHeaderYear.module.css'
+
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderYear = observer(({ column, tpopFilter }) => {
@@ -166,57 +129,63 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
   const onMouseEnter = () => hovered.setYear(column)
   const className = hovered.year === column ? 'column-hovered' : ''
 
+  const menuItemStyle = {
+    color: yearHasKontrollen ? 'black' : 'rgba(0,0,0,0.3) !important',
+  }
+
   return (
     <>
-      <StyledCell
+      <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
-        className={className}
+        className={`${className} ${cell}`}
         aria-controls="yearHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
-        width={yearColumnWidth}
+        style={{ width: yearColumnWidth, maxWidth: yearColumnWidth }}
       >
-        <Title>{column}</Title>
-        <Dropdown>
+        <div className={title}>{column}</div>
+        <div className={dropdown}>
           {filterSet ?
             <FaFilter />
           : <Caret />}
-        </Dropdown>
-      </StyledCell>
+        </div>
+      </div>
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={closeMenu}
         anchorOrigin={anchorOrigin}
       >
-        <StyledMenuItem
+        <MenuItem
           onClick={onClickFilterKontrolleYear}
-          active={yearHasKontrollen ? 1 : 0}
           dense
+          style={menuItemStyle}
         >
           {filterKontrolleYear === column ?
             `nicht TPop mit Kontrollen in ${column} filtern`
           : `TPop mit Kontrollen in ${column} filtern`}
-        </StyledMenuItem>
-        <StyledMenuItem
+        </MenuItem>
+        <MenuItem
           onClick={onClickFilterEkplanYear}
           active={yearHasEkplan ? 1 : 0}
           dense
+          style={menuItemStyle}
         >
           {filterEkplanYear === column ?
             `nicht TPop mit Ekplan in ${column} filtern`
           : `TPop mit Ekplan in ${column} filtern`}
-        </StyledMenuItem>
-        <StyledMenuItem
+        </MenuItem>
+        <MenuItem
           onClick={onClickFilterAnsiedlungYear}
           active={yearHasAnsiedlungen ? 1 : 0}
           dense
+          style={menuItemStyle}
         >
           {filterAnsiedlungYear === column ?
             `nicht TPop mit Ansiedlungen in ${column} filtern`
           : `TPop mit Ansiedlungen in ${column} filtern`}
-        </StyledMenuItem>
+        </MenuItem>
       </Menu>
     </>
   )
