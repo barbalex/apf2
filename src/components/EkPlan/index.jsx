@@ -1,5 +1,4 @@
 import { useContext, lazy, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import Button from '@mui/material/Button'
@@ -27,43 +26,13 @@ const Spinner = lazy(async () => ({
   default: (await import('../shared/Spinner.jsx')).Spinner,
 }))
 
-const Container = styled.div`
-  height: 100%;
-  width: 100vw;
-  overflow: hidden;
-`
-const Header = styled.div`
-  padding: 5px 10px 0 10px;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-`
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-right: 10px;
-`
-const AnleitungButton = styled(Button)`
-  text-transform: none !important;
-  height: 2em;
-  min-width: 9em !important;
-  font-size: 0.75rem !important;
-  padding: 2px 15px !important;
-  margin-left: -15px;
-  margin-top: 28px;
-  line-height: unset !important;
-`
-const FilterResetButton = styled(Button)`
-  text-transform: none !important;
-  height: 2em;
-  min-width: 9em !important;
-  font-size: 0.75rem !important;
-  padding: 2px 5px !important;
-  margin-left: -15px;
-  margin-top: 3px;
-  line-height: unset !important;
-`
+import {
+  container,
+  header,
+  buttonContainer,
+  anleitungButton,
+  filterResetButton,
+} from './index.module.css'
 
 export const Component = observer(() => {
   const store = useContext(MobxContext)
@@ -139,36 +108,38 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <Suspense fallback={<Spinner />}>
           {!!user.token && (
             <>
-              <Header>
+              <div className={header}>
                 <ApList />
-                <ButtonContainer>
-                  <AnleitungButton
+                <div className={buttonContainer}>
+                  <Button
                     variant="outlined"
                     onClick={onClickAnleitung}
                     color="inherit"
+                    className={anleitungButton}
                   >
                     Anleitung
-                  </AnleitungButton>
-                  <FilterResetButton
+                  </Button>
+                  <Button
                     variant="outlined"
                     onClick={onClickResetFilter}
                     color="inherit"
+                    className={filterResetButton}
                   >
                     Filter leeren
-                  </FilterResetButton>
-                </ButtonContainer>
+                  </Button>
+                </div>
                 <Choose />
-              </Header>
+              </div>
               {!!aps.length && <Table />}
             </>
           )}
           <User />
         </Suspense>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 })
