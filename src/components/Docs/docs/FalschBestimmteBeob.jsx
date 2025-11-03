@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Falsch bestimmte Beobachtungen 👀</h1>
-    <DokuDate>30.01.2019</DokuDate>
+    <p className={dokuDate}>30.01.2019</p>
     <p>Bei AP-Arten ist vorgesehen:</p>
     <ul>
       <li>das richtige Taxon anzugeben</li>
