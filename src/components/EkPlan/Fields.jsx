@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
@@ -8,10 +7,7 @@ import DialogContent from '@mui/material/DialogContent'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const StyledDialogContent = styled(DialogContent)`
-  display: flex;
-  flex-direction: column;
-`
+import { content } from './Fields.module.css'
 
 export const Fields = observer(() => {
   const store = useContext(MobxContext)
@@ -19,7 +15,7 @@ export const Fields = observer(() => {
 
   return (
     <ErrorBoundary>
-      <StyledDialogContent>
+      <DialogContent className={content}>
         <FormControlLabel
           value={fields.includes('ap').toString()}
           control={
@@ -224,7 +220,7 @@ export const Fields = observer(() => {
           label="EK Frequenz abweichend"
           labelPlacement="end"
         />
-      </StyledDialogContent>
+      </DialogContent>
     </ErrorBoundary>
   )
 })
