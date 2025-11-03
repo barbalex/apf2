@@ -3,23 +3,8 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
-import styled from '@emotion/styled'
 
-const StyledInput = styled(Input)`
-  div hr {
-    width: calc(100% - 20px) !important;
-  }
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const StyledDeleteFilterIcon = styled(MdDeleteSweep)`
-  cursor: pointer;
-  pointer-events: auto;
-  padding-top: 5px;
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 1.5rem;
-`
+import { input, deleteFilter } from './Filter.module.css'
 
 export const Filter = ({ filter, setFilter }) => {
   const onChange = (e) => setFilter(e.target.value)
@@ -31,7 +16,7 @@ export const Filter = ({ filter, setFilter }) => {
       variant="standard"
     >
       <InputLabel htmlFor="filterInput">filtern</InputLabel>
-      <StyledInput
+      <Input
         id="filterInput"
         value={filter}
         onChange={onChange}
@@ -46,10 +31,11 @@ export const Filter = ({ filter, setFilter }) => {
               onClick={onClickEmptyFilter}
               title="Filter entfernen"
             >
-              <StyledDeleteFilterIcon />
+              <MdDeleteSweep className={deleteFilter} />
             </InputAdornment>
           : null
         }
+        className={input}
       />
     </FormControl>
   )
