@@ -1,4 +1,3 @@
-import { DokuDate } from '../../DesktopDocs.jsx'
 import entfernen1 from './entfernen_1.png'
 import formularFilter1 from './formular_filter_1.png'
 import formularFilter2 from './formular_filter_2.png'
@@ -10,10 +9,12 @@ import uebersicht1 from './uebersicht_1.png'
 import zusammenspiel from './zusammenspiel.png'
 import kartenFilterEntfernen from './karten-filter-entfernen.gif'
 
+import { dokuDate } from '../../DesktopDocs.module.css'
+
 export const Component = () => (
   <>
     <h1>Filter</h1>
-    <DokuDate>22.11.2024</DokuDate>
+    <p className={dokuDate}>22.11.2024</p>
     <p>
       Filtern hat in apflora eine lange Geschichte und wurde Schritt um Schritt
       erweitert.
