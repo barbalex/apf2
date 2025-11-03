@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { Link, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
@@ -8,28 +7,7 @@ import { MenuItems } from './MenuItems.jsx'
 import { Filter } from './Filter.jsx'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
-const Menu = styled.div`
-  width: 25%;
-  min-width: 320px;
-  height: 100%;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 25px 0;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
-  box-sizing: border-box;
-`
-const MenuTitle = styled.div`
-  padding: 0 16px;
-`
-const MenuTitleLink = styled(Link)`
-  font-size: 21px;
-  font-weight: 700;
-  text-decoration: none;
-  color: rgba(0, 0, 0, 0.87);
-  &:hover {
-    text-decoration: underline;
-  }
-`
+import { menu, menuTitle, menuTitleLink } from './index.module.css'
 
 export const Sidebar = observer(() => {
   const { search } = useLocation()
@@ -43,18 +21,21 @@ export const Sidebar = observer(() => {
     })
 
   return (
-    <Menu>
-      <MenuTitle>
-        <MenuTitleLink to={`/Dokumentation/${search}`}>
+    <div className={menu}>
+      <div className={menuTitle}>
+        <Link
+          to={`/Dokumentation/${search}`}
+          className={menuTitleLink}
+        >
           Dokumentation
-        </MenuTitleLink>
+        </Link>
         <Filter
           filter={store.tree.nodeLabelFilter.doc ?? ''}
           setFilter={setFilter}
         />
-      </MenuTitle>
+      </div>
       <MenuItems />
       <IntoViewScroller />
-    </Menu>
+    </div>
   )
 })
