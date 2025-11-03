@@ -2,8 +2,8 @@ import { useState, useContext, useRef, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import { styled } from '@mui/material/styles'
 import { BsCaretDown } from 'react-icons/bs'
-import styled from '@emotion/styled'
 import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 import { motion } from 'framer-motion'
@@ -14,20 +14,18 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 import { usePrevious } from '../../../../modules/usePrevious.js'
 
-const StyledIconButton = styled(IconButton)`
-  z-index: 2;
-`
+import { iconButton } from './index.module.css'
+
 // https://mui.com/material-ui/react-menu/#customization
-const StyledMenu = styled(MuiMenu)`
-  container-type: inline-size;
-  .MuiPaper-root {
-    scrollbar-width: thin !important;
-    min-width: ${(props) => (props.minwidth ? `${props.minwidth}px` : 'unset')};
-  }
-  .MuiList-root {
-    padding-top: 0;
-  }
-`
+const StyledMenu = styled((props) => <MuiMenu {...props} />)((theme) => ({
+  '& .MuiPaper-root': {
+    scrollbarWidth: 'thin',
+    minWidth: (props) => (props.minwidth ? `${props.minwidth}px` : 'unset'),
+  },
+  '& .MuiList-root': {
+    paddingTop: 0,
+  },
+}))
 
 // do NOT use a MenuList. Reason: grabs key input to navigate to menu items
 // thus filter input does not work
@@ -68,15 +66,16 @@ export const Menu = observer(({ navData }) => {
 
   return (
     <>
-      <StyledIconButton
+      <IconButton
         id={iconId}
         aria-controls={open ? menuId : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={onClick}
+        className={iconButton}
       >
         <BsCaretDown />
-      </StyledIconButton>
+      </IconButton>
       <StyledMenu
         id={menuId}
         anchorEl={anchorEl}
