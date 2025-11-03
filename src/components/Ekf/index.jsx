@@ -65,7 +65,6 @@ export const Component = observer(() => {
     // navigate to first kontrId so form is shown for first ekf
     // IF none is choosen yet
     if (!loading && ekf.length > 0 && !ekfId) {
-      console.log('Ekf, useEffect, navigating to first ekf')
       navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${ekf[0].id}${search}`)
     }
     // adding ekf as dependency causes infinite loop
