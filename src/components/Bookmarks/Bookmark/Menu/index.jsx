@@ -17,6 +17,7 @@ import { usePrevious } from '../../../../modules/usePrevious.js'
 const StyledIconButton = styled(IconButton)`
   z-index: 2;
 `
+// https://mui.com/material-ui/react-menu/#customization
 const StyledMenu = styled(MuiMenu)`
   container-type: inline-size;
   .MuiPaper-root {
