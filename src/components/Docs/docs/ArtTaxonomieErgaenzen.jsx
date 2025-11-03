@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Art-Taxonomien ergänzen</h1>
-    <DokuDate>27.12.2021</DokuDate>
+    <p className={dokuDate}>27.12.2021</p>
     <h3>Herkunft der Art-Listen</h3>
     <p>
       Artenlisten stammen aus{' '}

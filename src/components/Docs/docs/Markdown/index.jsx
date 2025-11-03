@@ -1,10 +1,11 @@
-import { DokuDate } from '../../DesktopDocs.jsx'
 import field from './field.png'
+
+import { dokuDate } from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Formatierbare Felder</h1>
-    <DokuDate>04.05.2020</DokuDate>
+    <p className={dokuDate}>04.05.2020</p>
     <p>
       Am 19.04.2020 wurden formatierbare Felder eingeführt:
       <br />
