@@ -1,0 +1,32 @@
+.list {
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.row {
+  display: flex;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.textField {
+  padding-bottom: 9px !important;
+}
+
+.formControlLabel {
+  margin-left: 0 !important;
+  padding: 8px 0;
+}
+
+.checkbox {
+  width: 30px !important;
+  height: 30px !important;
+}

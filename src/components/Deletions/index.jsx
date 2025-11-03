@@ -6,7 +6,6 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
@@ -16,39 +15,14 @@ import { undelete } from './undelete/index.jsx'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-const List = styled.div`
-  padding-left: 24px;
-  padding-right: 24px;
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-  max-width: ${window.innerWidth * 0.8}px;
-`
-const Row = styled.div`
-  display: flex;
-  border-top: ${(props) =>
-    props['data-withtopline'] ? '1px solid rgba(0,0,0,0.1)' : 'none'};
-  padding-top: ${(props) => (props['data-withtopline'] ? '10px' : 'unset')};
-`
-const TextContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
-const StyledTextField = styled(TextField)`
-  padding-bottom: 9px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0) !important;
-  }
-`
-const StyledFormControlLabel = styled(FormControlLabel)`
-  margin-left: 0 !important;
-  padding: 8px 0;
-`
-const StyledCheckbox = styled(Checkbox)`
-  width: 30px !important;
-  height: 30px !important;
-`
+import {
+  list,
+  row,
+  textContainer,
+  textField,
+  formControlLabel,
+  checkbox,
+} from './index.module.css'
 
 export const Deletions = observer(() => {
   const apolloClient = useApolloClient()
@@ -104,7 +78,10 @@ export const Deletions = observer(() => {
       >
         <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
         <DialogContent>
-          <List>
+          <div
+            className={list}
+            style={{ maxWidth: window.innerWidth * 0.8 }}
+          >
             {deletedDatasets.map((ds, index) => {
               // clone to remove keys _only_ for presentation
               const dataset = { ...ds.data }
@@ -117,42 +94,51 @@ export const Deletions = observer(() => {
               )
 
               return (
-                <Row
+                <div
+                  className={row}
                   key={ds.id}
-                  data-withtopline={index > 0}
+                  style={{
+                    borderTop: index > 0 ? '1px solid rgba(0,0,0,0.1)' : 'none',
+                    paddingTop: index > 0 ? '10px' : 'unset',
+                  }}
                 >
-                  <StyledFormControlLabel
+                  <FormControlLabel
                     control={
-                      <StyledCheckbox
+                      <Checkbox
                         checked={chosenDeletions.includes(ds.id)}
                         onChange={toggleChoosenDeletions}
                         value={ds.id}
                         color="primary"
+                        className={checkbox}
                       />
                     }
+                    className={formControlLabel}
                   />
-                  <TextContainer>
-                    <StyledTextField
+                  <div className={textContainer}>
+                    <TextField
                       label="Lösch-Zeitpunkt"
                       value={time}
                       fullWidth
+                      className={textField}
                     />
-                    <StyledTextField
+                    <TextField
                       label="Tabelle"
                       value={ds.table}
                       fullWidth
+                      className={textField}
                     />
-                    <StyledTextField
+                    <TextField
                       label="Daten"
                       value={JSON.stringify(dataset, null, 2)}
                       multiline
                       fullWidth
+                      className={textField}
                     />
-                  </TextContainer>
-                </Row>
+                  </div>
+                </div>
               )
             })}
-          </List>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button
