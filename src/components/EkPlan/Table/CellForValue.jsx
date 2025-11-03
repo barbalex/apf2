@@ -1,16 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { StyledTableCell } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`
+import { container } from './CellForValue.module.css'
 
 export const CellForValue = observer(
   ({ field, width, row, isOdd, firstChild }) => {
@@ -31,9 +25,9 @@ export const CellForValue = observer(
         data-isodd={isOdd}
         data-firstchild={firstChild}
       >
-        <Container>
+        <div className={container}>
           <div>{value}</div>
-        </Container>
+        </div>
       </StyledTableCell>
     )
   },
