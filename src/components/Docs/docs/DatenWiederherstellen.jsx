@@ -1,9 +1,9 @@
-import { DokuDate } from '../DesktopDocs.jsx'
+import { dokuDate } from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Daten aus Sicherung herstellen</h1>
-    <DokuDate>18.11.2021</DokuDate>
+    <p className={dokuDate}>18.11.2021</p>
     <p>
       Soll eine Datenbank aus einer Sicherung wiederhergestellt werden, geht das
       so:
