@@ -1,5 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import TextField from '@mui/material/TextField'
@@ -25,12 +25,12 @@ import {
   checkboxDensifier,
 } from './Choose.module.css'
 
-const StyledDialog = styled(Dialog)`
-  overflow-y: hidden;
-  .MuiDialog-paper {
-    overflow-y: hidden;
-  }
-`
+const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
+  overflowY: 'hidden',
+  '& .MuiDialog-paper': {
+    overflowY: 'hidden',
+  },
+}))
 
 // placing material-ui checkboxes denser
 // see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
