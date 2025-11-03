@@ -1,15 +1,12 @@
 import { Outlet } from 'react-router'
 
-import { Container, Doku } from './DesktopDocs.jsx'
-
-const dokuStyle = {
-  padding: '0 10px 10px 10px',
-}
+import { container, doku } from './DesktopDocs.module.css'
+import { doku as myDokuClass } from './MobileDoc.module.css'
 
 export const Component = () => (
-  <Container>
-    <Doku stye={dokuStyle}>
+  <div className={container}>
+    <div className={`${doku} ${myDokuClass}`}>
       <Outlet />
-    </Doku>
-  </Container>
+    </div>
+  </div>
 )

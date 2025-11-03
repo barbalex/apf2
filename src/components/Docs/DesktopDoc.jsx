@@ -4,17 +4,18 @@ import { Outlet } from 'react-router'
 import { Sidebar } from './DesktopSidebar/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
-import { Container, Doku, DokuDate, Code } from './DesktopDocs.jsx'
+
+import { container, doku } from './DesktopDocs.module.css'
 
 export const Component = () => (
   <ErrorBoundary>
-    <Container>
+    <div className={container}>
       <Sidebar />
-      <Doku>
+      <div className={doku}>
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>
-      </Doku>
-    </Container>
+      </div>
+    </div>
   </ErrorBoundary>
 )

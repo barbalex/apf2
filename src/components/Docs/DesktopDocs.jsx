@@ -6,12 +6,17 @@ import { Sidebar } from './DesktopSidebar/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 
+import { container, doku, dokuDate, code } from './DesktopDocs.module.css'
+
+// TODO: update importing components to use css modules
 export const Container = styled.div`
   height: 100%;
   display: flex;
   overflow: hidden;
   background-color: #fffde7;
 `
+
+// TODO: update importing components to use css modules
 export const Doku = styled.div`
   height: 100%;
   width: 100%;
@@ -63,10 +68,12 @@ export const Doku = styled.div`
     padding: 0 5px 0 0;
   }
 `
+// TODO: update importing components to use css modules
 export const DokuDate = styled.p`
   margin-bottom: 15px !important;
   color: grey;
 `
+// TODO: update importing components to use css modules
 export const Code = styled.code`
   background-color: rgba(0, 0, 0, 0.05);
   padding: 0 3px;
@@ -74,11 +81,11 @@ export const Code = styled.code`
 
 export const DesktopDocs = () => (
   <ErrorBoundary>
-    <Container>
+    <div className={container}>
       <Sidebar />
-      <Doku>
+      <div className={doku}>
         <div />
-      </Doku>
-    </Container>
+      </div>
+    </div>
   </ErrorBoundary>
 )
