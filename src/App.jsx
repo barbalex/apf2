@@ -135,7 +135,7 @@ export const App = () => {
           </ApolloProvider>
         </MobxContext>
       </IdbContext>
-      <Analytics />
+      <Analytics debug={false} />
     </JotaiProvider>
   )
 }
