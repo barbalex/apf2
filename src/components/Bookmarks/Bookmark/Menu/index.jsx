@@ -82,8 +82,10 @@ export const Menu = observer(({ navData }) => {
         anchorEl={anchorEl}
         open={open}
         onClose={onClose}
-        MenuListProps={{
-          'aria-labelledby': iconId,
+        slotProps={{
+          list: {
+            'aria-labelledby': iconId,
+          },
         }}
         minwidth={titleWidth}
       >
