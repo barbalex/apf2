@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, Children, cloneElement } from 'react'
 import { IconButton, Menu } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import { useDebouncedCallback } from 'use-debounce'
 
 import {
@@ -11,16 +11,17 @@ import {
   menuContent,
 } from './index.module.css'
 
-export const buttonWidth = 40
+const buttonWidth = 40
 
-// remove the margin mui adds to top and bottom of menu
-const StyledMenu = styled(Menu)`
-  background-color: ${(props) => props.bgColor};
-  overflow: hidden;
-  ul {
-    padding: 0 !important;
-  }
-`
+const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
+  '& .MuiPaper-root': {
+    backgroundColor: (props) => props.bgColor,
+    overflow: 'hidden',
+  },
+  '& .MuiList-root': {
+    padding: '0 !important',
+  },
+}))
 
 const getChildren = ({ addMargin, children }) => {
   const visibleChildren = []

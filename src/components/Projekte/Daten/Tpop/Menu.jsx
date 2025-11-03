@@ -25,7 +25,7 @@ import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
 import { useAtom } from 'jotai'
 
-import { MenuBar, buttonWidth } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
