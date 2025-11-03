@@ -1,11 +1,11 @@
-import { DokuDate } from '../../DesktopDocs.jsx'
+import { dokuDate } from '../../DesktopDocs.module.css'
 import { YoutubeEmbed } from '../../../shared/YoutubeEmbed.jsx'
 import beobZuordnen from './beobZuordnen_01.png'
 
 export const Component = () => (
   <>
     <h1>Beobachtungen Teil-Populationen zuordnen</h1>
-    <DokuDate>05.06.2019</DokuDate>
+    <p className={dokuDate}>05.06.2019</p>
     <p>
       Bei den wichtigsten Artförderprogrammen werden gemeldete Beobachtungen
       beurteilt. Sie werden entweder verworfen (&quot;nicht zuordnen&quot;) oder

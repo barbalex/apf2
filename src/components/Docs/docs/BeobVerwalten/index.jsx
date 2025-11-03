@@ -1,13 +1,16 @@
-import { DokuDate, Code } from '../../DesktopDocs.jsx'
+import { dokuDate } from '../../DesktopDocs.module.css'
 import beobTable from './beobTable.webp'
+
+import { code } from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Beobachtungen verwalten</h1>
-    <DokuDate>16.04.2023</DokuDate>
+    <p className={dokuDate}>16.04.2023</p>
     <h2>1. Datenstruktur</h2>
     <p>
-      Beobachtungen werden in der Tabelle <Code>beob</Code> gespeichert:
+      Beobachtungen werden in der Tabelle <code className={code}>beob</code>{' '}
+      gespeichert:
       <br />
       <img
         src={beobTable}
@@ -21,7 +24,7 @@ export const Component = () => (
     <ol>
       <li>
         Den unveränderten Originaldaten der Beobachtung, enthalten im JSONB-Feld{' '}
-        <Code>data</Code>
+        <code className={code}>data</code>
       </li>
       <li>
         In den übrigen Feldern: Extrahierten bzw. abgeleiteteten Daten, welche
@@ -38,7 +41,7 @@ export const Component = () => (
         Die Struktur von Beobachtungsdaten ist im Prinzip unerheblich.
         Änderungen daran auch. Wichtig ist einzig, dass zum Zeitpunkt des
         Imports klar ist, wie aus den Beobachtungsdaten die abgeleiteten Felder
-        in Tabelle <Code>beob</Code> generiert werden können
+        in Tabelle <code className={code}>beob</code> generiert werden können
       </li>
       <li>
         Somit können jederzeit Beobachtungen unabhängig von ihrer Datenstruktur
@@ -46,8 +49,8 @@ export const Component = () => (
       </li>
       <li>
         Schon vorhandene Beobachtungen können bei erneutem Import mit
-        aktuelleren ersetzt werden (<Code>quelle</Code> und{' '}
-        <Code>id_field</Code> vergleichen)
+        aktuelleren ersetzt werden (<code className={code}>quelle</code> und{' '}
+        <code className={code}>id_field</code> vergleichen)
       </li>
       <li>
         Mit Hilfe der abgeleiteten Felder können gebaut werden:
@@ -62,76 +65,79 @@ export const Component = () => (
     <p>Felder der Tabelle &quot;beob&quot;:</p>
     <ul>
       <li>
-        <Code>id</Code>: id dieser Tabelle. Ohne Bezug zu id&#39;s in den
-        Beobachtungsdaten
+        <code className={code}>id</code>: id dieser Tabelle. Ohne Bezug zu
+        id&#39;s in den Beobachtungsdaten
       </li>
       <li>
-        <Code>data</Code>: Unveränderte Originaldaten im JSONB Format
+        <code className={code}>data</code>: Unveränderte Originaldaten im JSONB
+        Format
       </li>
       <li>
-        <Code>id_field</Code>: Feld in den Originaldaten, welches die
-        Original-ID enthält. Dient dazu, gemeinsam mit dem Feld{' '}
-        <Code>quelle</Code> jederzeit mit neuen Versionen von Originaldaten
-        verbinden zu können. Extrahiert, um Beobachtungen bei re-Importen
+        <code className={code}>id_field</code>: Feld in den Originaldaten,
+        welches die Original-ID enthält. Dient dazu, gemeinsam mit dem Feld{' '}
+        <code className={code}>quelle</code> jederzeit mit neuen Versionen von
+        Originaldaten verbinden zu können. Extrahiert, um Beobachtungen bei
+        re-Importen effizient aktualisieren zu können
+      </li>
+      <li>
+        <code className={code}>obs_id</code>: Wie id_field. Weil ab 2022 Importe
+        sowieso nur von Info Flora stammen sollen, dies ihre ID ist und komplexe
+        Abfragen beim Import mit Hilfe dieses Feldes vereinfacht und
+        beschleunigt werden. Extrahiert, um Beobachtungen bei re-Importen
         effizient aktualisieren zu können
       </li>
       <li>
-        <Code>obs_id</Code>: Wie id_field. Weil ab 2022 Importe sowieso nur von
-        Info Flora stammen sollen, dies ihre ID ist und komplexe Abfragen beim
-        Import mit Hilfe dieses Feldes vereinfacht und beschleunigt werden.
-        Extrahiert, um Beobachtungen bei re-Importen effizient aktualisieren zu
-        können
-      </li>
-      <li>
-        <Code>quelle</Code>
+        <code className={code}>quelle</code>
         {`: Woher die Beobachtung stammt. Möglichst kurz und klar, ähnlich
         Literaturzitaten. Beispiel: "Info Spezies 2017". Extrahiert, um Beobachtungen effizient beschriften zu können`}
       </li>
       <li>
-        <Code>art_id</Code>: beschreibt die Art. Fremdschlüssel aus Tabelle{' '}
-        <Code>ae_taxonomies</Code>. Extrahiert, um Beobachtungen effizient
-        beschriften zu können
+        <code className={code}>art_id</code>: beschreibt die Art. Fremdschlüssel
+        aus Tabelle <code className={code}>ae_taxonomies</code>. Extrahiert, um
+        Beobachtungen effizient beschriften zu können
       </li>
       <li>
-        <Code>art_id_original</Code>: Am Unterschied zwischen art_id_original
-        (unverändert) und art_id (verändert) wird erkenntlich, wenn die
-        Zuordnung des Taxon verändert wurde. Extrahiert, um Taxon-Änderungen
-        effizient abfragen zu können
+        <code className={code}>art_id_original</code>: Am Unterschied zwischen
+        art_id_original (unverändert) und art_id (verändert) wird erkenntlich,
+        wenn die Zuordnung des Taxon verändert wurde. Extrahiert, um
+        Taxon-Änderungen effizient abfragen zu können
       </li>
       <li>
-        <Code>autor</Code>: Autor der Beobachtung. Extrahiert, um Beobachtungen
-        effizient beschriften zu können
+        <code className={code}>autor</code>: Autor der Beobachtung. Extrahiert,
+        um Beobachtungen effizient beschriften zu können
       </li>
       <li>
-        <Code>datum</Code>: Datum der Beobachtung. Extrahiert, um Beobachtungen
-        effizient beschriften zu können
+        <code className={code}>datum</code>: Datum der Beobachtung. Extrahiert,
+        um Beobachtungen effizient beschriften zu können
       </li>
       <li>
-        <Code>geom_point</Code>: Die Geometrie der Beobachtung. Extrahiert, um
-        Beobachtungen effizient in Karten anzeigen zu können
+        <code className={code}>geom_point</code>: Die Geometrie der Beobachtung.
+        Extrahiert, um Beobachtungen effizient in Karten anzeigen zu können
       </li>
       <li>
-        <Code>tpop_id</Code>
+        <code className={code}>tpop_id</code>
         {`: dieser Teilpopulation wird die Beobachtung
         zugeordnet`}
       </li>
       <li>
-        <Code>nicht_zuordnen</Code>
+        <code className={code}>nicht_zuordnen</code>
         {`: "Ja" oder "nein". Wird "ja" gesetzt, wenn eine Beobachtung
         keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld
         begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder
         die Beobachtung ist nicht (genau genug) lokalisierbar`}
       </li>
       <li>
-        <Code>bemerkungen</Code>: Bemerkungen zur Zuordnung
+        <code className={code}>bemerkungen</code>: Bemerkungen zur Zuordnung
       </li>
       <li>
-        <Code>infoflora_informiert_datum</Code>: Wann ein Email an Info Flora
-        generiert wurde
+        <code className={code}>infoflora_informiert_datum</code>: Wann ein Email
+        an Info Flora generiert wurde
       </li>
       <li>
-        <Code>created_at</Code>, <Code>update_at</Code>, <Code>changed_by</Code>
-        : Dokumentiert die letzte Änderung am Datensatz
+        <code className={code}>created_at</code>,{' '}
+        <code className={code}>update_at</code>,{' '}
+        <code className={code}>changed_by</code>: Dokumentiert die letzte
+        Änderung am Datensatz
       </li>
       <li>
         {`id_evab, id_evab_lc: Relikte aus der Zeit, als Beobachtungen aus EvAB

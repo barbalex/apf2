@@ -1,4 +1,3 @@
-import { DokuDate } from '../../DesktopDocs.jsx'
 import ekplanFilternJahr from './ekplan_filtern_jahr.gif'
 import ekplanenAp from './ekplanen_ap.png'
 import ekplanenAuto from './ekplanen_auto.gif'
@@ -20,10 +19,12 @@ import ekplanenPlan from './ekplanen_plan.png'
 import ekplanenSpalten from './ekplanen_spalten.png'
 import filtern from './filtern.gif'
 
+import { dokuDate } from '../../DesktopDocs.module.css'
+
 export const Component = () => (
   <>
     <h1>Erfolgs-Kontrollen planen</h1>
-    <DokuDate>10.09.2019</DokuDate>
+    <p className={dokuDate}>10.09.2019</p>
     <p>
       <strong>Inhalt</strong>
     </p>
