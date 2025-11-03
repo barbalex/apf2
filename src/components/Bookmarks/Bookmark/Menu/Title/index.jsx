@@ -3,60 +3,19 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Collapse from '@mui/material/Collapse'
 import { MdFilterAlt } from 'react-icons/md'
-import styled from '@emotion/styled'
 import isUuid from 'is-uuid'
 import { useResizeDetector } from 'react-resize-detector'
 import { FilterInput } from './FilterInput.jsx'
 import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.jsx'
 
-const Container = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  z-index: 1;
-  border-radius: 4px;
-  min-width: ${(props) => props.minwidth}px;
-`
-const ContentWrapper = styled.div`
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  min-width: ${(props) => props.minwidth}px;
-  background-color: white;
-`
-const MenuTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 0.6666667px solid rgba(0, 0, 0, 0.12);
-  border-radius: 4px;
-  font-weight: bold;
-  min-height: 40px;
-`
-const TitleDiv = styled.div`
-  padding: 0 16px;
-  user-select: none;
-  cursor: default;
-  white-space: nowrap;
-  overflow: hidden;
-  flex-shrink: 0;
-`
-const Filters = styled.div`
-  margin-right: 8px;
-  display: flex;
-  align-items: center;
-  flex-grow: 0;
-  flex-shrink: 1;
-`
-const StyledTooltip = styled(Tooltip)`
-  ${(props) => (props.show === 'true' ? '' : 'display: none;')}
-`
-const ApFilterFitter = styled.div`
-  margin-top: -14px;
-  margin-left: 15px;
-  margin-right: -15px;
-  width: 58px;
-`
+import {
+  container,
+  contentWrapper,
+  menuTitle,
+  title,
+  filters,
+  apFilterFitter,
+} from './index.module.css'
 
 export const Title = ({
   navData,
@@ -93,15 +52,27 @@ export const Title = ({
   const minWidth = Math.max(parentWidth ?? 0, (titleWidth ?? 40) + 40, 80)
 
   return (
-    <Container minwidth={minWidth}>
-      <ContentWrapper minwidth={minWidth}>
-        <MenuTitle>
-          <TitleDiv ref={ref}>{navData.label}</TitleDiv>
+    <div
+      className={container}
+      style={{ minWidth }}
+    >
+      <div
+        className={contentWrapper}
+        style={{ minWidth }}
+      >
+        <div className={menuTitle}>
+          <div
+            className={title}
+            ref={ref}
+          >
+            {navData.label}
+          </div>
           {!!parentWidth && (
-            <Filters>
-              <StyledTooltip
+            <div className={filters}>
+              <Tooltip
                 title="Filtern"
                 show={isUuidList.toString()}
+                style={isUuidList ? {} : { display: 'none' }}
               >
                 <IconButton
                   aria-label="Filtern"
@@ -109,15 +80,15 @@ export const Title = ({
                 >
                   <MdFilterAlt />
                 </IconButton>
-              </StyledTooltip>
+              </Tooltip>
               {isAps && (
-                <ApFilterFitter>
+                <div className={apFilterFitter}>
                   <ApFilter />
-                </ApFilterFitter>
+                </div>
               )}
-            </Filters>
+            </div>
           )}
-        </MenuTitle>
+        </div>
         <Collapse in={filterInputIsVisible}>
           <FilterInput
             width={parentWidth}
@@ -126,7 +97,7 @@ export const Title = ({
             ref={filterInputRef}
           />
         </Collapse>
-      </ContentWrapper>
-    </Container>
+      </div>
+    </div>
   )
 }
