@@ -1,9 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { StyledTableCell, InfoRow } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
+
+import { infoRow, tableCell } from './index.module.css'
 
 export const CellForYearTitle = observer(({ row, isOdd }) => {
   const store = useContext(MobxContext)
@@ -18,15 +19,15 @@ export const CellForYearTitle = observer(({ row, isOdd }) => {
   }
 
   return (
-    <StyledTableCell
+    <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
-      className={className}
+      className={`${className} ${tableCell}`}
       style={style}
     >
-      {showEk && <InfoRow>EK:</InfoRow>}
-      {showEkf && <InfoRow>EKF:</InfoRow>}
-      {showMassn && <InfoRow>Ansied:</InfoRow>}
-    </StyledTableCell>
+      {showEk && <div className={infoRow}>EK:</div>}
+      {showEkf && <div className={infoRow}>EKF:</div>}
+      {showMassn && <div className={infoRow}>Ansied:</div>}
+    </div>
   )
 })
