@@ -135,8 +135,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
                 viewBox="4 3 17 17"
                 height={23}
                 style={{
-                  color:
-                    nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
+                  color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                 }}
                 className={openNode}
               />
@@ -147,8 +146,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
             {symbolIcon === 'loadingIcon' && (
               <MdMoreHoriz
                 style={{
-                  color:
-                    nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
+                  color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                 }}
                 className={loading}
               />
@@ -171,7 +169,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
           onClick={onClickNode}
           style={{
             fontWeight: nodeIsInActiveNodePath ? 700 : 'inherit',
-            color: nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit',
+            color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
           }}
         >
           {nodeLabelFilter?.[node.menuType] ?

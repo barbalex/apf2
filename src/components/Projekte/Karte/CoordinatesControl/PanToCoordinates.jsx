@@ -177,15 +177,11 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
           <IconButton
             aria-label={centerOnCoordsTitle}
             onClick={onClickGoto}
-            style={{
-              cursor: centerOnCoordsDisabled ? 'pointer !important' : 'default',
-            }}
+            style={{ cursor: centerOnCoordsDisabled ? 'pointer' : 'default' }}
             className={iconButton}
           >
             <MdMyLocation
-              style={{
-                color: centerOnCoordsDisabled ? 'grey !important' : 'unset',
-              }}
+              style={{ color: centerOnCoordsDisabled ? 'grey' : 'unset' }}
               className={panIcon}
             />
           </IconButton>

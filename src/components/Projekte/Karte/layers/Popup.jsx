@@ -26,7 +26,7 @@ export const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
             style={{
               display: 'grid',
               gridTemplateColumns: '85px 1fr',
-              fontSize: 'x-small !important',
+              fontSize: 'x-small',
               backgroundColor:
                 index % 2 === 0 ? 'rgba(0, 0, 0, 0.05)' : 'white',
               color: index % 2 === 0 ? 'black' : 'inherit',

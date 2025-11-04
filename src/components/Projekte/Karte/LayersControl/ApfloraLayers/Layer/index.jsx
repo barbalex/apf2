@@ -215,10 +215,7 @@ export const Layer = observer(({ apfloraLayer }) => {
                 />
               : <MdPlayCircleOutline
                   style={{
-                    color:
-                      assigningispossible ? 'black' : (
-                        'rgba(0,0,0,0.2) !important'
-                      ),
+                    color: assigningispossible ? 'black' : 'rgba(0,0,0,0.2)',
                     cursor: assigningispossible ? 'pointer' : 'not-allowed',
                   }}
                   className={icon}
