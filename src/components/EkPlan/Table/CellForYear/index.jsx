@@ -2,7 +2,6 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 
-import { StyledTableCell } from '../index.jsx'
 import { EkIcon } from './EkIcon.jsx'
 import { MassnIcon } from './MassnIcon.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -10,7 +9,7 @@ import { query } from './query.js'
 import { yearColumnWidth } from './yearColumnWidth.js'
 import { hover } from 'framer-motion'
 
-import { infoRow } from '../index.module.css'
+import { infoRow, tableCell } from '../index.module.css'
 
 export const CellForYear = observer(
   ({ year, row, isOdd, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
@@ -63,11 +62,11 @@ export const CellForYear = observer(
     }
 
     return (
-      <StyledTableCell
+      <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         onClick={onClickCell}
-        className={className}
+        className={`${className} ${tableCell}`}
         style={cellStyle}
       >
         <div className={infoRow}>
@@ -91,7 +90,7 @@ export const CellForYear = observer(
         <div className={infoRow}>
           {showMassn && <MassnIcon ansiedlungs={ansiedlungs} />}
         </div>
-      </StyledTableCell>
+      </div>
     )
   },
 )
