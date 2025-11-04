@@ -9,6 +9,7 @@ import { InfoRow } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.js'
 import { yearColumnWidth } from './yearColumnWidth.js'
+import { hover } from 'framer-motion'
 
 export const CellForYear = observer(
   ({ year, row, isOdd, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
@@ -42,20 +43,31 @@ export const CellForYear = observer(
       setYearMenuAnchor(event.currentTarget.getBoundingClientRect())
     }
 
-    const classes = []
-    if (hovered.year === year) classes.push('column-hovered')
-    if (hovered.tpopId === row.id) classes.push('tpop-hovered')
+    const classes = [
+      ...(hovered.year === year ? ['column-hovered'] : []),
+      ...(hovered.tpopId === row.id ? ['tpop-hovered'] : []),
+    ]
     const className = classes.join(' ')
+
+    const cellStyle = {
+      width: yearColumnWidth,
+      minWidth: yearColumnWidth,
+      // WEIRD: this is not applied for clicked
+      backgroundColor:
+        clicked ? 'rgb(255,211,167) !important'
+        : isOdd ? 'rgb(255, 255, 252)'
+        : 'unset',
+      // applying a border instead
+      ...(clicked ? { border: '2px solid rgb(255, 140, 0)' } : {}),
+    }
 
     return (
       <StyledTableCell
-        width={yearColumnWidth}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
-        data-clicked={clicked}
-        data-isodd={isOdd}
         onClick={onClickCell}
         className={className}
+        style={cellStyle}
       >
         <InfoRow>
           {showEk && (

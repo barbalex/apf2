@@ -11,13 +11,18 @@ export const CellForYearTitle = observer(({ row, isOdd }) => {
   const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
   const onMouseEnter = () => hovered.setTpopId(row.id)
 
+  const style = {
+    width: yearColumnWidth,
+    minWidth: yearColumnWidth,
+    backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+  }
+
   return (
     <StyledTableCell
-      width={yearColumnWidth}
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
-      data-isodd={isOdd}
+      style={style}
     >
       {showEk && <InfoRow>EK:</InfoRow>}
       {showEkf && <InfoRow>EKF:</InfoRow>}

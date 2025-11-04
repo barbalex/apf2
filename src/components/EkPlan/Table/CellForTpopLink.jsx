@@ -6,6 +6,7 @@ import { StyledTableCell } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
 import { link } from './CellForTpopLink.module.css'
+import { min } from 'date-fns'
 
 export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
   const store = useContext(MobxContext)
@@ -21,13 +22,18 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
     window.open(field.value)
   }
 
+  const tableCellStyle = {
+    width,
+    minWidth: width,
+    backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+  }
+
   return (
     <StyledTableCell
-      width={width}
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
       className={className}
-      data-isodd={isOdd}
+      style={tableCellStyle}
     >
       <div
         className={link}

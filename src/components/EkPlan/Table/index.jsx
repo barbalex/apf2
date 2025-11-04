@@ -49,25 +49,16 @@ export const StyledTableCell = styled.div`
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   padding: 2px 4px !important;
-  padding-left: ${(props) =>
-    props['data-firstchild'] ? '10px !important' : '2px'};
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
-  background: ${(props) =>
-    props['data-clicked'] ? 'rgb(255,211,167) !important'
-    : props['data-isodd'] ? 'rgb(255, 255, 252)'
-    : 'unset'};
-  box-sizing: border-box;
-  width: ${(props) => props.width}px;
-  min-width: ${(props) => props.width}px;
   height: 60px;
   &.tpop-hovered {
-    background-color: hsla(45, 100%, 90%, 1);
+    background-color: hsla(45, 100%, 90%, 1) !important;
   }
   &.column-hovered {
-    background-color: hsla(45, 100%, 90%, 1);
+    background-color: hsla(45, 100%, 90%, 1) !important;
   }
   div {
     white-space: nowrap !important;
@@ -81,8 +72,6 @@ export const StyledCellForSelect = styled(StyledTableCell)`
   border-left: solid green 1px;
   border-right: solid green 1px;
   box-sizing: border-box;
-  width: ${(props) => props.width}px;
-  min-width: ${(props) => props.width}px;
   height: 60px;
   display: flex;
   align-items: center;

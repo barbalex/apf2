@@ -13,13 +13,18 @@ export const CellForEkfrequenzAbweichend = observer(
     const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
     const onMouseEnter = () => hovered.setTpopId(row.id)
 
+    const cellStyle = {
+      width,
+      minWidth: width,
+      backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+    }
+
     return (
       <StyledCellForSelect
-        width={width}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         className={className}
-        data-isodd={isOdd}
+        style={cellStyle}
       >
         <Checkbox
           row={row.tpop}

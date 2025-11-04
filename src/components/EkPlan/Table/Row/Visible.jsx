@@ -153,6 +153,7 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
               key={value.label}
               field={value}
               row={row}
+              isOdd={isOdd}
               firstChild={columnIndex === 0}
               width={width}
             />

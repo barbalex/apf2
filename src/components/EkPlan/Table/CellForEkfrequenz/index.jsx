@@ -77,15 +77,20 @@ export const CellForEkfrequenz = observer(
     const onOpen = () => setOpen(true)
     const onClose = () => setOpen(false)
 
+    const cellStyle = {
+      width,
+      minWidth: width,
+      backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+    }
+
     return (
       <>
         <StyledCellForSelect
-          width={width}
           onMouseEnter={onMouseEnter}
           onMouseLeave={hovered.reset}
           onClick={onOpen}
           className={className}
-          data-isodd={isOdd}
+          style={cellStyle}
         >
           {valueToShow}
         </StyledCellForSelect>
