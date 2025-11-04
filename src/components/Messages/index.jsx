@@ -71,8 +71,6 @@ export const Messages = observer(() => {
     (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
   )
 
-  console.log('Messages', { unreadMessages, userName, aYearAgo })
-
   const onClickReadAll = async () => {
     await Promise.all(
       unreadMessages.map(async (message) => {
