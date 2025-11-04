@@ -133,7 +133,7 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
   }
 
   const menuItemStyle = {
-    color: yearHasKontrollen ? 'black' : 'rgba(0,0,0,0.3) !important',
+    color: yearHasKontrollen ? 'black' : 'rgba(0,0,0,0.3)',
   }
 
   return (
