@@ -10,8 +10,9 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
-import { StyledCellForSelect } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
+
+import { cellForSelect } from '../index.module.css'
 
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.js'),
@@ -45,7 +46,6 @@ export const CellForEkfrequenz = observer(
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { hovered, apValues } = store.ekPlan
-    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)
 
@@ -77,23 +77,27 @@ export const CellForEkfrequenz = observer(
     const onOpen = () => setOpen(true)
     const onClose = () => setOpen(false)
 
+    const isHovered = hovered.tpopId === row.id
     const cellStyle = {
-      width,
+      maxWidth: width,
       minWidth: width,
-      backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+      backgroundColor:
+        isHovered ? 'hsla(45, 100%, 90%, 1)'
+        : isOdd ? 'rgb(255, 255, 252)'
+        : 'unset',
     }
 
     return (
       <>
-        <StyledCellForSelect
+        <div
           onMouseEnter={onMouseEnter}
           onMouseLeave={hovered.reset}
           onClick={onOpen}
-          className={className}
+          className={cellForSelect}
           style={cellStyle}
         >
           {valueToShow}
-        </StyledCellForSelect>
+        </div>
         <Dialog
           onClose={onClose}
           open={open}
