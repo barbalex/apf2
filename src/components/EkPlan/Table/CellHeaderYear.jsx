@@ -126,7 +126,11 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
   }
 
   const onMouseEnter = () => hovered.setYear(column)
-  const className = hovered.year === column ? 'column-hovered' : ''
+
+  const isHovered = hovered.year === column
+  const style = {
+    ...(isHovered ? { backgroundColor: 'rgba(182, 194, 182, 1)' } : {}),
+  }
 
   const menuItemStyle = {
     color: yearHasKontrollen ? 'black' : 'rgba(0,0,0,0.3) !important',
@@ -140,7 +144,8 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
         aria-controls="yearHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
-        className={`${className} ${cell}`}
+        className={cell}
+        style={style}
       >
         <div className={title}>{column}</div>
         <div className={dropdown}>
