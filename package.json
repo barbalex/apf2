@@ -36,7 +36,7 @@
     "@turf/ellipse": "7.2.0",
     "@turf/helpers": "7.2.0",
     "@turf/nearest-point": "7.2.0",
-    "@uploadcare/react-uploader": "1.10.2",
+    "@uploadcare/react-uploader": "1.11.0",
     "@vercel/analytics": "1.5.0",
     "array-move": "4.0.0",
     "autosuggest-highlight": "3.3.4",
