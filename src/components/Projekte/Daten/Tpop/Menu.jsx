@@ -380,9 +380,9 @@ export const Menu = observer(({ row }) => {
             <MdOutlineMoveDown
               style={{
                 color:
-                  isMovingTpop && thisTpopIsMoving ?
-                    'rgb(255, 90, 0) !important'
-                  : 'white',
+                  isMovingTpop && thisTpopIsMoving ? 'rgb(255, 90, 0)' : (
+                    'white'
+                  ),
               }}
             />
           </IconButton>
@@ -404,8 +404,7 @@ export const Menu = observer(({ row }) => {
           <IconButton onClick={onClickCopy}>
             <MdContentCopy
               style={{
-                color:
-                  thisTpopIsCopying ? 'rgb(255, 90, 0) !important' : 'white',
+                color: thisTpopIsCopying ? 'rgb(255, 90, 0)' : 'white',
               }}
             />
           </IconButton>
