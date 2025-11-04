@@ -230,7 +230,7 @@ export const Menu = observer(({ row }) => {
               style={{
                 color:
                   isMovingTpopfreiwkontr && thisTpopfreiwkontrIsMoving ?
-                    'rgb(255, 90, 0) !important'
+                    'rgb(255, 90, 0)'
                   : 'white',
               }}
             />
@@ -254,9 +254,7 @@ export const Menu = observer(({ row }) => {
             <MdContentCopy
               style={{
                 color:
-                  thisTpopfreiwkontrIsCopying ?
-                    'rgb(255, 90, 0) !important'
-                  : 'white',
+                  thisTpopfreiwkontrIsCopying ? 'rgb(255, 90, 0)' : 'white',
               }}
             />
           </IconButton>
