@@ -13,6 +13,7 @@ import { MobxContext } from '../../mobxContext.js'
 import { Error } from '../shared/Error.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { MessagesList } from './Messages/index.jsx'
+import { a } from '../Projekte/Karte/layers/Pop/statusGroup/a.js'
 
 const StyledDialog = styled(Dialog)`
   display: flex;
@@ -39,6 +40,8 @@ const getAYearAgo = () => {
   return now.toISOString()
 }
 
+const aYearAgo = getAYearAgo()
+
 export const Messages = observer(() => {
   const store = useContext(MobxContext)
   const { user } = store
@@ -47,10 +50,10 @@ export const Messages = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const aYearAgo = getAYearAgo()
-
+  // DO NOT use aYearAgo in queryKey, because it changes every second
+  // this causes the query to refetch all the time!
   const { data, error, refetch } = useQuery({
-    queryKey: ['UsermessagesQuery', userName, aYearAgo],
+    queryKey: ['UsermessagesQuery', userName],
     queryFn: async () =>
       apolloClient.query({
         query,
@@ -67,6 +70,8 @@ export const Messages = observer(() => {
   const unreadMessages = allMessages.filter(
     (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
   )
+
+  console.log('Messages', { unreadMessages, userName, aYearAgo })
 
   const onClickReadAll = async () => {
     await Promise.all(
