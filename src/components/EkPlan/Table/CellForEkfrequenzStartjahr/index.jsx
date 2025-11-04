@@ -19,22 +19,11 @@ const Container = styled.div`
   text-overflow: ellipsis !important;
   overflow: hidden !important;
   padding: 2px 4px !important;
-  padding-left: ${(props) =>
-    props['data-firstchild'] ? '10px !important' : '2px'};
+  padding-left: '2px';
   border-left: solid hsla(70, 80%, 75%, 1) 1px;
   border-right: solid hsla(70, 80%, 75%, 1) 1px;
   border-bottom: solid #e6e6e6 1px;
   box-sizing: border-box;
-  background: ${(props) =>
-    props['data-clicked'] ? 'rgb(255,211,167) !important'
-    : props['data-isodd'] ? 'rgb(255, 255, 252)'
-    : 'unset'};
-  &.tpop-hovered {
-    background-color: hsla(45, 100%, 90%, 1);
-  }
-  &.column-hovered {
-    background-color: hsla(45, 100%, 90%, 1);
-  }
   div {
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
@@ -47,8 +36,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: ${(props) => props.width}px;
-  min-width: ${(props) => props.width}px;
   height: 60px;
   &:focus-within {
     border: solid orange 3px;
@@ -74,7 +61,7 @@ export const CellForEkfrequenzStartjahr = observer(
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { hovered } = store.ekPlan
-    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+    const isHovered = hovered.tpopId === row.id
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)
 
@@ -109,11 +96,16 @@ export const CellForEkfrequenzStartjahr = observer(
 
     return (
       <Container
-        width={width}
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
-        className={className}
-        data-isodd={isOdd}
+        style={{
+          minWidth: width,
+          maxWidth: width,
+          backgroundColor:
+            isHovered ? 'hsla(45, 100%, 90%, 1)'
+            : isOdd ? 'rgb(255, 255, 252)'
+            : 'unset',
+        }}
       >
         <Input
           value={stateValue}
