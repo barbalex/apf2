@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { StyledTableCell } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
 import { container } from './CellForValue.module.css'
+import { tableCell } from './index.module.css'
 
 export const CellForValue = observer(
   ({ field, width, row, isOdd, firstChild }) => {
@@ -24,16 +24,16 @@ export const CellForValue = observer(
     }
 
     return (
-      <StyledTableCell
+      <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
-        className={className}
+        className={`${className} ${tableCell}`}
         style={tableCellStyle}
       >
         <div className={container}>
           <div>{value}</div>
         </div>
-      </StyledTableCell>
+      </div>
     )
   },
 )
