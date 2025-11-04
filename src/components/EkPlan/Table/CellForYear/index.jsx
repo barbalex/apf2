@@ -5,11 +5,12 @@ import { useQuery } from '@apollo/client/react'
 import { StyledTableCell } from '../index.jsx'
 import { EkIcon } from './EkIcon.jsx'
 import { MassnIcon } from './MassnIcon.jsx'
-import { InfoRow } from '../index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.js'
 import { yearColumnWidth } from './yearColumnWidth.js'
 import { hover } from 'framer-motion'
+
+import { infoRow } from '../index.module.css'
 
 export const CellForYear = observer(
   ({ year, row, isOdd, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
@@ -69,7 +70,7 @@ export const CellForYear = observer(
         className={className}
         style={cellStyle}
       >
-        <InfoRow>
+        <div className={infoRow}>
           {showEk && (
             <EkIcon
               planned={ekPlan}
@@ -77,8 +78,8 @@ export const CellForYear = observer(
               einheits={einheits}
             />
           )}
-        </InfoRow>
-        <InfoRow>
+        </div>
+        <div className={infoRow}>
           {showEkf && (
             <EkIcon
               planned={ekfPlan}
@@ -86,10 +87,10 @@ export const CellForYear = observer(
               einheits={einheits}
             />
           )}
-        </InfoRow>
-        <InfoRow>
+        </div>
+        <div className={infoRow}>
           {showMassn && <MassnIcon ansiedlungs={ansiedlungs} />}
-        </InfoRow>
+        </div>
       </StyledTableCell>
     )
   },
