@@ -13,10 +13,6 @@
   cursor: pointer;
   box-sizing: border-box;
   height: 60px;
-  &.column-hovered {
-    background: hsla(120, 25%, 82%, 1) !important;
-    font-weight: 700 !important;
-  }
 }
 
 .title {
