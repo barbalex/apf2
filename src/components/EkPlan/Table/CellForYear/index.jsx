@@ -43,21 +43,16 @@ export const CellForYear = observer(
       setYearMenuAnchor(event.currentTarget.getBoundingClientRect())
     }
 
-    const classes = [
-      ...(hovered.year === year ? ['column-hovered'] : []),
-      ...(hovered.tpopId === row.id ? ['tpop-hovered'] : []),
-    ]
-    const className = classes.join(' ')
+    const isHovered = hovered.year === year || hovered.tpopId === row.id
 
     const cellStyle = {
       width: yearColumnWidth,
       minWidth: yearColumnWidth,
-      // WEIRD: this is not applied for clicked
       backgroundColor:
-        clicked ? 'rgb(255,211,167) !important'
+        clicked ? 'rgb(255,211,167)'
+        : isHovered ? 'hsla(45, 100%, 90%, 1)'
         : isOdd ? 'rgb(255, 255, 252)'
         : 'unset',
-      // applying a border instead
       ...(clicked ? { border: '2px solid rgb(255, 140, 0)' } : {}),
     }
 
@@ -66,7 +61,7 @@ export const CellForYear = observer(
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         onClick={onClickCell}
-        className={`${className} ${tableCell}`}
+        className={tableCell}
         style={cellStyle}
       >
         <div className={infoRow}>
