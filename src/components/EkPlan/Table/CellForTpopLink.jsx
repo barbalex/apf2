@@ -5,15 +5,13 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../mobxContext.js'
 
 import { link } from './CellForTpopLink.module.css'
-import { min } from 'date-fns'
-
 import { tableCell } from './index.module.css'
 
 export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
   const store = useContext(MobxContext)
 
   const { hovered } = store.ekPlan
-  const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+  const isHovered = hovered.tpopId === row.id
   const onMouseEnter = () => hovered.setTpopId(row.id)
 
   const onClickLink = () => {
@@ -23,18 +21,21 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
     window.open(field.value)
   }
 
-  const tableCellStyle = {
-    width,
+  const cellStyle = {
+    maxWidth: width,
     minWidth: width,
-    backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+    backgroundColor:
+      isHovered ? 'hsla(45, 100%, 90%, 1)'
+      : isOdd ? 'rgb(255, 255, 252)'
+      : 'unset',
   }
 
   return (
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
-      className={`${className} ${tableCell}`}
-      style={tableCellStyle}
+      className={tableCell}
+      style={cellStyle}
     >
       <div
         className={link}
