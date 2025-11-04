@@ -2,11 +2,12 @@ import { useContext } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 
-import { StyledTableCell } from './index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
 import { link } from './CellForTpopLink.module.css'
 import { min } from 'date-fns'
+
+import { tableCell } from './index.module.css'
 
 export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
   const store = useContext(MobxContext)
@@ -29,10 +30,10 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
   }
 
   return (
-    <StyledTableCell
+    <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
-      className={className}
+      className={`${className} ${tableCell}`}
       style={tableCellStyle}
     >
       <div
@@ -44,6 +45,6 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
           <FaExternalLinkAlt />
         </div>
       </div>
-    </StyledTableCell>
+    </div>
   )
 })
