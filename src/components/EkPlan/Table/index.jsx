@@ -20,28 +20,7 @@ import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
 import { TpopRow } from './Row/index.jsx'
 import { EkplanTableHeader } from './Header.jsx'
 
-const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: calc(100% - 86px);
-  user-select: none !important;
-  display: flex;
-  flex-direction: column;
-`
-const YScrollContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-  scrollbar-gutter: stable;
-`
-// not in use
-// Setting overflow-y: auto on the body did not work
-// as the columns not initially visible would not be rendered
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-`
+import { container, yScrollContainer, exportButton } from './index.module.css'
 
 export const StyledTableCell = styled.div`
   font-size: 0.75rem !important;
@@ -90,19 +69,6 @@ export const InfoRow = styled.div`
   min-height: 19px;
   display: flex;
   align-items: center;
-`
-const ExportButton = styled(Button)`
-  position: absolute !important;
-  top: 53px !important;
-  right: 517px !important;
-  min-width: 9em !important;
-  text-transform: none !important;
-  height: 2em;
-  font-size: 0.75rem !important;
-  right: 10px;
-  padding: 2px 15px !important;
-  line-height: unset !important;
-  z-index: 5;
 `
 
 const getTpopFilter = ({
@@ -364,15 +330,19 @@ export const EkPlanTable = observer(() => {
         <SpinnerOverlay message="Startjahr und EK-Pläne werden gesetzt" />
       )}
       <Suspense fallback={<Spinner />}>
-        <ExportButton
+        <Button
           variant="outlined"
           onClick={onClickExport}
           color="inherit"
+          className={exportButton}
         >
           exportieren
-        </ExportButton>
-        <Container ref={resizeRef}>
-          <YScrollContainer>
+        </Button>
+        <div
+          className={container}
+          ref={resizeRef}
+        >
+          <div className={yScrollContainer}>
             <EkplanTableHeader
               tpopLength={tpops.length !== 0 ? tpops.length : '...'}
               tpopFilter={tpopFilter}
@@ -388,8 +358,8 @@ export const EkPlanTable = observer(() => {
                 years={years}
               />
             ))}
-          </YScrollContainer>
-        </Container>
+          </div>
+        </div>
       </Suspense>
       {!!yearMenuAnchor && <CellForYearMenu />}
     </ErrorBoundary>

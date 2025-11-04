@@ -1,0 +1,89 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 86px);
+  user-select: none !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.yScrollContainer {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  scrollbar-gutter: stable;
+}
+
+/* not in use */
+/* Setting overflow-y: auto on the body did not work */
+/* as the columns not initially visible would not be rendered */
+.body {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+}
+
+.tableCell {
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  padding: 2px 4px !important;
+  border-left: solid hsla(70, 80%, 75%, 1) 1px;
+  border-right: solid hsla(70, 80%, 75%, 1) 1px;
+  border-bottom: solid #e6e6e6 1px;
+  box-sizing: border-box;
+  height: 60px;
+  &.tpop-hovered {
+    background-color: hsla(45, 100%, 90%, 1) !important;
+  }
+  &.column-hovered {
+    background-color: hsla(45, 100%, 90%, 1) !important;
+  }
+  div {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
+}
+
+.cellForSelect {
+  padding: 0 12px !important;
+  font-size: unset !important;
+  border-left: solid green 1px;
+  border-right: solid green 1px;
+  box-sizing: border-box;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem !important;
+  cursor: pointer;
+  &:focus-within {
+    border: solid orange 3px;
+  }
+}
+
+.infoRow {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 19px;
+  min-height: 19px;
+  display: flex;
+  align-items: center;
+}
+
+.exportButton {
+  position: absolute !important;
+  top: 53px !important;
+  right: 517px !important;
+  min-width: 9em !important;
+  text-transform: none !important;
+  height: 2em;
+  font-size: 0.75rem !important;
+  right: 10px;
+  padding: 2px 15px !important;
+  line-height: unset !important;
+  z-index: 5;
+}
