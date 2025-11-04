@@ -1,7 +1,6 @@
 import { useContext, useState, Suspense } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useResizeDetector } from 'react-resize-detector'
@@ -21,46 +20,6 @@ import { TpopRow } from './Row/index.jsx'
 import { EkplanTableHeader } from './Header.jsx'
 
 import { container, yScrollContainer, exportButton } from './index.module.css'
-
-export const StyledTableCell = styled.div`
-  font-size: 0.75rem !important;
-  white-space: nowrap !important;
-  text-overflow: ellipsis !important;
-  overflow: hidden !important;
-  padding: 2px 4px !important;
-  border-left: solid hsla(70, 80%, 75%, 1) 1px;
-  border-right: solid hsla(70, 80%, 75%, 1) 1px;
-  border-bottom: solid #e6e6e6 1px;
-  box-sizing: border-box;
-  height: 60px;
-  &.tpop-hovered {
-    background-color: hsla(45, 100%, 90%, 1) !important;
-  }
-  &.column-hovered {
-    background-color: hsla(45, 100%, 90%, 1) !important;
-  }
-  div {
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    overflow: hidden !important;
-  }
-`
-export const StyledCellForSelect = styled(StyledTableCell)`
-  padding: 0 12px !important;
-  font-size: unset !important;
-  border-left: solid green 1px;
-  border-right: solid green 1px;
-  box-sizing: border-box;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem !important;
-  cursor: pointer;
-  &:focus-within {
-    border: solid orange 3px;
-  }
-`
 
 const getTpopFilter = ({
   apValues,
