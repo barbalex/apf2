@@ -13,21 +13,24 @@ export const CellForValue = observer(
     const { value } = field
 
     const { hovered } = store.ekPlan
-    const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+    const isHovered = hovered.tpopId === row.id
     const onMouseEnter = () => hovered.setTpopId(row.id)
 
     const tableCellStyle = {
       width,
       minWidth: width,
       paddingLeft: firstChild ? 10 : 2,
-      backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+      backgroundColor:
+        isHovered ? 'hsla(45, 100%, 90%, 1)'
+        : isOdd ? 'rgb(255, 255, 252)'
+        : 'unset',
     }
 
     return (
       <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
-        className={`${className} ${tableCell}`}
+        className={tableCell}
         style={tableCellStyle}
       >
         <div className={container}>
