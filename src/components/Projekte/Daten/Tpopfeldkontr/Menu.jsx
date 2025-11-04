@@ -280,7 +280,7 @@ export const Menu = observer(({ row }) => {
               style={{
                 color:
                   isMovingFeldkontr && thisTpopfeldkontrIsMoving ?
-                    'rgb(255, 90, 0) !important'
+                    'rgb(255, 90, 0)'
                   : 'white',
               }}
             />
@@ -299,8 +299,7 @@ export const Menu = observer(({ row }) => {
               <MdContentCopy
                 style={{
                   color:
-                    thisTpopfeldkontrIsCopying === 'true' ?
-                      'rgb(255, 90, 0) !important'
+                    thisTpopfeldkontrIsCopying === 'true' ? 'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
@@ -324,8 +323,7 @@ export const Menu = observer(({ row }) => {
               <MdContentCopy
                 style={{
                   color:
-                    thisTpopfeldkontrIsCopying === 'true' ?
-                      'rgb(255, 90, 0) !important'
+                    thisTpopfeldkontrIsCopying === 'true' ? 'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
