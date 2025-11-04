@@ -9,20 +9,23 @@ import { infoRow, tableCell } from './index.module.css'
 export const CellForYearTitle = observer(({ row, isOdd }) => {
   const store = useContext(MobxContext)
   const { showEk, showEkf, showMassn, hovered } = store.ekPlan
-  const className = hovered.tpopId === row.id ? 'tpop-hovered' : ''
+  const isHovered = hovered.tpopId === row.id
   const onMouseEnter = () => hovered.setTpopId(row.id)
 
   const style = {
-    width: yearColumnWidth,
+    maxWidth: yearColumnWidth,
     minWidth: yearColumnWidth,
-    backgroundColor: isOdd ? 'rgb(255, 255, 252)' : 'unset',
+    backgroundColor:
+      isHovered ? 'hsla(45, 100%, 90%, 1)'
+      : isOdd ? 'rgb(255, 255, 252)'
+      : 'unset',
   }
 
   return (
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
-      className={`${className} ${tableCell}`}
+      className={tableCell}
       style={style}
     >
       {showEk && <div className={infoRow}>EK:</div>}
