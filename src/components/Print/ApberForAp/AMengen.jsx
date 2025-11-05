@@ -1,52 +1,22 @@
 import styled from '@emotion/styled'
 
-const Container = styled.div`
-  padding: 0.2cm 0;
-  break-inside: avoid;
-`
-const Title = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: -18px;
-`
-const Row = styled.div`
-  display: flex;
-  padding: 0.05cm 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  page-break-inside: avoid;
-`
-const YearRow = styled.div`
-  display: flex;
-  padding: 0.05cm 0;
-`
-const TotalRow = styled.div`
-  display: flex;
-  padding: 0.05cm 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  page-break-inside: avoid;
-  font-weight: 700;
-`
-const LabelRow = styled.div`
-  display: flex;
-  padding: 0.05cm 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  page-break-inside: avoid;
-  font-size: 12px;
-`
-const Year = styled.div`
-  position: relative;
-  left: 10.9cm;
-  width: 2cm;
-`
-const Label1 = styled.div`
-  min-width: 10cm;
-  max-width: 10cm;
-`
-const Label2 = styled.div`
-  min-width: 8.8cm;
-  max-width: 8.8cm;
-  padding-left: 1.2cm;
-`
+import {
+  container,
+  title,
+  row,
+  yearRow,
+  totalRow,
+  labelRow,
+  year,
+  label1,
+  label2,
+  label2Davon,
+  label2AfterDavon,
+  label3,
+  number,
+  popSeit,
+} from './AMengen.module.css'
+
 const Label2Davon = styled.div`
   font-size: 10px;
   min-width: 1.8cm;
@@ -100,62 +70,62 @@ export const AMengen = ({ loading, jahr, node }) => {
   const a6LTpop = loading ? '...' : a7LTpop + a8LTpop
 
   return (
-    <Container>
-      <Title>A. Grundmengen</Title>
-      <YearRow>
-        <Year>{jahr}</Year>
-      </YearRow>
-      <LabelRow>
-        <Label1 />
+    <div className={container}>
+      <h3 className={title}>A. Grundmengen</h3>
+      <div className={yearRow}>
+        <div className={year}>{jahr}</div>
+      </div>
+      <div className={labelRow}>
+        <div className={label1} />
         <Number>Pop</Number>
         <Number>TPop</Number>
         <PopSeit />
         <Number />
-      </LabelRow>
-      <Row>
-        <Label1>Anzahl bekannt</Label1>
+      </div>
+      <div className={row}>
+        <div className={label1}>Anzahl bekannt</div>
         <Number>{loading ? '...' : a1LPop}</Number>
         <Number>{loading ? '...' : a1LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-      <TotalRow>
-        <Label2>aktuell</Label2>
+      </div>
+      <div className={totalRow}>
+        <div className={label2}>aktuell</div>
         <Number>{loading ? '...' : a2LPop}</Number>
         <Number>{loading ? '...' : a2LTpop}</Number>
         <PopSeit />
         <Number />
-      </TotalRow>
-      <Row>
+      </div>
+      <div className={row}>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>ursprünglich</Label2AfterDavon>
         <Number>{loading ? '...' : a3LPop}</Number>
         <Number>{loading ? '...' : a3LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-      <Row>
+      </div>
+      <div className={row}>
         <Label3>angesiedelt (vor Beginn AP)</Label3>
         <Number>{loading ? '...' : a4LPop}</Number>
         <Number>{loading ? '...' : a4LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-      <Row>
+      </div>
+      <div className={row}>
         <Label3>angesiedelt (nach Beginn AP)</Label3>
         <Number>{loading ? '...' : a5LPop}</Number>
         <Number>{loading ? '...' : a5LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-      <Row>
-        <Label2>erloschen (nach 1950):</Label2>
+      </div>
+      <div className={row}>
+        <div className={label2}>erloschen (nach 1950):</div>
         <Number>{loading ? '...' : a6LPop}</Number>
         <Number>{loading ? '...' : a6LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-      <Row>
+      </div>
+      <div className={row}>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>
           zuvor autochthon oder vor AP angesiedelt
@@ -164,21 +134,21 @@ export const AMengen = ({ loading, jahr, node }) => {
         <Number>{loading ? '...' : a7LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-      <Row>
+      </div>
+      <div className={row}>
         <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
         <Number>{loading ? '...' : a8LPop}</Number>
         <Number>{loading ? '...' : a8LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-      <Row>
-        <Label2>Ansaatversuche:</Label2>
+      </div>
+      <div className={row}>
+        <div className={label2}>Ansaatversuche:</div>
         <Number>{loading ? '...' : a9LPop}</Number>
         <Number>{loading ? '...' : a9LTpop}</Number>
         <PopSeit />
         <Number />
-      </Row>
-    </Container>
+      </div>
+    </div>
   )
 }
