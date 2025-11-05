@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -13,19 +12,7 @@ import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.jsx
 import { CellHeaderYear } from './CellHeaderYear.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-`
-const TpopTitle = styled.h4`
-  position: absolute;
-  left: 10px;
-  z-index: 3;
-  top: -20px;
-`
+import { container, title } from './Header.module.css'
 
 export const EkplanTableHeader = observer(
   ({ tpopLength, refetch, tpopFilter, years }) => {
@@ -42,8 +29,8 @@ export const EkplanTableHeader = observer(
 
     return (
       <ErrorBoundary>
-        <HeaderContainer>
-          <TpopTitle>{`${tpopLength} Teilpopulationen`}</TpopTitle>
+        <div className={container}>
+          <h4 className={title}>{`${tpopLength} Teilpopulationen`}</h4>
           {headerFieldsFixed.map((column, index) => {
             const field = column.name
             if (field === 'ekfrequenz') {
@@ -95,7 +82,7 @@ export const EkplanTableHeader = observer(
               tpopFilter={tpopFilter}
             />
           ))}
-        </HeaderContainer>
+        </div>
       </ErrorBoundary>
     )
   },
