@@ -1,17 +1,15 @@
-import styled from '@emotion/styled'
+import { MdLocalFlorist } from 'react-icons/md'
 
-import { MapIcon } from './MapIcon.jsx'
 import { IconContainer } from './IconContainer.jsx'
 
-const StyledMapIcon = styled(MapIcon)`
-  color: #9a009a !important;
-`
+import { mapIcon } from './BeobnichtbeurteiltMapIcon.module.css'
+import { iconContainer } from './index.module.css'
 
 export const BeobnichtbeurteiltMapIcon = () => (
-  <IconContainer
+  <div
     title="Beobachtungen nicht beurteilt in Karte sichtbar"
-    className="iconContainer"
+    className={iconContainer}
   >
-    <StyledMapIcon />
-  </IconContainer>
+    <MdLocalFlorist className={mapIcon} />
+  </div>
 )
