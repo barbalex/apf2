@@ -1,0 +1,26 @@
+.yearCellMenuTitle {
+  margin-top: 0;
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+  color: grey;
+}
+
+.menuItem {
+  min-height: 17px !important;
+  line-height: 1rem !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.listItemText {
+  span {
+    font-size: 0.85rem !important;
+  }
+}
+
+.listItemIcon {
+  min-width: 36px !important;
+}

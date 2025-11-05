@@ -4,7 +4,6 @@ import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -19,29 +18,12 @@ import { EksMenu } from './EksMenu/index.jsx'
 import { EkfsMenu } from './EkfsMenu/index.jsx'
 import { MassnsMenu } from './MassnsMenu/index.jsx'
 
-const YearCellMenuTitle = styled.h5`
-  margin-top: 0;
-  padding-top: 8px;
-  padding-left: 16px;
-  padding-right: 16px;
-  margin-bottom: 8px;
-  font-size: 0.75rem;
-  color: grey;
-`
-export const StyledMenuItem = styled(MenuItem)`
-  min-height: 17px !important;
-  line-height: 1rem !important;
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-`
-const StyledListItemText = styled(ListItemText)`
-  span {
-    font-size: 0.85rem !important;
-  }
-`
-const StyledListItemIcon = styled(ListItemIcon)`
-  min-width: 36px !important;
-`
+import {
+  yearCellMenuTitle,
+  menuItem,
+  listItemText,
+  listItemIcon,
+} from './index.module.css'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
@@ -165,84 +147,120 @@ export const CellForYearMenu = observer(() => {
         open={Boolean(yearMenuAnchor)}
         onClose={closeYearCellMenu}
       >
-        <YearCellMenuTitle>{yearClicked.title}</YearCellMenuTitle>
+        <h5 className={yearCellMenuTitle}>{yearClicked.title}</h5>
         {showEk && (
           <div>
             {yearClicked.ekPlan ?
-              <StyledMenuItem onClick={onClickEkEntfernen}>
-                <StyledListItemIcon>
+              <MenuItem
+                className={menuItem}
+                onClick={onClickEkEntfernen}
+              >
+                <ListItemIcon className={listItemIcon}>
                   <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EK-Planung entfernen" />
-              </StyledMenuItem>
-            : <StyledMenuItem onClick={onClickEkPlanen}>
-                <StyledListItemIcon>
+                </ListItemIcon>
+                <ListItemText
+                  className={listItemText}
+                  primary="EK-Planung entfernen"
+                />
+              </MenuItem>
+            : <MenuItem
+                className={menuItem}
+                onClick={onClickEkPlanen}
+              >
+                <ListItemIcon className={listItemIcon}>
                   <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EK planen" />
-              </StyledMenuItem>
+                </ListItemIcon>
+                <ListItemText
+                  className={listItemText}
+                  primary="EK planen"
+                />
+              </MenuItem>
             }
           </div>
         )}
         {showEkf && (
           <div>
             {yearClicked.ekfPlan ?
-              <StyledMenuItem onClick={onClickEkfEntfernen}>
-                <StyledListItemIcon>
+              <MenuItem
+                className={menuItem}
+                onClick={onClickEkfEntfernen}
+              >
+                <ListItemIcon className={listItemIcon}>
                   <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EKF-Planung entfernen" />
-              </StyledMenuItem>
-            : <StyledMenuItem onClick={onClickEkfPlanen}>
-                <StyledListItemIcon>
+                </ListItemIcon>
+                <ListItemText
+                  className={listItemText}
+                  primary="EKF-Planung entfernen"
+                />
+              </MenuItem>
+            : <MenuItem
+                className={menuItem}
+                onClick={onClickEkfPlanen}
+              >
+                <ListItemIcon className={listItemIcon}>
                   <EditIcon />
-                </StyledListItemIcon>
-                <StyledListItemText primary="EKF planen" />
-              </StyledMenuItem>
+                </ListItemIcon>
+                <ListItemText
+                  className={listItemText}
+                  primary="EKF planen"
+                />
+              </MenuItem>
             }
           </div>
         )}
         {showEk && !!eks.length && (
-          <StyledMenuItem
+          <MenuItem
+            className={menuItem}
             onClick={(e) => setEksAnchor(e.currentTarget)}
             style={{
               backgroundColor:
                 Boolean(eksAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
-            <StyledListItemIcon>
+            <ListItemIcon className={listItemIcon}>
               <ListIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary={`EK (${eks.length})`} />
-          </StyledMenuItem>
+            </ListItemIcon>
+            <ListItemText
+              className={listItemText}
+              primary={`EK (${eks.length})`}
+            />
+          </MenuItem>
         )}
         {showEkf && !!ekfs.length && (
-          <StyledMenuItem
+          <MenuItem
+            className={menuItem}
             onClick={(e) => setEkfsAnchor(e.currentTarget)}
             style={{
               backgroundColor:
                 Boolean(ekfsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
-            <StyledListItemIcon>
+            <ListItemIcon className={listItemIcon}>
               <ListIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary={`EKF (${ekfs.length})`} />
-          </StyledMenuItem>
+            </ListItemIcon>
+            <ListItemText
+              className={listItemText}
+              primary={`EKF (${ekfs.length})`}
+            />
+          </MenuItem>
         )}
         {showMassn && !!massns.length && (
-          <StyledMenuItem
+          <MenuItem
+            className={menuItem}
             onClick={(e) => setMassnsAnchor(e.currentTarget)}
             style={{
               backgroundColor:
                 Boolean(massnsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
-            <StyledListItemIcon>
+            <ListItemIcon className={listItemIcon}>
               <ListIcon />
-            </StyledListItemIcon>
-            <StyledListItemText primary={`Ansiedlungen (${massns.length})`} />
-          </StyledMenuItem>
+            </ListItemIcon>
+            <ListItemText
+              className={listItemText}
+              primary={`Ansiedlungen (${massns.length})`}
+            />
+          </MenuItem>
         )}
       </Menu>
       {!!eksAnchor && (
