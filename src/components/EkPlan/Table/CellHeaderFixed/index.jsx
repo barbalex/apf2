@@ -3,7 +3,6 @@ import { useState, useContext } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import styled from '@emotion/styled'
 import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
@@ -11,43 +10,8 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { TextFilter } from './TextFilter.jsx'
 import { BooleanFilter } from './BooleanFilter.jsx'
 
-export const StyledCell = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-weight: 500;
-  font-size: 0.75rem;
-  color: black;
-  line-height: 60px;
-  border-left: solid hsla(120, 25%, 70%, 1) 1px;
-  border-right: solid hsla(120, 25%, 70%, 1) 1px;
-  border-bottom: solid #e6e6e6 1px;
-  background: hsla(120, 25%, 88%, 1);
-  padding: 0 4px;
-  cursor: pointer;
-  box-sizing: border-box;
-  width: ${(props) => props.width}px;
-  min-width: ${(props) => props.width}px;
-  height: 60px;
-`
-const Title = styled.div`
-  text-align: left;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: normal;
-  padding: 2px 0;
-  margin-top: auto;
-  margin-bottom: auto;
-  user-select: none;
-  ${(props) => props['data-label'] === 'Art' && 'padding-left: 5px;'}
-`
-const Dropdown = styled.div`
-  font-size: 1.3em;
-  padding-left: 2px;
-`
-const StyledFaFilter = styled(FaFilter)`
-  font-size: 0.9em;
-  padding-right: 3px;
-`
+import { cell, title, dropdown, faFilter } from './index.module.css'
+
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
 export const CellHeaderFixed = observer(({ column }) => {
@@ -64,21 +28,31 @@ export const CellHeaderFixed = observer(({ column }) => {
 
   return (
     <>
-      <StyledCell
+      <div
+        className={cell}
         aria-controls={`${name}ColumnHeaderMenu`}
         aria-haspopup="true"
         onClick={onClickCell}
-        width={column.width}
+        style={{
+          minWidth: column.width,
+          maxWidth: column.width,
+        }}
       >
-        <Title data-label={label}>{label}</Title>
+        <div
+          className={title}
+          data-label={label}
+          style={{ ...(label === 'Art' ? { paddingLeft: 5 } : {}) }}
+        >
+          {label}
+        </div>
         {!nofilter && (
-          <Dropdown>
+          <div className={dropdown}>
             {filterValue ?
-              <StyledFaFilter />
+              <FaFilter className={faFilter} />
             : <Caret />}
-          </Dropdown>
+          </div>
         )}
-      </StyledCell>
+      </div>
       <Menu
         id={`${name}ColumnHeaderMenu`}
         anchorEl={anchorEl}
