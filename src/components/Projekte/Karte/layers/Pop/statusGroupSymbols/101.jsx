@@ -1,8 +1,8 @@
 import Icon from './101.svg'
-import { iconContainer } from '../../iconContainer.module.css'
+import { container } from '../../iconContainer.module.css'
 
 export const PopIcon101 = () => (
-  <div className={iconContainer}>
+  <div className={container}>
     <Icon />
   </div>
 )
