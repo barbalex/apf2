@@ -1,0 +1,8 @@
+.iconContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-right: 4px;
+  margin-left: -2px;
+  align-self: center;
+}
