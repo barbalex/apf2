@@ -33,8 +33,6 @@ export const StyledMenuItem = styled(MenuItem)`
   line-height: 1rem !important;
   padding-top: 2px !important;
   padding-bottom: 2px !important;
-  background-color: ${(props) =>
-    props.active === 'true' ? 'rgba(0, 0, 0, 0.08) !important' : 'unset'};
 `
 const StyledListItemText = styled(ListItemText)`
   span {
@@ -207,7 +205,10 @@ export const CellForYearMenu = observer(() => {
         {showEk && !!eks.length && (
           <StyledMenuItem
             onClick={(e) => setEksAnchor(e.currentTarget)}
-            active={Boolean(eksAnchor).toString()}
+            style={{
+              backgroundColor:
+                Boolean(eksAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+            }}
           >
             <StyledListItemIcon>
               <ListIcon />
@@ -218,7 +219,10 @@ export const CellForYearMenu = observer(() => {
         {showEkf && !!ekfs.length && (
           <StyledMenuItem
             onClick={(e) => setEkfsAnchor(e.currentTarget)}
-            active={Boolean(ekfsAnchor).toString()}
+            style={{
+              backgroundColor:
+                Boolean(ekfsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+            }}
           >
             <StyledListItemIcon>
               <ListIcon />
@@ -229,7 +233,10 @@ export const CellForYearMenu = observer(() => {
         {showMassn && !!massns.length && (
           <StyledMenuItem
             onClick={(e) => setMassnsAnchor(e.currentTarget)}
-            active={Boolean(massnsAnchor).toString()}
+            style={{
+              backgroundColor:
+                Boolean(massnsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+            }}
           >
             <StyledListItemIcon>
               <ListIcon />
