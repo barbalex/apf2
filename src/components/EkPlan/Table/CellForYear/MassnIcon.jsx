@@ -6,12 +6,11 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
-const CheckboxContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-wrap: nowrap;
-  justify-content: ${(props) => (props.showcount ? 'space-between' : 'center')};
 `
 const MassnContainer = styled.div`
   position: relative;
@@ -47,7 +46,7 @@ export const MassnIcon = observer(({ ansiedlungs }) => {
   const { showCount, showEkCount } = store.ekPlan
 
   if (!ansiedlungs.length) {
-    return <CheckboxContainer>&nbsp;</CheckboxContainer>
+    return <Container>&nbsp;</Container>
   }
   let sumCounted = null
   const ansiedlungsWithCount = ansiedlungs.filter(
@@ -58,7 +57,10 @@ export const MassnIcon = observer(({ ansiedlungs }) => {
   }
 
   return (
-    <CheckboxContainer showcount={showCount}>
+    <Container
+      showcount={showCount}
+      style={{ justifyContent: showCount ? 'space-between' : 'center' }}
+    >
       <MassnContainer>
         <MassnSymbol />
         {showEkCount && ansiedlungs.length > 1 && (
@@ -68,6 +70,6 @@ export const MassnIcon = observer(({ ansiedlungs }) => {
       {showCount && (
         <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
       )}
-    </CheckboxContainer>
+    </Container>
   )
 })
