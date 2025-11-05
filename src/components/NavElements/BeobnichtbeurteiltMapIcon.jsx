@@ -1,7 +1,5 @@
 import { MdLocalFlorist } from 'react-icons/md'
 
-import { IconContainer } from './IconContainer.jsx'
-
 import { mapIcon } from './BeobnichtbeurteiltMapIcon.module.css'
 import { iconContainer } from './index.module.css'
 

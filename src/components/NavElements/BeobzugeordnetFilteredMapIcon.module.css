@@ -1,0 +1,10 @@
+.mapIcon {
+  color: #ff00ff !important;
+  paint-order: stroke;
+  stroke-width: 8px;
+  stroke: #fff900;
+  margin-left: -2px;
+  height: 1.2rem !important;
+  font-size: 1.4rem;
+  align-self: flex-start;
+}
