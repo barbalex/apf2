@@ -18,68 +18,31 @@ import { PopMenge } from '../../Projekte/Daten/ApAuswertung/PopMenge/index.jsx'
 import { PopStatus } from '../../Projekte/Daten/ApAuswertung/PopStatus/index.jsx'
 import { TpopKontrolliert } from '../../Projekte/Daten/ApAuswertung/TpopKontrolliert/index.jsx'
 
+import {
+  noDataContainer,
+  container,
+  containerSubreport,
+  contentContainer,
+  contentContainerSubreport,
+  header,
+  title1,
+  titledLabel,
+  row,
+  fieldRow,
+  fieldRowBold,
+  fieldRowFullWidth,
+  fullWidthField,
+  fieldLabel,
+  field,
+  erfkritRow,
+  erfkritErfolg,
+  erfkritKriterium,
+  fab,
+  chartContainer,
+} from './index.module.css'
+
 const mdParser = new MarkdownIt({ breaks: true })
 
-const NoDataContainer = styled.div`
-  margin: 1cm;
-`
-const Container = styled.div`
-  /* this part is for when page preview is shown */
-  /* Divide single pages with some space and center all pages horizontally */
-  /* will be removed in @media print */
-  margin: ${(props) => (props.issubreport ? '0' : '1cm auto')};
-  margin-left: ${(props) => (props.issubreport ? '0 !important' : '1cm auto')};
-  /* Define a white paper background that sticks out from the darker overall background */
-  background: ${(props) => (props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff')};
-  /* Show a drop shadow beneath each page */
-  box-shadow: ${(props) =>
-    props.issubreport ? 'unset' : '0 4px 5px rgba(75, 75, 75, 0.2)'};
-
-  /* set dimensions */
-  width: 21cm;
-
-  overflow-y: visible;
-
-  @media print {
-    /* this is when it is actually printed */
-    height: auto !important;
-    overflow: visible !important;
-    width: 21cm;
-
-    margin: 0 !important;
-    padding: ${(props) => (props.issubreport ? '0' : '0.5cm !important')};
-    /*padding-left: 0 !important;*/
-    /* try this */
-    page-break-before: always !important;
-
-    box-shadow: unset;
-  }
-`
-const ContentContainer = styled.div`
-  padding: ${(props) => (props.issubreport ? '1.5cm 0 1.5cm 0' : '1.5cm')};
-  width: ${(props) => (props.issubreport ? '18cm' : 'unset')};
-  font-size: 14px;
-  @media print {
-    padding: 0;
-    padding: ${(props) => (props.issubreport ? '0' : '0 1.5cm')};
-    width: 21cm;
-    height: auto !important;
-    overflow: visible !important;
-  }
-`
-const Header = styled.p`
-  font-size: 12px;
-`
-const Title1 = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  break-after: avoid;
-  page-break-after: avoid;
-`
-const TitledLabel = styled.label`
-  text-decoration: underline;
-  padding-bottom: 8px;
-`
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
@@ -93,7 +56,9 @@ const FieldRow = styled.div`
   display: flex;
   padding: 0.2cm 0;
 `
-const FieldRowBold = styled(FieldRow)`
+const FieldRowBold = styled.div`
+  display: flex;
+  padding: 0.2cm 0;
   font-weight: 700;
 `
 const FieldRowFullWidth = styled.div`
@@ -104,10 +69,6 @@ const FieldRowFullWidth = styled.div`
 `
 const FullWidthField = styled.div`
   hyphens: auto;
-`
-const FieldLabel = styled.label`
-  width: 5.5cm;
-  padding-right: 0.5cm;
 `
 const Field = styled.div`
   width: 100%;
@@ -121,22 +82,6 @@ const ErfkritErfolg = styled.div`
 `
 const ErfkritKriterium = styled.div`
   width: 100%;
-`
-const StyledFab = styled(Fab)`
-  position: fixed !important;
-  top: 74px;
-  right: 20px;
-  > span {
-    height: 24px;
-    width: 24px;
-  }
-  > span > svg {
-    height: 24px;
-    width: 24px;
-  }
-  @media print {
-    display: none !important;
-  }
 `
 const ChartContainer = styled.div`
   padding: 10px 0;
@@ -199,37 +144,42 @@ export const ApberForAp = observer(
 
     if (!node) {
       return (
-        <NoDataContainer issubreport={isSubReport}>
+        <div className={noDataContainer}>
           <div>Sorry, es gibt nicht ausreichend Daten.</div>
           <div>
             Kann es sein, dass es sich nicht um einen gültigen Aktionsplan
             handelt?
           </div>
-        </NoDataContainer>
+        </div>
       )
     }
 
     return (
       <ErrorBoundary>
-        <Container issubreport={isSubReport}>
+        <div className={isSubReport ? containerSubreport : container}>
           {!subReportIndex && (
-            <StyledFab
+            <Fab
               onClick={onClickPrint}
               title="drucken"
               aria-label="drucken"
               color="primary"
+              className={fab}
             >
               <MdPrint />
-            </StyledFab>
+            </Fab>
           )}
-          <ContentContainer issubreport={isSubReport}>
-            <Header>
+          <div
+            className={
+              isSubReport ? contentContainerSubreport : contentContainer
+            }
+          >
+            <p className={header}>
               {`Jahresbericht ${jahr},
               ${node?.artname ?? ''},
               ${format(new Date(), 'dd.MM.yyyy')}`}
-            </Header>
+            </p>
 
-            <Title1>{node?.artname ?? ''}</Title1>
+            <h3 className={title1}>{node?.artname ?? ''}</h3>
 
             <Row>
               <p>{`Start Programm: ${
@@ -246,9 +196,9 @@ export const ApberForAp = observer(
             />
             {!!apber.biotopeNeue && (
               <FieldRowFullWidth>
-                <TitledLabel>
+                <label className={titledLabel}>
                   Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope
-                </TitledLabel>
+                </label>
                 <FullWidthField>
                   <div
                     dangerouslySetInnerHTML={{
@@ -293,10 +243,10 @@ export const ApberForAp = observer(
             </ChartContainer>
             {!!apber.biotopeOptimieren && (
               <FieldRowFullWidth>
-                <TitledLabel>
+                <label className={titledLabel}>
                   Bemerkungen / Folgerungen für nächstes Jahr: Optimierung
                   Biotope
-                </TitledLabel>
+                </label>
                 <FullWidthField>
                   <div
                     dangerouslySetInnerHTML={{
@@ -314,7 +264,9 @@ export const ApberForAp = observer(
             />
             {!!apber.massnahmenPlanungVsAusfuehrung && (
               <FieldRowFullWidth>
-                <TitledLabel>Vergleich Ausführung/Planung</TitledLabel>
+                <label className={titledLabel}>
+                  Vergleich Ausführung/Planung
+                </label>
                 <FullWidthField>
                   <div
                     dangerouslySetInnerHTML={{
@@ -328,10 +280,10 @@ export const ApberForAp = observer(
             )}
             {!!apber.massnahmenOptimieren && (
               <FieldRowFullWidth>
-                <TitledLabel>
+                <label className={titledLabel}>
                   Bemerkungen / Folgerungen für nächstes Jahr: Optimierung
                   Massnahmen
-                </TitledLabel>
+                </label>
                 <FullWidthField>
                   <div
                     dangerouslySetInnerHTML={{
@@ -345,9 +297,9 @@ export const ApberForAp = observer(
             )}
             {!!apber.massnahmenApBearb && (
               <FieldRowFullWidth>
-                <TitledLabel>
+                <label className={titledLabel}>
                   Weitere Aktivitäten der Art-Verantwortlichen
-                </TitledLabel>
+                </label>
                 <FullWidthField>
                   <div
                     dangerouslySetInnerHTML={{
@@ -359,14 +311,14 @@ export const ApberForAp = observer(
             )}
             {!!massns.length && <Massnahmen massns={massns} />}
 
-            <Title1>
+            <h3 className={title1}>
               D. Einschätzung der Wirkung des AP insgesamt auf die Art
-            </Title1>
+            </h3>
             {!!apber.vergleichVorjahrGesamtziel && (
               <FieldRow>
-                <FieldLabel>
+                <label className={fieldLabel}>
                   Vergleich zu Vorjahr - Ausblick auf Gesamtziel
-                </FieldLabel>
+                </label>
                 <Field>
                   <div
                     dangerouslySetInnerHTML={{
@@ -381,7 +333,7 @@ export const ApberForAp = observer(
             {!!ziele.length && <Ziele ziele={ziele} />}
             {!!erfkrit.length && (
               <FieldRow>
-                <FieldLabel>Beurteilungsskala</FieldLabel>
+                <label className={fieldLabel}>Beurteilungsskala</label>
                 <Field>
                   {erfkrit.map((e) => (
                     <ErfkritRow key={e.id}>
@@ -398,19 +350,19 @@ export const ApberForAp = observer(
             )}
             {!!apber.apErfkritWerteByBeurteilung && (
               <FieldRowBold>
-                <FieldLabel>Beurteilung</FieldLabel>
+                <label className={fieldLabel}>Beurteilung</label>
                 <Field>{apber?.apErfkritWerteByBeurteilung?.text ?? ''}</Field>
               </FieldRowBold>
             )}
             {!!apber.wirkungAufArt && (
               <FieldRow>
-                <FieldLabel>Bemerkungen</FieldLabel>
+                <label className={fieldLabel}>Bemerkungen</label>
                 <Field>{apber?.wirkungAufArt ?? ''}</Field>
               </FieldRow>
             )}
             {!!apber.apberAnalyse && (
               <FieldRow>
-                <FieldLabel>Analyse</FieldLabel>
+                <label className={fieldLabel}>Analyse</label>
                 <Field>
                   <div
                     dangerouslySetInnerHTML={{
@@ -422,7 +374,9 @@ export const ApberForAp = observer(
             )}
             {!!apber.konsequenzenUmsetzung && (
               <FieldRow>
-                <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
+                <label className={fieldLabel}>
+                  Konsequenzen für die Umsetzung
+                </label>
                 <Field>
                   <div
                     dangerouslySetInnerHTML={{
@@ -436,7 +390,9 @@ export const ApberForAp = observer(
             )}
             {!!apber.konsequenzenErfolgskontrolle && (
               <FieldRow>
-                <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
+                <label className={fieldLabel}>
+                  Konsequenzen für die Erfolgskontrolle
+                </label>
                 <Field>
                   <div
                     dangerouslySetInnerHTML={{
@@ -455,8 +411,8 @@ export const ApberForAp = observer(
                 : '(Datum fehlt)'
               } / ${node?.bearbeiter ?? '(kein Bearbeiter)'}`}
             </Row>
-          </ContentContainer>
-        </Container>
+          </div>
+        </div>
       </ErrorBoundary>
     )
   },

@@ -1,0 +1,185 @@
+.noDataContainer {
+  margin: 1cm;
+}
+
+.container {
+  /* this part is for when page preview is shown */
+  /* Divide single pages with some space and center all pages horizontally */
+  /* will be removed in @media print */
+  margin: 1cm auto;
+  margin-left: 1cm auto;
+  /* Define a white paper background that sticks out from the darker overall background */
+  background: #fff;
+  /* Show a drop shadow beneath each page */
+  box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+
+  /* set dimensions */
+  width: 21cm;
+
+  overflow-y: visible;
+
+  @media print {
+    /* this is when it is actually printed */
+    height: auto !important;
+    overflow: visible !important;
+    width: 21cm;
+
+    margin: 0 !important;
+    padding: 0.5cm !important;
+    /* try this */
+    page-break-before: always !important;
+
+    box-shadow: unset;
+  }
+}
+
+.containerSubreport {
+  /* this part is for when page preview is shown */
+  /* Divide single pages with some space and center all pages horizontally */
+  /* will be removed in @media print */
+  margin: 0;
+  margin-left: 0 !important;
+  /* Define a white paper background that sticks out from the darker overall background */
+  background: rgba(0, 0, 0, 0);
+  /* Show a drop shadow beneath each page */
+  box-shadow: unset;
+
+  /* set dimensions */
+  width: 21cm;
+
+  overflow-y: visible;
+
+  @media print {
+    /* this is when it is actually printed */
+    height: auto !important;
+    overflow: visible !important;
+    width: 21cm;
+
+    margin: 0 !important;
+    padding: 0;
+    /* try this */
+    page-break-before: always !important;
+
+    box-shadow: unset;
+  }
+}
+
+.contentContainer {
+  padding: 1.5cm;
+  width: unset;
+  font-size: 14px;
+  @media print {
+    padding: 0;
+    padding: 0 1.5cm;
+    width: 21cm;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+.contentContainerSubreport {
+  padding: 1.5cm 0 1.5cm 0;
+  width: 18cm;
+  font-size: 14px;
+  @media print {
+    padding: 0;
+    padding: 0;
+    width: 21cm;
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+.header {
+  font-size: 12px;
+}
+
+.title1 {
+  font-size: 16px;
+  font-weight: 700;
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+.titledLabel {
+  text-decoration: underline;
+  padding-bottom: 8px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2cm 0;
+  p {
+    margin: 0;
+  }
+  break-inside: avoid;
+}
+
+.fieldRow {
+  display: flex;
+  padding: 0.2cm 0;
+}
+
+.fieldRowBold {
+  display: flex;
+  padding: 0.2cm 0;
+  font-weight: 700;
+}
+
+.fieldRowFullWidth {
+  display: flex;
+  flex-direction: column;
+  padding: 0.2cm 0;
+  break-inside: avoid;
+}
+
+.fullWidthField {
+  hyphens: auto;
+}
+
+.fieldLabel {
+  width: 5.5cm;
+  padding-right: 0.5cm;
+}
+
+.field {
+  width: 100%;
+  hyphens: auto;
+}
+
+.erfkritRow {
+  display: flex;
+}
+
+.erfkritErfolg {
+  width: 5.5cm;
+}
+
+.erfkritKriterium {
+  width: 100%;
+}
+
+.fab {
+  position: fixed !important;
+  top: 74px;
+  right: 20px;
+  > span {
+    height: 24px;
+    width: 24px;
+  }
+  > span > svg {
+    height: 24px;
+    width: 24px;
+  }
+  @media print {
+    display: none !important;
+  }
+}
+
+.chartContainer {
+  padding: 10px 0;
+  @media print {
+    break-inside: avoid;
+  }
+}
