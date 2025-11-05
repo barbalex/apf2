@@ -3,28 +3,11 @@ import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
-import styled from '@emotion/styled'
 
 import { tpop } from '../../../shared/fragments.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-`
-const Div = styled.div`
-  width: 19px;
-  height: 19px;
-  border-radius: 3px;
-  transition: all 150ms;
-  margin: auto;
-`
-const Icon = styled.svg`
-  fill: none;
-  stroke: white;
-  stroke-width: 2px;
-`
+import { container, div, icon } from './Checkbox.module.css'
 
 export const Checkbox = observer(({ row, value, field }) => {
   const store = useContext(MobxContext)
@@ -85,15 +68,22 @@ export const Checkbox = observer(({ row, value, field }) => {
   }
 
   return (
-    <Container onClick={onClick}>
-      <Div style={{ background: checked ? '#2e7d32' : 'rgba(46,125,50,0.1)' }}>
-        <Icon
+    <div
+      className={container}
+      onClick={onClick}
+    >
+      <div
+        className={div}
+        style={{ background: checked ? '#2e7d32' : 'rgba(46,125,50,0.1)' }}
+      >
+        <svg
           viewBox="0 0 24 24"
           style={{ visibility: checked ? 'visible' : 'hidden' }}
+          className={icon}
         >
           <polyline points="20 6 9 17 4 12" />
-        </Icon>
-      </Div>
-    </Container>
+        </svg>
+      </div>
+    </div>
   )
 })
