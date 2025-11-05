@@ -1,4 +1,3 @@
-import { Suspense } from 'react'
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import { useApolloClient } from '@apollo/client/react'
@@ -107,7 +106,7 @@ export const ApberForYear = () => {
 
   const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ['ApberForYearQuery', apberuebersichtId],
     queryFn: async () => {
       // first get year
@@ -153,53 +152,54 @@ export const ApberForYear = () => {
   const jahr = data?.jahr
   const apberuebersicht = data?.data?.apberuebersichtById
 
+  // don't use Suspense - without jahr things fail hard
+  if (isLoading) return <Spinner />
+
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Spinner />}>
-        <Container>
-          <ContentContainer>
-            <FirstPageTitle>
-              Umsetzung der Aktionspläne Flora
-              <br />
-              im Kanton Zürich
-            </FirstPageTitle>
-            <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
-            <FirstPageFnsLogo
-              src={fnslogo}
-              alt="FNS"
-              width="350"
-            />
-            <FirstPageDate>
-              {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
-            </FirstPageDate>
-            <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
-            {!!apberuebersicht?.bemerkungen && (
-              <SecondPage>
-                <SecondPageTop />
-                <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-                <SecondPageText>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: mdParser.render(apberuebersicht.bemerkungen),
-                    }}
-                  />
-                </SecondPageText>
-              </SecondPage>
-            )}
-            <AvList data={data?.jberData} />
-            <ErfolgList
-              jahr={jahr}
-              data={data?.jberData}
-            />
-            <AktPopList year={jahr} />
-            <ApberForAps
-              jahr={jahr}
-              data={data?.data}
-              jberData={data?.jberData}
-            />
-          </ContentContainer>
-        </Container>
-      </Suspense>
+      <Container>
+        <ContentContainer>
+          <FirstPageTitle>
+            Umsetzung der Aktionspläne Flora
+            <br />
+            im Kanton Zürich
+          </FirstPageTitle>
+          <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
+          <FirstPageFnsLogo
+            src={fnslogo}
+            alt="FNS"
+            width="350"
+          />
+          <FirstPageDate>
+            {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
+          </FirstPageDate>
+          <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+          {!!apberuebersicht?.bemerkungen && (
+            <SecondPage>
+              <SecondPageTop />
+              <SecondPageTitle>Zusammenfassung</SecondPageTitle>
+              <SecondPageText>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(apberuebersicht.bemerkungen),
+                  }}
+                />
+              </SecondPageText>
+            </SecondPage>
+          )}
+          <AvList data={data?.jberData} />
+          <ErfolgList
+            jahr={jahr}
+            data={data?.jberData}
+          />
+          <AktPopList year={jahr} />
+          <ApberForAps
+            jahr={jahr}
+            data={data?.data}
+            jberData={data?.jberData}
+          />
+        </ContentContainer>
+      </Container>
     </ErrorBoundary>
   )
 }
