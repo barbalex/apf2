@@ -1,8 +1,8 @@
 import Icon from './201.svg'
-import { IconContainer } from '../../../../../NavElements/IconContainer.jsx'
+import { iconContainer } from '../../iconContainer.module.css'
 
 export const TpopIcon201 = () => (
-  <IconContainer className="iconContainer">
+  <div className={iconContainer}>
     <Icon />
-  </IconContainer>
+  </div>
 )
