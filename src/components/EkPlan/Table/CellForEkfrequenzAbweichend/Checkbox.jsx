@@ -13,19 +13,17 @@ const Container = styled.div`
   height: 100%;
   display: flex;
 `
-
+const Div = styled.div`
+  width: 19px;
+  height: 19px;
+  border-radius: 3px;
+  transition: all 150ms;
+  margin: auto;
+`
 const Icon = styled.svg`
   fill: none;
   stroke: white;
   stroke-width: 2px;
-`
-const CheckboxDiv = styled.div`
-  width: 19px;
-  height: 19px;
-  background: ${(props) => (props.checked ? '#2e7d32' : 'rgba(46,125,50,0.1)')};
-  border-radius: 3px;
-  transition: all 150ms;
-  margin: auto;
 `
 
 export const Checkbox = observer(({ row, value, field }) => {
@@ -88,14 +86,14 @@ export const Checkbox = observer(({ row, value, field }) => {
 
   return (
     <Container onClick={onClick}>
-      <CheckboxDiv checked={checked}>
+      <Div style={{ background: checked ? '#2e7d32' : 'rgba(46,125,50,0.1)' }}>
         <Icon
           viewBox="0 0 24 24"
           style={{ visibility: checked ? 'visible' : 'hidden' }}
         >
           <polyline points="20 6 9 17 4 12" />
         </Icon>
-      </CheckboxDiv>
+      </Div>
     </Container>
   )
 })
