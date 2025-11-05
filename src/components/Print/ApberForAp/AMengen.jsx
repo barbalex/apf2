@@ -17,24 +17,6 @@ import {
   popSeit,
 } from './AMengen.module.css'
 
-const Label2Davon = styled.div`
-  font-size: 10px;
-  min-width: 1.8cm;
-  max-width: 1.8cm;
-  top: 3px;
-  position: relative;
-  color: grey;
-  padding-left: 1.2cm;
-`
-const Label2AfterDavon = styled.div`
-  min-width: 7cm;
-  max-width: 7cm;
-`
-const Label3 = styled.div`
-  min-width: 7cm;
-  max-width: 7cm;
-  padding-left: 3cm;
-`
 const Number = styled.div`
   min-width: 1.2cm;
   max-width: 1.2cm;
@@ -97,22 +79,22 @@ export const AMengen = ({ loading, jahr, node }) => {
         <Number />
       </div>
       <div className={row}>
-        <Label2Davon>davon:</Label2Davon>
-        <Label2AfterDavon>ursprünglich</Label2AfterDavon>
+        <div className={label2Davon}>davon:</div>
+        <div className={label2AfterDavon}>ursprünglich</div>
         <Number>{loading ? '...' : a3LPop}</Number>
         <Number>{loading ? '...' : a3LTpop}</Number>
         <PopSeit />
         <Number />
       </div>
       <div className={row}>
-        <Label3>angesiedelt (vor Beginn AP)</Label3>
+        <div className={label3}>angesiedelt (vor Beginn AP)</div>
         <Number>{loading ? '...' : a4LPop}</Number>
         <Number>{loading ? '...' : a4LTpop}</Number>
         <PopSeit />
         <Number />
       </div>
       <div className={row}>
-        <Label3>angesiedelt (nach Beginn AP)</Label3>
+        <div className={label3}>angesiedelt (nach Beginn AP)</div>
         <Number>{loading ? '...' : a5LPop}</Number>
         <Number>{loading ? '...' : a5LTpop}</Number>
         <PopSeit />
@@ -126,17 +108,17 @@ export const AMengen = ({ loading, jahr, node }) => {
         <Number />
       </div>
       <div className={row}>
-        <Label2Davon>davon:</Label2Davon>
-        <Label2AfterDavon>
+        <div className={label2Davon}>davon:</div>
+        <div className={label2AfterDavon}>
           zuvor autochthon oder vor AP angesiedelt
-        </Label2AfterDavon>
+        </div>
         <Number>{loading ? '...' : a7LPop}</Number>
         <Number>{loading ? '...' : a7LTpop}</Number>
         <PopSeit />
         <Number />
       </div>
       <div className={row}>
-        <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
+        <div className={label3}>nach Beginn Aktionsplan angesiedelt</div>
         <Number>{loading ? '...' : a8LPop}</Number>
         <Number>{loading ? '...' : a8LTpop}</Number>
         <PopSeit />
