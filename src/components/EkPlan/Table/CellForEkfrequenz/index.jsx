@@ -26,13 +26,10 @@ const StyledDialogTitle = styled(DialogTitle)`
 const StyledListItem = styled(ListItem)`
   font-size: 0.85rem;
   user-select: none;
-  ${(props) =>
-    props.active === 'true' && 'background-color: rgba(0, 0, 0, 0.04);'}
 `
 const CodeText = styled.span`
   font-family: 'Roboto Mono', monospace;
   font-size: 0.85rem;
-  min-width: ${(props) => props.width * 0.65}rem;
 `
 const AnwendungsfallText = styled.span`
   font-size: 0.85rem;
@@ -111,7 +108,11 @@ export const CellForEkfrequenz = observer(
               }}
               button={true.toString()}
               dense
-              active={(data?.tpopById?.ekfrequenz === null).toString()}
+              style={{
+                ...(data?.tpopById?.ekfrequenz === null ?
+                  { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
+                : {}),
+              }}
             >
               Kein Wert
             </StyledListItem>
@@ -124,9 +125,18 @@ export const CellForEkfrequenz = observer(
                 }}
                 button={true.toString()}
                 dense
-                active={(e.id === data?.tpopById?.ekfrequenz).toString()}
+                style={{
+                  ...(e.id === data?.tpopById?.ekfrequenz ?
+                    { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
+                  : {}),
+                }}
               >
-                <CodeText width={maxCodeLength}>{e.code}</CodeText>
+                <CodeText
+                  width={maxCodeLength}
+                  style={{ minWidth: `${maxCodeLength * 0.65}rem` }}
+                >
+                  {e.code}
+                </CodeText>
                 <AnwendungsfallText>{e.anwendungsfall}</AnwendungsfallText>
               </StyledListItem>
             ))}
