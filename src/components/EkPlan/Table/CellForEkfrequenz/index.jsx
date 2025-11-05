@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
@@ -13,27 +12,16 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import { cellForSelect } from '../index.module.css'
+import {
+  dialogTitle,
+  listItem,
+  codeText,
+  anwendungsfallText,
+} from './index.module.css'
 
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.js'),
 )
-
-const StyledDialogTitle = styled(DialogTitle)`
-  font-size: 1rem;
-  font-weight: 700;
-  padding: 10px 16px 5px 16px;
-`
-const StyledListItem = styled(ListItem)`
-  font-size: 0.85rem;
-  user-select: none;
-`
-const CodeText = styled.span`
-  font-family: 'Roboto Mono', monospace;
-  font-size: 0.85rem;
-`
-const AnwendungsfallText = styled.span`
-  font-size: 0.85rem;
-`
 
 export const CellForEkfrequenz = observer(
   ({ row, isOdd, field, width, setProcessing, data }) => {
@@ -99,9 +87,9 @@ export const CellForEkfrequenz = observer(
           onClose={onClose}
           open={open}
         >
-          <StyledDialogTitle>EK-Frequenz wählen:</StyledDialogTitle>
+          <DialogTitle className={dialogTitle}>EK-Frequenz wählen:</DialogTitle>
           <List sx={{ pt: 0 }}>
-            <StyledListItem
+            <ListItem
               onClick={() => {
                 onChange({ target: { value: '' } })
                 onClose()
@@ -113,11 +101,12 @@ export const CellForEkfrequenz = observer(
                   { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
                 : {}),
               }}
+              className={listItem}
             >
               Kein Wert
-            </StyledListItem>
+            </ListItem>
             {allEkfrequenzs.map((e) => (
-              <StyledListItem
+              <ListItem
                 key={e.id}
                 onClick={() => {
                   onChange({ target: { value: e.id } })
@@ -130,15 +119,17 @@ export const CellForEkfrequenz = observer(
                     { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
                   : {}),
                 }}
+                className={listItem}
               >
-                <CodeText
+                <span
+                  className={codeText}
                   width={maxCodeLength}
                   style={{ minWidth: `${maxCodeLength * 0.65}rem` }}
                 >
                   {e.code}
-                </CodeText>
-                <AnwendungsfallText>{e.anwendungsfall}</AnwendungsfallText>
-              </StyledListItem>
+                </span>
+                <span className={anwendungsfallText}>{e.anwendungsfall}</span>
+              </ListItem>
             ))}
           </List>
         </Dialog>
