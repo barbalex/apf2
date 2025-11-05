@@ -1,0 +1,40 @@
+.container {
+  font-size: 0.75rem !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+  padding: 2px 4px !important;
+  padding-left: '2px';
+  border-left: solid hsla(70, 80%, 75%, 1) 1px;
+  border-right: solid hsla(70, 80%, 75%, 1) 1px;
+  border-bottom: solid #e6e6e6 1px;
+  box-sizing: border-box;
+  div {
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+  }
+  padding: 5px 15px !important;
+  font-size: unset !important;
+  border-left: solid green 1px;
+  border-right: solid green 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 60px;
+  &:focus-within {
+    border: solid orange 3px;
+  }
+}
+
+.input {
+  font-size: 12px;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  text-align: center;
+  &:focus {
+    outline: none !important;
+  }
+}
