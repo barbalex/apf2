@@ -1,5 +1,3 @@
-import styled from '@emotion/styled'
-
 import {
   container,
   title,
@@ -13,65 +11,9 @@ import {
   label2Davon,
   label2AfterDavon,
   label3,
-  number,
+  numberClass,
   popSeit,
 } from './CMengen.module.css'
-
-const LabelRow = styled.div`
-  font-size: 12px;
-  display: flex;
-  padding: 0.05cm 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  page-break-inside: avoid;
-`
-const Year = styled.div`
-  position: relative;
-  left: 10.9cm;
-  width: 2cm;
-`
-const YearSince = styled.div`
-  position: relative;
-  left: 11.45cm;
-  width: 2cm;
-`
-const Label1 = styled.div`
-  min-width: 10cm;
-  max-width: 10cm;
-`
-const Label2 = styled.div`
-  min-width: 8.8cm;
-  max-width: 8.8cm;
-  padding-left: 1.2cm;
-`
-const Label2Davon = styled.div`
-  padding-left: 1.2cm;
-  font-size: 10px;
-  min-width: 1.8cm;
-  max-width: 1.8cm;
-  top: 3px;
-  position: relative;
-  color: grey;
-`
-const Label2AfterDavon = styled.div`
-  min-width: 7cm;
-  max-width: 7cm;
-`
-const Label3 = styled.div`
-  min-width: 7cm;
-  max-width: 7cm;
-  padding-left: 3cm;
-`
-const Number = styled.div`
-  min-width: 1cm;
-  max-width: 1cm;
-  text-align: right;
-`
-const PopSeit = styled.div`
-  margin-left: 1cm;
-  min-width: 1cm;
-  max-width: 1cm;
-  text-align: right;
-`
 
 export const CMengen = ({ jahr, loading, node }) => {
   const c1LPop = loading ? '...' : node?.c1LPop
@@ -96,65 +38,67 @@ export const CMengen = ({ jahr, loading, node }) => {
     <div className={container}>
       <h3 className={title}>C. Zwischenbilanz zur Wirkung von Massnahmen</h3>
       <div className={yearRow}>
-        <Year>{jahr}</Year>
-        <YearSince>{`Seit ${c1FirstYear}`}</YearSince>
+        <div className={year}>{jahr}</div>
+        <div className={yearSince}>{`Seit ${c1FirstYear}`}</div>
       </div>
-      <LabelRow>
-        <Label1 />
-        <Number>Pop</Number>
-        <Number>TPop</Number>
-        <PopSeit>Pop</PopSeit>
-        <Number>TPop</Number>
-      </LabelRow>
-      <div className={row}>
-        <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
-        <Number>{c1LPop}</Number>
-        <Number>{c1LTpop}</Number>
-        <PopSeit>{c1RPop}</PopSeit>
-        <Number>{c1RTpop}</Number>
+      <div className={labelRow}>
+        <div className={label1} />
+        <div className={numberClass}>Pop</div>
+        <div className={numberClass}>TPop</div>
+        <div className={popSeit}>Pop</div>
+        <div className={numberClass}>TPop</div>
       </div>
       <div className={row}>
-        <Label2>kontrolliert</Label2>
-        <Number />
-        <Number />
-        <PopSeit>{c2RPop}</PopSeit>
-        <Number>{c2RTpop}</Number>
+        <div className={label1}>
+          Anzahl Populationen/Teilpopulationen mit Massnahmen
+        </div>
+        <div className={numberClass}>{c1LPop}</div>
+        <div className={numberClass}>{c1LTpop}</div>
+        <div className={popSeit}>{c1RPop}</div>
+        <div className={numberClass}>{c1RTpop}</div>
       </div>
       <div className={row}>
-        <Label2Davon>davon:</Label2Davon>
-        <Label2AfterDavon>sehr erfolgreich</Label2AfterDavon>
-        <Number />
-        <Number />
-        <PopSeit>{c3RPop}</PopSeit>
-        <Number>{c3RTpop}</Number>
+        <div className={label2}>kontrolliert</div>
+        <div className={numberClass} />
+        <div className={numberClass} />
+        <div className={popSeit}>{c2RPop}</div>
+        <div className={numberClass}>{c2RTpop}</div>
       </div>
       <div className={row}>
-        <Label3>erfolgreich</Label3>
-        <Number />
-        <Number />
-        <PopSeit>{c4RPop}</PopSeit>
-        <Number>{c4RTpop}</Number>
+        <div className={label2Davon}>davon:</div>
+        <div className={label2AfterDavon}>sehr erfolgreich</div>
+        <div className={numberClass} />
+        <div className={numberClass} />
+        <div className={popSeit}>{c3RPop}</div>
+        <div className={numberClass}>{c3RTpop}</div>
       </div>
       <div className={row}>
-        <Label3>weniger erfolgreich</Label3>
-        <Number />
-        <Number />
-        <PopSeit>{c5RPop}</PopSeit>
-        <Number>{c5RTpop}</Number>
+        <div className={label3}>erfolgreich</div>
+        <div className={numberClass} />
+        <div className={numberClass} />
+        <div className={popSeit}>{c4RPop}</div>
+        <div className={numberClass}>{c4RTpop}</div>
       </div>
       <div className={row}>
-        <Label3>nicht erfolgreich</Label3>
-        <Number />
-        <Number />
-        <PopSeit>{c6RPop}</PopSeit>
-        <Number>{c6RTpop}</Number>
+        <div className={label3}>weniger erfolgreich</div>
+        <div className={numberClass} />
+        <div className={numberClass} />
+        <div className={popSeit}>{c5RPop}</div>
+        <div className={numberClass}>{c5RTpop}</div>
       </div>
       <div className={row}>
-        <Label3>mit unsicherer Wirkung</Label3>
-        <Number />
-        <Number />
-        <PopSeit>{c7RPop}</PopSeit>
-        <Number>{c7RTpop}</Number>
+        <div className={label3}>nicht erfolgreich</div>
+        <div className={numberClass} />
+        <div className={numberClass} />
+        <div className={popSeit}>{c6RPop}</div>
+        <div className={numberClass}>{c6RTpop}</div>
+      </div>
+      <div className={row}>
+        <div className={label3}>mit unsicherer Wirkung</div>
+        <div className={numberClass} />
+        <div className={numberClass} />
+        <div className={popSeit}>{c7RPop}</div>
+        <div className={numberClass}>{c7RTpop}</div>
       </div>
     </div>
   )
