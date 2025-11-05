@@ -8,6 +8,12 @@
   padding-bottom: 2px !important;
 }
 
+.listItem {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  font-size: 0.85rem !important;
+}
+
 .listItemText {
   padding-right: 8px;
   span {
@@ -15,7 +21,7 @@
   }
 }
 
-.listItem {
+.listItemButton {
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   font-size: 0.85rem !important;
