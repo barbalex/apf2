@@ -19,10 +19,18 @@ const YearRow = styled.div`
   display: flex;
   padding: 0.05cm 0;
 `
-const TotalRow = styled(Row)`
+const TotalRow = styled.div`
+  display: flex;
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  page-break-inside: avoid;
   font-weight: 700;
 `
-const LabelRow = styled(Row)`
+const LabelRow = styled.div`
+  display: flex;
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  page-break-inside: avoid;
   font-size: 12px;
 `
 const Year = styled.div`
@@ -39,13 +47,14 @@ const Label2 = styled.div`
   max-width: 8.8cm;
   padding-left: 1.2cm;
 `
-const Label2Davon = styled(Label2)`
+const Label2Davon = styled.div`
   font-size: 10px;
   min-width: 1.8cm;
   max-width: 1.8cm;
   top: 3px;
   position: relative;
   color: grey;
+  padding-left: 1.2cm;
 `
 const Label2AfterDavon = styled.div`
   min-width: 7cm;
@@ -61,7 +70,10 @@ const Number = styled.div`
   max-width: 1.2cm;
   text-align: right;
 `
-const PopSeit = styled(Number)`
+const PopSeit = styled.div`
+  min-width: 1.2cm;
+  max-width: 1.2cm;
+  text-align: right;
   margin-left: 1cm;
 `
 
