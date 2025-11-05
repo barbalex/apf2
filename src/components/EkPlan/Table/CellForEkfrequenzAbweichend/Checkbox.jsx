@@ -26,10 +26,6 @@ const CheckboxDiv = styled.div`
   border-radius: 3px;
   transition: all 150ms;
   margin: auto;
-
-  ${Icon} {
-    visibility: ${(props) => (props.checked ? 'visible' : 'hidden')};
-  }
 `
 
 export const Checkbox = observer(({ row, value, field }) => {
@@ -93,7 +89,10 @@ export const Checkbox = observer(({ row, value, field }) => {
   return (
     <Container onClick={onClick}>
       <CheckboxDiv checked={checked}>
-        <Icon viewBox="0 0 24 24">
+        <Icon
+          viewBox="0 0 24 24"
+          style={{ visibility: checked ? 'visible' : 'hidden' }}
+        >
           <polyline points="20 6 9 17 4 12" />
         </Icon>
       </CheckboxDiv>
