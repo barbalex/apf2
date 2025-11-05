@@ -1,0 +1,22 @@
+.container {
+  height: 100%;
+}
+
+.messageRow {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #cacaca;
+  padding-left: 24px;
+  padding-right: 15px;
+  min-height: 36px;
+}
+
+.message {
+  padding-top: 8px;
+  padding-right: 15px;
+}
+
+.okButton {
+  position: relative !important;
+  right: 12px;
+}

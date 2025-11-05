@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
 import Linkify from 'react-linkify'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -10,26 +9,12 @@ import { DateTime } from 'luxon'
 import { createUsermessage } from '../createUsermessage.js'
 import { MobxContext } from '../../../mobxContext.js'
 
-const Container = styled.div`
-  height: 100%;
-`
-const MessageRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: ${(props) => (props.paddBottom ? '24px' : '7px')};
-  border-top: 1px solid #cacaca;
-  padding-left: 24px;
-  padding-right: 15px;
-  min-height: 36px;
-`
-const MessageDiv = styled.div`
-  padding-top: 8px;
-  padding-right: 15px;
-`
-const OkButton = styled(Button)`
-  position: relative !important;
-  right: 12px;
-`
+import {
+  container,
+  messageRow,
+  message as messageClass,
+  okButton,
+} from './Messages.module.css'
 
 export const Messages = observer(({ unreadMessages }) => {
   const store = useContext(MobxContext)
@@ -50,28 +35,31 @@ export const Messages = observer(({ unreadMessages }) => {
   }
 
   return (
-    <Container>
+    <div className={container}>
       {unreadMessages.map((m, index) => {
         const paddBottom = index === unreadMessages.length - 1
         const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
         return (
-          <MessageRow
+          <div
+            className={messageRow}
             key={m.id}
             paddBottom={paddBottom}
+            style={{ paddingBottom: paddBottom ? 24 : 7 }}
           >
             <Linkify properties={{ target: '_blank' }}>
-              <MessageDiv>{`${date}: ${m.message}`}</MessageDiv>
+              <div className={messageClass}>{`${date}: ${m.message}`}</div>
             </Linkify>
-            <OkButton
+            <Button
               onClick={() => onClickRead(m)}
               color="inherit"
+              className={okButton}
             >
               o.k.
-            </OkButton>
-          </MessageRow>
+            </Button>
+          </div>
         )
       })}
-    </Container>
+    </div>
   )
 })
