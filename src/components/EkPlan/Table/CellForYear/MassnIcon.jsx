@@ -31,7 +31,6 @@ export const MassnIcon = observer(({ ansiedlungs }) => {
   return (
     <div
       className={container}
-      showcount={showCount}
       style={{ justifyContent: showCount ? 'space-between' : 'center' }}
     >
       <div className={massnContainer}>
