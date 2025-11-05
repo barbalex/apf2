@@ -163,7 +163,7 @@ export const ApberForAp = observer(
     const store = useContext(MobxContext)
     const { setIsPrint } = store
 
-    const apData = isSubReport ? apDataPassed : apDataPassed.apById
+    const apData = isSubReport ? apDataPassed : apDataPassed?.apById
     const apber = apData?.apbersByApId?.nodes?.[0] ?? {}
     const apberDatum = apber?.datum
     const erfkrit = sortBy(apData?.erfkritsByApId?.nodes ?? [], [
