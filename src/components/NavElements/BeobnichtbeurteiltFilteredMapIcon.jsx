@@ -1,5 +1,4 @@
-import { MapIcon } from './MapIcon.jsx'
-import { IconContainer } from './IconContainer.jsx'
+import { MdLocalFlorist } from 'react-icons/md'
 
 import { mapIcon } from './BeobnichtbeurteiltFilteredMapIcon.module.css'
 import { iconContainer } from './index.module.css'
@@ -9,6 +8,6 @@ export const BeobnichtbeurteiltFilteredMapIcon = () => (
     title="Beobachtung in Karte hervorgehoben"
     className={iconContainer}
   >
-    <MapIcon className={mapIcon} />
+    <MdLocalFlorist className={mapIcon} />
   </div>
 )
