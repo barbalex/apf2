@@ -1,17 +1,13 @@
-import styled from '@emotion/styled'
+import { MdLocalFlorist } from 'react-icons/md'
 
-import { MapIcon } from './MapIcon.jsx'
-import { IconContainer } from './IconContainer.jsx'
-
-const StyledMapIcon = styled(MapIcon)`
-  color: #947500 !important;
-`
+import { iconContainer } from './index.module.css'
+import { icon } from './PopMapIcon.module.css'
 
 export const PopMapIcon = () => (
-  <IconContainer
+  <div
     title="Populationen in Karte sichtbar"
-    className="iconContainer"
+    className={iconContainer}
   >
-    <StyledMapIcon />
-  </IconContainer>
+    <MdLocalFlorist className={icon} />
+  </div>
 )
