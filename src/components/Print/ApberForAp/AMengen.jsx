@@ -61,12 +61,9 @@ const Number = styled.div`
   max-width: 1.2cm;
   text-align: right;
 `
-const PopBerJahr = styled(Number)``
-const TpopBerJahr = styled(Number)``
 const PopSeit = styled(Number)`
   margin-left: 1cm;
 `
-const TpopSeit = styled(Number)``
 
 export const AMengen = ({ loading, jahr, node }) => {
   const a3LPop = node?.a3LPop
@@ -98,79 +95,78 @@ export const AMengen = ({ loading, jahr, node }) => {
       </YearRow>
       <LabelRow>
         <Label1 />
-        <PopBerJahr>Pop</PopBerJahr>
-        <TpopBerJahr>TPop</TpopBerJahr>
+        <Number>Pop</Number>
+        <Number>TPop</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </LabelRow>
       <Row>
         <Label1>Anzahl bekannt</Label1>
-        <PopBerJahr>{loading ? '...' : a1LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a1LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a1LPop}</Number>
+        <Number>{loading ? '...' : a1LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
       <TotalRow>
         <Label2>aktuell</Label2>
-        <PopBerJahr>{loading ? '...' : a2LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a2LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a2LPop}</Number>
+        <Number>{loading ? '...' : a2LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </TotalRow>
       <Row>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>ursprünglich</Label2AfterDavon>
-        <PopBerJahr>{loading ? '...' : a3LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a3LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a3LPop}</Number>
+        <Number>{loading ? '...' : a3LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
       <Row>
         <Label3>angesiedelt (vor Beginn AP)</Label3>
-        <PopBerJahr>{loading ? '...' : a4LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a4LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a4LPop}</Number>
+        <Number>{loading ? '...' : a4LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
       <Row>
         <Label3>angesiedelt (nach Beginn AP)</Label3>
-        <PopBerJahr>{loading ? '...' : a5LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a5LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a5LPop}</Number>
+        <Number>{loading ? '...' : a5LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
       <Row>
         <Label2>erloschen (nach 1950):</Label2>
-        <PopBerJahr>{loading ? '...' : a6LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a6LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a6LPop}</Number>
+        <Number>{loading ? '...' : a6LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
       <Row>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>
           zuvor autochthon oder vor AP angesiedelt
         </Label2AfterDavon>
-        <PopBerJahr>{loading ? '...' : a7LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a7LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a7LPop}</Number>
+        <Number>{loading ? '...' : a7LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
       <Row>
         <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
-        <PopBerJahr>{loading ? '...' : a8LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a8LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a8LPop}</Number>
+        <Number>{loading ? '...' : a8LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
       <Row>
         <Label2>Ansaatversuche:</Label2>
-        <PopBerJahr>{loading ? '...' : a9LPop}</PopBerJahr>
-        <TpopBerJahr>{loading ? '...' : a9LTpop}</TpopBerJahr>
+        <Number>{loading ? '...' : a9LPop}</Number>
+        <Number>{loading ? '...' : a9LTpop}</Number>
         <PopSeit />
-        <TpopSeit />
+        <Number />
       </Row>
     </Container>
   )
 }
-
