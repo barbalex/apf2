@@ -9,46 +9,16 @@ import {
   MdExpandLess as CloseIcon,
 } from 'react-icons/md'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import styled from '@emotion/styled'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-
-const OuterList = styled(List)`
-  border-bottom: ${(props) =>
-    props.border === 'true' ? '1px solid #d6d6d6' : 'none'};
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-`
-const InnerList = styled(List)`
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-`
-const StyledListItemText = styled(ListItemText)`
-  padding-right: 8px;
-  span {
-    font-size: 0.85rem !important;
-  }
-`
-const StyledListItem = styled(ListItem)`
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  font-size: 0.85rem !important;
-`
-const StyledListItemButton = styled(ListItemButton)`
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  font-size: 0.85rem !important;
-`
-const OutsideLink = styled.div`
-  margin-left: 2px;
-  margin-right: 6px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  svg {
-    font-size: 0.9em;
-    color: rgba(0, 0, 0, 0.77);
-  }
-`
+import {
+  outerList,
+  innerList,
+  listItemText,
+  listItem,
+  listItemButton,
+  outsideLink,
+} from './Ekf.module.css'
 
 export const Ekf = ({ tpop, ekf, border }) => {
   const [open, setOpen] = useState(true)
@@ -65,13 +35,17 @@ export const Ekf = ({ tpop, ekf, border }) => {
   }`
 
   return (
-    <OuterList
+    <List
       component="nav"
-      border={border.toString()}
+      style={{ borderBottom: border ? '1px solid #d6d6d6' : 'none' }}
+      className={outerList}
     >
       <ListItemButton onClick={toggleOpen}>
-        <StyledListItemText primary={title} />
-        <OutsideLink
+        <ListItemText
+          primary={title}
+          className={listItemText}
+        />
+        <div
           onClick={() => {
             if (window.matchMedia('(display-mode: standalone)').matches) {
               return window.open(url, '_blank', 'toolbar=no')
@@ -79,9 +53,10 @@ export const Ekf = ({ tpop, ekf, border }) => {
             window.open(url)
           }}
           title="in neuem Fenster öffnen"
+          className={outsideLink}
         >
           <FaExternalLinkAlt />
-        </OutsideLink>
+        </div>
         {open ?
           <CloseIcon />
         : <ExpandIcon />}
@@ -91,7 +66,7 @@ export const Ekf = ({ tpop, ekf, border }) => {
         timeout="auto"
         unmountOnExit
       >
-        <InnerList>
+        <List className={innerList}>
           {zaehls.map((z) => {
             const einheit =
               z?.tpopkontrzaehlEinheitWerteByEinheit?.text ?? '(keine Einheit)'
@@ -101,16 +76,17 @@ export const Ekf = ({ tpop, ekf, border }) => {
               z.anzahl !== null ? z.anzahl : '(Anzahl nicht erfasst)'
 
             return (
-              <StyledListItem
+              <ListItem
                 key={z.id}
                 component="div"
+                className={listItem}
               >
                 {`${anzahl} ${einheit}, ${methode}`}
-              </StyledListItem>
+              </ListItem>
             )
           })}
-        </InnerList>
+        </List>
       </Collapse>
-    </OuterList>
+    </List>
   )
 }

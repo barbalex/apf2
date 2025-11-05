@@ -1,0 +1,33 @@
+.outerList {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
+
+.innerList {
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
+}
+
+.listItemText {
+  padding-right: 8px;
+  span {
+    font-size: 0.85rem !important;
+  }
+}
+
+.listItem {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  font-size: 0.85rem !important;
+}
+
+.outsideLink {
+  margin-left: 2px;
+  margin-right: 6px;
+  margin-bottom: -2px;
+  cursor: pointer;
+  svg {
+    font-size: 0.9em;
+    color: rgba(0, 0, 0, 0.77);
+  }
+}
