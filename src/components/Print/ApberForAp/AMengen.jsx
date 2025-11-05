@@ -1,5 +1,3 @@
-import styled from '@emotion/styled'
-
 import {
   container,
   title,
@@ -13,21 +11,9 @@ import {
   label2Davon,
   label2AfterDavon,
   label3,
-  number,
+  numberClass,
   popSeit,
 } from './AMengen.module.css'
-
-const Number = styled.div`
-  min-width: 1.2cm;
-  max-width: 1.2cm;
-  text-align: right;
-`
-const PopSeit = styled.div`
-  min-width: 1.2cm;
-  max-width: 1.2cm;
-  text-align: right;
-  margin-left: 1cm;
-`
 
 export const AMengen = ({ loading, jahr, node }) => {
   const a3LPop = node?.a3LPop
@@ -59,77 +45,77 @@ export const AMengen = ({ loading, jahr, node }) => {
       </div>
       <div className={labelRow}>
         <div className={label1} />
-        <Number>Pop</Number>
-        <Number>TPop</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>Pop</div>
+        <div className={numberClass}>TPop</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label1}>Anzahl bekannt</div>
-        <Number>{loading ? '...' : a1LPop}</Number>
-        <Number>{loading ? '...' : a1LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a1LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a1LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={totalRow}>
         <div className={label2}>aktuell</div>
-        <Number>{loading ? '...' : a2LPop}</Number>
-        <Number>{loading ? '...' : a2LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a2LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a2LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label2Davon}>davon:</div>
         <div className={label2AfterDavon}>ursprünglich</div>
-        <Number>{loading ? '...' : a3LPop}</Number>
-        <Number>{loading ? '...' : a3LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a3LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a3LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label3}>angesiedelt (vor Beginn AP)</div>
-        <Number>{loading ? '...' : a4LPop}</Number>
-        <Number>{loading ? '...' : a4LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a4LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a4LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label3}>angesiedelt (nach Beginn AP)</div>
-        <Number>{loading ? '...' : a5LPop}</Number>
-        <Number>{loading ? '...' : a5LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a5LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a5LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label2}>erloschen (nach 1950):</div>
-        <Number>{loading ? '...' : a6LPop}</Number>
-        <Number>{loading ? '...' : a6LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a6LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a6LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label2Davon}>davon:</div>
         <div className={label2AfterDavon}>
           zuvor autochthon oder vor AP angesiedelt
         </div>
-        <Number>{loading ? '...' : a7LPop}</Number>
-        <Number>{loading ? '...' : a7LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a7LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a7LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label3}>nach Beginn Aktionsplan angesiedelt</div>
-        <Number>{loading ? '...' : a8LPop}</Number>
-        <Number>{loading ? '...' : a8LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a8LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a8LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
       <div className={row}>
         <div className={label2}>Ansaatversuche:</div>
-        <Number>{loading ? '...' : a9LPop}</Number>
-        <Number>{loading ? '...' : a9LTpop}</Number>
-        <PopSeit />
-        <Number />
+        <div className={numberClass}>{loading ? '...' : a9LPop}</div>
+        <div className={numberClass}>{loading ? '...' : a9LTpop}</div>
+        <div className={popSeit} />
+        <div className={numberClass} />
       </div>
     </div>
   )
