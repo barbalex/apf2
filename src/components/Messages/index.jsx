@@ -2,7 +2,7 @@ import { useContext, Suspense } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
@@ -15,24 +15,17 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { MessagesList } from './Messages/index.jsx'
 import { a } from '../Projekte/Karte/layers/Pop/statusGroup/a.js'
 
-const StyledDialog = styled(Dialog)`
-  display: flex;
-  flex-direction: column;
-  > div > div {
-    max-width: ${window.innerWidth * 0.8}px !important;
-    min-width: 368px !important;
-    min-width: 80% !important;
-  }
-`
-const TitleRow = styled.div`
-  padding-bottom: 5px;
-  overflow: visible !important;
-`
-const AllOkButton = styled(Button)`
-  position: absolute !important;
-  top: 20px;
-  right: 25px;
-`
+import { titleRow, allOkButton } from './index.module.css'
+
+const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
+  display: 'flex',
+  flexDirection: 'column',
+  '& .MuiPaper-root': {
+    maxWidth: `${window.innerWidth * 0.8}px !important`,
+    minWidth: '368px !important',
+    minWidth: '80% !important',
+  },
+}))
 
 const getAYearAgo = () => {
   const now = new Date()
@@ -92,15 +85,16 @@ export const Messages = observer(() => {
           open={unreadMessages.length > 0 && !!userName}
           aria-labelledby="dialog-title"
         >
-          <TitleRow>
+          <div className={titleRow}>
             <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-            <AllOkButton
+            <Button
               onClick={onClickReadAll}
               color="inherit"
+              className={allOkButton}
             >
               alle o.k.
-            </AllOkButton>
-          </TitleRow>
+            </Button>
+          </div>
           <MessagesList unreadMessages={unreadMessages} />
         </StyledDialog>
       </Suspense>

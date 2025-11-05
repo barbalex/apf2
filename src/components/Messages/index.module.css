@@ -1,0 +1,10 @@
+.titleRow {
+  padding-bottom: 5px;
+  overflow: visible !important;
+}
+
+.allOkButton {
+  position: absolute !important;
+  top: 20px;
+  right: 25px;
+}
