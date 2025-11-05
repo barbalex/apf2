@@ -1,0 +1,42 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.icon {
+  fill: none;
+  stroke: #2e7d32;
+  stroke-width: 3px;
+}
+
+.checkbox {
+  position: relative;
+  width: 17px;
+  height: 17px;
+  border-radius: 3px;
+  transition: all 150ms;
+  flex-grow: 0;
+  flex-basis: 19px;
+  flex-shrink: 0;
+}
+
+.nrOfEk {
+  font-weight: 700;
+  font-size: smaller;
+  position: absolute;
+  bottom: -2px;
+  right: 0;
+  color: red;
+}
+
+.sumCounted {
+  margin-left: 3px;
+  align-self: center;
+  flex-grow: 0;
+  flex-basis: 32px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
