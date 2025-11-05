@@ -8,7 +8,7 @@ import styled from '@emotion/styled'
 import { tpop } from '../../../shared/fragments.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const CheckboxContainer = styled.div`
+const Container = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -19,7 +19,7 @@ const Icon = styled.svg`
   stroke: white;
   stroke-width: 2px;
 `
-const StyledCheckbox = styled.div`
+const CheckboxDiv = styled.div`
   width: 19px;
   height: 19px;
   background: ${(props) => (props.checked ? '#2e7d32' : 'rgba(46,125,50,0.1)')};
@@ -91,12 +91,12 @@ export const Checkbox = observer(({ row, value, field }) => {
   }
 
   return (
-    <CheckboxContainer onClick={onClick}>
-      <StyledCheckbox checked={checked}>
+    <Container onClick={onClick}>
+      <CheckboxDiv checked={checked}>
         <Icon viewBox="0 0 24 24">
           <polyline points="20 6 9 17 4 12" />
         </Icon>
-      </StyledCheckbox>
-    </CheckboxContainer>
+      </CheckboxDiv>
+    </Container>
   )
 })
