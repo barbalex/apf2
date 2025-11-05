@@ -1,53 +1,25 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { sum } from 'es-toolkit'
 import { GoZap } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-wrap: nowrap;
-`
-const MassnContainer = styled.div`
-  position: relative;
-  width: 17px;
-  height: 17px;
-  flex-grow: 0;
-  flex-basis: 19px;
-  flex-shrink: 0;
-`
-const MassnSymbol = styled(GoZap)`
-  font-size: 1.1rem;
-  color: #2e7d32;
-`
-const NrOfMassn = styled.div`
-  font-weight: 700;
-  font-size: smaller;
-  position: absolute;
-  bottom: -2px;
-  right: 0;
-  color: red;
-`
-const SumCounted = styled.div`
-  margin-left: 3px;
-  flex-grow: 0;
-  flex-basis: 32px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-`
+import {
+  container,
+  massnContainer,
+  massnSymbol,
+  nrOfMassn,
+  sumCounted,
+} from './MassnIcon.module.css'
 
 export const MassnIcon = observer(({ ansiedlungs }) => {
   const store = useContext(MobxContext)
   const { showCount, showEkCount } = store.ekPlan
 
   if (!ansiedlungs.length) {
-    return <Container>&nbsp;</Container>
+    return <div className={container}>&nbsp;</div>
   }
+
   let sumCounted = null
   const ansiedlungsWithCount = ansiedlungs.filter(
     (ans) => ans.zieleinheitAnzahl !== null,
@@ -57,19 +29,22 @@ export const MassnIcon = observer(({ ansiedlungs }) => {
   }
 
   return (
-    <Container
+    <div
+      className={container}
       showcount={showCount}
       style={{ justifyContent: showCount ? 'space-between' : 'center' }}
     >
-      <MassnContainer>
-        <MassnSymbol />
+      <div className={massnContainer}>
+        <GoZap className={massnSymbol} />
         {showEkCount && ansiedlungs.length > 1 && (
-          <NrOfMassn>{ansiedlungs.length}</NrOfMassn>
+          <div className={nrOfMassn}>{ansiedlungs.length}</div>
         )}
-      </MassnContainer>
+      </div>
       {showCount && (
-        <SumCounted>{sumCounted !== null ? sumCounted : ' '}</SumCounted>
+        <div className={sumCounted}>
+          {sumCounted !== null ? sumCounted : ' '}
+        </div>
       )}
-    </Container>
+    </div>
   )
 })
