@@ -5,8 +5,8 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import styled from '@emotion/styled'
 
-import { tpop } from '../../shared/fragments.js'
-import { MobxContext } from '../../../mobxContext.js'
+import { tpop } from '../../../shared/fragments.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
 const CheckboxContainer = styled.div`
   width: 100%;

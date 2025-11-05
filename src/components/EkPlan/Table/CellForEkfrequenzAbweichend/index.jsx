@@ -2,9 +2,9 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Checkbox } from './Checkbox.jsx'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.js'
 
-import { cellForSelect } from './index.module.css'
+import { cellForSelect } from '../index.module.css'
 
 export const CellForEkfrequenzAbweichend = observer(
   ({ field, row, isOdd, ekfrequenzAbweichend, width }) => {
