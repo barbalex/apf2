@@ -1,26 +1,28 @@
 import styled from '@emotion/styled'
 
-const Container = styled.div`
-  padding: 0.2cm 0;
-  break-inside: avoid;
-`
-const Title = styled.h3`
-  font-size: 16px;
-  font-weight: 700;
-  margin-bottom: 0;
-`
-const Row = styled.div`
+import {
+  container,
+  title,
+  row,
+  yearRow,
+  labelRow,
+  year,
+  yearSince,
+  label1,
+  label2,
+  label2Davon,
+  label2AfterDavon,
+  label3,
+  number,
+  popSeit,
+} from './CMengen.module.css'
+
+const LabelRow = styled.div`
+  font-size: 12px;
   display: flex;
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
   page-break-inside: avoid;
-`
-const YearRow = styled.div`
-  display: flex;
-  padding: 0.05cm 0;
-`
-const LabelRow = styled(Row)`
-  font-size: 12px;
 `
 const Year = styled.div`
   position: relative;
@@ -41,7 +43,8 @@ const Label2 = styled.div`
   max-width: 8.8cm;
   padding-left: 1.2cm;
 `
-const Label2Davon = styled(Label2)`
+const Label2Davon = styled.div`
+  padding-left: 1.2cm;
   font-size: 10px;
   min-width: 1.8cm;
   max-width: 1.8cm;
@@ -63,12 +66,12 @@ const Number = styled.div`
   max-width: 1cm;
   text-align: right;
 `
-const PopBerJahr = styled(Number)``
-const TpopBerJahr = styled(Number)``
-const PopSeit = styled(Number)`
+const PopSeit = styled.div`
   margin-left: 1cm;
+  min-width: 1cm;
+  max-width: 1cm;
+  text-align: right;
 `
-const TpopSeit = styled(Number)``
 
 export const CMengen = ({ jahr, loading, node }) => {
   const c1LPop = loading ? '...' : node?.c1LPop
@@ -90,69 +93,69 @@ export const CMengen = ({ jahr, loading, node }) => {
   const c1FirstYear = loading ? '...' : node?.c1FirstYear
 
   return (
-    <Container>
-      <Title>C. Zwischenbilanz zur Wirkung von Massnahmen</Title>
-      <YearRow>
+    <div className={container}>
+      <h3 className={title}>C. Zwischenbilanz zur Wirkung von Massnahmen</h3>
+      <div className={yearRow}>
         <Year>{jahr}</Year>
         <YearSince>{`Seit ${c1FirstYear}`}</YearSince>
-      </YearRow>
+      </div>
       <LabelRow>
         <Label1 />
-        <PopBerJahr>Pop</PopBerJahr>
-        <TpopBerJahr>TPop</TpopBerJahr>
+        <Number>Pop</Number>
+        <Number>TPop</Number>
         <PopSeit>Pop</PopSeit>
-        <TpopSeit>TPop</TpopSeit>
+        <Number>TPop</Number>
       </LabelRow>
-      <Row>
+      <div className={row}>
         <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
-        <PopBerJahr>{c1LPop}</PopBerJahr>
-        <TpopBerJahr>{c1LTpop}</TpopBerJahr>
+        <Number>{c1LPop}</Number>
+        <Number>{c1LTpop}</Number>
         <PopSeit>{c1RPop}</PopSeit>
-        <TpopSeit>{c1RTpop}</TpopSeit>
-      </Row>
-      <Row>
+        <Number>{c1RTpop}</Number>
+      </div>
+      <div className={row}>
         <Label2>kontrolliert</Label2>
-        <PopBerJahr />
-        <TpopBerJahr />
+        <Number />
+        <Number />
         <PopSeit>{c2RPop}</PopSeit>
-        <TpopSeit>{c2RTpop}</TpopSeit>
-      </Row>
-      <Row>
+        <Number>{c2RTpop}</Number>
+      </div>
+      <div className={row}>
         <Label2Davon>davon:</Label2Davon>
         <Label2AfterDavon>sehr erfolgreich</Label2AfterDavon>
-        <PopBerJahr />
-        <TpopBerJahr />
+        <Number />
+        <Number />
         <PopSeit>{c3RPop}</PopSeit>
-        <TpopSeit>{c3RTpop}</TpopSeit>
-      </Row>
-      <Row>
+        <Number>{c3RTpop}</Number>
+      </div>
+      <div className={row}>
         <Label3>erfolgreich</Label3>
-        <PopBerJahr />
-        <TpopBerJahr />
+        <Number />
+        <Number />
         <PopSeit>{c4RPop}</PopSeit>
-        <TpopSeit>{c4RTpop}</TpopSeit>
-      </Row>
-      <Row>
+        <Number>{c4RTpop}</Number>
+      </div>
+      <div className={row}>
         <Label3>weniger erfolgreich</Label3>
-        <PopBerJahr />
-        <TpopBerJahr />
+        <Number />
+        <Number />
         <PopSeit>{c5RPop}</PopSeit>
-        <TpopSeit>{c5RTpop}</TpopSeit>
-      </Row>
-      <Row>
+        <Number>{c5RTpop}</Number>
+      </div>
+      <div className={row}>
         <Label3>nicht erfolgreich</Label3>
-        <PopBerJahr />
-        <TpopBerJahr />
+        <Number />
+        <Number />
         <PopSeit>{c6RPop}</PopSeit>
-        <TpopSeit>{c6RTpop}</TpopSeit>
-      </Row>
-      <Row>
+        <Number>{c6RTpop}</Number>
+      </div>
+      <div className={row}>
         <Label3>mit unsicherer Wirkung</Label3>
-        <PopBerJahr />
-        <TpopBerJahr />
+        <Number />
+        <Number />
         <PopSeit>{c7RPop}</PopSeit>
-        <TpopSeit>{c7RTpop}</TpopSeit>
-      </Row>
-    </Container>
+        <Number>{c7RTpop}</Number>
+      </div>
+    </div>
   )
 }

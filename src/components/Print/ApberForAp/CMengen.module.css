@@ -1,0 +1,87 @@
+.container {
+  padding: 0.2cm 0;
+  break-inside: avoid;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.row {
+  display: flex;
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  page-break-inside: avoid;
+}
+
+.yearRow {
+  display: flex;
+  padding: 0.05cm 0;
+}
+
+.labelRow {
+  font-size: 12px;
+  display: flex;
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  page-break-inside: avoid;
+}
+
+.year {
+  position: relative;
+  left: 10.9cm;
+  width: 2cm;
+}
+
+.yearSince {
+  position: relative;
+  left: 11.45cm;
+  width: 2cm;
+}
+
+.label1 {
+  min-width: 10cm;
+  max-width: 10cm;
+}
+
+.label2 {
+  min-width: 8.8cm;
+  max-width: 8.8cm;
+  padding-left: 1.2cm;
+}
+
+.label2Davon {
+  padding-left: 1.2cm;
+  font-size: 10px;
+  min-width: 1.8cm;
+  max-width: 1.8cm;
+  top: 3px;
+  position: relative;
+  color: grey;
+}
+
+.label2AfterDavon {
+  min-width: 7cm;
+  max-width: 7cm;
+}
+
+.label3 {
+  min-width: 7cm;
+  max-width: 7cm;
+  padding-left: 3cm;
+}
+
+.number {
+  min-width: 1cm;
+  max-width: 1cm;
+  text-align: right;
+}
+
+.popSeit {
+  margin-left: 1cm;
+  min-width: 1cm;
+  max-width: 1cm;
+  text-align: right;
+}
