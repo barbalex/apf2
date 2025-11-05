@@ -1,0 +1,7 @@
+.container {
+  display: flex;
+  height: 60px;
+  min-height: 60px;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 60px;
+}
