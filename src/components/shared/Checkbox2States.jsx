@@ -2,25 +2,8 @@ import Checkbox from '@mui/material/Checkbox'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 
-// without slight padding radio is slightly cut off!
-const StyledFormControl = styled(FormControl)`
-  padding-left: 1px !important;
-  padding-bottom: 15px !important;
-`
-const StyledFormLabel = styled(FormLabel)`
-  padding-top: 10px !important;
-  padding-bottom: 8px !important;
-  font-size: 12px !important;
-  cursor: text;
-  user-select: none;
-  pointer-events: none;
-`
-const StyledCheckbox = styled(Checkbox)`
-  height: 2px !important;
-  width: 24px;
-`
+import { formControl, formLabel, checkbox } from './Checkbox2States.module.css'
 
 export const Checkbox2States = ({
   label,
@@ -47,30 +30,33 @@ export const Checkbox2States = ({
   const checked = value === true
 
   return (
-    <div>
-      <StyledFormControl
-        component="fieldset"
-        error={!!error}
-        aria-describedby={`${label}ErrorText`}
-        variant="standard"
+    <FormControl
+      component="fieldset"
+      error={!!error}
+      aria-describedby={`${label}ErrorText`}
+      variant="standard"
+      className={formControl}
+    >
+      <FormLabel
+        component="legend"
+        className={formLabel}
       >
-        <StyledFormLabel component="legend">{label}</StyledFormLabel>
-        <StyledCheckbox
-          inputProps={{ 'data-id': name }}
-          onClick={onClickButton}
-          color="primary"
-          checked={checked}
-          disabled={disabled}
-        />
-        {!!helperText && (
-          <FormHelperText id={`${label}helperText`}>
-            {helperText}
-          </FormHelperText>
-        )}
-        {!!error && (
-          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-        )}
-      </StyledFormControl>
-    </div>
+        {label}
+      </FormLabel>
+      <Checkbox
+        inputProps={{ 'data-id': name }}
+        onClick={onClickButton}
+        color="primary"
+        checked={checked}
+        disabled={disabled}
+        className={checkbox}
+      />
+      {!!helperText && (
+        <FormHelperText id={`${label}helperText`}>{helperText}</FormHelperText>
+      )}
+      {!!error && (
+        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      )}
+    </FormControl>
   )
 }
