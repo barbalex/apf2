@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
@@ -10,40 +9,12 @@ import { MobxContext } from '../../mobxContext.js'
 import { exists } from '../../modules/exists.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 
-const Container = styled.div`
-  background-color: #ffd3a7;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 46px;
-  @media print {
-    display: none !important;
-  }
-`
-const TitleRow = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-const FilterNumbers = styled.div`
-  padding-right: 8px;
-  cursor: default;
-  user-select: none;
-  margin-top: 2px;
-`
-const StyledDeleteFilterIcon = styled(FaTrash)`
-  cursor: pointer;
-  pointer-events: auto;
-`
-const StyledDeleteFilterIcon2 = styled(FaTrashAlt)`
-  cursor: pointer;
-  pointer-events: auto;
-`
-const StyledDeleteFilterIcon3 = styled(FaRegTrashAlt)`
-  cursor: pointer;
-  pointer-events: auto;
-`
-const StyledInfoIcon = styled(MdInfoOutline)``
+import {
+  container,
+  titleRow,
+  filterNumbers,
+  deleteFilterIcon,
+} from './FilterTitle.module.css'
 
 export const FilterTitle = observer(
   ({ title, table, totalNr, filteredNr, activeTab }) => {
@@ -79,9 +50,9 @@ export const FilterTitle = observer(
     }
 
     return (
-      <Container>
-        <TitleRow>
-          <FilterNumbers>
+      <div className={container}>
+        <div className={titleRow}>
+          <div className={filterNumbers}>
             {exists(filteredNr) && (
               <>
                 <span title="gefilterte Anzahl">
@@ -93,7 +64,7 @@ export const FilterTitle = observer(
                 </span>
               </>
             )}
-          </FilterNumbers>
+          </div>
           {activeTab !== undefined && (
             <Tooltip title={`Aktuelles Filter-Kriterium entfernen`}>
               <span>
@@ -103,7 +74,7 @@ export const FilterTitle = observer(
                   size="small"
                   disabled={!existsTableFilter}
                 >
-                  <StyledDeleteFilterIcon3 />
+                  <FaRegTrashAlt className={deleteFilterIcon} />
                 </IconButton>
               </span>
             </Tooltip>
@@ -116,7 +87,7 @@ export const FilterTitle = observer(
                 size="small"
                 disabled={!existsTableFilter}
               >
-                <StyledDeleteFilterIcon2 />
+                <FaTrashAlt className={deleteFilterIcon} />
               </IconButton>
             </span>
           </Tooltip>
@@ -128,7 +99,7 @@ export const FilterTitle = observer(
                 size="small"
                 disabled={!existsTreeFilter}
               >
-                <StyledDeleteFilterIcon />
+                <FaTrash className={deleteFilterIcon} />
               </IconButton>
             </span>
           </Tooltip>
@@ -138,11 +109,11 @@ export const FilterTitle = observer(
               size="medium"
               onClick={onClickInfo}
             >
-              <StyledInfoIcon />
+              <MdInfoOutline />
             </IconButton>
           </Tooltip>
-        </TitleRow>
-      </Container>
+        </div>
+      </div>
     )
   },
 )
