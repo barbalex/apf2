@@ -1,5 +1,4 @@
 import { Suspense } from 'react'
-import styled from '@emotion/styled'
 import { sumBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -24,34 +23,6 @@ import {
   totalColumn,
   totalDiffColumn,
 } from './AktPopList.module.css'
-
-const AngesColumn = styled.div`
-  min-width: 1.6cm;
-  max-width: 1.6cm;
-  text-align: center;
-  @media print {
-    min-width: 1.9cm;
-    max-width: 1.9cm;
-  }
-`
-const TotalColumn = styled.div`
-  min-width: 1.6cm;
-  max-width: 1.6cm;
-  text-align: center;
-  @media print {
-    min-width: 1.9cm;
-    max-width: 1.9cm;
-  }
-`
-const TotalDiffColumn = styled.div`
-  min-width: 1.2cm;
-  max-width: 1.2cm;
-  text-align: center;
-  @media print {
-    min-width: 1.5cm;
-    max-width: 1.5cm;
-  }
-`
 
 const fallback = (
   <ErrorBoundary>
@@ -123,11 +94,11 @@ export const AktPopList = ({ year }) => {
           <div className={titleRow2}>
             <div className={apColumn}>Aktionsplan</div>
             <div className={ursprColumn}>ursprünglich</div>
-            <AngesColumn>angesiedelt</AngesColumn>
-            <TotalColumn>total</TotalColumn>
+            <div className={angesColumn}>angesiedelt</div>
+            <div className={totalColumn}>total</div>
             <div className={ursprColumn}>ursprünglich</div>
-            <AngesColumn>angesiedelt</AngesColumn>
-            <TotalDiffColumn>total</TotalDiffColumn>
+            <div className={angesColumn}>angesiedelt</div>
+            <div className={totalDiffColumn}>total</div>
           </div>
           {aps.map((ap) => (
             <div
@@ -136,8 +107,8 @@ export const AktPopList = ({ year }) => {
             >
               <div className={apColumn}>{ap?.artname}</div>
               <div className={ursprColumn}>{ap?.pop100}</div>
-              <AngesColumn>{ap?.pop200}</AngesColumn>
-              <TotalColumn>{ap?.popTotal}</TotalColumn>
+              <div className={angesColumn}>{ap?.pop200}</div>
+              <div className={totalColumn}>{ap?.popTotal}</div>
               <div
                 className={ursprColumn}
                 style={{
@@ -149,7 +120,8 @@ export const AktPopList = ({ year }) => {
               >
                 {ap?.pop100Diff}
               </div>
-              <AngesColumn
+              <div
+                className={angesColumn}
                 style={{
                   backgroundColor:
                     ap?.pop200Diff > 0 ? '#00ff00'
@@ -158,8 +130,9 @@ export const AktPopList = ({ year }) => {
                 }}
               >
                 {ap?.pop200Diff}
-              </AngesColumn>
-              <TotalDiffColumn
+              </div>
+              <div
+                className={totalDiffColumn}
                 style={{
                   backgroundColor:
                     ap?.popTotalDiff > 0 ? '#00ff00'
@@ -168,14 +141,14 @@ export const AktPopList = ({ year }) => {
                 }}
               >
                 {ap?.popTotalDiff}
-              </TotalDiffColumn>
+              </div>
             </div>
           ))}
           <div className={totalRow}>
             <div className={apColumn}>{aps.length}</div>
             <div className={ursprColumn}>{pop100}</div>
-            <AngesColumn>{pop200}</AngesColumn>
-            <TotalColumn>{popsTotal}</TotalColumn>
+            <div className={angesColumn}>{pop200}</div>
+            <div className={totalColumn}>{popsTotal}</div>
             <div
               className={ursprColumn}
               style={{
@@ -187,7 +160,8 @@ export const AktPopList = ({ year }) => {
             >
               {pop100Diff}
             </div>
-            <AngesColumn
+            <div
+              className={angesColumn}
               style={{
                 backgroundColor:
                   pop200Diff > 0 ? '#00ff00'
@@ -196,8 +170,9 @@ export const AktPopList = ({ year }) => {
               }}
             >
               {pop200Diff}
-            </AngesColumn>
-            <TotalDiffColumn
+            </div>
+            <div
+              className={totalDiffColumn}
               style={{
                 backgroundColor:
                   popTotalDiff > 0 ? '#00ff00'
@@ -206,7 +181,7 @@ export const AktPopList = ({ year }) => {
               }}
             >
               {popTotalDiff}
-            </TotalDiffColumn>
+            </div>
           </div>
         </div>
       </Suspense>
