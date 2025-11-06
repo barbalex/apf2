@@ -146,6 +146,9 @@
 .field {
   width: 100%;
   hyphens: auto;
+  p {
+    margin: 0;
+  }
 }
 
 .erfkritRow {
