@@ -1,46 +1,8 @@
-import styled from '@emotion/styled'
 import { groupBy } from 'es-toolkit'
 import { sortBy } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  break-before: page;
-  font-size: 12px;
-  line-height: 1.1em;
-  @media screen {
-    margin-top: 1cm;
-  }
-  @media print {
-    /*padding-top: 0.3cm !important;*/
-    margin-top: 0.3cm !important;
-  }
-`
-const AvRow = styled.div`
-  display: flex;
-  padding: 0.05cm 0;
-  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
-  page-break-inside: avoid;
-`
-const NonAvRow = styled.div`
-  display: flex;
-  padding: 0.05cm 0;
-`
-const Av = styled.div`
-  min-width: 5cm;
-  max-width: 5cm;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`
-const Art = styled.div``
-const Title = styled.p`
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 4px;
-`
+import { container, avRow, nonAvRow, avClass, title } from './AvList.module.css'
 
 export const AvList = ({ data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
@@ -55,27 +17,36 @@ export const AvList = ({ data }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <Title>Artverantwortliche</Title>
+      <div className={container}>
+        <p className={title}>Artverantwortliche</p>
         {avs.map((av) => {
           const array = sortBy(avGrouped[av], ['art'])
+
           return array.map((o, i) => {
-            if (i === 0)
+            if (i === 0) {
               return (
-                <AvRow key={o.art}>
-                  <Av>{o.av}</Av>
-                  <Art>{o.art}</Art>
-                </AvRow>
+                <div
+                  className={avRow}
+                  key={o.art}
+                >
+                  <div className={avClass}>{o.av}</div>
+                  <div>{o.art}</div>
+                </div>
               )
+            }
+
             return (
-              <NonAvRow key={o.art}>
-                <Av>{}</Av>
-                <Art>{o.art}</Art>
-              </NonAvRow>
+              <div
+                className={nonAvRow}
+                key={o.art}
+              >
+                <div className={avClass} />
+                <div>{o.art}</div>
+              </div>
             )
           })
         })}
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 }
