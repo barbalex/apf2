@@ -4,55 +4,9 @@ import InputLabel from '@mui/material/InputLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import { DateTime } from 'luxon'
 import DatePicker from 'react-datepicker'
-import styled from '@emotion/styled'
 
-const StyledFormControl = styled(FormControl)`
-  margin-bottom: 19px !important;
-  width: 100%;
-  .react-datepicker-popper {
-    z-index: 2;
-  }
-  .react-datepicker-wrapper {
-    width: 100%;
-  }
-  .react-datepicker__header {
-    background-color: rgba(56, 142, 60, 0.1) !important;
-  }
-  &:focus-within label {
-    color: #2e7d3 !important;
-  }
-`
-const Label = styled(InputLabel)`
-  font-size: 12px !important;
-  color: rgb(0, 0, 0, 0.54);
-  position: relative !important;
-  transform: none !important;
-`
-const StyledDatePicker = styled(DatePicker)`
-  width: 100%;
-  padding: 0.25rem 0;
-  color: #495057;
-  background-color: #fff;
-  font-size: 1rem;
-  background-clip: padding-box;
-  transition:
-    border-color 0.15s ease-in-out,
-    box-shadow 0.15s ease-in-out;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-radius: 0;
-  background-color: transparent;
-  &:focus {
-    color: #495057;
-    background-color: #fff;
-    outline: 0;
-    border-bottom: 2px solid #2e7d32;
-    box-shadow: none;
-    background-color: transparent;
-  }
-`
+import { formControl, labelClass, datePicker } from './Date.module.css'
+
 const dateFormat = [
   'dd.MM.yyyy',
   'd.MM.yyyy',
@@ -127,17 +81,28 @@ export const DateField = ({
 
   // for popperPlacement see https://github.com/Hacker0x01/react-datepicker/issues/1246#issuecomment-361833919
   return (
-    <StyledFormControl variant="standard">
-      {!!label && <Label htmlFor={name}>{label}</Label>}
-      <StyledDatePicker
+    <FormControl
+      variant="standard"
+      className={formControl}
+    >
+      {!!label && (
+        <InputLabel
+          htmlFor={name}
+          className={labelClass}
+        >
+          {label}
+        </InputLabel>
+      )}
+      <DatePicker
         id={name}
         selected={selected}
         onChange={onChangeDatePicker}
         // onChangeRaw={onChangeDatePickerRaw}
         dateFormat={dateFormat}
         popperPlacement={popperPlacement}
+        className={datePicker}
       />
       {!!error && <FormHelperText>{error}</FormHelperText>}
-    </StyledFormControl>
+    </FormControl>
   )
 }
