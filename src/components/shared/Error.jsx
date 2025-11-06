@@ -1,5 +1,4 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { uniq } from 'es-toolkit'
 
@@ -7,9 +6,8 @@ import { logout } from '../../modules/logout.js'
 import { IdbContext } from '../../idbContext.js'
 import { existsPermissionError } from '../../modules/existsPermissionError.js'
 
-const ErrorContainer = styled.div`
-  padding: 15px;
-`
+import { container } from './Error.module.css'
+
 /*
 const LogoutButton = styled(Button)`
   margin-top: 10px !important;
@@ -31,7 +29,7 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
     return logout(idb)
     /*// if token is not accepted, ask user to logout
     return (
-      <ErrorContainer>
+      <div className={container}>
         <div>Ihre Anmeldung ist nicht mehr gültig.</div>
         <div>Bitte melden Sie sich neu an.</div>
         <LogoutButton
@@ -42,27 +40,27 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
         >
           Neu anmelden
         </LogoutButton>
-      </ErrorContainer>
+      </div>
     )*/
   }
 
   const errorMessages = errorsToUse.map((e) => e.message)
   const uniqueMessages = uniq(errorMessages)
   if (uniqueMessages.length === 1) {
-    return <ErrorContainer>{`Fehler: ${uniqueMessages[0]}`}</ErrorContainer>
+    return <div className={container}>{`Fehler: ${uniqueMessages[0]}`}</div>
   }
 
   // console.log('Error.jsx: errorsToUse:', errorsToUse)
   // console.log('Error.jsx: errorMessages:', errorMessages)
 
   return (
-    <ErrorContainer>
+    <div className={container}>
       <h5>Fehler:</h5>
       <ul>
         {uniqueMessages.map((message, index) => (
           <li key={index}>{message}</li>
         ))}
       </ul>
-    </ErrorContainer>
+    </div>
   )
 })
