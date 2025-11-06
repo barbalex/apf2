@@ -72,10 +72,6 @@ const ErfolgNicht = styled.div`
   display: inline-block;
   grid-column: 2 / span 1;
   text-align: center;
-  background-color: ${(props) =>
-    props.val ? 'red'
-    : props.odd ? 'rgba(0,0,0,0.03)'
-    : 'unset'};
   font-weight: 600;
   @media print {
     /* does not work - break is hideous :-( */
@@ -86,10 +82,6 @@ const ErfolgWenig = styled.div`
   display: inline-block;
   grid-column: 3 / span 1;
   text-align: center;
-  background-color: ${(props) =>
-    props.val ? 'orange'
-    : props.odd ? 'rgba(0,0,0,0.03)'
-    : 'unset'};
   font-weight: 600;
   @media print {
     /* does not work - break is hideous :-( */
@@ -445,14 +437,22 @@ export const ErfolgList = ({ jahr, data }) => {
               <Fragment key={row.ap}>
                 <Ap odd={odd}>{row.ap}</Ap>
                 <ErfolgNicht
-                  val={!!row.erfolgNicht}
-                  odd={odd}
+                  style={{
+                    backgroundColor:
+                      !!row.erfolgNicht ? 'red'
+                      : odd ? 'rgba(0,0,0,0.03)'
+                      : 'unset',
+                  }}
                 >
                   {row.erfolgNicht}
                 </ErfolgNicht>
                 <ErfolgWenig
-                  val={!!row.erfolgWenig}
-                  odd={odd}
+                  style={{
+                    backgroundColor:
+                      !!row.erfolgWenig ? 'orange'
+                      : odd ? 'rgba(0,0,0,0.03)'
+                      : 'unset',
+                  }}
                 >
                   {row.erfolgWenig}
                 </ErfolgWenig>
