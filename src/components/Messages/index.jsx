@@ -22,7 +22,6 @@ const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
   flexDirection: 'column',
   '& .MuiPaper-root': {
     maxWidth: `${window.innerWidth * 0.8}px !important`,
-    minWidth: '368px !important',
     minWidth: '80% !important',
   },
 }))
