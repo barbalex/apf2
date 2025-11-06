@@ -1,24 +1,11 @@
 import { useContext } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-const FilterCommentTitle = styled.div`
-  margin-top: -10px;
-  margin-bottom: -10px;
-  padding: 0 10px;
-  font-size: 0.75em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
-`
-const FilterCommentList = styled.ul``
-const FilterComment = styled.li`
-  padding: 0 10px;
-  font-size: 0.75em;
-`
+import { title, comment } from './ActiveFilters.module.css'
 
 export const ActiveFilters = observer(() => {
   const { apId } = useParams()
@@ -64,25 +51,23 @@ export const ActiveFilters = observer(() => {
 
   return (
     <ErrorBoundary>
-      <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
-      <FilterCommentList>
+      <div className={title}>Zusätzlich aktive Filter:</div>
+      <ul>
         {!!navApFilterComment && (
-          <FilterComment>{navApFilterComment}</FilterComment>
+          <li className={comment}>{navApFilterComment}</li>
         )}
         {!!navHiearchyComment && (
-          <FilterComment>{navHiearchyComment}</FilterComment>
+          <li className={comment}>{navHiearchyComment}</li>
         )}
-        {!!navLabelComment && <FilterComment>{navLabelComment}</FilterComment>}
+        {!!navLabelComment && <li className={comment}>{navLabelComment}</li>}
         {!!artHierarchyComment && (
-          <FilterComment>{artHierarchyComment}</FilterComment>
+          <li className={comment}>{artHierarchyComment}</li>
         )}
         {!!popHierarchyComment && (
-          <FilterComment>{popHierarchyComment}</FilterComment>
+          <li className={comment}>{popHierarchyComment}</li>
         )}
-        {!!mapFilterComment && (
-          <FilterComment>{mapFilterComment}</FilterComment>
-        )}
-      </FilterCommentList>
+        {!!mapFilterComment && <li className={comment}>{mapFilterComment}</li>}
+      </ul>
     </ErrorBoundary>
   )
 })
