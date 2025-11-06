@@ -1,0 +1,20 @@
+.formControl {
+  padding-bottom: 19px !important;
+
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.leftFormControl {
+  padding-right: 8px !important;
+  padding-bottom: 19px !important;
+
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+.rowClass {
+  display: flex;
+}

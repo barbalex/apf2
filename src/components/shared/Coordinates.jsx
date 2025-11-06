@@ -3,7 +3,6 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -30,18 +29,11 @@ import {
   message as wgs84LongMessage,
 } from '../../modules/wgs84LongIsValid.js'
 
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const LeftFormControl = styled(StyledFormControl)`
-  padding-right: 8px !important;
-`
-const Row = styled.div`
-  display: flex;
-`
+import {
+  formControl,
+  leftFormControl,
+  rowClass,
+} from './Coordinates.module.css'
 
 export const Coordinates = observer(({ row, refetchForm, table }) => {
   const { lv95X, lv95Y, id } = row || {}
@@ -242,12 +234,13 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
 
   return (
     <>
-      <Row>
-        <LeftFormControl
+      <div className={rowClass}>
+        <FormControl
           fullWidth
           error={!!wgs84LatError}
           aria-describedby={`${id}wgs84LatErrorText`}
           variant="standard"
+          className={leftFormControl}
         >
           <InputLabel
             htmlFor={`${id}wgs84Lat`}
@@ -275,12 +268,13 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
               {wgs84LatError}
             </FormHelperText>
           )}
-        </LeftFormControl>
-        <StyledFormControl
+        </FormControl>
+        <FormControl
           fullWidth
           error={!!wgs84LongError}
           aria-describedby={`${id}wgs84LongErrorText`}
           variant="standard"
+          className={formControl}
         >
           <InputLabel
             htmlFor={`${id}wgs84Long`}
@@ -308,14 +302,15 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
               {wgs84LongError}
             </FormHelperText>
           )}
-        </StyledFormControl>
-      </Row>
-      <Row>
-        <LeftFormControl
+        </FormControl>
+      </div>
+      <div className={rowClass}>
+        <FormControl
           fullWidth
           error={!!xError}
           aria-describedby={`${id}lv95XErrorText`}
           variant="standard"
+          className={leftFormControl}
         >
           <InputLabel
             htmlFor={`${id}lv95X`}
@@ -343,12 +338,13 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
               {xError}
             </FormHelperText>
           )}
-        </LeftFormControl>
-        <StyledFormControl
+        </FormControl>
+        <FormControl
           fullWidth
           error={!!yError}
           aria-describedby={`${id}lv95YErrorText`}
           variant="standard"
+          className={formControl}
         >
           <InputLabel
             htmlFor={`${id}lv95Y`}
@@ -376,8 +372,8 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
               {yError}
             </FormHelperText>
           )}
-        </StyledFormControl>
-      </Row>
+        </FormControl>
+      </div>
     </>
   )
 })
