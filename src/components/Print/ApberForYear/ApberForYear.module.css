@@ -1,0 +1,92 @@
+.container {
+  /* this part is for when page preview is shown */
+  /* Divide single pages with some space and center all pages horizontally */
+  /* will be removed in @media print */
+  margin: 1cm auto;
+  /* Define a white paper background that sticks out from the darker overall background */
+  background: #fff;
+  /* Show a drop shadow beneath each page */
+  box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+
+  /* set dimensions */
+  width: 21cm;
+
+  overflow-y: visible;
+
+  @media print {
+    /* this is when it is actually printed */
+    height: auto;
+    width: 21cm;
+
+    margin: 0 auto !important;
+    padding: 0.5cm !important;
+    padding-left: 0 !important;
+
+    box-shadow: unset;
+    overflow: visible !important;
+  }
+}
+
+.contentContainer {
+  padding: 1.5cm;
+  font-size: 14px;
+  @media print {
+    padding: 0;
+    height: auto;
+    overflow: visible !important;
+  }
+}
+
+.firstPageTitle {
+  margin-top: 3cm;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.firstPageSubTitle {
+  margin-top: 2cm;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.firstPageFnsLogo {
+  margin-top: 4cm;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.firstPageDate {
+  margin-top: 10cm;
+}
+
+.firstPageBearbeiter {
+  @media screen {
+    margin-bottom: 3cm;
+  }
+  break-after: page;
+}
+
+.secondPageTop {
+  padding-top: 2cm;
+  @media screen {
+    padding-top: 0;
+  }
+}
+
+.secondPage {
+  break-after: page;
+}
+
+.secondPageTitle {
+  padding-top: 2cm;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.secondPageText {
+  hyphens: auto;
+  padding-top: 0.2cm;
+}

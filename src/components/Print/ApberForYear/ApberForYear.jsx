@@ -16,72 +16,22 @@ import { ApberForAps } from './ApberForAps.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
+import {
+  container,
+  contentContainer,
+  firstPageTitle,
+  firstPageSubTitle,
+  firstPageFnsLogo,
+  firstPageDate,
+  firstPageBearbeiter,
+  secondPageTop,
+  secondPage,
+  secondPageTitle,
+  secondPageText,
+} from './ApberForYear.module.css'
+
 const mdParser = new MarkdownIt({ breaks: true })
 
-const Container = styled.div`
-  /* this part is for when page preview is shown */
-  /* Divide single pages with some space and center all pages horizontally */
-  /* will be removed in @media print */
-  margin: 1cm auto;
-  /* Define a white paper background that sticks out from the darker overall background */
-  background: #fff;
-  /* Show a drop shadow beneath each page */
-  box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
-
-  /* set dimensions */
-  width: 21cm;
-
-  overflow-y: visible;
-
-  @media print {
-    /* this is when it is actually printed */
-    height: auto;
-    width: 21cm;
-
-    margin: 0 auto !important;
-    padding: 0.5cm !important;
-    padding-left: 0 !important;
-
-    box-shadow: unset;
-    overflow: visible !important;
-  }
-`
-const ContentContainer = styled.div`
-  padding: 1.5cm;
-  font-size: 14px;
-  @media print {
-    padding: 0;
-    height: auto;
-    overflow: visible !important;
-  }
-`
-const FirstPageTitle = styled.p`
-  margin-top: 3cm;
-  font-size: 22px;
-  font-weight: 700;
-  text-align: center;
-`
-const FirstPageSubTitle = styled.p`
-  margin-top: 2cm;
-  font-size: 18px;
-  font-weight: 700;
-  text-align: center;
-`
-const FirstPageFnsLogo = styled.img`
-  margin-top: 4cm;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-`
-const FirstPageDate = styled.p`
-  margin-top: 10cm;
-`
-const FirstPageBearbeiter = styled.p`
-  @media screen {
-    margin-bottom: 3cm;
-  }
-  break-after: page;
-`
 const SecondPageTop = styled.div`
   padding-top: 2cm;
   @media screen {
@@ -157,23 +107,24 @@ export const ApberForYear = () => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <ContentContainer>
-          <FirstPageTitle>
+      <div className={container}>
+        <div className={contentContainer}>
+          <p className={firstPageTitle}>
             Umsetzung der Aktionspläne Flora
             <br />
             im Kanton Zürich
-          </FirstPageTitle>
-          <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
-          <FirstPageFnsLogo
+          </p>
+          <p className={firstPageSubTitle}>{`Jahresbericht ${jahr}`}</p>
+          <img
+            className={firstPageFnsLogo}
             src={fnslogo}
             alt="FNS"
             width="350"
           />
-          <FirstPageDate>
+          <p className={firstPageDate}>
             {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
-          </FirstPageDate>
-          <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+          </p>
+          <p className={firstPageBearbeiter}>Karin Marti, topos</p>
           {!!apberuebersicht?.bemerkungen && (
             <SecondPage>
               <SecondPageTop />
@@ -198,8 +149,8 @@ export const ApberForYear = () => {
             data={data?.data}
             jberData={data?.jberData}
           />
-        </ContentContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 }
