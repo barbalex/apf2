@@ -1,66 +1,51 @@
 import { useContext } from 'react'
 import { ErrorBoundary as RawErrorBoundary } from 'react-error-boundary'
-import styled from '@emotion/styled'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../modules/logout.js'
 import { IdbContext } from '../../idbContext.js'
 
-const Container = styled.div`
-  padding: 15px;
-`
-const ButtonContainer = styled.div`
-  margin-right: 10px;
-  margin-bottom: 10px;
-`
-const StyledButton = styled(Button)`
-  text-transform: none !important;
-`
-const Details = styled.details`
-  margin-bottom: 25px;
-`
-const Summary = styled.summary`
-  user-select: none;
-  &:focus {
-    outline: none !important;
-  }
-`
-const PreWrapping = styled.pre`
-  white-space: normal;
-`
-const Pre = styled.pre`
-  background-color: rgba(128, 128, 128, 0.09);
-`
+import {
+  container,
+  buttonContainer,
+  button,
+  details,
+  summary,
+  preWrapping,
+  pre,
+} from './ErrorBoundary.module.css'
 
 const ErrorFallback = ({ error, resetErrorBoundary }) => {
   const onReload = () => window.location.reload(true)
 
   return (
-    <Container>
+    <div className={container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <PreWrapping>{error.message}</PreWrapping>
-      <Details>
-        <Summary>Mehr Informationen</Summary>
-        <Pre>{error?.message ?? error}</Pre>
-      </Details>
-      <ButtonContainer>
-        <StyledButton
+      <pre className={preWrapping}>{error.message}</pre>
+      <details className={details}>
+        <summary className={summary}>Mehr Informationen</summary>
+        <pre className={pre}>{error?.message ?? error}</pre>
+      </details>
+      <div className={buttonContainer}>
+        <Button
           variant="outlined"
           onClick={onReload}
           color="inherit"
+          className={button}
         >
           neu starten
-        </StyledButton>
-      </ButtonContainer>
-      <ButtonContainer>
-        <StyledButton
+        </Button>
+      </div>
+      <div className={buttonContainer}>
+        <Button
           variant="outlined"
           onClick={resetErrorBoundary}
+          className={button}
         >
           Cache leeren und neu starten (neue Anmeldung nötig)
-        </StyledButton>
-      </ButtonContainer>
-    </Container>
+        </Button>
+      </div>
+    </div>
   )
 }
 

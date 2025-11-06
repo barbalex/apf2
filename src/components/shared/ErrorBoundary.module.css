@@ -1,0 +1,31 @@
+.container {
+  padding: 15px;
+}
+
+.buttonContainer {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.button {
+  text-transform: none !important;
+}
+
+.details {
+  margin-bottom: 25px;
+}
+
+.summary {
+  user-select: none;
+  &:focus {
+    outline: none !important;
+  }
+}
+
+.preWrapping {
+  white-space: normal;
+}
+
+.pre {
+  background-color: rgba(128, 128, 128, 0.09);
+}
