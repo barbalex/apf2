@@ -1,6 +1,25 @@
 import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 
+import {
+  container,
+  title,
+  row,
+  titleRow,
+  titleSubRow,
+  popNr,
+  popName,
+  popNrName,
+  tpopNr,
+  tpopFlurname,
+  tpopNrFlurname,
+  massnDatum,
+  massnDatumTitle,
+  massnTyp,
+  massnDatumTyp,
+  massnBeschreibung,
+} from './Massnahmen.module.css'
+
 const Container = styled.div`
   padding: 0.2cm 0;
   margin-bottom: 0.4cm;

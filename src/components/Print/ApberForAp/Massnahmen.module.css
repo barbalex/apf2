@@ -1,0 +1,103 @@
+.container {
+  padding: 0.2cm 0;
+  margin-bottom: 0.4cm;
+  max-width: 18cm;
+  font-size: 12px;
+}
+
+.title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  font-weight: 700;
+  break-after: avoid;
+  page-break-after: avoid;
+  page-break-inside: avoid;
+}
+
+.row {
+  display: flex;
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.titleRow {
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  display: flex;
+  flex-direction: column;
+  color: grey;
+  max-width: 18cm;
+  break-after: avoid;
+  page-break-after: avoid;
+  page-break-inside: avoid;
+}
+
+.titleSubRow {
+  display: flex;
+  max-width: 18cm;
+}
+
+.popNr {
+  min-width: 0.6cm;
+  max-width: 0.6cm;
+  padding-right: 0.2cm;
+}
+
+.popName {
+  min-width: 3.5cm;
+  max-width: 3.5cm;
+  padding-right: 0.2cm;
+}
+
+.popNrName {
+  min-width: 4.1cm;
+  max-width: 4.1cm;
+  padding-right: 0.2cm;
+}
+
+.tpopNr {
+  min-width: 0.8cm;
+  max-width: 0.8cm;
+  padding-right: 0.2cm;
+}
+
+.tpopFlurname {
+  min-width: 3.5cm;
+  max-width: 3.5cm;
+  padding-right: 0.2cm;
+}
+
+.tpopNrFlurname {
+  min-width: 4.3cm;
+  max-width: 4.3cm;
+  padding-right: 0.2cm;
+}
+
+.massnDatum {
+  min-width: 1cm;
+  max-width: 1cm;
+  padding-right: 0.2cm;
+}
+
+.massnDatumTitle {
+  min-width: 1cm;
+  max-width: 1cm;
+  padding-right: 0.2cm;
+  padding-top: 3px;
+  font-size: 10px;
+}
+
+.massnTyp {
+  min-width: 3.3cm;
+  max-width: 3.3cm;
+  padding-right: 0.2cm;
+}
+
+.massnDatumTyp {
+  min-width: 4.3cm;
+  max-width: 4.3cm;
+  padding-right: 0.2cm;
+}
+
+.massnBeschreibung {
+  width: 100%;
+}
