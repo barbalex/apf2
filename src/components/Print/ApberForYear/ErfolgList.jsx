@@ -42,35 +42,34 @@ const OverallTitle = styled.p`
   font-weight: 700;
   margin-bottom: 4px;
 `
-const Title = styled.div`
+const ApTitle = styled.div`
   font-weight: 700;
-`
-const ApTitle = styled(Title)`
   grid-column: 1 / span 1;
   grid-row: 1 / span 2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-top: 4px;
 `
-const Cell = styled.div`
+const Ap = styled.div`
   display: inline-block;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const Ap = styled(Cell)`
   grid-column: 1 / span 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgSpanningTitle = styled(Title)`
+const ErfolgSpanningTitle = styled.div`
+  font-weight: 700;
   grid-column: 2 / span 7;
   grid-row: 1 / span 1;
   text-align: center;
   padding-top: 4px;
 `
-const ErfolgNicht = styled(Cell)`
+const ErfolgNicht = styled.div`
+  display: inline-block;
   grid-column: 2 / span 1;
   text-align: center;
   background-color: ${(props) =>
@@ -78,8 +77,13 @@ const ErfolgNicht = styled(Cell)`
     : props.odd ? 'rgba(0,0,0,0.03)'
     : 'unset'};
   font-weight: 600;
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgWenig = styled(Cell)`
+const ErfolgWenig = styled.div`
+  display: inline-block;
   grid-column: 3 / span 1;
   text-align: center;
   background-color: ${(props) =>
@@ -87,8 +91,13 @@ const ErfolgWenig = styled(Cell)`
     : props.odd ? 'rgba(0,0,0,0.03)'
     : 'unset'};
   font-weight: 600;
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgMaessig = styled(Cell)`
+const ErfolgMaessig = styled.div`
+  display: inline-block;
   grid-column: 4 / span 1;
   text-align: center;
   background-color: ${(props) =>
@@ -96,8 +105,13 @@ const ErfolgMaessig = styled(Cell)`
     : props.odd ? 'rgba(0,0,0,0.03)'
     : 'unset'};
   font-weight: 600;
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgGut = styled(Cell)`
+const ErfolgGut = styled.div`
+  display: inline-block;
   grid-column: 5 / span 1;
   text-align: center;
   background-color: ${(props) =>
@@ -105,8 +119,13 @@ const ErfolgGut = styled(Cell)`
     : props.odd ? 'rgba(0,0,0,0.03)'
     : 'unset'};
   font-weight: 600;
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgSehr = styled(Cell)`
+const ErfolgSehr = styled.div`
+  display: inline-block;
   grid-column: 6 / span 1;
   text-align: center;
   font-weight: 600;
@@ -114,14 +133,24 @@ const ErfolgSehr = styled(Cell)`
     props.val ? '#00ff00'
     : props.odd ? 'rgba(0,0,0,0.03)'
     : 'unset'};
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgVeraenderung = styled(Cell)`
+const ErfolgVeraenderung = styled.div`
+  display: inline-block;
   grid-column: 7 / span 1;
   text-align: center;
   font-weight: 600;
   ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgUnsicher = styled(Cell)`
+const ErfolgUnsicher = styled.div`
+  display: inline-block;
   grid-column: 8 / span 1;
   text-align: center;
   background-color: ${(props) =>
@@ -129,28 +158,49 @@ const ErfolgUnsicher = styled(Cell)`
     : props.odd ? 'rgba(0,0,0,0.03)'
     : 'unset'};
   font-weight: 600;
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ErfolgNichtBeurteilt = styled(Cell)`
+const ErfolgNichtBeurteilt = styled.div`
+  display: inline-block;
   grid-column: 9 / span 1;
   text-align: center;
   font-weight: 600;
   ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const KeineMassnahme = styled(Cell)`
+const KeineMassnahme = styled.div`
+  display: inline-block;
   grid-column: 10 / span 1;
   text-align: center;
   font-weight: 600;
   ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const ApExists = styled(Cell)`
+const ApExists = styled.div`
+  display: inline-block;
   grid-column: 11 / span 1;
   text-align: center;
   font-weight: 600;
   ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
+  @media print {
+    /* does not work - break is hideous :-( */
+    page-break-inside: avoid;
+  }
 `
-const KeineMassnTitle = styled(Title)`
+const KeineMassnTitle = styled.div`
+  font-weight: 700;
   grid-column: 10 / span 1;
   grid-row: 1 / span 2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   writing-mode: vertical-lr;
   padding: 3px;
   > div {
@@ -159,9 +209,11 @@ const KeineMassnTitle = styled(Title)`
     line-height: 1em;
   }
 `
-const ApExistsTitle = styled(Title)`
+const ApExistsTitle = styled.div`
+  font-weight: 700;
   grid-column: 11 / span 1;
   grid-row: 1 / span 2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   writing-mode: vertical-lr;
   padding: 3px;
   > div {
@@ -170,9 +222,11 @@ const ApExistsTitle = styled(Title)`
     line-height: 1em;
   }
 `
-const ErfolgNichtBeurteiltTitle = styled(Title)`
+const ErfolgNichtBeurteiltTitle = styled.div`
+  font-weight: 700;
   grid-column: 9 / span 1;
   grid-row: 1 / span 2;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   writing-mode: vertical-lr;
   padding-bottom: 3px;
   padding-top: 3px;
@@ -182,7 +236,12 @@ const ErfolgNichtBeurteiltTitle = styled(Title)`
     line-height: 2.6em;
   }
 `
-const ErfolgTitle = styled(Title)`
+const ErfolgNichtTitle = styled.div`
+  grid-column: 2 / span 1;
+  grid-row: 2 / span 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: red;
+  font-weight: 700;
   writing-mode: vertical-lr;
   padding-bottom: 3px;
   padding-top: 3px;
@@ -195,39 +254,112 @@ const ErfolgTitle = styled(Title)`
     line-height: 2.6em;
   }
 `
-const ErfolgNichtTitle = styled(ErfolgTitle)`
-  grid-column: 2 / span 1;
-  grid-row: 2 / span 1;
-  background-color: red;
-`
-const ErfolgWenigTitle = styled(ErfolgTitle)`
+const ErfolgWenigTitle = styled.div`
   grid-column: 3 / span 1;
   grid-row: 2 / span 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: orange;
+  font-weight: 700;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 79px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
-const ErfolgMaessigTitle = styled(ErfolgTitle)`
+const ErfolgMaessigTitle = styled.div`
   grid-column: 4 / span 1;
   grid-row: 2 / span 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: yellow;
+  font-weight: 700;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 79px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
-const ErfolgGutTitle = styled(ErfolgTitle)`
+const ErfolgGutTitle = styled.div`
   grid-column: 5 / span 1;
   grid-row: 2 / span 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #00f6ff;
+  font-weight: 700;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 79px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
-const ErfolgSehrTitle = styled(ErfolgTitle)`
+const ErfolgSehrTitle = styled.div`
   grid-column: 6 / span 1;
   grid-row: 2 / span 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #00ff00;
+  font-weight: 700;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 79px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
-const ErfolgAenderungTitle = styled(ErfolgTitle)`
+const ErfolgAenderungTitle = styled.div`
   grid-column: 7 / span 1;
   grid-row: 2 / span 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 79px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
-const ErfolgUnsicherTitle = styled(ErfolgTitle)`
+const ErfolgUnsicherTitle = styled.div`
   grid-column: 8 / span 1;
   grid-row: 2 / span 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #afafaf;
+  font-weight: 700;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 79px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
 
 export const ErfolgList = ({ jahr, data }) => {
