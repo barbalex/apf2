@@ -19,7 +19,9 @@ const Row = styled.div`
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
-const TitleRow = styled(Row)`
+const TitleRow = styled.div`
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
   display: flex;
   flex-direction: column;
   color: grey;
