@@ -1,5 +1,4 @@
 import { useContext, lazy, Suspense } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 // import { getSnapshot } from 'mobx-state-tree'
@@ -37,26 +36,9 @@ const ChooseApToCopyErfkritsFrom = lazy(async () => ({
 }))
 
 import { Spinner } from '../shared/Spinner.jsx'
+import { container } from './ProtectedRoute.module.css'
 
 const isInIframe = inIframe()
-
-// in iframes width and height need to be set, so are set to 100%
-// this need to set height of container to 100% for the iframe
-const Container = styled.div`
-  background-color: #fffde7;
-  ${(props) => (props['data-isiniframe'] ? 'height: 100%;' : 'flex-grow: 1;')}
-  overflow: auto;
-  scrollbar-width: thin;
-  display: flex;
-  flex-direction: column;
-
-  @media print {
-    margin-top: 0;
-    height: auto;
-    overflow: visible !important;
-    background-color: white;
-  }
-`
 
 export const Component = observer(() => {
   const { pathname, search } = useLocation()
@@ -88,7 +70,10 @@ export const Component = observer(() => {
   }
 
   return (
-    <Container data-isiniframe={isInIframe}>
+    <div
+      className={container}
+      style={isInIframe ? { height: '100%' } : { flexGrow: 1 }}
+    >
       {!!user.token && (
         <>
           <Outlet />
@@ -109,6 +94,6 @@ export const Component = observer(() => {
       <Suspense fallback={null}>
         <User />
       </Suspense>
-    </Container>
+    </div>
   )
 })

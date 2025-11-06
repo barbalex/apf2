@@ -1,0 +1,16 @@
+/* in iframes width and height need to be set, so are set to 100% */
+/* this need to set height of container to 100% for the iframe */
+.container {
+  background-color: #fffde7;
+  overflow: auto;
+  scrollbar-width: thin;
+  display: flex;
+  flex-direction: column;
+
+  @media print {
+    margin-top: 0;
+    height: auto;
+    overflow: visible !important;
+    background-color: white;
+  }
+}
