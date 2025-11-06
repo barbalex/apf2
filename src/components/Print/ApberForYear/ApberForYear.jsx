@@ -1,4 +1,3 @@
-import styled from '@emotion/styled'
 import { DateTime } from 'luxon'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -31,25 +30,6 @@ import {
 } from './ApberForYear.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
-
-const SecondPageTop = styled.div`
-  padding-top: 2cm;
-  @media screen {
-    padding-top: 0;
-  }
-`
-const SecondPage = styled.div`
-  break-after: page;
-`
-const SecondPageTitle = styled.label`
-  padding-top: 2cm;
-  font-size: 18px;
-  font-weight: 700;
-`
-const SecondPageText = styled.div`
-  hyphens: auto;
-  padding-top: 0.2cm;
-`
 
 export const ApberForYear = () => {
   const { apberuebersichtId, projId } = useParams()
@@ -126,17 +106,17 @@ export const ApberForYear = () => {
           </p>
           <p className={firstPageBearbeiter}>Karin Marti, topos</p>
           {!!apberuebersicht?.bemerkungen && (
-            <SecondPage>
-              <SecondPageTop />
-              <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-              <SecondPageText>
+            <div className={secondPage}>
+              <div className={secondPageTop} />
+              <label className={secondPageTitle}>Zusammenfassung</label>
+              <div className={secondPageText}>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: mdParser.render(apberuebersicht.bemerkungen),
                   }}
                 />
-              </SecondPageText>
-            </SecondPage>
+              </div>
+            </div>
           )}
           <AvList data={data?.jberData} />
           <ErfolgList
