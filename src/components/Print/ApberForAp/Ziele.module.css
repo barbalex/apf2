@@ -1,0 +1,40 @@
+.container {
+  padding: 0.2cm 0;
+  break-inside: avoid;
+}
+
+.title {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  font-weight: 700;
+}
+
+.row {
+  display: flex;
+  padding: 0.15cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.zielColumn {
+  width: 100%;
+}
+
+.titleRow {
+  display: flex;
+  padding: 0.15cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: grey;
+}
+
+.typ {
+  width: 5.5cm;
+  padding-right: 0.5cm;
+}
+
+.goal {
+  width: 100%;
+}
+
+.opinion {
+  width: 100%;
+  padding-top: 0.1cm;
+}
