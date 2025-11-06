@@ -34,21 +34,38 @@ const ApRow = styled.div`
     padding: 0.05cm 0;
   }
 `
-const TitleRow1 = styled(ApRow)`
+const TitleRow1 = styled.div`
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
   border-top: 1px solid rgba(0, 0, 0, 0.3) !important;
+  page-break-inside: avoid;
+  > div {
+    padding: 0.05cm 0;
+  }
   div {
     font-weight: 700;
   }
 `
-const TitleRow2 = styled(ApRow)`
+const TitleRow2 = styled.div`
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
   border-bottom: 1px double rgba(0, 0, 0, 0.3) !important;
+  page-break-inside: avoid;
+  > div {
+    padding: 0.05cm 0;
+  }
   div {
     font-weight: 700;
   }
 `
-const TotalRow = styled(ApRow)`
+const TotalRow = styled.div`
+  display: flex;
   border-top: 1px solid rgba(0, 0, 0, 0.3) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
+  page-break-inside: avoid;
+  > div {
+    padding: 0.05cm 0;
+  }
   div {
     font-weight: 700;
   }
@@ -94,7 +111,6 @@ const UrsprColumn = styled.div`
   min-width: 1.6cm;
   max-width: 1.6cm;
   text-align: center;
-  background-color: ${(props) => props['data-color'] ?? 'white'};
   @media print {
     min-width: 1.9cm;
     max-width: 1.9cm;
@@ -104,7 +120,6 @@ const AngesColumn = styled.div`
   min-width: 1.6cm;
   max-width: 1.6cm;
   text-align: center;
-  background-color: ${(props) => props['data-color'] ?? 'white'};
   @media print {
     min-width: 1.9cm;
     max-width: 1.9cm;
@@ -114,7 +129,6 @@ const TotalColumn = styled.div`
   min-width: 1.6cm;
   max-width: 1.6cm;
   text-align: center;
-  background-color: ${(props) => props['data-color'] ?? 'white'};
   @media print {
     min-width: 1.9cm;
     max-width: 1.9cm;
@@ -124,7 +138,6 @@ const TotalDiffColumn = styled.div`
   min-width: 1.2cm;
   max-width: 1.2cm;
   text-align: center;
-  background-color: ${(props) => props['data-color'] ?? 'white'};
   @media print {
     min-width: 1.5cm;
     max-width: 1.5cm;
@@ -210,32 +223,32 @@ export const AktPopList = ({ year }) => {
               <AngesColumn>{ap?.pop200}</AngesColumn>
               <TotalColumn>{ap?.popTotal}</TotalColumn>
               <UrsprColumn
-                data-color={
-                  ap?.pop100Diff > 0 ? '#00ff00'
-                  : ap?.pop100Diff < 0 ?
-                    'red'
-                  : 'white'
-                }
+                style={{
+                  backgroundColor:
+                    ap?.pop100Diff > 0 ? '#00ff00'
+                    : ap?.pop100Diff < 0 ? 'red'
+                    : 'white',
+                }}
               >
                 {ap?.pop100Diff}
               </UrsprColumn>
               <AngesColumn
-                data-color={
-                  ap?.pop200Diff > 0 ? '#00ff00'
-                  : ap?.pop200Diff < 0 ?
-                    'red'
-                  : 'white'
-                }
+                style={{
+                  backgroundColor:
+                    ap?.pop200Diff > 0 ? '#00ff00'
+                    : ap?.pop200Diff < 0 ? 'red'
+                    : 'white',
+                }}
               >
                 {ap?.pop200Diff}
               </AngesColumn>
               <TotalDiffColumn
-                data-color={
-                  ap?.popTotalDiff > 0 ? '#00ff00'
-                  : ap?.popTotalDiff < 0 ?
-                    'red'
-                  : 'white'
-                }
+                style={{
+                  backgroundColor:
+                    ap?.popTotalDiff > 0 ? '#00ff00'
+                    : ap?.popTotalDiff < 0 ? 'red'
+                    : 'white',
+                }}
               >
                 {ap?.popTotalDiff}
               </TotalDiffColumn>
@@ -247,32 +260,32 @@ export const AktPopList = ({ year }) => {
             <AngesColumn>{pop200}</AngesColumn>
             <TotalColumn>{popsTotal}</TotalColumn>
             <UrsprColumn
-              data-color={
-                pop100Diff > 0 ? '#00ff00'
-                : pop100Diff < 0 ?
-                  'red'
-                : 'white'
-              }
+              style={{
+                backgroundColor:
+                  pop100Diff > 0 ? '#00ff00'
+                  : pop100Diff < 0 ? 'red'
+                  : 'white',
+              }}
             >
               {pop100Diff}
             </UrsprColumn>
             <AngesColumn
-              data-color={
-                pop200Diff > 0 ? '#00ff00'
-                : pop200Diff < 0 ?
-                  'red'
-                : 'white'
-              }
+              style={{
+                backgroundColor:
+                  pop200Diff > 0 ? '#00ff00'
+                  : pop200Diff < 0 ? 'red'
+                  : 'white',
+              }}
             >
               {pop200Diff}
             </AngesColumn>
             <TotalDiffColumn
-              data-color={
-                popTotalDiff > 0 ? '#00ff00'
-                : popTotalDiff < 0 ?
-                  'red'
-                : 'white'
-              }
+              style={{
+                backgroundColor:
+                  popTotalDiff > 0 ? '#00ff00'
+                  : popTotalDiff < 0 ? 'red'
+                  : 'white',
+              }}
             >
               {popTotalDiff}
             </TotalDiffColumn>
