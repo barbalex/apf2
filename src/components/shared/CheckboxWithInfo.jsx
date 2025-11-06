@@ -3,20 +3,23 @@ import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import Checkbox from '@mui/material/Checkbox'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 import { container, formControl } from './CheckboxWithInfo.module.css'
 
-const StyledFormControlLabel = styled(FormControlLabel)`
-  margin-top: -10px;
-  .MuiFormControlLabel-label {
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.5);
-    user-select: none;
-  }
-`
+// https://mui.com/material-ui/react-menu/#customization
+const StyledFormControlLabel = styled((props) => (
+  <FormControlLabel {...props} />
+))(() => ({
+  marginTop: -10,
+  '& .MuiFormControlLabel-label': {
+    fontSize: 12,
+    color: 'rgba(0, 0, 0, 0.5)',
+    userSelect: 'none',
+  },
+}))
 
 export const CheckboxWithInfo = observer(
   ({ value = null, label, name, popover, saveToDb, error }) => {
