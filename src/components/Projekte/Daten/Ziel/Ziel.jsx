@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { isEqual } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -21,29 +20,7 @@ import { ziel as zielFragment } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  padding: 10px;
-`
-const Subtitle = styled.h3`
-  margin-top: 10px;
-  margin-bottom: 15px;
-  font-weight: bold;
-  font-size: 1em;
-  color: rgba(0, 0, 0, 0.6);
-  padding-bottom: 2px;
-`
+import { container, formContainer, subtitle } from './Ziel.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -153,12 +130,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <FormTitle
           title="Ziel"
           MenuBarComponent={Menu}
         />
-        <FormContainer>
+        <div className={formContainer}>
           <TextField
             name="jahr"
             label="Jahr"
@@ -185,7 +162,7 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.bezeichnung}
           />
-          <Subtitle>Beurteilung</Subtitle>
+          <h3 className={subtitle}>Beurteilung</h3>
           <Select
             name="erreichung"
             label="Ziel-Erreichung"
@@ -204,8 +181,8 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.bemerkungen}
           />
-        </FormContainer>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 })
