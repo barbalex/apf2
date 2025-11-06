@@ -1,5 +1,4 @@
 import { useEffect, useContext, useState } from 'react'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -10,43 +9,12 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { Form } from './Form/index.jsx'
 import { Tabs } from './Tabs.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background-color: #ffd3a7;
-  @media print {
-    font-size: 11px;
-    height: auto;
-    width: inherit;
-    margin: 0 !important;
-    padding: 0.5cm !important;
-    overflow: hidden;
-    page-break-after: always;
-  }
-`
-const ScrollContainer = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
-const FilterCommentTitle = styled.div`
-  margin-top: -10px;
-  margin-bottom: -10px;
-  padding: 0 10px;
-  font-size: 0.75em;
-  font-weight: bold;
-  color: rgba(0, 0, 0, 0.87);
-`
-const FilterCommentList = styled.ul``
-const FilterComment = styled.li`
-  padding: 0 10px;
-  font-size: 0.75em;
-`
+import {
+  container,
+  scrollContainer,
+  filterCommentTitle,
+  filterComment,
+} from './index.module.css'
 
 export const TpopfreiwkontrFilter = observer(() => {
   const { apId } = useParams()
@@ -123,7 +91,7 @@ export const TpopfreiwkontrFilter = observer(() => {
     !!mapFilter
 
   return (
-    <Container>
+    <div className={container}>
       <FilterTitle
         title="Freiwilligen-Kontrollen"
         table="tpopfreiwkontr"
@@ -133,30 +101,30 @@ export const TpopfreiwkontrFilter = observer(() => {
       />
       {showFilterComments && (
         <>
-          <FilterCommentTitle>Zusätzlich aktive Filter:</FilterCommentTitle>
-          <FilterCommentList>
+          <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+          <ul>
             {!!navApFilterComment && (
-              <FilterComment>{navApFilterComment}</FilterComment>
+              <li className={filterComment}>{navApFilterComment}</li>
             )}
             {!!navHiearchyComment && (
-              <FilterComment>{navHiearchyComment}</FilterComment>
+              <li className={filterComment}>{navHiearchyComment}</li>
             )}
             {!!navLabelComment && (
-              <FilterComment>{navLabelComment}</FilterComment>
+              <li className={filterComment}>{navLabelComment}</li>
             )}
             {!!artHierarchyComment && (
-              <FilterComment>{artHierarchyComment}</FilterComment>
+              <li className={filterComment}>{artHierarchyComment}</li>
             )}
             {!!popHierarchyComment && (
-              <FilterComment>{popHierarchyComment}</FilterComment>
+              <li className={filterComment}>{popHierarchyComment}</li>
             )}
             {!!tpopHierarchyComment && (
-              <FilterComment>{tpopHierarchyComment}</FilterComment>
+              <li className={filterComment}>{tpopHierarchyComment}</li>
             )}
             {!!mapFilterComment && (
-              <FilterComment>{mapFilterComment}</FilterComment>
+              <li className={filterComment}>{mapFilterComment}</li>
             )}
-          </FilterCommentList>
+          </ul>
         </>
       )}
       <Tabs
@@ -164,12 +132,12 @@ export const TpopfreiwkontrFilter = observer(() => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
-      <ScrollContainer>
+      <div className={scrollContainer}>
         <Form
           row={row}
           activeTab={activeTab}
         />
-      </ScrollContainer>
-    </Container>
+      </div>
+    </div>
   )
 })

@@ -1,0 +1,40 @@
+.container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #ffd3a7;
+
+  @media print {
+    font-size: 11px;
+    height: auto;
+    width: inherit;
+    margin: 0 !important;
+    padding: 0.5cm !important;
+    overflow: hidden;
+    page-break-after: always;
+  }
+}
+
+.scrollContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.filterCommentTitle {
+  margin-top: -10px;
+  margin-bottom: -10px;
+  padding: 0 10px;
+  font-size: 0.75em;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.filterComment {
+  padding: 0 10px;
+  font-size: 0.75em;
+}
