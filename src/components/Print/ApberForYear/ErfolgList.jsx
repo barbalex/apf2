@@ -1,5 +1,4 @@
 import { Fragment } from 'react'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import {
@@ -30,288 +29,6 @@ import {
   erfolgAenderungTitle,
   erfolgUnsicherTitle,
 } from './ErfolgList.module.css'
-
-const ErfolgSpanningTitle = styled.div`
-  font-weight: 700;
-  grid-column: 2 / span 7;
-  grid-row: 1;
-  text-align: center;
-  padding-top: 4px;
-`
-const ErfolgNicht = styled.div`
-  grid-column: 2;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ErfolgWenig = styled.div`
-  grid-column: 3;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ErfolgMaessig = styled.div`
-  grid-column: 4;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ErfolgGut = styled.div`
-  grid-column: 5;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ErfolgSehr = styled.div`
-  grid-column: 6;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ErfolgVeraenderung = styled.div`
-  grid-column: 7;
-  text-align: center;
-  font-size: 0.8em;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ErfolgUnsicher = styled.div`
-  grid-column: 8;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ErfolgNichtBeurteilt = styled.div`
-  grid-column: 9;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const KeineMassnahme = styled.div`
-  grid-column: 10;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const ApExists = styled.div`
-  grid-column: 11;
-  height: 1em;
-  align-self: center;
-  text-align: center;
-  font-weight: 600;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
-const KeineMassnTitle = styled.div`
-  font-weight: 700;
-  grid-column: 10;
-  grid-row: 1 / span 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  writing-mode: vertical-lr;
-  padding: 3px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 1em;
-  }
-`
-const ApExistsTitle = styled.div`
-  font-weight: 700;
-  grid-column: 11;
-  grid-row: 1 / span 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  writing-mode: vertical-lr;
-  padding: 3px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 1em;
-  }
-`
-const ErfolgNichtBeurteiltTitle = styled.div`
-  font-weight: 700;
-  grid-column: 9;
-  grid-row: 1 / span 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
-const ErfolgNichtTitle = styled.div`
-  grid-column: 2;
-  grid-row: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: red;
-  font-weight: 700;
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 79px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
-const ErfolgWenigTitle = styled.div`
-  grid-column: 3;
-  grid-row: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: orange;
-  font-weight: 700;
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 79px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
-const ErfolgMaessigTitle = styled.div`
-  grid-column: 4;
-  grid-row: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: yellow;
-  font-weight: 700;
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 79px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
-const ErfolgGutTitle = styled.div`
-  grid-column: 5;
-  grid-row: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: #00f6ff;
-  font-weight: 700;
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 79px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
-const ErfolgSehrTitle = styled.div`
-  grid-column: 6;
-  grid-row: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: #00ff00;
-  font-weight: 700;
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 79px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
-const ErfolgAenderungTitle = styled.div`
-  grid-column: 7;
-  grid-row: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  font-weight: 700;
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 79px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
-const ErfolgUnsicherTitle = styled.div`
-  grid-column: 8;
-  grid-row: 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background-color: #afafaf;
-  font-weight: 700;
-  writing-mode: vertical-lr;
-  padding-bottom: 3px;
-  padding-top: 3px;
-  /* needed because of bug (?) in print mode
-   * where not full height is taken */
-  height: 79px;
-  > div {
-    transform: rotate(180deg);
-    transform-origin: center center 0;
-    line-height: 2.6em;
-  }
-`
 
 export const ErfolgList = ({ jahr, data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
@@ -355,39 +72,39 @@ export const ErfolgList = ({ jahr, data }) => {
         <p className={overallTitle}>{`Erfolg ${jahr}`}</p>
         <div className={table}>
           <div className={apTitle}>Art</div>
-          <ErfolgSpanningTitle>Erfolg</ErfolgSpanningTitle>
-          <KeineMassnTitle>
+          <div className={erfolgSpanningTitle}>Erfolg</div>
+          <div className={keineMassnTitle}>
             <div>keine Massnahme</div>
             <div>im Berichtsjahr</div>
-          </KeineMassnTitle>
-          <ApExistsTitle>
+          </div>
+          <div className={apExistsTitle}>
             <div>Aktionsplan</div>
             <div>erstellt</div>
-          </ApExistsTitle>
-          <ErfolgNichtTitle>
+          </div>
+          <div className={erfolgNichtTitle}>
             <div>nicht</div>
-          </ErfolgNichtTitle>
-          <ErfolgWenigTitle>
+          </div>
+          <div className={erfolgWenigTitle}>
             <div>wenig</div>
-          </ErfolgWenigTitle>
-          <ErfolgMaessigTitle>
+          </div>
+          <div className={erfolgMaessigTitle}>
             <div>mässig</div>
-          </ErfolgMaessigTitle>
-          <ErfolgGutTitle>
+          </div>
+          <div className={erfolgGutTitle}>
             <div>gut</div>
-          </ErfolgGutTitle>
-          <ErfolgSehrTitle>
+          </div>
+          <div className={erfolgSehrTitle}>
             <div>sehr</div>
-          </ErfolgSehrTitle>
-          <ErfolgAenderungTitle>
+          </div>
+          <div className={erfolgAenderungTitle}>
             <div>Veränderung</div>
-          </ErfolgAenderungTitle>
-          <ErfolgUnsicherTitle>
+          </div>
+          <div className={erfolgUnsicherTitle}>
             <div>unsicher</div>
-          </ErfolgUnsicherTitle>
-          <ErfolgNichtBeurteiltTitle>
+          </div>
+          <div className={erfolgNichtBeurteiltTitle}>
             <div>nicht beurteilt</div>
-          </ErfolgNichtBeurteiltTitle>
+          </div>
           {apRows.map((row, index) => {
             // eslint-disable-next-line eqeqeq
             const odd = Math.abs(index % 2) == 1
@@ -402,7 +119,8 @@ export const ErfolgList = ({ jahr, data }) => {
                 >
                   {row.ap}
                 </div>
-                <ErfolgNicht
+                <div
+                  className={erfolgNicht}
                   style={{
                     backgroundColor:
                       !!row.erfolgNicht ? 'red'
@@ -411,8 +129,9 @@ export const ErfolgList = ({ jahr, data }) => {
                   }}
                 >
                   {row.erfolgNicht}
-                </ErfolgNicht>
-                <ErfolgWenig
+                </div>
+                <div
+                  className={erfolgWenig}
                   style={{
                     backgroundColor:
                       !!row.erfolgWenig ? 'orange'
@@ -421,8 +140,9 @@ export const ErfolgList = ({ jahr, data }) => {
                   }}
                 >
                   {row.erfolgWenig}
-                </ErfolgWenig>
-                <ErfolgMaessig
+                </div>
+                <div
+                  className={erfolgMaessig}
                   style={{
                     backgroundColor:
                       !!row.erfolgMaessig ? 'yellow'
@@ -431,8 +151,9 @@ export const ErfolgList = ({ jahr, data }) => {
                   }}
                 >
                   {row.erfolgMaessig}
-                </ErfolgMaessig>
-                <ErfolgGut
+                </div>
+                <div
+                  className={erfolgGut}
                   style={{
                     backgroundColor:
                       !!row.erfolgGut ? '#00f6ff'
@@ -441,8 +162,9 @@ export const ErfolgList = ({ jahr, data }) => {
                   }}
                 >
                   {row.erfolgGut}
-                </ErfolgGut>
-                <ErfolgSehr
+                </div>
+                <div
+                  className={erfolgSehr}
                   style={{
                     backgroundColor:
                       !!row.erfolgSehr ? '#00ff00'
@@ -451,15 +173,17 @@ export const ErfolgList = ({ jahr, data }) => {
                   }}
                 >
                   {row.erfolgSehr}
-                </ErfolgSehr>
-                <ErfolgVeraenderung
+                </div>
+                <div
+                  className={erfolgVeraenderung}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
                 >
                   {row.veraenderung}
-                </ErfolgVeraenderung>
-                <ErfolgUnsicher
+                </div>
+                <div
+                  className={erfolgUnsicher}
                   style={{
                     backgroundColor:
                       !!row.erfolgUnsicher ? '#afafaf'
@@ -468,28 +192,31 @@ export const ErfolgList = ({ jahr, data }) => {
                   }}
                 >
                   {row.erfolgUnsicher}
-                </ErfolgUnsicher>
-                <ErfolgNichtBeurteilt
+                </div>
+                <div
+                  className={erfolgNichtBeurteilt}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
                 >
                   {row.nichtBeurteilt}
-                </ErfolgNichtBeurteilt>
-                <KeineMassnahme
+                </div>
+                <div
+                  className={keineMassnahme}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
                 >
                   {row.keineMassnahme}
-                </KeineMassnahme>
-                <ApExists
+                </div>
+                <div
+                  className={apExists}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
                 >
                   {row.apExists}
-                </ApExists>
+                </div>
               </Fragment>
             )
           })}
