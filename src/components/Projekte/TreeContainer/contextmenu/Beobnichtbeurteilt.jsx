@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import styled from '@emotion/styled'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -10,9 +9,7 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.js'
 
-const SecondLine = styled.span`
-  margin-left: 15px;
-`
+import { secondLine } from './Beobnichtbeurteilt.module.css'
 
 // create objects outside render
 const createNewPopFromBeobData = {
@@ -46,9 +43,9 @@ export const BeobNichtBeurteilt = observer(({ onClick }) => {
             >
               neue Population und Teil-Population gründen
               <br />
-              <SecondLine>
+              <span className={secondLine}>
                 und Beobachtung der Teil-Population zuordnen
-              </SecondLine>
+              </span>
             </MenuItem>
             <MenuItem
               onClick={onClick}
@@ -56,9 +53,9 @@ export const BeobNichtBeurteilt = observer(({ onClick }) => {
             >
               neue Teil-Population in bestehender Population gründen
               <br />
-              <SecondLine>
+              <span className={secondLine}>
                 und Beobachtung der Teil-Population zuordnen
-              </SecondLine>
+              </span>
             </MenuItem>
           </>
         )}
