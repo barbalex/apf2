@@ -1,0 +1,148 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  break-before: page;
+  font-size: 10px;
+  line-height: 1.1em;
+  @media screen {
+    margin-top: 1.5cm;
+  }
+  @media print {
+    margin-top: 0.3cm !important;
+  }
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.apRow {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  page-break-inside: avoid;
+  > div {
+    padding: 0.05cm 0;
+  }
+}
+
+.titleRow1 {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.3) !important;
+  page-break-inside: avoid;
+  > div {
+    padding: 0.05cm 0;
+  }
+  div {
+    font-weight: 700;
+  }
+}
+
+.titleRow2 {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px double rgba(0, 0, 0, 0.3) !important;
+  page-break-inside: avoid;
+  > div {
+    padding: 0.05cm 0;
+  }
+  div {
+    font-weight: 700;
+  }
+}
+
+.totalRow {
+  display: flex;
+  border-top: 1px solid rgba(0, 0, 0, 0.3) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
+  page-break-inside: avoid;
+  > div {
+    padding: 0.05cm 0;
+  }
+  div {
+    font-weight: 700;
+  }
+}
+
+.diffLeftColumn {
+  min-width: 8.8cm;
+  max-width: 8.8cm;
+  @media print {
+    min-width: 9.7cm;
+    max-width: 9.7cm;
+  }
+}
+
+.dataColumn {
+  min-width: 5.1cm;
+  max-width: 5.1cm;
+  text-align: center;
+  @media print {
+    min-width: 5.4cm;
+    max-width: 5.4cm;
+  }
+}
+
+.diffColumn {
+  min-width: 4.4cm;
+  max-width: 4.4cm;
+  text-align: center;
+  @media print {
+    min-width: 5cm;
+    max-width: 5cm;
+  }
+}
+
+.apColumn {
+  min-width: 8.8cm;
+  max-width: 8.8cm;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media print {
+    min-width: 9.5cm;
+    max-width: 9.5cm;
+  }
+}
+
+.ursprColumn {
+  min-width: 1.6cm;
+  max-width: 1.6cm;
+  text-align: center;
+  @media print {
+    min-width: 1.9cm;
+    max-width: 1.9cm;
+  }
+}
+
+.angesColumn {
+  min-width: 1.6cm;
+  max-width: 1.6cm;
+  text-align: center;
+  @media print {
+    min-width: 1.9cm;
+    max-width: 1.9cm;
+  }
+}
+
+.totalColumn {
+  min-width: 1.6cm;
+  max-width: 1.6cm;
+  text-align: center;
+  @media print {
+    min-width: 1.9cm;
+    max-width: 1.9cm;
+  }
+}
+
+.totalDiffColumn {
+  min-width: 1.2cm;
+  max-width: 1.2cm;
+  text-align: center;
+  @media print {
+    min-width: 1.5cm;
+    max-width: 1.5cm;
+  }
+}

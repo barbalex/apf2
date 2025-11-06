@@ -8,56 +8,23 @@ import { useParams } from 'react-router'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  break-before: page;
-  font-size: 10px;
-  line-height: 1.1em;
-  @media screen {
-    margin-top: 1.5cm;
-  }
-  @media print {
-    margin-top: 0.3cm !important;
-  }
-`
-const Title = styled.p`
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 4px;
-`
-const ApRow = styled.div`
-  display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  page-break-inside: avoid;
-  > div {
-    padding: 0.05cm 0;
-  }
-`
-const TitleRow1 = styled.div`
-  display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.3) !important;
-  page-break-inside: avoid;
-  > div {
-    padding: 0.05cm 0;
-  }
-  div {
-    font-weight: 700;
-  }
-`
-const TitleRow2 = styled.div`
-  display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-  border-bottom: 1px double rgba(0, 0, 0, 0.3) !important;
-  page-break-inside: avoid;
-  > div {
-    padding: 0.05cm 0;
-  }
-  div {
-    font-weight: 700;
-  }
-`
+import {
+  container,
+  title,
+  apRow,
+  titleRow1,
+  titleRow2,
+  totalRow,
+  diffLeftColumn,
+  dataColumn,
+  diffColumn,
+  apColumn,
+  ursprColumn,
+  angesColumn,
+  totalColumn,
+  totalDiffColumn,
+} from './AktPopList.module.css'
+
 const TotalRow = styled.div`
   display: flex;
   border-top: 1px solid rgba(0, 0, 0, 0.3) !important;
@@ -146,10 +113,12 @@ const TotalDiffColumn = styled.div`
 
 const fallback = (
   <ErrorBoundary>
-    <Container>
-      <Title>Übersicht über aktuelle Populationen aller AP-Arten</Title>
-      <TitleRow1>Lade Daten...</TitleRow1>
-    </Container>
+    <div className={container}>
+      <p className={title}>
+        Übersicht über aktuelle Populationen aller AP-Arten
+      </p>
+      <div className={titleRow1}>Lade Daten...</div>
+    </div>
   </ErrorBoundary>
 )
 
@@ -200,14 +169,16 @@ export const AktPopList = ({ year }) => {
   return (
     <ErrorBoundary>
       <Suspense fallback={fallback}>
-        <Container>
-          <Title>Übersicht über aktuelle Populationen aller AP-Arten</Title>
-          <TitleRow1>
+        <div className={container}>
+          <p className={title}>
+            Übersicht über aktuelle Populationen aller AP-Arten
+          </p>
+          <div className={titleRow1}>
             <DiffLeftColumn />
             <DataColumn>aktuelle Werte</DataColumn>
             <DiffColumn>Differenz zum Vorjahr</DiffColumn>
-          </TitleRow1>
-          <TitleRow2>
+          </div>
+          <div className={titleRow2}>
             <ApColumn>Aktionsplan</ApColumn>
             <UrsprColumn>ursprünglich</UrsprColumn>
             <AngesColumn>angesiedelt</AngesColumn>
@@ -215,9 +186,12 @@ export const AktPopList = ({ year }) => {
             <UrsprColumn>ursprünglich</UrsprColumn>
             <AngesColumn>angesiedelt</AngesColumn>
             <TotalDiffColumn>total</TotalDiffColumn>
-          </TitleRow2>
+          </div>
           {aps.map((ap) => (
-            <ApRow key={ap?.artname}>
+            <div
+              className={apRow}
+              key={ap?.artname}
+            >
               <ApColumn>{ap?.artname}</ApColumn>
               <UrsprColumn>{ap?.pop100}</UrsprColumn>
               <AngesColumn>{ap?.pop200}</AngesColumn>
@@ -252,7 +226,7 @@ export const AktPopList = ({ year }) => {
               >
                 {ap?.popTotalDiff}
               </TotalDiffColumn>
-            </ApRow>
+            </div>
           ))}
           <TotalRow>
             <ApColumn>{aps.length}</ApColumn>
@@ -290,7 +264,7 @@ export const AktPopList = ({ year }) => {
               {popTotalDiff}
             </TotalDiffColumn>
           </TotalRow>
-        </Container>
+        </div>
       </Suspense>
     </ErrorBoundary>
   )
