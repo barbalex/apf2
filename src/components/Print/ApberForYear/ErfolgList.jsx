@@ -2,73 +2,44 @@ import { Fragment } from 'react'
 import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import {
+  container,
+  table,
+  overallTitle,
+  apTitle,
+  ap as apClass,
+  erfolgSpanningTitle,
+  erfolgNicht,
+  erfolgWenig,
+  erfolgMaessig,
+  erfolgGut,
+  erfolgSehr,
+  erfolgVeraenderung,
+  erfolgUnsicher,
+  erfolgNichtBeurteilt,
+  keineMassnahme,
+  apExists,
+  keineMassnTitle,
+  apExistsTitle,
+  erfolgNichtBeurteiltTitle,
+  erfolgNichtTitle,
+  erfolgWenigTitle,
+  erfolgMaessigTitle,
+  erfolgGutTitle,
+  erfolgSehrTitle,
+  erfolgAenderungTitle,
+  erfolgUnsicherTitle,
+} from './ErfolgList.module.css'
 
-const Container = styled.div`
-  break-before: page;
-  font-size: 11px;
-  @media screen {
-    margin-top: 3cm;
-  }
-  @media print {
-    margin-top: 0.3cm !important;
-    /* get background colors to show */
-    -webkit-print-color-adjust: exact;
-  }
-`
-const Table = styled.div`
-  display: grid;
-  /* need the minmax 0 value to prevent long art names from pushing to the right */
-  grid-template-columns: minmax(0, 12fr) repeat(10, 1fr);
-  grid-column-gap: 0;
-  grid-row-gap: 0;
-  justify-items: stretch;
-  align-items: stretch;
-  justify-content: stretch;
-  box-sizing: border-box;
-  border-collapse: collapse;
-  border: 1px solid rgba(0,0,0,0.1);
-  margin-left: -1px;
-  margin-right: -1px;
-}
-  > div { 
-    border: 1px solid rgba(0,0,0,0.1);
-    box-sizing: border-box;
-    border-collapse: collapse;
-    page-break-inside: avoid;
-  }
-`
-const OverallTitle = styled.p`
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 4px;
-`
-const ApTitle = styled.div`
-  font-weight: 700;
-  grid-column: 1 / span 1;
-  grid-row: 1 / span 2;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding-top: 4px;
-`
-const Ap = styled.div`
-  display: inline-block;
-  grid-column: 1 / span 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  @media print {
-    /* does not work - break is hideous :-( */
-    page-break-inside: avoid;
-  }
-`
 const ErfolgSpanningTitle = styled.div`
   font-weight: 700;
-  grid-column: 2 / span 7;§
-  grid-row: 1 / span 1;
+  grid-column: 2 / span 7;
+  grid-row: 1;
   text-align: center;
   padding-top: 4px;
 `
 const ErfolgNicht = styled.div`
-  grid-column: 2 / span 1;
+  grid-column: 2;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -79,7 +50,7 @@ const ErfolgNicht = styled.div`
   }
 `
 const ErfolgWenig = styled.div`
-  grid-column: 3 / span 1;
+  grid-column: 3;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -90,7 +61,7 @@ const ErfolgWenig = styled.div`
   }
 `
 const ErfolgMaessig = styled.div`
-  grid-column: 4 / span 1;
+  grid-column: 4;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -101,7 +72,7 @@ const ErfolgMaessig = styled.div`
   }
 `
 const ErfolgGut = styled.div`
-  grid-column: 5 / span 1;
+  grid-column: 5;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -112,7 +83,7 @@ const ErfolgGut = styled.div`
   }
 `
 const ErfolgSehr = styled.div`
-  grid-column: 6 / span 1;
+  grid-column: 6;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -123,7 +94,7 @@ const ErfolgSehr = styled.div`
   }
 `
 const ErfolgVeraenderung = styled.div`
-  grid-column: 7 / span 1;
+  grid-column: 7;
   text-align: center;
   font-size: 0.8em;
   font-weight: 600;
@@ -133,7 +104,7 @@ const ErfolgVeraenderung = styled.div`
   }
 `
 const ErfolgUnsicher = styled.div`
-  grid-column: 8 / span 1;
+  grid-column: 8;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -144,7 +115,7 @@ const ErfolgUnsicher = styled.div`
   }
 `
 const ErfolgNichtBeurteilt = styled.div`
-  grid-column: 9 / span 1;
+  grid-column: 9;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -155,7 +126,7 @@ const ErfolgNichtBeurteilt = styled.div`
   }
 `
 const KeineMassnahme = styled.div`
-  grid-column: 10 / span 1;
+  grid-column: 10;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -166,7 +137,7 @@ const KeineMassnahme = styled.div`
   }
 `
 const ApExists = styled.div`
-  grid-column: 11 / span 1;
+  grid-column: 11;
   height: 1em;
   align-self: center;
   text-align: center;
@@ -178,7 +149,7 @@ const ApExists = styled.div`
 `
 const KeineMassnTitle = styled.div`
   font-weight: 700;
-  grid-column: 10 / span 1;
+  grid-column: 10;
   grid-row: 1 / span 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   writing-mode: vertical-lr;
@@ -191,7 +162,7 @@ const KeineMassnTitle = styled.div`
 `
 const ApExistsTitle = styled.div`
   font-weight: 700;
-  grid-column: 11 / span 1;
+  grid-column: 11;
   grid-row: 1 / span 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   writing-mode: vertical-lr;
@@ -204,7 +175,7 @@ const ApExistsTitle = styled.div`
 `
 const ErfolgNichtBeurteiltTitle = styled.div`
   font-weight: 700;
-  grid-column: 9 / span 1;
+  grid-column: 9;
   grid-row: 1 / span 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   writing-mode: vertical-lr;
@@ -217,8 +188,8 @@ const ErfolgNichtBeurteiltTitle = styled.div`
   }
 `
 const ErfolgNichtTitle = styled.div`
-  grid-column: 2 / span 1;
-  grid-row: 2 / span 1;
+  grid-column: 2;
+  grid-row: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: red;
   font-weight: 700;
@@ -235,8 +206,8 @@ const ErfolgNichtTitle = styled.div`
   }
 `
 const ErfolgWenigTitle = styled.div`
-  grid-column: 3 / span 1;
-  grid-row: 2 / span 1;
+  grid-column: 3;
+  grid-row: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: orange;
   font-weight: 700;
@@ -253,8 +224,8 @@ const ErfolgWenigTitle = styled.div`
   }
 `
 const ErfolgMaessigTitle = styled.div`
-  grid-column: 4 / span 1;
-  grid-row: 2 / span 1;
+  grid-column: 4;
+  grid-row: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: yellow;
   font-weight: 700;
@@ -271,8 +242,8 @@ const ErfolgMaessigTitle = styled.div`
   }
 `
 const ErfolgGutTitle = styled.div`
-  grid-column: 5 / span 1;
-  grid-row: 2 / span 1;
+  grid-column: 5;
+  grid-row: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #00f6ff;
   font-weight: 700;
@@ -289,8 +260,8 @@ const ErfolgGutTitle = styled.div`
   }
 `
 const ErfolgSehrTitle = styled.div`
-  grid-column: 6 / span 1;
-  grid-row: 2 / span 1;
+  grid-column: 6;
+  grid-row: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #00ff00;
   font-weight: 700;
@@ -307,8 +278,8 @@ const ErfolgSehrTitle = styled.div`
   }
 `
 const ErfolgAenderungTitle = styled.div`
-  grid-column: 7 / span 1;
-  grid-row: 2 / span 1;
+  grid-column: 7;
+  grid-row: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   font-weight: 700;
   writing-mode: vertical-lr;
@@ -324,8 +295,8 @@ const ErfolgAenderungTitle = styled.div`
   }
 `
 const ErfolgUnsicherTitle = styled.div`
-  grid-column: 8 / span 1;
-  grid-row: 2 / span 1;
+  grid-column: 8;
+  grid-row: 2;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   background-color: #afafaf;
   font-weight: 700;
@@ -380,10 +351,10 @@ export const ErfolgList = ({ jahr, data }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <OverallTitle>{`Erfolg ${jahr}`}</OverallTitle>
-        <Table>
-          <ApTitle>Art</ApTitle>
+      <div className={container}>
+        <p className={overallTitle}>{`Erfolg ${jahr}`}</p>
+        <div className={table}>
+          <div className={apTitle}>Art</div>
           <ErfolgSpanningTitle>Erfolg</ErfolgSpanningTitle>
           <KeineMassnTitle>
             <div>keine Massnahme</div>
@@ -423,13 +394,14 @@ export const ErfolgList = ({ jahr, data }) => {
 
             return (
               <Fragment key={row.ap}>
-                <Ap
+                <div
+                  className={apClass}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
                 >
                   {row.ap}
-                </Ap>
+                </div>
                 <ErfolgNicht
                   style={{
                     backgroundColor:
@@ -521,8 +493,8 @@ export const ErfolgList = ({ jahr, data }) => {
               </Fragment>
             )
           })}
-        </Table>
-      </Container>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 }
