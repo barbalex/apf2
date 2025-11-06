@@ -1,0 +1,17 @@
+.title {
+  margin-top: -8px;
+  margin-bottom: -8px;
+  font-size: 0.75em;
+  font-weight: bold;
+  padding-left: 10px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.tabs {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.tab {
+  min-width: 70px !important;
+  text-transform: none !important;
+}

@@ -2,27 +2,11 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import styled from '@emotion/styled'
 
 import { initial as tpopfreiwkontr } from '../../../../store/Tree/DataFilter/tpopfreiwkontr.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-const Row = styled.div``
-const Title = styled.div`
-  margin-top: -8px;
-  margin-bottom: -8px;
-  font-size: 0.75em;
-  font-weight: bold;
-  padding-left: 10px;
-  color: rgba(0, 0, 0, 0.87);
-`
-const StyledTabs = styled(MuiTabs)`
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
-`
-const StyledTab = styled(Tab)`
-  min-width: 70px !important;
-  text-transform: none !important;
-`
+import { title, tabs, tab } from './Tabs.module.css'
 
 export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(MobxContext)
@@ -46,30 +30,33 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
   }
 
   return (
-    <Row>
-      <Title>Filter-Kriterien:</Title>
-      <StyledTabs
+    <>
+      <div className={title}>Filter-Kriterien:</div>
+      <MuiTabs
         value={activeTab}
         onChange={onChangeTab}
         indicatorColor="primary"
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
+        className={tabs}
       >
         {dataFilter.map((filter, index) => (
-          <StyledTab
+          <Tab
             key={index}
             label={index + 1}
             value={index}
+            className={tab}
           />
         ))}
-        <StyledTab
+        <Tab
           key={dataFilter.length}
           label="oder"
           value={dataFilter.length}
           disabled={lastFilterIsEmpty}
+          className={tab}
         />
-      </StyledTabs>
-    </Row>
+      </MuiTabs>
+    </>
   )
 })
