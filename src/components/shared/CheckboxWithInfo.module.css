@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+}
+
+/* without slight padding radio is slightly cut off! */
+.formControl {
+  padding-left: 1px !important;
+  padding-bottom: 15px !important;
+}

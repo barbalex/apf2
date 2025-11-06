@@ -7,21 +7,8 @@ import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
+import { container, formControl } from './CheckboxWithInfo.module.css'
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-  }
-`
-// without slight padding radio is slightly cut off!
-const StyledFormControl = styled(FormControl)`
-  padding-left: 1px !important;
-  padding-bottom: 15px !important;
-`
 const StyledFormControlLabel = styled(FormControlLabel)`
   margin-top: -10px;
   .MuiFormControlLabel-label {
@@ -36,12 +23,13 @@ export const CheckboxWithInfo = observer(
     const onCheck = (e, val) => saveToDb(val)
 
     return (
-      <Container>
-        <StyledFormControl
+      <div className={container}>
+        <FormControl
           component="fieldset"
           error={!!error}
           aria-describedby={`${label}ErrorText`}
           variant="standard"
+          className={formControl}
         >
           <FormGroup>
             <StyledFormControlLabel
@@ -60,11 +48,11 @@ export const CheckboxWithInfo = observer(
           {!!error && (
             <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
           )}
-        </StyledFormControl>
+        </FormControl>
         <div>
           <InfoWithPopover name={name}>{popover}</InfoWithPopover>
         </div>
-      </Container>
+      </div>
     )
   },
 )
