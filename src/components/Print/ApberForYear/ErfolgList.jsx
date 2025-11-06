@@ -62,14 +62,15 @@ const Ap = styled.div`
 `
 const ErfolgSpanningTitle = styled.div`
   font-weight: 700;
-  grid-column: 2 / span 7;
+  grid-column: 2 / span 7;§
   grid-row: 1 / span 1;
   text-align: center;
   padding-top: 4px;
 `
 const ErfolgNicht = styled.div`
-  display: inline-block;
   grid-column: 2 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -78,8 +79,9 @@ const ErfolgNicht = styled.div`
   }
 `
 const ErfolgWenig = styled.div`
-  display: inline-block;
   grid-column: 3 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -88,8 +90,9 @@ const ErfolgWenig = styled.div`
   }
 `
 const ErfolgMaessig = styled.div`
-  display: inline-block;
   grid-column: 4 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -98,8 +101,9 @@ const ErfolgMaessig = styled.div`
   }
 `
 const ErfolgGut = styled.div`
-  display: inline-block;
   grid-column: 5 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -108,8 +112,9 @@ const ErfolgGut = styled.div`
   }
 `
 const ErfolgSehr = styled.div`
-  display: inline-block;
   grid-column: 6 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -118,9 +123,9 @@ const ErfolgSehr = styled.div`
   }
 `
 const ErfolgVeraenderung = styled.div`
-  display: inline-block;
   grid-column: 7 / span 1;
   text-align: center;
+  font-size: 0.8em;
   font-weight: 600;
   @media print {
     /* does not work - break is hideous :-( */
@@ -128,8 +133,9 @@ const ErfolgVeraenderung = styled.div`
   }
 `
 const ErfolgUnsicher = styled.div`
-  display: inline-block;
   grid-column: 8 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -138,8 +144,9 @@ const ErfolgUnsicher = styled.div`
   }
 `
 const ErfolgNichtBeurteilt = styled.div`
-  display: inline-block;
   grid-column: 9 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -148,8 +155,9 @@ const ErfolgNichtBeurteilt = styled.div`
   }
 `
 const KeineMassnahme = styled.div`
-  display: inline-block;
   grid-column: 10 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
@@ -158,8 +166,9 @@ const KeineMassnahme = styled.div`
   }
 `
 const ApExists = styled.div`
-  display: inline-block;
   grid-column: 11 / span 1;
+  height: 1em;
+  align-self: center;
   text-align: center;
   font-weight: 600;
   @media print {
