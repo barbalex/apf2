@@ -44,7 +44,6 @@ export const Messages = observer(({ unreadMessages }) => {
           <div
             className={messageRow}
             key={m.id}
-            paddBottom={paddBottom}
             style={{ paddingBottom: paddBottom ? 24 : 7 }}
           >
             <Linkify properties={{ target: '_blank' }}>
