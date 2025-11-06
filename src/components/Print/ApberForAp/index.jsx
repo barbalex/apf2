@@ -43,24 +43,6 @@ import {
 
 const mdParser = new MarkdownIt({ breaks: true })
 
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding: 0.2cm 0;
-  p {
-    margin: 0;
-  }
-  break-inside: avoid;
-`
-const FieldRow = styled.div`
-  display: flex;
-  padding: 0.2cm 0;
-`
-const FieldRowBold = styled.div`
-  display: flex;
-  padding: 0.2cm 0;
-  font-weight: 700;
-`
 const FieldRowFullWidth = styled.div`
   display: flex;
   flex-direction: column;
@@ -181,13 +163,13 @@ export const ApberForAp = observer(
 
             <h3 className={title1}>{node?.artname ?? ''}</h3>
 
-            <Row>
+            <div className={row}>
               <p>{`Start Programm: ${
                 node?.startJahr ?? '(Start-Jahr fehlt)'
               }`}</p>
               <p>{`Erste Massnahme: ${node?.firstMassn ?? ''}`}</p>
               <p>{`Erste Kontrolle: ${node?.b1FirstYear ?? ''}`}</p>
-            </Row>
+            </div>
 
             <AMengen
               loading={false}
@@ -315,7 +297,7 @@ export const ApberForAp = observer(
               D. Einschätzung der Wirkung des AP insgesamt auf die Art
             </h3>
             {!!apber.vergleichVorjahrGesamtziel && (
-              <FieldRow>
+              <div className={fieldRow}>
                 <label className={fieldLabel}>
                   Vergleich zu Vorjahr - Ausblick auf Gesamtziel
                 </label>
@@ -328,11 +310,11 @@ export const ApberForAp = observer(
                     }}
                   />
                 </Field>
-              </FieldRow>
+              </div>
             )}
             {!!ziele.length && <Ziele ziele={ziele} />}
             {!!erfkrit.length && (
-              <FieldRow>
+              <div className={fieldRow}>
                 <label className={fieldLabel}>Beurteilungsskala</label>
                 <Field>
                   {erfkrit.map((e) => (
@@ -346,22 +328,22 @@ export const ApberForAp = observer(
                     </ErfkritRow>
                   ))}
                 </Field>
-              </FieldRow>
+              </div>
             )}
             {!!apber.apErfkritWerteByBeurteilung && (
-              <FieldRowBold>
+              <div className={fieldRowBold}>
                 <label className={fieldLabel}>Beurteilung</label>
                 <Field>{apber?.apErfkritWerteByBeurteilung?.text ?? ''}</Field>
-              </FieldRowBold>
+              </div>
             )}
             {!!apber.wirkungAufArt && (
-              <FieldRow>
+              <div className={fieldRow}>
                 <label className={fieldLabel}>Bemerkungen</label>
                 <Field>{apber?.wirkungAufArt ?? ''}</Field>
-              </FieldRow>
+              </div>
             )}
             {!!apber.apberAnalyse && (
-              <FieldRow>
+              <div className={fieldRow}>
                 <label className={fieldLabel}>Analyse</label>
                 <Field>
                   <div
@@ -370,10 +352,10 @@ export const ApberForAp = observer(
                     }}
                   />
                 </Field>
-              </FieldRow>
+              </div>
             )}
             {!!apber.konsequenzenUmsetzung && (
-              <FieldRow>
+              <div className={fieldRow}>
                 <label className={fieldLabel}>
                   Konsequenzen für die Umsetzung
                 </label>
@@ -386,10 +368,10 @@ export const ApberForAp = observer(
                     }}
                   />
                 </Field>
-              </FieldRow>
+              </div>
             )}
             {!!apber.konsequenzenErfolgskontrolle && (
-              <FieldRow>
+              <div className={fieldRow}>
                 <label className={fieldLabel}>
                   Konsequenzen für die Erfolgskontrolle
                 </label>
@@ -402,15 +384,15 @@ export const ApberForAp = observer(
                     }}
                   />
                 </Field>
-              </FieldRow>
+              </div>
             )}
-            <Row>
+            <div className={row}>
               {`${
                 apberDatum ?
                   format(new Date(apberDatum), 'dd.MM.yyyy')
                 : '(Datum fehlt)'
               } / ${node?.bearbeiter ?? '(kein Bearbeiter)'}`}
-            </Row>
+            </div>
           </div>
         </div>
       </ErrorBoundary>
