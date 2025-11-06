@@ -25,64 +25,6 @@ import {
   totalDiffColumn,
 } from './AktPopList.module.css'
 
-const TotalRow = styled.div`
-  display: flex;
-  border-top: 1px solid rgba(0, 0, 0, 0.3) !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3) !important;
-  page-break-inside: avoid;
-  > div {
-    padding: 0.05cm 0;
-  }
-  div {
-    font-weight: 700;
-  }
-`
-const DiffLeftColumn = styled.div`
-  min-width: 8.8cm;
-  max-width: 8.8cm;
-  @media print {
-    min-width: 9.7cm;
-    max-width: 9.7cm;
-  }
-`
-const DataColumn = styled.div`
-  min-width: 5.1cm;
-  max-width: 5.1cm;
-  text-align: center;
-  @media print {
-    min-width: 5.4cm;
-    max-width: 5.4cm;
-  }
-`
-const DiffColumn = styled.div`
-  min-width: 4.4cm;
-  max-width: 4.4cm;
-  text-align: center;
-  @media print {
-    min-width: 5cm;
-    max-width: 5cm;
-  }
-`
-const ApColumn = styled.div`
-  min-width: 8.8cm;
-  max-width: 8.8cm;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  @media print {
-    min-width: 9.5cm;
-    max-width: 9.5cm;
-  }
-`
-const UrsprColumn = styled.div`
-  min-width: 1.6cm;
-  max-width: 1.6cm;
-  text-align: center;
-  @media print {
-    min-width: 1.9cm;
-    max-width: 1.9cm;
-  }
-`
 const AngesColumn = styled.div`
   min-width: 1.6cm;
   max-width: 1.6cm;
@@ -174,16 +116,16 @@ export const AktPopList = ({ year }) => {
             Übersicht über aktuelle Populationen aller AP-Arten
           </p>
           <div className={titleRow1}>
-            <DiffLeftColumn />
-            <DataColumn>aktuelle Werte</DataColumn>
-            <DiffColumn>Differenz zum Vorjahr</DiffColumn>
+            <div className={diffLeftColumn} />
+            <div className={dataColumn}>aktuelle Werte</div>
+            <div className={diffColumn}>Differenz zum Vorjahr</div>
           </div>
           <div className={titleRow2}>
-            <ApColumn>Aktionsplan</ApColumn>
-            <UrsprColumn>ursprünglich</UrsprColumn>
+            <div className={apColumn}>Aktionsplan</div>
+            <div className={ursprColumn}>ursprünglich</div>
             <AngesColumn>angesiedelt</AngesColumn>
             <TotalColumn>total</TotalColumn>
-            <UrsprColumn>ursprünglich</UrsprColumn>
+            <div className={ursprColumn}>ursprünglich</div>
             <AngesColumn>angesiedelt</AngesColumn>
             <TotalDiffColumn>total</TotalDiffColumn>
           </div>
@@ -192,11 +134,12 @@ export const AktPopList = ({ year }) => {
               className={apRow}
               key={ap?.artname}
             >
-              <ApColumn>{ap?.artname}</ApColumn>
-              <UrsprColumn>{ap?.pop100}</UrsprColumn>
+              <div className={apColumn}>{ap?.artname}</div>
+              <div className={ursprColumn}>{ap?.pop100}</div>
               <AngesColumn>{ap?.pop200}</AngesColumn>
               <TotalColumn>{ap?.popTotal}</TotalColumn>
-              <UrsprColumn
+              <div
+                className={ursprColumn}
                 style={{
                   backgroundColor:
                     ap?.pop100Diff > 0 ? '#00ff00'
@@ -205,7 +148,7 @@ export const AktPopList = ({ year }) => {
                 }}
               >
                 {ap?.pop100Diff}
-              </UrsprColumn>
+              </div>
               <AngesColumn
                 style={{
                   backgroundColor:
@@ -228,12 +171,13 @@ export const AktPopList = ({ year }) => {
               </TotalDiffColumn>
             </div>
           ))}
-          <TotalRow>
-            <ApColumn>{aps.length}</ApColumn>
-            <UrsprColumn>{pop100}</UrsprColumn>
+          <div className={totalRow}>
+            <div className={apColumn}>{aps.length}</div>
+            <div className={ursprColumn}>{pop100}</div>
             <AngesColumn>{pop200}</AngesColumn>
             <TotalColumn>{popsTotal}</TotalColumn>
-            <UrsprColumn
+            <div
+              className={ursprColumn}
               style={{
                 backgroundColor:
                   pop100Diff > 0 ? '#00ff00'
@@ -242,7 +186,7 @@ export const AktPopList = ({ year }) => {
               }}
             >
               {pop100Diff}
-            </UrsprColumn>
+            </div>
             <AngesColumn
               style={{
                 backgroundColor:
@@ -263,7 +207,7 @@ export const AktPopList = ({ year }) => {
             >
               {popTotalDiff}
             </TotalDiffColumn>
-          </TotalRow>
+          </div>
         </div>
       </Suspense>
     </ErrorBoundary>
