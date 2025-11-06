@@ -55,7 +55,6 @@ const Ap = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
   @media print {
     /* does not work - break is hideous :-( */
     page-break-inside: avoid;
@@ -92,10 +91,6 @@ const ErfolgMaessig = styled.div`
   display: inline-block;
   grid-column: 4 / span 1;
   text-align: center;
-  background-color: ${(props) =>
-    props.val ? 'yellow'
-    : props.odd ? 'rgba(0,0,0,0.03)'
-    : 'unset'};
   font-weight: 600;
   @media print {
     /* does not work - break is hideous :-( */
@@ -106,10 +101,6 @@ const ErfolgGut = styled.div`
   display: inline-block;
   grid-column: 5 / span 1;
   text-align: center;
-  background-color: ${(props) =>
-    props.val ? '#00f6ff'
-    : props.odd ? 'rgba(0,0,0,0.03)'
-    : 'unset'};
   font-weight: 600;
   @media print {
     /* does not work - break is hideous :-( */
@@ -121,10 +112,6 @@ const ErfolgSehr = styled.div`
   grid-column: 6 / span 1;
   text-align: center;
   font-weight: 600;
-  background-color: ${(props) =>
-    props.val ? '#00ff00'
-    : props.odd ? 'rgba(0,0,0,0.03)'
-    : 'unset'};
   @media print {
     /* does not work - break is hideous :-( */
     page-break-inside: avoid;
@@ -135,7 +122,6 @@ const ErfolgVeraenderung = styled.div`
   grid-column: 7 / span 1;
   text-align: center;
   font-weight: 600;
-  ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
   @media print {
     /* does not work - break is hideous :-( */
     page-break-inside: avoid;
@@ -145,10 +131,6 @@ const ErfolgUnsicher = styled.div`
   display: inline-block;
   grid-column: 8 / span 1;
   text-align: center;
-  background-color: ${(props) =>
-    props.val ? '#afafaf'
-    : props.odd ? 'rgba(0,0,0,0.03)'
-    : 'unset'};
   font-weight: 600;
   @media print {
     /* does not work - break is hideous :-( */
@@ -160,7 +142,6 @@ const ErfolgNichtBeurteilt = styled.div`
   grid-column: 9 / span 1;
   text-align: center;
   font-weight: 600;
-  ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
   @media print {
     /* does not work - break is hideous :-( */
     page-break-inside: avoid;
@@ -171,7 +152,6 @@ const KeineMassnahme = styled.div`
   grid-column: 10 / span 1;
   text-align: center;
   font-weight: 600;
-  ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
   @media print {
     /* does not work - break is hideous :-( */
     page-break-inside: avoid;
@@ -182,7 +162,6 @@ const ApExists = styled.div`
   grid-column: 11 / span 1;
   text-align: center;
   font-weight: 600;
-  ${(props) => props['odd'] && 'background-color: rgba(0,0,0,0.03);'}
   @media print {
     /* does not work - break is hideous :-( */
     page-break-inside: avoid;
@@ -435,7 +414,13 @@ export const ErfolgList = ({ jahr, data }) => {
 
             return (
               <Fragment key={row.ap}>
-                <Ap odd={odd}>{row.ap}</Ap>
+                <Ap
+                  style={{
+                    ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
+                  }}
+                >
+                  {row.ap}
+                </Ap>
                 <ErfolgNicht
                   style={{
                     backgroundColor:
@@ -457,47 +442,70 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.erfolgWenig}
                 </ErfolgWenig>
                 <ErfolgMaessig
-                  val={!!row.erfolgMaessig}
-                  odd={odd}
+                  style={{
+                    backgroundColor:
+                      !!row.erfolgMaessig ? 'yellow'
+                      : odd ? 'rgba(0,0,0,0.03)'
+                      : 'unset',
+                  }}
                 >
                   {row.erfolgMaessig}
                 </ErfolgMaessig>
                 <ErfolgGut
-                  val={!!row.erfolgGut}
-                  odd={odd}
+                  style={{
+                    backgroundColor:
+                      !!row.erfolgGut ? '#00f6ff'
+                      : odd ? 'rgba(0,0,0,0.03)'
+                      : 'unset',
+                  }}
                 >
                   {row.erfolgGut}
                 </ErfolgGut>
                 <ErfolgSehr
-                  val={!!row.erfolgSehr}
-                  odd={odd}
+                  style={{
+                    backgroundColor:
+                      !!row.erfolgSehr ? '#00ff00'
+                      : odd ? 'rgba(0,0,0,0.03)'
+                      : 'unset',
+                  }}
                 >
                   {row.erfolgSehr}
                 </ErfolgSehr>
-                <ErfolgVeraenderung odd={odd}>
+                <ErfolgVeraenderung
+                  style={{
+                    ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
+                  }}
+                >
                   {row.veraenderung}
                 </ErfolgVeraenderung>
                 <ErfolgUnsicher
-                  val={!!row.erfolgUnsicher}
-                  odd={odd}
+                  style={{
+                    backgroundColor:
+                      !!row.erfolgUnsicher ? '#afafaf'
+                      : odd ? 'rgba(0,0,0,0.03)'
+                      : 'unset',
+                  }}
                 >
                   {row.erfolgUnsicher}
                 </ErfolgUnsicher>
                 <ErfolgNichtBeurteilt
-                  val={!!row.nichtBeurteilt}
-                  odd={odd}
+                  style={{
+                    ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
+                  }}
                 >
                   {row.nichtBeurteilt}
                 </ErfolgNichtBeurteilt>
                 <KeineMassnahme
-                  val={!!row.keineMassnahme}
-                  odd={odd}
+                  style={{
+                    ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
+                  }}
                 >
                   {row.keineMassnahme}
                 </KeineMassnahme>
                 <ApExists
-                  val={!!row.apExists}
-                  odd={odd}
+                  style={{
+                    ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
+                  }}
                 >
                   {row.apExists}
                 </ApExists>
