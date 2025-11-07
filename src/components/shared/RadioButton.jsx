@@ -2,25 +2,8 @@ import Radio from '@mui/material/Radio'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 
-// without slight padding radio is slightly cut off!
-const StyledFormControl = styled(FormControl)`
-  padding-left: 1px !important;
-  padding-bottom: 15px !important;
-`
-const StyledFormLabel = styled(FormLabel)`
-  padding-top: 10px !important;
-  padding-bottom: 8px !important;
-  font-size: 12px !important;
-  cursor: text;
-  user-select: none;
-  pointer-events: none;
-`
-const StyledRadio = styled(Radio)`
-  height: 2px !important;
-  width: 24px;
-`
+import { formControl, formLabel, radio } from './RadioButton.module.css'
 
 export const RadioButton = ({ label, name, value, error, saveToDb }) => {
   const onClickButton = () => {
@@ -37,22 +20,29 @@ export const RadioButton = ({ label, name, value, error, saveToDb }) => {
   }
 
   return (
-    <StyledFormControl
+    <FormControl
       component="fieldset"
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
+      className={formControl}
     >
-      <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <StyledRadio
+      <FormLabel
+        component="legend"
+        className={formLabel}
+      >
+        {label}
+      </FormLabel>
+      <Radio
         data-id={name}
         onClick={onClickButton}
         color="primary"
         checked={value}
+        className={radio}
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
-    </StyledFormControl>
+    </FormControl>
   )
 }
