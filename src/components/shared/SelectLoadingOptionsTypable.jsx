@@ -1,80 +1,13 @@
 import { useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 12px;
-`
-const Label = styled.div`
-  font-size: ${(props) => (props.labelsize ? `${props.labelsize}px` : '12px')};
-  color: rgb(0, 0, 0, 0.54);
-`
-const Error = styled.div`
-  font-size: 12px;
-  color: red;
-`
-const StyledSelect = styled(AsyncSelect)`
-  .react-select__control {
-    background-color: rgba(0, 0, 0, 0) !important;
-    border-bottom-color: rgba(0, 0, 0, 0.1);
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-  }
-  .react-select__control:hover {
-    border-bottom-width: 2px;
-  }
-  .react-select__control:focus-within {
-    border-bottom-color: rgba(28, 80, 31, 1) !important;
-    box-shadow: none;
-  }
-  .react-select__value-container {
-    padding-left: 0;
-  }
-  .react-select__indicators {
-    @media print {
-      display: none;
-    }
-  }
-  .react-select__clear-indicator {
-    /* ability to hide caret when not enough space */
-    padding-right: 8px;
-  }
-  .react-select__dropdown-indicator {
-    /* ability to hide caret when not enough space */
-    display: flex;
-  }
-  .react-select__indicator-separator {
-    /* ability to hide caret when not enough space */
-    width: 1px;
-  }
-  .select-nocaret .react-select__clear-indicator {
-    /* ability to hide caret when not enough space */
-    padding-right: 0;
-  }
-  .select-nocaret .react-select__dropdown-indicator {
-    /* ability to hide caret when not enough space */
-    display: none;
-  }
-  .select-nocaret .react-select__indicator-separator {
-    /* ability to hide caret when not enough space */
-    width: 0;
-  }
-  .select-height-limited .react-select__menu,
-  .select-height-limited .react-select__menu-list {
-    // height: 130px;
-    // height: var(--react-select-menu-list-max-height, unset);
-  }
-  // only for ApList.ChooseAp
-  .ekplan-aplist-chooseap .react-select__menu-list {
-    z-index: 4;
-  }
-`
+import {
+  container,
+  labelClass,
+  errorClass,
+} from './SelectLoadingOptionsTypable.module.css'
 
 export const SelectLoadingOptionsTypable = observer(
   ({
@@ -147,9 +80,12 @@ export const SelectLoadingOptionsTypable = observer(
     }
 
     return (
-      <Container data-id={field}>
-        {label && <Label>{label}</Label>}
-        <StyledSelect
+      <div
+        className={container}
+        data-id={field}
+      >
+        {label && <div className={labelClass}>{label}</div>}
+        <AsyncSelect
           id={field}
           defaultOptions
           name={field}
@@ -171,8 +107,8 @@ export const SelectLoadingOptionsTypable = observer(
           onInputChange={onInputChange}
           loadOptions={loadOptions}
         />
-        {saveToDbError && <Error>{saveToDbError}</Error>}
-      </Container>
+        {saveToDbError && <div className={errorClass}>{saveToDbError}</div>}
+      </div>
     )
   },
 )
