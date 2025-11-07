@@ -1,14 +1,7 @@
-import styled from '@emotion/styled'
-
 import { RadioButtonGroup } from './RadioButtonGroup.jsx'
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  break-inside: avoid;
-`
+import { container } from './RadioButtonGroupWithInfo.module.css'
 
 export const RadioButtonGroupWithInfo = ({
   label,
@@ -19,7 +12,7 @@ export const RadioButtonGroupWithInfo = ({
   saveToDb,
   popover,
 }) => (
-  <Container>
+  <div className={container}>
     <RadioButtonGroup
       value={value}
       name={name}
@@ -29,5 +22,5 @@ export const RadioButtonGroupWithInfo = ({
       error={error}
     />
     <InfoWithPopover name={name}>{popover}</InfoWithPopover>
-  </Container>
+  </div>
 )
