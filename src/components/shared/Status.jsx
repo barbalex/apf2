@@ -6,64 +6,22 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
 
-const FieldWithInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  break-inside: avoid;
-`
-const PopoverContentRow = styled.div`
-  padding: 2px 5px 2px 5px;
-  display: flex;
-  border-color: grey;
-  border-width: thin;
-  border-style: solid;
-  border-radius: 4px;
-`
-const StatusContainer = styled.div`
-  padding-top: 10px;
-  break-inside: avoid;
-`
-const HerkunftContainer = styled.div`
-  display: flex;
-  margin-top: -2px;
-  flex-wrap: wrap;
-`
-const HerkunftColumnContainer = styled.div`
-  padding-right: 25px;
-  overflow: visible !important;
-  display: flex;
-  flex-direction: column;
-`
-const HerkunftColumnContainerLast = styled.div`
-  overflow: visible !important;
-`
-const GroupLabelContainer = styled.div`
-  padding-bottom: 2px;
-`
-const StyledInput = styled(Input)`
-  &:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
-const StyledRadio = styled(Radio)`
-  height: 2px !important;
-`
-const StyledLabel = styled.div`
-  margin-top: 10px;
-  cursor: text;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-  user-select: none;
-  padding-bottom: 8px;
-  color: ${(props) => (props.error ? '#f44336' : 'unset')};
-`
+import {
+  fieldWithInfoContainer,
+  popoverContentRow,
+  statusContainer,
+  herkunftContainer,
+  herkunftColumnContainer,
+  herkunftColumnContainerLast,
+  groupLabelContainer,
+  input,
+  radio,
+  label,
+} from './Status.module.css'
 
 export const Status = ({
   apJahr = null,
@@ -153,14 +111,14 @@ export const Status = ({
 
   return (
     <div>
-      <FieldWithInfoContainer>
+      <div className={fieldWithInfoContainer}>
         <FormControl
           fullWidth
           aria-describedby="bekanntSeitHelper"
           variant="standard"
         >
           <InputLabel htmlFor="bekanntSeit">bekannt seit</InputLabel>
-          <StyledInput
+          <Input
             id="bekanntSeit"
             name="bekanntSeit"
             value={bekanntSeitStateValue}
@@ -169,34 +127,41 @@ export const Status = ({
             onBlur={onBlurBekanntSeit}
             endAdornment={
               <InfoWithPopover name="bekanntSeit">
-                <PopoverContentRow>
+                <div className={popoverContentRow}>
                   Dieses Feld immer ausfüllen
-                </PopoverContentRow>
+                </div>
               </InfoWithPopover>
             }
+            className={input}
           />
         </FormControl>
-      </FieldWithInfoContainer>
-      <StatusContainer>
+      </div>
+      <div className={statusContainer}>
         <FormControl
           component="fieldset"
           error={!!error}
           aria-describedby="StatusErrorText"
           variant="standard"
         >
-          <StyledLabel error={!!error}>Status</StyledLabel>
+          <div
+            className={label}
+            style={{ color: error ? '#f44336' : 'unset' }}
+          >
+            Status
+          </div>
           <RadioGroup
             aria-label="Status"
             value={statusSelected.toString()}
             onChange={onChangeStatus}
           >
-            <HerkunftContainer>
-              <HerkunftColumnContainer>
-                <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
+            <div className={herkunftContainer}>
+              <div className={herkunftColumnContainer}>
+                <div className={groupLabelContainer}>ursprünglich:</div>
                 <FormControlLabel
                   value="100"
                   control={
-                    <StyledRadio
+                    <Radio
+                      className={radio}
                       data-id="status_100"
                       color="primary"
                     />
@@ -208,7 +173,8 @@ export const Status = ({
                 <FormControlLabel
                   value="101"
                   control={
-                    <StyledRadio
+                    <Radio
+                      className={radio}
                       data-id="status_101"
                       color="primary"
                     />
@@ -217,13 +183,14 @@ export const Status = ({
                   disabled={statusDisabled}
                   onClick={onClickButton}
                 />
-              </HerkunftColumnContainer>
-              <HerkunftColumnContainer>
-                <GroupLabelContainer>{angesiedeltLabel}</GroupLabelContainer>
+              </div>
+              <div className={herkunftColumnContainer}>
+                <div className={groupLabelContainer}>{angesiedeltLabel}</div>
                 <FormControlLabel
                   value="200"
                   control={
-                    <StyledRadio
+                    <Radio
+                      className={radio}
                       data-id="status_200"
                       color="primary"
                     />
@@ -235,7 +202,8 @@ export const Status = ({
                 <FormControlLabel
                   value="201"
                   control={
-                    <StyledRadio
+                    <Radio
+                      className={radio}
                       data-id="status_201"
                       color="primary"
                     />
@@ -247,7 +215,8 @@ export const Status = ({
                 <FormControlLabel
                   value="202"
                   control={
-                    <StyledRadio
+                    <Radio
+                      className={radio}
                       data-id="status_202"
                       color="primary"
                     />
@@ -256,13 +225,14 @@ export const Status = ({
                   disabled={statusDisabled}
                   onClick={onClickButton}
                 />
-              </HerkunftColumnContainer>
-              <HerkunftColumnContainerLast>
-                <GroupLabelContainer>potenziell:</GroupLabelContainer>
+              </div>
+              <div className={herkunftColumnContainerLast}>
+                <div className={groupLabelContainer}>potenziell:</div>
                 <FormControlLabel
                   value="300"
                   control={
-                    <StyledRadio
+                    <Radio
+                      className={radio}
                       data-id="status_300"
                       color="primary"
                     />
@@ -271,14 +241,14 @@ export const Status = ({
                   disabled={statusDisabled}
                   onClick={onClickButton}
                 />
-              </HerkunftColumnContainerLast>
-            </HerkunftContainer>
+              </div>
+            </div>
           </RadioGroup>
           {!!error && (
             <FormHelperText id="StatusErrorText">{error}</FormHelperText>
           )}
         </FormControl>
-      </StatusContainer>
+      </div>
     </div>
   )
 }
