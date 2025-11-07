@@ -1,5 +1,4 @@
 import ReactSelect from 'react-select'
-import styled from '@emotion/styled'
 
 import { exists } from '../../modules/exists.js'
 import { container, labelClass, errorClass, select } from './Select.module.css'
