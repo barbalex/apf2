@@ -101,9 +101,18 @@ export const ProjektContainer = observer(() => {
     ),
   }
 
-  if (isPrint) {
-    return <Outlet />
-  }
+  if (isPrint) return <Outlet />
+
+  const overflowPane1 =
+    treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
+  const overflowPane2 =
+    treeTabs[1] === 'daten' &&
+    treeTabs.length === 2 &&
+    (showApberForAll || showApberForArt)
+  const overflowPane3 =
+    treeTabs[1] === 'daten' &&
+    treeTabs.length > 2 &&
+    (showApberForAll || showApberForArt)
 
   return (
     <div className={outerContainer}>
@@ -121,20 +130,9 @@ export const ProjektContainer = observer(() => {
             : `${100 / treeTabs.length}%`
           }
           maxSize={-10}
-          overflowPane1={
-            treeTabs[0] === 'daten' && (showApberForAll || showApberForArt) ?
-              'auto'
-            : 'hidden'
-          }
-          overflowPane2={
-            (
-              treeTabs[1] === 'daten' &&
-              treeTabs.length === 2 &&
-              (showApberForAll || showApberForArt)
-            ) ?
-              'auto'
-            : 'hidden'
-          }
+          className={`${overflowPane1 ? 'Pane1-overflowing' : ''} ${
+            overflowPane2 ? 'Pane2-overflowing' : ''
+          }`}
         >
           {elObj[treeTabs[0]]}
           {treeTabs.length === 1 && <></>}
@@ -144,15 +142,7 @@ export const ProjektContainer = observer(() => {
               split="vertical"
               size={`${100 / (treeTabs.length - 1)}%`}
               maxSize={-10}
-              overflowPane1={
-                (
-                  treeTabs[1] === 'daten' &&
-                  treeTabs.length > 2 &&
-                  (showApberForAll || showApberForArt)
-                ) ?
-                  'auto'
-                : 'hidden'
-              }
+              className={`${overflowPane3 ? 'Pane1-overflowing' : ''}`}
             >
               {elObj[treeTabs[1]]}
               {treeTabs.length === 3 && elObj[treeTabs[2]]}
