@@ -1,21 +1,10 @@
-import styled from '@emotion/styled'
 import CircularProgress from '@mui/material/CircularProgress'
 
-const SpinnerContainer = styled.div`
-  min-height: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-const SpinnerText = styled.div`
-  padding: 10px;
-`
+import { container, text } from './Spinner.module.css'
 
 export const Spinner = ({ message }) => (
-  <SpinnerContainer>
+  <div className={container}>
     <CircularProgress />
-    {!!message && <SpinnerText>{message}</SpinnerText>}
-  </SpinnerContainer>
+    {!!message && <div className={text}>{message}</div>}
+  </div>
 )
