@@ -3,13 +3,13 @@ import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQuery } from '@apollo/client/react'
 import { sortBy } from 'es-toolkit'
+import SplitPane from 'react-split-pane'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import { EkfList } from './List/index.jsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
 import { MobxContext } from '../../mobxContext.js'
-import { StyledSplitPane } from '../shared/StyledSplitPane'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'
 import { Error } from '../shared/Error.jsx'
@@ -103,7 +103,7 @@ export const Component = observer(() => {
 
   return (
     <div className={container}>
-      <StyledSplitPane
+      <SplitPane
         split="vertical"
         size="350px"
         minSize={100}
@@ -112,7 +112,7 @@ export const Component = observer(() => {
         {ekfId ?
           <Tpopfreiwkontr id={ekfId} />
         : <div className={innerContainer} />}
-      </StyledSplitPane>
+      </SplitPane>
     </div>
   )
 })

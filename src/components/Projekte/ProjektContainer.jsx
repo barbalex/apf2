@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import { useAtom } from 'jotai'
+import SplitPane from 'react-split-pane'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import { Karte } from './Karte/index.jsx'
@@ -16,7 +17,6 @@ const Filter = lazy(async () => ({
   default: (await import('./Filter/index.jsx')).Filter,
 }))
 import { MobxContext } from '../../mobxContext.js'
-import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.jsx'
@@ -122,7 +122,7 @@ export const ProjektContainer = observer(() => {
         height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
       >
-        <StyledSplitPane
+        <SplitPane
           split="vertical"
           size={
             treeTabs.length === 2 && treeTabs[0] === 'tree' ?
@@ -138,7 +138,7 @@ export const ProjektContainer = observer(() => {
           {treeTabs.length === 1 && <></>}
           {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
           {treeTabs.length > 2 && (
-            <StyledSplitPane
+            <SplitPane
               split="vertical"
               size={`${100 / (treeTabs.length - 1)}%`}
               maxSize={-10}
@@ -147,7 +147,7 @@ export const ProjektContainer = observer(() => {
               {elObj[treeTabs[1]]}
               {treeTabs.length === 3 && elObj[treeTabs[2]]}
               {treeTabs.length > 3 && (
-                <StyledSplitPane
+                <SplitPane
                   split="vertical"
                   size={`${100 / (treeTabs.length - 2)}%`}
                   maxSize={-10}
@@ -155,20 +155,20 @@ export const ProjektContainer = observer(() => {
                   {elObj[treeTabs[2]]}
                   {treeTabs.length === 4 && elObj[treeTabs[3]]}
                   {treeTabs.length === 5 && (
-                    <StyledSplitPane
+                    <SplitPane
                       split="vertical"
                       size="50%"
                       maxSize={-10}
                     >
                       {elObj[treeTabs[3]]}
                       {elObj[treeTabs[4]]}
-                    </StyledSplitPane>
+                    </SplitPane>
                   )}
-                </StyledSplitPane>
+                </SplitPane>
               )}
-            </StyledSplitPane>
+            </SplitPane>
           )}
-        </StyledSplitPane>
+        </SplitPane>
       </div>
     </div>
   )

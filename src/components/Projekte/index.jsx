@@ -2,12 +2,12 @@ import { useContext, lazy, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
+import SplitPane from 'react-split-pane'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import { ProjektContainer } from './ProjektContainer.jsx'
 import { MobxContext } from '../../mobxContext.js'
-import { StyledSplitPane } from '../shared/StyledSplitPane.jsx'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 import { inIframe } from '../../modules/inIframe.js'
@@ -63,7 +63,7 @@ export const Component = observer(() => {
       <div className={container}>
         {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
-        : <StyledSplitPane
+        : <SplitPane
             split="vertical"
             defaultSize="50%"
           >
@@ -75,7 +75,7 @@ export const Component = observer(() => {
               width="100%"
               height="100%"
             />
-          </StyledSplitPane>
+          </SplitPane>
         }
       </div>
     )
@@ -89,7 +89,7 @@ export const Component = observer(() => {
       <div className={container}>
         {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
-        : <StyledSplitPane
+        : <SplitPane
             split="vertical"
             defaultSize="50%"
           >
@@ -101,7 +101,7 @@ export const Component = observer(() => {
               width="100%"
               height="100%"
             />
-          </StyledSplitPane>
+          </SplitPane>
         }
       </div>
     </>
