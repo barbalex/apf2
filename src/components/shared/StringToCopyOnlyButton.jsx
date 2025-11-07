@@ -1,16 +1,9 @@
 import { useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
-
-const Container = styled.div`
-  padding-top: 10px;
-  @media print {
-    display: none;
-  }
-`
+import { container } from './StringToCopyOnlyButton.module.css'
 
 export const StringToCopyOnlyButton = ({ text, label }) => {
   const [copied, setCopied] = useState(false)
@@ -24,7 +17,7 @@ export const StringToCopyOnlyButton = ({ text, label }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         <CopyToClipboard
           text={text}
           onCopy={onCopy}
@@ -36,7 +29,7 @@ export const StringToCopyOnlyButton = ({ text, label }) => {
             {copied ? `${label} kopiert` : `${label} kopieren`}
           </Button>
         </CopyToClipboard>
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 }
