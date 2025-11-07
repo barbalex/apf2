@@ -4,27 +4,10 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import styled from '@emotion/styled'
 
 import { exists } from '../../modules/exists.js'
 
-// without slight padding radio is slightly cut off!
-const StyledFormControl = styled(FormControl)`
-  padding-left: 1px !important;
-  padding-bottom: 19px !important;
-  break-inside: avoid;
-`
-const StyledFormLabel = styled(FormLabel)`
-  padding-top: 1px !important;
-  font-size: 12px !important;
-  cursor: text;
-  user-select: none;
-  pointer-events: none;
-  padding-bottom: 8px !important;
-`
-const StyledRadio = styled(Radio)`
-  height: 2px !important;
-`
+import { formControl, formLabel, radio } from './RadioButtonGroup.module.css'
 
 export const RadioButtonGroup = ({
   value = null,
@@ -89,13 +72,19 @@ export const RadioButtonGroup = ({
     value !== null && value !== undefined ? value.toString() : ''
 
   return (
-    <StyledFormControl
+    <FormControl
       component="fieldset"
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
+      className={formControl}
     >
-      <StyledFormLabel component="legend">{label}</StyledFormLabel>
+      <FormLabel
+        component="legend"
+        className={formLabel}
+      >
+        {label}
+      </FormLabel>
       <RadioGroup
         aria-label={label}
         value={valueSelected}
@@ -106,11 +95,12 @@ export const RadioButtonGroup = ({
             key={index}
             value={e.value.toString ? e.value.toString() : e.value}
             control={
-              <StyledRadio
+              <Radio
                 data-id={`${name}_${
                   e.value.toString ? e.value.toString() : e.value
                 }`}
                 color="primary"
+                className={radio}
               />
             }
             label={e.label}
@@ -124,6 +114,6 @@ export const RadioButtonGroup = ({
       {!!helperText && (
         <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
       )}
-    </StyledFormControl>
+    </FormControl>
   )
 }

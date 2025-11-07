@@ -1,0 +1,19 @@
+/* without slight padding radio is slightly cut off! */
+.formControl {
+  padding-left: 1px !important;
+  padding-bottom: 19px !important;
+  break-inside: avoid;
+}
+
+.formLabel {
+  padding-top: 1px !important;
+  font-size: 12px !important;
+  cursor: text;
+  user-select: none;
+  pointer-events: none;
+  padding-bottom: 8px !important;
+}
+
+.radio {
+  height: 2px !important;
+}
