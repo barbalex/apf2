@@ -1,0 +1,8 @@
+.labelClass {
+  margin-top: 10px;
+  cursor: text;
+  font-size: 12px;
+  pointer-events: none;
+  user-select: none;
+  padding-bottom: 4px;
+}
