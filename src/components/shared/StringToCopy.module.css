@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  break-inside: avoid;
+}
+
+.innerContainer {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.guid {
+  flex-grow: 1;
+  &::before {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    content: '';
+    position: absolute;
+    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+}
+
+.buttonContainer {
+  margin-top: -7px;
+}
+
+.label {
+  margin-top: 10px;
+  cursor: text;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  user-select: none;
+  padding-bottom: 8px;
+}

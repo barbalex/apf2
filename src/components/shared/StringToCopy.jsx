@@ -1,49 +1,16 @@
 import { useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from './ErrorBoundary.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
-  break-inside: avoid;
-`
-const StringToCopyContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-`
-const GuidContainer = styled.div`
-  flex-grow: 1;
-  &::before {
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 1px;
-    content: '';
-    position: absolute;
-    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    pointer-events: none;
-    background-color: rgba(0, 0, 0, 0.1);
-    width: 100%;
-  }
-`
-const CopyButtonContainer = styled.div`
-  margin-top: -7px;
-`
-const StyledLabel = styled.div`
-  margin-top: 10px;
-  cursor: text;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-  user-select: none;
-  padding-bottom: 8px;
-`
+import {
+  container,
+  innerContainer,
+  guid,
+  buttonContainer,
+  label,
+} from './StringToCopy.module.css'
 
 export const StringToCopy = ({ text, label }) => {
   const [copied, setCopied] = useState(false)
@@ -57,11 +24,11 @@ export const StringToCopy = ({ text, label }) => {
 
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledLabel>{label}</StyledLabel>
-        <StringToCopyContainer>
-          <GuidContainer>{text}</GuidContainer>
-          <CopyButtonContainer>
+      <div className={container}>
+        <div className={label}>{label}</div>
+        <div className={innerContainer}>
+          <div className={guid}>{text}</div>
+          <div className={buttonContainer}>
             <CopyToClipboard
               text={text}
               onCopy={onCopy}
@@ -73,9 +40,9 @@ export const StringToCopy = ({ text, label }) => {
                 {copied ? `${label} kopiert` : `${label} kopieren`}
               </Button>
             </CopyToClipboard>
-          </CopyButtonContainer>
-        </StringToCopyContainer>
-      </Container>
+          </div>
+        </div>
+      </div>
     </ErrorBoundary>
   )
 }
