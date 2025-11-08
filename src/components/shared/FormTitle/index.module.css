@@ -1,0 +1,34 @@
+.container {
+  background-color: #388e3c;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media print {
+    display: none !important;
+  }
+}
+
+.titleRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  min-height: 42px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.titleClass {
+  display: block;
+  flex-grow: 0;
+  flex-shrink: 1;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

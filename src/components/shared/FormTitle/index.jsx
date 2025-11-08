@@ -2,45 +2,13 @@ import { useContext, useState, useRef, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import Collapse from '@mui/material/Collapse'
 import { useAtom } from 'jotai'
-import styled from '@emotion/styled'
 
 import { TestdataMessage } from './TestdataMessage.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { FilterInput } from './FilterInput.jsx'
 import { navListFilterAtoms } from '../../../JotaiStore/index.js'
 
-const Container = styled.div`
-  background-color: #388e3c;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-
-  @media print {
-    display: none !important;
-  }
-`
-const TitleRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  min-height: 42px;
-  flew-wrap: nowrap;
-  overflow: hidden;
-`
-const Title = styled.div`
-  display: block;
-  flex-grow: 0;
-  flex-shrink: 1;
-  margin-top: auto;
-  margin-bottom: auto;
-  padding: 10px;
-  color: white;
-  font-weight: bold;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-`
+import { container, titleRow, titleClass } from './index.module.css'
 
 export const FormTitle = ({
   title,
@@ -69,16 +37,21 @@ export const FormTitle = ({
   // }, [!!filterValue])
 
   return (
-    <Container>
-      <TitleRow>
-        <Title data-id="form-title">{title}</Title>
+    <div className={container}>
+      <div className={titleRow}>
+        <div
+          className={titleClass}
+          data-id="form-title"
+        >
+          {title}
+        </div>
         {!!MenuBarComponent && (
           <MenuBarComponent
             toggleFilterInput={toggleFilterInput}
             {...menuBarProps}
           />
         )}
-      </TitleRow>
+      </div>
       {!!listFilter && (
         <Collapse in={filterInputIsVisible}>
           <FilterInput
@@ -88,6 +61,6 @@ export const FormTitle = ({
         </Collapse>
       )}
       {!noTestDataMessage && <TestdataMessage />}
-    </Container>
+    </div>
   )
 }
