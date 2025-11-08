@@ -28,7 +28,6 @@ import { useAtom } from 'jotai'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
@@ -39,6 +38,7 @@ import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfT
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import { menuTitle } from '../../../shared/Files/Menu/index.module.css'
 import {
   roundToggleButton,
   styledLoadingButton,
@@ -456,7 +456,7 @@ export const Menu = observer(({ row }) => {
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
       >
-        <MenuTitle>löschen?</MenuTitle>
+        <h3 className={menuTitle}>löschen?</h3>
         <MenuItem onClick={onClickDelete}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
