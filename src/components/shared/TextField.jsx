@@ -3,15 +3,9 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 import { observer } from 'mobx-react-lite'
 
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import { formControl } from './TextField.module.css'
 
 export const TextField = observer(
   ({
@@ -42,12 +36,13 @@ export const TextField = observer(
     const onKeyPress = (event) => event.key === 'Enter' && saveToDb(event)
 
     return (
-      <StyledFormControl
+      <FormControl
         fullWidth
         disabled={disabled}
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
+        className={formControl}
       >
         <InputLabel
           htmlFor={label}
@@ -80,7 +75,7 @@ export const TextField = observer(
             {helperText}
           </FormHelperText>
         )}
-      </StyledFormControl>
+      </FormControl>
     )
   },
 )
