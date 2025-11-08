@@ -663,3 +663,20 @@ a {
 .Pane2-overflowing .Pane2 {
   overflow: auto !important;
 }
+
+/* react-markdown-editor-lite */
+
+.react-markdown-editor-lite {
+  .editorpane {
+    overflow-y: hidden !important;
+  }
+  .editorpane,
+  .html-wrap,
+  .rc-md-navigation {
+    background-color: #fffde7 !important;
+  }
+  /* without this full page view is white */
+  .rc-md-editor {
+    background-color: #fffde7 !important;
+  }
+}

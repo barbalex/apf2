@@ -1,11 +1,11 @@
 import { useRef, useEffect, useState } from 'react'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@mui/material/FormHelperText'
-import styled from '@emotion/styled'
 import ReactMarkdownEditor, { Plugins } from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 
 import { Label } from '../../Label.jsx'
+import { container } from './index.module.css'
 
 ReactMarkdownEditor.use(Plugins.AutoResize, {
   min: 47,
@@ -14,21 +14,6 @@ ReactMarkdownEditor.use(Plugins.AutoResize, {
 
 const mdParser = new MarkdownIt({ breaks: true })
 
-const EditorContainer = styled.div`
-  margin-bottom: 12px;
-  .editorpane {
-    overflow-y: hidden !important;
-  }
-  .editorpane,
-  .html-wrap,
-  .rc-md-navigation {
-    background-color: #fffde7 !important;
-  }
-  /* without this full page view is white */
-  .rc-md-editor {
-    background-color: #fffde7 !important;
-  }
-`
 const config = {
   view: { menu: true, md: true, html: false },
   canView: {
@@ -80,7 +65,7 @@ export const Editor = ({
   }, [])
 
   return (
-    <EditorContainer>
+    <div className={`${container} react-markdown-editor-lite`}>
       <Label label={label} />
       <ReactMarkdownEditor
         ref={el}
@@ -94,6 +79,6 @@ export const Editor = ({
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
       )}
-    </EditorContainer>
+    </div>
   )
 }
