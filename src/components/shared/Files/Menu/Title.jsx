@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 
-const TitleContainer = styled.div``
 const TitleDiv = styled.h3`
   padding: 0 10px;
   font-size: 0.9rem;
@@ -12,11 +11,6 @@ const TitleDiv = styled.h3`
   // center vertically
   margin-top: auto;
   margin-bottom: auto;
-  // fix width to prevent jumping
-  // but remember to subtract padding
-  width: ${(props) => props.titleComponentWidth - 20}px;
-  min-width: ${(props) => props.titleComponentWidth - 20}px;
-  max-width: ${(props) => props.titleComponentWidth - 20}px;
   // place left
   margin-right: auto;
   display: block;
@@ -32,7 +26,7 @@ const Content = styled.div`
 `
 
 const FileNameForTooltip = ({ file, props, ref }) => (
-  <TitleContainer
+  <div
     ref={ref}
     {...props}
   >
@@ -56,16 +50,26 @@ const FileNameForTooltip = ({ file, props, ref }) => (
         </>
       )}
     </Content>
-  </TitleContainer>
+  </div>
 )
 
 export const Title = ({ file, numbers, titleComponentWidth }) => {
   if (!file && numbers === undefined) return null
 
+  // fix width to prevent jumping
+  // but remember to subtract padding
+  const width = titleComponentWidth - 20
+
   return (
     <ErrorBoundary>
       <Tooltip title={file ? <FileNameForTooltip file={file} /> : null}>
-        <TitleDiv titleComponentWidth={titleComponentWidth}>{numbers}</TitleDiv>
+        <TitleDiv 
+          style={{
+            width,
+            minWidth: width,
+            maxWidth: width
+          }}
+        >{numbers}</TitleDiv>
       </Tooltip>
     </ErrorBoundary>
   )
