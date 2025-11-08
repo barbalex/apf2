@@ -9,28 +9,13 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import { green } from '@mui/material/colors'
-import styled from '@emotion/styled'
 import getUrls from 'get-urls'
 
-const Container = styled.div`
-  display: flex;
-  margin-bottom: -15px;
-  break-inside: avoid;
-`
-const StyledOpenInNewIcon = styled(MdOpenInNew)`
-  margin-top: 20px;
-  cursor: pointer;
-  font-size: 1.5rem;
-  &:hover {
-    color: ${green[300]};
-  }
-`
-const StyledFormControl = styled(FormControl)`
-  padding-bottom: 19px !important;
-  > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
+import {
+  container,
+  openInNewIcon,
+  formControl,
+} from './TextFieldWithUrl.module.css'
 
 export const TextFieldWithUrl = ({
   field,
@@ -49,13 +34,14 @@ export const TextFieldWithUrl = ({
   const onKeyPress = (event) => event.key === 'Enter' && handleSubmit()
 
   return (
-    <Container>
-      <StyledFormControl
+    <div className={container}>
+      <FormControl
         disabled={disabled}
         fullWidth
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
+        className={formControl}
       >
         <InputLabel
           htmlFor={label}
@@ -80,18 +66,19 @@ export const TextFieldWithUrl = ({
         {!!error && (
           <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
         )}
-      </StyledFormControl>
+      </FormControl>
       {Array.from(urls).map((url, index) => (
         <div
           key={index}
           title={`${url} öffnen`}
         >
-          <StyledOpenInNewIcon
+          <MdOpenInNew
             onClick={() => window.open(url, '_blank')}
             data-id="open-url"
+            className={openInNewIcon}
           />
         </div>
       ))}
-    </Container>
+    </div>
   )
 }

@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  margin-bottom: -15px;
+  break-inside: avoid;
+}
+
+.openInNewIcon {
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  &:hover {
+    color: #81c784;
+  }
+}
+
+.formControl {
+  padding-bottom: 19px !important;
+
+  > div:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+}
