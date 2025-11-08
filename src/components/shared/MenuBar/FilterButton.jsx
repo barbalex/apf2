@@ -1,23 +1,21 @@
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdFilterAlt } from 'react-icons/md'
-import styled from '@emotion/styled'
 
-const StyledButton = styled(IconButton)`
-  color: white;
-`
+import { button } from './FilterButton.module.css'
 
 export const FilterButton = ({ toggleFilterInput }) => {
   const onClick = () => toggleFilterInput()
 
   return (
     <Tooltip title="Filtern">
-      <StyledButton
+      <IconButton
         aria-label="Filtern"
         onClick={onClick}
+        className={button}
       >
         <MdFilterAlt />
-      </StyledButton>
+      </IconButton>
     </Tooltip>
   )
 }
