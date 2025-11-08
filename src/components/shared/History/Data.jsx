@@ -1,38 +1,13 @@
-import styled from '@emotion/styled'
 import { diffSentences } from 'diff'
 
 import { toStringIfPossible } from '../../../modules/toStringIfPossible.js'
 import { Spinner } from '../Spinner'
 
-const Row = styled.div`
-  display: flex;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  border-bottom: ${(props) =>
-    props['data-last'] ? '1px solid rgba(0, 0, 0, 0.1)' : 'none'};
-  .Difference > del {
-    background-color: rgb(201, 238, 211);
-    text-decoration: none;
-  }
-  .Difference > ins {
-    padding-left: 2px;
-    background-color: rgba(216, 67, 21, 0.2);
-    text-decoration: none;
-  }
-`
-const Key = styled.div`
-  width: 225px;
-  padding-right: 5px;
-  color: rgba(0, 0, 0, 0.54);
-`
+import { row, key } from './Data.module.css'
+
 const styles = {
-  added: {
-    color: 'green',
-  },
-  removed: {
-    color: 'red',
-  },
+  added: { color: 'green' },
+  removed: { color: 'red' },
 }
 
 export const Data = ({ dataArray = [], loading }) => {
@@ -50,13 +25,17 @@ export const Data = ({ dataArray = [], loading }) => {
     }
 
     const showDiff = !['geändert', 'geändert von'].includes(d.label)
+    const isLast = index + 1 === (dataArray ?? []).length
 
     return (
-      <Row
+      <div
+        className={row}
         key={d.label}
-        data-last={index + 1 === (dataArray ?? []).length}
+        style={{
+          borderBottom: isLast ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
+        }}
       >
-        <Key>{`${d.label}:`}</Key>
+        <div className={key}>{`${d.label}:`}</div>
         {showDiff ?
           <>
             {(diffSentences(inputB, inputA) ?? []).map((group) => (
@@ -74,7 +53,7 @@ export const Data = ({ dataArray = [], loading }) => {
             ))}
           </>
         : <div>{inputB}</div>}
-      </Row>
+      </div>
     )
   })
 }
