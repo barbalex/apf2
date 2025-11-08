@@ -1,0 +1,11 @@
+/* styles an h3 */
+.menuTitle {
+  padding-top: 2px;
+  padding-left: 15px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  &:focus {
+    outline: none;
+  }
+}
