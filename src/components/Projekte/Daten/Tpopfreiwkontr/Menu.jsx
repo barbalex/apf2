@@ -17,9 +17,10 @@ import { isEqual } from 'es-toolkit'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { MenuTitle } from '../../../shared/Files/Menu/index.jsx'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
+
+import { menuTitle } from '../../../shared/Files/Menu/index.module.css'
 
 const iconStyle = { color: 'white' }
 
@@ -273,7 +274,7 @@ export const Menu = observer(({ row }) => {
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
       >
-        <MenuTitle>löschen?</MenuTitle>
+        <h3 className={menuTitle}>löschen?</h3>
         <MenuItem onClick={onClickDelete}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
