@@ -1,25 +1,16 @@
-import styled from '@emotion/styled'
 import { useOutletContext } from 'react-router'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-
 import { File } from './File.jsx'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${(props) => (props.showfilter ? '#ffd3a7' : 'unset')};
-  padding: 10px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-`
+import { container } from './index.module.css'
 
 export const Component = () => {
   const { parent, files, refetch } = useOutletContext()
 
   return (
     <ErrorBoundary>
-      <Container>
+      <div className={container}>
         {files.map((file) => (
           <File
             key={file.fileId}
@@ -28,7 +19,7 @@ export const Component = () => {
             refetch={refetch}
           />
         ))}
-      </Container>
+      </div>
     </ErrorBoundary>
   )
 }
