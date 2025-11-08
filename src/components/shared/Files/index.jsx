@@ -3,16 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import styled from '@emotion/styled'
 import { upperFirst } from 'es-toolkit'
 import { useNavigate, Outlet, useParams, useLocation } from 'react-router'
-
-import './index.css'
 
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { Error } from '../Error.jsx'
 import { Spinner } from '../Spinner.jsx'
-
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
@@ -26,18 +22,8 @@ import { UploaderContext } from '../../../UploaderContext.js'
 import { MobxContext } from '../../../mobxContext.js'
 import { Menu } from './Menu/index.jsx'
 
-const Container = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
-const OutletContainer = styled.div`
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-`
+import './index.css'
+import { container, outletContainer } from './index.module.css'
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -173,7 +159,10 @@ export const FilesRouter = observer(
 
     return (
       <ErrorBoundary>
-        <Container ref={containerRef}>
+        <div
+          className={container}
+          ref={containerRef}
+        >
           <Uploader
             onFileUploadSuccess={onFileUploadSuccess}
             onFileUploadFailed={onFileUploadFailed}
@@ -185,12 +174,12 @@ export const FilesRouter = observer(
             refetch={refetch}
             containerRef={containerRef}
           />
-          <OutletContainer>
+          <div className={outletContainer}>
             <Suspense fallback={<Spinner />}>
               <Outlet context={{ files, parent, refetch }} />
             </Suspense>
-          </OutletContainer>
-        </Container>
+          </div>
+        </div>
       </ErrorBoundary>
     )
   },
