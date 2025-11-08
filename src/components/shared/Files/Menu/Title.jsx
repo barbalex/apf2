@@ -1,36 +1,14 @@
 import { Tooltip } from '@mui/material'
-import styled from '@emotion/styled'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-
-const TitleDiv = styled.h3`
-  padding: 0 10px;
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.8);
-  // center vertically
-  margin-top: auto;
-  margin-bottom: auto;
-  // place left
-  margin-right: auto;
-  display: block;
-  overflow: hidden;
-  flex-grow: 0;
-  flex-shrink: 0;
-`
-const Content = styled.div`
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: 8px;
-  row-gap: 2px;
-`
+import { title, content } from './Title.module.css'
 
 const FileNameForTooltip = ({ file, props, ref }) => (
   <div
     ref={ref}
     {...props}
   >
-    <Content>
+    <div className={content}>
       {file.name && (
         <>
           <div>Name:</div>
@@ -49,7 +27,7 @@ const FileNameForTooltip = ({ file, props, ref }) => (
           <div>{file.beschreibung}</div>
         </>
       )}
-    </Content>
+    </div>
   </div>
 )
 
@@ -63,13 +41,16 @@ export const Title = ({ file, numbers, titleComponentWidth }) => {
   return (
     <ErrorBoundary>
       <Tooltip title={file ? <FileNameForTooltip file={file} /> : null}>
-        <TitleDiv 
+        <h3
           style={{
             width,
             minWidth: width,
-            maxWidth: width
+            maxWidth: width,
           }}
-        >{numbers}</TitleDiv>
+          className={title}
+        >
+          {numbers}
+        </h3>
       </Tooltip>
     </ErrorBoundary>
   )

@@ -1,0 +1,22 @@
+.title {
+  padding: 0 10px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.8);
+  /* center vertically */
+  margin-top: auto;
+  margin-bottom: auto;
+  /* place left */
+  margin-right: auto;
+  display: block;
+  overflow: hidden;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 8px;
+  row-gap: 2px;
+}
