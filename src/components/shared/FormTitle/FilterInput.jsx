@@ -6,26 +6,26 @@ import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
 import { useLocation } from 'react-router'
-import styled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { container, iconButton } from './FilterInput.module.css'
 
-const StyledTextField = styled(TextField)`
-  label,
-  input {
-    color: white;
-  }
-  .MuiFormLabel-root.Mui-focused {
-    color: rgba(255, 255, 255, 0.7);
-  }
-  .MuiInputBase-root:before {
-    border-bottom: 1px solid white;
-  }
-  .MuiInputBase-root.MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before {
-    border-bottom: 2px solid white;
-  }
-`
+// https://mui.com/material-ui/react-menu/#customization
+const StyledTextField = styled((props) => <TextField {...props} />)(() => ({
+  label: { color: 'white' },
+  input: { color: 'white' },
+  '& .MuiFormLabel-root.Mui-focused': {
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  '& .MuiInputBase-root:before': {
+    borderBottom: '1px solid white',
+  },
+  '& .MuiInputBase-root.MuiInput-root:hover:not(.Mui-disabled, .Mui-error):before':
+    {
+      borderBottom: '2px solid white',
+    },
+}))
 
 export const FilterInput = observer(
   ({ toggleFilterInputIsVisible, ref: inputRef }) => {
