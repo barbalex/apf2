@@ -9,13 +9,8 @@ import { useLocation } from 'react-router'
 import styled from '@emotion/styled'
 
 import { MobxContext } from '../../../mobxContext.js'
+import { container, iconButton } from './FilterInput.module.css'
 
-const Container = styled.div`
-  padding: 0 10px 10px 10px;
-`
-const StyledIconButton = styled(IconButton)`
-  color: white;
-`
 const StyledTextField = styled(TextField)`
   label,
   input {
@@ -33,7 +28,7 @@ const StyledTextField = styled(TextField)`
 `
 
 export const FilterInput = observer(
-  ({ filterInputIsVisible, toggleFilterInputIsVisible, ref: inputRef }) => {
+  ({ toggleFilterInputIsVisible, ref: inputRef }) => {
     const store = useContext(MobxContext)
     const { nodeLabelFilter, activeFilterTable: activeFilterTableIn } =
       store.tree
@@ -87,7 +82,7 @@ export const FilterInput = observer(
     if (!activeFilterTable) return null
 
     return (
-      <Container show={filterInputIsVisible.toString()}>
+      <div className={container}>
         <StyledTextField
           inputRef={inputRef}
           label="Filter"
@@ -109,20 +104,21 @@ export const FilterInput = observer(
                 isFiltered || value?.length ?
                   <InputAdornment position="end">
                     <Tooltip title="Filter entfernen">
-                      <StyledIconButton
+                      <IconButton
                         aria-label="Filter entfernen"
                         onClick={onClickEmpty}
                         fontSize="small"
+                        className={iconButton}
                       >
                         <FaTimes />
-                      </StyledIconButton>
+                      </IconButton>
                     </Tooltip>
                   </InputAdornment>
                 : null,
             },
           }}
         />
-      </Container>
+      </div>
     )
   },
 )

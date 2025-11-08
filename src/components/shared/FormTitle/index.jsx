@@ -82,7 +82,6 @@ export const FormTitle = ({
       {!!listFilter && (
         <Collapse in={filterInputIsVisible}>
           <FilterInput
-            filterInputIsVisible={filterInputIsVisible}
             toggleFilterInputIsVisible={toggleFilterInputIsVisible}
             ref={filterInputRef}
           />
