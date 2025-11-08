@@ -2,29 +2,11 @@ import { useRef } from 'react'
 import { useOutletContext, useParams } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
-import styled from '@emotion/styled'
 
 import '@cyntler/react-doc-viewer/dist/index.css'
 import './style.css'
+import { fileClass, text } from './index.module.css'
 
-const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-`
-const FileDiv = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-`
-const Image = styled.img`
-  object-fit: contain;
-`
-const TextDiv = styled.div`
-  align-self: center;
-  padding: 2em 1em;
-`
 const imageStyle = {
   objectFit: 'contain',
   margin: 'auto',
@@ -67,7 +49,10 @@ export const Component = () => {
   const isNotViewable = !isImage && !isPdf && !isReactDocViewable
 
   return (
-    <FileDiv ref={ref}>
+    <div
+      className={fileClass}
+      ref={ref}
+    >
       {isImage && width && (
         <img
           src={`https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width - 10)}x${Math.floor(
@@ -107,8 +92,10 @@ export const Component = () => {
         </div>
       )}
       {isNotViewable && (
-        <TextDiv>{`Sorry, für Dateien vom Typ '${row.fileMimeType}' gibt es keine Vorschau.`}</TextDiv>
+        <div
+          className={text}
+        >{`Sorry, für Dateien vom Typ '${row.fileMimeType}' gibt es keine Vorschau.`}</div>
       )}
-    </FileDiv>
+    </div>
   )
 }
