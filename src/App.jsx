@@ -1,4 +1,4 @@
-import { lazy, Suspense, createRef } from 'react'
+import { lazy, Suspense, createRef, useEffect } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'
@@ -31,6 +31,8 @@ import { store as jotaiStore } from './JotaiStore/index.js'
 import { MobxContext } from './mobxContext.js'
 import { IdbContext } from './idbContext.js'
 import { UploaderContext } from './UploaderContext.js'
+
+import { persistStore } from './modules/persistStore.js'
 
 import './app.css'
 
@@ -89,7 +91,11 @@ export const App = () => {
   const idbContext = { idb }
   const uploaderRef = createRef(null)
 
-  // console.log('App rendering')
+  useEffect(() => {
+    persistStore({ store, idb })
+  }, [])
+
+  console.log('App rendering')
 
   return (
     <JotaiProvider store={jotaiStore}>
@@ -121,11 +127,11 @@ export const App = () => {
                         <LastTouchedNodeSetter />
                         <MouseWheelHandler />
                         <LegacyBrowserInformer />
-                        <StorePersister
+                        {/* <StorePersister
                           apolloClient={apolloClient}
                           store={store}
                           idb={idb}
-                        />
+                        /> */}
                       </Suspense>
                     </UploaderContext>
                   </SnackbarProvider>
