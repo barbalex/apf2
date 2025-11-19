@@ -54,15 +54,15 @@ a {
   color: black;
 }
 
-// ensuring menus in more-menu have a a border
-      // somehow the inmenu prop is not always passed in
-      .menubar-more-menus button {
+/* ensuring menus in more-menu have a a border */
+/* somehow the inmenu prop is not always passed in */
+.menubar-more-menus button {
   border: 1px solid #ab9518 !important;
 }
 
 /* newer syntax for firefox */
-// somehow scrollbar-width is seen at lower levels but not applied !!??
-      html {
+/* somehow scrollbar-width is seen at lower levels but not applied !!?? */
+html {
   scrollbar-color: #2e7d32#F2FEF3;
   scrollbar-width: thin;
 }
@@ -656,12 +656,14 @@ a {
 }
 .Pane1-overflowing .Pane {
   overflow: auto !important;
+  scrollbar-width: thin;
 }
 .Pane2 {
   overflow: hidden;
 }
 .Pane2-overflowing .Pane2 {
   overflow: auto !important;
+  scrollbar-width: thin;
 }
 
 /* react-markdown-editor-lite */
