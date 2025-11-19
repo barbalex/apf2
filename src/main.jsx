@@ -12,9 +12,3 @@ createRoot(document.getElementById('root')).render(
     <App />
   </StrictMode>,
 )
-// todo: causes mstPersist to run twice
-// .render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>,
-// )

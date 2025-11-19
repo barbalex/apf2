@@ -64,9 +64,6 @@ const LegacyBrowserInformer = lazy(async () => ({
   default: (await import('./components/LegacyBrowserInformer.jsx'))
     .LegacyBrowserInformer,
 }))
-const StorePersister = lazy(async () => ({
-  default: (await import('./components/StorePersister.jsx')).StorePersister,
-}))
 const Spinner = lazy(async () => ({
   default: (await import('./components/shared/Spinner.jsx')).Spinner,
 }))
@@ -94,8 +91,6 @@ export const App = () => {
   useEffect(() => {
     persistStore({ store, idb })
   }, [])
-
-  console.log('App rendering')
 
   return (
     <JotaiProvider store={jotaiStore}>
@@ -127,11 +122,6 @@ export const App = () => {
                         <LastTouchedNodeSetter />
                         <MouseWheelHandler />
                         <LegacyBrowserInformer />
-                        {/* <StorePersister
-                          apolloClient={apolloClient}
-                          store={store}
-                          idb={idb}
-                        /> */}
                       </Suspense>
                     </UploaderContext>
                   </SnackbarProvider>

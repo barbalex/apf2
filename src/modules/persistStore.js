@@ -60,7 +60,7 @@ export const persistStore = ({ store, idb }) => {
     //   window.__idb__ = idb
     // }
 
-    window.store = store
+    // window.store = store
 
     // set last activeNodeArray
     // only if top domain was visited
