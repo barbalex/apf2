@@ -1,4 +1,4 @@
-import { useEffect, useState, Suspense } from 'react'
+import { Suspense } from 'react'
 
 import { Spinner } from '../../shared/Spinner.jsx'
 import { Error } from '../../shared/Error.jsx'
