@@ -1,7 +1,6 @@
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect } from 'react'
 
 import { Fetcher } from './Fetcher.jsx'
-import { Spinner } from '../../shared/Spinner.jsx'
 
 // pass on TransitionGroup's props
 export const FetcherImporter = ({ match, ...other }) => {
@@ -18,10 +17,7 @@ export const FetcherImporter = ({ match, ...other }) => {
     )
   }, [fetcherName, fetcherModule])
 
-  if (!fetcherModule || !fetcherName) {
-    return null
-    // return <Spinner />
-  }
+  if (!fetcherModule || !fetcherName) return null
 
   return (
     <Fetcher
