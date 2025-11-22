@@ -1,0 +1,16 @@
+.container {
+  padding: 15px;
+}
+
+.buttonContainer {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.button {
+  text-transform: none !important;
+}
+
+.preWrapping {
+  white-space: normal;
+}
