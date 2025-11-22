@@ -3,7 +3,6 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
-import { useResizeDetector } from 'react-resize-detector'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { queryAll } from './queryAll.js'
@@ -19,7 +18,7 @@ import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
 import { TpopRow } from './Row/index.jsx'
 import { EkplanTableHeader } from './Header.jsx'
 
-import { container, yScrollContainer, exportButton } from './index.module.css'
+import { container, scrollContainer, exportButton } from './index.module.css'
 
 const getTpopFilter = ({
   apValues,
@@ -176,26 +175,6 @@ export const EkPlanTable = observer(() => {
 
   const [processing, setProcessing] = useState(false)
 
-  /**
-   * BIG TROUBLE with height
-   * ideally we would use flex with column and let css do the sizing
-   * BUT: Chrome goes crazy when two columnal flexes are stacked
-   * it keeps changing size by a fraction of a point permanently
-   * which wrecks EVERYTHING as table rerenders permanently
-   * So we need to:
-   * 1. know appBarHeight
-   * 2. NOT use columnal flex but boxes with calculated size
-   */
-  const {
-    width = 0,
-    height = 0,
-    ref: resizeRef,
-  } = useResizeDetector({
-    refreshMode: 'debounce',
-    refreshRate: 100,
-    refreshOptions: { leading: true },
-  })
-
   const tpopFilter = getTpopFilter({
     apValues,
     filterAp,
@@ -288,11 +267,8 @@ export const EkPlanTable = observer(() => {
         >
           exportieren
         </Button>
-        <div
-          className={container}
-          ref={resizeRef}
-        >
-          <div className={yScrollContainer}>
+        <div className={container}>
+          <div className={scrollContainer}>
             <EkplanTableHeader
               tpopLength={tpops.length !== 0 ? tpops.length : '...'}
               tpopFilter={tpopFilter}

@@ -7,20 +7,13 @@
   flex-direction: column;
 }
 
-.yScrollContainer {
+.scrollContainer {
   display: flex;
   flex-direction: column;
   overflow: auto;
   scrollbar-width: thin;
   scrollbar-gutter: stable;
-}
-
-/* not in use */
-/* Setting overflow-y: auto on the body did not work */
-/* as the columns not initially visible would not be rendered */
-.body {
-  display: flex;
-  flex-direction: column;
+  height: calc(100%);
   width: 100vw;
 }
 
