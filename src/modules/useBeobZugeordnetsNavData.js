@@ -7,6 +7,7 @@ import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.jsx'
+import { BeobzugeordnetFilteredAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetFilteredAbsenzMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
 
@@ -53,6 +54,7 @@ export const useBeobZugeordnetsNavData = (props) => {
               nodes {
                 id
                 label
+                absenz
               }
             }
           }
@@ -80,6 +82,11 @@ export const useBeobZugeordnetsNavData = (props) => {
 
   const count = data?.data?.beobsZugeordnet?.totalCount ?? 0
   const filteredCount = data?.data?.filteredBeobsZugeordnet?.totalCount ?? 0
+
+  console.log(
+    'useBeobZugeordnetsNavData, data:',
+    data?.data?.filteredBeobsZugeordnet?.nodes,
+  )
 
   const navData = {
     id: 'Beobachtungen',
@@ -126,7 +133,9 @@ export const useBeobZugeordnetsNavData = (props) => {
       hasChildren: false,
       labelLeftElements:
         showBeobzugeordnetIcon && beobId === p.id ?
-          [BeobzugeordnetFilteredMapIcon]
+          p.absenz ?
+            [BeobzugeordnetFilteredAbsenzMapIcon]
+          : [BeobzugeordnetFilteredMapIcon]
         : undefined,
     })),
   }
