@@ -1,8 +1,6 @@
-export const getDataArrayFromExportObjects = (exportObjects) => {
-  const dataArray = []
+export const getDataArrayFromExportObjects = (exportObjects) => [
   // first the field names:
-  dataArray.push(Object.keys(exportObjects[0]))
+  Object.keys(exportObjects[0]),
   // then the field values
-  exportObjects.forEach((object) => dataArray.push(Object.values(object)))
-  return dataArray
-}
+  ...exportObjects.map((o) => Object.values(o)),
+]
