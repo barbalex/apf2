@@ -1,8 +1,7 @@
 /**
  * writes a dataArray to an Excel workbook
  */
-// see: https://github.com/guyonroche/exceljs/issues/313
-import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
+import { Workbook } from 'exceljs'
 
 //import { getDataArrayFromExportObjectsWorker } from './getDataArrayFromExportObjectsWorker.js'
 import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.js'
@@ -23,7 +22,7 @@ export const getXlsxBuffer = async ({ data, store }) => {
 
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
-  const workbook = new ExcelJs.Workbook()
+  const workbook = new Workbook()
   const worksheet = workbook.addWorksheet('Daten', {
     views: [
       {
