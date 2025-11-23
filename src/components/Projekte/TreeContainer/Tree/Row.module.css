@@ -6,9 +6,12 @@
   align-items: center;
   white-space: nowrap;
   user-select: none;
-  content-visibility: auto;
-  contain-intrinsic-size: auto 23px;
   transition: opacity 300ms ease-in-out;
+  /* prevent rendering when not in viewport */
+  /* nope: dragging scrollbar quickly is slow and  */
+  /* the mouse pointer ends up under the scrollbar pulley */
+  /* content-visibility: auto;
+  contain-intrinsic-size: auto 24px; */
   /* a child .iconContainer needs some love */
   .iconContainer {
     align-self: flex-start !important;
