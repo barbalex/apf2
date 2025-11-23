@@ -1,14 +1,6 @@
-export function GetDataArrayFromExportObjectsWorker(exportObjects) {
-  const dataArray = []
+export const GetDataArrayFromExportObjectsWorker = (exportObjects) => [
   // first the field names:
-  dataArray.push(Object.keys(exportObjects[0]))
+  ...Object.keys(exportObjects[0]),
   // then the field values
-  exportObjects.forEach((object) =>
-    dataArray.push(
-      Object.keys(object).map((key) => {
-        return object[key]
-      }),
-    ),
-  )
-  return dataArray
-}
+  ...exportObjects.map((o) => Object.keys(o)),
+]
