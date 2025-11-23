@@ -5,14 +5,7 @@ export function GetDataArrayFromExportObjectsWorker(exportObjects) {
   // then the field values
   exportObjects.forEach((object) =>
     dataArray.push(
-      Object.keys(object).map((key, index) => {
-        /**
-         * exceljs errors out if first member of array is null
-         * see: https://github.com/guyonroche/exceljs/issues/111
-         */
-        if (object[key] === null && index === 0) {
-          return ''
-        }
+      Object.keys(object).map((key) => {
         return object[key]
       }),
     ),
