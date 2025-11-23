@@ -18,6 +18,7 @@ export function useSearchParamsState(searchParamName, defaultValue) {
   }
 
   const setSearchParamsState = (newState) => {
+    // ensure projekteTabs sort order
     if (searchParamName === 'projekteTabs') {
       newState.sort(projekteTabsSortFunction)
     }
