@@ -51,29 +51,30 @@ export const ProjekteMenus = observer(() => {
     if (isMobileView) {
       // show one tab only
       if (projekteTabs.length === 1) {
-        setProjekteTabs([name])
+        return setProjekteTabs([name])
       } else {
         // if multiple tabs are visible, close the clicked one
         // UNLESS the clicked one was not yet visible - then open it and close non tree ones
         if (projekteTabs.includes(name)) {
-          setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
-        } else {
-          setProjekteTabs([...projekteTabs.filter((el) => el === 'tree'), name])
+          return setProjekteTabs([...projekteTabs.filter((el) => el !== name)])
         }
+        return setProjekteTabs([
+          ...projekteTabs.filter((el) => el === 'tree'),
+          name,
+        ])
+      }
+    }
+    const newProjekteTabs = [...projekteTabs]
+    if (newProjekteTabs.includes(name)) {
+      remove(newProjekteTabs, (el) => el === name)
+      if (name === 'tree2') {
+        // close all tree2-tabs
+        remove(newProjekteTabs, (el) => el.includes('2'))
       }
     } else {
-      const newProjekteTabs = [...projekteTabs]
-      if (newProjekteTabs.includes(name)) {
-        remove(newProjekteTabs, (el) => el === name)
-        if (name === 'tree2') {
-          // close all tree2-tabs
-          remove(newProjekteTabs, (el) => el.includes('2'))
-        }
-      } else {
-        newProjekteTabs.push(name)
-      }
-      setProjekteTabs(newProjekteTabs)
+      newProjekteTabs.push(name)
     }
+    setProjekteTabs(newProjekteTabs)
   }
 
   const onClickTree = () => onClickButton('tree')

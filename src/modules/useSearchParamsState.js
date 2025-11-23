@@ -1,6 +1,8 @@
 // see: https://blog.logrocket.com/use-state-url-persist-state-usesearchparams/
 import { useSearchParams } from 'react-router'
 
+import { projekteTabsSortFunction } from './projekteTabsSortFunction.js'
+
 export function useSearchParamsState(searchParamName, defaultValue) {
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -16,6 +18,9 @@ export function useSearchParamsState(searchParamName, defaultValue) {
   }
 
   const setSearchParamsState = (newState) => {
+    if (searchParamName === 'projekteTabs') {
+      newState.sort(projekteTabsSortFunction)
+    }
     const previous = [...searchParams.entries()].reduce((o, [key, value]) => {
       if (key in o) {
         if (o[key] instanceof Array) {
