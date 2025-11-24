@@ -34,3 +34,5 @@ schema.json
 /playwright-report/
 /playwright/.cache/
 playwright/.auth
+
+git_stats.txt
