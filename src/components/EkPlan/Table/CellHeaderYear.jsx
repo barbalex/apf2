@@ -164,7 +164,7 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
           }}
         >
           {filterKontrolleYear === column ?
-            `nicht TPop mit Kontrollen in ${column} filtern`
+            `Nicht TPop mit Kontrollen in ${column} filtern`
           : `TPop mit Kontrollen in ${column} filtern`}
         </MenuItem>
         <MenuItem
@@ -176,7 +176,7 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
           }}
         >
           {filterEkplanYear === column ?
-            `nicht TPop mit Ekplan in ${column} filtern`
+            `Nicht TPop mit Ekplan in ${column} filtern`
           : `TPop mit Ekplan in ${column} filtern`}
         </MenuItem>
         <MenuItem
@@ -188,7 +188,7 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
           }}
         >
           {filterAnsiedlungYear === column ?
-            `nicht TPop mit Ansiedlungen in ${column} filtern`
+            `Nicht TPop mit Ansiedlungen in ${column} filtern`
           : `TPop mit Ansiedlungen in ${column} filtern`}
         </MenuItem>
       </Menu>
