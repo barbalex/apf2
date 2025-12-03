@@ -132,10 +132,6 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
     ...(isHovered ? { backgroundColor: 'rgba(182, 194, 182, 1)' } : {}),
   }
 
-  const menuItemStyle = {
-    color: yearHasKontrollen ? 'black' : 'rgba(0,0,0,0.3)',
-  }
-
   return (
     <>
       <div
@@ -163,7 +159,9 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
         <MenuItem
           onClick={onClickFilterKontrolleYear}
           dense
-          style={menuItemStyle}
+          style={{
+            color: yearHasKontrollen ? 'black' : 'rgba(0,0,0,0.3)',
+          }}
         >
           {filterKontrolleYear === column ?
             `nicht TPop mit Kontrollen in ${column} filtern`
@@ -171,9 +169,11 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
         </MenuItem>
         <MenuItem
           onClick={onClickFilterEkplanYear}
-          active={yearHasEkplan ? 1 : 0}
+          active={yearHasEkplan}
           dense
-          style={menuItemStyle}
+          style={{
+            color: yearHasEkplan ? 'black' : 'rgba(0,0,0,0.3)',
+          }}
         >
           {filterEkplanYear === column ?
             `nicht TPop mit Ekplan in ${column} filtern`
@@ -181,9 +181,11 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
         </MenuItem>
         <MenuItem
           onClick={onClickFilterAnsiedlungYear}
-          active={yearHasAnsiedlungen ? 1 : 0}
+          active={yearHasAnsiedlungen}
           dense
-          style={menuItemStyle}
+          style={{
+            color: yearHasAnsiedlungen ? 'black' : 'rgba(0,0,0,0.3)',
+          }}
         >
           {filterAnsiedlungYear === column ?
             `nicht TPop mit Ansiedlungen in ${column} filtern`
