@@ -3,6 +3,7 @@
 # 2025.12.05: live version is 17
 FROM postgis/postgis:17-3.5
 
+# mount SQL files directly into the Postgres containers’ initialization directory
 COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data
 COPY ./apflora.backup /sik_data/apflora.backup
