@@ -11,6 +11,9 @@ export const IsDesktopViewSetter = () => {
 
   const onResize = ({ width }) => setDesktopView(width)
 
+  // on first load this provokes:
+  // Cannot update a component (`Router`) while rendering a different component (`IsDesktopViewSetter`).
+  // To locate the bad setState() call inside `IsDesktopViewSetter`, follow the stack trace as described in https://react.dev/link/setstate-in-render
   const { ref } = useResizeDetector({
     handleHeight: false,
     refreshMode: 'debounce',
