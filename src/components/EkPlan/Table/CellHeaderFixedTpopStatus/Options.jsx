@@ -13,8 +13,7 @@ export const Options = ({ type }) => {
 
   return (
     <FormGroup className={formGroup}>
-      {' '}
-      ><FormLabel>Gewünschte Stati wählen:</FormLabel>
+      <FormLabel>Gewünschte Stati wählen:</FormLabel>
       {options.map((option) => (
         <Option
           key={option.id}
