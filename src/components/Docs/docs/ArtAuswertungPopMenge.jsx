@@ -38,6 +38,7 @@ export const Component = () => (
         <ul>
           <li>mit der ziel-relevanten Einheit</li>
           <li>mit einer Anzahl</li>
+          <li>nicht markiert als: "Im Jahresbericht nicht berücksichtigen"</li>
           <li>von TPop mit Status 100, 200, 201</li>
         </ul>
       </li>
