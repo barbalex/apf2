@@ -116,13 +116,13 @@ export const App = () => {
                       <Router />
                       {/*<UnterhaltsRouter />*/}
                       {/* </Suspense> */}
-                      <Suspense fallback={null}>
-                        <Notifier />
-                        <IsPrintSetter />
-                        <LastTouchedNodeSetter />
-                        <MouseWheelHandler />
-                        <LegacyBrowserInformer />
-                      </Suspense>
+                      {/* <Suspense fallback={null}> */}
+                      <Notifier />
+                      <IsPrintSetter />
+                      <LastTouchedNodeSetter />
+                      <MouseWheelHandler />
+                      <LegacyBrowserInformer />
+                      {/* </Suspense> */}
                     </UploaderContext>
                   </SnackbarProvider>
                 </ThemeProvider>
