@@ -2954,58 +2954,34 @@ ALTER TABLE apflora.tpopmassn_file ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopmassn_file;
 
 CREATE POLICY reader ON apflora.tpopmassn_file
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND tpopmassn_id IN (
-      SELECT
-        id
-      FROM
-        apflora.tpopmassn
-      WHERE
-        tpop_id IN (
-          SELECT
-            id
-          FROM
-            apflora.tpop
-          WHERE
-            pop_id IN (
-              SELECT
-                id
-              FROM
-                apflora.pop
-              WHERE
-                ap_id IN (
-                  SELECT
-                    ap_id
-                  FROM
-                    apflora.ap_user
-                  WHERE
-                    user_name = current_user_name()))))))
-                  WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-                  OR (CURRENT_USER IN ('apflora_ap_writer') AND tpopmassn_id IN (
-                    SELECT
-                      id
-                    FROM
-                      apflora.tpopmassn
-                    WHERE
-                      tpop_id IN (
-                        SELECT
-                          id
-                        FROM
-                          apflora.tpop
-                        WHERE
-                          pop_id IN (
-                            SELECT
-                              id
-                            FROM
-                              apflora.pop
-                            WHERE
-                              ap_id IN (
-                                SELECT
-                                  ap_id
-                                FROM
-                                  apflora.ap_user
-                                WHERE
-                                  user_name = current_user_name()))))));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND tpopmassn_id IN (
+      SELECT tpopmassn.id
+      FROM apflora.tpopmassn
+        inner join apflora.tpop on tpopmassn.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpopmassn_id IN (
+      SELECT tpopmassn.id
+      FROM apflora.tpopmassn
+        inner join apflora.tpop on tpopmassn.tpop_id = tpop.id
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 
 -- tpopmassnber
 DROP TABLE IF EXISTS apflora.tpopmassnber;
@@ -3046,46 +3022,32 @@ ALTER TABLE apflora.tpopmassnber ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopmassnber;
 
 CREATE POLICY reader ON apflora.tpopmassnber
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND tpop_id IN (
-      SELECT
-        id
-      FROM
-        apflora.tpop
-      WHERE
-        pop_id IN (
-          SELECT
-            id
-          FROM
-            apflora.pop
-          WHERE
-            ap_id IN (
-              SELECT
-                ap_id
-              FROM
-                apflora.ap_user
-              WHERE
-                user_name = current_user_name())))))
-              WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-              OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
-                SELECT
-                  id
-                FROM
-                  apflora.tpop
-                WHERE
-                  pop_id IN (
-                    SELECT
-                      id
-                    FROM
-                      apflora.pop
-                    WHERE
-                      ap_id IN (
-                        SELECT
-                          ap_id
-                        FROM
-                          apflora.ap_user
-                        WHERE
-                          user_name = current_user_name())))));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND tpop_id IN (
+      SELECT tpop.id
+      FROM apflora.tpop
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpop_id IN (
+      SELECT tpop.id
+      FROM apflora.tpop
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 
 -- message
 DROP TABLE IF EXISTS apflora.message CASCADE;
