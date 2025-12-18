@@ -3074,8 +3074,8 @@ ALTER TABLE apflora.message ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.message;
 
 CREATE POLICY reader ON apflora.message
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- currentIssue
 DROP TABLE IF EXISTS apflora.currentIssue CASCADE;
@@ -3100,8 +3100,8 @@ ALTER TABLE apflora.currentIssue ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.currentIssue;
 
 CREATE POLICY reader ON apflora.currentIssue
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- usermessage
 -- list of read messages per user
@@ -3124,8 +3124,10 @@ ALTER TABLE apflora.usermessage ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.usermessage;
 
 CREATE POLICY reader ON apflora.usermessage
-  USING (user_name = current_user_name()
-    OR CURRENT_USER = 'apflora_manager');
+USING (
+  user_name = current_user_name()
+  OR CURRENT_USER = 'apflora_manager'
+);
 
 -- ziel
 DROP TABLE IF EXISTS apflora.ziel;
@@ -3172,22 +3174,28 @@ ALTER TABLE apflora.ziel ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ziel;
 
 CREATE POLICY reader ON apflora.ziel
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND ap_id IN (
-      SELECT
-        ap_id
-      FROM
-        apflora.ap_user
-      WHERE
-        user_name = current_user_name())))
-      WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-      OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-        SELECT
-          ap_id
-        FROM
-          apflora.ap_user
-        WHERE
-          user_name = current_user_name())));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+);
 
 -- beob
 DROP TABLE IF EXISTS apflora.beob;
@@ -3266,36 +3274,30 @@ ALTER TABLE apflora.beob ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.beob;
 
 CREATE POLICY reader ON apflora.beob
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND art_id IN (
-      SELECT
-        DISTINCT
-          art_id
-        FROM
-          apflora.apart
-        WHERE
-          ap_id IN (
-            SELECT
-              ap_id
-            FROM
-              apflora.ap_user
-            WHERE
-              user_name = current_user_name()))))
-            WITH CHECK (CURRENT_USER IN ('apflora_manager')
-            OR (CURRENT_USER IN ('apflora_ap_writer') AND art_id IN (
-              SELECT
-                DISTINCT
-                  art_id
-                FROM
-                  apflora.apart
-                WHERE
-                  ap_id IN (
-                    SELECT
-                      ap_id
-                    FROM
-                      apflora.ap_user
-                    WHERE
-                      user_name = current_user_name()))));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND art_id IN (
+      SELECT apart.art_id
+      FROM apflora.apart
+        inner join apflora.ap_user on ap_user.ap_id = apart.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND art_id IN (
+      SELECT apart.art_id
+      FROM apflora.apart
+        inner join apflora.ap_user on ap_user.ap_id = apart.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 
 -- beobprojekt
 -- is used to control what beob are seen in what projekt
