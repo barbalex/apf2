@@ -2125,6 +2125,8 @@ CREATE INDEX ON apflora.tpop USING btree(status);
 
 CREATE INDEX ON apflora.tpop USING btree(apber_relevant);
 
+CREATE INDEX ON apflora.tpop USING btree(apber_relevant_grund);
+
 CREATE INDEX ON apflora.tpop USING btree(nr);
 
 CREATE INDEX ON apflora.tpop USING btree(flurname);
