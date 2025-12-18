@@ -3584,8 +3584,8 @@ ALTER TABLE apflora.detailplaene ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.detailplaene;
 
 CREATE POLICY reader ON apflora.detailplaene
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 --truncate apflora.apqk
 --insert into apflora.apqk(ap_id, qk_name)
@@ -3612,8 +3612,8 @@ ALTER TABLE apflora.ns_betreuung ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ns_betreuung;
 
 CREATE POLICY reader ON apflora.ns_betreuung
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- Table: apflora.ch_administrative_unit
 -- source: https://opendata.swiss/en/dataset/administrative-units-switzerland-inspire
