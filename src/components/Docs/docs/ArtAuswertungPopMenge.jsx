@@ -26,13 +26,16 @@ export const Component = () => (
         </p>
         <ul>
           <li>nur Pop und TPop mit den Stati 100, 200, 201</li>
-          <li>
-            nur für den AP-Bericht relevante TPop Mehr zu der Historisierung von
-            Art, Pop und TPop{' '}
-            <Link to="/Dokumentation/historisierung">hier</Link>.
-          </li>
+          <li>nur für den AP-Bericht relevante TPop</li>
         </ul>
       </li>
+      Dies führt dazu, dass nur Ergebnisse aus den Jahren angezeigt werden
+      können, für die Historisierungen vorliegen. <br />
+      Mehr zu der Historisierung von Art, Pop und TPop{' '}
+      <Link to="/Dokumentation/historisierung">hier</Link>.
+    </ul>
+
+    <ul>
       <li>
         <p>Die für das entsprechende Jahr jüngste Kontrolle</p>
         <ul>
