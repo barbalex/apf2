@@ -1708,13 +1708,10 @@ USING (
   OR (
     CURRENT_USER IN ('apflora_ap_reader') 
     AND idealbiotop_id IN (
-      SELECT id
+      SELECT idealbiotop.id
       FROM apflora.idealbiotop
-      WHERE ap_id IN (
-        SELECT ap_id
-        FROM apflora.ap_user
-        WHERE user_name = current_user_name()
-      )
+       join apflora.ap_user on apflora.ap_user.ap_id = apflora.idealbiotop.ap_id
+      WHERE apflora.ap_user.user_name = current_user_name()
     )
   )
 )
@@ -1723,13 +1720,10 @@ WITH CHECK (
   OR (
     CURRENT_USER IN ('apflora_ap_writer') 
     AND idealbiotop_id IN (
-      SELECT id
+      SELECT idealbiotop.id
       FROM apflora.idealbiotop
-      WHERE ap_id IN (
-        SELECT ap_id
-        FROM apflora.ap_user
-        WHERE user_name = current_user_name()
-      )
+       join apflora.ap_user on apflora.ap_user.ap_id = apflora.idealbiotop.ap_id
+      WHERE apflora.ap_user.user_name = current_user_name()
     )
   )
 );
