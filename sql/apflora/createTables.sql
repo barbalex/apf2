@@ -2306,46 +2306,32 @@ ALTER TABLE apflora.tpop_file ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpop_file;
 
 CREATE POLICY reader ON apflora.tpop_file
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND tpop_id IN (
-      SELECT
-        id
-      FROM
-        apflora.tpop
-      WHERE
-        pop_id IN (
-          SELECT
-            id
-          FROM
-            apflora.pop
-          WHERE
-            ap_id IN (
-              SELECT
-                ap_id
-              FROM
-                apflora.ap_user
-              WHERE
-                user_name = current_user_name())))))
-              WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-              OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
-                SELECT
-                  id
-                FROM
-                  apflora.tpop
-                WHERE
-                  pop_id IN (
-                    SELECT
-                      id
-                    FROM
-                      apflora.pop
-                    WHERE
-                      ap_id IN (
-                        SELECT
-                          ap_id
-                        FROM
-                          apflora.ap_user
-                        WHERE
-                          user_name = current_user_name())))));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND tpop_id IN (
+      SELECT tpop.id
+      FROM apflora.tpop
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on ap_user.ap_id = pop.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpop_id IN (
+      SELECT tpop.id
+      FROM apflora.tpop
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on ap_user.ap_id = pop.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 
 -- tpop_history
 DROP TABLE IF EXISTS apflora.tpop_history;
@@ -2435,34 +2421,30 @@ ALTER TABLE apflora.tpop_history ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpop_history;
 
 CREATE POLICY reader ON apflora.tpop_history
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND pop_id IN (
-      SELECT
-        id
-      FROM
-        apflora.pop_history
-      WHERE
-        ap_id IN (
-          SELECT
-            ap_id
-          FROM
-            apflora.ap_user
-          WHERE
-            user_name = current_user_name()))))
-          WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-          OR (CURRENT_USER IN ('apflora_ap_writer') AND pop_id IN (
-            SELECT
-              id
-            FROM
-              apflora.pop_history
-            WHERE
-              ap_id IN (
-                SELECT
-                  ap_id
-                FROM
-                  apflora.ap_user
-                WHERE
-                  user_name = current_user_name()))));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND pop_id IN (
+      SELECT pop_history.id
+      FROM apflora.pop_history
+        inner join apflora.ap_user on ap_user.ap_id = pop_history.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND pop_id IN (
+      SELECT pop_history.id
+      FROM apflora.pop_history
+        inner join apflora.ap_user on ap_user.ap_id = pop_history.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 
 -- tpopber
 DROP TABLE IF EXISTS apflora.tpopber;
