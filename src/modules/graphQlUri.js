@@ -1,4 +1,11 @@
+import { isElectron } from './isElectron.js'
+
 export const graphQlUri = () => {
+  const isElectronApp = isElectron()
+  if (isElectronApp) {
+    return `https://api.apflora.ch/graphql`
+  }
+
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')
   const isLocalhost = hostnameWithoutWww === 'localhost'
 
