@@ -2782,57 +2782,30 @@ DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl;
 
 CREATE POLICY reader ON apflora.tpopkontrzaehl
   USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND tpopkontr_id IN (
-      SELECT
-        id
-      FROM
-        apflora.tpopkontr
-      WHERE
-        tpop_id IN (
-          SELECT
-            id
-          FROM
-            apflora.tpop
-          WHERE
-            pop_id IN (
-              SELECT
-                id
-              FROM
-                apflora.pop
-              WHERE
-                ap_id IN (
-                  SELECT
-                    ap_id
-                  FROM
-                    apflora.ap_user
-                  WHERE
-                    user_name = current_user_name()))))))
-                  WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-                  OR (CURRENT_USER IN ('apflora_ap_writer') AND tpopkontr_id IN (
-                    SELECT
-                      id
-                    FROM
-                      apflora.tpopkontr
-                    WHERE
-                      tpop_id IN (
-                        SELECT
-                          id
-                        FROM
-                          apflora.tpop
-                        WHERE
-                          pop_id IN (
-                            SELECT
-                              id
-                            FROM
-                              apflora.pop
-                            WHERE
-                              ap_id IN (
-                                SELECT
-                                  ap_id
-                                FROM
-                                  apflora.ap_user
-                                WHERE
-                                  user_name = current_user_name()))))));
+    OR (
+      CURRENT_USER IN ('apflora_ap_reader') 
+      AND tpopkontr_id IN (
+          SELECT tpopkontr.id
+          FROM apflora.tpopkontr
+            inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+            inner join apflora.pop on tpop.pop_id = pop.id
+            inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+          WHERE ap_user.user_name = current_user_name()
+      )))
+  WITH CHECK (
+    CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+    OR (
+      CURRENT_USER IN ('apflora_ap_writer') 
+      AND tpopkontr_id IN (
+        SELECT tpopkontr.id
+        FROM apflora.tpopkontr
+          inner join apflora.tpop on tpopkontr.tpop_id = tpop.id
+          inner join apflora.pop on tpop.pop_id = pop.id
+          inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+        WHERE ap_user.user_name = current_user_name()
+      )
+    )
+  );
 
 -- tpopmassn
 DROP TABLE IF EXISTS apflora.tpopmassn;
