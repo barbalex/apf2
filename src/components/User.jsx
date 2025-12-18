@@ -84,7 +84,7 @@ export const User = observer(() => {
         },
       })
     } catch (error) {
-      const messages = error.graphQLErrors.map((x) => x.message)
+      const messages = error.graphQLErrors?.map((x) => x.message)
       const isNamePassError =
         messages.includes('invalid user or password') ||
         messages.includes('permission denied for relation user')
