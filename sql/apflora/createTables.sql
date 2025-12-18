@@ -1364,14 +1364,17 @@ USING (
     )
   )
 )
-WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-  SELECT
-    ap_id
-  FROM
-    apflora.ap_user
-  WHERE
-    user_name = current_user_name())));
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+);
 
 -- apberuebersicht
 DROP TABLE IF EXISTS apflora.apberuebersicht;
@@ -1418,8 +1421,8 @@ ALTER TABLE apflora.apberuebersicht ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.apberuebersicht;
 
 CREATE POLICY reader ON apflora.apberuebersicht
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_reader', 'apflora_ap_writer', 'apflora_ap_reader'))
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (CURRENT_USER IN ('apflora_manager', 'apflora_reader', 'apflora_ap_writer', 'apflora_ap_reader'))
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- assozart
 DROP TABLE IF EXISTS apflora.assozart;
@@ -1456,22 +1459,28 @@ ALTER TABLE apflora.assozart ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.assozart;
 
 CREATE POLICY reader ON apflora.assozart
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND ap_id IN (
-      SELECT
-        ap_id
-      FROM
-        apflora.ap_user
-      WHERE
-        user_name = current_user_name())))
-      WITH CHECK (CURRENT_USER IN ('apflora_manager')
-      OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-        SELECT
-          ap_id
-        FROM
-          apflora.ap_user
-        WHERE
-          user_name = current_user_name())));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+);
 
 -- erfkrit
 DROP TABLE IF EXISTS apflora.erfkrit;
@@ -1507,22 +1516,28 @@ ALTER TABLE apflora.erfkrit ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.erfkrit;
 
 CREATE POLICY reader ON apflora.erfkrit
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND ap_id IN (
-      SELECT
-        ap_id
-      FROM
-        apflora.ap_user
-      WHERE
-        user_name = current_user_name())))
-      WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-      OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-        SELECT
-          ap_id
-        FROM
-          apflora.ap_user
-        WHERE
-          user_name = current_user_name())));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+);
 
 -- idealbiotop
 DROP TABLE IF EXISTS apflora.idealbiotop;
