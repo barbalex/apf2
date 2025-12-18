@@ -93,4 +93,8 @@ export default defineConfig({
       localsConvention: 'camelCaseOnly',
     },
   },
+  // needed for electron to build an asar package
+  resolve: {
+    preserveSymlinks: true,
+  },
 })
