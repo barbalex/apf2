@@ -1620,22 +1620,28 @@ ALTER TABLE apflora.idealbiotop ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.idealbiotop;
 
 CREATE POLICY reader ON apflora.idealbiotop
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND ap_id IN (
-      SELECT
-        ap_id
-      FROM
-        apflora.ap_user
-      WHERE
-        user_name = current_user_name())))
-      WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-      OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-        SELECT
-          ap_id
-        FROM
-          apflora.ap_user
-        WHERE
-          user_name = current_user_name())));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+);
 
 DROP TABLE IF EXISTS apflora.idealbiotop_file;
 
