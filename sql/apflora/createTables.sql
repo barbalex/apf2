@@ -54,8 +54,8 @@ ALTER TABLE apflora.tpopkontrzaehl_einheit_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl_einheit_werte;
 
 CREATE POLICY reader ON apflora.tpopkontrzaehl_einheit_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- tpopkontrzaehl_methode_werte
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
@@ -107,8 +107,8 @@ ALTER TABLE apflora.tpopkontrzaehl_methode_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopkontrzaehl_methode_werte;
 
 CREATE POLICY reader ON apflora.tpopkontrzaehl_methode_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- ziel_typ_werte
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
@@ -159,8 +159,8 @@ ALTER TABLE apflora.ziel_typ_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ziel_typ_werte;
 
 CREATE POLICY reader ON apflora.ziel_typ_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 
 -- tpopkontr_idbiotuebereinst_werte
@@ -210,8 +210,8 @@ ALTER TABLE apflora.tpopkontr_idbiotuebereinst_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopkontr_idbiotuebereinst_werte;
 
 CREATE POLICY reader ON apflora.tpopkontr_idbiotuebereinst_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- tpopkontr_typ_werte
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
@@ -260,8 +260,8 @@ ALTER TABLE apflora.tpopkontr_typ_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopkontr_typ_werte;
 
 CREATE POLICY reader ON apflora.tpopkontr_typ_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- ek_abrechnungstyp_werte
 DROP TABLE IF EXISTS apflora.ek_abrechnungstyp_werte;
@@ -296,8 +296,8 @@ ALTER TABLE apflora.ek_abrechnungstyp_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ek_abrechnungstyp_werte;
 
 CREATE POLICY reader ON apflora.ek_abrechnungstyp_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- tpop_apberrelevant_grund_werte
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_grund_werte;
@@ -346,8 +346,8 @@ ALTER TABLE apflora.tpop_apberrelevant_grund_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpop_apberrelevant_grund_werte;
 
 CREATE POLICY reader ON apflora.tpop_apberrelevant_grund_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- tpopmassn_erfbeurt_werte
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
@@ -398,8 +398,8 @@ ALTER TABLE apflora.tpopmassn_erfbeurt_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopmassn_erfbeurt_werte;
 
 CREATE POLICY reader ON apflora.tpopmassn_erfbeurt_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- tpopmassn_typ_werte
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
@@ -456,8 +456,8 @@ ALTER TABLE apflora.tpopmassn_typ_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpopmassn_typ_werte;
 
 CREATE POLICY reader ON apflora.tpopmassn_typ_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
   -- tpop_entwicklung_werte
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
@@ -506,8 +506,8 @@ ALTER TABLE apflora.tpop_entwicklung_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.tpop_entwicklung_werte;
 
 CREATE POLICY reader ON apflora.tpop_entwicklung_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- projekt
 DROP TABLE IF EXISTS apflora.projekt;
@@ -531,8 +531,8 @@ ALTER TABLE apflora.projekt ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.projekt;
 
 CREATE POLICY reader ON apflora.projekt
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- this table can not be used as foreign table
 -- because it needs to be referenced
@@ -572,8 +572,8 @@ ALTER TABLE apflora.ae_taxonomies ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ae_taxonomies;
 
 CREATE POLICY reader ON apflora.ae_taxonomies
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- to update data run:
 -- INSERT INTO apflora.ae_taxonomies (taxonomie_id, taxonomie_name, id, taxid, taxid_intern, familie, artname, tax_art_name, artwert)
@@ -1051,8 +1051,8 @@ ALTER TABLE apflora.ekfrequenz ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.ekfrequenz;
 
 CREATE POLICY writer ON apflora.ekfrequenz
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- userprojekt
 -- this table is NOT YET IN USE
@@ -1115,8 +1115,8 @@ ALTER TABLE apflora.ap_bearbstand_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ap_bearbstand_werte;
 
 CREATE POLICY reader ON apflora.ap_bearbstand_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- ap_erfbeurtkrit_werte
 -- this table is not used!!!
@@ -1166,8 +1166,8 @@ ALTER TABLE apflora.ap_erfbeurtkrit_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ap_erfbeurtkrit_werte;
 
 CREATE POLICY reader ON apflora.ap_erfbeurtkrit_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- ap_erfkrit_werte
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
@@ -1218,8 +1218,8 @@ ALTER TABLE apflora.ap_erfkrit_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ap_erfkrit_werte;
 
 CREATE POLICY reader ON apflora.ap_erfkrit_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- ap_umsetzung_werte
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
@@ -1268,8 +1268,8 @@ ALTER TABLE apflora.ap_umsetzung_werte ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.ap_umsetzung_werte;
 
 CREATE POLICY reader ON apflora.ap_umsetzung_werte
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- apber
 DROP TABLE IF EXISTS apflora.apber;
@@ -1353,22 +1353,25 @@ ALTER TABLE apflora.apber ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.apber;
 
 CREATE POLICY reader ON apflora.apber
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND ap_id IN (
-      SELECT
-        ap_id
-      FROM
-        apflora.ap_user
-      WHERE
-        user_name = current_user_name())))
-      WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-      OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-        SELECT
-          ap_id
-        FROM
-          apflora.ap_user
-        WHERE
-          user_name = current_user_name())));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
+  SELECT
+    ap_id
+  FROM
+    apflora.ap_user
+  WHERE
+    user_name = current_user_name())));
 
 -- apberuebersicht
 DROP TABLE IF EXISTS apflora.apberuebersicht;
