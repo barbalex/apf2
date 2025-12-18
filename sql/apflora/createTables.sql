@@ -3344,22 +3344,28 @@ ALTER TABLE apflora.apart ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.apart;
 
 CREATE POLICY reader ON apflora.apart
-  USING (CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
-    OR (CURRENT_USER IN ('apflora_ap_reader') AND ap_id IN (
-      SELECT
-        ap_id
-      FROM
-        apflora.ap_user
-      WHERE
-        user_name = current_user_name())))
-      WITH CHECK (CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
-      OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-        SELECT
-          ap_id
-        FROM
-          apflora.ap_user
-        WHERE
-          user_name = current_user_name())));
+USING (
+  CURRENT_USER IN ('apflora_manager', 'apflora_ap_writer', 'apflora_reader', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_reader') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager', 'apflora_freiwillig')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+);
 
 -- ekzaehleinheit
 DROP TABLE IF EXISTS apflora.ekzaehleinheit;
@@ -3414,8 +3420,8 @@ ALTER TABLE apflora.ekzaehleinheit ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.ekzaehleinheit;
 
 CREATE POLICY writer ON apflora.ekzaehleinheit
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 -- ek_type
 DROP TYPE IF EXISTS ek_type;
@@ -3468,27 +3474,20 @@ ALTER TABLE apflora.ekplan ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS writer ON apflora.ekplan;
 
 CREATE POLICY writer ON apflora.ekplan
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager'
-    OR (CURRENT_USER IN ('apflora_ap_writer') AND tpop_id IN (
-      SELECT
-        id
-      FROM
-        apflora.tpop
-      WHERE
-        pop_id IN (
-          SELECT
-            id
-          FROM
-            apflora.pop
-          WHERE
-            ap_id IN (
-              SELECT
-                ap_id
-              FROM
-                apflora.ap_user
-              WHERE
-                user_name = current_user_name())))));
+USING (TRUE)
+WITH CHECK (
+  CURRENT_USER = 'apflora_manager'
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND tpop_id IN (
+      SELECT tpop.id
+      FROM apflora.tpop
+        inner join apflora.pop on tpop.pop_id = pop.id
+        inner join apflora.ap_user on pop.ap_id = ap_user.ap_id
+      WHERE ap_user.user_name = current_user_name()
+    )
+  )
+);
 
 DROP TABLE IF EXISTS apflora.qk;
 
@@ -3514,8 +3513,8 @@ ALTER TABLE apflora.qk ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.qk;
 
 CREATE POLICY reader ON apflora.qk
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 DROP TABLE IF EXISTS apflora.apqk;
 
@@ -3536,15 +3535,18 @@ ALTER TABLE apflora.apqk ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader ON apflora.apqk;
 
 CREATE POLICY reader ON apflora.apqk
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER IN ('apflora_manager')
-    OR (CURRENT_USER IN ('apflora_ap_writer') AND ap_id IN (
-      SELECT
-        ap_id
-      FROM
-        apflora.ap_user
-      WHERE
-        user_name = current_user_name())));
+USING (TRUE)
+WITH CHECK (
+  CURRENT_USER IN ('apflora_manager')
+  OR (
+    CURRENT_USER IN ('apflora_ap_writer') 
+    AND ap_id IN (
+      SELECT ap_id
+      FROM apflora.ap_user
+      WHERE user_name = current_user_name()
+    )
+  )
+);
 
 --insert into apflora.apqk (ap_id, qk_name)
 --select ap.id, qk.name
@@ -3556,8 +3558,8 @@ COMMENT ON TABLE apflora.markierungen IS 'Markierungen, die im Rahmen von apflor
 DROP POLICY IF EXISTS reader ON apflora.markierungen;
 
 CREATE POLICY reader ON apflora.markierungen
-  USING (TRUE)
-  WITH CHECK (CURRENT_USER = 'apflora_manager');
+USING (TRUE)
+WITH CHECK (CURRENT_USER = 'apflora_manager');
 
 DROP TABLE IF EXISTS apflora.detailplaene;
 
