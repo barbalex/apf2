@@ -4,7 +4,6 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
 BEGIN
   RETURN query WITH massnahmen AS(
     SELECT
-      pop.id AS pop_id,
       tpop.id AS tpop_id,
       massn.jahr,
       CASE WHEN massn.datum IS NOT NULL THEN
@@ -35,13 +34,10 @@ BEGIN
 ),
 zaehlungen AS(
   SELECT
-    tpop.pop_id,
     tpop.id AS tpop_id,
     tpop.year AS jahr,
-    CASE WHEN kontr.datum IS NOT NULL THEN
-      kontr.datum
-    ELSE
-      to_date(concat(kontr.jahr, '-01-01'), 'YYYY-MM-DD')
+    CASE WHEN kontr.datum IS NOT NULL THEN kontr.datum
+    ELSE to_date(concat(kontr.jahr, '-01-01'), 'YYYY-MM-DD')
     END AS datum,
     zaehlungen.anzahl
   FROM
@@ -68,41 +64,45 @@ zaehlungen AS(
 ),
 zaehlungen_summe_pro_jahr AS(
   SELECT
-    pop_id,
+    tpop_id,
     jahr,
     sum(anzahl) as sum
   FROM zaehlungen
   GROUP BY
-    pop_id,
+    tpop_id,
     jahr
   ORDER BY jahr desc
 ),
 massnahmen_summe_pro_jahr AS(
   SELECT
-    pop_id,
+    tpop_id,
     jahr,
     sum(anzahl) as sum
   FROM massnahmen
   GROUP BY
-    pop_id,
+    tpop_id,
     jahr
   ORDER BY jahr desc
 ),
-pop_summe_pro_jahr AS(
+tpop_summe_pro_jahr AS(
   SELECT
-    pop.id as pop_id,
-    pop.year as jahr,
+    tpop.id as tpop_id,
+    tpop.year as jahr,
     COALESCE(zspj.sum, 0) + COALESCE(mspj.sum, 0) AS anzahl
   FROM
-    apflora.pop_history pop
-    left join zaehlungen_summe_pro_jahr zspj on zspj.pop_id = pop.id AND zspj.jahr = pop.year
-    left join massnahmen_summe_pro_jahr mspj on mspj.pop_id = pop.id AND mspj.jahr = pop.year
+    apflora.tpop_history tpop
+    left join zaehlungen_summe_pro_jahr zspj on zspj.tpop_id = tpop.id AND zspj.jahr = tpop.year
+    left join massnahmen_summe_pro_jahr mspj on mspj.tpop_id = tpop.id AND mspj.jahr = tpop.year
+  WHERE
+    tpop.pop_id = $1
+  ORDER BY
+    tpop.year DESC
 )
 SELECT
   jahr,
-  json_object_agg(pop_id, anzahl) AS
+  json_object_agg(tpop_id, anzahl) AS
 VALUES
-  FROM pop_summe_pro_jahr
+  FROM tpop_summe_pro_jahr
 GROUP BY
   jahr
 ORDER BY
