@@ -4,6 +4,7 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
 BEGIN
   RETURN query WITH massnahmen AS(
     SELECT
+      pop.id AS pop_id,
       tpop.id AS tpop_id,
       massn.jahr,
       CASE WHEN massn.datum IS NOT NULL THEN
@@ -34,8 +35,9 @@ BEGIN
 ),
 zaehlungen AS(
   SELECT
+    tpop.pop_id,
     tpop.id AS tpop_id,
-    kontr.jahr,
+    tpop.year AS jahr,
     CASE WHEN kontr.datum IS NOT NULL THEN
       kontr.datum
     ELSE
@@ -58,85 +60,49 @@ zaehlungen AS(
     AND zaehlungen.einheit = ze.code
     -- nur Zählungen mit der Ziel-Einheit
     AND ze.code = zaehlungen.einheit
-    AND pop.id = $1
+    AND tpop.pop_id = $1
   ORDER BY
     tpop.id,
     kontr.jahr DESC,
     kontr.datum DESC
 ),
-tpop_letzte_anzahlen AS(
+zaehlungen_summe_pro_jahr AS(
   SELECT
-    tpop.id AS tpop_id,
-    tpop.year AS jahr,
-    zaehl.anzahl AS letzte_zaehlung_anzahl,
-    zaehl.datum AS datum,
-    massn.anzahl AS massn_anz_seither
-  FROM
-    apflora.tpop_history AS tpop
-    LEFT JOIN zaehlungen zaehl ON zaehl.tpop_id = tpop.id
-      AND zaehl.datum =(
-        SELECT max(datum)
-        FROM zaehlungen
-      WHERE
-        tpop_id = tpop.id
-        AND datum <= to_date(concat(tpop.year, '-12-31'), 'YYYY-MM-DD'))
-      LEFT JOIN massnahmen massn 
-        ON massn.tpop_id = tpop.id
-        AND massn.datum <= to_date(concat(tpop.year, '-12-31'), 'YYYY-MM-DD')
-        AND massn.datum >= coalesce(zaehl.datum, to_date(concat(tpop.year, '-01-01'), 'YYYY-MM-DD'))
-    WHERE
-      tpop.pop_id = $1
-    ORDER BY
-      tpop.id,
-      tpop.year
-),
-tpop_letzte_anzahl AS(
-  SELECT
-    tpop_id,
+    pop_id,
     jahr,
-    datum,
-    CASE WHEN la.tpop_id IS NULL THEN
-      NULL
-    WHEN la.letzte_zaehlung_anzahl IS NOT NULL AND la.massn_anz_seither IS NOT NULL THEN
-      la.letzte_zaehlung_anzahl + la.massn_anz_seither
-    WHEN la.letzte_zaehlung_anzahl IS NULL AND la.massn_anz_seither IS NOT NULL THEN
-      la.massn_anz_seither
-    WHEN la.letzte_zaehlung_anzahl IS NOT NULL AND la.massn_anz_seither IS NULL THEN
-      la.letzte_zaehlung_anzahl
-    ELSE
-      NULL
-    END AS anzahl
-  FROM
-    tpop_letzte_anzahlen la
-),
-tpop_data AS(
-  SELECT
-    tpop.year AS jahr,
-    tpop.id AS tpop_id,
-    sum(anzahl) AS anzahl
-FROM
-  tpop_letzte_anzahl tpla
-  INNER JOIN apflora.tpop_history tpop ON tpop.id = tpla.tpop_id AND tpop.year = tpla.jahr
-  INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id AND pop.year = tpop.year
-  WHERE
-    pop.status IN(100, 200, 201)
-    AND tpla.anzahl IS NOT NULL
-    AND pop.bekannt_seit <= pop.year
-    AND tpop.bekannt_seit <= tpop.year
-    AND tpop.apber_relevant = TRUE
-    AND pop.id = $1
+    sum(anzahl) as sum
+  FROM zaehlungen
   GROUP BY
-    tpop.id,
-    tpop.year
-  ORDER BY
-    tpop.id,
-    tpop.year
+    pop_id,
+    jahr
+  ORDER BY jahr desc
+),
+massnahmen_summe_pro_jahr AS(
+  SELECT
+    pop_id,
+    jahr,
+    sum(anzahl) as sum
+  FROM massnahmen
+  GROUP BY
+    pop_id,
+    jahr
+  ORDER BY jahr desc
+),
+pop_summe_pro_jahr AS(
+  SELECT
+    pop.id as pop_id,
+    pop.year as jahr,
+    COALESCE(zspj.sum, 0) + COALESCE(mspj.sum, 0) AS anzahl
+  FROM
+    apflora.pop_history pop
+    left join zaehlungen_summe_pro_jahr zspj on zspj.pop_id = pop.id AND zspj.jahr = pop.year
+    left join massnahmen_summe_pro_jahr mspj on mspj.pop_id = pop.id AND mspj.jahr = pop.year
 )
 SELECT
   jahr,
-  json_object_agg(tpop_id, anzahl) AS
+  json_object_agg(pop_id, anzahl) AS
 VALUES
-  FROM tpop_data
+  FROM pop_summe_pro_jahr
 GROUP BY
   jahr
 ORDER BY
