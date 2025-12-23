@@ -6,11 +6,6 @@ BEGIN
     SELECT
       tpop.id AS tpop_id,
       massn.jahr,
-      CASE WHEN massn.datum IS NOT NULL THEN
-        massn.datum
-      ELSE
-        to_date(concat(massn.jahr, '-01-01'), 'YYYY-MM-DD')
-      END AS datum,
       massn.zieleinheit_anzahl AS anzahl
     FROM
       apflora.tpopmassn massn
@@ -29,16 +24,12 @@ BEGIN
       AND pop.id = $1
     ORDER BY
       tpop.id,
-      massn.jahr DESC,
-      massn.datum DESC
+      massn.jahr DESC
 ),
 zaehlungen AS(
   SELECT
     tpop.id AS tpop_id,
     tpop.year AS jahr,
-    CASE WHEN kontr.datum IS NOT NULL THEN kontr.datum
-    ELSE to_date(concat(kontr.jahr, '-01-01'), 'YYYY-MM-DD')
-    END AS datum,
     zaehlungen.anzahl
   FROM
     apflora.tpopkontrzaehl zaehlungen
@@ -59,8 +50,7 @@ zaehlungen AS(
     AND tpop.pop_id = $1
   ORDER BY
     tpop.id,
-    kontr.jahr DESC,
-    kontr.datum DESC
+    kontr.jahr DESC
 ),
 zaehlungen_summe_pro_jahr AS(
   SELECT
