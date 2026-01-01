@@ -622,7 +622,7 @@ html {
 
 /* react-split-pane */
 
-.Resizer {
+.split-pane-divider {
   background: #388e3c;
   opacity: 1;
   -moz-box-sizing: border-box;
@@ -630,38 +630,38 @@ html {
   box-sizing: border-box;
 }
 
-.Resizer:hover {
+.split-pane-divider:hover {
   -webkit-transition: all 2s ease;
   transition: all 2s ease;
 }
 
-.Resizer.vertical {
+.split-pane-divider.vertical {
   border-left: 3px solid #388e3c;
   cursor: col-resize;
   background-color: #388e3c;
 }
 
-.Resizer.vertical:hover {
+.split-pane-divider.vertical:hover {
   border-left: 2px solid rgba(0, 0, 0, 0.3);
   border-right: 2px solid rgba(0, 0, 0, 0.3);
 }
-.Resizer.disabled {
+.split-pane-divider.disabled {
   cursor: not-allowed;
 }
-.Resizer.disabled:hover {
+.split-pane-divider.disabled:hover {
   border-color: transparent;
 }
-.Pane {
+.split-pane-pane {
   overflow: hidden;
 }
-.Pane1-overflowing .Pane {
+.split-pane-pane1-overflowing .split-pane-pane {
   overflow: auto !important;
   scrollbar-width: thin;
 }
-.Pane2 {
+.split-pane-pane2 {
   overflow: hidden;
 }
-.Pane2-overflowing .Pane2 {
+.split-pane-pane2-overflowing .split-pane-pane2 {
   overflow: auto !important;
   scrollbar-width: thin;
 }
