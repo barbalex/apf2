@@ -2,7 +2,7 @@ import { useContext, lazy, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
-import SplitPane from 'react-split-pane'
+import { SplitPane, Pane } from 'react-split-pane'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -61,22 +61,24 @@ export const Component = observer(() => {
     // inside iframe app bar should be hidden
     return (
       <div className={container}>
-        {tree2Tabs.length === 0 || isPrint ?
+        {tree2Tabs.length === 0 || isPrint ? (
           <ProjektContainer />
-        : <SplitPane
-            split="vertical"
-            defaultSize="50%"
-          >
-            <ProjektContainer />
-            <iframe
-              className={iframe}
-              src={iFrameSrc}
-              title="tree2"
-              width="100%"
-              height="100%"
-            />
+        ) : (
+          <SplitPane direction="horizontal">
+            <Pane defaultSize="50%">
+              <ProjektContainer />
+            </Pane>
+            <Pane>
+              <iframe
+                className={iframe}
+                src={iFrameSrc}
+                title="tree2"
+                width="100%"
+                height="100%"
+              />
+            </Pane>
           </SplitPane>
-        }
+        )}
       </div>
     )
   }
@@ -87,12 +89,10 @@ export const Component = observer(() => {
         <ApFilterController />
       </Suspense>
       <div className={container}>
-        {tree2Tabs.length === 0 || isPrint ?
+        {tree2Tabs.length === 0 || isPrint ? (
           <ProjektContainer />
-        : <SplitPane
-            split="vertical"
-            defaultSize="50%"
-          >
+        ) : (
+          <SplitPane split="vertical" defaultSize="50%">
             <ProjektContainer />
             <iframe
               className={iframe}
@@ -102,7 +102,7 @@ export const Component = observer(() => {
               height="100%"
             />
           </SplitPane>
-        }
+        )}
       </div>
     </>
   )

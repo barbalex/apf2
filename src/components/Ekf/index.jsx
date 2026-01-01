@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQuery } from '@apollo/client/react'
 import { sortBy } from 'es-toolkit'
-import SplitPane from 'react-split-pane'
+import { SplitPane, Pane } from 'react-split-pane'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -92,10 +92,7 @@ export const Component = observer(() => {
     return (
       <>
         {ekf.map((e) => (
-          <Tpopfreiwkontr
-            id={e.id}
-            key={e.id}
-          />
+          <Tpopfreiwkontr id={e.id} key={e.id} />
         ))}
       </>
     )
@@ -103,15 +100,19 @@ export const Component = observer(() => {
 
   return (
     <div className={container}>
-      <SplitPane
-        split="vertical"
-        size="350px"
-        minSize={100}
-      >
-        <EkfList ekf={ekf} />
-        {ekfId ?
-          <Tpopfreiwkontr id={ekfId} />
-        : <div className={innerContainer} />}
+      <SplitPane split="vertical">
+        <Pane size="350px" minSize={100}>
+          <EkfList ekf={ekf} />
+        </Pane>
+        {ekfId ? (
+          <Pane>
+            <Tpopfreiwkontr id={ekfId} />
+          </Pane>
+        ) : (
+          <Pane>
+            <div className={innerContainer} />
+          </Pane>
+        )}
       </SplitPane>
     </div>
   )

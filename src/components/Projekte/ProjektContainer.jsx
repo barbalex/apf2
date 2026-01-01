@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import { useAtom } from 'jotai'
-import SplitPane from 'react-split-pane'
+import { SplitPane, Pane } from 'react-split-pane'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
 import { Karte } from './Karte/index.jsx'
@@ -83,10 +83,7 @@ export const ProjektContainer = observer(() => {
       </div>
     ),
     karte: (
-      <div
-        className={innerContainer}
-        ref={mapContainerRef}
-      >
+      <div className={innerContainer} ref={mapContainerRef}>
         <Suspense fallback={<Spinner />}>
           <Karte mapContainerRef={mapContainerRef} />
         </Suspense>
@@ -123,50 +120,60 @@ export const ProjektContainer = observer(() => {
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
       >
         <SplitPane
-          split="vertical"
-          size={
-            treeTabs.length === 2 && treeTabs[0] === 'tree' ?
-              '33%'
-            : `${100 / treeTabs.length}%`
-          }
-          maxSize={-10}
+          direction="horizontal"
           className={`${overflowPane1InSplitPane1 ? 'Pane1-overflowing' : ''} ${
             overflowPane2InSplitPane1 ? 'Pane2-overflowing' : ''
           }`}
         >
-          {elObj[treeTabs[0]]}
+          <Pane
+            size={
+              treeTabs.length === 2 && treeTabs[0] === 'tree'
+                ? '33%'
+                : `${100 / treeTabs.length}%`
+            }
+            maxSize={-10}
+          >
+            {elObj[treeTabs[0]]}
+          </Pane>
           {treeTabs.length === 1 && <></>}
-          {treeTabs.length === 2 && <>{elObj[treeTabs[1]]}</>}
+          {treeTabs.length === 2 && <Pane>{elObj[treeTabs[1]]}</Pane>}
           {treeTabs.length > 2 && (
-            <SplitPane
-              split="vertical"
-              size={`${100 / (treeTabs.length - 1)}%`}
-              maxSize={-10}
-              className={`${overflowPane1InSplitPane2 ? 'Pane1-overflowing' : ''}`}
-            >
-              {elObj[treeTabs[1]]}
-              {treeTabs.length === 3 && elObj[treeTabs[2]]}
-              {treeTabs.length > 3 && (
-                <SplitPane
-                  split="vertical"
-                  size={`${100 / (treeTabs.length - 2)}%`}
-                  maxSize={-10}
-                >
-                  {elObj[treeTabs[2]]}
-                  {treeTabs.length === 4 && elObj[treeTabs[3]]}
-                  {treeTabs.length === 5 && (
-                    <SplitPane
-                      split="vertical"
-                      size="50%"
-                      maxSize={-10}
-                    >
-                      {elObj[treeTabs[3]]}
-                      {elObj[treeTabs[4]]}
+            <Pane>
+              <SplitPane
+                direction="horizontal"
+                className={`${overflowPane1InSplitPane2 ? 'Pane1-overflowing' : ''}`}
+              >
+                <Pane size={`${100 / (treeTabs.length - 1)}%`} maxSize={-10}>
+                  {elObj[treeTabs[1]]}
+                </Pane>
+                {treeTabs.length === 3 && <Pane>{elObj[treeTabs[2]]}</Pane>}
+                {treeTabs.length > 3 && (
+                  <Pane>
+                    <SplitPane direction="horizontal">
+                      <Pane
+                        size={`${100 / (treeTabs.length - 2)}%`}
+                        maxSize={-10}
+                      >
+                        {elObj[treeTabs[2]]}
+                      </Pane>
+                      {treeTabs.length === 4 && (
+                        <Pane>{elObj[treeTabs[3]]}</Pane>
+                      )}
+                      {treeTabs.length === 5 && (
+                        <Pane>
+                          <SplitPane direction="horizontal">
+                            <Pane size="50%" maxSize={-10}>
+                              {elObj[treeTabs[3]]}
+                            </Pane>
+                            <Pane>{elObj[treeTabs[4]]}</Pane>
+                          </SplitPane>
+                        </Pane>
+                      )}
                     </SplitPane>
-                  )}
-                </SplitPane>
-              )}
-            </SplitPane>
+                  </Pane>
+                )}
+              </SplitPane>
+            </Pane>
           )}
         </SplitPane>
       </div>
