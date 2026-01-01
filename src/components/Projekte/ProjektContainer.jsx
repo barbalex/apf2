@@ -138,40 +138,30 @@ export const ProjektContainer = observer(() => {
           {treeTabs.length === 1 && <></>}
           {treeTabs.length === 2 && <Pane>{elObj[treeTabs[1]]}</Pane>}
           {treeTabs.length > 2 && (
+            <Pane
+              // size={`${100 / (treeTabs.length - 1)}%`}
+              maxSize={-10}
+            >
+              {elObj[treeTabs[1]]}
+            </Pane>
+          )}
+          {treeTabs.length === 3 && <Pane>{elObj[treeTabs[2]]}</Pane>}
+          {treeTabs.length > 3 && (
+            <Pane
+              // size={`${100 / (treeTabs.length - 2)}%`}
+              maxSize={-10}
+            >
+              {elObj[treeTabs[2]]}
+            </Pane>
+          )}
+          {treeTabs.length === 4 && <Pane>{elObj[treeTabs[3]]}</Pane>}
+          {treeTabs.length === 5 && (
             <Pane>
-              <SplitPane
-                direction="horizontal"
-                className={`${overflowPane1InSplitPane2 ? 'Pane1-overflowing' : ''}`}
-              >
-                <Pane size={`${100 / (treeTabs.length - 1)}%`} maxSize={-10}>
-                  {elObj[treeTabs[1]]}
+              <SplitPane direction="horizontal">
+                <Pane size="50%" maxSize={-10}>
+                  {elObj[treeTabs[3]]}
                 </Pane>
-                {treeTabs.length === 3 && <Pane>{elObj[treeTabs[2]]}</Pane>}
-                {treeTabs.length > 3 && (
-                  <Pane>
-                    <SplitPane direction="horizontal">
-                      <Pane
-                        size={`${100 / (treeTabs.length - 2)}%`}
-                        maxSize={-10}
-                      >
-                        {elObj[treeTabs[2]]}
-                      </Pane>
-                      {treeTabs.length === 4 && (
-                        <Pane>{elObj[treeTabs[3]]}</Pane>
-                      )}
-                      {treeTabs.length === 5 && (
-                        <Pane>
-                          <SplitPane direction="horizontal">
-                            <Pane size="50%" maxSize={-10}>
-                              {elObj[treeTabs[3]]}
-                            </Pane>
-                            <Pane>{elObj[treeTabs[4]]}</Pane>
-                          </SplitPane>
-                        </Pane>
-                      )}
-                    </SplitPane>
-                  </Pane>
-                )}
+                <Pane>{elObj[treeTabs[4]]}</Pane>
               </SplitPane>
             </Pane>
           )}
