@@ -27,6 +27,7 @@ import {
   container,
   innerContainer,
 } from './ProjektContainer.module.css'
+import { fi } from 'date-fns/locale'
 
 export const ProjektContainer = observer(() => {
   const { projId, apberuebersichtId, apberId } = useParams()
@@ -111,7 +112,23 @@ export const ProjektContainer = observer(() => {
     treeTabs.length > 2 &&
     (showApberForAll || showApberForArt)
 
-  console.log('ProjektContainer', { treeTabs, length: treeTabs.length })
+  const firstOfTwoIsTree = treeTabs[0] === 'tree' && treeTabs.length === 2
+  const singlePane = treeTabs.length === 1
+  const firstPaneSize = singlePane
+    ? '100%'
+    : firstOfTwoIsTree
+      ? '33%'
+      : undefined
+  const firstPaneMaxSize = singlePane ? undefined : -10
+
+  console.log('ProjektContainer', {
+    treeTabs,
+    length: treeTabs.length,
+    firstOfTwoIsTree,
+    singlePane,
+    firstPaneSize,
+    firstPaneMaxSize,
+  })
 
   return (
     <div className={outerContainer}>
@@ -123,34 +140,20 @@ export const ProjektContainer = observer(() => {
       >
         <SplitPane
           direction="horizontal"
-          className={`${overflowPane1InSplitPane1 ? 'Pane1-overflowing' : ''} ${
-            overflowPane2InSplitPane1 ? 'Pane2-overflowing' : ''
+          className={`${overflowPane1InSplitPane1 ? 'Pane-overflowing' : ''} ${
+            overflowPane2InSplitPane1 ? 'Pane-overflowing' : ''
           }`}
         >
-          <Pane
-            key={treeTabs.length}
-            size={
-              treeTabs.length === 1
-                ? '100%'
-                : treeTabs.length === 2 && treeTabs[0] === 'tree'
-                  ? '33%'
-                  : `${100 / treeTabs.length}%`
-            }
-            maxSize={-10}
-          >
+          <Pane size={firstPaneSize} maxSize={firstPaneMaxSize}>
             {elObj[treeTabs[0]]}
           </Pane>
-          {treeTabs.length > 0 && (
-            <Pane>{elObj[treeTabs[1]] ?? undefined}</Pane>
+          {singlePane && <Pane size={0}>''</Pane>}
+          {!!elObj[treeTabs[1]] && (
+            <Pane maxSize={-10}>{elObj[treeTabs[1]] ?? undefined}</Pane>
           )}
           {!!elObj[treeTabs[2]] && <Pane>{elObj[treeTabs[2]]}</Pane>}
           {!!elObj[treeTabs[3]] && (
-            <Pane
-              // size={`${100 / (treeTabs.length - 2)}%`}
-              maxSize={-10}
-            >
-              {elObj[treeTabs[3]]}
-            </Pane>
+            <Pane maxSize={-10}>{elObj[treeTabs[3]]}</Pane>
           )}
           {!!elObj[treeTabs[4]] && <Pane>{elObj[treeTabs[4]]}</Pane>}
         </SplitPane>
