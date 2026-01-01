@@ -92,15 +92,19 @@ export const Component = observer(() => {
         {tree2Tabs.length === 0 || isPrint ? (
           <ProjektContainer />
         ) : (
-          <SplitPane split="vertical" defaultSize="50%">
-            <ProjektContainer />
-            <iframe
-              className={iframe}
-              src={iFrameSrc}
-              title="tree2"
-              width="100%"
-              height="100%"
-            />
+          <SplitPane direction="horizontal">
+            <Pane defaultSize="50%">
+              <ProjektContainer />
+            </Pane>
+            <Pane>
+              <iframe
+                className={iframe}
+                src={iFrameSrc}
+                title="tree2"
+                width="100%"
+                height="100%"
+              />
+            </Pane>
           </SplitPane>
         )}
       </div>
