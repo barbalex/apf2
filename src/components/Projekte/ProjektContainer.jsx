@@ -111,6 +111,8 @@ export const ProjektContainer = observer(() => {
     treeTabs.length > 2 &&
     (showApberForAll || showApberForArt)
 
+  console.log('ProjektContainer', { treeTabs, length: treeTabs.length })
+
   return (
     <div className={outerContainer}>
       {!hideBookmarks && <Bookmarks />}
@@ -126,45 +128,31 @@ export const ProjektContainer = observer(() => {
           }`}
         >
           <Pane
+            key={treeTabs.length}
             size={
-              treeTabs.length === 2 && treeTabs[0] === 'tree'
-                ? '33%'
-                : `${100 / treeTabs.length}%`
+              treeTabs.length === 1
+                ? '100%'
+                : treeTabs.length === 2 && treeTabs[0] === 'tree'
+                  ? '33%'
+                  : `${100 / treeTabs.length}%`
             }
             maxSize={-10}
           >
             {elObj[treeTabs[0]]}
           </Pane>
-          {treeTabs.length === 1 && <></>}
-          {treeTabs.length === 2 && <Pane>{elObj[treeTabs[1]]}</Pane>}
-          {treeTabs.length > 2 && (
-            <Pane
-              // size={`${100 / (treeTabs.length - 1)}%`}
-              maxSize={-10}
-            >
-              {elObj[treeTabs[1]]}
-            </Pane>
+          {treeTabs.length > 0 && (
+            <Pane>{elObj[treeTabs[1]] ?? undefined}</Pane>
           )}
-          {treeTabs.length === 3 && <Pane>{elObj[treeTabs[2]]}</Pane>}
-          {treeTabs.length > 3 && (
+          {!!elObj[treeTabs[2]] && <Pane>{elObj[treeTabs[2]]}</Pane>}
+          {!!elObj[treeTabs[3]] && (
             <Pane
               // size={`${100 / (treeTabs.length - 2)}%`}
               maxSize={-10}
             >
-              {elObj[treeTabs[2]]}
+              {elObj[treeTabs[3]]}
             </Pane>
           )}
-          {treeTabs.length === 4 && <Pane>{elObj[treeTabs[3]]}</Pane>}
-          {treeTabs.length === 5 && (
-            <Pane>
-              <SplitPane direction="horizontal">
-                <Pane size="50%" maxSize={-10}>
-                  {elObj[treeTabs[3]]}
-                </Pane>
-                <Pane>{elObj[treeTabs[4]]}</Pane>
-              </SplitPane>
-            </Pane>
-          )}
+          {!!elObj[treeTabs[4]] && <Pane>{elObj[treeTabs[4]]}</Pane>}
         </SplitPane>
       </div>
     </div>
