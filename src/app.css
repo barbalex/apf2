@@ -635,13 +635,13 @@ html {
   transition: all 2s ease;
 }
 
-.split-pane-divider.vertical {
+.split-pane-divider.horizontal {
   border-left: 3px solid #388e3c;
   cursor: col-resize;
   background-color: #388e3c;
 }
 
-.split-pane-divider.vertical:hover {
+.split-pane-divider.horizontal:hover {
   border-left: 2px solid rgba(0, 0, 0, 0.3);
   border-right: 2px solid rgba(0, 0, 0, 0.3);
 }
@@ -654,14 +654,7 @@ html {
 .split-pane-pane {
   overflow: hidden;
 }
-.split-pane-pane1-overflowing .split-pane-pane {
-  overflow: auto !important;
-  scrollbar-width: thin;
-}
-.split-pane-pane2 {
-  overflow: hidden;
-}
-.split-pane-pane2-overflowing .split-pane-pane2 {
+.split-pane-pane-overflowing .split-pane-pane {
   overflow: auto !important;
   scrollbar-width: thin;
 }
