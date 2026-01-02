@@ -26,8 +26,11 @@ import {
   outerContainer,
   container,
   innerContainer,
+  overflowingPane,
+  overflowingDiv,
 } from './ProjektContainer.module.css'
 import { fi } from 'date-fns/locale'
+import { first } from 'rxjs'
 
 export const ProjektContainer = observer(() => {
   const { projId, apberuebersichtId, apberId } = useParams()
@@ -101,16 +104,10 @@ export const ProjektContainer = observer(() => {
 
   if (isPrint) return <Outlet />
 
-  const overflowPane1InSplitPane1 =
+  const overflowPane1 =
     treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
-  const overflowPane2InSplitPane1 =
-    treeTabs[1] === 'daten' &&
-    treeTabs.length === 2 &&
-    (showApberForAll || showApberForArt)
-  const overflowPane1InSplitPane2 =
-    treeTabs[1] === 'daten' &&
-    treeTabs.length > 2 &&
-    (showApberForAll || showApberForArt)
+  const overflowPane2 =
+    treeTabs[1] === 'daten' && (showApberForAll || showApberForArt)
 
   const firstOfTwoIsTree = treeTabs[0] === 'tree' && treeTabs.length === 2
   const singlePane = treeTabs.length === 1
@@ -119,17 +116,10 @@ export const ProjektContainer = observer(() => {
     : firstOfTwoIsTree
       ? '33%'
       : undefined
-  const firstPaneMaxSize = singlePane ? undefined : -10
+  const firstPaneMaxSize = singlePane ? undefined : '95%'
 
-  console.log('ProjektContainer', {
-    treeTabs,
-    length: treeTabs.length,
-    firstOfTwoIsTree,
-    singlePane,
-    firstPaneSize,
-    firstPaneMaxSize,
-  })
-
+  // TODO: issue with single pane: it does not expand to full width, when changing from two to one pane
+  // thus rendering outside of split pane. But then the tree rebuilds.
   return (
     <div className={outerContainer}>
       {!hideBookmarks && <Bookmarks />}
@@ -138,25 +128,39 @@ export const ProjektContainer = observer(() => {
         height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
       >
-        <SplitPane
-          direction="horizontal"
-          className={`${overflowPane1InSplitPane1 ? 'Pane-overflowing' : ''} ${
-            overflowPane2InSplitPane1 ? 'Pane-overflowing' : ''
-          }`}
-        >
-          <Pane size={firstPaneSize} maxSize={firstPaneMaxSize}>
+        {treeTabs.length === 1 ? (
+          <div className={overflowPane1 ? overflowingDiv : undefined}>
             {elObj[treeTabs[0]]}
-          </Pane>
-          {singlePane && <Pane size={0}>''</Pane>}
-          {!!elObj[treeTabs[1]] && (
-            <Pane maxSize={-10}>{elObj[treeTabs[1]] ?? undefined}</Pane>
-          )}
-          {!!elObj[treeTabs[2]] && <Pane>{elObj[treeTabs[2]]}</Pane>}
-          {!!elObj[treeTabs[3]] && (
-            <Pane maxSize={-10}>{elObj[treeTabs[3]]}</Pane>
-          )}
-          {!!elObj[treeTabs[4]] && <Pane>{elObj[treeTabs[4]]}</Pane>}
-        </SplitPane>
+          </div>
+        ) : (
+          <SplitPane direction="horizontal">
+            <Pane
+              size={firstPaneSize}
+              maxSize={firstPaneMaxSize}
+              className={overflowPane1 ? overflowingPane : undefined}
+            >
+              {elObj[treeTabs[0]]}
+            </Pane>
+            {singlePane && <Pane size={0}></Pane>}
+            {!!elObj[treeTabs[1]] && (
+              <Pane
+                maxSize="95%"
+                className={overflowPane2 ? overflowingPane : undefined}
+              >
+                {elObj[treeTabs[1]] ?? undefined}
+              </Pane>
+            )}
+            {!!elObj[treeTabs[2]] && (
+              <Pane maxSize="95%">{elObj[treeTabs[2]]}</Pane>
+            )}
+            {!!elObj[treeTabs[3]] && (
+              <Pane maxSize="95%">{elObj[treeTabs[3]]}</Pane>
+            )}
+            {!!elObj[treeTabs[4]] && (
+              <Pane maxSize="95%">{elObj[treeTabs[4]]}</Pane>
+            )}
+          </SplitPane>
+        )}
       </div>
     </div>
   )
