@@ -73,7 +73,7 @@ export const More = observer(
 
     return (
       <Tooltip title="Mehr Befehle">
-        {isMobileView ? (
+        {isMobileView ?
           <Button
             aria-label="Mehr"
             aria-owns={anchorEl ? 'appbar-more-menu' : null}
@@ -85,8 +85,7 @@ export const More = observer(
           >
             <FaBars />
           </Button>
-        ) : (
-          <Button
+        : <Button
             aria-label="Mehr"
             aria-owns={anchorEl ? 'appbar-more-menu' : null}
             aria-haspopup="true"
@@ -96,7 +95,7 @@ export const More = observer(
           >
             Mehr
           </Button>
-        )}
+        }
         <Menu
           id="appbar-more-menu"
           anchorEl={anchorEl}
@@ -141,7 +140,7 @@ export const More = observer(
           <MenuItem onClick={onClickUptime}>
             Verfügbarkeit der Server von apflora.ch
           </MenuItem>
-          <div className={version}>Version: 1.124.49 vom 2.1.2026</div>
+          <div className={version}>Version: 1.124.50 vom 6.1.2026</div>
         </Menu>
       </Tooltip>
     )
