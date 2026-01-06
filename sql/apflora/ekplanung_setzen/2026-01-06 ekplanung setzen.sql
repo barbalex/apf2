@@ -275,6 +275,7 @@ WHERE
 
 -- 2024: 372
 -- 2025: 351
+-- 2026: 375
 --
 -- Then add ekpläne:
 -- to check before updating:
@@ -291,12 +292,9 @@ WITH kontrolljahre AS (
     AND tpop1.ekfrequenz_startjahr IS NOT NULL
     AND apflora.ekfrequenz.kontrolljahre IS NOT NULL
     AND (
-      SELECT
-        count(*)
-      FROM
-        apflora.ekplan
-      WHERE
-        tpop_id = tpop1.id) = 0)
+      SELECT count(*)
+      FROM apflora.ekplan
+      WHERE tpop_id = tpop1.id) = 0)
   ORDER BY
     tpop1.id,
     tpop1.ekfrequenz_startjahr
@@ -369,4 +367,6 @@ ekplans AS (
   FROM
     ekplans;
 
--- xxx (2024: 1'944, 2025: 1'543)
+-- 2024: 1'944
+-- 2025: 1'543
+-- 2026: 1'876

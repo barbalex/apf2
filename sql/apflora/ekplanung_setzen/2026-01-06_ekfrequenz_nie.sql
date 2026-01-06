@@ -79,7 +79,9 @@ WHERE
     FROM
       apflora.v_tpop_ekfrequenz_to_set_nie);
 
--- 210
+-- 2024: 210
+-- 2025: 200
+-- 2026: 349
 --
 -- need to remove ekplan:
 WITH tpop_id_to_unplan AS (
@@ -101,3 +103,4 @@ WHERE tpop_id IN (
 
 -- 2024: 564
 -- 2025: 336
+-- 2026: 921
