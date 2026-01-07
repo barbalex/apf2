@@ -85,8 +85,6 @@ letzte_anzahl_pro_jahr AS(
   SELECT
     tpop.id AS tpop_id,
     tpop.year AS jahr,
-    -- get the latest count per year
-    -- get sum of zaehlungen_summe_pro_jahr for highest year less than or equal to tpop.year
     coalesce((
       SELECT sum
       FROM zaehlungen_summe_pro_jahr zspj
