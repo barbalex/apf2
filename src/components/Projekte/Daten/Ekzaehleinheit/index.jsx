@@ -146,6 +146,7 @@ export const Component = observer(() => {
         />
         <div className={formContainer}>
           <Select
+            key={`${row?.id}zaehleinheitId`}
             name="zaehleinheitId"
             label="Zähleinheit"
             options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}

@@ -68,6 +68,7 @@ export const Ek = ({ saveToDb, row, fieldErrors }) => {
           error={fieldErrors.ekfrequenzStartjahr}
         />
         <Select
+          key={`${row?.id}ekfKontrolleur`}
           name="ekfKontrolleur"
           label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
           options={dataEk?.allAdresses?.nodes ?? []}

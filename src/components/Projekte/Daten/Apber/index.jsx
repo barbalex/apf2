@@ -120,9 +120,7 @@ export const Component = observer(() => {
           title="AP-Bericht"
           MenuBarComponent={Menu}
         />
-        <div
-          className={formContainer}
-        >
+        <div className={formContainer}>
           <TextField
             name="jahr"
             label="Jahr"
@@ -139,6 +137,7 @@ export const Component = observer(() => {
             error={fieldErrors.vergleichVorjahrGesamtziel}
           />
           <Select
+            key={`${row?.id}beurteilung`}
             name="beurteilung"
             label="Beurteilung"
             options={data?.allApErfkritWertes?.nodes ?? []}
@@ -148,6 +147,7 @@ export const Component = observer(() => {
             error={fieldErrors.beurteilung}
           />
           <Select
+            key={`${row?.id}veraenderungZumVorjahr`}
             name="veraenderungZumVorjahr"
             label="Veränderung zum Vorjahr"
             options={veraenGegenVorjahrWerte}
@@ -227,6 +227,7 @@ export const Component = observer(() => {
             error={fieldErrors.datum}
           />
           <Select
+            key={`${row?.id}apId`}
             name="bearbeiter"
             label="BearbeiterIn"
             options={data?.allAdresses?.nodes ?? []}

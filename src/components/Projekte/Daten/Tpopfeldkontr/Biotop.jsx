@@ -120,6 +120,7 @@ export const Component = observer(() => {
         />
         <div className={section}>Vegetation</div>
         <Select
+          key={`${row?.id}lrDelarze`}
           data-id="lrDelarze"
           name="lrDelarze"
           label="Lebensraum nach Delarze"
@@ -130,6 +131,7 @@ export const Component = observer(() => {
           error={fieldErrors.lrDelarze}
         />
         <Select
+          key={`${row?.id}lrUmgebungDelarze`}
           name="lrUmgebungDelarze"
           label="Umgebung nach Delarze"
           options={aeLrWerte}

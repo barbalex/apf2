@@ -46,6 +46,7 @@ export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
       <div className={label}>{`Zähleinheit ${nr}`}</div>
       <div className={val}>
         <Select
+          key={`${row?.id}einheit`}
           value={row.einheit}
           label=""
           name="einheit"

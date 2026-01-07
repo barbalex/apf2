@@ -362,6 +362,7 @@ export const Component = observer(({ showFilter = false }) => {
           error={fieldErrors.beschreibung}
         />
         <Select
+          key={`${row?.id}bearbeiter`}
           name="bearbeiter"
           label="BearbeiterIn"
           value={row.bearbeiter}
@@ -451,6 +452,7 @@ export const Component = observer(({ showFilter = false }) => {
         {isAnpflanzung && (
           <>
             <Select
+              key={`${row?.id}zieleinheitEinheit`}
               name="zieleinheitEinheit"
               label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
               value={row.zieleinheitEinheit}

@@ -189,6 +189,7 @@ export const TpopmassnFilter = observer(() => {
               saveToDb={saveToDb}
             />
             <Select
+              key={`${row?.id}bearbeiter`}
               name="bearbeiter"
               label="BearbeiterIn"
               options={data?.allAdresses?.nodes ?? []}
@@ -269,6 +270,7 @@ export const TpopmassnFilter = observer(() => {
             {isAnpflanzung && (
               <>
                 <Select
+                  key={`${row?.id}zieleinheitEinheit`}
                   name="zieleinheitEinheit"
                   label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                   options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
@@ -286,6 +288,7 @@ export const TpopmassnFilter = observer(() => {
               </>
             )}
             <SelectLoadingOptionsTypable
+              key={`${row?.id}wirtspflanze`}
               field="wirtspflanze"
               label="Wirtspflanze"
               query={queryAeTaxonomies}

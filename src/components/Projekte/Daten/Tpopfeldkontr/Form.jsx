@@ -169,6 +169,7 @@ export const TpopfeldkontrForm = observer(({ row, data }) => {
           error={fieldErrors.typ}
         />
         <Select
+          key={`${row?.id}bearbeiter`}
           name="bearbeiter"
           label="BearbeiterIn"
           options={data?.allAdresses?.nodes ?? []}

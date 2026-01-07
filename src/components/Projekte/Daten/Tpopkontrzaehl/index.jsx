@@ -114,6 +114,7 @@ export const Component = observer(() => {
         />
         <div className={formContainer}>
           <Select
+            key={`${row?.id}einheit`}
             name="einheit"
             label="Einheit"
             options={zaehlEinheitOptions}

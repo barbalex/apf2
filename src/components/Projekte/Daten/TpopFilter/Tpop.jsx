@@ -123,6 +123,7 @@ export const Tpop = observer(
         {errorLists ?
           <div>errorLists.message</div>
         : <SelectCreatableGemeinde
+            key={`${row?.id}gemeinde`}
             name="gemeinde"
             value={row.gemeinde}
             error={fieldErrors.gemeinde}

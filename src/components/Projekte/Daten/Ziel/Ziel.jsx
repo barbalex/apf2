@@ -164,6 +164,7 @@ export const Component = observer(() => {
           />
           <h3 className={subtitle}>Beurteilung</h3>
           <Select
+            key={`${row?.id}erreichung`}
             name="erreichung"
             label="Ziel-Erreichung"
             options={erreichungOptions}

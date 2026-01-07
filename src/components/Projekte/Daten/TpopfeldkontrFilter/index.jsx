@@ -227,6 +227,7 @@ export const TpopfeldkontrFilter = observer(() => {
                 saveToDb={saveToDb}
               />
               <Select
+                key={`${row?.id}bearbeiter`}
                 name="bearbeiter"
                 label="BearbeiterIn"
                 options={data?.allAdresses?.nodes ?? []}
@@ -337,6 +338,7 @@ export const TpopfeldkontrFilter = observer(() => {
               />
               <div className={section}>Vegetation</div>
               <Select
+                key={`${row?.id}lrDelarze`}
                 data-id="lrDelarze"
                 name="lrDelarze"
                 label="Lebensraum nach Delarze"
@@ -346,6 +348,7 @@ export const TpopfeldkontrFilter = observer(() => {
                 saveToDb={saveToDb}
               />
               <Select
+                key={`${row?.id}lrUmgebungDelarze`}
                 name="lrUmgebungDelarze"
                 label="Umgebung nach Delarze"
                 options={aeLrWerte}

@@ -133,6 +133,7 @@ export const Component = observer(() => {
         />
         <div className={formContainer}>
           <SelectLoadingOptions
+            key={`${row?.id}aeId`}
             field="aeId"
             valueLabelPath="aeTaxonomyByAeId.taxArtName"
             label="Art"

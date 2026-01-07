@@ -162,6 +162,7 @@ export const ApFilter = observer(() => {
         <div className={fieldsContainer}>
           <div className={formContainer}>
             <SelectLoadingOptions
+              key={`${row?.id}artId`}
               field="artId"
               valueLabelPath="aeTaxonomyByArtId.artname"
               label="Art (das namensgebende Taxon)"
@@ -180,6 +181,7 @@ export const ApFilter = observer(() => {
               saveToDb={saveToDb}
             />
             <RadioButtonGroupWithInfo
+              key={`${row?.id}bearbeitung`}
               name="bearbeitung"
               dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
               loading={loadingLists}
@@ -209,6 +211,7 @@ export const ApFilter = observer(() => {
             />
             <div className={fieldContainer}>
               <RadioButtonGroupWithInfo
+                key={`${row?.id}umsetzung`}
                 name="umsetzung"
                 dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
                 loading={loadingLists}
@@ -238,6 +241,7 @@ export const ApFilter = observer(() => {
               />
             </div>
             <Select
+              key={`${row?.id}bearbeiter`}
               name="bearbeiter"
               label="Verantwortlich"
               options={dataAdresses?.allAdresses?.nodes ?? []}
