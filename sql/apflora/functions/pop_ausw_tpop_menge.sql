@@ -17,6 +17,9 @@ BEGIN
       INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
     WHERE
       massn.jahr IS NOT NULL
+      AND massn.jahr <= EXTRACT(YEAR FROM CURRENT_DATE)
+      AND tpop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
+      AND pop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
       AND tpop.status IN(200, 201)
       AND tpop.apber_relevant = TRUE
       AND massn.zieleinheit_einheit = ze.code
@@ -29,7 +32,7 @@ BEGIN
 zaehlungen AS(
   SELECT
     tpop.id AS tpop_id,
-    tpop.year AS jahr,
+    kontr.jahr AS jahr,
     zaehlungen.anzahl
   FROM
     apflora.tpopkontrzaehl zaehlungen
@@ -41,6 +44,10 @@ zaehlungen AS(
     INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
   WHERE
     kontr.jahr IS NOT NULL
+    AND kontr.jahr <= EXTRACT(YEAR FROM CURRENT_DATE)
+    AND tpop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
+    AND pop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
+    AND (kontr.apber_nicht_relevant <> TRUE OR kontr.apber_nicht_relevant IS NULL)
     AND tpop.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
     AND zaehlungen.anzahl IS NOT NULL
@@ -49,8 +56,8 @@ zaehlungen AS(
     AND ze.code = zaehlungen.einheit
     AND tpop.pop_id = $1
   ORDER BY
-    tpop.id,
-    kontr.jahr DESC
+    kontr.jahr DESC,
+    tpop.id
 ),
 zaehlungen_summe_pro_jahr AS(
   SELECT
@@ -74,25 +81,37 @@ massnahmen_summe_pro_jahr AS(
     jahr
   ORDER BY jahr desc
 ),
-tpop_summe_pro_jahr AS(
+letzte_anzahl_pro_jahr AS(
   SELECT
-    tpop.id as tpop_id,
-    tpop.year as jahr,
-    COALESCE(zspj.sum, 0) + COALESCE(mspj.sum, 0) AS anzahl
-  FROM
-    apflora.tpop_history tpop
-    left join zaehlungen_summe_pro_jahr zspj on zspj.tpop_id = tpop.id AND zspj.jahr = tpop.year
-    left join massnahmen_summe_pro_jahr mspj on mspj.tpop_id = tpop.id AND mspj.jahr = tpop.year
+    tpop.id AS tpop_id,
+    tpop.year AS jahr,
+    -- get the latest count per year
+    -- get sum of zaehlungen_summe_pro_jahr for highest year less than or equal to tpop.year
+    coalesce((
+      SELECT sum
+      FROM zaehlungen_summe_pro_jahr zspj
+      WHERE zspj.tpop_id = tpop.id
+      AND zspj.jahr <= tpop.year
+      ORDER BY zspj.jahr DESC
+      LIMIT 1
+    ), 0) +
+    coalesce((
+      SELECT sum
+      FROM massnahmen_summe_pro_jahr mspj
+      WHERE mspj.tpop_id = tpop.id
+      AND mspj.jahr <= tpop.year
+      ORDER BY mspj.jahr DESC
+      LIMIT 1
+    ), 0) AS anzahl
+  FROM apflora.tpop_history tpop
   WHERE
     tpop.pop_id = $1
-  ORDER BY
-    tpop.year DESC
 )
 SELECT
   jahr,
   json_object_agg(tpop_id, anzahl) AS
 VALUES
-  FROM tpop_summe_pro_jahr
+  FROM letzte_anzahl_pro_jahr
 GROUP BY
   jahr
 ORDER BY

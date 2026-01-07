@@ -1,16 +1,10 @@
-CREATE TYPE apflora.ausw_pop_menge AS (
-  jahr integer,
-VALUES
-  json
-);
-
-CREATE OR REPLACE FUNCTION apflora.ap_ausw_pop_menge(apid uuid, jahr integer)
+CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
   RETURNS SETOF apflora.ausw_pop_menge
   AS $$
 BEGIN
   RETURN query WITH massnahmen AS(
     SELECT
-      pop.id AS pop_id,
+      tpop.id AS tpop_id,
       massn.jahr,
       massn.zieleinheit_anzahl AS anzahl
     FROM
@@ -23,22 +17,22 @@ BEGIN
       INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
     WHERE
       massn.jahr IS NOT NULL
-      AND massn.jahr <= $2
-      AND tpop.year <= $2
-      AND pop.year <= $2
+      AND massn.jahr <= EXTRACT(YEAR FROM CURRENT_DATE)
+      AND tpop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
+      AND pop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
       AND tpop.status IN(200, 201)
       AND tpop.apber_relevant = TRUE
       AND massn.zieleinheit_einheit = ze.code
       AND massn.zieleinheit_anzahl IS NOT NULL
-      AND ap.id = $1
+      AND pop.id = $1
     ORDER BY
       tpop.id,
       massn.jahr DESC
 ),
 zaehlungen AS(
   SELECT
-    pop.id AS pop_id,
-    kontr.jahr,
+    tpop.id AS tpop_id,
+    tpop.year AS jahr,
     zaehlungen.anzahl
   FROM
     apflora.tpopkontrzaehl zaehlungen
@@ -50,9 +44,9 @@ zaehlungen AS(
     INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
   WHERE
     kontr.jahr IS NOT NULL
-    AND kontr.jahr <= $2
-    AND tpop.year <= $2
-    AND pop.year <= $2
+    AND kontr.jahr <= EXTRACT(YEAR FROM CURRENT_DATE)
+    AND tpop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
+    AND pop.year <= EXTRACT(YEAR FROM CURRENT_DATE)
     AND (kontr.apber_nicht_relevant <> TRUE OR kontr.apber_nicht_relevant IS NULL)
     AND tpop.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
@@ -60,71 +54,60 @@ zaehlungen AS(
     AND zaehlungen.einheit = ze.code
     -- nur Zählungen mit der Ziel-Einheit
     AND ze.code = zaehlungen.einheit
-    AND ap.id = $1
+    AND tpop.pop_id = $1
   ORDER BY
     tpop.id,
     kontr.jahr DESC
 ),
 zaehlungen_summe_pro_jahr AS(
   SELECT
-    z.pop_id,
-    z.jahr,
-    sum(z.anzahl) as sum
-  FROM zaehlungen z
+    tpop_id,
+    jahr,
+    sum(anzahl) as sum
+  FROM zaehlungen
   GROUP BY
-    z.pop_id,
-    z.jahr
-  ORDER BY z.jahr desc
+    tpop_id,
+    jahr
+  ORDER BY jahr desc
 ),
 massnahmen_summe_pro_jahr AS(
   SELECT
-    m.pop_id,
-    m.jahr,
-    sum(m.anzahl) as sum
-  FROM massnahmen m
+    tpop_id,
+    jahr,
+    sum(anzahl) as sum
+  FROM massnahmen
   GROUP BY
-    m.pop_id,
-    m.jahr
-  ORDER BY m.jahr desc
+    tpop_id,
+    jahr
+  ORDER BY jahr desc
 ),
-letzte_anzahl_pro_jahr AS(
+tpop_summe_pro_jahr AS(
   SELECT
-    pop.id as pop_id,
-    pop.year as jahr,
-    COALESCE((
-      SELECT sum
-      FROM zaehlungen_summe_pro_jahr zspj
-      WHERE zspj.pop_id = pop.id
-        AND zspj.jahr <= pop.year
-      ORDER BY zspj.jahr DESC
-      LIMIT 1), 0
-    ) + 
-    COALESCE((
-      SELECT sum
-      FROM massnahmen_summe_pro_jahr mspj
-      WHERE mspj.pop_id = pop.id
-        AND mspj.jahr <= pop.year
-      ORDER BY mspj.jahr DESC
-      LIMIT 1), 0
-    ) AS anzahl
+    tpop.id as tpop_id,
+    tpop.year as jahr,
+    COALESCE(zspj.sum, 0) + COALESCE(mspj.sum, 0) AS anzahl
   FROM
-    apflora.pop_history pop
+    apflora.tpop_history tpop
+    left join zaehlungen_summe_pro_jahr zspj on zspj.tpop_id = tpop.id AND zspj.jahr = tpop.year
+    left join massnahmen_summe_pro_jahr mspj on mspj.tpop_id = tpop.id AND mspj.jahr = tpop.year
   WHERE
-    pop.ap_id = $1
+    tpop.pop_id = $1
+  ORDER BY
+    tpop.year DESC
 )
 SELECT
-  anz.jahr,
-  json_object_agg(pop_id, anzahl) AS
+  jahr,
+  json_object_agg(tpop_id, anzahl) AS
 VALUES
-  FROM letzte_anzahl_pro_jahr anz
+  FROM tpop_summe_pro_jahr
 GROUP BY
-  anz.jahr
+  jahr
 ORDER BY
-  anz.jahr;
+  jahr;
 END;
 $$
 LANGUAGE plpgsql
 SECURITY DEFINER STABLE;
 
-ALTER FUNCTION apflora.ap_ausw_pop_menge(apid uuid, jahr integer) OWNER TO postgres;
+ALTER FUNCTION apflora.pop_ausw_tpop_menge(popid uuid) OWNER TO postgres;
 

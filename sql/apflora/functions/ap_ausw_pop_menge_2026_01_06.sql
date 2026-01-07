@@ -67,60 +67,49 @@ zaehlungen AS(
 ),
 zaehlungen_summe_pro_jahr AS(
   SELECT
-    z.pop_id,
-    z.jahr,
-    sum(z.anzahl) as sum
-  FROM zaehlungen z
+    zaehlungen.pop_id,
+    zaehlungen.jahr,
+    sum(zaehlungen.anzahl) as sum
+  FROM zaehlungen
   GROUP BY
-    z.pop_id,
-    z.jahr
-  ORDER BY z.jahr desc
+    zaehlungen.pop_id,
+    zaehlungen.jahr
+  ORDER BY zaehlungen.jahr desc
 ),
 massnahmen_summe_pro_jahr AS(
   SELECT
-    m.pop_id,
-    m.jahr,
-    sum(m.anzahl) as sum
-  FROM massnahmen m
+    massnahmen.pop_id,
+    massnahmen.jahr,
+    sum(massnahmen.anzahl) as sum
+  FROM massnahmen
   GROUP BY
-    m.pop_id,
-    m.jahr
-  ORDER BY m.jahr desc
+    massnahmen.pop_id,
+    massnahmen.jahr
+  ORDER BY massnahmen.jahr desc
 ),
-letzte_anzahl_pro_jahr AS(
+pop_summe_pro_jahr AS(
   SELECT
     pop.id as pop_id,
     pop.year as jahr,
-    COALESCE((
-      SELECT sum
-      FROM zaehlungen_summe_pro_jahr zspj
-      WHERE zspj.pop_id = pop.id
-        AND zspj.jahr <= pop.year
-      ORDER BY zspj.jahr DESC
-      LIMIT 1), 0
-    ) + 
-    COALESCE((
-      SELECT sum
-      FROM massnahmen_summe_pro_jahr mspj
-      WHERE mspj.pop_id = pop.id
-        AND mspj.jahr <= pop.year
-      ORDER BY mspj.jahr DESC
-      LIMIT 1), 0
-    ) AS anzahl
+    COALESCE(zspj.sum, 0) + COALESCE(mspj.sum, 0) AS anzahl
   FROM
     apflora.pop_history pop
+    left join zaehlungen_summe_pro_jahr zspj on zspj.pop_id = pop.id AND zspj.jahr = pop.year
+    left join massnahmen_summe_pro_jahr mspj on mspj.pop_id = pop.id AND mspj.jahr = pop.year
   WHERE
     pop.ap_id = $1
+  ORDER BY
+    pop.year DESC
 )
 SELECT
-  anz.jahr,
+  pop_summe_pro_jahr.jahr,
   json_object_agg(pop_id, anzahl) AS
 VALUES
-  FROM letzte_anzahl_pro_jahr anz
+  FROM pop_summe_pro_jahr
 GROUP BY
-  anz.jahr
+  pop_summe_pro_jahr.jahr
 ORDER BY
-  anz.jahr;
+  jahr;
 END;
 $$
 LANGUAGE plpgsql
