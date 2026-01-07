@@ -70,7 +70,7 @@ zaehlungen AS(
   WHERE
     kontr.jahr IS NOT NULL
     AND kontr.jahr <= $2
-    AND (kontr.apber_nicht_relevant <> TRUE OR kontr.apber_nicht_relevant IS NULL)
+    AND (kontr.apber_nicht_relevant IS NOT TRUE)
     AND tpop.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
     AND zaehlungen.anzahl IS NOT NULL
