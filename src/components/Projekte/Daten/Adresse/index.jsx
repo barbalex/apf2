@@ -17,7 +17,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { adresse } from '../../../shared/fragments.js'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer, fieldsContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   name: 'String',
@@ -92,13 +92,13 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Adresse"
           MenuBarComponent={Menu}
         />
-        <div className={fieldsContainer}>
-          <div className={formContainer}>
+        <div className={styles.fieldsContainer}>
+          <div className={styles.formContainer}>
             <TextField
               name="name"
               label="Name"
