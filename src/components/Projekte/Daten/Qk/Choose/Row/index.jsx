@@ -7,7 +7,7 @@ import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
-import { container, check, titel, beschreibung } from './index.module.css'
+import styles from './index.module.css'
 
 export const Row = ({ apId, qk }) => {
   const apolloClient = useApolloClient()
@@ -70,16 +70,16 @@ export const Row = ({ apId, qk }) => {
   if (error) return <Error error={error} />
 
   return (
-    <div className={container}>
-      <div className={check}>
+    <div className={styles.container}>
+      <div className={styles.check}>
         <Checkbox
           checked={checked}
           onChange={onChange}
           color="primary"
         />
       </div>
-      <div className={titel}>{qk.titel}</div>
-      <div className={beschreibung}>{qk.beschreibung}</div>
+      <div className={styles.titel}>{qk.titel}</div>
+      <div className={styles.beschreibung}>{qk.beschreibung}</div>
     </div>
   )
 }
