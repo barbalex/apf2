@@ -20,7 +20,7 @@ import { query } from './query.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.jsx'
 
-import { formContainer } from './Pop.module.css'
+import styles from './Pop.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -116,7 +116,7 @@ export const Component = observer(() => {
           MenuBarComponent={Menu}
           menuBarProps={{ row }}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             label="Nr."
             name="nr"

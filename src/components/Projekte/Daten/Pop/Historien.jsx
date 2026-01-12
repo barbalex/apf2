@@ -7,14 +7,7 @@ import { History as HistoryComponent } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-import {
-  container,
-  errorContainer,
-  docLink,
-  docLine,
-  aenderung,
-  aktuell,
-} from './Historien.module.css'
+import styles from './Historien.module.css'
 
 const query = gql`
   query popHistoryQuery($popId: UUID!) {
@@ -108,26 +101,26 @@ export const Component = () => {
   }
 
   if (error) {
-    return <div className={errorContainer}>{error.message}</div>
+    return <div className={styles.errorContainer}>{error.message}</div>
   }
 
   return (
     <>
       <FormTitle title={`${label}: Historien`} />
-      <div className={container}>
-        <p className={docLine}>
+      <div className={styles.container}>
+        <p className={styles.docLine}>
           Jährlich historisierte Daten der Population (
           <span
-            className={docLink}
+            className={styles.docLink}
             onClick={openDocs}
           >
             Dokumentation
           </span>
           ).
         </p>
-        <p className={docLine}>
-          <span className={aenderung}>Änderungen</span> zum{' '}
-          <span className={aktuell}>aktuellen Zustand</span> sind hervorgehoben.
+        <p className={styles.docLine}>
+          <span className={styles.aenderung}>Änderungen</span> zum{' '}
+          <span className={styles.aktuell}>aktuellen Zustand</span> sind hervorgehoben.
         </p>
         {rows.map((r) => {
           const dataArray = [

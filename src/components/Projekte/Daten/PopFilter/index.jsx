@@ -15,12 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { PopOrTabs } from './PopOrTabs.jsx'
 
-import {
-  container,
-  formContainer,
-  filterCommentTitle,
-  filterComment,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const PopFilter = observer(() => {
   const { apId } = useParams()
@@ -94,7 +89,7 @@ export const PopFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FilterTitle
           title="Population"
           table="pop"
@@ -104,22 +99,22 @@ export const PopFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <div className={styles.filterCommentTitle}>Zusätzlich aktive Filter:</div>
             <ul>
               {!!navApFilterComment && (
-                <li className={filterComment}>{navApFilterComment}</li>
+                <li className={styles.filterComment}>{navApFilterComment}</li>
               )}
               {!!navHiearchyComment && (
-                <li className={filterComment}>{navHiearchyComment}</li>
+                <li className={styles.filterComment}>{navHiearchyComment}</li>
               )}
               {!!navLabelComment && (
-                <li className={filterComment}>{navLabelComment}</li>
+                <li className={styles.filterComment}>{navLabelComment}</li>
               )}
               {!!hierarchyComment && (
-                <li className={filterComment}>{hierarchyComment}</li>
+                <li className={styles.filterComment}>{hierarchyComment}</li>
               )}
               {!!mapFilterComment && (
-                <li className={filterComment}>{mapFilterComment}</li>
+                <li className={styles.filterComment}>{mapFilterComment}</li>
               )}
             </ul>
           </>
@@ -129,7 +124,7 @@ export const PopFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             label="Nr."
             name="nr"

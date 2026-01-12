@@ -15,7 +15,7 @@ import { idealbiotop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-import { formContainer, section } from './Idealbiotop.module.css'
+import styles from './Idealbiotop.module.css'
 
 const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
@@ -105,7 +105,7 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <FormTitle title="Idealbiotop" />
-      <div className={formContainer}>
+      <div className={styles.formContainer}>
         <DateField
           name="erstelldatum"
           label="Erstelldatum"
@@ -113,7 +113,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.erstelldatum}
         />
-        <div className={section}>Lage</div>
+        <div className={styles.section}>Lage</div>
         <TextField
           name="hoehenlage"
           label="Höhe"
@@ -159,7 +159,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.hangneigung}
         />
-        <div className={section}>Boden</div>
+        <div className={styles.section}>Boden</div>
         <TextField
           name="bodenTyp"
           label="Typ"
@@ -214,7 +214,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.wasserhaushalt}
         />
-        <div className={section}>Vegetation</div>
+        <div className={styles.section}>Vegetation</div>
         <TextField
           name="konkurrenz"
           label="Konkurrenz"

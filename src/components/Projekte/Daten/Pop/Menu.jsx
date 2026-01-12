@@ -325,7 +325,7 @@ export const Menu = observer(({ row }) => {
         open={copyMenuOpen}
         onClose={() => setCopyMenuAnchorEl(null)}
       >
-        <h3 className={menuTitle}>Kopieren:</h3>
+        <h3 className={styles.menuTitle}>Kopieren:</h3>
         <MenuItem onClick={onClickCopyWithNextLevel}>
           mit Teilpopulationen
         </MenuItem>
@@ -340,7 +340,7 @@ export const Menu = observer(({ row }) => {
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
       >
-        <h3 className={menuTitle}>löschen?</h3>
+        <h3 className={styles.menuTitle}>löschen?</h3>
         <MenuItem onClick={onClickDelete}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>

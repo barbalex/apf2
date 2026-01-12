@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab'
 import { initial as pop } from '../../../../store/Tree/DataFilter/pop'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { title, styledTabs, styledTab } from './PopOrTabs.module.css'
+import styles from './PopOrTabs.module.css'
 
 export const PopOrTabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(MobxContext)
@@ -28,7 +28,7 @@ export const PopOrTabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
 
   return (
     <div>
-      <div className={title}>Filter-Kriterien:</div>
+      <div className={styles.title}>Filter-Kriterien:</div>
       <Tabs
         value={activeTab}
         onChange={onChangeTab}
@@ -36,14 +36,14 @@ export const PopOrTabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        className={styledTabs}
+        className={styles.tabs}
       >
         {dataFilter.map((filter, index) => (
           <Tab
             key={index}
             label={index + 1}
             value={index}
-            className={styledTab}
+            className={styles.tab}
           />
         ))}
         <Tab
@@ -51,7 +51,7 @@ export const PopOrTabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
           label="oder"
           value={dataFilter.length}
           disabled={lastFilterIsEmpty}
-          className={styledTab}
+          className={styles.tab}
         />
       </Tabs>
     </div>
