@@ -18,7 +18,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { fieldTypes } from './Form.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-import { formContainer, section } from './Form.module.css'
+import styles from './Form.module.css'
 
 export const Component = observer(() => {
   const { tpopkontrId } = useParams()
@@ -109,7 +109,7 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <FormTitle title="Biotop" />
-      <div className={formContainer}>
+      <div className={styles.formContainer}>
         <TextField
           name="flaeche"
           label="Fläche"
@@ -118,7 +118,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.flaeche}
         />
-        <div className={section}>Vegetation</div>
+        <div className={styles.section}>Vegetation</div>
         <Select
           key={`${row?.id}lrDelarze`}
           data-id="lrDelarze"
@@ -188,7 +188,7 @@ export const Component = observer(() => {
           saveToDb={saveToDb}
           error={fieldErrors.baumschicht}
         />
-        <div className={section}>Beurteilung</div>
+        <div className={styles.section}>Beurteilung</div>
         <TextField
           name="handlungsbedarf"
           label="Handlungsbedarf"
