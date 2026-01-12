@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 import Linkify from 'react-linkify'
 
-import { rowClass, labelClass, valueClass } from './Field.module.css'
+import styles from './Field.module.css'
 
 const ItemTypes = { CARD: 'card' }
 
@@ -70,11 +70,11 @@ export const Field = ({ label, value, index, moveField }) => {
     <div
       ref={ref}
       style={{ opacity }}
-      className={rowClass}
+      className={styles.rowClass}
       data-handler-id={handlerId}
     >
-      <div className={labelClass}>{label}</div>
-      <div className={valueClass}>
+      <div className={styles.labelClass}>{label}</div>
+      <div className={styles.valueClass}>
         <Linkify properties={{ target: '_blank' }}>{value}</Linkify>
       </div>
     </div>

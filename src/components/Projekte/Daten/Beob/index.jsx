@@ -15,7 +15,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Field as BeobField } from './Field.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { outerContainer, container, explainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const Beob = observer(() => {
   const { beobId: id } = useParams()
@@ -113,11 +113,11 @@ export const Beob = observer(() => {
   // NEW: alternative solution: https://github.com/react-dnd/react-dnd/issues/3257#issuecomment-1239254032
   return (
     <ErrorBoundary>
-      <div className={outerContainer}>
-        <p className={explainer}>
+      <div className={styles.outerContainer}>
+        <p className={styles.explainer}>
           Die Felder können beliebig sortiert werden (drag and drop).
         </p>
-        <div className={container}>
+        <div className={styles.container}>
           <Suspense fallback={<Spinner />}>
             <DndProvider
               backend={HTML5Backend}
