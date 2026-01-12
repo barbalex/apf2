@@ -3,7 +3,7 @@ import Input from '@mui/material/Input'
 
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 
-import { styledInput } from './KontrolljahrField.module.css'
+import styles from './KontrolljahrField.module.css'
 
 export const KontrolljahrField = ({
   saveToDb,
@@ -39,7 +39,7 @@ export const KontrolljahrField = ({
       onChange={onChange}
       onBlur={onBlur}
       onKeyDown={onKeyDown}
-      className={styledInput}
+      className={styles.styledInput}
     />
   )
 }

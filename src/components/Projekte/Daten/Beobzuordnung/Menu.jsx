@@ -21,7 +21,7 @@ import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfB
 import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.js'
 import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/index.js'
 
-import { styledLoadingButton, styledButton } from '../Tpop/Menu.module.css'
+import styles from '../Tpop/Menu.module.css'
 
 export const Menu = observer(() => {
   const { search, pathname } = useLocation()
@@ -112,7 +112,7 @@ export const Menu = observer(() => {
             onClick={onClickCopyingBeobZugeordnetKoordToTpop}
             loading={copyingBeobZugeordnetKoordToTpop}
             width={190}
-            className={styledLoadingButton}
+            className={styles.styledLoadingButton}
           >
             Koordinaten auf die
             <br />
@@ -125,7 +125,7 @@ export const Menu = observer(() => {
             onClick={onClickCreateNewPopFromBeob}
             loading={creatingNewPopFromBeob}
             width={245}
-            className={styledLoadingButton}
+            className={styles.styledLoadingButton}
           >
             {'Pop. und TPop. gründen >'}
             <br />
@@ -137,7 +137,7 @@ export const Menu = observer(() => {
             variant="outlined"
             onClick={onClickNewTpopFromBeob}
             width={258}
-            className={styledButton}
+            className={styles.styledButton}
           >
             {'TPop. in bestehender Pop. gründen'}
             <br />
@@ -148,7 +148,7 @@ export const Menu = observer(() => {
           variant="outlined"
           onClick={onClickShowCoordOfBeobOnMapsZhCh}
           width={105}
-          className={styledButton}
+          className={styles.styledButton}
         >
           zeige auf
           <br />
@@ -158,7 +158,7 @@ export const Menu = observer(() => {
           variant="outlined"
           onClick={onClickShowCoordOfBeobOnMapGeoAdminCh}
           width={147}
-          className={styledButton}
+          className={styles.styledButton}
         >
           zeige auf
           <br />

@@ -5,7 +5,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { KontrolljahrField } from './KontrolljahrField.jsx'
 import { KontrolljahrFieldEmpty } from './KontrolljahrFieldEmpty.jsx'
 
-import { delIcon } from './Kontrolljahre.module.css'
+import styles from './Kontrolljahre.module.css'
 
 export const Kontrolljahre = ({ kontrolljahre = [], saveToDb, refetch }) => {
   const kontrolljahreSorted = [...kontrolljahre].sort(
@@ -32,7 +32,7 @@ export const Kontrolljahre = ({ kontrolljahre = [], saveToDb, refetch }) => {
               })
               refetch()
             }}
-            className={delIcon}
+            className={styles.delIcon}
           >
             <FaTimes />
           </IconButton>

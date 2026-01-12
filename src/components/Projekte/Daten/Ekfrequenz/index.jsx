@@ -19,13 +19,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-import {
-  container,
-  formContainer,
-  kontrolljahrContainer,
-  labelRow,
-  styledLabel,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -125,12 +119,12 @@ export const Component = observer(() => {
   if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="EK-Frequenz"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             name="code"
             label="Kürzel"
@@ -156,9 +150,9 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.ektyp}
           />
-          <div className={kontrolljahrContainer}>
-            <div className={labelRow}>
-              <div className={styledLabel}>
+          <div className={styles.kontrolljahrContainer}>
+            <div className={styles.labelRow}>
+              <div className={styles.styledLabel}>
                 Kontrolljahre (= Anzahl Jahre nach Start bzw. Ansiedlung)
               </div>
             </div>

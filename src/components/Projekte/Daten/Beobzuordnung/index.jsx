@@ -32,19 +32,7 @@ import {
 } from '../../../shared/fragments.js'
 import { Menu } from './Menu.jsx'
 
-import {
-  popoverContainer,
-  container,
-  formContainer,
-  fieldsContainer,
-  title,
-  labelPopoverTitleRow,
-  labelPopoverContentRow,
-  originalArtDiv,
-  infofloraRow,
-  emailButton,
-  styledSendIcon,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   idField: 'String',
@@ -62,9 +50,9 @@ const fieldTypes = {
 }
 
 const nichtZuordnenPopover = (
-  <div className={popoverContainer}>
-    <div className={labelPopoverTitleRow}>Legende</div>
-    <div className={labelPopoverContentRow}>
+  <div className={styles.popoverContainer}>
+    <div className={styles.labelPopoverTitleRow}>Legende</div>
+    <div className={styles.labelPopoverContentRow}>
       {'Will heissen: Die Beobachtung kann nicht zugeordnet werden.'}
       <br />
       {'Mögliche Gründe: Unsichere Bestimmung, nicht lokalisierbar.'}
@@ -244,15 +232,15 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Beobachtung"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
-          <div className={fieldsContainer}>
+        <div className={styles.formContainer}>
+          <div className={styles.fieldsContainer}>
             {row && row.artId !== row.artIdOriginal && (
-              <div className={originalArtDiv}>{`Art gemäss Original-Meldung: ${
+              <div className={styles.originalArtDiv}>{`Art gemäss Original-Meldung: ${
                 row?.aeTaxonomyByArtIdOriginal?.artname ?? '(kein Name)'
               }`}</div>
             )}
@@ -333,14 +321,14 @@ export const Component = observer(() => {
                     body,
                   })
                 }}
-                className={emailButton}
+                className={styles.emailButton}
               >
-                <SendIcon className={styledSendIcon} />
+                <SendIcon className={styles.styledSendIcon} />
                 Email an Info Flora
               </Button>
             </div>
           </div>
-          <div className={title}>{`Informationen aus ${
+          <div className={styles.title}>{`Informationen aus ${
             row?.quelle ?? '?'
           } (nicht veränderbar)`}</div>
           <Beob />

@@ -9,7 +9,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
-import { container, fieldsContainer, content } from './index.module.css'
+import styles from './index.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -41,11 +41,11 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle title={row.title} />
-        <div className={fieldsContainer}>
+        <div className={styles.fieldsContainer}>
           <div
-            className={content}
+            className={styles.content}
             dangerouslySetInnerHTML={{
               __html: mdParser.render(row.issue),
             }}
