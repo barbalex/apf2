@@ -87,7 +87,10 @@ export const ProjektContainer = observer(() => {
       </div>
     ),
     karte: (
-      <div className={innerContainer} ref={mapContainerRef}>
+      <div
+        className={innerContainer}
+        ref={mapContainerRef}
+      >
         <Suspense fallback={<Spinner />}>
           <Karte mapContainerRef={mapContainerRef} />
         </Suspense>
@@ -104,18 +107,18 @@ export const ProjektContainer = observer(() => {
 
   if (isPrint) return <Outlet />
 
-  const overflowPane1 =
-    treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
-  const overflowPane2 =
-    treeTabs[1] === 'daten' && (showApberForAll || showApberForArt)
+  // TODO: why were these needed?
+  // const overflowPane1 =
+  //   treeTabs[0] === 'daten' && (showApberForAll || showApberForArt)
+  // const overflowPane2 =
+  //   treeTabs[1] === 'daten' && (showApberForAll || showApberForArt)
 
   const firstOfTwoIsTree = treeTabs[0] === 'tree' && treeTabs.length === 2
   const singlePane = treeTabs.length === 1
-  const firstPaneSize = singlePane
-    ? '100%'
-    : firstOfTwoIsTree
-      ? '33%'
-      : undefined
+  const firstPaneSize =
+    singlePane ? '100%'
+    : firstOfTwoIsTree ? '33%'
+    : undefined
   const firstPaneMaxSize = singlePane ? undefined : '95%'
 
   // TODO: issue with single pane: it does not expand to full width, when changing from two to one pane
@@ -128,16 +131,13 @@ export const ProjektContainer = observer(() => {
         height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
       >
-        {treeTabs.length === 1 ? (
-          <div className={overflowPane1 ? overflowingDiv : undefined}>
-            {elObj[treeTabs[0]]}
-          </div>
-        ) : (
-          <SplitPane direction="horizontal">
+        {treeTabs.length === 1 ?
+          <div className={overflowingDiv}>{elObj[treeTabs[0]]}</div>
+        : <SplitPane direction="horizontal">
             <Pane
               size={firstPaneSize}
               maxSize={firstPaneMaxSize}
-              className={overflowPane1 ? overflowingPane : undefined}
+              className={overflowingPane}
             >
               {elObj[treeTabs[0]]}
             </Pane>
@@ -145,7 +145,7 @@ export const ProjektContainer = observer(() => {
             {!!elObj[treeTabs[1]] && (
               <Pane
                 maxSize="95%"
-                className={overflowPane2 ? overflowingPane : undefined}
+                className={overflowingPane}
               >
                 {elObj[treeTabs[1]] ?? undefined}
               </Pane>
@@ -160,7 +160,7 @@ export const ProjektContainer = observer(() => {
               <Pane maxSize="95%">{elObj[treeTabs[4]]}</Pane>
             )}
           </SplitPane>
-        )}
+        }
       </div>
     </div>
   )
