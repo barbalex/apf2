@@ -11,7 +11,7 @@ import { deleteModule } from './delete/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { dialog } from './index.module.css'
+import styles from './index.module.css'
 
 export const DatasetDeleteModal = observer(() => {
   const { search } = useLocation()
@@ -44,7 +44,7 @@ export const DatasetDeleteModal = observer(() => {
     <ErrorBoundary>
       <Dialog
         open={!!toDeleteId}
-        className={dialog}
+        className={styles.dialog}
       >
         {question}
         <DialogActions>

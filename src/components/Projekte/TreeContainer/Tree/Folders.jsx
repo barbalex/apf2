@@ -4,7 +4,7 @@ import { Transition } from 'react-transition-group'
 import { Node } from './Node.jsx'
 import { NodeWithList } from './NodeWithList.jsx'
 
-import { container } from './Folders.module.css'
+import styles from './Folders.module.css'
 
 const transitionStyles = {
   entering: { opacity: 1 },
@@ -29,7 +29,7 @@ export const Folders = ({ navData, in: inProp }) => {
     >
       {(state) => (
         <div
-          className={container}
+          className={styles.container}
           ref={ref}
           style={transitionStyles[state]}
         >

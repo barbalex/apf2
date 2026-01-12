@@ -17,7 +17,7 @@ const ApFilterController = lazy(async () => ({
   default: (await import('./ApFilterController.jsx')).ApFilterController,
 }))
 
-import { container, iframe } from './index.module.css'
+import styles from './index.module.css'
 
 const isInIframe = inIframe()
 
@@ -60,7 +60,7 @@ export const Component = observer(() => {
   if (isInIframe) {
     // inside iframe app bar should be hidden
     return (
-      <div className={container}>
+      <div className={styles.container}>
         {tree2Tabs.length === 0 || isPrint ? (
           <ProjektContainer />
         ) : (
@@ -70,7 +70,7 @@ export const Component = observer(() => {
             </Pane>
             <Pane>
               <iframe
-                className={iframe}
+                className={styles.iframe}
                 src={iFrameSrc}
                 title="tree2"
                 width="100%"
@@ -88,7 +88,7 @@ export const Component = observer(() => {
       <Suspense fallback={null}>
         <ApFilterController />
       </Suspense>
-      <div className={container}>
+      <div className={styles.container}>
         {tree2Tabs.length === 0 || isPrint ? (
           <ProjektContainer />
         ) : (
@@ -98,7 +98,7 @@ export const Component = observer(() => {
             </Pane>
             <Pane>
               <iframe
-                className={iframe}
+                className={styles.iframe}
                 src={iFrameSrc}
                 title="tree2"
                 width="100%"

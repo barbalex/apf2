@@ -11,7 +11,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { tables } from '../../../modules/tables.js'
 import { MobxContext } from '../../../mobxContext.js'
 
-import { formControl, input, deleteFilterIcon } from './LabelFilter.module.css'
+import styles from './LabelFilter.module.css'
 
 const getValues = ({ activeFilterTable, nodeLabelFilter }) => {
   let labelText = '(filtern nicht möglich)'
@@ -78,7 +78,7 @@ export const LabelFilter = observer(() => {
     <FormControl
       fullWidth
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
       <Input
@@ -97,11 +97,11 @@ export const LabelFilter = observer(() => {
               onClick={onClickEmptyFilter}
               title="Alle Filter entfernen"
             >
-              <MdDeleteSweep className={deleteFilterIcon} />
+              <MdDeleteSweep className={styles.deleteFilterIcon} />
             </InputAdornment>
           : null
         }
-        className={input}
+        className={styles.input}
       />
     </FormControl>
   )

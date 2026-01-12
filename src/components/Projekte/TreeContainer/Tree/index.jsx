@@ -2,10 +2,10 @@ import { Root } from './Root.jsx'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 import { Menu } from './Menu.jsx'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const TreeComponent = () => (
-  <div className={container}>
+  <div className={styles.container}>
     <Root />
     <IntoViewScroller />
     <Menu />

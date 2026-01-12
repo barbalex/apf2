@@ -226,7 +226,7 @@ import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidate
 import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.js'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 
-import { dialog } from './Menus.module.css'
+import styles from './Menus.module.css'
 
 export const Menus = observer(() => {
   const params = useParams()
@@ -574,7 +574,7 @@ export const Menus = observer(() => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
             maxWidth="xl"
-            className={dialog}
+            className={styles.dialog}
           >
             <DialogTitle id="alert-dialog-title">
               {'Population wählen:'}

@@ -25,7 +25,7 @@ const Spinner = lazy(async () => ({
 }))
 
 import { MobxContext } from '../../../mobxContext.js'
-import { container, labelFilterContainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const TreeContainer = observer(() => {
   const params = useParams()
@@ -40,7 +40,7 @@ export const TreeContainer = observer(() => {
   return (
     <ErrorBoundary>
       <div
-        className={container}
+        className={styles.container}
         data-id="tree-container1"
       >
         {!!toDeleteId && (
@@ -48,7 +48,7 @@ export const TreeContainer = observer(() => {
             <DeleteDatasetModal />
           </Suspense>
         )}
-        <div className={labelFilterContainer}>
+        <div className={styles.labelFilterContainer}>
           <Suspense fallback={null}>
             <LabelFilter />
           </Suspense>

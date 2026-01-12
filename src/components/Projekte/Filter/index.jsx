@@ -8,14 +8,14 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Title } from './Title.jsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const Filter = () => {
   const [tab, setTab] = useSearchParamsState('filterTab', 'ap')
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <Title
           activeTab={tab}
           setActiveTab={setTab}

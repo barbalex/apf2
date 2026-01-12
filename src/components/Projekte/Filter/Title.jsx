@@ -1,7 +1,7 @@
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
-import { tab, tabs, container, title } from './Title.module.css'
+import styles from './Title.module.css'
 
 const titleObject = {
   ap: 'Art Filter',
@@ -16,15 +16,15 @@ export const Title = ({ activeTab, setActiveTab }) => {
   const onChangeTab = (event, value) => setActiveTab(value)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <div
-        className={title}
+        className={styles.title}
         data-id="form-title"
       >
         {titleObject[activeTab]}
       </div>
       <Tabs
-        className={tabs}
+        className={styles.tabs}
         value={activeTab}
         onChange={onChangeTab}
         indicatorColor="primary"
@@ -33,37 +33,37 @@ export const Title = ({ activeTab, setActiveTab }) => {
         scrollButtons="auto"
       >
         <Tab
-          className={tab}
+          className={styles.tab}
           label="Art"
           value="ap"
           data-id="ap"
         />
         <Tab
-          className={tab}
+          className={styles.tab}
           label="Pop"
           value="pop"
           data-id="pop"
         />
         <Tab
-          className={tab}
+          className={styles.tab}
           label="T-Pop"
           value="tpop"
           data-id="tpop"
         />
         <Tab
-          className={tab}
+          className={styles.tab}
           label="Massn"
           value="tpopmassn"
           data-id="tpopmassn"
         />
         <Tab
-          className={tab}
+          className={styles.tab}
           label="EK"
           value="tpopfeldkontr"
           data-id="tpopfeldkontr"
         />
         <Tab
-          className={tab}
+          className={styles.tab}
           label="EKF"
           value="tpopfreiwkontr"
           data-id="tpopfreiwkontr"

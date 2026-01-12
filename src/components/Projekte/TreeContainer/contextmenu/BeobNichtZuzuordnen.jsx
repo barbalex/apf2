@@ -9,7 +9,7 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.js'
 
-import { secondLine } from './Beobnichtbeurteilt.module.css'
+import styles from './Beobnichtbeurteilt.module.css'
 
 // create objects outside render
 const createNewPopFromBeobData = {
@@ -43,7 +43,7 @@ export const BeobNichtZuzuordnen = observer(({ onClick }) => {
             >
               neue Population und Teil-Population gründen
               <br />
-              <span className={secondLine}>
+              <span className={styles.secondLine}>
                 und Beobachtung der Teil-Population zuordnen
               </span>
             </MenuItem>

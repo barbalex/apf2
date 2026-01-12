@@ -12,7 +12,7 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Error } from '../../shared/Error.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
-import { listItem } from './TpopFromBeobPopList.module.css'
+import styles from './TpopFromBeobPopList.module.css'
 
 export const TpopFromBeobPopList = observer(
   ({ closeNewTpopFromBeobDialog, beobId }) => {
@@ -64,7 +64,7 @@ export const TpopFromBeobPopList = observer(
                 })
                 closeNewTpopFromBeobDialog()
               }}
-              className={listItem}
+              className={styles.listItem}
             >
               {pop.label}
             </ListItemButton>
