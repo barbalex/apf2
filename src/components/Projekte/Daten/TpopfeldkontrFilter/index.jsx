@@ -24,14 +24,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Tabs } from './Tabs.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-import {
-  container,
-  formContainer,
-  section,
-  styledTab,
-  filterCommentTitle,
-  filterComment,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const tpopkontrTypWerte = [
   {
@@ -142,7 +135,7 @@ export const TpopfeldkontrFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FilterTitle
           title="Feld-Kontrollen"
           table="tpopfeldkontr"
@@ -152,28 +145,28 @@ export const TpopfeldkontrFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <div className={styles.filterCommentTitle}>Zusätzlich aktive Filter:</div>
             <ul>
               {!!navApFilterComment && (
-                <li className={filterComment}>{navApFilterComment}</li>
+                <li className={styles.filterComment}>{navApFilterComment}</li>
               )}
               {!!navHiearchyComment && (
-                <li className={filterComment}>{navHiearchyComment}</li>
+                <li className={styles.filterComment}>{navHiearchyComment}</li>
               )}
               {!!navLabelComment && (
-                <li className={filterComment}>{navLabelComment}</li>
+                <li className={styles.filterComment}>{navLabelComment}</li>
               )}
               {!!artHierarchyComment && (
-                <li className={filterComment}>{artHierarchyComment}</li>
+                <li className={styles.filterComment}>{artHierarchyComment}</li>
               )}
               {!!popHierarchyComment && (
-                <li className={filterComment}>{popHierarchyComment}</li>
+                <li className={styles.filterComment}>{popHierarchyComment}</li>
               )}
               {!!tpopHierarchyComment && (
-                <li className={filterComment}>{tpopHierarchyComment}</li>
+                <li className={styles.filterComment}>{tpopHierarchyComment}</li>
               )}
               {!!mapFilterComment && (
-                <li className={filterComment}>{mapFilterComment}</li>
+                <li className={styles.filterComment}>{mapFilterComment}</li>
               )}
             </ul>
           </>
@@ -194,16 +187,16 @@ export const TpopfeldkontrFilter = observer(() => {
             label="Entwicklung"
             value="entwicklung"
             data-id="entwicklung"
-            className={styledTab}
+            className={styles.styledTab}
           />
           <Tab
             label="Biotop"
             value="biotop"
             data-id="biotop"
-            className={styledTab}
+            className={styles.styledTab}
           />
         </MuiTabs>
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           {tab === 'entwicklung' && (
             <>
               <TextField
@@ -336,7 +329,7 @@ export const TpopfeldkontrFilter = observer(() => {
                 value={row?.flaeche}
                 saveToDb={saveToDb}
               />
-              <div className={section}>Vegetation</div>
+              <div className={styles.section}>Vegetation</div>
               <Select
                 key={`${row?.id}lrDelarze`}
                 data-id="lrDelarze"
@@ -398,7 +391,7 @@ export const TpopfeldkontrFilter = observer(() => {
                 value={row?.baumschicht}
                 saveToDb={saveToDb}
               />
-              <div className={section}>Beurteilung</div>
+              <div className={styles.section}>Beurteilung</div>
               <TextField
                 name="handlungsbedarf"
                 label="Handlungsbedarf"
