@@ -21,19 +21,7 @@ import { Error } from '../../../../shared/Error.jsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
-import {
-  container,
-  scrollContainer,
-  styledPaper,
-  title,
-  styledA,
-  row,
-  outsideLink,
-  styledFormControl,
-  berichtjahrControl,
-  analyzingButton,
-  analyzingSpan,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Qk = observer(({ qkNameQueries, qks }) => {
   const { apId, projId } = useParams()
@@ -87,11 +75,11 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
   return (
     <ErrorBoundary>
       <FormTitle title="Qualitätskontrollen ausführen" />
-      <div className={container}>
+      <div className={styles.container}>
         <FormControl
           fullWidth
           variant="standard"
-          className={berichtjahrControl}
+          className={styles.berichtjahrControl}
         >
           <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
           <Input
@@ -104,7 +92,7 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
         <FormControl
           fullWidth
           variant="standard"
-          className={styledFormControl}
+          className={styles.styledFormControl}
         >
           <InputLabel htmlFor="filter">
             nach Abschnitts-Titel filtern
@@ -119,9 +107,9 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
           <Button
             onClick={refetch}
             variant="outlined"
-            className={analyzingButton}
+            className={styles.analyzingButton}
           >
-            <span className={analyzingSpan}>Die Daten werden analysiert</span>
+            <span className={styles.analyzingSpan}>Die Daten werden analysiert</span>
             <CircularProgress />
           </Button>
         : <div>
@@ -132,28 +120,28 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
               <Button
                 onClick={() => refetch()}
                 variant="outlined"
-                className={analyzingButton}
+                className={styles.analyzingButton}
               >
                 neu analysieren
               </Button>
             </Badge>
           </div>
         }
-        <div className={scrollContainer}>
+        <div className={styles.scrollContainer}>
           {messageGroupsFiltered.map((messageGroup) => (
             <Paper
               key={messageGroup.title}
               elevation={2}
-              className={styledPaper}
+              className={styles.styledPaper}
             >
-              <div className={title}>{messageGroup.title}</div>
+              <div className={styles.title}>{messageGroup.title}</div>
               {messageGroup.messages.map((m, i) => (
                 <div
-                  className={row}
+                  className={styles.row}
                   key={`${m.text}Index${i}`}
                 >
                   <p
-                    className={styledA}
+                    className={styles.styledA}
                     onClick={() =>
                       openTree2WithActiveNodeArray({
                         activeNodeArray: m.url,
@@ -168,7 +156,7 @@ export const Qk = observer(({ qkNameQueries, qks }) => {
                     {m.text}
                   </p>
                   <div
-                    className={outsideLink}
+                    className={styles.outsideLink}
                     onClick={() => {
                       const url = `${appBaseUrl()}Daten/${m.url.join(
                         '/',
