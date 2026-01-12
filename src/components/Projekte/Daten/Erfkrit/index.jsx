@@ -18,7 +18,7 @@ import { erfkrit } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -104,12 +104,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Erfolgs-Kriterium"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <RadioButtonGroup
             name="erfolg"
             label="Beurteilung"

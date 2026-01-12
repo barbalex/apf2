@@ -22,7 +22,7 @@ import {
 } from '../../../shared/fragments.js'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   bemerkungen: 'String',
@@ -139,12 +139,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="EK-Zähleinheit"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <Select
             key={`${row?.id}zaehleinheitId`}
             name="zaehleinheitId"
