@@ -18,7 +18,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   bemerkungen: 'String',
@@ -124,14 +124,14 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <div
-        className={container}
+        className={styles.container}
         data-id="assozart"
       >
         <FormTitle
           title="assoziierte Art"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <SelectLoadingOptions
             key={`${row?.id}aeId`}
             field="aeId"

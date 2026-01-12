@@ -22,7 +22,7 @@ import { ApFilter } from '../../TreeContainer/ApFilter/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-import { fitter } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 const iconStyle = { color: 'white' }
 
@@ -162,7 +162,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
             </IconButton>
           </Tooltip>
         )}
-        <div className={fitter}>
+        <div className={styles.fitter}>
           <ApFilter color="white" />
         </div>
       </MenuBar>
