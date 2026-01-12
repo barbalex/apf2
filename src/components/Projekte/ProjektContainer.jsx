@@ -22,13 +22,7 @@ import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.jsx'
 import { hideBookmarksAtom } from '../../JotaiStore/index.js'
 
-import {
-  outerContainer,
-  container,
-  innerContainer,
-  overflowingPane,
-  overflowingDiv,
-} from './ProjektContainer.module.css'
+import styles from './ProjektContainer.module.css'
 import { fi } from 'date-fns/locale'
 import { first } from 'rxjs'
 
@@ -66,21 +60,21 @@ export const ProjektContainer = observer(() => {
 
   const elObj = {
     tree: (
-      <div className={innerContainer}>
+      <div className={styles.innerContainer}>
         <Suspense fallback={<Spinner />}>
           <TreeContainer />
         </Suspense>
       </div>
     ),
     daten: (
-      <div className={innerContainer}>
+      <div className={styles.innerContainer}>
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>
       </div>
     ),
     filter: (
-      <div className={innerContainer}>
+      <div className={styles.innerContainer}>
         <Suspense fallback={<Spinner />}>
           <Filter />
         </Suspense>
@@ -88,7 +82,7 @@ export const ProjektContainer = observer(() => {
     ),
     karte: (
       <div
-        className={innerContainer}
+        className={styles.innerContainer}
         ref={mapContainerRef}
       >
         <Suspense fallback={<Spinner />}>
@@ -97,7 +91,7 @@ export const ProjektContainer = observer(() => {
       </div>
     ),
     exporte: (
-      <div className={innerContainer}>
+      <div className={styles.innerContainer}>
         <Suspense fallback={<Spinner />}>
           <Exporte />
         </Suspense>
@@ -124,20 +118,20 @@ export const ProjektContainer = observer(() => {
   // TODO: issue with single pane: it does not expand to full width, when changing from two to one pane
   // thus rendering outside of split pane. But then the tree rebuilds.
   return (
-    <div className={outerContainer}>
+    <div className={styles.outerContainer}>
       {!hideBookmarks && <Bookmarks />}
       <div
-        className={container}
+        className={styles.container}
         height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
       >
         {treeTabs.length === 1 ?
-          <div className={overflowingDiv}>{elObj[treeTabs[0]]}</div>
+          <div className={styles.overflowingDiv}>{elObj[treeTabs[0]]}</div>
         : <SplitPane direction="horizontal">
             <Pane
               size={firstPaneSize}
               maxSize={firstPaneMaxSize}
-              className={overflowingPane}
+              className={styles.overflowingPane}
             >
               {elObj[treeTabs[0]]}
             </Pane>
@@ -145,7 +139,7 @@ export const ProjektContainer = observer(() => {
             {!!elObj[treeTabs[1]] && (
               <Pane
                 maxSize="95%"
-                className={overflowingPane}
+                className={styles.overflowingPane}
               >
                 {elObj[treeTabs[1]] ?? undefined}
               </Pane>
