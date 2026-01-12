@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
-import { container, formContainer } from './Projekt.module.css'
+import styles from './Projekt.module.css'
 
 const fieldTypes = {
   name: 'String',
@@ -89,9 +89,9 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle title="Projekt" />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             name="name"
             label="Name"

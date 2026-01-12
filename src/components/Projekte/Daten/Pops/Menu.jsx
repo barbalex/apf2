@@ -22,7 +22,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-import { moveIcon, copyIcon } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 const iconStyle = { color: 'white' }
 
@@ -165,7 +165,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
             }
           >
             <IconButton onClick={onClickMovePopToHere}>
-              <MdOutlineMoveDown className={moveIcon} />
+              <MdOutlineMoveDown className={styles.moveIcon} />
             </IconButton>
           </Tooltip>
         )}
@@ -179,7 +179,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
         {isCopyingPop && (
           <Tooltip title={`Kopiere '${copying.label}' in diese Art`}>
             <IconButton onClick={onClickCopyPopToHere}>
-              <MdContentCopy className={copyIcon} />
+              <MdContentCopy className={styles.copyIcon} />
             </IconButton>
           </Tooltip>
         )}
