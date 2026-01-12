@@ -24,7 +24,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-import { menuTitle } from '../../../shared/Files/Menu/index.module.css'
+import styles from '../../../shared/Files/Menu/index.module.css'
 
 const iconStyle = { color: 'white' }
 
@@ -221,7 +221,7 @@ export const Menu = observer(() => {
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
       >
-        <h3 className={menuTitle}>löschen?</h3>
+        <h3 className={styles.menuTitle}>löschen?</h3>
         <MenuItem onClick={onClickDelete}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>

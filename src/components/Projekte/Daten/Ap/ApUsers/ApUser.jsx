@@ -8,7 +8,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 
 import { MobxContext } from '../../../../../mobxContext.js'
-import { delIcon } from './ApUser.module.css'
+import styles from './ApUser.module.css'
 
 export const ApUser = observer(({ user, refetch }) => {
   const apolloClient = useApolloClient()
@@ -46,7 +46,7 @@ export const ApUser = observer(({ user, refetch }) => {
         <IconButton
           aria-label={`${user.userName} entfernen`}
           onClick={onClickDelete}
-          className={delIcon}
+          className={styles.delIcon}
         >
           <FaTimes />
         </IconButton>

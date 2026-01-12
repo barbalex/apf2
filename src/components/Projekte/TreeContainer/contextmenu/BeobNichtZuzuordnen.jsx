@@ -53,7 +53,7 @@ export const BeobNichtZuzuordnen = observer(({ onClick }) => {
             >
               neue Teil-Population in bestehender Population gründen
               <br />
-              <span className={secondLine}>
+              <span className={styles.secondLine}>
                 und Beobachtung der Teil-Population zuordnen
               </span>
             </MenuItem>
