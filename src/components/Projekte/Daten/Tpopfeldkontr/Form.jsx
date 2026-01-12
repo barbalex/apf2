@@ -19,7 +19,7 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { formContainer } from './Form.module.css'
+import styles from './Form.module.css'
 
 export const fieldTypes = {
   typ: 'String',
@@ -144,7 +144,7 @@ export const TpopfeldkontrForm = observer(({ row, data }) => {
 
   return (
     <ErrorBoundary>
-      <div className={formContainer}>
+      <div className={styles.formContainer}>
         <TextField
           name="jahr"
           label="Jahr"
