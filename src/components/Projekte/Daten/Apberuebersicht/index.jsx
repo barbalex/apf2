@@ -24,13 +24,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { historize } from '../../../../modules/historize.js'
 import { Menu } from './Menu.jsx'
 
-import {
-  container,
-  fieldsContainer,
-  historizeButton,
-  explainer,
-  formContainer,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   projId: 'UUID',
@@ -149,14 +143,14 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="AP-Bericht Jahresübersicht"
           MenuBarComponent={Menu}
         />
         <Suspense fallback={<Spinner />}>
-          <div className={fieldsContainer}>
-            <div className={formContainer}>
+          <div className={styles.fieldsContainer}>
+            <div className={styles.formContainer}>
               <TextField
                 name="jahr"
                 label="Jahr"
@@ -180,10 +174,10 @@ export const Component = observer(() => {
                     color="inherit"
                     disabled={historizing || row?.historyFixed}
                     style={historizeButtonStyle}
-                    className={historizeButton}
+                    className={styles.historizeButton}
                   >
                     <span>{`Arten, Pop und TPop historisieren, um den zeitlichen Verlauf auswerten zu können`}</span>
-                    <div className={explainer}>
+                    <div className={styles.explainer}>
                       {historizing ?
                         'Bitte warten, das dauert eine Weile...'
                       : <>
