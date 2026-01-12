@@ -20,7 +20,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const veraenGegenVorjahrWerte = [
   { value: '+', label: '+' },
@@ -115,12 +115,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="AP-Bericht"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             name="jahr"
             label="Jahr"
