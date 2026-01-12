@@ -12,13 +12,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
-import {
-  container,
-  spinnerContainer,
-  spinnerText,
-  filterContainer,
-  styledFormControl,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Component = ({ refetchTab }) => {
   const { apId } = useParams()
@@ -43,9 +37,9 @@ export const Component = ({ refetchTab }) => {
 
   if (loading) {
     return (
-      <div className={spinnerContainer}>
+      <div className={styles.spinnerContainer}>
         <CircularProgress />
-        <div className={spinnerText}>lade Daten...</div>
+        <div className={styles.spinnerText}>lade Daten...</div>
       </div>
     )
   }
@@ -53,12 +47,12 @@ export const Component = ({ refetchTab }) => {
   return (
     <ErrorBoundary>
       <FormTitle title="Qualitätskontrollen wählen" />
-      <div className={container}>
-        <div className={filterContainer}>
+      <div className={styles.container}>
+        <div className={styles.filterContainer}>
           <FormControl
             fullWidth
             variant="standard"
-            className={styledFormControl}
+            className={styles.styledFormControl}
           >
             <InputLabel htmlFor="filter">{label}</InputLabel>
             <Input
