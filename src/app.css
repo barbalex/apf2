@@ -654,6 +654,11 @@ html {
 .split-pane-pane {
   overflow: hidden;
 }
+/* TODO: not working */
+.split-pane-pane-overflowing .split-pane-pane {
+  overflow: auto !important;
+  scrollbar-width: thin;
+}
 
 /* react-markdown-editor-lite */
 
