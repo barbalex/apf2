@@ -38,12 +38,8 @@ import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfT
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-import { menuTitle } from '../../../shared/Files/Menu/index.module.css'
-import {
-  roundToggleButton,
-  styledLoadingButton,
-  styledButton,
-} from './Menu.module.css'
+import menuStyles from '../../../shared/Files/Menu/index.module.css'
+import styles from './Menu.module.css'
 
 const iconStyle = { color: 'white' }
 
@@ -361,7 +357,7 @@ export const Menu = observer(({ row }) => {
             value={idOfTpopBeingLocalized ?? ''}
             onChange={onClickLocalizeOnMap}
             selected={isLocalizing}
-            className={roundToggleButton}
+            className={styles.roundToggleButton}
           >
             <FaMapLocationDot style={iconStyle} />
           </ToggleButton>
@@ -422,7 +418,7 @@ export const Menu = observer(({ row }) => {
             onClick={onCopyCoordToPop}
             loading={copyingCoordToTpop}
             width={155}
-            className={styledLoadingButton}
+            className={styles.styledLoadingButton}
           >
             Koordinaten auf die
             <br />
@@ -433,7 +429,7 @@ export const Menu = observer(({ row }) => {
           variant="outlined"
           onClick={onClickShowCoordOfTpopOnMapsZhCh}
           width={103}
-          className={styledButton}
+          className={styles.styledButton}
         >
           zeige auf
           <br />
@@ -443,7 +439,7 @@ export const Menu = observer(({ row }) => {
           variant="outlined"
           onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
           width={146}
-          className={styledButton}
+          className={styles.styledButton}
         >
           zeige auf
           <br />
@@ -456,7 +452,7 @@ export const Menu = observer(({ row }) => {
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
       >
-        <h3 className={menuTitle}>löschen?</h3>
+        <h3 className={menuStyles.menuTitle}>löschen?</h3>
         <MenuItem onClick={onClickDelete}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
