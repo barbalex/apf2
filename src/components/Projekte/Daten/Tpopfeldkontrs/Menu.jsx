@@ -22,7 +22,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-import { icon } from './Menu.module.css'
+import styles from './Menu.module.css'
 
 export const Menu = observer(({ toggleFilterInput }) => {
   const apolloClient = useApolloClient()
@@ -194,41 +194,41 @@ export const Menu = observer(({ toggleFilterInput }) => {
         )}
         <Tooltip title="Neue Feld-Kontrolle erstellen">
           <IconButton onClick={onClickAdd}>
-            <FaPlus className={icon} />
+            <FaPlus className={styles.icon} />
           </IconButton>
         </Tooltip>
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum öffnen">
             <IconButton onClick={onClickOpenLowerNodes}>
-              <FaFolderTree className={icon} />
+              <FaFolderTree className={styles.icon} />
             </IconButton>
           </Tooltip>
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
             <IconButton onClick={onClickCloseLowerNodes}>
-              <RiFolderCloseFill className={icon} />
+              <RiFolderCloseFill className={styles.icon} />
             </IconButton>
           </Tooltip>
         )}
         {isMovingEk && (
           <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
             <IconButton onClick={onClickMoveEkfToHere}>
-              <MdOutlineMoveDown className={icon} />
+              <MdOutlineMoveDown className={styles.icon} />
             </IconButton>
           </Tooltip>
         )}
         {isMovingEk && (
           <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
             <IconButton onClick={onClickStopMoving}>
-              <BsSignStopFill className={icon} />
+              <BsSignStopFill className={styles.icon} />
             </IconButton>
           </Tooltip>
         )}
         {isCopyingEk && (
           <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
             <IconButton onClick={onClickCopyEkfToHere}>
-              <MdContentCopy className={icon} />
+              <MdContentCopy className={styles.icon} />
             </IconButton>
           </Tooltip>
         )}
@@ -237,7 +237,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
             title={`Kopieren von '${copying.label ?? copyingBiotop.label}' abbrechen`}
           >
             <IconButton onClick={onClickStopCopying}>
-              <BsSignStopFill className={icon} />
+              <BsSignStopFill className={styles.icon} />
             </IconButton>
           </Tooltip>
         )}
