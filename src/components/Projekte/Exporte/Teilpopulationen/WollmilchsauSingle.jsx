@@ -9,7 +9,7 @@ import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { container } from './WollmilchsauSingle.module.css'
+import styles from './WollmilchsauSingle.module.css'
 
 export const WollmilchsauSingle = observer(() => {
   const store = useContext(MobxContext)
@@ -29,7 +29,7 @@ export const WollmilchsauSingle = observer(() => {
     : { artname: { isNull: false } }
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <SelectLoadingOptions
         row={{}}
         field="ewm"

@@ -12,8 +12,8 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-import { formControlLabel, checkbox } from './Optionen.module.css'
-import { cardContent, actionTitle, card, cardActions } from './index.module.css'
+import optionenStyles from './Optionen.module.css'
+import styles from './index.module.css'
 
 export const Optionen = observer(() => {
   const store = useContext(MobxContext)
@@ -21,13 +21,13 @@ export const Optionen = observer(() => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <div className={actionTitle}>Optionen</div>
+        <div className={styles.actionTitle}>Optionen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -43,7 +43,7 @@ export const Optionen = observer(() => {
         timeout="auto"
         unmountOnExit
       >
-        <CardContent className={cardContent}>
+        <CardContent className={styles.cardContent}>
           <FormControlLabel
             control={
               <Checkbox
@@ -53,11 +53,11 @@ export const Optionen = observer(() => {
                 }
                 value={exportFileType}
                 color="primary"
-                className={checkbox}
+                className={optionenStyles.checkbox}
               />
             }
             label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
-            className={formControlLabel}
+            className={optionenStyles.formControlLabel}
           />
         </CardContent>
       </Collapse>

@@ -7,7 +7,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { button, progress } from '../index.module.css'
+import styles from '../index.module.css'
 
 export const Massnahmen = observer(({ filtered = false }) => {
   const store = useContext(MobxContext)

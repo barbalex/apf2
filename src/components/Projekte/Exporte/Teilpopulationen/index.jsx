@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CardContent } from './CardContent.jsx'
-import { actionTitle, card, cardActions } from '../index.module.css'
+import styles from '../index.module.css'
 
 export const Teilpopulationen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -15,13 +15,13 @@ export const Teilpopulationen = () => {
   const onClickAction = () => setExpanded(!expanded)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={onClickAction}
       >
-        <div className={actionTitle}>Teilpopulationen</div>
+        <div className={styles.actionTitle}>Teilpopulationen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}

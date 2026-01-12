@@ -8,20 +8,20 @@ import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import { CsvInExcelOeffnen } from './CsvInExcelOeffnen.jsx'
-import { cardContent } from './index.module.css'
-import { actionTitle, card, cardActions } from '../index.module.css'
+import tippsStyles from './index.module.css'
+import styles from '../index.module.css'
 
 export const CsvProgramm = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <div className={actionTitle}>
+        <div className={styles.actionTitle}>
           Welches Programm soll ich dazu verwenden?
         </div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
@@ -39,7 +39,7 @@ export const CsvProgramm = () => {
         timeout="auto"
         unmountOnExit
       >
-        <CardContent className={cardContent}>
+        <CardContent className={tippsStyles.cardContent}>
           {
             'Um die Datei das erste Mal zu öffnen eignet sich Libre Office am besten: '
           }

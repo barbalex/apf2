@@ -7,20 +7,22 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { cardContent } from './index.module.css'
-import { actionTitle, card, cardActions } from '../index.module.css'
+import tippsStyles from './index.module.css'
+import styles from '../index.module.css'
 
 export const ZuVieleDaten = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <div className={actionTitle}>Hilfe, das sind viel zu viele Daten!</div>
+        <div className={styles.actionTitle}>
+          Hilfe, das sind viel zu viele Daten!
+        </div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -36,7 +38,7 @@ export const ZuVieleDaten = () => {
         timeout="auto"
         unmountOnExit
       >
-        <CardContent className={cardContent}>
+        <CardContent className={tippsStyles.cardContent}>
           {'Meist werden alle verfügbaren Datensätze und Felder exportiert.'}
           <br />
           {

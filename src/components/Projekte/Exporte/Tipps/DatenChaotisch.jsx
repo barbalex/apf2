@@ -7,20 +7,20 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { cardContent } from './index.module.css'
-import { actionTitle, card, cardActions } from '../index.module.css'
+import tippsStyles from './index.module.css'
+import styles from '../index.module.css'
 
 export const DatenChaotisch = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <div className={actionTitle}>
+        <div className={styles.actionTitle}>
           Sind die Daten ungeordnet und chaotisch?
         </div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
@@ -38,7 +38,7 @@ export const DatenChaotisch = () => {
         timeout="auto"
         unmountOnExit
       >
-        <CardContent className={cardContent}>
+        <CardContent className={tippsStyles.cardContent}>
           {
             'Das Programm hat wohl beim Öffnen die Feld-Grenzen nicht richtig erkannt.'
           }

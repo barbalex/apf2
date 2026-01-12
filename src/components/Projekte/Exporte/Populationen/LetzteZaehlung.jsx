@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { button, progress } from '../index.module.css'
+import styles from '../index.module.css'
 
 export const LetzteZaehlung = observer(() => {
   const store = useContext(MobxContext)
@@ -20,7 +20,7 @@ export const LetzteZaehlung = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -157,7 +157,7 @@ export const LetzteZaehlung = observer(() => {
     >
       Letzte Zählungen
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

@@ -7,20 +7,20 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { cardContent } from './index.module.css'
-import { actionTitle, card, cardActions } from '../index.module.css'
+import tippsStyles from './index.module.css'
+import styles from '../index.module.css'
 
 export const WasIstCsv = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <div className={actionTitle}>Was ist eine .csv-Datei?</div>
+        <div className={styles.actionTitle}>Was ist eine .csv-Datei?</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -36,7 +36,7 @@ export const WasIstCsv = () => {
         timeout="auto"
         unmountOnExit
       >
-        <CardContent className={cardContent}>
+        <CardContent className={tippsStyles.cardContent}>
           {'Eine reine Textdatei, deren Name mit ".csv" endet.'}
           <br />
           {'"csv" steht für: "comma separated values".'}

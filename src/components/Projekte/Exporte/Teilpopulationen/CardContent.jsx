@@ -13,10 +13,10 @@ import { TPopInklBerichte } from './TPopInklBerichte.jsx'
 import { LetzteZaehlungen } from './LetzteZaehlungen.jsx'
 import { LetzteZaehlungenInklAnpflanzungen } from './LetzteZaehlungenInklAnpflanzungen.jsx'
 
-import { cardContent } from '../index.module.css'
+import styles from '../index.module.css'
 
 export const CardContent = () => (
-  <MuiCardContent className={cardContent}>
+  <MuiCardContent className={styles.cardContent}>
     <TPop />
     <TPop filtered={true} />
     <TPopFuerWebgisBun />

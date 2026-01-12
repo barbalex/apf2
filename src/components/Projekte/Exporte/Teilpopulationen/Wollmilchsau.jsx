@@ -8,8 +8,8 @@ import Button from '@mui/material/Button'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { button } from '../index.module.css'
-import { li, ewm, progress } from './Wollmilchsau.module.css'
+import styles from '../index.module.css'
+import wollmilchsauStyles from './Wollmilchsau.module.css'
 
 export const Wollmilchsau = observer(() => {
   const store = useContext(MobxContext)
@@ -21,7 +21,7 @@ export const Wollmilchsau = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -642,18 +642,20 @@ export const Wollmilchsau = observer(() => {
           marginBottom: '10px',
         }}
       >
-        <li className={li}>Anzahl Kontrollen</li>
-        <li className={li}>erste Kontrolle</li>
-        <li className={li}>erste Zählung</li>
-        <li className={li}>letzte Kontrolle</li>
-        <li className={li}>letzte Zählung</li>
-        <li className={li}>letzter Teilpopulationsbericht</li>
+        <li className={wollmilchsauStyles.li}>Anzahl Kontrollen</li>
+        <li className={wollmilchsauStyles.li}>erste Kontrolle</li>
+        <li className={wollmilchsauStyles.li}>erste Zählung</li>
+        <li className={wollmilchsauStyles.li}>letzte Kontrolle</li>
+        <li className={wollmilchsauStyles.li}>letzte Zählung</li>
+        <li className={wollmilchsauStyles.li}>
+          letzter Teilpopulationsbericht
+        </li>
       </ul>
-      <div className={ewm}>
+      <div className={wollmilchsauStyles.ewm}>
         {'= "Eier legende Wollmilchsau". Vorsicht: kann > 2 Minuten dauern!'}
       </div>
       {queryState ?
-        <div className={progress}>{queryState}</div>
+        <div className={wollmilchsauStyles.progress}>{queryState}</div>
       : null}
     </Button>
   )
