@@ -28,7 +28,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { query } from './query.js'
 import { Menu } from './Menu.jsx'
 
-import { container } from './Tpop.module.css'
+import styles from './Tpop.module.css'
 
 export const fieldTypes = {
   popId: 'UUID',
@@ -200,7 +200,7 @@ export const Component = observer(() => {
         MenuBarComponent={Menu}
         menuBarProps={{ row }}
       />
-      <div className={container}>
+      <div className={styles.container}>
         <TextField
           name="nr"
           label="Nr."
