@@ -16,7 +16,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { tpopber } from '../../../shared/fragments.js'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   tpopId: 'UUID',
@@ -110,12 +110,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Kontroll-Bericht Teil-Population"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             name="jahr"
             label="Jahr"
