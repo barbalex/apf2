@@ -21,7 +21,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyBiotopTo } from '../../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 
-import { menuTitle } from '../../../shared/Files/Menu/index.module.css'
+import styles from '../../../shared/Files/Menu/index.module.css'
 
 const iconStyle = { color: 'white' }
 
@@ -346,7 +346,7 @@ export const Menu = observer(({ row }) => {
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
       >
-        <h3 className={menuTitle}>löschen?</h3>
+        <h3 className={styles.menuTitle}>löschen?</h3>
         <MenuItem onClick={onClickDelete}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
@@ -356,7 +356,7 @@ export const Menu = observer(({ row }) => {
         open={copyBiotopMenuOpen}
         onClose={() => setCopyBiotopMenuAnchorEl(null)}
       >
-        <h3 className={menuTitle}>Kopieren:</h3>
+        <h3 className={styles.menuTitle}>Kopieren:</h3>
         <MenuItem onClick={onClickSetFeldkontrCopying}>Feld-Kontrolle</MenuItem>
         <MenuItem onClick={onClickSetBiotopCopying}>Biotop</MenuItem>
       </MuiMenu>
