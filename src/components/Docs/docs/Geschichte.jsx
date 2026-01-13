@@ -1,10 +1,10 @@
 import { Link } from 'react-router'
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Entstehungs-Geschichte 🚀</h1>
-    <p className={dokuDate}>18.04.2019</p>
+    <p className={desktopStyles.dokuDate}>18.04.2019</p>
     <h2>Ab 1995: Excel-Listen</h2>
     <p>
       Vor langer, langer Zeit begann im Kanton Zürich ein Projekt zur Förderung

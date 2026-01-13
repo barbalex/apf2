@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Historisierung</h1>
-    <p className={dokuDate}>10.12.2020</p>
+    <p className={desktopStyles.dokuDate}>10.12.2020</p>
     <h2>Wunsch</h2>
     <p>Stand: Ende 2019</p>
     <p>Die Daten in apflora werden je länger je intensiver ausgewertet. </p>
@@ -41,7 +41,7 @@ export const Component = () => (
       es zuverlässig nachführt, kann das Feld &quot;Bekannt seit&quot; dafür
       verwendet werden. Davon gehe ich aus. Bloss: Wenn eine Population entfernt
       wird, verschwindet sie dann auch in den Vorjahren aus der Statistik 🤔.
-      Das sollte vermutlich nicht passieren, passiert aber vermutlich schon.
+      Das sollte vermutlich nicht passieren, passiert aber eventuell dennoch.
     </p>
     <p>
       Hingegen ist es nicht möglich, zu{' '}
