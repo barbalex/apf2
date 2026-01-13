@@ -13,11 +13,13 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { AdresseId } from '../../../../models/apflora/Adresse.js'
+
 interface CreateAdresseResult {
   data?: {
     createAdresse?: {
       adresse?: {
-        id: string
+        id: AdresseId
       }
     }
   }
@@ -54,7 +56,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
