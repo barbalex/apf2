@@ -80,6 +80,48 @@ const query = gql`
   }
 `
 
+interface PopHistoryData {
+  id: PopId
+  apId: ApId
+  apByApId?: {
+    id: ApId
+    aeTaxonomyByArtId?: {
+      id: AeTaxonomiesId
+      artname: string | null
+    }
+  }
+  nr: number | null
+  name: string | null
+  status: PopStatusWerteCode | null
+  popStatusWerteByStatus?: {
+    id: PopStatusWerteCode
+    text: string | null
+  }
+  statusUnklar: boolean | null
+  statusUnklarBegruendung: string | null
+  bekanntSeit: number | null
+  geomPoint?: {
+    geojson: unknown
+    x: number | null
+    y: number | null
+  }
+  changedBy: string | null
+}
+
+interface PopHistoryQueryResult {
+  popById?: PopHistoryData & {
+    label: string | null
+  }
+  allPopHistories?: {
+    totalCount: number
+    nodes: Array<
+      PopHistoryData & {
+        year: number | null
+      }
+    >
+  }
+}
+
 const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 export const Component = () => {
