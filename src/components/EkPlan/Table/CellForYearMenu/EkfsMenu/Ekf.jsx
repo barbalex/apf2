@@ -11,14 +11,7 @@ import {
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import {
-  outerList,
-  innerList,
-  listItemText,
-  listItem,
-  listItemButton,
-  outsideLink,
-} from './Ekf.module.css'
+import styles from './Ekf.module.css'
 
 export const Ekf = ({ tpop, ekf, border }) => {
   const [open, setOpen] = useState(true)
@@ -38,12 +31,12 @@ export const Ekf = ({ tpop, ekf, border }) => {
     <List
       component="nav"
       style={{ borderBottom: border ? '1px solid #d6d6d6' : 'none' }}
-      className={outerList}
+      className={styles.outerList}
     >
       <ListItemButton onClick={toggleOpen}>
         <ListItemText
           primary={title}
-          className={listItemText}
+          className={styles.listItemText}
         />
         <div
           onClick={() => {
@@ -53,7 +46,7 @@ export const Ekf = ({ tpop, ekf, border }) => {
             window.open(url)
           }}
           title="in neuem Fenster öffnen"
-          className={outsideLink}
+          className={styles.outsideLink}
         >
           <FaExternalLinkAlt />
         </div>
@@ -66,7 +59,7 @@ export const Ekf = ({ tpop, ekf, border }) => {
         timeout="auto"
         unmountOnExit
       >
-        <List className={innerList}>
+        <List className={styles.innerList}>
           {zaehls.map((z) => {
             const einheit =
               z?.tpopkontrzaehlEinheitWerteByEinheit?.text ?? '(keine Einheit)'
@@ -79,7 +72,7 @@ export const Ekf = ({ tpop, ekf, border }) => {
               <ListItem
                 key={z.id}
                 component="div"
-                className={listItem}
+                className={styles.listItem}
               >
                 {`${anzahl} ${einheit}, ${methode}`}
               </ListItem>

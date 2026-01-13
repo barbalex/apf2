@@ -11,14 +11,7 @@ import {
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import {
-  outerList,
-  innerList,
-  listItemText,
-  listItem,
-  listItemButton,
-  outsideLink,
-} from '../EkfsMenu/Ekf.module.css'
+import styles from '../EkfsMenu/Ekf.module.css'
 
 export const Massn = ({ tpop, massn, border }) => {
   const [open, setOpen] = useState(true)
@@ -45,15 +38,15 @@ export const Massn = ({ tpop, massn, border }) => {
     <List
       component="nav"
       style={{ borderBottom: border ? '1px solid #d6d6d6' : 'none' }}
-      className={outerList}
+      className={styles.outerList}
     >
       <ListItemButton
         onClick={toggleOpen}
-        className={listItemButton}
+        className={styles.listItemButton}
       >
         <ListItemText
           primary={title}
-          className={listItemText}
+          className={styles.listItemText}
         />
         <div
           onClick={() => {
@@ -63,7 +56,7 @@ export const Massn = ({ tpop, massn, border }) => {
             window.open(url)
           }}
           title="in neuem Fenster öffnen"
-          className={outsideLink}
+          className={styles.outsideLink}
         >
           <FaExternalLinkAlt />
         </div>
@@ -76,22 +69,22 @@ export const Massn = ({ tpop, massn, border }) => {
         timeout="auto"
         unmountOnExit
       >
-        <List className={innerList}>
+        <List className={styles.innerList}>
           <ListItem
-            className={listItem}
+            className={styles.listItem}
             component="div"
           >
             {`Triebe: ${anzTriebe}`}
           </ListItem>
           <ListItem
-            className={listItem}
+            className={styles.listItem}
             component="div"
           >
             {`Pflanzen: ${anzPflanzen}`}
           </ListItem>
           {anzZielrelevEinheit !== null && (
             <ListItem
-              className={listItem}
+              className={styles.listItem}
               component="div"
             >
               {`${zielrelevEinheit}: ${anzZielrelevEinheit} (ziel-relevant)`}
@@ -99,7 +92,7 @@ export const Massn = ({ tpop, massn, border }) => {
           )}
           {!!massn.bemerkungen && (
             <ListItem
-              className={listItem}
+              className={styles.listItem}
               component="div"
             >
               {`Bemerkungen: ${massn.bemerkungen}`}
