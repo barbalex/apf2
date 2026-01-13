@@ -19,6 +19,55 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.js'
 import { queryEkfTpops } from './queryEkfTpops.js'
 
+import type { UserId } from '../../../../models/apflora/UserId.ts'
+import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
+import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+
+interface CreateUserResult {
+  data: {
+    createUser: {
+      user: {
+        id: UserId
+      }
+    }
+  }
+}
+
+interface EkfTpopsQueryResult {
+  ekfTpops: {
+    totalCount: number
+    nodes: Array<{
+      id: TpopId
+      ekfInJahr: {
+        totalCount: number
+      }
+    }>
+  } | null
+}
+
+interface CreateTpopkontrResult {
+  data: {
+    createTpopkontr: {
+      tpopkontr: {
+        id: TpopkontrId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  row: {
+    id: UserId
+    adresseId: AdresseId | null
+    [key: string]: any
+  }
+  editPassword: boolean
+  setEditPassword: (value: boolean) => void
+  passwordMessage: string
+  setPasswordMessage: (value: string) => void
+}
+
 import styles from './Menu.module.css'
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
@@ -31,7 +80,7 @@ export const Menu = observer(
     setEditPassword,
     passwordMessage,
     setPasswordMessage,
-  }) => {
+  }: MenuProps) => {
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
 
@@ -41,7 +90,7 @@ export const Menu = observer(
     const tsQueryClient = useQueryClient()
 
     const thisYear = new Date().getFullYear()
-    const { data, refetch } = useQuery(queryEkfTpops, {
+    const { data, refetch } = useQuery<EkfTpopsQueryResult>(queryEkfTpops, {
       variables: {
         id: row.adresseId || '9999999999999999999999999',
         jahr: thisYear,
@@ -56,9 +105,9 @@ export const Menu = observer(
     const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
 
     const onClickAdd = async () => {
-      let result
+      let result: CreateUserResult | undefined
       try {
-        result = await apolloClient.mutate({
+        result = await apolloClient.mutate<CreateUserResult['data']>({
           mutation: gql`
             mutation createUserForUserForm {
               createUser(input: { user: {} }) {
@@ -71,7 +120,7 @@ export const Menu = observer(
         })
       } catch (error) {
         return store.enqueNotification({
-          message: error.message,
+          message: (error as Error).message,
           options: {
             variant: 'error',
           },
@@ -87,7 +136,9 @@ export const Menu = observer(
       navigate(`/Daten/Benutzer/${id}${search}`)
     }
 
-    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+      null,
+    )
     const delMenuOpen = Boolean(delMenuAnchorEl)
 
     const onClickDelete = async () => {
@@ -107,7 +158,7 @@ export const Menu = observer(
         })
       } catch (error) {
         return store.enqueNotification({
-          message: error.message,
+          message: (error as Error).message,
           options: {
             variant: 'error',
           },

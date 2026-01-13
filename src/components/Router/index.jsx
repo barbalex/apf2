@@ -1394,7 +1394,7 @@ export const Router = () => {
               <Route path=":userId">
                 <Route
                   path="*"
-                  lazy={() => import('../Projekte/Daten/User/index.jsx')}
+                  lazy={() => import('../Projekte/Daten/User/index.tsx')}
                   errorElement={<RouterErrorBoundary />}
                 />
                 <Route path="EKF">

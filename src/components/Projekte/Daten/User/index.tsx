@@ -23,7 +23,27 @@ import { user as userFragment } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type { UserId } from '../../../../models/apflora/UserId.ts'
+import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
+
+interface UserQueryResult {
+  userById: {
+    id: UserId
+    name: string | null
+    email: string | null
+    role: string | null
+    pass: string | null
+    adresseId: AdresseId | null
+  } | null
+  allAdresses: {
+    nodes: Array<{
+      value: AdresseId
+      label: string
+    }>
+  }
+}
 
 import styles from './index.module.css'
 
@@ -65,7 +85,7 @@ export const Component = () => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [editPassword, setEditPassword] = useState(false)
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
@@ -75,7 +95,7 @@ export const Component = () => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<UserQueryResult>(query, {
     variables: { id: userId },
   })
 
@@ -85,7 +105,7 @@ export const Component = () => {
     setErrors({})
   }, [row.id])
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
     try {
@@ -116,7 +136,7 @@ export const Component = () => {
         },
       })
     } catch (error) {
-      return setErrors({ [field]: error.message })
+      return setErrors({ [field]: (error as Error).message })
     }
     setErrors({})
     if (field === 'name') {
@@ -126,7 +146,7 @@ export const Component = () => {
     }
   }
 
-  const onBlurPassword = (event) => {
+  const onBlurPassword = (event: React.FocusEvent<HTMLInputElement>) => {
     setPasswordErrorText('')
     const password = event.target.value
     setPassword(password)
@@ -137,7 +157,7 @@ export const Component = () => {
     }
   }
 
-  const onBlurPassword2 = async (event) => {
+  const onBlurPassword2 = async (event: React.FocusEvent<HTMLInputElement>) => {
     setPassword2ErrorText('')
     const password2 = event.target.value
     setPassword2(password2)
@@ -150,10 +170,10 @@ export const Component = () => {
       // then tell user if it worked
       try {
         const fakeEvent = { target: { name: 'pass', value: password2 } }
-        await saveToDb(fakeEvent)
+        await saveToDb(fakeEvent as React.ChangeEvent<HTMLInputElement>)
       } catch (error) {
-        setErrors({ pass: error.message })
-        return setPasswordMessage(error.message)
+        setErrors({ pass: (error as Error).message })
+        return setPasswordMessage((error as Error).message)
       }
       setPasswordMessage(
         'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
