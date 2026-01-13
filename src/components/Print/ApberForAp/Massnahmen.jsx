@@ -1,42 +1,25 @@
 import { DateTime } from 'luxon'
 
-import {
-  container,
-  title,
-  row,
-  titleRow,
-  titleSubRow,
-  popNr,
-  popName,
-  popNrName,
-  tpopNr,
-  tpopFlurname,
-  tpopNrFlurname,
-  massnDatum,
-  massnDatumTitle,
-  massnTyp,
-  massnDatumTyp,
-  massnBeschreibung,
-} from './Massnahmen.module.css'
+import styles from './Massnahmen.module.css'
 
 export const Massnahmen = ({ massns }) => (
-  <div className={container}>
-    <div className={title}>Massnahmen im Berichtsjahr:</div>
-    <div className={titleRow}>
-      <div className={titleSubRow}>
-        <div className={popNrName}>Population</div>
-        <div className={tpopNrFlurname}>Teil-Population</div>
-        <div className={massnDatumTyp}>Massnahme</div>
-        <div className={massnBeschreibung} />
+  <div className={styles.container}>
+    <div className={styles.title}>Massnahmen im Berichtsjahr:</div>
+    <div className={styles.titleRow}>
+      <div className={styles.titleSubRow}>
+        <div className={styles.popNrName}>Population</div>
+        <div className={styles.tpopNrFlurname}>Teil-Population</div>
+        <div className={styles.massnDatumTyp}>Massnahme</div>
+        <div className={styles.massnBeschreibung} />
       </div>
-      <div className={titleSubRow}>
-        <div className={popNr}>Nr.</div>
-        <div className={popName}>Name</div>
-        <div className={tpopNr}>Nr.</div>
-        <div className={tpopFlurname}>Flurname</div>
-        <div className={massnDatumTitle}>Datum</div>
-        <div className={massnTyp}>Typ</div>
-        <div className={massnBeschreibung}>Massnahme</div>
+      <div className={styles.titleSubRow}>
+        <div className={styles.popNr}>Nr.</div>
+        <div className={styles.popName}>Name</div>
+        <div className={styles.tpopNr}>Nr.</div>
+        <div className={styles.tpopFlurname}>Flurname</div>
+        <div className={styles.massnDatumTitle}>Datum</div>
+        <div className={styles.massnTyp}>Typ</div>
+        <div className={styles.massnBeschreibung}>Massnahme</div>
       </div>
     </div>
     {massns.map((m) => {
@@ -44,20 +27,26 @@ export const Massnahmen = ({ massns }) => (
 
       return (
         <div
-          className={row}
+          className={styles.row}
           key={m.id}
         >
-          <div className={popNr}>{m?.tpopByTpopId?.popByPopId?.nr ?? ''}</div>
-          <div className={popName}>
+          <div className={styles.popNr}>
+            {m?.tpopByTpopId?.popByPopId?.nr ?? ''}
+          </div>
+          <div className={styles.popName}>
             {m?.tpopByTpopId?.popByPopId?.name ?? ''}
           </div>
-          <div className={tpopNr}>{m?.tpopByTpopId?.nr ?? ''}</div>
-          <div className={tpopFlurname}>{m?.tpopByTpopId?.flurname ?? ''}</div>
-          <div className={massnDatum}>{mDatum}</div>
-          <div className={massnTyp}>
+          <div className={styles.tpopNr}>{m?.tpopByTpopId?.nr ?? ''}</div>
+          <div className={styles.tpopFlurname}>
+            {m?.tpopByTpopId?.flurname ?? ''}
+          </div>
+          <div className={styles.massnDatum}>{mDatum}</div>
+          <div className={styles.massnTyp}>
             {m?.tpopmassnTypWerteByTyp?.text ?? ''}
           </div>
-          <div className={massnBeschreibung}>{m?.beschreibung ?? ''}</div>
+          <div className={styles.massnBeschreibung}>
+            {m?.beschreibung ?? ''}
+          </div>
         </div>
       )
     })}
