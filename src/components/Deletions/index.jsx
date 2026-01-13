@@ -15,14 +15,7 @@ import { undelete } from './undelete/index.jsx'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import {
-  list,
-  row,
-  textContainer,
-  textField,
-  formControlLabel,
-  checkbox,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Deletions = observer(() => {
   const apolloClient = useApolloClient()
@@ -79,7 +72,7 @@ export const Deletions = observer(() => {
         <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
         <DialogContent>
           <div
-            className={list}
+            className={styles.list}
             style={{ maxWidth: window.innerWidth * 0.8 }}
           >
             {deletedDatasets.map((ds, index) => {
@@ -95,7 +88,7 @@ export const Deletions = observer(() => {
 
               return (
                 <div
-                  className={row}
+                  className={styles.row}
                   key={ds.id}
                   style={{
                     borderTop: index > 0 ? '1px solid rgba(0,0,0,0.1)' : 'none',
@@ -109,30 +102,30 @@ export const Deletions = observer(() => {
                         onChange={toggleChoosenDeletions}
                         value={ds.id}
                         color="primary"
-                        className={checkbox}
+                        className={styles.checkbox}
                       />
                     }
-                    className={formControlLabel}
+                    className={styles.formControlLabel}
                   />
-                  <div className={textContainer}>
+                  <div className={styles.textContainer}>
                     <TextField
                       label="Lösch-Zeitpunkt"
                       value={time}
                       fullWidth
-                      className={textField}
+                      className={styles.textField}
                     />
                     <TextField
                       label="Tabelle"
                       value={ds.table}
                       fullWidth
-                      className={textField}
+                      className={styles.textField}
                     />
                     <TextField
                       label="Daten"
                       value={JSON.stringify(dataset, null, 2)}
                       multiline
                       fullWidth
-                      className={textField}
+                      className={styles.textField}
                     />
                   </div>
                 </div>
