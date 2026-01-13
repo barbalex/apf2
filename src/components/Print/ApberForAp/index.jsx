@@ -17,28 +17,7 @@ import { PopMenge } from '../../Projekte/Daten/ApAuswertung/PopMenge/index.jsx'
 import { PopStatus } from '../../Projekte/Daten/ApAuswertung/PopStatus/index.jsx'
 import { TpopKontrolliert } from '../../Projekte/Daten/ApAuswertung/TpopKontrolliert/index.jsx'
 
-import {
-  noDataContainer,
-  container,
-  containerSubreport,
-  contentContainer,
-  contentContainerSubreport,
-  header,
-  title1,
-  titledLabel,
-  row,
-  fieldRow,
-  fieldRowBold,
-  fieldRowFullWidth,
-  fullWidthField,
-  fieldLabel,
-  field,
-  erfkritRow,
-  erfkritErfolg,
-  erfkritKriterium,
-  fab,
-  chartContainer,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -96,7 +75,7 @@ export const ApberForAp = observer(
 
     if (!node) {
       return (
-        <div className={noDataContainer}>
+        <div className={styles.noDataContainer}>
           <div>Sorry, es gibt nicht ausreichend Daten.</div>
           <div>
             Kann es sein, dass es sich nicht um einen gültigen Aktionsplan
@@ -108,32 +87,32 @@ export const ApberForAp = observer(
 
     return (
       <ErrorBoundary>
-        <div className={isSubReport ? containerSubreport : container}>
+        <div className={isSubReport ? styles.containerSubreport : styles.container}>
           {!subReportIndex && (
             <Fab
               onClick={onClickPrint}
               title="drucken"
               aria-label="drucken"
               color="primary"
-              className={fab}
+              className={styles.fab}
             >
               <MdPrint />
             </Fab>
           )}
           <div
             className={
-              isSubReport ? contentContainerSubreport : contentContainer
+              isSubReport ? styles.contentContainerSubreport : styles.contentContainer
             }
           >
-            <p className={header}>
+            <p className={styles.header}>
               {`Jahresbericht ${jahr},
               ${node?.artname ?? ''},
               ${format(new Date(), 'dd.MM.yyyy')}`}
             </p>
 
-            <h3 className={title1}>{node?.artname ?? ''}</h3>
+            <h3 className={styles.title1}>{node?.artname ?? ''}</h3>
 
-            <div className={row}>
+            <div className={styles.row}>
               <p>{`Start Programm: ${
                 node?.startJahr ?? '(Start-Jahr fehlt)'
               }`}</p>
@@ -147,11 +126,11 @@ export const ApberForAp = observer(
               jahr={jahr}
             />
             {!!apber.biotopeNeue && (
-              <div className={fieldRowFullWidth}>
-                <label className={titledLabel}>
+              <div className={styles.fieldRowFullWidth}>
+                <label className={styles.titledLabel}>
                   Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope
                 </label>
-                <div className={fullWidthField}>
+                <div className={styles.fullWidthField}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(apber?.biotopeNeue ?? ''),
@@ -166,7 +145,7 @@ export const ApberForAp = observer(
               loading={false}
               node={node}
             />
-            <div className={chartContainer}>
+            <div className={styles.chartContainer}>
               <TpopKontrolliert
                 apId={apId}
                 jahr={jahr}
@@ -175,7 +154,7 @@ export const ApberForAp = observer(
                 isSubReport={isSubReport}
               />
             </div>
-            <div className={chartContainer}>
+            <div className={styles.chartContainer}>
               <PopStatus
                 apId={apId}
                 year={jahr}
@@ -184,7 +163,7 @@ export const ApberForAp = observer(
                 isSubReport={isSubReport}
               />
             </div>
-            <div className={chartContainer}>
+            <div className={styles.chartContainer}>
               <PopMenge
                 apId={apId}
                 jahr={jahr}
@@ -194,12 +173,12 @@ export const ApberForAp = observer(
               />
             </div>
             {!!apber.biotopeOptimieren && (
-              <div className={fieldRowFullWidth}>
-                <label className={titledLabel}>
+              <div className={styles.fieldRowFullWidth}>
+                <label className={styles.titledLabel}>
                   Bemerkungen / Folgerungen für nächstes Jahr: Optimierung
                   Biotope
                 </label>
-                <div className={fullWidthField}>
+                <div className={styles.fullWidthField}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(apber?.biotopeOptimieren ?? ''),
@@ -215,11 +194,11 @@ export const ApberForAp = observer(
               node={node}
             />
             {!!apber.massnahmenPlanungVsAusfuehrung && (
-              <div className={fieldRowFullWidth}>
-                <label className={titledLabel}>
+              <div className={styles.fieldRowFullWidth}>
+                <label className={styles.titledLabel}>
                   Vergleich Ausführung/Planung
                 </label>
-                <div className={fullWidthField}>
+                <div className={styles.fullWidthField}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(
@@ -231,12 +210,12 @@ export const ApberForAp = observer(
               </div>
             )}
             {!!apber.massnahmenOptimieren && (
-              <div className={fieldRowFullWidth}>
-                <label className={titledLabel}>
+              <div className={styles.fieldRowFullWidth}>
+                <label className={styles.titledLabel}>
                   Bemerkungen / Folgerungen für nächstes Jahr: Optimierung
                   Massnahmen
                 </label>
-                <div className={fullWidthField}>
+                <div className={styles.fullWidthField}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(
@@ -248,11 +227,11 @@ export const ApberForAp = observer(
               </div>
             )}
             {!!apber.massnahmenApBearb && (
-              <div className={fieldRowFullWidth}>
-                <label className={titledLabel}>
+              <div className={styles.fieldRowFullWidth}>
+                <label className={styles.titledLabel}>
                   Weitere Aktivitäten der Art-Verantwortlichen
                 </label>
-                <div className={fullWidthField}>
+                <div className={styles.fullWidthField}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(apber?.massnahmenApBearb ?? ''),
@@ -263,15 +242,15 @@ export const ApberForAp = observer(
             )}
             {!!massns.length && <Massnahmen massns={massns} />}
 
-            <h3 className={title1}>
+            <h3 className={styles.title1}>
               D. Einschätzung der Wirkung des AP insgesamt auf die Art
             </h3>
             {!!apber.vergleichVorjahrGesamtziel && (
-              <div className={fieldRow}>
-                <label className={fieldLabel}>
+              <div className={styles.fieldRow}>
+                <label className={styles.fieldLabel}>
                   Vergleich zu Vorjahr - Ausblick auf Gesamtziel
                 </label>
-                <div className={field}>
+                <div className={styles.field}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(
@@ -284,19 +263,19 @@ export const ApberForAp = observer(
             )}
             {!!ziele.length && <Ziele ziele={ziele} />}
             {!!erfkrit.length && (
-              <div className={fieldRow}>
-                <label className={fieldLabel}>Beurteilungsskala</label>
-                <div className={field}>
+              <div className={styles.fieldRow}>
+                <label className={styles.fieldLabel}>Beurteilungsskala</label>
+                <div className={styles.field}>
                   {erfkrit.map((e) => (
                     <div
-                      className={erfkritRow}
+                      className={styles.erfkritRow}
                       key={e.id}
                     >
-                      <div className={erfkritErfolg}>{`${
+                      <div className={styles.erfkritErfolg}>{`${
                         e?.apErfkritWerteByErfolg?.text ?? '(fehlt)'
                       }:`}</div>
-                      <div className={erfkritKriterium}>
-                        {e.kriterien || '(fehlt)'}
+                      <div className={styles.erfkritKriterium}>
+                        {e.kriterien || '(fehlt)'}}
                       </div>
                     </div>
                   ))}
@@ -304,23 +283,23 @@ export const ApberForAp = observer(
               </div>
             )}
             {!!apber.apErfkritWerteByBeurteilung && (
-              <div className={fieldRowBold}>
-                <label className={fieldLabel}>Beurteilung</label>
-                <div className={field}>
+              <div className={styles.fieldRowBold}>
+                <label className={styles.fieldLabel}>Beurteilung</label>
+                <div className={styles.field}>
                   {apber?.apErfkritWerteByBeurteilung?.text ?? ''}
                 </div>
               </div>
             )}
             {!!apber.wirkungAufArt && (
-              <div className={fieldRow}>
-                <label className={fieldLabel}>Bemerkungen</label>
-                <div className={field}>{apber?.wirkungAufArt ?? ''}</div>
+              <div className={styles.fieldRow}>
+                <label className={styles.fieldLabel}>Bemerkungen</label>
+                <div className={styles.field}>{apber?.wirkungAufArt ?? ''}</div>
               </div>
             )}
             {!!apber.apberAnalyse && (
-              <div className={fieldRow}>
-                <label className={fieldLabel}>Analyse</label>
-                <div className={field}>
+              <div className={styles.fieldRow}>
+                <label className={styles.fieldLabel}>Analyse</label>
+                <div className={styles.field}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(apber?.apberAnalyse ?? ''),
@@ -330,11 +309,11 @@ export const ApberForAp = observer(
               </div>
             )}
             {!!apber.konsequenzenUmsetzung && (
-              <div className={fieldRow}>
-                <label className={fieldLabel}>
+              <div className={styles.fieldRow}>
+                <label className={styles.fieldLabel}>
                   Konsequenzen für die Umsetzung
                 </label>
-                <div className={field}>
+                <div className={styles.field}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(
@@ -346,11 +325,11 @@ export const ApberForAp = observer(
               </div>
             )}
             {!!apber.konsequenzenErfolgskontrolle && (
-              <div className={fieldRow}>
-                <label className={fieldLabel}>
+              <div className={styles.fieldRow}>
+                <label className={styles.fieldLabel}>
                   Konsequenzen für die Erfolgskontrolle
                 </label>
-                <div className={field}>
+                <div className={styles.field}>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: mdParser.render(
@@ -361,7 +340,7 @@ export const ApberForAp = observer(
                 </div>
               </div>
             )}
-            <div className={row}>
+            <div className={styles.row}>
               {`${
                 apberDatum ?
                   format(new Date(apberDatum), 'dd.MM.yyyy')

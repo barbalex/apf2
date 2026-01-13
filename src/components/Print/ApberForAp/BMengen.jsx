@@ -1,15 +1,4 @@
-import {
-  container,
-  title,
-  row,
-  yearRow,
-  labelRow,
-  year,
-  yearSince,
-  label1,
-  number,
-  popSeit,
-} from './BMengen.module.css'
+import styles from './BMengen.module.css'
 
 export const BMengen = ({ jahr, loading, node }) => {
   const b1LPop = node?.b1LPop
@@ -19,27 +8,27 @@ export const BMengen = ({ jahr, loading, node }) => {
   const b1FirstYear = node?.b1FirstYear
 
   return (
-    <div className={container}>
-      <h3 className={title}>B. Bestandesentwicklung</h3>
-      <div className={yearRow}>
-        <div className={year}>{jahr}</div>
+    <div className={styles.container}>
+      <h3 className={styles.title}>B. Bestandesentwicklung</h3>
+      <div className={styles.yearRow}>
+        <div className={styles.year}>{jahr}</div>
         <div
-          className={yearSince}
+          className={styles.yearSince}
         >{`Seit ${loading ? '...' : b1FirstYear}`}</div>
       </div>
-      <div className={labelRow}>
-        <div className={label1} />
-        <div className={number}>Pop</div>
-        <div className={number}>TPop</div>
-        <div className={popSeit}>Pop</div>
-        <div className={number}>TPop</div>
+      <div className={styles.labelRow}>
+        <div className={styles.label1} />
+        <div className={styles.number}>Pop</div>
+        <div className={styles.number}>TPop</div>
+        <div className={styles.popSeit}>Pop</div>
+        <div className={styles.number}>TPop</div>
       </div>
-      <div className={row}>
-        <div className={label1}>kontrolliert (inkl. Ansaatversuche)</div>
-        <div className={number}>{loading ? '...' : b1LPop}</div>
-        <div className={number}>{loading ? '...' : b1LTpop}</div>
-        <div className={popSeit}>{loading ? '...' : b1RPop}</div>
-        <div className={number}>{loading ? '...' : b1RTpop}</div>
+      <div className={styles.row}>
+        <div className={styles.label1}>kontrolliert (inkl. Ansaatversuche)</div>
+        <div className={styles.number}>{loading ? '...' : b1LPop}</div>
+        <div className={styles.number}>{loading ? '...' : b1LTpop}</div>
+        <div className={styles.popSeit}>{loading ? '...' : b1RPop}</div>
+        <div className={styles.number}>{loading ? '...' : b1RTpop}</div>
       </div>
     </div>
   )
