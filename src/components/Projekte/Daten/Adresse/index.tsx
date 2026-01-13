@@ -29,17 +29,21 @@ const fieldTypes = {
   freiwErfko: 'Boolean',
 }
 
+interface AdresseQueryResult {
+  adresseById: Adresse
+}
+
 export const Component = observer(() => {
-  const { adrId } = useParams()
+  const { adrId } = useParams<{ adrId: string }>()
   const store = useContext(MobxContext)
   const tsQueryClient = useQueryClient()
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery<AdresseQueryResult>(query, {
     variables: { id: adrId },
   })
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const row: Adresse = data?.adresseById ?? {}
 

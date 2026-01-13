@@ -16,13 +16,15 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { AdresseId } from '../../../../models/apflora/Adresse.js'
+
 import styles from '../../../shared/Files/Menu/index.module.css'
 
 interface CreateAdresseResult {
   data?: {
     createAdresse?: {
       adresse?: {
-        id: string
+        id: AdresseId
       }
     }
   }
@@ -32,7 +34,7 @@ interface DeleteAdresseResult {
   data?: {
     deleteAdresseById?: {
       adresse?: {
-        id: string
+        id: AdresseId
       }
     }
   }
@@ -44,7 +46,7 @@ export const Menu = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { adrId } = useParams()
+  const { adrId } = useParams<{ adrId: string }>()
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const store = useContext(MobxContext)
