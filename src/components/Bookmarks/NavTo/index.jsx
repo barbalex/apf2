@@ -1,6 +1,6 @@
 import { useMatches, useLocation } from 'react-router'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const NavTo = () => {
   const { pathname } = useLocation()
@@ -17,7 +17,7 @@ export const NavTo = () => {
   const Nav = navMatch?.handle?.nav
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       {!!Nav ?
         <Nav />
       : null}

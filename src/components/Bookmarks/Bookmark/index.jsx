@@ -6,7 +6,7 @@ import { useAtom } from 'jotai'
 import { Label } from './Label.jsx'
 import { showBookmarksMenuAtom } from '../../../JotaiStore/index.js'
 
-import { container, outerContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const transitionStyles = {
   entering: { opacity: 1 },
@@ -32,11 +32,11 @@ export const Bookmark = ({ navData, in: inProp }) => {
     >
       {(state) => (
         <div
-          className={outerContainer}
+          className={styles.outerContainer}
           ref={outerContainerRef}
         >
           <div
-            className={container}
+            className={styles.container}
             style={{ paddingRight: showBookmarksMenu ? 'unset' : '15px' }}
           >
             <Label

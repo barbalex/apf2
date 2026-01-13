@@ -14,7 +14,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
 import { usePrevious } from '../../../../modules/usePrevious.js'
 
-import { iconButton } from './index.module.css'
+import styles from './index.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
 const StyledMenu = styled((props) => <MuiMenu {...props} />)(() => ({
@@ -72,7 +72,7 @@ export const Menu = observer(({ navData }) => {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={onClick}
-        className={iconButton}
+        className={styles.iconButton}
       >
         <BsCaretDown />
       </IconButton>

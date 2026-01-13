@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { toggleNodeSymbol } from '../../Projekte/TreeContainer/Tree/toggleNodeSymbol.js'
 import { MobxContext } from '../../../mobxContext.js'
 
-import { link, text } from './Label.module.css'
+import styles from './Label.module.css'
 
 export const Label = observer(
   ({ navData, outerContainerRef, labelStyle, ref }) => {
@@ -51,12 +51,12 @@ export const Label = observer(
           onClick={onClick}
           ref={ref}
           style={{ ...labelStyle }}
-          className={link}
+          className={styles.link}
         >
           {navData.labelShort ?? navData.label}
         </Link>
       : <div
-          className={text}
+          className={styles.text}
           ref={ref}
           style={{ ...labelStyle }}
         >
