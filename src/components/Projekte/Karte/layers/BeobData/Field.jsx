@@ -1,11 +1,7 @@
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import {
-  row,
-  label as labelClass,
-  value as valueClass,
-} from './Field.module.css'
+import styles from './Field.module.css'
 
 const ItemTypes = { CARD: 'card' }
 
@@ -71,13 +67,13 @@ export const Field = ({ label, value, index, moveField }) => {
 
   return (
     <div
-      className={row}
+      className={styles.row}
       ref={ref}
       style={{ opacity }}
       data-handler-id={handlerId}
     >
-      <div className={labelClass}>{label}</div>
-      <div className={valueClass}>{value}</div>
+      <div className={styles.label}>{label}</div>
+      <div className={styles.value}>{value}</div>
     </div>
   )
 }

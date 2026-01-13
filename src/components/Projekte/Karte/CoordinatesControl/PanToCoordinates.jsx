@@ -12,13 +12,7 @@ import { MdMyLocation, MdClear } from 'react-icons/md'
 import { epsg2056to4326 } from '../../../../modules/epsg2056to4326.js'
 import panCentreIcon from '../../../../etc/panTo.png'
 
-import {
-  panIcon,
-  container,
-  iconButton,
-  clearIcon,
-  input,
-} from './PanToCoordinates.module.css'
+import styles from './PanToCoordinates.module.css'
 
 const xIsValid = (x) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y) => !y || (y >= 1075346 && y < 1299942)
@@ -129,7 +123,7 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       onBlur={onBlurGotoContainer}
       onFocus={onFocusGotoContainer}
     >
@@ -149,7 +143,7 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
           onChange={onChangeX}
           onBlur={onBlurX}
           ref={xkoordField}
-          className={input}
+          className={styles.input}
         />
         <FormHelperText id="xhelper">{xError}</FormHelperText>
       </FormControl>
@@ -168,7 +162,7 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
           max="1299942"
           onChange={onChangeY}
           onBlur={onBlurY}
-          className={input}
+          className={styles.input}
         />
         <FormHelperText id="yhelper">{yError}</FormHelperText>
       </FormControl>
@@ -178,11 +172,11 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
             aria-label={centerOnCoordsTitle}
             onClick={onClickGoto}
             style={{ cursor: centerOnCoordsDisabled ? 'pointer' : 'default' }}
-            className={iconButton}
+            className={styles.iconButton}
           >
             <MdMyLocation
               style={{ color: centerOnCoordsDisabled ? 'grey' : 'unset' }}
-              className={panIcon}
+              className={styles.panIcon}
             />
           </IconButton>
         </span>
@@ -191,9 +185,9 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
         <IconButton
           aria-label="schliessen"
           onClick={onClickClear}
-          className={iconButton}
+          className={styles.iconButton}
         >
-          <MdClear className={clearIcon} />
+          <MdClear className={styles.clearIcon} />
         </IconButton>
       </Tooltip>
     </div>

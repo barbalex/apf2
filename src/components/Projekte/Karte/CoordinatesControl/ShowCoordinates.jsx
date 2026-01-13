@@ -3,7 +3,7 @@ import 'leaflet'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { div } from './ShowCoordinates.module.css'
+import styles from './ShowCoordinates.module.css'
 
 export const ShowCoordinates = observer(({ setControlType }) => {
   const { mapMouseCoordinates } = useContext(MobxContext)
@@ -14,7 +14,7 @@ export const ShowCoordinates = observer(({ setControlType }) => {
 
   return (
     <div
-      className={div}
+      className={styles.div}
       onClick={onClick}
       title="Klicken um Koordinaten zu suchen"
     >
