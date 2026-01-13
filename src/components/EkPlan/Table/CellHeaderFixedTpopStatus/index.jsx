@@ -8,13 +8,8 @@ import { styled } from '@mui/material/styles'
 import { MobxContext } from '../../../../mobxContext.js'
 import { Options } from './Options.jsx'
 
-import {
-  cell,
-  title,
-  dropdown,
-  textFilterContainer,
-} from '../CellHeaderFixedEkfrequenz.module.css'
-import { faFilter } from './index.module.css'
+import ekfrequenzStyles from '../CellHeaderFixedEkfrequenz.module.css'
+import styles from './index.module.css'
 
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
@@ -45,7 +40,7 @@ export const CellHeaderFixedTpopStatus = observer(
     return (
       <>
         <div
-          className={cell}
+          className={ekfrequenzStyles.cell}
           aria-controls={`${type}StatusHeaderMenu`}
           aria-haspopup="true"
           onClick={onClickCell}
@@ -54,10 +49,10 @@ export const CellHeaderFixedTpopStatus = observer(
             minWidth: column.width,
           }}
         >
-          <div className={title}>{label}</div>
-          <div className={dropdown}>
+          <div className={ekfrequenzStyles.title}>{label}</div>
+          <div className={ekfrequenzStyles.dropdown}>
             {filterStatus?.length ?
-              <FaFilter className={faFilter} />
+              <FaFilter className={styles.faFilter} />
             : <Caret />}
           </div>
         </div>
@@ -67,7 +62,7 @@ export const CellHeaderFixedTpopStatus = observer(
           onClose={closeMenu}
           anchorOrigin={anchorOrigin}
         >
-          <div className={textFilterContainer}>
+          <div className={ekfrequenzStyles.textFilterContainer}>
             <Options type={type} />
           </div>
         </StyledMenu>

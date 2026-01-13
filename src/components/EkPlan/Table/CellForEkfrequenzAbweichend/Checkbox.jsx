@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { tpop } from '../../../shared/fragments.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { container, div, icon } from './Checkbox.module.css'
+import styles from './Checkbox.module.css'
 
 export const Checkbox = observer(({ row, value, field }) => {
   const store = useContext(MobxContext)
@@ -69,17 +69,17 @@ export const Checkbox = observer(({ row, value, field }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       onClick={onClick}
     >
       <div
-        className={div}
+        className={styles.div}
         style={{ background: checked ? '#2e7d32' : 'rgba(46,125,50,0.1)' }}
       >
         <svg
           viewBox="0 0 24 24"
           style={{ visibility: checked ? 'visible' : 'hidden' }}
-          className={icon}
+          className={styles.icon}
         >
           <polyline points="20 6 9 17 4 12" />
         </svg>

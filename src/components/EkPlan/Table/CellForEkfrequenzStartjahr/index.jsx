@@ -8,7 +8,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { tpop } from '../../../shared/fragments.js'
 import { setEkplans } from '../setEkplans/index.jsx'
 
-import { container, input } from './index.module.css'
+import styles from './index.module.css'
 
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.js'),
@@ -67,13 +67,13 @@ export const CellForEkfrequenzStartjahr = observer(
             : isOdd ? 'rgb(255, 255, 252)'
             : 'unset',
         }}
-        className={container}
+        className={styles.container}
       >
         <input
           value={stateValue}
           onChange={onChange}
           onBlur={onBlur}
-          className={input}
+          className={styles.input}
         />
       </div>
     )

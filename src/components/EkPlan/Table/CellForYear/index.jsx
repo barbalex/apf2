@@ -9,7 +9,7 @@ import { query } from './query.js'
 import { yearColumnWidth } from './yearColumnWidth.js'
 import { hover } from 'framer-motion'
 
-import { infoRow, tableCell } from '../index.module.css'
+import indexStyles from '../index.module.css'
 
 export const CellForYear = observer(
   ({ year, row, isOdd, ekPlan, ekfPlan, eks, ekfs, ansiedlungs }) => {
@@ -61,10 +61,10 @@ export const CellForYear = observer(
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
         onClick={onClickCell}
-        className={tableCell}
+        className={indexStyles.tableCell}
         style={cellStyle}
       >
-        <div className={infoRow}>
+        <div className={indexStyles.infoRow}>
           {showEk && (
             <EkIcon
               planned={ekPlan}
@@ -73,7 +73,7 @@ export const CellForYear = observer(
             />
           )}
         </div>
-        <div className={infoRow}>
+        <div className={indexStyles.infoRow}>
           {showEkf && (
             <EkIcon
               planned={ekfPlan}
@@ -82,7 +82,7 @@ export const CellForYear = observer(
             />
           )}
         </div>
-        <div className={infoRow}>
+        <div className={indexStyles.infoRow}>
           {showMassn && <MassnIcon ansiedlungs={ansiedlungs} />}
         </div>
       </div>

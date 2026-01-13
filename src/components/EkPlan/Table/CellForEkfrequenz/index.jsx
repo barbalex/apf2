@@ -11,13 +11,8 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { cellForSelect } from '../index.module.css'
-import {
-  dialogTitle,
-  listItem,
-  codeText,
-  anwendungsfallText,
-} from './index.module.css'
+import indexStyles from '../index.module.css'
+import styles from './index.module.css'
 
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.js'),
@@ -78,7 +73,7 @@ export const CellForEkfrequenz = observer(
           onMouseEnter={onMouseEnter}
           onMouseLeave={hovered.reset}
           onClick={onOpen}
-          className={cellForSelect}
+          className={indexStyles.cellForSelect}
           style={cellStyle}
         >
           {valueToShow}
@@ -87,7 +82,7 @@ export const CellForEkfrequenz = observer(
           onClose={onClose}
           open={open}
         >
-          <DialogTitle className={dialogTitle}>EK-Frequenz wählen:</DialogTitle>
+          <DialogTitle className={styles.dialogTitle}>EK-Frequenz wählen:</DialogTitle>
           <List sx={{ pt: 0 }}>
             <ListItem
               onClick={() => {
@@ -101,7 +96,7 @@ export const CellForEkfrequenz = observer(
                   { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
                 : {}),
               }}
-              className={listItem}
+              className={styles.listItem}
             >
               Kein Wert
             </ListItem>
@@ -119,16 +114,16 @@ export const CellForEkfrequenz = observer(
                     { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
                   : {}),
                 }}
-                className={listItem}
+                className={styles.listItem}
               >
                 <span
-                  className={codeText}
+                  className={styles.codeText}
                   width={maxCodeLength}
                   style={{ minWidth: `${maxCodeLength * 0.65}rem` }}
                 >
                   {e.code}
                 </span>
-                <span className={anwendungsfallText}>{e.anwendungsfall}</span>
+                <span className={styles.anwendungsfallText}>{e.anwendungsfall}</span>
               </ListItem>
             ))}
           </List>

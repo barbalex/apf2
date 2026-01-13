@@ -5,14 +5,14 @@ import { useQuery } from '@apollo/client/react'
 import { Option } from './Option.jsx'
 import { query } from './query.js'
 
-import { formGroup } from './Options.module.css'
+import styles from './Options.module.css'
 
 export const Options = ({ type }) => {
   const { data } = useQuery(query)
   const options = data?.allPopStatusWertes?.nodes ?? []
 
   return (
-    <FormGroup className={formGroup}>
+    <FormGroup className={styles.formGroup}>
       <FormLabel>Gewünschte Stati wählen:</FormLabel>
       {options.map((option) => (
         <Option
