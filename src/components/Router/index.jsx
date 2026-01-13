@@ -864,7 +864,7 @@ export const Router = () => {
                       <Route
                         path=":beobId"
                         lazy={() =>
-                          import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                          import('../Projekte/Daten/Beobzuordnung/index.tsx')
                         }
                         errorElement={<RouterErrorBoundary />}
                       />
@@ -884,7 +884,7 @@ export const Router = () => {
                       <Route
                         path=":beobId"
                         lazy={() =>
-                          import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                          import('../Projekte/Daten/Beobzuordnung/index.tsx')
                         }
                         errorElement={<RouterErrorBoundary />}
                       />
@@ -1328,7 +1328,7 @@ export const Router = () => {
                               <Route
                                 path=":beobId"
                                 lazy={() =>
-                                  import('../Projekte/Daten/Beobzuordnung/index.jsx')
+                                  import('../Projekte/Daten/Beobzuordnung/index.tsx')
                                 }
                                 errorElement={<RouterErrorBoundary />}
                               />

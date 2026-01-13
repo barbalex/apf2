@@ -30,9 +30,51 @@ import {
   pop,
   popStatusWerte,
 } from '../../../shared/fragments.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type BeobType from '../../../../models/apflora/Beob.js'
+import type Ap from '../../../../models/apflora/Ap.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type { TpopId } from '../../../../models/apflora/Tpop.js'
+import type { PopStatusWerteCode } from '../../../../models/apflora/PopStatusWerte.js'
 
 import styles from './index.module.css'
+
+interface BeobzuordnungQueryResult {
+  beobById: BeobType & {
+    aeTaxonomyByArtId?: {
+      artname: string
+      taxid: number
+      apByArtId?: Ap
+    }
+    aeTaxonomyByArtIdOriginal?: {
+      artname: string
+      taxid: number
+    }
+  }
+  apById: Ap & {
+    popsByApId: {
+      nodes: Array<{
+        id: string
+        nr: number
+        tpopsByPopId: {
+          nodes: Array<{
+            id: TpopId
+            nr: number
+            lv95X: number
+            lv95Y: number
+            popStatusWerteByStatus?: {
+              text: string
+            }
+            popByPopId?: {
+              nr: number
+            }
+          }>
+        }
+      }>
+    }
+  }
+}
 
 const fieldTypes = {
   idField: 'String',
@@ -62,7 +104,7 @@ const nichtZuordnenPopover = (
   </div>
 )
 
-const getTpopZuordnenSource = ({ row, ap }) => {
+const getTpopZuordnenSource = ({ row, ap }: { row: any; ap: any }) => {
   // get all popIds of active ap
   const popList = ap?.popsByApId?.nodes ?? []
   // get all tpop
@@ -99,7 +141,7 @@ const getTpopZuordnenSource = ({ row, ap }) => {
 }
 
 export const Component = observer(() => {
-  const { beobId: id, apId } = useParams()
+  const { beobId: id, apId } = useParams<{ beobId: string; apId: string }>()
   const { search, pathname } = useLocation()
   const type =
     pathname.includes('nicht-zuzuordnende-Beobachtungen') ? 'nichtZuzuordnen'
@@ -111,15 +153,18 @@ export const Component = observer(() => {
 
   const store = useContext(MobxContext)
 
-  const { data, loading, error, refetch } = useQuery(query, {
-    variables: { id, apId },
-  })
+  const { data, loading, error, refetch } = useQuery<BeobzuordnungQueryResult>(
+    query,
+    {
+      variables: { id, apId },
+    },
+  )
 
   const row = data?.beobById ?? {}
   const ap = data?.apById ?? {}
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
-  const aeTaxonomiesfilter = (inputValue) =>
+  const aeTaxonomiesfilter = (inputValue: string) =>
     inputValue ?
       {
         artname: { includesInsensitive: inputValue },
@@ -127,7 +172,7 @@ export const Component = observer(() => {
       }
     : { artname: { isNull: false }, apartsByArtIdExist: true }
 
-  const onSaveArtIdToDb = (event) =>
+  const onSaveArtIdToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
     saveArtIdToDb({
       value: event.target.value,
       row,
@@ -136,7 +181,7 @@ export const Component = observer(() => {
       search,
     })
 
-  const onSaveNichtZuordnenToDb = (value) =>
+  const onSaveNichtZuordnenToDb = (value: boolean) =>
     saveNichtZuordnenToDb({
       value,
       id,
@@ -146,7 +191,7 @@ export const Component = observer(() => {
       search,
     })
 
-  const onSaveTpopIdToDb = (event) =>
+  const onSaveTpopIdToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
     saveTpopIdToDb({
       value: event.target.value,
       id,
@@ -156,7 +201,7 @@ export const Component = observer(() => {
       search,
     })
 
-  const onUpdateField = (event) => {
+  const onUpdateField = (event: React.ChangeEvent<HTMLInputElement>) => {
     const changedField = event.target.name
     apolloClient.mutate({
       mutation: gql`

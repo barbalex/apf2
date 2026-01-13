@@ -26,7 +26,12 @@ import styles from '../Tpop/Menu.module.css'
 export const Menu = observer(() => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const { projId, apId, beobId, tpopId } = useParams()
+  const { projId, apId, beobId, tpopId } = useParams<{
+    projId: string
+    apId: string
+    beobId: string
+    tpopId?: string
+  }>()
 
   const store = useContext(MobxContext)
 
