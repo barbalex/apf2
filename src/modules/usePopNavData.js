@@ -8,13 +8,13 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
 import { popIcons } from './usePopsNavData.js'
-import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.jsx'
-import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.jsx'
+import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
+import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 const getLabelRightElements = ({ movingId, copyingId, popId }) => {
   const labelRightElements = []

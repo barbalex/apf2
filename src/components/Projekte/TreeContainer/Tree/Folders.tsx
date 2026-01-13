@@ -1,8 +1,8 @@
 import { useRef } from 'react'
 import { Transition } from 'react-transition-group'
 
-import { Node } from './Node.jsx'
-import { NodeWithList } from './NodeWithList.jsx'
+import { Node } from './Node.tsx'
+import { NodeWithList } from './NodeWithList.tsx'
 
 import styles from './Folders.module.css'
 

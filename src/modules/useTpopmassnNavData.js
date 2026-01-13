@@ -8,8 +8,8 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 const getLabelRightElements = ({ copyingId, movingId, tpopmassnId }) => {
   const labelRightElements = []

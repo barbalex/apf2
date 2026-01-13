@@ -18,7 +18,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { ApFilter } from '../../TreeContainer/ApFilter/index.jsx'
+import { ApFilter } from '../../TreeContainer/ApFilter/index.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 

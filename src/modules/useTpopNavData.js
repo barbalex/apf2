@@ -9,13 +9,13 @@ import { MobxContext } from '../mobxContext.js'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 
-import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.jsx'
-import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.jsx'
+import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.tsx'
+import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.tsx'
 import { tpopIcons } from './useTpopsNavData.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 const getLabelRightElements = ({ movingId, copyingId, tpopId }) => {
   const labelRightElements = []

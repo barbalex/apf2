@@ -12,7 +12,20 @@ import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Error } from '../../shared/Error.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
+import type { PopId } from '../../../models/apflora/public/Pop.ts'
+
 import styles from './TpopFromBeobPopList.module.css'
+
+interface PopNode {
+  id: PopId
+  label: string | null
+}
+
+interface AllPopsQueryResult {
+  allPops: {
+    nodes: PopNode[]
+  }
+}
 
 export const TpopFromBeobPopList = observer(
   ({ closeNewTpopFromBeobDialog, beobId }) => {
@@ -36,7 +49,7 @@ export const TpopFromBeobPopList = observer(
         }
       }
     `
-    const { data, error, loading } = useQuery(query, {
+    const { data, error, loading } = useQuery<AllPopsQueryResult>(query, {
       variables: { apId },
     })
 

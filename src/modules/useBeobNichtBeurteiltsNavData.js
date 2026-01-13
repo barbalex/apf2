@@ -8,7 +8,7 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobNichtBeurteiltsNavData = (props) => {
   const apolloClient = useApolloClient()

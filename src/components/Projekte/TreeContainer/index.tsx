@@ -3,19 +3,19 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 const LabelFilter = lazy(async () => ({
-  default: (await import('./LabelFilter.jsx')).LabelFilter,
+  default: (await import('./LabelFilter.tsx')).LabelFilter,
 }))
 const ApFilter = lazy(async () => ({
-  default: (await import('./ApFilter/index.jsx')).ApFilter,
+  default: (await import('./ApFilter/index.tsx')).ApFilter,
 }))
 const TreeComponent = lazy(async () => ({
-  default: (await import('./Tree/index.jsx')).TreeComponent,
+  default: (await import('./Tree/index.tsx')).TreeComponent,
 }))
 const Menus = lazy(async () => ({
-  default: (await import('./Menus.jsx')).Menus,
+  default: (await import('./Menus.tsx')).Menus,
 }))
 const DeleteDatasetModal = lazy(async () => ({
-  default: (await import('./DeleteDatasetModal/index.jsx')).DatasetDeleteModal,
+  default: (await import('./DeleteDatasetModal/index.tsx')).DatasetDeleteModal,
 }))
 const ErrorBoundary = lazy(async () => ({
   default: (await import('../../shared/ErrorBoundary.jsx')).ErrorBoundary,

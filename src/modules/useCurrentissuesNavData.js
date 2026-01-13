@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useCurrentissuesNavData = () => {
   const apolloClient = useApolloClient()

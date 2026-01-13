@@ -7,7 +7,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useLocation } from 'react-router'
 
 import { tables } from '../../../../modules/tables.js'
-import { deleteModule } from './delete/index.jsx'
+import { deleteModule } from './delete/index.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 

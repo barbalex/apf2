@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 export const useMessagesNavData = () => {
   const apolloClient = useApolloClient()

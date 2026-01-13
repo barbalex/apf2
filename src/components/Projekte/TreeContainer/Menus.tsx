@@ -20,190 +20,190 @@ import {
 } from '../../../JotaiStore/index.js'
 
 const CmApFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApFolder.jsx')).Apfolder,
+  default: (await import('./contextmenu/ApFolder.tsx')).Apfolder,
 }))
 const CmAp = lazy(async () => ({
-  default: (await import('./contextmenu/Ap.jsx')).Ap,
+  default: (await import('./contextmenu/Ap.tsx')).Ap,
 }))
 const CmUserFolder = lazy(async () => ({
-  default: (await import('./contextmenu/UserFolder.jsx')).UserFolder,
+  default: (await import('./contextmenu/UserFolder.tsx')).UserFolder,
 }))
 const CmUser = lazy(async () => ({
-  default: (await import('./contextmenu/User.jsx')).User,
+  default: (await import('./contextmenu/User.tsx')).User,
 }))
 const CmAdresseFolder = lazy(async () => ({
-  default: (await import('./contextmenu/AdresseFolder.jsx')).Adressefolder,
+  default: (await import('./contextmenu/AdresseFolder.tsx')).Adressefolder,
 }))
 const CmAdresse = lazy(async () => ({
-  default: (await import('./contextmenu/Adresse.jsx')).Adresse,
+  default: (await import('./contextmenu/Adresse.tsx')).Adresse,
 }))
 const CmTpopApberrelevantGrundWerteFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopApberrelevantGrundWerteFolder.jsx'))
+  default: (await import('./contextmenu/TpopApberrelevantGrundWerteFolder.tsx'))
     .TpopApberrelevantGrundWerteFolder,
 }))
 const CmTpopApberrelevantGrundWerte = lazy(async () => ({
-  default: (await import('./contextmenu/TpopApberrelevantGrundWerte.jsx'))
+  default: (await import('./contextmenu/TpopApberrelevantGrundWerte.tsx'))
     .TpopApberrelevantGrundWerte,
 }))
 const CmTpopkontrzaehlEinheitWerteFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerteFolder.jsx'))
+  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerteFolder.tsx'))
     .TpopkontrzaehlEinheitWerteFolder,
 }))
 const CmTpopkontrzaehlEinheitWerte = lazy(async () => ({
-  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerte.jsx'))
+  default: (await import('./contextmenu/TpopkontrzaehlEinheitWerte.tsx'))
     .TpopkontrzaehlEinheitWerte,
 }))
 const CmEkAbrechnungstypWerteFolder = lazy(async () => ({
-  default: (await import('./contextmenu/EkAbrechnungstypWerteFolder.jsx'))
+  default: (await import('./contextmenu/EkAbrechnungstypWerteFolder.tsx'))
     .EkAbrechnungstypWerteFolder,
 }))
 const CmEkAbrechnungstypWerte = lazy(async () => ({
-  default: (await import('./contextmenu/EkAbrechnungstypWerte.jsx'))
+  default: (await import('./contextmenu/EkAbrechnungstypWerte.tsx'))
     .EkAbrechnungstypWerte,
 }))
 const CmApberuebersichtFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApberuebersichtFolder.jsx'))
+  default: (await import('./contextmenu/ApberuebersichtFolder.tsx'))
     .ApberuebersichtFolder,
 }))
 const CmApberuebersicht = lazy(async () => ({
-  default: (await import('./contextmenu/Apberuebersicht.jsx')).Apberuebersicht,
+  default: (await import('./contextmenu/Apberuebersicht.tsx')).Apberuebersicht,
 }))
 const CmAssozartFolder = lazy(async () => ({
-  default: (await import('./contextmenu/AssozartFolder.jsx')).AssozartFolder,
+  default: (await import('./contextmenu/AssozartFolder.tsx')).AssozartFolder,
 }))
 const CmAssozart = lazy(async () => ({
-  default: (await import('./contextmenu/Assozart.jsx')).AssozartFolder,
+  default: (await import('./contextmenu/Assozart.tsx')).AssozartFolder,
 }))
 const CmEkzaehleinheitFolder = lazy(async () => ({
-  default: (await import('./contextmenu/EkzaehleinheitFolder.jsx'))
+  default: (await import('./contextmenu/EkzaehleinheitFolder.tsx'))
     .EkzaehleinheitFolder,
 }))
 const CmEkzaehleinheit = lazy(async () => ({
-  default: (await import('./contextmenu/Ekzaehleinheit.jsx')).Ekzaehleinheit,
+  default: (await import('./contextmenu/Ekzaehleinheit.tsx')).Ekzaehleinheit,
 }))
 const CmEkfrequenzFolder = lazy(async () => ({
-  default: (await import('./contextmenu/EkfrequenzFolder.jsx'))
+  default: (await import('./contextmenu/EkfrequenzFolder.tsx'))
     .EkfrequenzFolder,
 }))
 const CmEkfrequenz = lazy(async () => ({
-  default: (await import('./contextmenu/Ekfrequenz.jsx')).Ekfrequenz,
+  default: (await import('./contextmenu/Ekfrequenz.tsx')).Ekfrequenz,
 }))
 const CmApartFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApartFolder.jsx')).ApartFolder,
+  default: (await import('./contextmenu/ApartFolder.tsx')).ApartFolder,
 }))
 const CmApart = lazy(async () => ({
-  default: (await import('./contextmenu/Apart.jsx')).Apart,
+  default: (await import('./contextmenu/Apart.tsx')).Apart,
 }))
 const CmBeobZugeordnetFolder = lazy(async () => ({
-  default: (await import('./contextmenu/BeobZugeordnetFolder.jsx'))
+  default: (await import('./contextmenu/BeobZugeordnetFolder.tsx'))
     .BeobZugeordnetFolder,
 }))
 const CmApberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ApberFolder.jsx')).ApberFolder,
+  default: (await import('./contextmenu/ApberFolder.tsx')).ApberFolder,
 }))
 const CmApber = lazy(async () => ({
-  default: (await import('./contextmenu/Apber.jsx')).Apber,
+  default: (await import('./contextmenu/Apber.tsx')).Apber,
 }))
 const CmErfkritFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ErfkritFolder.jsx')).ErfkritFolder,
+  default: (await import('./contextmenu/ErfkritFolder.tsx')).ErfkritFolder,
 }))
 const CmErfkrit = lazy(async () => ({
-  default: (await import('./contextmenu/Erfkrit.jsx')).Erfkrit,
+  default: (await import('./contextmenu/Erfkrit.tsx')).Erfkrit,
 }))
 const CmZielFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ZielFolder.jsx')).ZielFolder,
+  default: (await import('./contextmenu/ZielFolder.tsx')).ZielFolder,
 }))
 const CmZielJahrFolder = lazy(async () => ({
-  default: (await import('./contextmenu/ZielJahrFolder.jsx')).ZielJahrFolder,
+  default: (await import('./contextmenu/ZielJahrFolder.tsx')).ZielJahrFolder,
 }))
 const CmZiel = lazy(async () => ({
-  default: (await import('./contextmenu/Ziel.jsx')).Ziel,
+  default: (await import('./contextmenu/Ziel.tsx')).Ziel,
 }))
 const CmPopFolder = lazy(async () => ({
-  default: (await import('./contextmenu/PopFolder.jsx')).PopFolder,
+  default: (await import('./contextmenu/PopFolder.tsx')).PopFolder,
 }))
 const CmPop = lazy(async () => ({
-  default: (await import('./contextmenu/Pop.jsx')).Pop,
+  default: (await import('./contextmenu/Pop.tsx')).Pop,
 }))
 const CmPopmassnberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/PopmassnberFolder.jsx'))
+  default: (await import('./contextmenu/PopmassnberFolder.tsx'))
     .PopmassnberFolder,
 }))
 const CmPopmassnber = lazy(async () => ({
-  default: (await import('./contextmenu/Popmassnber.jsx')).Popmassnber,
+  default: (await import('./contextmenu/Popmassnber.tsx')).Popmassnber,
 }))
 const CmPopberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/PopberFolder.jsx')).PopberFolder,
+  default: (await import('./contextmenu/PopberFolder.tsx')).PopberFolder,
 }))
 const CmPopber = lazy(async () => ({
-  default: (await import('./contextmenu/Popber.jsx')).Popber,
+  default: (await import('./contextmenu/Popber.tsx')).Popber,
 }))
 const CmProjekt = lazy(async () => ({
-  default: (await import('./contextmenu/Projekt.jsx')).Projekt,
+  default: (await import('./contextmenu/Projekt.tsx')).Projekt,
 }))
 const CmWerteListen = lazy(async () => ({
-  default: (await import('./contextmenu/WerteListen.jsx')).WerteListen,
+  default: (await import('./contextmenu/WerteListen.tsx')).WerteListen,
 }))
 const CmTpopFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopFolder.jsx')).TpopFolder,
+  default: (await import('./contextmenu/TpopFolder.tsx')).TpopFolder,
 }))
 const CmTpop = lazy(async () => ({
-  default: (await import('./contextmenu/Tpop.jsx')).Tpop,
+  default: (await import('./contextmenu/Tpop.tsx')).Tpop,
 }))
 const CmTpopberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopberFolder.jsx')).TpopberFolder,
+  default: (await import('./contextmenu/TpopberFolder.tsx')).TpopberFolder,
 }))
 const CmTpopber = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopber.jsx')).Tpopber,
+  default: (await import('./contextmenu/Tpopber.tsx')).Tpopber,
 }))
 const CmBeobZugeordnet = lazy(async () => ({
-  default: (await import('./contextmenu/BeobZugeordnet.jsx')).BeobZugeordnet,
+  default: (await import('./contextmenu/BeobZugeordnet.tsx')).BeobZugeordnet,
 }))
 const CmBeobnichtbeurteilt = lazy(async () => ({
-  default: (await import('./contextmenu/Beobnichtbeurteilt.jsx'))
+  default: (await import('./contextmenu/Beobnichtbeurteilt.tsx'))
     .BeobNichtBeurteilt,
 }))
 const CmBeobNichtZuzuordnen = lazy(async () => ({
-  default: (await import('./contextmenu/BeobNichtZuzuordnen.jsx'))
+  default: (await import('./contextmenu/BeobNichtZuzuordnen.tsx'))
     .BeobNichtZuzuordnen,
 }))
 const CmTpopfreiwkontrFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopfreiwkontrFolder.jsx'))
+  default: (await import('./contextmenu/TpopfreiwkontrFolder.tsx'))
     .TpopfreiwkontrFolder,
 }))
 const CmTpopfreiwkontr = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopfreiwkontr.jsx')).Tpopfreiwkontr,
+  default: (await import('./contextmenu/Tpopfreiwkontr.tsx')).Tpopfreiwkontr,
 }))
 const CmTpopfeldkontrFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopfeldkontrFolder.jsx'))
+  default: (await import('./contextmenu/TpopfeldkontrFolder.tsx'))
     .TpopfeldkontrFolder,
 }))
 const CmTpopfeldkontr = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopfeldkontr.jsx')).Tpopfeldkontr,
+  default: (await import('./contextmenu/Tpopfeldkontr.tsx')).Tpopfeldkontr,
 }))
 const CmTpopfeldkontrzaehlFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopfeldkontrzaehlFolder.jsx'))
+  default: (await import('./contextmenu/TpopfeldkontrzaehlFolder.tsx'))
     .TpopfeldkontrzaehlFolder,
 }))
 const CmTpopfeldkontrzaehl = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopfeldkontrzaehl.jsx'))
+  default: (await import('./contextmenu/Tpopfeldkontrzaehl.tsx'))
     .Tpopfeldkontrzaehl,
 }))
 const CmTpopmassnberFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopmassnberFolder.jsx'))
+  default: (await import('./contextmenu/TpopmassnberFolder.tsx'))
     .TpopmassnberFolder,
 }))
 const CmTpopmassnber = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopmassnber.jsx')).Tpopmassnber,
+  default: (await import('./contextmenu/Tpopmassnber.tsx')).Tpopmassnber,
 }))
 const CmTpopmassnFolder = lazy(async () => ({
-  default: (await import('./contextmenu/TpopmassnFolder.jsx')).TpopmassnFolder,
+  default: (await import('./contextmenu/TpopmassnFolder.tsx')).TpopmassnFolder,
 }))
 const CmTpopmassn = lazy(async () => ({
-  default: (await import('./contextmenu/Tpopmassn.jsx')).Tpopmassn,
+  default: (await import('./contextmenu/Tpopmassn.tsx')).Tpopmassn,
 }))
 const TpopFromBeobPopList = lazy(async () => ({
-  default: (await import('./TpopFromBeobPopList.jsx')).TpopFromBeobPopList,
+  default: (await import('./TpopFromBeobPopList.tsx')).TpopFromBeobPopList,
 }))
 const ErrorBoundary = lazy(async () => ({
   default: (await import('../../shared/ErrorBoundary.jsx')).ErrorBoundary,

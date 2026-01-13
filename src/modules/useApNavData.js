@@ -10,8 +10,8 @@ import { PopMapIcon } from '../components/NavElements/PopMapIcon.jsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.jsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
-import { Node } from '../components/Projekte/TreeContainer/Tree/Node.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
+import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 export const useApNavData = (props) => {
   const apolloClient = useApolloClient()

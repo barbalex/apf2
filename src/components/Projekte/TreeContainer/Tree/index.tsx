@@ -1,6 +1,6 @@
-import { Root } from './Root.jsx'
-import { IntoViewScroller } from './IntoViewScroller.jsx'
-import { Menu } from './Menu.jsx'
+import { Root } from './Root.tsx'
+import { IntoViewScroller } from './IntoViewScroller.tsx'
+import { Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
 

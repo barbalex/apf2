@@ -8,7 +8,7 @@ import { reaction } from 'mobx'
 import { MobxContext } from '../mobxContext.js'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.jsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobZugeordnetsNavData = (props) => {
   const apolloClient = useApolloClient()

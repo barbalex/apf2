@@ -6,7 +6,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkfrequenzsNavData = (props) => {
   const apolloClient = useApolloClient()

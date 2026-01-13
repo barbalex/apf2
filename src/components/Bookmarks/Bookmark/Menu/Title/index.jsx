@@ -6,7 +6,7 @@ import { MdFilterAlt } from 'react-icons/md'
 import isUuid from 'is-uuid'
 import { useResizeDetector } from 'react-resize-detector'
 import { FilterInput } from './FilterInput.jsx'
-import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.jsx'
+import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.tsx'
 
 import styles from './index.module.css'
 

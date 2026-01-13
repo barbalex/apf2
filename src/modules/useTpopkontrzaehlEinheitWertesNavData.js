@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopkontrzaehlEinheitWertesNavData = () => {
   const apolloClient = useApolloClient()

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
-import { NodeWithListTransitioned } from '../NodeWithListTransitioned.jsx'
-import { NodeWithList } from '../NodeWithList.jsx'
+import { NodeWithListTransitioned } from '../NodeWithListTransitioned.tsx'
+import { NodeWithList } from '../NodeWithList.tsx'
 
 export const Fetcher = ({
   menu,

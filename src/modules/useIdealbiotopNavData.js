@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useIdealbiotopNavData = (props) => {
   const apolloClient = useApolloClient()

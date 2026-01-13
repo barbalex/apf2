@@ -8,7 +8,7 @@ import { useParams } from 'react-router'
 import { MobxContext } from '../mobxContext.js'
 import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
-import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.jsx'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopmassnsNavData = (props) => {
   const apolloClient = useApolloClient()
