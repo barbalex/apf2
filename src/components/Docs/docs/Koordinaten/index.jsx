@@ -1,11 +1,11 @@
 import coordinates from './coordinates.png'
 
-import { dokuDate } from '../../DesktopDocs.module.css'
+import desktopStyles from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Koordinaten</h1>
-    <p className={dokuDate}>02.06.2019</p>
+    <p className={desktopStyles.dokuDate}>02.06.2019</p>
     <p>
       Früher wurden Koordinaten in apflora in der Projektion{' '}
       <a

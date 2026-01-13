@@ -2,14 +2,14 @@ import tpopSymbols1 from './tpopSymbols1.png'
 import tpopSymbols2 from './tpopSymbols2.png'
 import tpopSymbols3 from './tpopSymbols3.png'
 
-import { dokuDate } from '../../DesktopDocs.module.css'
+import desktopStyles from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Karte: Symbole und Label für (Teil-)Populationen wählen</h1>
-    <p className={dokuDate}>30.01.2019</p>Seit dem 26.12.2018 ist das
-    Blumen-Symbol für Populationen und Teil-Populationen im Layer-Tool der Karte
-    interaktiv:
+    <p className={desktopStyles.dokuDate}>30.01.2019</p>Seit dem 26.12.2018 ist
+    das Blumen-Symbol für Populationen und Teil-Populationen im Layer-Tool der
+    Karte interaktiv:
     <br />
     <img
       src={tpopSymbols1}

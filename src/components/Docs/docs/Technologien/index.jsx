@@ -1,11 +1,11 @@
 import { Link } from 'react-router'
 
-import { dokuDate } from '../../DesktopDocs.module.css'
+import desktopStyles from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Technologien</h1>
-    <p className={dokuDate}>1.1.2023</p>
+    <p className={desktopStyles.dokuDate}>1.1.2023</p>
     <p>Die Anwendung ist zweigeteilt:</p>
     <ol>
       <li>

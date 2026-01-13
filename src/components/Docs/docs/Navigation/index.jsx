@@ -5,12 +5,12 @@ import image004 from './image004.png'
 import image005 from './image005.png'
 import image006 from './image006.png'
 
-import { dokuDate } from '../../DesktopDocs.module.css'
+import desktopStyles from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Navigation 📱💻</h1>
-    <p className={dokuDate}>20.12.2024</p>
+    <p className={desktopStyles.dokuDate}>20.12.2024</p>
     <p>
       Früher war apflora primär für die Arbeit auf Desktops ausgelegt. Ende 2024
       wurde apflora für die Bedienung auf Handys und Tablets erweitert.
