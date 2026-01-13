@@ -16,6 +16,20 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ZielId } from '../../../../models/apflora/ZielId.ts'
+import type { ApId } from '../../../../models/apflora/ApId.ts'
+
+interface CreateZielResult {
+  data: {
+    createZiel: {
+      ziel: {
+        id: ZielId
+        apId: ApId
+      }
+    }
+  }
+}
+
 import styles from '../../../shared/Files/Menu/index.module.css'
 
 const iconStyle = { color: 'white' }
@@ -31,9 +45,9 @@ export const Menu = observer(() => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateZielResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateZielResult['data']>({
         mutation: gql`
           mutation createZielForZielForm($apId: UUID!) {
             createZiel(input: { ziel: { apId: $apId } }) {
@@ -48,7 +62,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -69,7 +83,9 @@ export const Menu = observer(() => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -89,7 +105,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

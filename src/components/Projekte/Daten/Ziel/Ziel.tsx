@@ -18,7 +18,30 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { ziel as zielFragment } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type { ZielId } from '../../../../models/apflora/ZielId.ts'
+import type { ApId } from '../../../../models/apflora/ApId.ts'
+import type { ZielTypWerteCode } from '../../../../models/apflora/ZielTypWerteCode.ts'
+
+interface ZielQueryResult {
+  zielById: {
+    id: ZielId
+    apId: ApId
+    typ: ZielTypWerteCode | null
+    jahr: number | null
+    bezeichnung: string | null
+    erreichung: string | null
+    bemerkungen: string | null
+    changedBy: string | null
+  } | null
+  allZielTypWertes: {
+    nodes: Array<{
+      value: ZielTypWerteCode
+      label: string
+    }>
+  }
+}
 
 import styles from './Ziel.module.css'
 
@@ -50,9 +73,9 @@ export const Component = observer(() => {
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<ZielQueryResult>(query, {
     variables: {
       id,
     },
@@ -60,7 +83,7 @@ export const Component = observer(() => {
 
   const row = data?.zielById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -96,7 +119,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     tsQueryClient.invalidateQueries({
