@@ -13,10 +13,7 @@ import { Verification } from '../../Tpopfreiwkontr/Form/Verification.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 
-import {
-  formContainer,
-  gridContainer,
-} from '../../Tpopfreiwkontr/Form/index.module.css'
+import styles from '../../Tpopfreiwkontr/Form/index.module.css'
 
 export const Form = observer(({ row, activeTab }) => {
   const store = useContext(MobxContext)
@@ -31,8 +28,8 @@ export const Form = observer(({ row, activeTab }) => {
     })
 
   return (
-    <div className={formContainer}>
-      <div className={gridContainer}>
+    <div className={styles.formContainer}>
+      <div className={styles.gridContainer}>
         <Headdata
           row={row}
           activeTab={activeTab}
