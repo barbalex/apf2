@@ -22,9 +22,36 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import type {
+  TpopkontrId,
+  TpopId,
+  TpopkontrzaehlId,
+} from '../../../../generated/apflora/models.js'
+
 import styles from './Menu.module.css'
 
-export const Menu = observer(({ toggleFilterInput }) => {
+interface CreateTpopkontrResult {
+  createTpopkontr: {
+    tpopkontr: {
+      id: TpopkontrId
+      tpopId: TpopId
+    }
+  }
+}
+
+interface CreateTpopkontrzaehlResult {
+  createTpopkontrzaehl: {
+    tpopkontrzaehl: {
+      id: TpopkontrzaehlId
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -47,7 +74,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
     // 1. create new tpopkontr
     let result
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopkontrResult>({
         mutation: gql`
           mutation createTpopfeldkontrForTpopfeldkontrForm($tpopId: UUID!) {
             createTpopkontr(input: { tpopkontr: { tpopId: $tpopId } }) {
@@ -64,7 +91,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -73,7 +100,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
     const id = result?.data?.createTpopkontr?.tpopkontr?.id
 
     // 2. add new tpopkontrzaehl
-    const resultZaehl = await apolloClient.mutate({
+    const resultZaehl = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
       mutation: gql`
         mutation createTpokontrzaehlForTpopfeldkontrs($parentId: UUID!) {
           createTpopkontrzaehl(
