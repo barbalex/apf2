@@ -16,7 +16,18 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopberId, TpopId } from '../../../../generated/apflora/models.js'
+
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+interface CreateTpopberResult {
+  createTpopber: {
+    tpopber: {
+      id: TpopberId
+      tpopId: TpopId
+    }
+  }
+}
 
 const iconStyle = { color: 'white' }
 
@@ -33,7 +44,7 @@ export const Menu = observer(() => {
   const onClickAdd = async () => {
     let result
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopberResult>({
         mutation: gql`
           mutation createTpopberForTpopberForm($tpopId: UUID!) {
             createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
@@ -48,7 +59,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -66,7 +77,9 @@ export const Menu = observer(() => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -86,7 +99,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

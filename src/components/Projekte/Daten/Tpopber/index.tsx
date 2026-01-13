@@ -14,9 +14,32 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopber } from '../../../shared/fragments.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type {
+  TpopberId,
+  TpopId,
+  TpopEntwicklungWerteCode,
+} from '../../../../generated/apflora/models.js'
 
 import styles from './index.module.css'
+
+interface TpopberQueryResult {
+  tpopberById?: {
+    id: TpopberId
+    tpopId: TpopId
+    jahr?: number | null
+    entwicklung?: TpopEntwicklungWerteCode | null
+    bemerkungen?: string | null
+    changedBy?: string | null
+  } | null
+  allTpopEntwicklungWertes?: {
+    nodes: {
+      value: TpopEntwicklungWerteCode
+      label?: string | null
+    }[]
+  } | null
+}
 
 const fieldTypes = {
   tpopId: 'UUID',
@@ -33,9 +56,9 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(
+  const { data, loading, error } = useQuery<TpopberQueryResult>(
     gql`
       query tpopberByIdQuery($id: UUID!) {
         tpopberById(id: $id) {
@@ -91,7 +114,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     // only set if necessary (to reduce renders)
     if (Object.keys(fieldErrors).length) {
