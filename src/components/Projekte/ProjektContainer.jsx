@@ -11,7 +11,7 @@ const TreeContainer = lazy(async () => ({
   default: (await import('./TreeContainer/index.jsx')).TreeContainer,
 }))
 const Exporte = lazy(async () => ({
-  default: (await import('./Exporte/index.jsx')).Exporte,
+  default: (await import('./Exporte/index.tsx')).Exporte,
 }))
 const Filter = lazy(async () => ({
   default: (await import('./Filter/index.jsx')).Filter,
