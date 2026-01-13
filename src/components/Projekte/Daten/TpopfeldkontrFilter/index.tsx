@@ -21,10 +21,53 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Tabs } from './Tabs.jsx'
+import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
+import type {
+  AdresseId,
+  TpopEntwicklungWerteCode,
+  TpopkontrIdbiotuebereinstWerteCode,
+} from '../../../../generated/apflora/models.js'
+
 import styles from './index.module.css'
+
+interface TpopfeldkontrFilterQueryResult {
+  allTpopkontrIdbiotuebereinstWertes?: {
+    nodes: {
+      value: TpopkontrIdbiotuebereinstWerteCode
+      label?: string | null
+    }[]
+  } | null
+  allTpopEntwicklungWertes?: {
+    nodes: {
+      value: TpopEntwicklungWerteCode
+      label?: string | null
+    }[]
+  } | null
+  allAeLrDelarzes?: {
+    nodes: {
+      id: string
+      label?: string | null
+      einheit?: string | null
+    }[]
+  } | null
+  allAdresses?: {
+    nodes: {
+      value: AdresseId
+      label?: string | null
+    }[]
+  } | null
+}
+
+interface TpopkontrsCountQueryResult {
+  allTpopkontrs?: {
+    totalCount: number
+  } | null
+  tpopkontrsFiltered?: {
+    totalCount: number
+  } | null
+}
 
 const tpopkontrTypWerte = [
   {
@@ -63,13 +106,16 @@ export const TpopfeldkontrFilter = observer(() => {
 
   const row = dataFilter.tpopfeldkontr[activeTab]
 
-  const { data, loading, error } = useQuery(query)
-  const { data: dataTpopkontrs } = useQuery(queryTpopkontrs, {
-    variables: {
-      filteredFilter: ekGqlFilter.filtered,
-      allFilter: ekGqlFilter.all,
+  const { data, loading, error } = useQuery<TpopfeldkontrFilterQueryResult>(query)
+  const { data: dataTpopkontrs } = useQuery<TpopkontrsCountQueryResult>(
+    queryTpopkontrs,
+    {
+      variables: {
+        filteredFilter: ekGqlFilter.filtered,
+        allFilter: ekGqlFilter.all,
+      },
     },
-  })
+  )
 
   const [tab, setTab] = useSearchParamsState('feldkontrTab', 'entwicklung')
   const onChangeTab = (event, value) => setTab(value)
