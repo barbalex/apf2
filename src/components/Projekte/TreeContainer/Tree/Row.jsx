@@ -19,15 +19,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 
-import {
-  node as nodeClass,
-  openNode,
-  closedNodeWithChildren,
-  loading,
-  leaf,
-  symbol,
-  label as labelClass,
-} from './Row.module.css'
+import styles from './Row.module.css'
 
 const transitionStyles = {
   entering: { opacity: 1 },
@@ -122,12 +114,12 @@ export const Row = observer(({ node, transitionState, ref }) => {
         // need this id to scroll elements into view
         id={node.id}
         ref={ref}
-        className={nodeClass}
+        className={styles.node}
         style={nodeStyle}
       >
         {useSymbolIcon && (
           <div
-            className={symbol}
+            className={styles.symbol}
             onClick={onClickNodeSymbol}
           >
             {symbolIcon === 'openNodeIcon' && (
@@ -137,34 +129,34 @@ export const Row = observer(({ node, transitionState, ref }) => {
                 style={{
                   color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                 }}
-                className={openNode}
+                className={styles.openNode}
               />
             )}
             {symbolIcon === 'closedNodeWithChildrenIcon' && (
-              <MdChevronRight className={closedNodeWithChildren} />
+              <MdChevronRight className={styles.closedNodeWithChildren} />
             )}
             {symbolIcon === 'loadingIcon' && (
               <MdMoreHoriz
                 style={{
                   color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
                 }}
-                className={loading}
+                className={styles.loading}
               />
             )}
           </div>
         )}
         {useSymbolSpan && (
           <div
-            className={symbol}
+            className={styles.symbol}
             onClick={onClickNode}
           >
-            <MdRemove className={leaf} />
+            <MdRemove className={styles.leaf} />
           </div>
         )}
         {node.labelLeftElements?.length &&
           node.labelLeftElements.map((El, index) => <El key={index} />)}
         <span
-          className={labelClass}
+          className={styles.label}
           node={node}
           onClick={onClickNode}
           style={{
