@@ -16,7 +16,12 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { Tabs } from './Tabs.jsx'
+import { Tabs } from './Tabs.tsx'
+
+import type { AdresseId } from '../../../../models/apflora/Adresse.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type { ApBearbstandWerteCode } from '../../../../models/apflora/ApBearbstandWerte.js'
+import type { ApUmsetzungWerteCode } from '../../../../models/apflora/ApUmsetzungWerte.js'
 
 import {
   popover,
@@ -30,6 +35,45 @@ import {
   filterCommentTitle,
   filterComment,
 } from './index.module.css'
+
+interface ApsQueryResult {
+  allAps: {
+    totalCount: number
+  }
+  filteredAps: {
+    totalCount: number
+  }
+}
+
+interface AdressesQueryResult {
+  allAdresses: {
+    nodes: Array<{
+      value: AdresseId
+      label: string
+    }>
+  }
+}
+
+interface ListsQueryResult {
+  allApBearbstandWertes: {
+    nodes: Array<{
+      value: ApBearbstandWerteCode
+      label: string
+    }>
+  }
+  allApUmsetzungWertes: {
+    nodes: Array<{
+      value: ApUmsetzungWerteCode
+      label: string
+    }>
+  }
+}
+
+interface AeTaxonomiesByIdQueryResult {
+  aeTaxonomyById: {
+    artname: string
+  }
+}
 
 export const ApFilter = observer(() => {
   const store = useContext(MobxContext)
@@ -49,7 +93,7 @@ export const ApFilter = observer(() => {
     }
   }, [activeTab, dataFilter.ap.length])
 
-  const { data: apsData, error: apsError } = useQuery(queryAps, {
+  const { data: apsData, error: apsError } = useQuery<ApsQueryResult>(queryAps, {
     variables: {
       filteredFilter: apGqlFilter.filtered,
       allFilter: apGqlFilter.all,
@@ -60,19 +104,19 @@ export const ApFilter = observer(() => {
     data: dataAdresses,
     error: errorAdresses,
     loading: loadingAdresses,
-  } = useQuery(queryAdresses)
+  } = useQuery<AdressesQueryResult>(queryAdresses)
 
   const {
     data: dataLists,
     error: errorLists,
     loading: loadingLists,
-  } = useQuery(queryLists)
+  } = useQuery<ListsQueryResult>(queryLists)
 
   const {
     data: dataAeTaxonomiesById,
     error: errorAeTaxonomiesById,
     loading: loadingAeTaxonomiesById,
-  } = useQuery(queryAeTaxonomiesById, {
+  } = useQuery<AeTaxonomiesByIdQueryResult>(queryAeTaxonomiesById, {
     variables: {
       id: dataFilter.ap?.[activeTab]?.artId,
       run: !!dataFilter.ap?.[activeTab]?.artId,
@@ -87,7 +131,7 @@ export const ApFilter = observer(() => {
   const row = dataFilter.ap[activeTab]
   // console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
 
-  const saveToDb = (event) => {
+  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -99,8 +143,8 @@ export const ApFilter = observer(() => {
     })
   }
 
-  const aeTaxonomiesFilter = (inputValue) => {
-    let filter = { apByArtIdExists: true }
+  const aeTaxonomiesFilter = (inputValue: string) => {
+    let filter: any = { apByArtIdExists: true }
     if (inputValue) filter.artname = { includesInsensitive: inputValue }
     if (nurApFilter) filter.apByArtId = { bearbeitung: { in: [1, 2, 3] } }
     return filter
