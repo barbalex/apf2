@@ -21,8 +21,92 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { query } from './query.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+
+import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
+import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { ApId } from '../../../../models/apflora/ApId.ts'
+import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
+import type { TpopmassnTypWerteCode } from '../../../../models/apflora/TpopmassnTypWerteCode.ts'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+
+interface TpopmassnQueryResult {
+  tpopmassnById: {
+    id: TpopmassnId
+    label: string
+    typ: TpopmassnTypWerteCode | null
+    tpopmassnTypWerteByTyp: {
+      id: string
+      anpflanzung: boolean | null
+    } | null
+    beschreibung: string | null
+    jahr: number | null
+    datum: string | null
+    bemerkungen: string | null
+    planBezeichnung: string | null
+    flaeche: number | null
+    markierung: string | null
+    anzTriebe: number | null
+    anzPflanzen: number | null
+    anzPflanzstellen: number | null
+    zieleinheitEinheit: TpopkontrzaehlEinheitWerteCode | null
+    zieleinheitAnzahl: number | null
+    wirtspflanze: string | null
+    herkunftPop: string | null
+    sammeldatum: string | null
+    vonAnzahlIndividuen: number | null
+    form: string | null
+    pflanzanordnung: string | null
+    tpopId: TpopId
+    bearbeiter: AdresseId | null
+    planVorhanden: boolean | null
+    changedBy: string | null
+    tpopByTpopId: {
+      id: TpopId
+      popByPopId: {
+        id: string
+        apByApId: {
+          id: ApId
+          ekzaehleinheitsByApId: {
+            nodes: Array<{
+              id: string
+              zielrelevant: boolean | null
+              notMassnCountUnit: boolean | null
+            }>
+          }
+        }
+      }
+    }
+  } | null
+  allAdresses: {
+    nodes: Array<{
+      id: string
+      value: AdresseId
+      label: string
+    }>
+  }
+  allTpopmassnTypWertes: {
+    nodes: Array<{
+      id: string
+      value: TpopmassnTypWerteCode
+      label: string
+      historic: boolean | null
+    }>
+  }
+  allTpopkontrzaehlEinheitWertes: {
+    nodes: Array<{
+      id: string
+      value: TpopkontrzaehlEinheitWerteCode
+      label: string
+      historic: boolean | null
+    }>
+  }
+}
+
+interface ComponentProps {
+  showFilter?: boolean
+}
 
 import styles from './Tpopmassn.module.css'
 
@@ -51,7 +135,7 @@ const fieldTypes = {
   planVorhanden: 'Boolean',
 }
 
-export const Component = observer(({ showFilter = false }) => {
+export const Component = observer(({ showFilter = false }: ComponentProps) => {
   const { tpopmassnId, apId } = useParams()
 
   const apolloClient = useApolloClient()
@@ -59,9 +143,9 @@ export const Component = observer(({ showFilter = false }) => {
 
   const store = useContext(MobxContext)
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<TpopmassnQueryResult>(query, {
     variables: { id: tpopmassnId },
   })
 
@@ -73,7 +157,7 @@ export const Component = observer(({ showFilter = false }) => {
 
   const isAnpflanzung = row?.tpopmassnTypWerteByTyp?.anpflanzung
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -124,7 +208,7 @@ export const Component = observer(({ showFilter = false }) => {
           variables: { apId, typ: value ?? 1 },
         })
       } catch (error) {
-        return setFieldErrors({ [field]: error.message })
+        return setFieldErrors({ [field]: (error as Error).message })
       }
       const isAnpflanzung =
         zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
@@ -307,7 +391,7 @@ export const Component = observer(({ showFilter = false }) => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (['jahr', 'datum', 'typ'].includes(field)) {
