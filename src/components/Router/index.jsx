@@ -448,7 +448,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":wertId"
-                  lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+                  lazy={() => import('../Projekte/Daten/Werte/index.tsx')}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -466,7 +466,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":wertId"
-                  lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+                  lazy={() => import('../Projekte/Daten/Werte/index.tsx')}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>
@@ -484,7 +484,7 @@ export const Router = () => {
                 />
                 <Route
                   path=":wertId"
-                  lazy={() => import('../Projekte/Daten/Werte/index.jsx')}
+                  lazy={() => import('../Projekte/Daten/Werte/index.tsx')}
                   errorElement={<RouterErrorBoundary />}
                 />
               </Route>

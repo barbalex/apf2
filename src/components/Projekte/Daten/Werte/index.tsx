@@ -13,7 +13,32 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type { TpopApberrelevantGrundWerteId } from '../../../../models/apflora/TpopApberrelevantGrundWerteId.ts'
+import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerteCode.ts'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+
+interface WerteQueryResult {
+  tpopApberrelevantGrundWerteById?: {
+    id: TpopApberrelevantGrundWerteId
+    code: number | null
+    text: string | null
+    sort: number | null
+  }
+  ekAbrechnungstypWerteById?: {
+    id: string
+    code: EkAbrechnungstypWerteCode | null
+    text: string | null
+    sort: number | null
+  }
+  tpopkontrzaehlEinheitWerteById?: {
+    id: string
+    code: TpopkontrzaehlEinheitWerteCode | null
+    text: string | null
+    sort: number | null
+  }
+}
 
 import styles from './index.module.css'
 
@@ -33,7 +58,7 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const query = gql`
     query werteByIdQuery($id: UUID!) {
@@ -45,7 +70,7 @@ export const Component = observer(() => {
       }
     }
   `
-  const { data, loading, error, refetch } = useQuery(query, {
+  const { data, loading, error, refetch } = useQuery<WerteQueryResult>(query, {
     variables: {
       id,
     },
@@ -60,7 +85,7 @@ export const Component = observer(() => {
     codeFieldType = 'text'
   }
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -107,7 +132,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     refetch()
     setFieldErrors({})

@@ -19,9 +19,17 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+interface MenuProps {
+  row: {
+    id: string
+    [key: string]: any
+  }
+  table: string
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row, table }) => {
+export const Menu = observer(({ row, table }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
 
@@ -56,7 +64,7 @@ export const Menu = observer(({ row, table }) => {
     } catch (error) {
       console.log('error', error)
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -72,7 +80,9 @@ export const Menu = observer(({ row, table }) => {
     navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -93,7 +103,7 @@ export const Menu = observer(({ row, table }) => {
     } catch (error) {
       console.log('error', error)
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
