@@ -12,13 +12,21 @@ import { query } from './query.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Field as BeobField } from './Field.jsx'
+import { Field as BeobField } from './Field.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
+
+import type BeobType from '../../../../models/apflora/Beob.js'
 
 import styles from './index.module.css'
 
+interface BeobQueryResult {
+  data?: {
+    beobById: BeobType
+  }
+}
+
 export const Beob = observer(() => {
-  const { beobId: id } = useParams()
+  const { beobId: id } = useParams<{ beobId: string }>()
 
   const store = useContext(MobxContext)
   const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
@@ -27,7 +35,7 @@ export const Beob = observer(() => {
 
   const apolloClient = useApolloClient()
 
-  const sortFn = (a, b) => {
+  const sortFn = (a: [string, any], b: [string, any]) => {
     const keyA = a[0]
     const keyB = b[0]
     const indexOfA = sortedBeobFields.indexOf(keyA)
@@ -46,7 +54,7 @@ export const Beob = observer(() => {
     return 0
   }
 
-  const { data, error } = useQuery({
+  const { data, error } = useQuery<BeobQueryResult>({
     queryKey: ['beobByIdQueryForBeob', id],
     queryFn: async () =>
       apolloClient.query({
@@ -78,7 +86,7 @@ export const Beob = observer(() => {
     setSortedBeobFields([...sortedBeobFields, ...additionalKeys])
   }, [keys, setSortedBeobFields, sortedBeobFields])
 
-  const moveField = (dragIndex, hoverIndex) => {
+  const moveField = (dragIndex: number, hoverIndex: number) => {
     // get item from keys
     const itemBeingDragged = keys[dragIndex]
     const itemBeingHovered = keys[hoverIndex]
@@ -95,7 +103,7 @@ export const Beob = observer(() => {
     setSortedBeobFields(newArray)
   }
 
-  const renderField = (field, index) => (
+  const renderField = (field: [string, any], index: number) => (
     <BeobField
       key={field[0]}
       label={field[0]}

@@ -6,16 +6,28 @@ import styles from './Field.module.css'
 
 const ItemTypes = { CARD: 'card' }
 
-export const Field = ({ label, value, index, moveField }) => {
-  const ref = useRef(null)
-  const [{ handlerId }, drop] = useDrop({
+interface FieldProps {
+  label: string
+  value: any
+  index: number
+  moveField: (dragIndex: number, hoverIndex: number) => void
+}
+
+interface DragItem {
+  id: string
+  index: number
+}
+
+export const Field = ({ label, value, index, moveField }: FieldProps) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
     accept: ItemTypes.CARD,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
       }
     },
-    hover(item, monitor) {
+    hover(item: DragItem, monitor) {
       if (!ref.current) {
         return
       }
@@ -54,7 +66,7 @@ export const Field = ({ label, value, index, moveField }) => {
       item.index = hoverIndex
     },
   })
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag] = useDrag<DragItem, void, { isDragging: boolean }>({
     type: ItemTypes.CARD,
     item: () => {
       return { id: label, index }
