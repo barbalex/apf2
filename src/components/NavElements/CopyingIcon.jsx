@@ -1,13 +1,13 @@
 import { MdContentCopy } from 'react-icons/md'
 
-import { iconContainer } from './index.module.css'
-import { icon } from './CopyingIcon.module.css'
+import indexStyles from './index.module.css'
+import styles from './CopyingIcon.module.css'
 
 export const CopyingIcon = () => (
   <div
     title="kopiert, bereit zum Einfügen"
-    className={iconContainer}
+    className={indexStyles.iconContainer}
   >
-    <MdContentCopy className={icon} />
+    <MdContentCopy className={styles.icon} />
   </div>
 )
