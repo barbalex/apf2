@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Open source</h1>
-    <p className={dokuDate}>30.01.2019</p>
+    <p className={desktopStyles.dokuDate}>30.01.2019</p>
     <p>
       <a
         href="https://github.com/barbalex/apf2/blob/master/LICENSE"

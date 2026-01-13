@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Technische Voraussetzungen</h1>
-    <p className={dokuDate}>20.12.2024</p>
+    <p className={desktopStyles.dokuDate}>20.12.2024</p>
     <p>
       Vorausgesetzt wird ein <strong>moderner Browser</strong>:
     </p>
