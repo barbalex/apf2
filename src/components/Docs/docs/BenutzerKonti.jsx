@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Benutzer-Konti</h1>
-    <p className={dokuDate}>29.04.2020</p>
+    <p className={desktopStyles.dokuDate}>29.04.2020</p>
     <h3>Grundsätze</h3>
     <ul>
       <li>
