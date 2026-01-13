@@ -19,7 +19,7 @@ import { updateBeobById } from './updateBeobById.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
 
-import { h3, button, absenz, info } from '../BeobNichtBeurteilt/Marker.module.css'
+import styles from '../BeobNichtBeurteilt/Marker.module.css'
 
 export const Marker = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
@@ -159,10 +159,10 @@ export const Marker = observer(({ beob }) => {
             beob?.aeTaxonomyByArtId?.artname ?? ''
           }`}</div>
           {beob?.absenz ?
-            <div className={absenz}>Absenzmeldung</div>
+            <div className={styles.absenz}>Absenzmeldung</div>
           : null}
-          <h3 className={h3}>{label}</h3>
-          <div className={info}>
+          <h3 className={styles.h3}>{label}</h3>
+          <div className={styles.info}>
             <div>Koordinaten:</div>
             <div>
               {`${beob.lv95X?.toLocaleString(
@@ -182,7 +182,7 @@ export const Marker = observer(({ beob }) => {
             onClick={openBeobInTab}
             color="inherit"
             fullWidth
-            className={button}
+            className={styles.button}
           >
             Formular in neuem Fenster öffnen
           </Button>
@@ -192,7 +192,7 @@ export const Marker = observer(({ beob }) => {
             color="inherit"
             fullWidth
             onClick={openBeobInTree2}
-            className={button}
+            className={styles.button}
           >
             Formular in Navigationsbaum 2 öffnen
           </Button>

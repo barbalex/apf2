@@ -30,12 +30,7 @@ import { svg300 } from './statusGroupSymbols/300.js'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 
-import {
-  h3,
-  button,
-  info,
-  tooltip,
-} from '../BeobNichtBeurteilt/Marker.module.css'
+import styles from '../BeobNichtBeurteilt/Marker.module.css'
 
 const getIconHtml = ({ isHighlighted, pop, popIconName }) => {
   let iconHtml = isHighlighted ? popHighlightedIconString : popIconString
@@ -130,10 +125,10 @@ export const Marker = observer(({ pop }) => {
       <Popup>
         <>
           <div>Population</div>
-          <h3 className={h3}>
+          <h3 className={styles.h3}>
             {`${pop.nr ?? '(keine Nummer)'}: ${pop.name ?? '(kein Name)'}`}
           </h3>
-          <div className={info}>
+          <div className={styles.info}>
             <div>Art:</div>
             <div>{artname}</div>
             <div>Koordinaten:</div>
@@ -153,7 +148,7 @@ export const Marker = observer(({ pop }) => {
             color="inherit"
             onClick={openPopInTab}
             fullWidth
-            className={button}
+            className={styles.button}
           >
             Formular in neuem Fenster öffnen
           </Button>
@@ -163,7 +158,7 @@ export const Marker = observer(({ pop }) => {
             color="inherit"
             onClick={openPopInTree2}
             fullWidth
-            className={button}
+            className={styles.button}
           >
             Formular in Navigationsbaum 2 öffnen
           </Button>
@@ -173,7 +168,7 @@ export const Marker = observer(({ pop }) => {
         direction="bottom"
         opacity={1}
         permanent
-        className={tooltip}
+        className={styles.tooltip}
       >
         <span className="mapTooltip">{title}</span>
       </Tooltip>

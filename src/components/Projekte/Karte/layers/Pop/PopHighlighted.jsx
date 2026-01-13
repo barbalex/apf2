@@ -1,8 +1,8 @@
 import Icon from './popHighlighted.svg'
-import { container } from '../iconContainer.module.css'
+import styles from '../iconContainer.module.css'
 
 export const PopIconHighlighted = () => (
-  <div className={container}>
+  <div className={styles.container}>
     <Icon />
   </div>
 )
