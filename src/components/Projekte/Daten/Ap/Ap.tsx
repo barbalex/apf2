@@ -13,12 +13,14 @@ import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx
 import { queryAeTaxonomies } from './queryAeTaxonomies.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { ApUsers } from './ApUsers/index.jsx'
+import { ApUsers } from './ApUsers/index.tsx'
 import { ap, aeTaxonomies } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { query } from './query.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type Ap from '../../../../models/apflora/Ap.js'
 
 import styles from './Ap.module.css'
 
@@ -33,7 +35,7 @@ const fieldTypes = {
 }
 
 export const Component = observer(() => {
-  const { apId } = useParams()
+  const { apId } = useParams<{ apId: string }>()
 
   const store = useContext(MobxContext)
   const { user } = store
@@ -41,15 +43,15 @@ export const Component = observer(() => {
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery<any>(query, {
     variables: { id: apId },
   })
 
-  const row = data?.apById ?? {}
+  const row: Ap = data?.apById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -59,7 +61,7 @@ export const Component = observer(() => {
       changedBy: user.name,
     }
     try {
-      await apolloClient.mutate({
+      await apolloClient.mutate<any>({
         mutation: gql`
             mutation updateAp(
               $id: UUID!
@@ -89,7 +91,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (field === 'artId') {
@@ -99,7 +101,7 @@ export const Component = observer(() => {
     }
   }
 
-  const aeTaxonomiesfilterForData = (inputValue) =>
+  const aeTaxonomiesfilterForData = (inputValue: string) =>
     inputValue ?
       {
         or: [

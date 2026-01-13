@@ -10,7 +10,19 @@ import { useApolloClient } from '@apollo/client/react'
 import { MobxContext } from '../../../../../mobxContext.js'
 import styles from './ApUser.module.css'
 
-export const ApUser = observer(({ user, refetch }) => {
+interface ApUserProps {
+  user: {
+    id: string
+    userName: string
+    userByUserName?: {
+      id: string
+      role: string
+    }
+  }
+  refetch: () => void
+}
+
+export const ApUser = observer(({ user, refetch }: ApUserProps) => {
   const apolloClient = useApolloClient()
   const { enqueNotification } = useContext(MobxContext)
 
@@ -28,7 +40,7 @@ export const ApUser = observer(({ user, refetch }) => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: { variant: 'error' },
       })
     }

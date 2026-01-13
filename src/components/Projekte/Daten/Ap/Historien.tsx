@@ -88,8 +88,8 @@ const apHistoriesQuery = gql`
 const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 export const Component = () => {
-  const { apId } = useParams()
-  const { error, data } = useQuery(apHistoriesQuery, {
+  const { apId } = useParams<{ apId: string }>()
+  const { error, data } = useQuery<any>(apHistoriesQuery, {
     variables: { apId },
   })
 

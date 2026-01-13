@@ -26,12 +26,33 @@ import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
+interface CreateApResult {
+  data?: {
+    createAp?: {
+      ap?: {
+        id: string
+        projId: string
+      }
+    }
+  }
+}
+
+interface DeleteApResult {
+  data?: {
+    deleteApById?: {
+      ap?: {
+        id: string
+      }
+    }
+  }
+}
+
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const { projId, apId } = useParams()
+  const { projId, apId } = useParams<{ projId: string; apId: string }>()
 
   const store = useContext(MobxContext)
 
@@ -42,7 +63,7 @@ export const Menu = observer(() => {
   const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateApResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -59,7 +80,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -75,11 +96,13 @@ export const Menu = observer(() => {
     navigate(`/Daten/Projekte/${projId}/Arten/${id}/Art${search}`)
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
+    let result: DeleteApResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -95,7 +118,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

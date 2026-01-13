@@ -5,16 +5,28 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { Select } from '../../../../shared/Select.jsx'
 
-export const NewUser = ({ apId, apUsers, refetch }) => {
+interface ApUser {
+  userByUserName?: {
+    id: string
+  }
+}
+
+interface NewUserProps {
+  apId: string
+  apUsers: ApUser[]
+  refetch: () => void
+}
+
+export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
   const apolloClient = useApolloClient()
 
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
   const {
     data,
     loading,
     error: queryError,
-  } = useQuery(gql`
+  } = useQuery<any>(gql`
     query benutzerForNewUser {
       allUsers(
         orderBy: NAME_ASC
@@ -37,10 +49,10 @@ export const NewUser = ({ apId, apUsers, refetch }) => {
       label: `${d.name ?? '(kein Name)'} (${d.role.replace('apflora_', '')})`,
     }))
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value
     try {
-      await apolloClient.mutate({
+      await apolloClient.mutate<any>({
         mutation: gql`
           mutation createApUserForApMutation($apId: UUID!, $name: String) {
             createApUser(input: { apUser: { apId: $apId, userName: $name } }) {
@@ -53,7 +65,7 @@ export const NewUser = ({ apId, apUsers, refetch }) => {
         variables: { apId, name },
       })
     } catch (error) {
-      return setError(error.message)
+      return setError((error as Error).message)
     }
     refetch()
   }

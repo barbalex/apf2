@@ -19,8 +19,8 @@ const apFilesQuery = gql`
 `
 
 export const Component = () => {
-  const { apId } = useParams()
-  const { data } = useQuery(apFilesQuery, {
+  const { apId } = useParams<{ apId: string }>()
+  const { data } = useQuery<any>(apFilesQuery, {
     variables: { apId },
   })
 

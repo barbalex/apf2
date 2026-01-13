@@ -2,8 +2,8 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
-import { ApUser } from './ApUser.jsx'
-import { NewUser } from './NewUser.jsx'
+import { ApUser } from './ApUser.tsx'
+import { NewUser } from './NewUser.tsx'
 import { Label } from '../../../../shared/Label.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
@@ -15,10 +15,19 @@ import {
   infoRow,
 } from './index.module.css'
 
-export const ApUsers = () => {
-  const { apId } = useParams()
+interface ApUserNode {
+  id: string
+  userName: string
+  userByUserName?: {
+    id: string
+    role: string
+  }
+}
 
-  const { data, error, loading, refetch } = useQuery(
+export const ApUsers = () => {
+  const { apId } = useParams<{ apId: string }>()
+
+  const { data, error, loading, refetch } = useQuery<any>(
     gql`
       query apUsersForApQuery($apId: UUID!) {
         allApUsers(
