@@ -1,18 +1,27 @@
 import { useState, useEffect } from 'react'
-import { gql } from '@apollo/client';
-import { useQuery } from "@apollo/client/react";
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
-import { ApberForYear } from './ApberForYear.jsx'
+import { ApberForYear } from './ApberForYear.tsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
+
+import type { ApberuebersichtId } from '../../../models/apflora/public/Apberuebersicht.ts'
+
+interface ApberuebersichtQueryResult {
+  apberuebersichtById: {
+    id: ApberuebersichtId
+    jahr: number | null
+  } | null
+}
 
 export const Component = () => {
   const { apberuebersichtId = '99999999-9999-9999-9999-999999999999' } =
     useParams()
 
-  const { data, loading, error } = useQuery(
+  const { data, loading, error } = useQuery<ApberuebersichtQueryResult>(
     gql`
       query apberuebersichtByIdForApberForYear($apberuebersichtId: UUID!) {
         apberuebersichtById(id: $apberuebersichtId) {

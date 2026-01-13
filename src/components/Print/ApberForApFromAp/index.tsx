@@ -5,10 +5,17 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { apByIdJahr } from './apByIdJahr.js'
-import { ApberForAp } from '../ApberForAp/index.jsx'
+import { ApberForAp } from '../ApberForAp/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
+import type { ApberId, ApId } from '../../../models/apflora/public/Apber.ts'
 
+interface ApberQueryResult {
+  apberById: {
+    id: ApberId
+    jahr: number | null
+  } | null
+}
 export const Component = () => {
   const { apberId, apId } = useParams()
 
@@ -17,7 +24,7 @@ export const Component = () => {
   const { data, error } = useQuery({
     queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
     queryFn: async () => {
-      const { data: apberData, error: apberError } = await apolloClient.query({
+      const { data: apberData, error: apberError } = await apolloClient.query<ApberQueryResult>({
         query: gql`
           query apberById($apberId: UUID!) {
             apberById(id: $apberId) {

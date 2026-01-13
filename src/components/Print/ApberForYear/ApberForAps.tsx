@@ -1,4 +1,4 @@
-import { ApberForAp } from '../ApberForAp/index.jsx'
+import { ApberForAp } from '../ApberForAp/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
 export const ApberForAps = ({ jahr, data, jberData }) => {

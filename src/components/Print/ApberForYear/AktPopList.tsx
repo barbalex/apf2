@@ -7,7 +7,26 @@ import { useParams } from 'react-router'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
+import type { ApId } from '../../../models/apflora/public/Ap.ts'
+
 import styles from './AktPopList.module.css'
+
+interface JberAktPopNode {
+  artname: string | null
+  id: ApId
+  pop100: number | null
+  pop200: number | null
+  popTotal: number | null
+  pop100Diff: number | null
+  pop200Diff: number | null
+  popTotalDiff: number | null
+}
+
+interface AktPopListQueryResult {
+  jberAktPop: {
+    nodes: JberAktPopNode[]
+  }
+}
 
 const fallback = (
   <ErrorBoundary>
