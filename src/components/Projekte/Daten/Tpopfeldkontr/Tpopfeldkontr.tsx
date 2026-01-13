@@ -1,0 +1,106 @@
+import { useQuery } from '@apollo/client/react'
+import { useParams } from 'react-router'
+
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { Error } from '../../../shared/Error.jsx'
+import { Spinner } from '../../../shared/Spinner.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { Menu } from './Menu.tsx'
+import { query } from './query.js'
+import { TpopfeldkontrForm } from './Form.tsx'
+
+import type {
+  TpopkontrId,
+  TpopId,
+  AdresseId,
+  TpopEntwicklungWerteCode,
+  TpopkontrIdbiotuebereinstWerteCode,
+} from '../../../../generated/apflora/models.js'
+
+interface TpopfeldkontrQueryResult {
+  tpopkontrById?: {
+    id: TpopkontrId
+    tpopId: TpopId
+    typ?: string | null
+    datum?: string | null
+    jahr?: number | null
+    vitalitaet?: string | null
+    ueberlebensrate?: number | null
+    entwicklung?: TpopEntwicklungWerteCode | null
+    ursachen?: string | null
+    erfolgsbeurteilung?: string | null
+    umsetzungAendern?: string | null
+    kontrolleAendern?: string | null
+    bemerkungen?: string | null
+    lrDelarze?: string | null
+    flaeche?: number | null
+    lrUmgebungDelarze?: string | null
+    vegetationstyp?: string | null
+    konkurrenz?: string | null
+    moosschicht?: string | null
+    krautschicht?: string | null
+    strauchschicht?: string | null
+    baumschicht?: string | null
+    idealbiotopUebereinstimmung?: TpopkontrIdbiotuebereinstWerteCode | null
+    handlungsbedarf?: string | null
+    gefaehrdung?: string | null
+    bearbeiter?: AdresseId | null
+    jungpflanzenVorhanden?: boolean | null
+    apberNichtRelevant?: boolean | null
+    apberNichtRelevantGrund?: string | null
+    changedBy?: string | null
+  } | null
+  allTpopkontrIdbiotuebereinstWertes?: {
+    nodes: {
+      value: TpopkontrIdbiotuebereinstWerteCode
+      label?: string | null
+    }[]
+  } | null
+  allTpopEntwicklungWertes?: {
+    nodes: {
+      value: TpopEntwicklungWerteCode
+      label?: string | null
+    }[]
+  } | null
+  allAeLrDelarzes?: {
+    nodes: {
+      id: string
+      label?: string | null
+      einheit?: string | null
+    }[]
+  } | null
+  allAdresses?: {
+    nodes: {
+      value: AdresseId
+      label?: string | null
+    }[]
+  } | null
+}
+
+export const Component = () => {
+  const { tpopkontrId } = useParams()
+
+  const { data, loading, error } = useQuery<TpopfeldkontrQueryResult>(query, {
+    variables: { id: tpopkontrId },
+  })
+
+  const row = data?.tpopkontrById ?? {}
+
+  if (error) return <Error error={error} />
+
+  if (loading) return <Spinner />
+
+  return (
+    <ErrorBoundary>
+      <FormTitle
+        title="Feld-Kontrolle"
+        MenuBarComponent={Menu}
+        menuBarProps={{ row }}
+      />
+      <TpopfeldkontrForm
+        row={row}
+        data={data}
+      />
+    </ErrorBoundary>
+  )
+}

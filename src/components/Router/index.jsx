@@ -1151,7 +1151,7 @@ export const Router = () => {
                                 <Route
                                   index={true}
                                   lazy={() =>
-                                    import('../Projekte/Daten/Tpopfeldkontr/index.jsx')
+                                    import('../Projekte/Daten/Tpopfeldkontr/index.tsx')
                                   }
                                   errorElement={<RouterErrorBoundary />}
                                 />
@@ -1165,7 +1165,7 @@ export const Router = () => {
                                 <Route
                                   path="Teil-Population"
                                   lazy={() =>
-                                    import('../Projekte/Daten/Tpopfeldkontr/index.jsx')
+                                    import('../Projekte/Daten/Tpopfeldkontr/index.tsx')
                                   }
                                   errorElement={<RouterErrorBoundary />}
                                 />

@@ -21,11 +21,41 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyBiotopTo } from '../../../../modules/copyBiotopTo.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 
+import type {
+  TpopkontrId,
+  TpopId,
+  TpopkontrzaehlId,
+} from '../../../../generated/apflora/models.js'
+
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+interface CreateTpopkontrResult {
+  createTpopkontr: {
+    tpopkontr: {
+      id: TpopkontrId
+      tpopId: TpopId
+    }
+  }
+}
+
+interface CreateTpopkontrzaehlResult {
+  createTpopkontrzaehl: {
+    tpopkontrzaehl: {
+      id: TpopkontrzaehlId
+    }
+  }
+}
+
+interface MenuProps {
+  row?: {
+    label?: string
+    labelEk?: string
+  }
+}
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row }) => {
+export const Menu = observer(({ row }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
@@ -48,7 +78,7 @@ export const Menu = observer(({ row }) => {
     // 1. add new tpopkontr
     let result
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopkontrResult>({
         mutation: gql`
           mutation createTpopkontrForTpopfeldkontrForm($tpopId: UUID!) {
             createTpopkontr(input: { tpopkontr: { tpopId: $tpopId } }) {
@@ -66,7 +96,7 @@ export const Menu = observer(({ row }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -75,7 +105,7 @@ export const Menu = observer(({ row }) => {
     const id = result?.data?.createTpopkontr?.tpopkontr?.id
 
     // 2. add new tpopkontrzaehl
-    const resultZaehl = await apolloClient.mutate({
+    const resultZaehl = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
       mutation: gql`
         mutation createTpokontrzaehlForTpopfeldkontrForm($parentId: UUID!) {
           createTpopkontrzaehl(
@@ -121,9 +151,12 @@ export const Menu = observer(({ row }) => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
-  const [copyBiotopMenuAnchorEl, setCopyBiotopMenuAnchorEl] = useState(null)
+  const [copyBiotopMenuAnchorEl, setCopyBiotopMenuAnchorEl] =
+    useState<HTMLElement | null>(null)
   const copyBiotopMenuOpen = Boolean(copyBiotopMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -143,7 +176,7 @@ export const Menu = observer(({ row }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

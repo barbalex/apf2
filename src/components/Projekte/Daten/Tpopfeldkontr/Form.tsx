@@ -19,7 +19,56 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
+import type {
+  TpopkontrId,
+  TpopId,
+  AdresseId,
+  TpopEntwicklungWerteCode,
+  TpopkontrIdbiotuebereinstWerteCode,
+} from '../../../../generated/apflora/models.js'
+
 import styles from './Form.module.css'
+
+interface TpopfeldkontrRow {
+  id: TpopkontrId
+  tpopId: TpopId
+  typ?: string | null
+  datum?: string | null
+  jahr?: number | null
+  vitalitaet?: string | null
+  ueberlebensrate?: number | null
+  entwicklung?: TpopEntwicklungWerteCode | null
+  ursachen?: string | null
+  erfolgsbeurteilung?: string | null
+  umsetzungAendern?: string | null
+  kontrolleAendern?: string | null
+  bemerkungen?: string | null
+  bearbeiter?: AdresseId | null
+  jungpflanzenVorhanden?: boolean | null
+  gefaehrdung?: string | null
+  apberNichtRelevant?: boolean | null
+  apberNichtRelevantGrund?: string | null
+}
+
+interface TpopfeldkontrFormData {
+  allTpopEntwicklungWertes?: {
+    nodes: {
+      value: TpopEntwicklungWerteCode
+      label?: string | null
+    }[]
+  } | null
+  allAdresses?: {
+    nodes: {
+      value: AdresseId
+      label?: string | null
+    }[]
+  } | null
+}
+
+interface TpopfeldkontrFormProps {
+  row: TpopfeldkontrRow
+  data: TpopfeldkontrFormData
+}
 
 export const fieldTypes = {
   typ: 'String',
@@ -76,13 +125,14 @@ const tpopkontrTypWerte = [
   },
 ]
 
-export const TpopfeldkontrForm = observer(({ row, data }) => {
-  const store = useContext(MobxContext)
+export const TpopfeldkontrForm = observer(
+  ({ row, data }: TpopfeldkontrFormProps) => {
+    const store = useContext(MobxContext)
 
-  const apolloClient = useApolloClient()
-  const tsQueryClient = useQueryClient()
+    const apolloClient = useApolloClient()
+    const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const saveToDb = async (event) => {
     const field = event.target.name
@@ -132,7 +182,7 @@ export const TpopfeldkontrForm = observer(({ row, data }) => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (['jahr', 'datum', 'typ'].includes(field)) {
@@ -287,4 +337,5 @@ export const TpopfeldkontrForm = observer(({ row, data }) => {
       </div>
     </ErrorBoundary>
   )
-})
+},
+)

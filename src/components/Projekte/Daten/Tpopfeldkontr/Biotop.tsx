@@ -15,10 +15,47 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopfeldkontr } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { fieldTypes } from './Form.jsx'
+import { fieldTypes } from './Form.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
+import type {
+  TpopkontrId,
+  TpopId,
+  TpopkontrIdbiotuebereinstWerteCode,
+} from '../../../../generated/apflora/models.js'
+
 import styles from './Form.module.css'
+
+interface BiotopQueryResult {
+  tpopkontrById?: {
+    id: TpopkontrId
+    tpopId: TpopId
+    flaeche?: number | null
+    lrDelarze?: string | null
+    lrUmgebungDelarze?: string | null
+    vegetationstyp?: string | null
+    konkurrenz?: string | null
+    moosschicht?: string | null
+    krautschicht?: string | null
+    strauchschicht?: string | null
+    baumschicht?: string | null
+    idealbiotopUebereinstimmung?: TpopkontrIdbiotuebereinstWerteCode | null
+    handlungsbedarf?: string | null
+  } | null
+  allTpopkontrIdbiotuebereinstWertes?: {
+    nodes: {
+      value: TpopkontrIdbiotuebereinstWerteCode
+      label?: string | null
+    }[]
+  } | null
+  allAeLrDelarzes?: {
+    nodes: {
+      id: string
+      label?: string | null
+      einheit?: string | null
+    }[]
+  } | null
+}
 
 export const Component = observer(() => {
   const { tpopkontrId } = useParams()
@@ -28,9 +65,9 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<BiotopQueryResult>(query, {
     variables: {
       id: tpopkontrId,
     },
@@ -86,7 +123,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (['jahr', 'datum', 'typ'].includes(field)) {
