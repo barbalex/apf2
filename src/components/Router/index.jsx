@@ -891,13 +891,13 @@ export const Router = () => {
                     </Route>
                     <Route
                       path="Qualitätskontrollen"
-                      lazy={() => import('../Projekte/Daten/Qk/index.jsx')}
+                      lazy={() => import('../Projekte/Daten/Qk/index.tsx')}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
                       path="Qualitätskontrollen-wählen"
                       lazy={() =>
-                        import('../Projekte/Daten/Qk/Choose/index.jsx')
+                        import('../Projekte/Daten/Qk/Choose/index.tsx')
                       }
                       errorElement={<RouterErrorBoundary />}
                     />

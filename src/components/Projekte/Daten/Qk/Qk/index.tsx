@@ -21,9 +21,31 @@ import { Error } from '../../../../shared/Error.jsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
+import type { QkName } from '../../../../../models/apflora/index.js'
+
 import styles from './index.module.css'
 
-export const Qk = observer(({ qkNameQueries, qks }) => {
+interface QkNode {
+  name: QkName
+  titel: string | null
+}
+
+interface QkProps {
+  qkNameQueries: Record<string, boolean>
+  qks: QkNode[]
+}
+
+interface QkNode {
+  name: QkName
+  titel: string | null
+}
+
+interface QkProps {
+  qkNameQueries: Record<string, boolean>
+  qks: QkNode[]
+}
+
+export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
   const { apId, projId } = useParams()
   const { search } = useLocation()
 

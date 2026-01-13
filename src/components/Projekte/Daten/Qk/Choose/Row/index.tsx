@@ -7,13 +7,41 @@ import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
+import type {
+  ApId,
+  QkName,
+  ApqkQkName,
+} from '../../../../../../models/apflora/index.js'
+
 import styles from './index.module.css'
 
-export const Row = ({ apId, qk }) => {
+interface QkNode {
+  name: QkName
+  titel: string | null
+  beschreibung: string | null
+}
+
+interface ApqkData {
+  apId: ApId
+  qkName: ApqkQkName
+}
+
+interface ApqkQueryResult {
+  data?: {
+    apqkByApIdAndQkName?: ApqkData
+  }
+}
+
+interface RowProps {
+  apId: ApId
+  qk: QkNode
+}
+
+export const Row = ({ apId, qk }: RowProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data, error } = useQuery({
+  const { data, error } = useQuery<ApqkQueryResult>({
     queryKey: ['apqkQueryForRow', apId, qk.name],
     queryFn: async () =>
       apolloClient.query({

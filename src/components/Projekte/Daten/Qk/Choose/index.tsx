@@ -7,17 +7,37 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { Form, useParams } from 'react-router'
 
 import { query } from './query.js'
-import { Row } from './Row/index.jsx'
+import { Row } from './Row/index.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
+import type { QkName } from '../../../../../models/apflora/index.js'
+
 import styles from './index.module.css'
 
-export const Component = ({ refetchTab }) => {
+interface QkNode {
+  name: QkName
+  titel: string | null
+  beschreibung: string | null
+  sort: number | null
+}
+
+interface QkChooseQueryResult {
+  allQks?: {
+    totalCount: number
+    nodes: QkNode[]
+  }
+}
+
+interface ChooseProps {
+  refetchTab?: () => void
+}
+
+export const Component = ({ refetchTab }: ChooseProps) => {
   const { apId } = useParams()
 
-  const { data, error, loading } = useQuery(query)
+  const { data, error, loading } = useQuery<QkChooseQueryResult>(query)
   const rows = data?.allQks?.nodes
 
   const [filter, setFilter] = useState('')
