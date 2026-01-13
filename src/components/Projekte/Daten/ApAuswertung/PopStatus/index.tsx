@@ -13,8 +13,10 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
-import { CustomTooltip } from '../CustomTooltip.jsx'
+import { CustomTooltip } from '../CustomTooltip.tsx'
 import { Error } from '../../../../shared/Error.jsx'
+
+import type { ApId } from '../../../../../models/apflora/Ap.js'
 
 import {
   spinnerContainer,
@@ -22,6 +24,30 @@ import {
   noDataContainer,
   title,
 } from './index.module.css'
+
+interface PopStatusNode {
+  year: number | null
+  a3Lpop: string | null
+  a4Lpop: string | null
+  a5Lpop: string | null
+  a7Lpop: string | null
+  a8Lpop: string | null
+  a9Lpop: string | null
+}
+
+interface PopStatusQueryResult {
+  popNachStatusForJber: {
+    nodes: PopStatusNode[]
+  }
+}
+
+interface PopStatusProps {
+  apId?: ApId
+  height?: number
+  print?: boolean
+  isSubReport?: boolean
+  year?: number
+}
 
 const color = {
   'ursprünglich, aktuell': '#2e7d32',
@@ -40,16 +66,16 @@ export const PopStatus = ({
   print,
   isSubReport,
   year: yearPassed,
-}) => {
-  const { apId } = useParams()
-  const id = apIdPassed ?? apId
+}: PopStatusProps) => {
+  const { apId } = useParams<{ apId: string }>()
+  const id = apIdPassed ?? (apId as ApId)
 
   const year = yearPassed ?? new Date().getFullYear()
   const {
     data: dataPopStati,
     error: errorPopStati,
     loading: loadingPopStati,
-  } = useQuery(query, {
+  } = useQuery<PopStatusQueryResult>(query, {
     variables: { apId: id, year },
   })
   const rows = dataPopStati?.popNachStatusForJber?.nodes ?? []

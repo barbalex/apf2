@@ -12,8 +12,11 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
-import { CustomTick } from './CustomTick.jsx'
+import { CustomTick } from './CustomTick.tsx'
 import { Error } from '../../../../shared/Error.jsx'
+
+import type { ApberId } from '../../../../../models/apflora/Apber.js'
+import type { ApErfkritWerteCode } from '../../../../../models/apflora/ApErfkritWerte.js'
 
 import {
   spinnerContainer,
@@ -21,6 +24,22 @@ import {
   noDataContainer,
   title,
 } from './index.module.css'
+
+interface ApberNode {
+  id: ApberId
+  jahr: number | null
+  beurteilung: ApErfkritWerteCode | null
+  apErfkritWerteByBeurteilung: {
+    id: number
+    text: string
+  } | null
+}
+
+interface ApErfolgQueryResult {
+  allApbers: {
+    nodes: ApberNode[]
+  }
+}
 
 const erfValueFromCode = {
   3: 1, // nicht erfolgreich
@@ -41,13 +60,13 @@ const addMissingErfolgData = (erfolgRawData) => {
 }
 
 export const ApErfolg = () => {
-  const { apId: id } = useParams()
+  const { apId: id } = useParams<{ apId: string }>()
 
   const {
     data: dataErfolg,
     error: errorErfolg,
     loading: loadingErfolg,
-  } = useQuery(query, {
+  } = useQuery<ApErfolgQueryResult>(query, {
     variables: { id },
   })
   const erfolgRawData = (dataErfolg?.allApbers?.nodes ?? []).map((e) => ({

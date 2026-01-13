@@ -3,11 +3,14 @@ import { gql } from '@apollo/client'
 
 import { useQuery } from '@apollo/client/react'
 
-import { ApErfolg } from './ApErfolg/index.jsx'
-import { PopStatus } from './PopStatus/index.jsx'
-import { PopMenge } from './PopMenge/index.jsx'
-import { TpopKontrolliert } from './TpopKontrolliert/index.jsx'
+import { ApErfolg } from './ApErfolg/index.tsx'
+import { PopStatus } from './PopStatus/index.tsx'
+import { PopMenge } from './PopMenge/index.tsx'
+import { TpopKontrolliert } from './TpopKontrolliert/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+
+import type { ApId } from '../../../../models/apflora/Ap.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
 
 import styles from './index.module.css'
 
@@ -23,9 +26,19 @@ const apAuswertungQuery = gql`
   }
 `
 
+interface ApAuswertungQueryResult {
+  apById: {
+    id: ApId
+    aeTaxonomyByArtId: {
+      id: AeTaxonomiesId
+      artname: string
+    } | null
+  }
+}
+
 export const Component = () => {
-  const { apId } = useParams()
-  const { data } = useQuery(apAuswertungQuery, {
+  const { apId } = useParams<{ apId: string }>()
+  const { data } = useQuery<ApAuswertungQueryResult>(apAuswertungQuery, {
     variables: { apId },
   })
 

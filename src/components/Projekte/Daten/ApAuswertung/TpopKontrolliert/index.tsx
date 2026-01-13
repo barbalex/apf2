@@ -13,8 +13,10 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
-import { CustomTooltip } from '../CustomTooltip.jsx'
+import { CustomTooltip } from '../CustomTooltip.tsx'
 import { Error } from '../../../../shared/Error.jsx'
+
+import type { ApId } from '../../../../../models/apflora/Ap.js'
 
 import {
   spinnerContainer,
@@ -24,6 +26,26 @@ import {
   titleTitle,
   titleKontr,
 } from './index.module.css'
+
+interface TpopKontrolliertNode {
+  year: number | null
+  anzTpop: string | null
+  anzTpopber: string | null
+}
+
+interface TpopKontrolliertQueryResult {
+  tpopKontrolliertForJber: {
+    nodes: TpopKontrolliertNode[]
+  }
+}
+
+interface TpopKontrolliertProps {
+  apId?: ApId
+  height?: number
+  print?: boolean
+  isSubReport?: boolean
+  jahr?: number
+}
 
 const color = {
   'Teil-Populationen': '#2e7d32',
@@ -36,11 +58,11 @@ export const TpopKontrolliert = ({
   print,
   isSubReport,
   jahr,
-}) => {
-  const { apId } = useParams()
-  const id = apIdPassed ?? apId
+}: TpopKontrolliertProps) => {
+  const { apId } = useParams<{ apId: string }>()
+  const id = apIdPassed ?? (apId as ApId)
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery<TpopKontrolliertQueryResult>(query, {
     variables: { id, year: jahr ?? new Date().getFullYear() },
   })
   const erfolgData = (data?.tpopKontrolliertForJber?.nodes ?? []).map((d) => ({

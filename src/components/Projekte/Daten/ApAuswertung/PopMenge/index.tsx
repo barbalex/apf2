@@ -16,9 +16,15 @@ import MuiTooltip from '@mui/material/Tooltip'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
-import { CustomTooltip } from './CustomTooltip.jsx'
+import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../../modules/exists.js'
 import { Error } from '../../../../shared/Error.jsx'
+
+import type { ApId } from '../../../../../models/apflora/Ap.js'
+import type { PopId } from '../../../../../models/apflora/Pop.js'
+import type { EkzaehleinheitId } from '../../../../../models/apflora/Ekzaehleinheit.js'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../models/apflora/TpopkontrzaehlEinheitWerte.js'
+import type { PopStatusWerteCode } from '../../../../../models/apflora/PopStatusWerte.js'
 
 import {
   spinnerContainer,
@@ -28,9 +34,49 @@ import {
   title,
 } from './index.module.css'
 
+interface ApAuswPopMengeNode {
+  jahr: number | null
+  values: string | null
+}
+
+interface PopNode {
+  id: PopId
+  nr: number | null
+  name: string | null
+  status: PopStatusWerteCode | null
+}
+
+interface EkzaehleinheitNode {
+  id: EkzaehleinheitId
+  tpopkontrzaehlEinheitWerteByZaehleinheitId: {
+    id: TpopkontrzaehlEinheitWerteCode
+    text: string
+  } | null
+}
+
+interface PopMengeQueryResult {
+  apAuswPopMenge: {
+    nodes: ApAuswPopMengeNode[]
+  }
+  allEkzaehleinheits: {
+    nodes: EkzaehleinheitNode[]
+  }
+  allPops: {
+    nodes: PopNode[]
+  }
+}
+
+interface PopMengeProps {
+  apId?: ApId
+  height?: number
+  print?: boolean
+  isSubReport?: boolean
+  jahr?: number
+}
+
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
-const formatNumber = (tickItem) => {
+const formatNumber = (tickItem: any) => {
   const value =
     exists(tickItem) && tickItem?.toLocaleString ?
       tickItem.toLocaleString('de-ch')
@@ -44,16 +90,16 @@ export const PopMenge = ({
   print,
   isSubReport,
   jahr: jahrPassed,
-}) => {
-  const { apId } = useParams()
-  const id = apIdPassed ?? apId
+}: PopMengeProps) => {
+  const { apId } = useParams<{ apId: string }>()
+  const id = apIdPassed ?? (apId as ApId)
 
   const jahr = jahrPassed ?? new Date().getFullYear()
   const {
     data: dataPopMenge,
     error: errorPopMenge,
     loading: loadingPopMenge,
-  } = useQuery(query, {
+  } = useQuery<PopMengeQueryResult>(query, {
     variables: { id, jahr },
   })
 
