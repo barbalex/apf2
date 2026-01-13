@@ -240,7 +240,9 @@ export const Component = observer(() => {
         <div className={styles.formContainer}>
           <div className={styles.fieldsContainer}>
             {row && row.artId !== row.artIdOriginal && (
-              <div className={styles.originalArtDiv}>{`Art gemäss Original-Meldung: ${
+              <div
+                className={styles.originalArtDiv}
+              >{`Art gemäss Original-Meldung: ${
                 row?.aeTaxonomyByArtIdOriginal?.artname ?? '(kein Name)'
               }`}</div>
             )}
@@ -281,7 +283,7 @@ export const Component = observer(() => {
               multiLine
               saveToDb={onUpdateField}
             />
-            <div className={infofloraRow}>
+            <div className={styles.infofloraRow}>
               <DateField
                 key={`${row.id}infofloraInformiertDatum`}
                 name="infofloraInformiertDatum"

@@ -21,24 +21,19 @@ import { LetzterMassnBericht } from './LetzterMassnBericht.jsx'
 import { LetzteZaehlung } from './LetzteZaehlung.jsx'
 import { LetzteZaehlungInklAnpflanz } from './LetzteZaehlungInklAnpflanz.jsx'
 
-import {
-  cardContent,
-  actionTitle,
-  card,
-  cardActions,
-} from '../index.module.css'
+import styles from '../index.module.css'
 
 export const Populationen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <div className={actionTitle}>Populationen</div>
+        <div className={styles.actionTitle}>Populationen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -56,7 +51,7 @@ export const Populationen = () => {
         unmountOnExit
       >
         {expanded ?
-          <CardContent className={cardContent}>
+          <CardContent className={styles.cardContent}>
             <Pops />
             <Pops filtered={true} />
             <PopsForGoogleEarth />

@@ -12,24 +12,19 @@ import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
 import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
 import { InfoFlora } from './InfoFlora.jsx'
 
-import {
-  cardContent,
-  actionTitle,
-  card,
-  cardActions,
-} from '../index.module.css'
+import styles from '../index.module.css'
 
 export const Kontrollen = () => {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.styles.cardActions}
         disableSpacing
         onClick={() => setExpanded(!expanded)}
       >
-        <div className={actionTitle}>Kontrollen</div>
+        <div className={styles.actionTitle}>Kontrollen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -47,7 +42,7 @@ export const Kontrollen = () => {
         unmountOnExit
       >
         {expanded ?
-          <CardContent className={cardContent}>
+          <CardContent className={styles.cardContent}>
             <KontrollenComponent />
             <KontrollenComponent filtered={true} />
             <KontrFuerWebgisBun />

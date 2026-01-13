@@ -134,14 +134,14 @@ export const Count = observer(
       gridArea: `count${nr}`,
     }
     const containerClass =
-      showNew ? containerNew
-      : showEmpty ? containerEmpty
-      : containerElse
+      showNew ? styles.containerNew
+      : showEmpty ? styles.containerEmpty
+      : styles.containerElse
 
     const formStyle = {
       gridArea: `count${nr}`,
     }
-    const formClass = showDelete ? formShowDelete : formElse
+    const formClass = showDelete ? styles.formShowDelete : styles.formElse
 
     if (showNew) {
       return (

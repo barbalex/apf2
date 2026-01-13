@@ -11,12 +11,7 @@ import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
 import { BeobZugeordnet } from './BeobZugeordnet.jsx'
 import { BeobArtChanged } from './BeobArtChanged.jsx'
 
-import {
-  cardContent,
-  actionTitle,
-  card,
-  cardActions,
-} from '../index.module.css'
+import styles from '../index.module.css'
 
 export const Beobachtungen = () => {
   const [expanded, setExpanded] = useState(false)
@@ -24,13 +19,13 @@ export const Beobachtungen = () => {
   const onClickAction = () => setExpanded(!expanded)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.styles.cardActions}
         disableSpacing
         onClick={onClickAction}
       >
-        <div className={actionTitle}>Beobachtungen</div>
+        <div className={styles.actionTitle}>Beobachtungen</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -48,7 +43,7 @@ export const Beobachtungen = () => {
         unmountOnExit
       >
         {expanded ?
-          <CardContent className={cardContent}>
+          <CardContent className={styles.cardContent}>
             <BeobArtChanged t />
             <BeobZugeordnet />
             <BeobNichtZuzuordnen />

@@ -20,12 +20,7 @@ import { Erfkrit } from './Erfkrit.jsx'
 import { Idealbiotop } from './Idealbiotop.jsx'
 import { Assozart } from './Assozart.jsx'
 
-import {
-  cardContent,
-  actionTitle,
-  card,
-  cardActions,
-} from '../index.module.css'
+import styles from '../index.module.css'
 
 export const Ap = () => {
   const [expanded, setExpanded] = useState(false)
@@ -33,13 +28,13 @@ export const Ap = () => {
   const onClickAction = () => setExpanded(!expanded)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.styles.cardActions}
         disableSpacing
         onClick={onClickAction}
       >
-        <div className={actionTitle}>Art</div>
+        <div className={styles.actionTitle}>Art</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -57,7 +52,7 @@ export const Ap = () => {
         unmountOnExit
       >
         {expanded ?
-          <CardContent className={cardContent}>
+          <CardContent className={styles.cardContent}>
             <ApComponent />
             <ApComponent filtered={true} />
             <ApOhnePop />
