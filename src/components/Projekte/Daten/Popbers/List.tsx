@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../../mobxContext.js'
 import { usePopbersNavData } from '../../../../modules/usePopbersNavData.js'
 import { List as SharedList } from '../../../shared/List/index.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
 
