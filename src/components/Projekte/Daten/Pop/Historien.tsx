@@ -7,6 +7,13 @@ import { History as HistoryComponent } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
+import type {
+  PopId,
+  ApId,
+  AeTaxonomiesId,
+  PopStatusWerteCode,
+} from '../../../../models/apflora/index.js'
+
 import styles from './Historien.module.css'
 
 const query = gql`
@@ -78,7 +85,7 @@ const simplebarStyle = { maxHeight: '100%', height: '100%' }
 export const Component = () => {
   const { popId } = useParams()
 
-  const { error, data, loading } = useQuery(query, {
+  const { error, data, loading } = useQuery<PopHistoryQueryResult>(query, {
     variables: {
       popId,
     },
@@ -120,7 +127,8 @@ export const Component = () => {
         </p>
         <p className={styles.docLine}>
           <span className={styles.aenderung}>Änderungen</span> zum{' '}
-          <span className={styles.aktuell}>aktuellen Zustand</span> sind hervorgehoben.
+          <span className={styles.aktuell}>aktuellen Zustand</span> sind
+          hervorgehoben.
         </p>
         {rows.map((r) => {
           const dataArray = [

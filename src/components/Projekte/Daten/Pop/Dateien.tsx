@@ -6,10 +6,21 @@ import { useQuery } from '@apollo/client/react'
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
+import type { PopId } from '../../../../models/apflora/index.js'
+
+interface PopQueryResult {
+  data?: {
+    popById?: {
+      id: PopId
+      label: string | null
+    }
+  }
+}
+
 export const Component = () => {
   const { popId } = useParams()
 
-  const { data } = useQuery(
+  const { data } = useQuery<PopQueryResult>(
     gql`
       query popByIdForPopDateienQuery($id: UUID!) {
         popById(id: $id) {

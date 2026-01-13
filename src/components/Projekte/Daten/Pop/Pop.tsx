@@ -18,9 +18,22 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { query } from './query.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type { Pop } from '../../../../models/apflora/index.js'
 
 import styles from './Pop.module.css'
+
+interface PopQueryResult {
+  data?: {
+    popById?: Pop & {
+      apByApId?: {
+        id: string
+        startJahr: number | null
+      }
+    }
+  }
+}
 
 const fieldTypes = {
   apId: 'UUID',
@@ -40,15 +53,15 @@ export const Component = observer(() => {
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, error, refetch } = useQuery(query, {
+  const { data, error, refetch } = useQuery<PopQueryResult>(query, {
     variables: { id: popId },
   })
 
   const row = data?.popById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -84,7 +97,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     // update pop on map
     if (

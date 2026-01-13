@@ -25,11 +25,28 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import type { PopId, ApId, Pop } from '../../../../models/apflora/index.js'
+
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+interface CreatePopResult {
+  data?: {
+    createPop?: {
+      pop?: {
+        id: PopId
+        apId: ApId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  row: Pop
+}
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row }) => {
+export const Menu = observer(({ row }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId } = useParams()
@@ -41,9 +58,9 @@ export const Menu = observer(({ row }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreatePopResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreatePopResult>({
         mutation: gql`
           mutation createPopForPopRouterForm($apId: UUID!) {
             createPop(input: { pop: { apId: $apId } }) {
@@ -58,7 +75,7 @@ export const Menu = observer(({ row }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -79,10 +96,10 @@ export const Menu = observer(({ row }) => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<null | HTMLElement>(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const [copyMenuAnchorEl, setCopyMenuAnchorEl] = useState(null)
+  const [copyMenuAnchorEl, setCopyMenuAnchorEl] = useState<null | HTMLElement>(null)
   const copyMenuOpen = Boolean(copyMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -102,7 +119,7 @@ export const Menu = observer(({ row }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
