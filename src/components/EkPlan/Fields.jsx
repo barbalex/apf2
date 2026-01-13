@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import { content } from './Fields.module.css'
+import styles from './Fields.module.css'
 
 export const Fields = observer(() => {
   const store = useContext(MobxContext)
@@ -15,7 +15,7 @@ export const Fields = observer(() => {
 
   return (
     <ErrorBoundary>
-      <DialogContent className={content}>
+      <DialogContent className={styles.content}>
         <FormControlLabel
           value={fields.includes('ap').toString()}
           control={

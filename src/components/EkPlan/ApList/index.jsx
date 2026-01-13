@@ -8,7 +8,7 @@ import { Ap } from './Ap/index.jsx'
 import { ChooseAp } from './ChooseAp/index.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 
-import { container, titleRow, apTitle, plusIcon } from './index.module.css'
+import styles from './index.module.css'
 
 export const ApList = observer(() => {
   const store = useContext(MobxContext)
@@ -18,15 +18,15 @@ export const ApList = observer(() => {
   const onClickAdd = () => setShowChoose(true)
 
   return (
-    <div className={container}>
-      <div className={titleRow}>
-        <div className={apTitle}>Arten</div>
+    <div className={styles.container}>
+      <div className={styles.titleRow}>
+        <div className={styles.apTitle}>Arten</div>
         {!showChoose && (
           <Tooltip title="Art hinzufügen">
             <IconButton
               aria-label="Art hinzufügen"
               onClick={onClickAdd}
-              className={plusIcon}
+              className={styles.plusIcon}
             >
               <FaPlus />
             </IconButton>

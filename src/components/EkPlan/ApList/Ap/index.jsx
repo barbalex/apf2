@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { container, apClass, label, delIcon } from './index.module.css'
+import styles from './index.module.css'
 
 export const Ap = observer(({ ap }) => {
   const store = useContext(MobxContext)
@@ -30,8 +30,8 @@ export const Ap = observer(({ ap }) => {
     : 'Zielrelevante Zähleinheit:'
 
   return (
-    <div className={container}>
-      <div className={apClass}>{`${ap.label}.`}</div>
+    <div className={styles.container}>
+      <div className={styles.apClass}>{`${ap.label}.`}</div>
       {!apsDataLoading && (
         <>
           <div
@@ -39,13 +39,13 @@ export const Ap = observer(({ ap }) => {
               color: einheits.length === 0 ? 'red' : 'unset',
             }}
           >
-            <span className={label}>{labelText}</span> {einheitsText}
+            <span className={styles.label}>{labelText}</span> {einheitsText}
           </div>
           <Tooltip title={`${ap.label} entfernen`}>
             <IconButton
               aria-label={`${ap.label} entfernen`}
               onClick={onClickDelete}
-              className={delIcon}
+              className={styles.delIcon}
             >
               <FaTimes />
             </IconButton>

@@ -14,16 +14,7 @@ import { MobxContext } from '../../mobxContext.js'
 import { allFields } from '../../store/EkPlan/index.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  chooseContainer,
-  title,
-  label,
-  felderButton,
-  pastYearsContainer,
-  textField,
-  checkboxDensifier,
-} from './Choose.module.css'
+import styles from './Choose.module.css'
 
 const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
   overflowY: 'hidden',
@@ -36,7 +27,7 @@ const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
 // see: https://github.com/mui-org/material-ui/issues/6098#issuecomment-380451242
 // but styling with styled-components
 const DenserCheckbox = (props) => (
-  <div className={checkboxDensifier}>{props.children}</div>
+  <div className={styles.checkboxDensifier}>{props.children}</div>
 )
 
 export const Choose = observer(() => {
@@ -87,13 +78,13 @@ export const Choose = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <h5 className={title}>anzeigen:</h5>
+      <div className={styles.container}>
+        <h5 className={styles.title}>anzeigen:</h5>
       </div>
-      <div className={chooseContainer}>
-        <div className={pastYearsContainer}>
+      <div className={styles.chooseContainer}>
+        <div className={styles.pastYearsContainer}>
           <TextField
-            className={textField}
+            className={styles.textField}
             label="vergangene Jahre"
             variant="outlined"
             value={pastYearsLocal}
@@ -110,7 +101,7 @@ export const Choose = observer(() => {
           />
         </div>
         <Button
-          className={felderButton}
+          className={styles.felderButton}
           variant="outlined"
           size="small"
           onClick={onClickChooseFields}
@@ -119,7 +110,7 @@ export const Choose = observer(() => {
           {felderButtonTitle}
         </Button>
         <FormControlLabel
-          className={label}
+          className={styles.label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -133,7 +124,7 @@ export const Choose = observer(() => {
           labelPlacement="start"
         />
         <FormControlLabel
-          className={label}
+          className={styles.label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -147,7 +138,7 @@ export const Choose = observer(() => {
           labelPlacement="start"
         />
         <FormControlLabel
-          className={label}
+          className={styles.label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -161,7 +152,7 @@ export const Choose = observer(() => {
           labelPlacement="start"
         />
         <FormControlLabel
-          className={label}
+          className={styles.label}
           control={
             <DenserCheckbox>
               <Checkbox
@@ -175,7 +166,7 @@ export const Choose = observer(() => {
           labelPlacement="start"
         />
         <FormControlLabel
-          className={label}
+          className={styles.label}
           control={
             <DenserCheckbox>
               <Checkbox

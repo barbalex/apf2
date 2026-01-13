@@ -26,13 +26,7 @@ const Spinner = lazy(async () => ({
   default: (await import('../shared/Spinner.jsx')).Spinner,
 }))
 
-import {
-  container,
-  header,
-  buttonContainer,
-  anleitungButton,
-  filterResetButton,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Component = observer(() => {
   const store = useContext(MobxContext)
@@ -108,18 +102,18 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <Suspense fallback={<Spinner />}>
           {!!user.token && (
             <>
-              <div className={header}>
+              <div className={styles.styles.header}>
                 <ApList />
-                <div className={buttonContainer}>
+                <div className={styles.buttonContainer}>
                   <Button
                     variant="outlined"
                     onClick={onClickAnleitung}
                     color="inherit"
-                    className={anleitungButton}
+                    className={styles.anleitungButton}
                   >
                     Anleitung
                   </Button>
@@ -127,7 +121,7 @@ export const Component = observer(() => {
                     variant="outlined"
                     onClick={onClickResetFilter}
                     color="inherit"
-                    className={filterResetButton}
+                    className={styles.filterResetButton}
                   >
                     Filter leeren
                   </Button>

@@ -8,7 +8,7 @@ import { queryApsToChoose } from './queryApsToChoose.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { select, container, labelClass, errorClass } from './index.module.css'
+import styles from './index.module.css'
 
 export const ChooseAp = observer(({ setShowChoose }) => {
   const { projId } = useParams()
@@ -65,8 +65,8 @@ export const ChooseAp = observer(({ setShowChoose }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={labelClass}>{label}</div>
+      <div className={styles.container}>
+        <div className={styles.labelClass}>{label}</div>
         <AsyncSelect
           defaultOptions
           onChange={onChange}
@@ -87,12 +87,12 @@ export const ChooseAp = observer(({ setShowChoose }) => {
           loadOptions={loadOptions}
           openMenuOnFocus
           autoFocus
-          className={`ekplan-aplist-chooseap select-height-limited select-nocaret ${select}`}
+          className={`ekplan-aplist-chooseap select-height-limited select-nocaret ${styles.select}`}
           menuPortalTarget={document.body}
           styles={{ menuPortal: (base) => ({ ...base, zIndex: 4 }) }}
         />
         {error.current && (
-          <div className={errorClass}>{error.current.message}</div>
+          <div className={styles.errorClass}>{error.current.message}</div>
         )}
       </div>
     </ErrorBoundary>
