@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { MessagesList } from './Messages/index.jsx'
 import { a } from '../Projekte/Karte/layers/Pop/statusGroup/a.js'
 
-import { titleRow, allOkButton } from './index.module.css'
+import styles from './index.module.css'
 
 const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
   display: 'flex',
@@ -84,12 +84,12 @@ export const Messages = observer(() => {
           open={unreadMessages.length > 0 && !!userName}
           aria-labelledby="dialog-title"
         >
-          <div className={titleRow}>
+          <div className={styles.titleRow}>
             <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
             <Button
               onClick={onClickReadAll}
               color="inherit"
-              className={allOkButton}
+              className={styles.allOkButton}
             >
               alle o.k.
             </Button>
