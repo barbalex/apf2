@@ -5,7 +5,7 @@ import screenfull from 'screenfull'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-import { button } from './FullscreenControl.module.css'
+import styles from './FullscreenControl.module.css'
 
 export const FullscreenControl = observer(({ mapRef }) => {
   // need to test if screenfull (i.e. the fullscreen api) is supported - iPhones don't support it
@@ -41,7 +41,7 @@ const FullscreenController = ({ mapRef }) => {
 
   return (
     <button
-      className={button}
+      className={styles.button}
       onClick={onClick}
       title={isFullscreen ? 'Karte verkleinern' : 'Karte maximieren'}
     >

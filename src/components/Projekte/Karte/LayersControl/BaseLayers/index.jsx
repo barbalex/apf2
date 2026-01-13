@@ -1,5 +1,5 @@
 import { BaseLayer } from './BaseLayer.jsx'
-import { container } from '../ApfloraLayers/index.module.css'
+import styles from '../ApfloraLayers/index.module.css'
 
 export const baseLayers = [
   { label: 'OpenStreetMap farbig', value: 'OsmColor', cors: true },
@@ -67,7 +67,7 @@ export const baseLayers = [
 ]
 
 export const BaseLayers = () => (
-  <div className={container}>
+  <div className={styles.container}>
     {baseLayers.map((layer, index) => (
       <BaseLayer
         key={index}

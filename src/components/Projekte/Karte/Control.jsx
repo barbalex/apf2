@@ -1,4 +1,4 @@
-import { innerDiv } from './Control.module.css'
+import styles from './Control.module.css'
 
 // Classes used by Leaflet to position controls
 const POSITION_CLASSES = {
@@ -18,7 +18,7 @@ export const Control = ({ children, position, visible = true }) => {
       style={{ visibility: visible ? 'visible' : 'hidden' }}
     >
       <div className={positionClass}>
-        <div className={`leaflet-control leaflet-bar ${innerDiv}`}>
+        <div className={`leaflet-control leaflet-bar ${styles.innerDiv}`}>
           {children}
         </div>
       </div>
