@@ -22,9 +22,27 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { PopId } from '../../../../models/apflora/PopId.ts'
+
+interface CreateTpopResult {
+  data: {
+    createTpop: {
+      tpop: {
+        id: TpopId
+        popId: PopId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const apolloClient = useApolloClient()
@@ -34,9 +52,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const { setMoving, moving, setCopying, copying } = store
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateTpopResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopResult['data']>({
         mutation: gql`
           mutation createTpopForTpopsForm($popId: UUID!) {
             createTpop(input: { tpop: { popId: $popId } }) {
@@ -53,7 +71,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
