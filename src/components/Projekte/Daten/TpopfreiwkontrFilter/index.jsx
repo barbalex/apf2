@@ -9,12 +9,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { Form } from './Form/index.jsx'
 import { Tabs } from './Tabs.jsx'
 
-import {
-  container,
-  scrollContainer,
-  filterCommentTitle,
-  filterComment,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const TpopfreiwkontrFilter = observer(() => {
   const { apId } = useParams()
@@ -91,7 +86,7 @@ export const TpopfreiwkontrFilter = observer(() => {
     !!mapFilter
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FilterTitle
         title="Freiwilligen-Kontrollen"
         table="tpopfreiwkontr"
@@ -101,28 +96,30 @@ export const TpopfreiwkontrFilter = observer(() => {
       />
       {showFilterComments && (
         <>
-          <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+          <div className={styles.filterCommentTitle}>
+            Zusätzlich aktive Filter:
+          </div>
           <ul>
             {!!navApFilterComment && (
-              <li className={filterComment}>{navApFilterComment}</li>
+              <li className={styles.filterComment}>{navApFilterComment}</li>
             )}
             {!!navHiearchyComment && (
-              <li className={filterComment}>{navHiearchyComment}</li>
+              <li className={styles.filterComment}>{navHiearchyComment}</li>
             )}
             {!!navLabelComment && (
-              <li className={filterComment}>{navLabelComment}</li>
+              <li className={styles.filterComment}>{navLabelComment}</li>
             )}
             {!!artHierarchyComment && (
-              <li className={filterComment}>{artHierarchyComment}</li>
+              <li className={styles.filterComment}>{artHierarchyComment}</li>
             )}
             {!!popHierarchyComment && (
-              <li className={filterComment}>{popHierarchyComment}</li>
+              <li className={styles.filterComment}>{popHierarchyComment}</li>
             )}
             {!!tpopHierarchyComment && (
-              <li className={filterComment}>{tpopHierarchyComment}</li>
+              <li className={styles.filterComment}>{tpopHierarchyComment}</li>
             )}
             {!!mapFilterComment && (
-              <li className={filterComment}>{mapFilterComment}</li>
+              <li className={styles.filterComment}>{mapFilterComment}</li>
             )}
           </ul>
         </>
@@ -132,7 +129,7 @@ export const TpopfreiwkontrFilter = observer(() => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
-      <div className={scrollContainer}>
+      <div className={styles.scrollContainer}>
         <Form
           row={row}
           activeTab={activeTab}

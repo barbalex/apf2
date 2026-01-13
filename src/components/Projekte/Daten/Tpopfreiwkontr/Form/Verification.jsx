@@ -1,7 +1,7 @@
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
 import { TextField2 } from '../../../../shared/TextField2.jsx'
 
-import { container, relevant, grund } from './Verification.module.css'
+import styles from './Verification.module.css'
 
 export const Verification = ({ saveToDb, row, errors }) => {
   const onSaveTrue = () => {
@@ -15,8 +15,8 @@ export const Verification = ({ saveToDb, row, errors }) => {
   }
 
   return (
-    <div className={container}>
-      <div className={relevant}>
+    <div className={styles.container}>
+      <div className={styles.relevant}>
         <RadioButton
           key={`${row?.id}apberNichtRelevant`}
           name="apberNichtRelevant"
@@ -26,7 +26,7 @@ export const Verification = ({ saveToDb, row, errors }) => {
           error={errors?.apberNichtRelevant}
         />
       </div>
-      <div className={grund}>
+      <div className={styles.grund}>
         <TextField2
           key={`${row?.id}apberNichtRelevantGrund`}
           name="apberNichtRelevantGrund"

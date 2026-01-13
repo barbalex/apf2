@@ -7,11 +7,7 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
-import {
-  container,
-  bearbLabel,
-  bearbVal,
-} from '../../../Tpopfreiwkontr/Form/Headdata/index.module.css'
+import styles from '../../../Tpopfreiwkontr/Form/Headdata/index.module.css'
 
 export const Headdata = observer(({ row, activeTab }) => {
   const store = useContext(MobxContext)
@@ -29,9 +25,9 @@ export const Headdata = observer(({ row, activeTab }) => {
   if (error) return <Error error={error} />
 
   return (
-    <div className={container}>
-      <div className={bearbLabel}>BeobachterIn</div>
-      <div className={bearbVal}>
+    <div className={styles.container}>
+      <div className={styles.bearbLabel}>BeobachterIn</div>
+      <div className={styles.bearbVal}>
         <Select
           key={`${row?.id}${activeTab}bearbeiter`}
           name="bearbeiter"
