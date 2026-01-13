@@ -16,7 +16,11 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { assozart } from '../../../shared/fragments.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type Assozart from '../../../../models/apflora/Assozart.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type { ApId } from '../../../../models/apflora/Ap.js'
 
 import styles from './index.module.css'
 
@@ -26,17 +30,31 @@ const fieldTypes = {
   apId: 'UUID',
 }
 
+interface AssozartQueryResult {
+  assozartById: Assozart & {
+    aeTaxonomyByAeId?: {
+      taxArtName: string
+    }
+    apByApId?: {
+      artId: AeTaxonomiesId
+      assozartsByApId: {
+        nodes: Array<Assozart>
+      }
+    }
+  }
+}
+
 export const Component = observer(() => {
-  const { assozartId: id } = useParams()
+  const { assozartId: id } = useParams<{ assozartId: string }>()
 
   const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<AssozartQueryResult>(query, {
     variables: {
       id,
     },
@@ -49,7 +67,7 @@ export const Component = observer(() => {
     .map((o) => o.aeId)
     // but do include the art included in the row
     .filter((o) => o !== row.aeId)
-  const aeTaxonomiesfilter = (inputValue) =>
+  const aeTaxonomiesfilter = (inputValue: string) =>
     inputValue ?
       assozartenOfAp.length ?
         {
@@ -59,7 +77,7 @@ export const Component = observer(() => {
       : { taxArtName: { includesInsensitive: inputValue } }
     : { taxArtName: { isNull: false } }
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -107,7 +125,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (field === 'aeId') {

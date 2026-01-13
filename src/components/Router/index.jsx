@@ -804,7 +804,7 @@ export const Router = () => {
                       <Route
                         path=":assozartId"
                         lazy={() =>
-                          import('../Projekte/Daten/Assozart/index.jsx')
+                          import('../Projekte/Daten/Assozart/index.tsx')
                         }
                         errorElement={<RouterErrorBoundary />}
                       />

@@ -87,7 +87,9 @@ export const ApberForAp = observer(
 
     return (
       <ErrorBoundary>
-        <div className={isSubReport ? styles.containerSubreport : styles.container}>
+        <div
+          className={isSubReport ? styles.containerSubreport : styles.container}
+        >
           {!subReportIndex && (
             <Fab
               onClick={onClickPrint}
@@ -101,7 +103,9 @@ export const ApberForAp = observer(
           )}
           <div
             className={
-              isSubReport ? styles.contentContainerSubreport : styles.contentContainer
+              isSubReport ?
+                styles.contentContainerSubreport
+              : styles.contentContainer
             }
           >
             <p className={styles.header}>
@@ -275,7 +279,7 @@ export const ApberForAp = observer(
                         e?.apErfkritWerteByErfolg?.text ?? '(fehlt)'
                       }:`}</div>
                       <div className={styles.erfkritKriterium}>
-                        {e.kriterien || '(fehlt)'}}
+                        {e.kriterien || '(fehlt)'}
                       </div>
                     </div>
                   ))}
