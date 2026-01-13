@@ -19,9 +19,40 @@ import {
   popmassnber,
   tpopmassnErfbeurtWerte,
 } from '../../../shared/fragments.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+import type {
+  PopmassnberId,
+  PopId,
+  ApId,
+  TpopmassnErfbeurtWerteCode,
+} from '../../../../models/apflora/index.js'
 
 import styles from './index.module.css'
+
+interface PopmassnberQueryResult {
+  popmassnberById?: {
+    id: PopmassnberId
+    popId: PopId
+    jahr: number | null
+    beurteilung: TpopmassnErfbeurtWerteCode | null
+    bemerkungen: string | null
+    tpopmassnErfbeurtWerteByBeurteilung?: {
+      code: TpopmassnErfbeurtWerteCode
+      text: string | null
+      sort: number | null
+    }
+    popByPopId?: {
+      id: PopId
+      apId: ApId
+    }
+  }
+  allTpopmassnErfbeurtWertes?: {
+    nodes: Array<{
+      value: TpopmassnErfbeurtWerteCode
+      label: string | null
+    }>
+  }
+}
 
 const fieldTypes = {
   popId: 'UUID',
@@ -38,9 +69,9 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<PopmassnberQueryResult>(query, {
     variables: {
       id,
     },
@@ -92,7 +123,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (['jahr', 'beurteilung'].includes(field)) {
