@@ -1,13 +1,13 @@
 import { MdLocalFlorist } from 'react-icons/md'
 
-import { iconContainer } from './index.module.css'
-import { mapIcon } from './BeobnichtzuzuordnenMapIcon.module.css'
+import indexStyles from './index.module.css'
+import styles from './BeobnichtzuzuordnenMapIcon.module.css'
 
 export const BeobnichtzuzuordnenMapIcon = () => (
   <div
     title="Beobachtungen nicht zuzuordnen in Karte sichtbar"
-    className={iconContainer}
+    className={indexStyles.iconContainer}
   >
-    <MdLocalFlorist className={mapIcon} />
+    <MdLocalFlorist className={styles.mapIcon} />
   </div>
 )

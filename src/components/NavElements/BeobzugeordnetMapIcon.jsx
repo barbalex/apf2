@@ -1,13 +1,13 @@
 import { MdLocalFlorist } from 'react-icons/md'
 
-import { iconContainer } from './index.module.css'
-import { mapIcon } from './BeobzugeordnetMapIcon.module.css'
+import indexStyles from './index.module.css'
+import styles from './BeobzugeordnetMapIcon.module.css'
 
 export const BeobzugeordnetMapIcon = () => (
   <div
     title="Beobachtungen zugeordnet in Karte sichtbar"
-    className={iconContainer}
+    className={indexStyles.iconContainer}
   >
-    <MdLocalFlorist className={mapIcon} />
+    <MdLocalFlorist className={styles.mapIcon} />
   </div>
 )

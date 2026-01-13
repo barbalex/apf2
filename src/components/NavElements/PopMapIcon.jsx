@@ -1,13 +1,13 @@
 import { MdLocalFlorist } from 'react-icons/md'
 
-import { iconContainer } from './index.module.css'
-import { icon } from './PopMapIcon.module.css'
+import indexStyles from './index.module.css'
+import styles from './PopMapIcon.module.css'
 
 export const PopMapIcon = () => (
   <div
     title="Populationen in Karte sichtbar"
-    className={iconContainer}
+    className={indexStyles.iconContainer}
   >
-    <MdLocalFlorist className={icon} />
+    <MdLocalFlorist className={styles.icon} />
   </div>
 )
