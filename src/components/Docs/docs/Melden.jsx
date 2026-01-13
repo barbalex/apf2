@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Fehler, Ideen, Vorschläge melden</h1>
-    <p className={dokuDate}>16.04.2019</p>
+    <p className={desktopStyles.dokuDate}>16.04.2019</p>
     <h2>Artverantwortliche und Freiwillige</h2>
     <p>
       Wendet euch bitte an <a href="mailto:kurz@toposmm.ch">Topos</a>.<br />

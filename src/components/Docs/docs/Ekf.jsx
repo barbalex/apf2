@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Erfolgs-Kontrollen Freiwillige (EKF)</h1>
-    <p className={dokuDate}>13.01.2020</p>
+    <p className={desktopStyles.dokuDate}>13.01.2020</p>
     <p>
       Freiwilligen-Kontrollen bzw. Erfolgs-Kontrollen Freiwillige werden
       nachfolgend mit &quot;EKF&quot; abgekürzt.

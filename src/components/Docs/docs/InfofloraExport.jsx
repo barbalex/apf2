@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Info-Flora-Export</h1>
-    <p className={dokuDate}>31.03.2022</p>
+    <p className={desktopStyles.dokuDate}>31.03.2022</p>
     <p>
       Feld- und Freiwilligen-Kontrollen entsprechen Beobachtungen. Ein mal
       jährlich (ca. im April) werden sie an Info Flora exportiert.

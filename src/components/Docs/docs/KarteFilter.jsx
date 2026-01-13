@@ -1,9 +1,9 @@
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Karte: Filter</h1>
-    <p className={dokuDate}>09.02.2022</p>
+    <p className={desktopStyles.dokuDate}>09.02.2022</p>
     <object
       data="https://ucarecdn.com/08ef33aa-0b63-419e-a7bb-da0d48dfdc21/KartenFilter_Anleitung_20220209.pdf"
       type="application/pdf"
