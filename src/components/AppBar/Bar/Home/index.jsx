@@ -2,7 +2,7 @@ import Button from '@mui/material/Button'
 import { useLocation, Link } from 'react-router'
 
 import { Dokumentation } from './Dokumentation.jsx'
-import { button } from './index.module.css'
+import styles from './index.module.css'
 
 export const HomeMenus = () => {
   const { search } = useLocation()
@@ -13,7 +13,7 @@ export const HomeMenus = () => {
         variant="text"
         component={Link}
         to={`/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13${search}`}
-        className={button}
+        className={styles.button}
       >
         Daten
       </Button>

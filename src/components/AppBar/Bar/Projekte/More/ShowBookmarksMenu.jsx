@@ -5,7 +5,7 @@ import { useAtom } from 'jotai'
 
 import { showBookmarksMenuAtom } from '../../../../../JotaiStore/index.js'
 
-import { formControlLabel } from './AlwaysShowTree.module.css'
+import styles from './AlwaysShowTree.module.css'
 
 export const ShowBookmarksMenu = () => {
   const [showBookmarksMenu, setShowBookmarksMenu] = useAtom(
@@ -26,7 +26,7 @@ export const ShowBookmarksMenu = () => {
           />
         }
         label="In Bookmarks ein Menü anzeigen"
-        className={formControlLabel}
+        className={styles.formControlLabel}
       />
     </Tooltip>
   )

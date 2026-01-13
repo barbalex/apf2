@@ -7,12 +7,7 @@ import { useAtom } from 'jotai'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 
-import {
-  button,
-  preceded,
-  followed as followedClass,
-  iconButton,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Daten = ({ treeNr = '', hide = false }) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
@@ -54,7 +49,7 @@ export const Daten = ({ treeNr = '', hide = false }) => {
           variant={isDaten ? 'outlined' : 'text'}
           onClick={onClickButton}
           data-id={`nav-daten${treeNr || 1}`}
-          className={`${button} ${isTree ? preceded : ''} ${followed ? followedClass : ''}`}
+          className={`${styles.button} ${isTree ? styles.preceded : ''} ${followed ? styles.followed : ''}`}
         >
           {`Daten${treeNr === '2' ? ' 2' : ''}`}
         </Button>
@@ -62,7 +57,7 @@ export const Daten = ({ treeNr = '', hide = false }) => {
           variant={isDaten ? 'outlined' : 'text'}
           onClick={onClickButton}
           data-id={`nav-daten${treeNr || 1}`}
-          className={`${iconButton} ${isTree ? preceded : ''} ${followed ? followedClass : ''}`}
+          className={`${styles.iconButton} ${isTree ? styles.preceded : ''} ${followed ? styles.followed : ''}`}
         >
           <MdEditNote />
         </Button>

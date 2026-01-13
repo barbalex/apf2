@@ -19,13 +19,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
 import { hideTreeAtom } from '../../../../JotaiStore/index.js'
 
-import {
-  button,
-  preceded,
-  followed,
-  iconButton,
-  dokuButton,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const ProjekteMenus = observer(() => {
   const { projId } = useParams()
@@ -123,7 +117,7 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickTree}
             data-id="nav-tree1"
             width={150}
-            className={`${button} ${datenIsVisible ? followed : ''}`}
+            className={`${styles.button} ${datenIsVisible ? styles.followed : ''}`}
           >
             Navigationsbaum
           </Button>
@@ -138,7 +132,7 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickTree}
             data-id="nav-tree1"
             width={46}
-            className={iconButton}
+            className={styles.iconButton}
           >
             <VscListTree />
           </Button>
@@ -152,7 +146,7 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickFilter}
             data-id="nav-filter1"
             width={70}
-            className={`${button} ${datenIsVisible ? preceded : ''} ${karteIsVisible ? followed : ''}`}
+            className={`${styles.button} ${datenIsVisible ? styles.preceded : ''} ${karteIsVisible ? styles.followed : ''}`}
           >
             Filter
           </Button>
@@ -161,7 +155,7 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickFilter}
             data-id="nav-filter1"
             width={46}
-            className={iconButton}
+            className={styles.iconButton}
           >
             <MdFilterAlt />
           </Button>
@@ -174,9 +168,9 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickKarte}
             data-id="nav-karte1"
             width={70}
-            className={`${button} ${filterIsVisible ? preceded : ''} ${
+            className={`${styles.button} ${filterIsVisible ? styles.preceded : ''} ${
               (!!projId && exporteIsVisible) || (!projId && tree2IsVisible) ?
-                followed
+                styles.followed
               : ''
             }`}
           >
@@ -187,7 +181,7 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickKarte}
             data-id="nav-karte1"
             width={46}
-            className={iconButton}
+            className={styles.iconButton}
           >
             <TbMap2 />
           </Button>
@@ -201,8 +195,8 @@ export const ProjekteMenus = observer(() => {
               onClick={onClickExporte}
               data-id="nav-exporte"
               width={74}
-              className={`${button} ${karteIsVisible ? preceded : ''} ${
-                isDesktopView && tree2IsVisible ? followed : ''
+              className={`${styles.button} ${karteIsVisible ? styles.preceded : ''} ${
+                isDesktopView && tree2IsVisible ? styles.followed : ''
               }`}
             >
               Exporte
@@ -212,7 +206,7 @@ export const ProjekteMenus = observer(() => {
               onClick={onClickExporte}
               data-id="nav-exporte"
               width={46}
-              className={iconButton}
+              className={styles.iconButton}
             >
               <FaDownload />
             </Button>
@@ -226,11 +220,11 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickTree2}
             data-id="nav-tree2"
             width={165}
-            className={`${button} ${
+            className={`${styles.button} ${
               (!!projId && exporteIsVisible) || (!projId && karteIsVisible) ?
-                preceded
+                styles.preceded
               : ''
-            } ${daten2IsVisible ? followed : ''}`}
+            } ${daten2IsVisible ? styles.followed : ''}`}
           >
             Navigationsbaum 2
           </Button>
@@ -249,8 +243,8 @@ export const ProjekteMenus = observer(() => {
             onClick={onClickFilter2}
             data-id="nav-filter2"
             width={70}
-            className={`${button} ${daten2IsVisible ? preceded : ''} ${
-              karte2IsVisible ? followed : ''
+            className={`${styles.button} ${daten2IsVisible ? styles.preceded : ''} ${
+              karte2IsVisible ? styles.followed : ''
             }`}
           >
             Filter 2
@@ -263,7 +257,7 @@ export const ProjekteMenus = observer(() => {
             variant="text"
             onClick={onClickEkPlanung}
             width={101}
-            className={button}
+            className={styles.button}
           >
             EK-Planung
           </Button>
@@ -275,7 +269,7 @@ export const ProjekteMenus = observer(() => {
             variant="text"
             onClick={onClickDocs}
             width={129}
-            className={dokuButton}
+            className={styles.dokuButton}
           >
             Dokumentation
           </Button>
@@ -283,7 +277,7 @@ export const ProjekteMenus = observer(() => {
             variant="text"
             onClick={onClickDocs}
             width={46}
-            className={iconButton}
+            className={styles.iconButton}
           >
             <MdInfoOutline />
           </Button>
