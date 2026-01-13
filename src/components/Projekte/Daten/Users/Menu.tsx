@@ -16,21 +16,40 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
+import { MobxContext } from '../../../../mobxContext.js'
+
+import type { UserId } from '../../../../models/apflora/UserId.ts'
+
+interface CreateUserResult {
+  data: {
+    createUser: {
+      user: {
+        id: UserId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
 
 const iconStyle = { color: 'white' }
 
-export const Menu = ({ toggleFilterInput }) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, userId } = useParams()
+
+  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateUserResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateUserResult['data']>({
         mutation: gql`
           mutation createUserForUsersForm {
             createUser(input: { user: {} }) {
@@ -43,7 +62,7 @@ export const Menu = ({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
