@@ -7,28 +7,53 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const Ap = observer(({ filtered = false }) => {
+interface ApAnzkontrsQueryResult {
+  allAps: {
+    nodes: Array<{
+      id: ApId
+      aeTaxonomyByArtId?: {
+        id: string
+        artname?: string
+      }
+      apBearbstandWerteByBearbeitung?: {
+        id: number
+        text?: string
+      }
+      startJahr?: number
+      apUmsetzungWerteByUmsetzung?: {
+        id: number
+        text?: string
+      }
+      vApAnzkontrsById?: {
+        nodes: Array<{
+          id: ApId
+          anzahlKontrollen?: number
+        }>
+      }
+    }>
+  }
+}
+
+export const AnzKontr = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification, tableIsFiltered } = store
-  const { apGqlFilter } = store.tree
+  const { enqueNotification } = store
 
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
 
-  const onClickAp = async () => {
+  const onClickAnzKontrProAp = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ApAnzkontrsQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ApAnzkontrsQueryResult>({
         query: gql`
-          query apForExportQuery($filter: ApFilter) {
-            allAps(
-              filter: $filter
-              orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
-            ) {
+          query apAnzkontrsForExportQuery {
+            allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
                 id
                 aeTaxonomyByArtId {
@@ -44,35 +69,34 @@ export const Ap = observer(({ filtered = false }) => {
                   id
                   text
                 }
-                createdAt
-                updatedAt
-                changedBy
+                vApAnzkontrsById {
+                  nodes {
+                    id
+                    anzahlKontrollen
+                  }
+                }
               }
             }
           }
         `,
-        variables: {
-          filter: filtered ? apGqlFilter.filtered : { or: [] },
-        },
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((n) => ({
-      id: n.id,
-      artname: n?.aeTaxonomyByArtId?.artname ?? null,
-      bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
-      startJahr: n.startJahr,
-      umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
-      createdAt: n.createdAt,
-      updatedAt: n.updatedAt,
-      changedBy: n.changedBy,
+    const rows = (result.data?.allAps.nodes ?? []).map((z) => ({
+      id: z.id,
+      artname: z?.aeTaxonomyByArtId?.artname ?? '',
+      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
+      start_jahr: z.startJahr,
+      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      anzahl_kontrollen:
+        z?.vApAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
@@ -85,23 +109,21 @@ export const Ap = observer(({ filtered = false }) => {
     }
     exportModule({
       data: rows,
-      fileName: `Arten${filtered ? '_gefiltert' : ''}`,
+      fileName: 'ApAnzahlKontrollen',
       store,
       apolloClient,
     })
     setQueryState(undefined)
   }
 
-  const apIsFiltered = tableIsFiltered('ap')
-
   return (
     <Button
       className={styles.button}
-      onClick={onClickAp}
+      onClick={onClickAnzKontrProAp}
       color="inherit"
-      disabled={!!queryState || (filtered && !apIsFiltered)}
+      disabled={!!queryState}
     >
-      {filtered ? 'Arten (gefiltert)' : 'Arten'}
+      Anzahl Kontrollen pro Art
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

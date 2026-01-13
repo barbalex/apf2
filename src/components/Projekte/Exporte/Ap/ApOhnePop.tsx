@@ -7,9 +7,35 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const AnzKontr = observer(() => {
+interface ApOhnepopQueryResult {
+  allAps: {
+    nodes: Array<{
+      id: ApId
+      aeTaxonomyByArtId?: {
+        id: string
+        artname?: string
+      }
+      apBearbstandWerteByBearbeitung?: {
+        id: number
+        text?: string
+      }
+      startJahr?: number
+      apUmsetzungWerteByUmsetzung?: {
+        id: number
+        text?: string
+      }
+      popsByApId?: {
+        totalCount: number
+      }
+    }>
+  }
+}
+
+export const ApOhnePop = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -17,13 +43,13 @@ export const AnzKontr = observer(() => {
 
   const [queryState, setQueryState] = useState()
 
-  const onClickAnzKontrProAp = async () => {
+  const onClickApOhnePop = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ApOhnepopQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ApOhnepopQueryResult>({
         query: gql`
-          query apAnzkontrsForExportQuery {
+          query apOhnepopForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
                 id
@@ -40,11 +66,8 @@ export const AnzKontr = observer(() => {
                   id
                   text
                 }
-                vApAnzkontrsById {
-                  nodes {
-                    id
-                    anzahlKontrollen
-                  }
+                popsByApId {
+                  totalCount
                 }
               }
             }
@@ -53,22 +76,22 @@ export const AnzKontr = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps.nodes ?? []).map((z) => ({
-      id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      start_jahr: z.startJahr,
-      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      anzahl_kontrollen:
-        z?.vApAnzkontrsById?.nodes?.[0]?.anzahlKontrollen ?? '',
-    }))
+    const rows = (result.data?.allAps?.nodes ?? [])
+      .filter((z) => z?.popsByApId?.totalCount === 0)
+      .map((z) => ({
+        id: z.id,
+        artname: z?.aeTaxonomyByArtId.artname ?? '',
+        bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
+        start_jahr: z.startJahr,
+        umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      }))
     if (rows.length === 0) {
       setQueryState(undefined)
       return enqueNotification({
@@ -80,7 +103,7 @@ export const AnzKontr = observer(() => {
     }
     exportModule({
       data: rows,
-      fileName: 'ApAnzahlKontrollen',
+      fileName: 'ApOhnePopulationen',
       store,
       apolloClient,
     })
@@ -90,11 +113,11 @@ export const AnzKontr = observer(() => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickAnzKontrProAp}
+      onClick={onClickApOhnePop}
       color="inherit"
       disabled={!!queryState}
     >
-      Anzahl Kontrollen pro Art
+      Arten ohne Populationen
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

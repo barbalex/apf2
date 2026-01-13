@@ -7,30 +7,63 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const BerUndMassn = observer(() => {
+interface ApQueryResult {
+  allAps: {
+    nodes: Array<{
+      id: ApId
+      aeTaxonomyByArtId?: {
+        id: string
+        artname?: string
+      }
+      apBearbstandWerteByBearbeitung?: {
+        id: number
+        text?: string
+      }
+      startJahr?: number
+      apUmsetzungWerteByUmsetzung?: {
+        id: number
+        text?: string
+      }
+      createdAt?: string
+      updatedAt?: string
+      changedBy?: string
+    }>
+  }
+}
+
+interface ApProps {
+  filtered?: boolean
+}
+
+export const Ap = observer(({ filtered = false }: ApProps) => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
+  const { enqueNotification, tableIsFiltered } = store
+  const { apGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
 
-  const onClickApBerUndMassn = async () => {
+  const onClickAp = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ApQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ApQueryResult>({
         query: gql`
-          query ApApberUndMassnsForExportQuery {
-            allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
+          query apForExportQuery($filter: ApFilter) {
+            allAps(
+              filter: $filter
+              orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
+            ) {
               nodes {
                 id
                 aeTaxonomyByArtId {
                   id
                   artname
-                  artwert
                 }
                 apBearbstandWerteByBearbeitung {
                   id
@@ -41,19 +74,6 @@ export const BerUndMassn = observer(() => {
                   id
                   text
                 }
-                adresseByBearbeiter {
-                  id
-                  name
-                }
-                vApApberundmassnsById {
-                  nodes {
-                    id
-                    massnJahr
-                    massnAnzahl
-                    massnAnzahlBisher
-                    berichtErstellt
-                  }
-                }
                 createdAt
                 updatedAt
                 changedBy
@@ -61,33 +81,28 @@ export const BerUndMassn = observer(() => {
             }
           }
         `,
+        variables: {
+          filter: filtered ? apGqlFilter.filtered : { or: [] },
+        },
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
-      ap_id: z.id,
-      artname: z?.aeTaxonomyByArtId?.artname ?? '',
-      ap_bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-      ap_start_jahr: z.startJahr,
-      ap_umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      ap_bearbeiter: z?.adresseByBearbeiter?.name ?? '',
-      artwert: z?.aeTaxonomyByArtId?.artwert ?? '',
-      massn_jahr: z?.vApApberundmassnsById?.nodes?.[0]?.massnJahr ?? '',
-      massn_anzahl: z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahl ?? '',
-      massn_anzahl_bisher:
-        z?.vApApberundmassnsById?.nodes?.[0]?.massnAnzahlBisher ?? '',
-      bericht_erstellt:
-        z?.vApApberundmassnsById?.nodes?.[0]?.berichtErstellt ?? '',
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
+    const rows = (result.data?.allAps?.nodes ?? []).map((n) => ({
+      id: n.id,
+      artname: n?.aeTaxonomyByArtId?.artname ?? null,
+      bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
+      startJahr: n.startJahr,
+      umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
+      createdAt: n.createdAt,
+      updatedAt: n.updatedAt,
+      changedBy: n.changedBy,
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
@@ -100,21 +115,23 @@ export const BerUndMassn = observer(() => {
     }
     exportModule({
       data: rows,
-      fileName: 'ApJahresberichteUndMassnahmen',
+      fileName: `Arten${filtered ? '_gefiltert' : ''}`,
       store,
       apolloClient,
     })
     setQueryState(undefined)
   }
 
+  const apIsFiltered = tableIsFiltered('ap')
+
   return (
     <Button
       className={styles.button}
-      onClick={onClickApBerUndMassn}
+      onClick={onClickAp}
       color="inherit"
-      disabled={!!queryState}
+      disabled={!!queryState || (filtered && !apIsFiltered)}
     >
-      AP-Berichte und Massnahmen
+      {filtered ? 'Arten (gefiltert)' : 'Arten'}
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

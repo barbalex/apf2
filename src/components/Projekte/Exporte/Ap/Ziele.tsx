@@ -8,9 +8,53 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import {
+  ApId,
+  ZielId,
+  AdresseId,
+  ZielTypWerteCode,
+} from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const Idealbiotop = observer(() => {
+interface ZielsQueryResult {
+  allZiels: {
+    nodes: Array<{
+      id: ZielId
+      jahr?: number
+      typ?: ZielTypWerteCode
+      zielTypWerteByTyp?: {
+        id: number
+        text?: string
+      }
+      bezeichnung?: string
+      erreichung?: number
+      bemerkungen?: string
+      apByApId?: {
+        id: ApId
+        apBearbstandWerteByBearbeitung?: {
+          id: number
+          text?: string
+        }
+        startJahr?: number
+        apUmsetzungWerteByUmsetzung?: {
+          id: number
+          text?: string
+        }
+        adresseByBearbeiter?: {
+          id: AdresseId
+          name?: string
+        }
+        aeTaxonomyByArtId?: {
+          id: string
+          artname?: string
+        }
+      }
+    }>
+  }
+}
+
+export const Ziele = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -18,23 +62,34 @@ export const Idealbiotop = observer(() => {
 
   const [queryState, setQueryState] = useState()
 
-  const onClickIdealbiotop = async () => {
+  const onClickZiele = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ZielsQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ZielsQueryResult>({
         query: gql`
-          query idealbiotopsForExportQuery {
-            allIdealbiotops {
+          query zielsForExportQuery {
+            allZiels(
+              orderBy: [
+                AP_BY_AP_ID__ART_ID_ASC
+                JAHR_ASC
+                ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
+                ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
+              ]
+            ) {
               nodes {
                 id
-                apId
+                jahr
+                typ
+                zielTypWerteByTyp {
+                  id
+                  text
+                }
+                bezeichnung
+                erreichung
+                bemerkungen
                 apByApId {
                   id
-                  aeTaxonomyByArtId {
-                    id
-                    artname
-                  }
                   apBearbstandWerteByBearbeitung {
                     id
                     text
@@ -48,28 +103,11 @@ export const Idealbiotop = observer(() => {
                     id
                     name
                   }
+                  aeTaxonomyByArtId {
+                    id
+                    artname
+                  }
                 }
-                erstelldatum
-                hoehenlage
-                region
-                exposition
-                besonnung
-                hangneigung
-                bodenTyp
-                bodenKalkgehalt
-                bodenDurchlaessigkeit
-                bodenHumus
-                bodenNaehrstoffgehalt
-                wasserhaushalt
-                konkurrenz
-                moosschicht
-                krautschicht
-                strauchschicht
-                baumschicht
-                bemerkungen
-                createdAt
-                updatedAt
-                changedBy
               }
             }
           }
@@ -77,42 +115,24 @@ export const Idealbiotop = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allIdealbiotops?.nodes ?? []).map((z) => ({
-      ap_id: z.apId,
+    const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
+      ap_id: z.id,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
       ap_start_jahr: z?.apByApId?.startJahr ?? '',
       ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
       ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
       id: z.id,
-      erstelldatum: z.erstelldatum,
-      hoehenlage: z.hoehenlage,
-      region: z.region,
-      exposition: z.exposition,
-      besonnung: z.besonnung,
-      hangneigung: z.hangneigung,
-      boden_typ: z.bodenTyp,
-      boden_kalkgehalt: z.bodenKalkgehalt,
-      boden_durchlaessigkeit: z.bodenDurchlaessigkeit,
-      boden_humus: z.bodenHumus,
-      boden_naehrstoffgehalt: z.bodenNaehrstoffgehalt,
-      wasserhaushalt: z.wasserhaushalt,
-      konkurrenz: z.konkurrenz,
-      moosschicht: z.moosschicht,
-      krautschicht: z.krautschicht,
-      strauchschicht: z.strauchschicht,
-      baumschicht: z.baumschicht,
-      bemerkungen: z.bemerkungen,
-      created_at: z.createdAt,
-      updated_at: z.updatedAt,
-      changed_by: z.changedBy,
+      jahr: z.jahr,
+      typ: z?.zielTypWerteByTyp?.text ?? '',
+      bezeichnung: z.bezeichnung,
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
@@ -125,7 +145,7 @@ export const Idealbiotop = observer(() => {
     }
     exportModule({
       data: sortBy(rows, ['artname']),
-      fileName: 'Idealbiotope',
+      fileName: 'ApZiele',
       store,
       apolloClient,
     })
@@ -135,11 +155,11 @@ export const Idealbiotop = observer(() => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickIdealbiotop}
+      onClick={onClickZiele}
       color="inherit"
       disabled={!!queryState}
     >
-      Idealbiotope
+      Ziele
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

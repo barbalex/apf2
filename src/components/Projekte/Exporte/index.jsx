@@ -1,5 +1,5 @@
 import { FormTitle } from '../../shared/FormTitle/index.jsx'
-import { Ap } from './Ap/index.jsx'
+import { Ap } from './Ap/index.tsx'
 import { Beobachtungen } from './Beobachtungen/index.jsx'
 import { Kontrollen } from './Kontrollen/index.jsx'
 import { Massnahmen } from './Massnahmen/index.jsx'

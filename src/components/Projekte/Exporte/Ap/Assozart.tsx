@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -8,9 +7,45 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId, AssozartId, AdresseId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const Ziele = observer(() => {
+interface AssozartsQueryResult {
+  allAssozarts: {
+    nodes: Array<{
+      id: AssozartId
+      apId?: ApId
+      aeTaxonomyByAeId?: {
+        id: string
+        artname?: string
+      }
+      apByApId?: {
+        id: ApId
+        label?: string
+        apBearbstandWerteByBearbeitung?: {
+          id: number
+          text?: string
+        }
+        startJahr?: number
+        apUmsetzungWerteByUmsetzung?: {
+          id: number
+          text?: string
+        }
+        adresseByBearbeiter?: {
+          id: AdresseId
+          name?: string
+        }
+      }
+      bemerkungen?: string
+      createdAt?: string
+      updatedAt?: string
+      changedBy?: string
+    }>
+  }
+}
+
+export const Assozart = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -18,34 +53,29 @@ export const Ziele = observer(() => {
 
   const [queryState, setQueryState] = useState()
 
-  const onClickZiele = async () => {
+  const onClickAssozarten = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: AssozartsQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<AssozartsQueryResult>({
         query: gql`
-          query zielsForExportQuery {
-            allZiels(
+          query assozartsForExportQuery {
+            allAssozarts(
               orderBy: [
-                AP_BY_AP_ID__ART_ID_ASC
-                JAHR_ASC
-                ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
-                ZIEL_TYP_WERTE_BY_TYP__TEXT_ASC
+                AP_BY_AP_ID__LABEL_ASC
+                AE_TAXONOMY_BY_AE_ID__ARTNAME_ASC
               ]
             ) {
               nodes {
                 id
-                jahr
-                typ
-                zielTypWerteByTyp {
+                apId
+                aeTaxonomyByAeId {
                   id
-                  text
+                  artname
                 }
-                bezeichnung
-                erreichung
-                bemerkungen
                 apByApId {
                   id
+                  label
                   apBearbstandWerteByBearbeitung {
                     id
                     text
@@ -59,11 +89,11 @@ export const Ziele = observer(() => {
                     id
                     name
                   }
-                  aeTaxonomyByArtId {
-                    id
-                    artname
-                  }
                 }
+                bemerkungen
+                createdAt
+                updatedAt
+                changedBy
               }
             }
           }
@@ -71,24 +101,26 @@ export const Ziele = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
-      ap_id: z.id,
-      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
+    const rows = (result.data?.allAssozarts?.nodes ?? []).map((z) => ({
+      ap_id: z.apId,
+      artname: z?.apByApId?.label ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
       ap_start_jahr: z?.apByApId?.startJahr ?? '',
       ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
       ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
       id: z.id,
-      jahr: z.jahr,
-      typ: z?.zielTypWerteByTyp?.text ?? '',
-      bezeichnung: z.bezeichnung,
+      artname_assoziiert: z?.aeTaxonomyByAeId?.artname ?? '',
+      bemerkungen: z.bemerkungen,
+      created_at: z.createdAt,
+      updated_at: z.updatedAt,
+      changed_by: z.changedBy,
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
@@ -100,8 +132,8 @@ export const Ziele = observer(() => {
       })
     }
     exportModule({
-      data: sortBy(rows, ['artname']),
-      fileName: 'ApZiele',
+      data: rows,
+      fileName: 'AssoziierteArten',
       store,
       apolloClient,
     })
@@ -111,11 +143,11 @@ export const Ziele = observer(() => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickZiele}
+      onClick={onClickAssozarten}
       color="inherit"
       disabled={!!queryState}
     >
-      Ziele
+      Assoziierte Arten
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

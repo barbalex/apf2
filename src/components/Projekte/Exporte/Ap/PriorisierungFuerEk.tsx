@@ -7,7 +7,52 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId, AdresseId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
+
+interface ApPopEkPrioQueryResult {
+  allAps: {
+    nodes: Array<{
+      id: ApId
+      aeTaxonomyByArtId?: {
+        id: string
+        artname?: string
+        artwert?: number
+      }
+      apBearbstandWerteByBearbeitung?: {
+        id: number
+        text?: string
+      }
+      startJahr?: number
+      apUmsetzungWerteByUmsetzung?: {
+        id: number
+        text?: string
+      }
+      adresseByBearbeiter?: {
+        id: AdresseId
+        name?: string
+      }
+      vApPopEkPriosByApId?: {
+        nodes: Array<{
+          id: ApId
+          jahrZuvor?: number
+          jahrZuletzt?: number
+          anzPopUrsprZuvor?: number
+          anzPopAngesZuvor?: number
+          anzPopAktuellZuvor?: number
+          anzPopUrsprZuletzt?: number
+          anzPopAngesZuletzt?: number
+          anzPopAktuellZuletzt?: number
+          diffPopUrspr?: number
+          diffPopAnges?: number
+          diffPopAktuell?: number
+          beurteilungZuletzt?: number
+        }>
+      }
+    }>
+  }
+}
 
 export const PriorisierungFuerEk = observer(() => {
   const store = useContext(MobxContext)
@@ -19,9 +64,9 @@ export const PriorisierungFuerEk = observer(() => {
 
   const onClickApPopEkPrio = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ApPopEkPrioQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ApPopEkPrioQueryResult>({
         query: gql`
           query apPopEkPrioForExportQuery {
             allAps(
@@ -72,7 +117,7 @@ export const PriorisierungFuerEk = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

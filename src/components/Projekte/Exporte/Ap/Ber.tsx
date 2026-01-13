@@ -8,7 +8,52 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId, ApberId, AdresseId, UserId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
+
+interface ApbersQueryResult {
+  allApbers: {
+    nodes: Array<{
+      apByApId?: {
+        id: ApId
+        aeTaxonomyByArtId?: {
+          id: string
+          artname?: string
+        }
+      }
+      id: ApberId
+      apId?: ApId
+      jahr?: number
+      situation?: string
+      vergleichVorjahrGesamtziel?: string
+      beurteilung?: number
+      apErfkritWerteByBeurteilung?: {
+        id: number
+        text?: string
+      }
+      veraenderungZumVorjahr?: string
+      apberAnalyse?: string
+      konsequenzenUmsetzung?: string
+      konsequenzenErfolgskontrolle?: string
+      biotopeNeue?: string
+      biotopeOptimieren?: string
+      massnahmenOptimieren?: string
+      wirkungAufArt?: string
+      createdAt?: string
+      updatedAt?: string
+      changedBy?: string
+      massnahmenApBearb?: string
+      massnahmenPlanungVsAusfuehrung?: string
+      datum?: string
+      bearbeiter?: UserId
+      adresseByBearbeiter?: {
+        id: AdresseId
+        name?: string
+      }
+    }>
+  }
+}
 
 export const Ber = observer(() => {
   const store = useContext(MobxContext)
@@ -20,9 +65,9 @@ export const Ber = observer(() => {
 
   const onClickApBer = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ApbersQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ApbersQueryResult>({
         query: gql`
           query apbersForExportQuery {
             allApbers {
@@ -70,7 +115,7 @@ export const Ber = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

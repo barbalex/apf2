@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -7,9 +8,48 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId, ErfkritId, AdresseId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const Assozart = observer(() => {
+interface ErfkritsQueryResult {
+  allErfkrits: {
+    nodes: Array<{
+      id: ErfkritId
+      apId?: ApId
+      apByApId?: {
+        id: ApId
+        aeTaxonomyByArtId?: {
+          id: string
+          artname?: string
+        }
+        apBearbstandWerteByBearbeitung?: {
+          id: number
+          text?: string
+        }
+        startJahr?: number
+        apUmsetzungWerteByUmsetzung?: {
+          id: number
+          text?: string
+        }
+        adresseByBearbeiter?: {
+          id: AdresseId
+          name?: string
+        }
+      }
+      apErfkritWerteByErfolg?: {
+        id: number
+        text?: string
+      }
+      kriterien?: string
+      createdAt?: string
+      updatedAt?: string
+      changedBy?: string
+    }>
+  }
+}
+
+export const Erfkrit = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -17,29 +57,23 @@ export const Assozart = observer(() => {
 
   const [queryState, setQueryState] = useState()
 
-  const onClickAssozarten = async () => {
+  const onClickErfkrit = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ErfkritsQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ErfkritsQueryResult>({
         query: gql`
-          query assozartsForExportQuery {
-            allAssozarts(
-              orderBy: [
-                AP_BY_AP_ID__LABEL_ASC
-                AE_TAXONOMY_BY_AE_ID__ARTNAME_ASC
-              ]
-            ) {
+          query erfkritsForExportQuery {
+            allErfkrits {
               nodes {
                 id
                 apId
-                aeTaxonomyByAeId {
-                  id
-                  artname
-                }
                 apByApId {
                   id
-                  label
+                  aeTaxonomyByArtId {
+                    id
+                    artname
+                  }
                   apBearbstandWerteByBearbeitung {
                     id
                     text
@@ -54,7 +88,11 @@ export const Assozart = observer(() => {
                     name
                   }
                 }
-                bemerkungen
+                apErfkritWerteByErfolg {
+                  id
+                  text
+                }
+                kriterien
                 createdAt
                 updatedAt
                 changedBy
@@ -65,23 +103,23 @@ export const Assozart = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAssozarts?.nodes ?? []).map((z) => ({
+    const rows = (result.data?.allErfkrits?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
-      artname: z?.apByApId?.label ?? '',
+      artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
       ap_start_jahr: z?.apByApId?.startJahr ?? '',
       ap_umsetzung: z?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? '',
       ap_bearbeiter: z?.apByApId?.adresseByBearbeiter?.name ?? '',
       id: z.id,
-      artname_assoziiert: z?.aeTaxonomyByAeId?.artname ?? '',
-      bemerkungen: z.bemerkungen,
+      beurteilung: z?.apErfkritWerteByErfolg?.text ?? '',
+      kriterien: z.kriterien,
       created_at: z.createdAt,
       updated_at: z.updatedAt,
       changed_by: z.changedBy,
@@ -96,8 +134,8 @@ export const Assozart = observer(() => {
       })
     }
     exportModule({
-      data: rows,
-      fileName: 'AssoziierteArten',
+      data: sortBy(rows, ['artname', 'beurteilung']),
+      fileName: 'Erfolgskriterien',
       store,
       apolloClient,
     })
@@ -107,11 +145,11 @@ export const Assozart = observer(() => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickAssozarten}
+      onClick={onClickErfkrit}
       color="inherit"
       disabled={!!queryState}
     >
-      Assoziierte Arten
+      Erfolgskriterien
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

@@ -7,7 +7,24 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
+
+interface EkPlanungNachAbrechnungstypQueryResult {
+  allVEkPlanungNachAbrechnungstyps: {
+    nodes: Array<{
+      apId?: ApId
+      artname?: string
+      artverantwortlich?: string
+      jahr?: number
+      a?: number
+      b?: number
+      d?: number
+      ekf?: number
+    }>
+  }
+}
 
 export const EkPlanung = observer(() => {
   const store = useContext(MobxContext)
@@ -19,9 +36,9 @@ export const EkPlanung = observer(() => {
 
   const onClickEkPlanung = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: EkPlanungNachAbrechnungstypQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<EkPlanungNachAbrechnungstypQueryResult>({
         query: gql`
           query ekPlanungNachAbrechnungstyps {
             allVEkPlanungNachAbrechnungstyps {
@@ -41,7 +58,7 @@ export const EkPlanung = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

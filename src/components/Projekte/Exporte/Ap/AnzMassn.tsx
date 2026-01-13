@@ -2,14 +2,44 @@ import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
+
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const ApOhnePop = observer(() => {
+interface ApAnzmassnsQueryResult {
+  allAps: {
+    nodes: Array<{
+      id: ApId
+      aeTaxonomyByArtId?: {
+        id: string
+        artname?: string
+      }
+      apBearbstandWerteByBearbeitung?: {
+        id: number
+        text?: string
+      }
+      startJahr?: number
+      apUmsetzungWerteByUmsetzung?: {
+        id: number
+        text?: string
+      }
+      vApAnzmassnsById?: {
+        nodes: Array<{
+          id: ApId
+          anzahlMassnahmen?: number
+        }>
+      }
+    }>
+  }
+}
+
+export const AnzMassn = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -17,13 +47,13 @@ export const ApOhnePop = observer(() => {
 
   const [queryState, setQueryState] = useState()
 
-  const onClickApOhnePop = async () => {
+  const onClickAnzMassnProAp = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: ApAnzmassnsQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<ApAnzmassnsQueryResult>({
         query: gql`
-          query apOhnepopForExportQuery {
+          query apAnzmassnsForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
                 id
@@ -40,8 +70,11 @@ export const ApOhnePop = observer(() => {
                   id
                   text
                 }
-                popsByApId {
-                  totalCount
+                vApAnzmassnsById {
+                  nodes {
+                    id
+                    anzahlMassnahmen
+                  }
                 }
               }
             }
@@ -50,22 +83,22 @@ export const ApOhnePop = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? [])
-      .filter((z) => z?.popsByApId?.totalCount === 0)
-      .map((z) => ({
-        id: z.id,
-        artname: z?.aeTaxonomyByArtId.artname ?? '',
-        bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
-        start_jahr: z.startJahr,
-        umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
-      }))
+    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
+      id: z.id,
+      artname: z?.aeTaxonomyByArtId?.artname ?? '',
+      bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
+      start_jahr: z.startJahr,
+      umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
+      anzahl_kontrollen:
+        z?.vApAnzmassnsById?.nodes?.[0]?.anzahlMassnahmen ?? '',
+    }))
     if (rows.length === 0) {
       setQueryState(undefined)
       return enqueNotification({
@@ -77,7 +110,7 @@ export const ApOhnePop = observer(() => {
     }
     exportModule({
       data: rows,
-      fileName: 'ApOhnePopulationen',
+      fileName: 'ApAnzahlMassnahmen',
       store,
       apolloClient,
     })
@@ -87,11 +120,11 @@ export const ApOhnePop = observer(() => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickApOhnePop}
+      onClick={onClickAnzMassnProAp}
       color="inherit"
       disabled={!!queryState}
     >
-      Arten ohne Populationen
+      Anzahl Massnahmen pro Art
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}
