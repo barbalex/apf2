@@ -134,14 +134,14 @@ export const Idealbiotop = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickIdealbiotop}
       color="inherit"
       disabled={!!queryState}
     >
       Idealbiotope
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

@@ -20,7 +20,7 @@ export const LetzterMassnBericht = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -149,7 +149,7 @@ export const LetzterMassnBericht = observer(() => {
     >
       Populationen mit dem letzten Massnahmen-Bericht
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

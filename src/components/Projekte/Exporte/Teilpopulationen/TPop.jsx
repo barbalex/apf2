@@ -212,14 +212,14 @@ export const TPop = observer(({ filtered = false }) => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickTPop}
       color="inherit"
       disabled={!!queryState || (filtered && !tpopIsFiltered)}
     >
       {filtered ? 'Teilpopulationen (gefiltert)' : 'Teilpopulationen'}
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

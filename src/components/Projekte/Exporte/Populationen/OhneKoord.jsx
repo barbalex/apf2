@@ -20,7 +20,7 @@ export const OhneKoord = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -109,7 +109,7 @@ export const OhneKoord = observer(() => {
     >
       Populationen ohne Koordinaten
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

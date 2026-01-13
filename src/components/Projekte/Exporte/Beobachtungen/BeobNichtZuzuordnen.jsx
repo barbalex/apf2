@@ -19,7 +19,7 @@ export const BeobNichtZuzuordnen = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -81,7 +81,7 @@ export const BeobNichtZuzuordnen = observer(() => {
     >
       Alle nicht zuzuordnenden Beobachtungen
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

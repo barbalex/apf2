@@ -89,14 +89,14 @@ export const AnzKontr = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickAnzKontrProAp}
       color="inherit"
       disabled={!!queryState}
     >
       Anzahl Kontrollen pro Art
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

@@ -20,7 +20,7 @@ export const LetzteZaehlungInklAnpflanz = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -177,7 +177,7 @@ export const LetzteZaehlungInklAnpflanz = observer(() => {
     >
       Aktuellste Zählung inklusive seither erfolgter Anpflanzungen
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

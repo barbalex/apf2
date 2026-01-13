@@ -123,14 +123,14 @@ export const Ber = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickApBer}
       color="inherit"
       disabled={!!queryState}
     >
       AP-Berichte (Jahresberichte)
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

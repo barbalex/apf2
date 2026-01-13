@@ -19,7 +19,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -144,7 +144,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
     >
       Kontrollen: Anzahl pro Zähleinheit
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

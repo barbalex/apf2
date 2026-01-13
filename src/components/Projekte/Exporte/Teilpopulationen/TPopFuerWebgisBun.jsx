@@ -19,7 +19,7 @@ export const TPopFuerWebgisBun = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -107,7 +107,7 @@ export const TPopFuerWebgisBun = observer(() => {
     >
       Teilpopulationen für WebGIS BUN
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

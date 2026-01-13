@@ -90,14 +90,14 @@ export const AnzMassn = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickAnzMassnProAp}
       color="inherit"
       disabled={!!queryState}
     >
       Anzahl Massnahmen pro Art
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

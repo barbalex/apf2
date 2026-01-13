@@ -137,14 +137,14 @@ export const BeobArtChanged = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickButton}
       color="inherit"
       disabled={!!queryState}
     >
       Alle Beobachtungen, bei denen die Art verändert wurde
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

@@ -22,7 +22,7 @@ export const Massnahmen = observer(({ filtered = false }) => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState || (filtered && !tpopmassnIsFiltered)}
       onClick={async () => {
@@ -264,7 +264,7 @@ export const Massnahmen = observer(({ filtered = false }) => {
     >
       {filtered ? 'Massnahmen (gefiltert)' : 'Massnahmen'}
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

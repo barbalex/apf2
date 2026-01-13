@@ -20,7 +20,7 @@ export const TPopFuerGoogleEarth = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -86,7 +86,7 @@ export const TPopFuerGoogleEarth = observer(() => {
     >
       {`Teilpopulationen für Google Earth (beschriftet mit PopNr/TPopNr)`}
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

@@ -86,14 +86,14 @@ export const ApOhnePop = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickApOhnePop}
       color="inherit"
       disabled={!!queryState}
     >
       Arten ohne Populationen
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

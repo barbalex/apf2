@@ -21,7 +21,7 @@ export const Anwendung = () => {
   return (
     <Card className={styles.card}>
       <CardActions
-        className={styles.styles.cardActions}
+        className={styles.cardActions}
         disableSpacing
         onClick={onClickAction}
       >

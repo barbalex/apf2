@@ -96,14 +96,14 @@ export const Ap = observer(({ filtered = false }) => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickAp}
       color="inherit"
       disabled={!!queryState || (filtered && !apIsFiltered)}
     >
       {filtered ? 'Arten (gefiltert)' : 'Arten'}
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

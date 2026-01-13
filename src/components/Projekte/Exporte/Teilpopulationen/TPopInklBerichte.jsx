@@ -19,7 +19,7 @@ export const TPopInklBerichte = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -117,7 +117,7 @@ export const TPopInklBerichte = observer(() => {
     >
       Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

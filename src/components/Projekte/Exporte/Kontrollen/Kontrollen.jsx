@@ -20,7 +20,7 @@ export const Kontrollen = observer(({ filtered = false }) => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -318,7 +318,7 @@ export const Kontrollen = observer(({ filtered = false }) => {
     >
       {filtered ? 'Kontrollen (gefiltert)' : 'Kontrollen'}
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

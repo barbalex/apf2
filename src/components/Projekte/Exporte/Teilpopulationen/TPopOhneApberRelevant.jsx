@@ -19,7 +19,7 @@ export const TPopOhneApberRelevant = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState}
       onClick={async () => {
@@ -75,7 +75,7 @@ export const TPopOhneApberRelevant = observer(() => {
     >
       {'Teilpopulationen ohne Eintrag im Feld "Für AP-Bericht relevant"'}
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

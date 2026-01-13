@@ -148,14 +148,14 @@ export const InfoFlora = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickInfoFlora}
       color="inherit"
       disabled={!!queryState}
     >
       Kontrollen als Beobachtungen für Info Flora
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

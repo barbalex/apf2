@@ -129,14 +129,14 @@ export const PriorisierungFuerEk = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickApPopEkPrio}
       color="inherit"
       disabled={!!queryState}
     >
       Priorisierung für EK basierend auf Pop-Entwicklung
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

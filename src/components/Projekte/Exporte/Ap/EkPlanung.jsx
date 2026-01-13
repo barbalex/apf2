@@ -80,14 +80,14 @@ export const EkPlanung = observer(() => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       onClick={onClickEkPlanung}
       color="inherit"
       disabled={!!queryState}
     >
       EK-Planung pro Jahr nach Abrechnungstyp
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )

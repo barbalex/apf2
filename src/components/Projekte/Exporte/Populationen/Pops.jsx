@@ -22,7 +22,7 @@ export const Pops = observer(({ filtered = false }) => {
 
   return (
     <Button
-      className={button}
+      className={styles.button}
       color="inherit"
       disabled={!!queryState || (filtered && !popIsFiltered)}
       onClick={async () => {
@@ -126,7 +126,7 @@ export const Pops = observer(({ filtered = false }) => {
     >
       {filtered ? 'Populationen (gefiltert)' : 'Populationen'}
       {queryState ?
-        <span className={progress}>{queryState}</span>
+        <span className={styles.progress}>{queryState}</span>
       : null}
     </Button>
   )
