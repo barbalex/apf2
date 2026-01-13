@@ -1,5 +1,5 @@
 import { exists } from '../../../../modules/exists.js'
-import { popup, title, row, label } from './CustomTooltip.module.css'
+import styles from './CustomTooltip.module.css'
 
 export const CustomTooltip = ({
   payload = [],
@@ -11,8 +11,8 @@ export const CustomTooltip = ({
   const data = reverse ? payload : (payload?.reverse() ?? [])
 
   return (
-    <div className={popup}>
-      <div className={title}>{label}</div>
+    <div className={styles.popup}>
+      <div className={styles.title}>{label}</div>
       {data.map((o, i) => {
         const value =
           exists(o.value) && o.value?.toLocaleString ?
@@ -23,9 +23,9 @@ export const CustomTooltip = ({
           <div
             key={`${i}/${o.dataKey}`}
             style={{ color: color[o.dataKey] }}
-            className={row}
+            className={styles.row}
           >
-            <div className={label}>{`${o.dataKey}:`}</div>
+            <div className={styles.label}>{`${o.dataKey}:`}</div>
             <div>{value}</div>
           </div>
         )

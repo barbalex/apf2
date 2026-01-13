@@ -1,7 +1,7 @@
 import { sortBy } from 'es-toolkit'
 
 import { exists } from '../../../../../modules/exists.js'
-import { popup, title, row, label } from './CustomTooltip.module.css'
+import styles from './CustomTooltip.module.css'
 
 const colorUrspruenglich = '#2e7d32'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
@@ -16,8 +16,8 @@ export const CustomTooltip = ({ payload = [], label, active, popsData }) => {
   ])
 
   return (
-    <div className={popup}>
-      <div className={title}>{label}</div>
+    <div className={styles.popup}>
+      <div className={styles.title}>{label}</div>
       {payloadSorted.map((p, i) => {
         const pop = popsData.find((d) => d.id === p.dataKey)
 
@@ -41,11 +41,11 @@ export const CustomTooltip = ({ payload = [], label, active, popsData }) => {
 
         return (
           <div
-            className={row}
+            className={styles.row}
             key={p.dataKey}
             style={{ color }}
           >
-            <div className={label}>{`${label}:`}</div>
+            <div className={styles.label}>{`${label}:`}</div>
             <div>{value}</div>
           </div>
         )

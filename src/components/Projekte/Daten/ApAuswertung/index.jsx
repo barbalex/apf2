@@ -9,7 +9,7 @@ import { PopMenge } from './PopMenge/index.jsx'
 import { TpopKontrolliert } from './TpopKontrolliert/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-import { scrollContainer, formContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const apAuswertungQuery = gql`
   query apAuswertungQuery($apId: UUID!) {
@@ -34,8 +34,8 @@ export const Component = () => {
   return (
     <>
       <FormTitle title={`${artname}: Auswertung`} />
-      <div className={scrollContainer}>
-        <div className={formContainer}>
+      <div className={styles.scrollContainer}>
+        <div className={styles.formContainer}>
           <ApErfolg />
           <PopStatus />
           <PopMenge />

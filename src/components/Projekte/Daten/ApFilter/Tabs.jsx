@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab'
 import { initial as ap } from '../../../../store/Tree/DataFilter/ap'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { title, styledTabs, styledTab } from './Tabs.module.css'
+import styles from './Tabs.module.css'
 
 export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(MobxContext)
@@ -28,7 +28,7 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
 
   return (
     <div>
-      <div className={title}>Filter-Kriterien:</div>
+      <div className={styles.title}>Filter-Kriterien:</div>
       <MaterialTabs
         value={activeTab}
         onChange={onChangeTab}
@@ -36,14 +36,14 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        className={styledTabs}
+        className={styles.styledTabs}
       >
         {dataFilter.map((filter, index) => (
           <Tab
             key={index}
             label={index + 1}
             value={index}
-            className={styledTab}
+            className={styles.styledTab}
           />
         ))}
         <Tab
@@ -51,7 +51,7 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
           label="oder"
           value={dataFilter.length}
           disabled={lastFilterIsEmpty}
-          className={styledTab}
+          className={styles.styledTab}
         />
       </MaterialTabs>
     </div>
