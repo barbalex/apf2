@@ -7,7 +7,43 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { BeobId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
+
+interface BeobArtChangedQueryResult {
+  allVBeobArtChangeds: {
+    nodes: Array<{
+      id: BeobId
+      quelle?: string
+      id_field?: string
+      original_id?: string
+      art_id_original?: string
+      artname_original?: string
+      taxonomie_id_original?: string
+      art_id?: string
+      artname?: string
+      taxonomie_id?: string
+      pop_id?: string
+      pop_nr?: number
+      tpop_id?: string
+      tpop_nr?: number
+      tpop_status?: number
+      tpop_gemeinde?: string
+      tpop_flurname?: string
+      lv95X?: number
+      lv95Y?: number
+      distanz_zur_teilpopulation?: number
+      datum?: string
+      autor?: string
+      nicht_zuordnen?: boolean
+      bemerkungen?: string
+      created_at?: string
+      updated_at?: string
+      changed_by?: string
+    }>
+  }
+}
 
 export const BeobArtChanged = observer(() => {
   const store = useContext(MobxContext)
@@ -20,12 +56,12 @@ export const BeobArtChanged = observer(() => {
 
   const onClickButton = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: BeobArtChangedQueryResult }
     try {
       // view: v_beob_art_changed
       result =
         mapFilter ?
-          await apolloClient.query({
+          await apolloClient.query<BeobArtChangedQueryResult>({
             query: gql`
               query allBeobsArtChangedFilteredByMap {
                 allVBeobArtChangeds {
@@ -69,7 +105,7 @@ export const BeobArtChanged = observer(() => {
               },
             },
           })
-        : await apolloClient.query({
+        : await apolloClient.query<BeobArtChangedQueryResult>({
             query: gql`
               query allBeobsArtChanged {
                 allVBeobArtChangeds {
@@ -109,7 +145,7 @@ export const BeobArtChanged = observer(() => {
     } catch (error) {
       setQueryState(undefined)
       return enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

@@ -7,9 +7,42 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { BeobId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const BeobNichtZuzuordnen = observer(() => {
+interface BeobZugeordnetQueryResult {
+  allVBeobZugeordnets: {
+    nodes: Array<{
+      id: BeobId
+      quelle?: string
+      id_field?: string
+      original_id?: string
+      art_id?: string
+      art_id_original?: string
+      artname?: string
+      pop_id?: string
+      pop_nr?: number
+      tpop_id?: string
+      tpop_nr?: number
+      tpop_status?: number
+      tpop_gemeinde?: string
+      tpop_flurname?: string
+      lv95X?: number
+      lv95Y?: number
+      distanz_zur_teilpopulation?: number
+      datum?: string
+      autor?: string
+      nicht_zuordnen?: boolean
+      bemerkungen?: string
+      created_at?: string
+      updated_at?: string
+      changed_by?: string
+    }>
+  }
+}
+
+export const BeobZugeordnet = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -24,12 +57,12 @@ export const BeobNichtZuzuordnen = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data?: BeobZugeordnetQueryResult }
         try {
-          result = await apolloClient.query({
+          result = await apolloClient.query<BeobZugeordnetQueryResult>({
             query: gql`
-              query allBeobsNichtZuzuordnenForExport {
-                allVBeobNichtZuzuordnens {
+              query ZugeordnetForExport {
+                allVBeobZugeordnets {
                   nodes {
                     id
                     quelle
@@ -63,7 +96,7 @@ export const BeobNichtZuzuordnen = observer(() => {
         } catch (error) {
           setQueryState(undefined)
           return enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },
@@ -71,15 +104,15 @@ export const BeobNichtZuzuordnen = observer(() => {
         }
         setQueryState('verarbeite...')
         exportModule({
-          data: result?.data?.allVBeobNichtZuzuordnens?.nodes ?? [],
-          fileName: 'Beobachtungen',
+          data: result?.data?.allVBeobZugeordnets?.nodes ?? [],
+          fileName: 'BeobachtungenZugeordnet',
           store,
           apolloClient,
         })
         setQueryState(undefined)
       }}
     >
-      Alle nicht zuzuordnenden Beobachtungen
+      Alle zugeordneten Beobachtungen
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

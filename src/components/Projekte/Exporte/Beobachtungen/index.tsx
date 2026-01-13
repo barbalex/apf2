@@ -7,9 +7,9 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.jsx'
-import { BeobZugeordnet } from './BeobZugeordnet.jsx'
-import { BeobArtChanged } from './BeobArtChanged.jsx'
+import { BeobNichtZuzuordnen } from './BeobNichtZuzuordnen.tsx'
+import { BeobZugeordnet } from './BeobZugeordnet.tsx'
+import { BeobArtChanged } from './BeobArtChanged.tsx'
 
 import styles from '../index.module.css'
 
