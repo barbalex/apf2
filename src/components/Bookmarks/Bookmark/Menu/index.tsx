@@ -11,7 +11,7 @@ import { motion } from 'framer-motion'
 import { Item } from './Item.jsx'
 import { Title } from './Title/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
+import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { usePrevious } from '../../../../modules/usePrevious.js'
 
 import styles from './index.module.css'

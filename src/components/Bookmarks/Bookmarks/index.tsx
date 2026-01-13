@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useMatches } from 'react-router'
 import { TransitionGroup } from 'react-transition-group'
 
-import { FetcherImporter } from './FetcherImporter.jsx'
+import { FetcherImporter } from './FetcherImporter.tsx'
 import styles from './index.module.css'
 
 const matchesFromAllMatches = (allMatches) =>

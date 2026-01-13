@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 
 import { Spinner } from '../../shared/Spinner.jsx'
 import { Error } from '../../shared/Error.jsx'
-import { Bookmark } from '../Bookmark/index.jsx'
+import { Bookmark } from '../Bookmark/index.tsx'
 
 // pass on TransitionGroup's props as other
 export const Fetcher = ({ params, fetcherModule, ...other }) => {

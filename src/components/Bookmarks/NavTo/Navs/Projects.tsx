@@ -1,4 +1,4 @@
-import { Nav } from '../Nav.jsx'
+import { Nav } from '../Nav.tsx'
 
 export const navData = {
   id: 'projekte',

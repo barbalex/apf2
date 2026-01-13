@@ -9,10 +9,10 @@ import { useAtom } from 'jotai'
 
 import { Spinner } from '../shared/Spinner.jsx'
 
-// import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.jsx'
+// import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.tsx'
 
 const DatenNav = lazy(async () => ({
-  default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).Menu,
+  default: (await import('../Bookmarks/NavTo/Navs/Daten.tsx')).Menu,
 }))
 const datenBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useRootNavData.js')).useRootNavData,
@@ -23,7 +23,7 @@ const datenHandle = {
   bookmarkFetcherName: 'useRootNavData',
 }
 const ProjekteNav = lazy(async () => ({
-  default: (await import('../Bookmarks/NavTo/Navs/Projects.jsx')).Menu,
+  default: (await import('../Bookmarks/NavTo/Navs/Projects.tsx')).Menu,
 }))
 const projekteBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useProjekteNavData.js'))

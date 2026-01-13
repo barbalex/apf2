@@ -5,7 +5,7 @@ import Collapse from '@mui/material/Collapse'
 import { MdFilterAlt } from 'react-icons/md'
 import isUuid from 'is-uuid'
 import { useResizeDetector } from 'react-resize-detector'
-import { FilterInput } from './FilterInput.jsx'
+import { FilterInput } from './FilterInput.tsx'
 import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.tsx'
 
 import styles from './index.module.css'

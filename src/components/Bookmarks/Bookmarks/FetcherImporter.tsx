@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-import { Fetcher } from './Fetcher.jsx'
+import { Fetcher } from './Fetcher.tsx'
 
 // pass on TransitionGroup's props
 export const FetcherImporter = ({ match, ...other }) => {

@@ -10,7 +10,7 @@ import { useAtom } from 'jotai'
 import { Spinner } from '../shared/Spinner.jsx'
 
 const DatenNav = lazy(async () => ({
-  default: (await import('../Bookmarks/NavTo/Navs/Daten.jsx')).Menu,
+  default: (await import('../Bookmarks/NavTo/Navs/Daten.tsx')).Menu,
 }))
 const datenBookmarkFetcher = lazy(async () => ({
   default: (await import('../../modules/useRootNavData.js')).useRootNavData,

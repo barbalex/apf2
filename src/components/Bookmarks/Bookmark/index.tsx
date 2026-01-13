@@ -1,9 +1,9 @@
 import { useRef } from 'react'
-import { Menu } from './Menu/index.jsx'
+import { Menu } from './Menu/index.tsx'
 import { Transition } from 'react-transition-group'
 import { useAtom } from 'jotai'
 
-import { Label } from './Label.jsx'
+import { Label } from './Label.tsx'
 import { showBookmarksMenuAtom } from '../../../JotaiStore/index.js'
 
 import styles from './index.module.css'

@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { useLocation, useNavigate } from 'react-router'
 import { isEqual } from 'es-toolkit'
 
-import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.js'
+import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
 export const Item = observer(({ menu, baseUrl, onClose }) => {

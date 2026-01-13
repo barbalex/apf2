@@ -3,7 +3,7 @@ import Highlighter from 'react-highlight-words'
 
 import { FormTitle } from '../FormTitle/index.jsx'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
-import { navData } from '../../Bookmarks/NavTo/Navs/Projects.jsx'
+import { navData } from '../../Bookmarks/NavTo/Navs/Projects.tsx'
 
 import styles from './index.module.css'
 

@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { useRootNavData } from '../../../../modules/useRootNavData.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { Nav } from '../Nav.jsx'
+import { Nav } from '../Nav.tsx'
 
 export const Menu = () => {
   const { navData, error } = useRootNavData()
