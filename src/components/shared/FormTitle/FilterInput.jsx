@@ -9,7 +9,7 @@ import { useLocation } from 'react-router'
 import { styled } from '@mui/material/styles'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { container, iconButton } from './FilterInput.module.css'
+import styles from './FilterInput.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
 const StyledTextField = styled((props) => <TextField {...props} />)(() => ({
@@ -82,7 +82,7 @@ export const FilterInput = observer(
     if (!activeFilterTable) return null
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <StyledTextField
           inputRef={inputRef}
           label="Filter"
@@ -108,7 +108,7 @@ export const FilterInput = observer(
                         aria-label="Filter entfernen"
                         onClick={onClickEmpty}
                         fontSize="small"
-                        className={iconButton}
+                        className={styles.iconButton}
                       >
                         <FaTimes />
                       </IconButton>

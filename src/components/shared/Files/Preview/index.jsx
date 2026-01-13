@@ -5,7 +5,7 @@ import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
 
 import '@cyntler/react-doc-viewer/dist/index.css'
 import './style.css'
-import { fileClass, text } from './index.module.css'
+import styles from './index.module.css'
 
 const imageStyle = {
   objectFit: 'contain',
@@ -50,7 +50,7 @@ export const Component = () => {
 
   return (
     <div
-      className={fileClass}
+      className={styles.fileClass}
       ref={ref}
     >
       {isImage && width && (
@@ -93,7 +93,7 @@ export const Component = () => {
       )}
       {isNotViewable && (
         <div
-          className={text}
+          className={styles.text}
         >{`Sorry, für Dateien vom Typ '${row.fileMimeType}' gibt es keine Vorschau.`}</div>
       )}
     </div>

@@ -1,14 +1,14 @@
 import { Tooltip } from '@mui/material'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-import { title, content } from './Title.module.css'
+import styles from './Title.module.css'
 
 const FileNameForTooltip = ({ file, props, ref }) => (
   <div
     ref={ref}
     {...props}
   >
-    <div className={content}>
+    <div className={styles.content}>
       {file.name && (
         <>
           <div>Name:</div>
@@ -47,7 +47,7 @@ export const Title = ({ file, numbers, titleComponentWidth }) => {
             minWidth: width,
             maxWidth: width,
           }}
-          className={title}
+          className={styles.title}
         >
           {numbers}
         </h3>

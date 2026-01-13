@@ -24,7 +24,7 @@ import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 import { UploaderContext } from '../../../../UploaderContext.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { menuTitle } from './index.module.css'
+import styles from './index.module.css'
 
 export const PreviewMenus = observer(
   ({ parent, files, refetch, containerRef }) => {
@@ -189,7 +189,7 @@ export const PreviewMenus = observer(
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
         >
-          <h3 className={menuTitle}>löschen?</h3>
+          <h3 className={styles.menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </MuiMenu>
