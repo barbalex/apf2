@@ -5,7 +5,7 @@ import { Spinner } from '../Spinner'
 
 import styles from './Data.module.css'
 
-const styles = {
+const style = {
   added: { color: 'green' },
   removed: { color: 'red' },
 }
@@ -42,9 +42,9 @@ export const Data = ({ dataArray = [], loading }) => {
               <span
                 key={group.value}
                 style={
-                  group.added ? styles.added
+                  group.added ? style.added
                   : group.removed ?
-                    styles.removed
+                    style.removed
                   : {}
                 }
               >
