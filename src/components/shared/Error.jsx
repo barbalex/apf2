@@ -6,7 +6,7 @@ import { logout } from '../../modules/logout.js'
 import { IdbContext } from '../../idbContext.js'
 import { existsPermissionError } from '../../modules/existsPermissionError.js'
 
-import { container } from './Error.module.css'
+import styles from './Error.module.css'
 
 /*
 const LogoutButton = styled(Button)`
@@ -47,14 +47,14 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
   const errorMessages = errorsToUse.map((e) => e.message)
   const uniqueMessages = uniq(errorMessages)
   if (uniqueMessages.length === 1) {
-    return <div className={container}>{`Fehler: ${uniqueMessages[0]}`}</div>
+    return <div className={styles.container}>{`Fehler: ${uniqueMessages[0]}`}</div>
   }
 
   // console.log('Error.jsx: errorsToUse:', errorsToUse)
   // console.log('Error.jsx: errorMessages:', errorMessages)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <h5>Fehler:</h5>
       <ul>
         {uniqueMessages.map((message, index) => (

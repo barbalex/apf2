@@ -1,7 +1,7 @@
 import { RadioButtonGroup } from './RadioButtonGroup.jsx'
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 
-import { container } from './RadioButtonGroupWithInfo.module.css'
+import styles from './RadioButtonGroupWithInfo.module.css'
 
 export const RadioButtonGroupWithInfo = ({
   label,

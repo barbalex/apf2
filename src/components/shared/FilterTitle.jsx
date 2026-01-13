@@ -9,12 +9,7 @@ import { MobxContext } from '../../mobxContext.js'
 import { exists } from '../../modules/exists.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 
-import {
-  container,
-  titleRow,
-  filterNumbers,
-  deleteFilterIcon,
-} from './FilterTitle.module.css'
+import styles from './FilterTitle.module.css'
 
 export const FilterTitle = observer(
   ({ title, table, totalNr, filteredNr, activeTab }) => {
@@ -50,9 +45,9 @@ export const FilterTitle = observer(
     }
 
     return (
-      <div className={container}>
-        <div className={titleRow}>
-          <div className={filterNumbers}>
+      <div className={styles.container}>
+        <div className={styles.titleRow}>
+          <div className={styles.filterNumbers}>
             {exists(filteredNr) && (
               <>
                 <span title="gefilterte Anzahl">
@@ -74,7 +69,7 @@ export const FilterTitle = observer(
                   size="small"
                   disabled={!existsTableFilter}
                 >
-                  <FaRegTrashAlt className={deleteFilterIcon} />
+                  <FaRegTrashAlt className={styles.deleteFilterIcon} />
                 </IconButton>
               </span>
             </Tooltip>
@@ -87,7 +82,7 @@ export const FilterTitle = observer(
                 size="small"
                 disabled={!existsTableFilter}
               >
-                <FaTrashAlt className={deleteFilterIcon} />
+                <FaTrashAlt className={styles.deleteFilterIcon} />
               </IconButton>
             </span>
           </Tooltip>
@@ -99,7 +94,7 @@ export const FilterTitle = observer(
                 size="small"
                 disabled={!existsTreeFilter}
               >
-                <FaTrash className={deleteFilterIcon} />
+                <FaTrash className={styles.deleteFilterIcon} />
               </IconButton>
             </span>
           </Tooltip>
