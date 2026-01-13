@@ -8,7 +8,7 @@ import { User } from './User/index.jsx'
 import { query } from './query.js'
 import { Menus } from './Menus.jsx'
 
-import { container, title, menu } from './index.module.css'
+import styles from './index.module.css'
 
 export const EkfBar = () => {
   const { userId } = useParams()
@@ -24,19 +24,19 @@ export const EkfBar = () => {
   const userName = userData?.userById?.name ?? null
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Button
         variant="outlined"
         component={Link}
         to={`/${search}`}
         title="Home"
-        className={title}
+        className={styles.title}
       >
         {userName ?
           `AP Flora: EKF von ${userName}`
         : 'AP Flora: Erfolgs-Kontrolle Freiwillige'}
       </Button>
-      <div className={menu}>
+      <div className={styles.menu}>
         <Menus />
       </div>
     </div>

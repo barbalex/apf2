@@ -25,14 +25,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { logout } from '../../../../modules/logout.js'
 import { IdbContext } from '../../../../idbContext.js'
 
-import {
-  container,
-  fieldsContainer,
-  input,
-  passwordMessage as passwordMessageClass,
-  formContainer,
-  abmeldenButton,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const User = observer(({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(MobxContext)
@@ -147,9 +140,9 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
         {error ?
           <Error error={error} />
         : <ErrorBoundary>
-            <div className={container}>
-              <div className={fieldsContainer}>
-                <div className={formContainer}>
+            <div className={styles.container}>
+              <div className={styles.styles.fieldsContainer}>
+                <div className={styles.formContainer}>
                   <TextField
                     name="email"
                     label="Email"
@@ -160,7 +153,7 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                     error={fieldErrors.email}
                   />
                   {!!passwordMessage && (
-                    <div className={passwordMessageClass}>
+                    <div className={styles.passwordMessage}>
                       {passwordMessage}
                     </div>
                   )}
@@ -179,7 +172,7 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                     </div>
                   )}
                   <Button
-                    className={abmeldenButton}
+                    className={styles.abmeldenButton}
                     variant="outlined"
                     color="primary"
                     onClick={() => {
@@ -197,7 +190,7 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                     >
                       <InputLabel htmlFor="passwort">Passwort</InputLabel>
                       <Input
-                        className={input}
+                        className={styles.input}
                         id="passwort"
                         type={showPass ? 'text' : 'password'}
                         defaultValue={password}
@@ -244,7 +237,7 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
                         Passwort wiederholen
                       </InputLabel>
                       <Input
-                        className={input}
+                        className={styles.input}
                         id="passwort2"
                         type={showPass2 ? 'text' : 'password'}
                         defaultValue={password2}

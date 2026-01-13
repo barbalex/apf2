@@ -6,7 +6,7 @@ import { Select } from '../../../../../shared/Select.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 import { queryAdresses } from './queryAdresses.js'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
@@ -29,7 +29,7 @@ export const EkfUser = ({ closeMenu }) => {
   if (error) return <Error error={error} />
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Suspense fallback={'lade...'}>
         <Select
           value={''}
