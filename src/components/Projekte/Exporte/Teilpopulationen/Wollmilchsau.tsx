@@ -8,8 +8,170 @@ import Button from '@mui/material/Button'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
 import wollmilchsauStyles from './Wollmilchsau.module.css'
+
+interface TPopErsteUndLetzteKontrolleQueryResult {
+  allTpops: {
+    totalCount: number
+    nodes: {
+      id: TpopId
+      vTpopErsteUndLetzteKontrolleUndLetzterTpopbersById: {
+        nodes: {
+          apId: ApId
+          familie: string | null
+          artname: string | null
+          apBearbeitung: string | null
+          apStartJahr: number | null
+          apUmsetzung: string | null
+          popId: PopId
+          popNr: number | null
+          popName: string | null
+          popStatus: string | null
+          popBekanntSeit: number | null
+          popStatusUnklar: boolean | null
+          popStatusUnklarBegruendung: string | null
+          popX: number | null
+          popY: number | null
+          id: TpopId
+          nr: number | null
+          gemeinde: string | null
+          flurname: string | null
+          status: string | null
+          statusDecodiert: string | null
+          bekanntSeit: number | null
+          statusUnklar: boolean | null
+          statusUnklarGrund: string | null
+          x: number | null
+          y: number | null
+          radius: number | null
+          hoehe: number | null
+          exposition: string | null
+          klima: string | null
+          neigung: string | null
+          beschreibung: string | null
+          katasterNr: string | null
+          apberRelevant: number | null
+          apberRelevantGrund: string | null
+          eigentuemer: string | null
+          kontakt: string | null
+          nutzungszone: string | null
+          bewirtschafter: string | null
+          bewirtschaftung: string | null
+          bodenTyp: string | null
+          bodenKalkgehalt: string | null
+          bodenDurchlaessigkeit: string | null
+          bodenHumus: string | null
+          bodenNaehrstoffgehalt: string | null
+          bodenAbtrag: string | null
+          wasserhaushalt: string | null
+          ekfrequenz: number | null
+          ekfrequenzAbweichend: boolean | null
+          createdAt: string | null
+          updatedAt: string | null
+          changedBy: string | null
+          anzahlKontrollen: number | null
+          ersteKontrolleId: string | null
+          ersteKontrolleJahr: number | null
+          ersteKontrolleDatum: string | null
+          ersteKontrolleTyp: string | null
+          ersteKontrolleBearbeiter: string | null
+          ersteKontrolleUeberlebensrate: number | null
+          ersteKontrolleVitalitaet: string | null
+          ersteKontrolleEntwicklung: number | null
+          ersteKontrolleUrsachen: string | null
+          ersteKontrolleErfolgsbeurteilung: string | null
+          ersteKontrolleUmsetzungAendern: string | null
+          ersteKontrolleKontrolleAendern: string | null
+          ersteKontrolleBemerkungen: string | null
+          ersteKontrolleLrDelarze: string | null
+          ersteKontrolleLrUmgebungDelarze: string | null
+          ersteKontrolleVegetationstyp: string | null
+          ersteKontrolleKonkurrenz: string | null
+          ersteKontrolleMoosschicht: string | null
+          ersteKontrolleKrautschicht: string | null
+          ersteKontrolleStrauchschicht: string | null
+          ersteKontrolleBaumschicht: string | null
+          ersteKontrolleIdealbiotopUebereinstimmung: string | null
+          ersteKontrolleHandlungsbedarf: string | null
+          ersteKontrolleFlaecheUeberprueft: number | null
+          ersteKontrolleFlaeche: number | null
+          ersteKontrollePlanVorhanden: boolean | null
+          ersteKontrolleDeckungVegetation: number | null
+          ersteKontrolleDeckungNackterBoden: number | null
+          ersteKontrolleDeckungApArt: number | null
+          ersteKontrolleJungpflanzenVorhanden: boolean | null
+          ersteKontrolleVegetationshoeheMaximum: number | null
+          ersteKontrolleVegetationshoeheMittel: number | null
+          ersteKontrolleGefaehrdung: string | null
+          ersteKontrolleCreatedAt: string | null
+          ersteKontrolleUpdatedAt: string | null
+          ersteKontrolleChangedBy: string | null
+          ersteKontrolleApberNichtRelevant: number | null
+          ersteKontrolleApberNichtRelevantGrund: string | null
+          ersteKontrolleEkfBemerkungen: string | null
+          ersteKontrolleZaehlungAnzahlen: string | null
+          ersteKontrolleZaehlungEinheiten: string | null
+          ersteKontrolleZaehlungMethoden: string | null
+          letzteKontrolleId: string | null
+          letzteKontrolleJahr: number | null
+          letzteKontrolleDatum: string | null
+          letzteKontrolleTyp: string | null
+          letzteKontrolleBearbeiter: string | null
+          letzteKontrolleUeberlebensrate: number | null
+          letzteKontrolleVitalitaet: string | null
+          letzteKontrolleEntwicklung: number | null
+          letzteKontrolleUrsachen: string | null
+          letzteKontrolleErfolgsbeurteilung: string | null
+          letzteKontrolleUmsetzungAendern: string | null
+          letzteKontrolleKontrolleAendern: string | null
+          letzteKontrolleBemerkungen: string | null
+          letzteKontrolleLrDelarze: string | null
+          letzteKontrolleLrUmgebungDelarze: string | null
+          letzteKontrolleVegetationstyp: string | null
+          letzteKontrolleKonkurrenz: string | null
+          letzteKontrolleMoosschicht: string | null
+          letzteKontrolleKrautschicht: string | null
+          letzteKontrolleStrauchschicht: string | null
+          letzteKontrolleBaumschicht: string | null
+          letzteKontrolleIdealbiotopUebereinstimmung: string | null
+          letzteKontrolleHandlungsbedarf: string | null
+          letzteKontrolleFlaecheUeberprueft: number | null
+          letzteKontrolleFlaeche: number | null
+          letzteKontrollePlanVorhanden: boolean | null
+          letzteKontrolleDeckungVegetation: number | null
+          letzteKontrolleDeckungNackterBoden: number | null
+          letzteKontrolleDeckungApArt: number | null
+          letzteKontrolleJungpflanzenVorhanden: boolean | null
+          letzteKontrolleVegetationshoeheMaximum: number | null
+          letzteKontrolleVegetationshoeheMittel: number | null
+          letzteKontrolleGefaehrdung: string | null
+          letzteKontrolleCreatedAt: string | null
+          letzteKontrolleUpdatedAt: string | null
+          letzteKontrolleChangedBy: string | null
+          letzteKontrolleApberNichtRelevant: number | null
+          letzteKontrolleApberNichtRelevantGrund: string | null
+          letzteKontrolleEkfBemerkungen: string | null
+          letzteKontrolleZaehlungAnzahlen: string | null
+          letzteKontrolleZaehlungEinheiten: string | null
+          letzteKontrolleZaehlungMethoden: string | null
+          tpopberAnz: number | null
+          tpopberId: string | null
+          tpopberJahr: number | null
+          tpopberEntwicklung: number | null
+          tpopberBemerkungen: string | null
+          tpopberCreatedAt: string | null
+          tpopberUpdatedAt: string | null
+          tpopberChangedBy: string | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const Wollmilchsau = observer(() => {
   const store = useContext(MobxContext)
@@ -26,7 +188,7 @@ export const Wollmilchsau = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopErsteUndLetzteKontrolleQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -197,7 +359,7 @@ export const Wollmilchsau = observer(() => {
         } catch (error) {
           console.log('Teilpopulationen Export, onClickEwm', { error })
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: { variant: 'error' },
           })
         }

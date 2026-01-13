@@ -8,7 +8,65 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
+
+interface TPopAnzMassnsQueryResult {
+  allTpops: {
+    totalCount: number
+    nodes: {
+      id: TpopId
+      vTpopAnzmassnsById: {
+        nodes: {
+          apId: ApId
+          familie: string | null
+          artname: string | null
+          apBearbeitung: string | null
+          apStartJahr: number | null
+          apUmsetzung: string | null
+          popId: PopId
+          popNr: number | null
+          popName: string | null
+          popStatus: string | null
+          popBekanntSeit: number | null
+          popStatusUnklar: boolean | null
+          popStatusUnklarBegruendung: string | null
+          popX: number | null
+          popY: number | null
+          id: TpopId
+          nr: number | null
+          gemeinde: string | null
+          flurname: string | null
+          status: string | null
+          bekanntSeit: number | null
+          statusUnklar: boolean | null
+          statusUnklarGrund: string | null
+          x: number | null
+          y: number | null
+          radius: number | null
+          hoehe: number | null
+          exposition: string | null
+          klima: string | null
+          neigung: string | null
+          beschreibung: string | null
+          katasterNr: string | null
+          apberRelevant: number | null
+          apberRelevantGrund: string | null
+          eigentuemer: string | null
+          kontakt: string | null
+          nutzungszone: string | null
+          bewirtschafter: string | null
+          ekfrequenz: number | null
+          ekfrequenzAbweichend: boolean | null
+          anzahlMassnahmen: number | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const AnzMassnahmen = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +83,7 @@ export const AnzMassnahmen = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopAnzMassnsQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -86,7 +144,7 @@ export const AnzMassnahmen = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: { variant: 'error' },
           })
         }

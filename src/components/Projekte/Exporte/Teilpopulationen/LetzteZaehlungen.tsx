@@ -8,7 +8,61 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
+
+interface TPopLastCountsQueryResult {
+  allTpops: {
+    nodes: {
+      id: TpopId
+      vTpopLastCountsByTpopId: {
+        nodes: {
+          artname: string | null
+          apId: ApId
+          popId: PopId
+          popNr: number | null
+          popName: string | null
+          popStatus: string | null
+          tpopId: TpopId
+          tpopNr: number | null
+          tpopGemeinde: string | null
+          tpopFlurname: string | null
+          tpopStatus: string | null
+          jahr: number | null
+          pflanzenTotal: number | null
+          pflanzenOhneJungpflanzen: number | null
+          triebeTotal: number | null
+          triebeBeweidung: number | null
+          keimlinge: number | null
+          davonRosetten: number | null
+          jungpflanzen: number | null
+          blatter: number | null
+          davonBluhendePflanzen: number | null
+          davonBluhendeTriebe: number | null
+          bluten: number | null
+          fertilePflanzen: number | null
+          fruchtendeTriebe: number | null
+          blutenstande: number | null
+          fruchtstande: number | null
+          gruppen: number | null
+          deckung: number | null
+          pflanzen5M2: number | null
+          triebeIn30M2: number | null
+          triebe50M2: number | null
+          triebeMahflache: number | null
+          flacheM2: number | null
+          pflanzstellen: number | null
+          stellen: number | null
+          andereZaehleinheit: string | null
+          artIstVorhanden: boolean | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const LetzteZaehlungen = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +79,7 @@ export const LetzteZaehlungen = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopLastCountsQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -82,7 +136,7 @@ export const LetzteZaehlungen = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

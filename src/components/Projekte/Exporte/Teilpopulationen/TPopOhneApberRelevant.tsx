@@ -7,9 +7,29 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
 
-export const TPopOhneBekanntSeit = observer(() => {
+interface TPopOhneapberichtrelevantQueryResult {
+  allVTpopOhneapberichtrelevants: {
+    nodes: {
+      artname: string | null
+      pop_nr: number | null
+      pop_name: string | null
+      id: TpopId
+      nr: number | null
+      gemeinde: string | null
+      flurname: string | null
+      apber_relevant: number | null
+      apber_relevant_grund: string | null
+      lv95X: number | null
+      lv95Y: number | null
+    }[]
+  }
+}
+
+export const TPopOhneApberRelevant = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -24,22 +44,22 @@ export const TPopOhneBekanntSeit = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopOhneapberichtrelevantQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
-              query viewTpopOhnebekanntseits {
-                allVTpopOhnebekanntseits {
+              query viewTpopOhneapberichtrelevants {
+                allVTpopOhneapberichtrelevants {
                   nodes {
                     artname
-                    ap_bearbeitung: apBearbeitung
                     pop_nr: popNr
                     pop_name: popName
                     id
                     nr
                     gemeinde
                     flurname
-                    bekannt_seit: bekanntSeit
+                    apber_relevant: apberRelevant
+                    apber_relevant_grund: apberRelevantGrund
                     lv95X: x
                     lv95Y: y
                   }
@@ -49,12 +69,12 @@ export const TPopOhneBekanntSeit = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: { variant: 'error' },
           })
         }
         setQueryState('verarbeite...')
-        const rows = result.data?.allVTpopOhnebekanntseits?.nodes ?? []
+        const rows = result.data?.allVTpopOhneapberichtrelevants?.nodes ?? []
         if (rows.length === 0) {
           setQueryState(undefined)
           return enqueNotification({
@@ -66,14 +86,14 @@ export const TPopOhneBekanntSeit = observer(() => {
         }
         exportModule({
           data: rows,
-          fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
+          fileName: 'TeilpopulationenOhneApBerichtRelevant',
           store,
           apolloClient,
         })
         setQueryState(undefined)
       }}
     >
-      {'Teilpopulationen von AP-Arten ohne "Bekannt seit"'}
+      {'Teilpopulationen ohne Eintrag im Feld "Für AP-Bericht relevant"'}
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}

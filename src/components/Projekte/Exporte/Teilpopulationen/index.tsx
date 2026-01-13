@@ -6,7 +6,7 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { CardContent } from './CardContent.jsx'
+import { CardContent } from './CardContent.tsx'
 import styles from '../index.module.css'
 
 export const Teilpopulationen = () => {

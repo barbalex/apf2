@@ -7,7 +7,71 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
+
+interface TPopPopberundmassnberQueryResult {
+  allVTpopPopberundmassnbers: {
+    nodes: {
+      ap_id: ApId
+      artname: string | null
+      ap_bearbeitung: string | null
+      ap_start_jahr: number | null
+      ap_umsetzung: string | null
+      pop_id: PopId
+      pop_nr: number | null
+      pop_name: string | null
+      pop_status: string | null
+      pop_bekannt_seit: number | null
+      pop_status_unklar: boolean | null
+      pop_status_unklar_begruendung: string | null
+      pop_x: number | null
+      pop_y: number | null
+      tpop_id: TpopId
+      tpop_nr: number | null
+      tpop_gemeinde: string | null
+      tpop_flurname: string | null
+      tpop_status: string | null
+      tpop_bekannt_seit: number | null
+      tpop_status_unklar: boolean | null
+      tpop_status_unklar_grund: string | null
+      tpop_x: number | null
+      tpop_y: number | null
+      tpop_radius: number | null
+      tpop_hoehe: number | null
+      tpop_exposition: string | null
+      tpop_klima: string | null
+      tpop_neigung: string | null
+      tpop_beschreibung: string | null
+      tpop_kataster_nr: string | null
+      tpop_apber_relevant: number | null
+      tpop_eigentuemer: string | null
+      tpop_kontakt: string | null
+      tpop_nutzungszone: string | null
+      tpop_bewirtschafter: string | null
+      tpop_bewirtschaftung: string | null
+      tpop_ekfrequenz: number | null
+      tpop_ekfrequenz_abweichend: boolean | null
+      tpopber_id: string | null
+      tpopber_jahr: number | null
+      tpopber_entwicklung: number | null
+      tpopber_bemerkungen: string | null
+      tpopber_created_at: string | null
+      tpopber_updated_at: string | null
+      tpopber_changed_by: string | null
+      tpopmassnber_id: string | null
+      tpopmassnber_jahr: number | null
+      tpopmassnber_entwicklung: number | null
+      tpopmassnber_bemerkungen: string | null
+      tpopmassnber_created_at: string | null
+      tpopmassnber_updated_at: string | null
+      tpopmassnber_changed_by: string | null
+    }[]
+  }
+}
 
 export const TPopInklBerichte = observer(() => {
   const store = useContext(MobxContext)
@@ -24,7 +88,7 @@ export const TPopInklBerichte = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopPopberundmassnberQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -91,7 +155,7 @@ export const TPopInklBerichte = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: { variant: 'error' },
           })
         }

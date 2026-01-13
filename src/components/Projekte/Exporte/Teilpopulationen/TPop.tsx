@@ -7,9 +7,94 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+import type { AdresseId } from '../../../../models/apflora/public/AdresseId'
+
 import styles from '../index.module.css'
 
-export const TPop = observer(({ filtered = false }) => {
+interface TPopQueryResult {
+  allTpops: {
+    nodes: {
+      popByPopId: {
+        id: PopId
+        apByApId: {
+          id: ApId
+          aeTaxonomyByArtId: {
+            id: string
+            artname: string | null
+            familie: string | null
+          } | null
+          apBearbstandWerteByBearbeitung: {
+            id: number
+            text: string | null
+          } | null
+          startJahr: number | null
+          apUmsetzungWerteByUmsetzung: {
+            id: number
+            text: string | null
+          } | null
+        } | null
+        id: PopId
+        nr: number | null
+        name: string | null
+        popStatusWerteByStatus: {
+          id: number
+          text: string | null
+        } | null
+        bekanntSeit: number | null
+        statusUnklar: boolean | null
+        statusUnklarBegruendung: string | null
+        x: number | null
+        y: number | null
+      } | null
+      id: TpopId
+      nr: number | null
+      gemeinde: string | null
+      flurname: string | null
+      status: number | null
+      popStatusWerteByStatus: {
+        id: number
+        text: string | null
+      } | null
+      bekanntSeit: number | null
+      statusUnklar: boolean | null
+      statusUnklarGrund: string | null
+      x: number | null
+      y: number | null
+      radius: number | null
+      hoehe: number | null
+      exposition: string | null
+      klima: string | null
+      neigung: string | null
+      beschreibung: string | null
+      katasterNr: string | null
+      apberRelevant: number | null
+      apberRelevantGrund: string | null
+      eigentuemer: string | null
+      kontakt: string | null
+      nutzungszone: string | null
+      bewirtschafter: string | null
+      bewirtschaftung: string | null
+      ekfrequenz: number | null
+      ekfrequenzAbweichend: boolean | null
+      adresseByEkfKontrolleur: {
+        id: AdresseId
+        name: string | null
+      } | null
+      createdAt: string | null
+      updatedAt: string | null
+      changedBy: string | null
+    }[]
+  }
+}
+
+interface TPopProps {
+  filtered?: boolean
+}
+
+export const TPop = observer(({ filtered = false }: TPopProps) => {
   const store = useContext(MobxContext)
   const { enqueNotification, tableIsFiltered } = store
   const { tpopGqlFilter } = store.tree
@@ -21,7 +106,7 @@ export const TPop = observer(({ filtered = false }) => {
   const onClickTPop = async () => {
     setQueryState('lade Daten...')
     //console.time('querying')
-    let result
+    let result: { data: TPopQueryResult }
     try {
       result = await apolloClient.query({
         query: gql`
@@ -112,7 +197,7 @@ export const TPop = observer(({ filtered = false }) => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: { variant: 'error' },
       })
     }

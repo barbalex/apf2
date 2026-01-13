@@ -8,7 +8,28 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
+
+interface TPopKmlQueryResult {
+  allTpops: {
+    nodes: {
+      id: TpopId
+      vTpopKmlsById: {
+        nodes: {
+          art: string | null
+          label: string | null
+          inhalte: string | null
+          id: TpopId
+          wgs84Lat: number | null
+          wgs84Long: number | null
+          url: string | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const TPopFuerGoogleEarth = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +46,7 @@ export const TPopFuerGoogleEarth = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopKmlQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -51,7 +72,7 @@ export const TPopFuerGoogleEarth = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: { variant: 'error' },
           })
         }

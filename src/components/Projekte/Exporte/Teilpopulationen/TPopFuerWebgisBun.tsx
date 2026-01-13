@@ -7,7 +7,59 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
+
+interface TPopWebgisBunQueryResult {
+  allVTpopWebgisbuns: {
+    nodes: {
+      APARTID: string | null
+      APART: string | null
+      APSTATUS: string | null
+      APSTARTJAHR: number | null
+      APSTANDUMSETZUNG: string | null
+      POPGUID: string | null
+      POPNR: number | null
+      POPNAME: string | null
+      POPSTATUS: string | null
+      POPSTATUSUNKLAR: boolean | null
+      POPUNKLARGRUND: string | null
+      POPBEKANNTSEIT: number | null
+      POP_X: number | null
+      POP_Y: number | null
+      TPOPID: TpopId
+      TPOPGUID: string | null
+      TPOPNR: number | null
+      TPOPGEMEINDE: string | null
+      TPOPFLURNAME: string | null
+      TPOPSTATUS: string | null
+      tpopapberrelevant: number | null
+      tpopapberrelevantgrund: string | null
+      TPOPSTATUSUNKLAR: boolean | null
+      TPOPUNKLARGRUND: string | null
+      TPOP_X: number | null
+      TPOP_Y: number | null
+      TPOPRADIUS: number | null
+      TPOPHOEHE: number | null
+      TPOPEXPOSITION: string | null
+      TPOPKLIMA: string | null
+      TPOPHANGNEIGUNG: string | null
+      TPOPBESCHREIBUNG: string | null
+      TPOPKATASTERNR: string | null
+      TPOPVERANTWORTLICH: string | null
+      TPOPBERICHTSRELEVANZ: string | null
+      TPOPBEKANNTSEIT: number | null
+      TPOPEIGENTUEMERIN: string | null
+      TPOPKONTAKTVO: string | null
+      TPOPNUTZUNGSZONE: string | null
+      TPOPBEWIRTSCHAFTER: string | null
+      TPOPBEWIRTSCHAFTUNG: string | null
+      TPOPCHANGEDAT: string | null
+      TPOPCHANGEBY: string | null
+    }[]
+  }
+}
 
 export const TPopFuerWebgisBun = observer(() => {
   const store = useContext(MobxContext)
@@ -24,7 +76,7 @@ export const TPopFuerWebgisBun = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopWebgisBunQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -81,7 +133,7 @@ export const TPopFuerWebgisBun = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: { variant: 'error' },
           })
         }

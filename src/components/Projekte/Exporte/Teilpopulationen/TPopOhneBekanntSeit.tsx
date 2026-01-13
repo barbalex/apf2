@@ -1,5 +1,4 @@
 import { useContext, useState } from 'react'
-import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -8,9 +7,29 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopId } from '../../../../models/apflora/public/TpopId'
+
 import styles from '../index.module.css'
 
-export const TPopFuerGEArtname = observer(() => {
+interface TPopOhnebekanntSeitQueryResult {
+  allVTpopOhnebekanntseits: {
+    nodes: {
+      artname: string | null
+      ap_bearbeitung: string | null
+      pop_nr: number | null
+      pop_name: string | null
+      id: TpopId
+      nr: number | null
+      gemeinde: string | null
+      flurname: string | null
+      bekannt_seit: number | null
+      lv95X: number | null
+      lv95Y: number | null
+    }[]
+  }
+}
+
+export const TPopOhneBekanntSeit = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -25,25 +44,24 @@ export const TPopFuerGEArtname = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: TPopOhnebekanntSeitQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
-              query tpopKmlnamenQuery {
-                allTpops(filter: { vTpopKmlnamenByIdExist: true }) {
+              query viewTpopOhnebekanntseits {
+                allVTpopOhnebekanntseits {
                   nodes {
+                    artname
+                    ap_bearbeitung: apBearbeitung
+                    pop_nr: popNr
+                    pop_name: popName
                     id
-                    vTpopKmlnamenById {
-                      nodes {
-                        art
-                        label
-                        inhalte
-                        id
-                        wgs84Lat
-                        wgs84Long
-                        url
-                      }
-                    }
+                    nr
+                    gemeinde
+                    flurname
+                    bekannt_seit: bekanntSeit
+                    lv95X: x
+                    lv95Y: y
                   }
                 }
               }
@@ -51,20 +69,12 @@ export const TPopFuerGEArtname = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: { variant: 'error' },
           })
         }
         setQueryState('verarbeite...')
-        const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
-          art: z?.vTpopKmlnamenById?.nodes?.[0]?.art ?? '',
-          label: z?.vTpopKmlnamenById?.nodes?.[0]?.label ?? '',
-          inhalte: z?.vTpopKmlnamenById?.nodes?.[0]?.inhalte ?? '',
-          id: z?.vTpopKmlnamenById?.nodes?.[0]?.id ?? '',
-          wgs84Lat: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Lat ?? '',
-          wgs84Long: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Long ?? '',
-          url: z?.vTpopKmlnamenById?.nodes?.[0]?.url ?? '',
-        }))
+        const rows = result.data?.allVTpopOhnebekanntseits?.nodes ?? []
         if (rows.length === 0) {
           setQueryState(undefined)
           return enqueNotification({
@@ -75,16 +85,15 @@ export const TPopFuerGEArtname = observer(() => {
           })
         }
         exportModule({
-          data: sortBy(rows, ['art', 'label']),
-          fileName: 'TeilpopulationenNachNamen',
+          data: rows,
+          fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
           store,
-          kml: true,
           apolloClient,
         })
         setQueryState(undefined)
       }}
     >
-      {`Teilpopulationen für Google Earth (beschriftet mit Artname, PopNr/TPopNr)`}
+      {'Teilpopulationen von AP-Arten ohne "Bekannt seit"'}
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}
