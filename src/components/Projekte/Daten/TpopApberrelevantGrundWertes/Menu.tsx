@@ -19,9 +19,23 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopApberrelevantGrundWerteCode } from '../../../../generated/apflora/models.js'
+
+interface CreateTpopApberrelevantGrundWerteResult {
+  createTpopApberrelevantGrundWerte: {
+    tpopApberrelevantGrundWerte: {
+      id: TpopApberrelevantGrundWerteCode
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, tpopApberrelevantGrundWerteId } = useParams()
@@ -34,22 +48,23 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const onClickAdd = async () => {
     let result
     try {
-      result = await apolloClient.mutate({
-        mutation: gql`
-          mutation createTpopApberrelevantGrundWerteForTpopApberrelevantGrundWerteForm {
-            createTpopApberrelevantGrundWerte(
-              input: { tpopApberrelevantGrundWerte: {} }
-            ) {
-              tpopApberrelevantGrundWerte {
-                id
+      result =
+        await apolloClient.mutate<CreateTpopApberrelevantGrundWerteResult>({
+          mutation: gql`
+            mutation createTpopApberrelevantGrundWerteForTpopApberrelevantGrundWerteForm {
+              createTpopApberrelevantGrundWerte(
+                input: { tpopApberrelevantGrundWerte: {} }
+              ) {
+                tpopApberrelevantGrundWerte {
+                  id
+                }
               }
             }
-          }
-        `,
-      })
+          `,
+        })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

@@ -442,7 +442,7 @@ export const Router = () => {
                 <Route
                   path="*"
                   lazy={() =>
-                    import('../Projekte/Daten/TpopApberrelevantGrundWertes/index.jsx')
+                    import('../Projekte/Daten/TpopApberrelevantGrundWertes/index.tsx')
                   }
                   errorElement={<RouterErrorBoundary />}
                 />
