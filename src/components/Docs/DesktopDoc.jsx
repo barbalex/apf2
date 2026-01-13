@@ -5,13 +5,13 @@ import { Sidebar } from './DesktopSidebar/index.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 
-import { container, doku } from './DesktopDocs.module.css'
+import styles from './DesktopDocs.module.css'
 
 export const Component = () => (
   <ErrorBoundary>
-    <div className={container}>
+    <div className={styles.container}>
       <Sidebar />
-      <div className={doku}>
+      <div className={styles.doku}>
         <Suspense fallback={<Spinner />}>
           <Outlet />
         </Suspense>

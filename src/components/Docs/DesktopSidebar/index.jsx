@@ -7,7 +7,7 @@ import { MenuItems } from './MenuItems.jsx'
 import { Filter } from './Filter.jsx'
 import { IntoViewScroller } from './IntoViewScroller.jsx'
 
-import { menu, menuTitle, menuTitleLink } from './index.module.css'
+import styles from './index.module.css'
 
 export const Sidebar = observer(() => {
   const { search } = useLocation()
@@ -21,11 +21,11 @@ export const Sidebar = observer(() => {
     })
 
   return (
-    <div className={menu}>
-      <div className={menuTitle}>
+    <div className={styles.menu}>
+      <div className={styles.menuTitle}>
         <Link
           to={`/Dokumentation/${search}`}
-          className={menuTitleLink}
+          className={styles.menuTitleLink}
         >
           Dokumentation
         </Link>
