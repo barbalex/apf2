@@ -15,7 +15,12 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apart } from '../../../shared/fragments.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type Apart from '../../../../models/apflora/Apart.js'
+import type { ApartId } from '../../../../models/apflora/Apart.js'
+import type { ApId } from '../../../../models/apflora/Ap.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
 
 import {
   container,
@@ -29,17 +34,32 @@ const fieldTypes = {
   artId: 'UUID',
 }
 
+interface ApartQueryResult {
+  apartById: Apart & {
+    aeTaxonomyByArtId?: {
+      id: AeTaxonomiesId
+      taxArtName: string
+    }
+    apByApId?: {
+      id: ApId
+      apartsByApId: {
+        nodes: Array<Apart>
+      }
+    }
+  }
+}
+
 export const Component = observer(() => {
-  const { taxonId: id } = useParams()
+  const { taxonId: id } = useParams<{ taxonId: string }>()
 
   const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, error, refetch } = useQuery(query, {
+  const { data, error, refetch } = useQuery<ApartQueryResult>(query, {
     variables: { id },
   })
 
@@ -52,7 +72,7 @@ export const Component = observer(() => {
     .filter((o) => o !== row.artId)
     // no null values
     .filter((o) => !!o)
-  const aeTaxonomiesfilter = (inputValue) =>
+  const aeTaxonomiesfilter = (inputValue: string) =>
     inputValue ?
       apartenOfAp.length ?
         {
@@ -67,7 +87,7 @@ export const Component = observer(() => {
   // because apart did not exist...
   // maybe do later
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -77,7 +97,7 @@ export const Component = observer(() => {
       changedBy: store.user.name,
     }
     try {
-      await apolloClient.mutate({
+      await apolloClient.mutate<any>({
         mutation: gql`
             mutation updateApart(
               $id: UUID!
@@ -103,7 +123,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     // without refetch artname is not renewed
     refetch()

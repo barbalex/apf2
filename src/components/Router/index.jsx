@@ -785,7 +785,7 @@ export const Router = () => {
                       />
                       <Route
                         path=":taxonId"
-                        lazy={() => import('../Projekte/Daten/Apart/index.jsx')}
+                        lazy={() => import('../Projekte/Daten/Apart/index.tsx')}
                         errorElement={<RouterErrorBoundary />}
                       />
                     </Route>
