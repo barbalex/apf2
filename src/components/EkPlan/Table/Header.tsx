@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { fields } from './fields.js'
+import { fields } from './fields.ts'
 import { CellHeaderFixed } from './CellHeaderFixed/index.tsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.tsx'
 import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.tsx'

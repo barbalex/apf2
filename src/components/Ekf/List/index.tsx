@@ -1,6 +1,6 @@
 import { uniq } from 'es-toolkit'
 
-import { Item } from './Item.jsx'
+import { Item } from './Item.tsx'
 import styles from './index.module.css'
 
 export const EkfList = ({ ekf }) => {

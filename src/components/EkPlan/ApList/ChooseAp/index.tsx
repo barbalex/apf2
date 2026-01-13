@@ -4,7 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { queryApsToChoose } from './queryApsToChoose.js'
+import { queryApsToChoose } from './queryApsToChoose.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 

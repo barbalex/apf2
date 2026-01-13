@@ -11,7 +11,7 @@ import { setEkplans } from '../setEkplans/index.tsx'
 import styles from './index.module.css'
 
 const processChangeWorkerFactory = createWorkerFactory(
-  () => import('./processChange.js'),
+  () => import('./processChange.ts'),
 )
 
 export const CellForEkfrequenzStartjahr = observer(

@@ -1,9 +1,14 @@
-import { queryEkfrequenz } from './queryEkfrequenz.js'
-import { queryTpopkontr } from './queryTpopkontr.js'
-import { queryTpopmassn } from './queryTpopmassn.js'
-import { mutationUpdateTpop } from './mutationUpdateTpop.js'
+import { queryEkfrequenz } from './queryEkfrequenz.ts'
+import { queryTpopkontr } from './queryTpopkontr.ts'
+import { queryTpopmassn } from './queryTpopmassn.ts'
+import { mutationUpdateTpop } from './mutationUpdateTpop.ts'
 
-export const setStartjahr = async ({ row, ekfrequenz, apolloClient, store }) => {
+export const setStartjahr = async ({
+  row,
+  ekfrequenz,
+  apolloClient,
+  store,
+}) => {
   const { enqueNotification } = store
 
   // 1  get ekfrequenz's kontrolljahreAb

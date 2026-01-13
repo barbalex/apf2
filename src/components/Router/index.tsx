@@ -384,17 +384,17 @@ export const Router = () => {
           />
           <Route
             path="Benutzer/:userId/EKF/:ekfYear"
-            lazy={() => import('../Ekf/index.jsx')}
+            lazy={() => import('../Ekf/index.tsx')}
             errorElement={<RouterErrorBoundary />}
           >
             <Route
               path="*"
-              lazy={() => import('../Ekf/index.jsx')}
+              lazy={() => import('../Ekf/index.tsx')}
               errorElement={<RouterErrorBoundary />}
             />
             <Route
               path=":ekfId"
-              lazy={() => import('../Ekf/index.jsx')}
+              lazy={() => import('../Ekf/index.tsx')}
               errorElement={<RouterErrorBoundary />}
             />
           </Route>

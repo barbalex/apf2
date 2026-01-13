@@ -9,14 +9,25 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { queryTpop } from './queryTpop.js'
-import { queryEkplansOfTpop } from './queryEkplansOfTpop.js'
-import { mutationCreateEkplan } from './mutationCreateEkplan.js'
-import { mutationDeleteEkplan } from './mutationDeleteEkplan.js'
+import { queryTpop } from './queryTpop.ts'
+import { queryEkplansOfTpop } from './queryEkplansOfTpop.ts'
+import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
+import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
 
 import { EksMenu } from './EksMenu/index.tsx'
 import { EkfsMenu } from './EkfsMenu/index.tsx'
 import { MassnsMenu } from './MassnsMenu/index.tsx'
+
+import type { TpopId } from '../../../../models/apflora/Tpop'
+import type { PopId } from '../../../../models/apflora/Pop'
+import type { ApId } from '../../../../models/apflora/Ap'
+import type { ProjektId } from '../../../../models/apflora/Projekt'
+import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr'
+import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn'
+import type { AdresseId } from '../../../../models/apflora/Adresse'
+import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl'
+import type { TpopkontrzaehlEinheitWerteId } from '../../../../models/apflora/TpopkontrzaehlEinheitWerte'
+import type { TpopkontrzaehlMethodeWerteId } from '../../../../models/apflora/TpopkontrzaehlMethodeWerte'
 
 import styles from './index.module.css'
 
@@ -58,7 +69,7 @@ export const CellForYearMenu = observer(() => {
     } catch (error) {
       closeYearCellMenu()
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -72,7 +83,7 @@ export const CellForYearMenu = observer(() => {
       })
     } catch (error) {
       store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -101,7 +112,7 @@ export const CellForYearMenu = observer(() => {
       })
     } catch (error) {
       store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -116,7 +127,86 @@ export const CellForYearMenu = observer(() => {
   const onClickEkPlanen = () => addEkPlan('EK')
   const onClickEkfPlanen = () => addEkPlan('EKF')
 
-  const { data } = useQuery(queryTpop, {
+  interface TpopkontrzaehlEinheitWerteNode {
+    id: TpopkontrzaehlEinheitWerteId
+    text: string | null
+  }
+
+  interface TpopkontrzaehlMethodeWerteNode {
+    id: TpopkontrzaehlMethodeWerteId
+    text: string | null
+  }
+
+  interface TpopkontrzaehlNode {
+    id: TpopkontrzaehlId
+    anzahl: number | null
+    einheit?: TpopkontrzaehlEinheitWerteId | null
+    tpopkontrzaehlEinheitWerteByEinheit: TpopkontrzaehlEinheitWerteNode | null
+    tpopkontrzaehlMethodeWerteByMethode: TpopkontrzaehlMethodeWerteNode | null
+  }
+
+  interface AdresseNode {
+    id: AdresseId
+    name: string | null
+  }
+
+  interface TpopkontrNode {
+    id: TpopkontrId
+    datum: Date | null
+    typ: string | null
+    adresseByBearbeiter: AdresseNode | null
+    tpopkontrzaehlsByTpopkontrId: {
+      nodes: TpopkontrzaehlNode[]
+    }
+  }
+
+  interface TpopmassnTypWerteNode {
+    id: string
+    text: string | null
+  }
+
+  interface TpopmassnNode {
+    id: TpopmassnId
+    datum: Date | null
+    tpopmassnTypWerteByTyp: TpopmassnTypWerteNode | null
+    beschreibung: string | null
+    anzTriebe: number | null
+    anzPflanzen: number | null
+    zieleinheitAnzahl: number | null
+    tpopkontrzaehlEinheitWerteByZieleinheitEinheit: TpopkontrzaehlEinheitWerteNode | null
+    bemerkungen: string | null
+    adresseByBearbeiter: AdresseNode | null
+  }
+
+  interface ApNode {
+    id: ApId
+    projId: ProjektId | null
+  }
+
+  interface PopNode {
+    id: PopId
+    apByApId: ApNode | null
+  }
+
+  interface TpopNode {
+    id: TpopId
+    eks: {
+      nodes: TpopkontrNode[]
+    }
+    ekfs: {
+      nodes: TpopkontrNode[]
+    }
+    massns: {
+      nodes: TpopmassnNode[]
+    }
+    popByPopId: PopNode | null
+  }
+
+  interface EkplanmenuTpopQueryResult {
+    tpopById: TpopNode | null
+  }
+
+  const { data } = useQuery<EkplanmenuTpopQueryResult>(queryTpop, {
     variables: {
       tpopId,
       jahr: year,

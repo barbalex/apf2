@@ -5,9 +5,8 @@ import { useQuery } from '@apollo/client/react'
 import { EkIcon } from './EkIcon.tsx'
 import { MassnIcon } from './MassnIcon.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { query } from './query.js'
-import { yearColumnWidth } from './yearColumnWidth.js'
-import { hover } from 'framer-motion'
+import { query } from './query.ts'
+import { yearColumnWidth } from './yearColumnWidth.ts'
 
 import indexStyles from '../index.module.css'
 

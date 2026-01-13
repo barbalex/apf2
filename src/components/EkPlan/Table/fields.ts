@@ -1,4 +1,4 @@
-import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
+import { yearColumnWidth } from './CellForYear/yearColumnWidth.ts'
 
 export const fields = {
   ap: {

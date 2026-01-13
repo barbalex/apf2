@@ -13,8 +13,18 @@ import { CellForTpopLink } from '../CellForTpopLink.tsx'
 import { CellForValue } from '../CellForValue.tsx'
 import { CellForYear } from '../CellForYear/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { queryRow } from './queryRow.js'
-import { tpopRowFromTpop } from './tpopRowFromTpop.js'
+import { queryRow } from './queryRow.ts'
+import { tpopRowFromTpop } from './tpopRowFromTpop.ts'
+
+import type { TpopId } from '../../../../models/apflora/Tpop'
+import type { PopId } from '../../../../models/apflora/Pop'
+import type { ApId } from '../../../../models/apflora/Ap'
+import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr'
+import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl'
+import type { TpopkontrzaehlEinheitWerteId } from '../../../../models/apflora/TpopkontrzaehlEinheitWerte'
+import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn'
+import type { EkfrequenzId } from '../../../../models/apflora/Ekfrequenz'
+import type { ProjektId } from '../../../../models/apflora/Projekt'
 
 const isItOdd = (num) => num % 2 === 0
 
@@ -25,7 +35,120 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
 
   const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery({
+  interface EkzaehleinheitCount {
+    totalCount: number
+  }
+
+  interface TpopkontrzaehlEinheitWerteNode {
+    id: TpopkontrzaehlEinheitWerteId
+    ekzaehleinheitsByZaehleinheitId: EkzaehleinheitCount
+  }
+
+  interface TpopkontrzaehlNode {
+    id: TpopkontrzaehlId
+    einheit: TpopkontrzaehlEinheitWerteId | null
+    anzahl: number | null
+    tpopkontrzaehlEinheitWerteByEinheit: TpopkontrzaehlEinheitWerteNode | null
+  }
+
+  interface TpopkontrNode {
+    id: TpopkontrId
+    jahr: number | null
+    tpopkontrzaehlsByTpopkontrId: {
+      nodes: TpopkontrzaehlNode[]
+    }
+  }
+
+  interface TpopmassnNode {
+    id: TpopmassnId
+    jahr: number | null
+    zieleinheitAnzahl: number | null
+  }
+
+  interface EkplanNode {
+    jahr: number | null
+  }
+
+  interface PopStatusWerteNode {
+    code: number | null
+    text: string | null
+  }
+
+  interface EkAbrechnungstypWerteNode {
+    id: string
+    text: string | null
+  }
+
+  interface EkfrequenzNode {
+    id: EkfrequenzId
+    ekAbrechnungstyp: string | null
+    ekAbrechnungstypWerteByEkAbrechnungstyp: EkAbrechnungstypWerteNode | null
+  }
+
+  interface AdresseNode {
+    name: string | null
+  }
+
+  interface ApNode {
+    id: ApId
+    projId: ProjektId | null
+    label: string | null
+  }
+
+  interface PopNode {
+    id: PopId
+    nr: number | null
+    name: string | null
+    popStatusWerteByStatus: PopStatusWerteNode | null
+    apByApId: ApNode | null
+  }
+
+  interface TpopNode {
+    id: TpopId
+    nr: number | null
+    gemeinde: string | null
+    flurname: string | null
+    lv95X: number | null
+    lv95Y: number | null
+    ekfrequenz: EkfrequenzId | null
+    ekfrequenzStartjahr: number | null
+    ekfrequenzAbweichend: boolean | null
+    ekfrequenzByEkfrequenz: EkfrequenzNode | null
+    popStatusWerteByStatus: PopStatusWerteNode | null
+    bekanntSeit: number | null
+    adresseByEkfKontrolleur: AdresseNode | null
+    popByPopId: PopNode | null
+    ekPlans: {
+      nodes: EkplanNode[]
+    }
+    ekfPlans: {
+      nodes: EkplanNode[]
+    }
+    eks: {
+      nodes: TpopkontrNode[]
+    }
+    ekfs: {
+      nodes: TpopkontrNode[]
+    }
+    ansiedlungs: {
+      nodes: TpopmassnNode[]
+    }
+  }
+
+  interface EkfrequenzForRowNode {
+    id: EkfrequenzId
+    ekAbrechnungstyp: string | null
+    ekAbrechnungstypWerteByEkAbrechnungstyp: EkAbrechnungstypWerteNode | null
+  }
+
+  interface RowQueryForEkPlanResult {
+    allEkfrequenzs: {
+      nodes: EkfrequenzForRowNode[]
+    }
+    tpopById: TpopNode | null
+  }
+
+  const { data, error } = useQuery<RowQueryForEkPlanResult>({
     queryKey: [
       'RowQueryForEkPlan',
       store.ekPlan.apValues,
@@ -33,8 +156,8 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
       years,
       fieldsShown,
     ],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<RowQueryForEkPlanResult>({
         query: queryRow,
         variables: {
           apIds: store.ekPlan.apValues,
@@ -52,11 +175,13 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
           showLv95Y: fieldsShown.includes('lv95Y'),
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      return result.data
+    },
   })
 
-  const ekfrequenzs = data?.data?.allEkfrequenzs?.nodes ?? []
-  const tpop = data?.data?.tpopById
+  const ekfrequenzs = data?.allEkfrequenzs?.nodes ?? []
+  const tpop = data?.tpopById
   const ekfrequenz = tpop?.ekfrequenz
   const ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr
   const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
@@ -67,7 +192,7 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
     .filter((o) => !!o.name)
     .filter((o) => store.ekPlan.fields.includes(o.name) || !!o.alwaysShow)
 
-  if (error) return `Fehler: ${error.message}`
+  if (error) return `Fehler: ${(error as Error).message}`
 
   return (
     <ErrorBoundary>

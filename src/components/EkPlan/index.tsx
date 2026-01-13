@@ -3,6 +3,10 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 
+import type { ApId } from '../../models/apflora/Ap'
+import type { EkzaehleinheitId } from '../../models/apflora/Ekzaehleinheit'
+import type { TpopkontrzaehlEinheitWerteId } from '../../models/apflora/TpopkontrzaehlEinheitWerte'
+
 const ApList = lazy(async () => ({
   default: (await import('./ApList/index.tsx')).ApList,
 }))
@@ -12,7 +16,7 @@ const Table = lazy(async () => ({
 const Choose = lazy(async () => ({
   default: (await import('./Choose.tsx')).Choose,
 }))
-import { queryAps } from './queryAps.js'
+import { queryAps } from './queryAps.ts'
 import { MobxContext } from '../../mobxContext.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 const Error = lazy(async () => ({
@@ -54,7 +58,31 @@ export const Component = observer(() => {
     setFilterEkplanYear,
   } = store.ekPlan
 
-  const { data, loading, error } = useQuery(queryAps, {
+  interface TpopkontrzaehlEinheitWerteNode {
+    id: TpopkontrzaehlEinheitWerteId
+    code: string | null
+    text: string | null
+  }
+
+  interface EkzaehleinheitNode {
+    id: EkzaehleinheitId
+    tpopkontrzaehlEinheitWerteByZaehleinheitId: TpopkontrzaehlEinheitWerteNode | null
+  }
+
+  interface ApNode {
+    id: ApId
+    ekzaehleinheitsByApId: {
+      nodes: EkzaehleinheitNode[]
+    }
+  }
+
+  interface EkplanApQueryResult {
+    allAps: {
+      nodes: ApNode[]
+    }
+  }
+
+  const { data, loading, error } = useQuery<EkplanApQueryResult>(queryAps, {
     variables: {
       ids: aps.map((ap) => ap.value),
     },
@@ -95,7 +123,7 @@ export const Component = observer(() => {
   if (error) {
     return (
       <Suspense fallback={<Spinner />}>
-        <Error error={error} />
+        <Error error={error as Error} />
       </Suspense>
     )
   }

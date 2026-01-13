@@ -15,7 +15,7 @@ import indexStyles from '../index.module.css'
 import styles from './index.module.css'
 
 const processChangeWorkerFactory = createWorkerFactory(
-  () => import('./processChange.js'),
+  () => import('./processChange.ts'),
 )
 
 export const CellForEkfrequenz = observer(
@@ -82,7 +82,9 @@ export const CellForEkfrequenz = observer(
           onClose={onClose}
           open={open}
         >
-          <DialogTitle className={styles.dialogTitle}>EK-Frequenz wählen:</DialogTitle>
+          <DialogTitle className={styles.dialogTitle}>
+            EK-Frequenz wählen:
+          </DialogTitle>
           <List sx={{ pt: 0 }}>
             <ListItem
               onClick={() => {
@@ -123,7 +125,9 @@ export const CellForEkfrequenz = observer(
                 >
                   {e.code}
                 </span>
-                <span className={styles.anwendungsfallText}>{e.anwendungsfall}</span>
+                <span className={styles.anwendungsfallText}>
+                  {e.anwendungsfall}
+                </span>
               </ListItem>
             ))}
           </List>

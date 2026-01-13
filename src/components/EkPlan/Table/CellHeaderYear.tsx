@@ -46,7 +46,25 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
     ekplansByTpopId: { some: { jahr: { equalTo: column } } },
   }
 
-  const { data, loading, error } = useQuery(
+  interface TpopCountWithKontrInYear {
+    totalCount: number
+  }
+
+  interface TpopCountWithAnsiedlungsInYear {
+    totalCount: number
+  }
+
+  interface TpopCountWithEkplanInYear {
+    totalCount: number
+  }
+
+  interface TpopQueryForCellHeaderYearResult {
+    tpopCountWithKontrInYear: TpopCountWithKontrInYear
+    tpopCountWithAnsiedlungsInYear: TpopCountWithAnsiedlungsInYear
+    tpopCountWithEkplanInYear: TpopCountWithEkplanInYear
+  }
+
+  const { data, loading, error } = useQuery<TpopQueryForCellHeaderYearResult>(
     gql`
       query TpopQueryForCellHeaderYear(
         $kontrFilter: TpopFilter!

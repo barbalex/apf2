@@ -5,16 +5,78 @@ import { useQuery } from '@apollo/client/react'
 import { sortBy } from 'es-toolkit'
 import { SplitPane, Pane } from 'react-split-pane'
 
+import type { UserId } from '../../models/apflora/User'
+import type { AdresseId } from '../../models/apflora/Adresse'
+import type { TpopkontrId } from '../../models/apflora/Tpopkontr'
+import type { TpopId } from '../../models/apflora/Tpop'
+import type { PopId } from '../../models/apflora/Pop'
+import type { ApId } from '../../models/apflora/Ap'
+import type { ProjektId } from '../../models/apflora/Projekt'
+import type { AeTaxonomyId } from '../../models/apflora/AeTaxonomy'
+
 // when Karte was loaded async, it did not load,
 // but only in production!
-import { EkfList } from './List/index.jsx'
+import { EkfList } from './List/index.tsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.tsx'
 import { MobxContext } from '../../mobxContext.js'
-import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
-import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'
-import { Error } from '../shared/Error.jsx'
+import { dataByUserId as dataByUserIdGql } from './dataByUserId.ts'
+import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.ts'
+import { Error } from '../shared/Error.tsx'
 
 import styles from './index.module.css'
+
+interface AeTaxonomyNode {
+  id: AeTaxonomyId
+  artname: string | null
+}
+
+interface ProjektNode {
+  id: ProjektId
+  name: string | null
+}
+
+interface ApNode {
+  id: ApId
+  aeTaxonomyByArtId: AeTaxonomyNode | null
+  projektByProjId: ProjektNode | null
+}
+
+interface PopNode {
+  id: PopId
+  nr: number | null
+  name: string | null
+  apByApId: ApNode | null
+}
+
+interface TpopNode {
+  id: TpopId
+  nr: number | null
+  flurname: string | null
+  gemeinde: string | null
+  popByPopId: PopNode | null
+}
+
+interface TpopkontrNode {
+  id: TpopkontrId
+  datum: string | null
+  tpopByTpopId: TpopNode | null
+}
+
+interface AdresseNode {
+  id: AdresseId
+  tpopkontrsByBearbeiter: {
+    nodes: TpopkontrNode[]
+  } | null
+}
+
+interface UserNode {
+  id: UserId
+  adresseByAdresseId: AdresseNode | null
+}
+
+interface EkfQueryResult {
+  userById: UserNode | null
+}
 
 const getEkfFromData = ({ data }) => {
   const ekfNodes =
@@ -54,7 +116,7 @@ export const Component = observer(() => {
   const query =
     ekfRefYear === ekfYear ? dataByUserIdGql : dataWithDateByUserIdGql
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<EkfQueryResult>(query, {
     variables: { id: userId, jahr: +ekfYear },
     fetchPolicy: 'network-only',
   })
@@ -92,7 +154,10 @@ export const Component = observer(() => {
     return (
       <>
         {ekf.map((e) => (
-          <Tpopfreiwkontr id={e.id} key={e.id} />
+          <Tpopfreiwkontr
+            id={e.id}
+            key={e.id}
+          />
         ))}
       </>
     )
@@ -101,18 +166,20 @@ export const Component = observer(() => {
   return (
     <div className={styles.container}>
       <SplitPane split="vertical">
-        <Pane size="350px" minSize={100}>
+        <Pane
+          size="350px"
+          minSize={100}
+        >
           <EkfList ekf={ekf} />
         </Pane>
-        {ekfId ? (
+        {ekfId ?
           <Pane>
             <Tpopfreiwkontr id={ekfId} />
           </Pane>
-        ) : (
-          <Pane>
+        : <Pane>
             <div className={styles.innerContainer} />
           </Pane>
-        )}
+        }
       </SplitPane>
     </div>
   )

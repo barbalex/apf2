@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
+import { yearColumnWidth } from './CellForYear/yearColumnWidth.ts'
 
 import indexStyles from './index.module.css'
 

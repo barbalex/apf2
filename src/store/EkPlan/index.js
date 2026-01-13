@@ -4,7 +4,7 @@ import { groupBy } from 'es-toolkit'
 
 import { Ap } from './Ap.js'
 import { Hovered, defaultValue as defaultHovered } from './Hovered.js'
-import { fields } from '../../components/EkPlan/Table/fields.js'
+import { fields } from '../../components/EkPlan/Table/fields.ts'
 
 export const defaultFields = [
   'ap',

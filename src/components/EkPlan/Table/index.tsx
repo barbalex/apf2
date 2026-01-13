@@ -5,18 +5,20 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { queryAll } from './queryAll.js'
-import { queryForExport } from './queryForExport.js'
+import { queryAll } from './queryAll.ts'
+import { queryForExport } from './queryForExport.ts'
 import { CellForYearMenu } from './CellForYearMenu/index.tsx'
-import { getYears } from './getYears.js'
+import { getYears } from './getYears.ts'
 import { Error } from '../../shared/Error.jsx'
-import { exportRowFromTpop } from './exportRowFromTpop.js'
+import { exportRowFromTpop } from './exportRowFromTpop.ts'
 import { exportModule } from '../../../modules/export.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
 import { TpopRow } from './Row/index.tsx'
 import { EkplanTableHeader } from './Header.tsx'
+
+import type { TpopId } from '../../../models/apflora/Tpop'
 
 import styles from './index.module.css'
 
@@ -175,6 +177,16 @@ export const EkPlanTable = observer(() => {
 
   const [processing, setProcessing] = useState(false)
 
+  interface TpopNode {
+    id: TpopId
+  }
+
+  interface EkplanTpopQueryResult {
+    allTpops: {
+      nodes: TpopNode[]
+    }
+  }
+
   const tpopFilter = getTpopFilter({
     apValues,
     filterAp,
@@ -200,17 +212,19 @@ export const EkPlanTable = observer(() => {
     filterEkplanYear,
   })
 
-  const { data, error, refetch } = useQuery({
+  const { data, error, refetch } = useQuery<EkplanTpopQueryResult>({
     queryKey: ['EkplanTpopQuery', tpopFilter],
     queryFn: () =>
-      apolloClient.query({
-        query: queryAll,
-        variables: { tpopFilter },
-        fetchPolicy: 'no-cache',
-      }),
+      apolloClient
+        .query<EkplanTpopQueryResult>({
+          query: queryAll,
+          variables: { tpopFilter },
+          fetchPolicy: 'no-cache',
+        })
+        .then((result) => result.data),
   })
 
-  const tpops = data?.data?.allTpops?.nodes ?? []
+  const tpops = data?.allTpops?.nodes ?? []
   const years = getYears(store.ekPlan.pastYears)
 
   // when this value changes, year columns are re-rendered as it is added as key
@@ -230,7 +244,7 @@ export const EkPlanTable = observer(() => {
       })
     } catch (error) {
       return enqueNotification({
-        message: `Fehler beim Abfragen für den Export: ${error.message}`,
+        message: `Fehler beim Abfragen für den Export: ${(error as Error).message}`,
         options: {
           variant: 'error',
         },
