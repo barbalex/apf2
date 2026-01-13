@@ -1,7 +1,7 @@
 import ReactSelect from 'react-select'
 
 import { exists } from '../../modules/exists.js'
-import { container, labelClass, errorClass, select } from './Select.module.css'
+import styles from './Select.module.css'
 
 export const Select = ({
   value,
@@ -42,13 +42,13 @@ export const Select = ({
 
   return (
     <div
-      className={container}
+      className={styles.container}
       data-id={field}
       style={styleMeantForSelect}
     >
       {label && (
         <div
-          className={labelClass}
+          className={styles.labelClass}
           style={{ fontSize: labelSize ?? 12 }}
         >
           {label}
@@ -71,9 +71,9 @@ export const Select = ({
         isSearchable
         noOptionsMessage={() => '(keine)'}
         classNamePrefix="react-select"
-        className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${select}`}
+        className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${styles.select}`}
       />
-      {error && <div className={errorClass}>{error}</div>}
+      {error && <div className={styles.errorClass}>{error}</div>}
     </div>
   )
 }

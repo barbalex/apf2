@@ -3,7 +3,7 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { formControl, formLabel, radio } from './RadioButton.module.css'
+import styles from './RadioButton.module.css'
 
 export const RadioButton = ({ label, name, value, error, saveToDb }) => {
   const onClickButton = () => {
@@ -25,11 +25,11 @@ export const RadioButton = ({ label, name, value, error, saveToDb }) => {
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <FormLabel
         component="legend"
-        className={formLabel}
+        className={styles.formLabel}
       >
         {label}
       </FormLabel>
@@ -38,7 +38,7 @@ export const RadioButton = ({ label, name, value, error, saveToDb }) => {
         onClick={onClickButton}
         color="primary"
         checked={value}
-        className={radio}
+        className={styles.radio}
       />
       {!!error && (
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>

@@ -7,7 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 
 import { exists } from '../../modules/exists.js'
 
-import { formControl, formLabel, radio } from './RadioButtonGroup.module.css'
+import styles from './RadioButtonGroup.module.css'
 
 export const RadioButtonGroup = ({
   value = null,
@@ -77,11 +77,11 @@ export const RadioButtonGroup = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <FormLabel
         component="legend"
-        className={formLabel}
+        className={styles.formLabel}
       >
         {label}
       </FormLabel>
@@ -100,7 +100,7 @@ export const RadioButtonGroup = ({
                   e.value.toString ? e.value.toString() : e.value
                 }`}
                 color="primary"
-                className={radio}
+                className={styles.radio}
               />
             }
             label={e.label}
