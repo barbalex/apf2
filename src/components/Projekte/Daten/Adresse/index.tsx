@@ -10,12 +10,12 @@ import { TextField } from '../../../shared/TextField.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { query } from './query.js'
 import { MobxContext } from '../../../../mobxContext.js'
+import { Menu } from './Menu.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { adresse } from '../../../shared/fragments.js'
-import { Menu } from './Menu.jsx'
 
 import type Adresse from '../../../../models/apflora/Adresse.js'
 
@@ -53,7 +53,7 @@ export const Component = observer(() => {
       changedBy: store.user.name,
     }
     try {
-      await apolloClient.mutate({
+      await apolloClient.mutate<any>({
         mutation: gql`
             mutation updateAdresse(
               $id: UUID!
@@ -79,7 +79,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (field === 'name') {

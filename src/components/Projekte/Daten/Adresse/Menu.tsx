@@ -18,6 +18,26 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
+interface CreateAdresseResult {
+  data?: {
+    createAdresse?: {
+      adresse?: {
+        id: string
+      }
+    }
+  }
+}
+
+interface DeleteAdresseResult {
+  data?: {
+    deleteAdresseById?: {
+      adresse?: {
+        id: string
+      }
+    }
+  }
+}
+
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
@@ -30,7 +50,7 @@ export const Menu = observer(() => {
   const store = useContext(MobxContext)
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateAdresseResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -46,7 +66,7 @@ export const Menu = observer(() => {
     } catch (error) {
       console.log('error:', error)
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -62,11 +82,13 @@ export const Menu = observer(() => {
     navigate(`/Daten/Werte-Listen/Adressen/${id}${search}`)
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
+    let result: DeleteAdresseResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -83,7 +105,7 @@ export const Menu = observer(() => {
     } catch (error) {
       console.log('error:', error)
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
