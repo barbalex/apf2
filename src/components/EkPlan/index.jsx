@@ -106,7 +106,7 @@ export const Component = observer(() => {
         <Suspense fallback={<Spinner />}>
           {!!user.token && (
             <>
-              <div className={styles.styles.header}>
+              <div className={styles.header}>
                 <ApList />
                 <div className={styles.buttonContainer}>
                   <Button
