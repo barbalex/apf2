@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import { observer } from 'mobx-react-lite'
 
-import { formControl } from './TextField2.module.css'
+import styles from './TextField2.module.css'
 
 export const TextField2 = observer(
   ({
@@ -42,7 +42,7 @@ export const TextField2 = observer(
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
-        className={formControl}
+        className={styles.formControl}
       >
         <InputLabel
           htmlFor={name}

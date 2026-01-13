@@ -1,7 +1,7 @@
 // seems not in use
 import AsyncSelect from 'react-select/async'
 
-import { container, labelClass, errorClass, select } from './Select.module.css'
+import styles from './Select.module.css'
 
 export const SelectAsync = ({
   value,
@@ -39,13 +39,13 @@ export const SelectAsync = ({
 
   return (
     <div
-      className={container}
+      className={styles.container}
       data-id={field}
       style={styleMeantForSelect}
     >
       {label && (
         <div
-          className={labelClass}
+          className={styles.labelClass}
           style={{ fontSize: labelSize ?? 12 }}
         >
           {label}
@@ -62,9 +62,9 @@ export const SelectAsync = ({
         noOptionsMessage={() => '(keine)'}
         classNamePrefix="react-select"
         onInputChange={onInputChange}
-        className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${select}`}
+        className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${styles.select}`}
       />
-      {error && <div className={errorClass}>{error}</div>}
+      {error && <div className={styles.errorClass}>{error}</div>}
     </div>
   )
 }

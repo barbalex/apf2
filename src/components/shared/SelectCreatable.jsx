@@ -4,7 +4,7 @@ import CreatableSelect from 'react-select/creatable'
 import { observer } from 'mobx-react-lite'
 
 import { exists } from '../../modules/exists.js'
-import { container, labelClass, errorClass, select } from './Select.module.css'
+import styles from './Select.module.css'
 
 export const SelectCreatable = observer(
   ({
@@ -75,10 +75,10 @@ export const SelectCreatable = observer(
 
     return (
       <div
-        className={container}
+        className={styles.container}
         style={styleMeantForSelect}
       >
-        {label && <div className={labelClass}>{label}</div>}
+        {label && <div className={styles.labelClass}>{label}</div>}
         <CreatableSelect
           id={field}
           name={field}
@@ -93,9 +93,9 @@ export const SelectCreatable = observer(
           isSearchable
           noOptionsMessage={() => '(keine)'}
           classNamePrefix="react-select"
-          className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${select}`}
+          className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${styles.select}`}
         />
-        {error && <div className={errorClass}>{error}</div>}
+        {error && <div className={styles.errorClass}>{error}</div>}
       </div>
     )
   },

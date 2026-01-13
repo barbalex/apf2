@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
-import { formControl, formLabel, radio } from './JesNo.module.css'
+import styles from './JesNo.module.css'
 
 const dataSource = [
   {
@@ -81,11 +81,11 @@ export const JesNo = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <FormLabel
         component="legend"
-        className={formLabel}
+        className={styles.formLabel}
       >
         {label}
       </FormLabel>
@@ -105,7 +105,7 @@ export const JesNo = ({
                 <Radio
                   data-id={`${name}_${valueToUse}`}
                   color="primary"
-                  className={radio}
+                  className={styles.radio}
                 />
               }
               label={e.label}
