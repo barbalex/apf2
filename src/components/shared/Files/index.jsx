@@ -23,7 +23,7 @@ import { MobxContext } from '../../../mobxContext.js'
 import { Menu } from './Menu/index.jsx'
 
 import './index.css'
-import { container, outletContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -160,7 +160,7 @@ export const FilesRouter = observer(
     return (
       <ErrorBoundary>
         <div
-          className={container}
+          className={styles.container}
           ref={containerRef}
         >
           <Uploader
@@ -174,7 +174,7 @@ export const FilesRouter = observer(
             refetch={refetch}
             containerRef={containerRef}
           />
-          <div className={outletContainer}>
+          <div className={styles.outletContainer}>
             <Suspense fallback={<Spinner />}>
               <Outlet context={{ files, parent, refetch }} />
             </Suspense>

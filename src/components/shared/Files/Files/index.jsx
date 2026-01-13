@@ -3,14 +3,14 @@ import { useOutletContext } from 'react-router'
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
 import { File } from './File.jsx'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const Component = () => {
   const { parent, files, refetch } = useOutletContext()
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         {files.map((file) => (
           <File
             key={file.fileId}
