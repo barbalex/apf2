@@ -16,11 +16,7 @@ import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import {
-  selectContainer,
-  selectLabel,
-  errorClass,
-} from './ChooseApToCopyEkfrequenzsFrom.module.css'
+import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
 export const ChooseApToCopyErfkritsFrom = observer(() => {
   const { apId } = useParams()
@@ -238,8 +234,8 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
             Achtung: Allfällige bestehende Erfolgskriterien werden gelöscht und
             mit den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
           </DialogContentText>
-          <div className={selectContainer}>
-            <div className={selectLabel}>
+          <div className={styles.selectContainer}>
+            <div className={styles.selectLabel}>
               Art (nur solche mit Erfolgskriterien)
             </div>
             <AsyncSelect
@@ -264,7 +260,7 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
               className="select-nocaret"
             />
             {apOptionsError && (
-              <div className={errorClass}>{apOptionsError}</div>
+              <div className={styles.errorClass}>{apOptionsError}</div>
             )}
           </div>
         </DialogContent>

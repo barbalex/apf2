@@ -16,11 +16,7 @@ import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
-import {
-  selectContainer,
-  selectLabel,
-  errorClass,
-} from './ChooseApToCopyEkfrequenzsFrom.module.css'
+import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
 export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
   const { apId } = useParams()
@@ -286,8 +282,8 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
             Achtung: Allfällige bestehende EK-Frequenzen werden gelöscht und mit
             den kopierten ersetzt, sobald Sie eine Art wählen
           </DialogContentText>
-          <div className={selectContainer}>
-            <div className={selectLabel}>
+          <div className={styles.selectContainer}>
+            <div className={styles.selectLabel}>
               Art (nur solche mit EK-Frequenzen)
             </div>
             <AsyncSelect
@@ -312,7 +308,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
               className="select-nocaret"
             />
             {apOptionsError && (
-              <div className={errorClass}>{apOptionsError}</div>
+              <div className={styles.errorClass}>{apOptionsError}</div>
             )}
           </div>
         </DialogContent>

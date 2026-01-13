@@ -36,7 +36,7 @@ const ChooseApToCopyErfkritsFrom = lazy(async () => ({
 }))
 
 import { Spinner } from '../shared/Spinner.jsx'
-import { container } from './ProtectedRoute.module.css'
+import styles from './ProtectedRoute.module.css'
 
 const isInIframe = inIframe()
 
@@ -71,7 +71,7 @@ export const Component = observer(() => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       style={isInIframe ? { height: '100%' } : { flexGrow: 1 }}
     >
       {!!user.token && (
