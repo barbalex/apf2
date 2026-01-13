@@ -11,12 +11,24 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
+import type { EkzaehleinheitId, ApId } from '../../../../models/apflora/index.js'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+interface CreateEkzaehleinheitResult {
+  data?: {
+    createEkzaehleinheit?: {
+      ekzaehleinheit?: {
+        id: EkzaehleinheitId
+        apId: ApId
+      }
+    }
+  }
+}
 
 const iconStyle = { color: 'white' }
 
@@ -31,9 +43,9 @@ export const Menu = observer(() => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateEkzaehleinheitResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateEkzaehleinheitResult>({
         mutation: gql`
           mutation createEkzaehleinheitForEkzaehleinheitForm($apId: UUID!) {
             createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
@@ -48,7 +60,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -69,7 +81,7 @@ export const Menu = observer(() => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<null | HTMLElement>(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -89,7 +101,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

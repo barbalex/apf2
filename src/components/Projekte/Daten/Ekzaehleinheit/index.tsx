@@ -4,6 +4,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
+import type { Ekzaehleinheit, ApId, TpopkontrzaehlEinheitWerteId } from '../../../../models/apflora/index.js'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { Select } from '../../../shared/Select.jsx'
@@ -20,9 +21,38 @@ import {
   ekzaehleinheit,
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
+
+interface EkzaehleinheitQueryResult {
+  data?: {
+    ekzaehleinheitById?: Ekzaehleinheit & {
+      tpopkontrzaehlEinheitWerteByZaehleinheitId?: {
+        id: TpopkontrzaehlEinheitWerteId
+        text: string | null
+      }
+      apByApId?: {
+        id: ApId
+        ekzaehleinheitsByApId?: {
+          nodes: Ekzaehleinheit[]
+        }
+      }
+    }
+  }
+}
+
+interface ListsQueryResult {
+  data?: {
+    allTpopkontrzaehlEinheitWertes?: {
+      nodes: Array<{
+        id: TpopkontrzaehlEinheitWerteId
+        value: TpopkontrzaehlEinheitWerteId
+        label: string | null
+      }>
+    }
+  }
+}
 
 const fieldTypes = {
   bemerkungen: 'String',
@@ -41,9 +71,9 @@ export const Component = observer(() => {
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<EkzaehleinheitQueryResult>(query, {
     variables: {
       id,
     },
@@ -62,13 +92,13 @@ export const Component = observer(() => {
     data: dataLists,
     loading: loadingLists,
     error: errorLists,
-  } = useQuery(queryLists, {
+  } = useQuery<ListsQueryResult>(queryLists, {
     variables: {
       filter: zaehleinheitWerteFilter,
     },
   })
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -110,14 +140,14 @@ export const Component = observer(() => {
     } catch (error) {
       if (
         field === 'zielrelevant' &&
-        (error.message.includes('doppelter Schlüsselwert') ||
-          error.message.includes('duplicate key value'))
+        ((error as Error).message.includes('doppelter Schlüsselwert') ||
+          (error as Error).message.includes('duplicate key value'))
       ) {
         return setFieldErrors({
           [field]: 'Pro Art darf nur eine Einheit zielrelevant sein',
         })
       }
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (['zaehleinheitId', 'sort'].includes(field)) {
