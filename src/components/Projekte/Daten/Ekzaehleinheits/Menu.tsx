@@ -7,14 +7,34 @@ import { FaPlus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
+import type {
+  EkzaehleinheitId,
+  ApId,
+} from '../../../../models/apflora/index.js'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
+
+interface CreateEkzaehleinheitResult {
+  data?: {
+    createEkzaehleinheit?: {
+      ekzaehleinheit?: {
+        id: EkzaehleinheitId
+        apId: ApId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { apId } = useParams()
@@ -25,9 +45,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateEkzaehleinheitResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateEkzaehleinheitResult>({
         mutation: gql`
           mutation createEkzaehleinheitForEkzaehleinheitsForm($apId: UUID!) {
             createEkzaehleinheit(input: { ekzaehleinheit: { apId: $apId } }) {
@@ -42,7 +62,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
