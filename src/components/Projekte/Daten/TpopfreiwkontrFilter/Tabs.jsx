@@ -6,7 +6,7 @@ import Tab from '@mui/material/Tab'
 import { initial as tpopfreiwkontr } from '../../../../store/Tree/DataFilter/tpopfreiwkontr.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { title, tabs, tab } from './Tabs.module.css'
+import styles from './Tabs.module.css'
 
 export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
   const store = useContext(MobxContext)
@@ -31,7 +31,7 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
 
   return (
     <>
-      <div className={title}>Filter-Kriterien:</div>
+      <div className={styles.title}>Filter-Kriterien:</div>
       <MuiTabs
         value={activeTab}
         onChange={onChangeTab}
@@ -39,14 +39,14 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
         textColor="primary"
         variant="scrollable"
         scrollButtons="auto"
-        className={tabs}
+        className={styles.tabs}
       >
         {dataFilter.map((filter, index) => (
           <Tab
             key={index}
             label={index + 1}
             value={index}
-            className={tab}
+            className={styles.tab}
           />
         ))}
         <Tab
@@ -54,7 +54,7 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
           label="oder"
           value={dataFilter.length}
           disabled={lastFilterIsEmpty}
-          className={tab}
+          className={styles.tab}
         />
       </MuiTabs>
     </>

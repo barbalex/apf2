@@ -15,25 +15,7 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { Error } from '../../../../../shared/Error.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
 
-import {
-  deleteIcon,
-  containerBase,
-  containerEmpty,
-  containerNew,
-  containerElse,
-  formBase,
-  formShowDelete,
-  formElse,
-  einheitLabel,
-  gezaehltLabel,
-  gezaehltVal,
-  geschaetztLabel,
-  geschaetztVal,
-  deleteClass,
-  styledDeleteButton,
-  styledAddIcon,
-  showNewClass,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const getZaehleinheitWerte = ({
   data,
@@ -165,15 +147,15 @@ export const Count = observer(
       return (
         <div
           style={containerStyle}
-          className={`${containerBase} ${containerClass}`}
+          className={`${styles.containerBase} ${containerClass}`}
         >
-          <div className={einheitLabel}>{`Zähleinheit ${nr}`}</div>
-          <div className={showNewClass}>
+          <div className={styles.einheitLabel}>{`Zähleinheit ${nr}`}</div>
+          <div className={styles.showNewClass}>
             <Button
               color="primary"
               onClick={createNew}
             >
-              <MdAddCircleOutline className={styledAddIcon} /> Neu
+              <MdAddCircleOutline className={styles.styledAddIcon} /> Neu
             </Button>
           </div>
         </div>
@@ -183,9 +165,9 @@ export const Count = observer(
       return (
         <div
           style={containerStyle}
-          className={`${containerBase} ${containerClass}`}
+          className={`${styles.containerBase} ${containerClass}`}
         >
-          <div className={einheitLabel}>{`Zähleinheit ${nr}`}</div>
+          <div className={styles.einheitLabel}>{`Zähleinheit ${nr}`}</div>
         </div>
       )
     }
@@ -197,7 +179,7 @@ export const Count = observer(
       <div
         data-id={`count${nr}`}
         style={formStyle}
-        className={`${containerBase} ${formClass}`}
+        className={`${styles.containerBase} ${formClass}`}
       >
         <Einheit
           row={row}
@@ -205,29 +187,29 @@ export const Count = observer(
           zaehleinheitWerte={zaehleinheitWerte}
           nr={nr}
         />
-        <div className={gezaehltLabel}>gezählt</div>
-        <div className={geschaetztLabel}>geschätzt</div>
-        <div className={gezaehltVal}>
+        <div className={styles.gezaehltLabel}>gezählt</div>
+        <div className={styles.geschaetztLabel}>geschätzt</div>
+        <div className={styles.gezaehltVal}>
           <Gezaehlt
             row={row}
             refetch={refetchMe}
           />
         </div>
-        <div className={geschaetztVal}>
+        <div className={styles.geschaetztVal}>
           <Geschaetzt
             row={row}
             refetch={refetchMe}
           />
         </div>
         {showDelete && (
-          <div className={deleteClass}>
+          <div className={styles.deleteClass}>
             <Button
               title="löschen"
               onClick={() => remove({ row })}
               color="inherit"
-              className={styledDeleteButton}
+              className={styles.styledDeleteButton}
             >
-              <MdDeleteForever className={deleteIcon} />
+              <MdDeleteForever className={styles.deleteIcon} />
             </Button>
           </div>
         )}

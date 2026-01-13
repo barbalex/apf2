@@ -16,20 +16,7 @@ import {
 } from '../../../../../shared/fragments.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
-import {
-  container,
-  popLabel,
-  popVal,
-  tpopLabel,
-  tpopVal,
-  koordLabel,
-  koordVal,
-  tpopNrLabel,
-  tpopNrVal,
-  bearbLabel,
-  bearbVal,
-  statusLabel,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Headdata = observer(({ pop, tpop, row }) => {
   const store = useContext(MobxContext)
@@ -126,19 +113,19 @@ export const Headdata = observer(({ pop, tpop, row }) => {
 
   if (error) return <Error error={error} />
   return (
-    <div className={container}>
-      <div className={popLabel}>Population</div>
-      <div className={popVal}>{pop?.name ?? ''}</div>
-      <div className={tpopLabel}>Teilpopulation</div>
-      <div className={tpopVal}>{tpop?.flurname ?? ''}</div>
-      <div className={koordLabel}>Koordinaten</div>
+    <div className={styles.container}>
+      <div className={styles.popLabel}>Population</div>
+      <div className={styles.popVal}>{pop?.name ?? ''}</div>
+      <div className={styles.tpopLabel}>Teilpopulation</div>
+      <div className={styles.tpopVal}>{tpop?.flurname ?? ''}</div>
+      <div className={styles.koordLabel}>Koordinaten</div>
       <div
-        className={koordVal}
+        className={styles.koordVal}
       >{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</div>
-      <div className={tpopNrLabel}>Teilpop.Nr.</div>
-      <div className={tpopNrVal}>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</div>
-      <div className={bearbLabel}>BeobachterIn</div>
-      <div className={bearbVal}>
+      <div className={styles.tpopNrLabel}>Teilpop.Nr.</div>
+      <div className={styles.tpopNrVal}>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</div>
+      <div className={styles.bearbLabel}>BeobachterIn</div>
+      <div className={styles.bearbVal}>
         <Select
           key={`${row.id}bearbeiter`}
           name="bearbeiter"
@@ -154,7 +141,7 @@ export const Headdata = observer(({ pop, tpop, row }) => {
           }
         />
       </div>
-      <div className={statusLabel}>{status}</div>
+      <div className={styles.statusLabel}>{status}</div>
     </div>
   )
 })
