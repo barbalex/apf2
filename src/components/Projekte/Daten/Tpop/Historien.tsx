@@ -7,7 +7,82 @@ import { History as SharedHistory } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
+import type {
+  TpopId,
+  PopId,
+  TpopStatusWerteCode,
+  TpopApberrelevantGrundWerteCode,
+  EkfrequenzId,
+  AdresseId,
+} from '../../../../generated/apflora/models.js'
+
 import styles from './Historien.module.css'
+
+interface TpopHistoryItem {
+  id: TpopId
+  year?: number | null
+  popId: PopId
+  popByPopId?: {
+    id: PopId
+    label?: string | null
+  } | null
+  nr?: number | null
+  gemeinde?: number | null
+  flurname?: string | null
+  geomPoint?: {
+    geojson?: unknown
+    x?: number | null
+    y?: number | null
+  } | null
+  radius?: number | null
+  hoehe?: number | null
+  exposition?: string | null
+  klima?: string | null
+  neigung?: string | null
+  beschreibung?: string | null
+  katasterNr?: string | null
+  status?: TpopStatusWerteCode | null
+  popStatusWerteByStatus?: {
+    id: TpopStatusWerteCode
+    text?: string | null
+  } | null
+  statusUnklarGrund?: string | null
+  apberRelevant?: number | null
+  apberRelevantGrund?: TpopApberrelevantGrundWerteCode | null
+  tpopApberrelevantGrundWerteByApberRelevantGrund?: {
+    id: TpopApberrelevantGrundWerteCode
+    text?: string | null
+  } | null
+  bekanntSeit?: number | null
+  eigentuemer?: string | null
+  kontakt?: string | null
+  nutzungszone?: string | null
+  bewirtschafter?: string | null
+  bewirtschaftung?: string | null
+  ekfrequenz?: EkfrequenzId | null
+  ekfrequenzByEkfrequenz?: {
+    id: EkfrequenzId
+    code?: string | null
+  } | null
+  ekfrequenzAbweichend?: boolean | null
+  ekfrequenzStartjahr?: number | null
+  ekfKontrolleur?: AdresseId | null
+  adresseByEkfKontrolleur?: {
+    id: AdresseId
+    name?: string | null
+  } | null
+  bemerkungen?: string | null
+  statusUnklar?: boolean | null
+  changedBy?: string | null
+}
+
+interface TpopHistoryQueryResult {
+  tpopById?: TpopHistoryItem | null
+  allTpopHistories: {
+    totalCount: number
+    nodes: TpopHistoryItem[]
+  }
+}
 
 const query = gql`
   query tpopHistoryQuery($tpopId: UUID!) {
@@ -135,7 +210,7 @@ const simplebarStyle = { maxHeight: '100%', height: '100%' }
 export const Component = () => {
   const { tpopId } = useParams()
 
-  const { error, data, loading } = useQuery(query, {
+  const { error, data, loading } = useQuery<TpopHistoryQueryResult>(query, {
     variables: {
       tpopId,
     },
@@ -174,7 +249,8 @@ export const Component = () => {
         </p>
         <p className={styles.docLine}>
           <span className={styles.aenderung}>Änderungen</span> zum{' '}
-          <span className={styles.aktuell}>aktuellen Zustand</span> sind hervorgehoben.
+          <span className={styles.aktuell}>aktuellen Zustand</span> sind
+          hervorgehoben.
         </p>
         {rows.map((r) => {
           const dataArray = [
