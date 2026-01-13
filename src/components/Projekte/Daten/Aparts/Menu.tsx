@@ -14,12 +14,30 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApartId } from '../../../../models/apflora/Apart.js'
+import type { ApId } from '../../../../models/apflora/Ap.js'
+
+interface CreateApartResult {
+  data?: {
+    createApart?: {
+      apart?: {
+        id: ApartId
+        apId: ApId
+      }
+    }
+  }
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
-  const { apId } = useParams()
+  const { apId } = useParams<{ apId: string }>()
 
   const store = useContext(MobxContext)
 
@@ -27,7 +45,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateApartResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -44,7 +62,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
