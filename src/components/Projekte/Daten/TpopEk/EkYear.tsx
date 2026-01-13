@@ -2,9 +2,25 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { sortBy } from 'es-toolkit'
 
+import type {
+  TpopkontrId,
+  EkplanId,
+} from '../../../../generated/apflora/models.js'
+
 import styles from './EkYear.module.css'
 
-const typRenamed = (e) => {
+interface EkYearData {
+  id: TpopkontrId | EkplanId
+  jahr?: number | null
+  typ?: string | null
+  is: 'ek' | 'ekplan'
+}
+
+interface EkYearProps {
+  data: EkYearData[]
+}
+
+const typRenamed = (e: EkYearData) => {
   switch (e.typ) {
     case 'Freiwilligen-Erfolgskontrolle':
       return 'EKF'
@@ -15,7 +31,7 @@ const typRenamed = (e) => {
   }
 }
 
-export const EkYear = ({ data }) => {
+export const EkYear = ({ data }: EkYearProps) => {
   const ekplans = sortBy(
     data.filter((o) => o.is === 'ekplan'),
     ['typ'],

@@ -16,7 +16,7 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { query as tpopQuery } from '../Tpop/query.js'
-import { EkYear } from './EkYear.jsx'
+import { EkYear } from './EkYear.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -30,13 +30,98 @@ import {
 import { fieldTypes } from '../Tpop/Tpop.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-import {
-  container,
-  formContainerNoColumnsInner,
-  ekfrequenzOptionsContainer,
-  styledTable,
-  ekplanTitle,
-} from './index.module.css'
+import type {
+  TpopId,
+  PopId,
+  TpopStatusWerteCode,
+  TpopApberrelevantGrundWerteCode,
+  EkfrequenzId,
+  AdresseId,
+  TpopkontrId,
+  EkplanId,
+  ApId,
+} from '../../../../generated/apflora/models.js'
+
+import styles from './index.module.css'
+
+interface TpopEkQueryResult {
+  tpopById?: {
+    id: TpopId
+    popId: PopId
+    nr?: number | null
+    gemeinde?: number | null
+    flurname?: string | null
+    status?: TpopStatusWerteCode | null
+    bekanntSeit?: number | null
+    statusUnklar?: boolean | null
+    statusUnklarGrund?: string | null
+    lv95X?: number | null
+    lv95Y?: number | null
+    wgs84Lat?: number | null
+    wgs84Long?: number | null
+    radius?: number | null
+    hoehe?: number | null
+    exposition?: string | null
+    klima?: string | null
+    neigung?: string | null
+    beschreibung?: string | null
+    katasterNr?: string | null
+    apberRelevant?: number | null
+    apberRelevantGrund?: TpopApberrelevantGrundWerteCode | null
+    eigentuemer?: string | null
+    kontakt?: string | null
+    nutzungszone?: string | null
+    bewirtschafter?: string | null
+    bewirtschaftung?: string | null
+    ekfrequenz?: EkfrequenzId | null
+    ekfrequenzAbweichend?: boolean | null
+    ekfrequenzStartjahr?: number | null
+    ekfKontrolleur?: AdresseId | null
+    bemerkungen?: string | null
+    popStatusWerteByStatus?: {
+      id: TpopStatusWerteCode
+      text?: string | null
+    } | null
+    tpopApberrelevantGrundWerteByApberRelevantGrund?: {
+      id: TpopApberrelevantGrundWerteCode
+      text?: string | null
+    } | null
+    popByPopId?: {
+      id: PopId
+      apId: ApId
+    } | null
+  } | null
+}
+
+interface TpopEkListsQueryResult {
+  allEkplans?: {
+    nodes: {
+      id: EkplanId
+      jahr?: number | null
+      typ?: string | null
+    }[]
+  } | null
+  allTpopkontrs?: {
+    nodes: {
+      id: TpopkontrId
+      jahr?: number | null
+      typ?: string | null
+    }[]
+  } | null
+  allEkfrequenzs?: {
+    nodes: {
+      id: EkfrequenzId
+      code?: string | null
+      anwendungsfall?: string | null
+    }[]
+  } | null
+  allAdresses?: {
+    nodes: {
+      value: AdresseId
+      label?: string | null
+    }[]
+  } | null
+}
 
 export const Component = observer(() => {
   const { tpopId, apId } = useParams()
@@ -51,12 +136,12 @@ export const Component = observer(() => {
     loading,
     error,
     refetch: refetchTpop,
-  } = useQuery(tpopQuery, {
+  } = useQuery<TpopEkQueryResult>(tpopQuery, {
     variables: { id: tpopId },
   })
 
   const row = data?.tpopById ?? {}
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const saveToDb = async (event) => {
     const field = event.target.name
@@ -107,7 +192,7 @@ export const Component = observer(() => {
         // no optimistic responce as geomPoint
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     // update tpop on map
     if (
@@ -137,7 +222,7 @@ export const Component = observer(() => {
     data: dataEk,
     loading: loadingEk,
     error: errorEk,
-  } = useQuery(query, {
+  } = useQuery<TpopEkListsQueryResult>(query, {
     variables: {
       id: tpopId,
       apId,
@@ -162,10 +247,10 @@ export const Component = observer(() => {
     [
       ...(dataEk?.allTpopkontrs?.nodes ?? [])
         .filter((e) => e.jahr !== null)
-        .map((t) => ({ ...t, is: 'ek' })),
+        .map((t) => ({ ...t, is: 'ek' as const })),
       ...(dataEk?.allEkplans?.nodes ?? [])
         .filter((e) => e.jahr !== null)
-        .map((t) => ({ ...t, is: 'ekplan' })),
+        .map((t) => ({ ...t, is: 'ekplan' as const })),
     ],
     (e) => e.jahr,
   )
@@ -177,9 +262,9 @@ export const Component = observer(() => {
   return (
     <ErrorBoundary>
       <FormTitle title="EK" />
-      <div className={container}>
-        <div className={formContainerNoColumnsInner}>
-          <div className={ekfrequenzOptionsContainer}>
+      <div className={styles.container}>
+        <div className={styles.formContainerNoColumnsInner}>
+          <div className={styles.ekfrequenzOptionsContainer}>
             <RadioButtonGroup
               name="ekfrequenz"
               dataSource={ekfrequenzOptions}
@@ -216,10 +301,10 @@ export const Component = observer(() => {
             error={fieldErrors.ekfKontrolleur}
           />
         </div>
-        <h5 className={ekplanTitle}>EK-Plan</h5>
+        <h5 className={styles.ekplanTitle}>EK-Plan</h5>
         <Table
           size="small"
-          className={styledTable}
+          className={styles.styledTable}
         >
           <TableHead>
             <TableRow>
