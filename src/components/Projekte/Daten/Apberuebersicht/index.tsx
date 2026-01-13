@@ -22,7 +22,9 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { historize } from '../../../../modules/historize.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type Apberuebersicht from '../../../../models/apflora/Apberuebersicht.js'
 
 import styles from './index.module.css'
 
@@ -34,7 +36,13 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
-const getIsBeforeMarchOfFollowingYear = (jahr) => {
+interface ApberuebersichtQueryResult {
+  data?: {
+    apberuebersichtById: Apberuebersicht
+  }
+}
+
+const getIsBeforeMarchOfFollowingYear = (jahr: number | null | undefined) => {
   const now = new Date()
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
@@ -43,7 +51,7 @@ const getIsBeforeMarchOfFollowingYear = (jahr) => {
 }
 
 export const Component = observer(() => {
-  const { apberuebersichtId } = useParams()
+  const { apberuebersichtId } = useParams<{ apberuebersichtId: string }>()
 
   const store = useContext(MobxContext)
   const { user } = store
@@ -54,10 +62,10 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [historizing, setHistorizing] = useState(false)
 
-  const { data, error } = useQuery({
+  const { data, error } = useQuery<ApberuebersichtQueryResult>({
     queryKey: [`Apberuebersicht`, apberuebersichtId],
     queryFn: () =>
       apolloClient.query({
@@ -69,7 +77,7 @@ export const Component = observer(() => {
 
   const row = data?.data?.apberuebersichtById
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -105,7 +113,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (field === 'jahr') {

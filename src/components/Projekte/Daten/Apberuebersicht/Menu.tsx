@@ -16,14 +16,41 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.js'
+import type { ProjId } from '../../../../models/apflora/Proj.js'
+
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+interface CreateApberuebersichtResult {
+  data?: {
+    createApberuebersicht?: {
+      apberuebersicht?: {
+        id: ApberuebersichtId
+        projId: ProjId
+      }
+    }
+  }
+}
+
+interface DeleteApberuebersichtResult {
+  data?: {
+    deleteApberuebersichtById?: {
+      apberuebersicht?: {
+        id: ApberuebersichtId
+      }
+    }
+  }
+}
 
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const { projId, apberuebersichtId } = useParams()
+  const { projId, apberuebersichtId } = useParams<{
+    projId: string
+    apberuebersichtId: string
+  }>()
 
   const store = useContext(MobxContext)
 
@@ -31,7 +58,7 @@ export const Menu = observer(() => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateApberuebersichtResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -50,7 +77,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -66,11 +93,13 @@ export const Menu = observer(() => {
     navigate(`/Daten/Projekte/${projId}/AP-Berichte/${id}${search}`)
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
+    let result: DeleteApberuebersichtResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -86,7 +115,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
