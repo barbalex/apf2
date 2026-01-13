@@ -14,7 +14,7 @@ import { inIframe } from '../../modules/inIframe.js'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 
 const ApFilterController = lazy(async () => ({
-  default: (await import('./ApFilterController.jsx')).ApFilterController,
+  default: (await import('./ApFilterController.tsx')).ApFilterController,
 }))
 
 import styles from './index.module.css'
@@ -61,10 +61,9 @@ export const Component = observer(() => {
     // inside iframe app bar should be hidden
     return (
       <div className={styles.container}>
-        {tree2Tabs.length === 0 || isPrint ? (
+        {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
-        ) : (
-          <SplitPane direction="horizontal">
+        : <SplitPane direction="horizontal">
             <Pane defaultSize="50%">
               <ProjektContainer />
             </Pane>
@@ -78,7 +77,7 @@ export const Component = observer(() => {
               />
             </Pane>
           </SplitPane>
-        )}
+        }
       </div>
     )
   }
@@ -89,10 +88,9 @@ export const Component = observer(() => {
         <ApFilterController />
       </Suspense>
       <div className={styles.container}>
-        {tree2Tabs.length === 0 || isPrint ? (
+        {tree2Tabs.length === 0 || isPrint ?
           <ProjektContainer />
-        ) : (
-          <SplitPane direction="horizontal">
+        : <SplitPane direction="horizontal">
             <Pane defaultSize="50%">
               <ProjektContainer />
             </Pane>
@@ -106,7 +104,7 @@ export const Component = observer(() => {
               />
             </Pane>
           </SplitPane>
-        )}
+        }
       </div>
     </>
   )

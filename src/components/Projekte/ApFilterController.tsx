@@ -7,6 +7,15 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { MobxContext } from '../../mobxContext.js'
 
+import type { ApId } from '../../models/apflora/public/Ap.ts'
+
+interface ApFilterControllerQueryResult {
+  apById: {
+    id: ApId
+    bearbeitung: number | null
+  }
+}
+
 export const ApFilterController = observer(() => {
   const apolloClient = useApolloClient()
   const { apId } = useParams()
@@ -20,7 +29,7 @@ export const ApFilterController = observer(() => {
     if (!apFilter) return
 
     apolloClient
-      .query({
+      .query<ApFilterControllerQueryResult>({
         query: gql`
           query apFilterControllerQuery($id: UUID!) {
             apById(id: $id) {

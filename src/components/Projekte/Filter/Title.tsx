@@ -3,7 +3,9 @@ import Tab from '@mui/material/Tab'
 
 import styles from './Title.module.css'
 
-const titleObject = {
+type TabValue = 'ap' | 'pop' | 'tpop' | 'tpopmassn' | 'tpopfeldkontr' | 'tpopfreiwkontr'
+
+const titleObject: Record<TabValue, string> = {
   ap: 'Art Filter',
   pop: 'Population Filter',
   tpop: 'Teil-Population Filter',
@@ -12,8 +14,13 @@ const titleObject = {
   tpopfreiwkontr: 'Freiwilligen-Kontrollen Filter',
 }
 
-export const Title = ({ activeTab, setActiveTab }) => {
-  const onChangeTab = (event, value) => setActiveTab(value)
+interface TitleProps {
+  activeTab: TabValue
+  setActiveTab: (tab: TabValue) => void
+}
+
+export const Title = ({ activeTab, setActiveTab }: TitleProps) => {
+  const onChangeTab = (_event: React.SyntheticEvent, value: TabValue) => setActiveTab(value)
 
   return (
     <div className={styles.container}>
