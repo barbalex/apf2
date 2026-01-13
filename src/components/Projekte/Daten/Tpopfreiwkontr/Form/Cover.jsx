@@ -1,22 +1,12 @@
 import { TextField2 } from '../../../../shared/TextField2.jsx'
 import anteilImg from './anteil.png'
 
-import {
-  container,
-  deckApArtLabel,
-  deckApArtVal,
-  deckApArtMass,
-  deckNaBoLabel,
-  deckNaBoVal,
-  deckNaBoMass,
-  deckImage,
-  img,
-} from './Cover.module.css'
+import styles from './Cover.module.css'
 
 export const Cover = ({ saveToDb, row, errors }) => (
-  <div className={container}>
-    <div className={deckApArtLabel}>Deckung überprüfte Art</div>
-    <div className={deckApArtVal}>
+  <div className={styles.container}>
+    <div className={styles.deckApArtLabel}>Deckung überprüfte Art</div>
+    <div className={styles.deckApArtVal}>
       <TextField2
         key={`${row.id}deckungApArt`}
         name="deckungApArt"
@@ -26,9 +16,9 @@ export const Cover = ({ saveToDb, row, errors }) => (
         errors={errors}
       />
     </div>
-    <div className={deckApArtMass}>%</div>
-    <div className={deckNaBoLabel}>Flächenanteil nackter Boden</div>
-    <div className={deckNaBoVal}>
+    <div className={styles.deckApArtMass}>%</div>
+    <div className={styles.deckNaBoLabel}>Flächenanteil nackter Boden</div>
+    <div className={styles.deckNaBoVal}>
       <TextField2
         key={`${row.id}deckungNackterBoden`}
         name="deckungNackterBoden"
@@ -38,10 +28,10 @@ export const Cover = ({ saveToDb, row, errors }) => (
         errors={errors}
       />
     </div>
-    <div className={deckNaBoMass}>%</div>
-    <div className={deckImage}>
+    <div className={styles.deckNaBoMass}>%</div>
+    <div className={styles.deckImage}>
       <img
-        className={img}
+        className={styles.img}
         src={anteilImg}
         alt="Flächen-Anteile"
       />

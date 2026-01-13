@@ -31,7 +31,7 @@ import {
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../shared/fragments.js'
 
-import { formContainer, gridContainer, countHint } from './index.module.css'
+import styles from './index.module.css'
 
 const fieldTypes = {
   typ: 'String',
@@ -216,8 +216,8 @@ export const Form = observer(({ data, refetch, row, apId }) => {
   }, [row.id])
 
   return (
-    <div className={formContainer}>
-      <div className={gridContainer}>
+    <div  className={styles.formContainer}>
+      <div className={styles.gridContainer}>
         <Title row={row} />
         <Headdata
           pop={pop}
@@ -253,7 +253,7 @@ export const Form = observer(({ data, refetch, row, apId }) => {
           />
         )}
         {zaehl1ShowEmpty && (
-          <div className={countHint}>
+          <div className={styles.countHint}>
             Sie müssen auf Ebene Art EK-Zähleinheiten definieren, um hier
             Zählungen erfassen zu können.
           </div>
