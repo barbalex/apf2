@@ -1,25 +1,30 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { Headdata } from './Headdata/index.jsx'
-import { DateField as Date } from '../../Tpopfreiwkontr/Form/Date.jsx'
-import { Map } from '../../Tpopfreiwkontr/Form/Map.jsx'
-import { Cover } from '../../Tpopfreiwkontr/Form/Cover.jsx'
-import { More } from '../../Tpopfreiwkontr/Form/More.jsx'
-import { Danger } from '../../Tpopfreiwkontr/Form/Danger.jsx'
-import { Remarks } from '../../Tpopfreiwkontr/Form/Remarks.jsx'
-import { EkfRemarks } from '../../Tpopfreiwkontr/Form/EkfRemarks.jsx'
-import { Verification } from '../../Tpopfreiwkontr/Form/Verification.jsx'
+import { Headdata } from './Headdata/index.tsx'
+import { DateField as Date } from '../../Tpopfreiwkontr/Form/Date.tsx'
+import { Map } from '../../Tpopfreiwkontr/Form/Map.tsx'
+import { Cover } from '../../Tpopfreiwkontr/Form/Cover.tsx'
+import { More } from '../../Tpopfreiwkontr/Form/More.tsx'
+import { Danger } from '../../Tpopfreiwkontr/Form/Danger.tsx'
+import { Remarks } from '../../Tpopfreiwkontr/Form/Remarks.tsx'
+import { EkfRemarks } from '../../Tpopfreiwkontr/Form/EkfRemarks.tsx'
+import { Verification } from '../../Tpopfreiwkontr/Form/Verification.tsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 
 import styles from '../../Tpopfreiwkontr/Form/index.module.css'
 
-export const Form = observer(({ row, activeTab }) => {
+interface FormProps {
+  row: any
+  activeTab: number
+}
+
+export const Form = observer(({ row, activeTab }: FormProps) => {
   const store = useContext(MobxContext)
   const { dataFilterSetValue } = store.tree
 
-  const saveToDb = (event) =>
+  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpopfreiwkontr',
       key: event.target.name,

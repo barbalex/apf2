@@ -6,8 +6,17 @@ import { useParams } from 'react-router'
 import { query } from './query.js'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { Form } from './Form/index.jsx'
-import { Tabs } from './Tabs.jsx'
+import { Form } from './Form/index.tsx'
+import { Tabs } from './Tabs.tsx'
+
+interface TpopkontrsQueryResult {
+  allTpopkontrs: {
+    totalCount: number
+  }
+  tpopkontrsFiltered: {
+    totalCount: number
+  }
+}
 
 import styles from './index.module.css'
 
@@ -37,7 +46,7 @@ export const TpopfreiwkontrFilter = observer(() => {
 
   const row = dataFilter.tpopfreiwkontr[activeTab]
 
-  const { data: dataTpopkontrs } = useQuery(query, {
+  const { data: dataTpopkontrs } = useQuery<TpopkontrsQueryResult>(query, {
     variables: {
       filteredFilter: ekfGqlFilter.filtered,
       allFilter: ekfGqlFilter.all,

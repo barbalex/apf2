@@ -7,14 +7,31 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
+import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
+
 import styles from '../../../Tpopfreiwkontr/Form/Headdata/index.module.css'
 
-export const Headdata = observer(({ row, activeTab }) => {
+interface TpopfreiwkontrAdressesFilterQueryResult {
+  allAdresses: {
+    nodes: Array<{
+      value: AdresseId
+      label: string
+    }>
+  }
+}
+
+interface HeaddataProps {
+  row: any
+  activeTab: number
+}
+
+export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
   const store = useContext(MobxContext)
   const { dataFilterSetValue } = store.tree
-  const { data, loading, error } = useQuery(query)
+  const { data, loading, error } =
+    useQuery<TpopfreiwkontrAdressesFilterQueryResult>(query)
 
-  const saveToDb = (event) =>
+  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpopfreiwkontr',
       key: 'bearbeiter',
