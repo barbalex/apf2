@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { Form, useParams } from 'react-router'
+import type { Idealbiotop } from '../../../../models/apflora/index.js'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { DateField } from '../../../shared/Date.jsx'
@@ -16,6 +17,14 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
 import styles from './Idealbiotop.module.css'
+
+interface IdealbiotopQueryResult {
+  data?: {
+    allIdealbiotops?: {
+      nodes: Idealbiotop[]
+    }
+  }
+}
 
 const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
@@ -48,15 +57,15 @@ export const Component = observer(() => {
 
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<IdealbiotopQueryResult>(query, {
     variables: { id: apId },
   })
 
   const row = data?.allIdealbiotops?.nodes?.[0] ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -93,7 +102,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
   }

@@ -730,7 +730,7 @@ export const Router = () => {
                       <Route
                         index={true}
                         lazy={() =>
-                          import('../Projekte/Daten/Idealbiotop/index.jsx')
+                          import('../Projekte/Daten/Idealbiotop/index.tsx')
                         }
                         errorElement={<RouterErrorBoundary />}
                       />
