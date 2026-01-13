@@ -7,14 +7,7 @@ import { ApfloraLayers } from './ApfloraLayers/index.jsx'
 import { BaseLayers } from './BaseLayers/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import {
-  container,
-  card,
-  cardHeader,
-  cardTitle,
-  cardTitleApfloraOpen,
-  expandIcon,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const LayersControl = observer(() => {
   const store = useContext(MobxContext)
@@ -57,8 +50,8 @@ export const LayersControl = observer(() => {
 
   const apfloraCardClass =
     baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
-      cardTitle
-    : cardTitleApfloraOpen
+      styles.cardTitle
+    : styles.cardTitleApfloraOpen
 
   // hack to get control to show on first load
   // depends on state being changed, so needs to be true above
@@ -77,19 +70,19 @@ export const LayersControl = observer(() => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       ref={ref}
     >
-      <div className={card}>
+      <div className={styles.card}>
         <div
-          className={cardHeader}
+          className={styles.cardHeader}
           onClick={onToggleApfloraLayersExpanded}
         >
           <div className={apfloraCardClass}>apflora</div>
           <div>
             {apfloraLayersExpanded ?
-              <MdExpandLess className={expandIcon} />
-            : <MdExpandMore className={expandIcon} />}
+              <MdExpandLess className={styles.expandIcon} />
+            : <MdExpandMore className={styles.expandIcon} />}
           </div>
         </div>
         {apfloraLayersExpanded && (
@@ -102,16 +95,16 @@ export const LayersControl = observer(() => {
           />
         )}
       </div>
-      <div className={card}>
+      <div className={styles.card}>
         <div
-          className={cardHeader}
+          className={styles.cardHeader}
           onClick={onToggleOverlaysExpanded}
         >
-          <div className={cardTitle}>überlagernd</div>
+          <div className={styles.cardTitle}>überlagernd</div>
           <div>
             {overlaysExpanded ?
-              <MdExpandLess className={expandIcon} />
-            : <MdExpandMore className={expandIcon} />}
+              <MdExpandLess className={styles.expandIcon} />
+            : <MdExpandMore className={styles.expandIcon} />}
           </div>
         </div>
         {overlaysExpanded && (
@@ -124,16 +117,16 @@ export const LayersControl = observer(() => {
           />
         )}
       </div>
-      <div className={card}>
+      <div className={styles.card}>
         <div
-          className={cardHeader}
+          className={styles.cardHeader}
           onClick={onToggleBaseLayersExpanded}
         >
-          <div className={cardTitle}>Hintergrund</div>
+          <div className={styles.cardTitle}>Hintergrund</div>
           <div>
             {baseLayersExpanded ?
-              <MdExpandLess className={expandIcon} />
-            : <MdExpandMore className={expandIcon} />}
+              <MdExpandLess className={styles.expandIcon} />
+            : <MdExpandMore className={styles.expandIcon} />}
           </div>
         </div>
         {baseLayersExpanded && <BaseLayers />}

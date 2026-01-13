@@ -6,14 +6,14 @@ import { Layer } from './Layer/index.jsx'
 import { ShowForMultipleAps } from './ShowForMultipleAps.jsx'
 import { KtZhFilter } from './KtZhFilter/index.jsx'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const ApfloraLayers = observer(() => {
   const store = useContext(MobxContext)
   const { apfloraLayers } = store
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       {apfloraLayers
         // prevent deprecated layer from showing in case some users still have it in layers
         .filter((l) => l.value !== 'mapFilter')

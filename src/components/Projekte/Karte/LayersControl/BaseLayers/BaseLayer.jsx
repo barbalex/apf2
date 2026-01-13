@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { Radio } from '../shared/Radio.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 
-import { layer as layerClass } from './BaseLayer.module.css'
+import styles from './BaseLayer.module.css'
 
 export const BaseLayer = observer(({ layer }) => {
   const store = useContext(MobxContext)
@@ -21,7 +21,7 @@ export const BaseLayer = observer(({ layer }) => {
 
   return (
     <div
-      className={layerClass}
+      className={styles.layer}
       onClick={onClick}
     >
       <Radio

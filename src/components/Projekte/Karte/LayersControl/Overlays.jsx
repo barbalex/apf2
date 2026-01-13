@@ -26,17 +26,7 @@ import { layerLegends } from './layerLegends.js'
 import { Checkbox } from './shared/Checkbox.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import {
-  container,
-  iconButton,
-  dragHandleIcon,
-  legendIcon,
-  layer as layerClass,
-  label,
-  check,
-  infoIcons,
-  icons,
-} from './Overlays.module.css'
+import styles from './Overlays.module.css'
 
 const SortableItem = ({
   id,
@@ -55,14 +45,14 @@ const SortableItem = ({
 
   return (
     <div
-      className={layerClass}
+      className={styles.layer}
       ref={setNodeRef}
       style={style}
       {...attributes}
       {...listeners}
     >
-      <div className={label}>
-        <div className={check}>
+      <div className={styles.label}>
+        <div className={styles.check}>
           <Checkbox
             value={overlay.value}
             label={overlay.label}
@@ -77,36 +67,36 @@ const SortableItem = ({
             }}
           />
         </div>
-        <div className={infoIcons}>
+        <div className={styles.infoIcons}>
           {(layerLegends({ apId })[overlay.value] || [])
             .filter((layer) => !!layer.url)
             .map((layer) => (
               <div
-                className={icons}
+                className={styles.icons}
                 key={layer.name}
               >
                 <div>
                   <Button
-                    className={iconButton}
+                    className={styles.iconButton}
                     color="inherit"
                     title={`Legende für ${layer.name} öffnen`}
                     onClick={() => window.open(layer.url, '_blank')}
                   >
-                    <MdInfoOutline className={legendIcon} />
+                    <MdInfoOutline className={styles.legendIcon} />
                   </Button>
                 </div>
               </div>
             ))}
         </div>
       </div>
-      <div className={icons}>
+      <div className={styles.icons}>
         <div>
           <Button
-            className={iconButton}
+            className={styles.iconButton}
             title="ziehen, um Layer höher/tiefer zu stapeln"
             color="inherit"
           >
-            <MdDragHandle className={dragHandleIcon} />
+            <MdDragHandle className={styles.dragHandleIcon} />
           </Button>
         </div>
       </div>
@@ -154,7 +144,7 @@ export const Overlays = observer(() => {
   // console.log('Overlays', overlays)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
