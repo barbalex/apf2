@@ -16,6 +16,20 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
+import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+
+interface CreateTpopmassnberResult {
+  data: {
+    createTpopmassnber: {
+      tpopmassnber: {
+        id: TpopmassnberId
+        tpopId: TpopId
+      }
+    }
+  }
+}
+
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 const iconStyle = { color: 'white' }
@@ -31,9 +45,9 @@ export const Menu = observer(() => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateTpopmassnberResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopmassnberResult['data']>({
         mutation: gql`
           mutation createTpopmassnberForTpopmassnberForm($tpopId: UUID!) {
             createTpopmassnber(input: { tpopmassnber: { tpopId: $tpopId } }) {
@@ -48,7 +62,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -66,7 +80,9 @@ export const Menu = observer(() => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -86,7 +102,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

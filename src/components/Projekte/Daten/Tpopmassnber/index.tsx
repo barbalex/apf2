@@ -15,7 +15,37 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopmassnber } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
+import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { PopId } from '../../../../models/apflora/PopId.ts'
+import type { ApId } from '../../../../models/apflora/ApId.ts'
+import type { TpopmassnErfbeurtWerteCode } from '../../../../models/apflora/TpopmassnErfbeurtWerteCode.ts'
+
+interface TpopmassnberQueryResult {
+  tpopmassnberById: {
+    id: TpopmassnberId
+    jahr: number | null
+    beurteilung: TpopmassnErfbeurtWerteCode | null
+    bemerkungen: string | null
+    tpopId: TpopId
+    changedBy: string | null
+    tpopByTpopId: {
+      id: TpopId
+      popByPopId: {
+        id: PopId
+        apId: ApId
+      }
+    }
+  } | null
+  allTpopmassnErfbeurtWertes: {
+    nodes: Array<{
+      value: TpopmassnErfbeurtWerteCode
+      label: string
+    }>
+  }
+}
 
 import styles from './index.module.css'
 
@@ -34,9 +64,9 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<TpopmassnberQueryResult>(query, {
     variables: {
       id,
     },
@@ -44,7 +74,7 @@ export const Component = observer(() => {
 
   const row = data?.tpopmassnberById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -87,7 +117,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (['jahr', 'beurteilung'].includes(field)) {
