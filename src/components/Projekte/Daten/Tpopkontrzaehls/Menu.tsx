@@ -13,9 +13,27 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
+import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+
+interface CreateTpopkontrzaehlResult {
+  data: {
+    createTpopkontrzaehl: {
+      tpopkontrzaehl: {
+        id: TpopkontrzaehlId
+        tpopkontrId: TpopkontrId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const apolloClient = useApolloClient()
@@ -24,9 +42,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const store = useContext(MobxContext)
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateTpopkontrzaehlResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopkontrzaehlResult['data']>({
         mutation: gql`
           mutation createTpopkontrzaehlForTpopkontrzaehlsForm(
             $tpopkontrId: UUID!
@@ -47,7 +65,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
