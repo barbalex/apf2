@@ -10,13 +10,7 @@ import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
 import beziehungen from '../../../etc/beziehungen.png'
 
-import {
-  cardContent,
-  actionTitle,
-  button,
-  card,
-  cardActions,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Anwendung = () => {
   const [expanded, setExpanded] = useState(false)
@@ -25,13 +19,13 @@ export const Anwendung = () => {
   const onClickGrafisch = () => window.open(beziehungen)
 
   return (
-    <Card className={card}>
+    <Card className={styles.card}>
       <CardActions
-        className={cardActions}
+        className={styles.styles.cardActions}
         disableSpacing
         onClick={onClickAction}
       >
-        <div className={actionTitle}>Anwendung</div>
+        <div className={styles.actionTitle}>Anwendung</div>
         <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
           <IconButton
             style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
@@ -49,9 +43,9 @@ export const Anwendung = () => {
         unmountOnExit
       >
         {expanded ?
-          <CardContent className={cardContent}>
+          <CardContent className={styles.cardContent}>
             <Button
-              className={button}
+              className={styles.button}
               onClick={onClickGrafisch}
               color="inherit"
             >

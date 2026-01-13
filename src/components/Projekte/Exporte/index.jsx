@@ -10,26 +10,21 @@ import { Anwendung } from './Anwendung.jsx'
 import { Optionen } from './Optionen.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  scrollContainer,
-  innerContainer,
-  exporteContainer,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Exporte = () => (
   <div
-    className={exporteContainer}
+    className={styles.exporteContainer}
     data-id="exporte-container"
   >
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Exporte"
           noTestDataMessage={true}
         />
-        <div className={scrollContainer}>
-          <div className={innerContainer}>
+        <div className={styles.scrollContainer}>
+          <div className={styles.innerContainer}>
             <Optionen />
             <Tipps />
             <Ap />
