@@ -1,13 +1,13 @@
 import { MdPhotoLibrary } from 'react-icons/md'
 
-import { iconContainer } from './index.module.css'
-import { copyingIcon } from './BiotopCopyingIcon.module.css'
+import indexStyles from './index.module.css'
+import styles from './BiotopCopyingIcon.module.css'
 
 export const BiotopCopyingIcon = () => (
   <div
     title="Biotop kopiert, bereit zum Einfügen"
-    className={iconContainer}
+    className={indexStyles.iconContainer}
   >
-    <MdPhotoLibrary className={copyingIcon} />
+    <MdPhotoLibrary className={styles.copyingIcon} />
   </div>
 )

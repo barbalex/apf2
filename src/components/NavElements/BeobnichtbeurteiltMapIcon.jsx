@@ -1,13 +1,13 @@
 import { MdLocalFlorist } from 'react-icons/md'
 
-import { mapIcon } from './BeobnichtbeurteiltMapIcon.module.css'
-import { iconContainer } from './index.module.css'
+import styles from './BeobnichtbeurteiltMapIcon.module.css'
+import indexStyles from './index.module.css'
 
 export const BeobnichtbeurteiltMapIcon = () => (
   <div
     title="Beobachtungen nicht beurteilt in Karte sichtbar"
-    className={iconContainer}
+    className={indexStyles.iconContainer}
   >
-    <MdLocalFlorist className={mapIcon} />
+    <MdLocalFlorist className={styles.mapIcon} />
   </div>
 )
