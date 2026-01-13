@@ -18,13 +18,8 @@ import { Field } from './Field.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { beob } from '../../../../shared/fragments.js'
 
-import { info, absenz } from '../BeobNichtBeurteilt/Marker.module.css'
-import {
-  topFieldsContainer,
-  dataContainer,
-  dataSummary,
-  dataDetails,
-} from './index.module.css'
+import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
+import styles from './index.module.css'
 
 const topFieldNames = [
   'PRESENCE',
@@ -146,8 +141,8 @@ export const Data = observer(({ id }) => {
   return (
     <ErrorBoundary>
       {!!topFields.length && (
-        <div className={topFieldsContainer}>
-          <div className={info}>
+        <div className={styles.topFieldsContainer}>
+          <div className={markerStyles.info}>
             {topFields.map(([key, value]) => {
               const isAbsenz =
                 key?.toLowerCase?.()?.includes?.('presence') && row?.absenz
@@ -155,7 +150,7 @@ export const Data = observer(({ id }) => {
               return (
                 <div
                   key={key}
-                  className={isAbsenz ? absenz : ''}
+                  className={isAbsenz ? markerStyles.absenz : ''}
                 >
                   <div>{`${key}:`}</div>
                   <div>{value}</div>
@@ -165,15 +160,17 @@ export const Data = observer(({ id }) => {
           </div>
         </div>
       )}
-      <div className={dataContainer}>
+      <div className={styles.dataContainer}>
         <Accordion
           expanded={beobDetailsOpen}
           onChange={onClickDetails}
           disableGutters
           elevation={1}
         >
-          <AccordionSummary className={dataSummary}>Daten</AccordionSummary>
-          <AccordionDetails className={dataDetails}>
+          <AccordionSummary className={styles.dataSummary}>
+            Daten
+          </AccordionSummary>
+          <AccordionDetails className={styles.dataDetails}>
             <DndProvider
               backend={HTML5Backend}
               context={window}
