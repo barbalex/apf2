@@ -19,9 +19,25 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+
+interface CreateTpopkontrzaehlEinheitWerteResult {
+  data: {
+    createTpopkontrzaehlEinheitWerte: {
+      tpopkontrzaehlEinheitWerte: {
+        id: string
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, tpopkontrzaehlEinheitWerteId } = useParams()
@@ -32,9 +48,11 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateTpopkontrzaehlEinheitWerteResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<
+        CreateTpopkontrzaehlEinheitWerteResult['data']
+      >({
         mutation: gql`
           mutation createTpopkontrzaehlEinheitWerteForTpopkontrzaehlEinheitWerteForm {
             createTpopkontrzaehlEinheitWerte(
@@ -49,7 +67,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
