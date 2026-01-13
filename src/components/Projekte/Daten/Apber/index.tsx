@@ -18,7 +18,11 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { apber } from '../../../shared/fragments.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type Apber from '../../../../models/apflora/Apber.js'
+import type { AdresseId } from '../../../../models/apflora/Adresse.js'
+import type { ApErfkritWerteCode } from '../../../../models/apflora/ApErfkritWerte.js'
 
 import styles from './index.module.css'
 
@@ -47,17 +51,33 @@ const fieldTypes = {
   bearbeiter: 'UUID',
 }
 
+interface ApberQueryResult {
+  apberById: Apber
+  allAdresses: {
+    nodes: Array<{
+      value: AdresseId
+      label: string
+    }>
+  }
+  allApErfkritWertes: {
+    nodes: Array<{
+      value: ApErfkritWerteCode
+      label: string
+    }>
+  }
+}
+
 export const Component = observer(() => {
-  const { apberId } = useParams()
+  const { apberId } = useParams<{ apberId: string }>()
 
   const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<ApberQueryResult>(query, {
     variables: {
       id: apberId,
     },
@@ -65,7 +85,7 @@ export const Component = observer(() => {
 
   const row = data?.apberById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -75,7 +95,7 @@ export const Component = observer(() => {
       changedBy: store.user.name,
     }
     try {
-      await apolloClient.mutate({
+      await apolloClient.mutate<any>({
         mutation: gql`
             mutation updateApber(
               $id: UUID!
@@ -101,7 +121,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     if (field === 'jahr') {

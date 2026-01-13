@@ -16,14 +16,42 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApberId } from '../../../../models/apflora/Apber.js'
+import type { ApId } from '../../../../models/apflora/Ap.js'
+
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+interface CreateApberResult {
+  data?: {
+    createApber?: {
+      apber?: {
+        id: ApberId
+        apId: ApId
+      }
+    }
+  }
+}
+
+interface DeleteApberResult {
+  data?: {
+    deleteApberById?: {
+      apber?: {
+        id: ApberId
+      }
+    }
+  }
+}
 
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const { projId, apId, apberId } = useParams()
+  const { projId, apId, apberId } = useParams<{
+    projId: string
+    apId: string
+    apberId: string
+  }>()
 
   const store = useContext(MobxContext)
 
@@ -31,7 +59,7 @@ export const Menu = observer(() => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateApberResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -48,7 +76,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -69,11 +97,13 @@ export const Menu = observer(() => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
+    let result: DeleteApberResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -89,7 +119,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
