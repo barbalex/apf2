@@ -22,11 +22,28 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import type { PopId, ApId } from '../../../../models/apflora/index.js'
+
 import styles from './Menu.module.css'
+
+interface CreatePopResult {
+  data?: {
+    createPop?: {
+      pop?: {
+        id: PopId
+        apId: ApId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams()
@@ -38,9 +55,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreatePopResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreatePopResult>({
         mutation: gql`
           mutation createPopForPopsForm($apId: UUID!) {
             createPop(input: { pop: { apId: $apId } }) {
@@ -55,7 +72,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
