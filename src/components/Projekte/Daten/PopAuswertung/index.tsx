@@ -17,10 +17,18 @@ import MuiTooltip from '@mui/material/Tooltip'
 import { useParams } from 'react-router'
 
 import { query } from './query.js'
-import { CustomTooltip } from './CustomTooltip.jsx'
+import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../modules/exists.js'
 import { Error } from '../../../shared/Error.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+
+import type {
+  PopId,
+  TpopId,
+  EkzaehleinheitId,
+  TpopkontrzaehlEinheitWerteId,
+  TpopStatusWerteCode,
+} from '../../../../models/apflora/index.js'
 
 import {
   spinnerContainer,
@@ -30,6 +38,38 @@ import {
   title,
   container,
 } from './index.module.css'
+
+interface TpopData {
+  id: TpopId
+  nr: number | null
+  label: string | null
+  status: TpopStatusWerteCode | null
+}
+
+interface PopAuswertungQueryResult {
+  popById?: {
+    id: PopId
+    label: string | null
+  }
+  popAuswTpopMenge?: {
+    nodes: Array<{
+      jahr: number | null
+      values: string | null
+    }>
+  }
+  allEkzaehleinheits?: {
+    nodes: Array<{
+      id: EkzaehleinheitId
+      tpopkontrzaehlEinheitWerteByZaehleinheitId?: {
+        id: TpopkontrzaehlEinheitWerteId
+        text: string | null
+      }
+    }>
+  }
+  allTpops?: {
+    nodes: TpopData[]
+  }
+}
 
 const colorUrspruenglich = 'rgba(46,125,50,0.3)'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
@@ -41,10 +81,14 @@ const formatNumber = (tickItem) => {
   return value
 }
 
-export const Component = ({ height = 400 }) => {
+interface ComponentProps {
+  height?: number
+}
+
+export const Component = ({ height = 400 }: ComponentProps) => {
   const { apId, popId } = useParams()
 
-  const { data, error, loading } = useQuery(query, {
+  const { data, error, loading } = useQuery<PopAuswertungQueryResult>(query, {
     variables: { apId, id: popId },
   })
 

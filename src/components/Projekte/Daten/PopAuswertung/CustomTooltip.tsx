@@ -1,17 +1,40 @@
 import { sortBy } from 'es-toolkit'
 
 import { exists } from '../../../../modules/exists.js'
-import {
-  container,
-  title,
-  row,
-  label as labelClass,
-} from './CustomTooltip.module.css'
+
+import type {
+  TpopId,
+  TpopStatusWerteCode,
+} from '../../../../models/apflora/index.js'
+
+import styles from './CustomTooltip.module.css'
 
 const colorUrspruenglich = '#2e7d32'
 const colorAngesiedelt = 'rgba(245,141,66,1)'
 
-export const CustomTooltip = ({ payload = [], label, active, tpopsData }) => {
+interface TpopData {
+  id: TpopId
+  nr: number | null
+  label: string | null
+  status: TpopStatusWerteCode | null
+}
+
+interface CustomTooltipProps {
+  payload?: Array<{
+    dataKey: string
+    value: number
+  }>
+  label?: string | number
+  active?: boolean
+  tpopsData: TpopData[]
+}
+
+export const CustomTooltip = ({
+  payload = [],
+  label,
+  active,
+  tpopsData,
+}: CustomTooltipProps) => {
   const payloadSorted = sortBy(payload, [
     (p) => {
       const tpop = tpopsData.find((d) => d.id === p.dataKey)
@@ -21,8 +44,8 @@ export const CustomTooltip = ({ payload = [], label, active, tpopsData }) => {
   ])
 
   return (
-    <div className={container}>
-      <div className={title}>{label}</div>
+    <div className={styles.container}>
+      <div className={styles.title}>{label}</div>
       {payloadSorted.map((p, i) => {
         const tpop = tpopsData.find((d) => d.id === p.dataKey)
         let label = p.dataKey
@@ -43,11 +66,11 @@ export const CustomTooltip = ({ payload = [], label, active, tpopsData }) => {
 
         return (
           <div
-            className={row}
+            className={styles.row}
             key={p.dataKey}
             style={{ color }}
           >
-            <div className={labelClass}>{`${label}:`}</div>
+            <div className={styles.label}>{`${label}:`}</div>
             <div>{value}</div>
           </div>
         )
