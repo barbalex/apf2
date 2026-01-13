@@ -40,10 +40,12 @@ export const Checkbox2States = ({
       <FormLabel
         component="legend"
         className={formLabel}
+        htmlFor={name}
       >
         {label}
       </FormLabel>
       <Checkbox
+        id={name}
         inputProps={{ 'data-id': name }}
         onClick={onClickButton}
         color="primary"
