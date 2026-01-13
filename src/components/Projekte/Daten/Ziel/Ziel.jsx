@@ -20,7 +20,7 @@ import { ziel as zielFragment } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer, subtitle } from './Ziel.module.css'
+import styles from './Ziel.module.css'
 
 const fieldTypes = {
   apId: 'UUID',
@@ -130,12 +130,12 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Ziel"
           MenuBarComponent={Menu}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             name="jahr"
             label="Jahr"
@@ -162,7 +162,7 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.bezeichnung}
           />
-          <h3 className={subtitle}>Beurteilung</h3>
+          <h3 className={styles.subtitle}>Beurteilung</h3>
           <Select
             key={`${row?.id}erreichung`}
             name="erreichung"
