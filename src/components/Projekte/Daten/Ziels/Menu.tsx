@@ -18,9 +18,24 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import { ZielId, ApId } from '../../../../models/apflora/index.ts'
+
+interface CreateZielResult {
+  createZiel: {
+    ziel: {
+      id: ZielId
+      apId: ApId
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, jahr } = useParams()
@@ -31,9 +46,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: { data?: CreateZielResult }
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateZielResult>({
         mutation: gql`
           mutation createZielForZielsForm($apId: UUID!) {
             createZiel(input: { ziel: { apId: $apId } }) {
@@ -48,7 +63,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
