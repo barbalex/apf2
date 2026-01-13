@@ -10,13 +10,31 @@ import Tooltip from '@mui/material/Tooltip'
 import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router'
 
-import { EkfYear } from './EkfYear.jsx'
-import { User } from './User/index.jsx'
+import { EkfYear } from './EkfYear.tsx'
+import { User } from './User/index.tsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
 
+import type { UserId, AdresseId } from '../../../models/apflora/public/User.ts'
+import type { TpopkontrId } from '../../../models/apflora/public/Tpopkontr.ts'
+
 import styles from './Menus.module.css'
+
+interface TpopkontrNode {
+  id: TpopkontrId
+}
+
+interface EkfMenusQueryResult {
+  userById: {
+    id: UserId
+    adresseByAdresseId: {
+      tpopkontrsByBearbeiter: {
+        nodes: TpopkontrNode[]
+      }
+    } | null
+  } | null
+}
 
 export const Menus = observer(() => {
   const { userId, ekfId, ekfYear } = useParams()
@@ -37,7 +55,7 @@ export const Menus = observer(() => {
   const query =
     ekfRefYear === ekfYear ? dataByUserIdQuery : dataWithDateByUserIdQuery
 
-  const { data } = useQuery(query, {
+  const { data } = useQuery<EkfMenusQueryResult>(query, {
     variables: { id: userId, jahr: +ekfYear },
     fetchPolicy: 'network-only',
   })

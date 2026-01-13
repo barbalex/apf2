@@ -362,7 +362,7 @@ export const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        lazy={() => import('../AppBar/index.jsx')}
+        lazy={() => import('../AppBar/index.tsx')}
         hydrateFallbackElement={<Spinner />}
         errorElement={<RouterErrorBoundary />}
       >
@@ -602,7 +602,7 @@ export const Router = () => {
                     >
                       <Route
                         index={true}
-                        lazy={() => import('../shared/Files/Files/index.tsx')}
+                        lazy={() => import('../shared/Files/Files/index.jsx')}
                         errorElement={<RouterErrorBoundary />}
                       />
                       <Route path=":fileId">

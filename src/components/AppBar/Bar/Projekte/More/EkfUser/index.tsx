@@ -6,7 +6,20 @@ import { Select } from '../../../../../shared/Select.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 import { queryAdresses } from './queryAdresses.js'
 
+import type { UserId } from '../../../../../../models/apflora/public/User.ts'
+
 import styles from './index.module.css'
+
+interface UserNode {
+  value: UserId
+  label: string | null
+}
+
+interface UsersQueryResult {
+  allUsers: {
+    nodes: UserNode[]
+  }
+}
 
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
@@ -15,7 +28,7 @@ export const EkfUser = ({ closeMenu }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
-  const { data, error } = useQuery(queryAdresses)
+  const { data, error } = useQuery<UsersQueryResult>(queryAdresses)
 
   const choose = (event) => {
     const value = event.target.value

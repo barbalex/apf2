@@ -35,7 +35,7 @@ export const Router = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route
-        lazy={() => import('../AppBar/index.jsx')}
+        lazy={() => import('../AppBar/index.tsx')}
         hydrateFallbackElement={<Spinner />}
       >
         <Route

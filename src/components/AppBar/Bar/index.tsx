@@ -2,9 +2,9 @@ import Button from '@mui/material/Button'
 import { useLocation, Link } from 'react-router'
 import { useAtom } from 'jotai'
 
-import { HomeMenus } from './Home/index.jsx'
-import { EkPlanMenus } from './EkPlan.jsx'
-import { ProjekteMenus } from './Projekte/index.jsx'
+import { HomeMenus } from './Home/index.tsx'
+import { EkPlanMenus } from './EkPlan.tsx'
+import { ProjekteMenus } from './Projekte/index.tsx'
 import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 
 import styles from './index.module.css'

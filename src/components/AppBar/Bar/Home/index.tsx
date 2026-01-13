@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button'
 import { useLocation, Link } from 'react-router'
 
-import { Dokumentation } from './Dokumentation.jsx'
+import { Dokumentation } from './Dokumentation.tsx'
 import styles from './index.module.css'
 
 export const HomeMenus = () => {

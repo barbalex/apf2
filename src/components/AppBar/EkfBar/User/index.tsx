@@ -25,7 +25,20 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { logout } from '../../../../modules/logout.js'
 import { IdbContext } from '../../../../idbContext.js'
 
+import type { UserId, AdresseId } from '../../../../models/apflora/public/User.ts'
+
 import styles from './index.module.css'
+
+interface UserByNameQueryResult {
+  userByName: {
+    id: UserId
+    name: string | null
+    email: string | null
+    role: string | null
+    pass: string | null
+    adresseId: AdresseId | null
+  } | null
+}
 
 export const User = observer(({ username, userOpen, toggleUserOpen }) => {
   const store = useContext(MobxContext)

@@ -9,14 +9,14 @@ import { useParams } from 'react-router'
 import { useAtom } from 'jotai'
 
 import { logout } from '../../../../../modules/logout.js'
-import { EkfUser } from './EkfUser/index.jsx'
+import { EkfUser } from './EkfUser/index.tsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { IdbContext } from '../../../../../idbContext.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
-import { ShowBookmarksMenu } from './ShowBookmarksMenu.jsx'
-import { EnforceDesktopNavigation } from './EnforceDesktopNavigation.jsx'
-import { EnforceMobileNavigation } from './EnforceMobileNavigation.jsx'
-import { AlwaysShowTree } from './AlwaysShowTree.jsx'
+import { ShowBookmarksMenu } from './ShowBookmarksMenu.tsx'
+import { EnforceDesktopNavigation } from './EnforceDesktopNavigation.tsx'
+import { EnforceMobileNavigation } from './EnforceMobileNavigation.tsx'
+import { AlwaysShowTree } from './AlwaysShowTree.tsx'
 import {
   isMobileViewAtom,
   isDesktopViewAtom,
