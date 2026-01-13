@@ -1,10 +1,10 @@
 import { FilesRouter } from '../../../../shared/Files/index.jsx'
-import { container, label, val } from './Files.module.css'
+import styles from './Files.module.css'
 
 export const Files = ({ row }) => (
-  <div className={container}>
-    <div className={label}>Dateien</div>
-    <div className={val}>
+  <div className={styles.container}>
+    <div className={styles.label}>Dateien</div>
+    <div className={styles.val}>
       <FilesRouter
         parentId={row.id}
         parent="tpopkontr"

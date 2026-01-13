@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 
-import { container, label0, label1, label2, val1, val2 } from './Map.module.css'
+import styles from './Map.module.css'
 
 export const Map = observer(({ saveToDb, row, errors }) => {
   const store = useContext(MobxContext)
@@ -34,11 +34,11 @@ export const Map = observer(({ saveToDb, row, errors }) => {
   const falseValue = isPrint ? false : row?.planVorhanden === false
 
   return (
-    <div className={container}>
-      <div className={label0}>Plan ergänzt</div>
-      <div className={label1}>ja</div>
+    <div className={styles.container}>
+      <div className={styles.label0}>Plan ergänzt</div>
+      <div className={styles.label1}>ja</div>
       <div
-        className={val1}
+        className={styles.val1}
         data-id="planVorhanden_true"
       >
         <RadioButton
@@ -48,9 +48,9 @@ export const Map = observer(({ saveToDb, row, errors }) => {
           saveToDb={onSaveTrue}
         />
       </div>
-      <div className={label2}>nein</div>
+      <div className={styles.label2}>nein</div>
       <div
-        className={val2}
+        className={styles.val2}
         data-id="planVorhanden_false"
       >
         <RadioButton

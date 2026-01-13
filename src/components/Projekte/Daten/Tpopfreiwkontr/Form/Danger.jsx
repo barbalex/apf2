@@ -1,15 +1,15 @@
 import { TextField2 } from '../../../../shared/TextField2.jsx'
-import { container, label, subLabel, val } from './Danger.module.css'
+import styles from './Danger.module.css'
 
 export const Danger = ({ saveToDb, row, errors }) => (
-  <div className={container}>
-    <div className={label}>
+  <div className={styles.container}>
+    <div className={styles.label}>
       Gefährdung{' '}
-      <span className={subLabel}>
+      <span className={styles.subLabel}>
         (Problemarten, Verbuschung, Tritt, Hunde, ...), welche?
       </span>
     </div>
-    <div className={val}>
+    <div className={styles.val}>
       <TextField2
         key={`${row.id}gefaehrdung`}
         name="gefaehrdung"
