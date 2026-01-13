@@ -9,12 +9,12 @@ import uebersicht1 from './uebersicht_1.png'
 import zusammenspiel from './zusammenspiel.png'
 import kartenFilterEntfernen from './karten-filter-entfernen.gif'
 
-import { dokuDate } from '../../DesktopDocs.module.css'
+import desktopStyles from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Filter</h1>
-    <p className={dokuDate}>22.11.2024</p>
+    <p className={desktopStyles.dokuDate}>22.11.2024</p>
     <p>
       Filtern hat in apflora eine lange Geschichte und wurde Schritt um Schritt
       erweitert.

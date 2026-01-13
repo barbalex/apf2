@@ -11,7 +11,7 @@ import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { Data } from '../BeobData/index.jsx'
 
-import { h3, button, info } from '../BeobNichtBeurteilt/Marker.module.css'
+import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
 
 export const Polyline = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
@@ -102,9 +102,9 @@ export const Polyline = observer(({ beob }) => {
     >
       <Popup>
         <>
-          <h3 className={h3}>Zuordnung</h3>
+          <h3 className={markerStyles.h3}>Zuordnung</h3>
           <div>einer Beobachtung</div>
-          <div className={info}>
+          <div className={markerStyles.info}>
             <div>von:</div>
             <div>{beob?.aeTaxonomyByArtId?.artname ?? ''}</div>
             <div>am:</div>
@@ -130,7 +130,7 @@ export const Polyline = observer(({ beob }) => {
             color="inherit"
             onClick={openBeobInTab}
             fullWidth
-            className={button}
+            className={markerStyles.button}
           >
             Beob. in neuem Fenster öffnen
           </Button>
@@ -140,7 +140,7 @@ export const Polyline = observer(({ beob }) => {
             color="inherit"
             onClick={openBeobInTree2}
             fullWidth
-            className={button}
+            className={markerStyles.button}
           >
             Beob. in Navigationsbaum 2 öffnen
           </Button>
@@ -150,7 +150,7 @@ export const Polyline = observer(({ beob }) => {
             color="inherit"
             onClick={openTpopInTab}
             fullWidth
-            className={button}
+            className={markerStyles.button}
           >
             TPop. in neuem Fenster öffnen
           </Button>
@@ -160,7 +160,7 @@ export const Polyline = observer(({ beob }) => {
             color="inherit"
             onClick={openTpopInTree2}
             fullWidth
-            className={button}
+            className={markerStyles.button}
           >
             TPop. in Navigationsbaum 2 öffnen
           </Button>
