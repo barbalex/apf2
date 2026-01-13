@@ -13,6 +13,16 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+interface CreateAdresseResult {
+  data?: {
+    createAdresse?: {
+      adresse?: {
+        id: string
+      }
+    }
+  }
+}
+
 const iconStyle = { color: 'white' }
 
 interface MenuProps {
@@ -29,7 +39,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: any
+    let result: CreateAdresseResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
