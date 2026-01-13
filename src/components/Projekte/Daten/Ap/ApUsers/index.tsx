@@ -7,6 +7,8 @@ import { NewUser } from './NewUser.tsx'
 import { Label } from '../../../../shared/Label.jsx'
 import { Error } from '../../../../shared/Error.jsx'
 
+import type { ApUserId } from '../../../../../models/apflora/ApUser.js'
+
 import {
   container,
   newUserContainer,
@@ -16,7 +18,7 @@ import {
 } from './index.module.css'
 
 interface ApUserNode {
-  id: string
+  id: ApUserId
   userName: string
   userByUserName?: {
     id: string
@@ -24,10 +26,16 @@ interface ApUserNode {
   }
 }
 
+interface ApUsersQueryResult {
+  allApUsers: {
+    nodes: ApUserNode[]
+  }
+}
+
 export const ApUsers = () => {
   const { apId } = useParams<{ apId: string }>()
 
-  const { data, error, loading, refetch } = useQuery<any>(
+  const { data, error, loading, refetch } = useQuery<ApUsersQueryResult>(
     gql`
       query apUsersForApQuery($apId: UUID!) {
         allApUsers(

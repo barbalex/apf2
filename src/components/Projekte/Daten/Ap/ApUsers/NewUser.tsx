@@ -5,14 +5,28 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { Select } from '../../../../shared/Select.jsx'
 
+import type { ApId } from '../../../../../models/apflora/Ap.js'
+
 interface ApUser {
   userByUserName?: {
     id: string
   }
 }
 
+interface UserNode {
+  id: string
+  name: string | null
+  role: string
+}
+
+interface BenutzerQueryResult {
+  allUsers: {
+    nodes: UserNode[]
+  }
+}
+
 interface NewUserProps {
-  apId: string
+  apId: ApId
   apUsers: ApUser[]
   refetch: () => void
 }
@@ -26,7 +40,7 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
     data,
     loading,
     error: queryError,
-  } = useQuery<any>(gql`
+  } = useQuery<BenutzerQueryResult>(gql`
     query benutzerForNewUser {
       allUsers(
         orderBy: NAME_ASC

@@ -21,6 +21,8 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.tsx'
 
 import type Ap from '../../../../models/apflora/Ap.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type { AdresseId } from '../../../../models/apflora/Adresse.js'
 
 import styles from './Ap.module.css'
 
@@ -34,6 +36,34 @@ const fieldTypes = {
   projId: 'UUID',
 }
 
+interface ApQueryResult {
+  apById: Ap & {
+    aeTaxonomyByArtId?: {
+      id: AeTaxonomiesId
+      taxArtName: string
+      artwert: number | null
+    }
+  }
+  allAdresses: {
+    nodes: Array<{
+      value: AdresseId
+      label: string
+    }>
+  }
+  allApBearbstandWertes: {
+    nodes: Array<{
+      value: number
+      label: string
+    }>
+  }
+  allApUmsetzungWertes: {
+    nodes: Array<{
+      value: number
+      label: string
+    }>
+  }
+}
+
 export const Component = observer(() => {
   const { apId } = useParams<{ apId: string }>()
 
@@ -45,7 +75,7 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, error, loading } = useQuery<any>(query, {
+  const { data, error, loading } = useQuery<ApQueryResult>(query, {
     variables: { id: apId },
   })
 

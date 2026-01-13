@@ -6,6 +6,9 @@ import { useQuery } from '@apollo/client/react'
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
+import type { ApId } from '../../../../models/apflora/Ap.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+
 const apFilesQuery = gql`
   query apFilesQuery($apId: UUID!) {
     apById(id: $apId) {
@@ -18,9 +21,19 @@ const apFilesQuery = gql`
   }
 `
 
+interface ApFilesQueryResult {
+  apById: {
+    id: ApId
+    aeTaxonomyByArtId: {
+      id: AeTaxonomiesId
+      artname: string
+    } | null
+  }
+}
+
 export const Component = () => {
   const { apId } = useParams<{ apId: string }>()
-  const { data } = useQuery<any>(apFilesQuery, {
+  const { data } = useQuery<ApFilesQueryResult>(apFilesQuery, {
     variables: { apId },
   })
 

@@ -8,6 +8,13 @@ import { History as HistoryComponent } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
+import type { ApId } from '../../../../models/apflora/Ap.js'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type { ApBearbstandWerteCode } from '../../../../models/apflora/ApBearbstandWerte.js'
+import type { ApUmsetzungWerteCode } from '../../../../models/apflora/ApUmsetzungWerte.js'
+import type { AdresseId } from '../../../../models/apflora/Adresse.js'
+import type { ProjektId } from '../../../../models/apflora/Projekt.js'
+
 import {
   innerContainer,
   errorContainer,
@@ -16,6 +23,72 @@ import {
   aenderung,
   aktuell,
 } from './Historien.module.css'
+
+interface ApHistoryNode {
+  id: string
+  year: number
+  artId: AeTaxonomiesId | null
+  aeTaxonomyByArtId: {
+    id: AeTaxonomiesId
+    artname: string
+  } | null
+  bearbeitung: ApBearbstandWerteCode | null
+  apBearbstandWerteByBearbeitung: {
+    id: number
+    text: string
+  } | null
+  startJahr: number | null
+  umsetzung: ApUmsetzungWerteCode | null
+  apUmsetzungWerteByUmsetzung: {
+    id: number
+    text: string
+  } | null
+  bearbeiter: AdresseId | null
+  adresseByBearbeiter: {
+    id: AdresseId
+    name: string
+  } | null
+  ekfBeobachtungszeitpunkt: string | null
+}
+
+interface ApHistoriesQueryResult {
+  apById: {
+    id: ApId
+    label: string
+    artId: AeTaxonomiesId | null
+    aeTaxonomyByArtId: {
+      id: AeTaxonomiesId
+      artname: string
+    } | null
+    bearbeitung: ApBearbstandWerteCode | null
+    apBearbstandWerteByBearbeitung: {
+      id: number
+      text: string
+    } | null
+    startJahr: number | null
+    umsetzung: ApUmsetzungWerteCode | null
+    apUmsetzungWerteByUmsetzung: {
+      id: number
+      text: string
+    } | null
+    bearbeiter: AdresseId | null
+    adresseByBearbeiter: {
+      id: AdresseId
+      name: string
+    } | null
+    ekfBeobachtungszeitpunkt: string | null
+    projId: ProjektId
+    projektByProjId: {
+      id: ProjektId
+      name: string
+    }
+    changedBy: string | null
+  }
+  allApHistories: {
+    totalCount: number
+    nodes: ApHistoryNode[]
+  }
+}
 
 const apHistoriesQuery = gql`
   query apHistoryQuery($apId: UUID!) {
@@ -89,7 +162,7 @@ const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 export const Component = () => {
   const { apId } = useParams<{ apId: string }>()
-  const { error, data } = useQuery<any>(apHistoriesQuery, {
+  const { error, data } = useQuery<ApHistoriesQueryResult>(apHistoriesQuery, {
     variables: { apId },
   })
 

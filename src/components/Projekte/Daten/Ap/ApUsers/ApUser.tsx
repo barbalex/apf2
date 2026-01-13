@@ -10,9 +10,11 @@ import { useApolloClient } from '@apollo/client/react'
 import { MobxContext } from '../../../../../mobxContext.js'
 import styles from './ApUser.module.css'
 
+import type { ApUserId } from '../../../../../models/apflora/ApUser.js'
+
 interface ApUserProps {
   user: {
-    id: string
+    id: ApUserId
     userName: string
     userByUserName?: {
       id: string
