@@ -19,7 +19,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.js'
 import { queryEkfTpops } from './queryEkfTpops.js'
 
-import { button } from './Menu.module.css'
+import styles from './Menu.module.css'
 import { menuTitle } from '../../../shared/Files/Menu/index.module.css'
 
 const iconStyle = { color: 'white' }
@@ -216,7 +216,7 @@ export const Menu = observer(
                 setEditPassword(true)
                 setPasswordMessage('')
               }}
-              className={button}
+              className={styles.button}
             >
               Passwort ändern
             </Button>
@@ -230,7 +230,7 @@ export const Menu = observer(
               }, in de${
                 ekfTpops.length > 1 ? 'nen' : 'r'
               } dieser Benutzer als EKF-Kontrolleur erfasst ist, EKF-Formulare für das Jahr ${thisYear}`}
-              className={button}
+              className={styles.button}
             >
               {`(Fehlende) EKF-Formulare für ${thisYear} erzeugen`}
             </Button>
@@ -240,7 +240,7 @@ export const Menu = observer(
               variant="outlined"
               component={Link}
               to={`/Daten/Benutzer/${row.id}/EKF/${thisYear}${search}`}
-              className={button}
+              className={styles.button}
             >
               {`EKF-Formulare für ${thisYear} öffnen`}
             </Button>
@@ -252,7 +252,7 @@ export const Menu = observer(
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
         >
-          <h3 className={menuTitle}>löschen?</h3>
+          <h3 className={styles.menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </MuiMenu>

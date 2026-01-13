@@ -25,12 +25,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-import {
-  container,
-  scrollContainer,
-  input,
-  passwordMessage,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const roleWerte = [
   {
@@ -183,7 +178,7 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Benutzer"
           MenuBarComponent={Menu}
@@ -196,7 +191,7 @@ export const Component = () => {
           }}
         />
 
-        <div className={scrollContainer}>
+        <div className={styles.scrollContainer}>
           <TextField2
             key={`${row.id}name`}
             name="name"
@@ -235,7 +230,7 @@ export const Component = () => {
             error={errors.adresseId}
           />
           {!!passwordMessage && (
-            <div className={passwordMessage}>{passwordMessage}</div>
+            <div className={styles.passwordMessage}>{passwordMessage}</div>
           )}
           {(editPassword || errors.pass) && (
             <FormControl
@@ -275,7 +270,7 @@ export const Component = () => {
                     </Tooltip>
                   </InputAdornment>
                 }
-                className={input}
+                className={styles.input}
               />
               <FormHelperText id="passwortHelper">
                 {passwordErrorText || (errors && !!errors.pass) ?
@@ -323,7 +318,7 @@ export const Component = () => {
                     </Tooltip>
                   </InputAdornment>
                 }
-                className={input}
+                className={styles.input}
               />
               <FormHelperText id="passwortHelper">
                 {password2ErrorText}

@@ -15,7 +15,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.jsx'
 
-import { container, formContainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const Component = observer(() => {
   const { wertId: id } = useParams()
@@ -124,13 +124,13 @@ export const Component = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title={table}
           MenuBarComponent={Menu}
           menuBarProps={{ row, table }}
         />
-        <div className={formContainer}>
+        <div className={styles.formContainer}>
           <TextField
             name="text"
             label="Text"

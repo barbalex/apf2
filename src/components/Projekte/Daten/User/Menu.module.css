@@ -1,10 +1,21 @@
-
-.button{
+.button {
   text-transform: none !important;
   margin-right: 10px !important;
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   &:hover {
     background-color: rgba(28, 74, 30, 0.2) !important;
+  }
+}
+
+/* styles an h3 */
+.menuTitle {
+  padding-top: 2px;
+  padding-left: 15px;
+  padding-right: 16px;
+  padding-bottom: 0;
+  margin-bottom: 3px;
+  &:focus {
+    outline: none;
   }
 }
