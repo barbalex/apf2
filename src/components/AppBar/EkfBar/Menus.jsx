@@ -16,7 +16,7 @@ import { MobxContext } from '../../../mobxContext.js'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.js'
 
-import { button, iconButton, badge, hourglass } from './Menus.module.css'
+import styles from './Menus.module.css'
 
 export const Menus = observer(() => {
   const { userId, ekfId, ekfYear } = useParams()
@@ -81,16 +81,16 @@ export const Menus = observer(() => {
     <>
       {ekfCount > 1 && (
         <Badge
-          className={badge}
+          className={styles.badge}
           badgeContent={ekfCount}
         >
           <Tooltip title={`Alle ${ekfCount} EKF drucken`}>
             <IconButton
-              className={iconButton}
+              className={styles.iconButton}
               onClick={onClickPrintAll}
             >
               {preparingEkfMultiprint ?
-                <MdHourglassEmpty className={hourglass} />
+                <MdHourglassEmpty className={styles.hourglass} />
               : <MdPrint />}
             </IconButton>
           </Tooltip>
@@ -99,7 +99,7 @@ export const Menus = observer(() => {
       <Tooltip title="Angezeigte EKF drucken">
         <span>
           <IconButton
-            className={iconButton}
+            className={styles.iconButton}
             onClick={onClickPrintSingle}
             disabled={!ekfIsActive}
           >
@@ -111,7 +111,7 @@ export const Menus = observer(() => {
       {!isFreiwillig && (
         <Tooltip title="In die Normal-Ansicht wechseln">
           <Button
-            className={button}
+            className={styles.button}
             variant="text"
             component={Link}
             to={`/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13${search}`}
@@ -123,7 +123,7 @@ export const Menus = observer(() => {
       {isFreiwillig && (
         <>
           <Button
-            className={button}
+            className={styles.button}
             onClick={toggleUserOpen}
           >
             {`Benutzer: ${username}`}
@@ -137,7 +137,7 @@ export const Menus = observer(() => {
       )}
       <Tooltip title="Dokumentation öffnen">
         <Button
-          className={button}
+          className={styles.button}
           variant="text"
           component={Link}
           to={`/Dokumentation/${search}`}

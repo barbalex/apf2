@@ -25,8 +25,8 @@ import {
   writeEnforceDesktopNavigationAtom,
 } from '../../../../../JotaiStore/index.js'
 
-import { iconButton } from '../index.module.css'
-import { mehrButton, version } from './index.module.css'
+import parentStyles from '../index.module.css'
+import styles from './index.module.css'
 
 export const More = observer(
   ({ onClickExporte: passedOnClickExporte, role }) => {
@@ -81,7 +81,7 @@ export const More = observer(
             onClick={onClickMehrButton}
             data-id="appbar-more"
             width={42}
-            className={iconButton}
+            className={parentStyles.iconButton}
           >
             <FaBars />
           </Button>
@@ -91,7 +91,7 @@ export const More = observer(
             aria-haspopup="true"
             onClick={onClickMehrButton}
             data-id="appbar-more"
-            className={mehrButton}
+            className={styles.mehrButton}
           >
             Mehr
           </Button>
@@ -140,7 +140,7 @@ export const More = observer(
           <MenuItem onClick={onClickUptime}>
             Verfügbarkeit der Server von apflora.ch
           </MenuItem>
-          <div className={version}>Version: 1.124.52 vom 12.1.2026</div>
+          <div className={styles.version}>Version: 1.124.52 vom 12.1.2026</div>
         </Menu>
       </Tooltip>
     )

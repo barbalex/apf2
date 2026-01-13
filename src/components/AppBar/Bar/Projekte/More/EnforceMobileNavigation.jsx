@@ -9,7 +9,7 @@ import {
 } from '../../../../../JotaiStore/index.js'
 import { constants } from '../../../../../modules/constants.js'
 
-import { formControlLabel } from './AlwaysShowTree.module.css'
+import styles from './AlwaysShowTree.module.css'
 
 export const EnforceMobileNavigation = () => {
   const [enforceMobileNavigation] = useAtom(enforceMobileNavigationAtom)
@@ -32,7 +32,7 @@ export const EnforceMobileNavigation = () => {
           />
         }
         label="Mobile-Navigation erzwingen"
-        className={formControlLabel}
+        className={styles.formControlLabel}
       />
     </Tooltip>
   )

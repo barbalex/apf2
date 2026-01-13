@@ -9,7 +9,7 @@ import {
 } from '../../../../../JotaiStore/index.js'
 import { constants } from '../../../../../modules/constants.js'
 
-import { formControlLabel } from './AlwaysShowTree.module.css'
+import styles from './AlwaysShowTree.module.css'
 
 export const EnforceDesktopNavigation = () => {
   const [enforceDesktopNavigation] = useAtom(enforceDesktopNavigationAtom)
@@ -32,7 +32,7 @@ export const EnforceDesktopNavigation = () => {
           />
         }
         label="Desktop-Navigation erzwingen"
-        className={formControlLabel}
+        className={styles.formControlLabel}
       />
     </Tooltip>
   )
