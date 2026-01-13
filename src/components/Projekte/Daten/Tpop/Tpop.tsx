@@ -26,9 +26,98 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { query } from './query.js'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type {
+  TpopId,
+  PopId,
+  ApId,
+  TpopStatusWerteCode,
+  TpopApberrelevantGrundWerteCode,
+  EkfrequenzId,
+  AdresseId,
+} from '../../../../models/apflora/index.js'
 
 import styles from './Tpop.module.css'
+
+interface TpopQueryResult {
+  tpopById?: {
+    id: TpopId
+    popId: PopId
+    nr: number | null
+    gemeinde: string | null
+    flurname: string | null
+    status: TpopStatusWerteCode | null
+    popStatusWerteByStatus?: {
+      code: TpopStatusWerteCode
+      text: string | null
+    }
+    bekanntSeit: number | null
+    statusUnklar: boolean | null
+    statusUnklarGrund: string | null
+    lv95X: number | null
+    lv95Y: number | null
+    wgs84Lat: number | null
+    wgs84Long: number | null
+    radius: number | null
+    hoehe: number | null
+    exposition: string | null
+    klima: string | null
+    neigung: string | null
+    beschreibung: string | null
+    katasterNr: string | null
+    apberRelevant: boolean | null
+    apberRelevantGrund: TpopApberrelevantGrundWerteCode | null
+    tpopApberrelevantGrundWerteByApberRelevantGrund?: {
+      code: TpopApberrelevantGrundWerteCode
+      text: string | null
+    }
+    eigentuemer: string | null
+    kontakt: string | null
+    nutzungszone: string | null
+    bewirtschafter: string | null
+    bewirtschaftung: string | null
+    ekfrequenz: EkfrequenzId | null
+    ekfrequenzAbweichend: boolean | null
+    ekfKontrolleur: AdresseId | null
+    ekfrequenzStartjahr: number | null
+    bemerkungen: string | null
+    bodenTyp: string | null
+    bodenKalkgehalt: string | null
+    bodenDurchlaessigkeit: string | null
+    bodenHumus: string | null
+    bodenNaehrstoffgehalt: string | null
+    bodenAbtrag: string | null
+    wasserhaushalt: string | null
+    geomPoint?: {
+      x: number | null
+      y: number | null
+    }
+    popByPopId?: {
+      id: PopId
+      apId: ApId
+      apByApId?: {
+        id: ApId
+        startJahr: number | null
+      }
+    }
+  }
+}
+
+interface TpopListsQueryResult {
+  allTpopApberrelevantGrundWertes?: {
+    nodes: Array<{
+      value: TpopApberrelevantGrundWerteCode
+      label: string | null
+    }>
+  }
+  allChAdministrativeUnits?: {
+    nodes: Array<{
+      value: string
+      label: string
+    }>
+  }
+}
 
 export const fieldTypes = {
   popId: 'UUID',
@@ -81,7 +170,7 @@ export const Component = observer(() => {
     loading,
     error,
     refetch: refetchTpop,
-  } = useQuery(query, { variables: { id: tpopId } })
+  } = useQuery<TpopQueryResult>(query, { variables: { id: tpopId } })
 
   const apJahr = data?.tpopById?.popByPopId?.apByApId?.startJahr ?? null
 
@@ -91,7 +180,7 @@ export const Component = observer(() => {
     data: dataLists,
     loading: loadingLists,
     error: errorLists,
-  } = useQuery(gql`
+  } = useQuery<TpopListsQueryResult>(gql`
     query TpopListsQueryForTpop {
       allTpopApberrelevantGrundWertes(
         orderBy: SORT_ASC
@@ -113,7 +202,7 @@ export const Component = observer(() => {
       }
     }
   `)
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const saveToDb = async (event) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
@@ -163,7 +252,7 @@ export const Component = observer(() => {
         // no optimistic responce as geomPoint
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     // update tpop on map
     if (

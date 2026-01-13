@@ -25,6 +25,8 @@ import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
 import { useAtom } from 'jotai'
 
+import type { TpopId, PopId } from '../../../../generated/apflora/models.js'
+
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
@@ -41,9 +43,27 @@ import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'
 
+interface CreateTpopResult {
+  createTpop: {
+    tpop: {
+      id: TpopId
+      popId: PopId
+    }
+  }
+}
+
+interface MenuProps {
+  row: {
+    id: TpopId
+    label?: string
+    lv95X?: number | null
+    lv95Y?: number | null
+  }
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row }) => {
+export const Menu = observer(({ row }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId } = useParams()
@@ -66,7 +86,7 @@ export const Menu = observer(({ row }) => {
   const onClickAdd = async () => {
     let result
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopResult>({
         mutation: gql`
           mutation createTpopForTpopForm($popId: UUID!) {
             createTpop(input: { tpop: { popId: $popId } }) {
@@ -83,7 +103,7 @@ export const Menu = observer(({ row }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
@@ -104,7 +124,9 @@ export const Menu = observer(({ row }) => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -124,7 +146,7 @@ export const Menu = observer(({ row }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
