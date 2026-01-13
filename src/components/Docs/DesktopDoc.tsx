@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { Outlet } from 'react-router'
 
-import { Sidebar } from './DesktopSidebar/index.jsx'
+import { Sidebar } from './DesktopSidebar/index.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 import { Spinner } from '../shared/Spinner.jsx'
 

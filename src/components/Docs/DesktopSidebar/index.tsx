@@ -3,9 +3,9 @@ import { Link, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { MenuItems } from './MenuItems.jsx'
-import { Filter } from './Filter.jsx'
-import { IntoViewScroller } from './IntoViewScroller.jsx'
+import { MenuItems } from './MenuItems.tsx'
+import { Filter } from './Filter.tsx'
+import { IntoViewScroller } from './IntoViewScroller.tsx'
 
 import styles from './index.module.css'
 

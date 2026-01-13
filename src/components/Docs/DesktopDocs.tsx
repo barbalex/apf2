@@ -1,4 +1,4 @@
-import { Sidebar } from './DesktopSidebar/index.jsx'
+import { Sidebar } from './DesktopSidebar/index.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
 import styles from './DesktopDocs.module.css'

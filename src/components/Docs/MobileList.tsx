@@ -5,7 +5,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { MobxContext } from '../../mobxContext.js'
 import { useDocsNavData } from '../../modules/useDocsNavData.js'
 import { List as SharedList } from '../shared/List/index.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
 
 export const MobileList = observer(() => {
   const store = useContext(MobxContext)

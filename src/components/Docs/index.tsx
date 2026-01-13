@@ -1,8 +1,8 @@
 import { useAtom } from 'jotai'
 
 import { isDesktopViewAtom } from '../../JotaiStore/index.js'
-import { MobileList } from './MobileList.jsx'
-import { DesktopDocs } from './DesktopDocs.jsx'
+import { MobileList } from './MobileList.tsx'
+import { DesktopDocs } from './DesktopDocs.tsx'
 
 export const Component = () => {
   const [isDesktopView] = useAtom(isDesktopViewAtom)
