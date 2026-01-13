@@ -3,28 +3,33 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { Select } from '../../../../../shared/Select.jsx'
+import { TextField } from '../../../../../shared/TextField.jsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
-import styles from './Einheit.module.css'
+interface GezaehltProps {
+  row: any
+  refetch: () => void
+}
 
-export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
+export const Gezaehlt = observer(({ row, refetch }: GezaehltProps) => {
   const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [error, setErrors] = useState(null)
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const onChange = async (event) => {
     const val = ifIsNumericAsNumber(event.target.value)
+    if (val === null && row.methode === 1) return
+    if (row.anzahl === val && row.methode === 2) return
     const variables = {
       id: row.id,
-      anzahl: row.anzahl,
-      methode: row.methode,
-      einheit: val,
+      anzahl: val,
+      methode: 2,
+      einheit: row.einheit,
       changedBy: store.user.name,
     }
     try {
@@ -33,7 +38,7 @@ export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
         variables,
       })
     } catch (error) {
-      return setErrors(error.message)
+      return setErrors({ anzahl: (error as Error).message })
     }
     refetch()
     tsQueryClient.invalidateQueries({
@@ -42,20 +47,13 @@ export const Einheit = observer(({ nr, row, refetch, zaehleinheitWerte }) => {
   }
 
   return (
-    <>
-      <div className={styles.label}>{`Zähleinheit ${nr}`}</div>
-      <div className={styles.val}>
-        <Select
-          key={`${row?.id}einheit`}
-          value={row.einheit}
-          label=""
-          name="einheit"
-          error={error}
-          options={zaehleinheitWerte}
-          saveToDb={onChange}
-          noCaret
-        />
-      </div>
-    </>
+    <TextField
+      value={row.methode === 2 ? row.anzahl : null}
+      label=""
+      name="anzahl"
+      type="number"
+      saveToDb={onChange}
+      errors={errors}
+    />
   )
 })

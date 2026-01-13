@@ -10,12 +10,45 @@ import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Form } from './Form/index.jsx'
-import { Menu } from './Menu.jsx'
+import { Form } from './Form/index.tsx'
+import { Menu } from './Menu.tsx'
+
+import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+import type { ApId } from '../../../../models/apflora/ApId.ts'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+
+interface TpopkontrQueryResult {
+  data: {
+    tpopkontrById: {
+      id: TpopkontrId
+      tpopByTpopId: {
+        popByPopId: {
+          apId: ApId
+          apByApId: {
+            ekzaehleinheitsByApId: {
+              nodes: Array<{
+                tpopkontrzaehlEinheitWerteByZaehleinheitId: {
+                  code: TpopkontrzaehlEinheitWerteCode
+                } | null
+              }>
+            }
+          }
+        }
+      }
+      tpopkontrzaehlsByTpopkontrId: {
+        nodes: any[]
+      }
+    } | null
+  }
+}
+
+interface ComponentProps {
+  id?: TpopkontrId
+}
 
 import styles from './Tpopfreiwkontr.module.css'
 
-export const Component = observer(({ id: idPassed }) => {
+export const Component = observer(({ id: idPassed }: ComponentProps) => {
   const params = useParams()
   const { pathname } = useLocation()
 
@@ -25,7 +58,7 @@ export const Component = observer(({ id: idPassed }) => {
   const apolloClient = useApolloClient()
 
   const id = idPassed ?? params.tpopkontrId
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery<TpopkontrQueryResult>({
     queryKey: ['TpopkontrQuery', id],
     queryFn: async () =>
       apolloClient.query({
@@ -82,7 +115,7 @@ export const Component = observer(({ id: idPassed }) => {
             if (!isActive) return
 
             enqueNotification({
-              message: error.message,
+              message: (error as Error).message,
               options: {
                 variant: 'error',
               },

@@ -6,14 +6,55 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { Einheit } from './Einheit.jsx'
-import { Gezaehlt } from './Gezaehlt.jsx'
-import { Geschaetzt } from './Geschaetzt.jsx'
+import { Einheit } from './Einheit.tsx'
+import { Gezaehlt } from './Gezaehlt.tsx'
+import { Geschaetzt } from './Geschaetzt.tsx'
 import { query } from './query.js'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
 import { MobxContext } from '../../../../../../mobxContext.js'
 import { Error } from '../../../../../shared/Error.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
+
+import type { TpopkontrzaehlId } from '../../../../../../models/apflora/TpopkontrzaehlId.ts'
+import type { TpopkontrId } from '../../../../../../models/apflora/TpopkontrId.ts'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+
+
+interface TpopkontrzaehlQueryResult {
+  tpopkontrzaehlById: {
+    id: TpopkontrzaehlId
+    einheit: TpopkontrzaehlEinheitWerteCode
+    anzahl: number | null
+    methode: number | null
+  } | null
+  allTpopkontrzaehlEinheitWertes: {
+    nodes: Array<{
+      code: TpopkontrzaehlEinheitWerteCode
+      id: string
+      text: string
+    }>
+  }
+}
+
+interface CountProps {
+  id?: TpopkontrzaehlId
+  tpopkontrId: TpopkontrId
+  nr: number
+  showEmpty?: boolean
+  showNew?: boolean
+  refetch: () => void
+  einheitsUsed?: TpopkontrzaehlEinheitWerteCode[]
+  ekzaehleinheits?: Array<{
+    code: TpopkontrzaehlEinheitWerteCode
+    text: string
+  }>
+  ekzaehleinheitsOriginal?: Array<{
+    tpopkontrzaehlEinheitWerteByZaehleinheitId: {
+      code: TpopkontrzaehlEinheitWerteCode
+    }
+    sort: number | null
+  }>
+}
 
 import styles from './index.module.css'
 
@@ -64,7 +105,7 @@ export const Count = observer(
     einheitsUsed = [],
     ekzaehleinheits = [],
     ekzaehleinheitsOriginal = [],
-  }) => {
+  }: CountProps) => {
     const store = useContext(MobxContext)
     const { setToDelete } = store
     const { activeNodeArray } = store.tree
@@ -77,7 +118,7 @@ export const Count = observer(
       loading,
       error,
       refetch: refetchMe,
-    } = useQuery(query, {
+    } = useQuery<TpopkontrzaehlQueryResult>(query, {
       variables: {
         id: id || '99999999-9999-9999-9999-999999999999',
       },

@@ -20,11 +20,29 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 
+import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
+
+interface CreateTpopkontrResult {
+  data: {
+    createTpopkontr: {
+      tpopkontr: {
+        id: TpopkontrId
+        tpopId: string
+        typ: string
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  row: any
+}
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row }) => {
+export const Menu = observer(({ row }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
@@ -36,9 +54,9 @@ export const Menu = observer(({ row }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateTpopkontrResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopkontrResult['data']>({
         mutation: gql`
           mutation createTpopkontrForTpopfreiwkontrForm(
             $tpopId: UUID!
@@ -77,7 +95,7 @@ export const Menu = observer(({ row }) => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(null)
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {

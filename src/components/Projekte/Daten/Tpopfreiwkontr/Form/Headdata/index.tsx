@@ -16,18 +16,35 @@ import {
 } from '../../../../../shared/fragments.js'
 import { Error } from '../../../../../shared/Error.jsx'
 
+import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
+
+interface TpopfreiwkontrAdressesQueryResult {
+  allAdresses: {
+    nodes: Array<{
+      value: AdresseId
+      label: string
+    }>
+  }
+}
+
+interface HeaddataProps {
+  pop: any
+  tpop: any
+  row: any
+}
+
 import styles from './index.module.css'
 
-export const Headdata = observer(({ pop, tpop, row }) => {
+export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
   const store = useContext(MobxContext)
   const { user, isPrint } = store
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [errors, setErrors] = useState(null)
+  const [errors, setErrors] = useState<string | null>(null)
 
-  const { data, loading, error } = useQuery(query)
+  const { data, loading, error } = useQuery<TpopfreiwkontrAdressesQueryResult>(query)
 
   const saveToDb = async (event) => {
     const { value } = event.target
@@ -97,7 +114,7 @@ export const Headdata = observer(({ pop, tpop, row }) => {
         variables,
       })
     } catch (error) {
-      return setErrors(error.message)
+      return setErrors((error as Error).message)
     }
     tsQueryClient.invalidateQueries({
       queryKey: ['tpopkontrByIdQueryForEkf'],

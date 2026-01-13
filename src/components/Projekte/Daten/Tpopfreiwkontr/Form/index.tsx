@@ -5,22 +5,23 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
+import type { ApId } from '../../../../../models/apflora/ApId.ts'
 
 import { StringToCopyOnlyButton } from '../../../../shared/StringToCopyOnlyButton.jsx'
-import { Title } from './Title.jsx'
-import { Headdata } from './Headdata/index.jsx'
-import { Besttime } from './Besttime.jsx'
-import { DateField } from './Date.jsx'
-import { Map } from './Map.jsx'
-import { Cover } from './Cover.jsx'
-import { More } from './More.jsx'
-import { Danger } from './Danger.jsx'
-import { Remarks } from './Remarks.jsx'
-import { EkfRemarks } from './EkfRemarks.jsx'
-import { Files } from './Files.jsx'
-import { Count } from './Count/index.jsx'
-import { Verification } from './Verification.jsx'
-import { Image } from './Image.jsx'
+import { Title } from './Title.tsx'
+import { Headdata } from './Headdata/index.tsx'
+import { Besttime } from './Besttime.tsx'
+import { DateField } from './Date.tsx'
+import { Map } from './Map.tsx'
+import { Cover } from './Cover.tsx'
+import { More } from './More.tsx'
+import { Danger } from './Danger.tsx'
+import { Remarks } from './Remarks.tsx'
+import { EkfRemarks } from './EkfRemarks.tsx'
+import { Files } from './Files.tsx'
+import { Count } from './Count/index.tsx'
+import { Verification } from './Verification.tsx'
+import { Image } from './Image.tsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.js'
 import {
@@ -30,6 +31,13 @@ import {
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../shared/fragments.js'
+
+interface FormProps {
+  data: any
+  refetch: () => void
+  row: any
+  apId: ApId
+}
 
 import styles from './index.module.css'
 
@@ -54,7 +62,7 @@ const fieldTypes = {
   ekfBemerkungen: 'String',
 }
 
-export const Form = observer(({ data, refetch, row, apId }) => {
+export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
   const store = useContext(MobxContext)
   const { isPrint, user } = store
   const { dataFilterSetValue } = store.tree
@@ -64,7 +72,7 @@ export const Form = observer(({ data, refetch, row, apId }) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const ekzaehleinheitsOriginal =
     data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId

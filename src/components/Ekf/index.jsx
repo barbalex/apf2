@@ -8,7 +8,7 @@ import { SplitPane, Pane } from 'react-split-pane'
 // when Karte was loaded async, it did not load,
 // but only in production!
 import { EkfList } from './List/index.jsx'
-import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.jsx'
+import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.tsx'
 import { MobxContext } from '../../mobxContext.js'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'

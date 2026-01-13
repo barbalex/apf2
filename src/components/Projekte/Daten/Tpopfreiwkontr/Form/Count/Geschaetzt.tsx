@@ -8,22 +8,32 @@ import { MobxContext } from '../../../../../../mobxContext.js'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
-export const Gezaehlt = observer(({ row, refetch }) => {
+interface GeschaetztProps {
+  row: any
+  refetch: () => void
+}
+
+export const Geschaetzt = observer(({ row, refetch }: GeschaetztProps) => {
   const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   const onChange = async (event) => {
     const val = ifIsNumericAsNumber(event.target.value)
-    if (val === null && row.methode === 1) return
-    if (row.anzahl === val && row.methode === 2) return
+    /*console.log('Geschaetzt, onChange:', {
+        row,
+        val,
+        targetValue: event.target.value,
+      })*/
+    if (val === null && row.methode === 2) return
+    if (row.anzahl === val && row.methode === 1) return
     const variables = {
       id: row.id,
       anzahl: val,
-      methode: 2,
+      methode: 1,
       einheit: row.einheit,
       changedBy: store.user.name,
     }
@@ -33,7 +43,7 @@ export const Gezaehlt = observer(({ row, refetch }) => {
         variables,
       })
     } catch (error) {
-      return setErrors({ anzahl: error.message })
+      return setErrors({ anzahl: (error as Error).message })
     }
     refetch()
     tsQueryClient.invalidateQueries({
@@ -43,7 +53,7 @@ export const Gezaehlt = observer(({ row, refetch }) => {
 
   return (
     <TextField
-      value={row.methode === 2 ? row.anzahl : null}
+      value={row.methode === 1 ? row.anzahl : null}
       label=""
       name="anzahl"
       type="number"
