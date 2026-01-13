@@ -19,12 +19,31 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerte.js'
+
+interface CreateEkAbrechnungstypWerteResult {
+  data?: {
+    createEkAbrechnungstypWerte?: {
+      ekAbrechnungstypWerte?: {
+        id: EkAbrechnungstypWerteCode
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const { projId, ekAbrechnungstypWerteId } = useParams()
+  const { projId, ekAbrechnungstypWerteId } = useParams<{
+    projId: string
+    ekAbrechnungstypWerteId: string
+  }>()
 
   const store = useContext(MobxContext)
 
@@ -32,7 +51,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateEkAbrechnungstypWerteResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -47,7 +66,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
