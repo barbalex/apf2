@@ -7,8 +7,8 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { Massnahmen as MassnahmenComponent } from './Massnahmen.jsx'
-import { MassnWebgisBun } from './MassnWebgisBun.jsx'
+import { Massnahmen as MassnahmenComponent } from './Massnahmen.tsx'
+import { MassnWebgisBun } from './MassnWebgisBun.tsx'
 
 import styles from '../index.module.css'
 

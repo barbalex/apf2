@@ -7,9 +7,123 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId, PopId, TpopId, TpopmassnId, AdresseId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const Massnahmen = observer(({ filtered = false }) => {
+interface TpopmassnQueryResult {
+  allTpopmassns: {
+    nodes: Array<{
+      tpopByTpopId?: {
+        popByPopId?: {
+          apByApId?: {
+            id: ApId
+            aeTaxonomyByArtId?: {
+              id: string
+              artname?: string
+              familie?: string
+            }
+            apBearbstandWerteByBearbeitung?: {
+              id: number
+              text?: string
+            }
+            startJahr?: number
+            apUmsetzungWerteByUmsetzung?: {
+              id: number
+              text?: string
+            }
+          }
+          id: PopId
+          nr?: number
+          name?: string
+          popStatusWerteByStatus?: {
+            id: number
+            text?: string
+          }
+          bekanntSeit?: number
+          statusUnklar?: boolean
+          statusUnklarBegruendung?: string
+          x?: number
+          y?: number
+        }
+        id: TpopId
+        nr?: number
+        gemeinde?: string
+        flurname?: string
+        status?: number
+        popStatusWerteByStatus?: {
+          id: number
+          text?: string
+        }
+        bekanntSeit?: number
+        statusUnklar?: boolean
+        statusUnklarGrund?: string
+        x?: number
+        y?: number
+        radius?: number
+        hoehe?: number
+        exposition?: string
+        klima?: string
+        neigung?: string
+        beschreibung?: string
+        katasterNr?: string
+        apberRelevant?: number
+        apberRelevantGrund?: number
+        eigentuemer?: string
+        kontakt?: string
+        nutzungszone?: string
+        bewirtschafter?: string
+        bewirtschaftung?: string
+        ekfrequenz?: string
+        ekfrequenzAbweichend?: boolean
+        adresseByEkfKontrolleur?: {
+          id: AdresseId
+          name?: string
+        }
+      }
+      id: TpopmassnId
+      jahr?: number
+      datum?: string
+      tpopmassnTypWerteByTyp?: {
+        id: number
+        text?: string
+      }
+      beschreibung?: string
+      adresseByBearbeiter?: {
+        id: AdresseId
+        name?: string
+      }
+      bemerkungen?: string
+      planVorhanden?: boolean
+      planBezeichnung?: string
+      flaeche?: number
+      form?: string
+      pflanzanordnung?: string
+      markierung?: string
+      anzTriebe?: number
+      anzPflanzen?: number
+      anzPflanzstellen?: number
+      tpopkontrzaehlEinheitWerteByZieleinheitEinheit?: {
+        id: number
+        text?: string
+      }
+      zieleinheitAnzahl?: number
+      wirtspflanze?: string
+      herkunftPop?: string
+      sammeldatum?: string
+      vonAnzahlIndividuen?: number
+      createdAt?: string
+      updatedAt?: string
+      changedBy?: string
+    }>
+  }
+}
+
+interface MassnahmenProps {
+  filtered?: boolean
+}
+
+export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
   const store = useContext(MobxContext)
   const { enqueNotification, tableIsFiltered } = store
   const { tpopmassnGqlFilter } = store.tree
@@ -27,9 +141,9 @@ export const Massnahmen = observer(({ filtered = false }) => {
       disabled={!!queryState || (filtered && !tpopmassnIsFiltered)}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data?: TpopmassnQueryResult }
         try {
-          result = await apolloClient.query({
+          result = await apolloClient.query<TpopmassnQueryResult>({
             query: gql`
               query tpopmassnForExportQuery($filter: TpopmassnFilter) {
                 allTpopmassns(
@@ -153,7 +267,7 @@ export const Massnahmen = observer(({ filtered = false }) => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

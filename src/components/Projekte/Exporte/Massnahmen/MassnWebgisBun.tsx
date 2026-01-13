@@ -9,6 +9,48 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from '../index.module.css'
 
+interface MassnWebgisBunQueryResult {
+  allVMassnWebgisbuns: {
+    nodes: Array<{
+      APARTID?: string
+      APART?: string
+      POPGUID?: string
+      POPNR?: number
+      TPOPGUID?: string
+      TPOPNR?: number
+      TPOP_X?: number
+      TPOP_Y?: number
+      TPOPSTATUS?: string
+      tpopapberrelevant?: number
+      tpopapberrelevantgrund?: string
+      MASSNGUID?: string
+      MASSNJAHR?: number
+      MASSNDAT?: string
+      MASSTYP?: string
+      MASSNMASSNAHME?: string
+      MASSNBEARBEITER?: string
+      MASSNBEMERKUNG?: string
+      MASSNPLAN?: boolean
+      MASSPLANBEZ?: string
+      MASSNFLAECHE?: number
+      MASSNFORMANSIEDL?: string
+      MASSNPFLANZANORDNUNG?: string
+      MASSNMARKIERUNG?: string
+      MASSNANZTRIEBE?: number
+      MASSNANZPFLANZEN?: number
+      MASSNANZPFLANZSTELLEN?: number
+      MASSNZIELEINHEITEINHEIT?: string
+      MASSNZIELEINHEITANZAHL?: number
+      MASSNWIRTSPFLANZEN?: string
+      MASSNHERKUNFTSPOP?: string
+      MASSNSAMMELDAT?: string
+      MASSNVONANZAHLINDIVIDUEN?: number
+      MASSNCHANGEDAT?: string
+      MASSNCHANGEBY?: string
+    }>
+  }
+}
+
 export const MassnWebgisBun = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
@@ -24,9 +66,9 @@ export const MassnWebgisBun = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data?: MassnWebgisBunQueryResult }
         try {
-          result = await apolloClient.query({
+          result = await apolloClient.query<MassnWebgisBunQueryResult>({
             query: gql`
               query viewMassnWebgisbuns {
                 allVMassnWebgisbuns {
@@ -73,7 +115,7 @@ export const MassnWebgisBun = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },
