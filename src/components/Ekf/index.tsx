@@ -21,7 +21,7 @@ import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/in
 import { MobxContext } from '../../mobxContext.js'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.ts'
-import { Error } from '../shared/Error.tsx'
+import { Error } from '../shared/Error.jsx'
 
 import styles from './index.module.css'
 
