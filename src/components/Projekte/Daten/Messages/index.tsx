@@ -7,17 +7,20 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
-import {
-  container,
-  scrollContainer,
-  messageRow,
-  date as dateClass,
-  titleRow,
-  title,
-} from './index.module.css'
+import type { Message } from '../../../../models/apflora/index.js'
+
+import styles from './index.module.css'
+
+interface MessagesQueryResult {
+  data?: {
+    allMessages?: {
+      nodes: Message[]
+    }
+  }
+}
 
 export const Component = () => {
-  const { data, loading, error } = useQuery(query)
+  const { data, loading, error } = useQuery<MessagesQueryResult>(query)
 
   const rows = data?.allMessages?.nodes ?? []
 
@@ -27,25 +30,25 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={titleRow}>
+      <div className={styles.container}>
+        <div className={styles.titleRow}>
           <div
-            className={title}
+            className={styles.title}
             data-id="form-title"
           >
             Mitteilungen
           </div>
         </div>
-        <div className={scrollContainer}>
+        <div className={styles.scrollContainer}>
           {rows.map((m) => {
             const date = DateTime.fromISO(m.time).toFormat('yyyy.LL.dd')
 
             return (
               <div
-                className={messageRow}
+                className={styles.messageRow}
                 key={m.id}
               >
-                <div className={dateClass}>{date}</div>
+                <div className={styles.date}>{date}</div>
                 <div>
                   <Linkify properties={{ target: '_blank' }}>
                     {m.message}

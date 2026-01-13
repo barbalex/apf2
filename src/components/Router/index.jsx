@@ -491,7 +491,7 @@ export const Router = () => {
             </Route>
             <Route
               path="Mitteilungen"
-              lazy={() => import('../Projekte/Daten/Messages/index.jsx')}
+              lazy={() => import('../Projekte/Daten/Messages/index.tsx')}
               handle={messagesHandle}
               errorElement={<RouterErrorBoundary />}
             />
