@@ -16,7 +16,41 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { tpopkontrzaehl } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
+
+import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
+import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+import type { TpopkontrzaehlMethodeWerteCode } from '../../../../models/apflora/TpopkontrzaehlMethodeWerteCode.ts'
+
+interface TpopkontrzaehlQueryResult {
+  tpopkontrzaehlById: {
+    id: TpopkontrzaehlId
+    einheit: TpopkontrzaehlEinheitWerteCode | null
+    anzahl: number | null
+    methode: TpopkontrzaehlMethodeWerteCode | null
+  } | null
+  allTpopkontrzaehlEinheitWertes: {
+    nodes: Array<{
+      id: string
+      value: TpopkontrzaehlEinheitWerteCode
+      label: string
+    }>
+  }
+  allTpopkontrzaehlMethodeWertes: {
+    nodes: Array<{
+      id: string
+      value: TpopkontrzaehlMethodeWerteCode
+      label: string
+    }>
+  }
+  otherZaehlOfEk: {
+    nodes: Array<{
+      id: TpopkontrzaehlId
+      einheit: TpopkontrzaehlEinheitWerteCode | null
+    }>
+  }
+}
 
 import styles from './index.module.css'
 
@@ -34,9 +68,9 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<TpopkontrzaehlQueryResult>(query, {
     variables: {
       id: tpopkontrzaehlId,
       tpopkontrId,
@@ -55,7 +89,7 @@ export const Component = observer(() => {
 
   const row = data?.tpopkontrzaehlById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -91,7 +125,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     tsQueryClient.invalidateQueries({
