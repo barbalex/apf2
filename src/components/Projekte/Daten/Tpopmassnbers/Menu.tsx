@@ -12,9 +12,28 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
+
+import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
+import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+
+interface CreateTpopmassnberResult {
+  data: {
+    createTpopmassnber: {
+      tpopmassnber: {
+        id: TpopmassnberId
+        tpopId: TpopId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { tpopId } = useParams()
@@ -25,9 +44,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateTpopmassnberResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopmassnberResult['data']>({
         mutation: gql`
           mutation createTpopmassnberForTpopmassnbersForm($tpopId: UUID!) {
             createTpopmassnber(input: { tpopmassnber: { tpopId: $tpopId } }) {
@@ -42,7 +61,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
