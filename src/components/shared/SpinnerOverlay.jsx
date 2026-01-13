@@ -1,7 +1,7 @@
 import CircularProgress from '@mui/material/CircularProgress'
 import Dialog from '@mui/material/Dialog'
 
-import { container, text } from './SpinnerOverlay.module.css'
+import styles from './SpinnerOverlay.module.css'
 
 export const SpinnerOverlay = ({ message, onClose }) => (
   <Dialog
@@ -9,9 +9,9 @@ export const SpinnerOverlay = ({ message, onClose }) => (
     onClose={onClose}
     disableEscapeKeyDown={true}
   >
-    <div className={container}>
+    <div className={styles.container}>
       <CircularProgress />
-      {!!message && <div className={text}>{message}</div>}
+      {!!message && <div className={styles.text}>{message}</div>}
     </div>
   </Dialog>
 )

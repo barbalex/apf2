@@ -3,11 +3,7 @@ import AsyncSelect from 'react-select/async'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 
-import {
-  container,
-  labelClass,
-  errorClass,
-} from './SelectLoadingOptionsTypable.module.css'
+import styles from './SelectLoadingOptionsTypable.module.css'
 
 export const SelectLoadingOptionsTypable = observer(
   ({
@@ -81,10 +77,10 @@ export const SelectLoadingOptionsTypable = observer(
 
     return (
       <div
-        className={container}
+        className={styles.container}
         data-id={field}
       >
-        {label && <div className={labelClass}>{label}</div>}
+        {label && <div className={styles.labelClass}>{label}</div>}
         <AsyncSelect
           id={field}
           defaultOptions
@@ -107,7 +103,9 @@ export const SelectLoadingOptionsTypable = observer(
           onInputChange={onInputChange}
           loadOptions={loadOptions}
         />
-        {saveToDbError && <div className={errorClass}>{saveToDbError}</div>}
+        {saveToDbError && (
+          <div className={styles.errorClass}>{saveToDbError}</div>
+        )}
       </div>
     )
   },
