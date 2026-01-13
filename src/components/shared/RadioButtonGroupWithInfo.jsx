@@ -12,7 +12,7 @@ export const RadioButtonGroupWithInfo = ({
   saveToDb,
   popover,
 }) => (
-  <div className={container}>
+  <div className={styles.container}>
     <RadioButtonGroup
       value={value}
       name={name}
