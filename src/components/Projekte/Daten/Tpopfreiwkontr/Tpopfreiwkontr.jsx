@@ -13,7 +13,7 @@ import { Spinner } from '../../../shared/Spinner.jsx'
 import { Form } from './Form/index.jsx'
 import { Menu } from './Menu.jsx'
 
-import { container, scrollContainer } from './Tpopfreiwkontr.module.css'
+import styles from './Tpopfreiwkontr.module.css'
 
 export const Component = observer(({ id: idPassed }) => {
   const params = useParams()
@@ -113,7 +113,7 @@ export const Component = observer(({ id: idPassed }) => {
   // console.log('Tpopfreiwkontr, isPrint:', isPrint)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       {!pathname.includes('EKF') && (
         <>
           <FormTitle
@@ -130,7 +130,7 @@ export const Component = observer(({ id: idPassed }) => {
           apId={apId}
           refetch={refetch}
         />
-      : <div className={scrollContainer}>
+      : <div className={styles.scrollContainer}>
           <Form
             data={data?.data}
             row={row}
