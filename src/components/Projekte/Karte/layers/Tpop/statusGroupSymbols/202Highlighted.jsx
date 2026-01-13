@@ -1,8 +1,8 @@
 import Icon from './202Highlighted.svg'
-import { container } from '../../iconContainer.module.css'
+import styles from '../../iconContainer.module.css'
 
 export const TpopIcon202Highlighted = () => (
-  <div className={container}>
+  <div className={styles.container}>
     <Icon />
   </div>
 )

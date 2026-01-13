@@ -1,10 +1,10 @@
 import { Link } from 'react-router'
-import { dokuDate } from '../DesktopDocs.module.css'
+import desktopStyles from '../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Art: Auswertung Population Mengen 📈</h1>
-    <p className={dokuDate}>
+    <p className={desktopStyles.dokuDate}>
       27.03.2020 (Ebene Population ergänzt am 31.3.2023)
     </p>
     <h3>Rahmen-Bedingungen</h3>
