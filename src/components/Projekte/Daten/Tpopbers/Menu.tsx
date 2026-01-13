@@ -13,9 +13,24 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopberId, TpopId } from '../../../../generated/apflora/models.js'
+
+interface CreateTpopberResult {
+  createTpopber: {
+    tpopber: {
+      id: TpopberId
+      tpopId: TpopId
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { tpopId } = useParams()
@@ -28,7 +43,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const onClickAdd = async () => {
     let result
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopberResult>({
         mutation: gql`
           mutation createTpopberForTpopbersForm($tpopId: UUID!) {
             createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
@@ -43,7 +58,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
