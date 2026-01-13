@@ -19,12 +19,33 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.js'
+import type { ProjId } from '../../../../models/apflora/Proj.js'
+
+interface CreateApberuebersichtResult {
+  data?: {
+    createApberuebersicht?: {
+      apberuebersicht?: {
+        id: ApberuebersichtId
+        projId: ProjId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const { projId, apberuebersichtId } = useParams()
+  const { projId, apberuebersichtId } = useParams<{
+    projId: string
+    apberuebersichtId: string
+  }>()
 
   const store = useContext(MobxContext)
 
@@ -32,7 +53,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateApberuebersichtResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -53,7 +74,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
