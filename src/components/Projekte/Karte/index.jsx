@@ -63,7 +63,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-import { container, mapContainer } from './index.module.css'
+import styles from './index.module.css'
 
 // this does not work
 // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
@@ -200,7 +200,7 @@ export const Karte = observer(({ mapContainerRef }) => {
 
   return (
     <div
-      className={`outer-map-container ${container}`}
+      className={`outer-map-container ${styles.container}`}
       data-id="karten-container1"
       ref={mapRef}
     >
@@ -217,7 +217,7 @@ export const Karte = observer(({ mapContainerRef }) => {
           minZoom={0}
           doubleClickZoom={false}
           zoomControl={false}
-          className={`map-container ${mapContainer}`}
+          className={`map-container ${styles.mapContainer}`}
         >
           {activeBaseLayer && (
             <MapResizer mapContainerRef={mapContainerRef}>
@@ -236,7 +236,7 @@ export const Karte = observer(({ mapContainerRef }) => {
               return (
                 <Pane
                   key={`${overlayName}/${index}`}
-                  className={overlayName}
+                  className={stylesoverlayName}
                   name={overlayName}
                   style={{ zIndex: 200 + index }}
                 >

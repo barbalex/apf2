@@ -5,7 +5,7 @@ import { LayersControl } from './LayersControl/index.jsx'
 import { FullscreenControl } from './FullscreenControl.jsx'
 import { PngControl } from './PngControl.jsx'
 
-import { container } from './OwnControls.module.css'
+import styles from './OwnControls.module.css'
 
 export const OwnControls = ({ mapRef }) => {
   /**
@@ -27,7 +27,7 @@ export const OwnControls = ({ mapRef }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       ref={resizeRef}
     >
       <LayersControl />

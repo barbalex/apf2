@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-import { icon, button } from './PngControl.module.css'
+import styles from './PngControl.module.css'
 
 const options = {
   hidden: true,
@@ -52,9 +52,9 @@ export const PngControl = observer(() => {
     <button
       onClick={savePng}
       title="Karte als png speichern"
-      className={button}
+      className={styles.button}
     >
-      <MdGetApp className={icon} />
+      <MdGetApp className={styles.icon} />
     </button>
   )
 })
