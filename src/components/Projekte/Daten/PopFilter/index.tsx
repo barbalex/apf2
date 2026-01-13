@@ -13,9 +13,18 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { PopOrTabs } from './PopOrTabs.jsx'
+import { PopOrTabs } from './PopOrTabs.tsx'
 
 import styles from './index.module.css'
+
+interface PopFilterQueryResult {
+  pops?: {
+    totalCount: number
+  }
+  popsFiltered?: {
+    totalCount: number
+  }
+}
 
 export const PopFilter = observer(() => {
   const { apId } = useParams()
@@ -42,7 +51,7 @@ export const PopFilter = observer(() => {
     }
   }, [activeTab, dataFilter.pop.length])
 
-  const { data: dataPops, error } = useQuery(query, {
+  const { data: dataPops, error } = useQuery<PopFilterQueryResult>(query, {
     variables: {
       filteredFilter: popGqlFilter.filtered,
       allFilter: popGqlFilter.all,

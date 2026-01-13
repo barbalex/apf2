@@ -1,5 +1,5 @@
-import { ApFilter } from '../Daten/ApFilter/index.jsx'
-import { PopFilter } from '../Daten/PopFilter/index.jsx'
+import { ApFilter } from '../Daten/ApFilter/index.tsx'
+import { PopFilter } from '../Daten/PopFilter/index.tsx'
 import { TpopFilter } from '../Daten/TpopFilter/index.tsx'
 import { TpopmassnFilter } from '../Daten/TpopmassnFilter/index.jsx'
 import { TpopfeldkontrFilter } from '../Daten/TpopfeldkontrFilter/index.jsx'
