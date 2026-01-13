@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { formControl } from './TextFieldNonUpdatable.module.css'
+import styles from './TextFieldNonUpdatable.module.css'
 
 export const TextFieldNonUpdatable = ({ label, value = '' }) => {
   const [error, setError] = useState(null)
@@ -20,7 +20,7 @@ export const TextFieldNonUpdatable = ({ label, value = '' }) => {
       fullWidth
       aria-describedby={`${label}-helper`}
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <InputLabel shrink>{label}</InputLabel>
       <Input

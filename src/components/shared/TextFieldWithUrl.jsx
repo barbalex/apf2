@@ -11,11 +11,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import { green } from '@mui/material/colors'
 import getUrls from 'get-urls'
 
-import {
-  container,
-  openInNewIcon,
-  formControl,
-} from './TextFieldWithUrl.module.css'
+import styles from './TextFieldWithUrl.module.css'
 
 export const TextFieldWithUrl = ({
   field,
@@ -34,14 +30,14 @@ export const TextFieldWithUrl = ({
   const onKeyPress = (event) => event.key === 'Enter' && handleSubmit()
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <FormControl
         disabled={disabled}
         fullWidth
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
-        className={formControl}
+        className={styles.formControl}
       >
         <InputLabel
           htmlFor={name}
@@ -75,7 +71,7 @@ export const TextFieldWithUrl = ({
           <MdOpenInNew
             onClick={() => window.open(url, '_blank')}
             data-id="open-url"
-            className={openInNewIcon}
+            className={styles.openInNewIcon}
           />
         </div>
       ))}

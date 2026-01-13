@@ -6,7 +6,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import { observer } from 'mobx-react-lite'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
-import { formControl, popoverContentRow } from './TextFieldWithInfo.module.css'
+import styles from './TextFieldWithInfo.module.css'
 
 export const TextFieldWithInfo = observer(
   ({
@@ -39,7 +39,7 @@ export const TextFieldWithInfo = observer(
         error={!!error}
         aria-describedby={`${label}ErrorText`}
         variant="standard"
-        className={formControl}
+        className={styles.formControl}
       >
         <InputLabel
           htmlFor={name}
@@ -62,7 +62,7 @@ export const TextFieldWithInfo = observer(
           autoCapitalize="off"
           endAdornment={
             <InfoWithPopover name={name}>
-              <div className={popoverContentRow}>{popover}</div>
+              <div className={styles.popoverContentRow}>{popover}</div>
             </InfoWithPopover>
           }
         />
