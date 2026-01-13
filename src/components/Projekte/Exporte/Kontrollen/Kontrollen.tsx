@@ -7,9 +7,154 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId, PopId, TpopId, TpopkontrId, AdresseId, TpopkontrzaehlId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
 
-export const Kontrollen = observer(({ filtered = false }) => {
+interface TpopkontrQueryResult {
+  allTpopkontrs: {
+    nodes: Array<{
+      tpopByTpopId?: {
+        popByPopId?: {
+          apByApId?: {
+            id: ApId
+            aeTaxonomyByArtId?: {
+              id: string
+              artname?: string
+              familie?: string
+            }
+            apBearbstandWerteByBearbeitung?: {
+              id: number
+              text?: string
+            }
+            startJahr?: number
+            apUmsetzungWerteByUmsetzung?: {
+              id: number
+              text?: string
+            }
+          }
+          id: PopId
+          nr?: number
+          name?: string
+          popStatusWerteByStatus?: {
+            id: number
+            text?: string
+          }
+          bekanntSeit?: number
+          statusUnklar?: boolean
+          statusUnklarBegruendung?: string
+          x?: number
+          y?: number
+        }
+        id: TpopId
+        nr?: number
+        gemeinde?: string
+        flurname?: string
+        status?: number
+        popStatusWerteByStatus?: {
+          id: number
+          text?: string
+        }
+        bekanntSeit?: number
+        statusUnklar?: boolean
+        statusUnklarGrund?: string
+        x?: number
+        y?: number
+        radius?: number
+        hoehe?: number
+        exposition?: string
+        klima?: string
+        neigung?: string
+        beschreibung?: string
+        kataster_nr?: string
+        apber_relevant?: number
+        apber_relevant_grund?: number
+        eigentuemer?: string
+        kontakt?: string
+        nutzungszone?: string
+        bewirtschafter?: string
+        bewirtschaftung?: string
+        ekfrequenz?: string
+        ekfrequenzAbweichend?: boolean
+        adresseByEkfKontrolleur?: {
+          id: AdresseId
+          name?: string
+        }
+      }
+      id: TpopkontrId
+      jahr?: number
+      datum?: string
+      tpopkontrTypWerteByTyp?: {
+        id: number
+        text?: string
+      }
+      adresseByBearbeiter?: {
+        id: AdresseId
+        name?: string
+      }
+      ueberlebensrate?: number
+      vitalitaet?: string
+      tpopEntwicklungWerteByEntwicklung?: {
+        id: number
+        text?: string
+      }
+      ursachen?: string
+      erfolgsbeurteilung?: string
+      umsetzungAendern?: string
+      kontrolleAendern?: string
+      bemerkungen?: string
+      lrDelarze?: string
+      lrUmgebungDelarze?: string
+      vegetationstyp?: string
+      konkurrenz?: string
+      moosschicht?: string
+      krautschicht?: string
+      strauchschicht?: string
+      baumschicht?: string
+      tpopkontrIdbiotuebereinstWerteByIdealbiotopUebereinstimmung?: {
+        id: number
+        text?: string
+      }
+      handlungsbedarf?: string
+      flaecheUeberprueft?: number
+      flaeche?: number
+      planVorhanden?: boolean
+      deckungVegetation?: number
+      deckungNackterBoden?: number
+      deckungApArt?: number
+      jungpflanzenVorhanden?: boolean
+      vegetationshoeheMaximum?: number
+      vegetationshoeheMittel?: number
+      gefaehrdung?: string
+      createdAt?: string
+      updatedAt?: string
+      changedBy?: string
+      apberNichtRelevant?: boolean
+      apberNichtRelevantGrund?: string
+      ekfBemerkungen?: string
+      tpopkontrzaehlsByTpopkontrId?: {
+        nodes: Array<{
+          id: TpopkontrzaehlId
+          anzahl?: number
+          tpopkontrzaehlEinheitWerteByEinheit?: {
+            id: number
+            text?: string
+          }
+          tpopkontrzaehlMethodeWerteByMethode?: {
+            id: number
+            text?: string
+          }
+        }>
+      }
+    }>
+  }
+}
+
+interface KontrollenProps {
+  filtered?: boolean
+}
+
+export const Kontrollen = observer(({ filtered = false }: KontrollenProps) => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
   const { tpopkontrGqlFilter } = store.tree
@@ -25,9 +170,9 @@ export const Kontrollen = observer(({ filtered = false }) => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data?: TpopkontrQueryResult }
         try {
-          result = await apolloClient.query({
+          result = await apolloClient.query<TpopkontrQueryResult>({
             query: gql`
               query tpopkontrForExportQuery($filter: TpopkontrFilter) {
                 allTpopkontrs(
@@ -182,7 +327,7 @@ export const Kontrollen = observer(({ filtered = false }) => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

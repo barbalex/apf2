@@ -9,6 +9,62 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from '../index.module.css'
 
+interface TpopkontrWebgisBunQueryResult {
+  allVTpopkontrWebgisbuns: {
+    nodes: Array<{
+      APARTID?: string
+      APART?: string
+      POPGUID?: string
+      POPNR?: number
+      TPOPGUID?: string
+      TPOPNR?: number
+      TPOPSTATUS?: string
+      tpopapberrelevant?: number
+      tpopapberrelevantgrund?: string
+      KONTRGUID?: string
+      KONTRJAHR?: number
+      KONTRDAT?: string
+      KONTRTYP?: string
+      KONTRBEARBEITER?: string
+      KONTRUEBERLEBENSRATE?: number
+      KONTRVITALITAET?: string
+      KONTRENTWICKLUNG?: string
+      KONTRURSACHEN?: string
+      KONTRERFOLGBEURTEIL?: string
+      KONTRAENDUMSETZUNG?: string
+      KONTRAENDKONTROLLE?: string
+      KONTR_X?: number
+      KONTR_Y?: number
+      KONTRBEMERKUNGEN?: string
+      KONTRLRMDELARZE?: string
+      KONTRDELARZEANGRENZ?: string
+      KONTRVEGTYP?: string
+      KONTRKONKURRENZ?: string
+      KONTRMOOSE?: string
+      KONTRKRAUTSCHICHT?: string
+      KONTRSTRAUCHSCHICHT?: string
+      KONTRBAUMSCHICHT?: string
+      KONTRUEBEREINSTIMMUNIDEAL?: string
+      KONTRHANDLUNGSBEDARF?: string
+      KONTRUEBERPRUFTFLAECHE?: number
+      KONTRFLAECHETPOP?: number
+      KONTRAUFPLAN?: boolean
+      KONTRDECKUNGVEG?: number
+      KONTRDECKUNGBODEN?: number
+      KONTRDECKUNGART?: number
+      KONTRJUNGEPLANZEN?: boolean
+      KONTRMAXHOEHEVEG?: number
+      KONTRMITTELHOEHEVEG?: number
+      KONTRGEFAEHRDUNG?: string
+      KONTRCHANGEDAT?: string
+      KONTRCHANGEBY?: string
+      ZAEHLEINHEITEN?: string
+      ANZAHLEN?: string
+      METHODEN?: string
+    }>
+  }
+}
+
 export const KontrFuerWebgisBun = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
@@ -24,9 +80,9 @@ export const KontrFuerWebgisBun = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data?: TpopkontrWebgisBunQueryResult }
         try {
-          result = await apolloClient.query({
+          result = await apolloClient.query<TpopkontrWebgisBunQueryResult>({
             query: gql`
               query viewTpopkontrWebgisbuns {
                 allVTpopkontrWebgisbuns {
@@ -87,7 +143,7 @@ export const KontrFuerWebgisBun = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

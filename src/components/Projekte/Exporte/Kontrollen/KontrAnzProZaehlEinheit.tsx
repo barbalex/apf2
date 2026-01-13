@@ -7,7 +7,95 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import { ApId, PopId, TpopId, TpopkontrId } from '../../../../models/apflora/index.ts'
+
 import styles from '../index.module.css'
+
+interface KontrzaehlAnzproeinheitQueryResult {
+  allVKontrzaehlAnzproeinheits: {
+    nodes: Array<{
+      ap_id?: ApId
+      artname?: string
+      ap_bearbeitung?: string
+      ap_start_jahr?: number
+      ap_umsetzung?: string
+      ap_bearbeiter?: string
+      pop_id?: PopId
+      pop_nr?: number
+      pop_name?: string
+      pop_status?: string
+      pop_bekannt_seit?: number
+      tpop_id?: TpopId
+      tpop_nr?: number
+      tpop_gemeinde?: string
+      tpop_flurname?: string
+      tpop_status?: number
+      tpop_bekannt_seit?: number
+      tpop_status_unklar?: boolean
+      tpop_status_unklar_grund?: string
+      tpop_x?: number
+      tpop_y?: number
+      tpop_radius?: number
+      tpop_hoehe?: number
+      tpop_exposition?: string
+      tpop_klima?: string
+      tpop_neigung?: string
+      tpop_beschreibung?: string
+      tpop_kataster_nr?: string
+      tpop_apber_relevant?: number
+      tpop_eigentuemer?: string
+      tpop_kontakt?: string
+      tpop_nutzungszone?: string
+      tpop_bewirtschafter?: string
+      tpop_bewirtschaftung?: string
+      tpop_ekfrequenz?: string
+      tpop_ekfrequenz_abweichend?: boolean
+      kontr_id?: TpopkontrId
+      kontr_jahr?: number
+      kontr_datum?: string
+      kontr_typ?: string
+      kontr_bearbeiter?: string
+      kontr_ueberlebensrate?: number
+      kontr_vitalitaet?: string
+      kontr_entwicklung?: string
+      kontr_ursachen?: string
+      kontr_erfolgsbeurteilung?: string
+      kontr_umsetzung_aendern?: string
+      kontr_kontrolle_aendern?: string
+      kontr_bemerkungen?: string
+      kontr_lr_delarze?: string
+      kontr_lr_umgebung_delarze?: string
+      kontr_vegetationstyp?: string
+      kontr_konkurrenz?: string
+      kontr_moosschicht?: string
+      kontr_krautschicht?: string
+      kontr_strauchschicht?: string
+      kontr_baumschicht?: string
+      kontr_idealbiotop_uebereinstimmung?: string
+      kontr_handlungsbedarf?: string
+      kontr_flaeche_ueberprueft?: number
+      kontr_flaeche?: number
+      kontr_plan_vorhanden?: boolean
+      kontr_deckung_vegetation?: number
+      kontr_deckung_nackter_boden?: number
+      kontr_deckung_ap_art?: number
+      kontr_jungpflanzen_vorhanden?: boolean
+      kontr_vegetationshoehe_maximum?: number
+      kontr_vegetationshoehe_mittel?: number
+      kontr_gefaehrdung?: string
+      kontr_created_at?: string
+      kontr_updated_at?: string
+      kontr_changed_by?: string
+      kontr_apber_nicht_relevant?: boolean
+      apber_nicht_relevant_grund?: string
+      ekf_bemerkungen?: string
+      id?: string
+      einheit?: string
+      methode?: string
+      anzahl?: number
+    }>
+  }
+}
 
 export const KontrAnzProZaehlEinheit = observer(() => {
   const store = useContext(MobxContext)
@@ -24,9 +112,9 @@ export const KontrAnzProZaehlEinheit = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data?: KontrzaehlAnzproeinheitQueryResult }
         try {
-          result = await apolloClient.query({
+          result = await apolloClient.query<KontrzaehlAnzproeinheitQueryResult>({
             query: gql`
               query viewKontrzaehlAnzproeinheits {
                 allVKontrzaehlAnzproeinheits {
@@ -117,7 +205,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

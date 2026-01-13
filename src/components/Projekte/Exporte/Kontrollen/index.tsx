@@ -7,10 +7,10 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { Kontrollen as KontrollenComponent } from './Kontrollen.jsx'
-import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.jsx'
-import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.jsx'
-import { InfoFlora } from './InfoFlora.jsx'
+import { Kontrollen as KontrollenComponent } from './Kontrollen.tsx'
+import { KontrFuerWebgisBun } from './KontrFuerWebgisBun.tsx'
+import { KontrAnzProZaehlEinheit } from './KontrAnzProZaehlEinheit.tsx'
+import { InfoFlora } from './InfoFlora.tsx'
 
 import styles from '../index.module.css'
 

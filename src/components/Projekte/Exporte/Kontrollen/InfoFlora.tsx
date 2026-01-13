@@ -9,6 +9,55 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from '../index.module.css'
 
+interface InfoFloraQueryResult {
+  allVExportInfoFloraBeobs: {
+    nodes: Array<{
+      idProjektintern?: string
+      taxonomieId?: string
+      taxonomie?: string
+      artname?: string
+      beobachtungstyp?: string
+      beobachtungstypCodiert?: string
+      herkunft?: string
+      herkunftCodiert?: string
+      status?: string
+      bekanntSeit?: number
+      datum?: string
+      jahr?: number
+      monat?: number
+      tag?: number
+      genauigkeitDatum?: string
+      genauigkeitDatumCodiert?: string
+      praesenz?: string
+      praesenzCodiert?: string
+      gefaehrdung?: string
+      vitalitaet?: string
+      beschreibung?: string
+      lebensraumNachDelarze?: string
+      umgebungNachDelarze?: string
+      deckungMoosschicht?: number
+      deckungKrautschicht?: number
+      deckungStrauchschicht?: number
+      deckungBaumschicht?: number
+      genauigkeitLage?: string
+      genauigkeitLageCodiert?: string
+      geometryType?: string
+      genauigkeitHoehe?: number
+      x?: number
+      y?: number
+      gemeinde?: string
+      flurname?: string
+      obergrenzeHoehe?: number
+      zaehlungen?: string
+      expertiseIntroduit?: string
+      expertiseIntroduiteNom?: string
+      projekt?: string
+      autor?: string
+      aktionsplan?: string
+    }>
+  }
+}
+
 export const InfoFlora = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
@@ -19,9 +68,9 @@ export const InfoFlora = observer(() => {
 
   const onClickInfoFlora = async () => {
     setQueryState('lade Daten...')
-    let result
+    let result: { data?: InfoFloraQueryResult }
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<InfoFloraQueryResult>({
         query: gql`
           query allVExportInfoFloraBeobs {
             allVExportInfoFloraBeobs {
@@ -75,7 +124,7 @@ export const InfoFlora = observer(() => {
       })
     } catch (error) {
       enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

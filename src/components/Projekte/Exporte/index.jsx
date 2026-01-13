@@ -1,7 +1,7 @@
 import { FormTitle } from '../../shared/FormTitle/index.jsx'
 import { Ap } from './Ap/index.tsx'
 import { Beobachtungen } from './Beobachtungen/index.tsx'
-import { Kontrollen } from './Kontrollen/index.jsx'
+import { Kontrollen } from './Kontrollen/index.tsx'
 import { Massnahmen } from './Massnahmen/index.jsx'
 import { Populationen } from './Populationen/index.jsx'
 import { Teilpopulationen } from './Teilpopulationen/index.jsx'
