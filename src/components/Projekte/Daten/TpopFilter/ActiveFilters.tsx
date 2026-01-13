@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 
-import { title, comment } from './ActiveFilters.module.css'
+import styles from './ActiveFilters.module.css'
 
 export const ActiveFilters = observer(() => {
   const { apId } = useParams()
@@ -51,22 +51,22 @@ export const ActiveFilters = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={title}>Zusätzlich aktive Filter:</div>
+      <div className={styles.title}>Zusätzlich aktive Filter:</div>
       <ul>
         {!!navApFilterComment && (
-          <li className={comment}>{navApFilterComment}</li>
+          <li className={styles.comment}>{navApFilterComment}</li>
         )}
         {!!navHiearchyComment && (
-          <li className={comment}>{navHiearchyComment}</li>
+          <li className={styles.comment}>{navHiearchyComment}</li>
         )}
-        {!!navLabelComment && <li className={comment}>{navLabelComment}</li>}
+        {!!navLabelComment && <li className={styles.comment}>{navLabelComment}</li>}
         {!!artHierarchyComment && (
-          <li className={comment}>{artHierarchyComment}</li>
+          <li className={styles.comment}>{artHierarchyComment}</li>
         )}
         {!!popHierarchyComment && (
-          <li className={comment}>{popHierarchyComment}</li>
+          <li className={styles.comment}>{popHierarchyComment}</li>
         )}
-        {!!mapFilterComment && <li className={comment}>{mapFilterComment}</li>}
+        {!!mapFilterComment && <li className={styles.comment}>{mapFilterComment}</li>}
       </ul>
     </ErrorBoundary>
   )

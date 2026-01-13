@@ -15,7 +15,7 @@ import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantI
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import { container } from './Tpop.module.css'
+import styles from './Tpop.module.css'
 
 export const Tpop = observer(
   ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
@@ -58,7 +58,7 @@ export const Tpop = observer(
     if (!row) return null
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <TextField
           name="nr"
           label="Nr."

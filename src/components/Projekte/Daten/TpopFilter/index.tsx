@@ -16,7 +16,7 @@ import { Tabs } from './Tabs.jsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { ActiveFilters } from './ActiveFilters.js'
 
-import { container, styledTab } from './index.module.css'
+import styles from './index.module.css'
 
 export const TpopFilter = observer(() => {
   const store = useContext(MobxContext)
@@ -56,7 +56,7 @@ export const TpopFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FilterTitle
           title="Teil-Population"
           table="tpop"
@@ -81,13 +81,13 @@ export const TpopFilter = observer(() => {
             label="Teil-Population"
             value="tpop"
             data-id="tpop"
-            className={styledTab}
+            className={styles.styledTab}
           />
           <Tab
             label="EK"
             value="ek"
             data-id="ek"
-            className={styledTab}
+            className={styles.styledTab}
           />
         </MuiTabs>
         {tab === 'tpop' ?

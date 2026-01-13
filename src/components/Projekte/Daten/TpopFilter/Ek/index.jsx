@@ -9,7 +9,7 @@ import { query } from './query.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
-import { container, ekfrequenzOptionsContainer } from './index.module.css'
+import styles from './index.module.css'
 
 export const Ek = ({ saveToDb, row, fieldErrors }) => {
   const { apId } = useParams()
@@ -40,8 +40,8 @@ export const Ek = ({ saveToDb, row, fieldErrors }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={ekfrequenzOptionsContainer}>
+      <div className={styles.container}>
+        <div className={styles.ekfrequenzOptionsContainer}>
           <RadioButtonGroup
             name="ekfrequenz"
             dataSource={ekfrequenzOptions}
