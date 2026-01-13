@@ -1,7 +1,7 @@
 import { ApFilter } from '../Daten/ApFilter/index.tsx'
 import { PopFilter } from '../Daten/PopFilter/index.tsx'
 import { TpopFilter } from '../Daten/TpopFilter/index.tsx'
-import { TpopmassnFilter } from '../Daten/TpopmassnFilter/index.jsx'
+import { TpopmassnFilter } from '../Daten/TpopmassnFilter/index.tsx'
 import { TpopfeldkontrFilter } from '../Daten/TpopfeldkontrFilter/index.tsx'
 import { TpopfreiwkontrFilter } from '../Daten/TpopfreiwkontrFilter/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'

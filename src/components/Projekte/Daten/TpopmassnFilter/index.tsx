@@ -17,7 +17,42 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { Tabs } from './Tabs.jsx'
+import { Tabs } from './Tabs.tsx'
+
+import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
+import type { TpopmassnTypWerteCode } from '../../../../models/apflora/TpopmassnTypWerteCode.ts'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+
+interface TpopmassnsFilterQueryResult {
+  allTpopmassns: {
+    totalCount: number
+  }
+  tpopmassnsFiltered: {
+    totalCount: number
+  }
+  allAdresses: {
+    nodes: Array<{
+      id: string
+      value: AdresseId
+      label: string
+    }>
+  }
+  allTpopmassnTypWertes: {
+    nodes: Array<{
+      id: string
+      value: TpopmassnTypWerteCode
+      label: string
+      anpflanzung: boolean | null
+    }>
+  }
+  allTpopkontrzaehlEinheitWertes: {
+    nodes: Array<{
+      id: string
+      value: TpopkontrzaehlEinheitWerteCode
+      label: string
+    }>
+  }
+}
 
 import styles from './index.module.css'
 
@@ -45,7 +80,7 @@ export const TpopmassnFilter = observer(() => {
     }
   }, [activeTab, dataFilter.tpopmassn.length])
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<TpopmassnsFilterQueryResult>(query, {
     variables: {
       filteredFilter: tpopmassnGqlFilter.filtered,
       allFilter: tpopmassnGqlFilter.all,
@@ -58,7 +93,7 @@ export const TpopmassnFilter = observer(() => {
     (n) => n.value === row?.typ,
   )?.anpflanzung
 
-  const saveToDb = (event) =>
+  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpopmassn',
       key: event.target.name,
