@@ -16,9 +16,54 @@ import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
 
+import type { EkfrequenzId, ApId } from '../../models/apflora/public/Ekfrequenz.ts'
+
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
-export const ChooseApToCopyErfkritsFrom = observer(() => {
+interface ExistingEkfrequenzNode {
+  id: EkfrequenzId
+}
+
+interface ExistingEkfrequenzQueryResult {
+  allEkfrequenzs: {
+    nodes: ExistingEkfrequenzNode[]
+  }
+}
+
+interface NewEkfrequenzNode {
+  id: EkfrequenzId
+  anwendungsfall: string | null
+  apId: ApId
+  bemerkungen: string | null
+  code: string | null
+  ekAbrechnungstyp: string | null
+  ektyp: string | null
+  kontrolljahre: number[] | null
+  kontrolljahreAb: string | null
+  sort: number | null
+}
+
+interface NewEkfrequenzQueryResult {
+  allEkfrequenzs: {
+    nodes: NewEkfrequenzNode[]
+  }
+}
+
+interface ApOption {
+  value: ApId
+  label: string | null
+  ekfrequenzsByApId: {
+    totalCount: number
+  }
+}
+
+interface ApOptionsQueryResult {
+  allAps: {
+    nodes: ApOption[]
+  }
+}
+
+export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
   const { apId } = useParams()
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -26,30 +71,33 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
   const {
     user,
     enqueNotification,
-    openChooseApToCopyErfkritsFrom,
-    setOpenChooseApToCopyErfkritsFrom,
+    openChooseApToCopyEkfrequenzsFrom,
+    setOpenChooseApToCopyEkfrequenzsFrom,
   } = store
 
-  const onCloseChooseApDialog = () => setOpenChooseApToCopyErfkritsFrom(false)
+  const onCloseChooseApDialog = () =>
+    setOpenChooseApToCopyEkfrequenzsFrom(false)
 
   const onChooseAp = async (option) => {
     const newApId = option.value
     // 0. choosing no option is not possible so needs not be catched
-    // 1. delete existing erfkrit
-    // 1.1: query existing erfkrit
-    let existingErfkritResult
+    // 1. delete existing ekfrequenz
+    // 1.1: query existing ekfrequenz
+    let existingEkfrequenzResult
     try {
-      existingErfkritResult = await apolloClient.query({
+      existingEkfrequenzResult = await apolloClient.query<ExistingEkfrequenzQueryResult>({
         query: gql`
-          query getExistingErfkritForErfkritFolder($apId: UUID) {
-            allErfkrits(filter: { apId: { equalTo: $apId } }) {
+          query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
+            allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
               nodes {
                 id
               }
             }
           }
         `,
-        variables: { apId },
+        variables: {
+          apId,
+        },
         // got errors when not setting 'network-only' policy
         // when copying repeatedly
         // apollo seemed to use local cache which was not up to date any more
@@ -61,24 +109,28 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
       console.log({ error })
       setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
     }
-    const existingErfkrits = (
-      existingErfkritResult?.data?.allErfkrits?.nodes ?? []
+    const existingEkfrequenzs = (
+      existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
     ).map((e) => e.id)
 
-    // 1.2: delete existing erfkrit
+    // 1.2: delete existing ekfrequenz
     try {
       await Promise.allSettled(
-        existingErfkrits.map(
+        existingEkfrequenzs.map(
           async (id) =>
             await apolloClient.mutate({
               mutation: gql`
-                mutation deleteExistingErfkritForErfkritFolder($id: UUID!) {
-                  deleteErfkritById(input: { id: $id }) {
-                    deletedErfkritId
+                mutation deleteExistingEkfrequenzForEkfrequenzFolder(
+                  $id: UUID!
+                ) {
+                  deleteEkfrequenzById(input: { id: $id }) {
+                    deletedEkfrequenzId
                   }
                 }
               `,
-              variables: { id },
+              variables: {
+                id,
+              },
               update(cache) {
                 cache.evict({ id })
               },
@@ -88,63 +140,92 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
     } catch (error) {
       console.log({ error })
       setApOptionsError(
-        `Fehler beim Löschen der existierenden Erfolgskriterien: ${error.message}`,
+        `Fehler beim Löschen der existierenden EK-Frequenzen: ${error.message}`,
       )
     }
 
-    // 2. add erfkrit from other ap
-    // 2.1: query erfkrit
-    let newErfkritResult
+    // 2. add ekfrequenz from other ap
+    // 2.1: query ekfrequenz
+    let newEkfrequenzResult
     try {
-      newErfkritResult = await apolloClient.query({
+      newEkfrequenzResult = await apolloClient.query<NewEkfrequenzQueryResult>({
         query: gql`
-          query getNewErfkritForErfkritFolder($apId: UUID) {
-            allErfkrits(filter: { apId: { equalTo: $apId } }) {
+          query getNewEkfrequenzForEkfrequenzFolder($apId: UUID) {
+            allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
               nodes {
                 id
+                anwendungsfall
                 apId
-                erfolg
-                kriterien
+                bemerkungen
+                code
+                ekAbrechnungstyp
+                ektyp
+                kontrolljahre
+                kontrolljahreAb
+                sort
               }
             }
           }
         `,
-        variables: { apId: newApId },
+        variables: {
+          apId: newApId,
+        },
       })
     } catch (error) {
       console.log({ error })
       return setApOptionsError(
-        `Fehler beim Abfragen der neuen Erfolgskriterien: ${error.message}`,
+        `Fehler beim Abfragen der neuen EK-Frequenzen: ${error.message}`,
       )
     }
-    const newErfkrits = newErfkritResult?.data?.allErfkrits?.nodes ?? []
+    const newEkfrequenzs =
+      newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
 
-    // 2.2: insert erfkrit
+    // 2.2: insert ekfrequenz
     let res
     try {
       res = await Promise.allSettled(
-        newErfkrits.map(async (ekf) =>
+        newEkfrequenzs.map(async (ekf) =>
           apolloClient.mutate({
             mutation: gql`
-              mutation insertErfkritForErfkritFolder(
+              mutation insertEkfrequenzForEkfrequenzFolder(
                 $apId: UUID!
-                $erfolg: Int
-                $kriterien: String
+                $anwendungsfall: String
+                $bemerkungen: String
+                $changedBy: String
+                $code: String
+                $ekAbrechnungstyp: String
+                $ektyp: EkType
+                $kontrolljahre: [Int]
+                $kontrolljahreAb: EkKontrolljahreAb
+                $sort: Int
               ) {
-                createErfkrit(
+                createEkfrequenz(
                   input: {
-                    erfkrit: {
+                    ekfrequenz: {
                       apId: $apId
-                      erfolg: $erfolg
-                      kriterien: $kriterien
+                      anwendungsfall: $anwendungsfall
+                      bemerkungen: $bemerkungen
+                      code: $code
+                      ekAbrechnungstyp: $ekAbrechnungstyp
+                      ektyp: $ektyp
+                      kontrolljahre: $kontrolljahre
+                      kontrolljahreAb: $kontrolljahreAb
+                      sort: $sort
+                      changedBy: $changedBy
                     }
                   }
                 ) {
-                  erfkrit {
+                  ekfrequenz {
                     id
                     apId
-                    erfolg
-                    kriterien
+                    anwendungsfall
+                    bemerkungen
+                    code
+                    ekAbrechnungstyp
+                    ektyp
+                    kontrolljahre
+                    kontrolljahreAb
+                    sort
                     changedBy
                   }
                 }
@@ -153,31 +234,41 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
             // somehow in dev i got errors claiming the strings were not utf-8
             // invalid byte sequence for encoding "UTF8"
             variables: {
-              anwendungsfall: ekf.anwendungsfall,
               apId: apId,
-              erfolg: ekf.erfolg,
-              kriterien: ekf.kriterien,
+              anwendungsfall: ekf.anwendungsfall ?? null,
+              bemerkungen: ekf.bemerkungen ?? null,
+              code: ekf.code ?? null,
+              ekAbrechnungstyp: ekf.ekAbrechnungstyp ?? null,
+              ektyp: ekf.ektyp ?? null,
+              kontrolljahre: ekf.kontrolljahre ?? null,
+              kontrolljahreAb: ekf.kontrolljahreAb ?? null,
+              sort: ekf.sort ?? null,
               changedBy: user.name,
             },
           }),
         ),
       )
     } catch (error) {
-      console.log('Error adding copied Erfolgskriterien:', error)
+      console.log('Error adding copied EK-Frequenzen:', error)
       return setApOptionsError(
-        `Fehler beim Kopieren der Erfolgskriterien: ${error.message}`,
+        `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
       )
     }
+    // console.log('ChooseApToCopyEkfrequenzsFrom, res:', res)
 
     // 3. inform user
-    setOpenChooseApToCopyErfkritsFrom(false)
+    setOpenChooseApToCopyEkfrequenzsFrom(false)
     enqueNotification({
-      message: `Die Erfolgskriterien wurden kopiert`,
-      options: { variant: 'info' },
+      message: `Die EK-Frequenzen wurden kopiert`,
+      options: {
+        variant: 'info',
+      },
     })
-    tsQueryClient.invalidateQueries({ queryKey: [`treeErfkrit`] })
+    tsQueryClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
     tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
-    tsQueryClient.invalidateQueries({ queryKey: [`treeAp`] })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeAp`],
+    })
   }
 
   const [apOptionsError, setApOptionsError] = useState(undefined)
@@ -192,51 +283,53 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
       : { label: { isNull: false }, id: { notEqualTo: apId } }
     let result
     try {
-      result = await apolloClient.query({
-        // would be elegant to query only ap with erfkrit
+      result = await apolloClient.query<ApOptionsQueryResult>({
+        // would be elegant to query only ap with ekfrequenz
         // solution: https://github.com/graphile/pg-aggregates
         query: gql`
-          query apForErfkritfolder($filter: ApFilter) {
+          query apForEkfrequenzfolder($filter: ApFilter) {
             allAps(orderBy: [LABEL_ASC], filter: $filter) {
               nodes {
                 value: id
                 label
-                erfkritsByApId {
+                ekfrequenzsByApId {
                   totalCount
                 }
               }
             }
           }
         `,
-        variables: { filter },
+        variables: {
+          filter: filter,
+        },
       })
     } catch (error) {
       console.log({ error })
       setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
     }
     const options = result?.data?.allAps?.nodes ?? []
-    // only show options with erfkrits
-    const optionsWithErfkrits = options.filter(
-      (e) => e.erfkritsByApId.totalCount > 0,
+    // only show options with ekfrequenzs
+    const optionsWithEkfrequenzs = options.filter(
+      (e) => e.ekfrequenzsByApId.totalCount > 0,
     )
-    cb(optionsWithErfkrits)
+    cb(optionsWithEkfrequenzs)
   }
 
   return (
     <ErrorBoundary>
       <Dialog
-        open={openChooseApToCopyErfkritsFrom}
+        open={openChooseApToCopyEkfrequenzsFrom}
         onClose={onCloseChooseApDialog}
       >
-        <DialogTitle>Erfolgskriterien aus anderer Art kopieren</DialogTitle>
+        <DialogTitle>EK-Frequenzen aus anderer Art kopieren</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Achtung: Allfällige bestehende Erfolgskriterien werden gelöscht und
-            mit den kopierten ersetzt, sobald Sie einen Aktionsplän wählen
+            Achtung: Allfällige bestehende EK-Frequenzen werden gelöscht und mit
+            den kopierten ersetzt, sobald Sie eine Art wählen
           </DialogContentText>
           <div className={styles.selectContainer}>
             <div className={styles.selectLabel}>
-              Art (nur solche mit Erfolgskriterien)
+              Art (nur solche mit EK-Frequenzen)
             </div>
             <AsyncSelect
               autoFocus

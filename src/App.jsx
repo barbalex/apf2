@@ -44,7 +44,7 @@ const NotificationDismisser = lazy(async () => ({
     .NotificationDismisser,
 }))
 const Router = lazy(async () => ({
-  default: (await import('./components/Router/index.jsx')).Router,
+  default: (await import('./components/Router/index.tsx')).Router,
 }))
 // const UnterhaltsRouter = lazy(async () => ({
 //   default: (await import('./components/Router/indexUnterhalt.jsx')).Router,
