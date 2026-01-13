@@ -29,11 +29,7 @@ import {
   message as wgs84LongMessage,
 } from '../../modules/wgs84LongIsValid.js'
 
-import {
-  formControl,
-  leftFormControl,
-  rowClass,
-} from './Coordinates.module.css'
+import styles from './Coordinates.module.css'
 
 export const Coordinates = observer(({ row, refetchForm, table }) => {
   const { lv95X, lv95Y, id } = row || {}
@@ -234,13 +230,13 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
 
   return (
     <>
-      <div className={rowClass}>
+      <div className={styles.rowClass}>
         <FormControl
           fullWidth
           error={!!wgs84LatError}
           aria-describedby={`${id}wgs84LatErrorText`}
           variant="standard"
-          className={leftFormControl}
+          className={styles.leftFormControl}
         >
           <InputLabel
             htmlFor={`${id}wgs84Lat`}
@@ -274,7 +270,7 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
           error={!!wgs84LongError}
           aria-describedby={`${id}wgs84LongErrorText`}
           variant="standard"
-          className={formControl}
+          className={styles.formControl}
         >
           <InputLabel
             htmlFor={`${id}wgs84Long`}
@@ -304,13 +300,13 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
           )}
         </FormControl>
       </div>
-      <div className={rowClass}>
+      <div className={styles.rowClass}>
         <FormControl
           fullWidth
           error={!!xError}
           aria-describedby={`${id}lv95XErrorText`}
           variant="standard"
-          className={leftFormControl}
+          className={styles.leftFormControl}
         >
           <InputLabel
             htmlFor={`${id}lv95X`}
@@ -344,7 +340,7 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
           error={!!yError}
           aria-describedby={`${id}lv95YErrorText`}
           variant="standard"
-          className={formControl}
+          className={styles.formControl}
         >
           <InputLabel
             htmlFor={`${id}lv95Y`}

@@ -3,7 +3,7 @@ import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { formControl, formLabel, checkbox } from './Checkbox2States.module.css'
+import styles from './Checkbox2States.module.css'
 
 export const Checkbox2States = ({
   label,
@@ -35,11 +35,11 @@ export const Checkbox2States = ({
       error={!!error}
       aria-describedby={`${label}ErrorText`}
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       <FormLabel
         component="legend"
-        className={formLabel}
+        className={styles.formLabel}
         htmlFor={name}
       >
         {label}
@@ -51,7 +51,7 @@ export const Checkbox2States = ({
         color="primary"
         checked={checked}
         disabled={disabled}
-        className={checkbox}
+        className={styles.checkbox}
       />
       {!!helperText && (
         <FormHelperText id={`${label}helperText`}>{helperText}</FormHelperText>

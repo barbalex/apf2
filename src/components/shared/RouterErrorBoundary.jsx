@@ -7,12 +7,7 @@ import { IdbContext } from '../../idbContext.js'
 import { MobxContext as storeContext } from '../../mobxContext.js'
 import { logout } from '../../modules/logout.js'
 
-import {
-  container,
-  buttonContainer,
-  button,
-  preWrapping,
-} from './RouterErrorBoundary.module.css'
+import styles from './RouterErrorBoundary.module.css'
 
 export const RouterErrorBoundary = observer(({ children }) => {
   const error = useRouteError()
@@ -24,12 +19,12 @@ export const RouterErrorBoundary = observer(({ children }) => {
   const onReload = () => window.location.reload(true)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={preWrapping}>{error.message}</pre>
-      <div className={buttonContainer}>
+      <pre className={styles.preWrapping}>{error.message}</pre>
+      <div className={styles.buttonContainer}>
         <Button
-          className={button}
+          className={styles.button}
           variant="outlined"
           onClick={onReload}
           color="inherit"
@@ -37,9 +32,9 @@ export const RouterErrorBoundary = observer(({ children }) => {
           neu starten
         </Button>
       </div>
-      <div className={buttonContainer}>
+      <div className={styles.buttonContainer}>
         <Button
-          className={button}
+          className={styles.button}
           variant="outlined"
           onClick={onLogout}
           color="inherit"

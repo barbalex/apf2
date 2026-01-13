@@ -5,15 +5,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { IoMdLocate } from 'react-icons/io'
 
 import { exists } from '../../modules/exists.js'
-import {
-  addLocationIcon,
-  container,
-  labelClass,
-  errorClass,
-  field,
-  select,
-  iconButton,
-} from './SelectCreatableGemeinde.module.css'
+import styles from './SelectCreatableGemeinde.module.css'
 
 export const SelectCreatableGemeinde = ({
   label,
@@ -82,19 +74,19 @@ export const SelectCreatableGemeinde = ({
 
   return (
     <div
-      className={container}
+      className={styles.container}
       data-id={name}
       style={styleMeantForSelect}
     >
       {label && (
         <div
-          className={labelClass}
+          className={styles.labelClass}
           style={{ color: error ? '#f44336' : 'rgb(0, 0, 0, 0.54)' }}
         >
           {label}
         </div>
       )}
-      <div className={field}>
+      <div className={styles.field}>
         <CreatableSelect
           id={name}
           name={name}
@@ -111,21 +103,21 @@ export const SelectCreatableGemeinde = ({
           maxheight={maxHeight}
           classNamePrefix="react-select"
           nocaret={noCaret}
-          className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${select}`}
+          className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${styles.select}`}
         />
         {showLocate && (
           <Tooltip title="Mit Hilfe der Koordinaten automatisch setzen">
             <IconButton
               aria-label="Mit Hilfe der Koordinaten automatisch setzen"
               onClick={onClickLocate}
-              className={iconButton}
+              className={styles.iconButton}
             >
-              <IoMdLocate className={addLocationIcon} />
+              <IoMdLocate className={styles.addLocationIcon} />
             </IconButton>
           </Tooltip>
         )}
       </div>
-      {error && <div className={errorClass}>{error}</div>}
+      {error && <div className={styles.errorClass}>{error}</div>}
     </div>
   )
 }

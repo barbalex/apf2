@@ -5,7 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import { DateTime } from 'luxon'
 import DatePicker from 'react-datepicker'
 
-import { formControl, labelClass, datePicker } from './Date.module.css'
+import styles from './Date.module.css'
 
 const dateFormat = [
   'dd.MM.yyyy',
@@ -83,12 +83,12 @@ export const DateField = ({
   return (
     <FormControl
       variant="standard"
-      className={formControl}
+      className={styles.formControl}
     >
       {!!label && (
         <InputLabel
           htmlFor={name}
-          className={labelClass}
+          className={styles.labelClass}
         >
           {label}
         </InputLabel>
@@ -100,7 +100,7 @@ export const DateField = ({
         // onChangeRaw={onChangeDatePickerRaw}
         dateFormat={dateFormat}
         popperPlacement={popperPlacement}
-        className={datePicker}
+        className={styles.datePicker}
       />
       {!!error && <FormHelperText>{error}</FormHelperText>}
     </FormControl>

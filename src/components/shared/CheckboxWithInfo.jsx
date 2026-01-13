@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 
 import { InfoWithPopover } from './InfoWithPopover.jsx'
-import { container, formControl } from './CheckboxWithInfo.module.css'
+import styles from './CheckboxWithInfo.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization
 const StyledFormControlLabel = styled((props) => (
@@ -26,13 +26,13 @@ export const CheckboxWithInfo = observer(
     const onCheck = (e, val) => saveToDb(val)
 
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <FormControl
           component="fieldset"
           error={!!error}
           aria-describedby={`${label}ErrorText`}
           variant="standard"
-          className={formControl}
+          className={styles.formControl}
         >
           <FormGroup>
             <StyledFormControlLabel
