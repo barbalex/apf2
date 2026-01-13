@@ -8,7 +8,7 @@ import { MobxContext } from '../../../mobxContext.js'
 import { FilterInput } from './FilterInput.jsx'
 import { navListFilterAtoms } from '../../../JotaiStore/index.js'
 
-import { container, titleRow, titleClass } from './index.module.css'
+import styles from './index.module.css'
 
 export const FormTitle = ({
   title,
@@ -37,10 +37,10 @@ export const FormTitle = ({
   // }, [!!filterValue])
 
   return (
-    <div className={container}>
-      <div className={titleRow}>
+    <div className={styles.container}>
+      <div className={styles.titleRow}>
         <div
-          className={titleClass}
+          className={styles.titleClass}
           data-id="form-title"
         >
           {title}

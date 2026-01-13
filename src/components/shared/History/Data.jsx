@@ -3,7 +3,7 @@ import { diffSentences } from 'diff'
 import { toStringIfPossible } from '../../../modules/toStringIfPossible.js'
 import { Spinner } from '../Spinner'
 
-import { row, key } from './Data.module.css'
+import styles from './Data.module.css'
 
 const styles = {
   added: { color: 'green' },
@@ -29,13 +29,13 @@ export const Data = ({ dataArray = [], loading }) => {
 
     return (
       <div
-        className={row}
+        className={styles.row}
         key={d.label}
         style={{
           borderBottom: isLast ? '1px solid rgba(0, 0, 0, 0.1)' : 'none',
         }}
       >
-        <div className={key}>{`${d.label}:`}</div>
+        <div className={styles.key}>{`${d.label}:`}</div>
         {showDiff ?
           <>
             {(diffSentences(inputB, inputA) ?? []).map((group) => (
