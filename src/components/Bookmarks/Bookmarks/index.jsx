@@ -3,7 +3,7 @@ import { useMatches } from 'react-router'
 import { TransitionGroup } from 'react-transition-group'
 
 import { FetcherImporter } from './FetcherImporter.jsx'
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 const matchesFromAllMatches = (allMatches) =>
   allMatches
@@ -19,7 +19,7 @@ export const Bookmarks = () => {
   // flex-direction row-reverse combined with reverse order of matches
   // to align bookmarks to the right, but still have them in order
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <TransitionGroup component={null}>
         {matches.map((match) => (
           <FetcherImporter

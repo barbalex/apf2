@@ -9,7 +9,7 @@ import { MdFilterAlt } from 'react-icons/md'
 
 import { MobxContext } from '../../../../../mobxContext.js'
 
-import { container } from './FilterInput.module.css'
+import styles from './FilterInput.module.css'
 
 export const FilterInput = observer(
   ({ width, filterInputIsVisible, toggleFilterInput, ref: inputRef }) => {
@@ -62,7 +62,7 @@ export const FilterInput = observer(
 
     return (
       <div
-        className={container}
+        className={styles.container}
         style={filterInputIsVisible ? {} : { display: 'none' }}
       >
         <TextField

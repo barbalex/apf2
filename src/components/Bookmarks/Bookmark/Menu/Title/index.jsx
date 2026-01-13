@@ -8,14 +8,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { FilterInput } from './FilterInput.jsx'
 import { ApFilter } from '../../../../Projekte/TreeContainer/ApFilter/index.jsx'
 
-import {
-  container,
-  contentWrapper,
-  menuTitle,
-  title,
-  filters,
-  apFilterFitter,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Title = ({
   navData,
@@ -53,22 +46,22 @@ export const Title = ({
 
   return (
     <div
-      className={container}
+      className={styles.container}
       style={{ minWidth }}
     >
       <div
-        className={contentWrapper}
+        className={styles.contentWrapper}
         style={{ minWidth }}
       >
-        <div className={menuTitle}>
+        <div className={styles.menuTitle}>
           <div
-            className={title}
+            className={styles.title}
             ref={ref}
           >
             {navData.label}
           </div>
           {!!parentWidth && (
-            <div className={filters}>
+            <div className={styles.filters}>
               <Tooltip
                 title="Filtern"
                 show={isUuidList.toString()}
@@ -82,7 +75,7 @@ export const Title = ({
                 </IconButton>
               </Tooltip>
               {isAps && (
-                <div className={apFilterFitter}>
+                <div className={styles.apFilterFitter}>
                   <ApFilter />
                 </div>
               )}

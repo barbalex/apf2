@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 
-import { link } from './Nav.module.css'
+import styles from './Nav.module.css'
 
 export const Nav = ({ item, baseUrl, needsBorderRight = false }) => {
   const { pathname, search } = useLocation()
@@ -20,7 +20,7 @@ export const Nav = ({ item, baseUrl, needsBorderRight = false }) => {
           borderRight:
             needsBorderRight ? 'rgba(46, 125, 50, 0.5) solid 1px' : 'none',
         }}
-        className={link}
+        className={styles.link}
       >
         {item.label}
       </Link>
