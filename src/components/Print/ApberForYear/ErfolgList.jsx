@@ -46,7 +46,7 @@ export const ErfolgList = ({ jahr, data }) => {
         <div className={styles.table}>
           <div className={styles.apTitle}>Art</div>
           <div className={styles.erfolgSpanningTitle}>Erfolg</div>
-          <div className={styles.styles.keineMassnTitle}>
+          <div className={styles.keineMassnTitle}>
             <div>keine Massnahme</div>
             <div>im Berichtsjahr</div>
           </div>

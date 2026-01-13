@@ -12,7 +12,7 @@ import styles from './AktPopList.module.css'
 const fallback = (
   <ErrorBoundary>
     <div className={styles.container}>
-      <p className={styles.styles.title}>
+      <p className={styles.title}>
         Übersicht über aktuelle Populationen aller AP-Arten
       </p>
       <div className={styles.titleRow1}>Lade Daten...</div>
