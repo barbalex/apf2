@@ -18,9 +18,27 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import type { ZielId } from '../../../../models/apflora/ZielId.ts'
+import type { ApId } from '../../../../models/apflora/ApId.ts'
+
+interface CreateZielResult {
+  data: {
+    createZiel: {
+      ziel: {
+        id: ZielId
+        apId: ApId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams()
@@ -31,9 +49,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateZielResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateZielResult['data']>({
         mutation: gql`
           mutation createZielForZieljahrs($apId: UUID!) {
             createZiel(input: { ziel: { apId: $apId, jahr: 1 } }) {
@@ -48,7 +66,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
