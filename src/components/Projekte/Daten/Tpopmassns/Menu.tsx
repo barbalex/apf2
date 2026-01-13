@@ -17,9 +17,27 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
+import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+
+interface CreateTpopmassnResult {
+  data: {
+    createTpopmassn: {
+      tpopmassn: {
+        id: TpopmassnId
+        tpopId: TpopId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { tpopId } = useParams()
@@ -31,9 +49,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateTpopmassnResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateTpopmassnResult['data']>({
         mutation: gql`
           mutation createTpopmassnForTpopmassnsForm($tpopId: UUID!) {
             createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
@@ -50,7 +68,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
