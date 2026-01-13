@@ -2,25 +2,7 @@ import { TextField2 } from '../../../../shared/TextField2.jsx'
 import { RadioButton } from '../../../../shared/RadioButton.jsx'
 import veghoeheImg from './veghoehe.png'
 
-import {
-  container,
-  flLabel,
-  flVal,
-  flMeasure,
-  jungPflLabel0,
-  jungPflLabel1,
-  jungPflVal1,
-  jungPflLabel2,
-  jungPflVal2,
-  veghoeheLabel0,
-  veghoeheMaxLabel,
-  veghoeheMaxVal,
-  veghoeheMittLabel,
-  veghoeheMittVal,
-  veghoeheMinLabel,
-  veghoeheImg as veghoeheImgClass,
-  img,
-} from './More.module.css'
+import styles from './More.module.css'
 
 export const More = ({ saveToDb, row, errors }) => {
   const jungpflanzenVorhandenOnSaveFalse = () => {
@@ -44,9 +26,9 @@ export const More = ({ saveToDb, row, errors }) => {
   }
 
   return (
-    <div className={container}>
-      <div className={flLabel}>Überprüfte Fläche</div>
-      <div className={flVal}>
+    <div className={styles.container}>
+      <div className={styles.flLabel}>Überprüfte Fläche</div>
+      <div className={styles.flVal}>
         <TextField2
           key={`${row?.id}flaecheUeberprueft`}
           name="flaecheUeberprueft"
@@ -56,15 +38,15 @@ export const More = ({ saveToDb, row, errors }) => {
           errors={errors}
         />
       </div>
-      <div className={flMeasure}>
+      <div className={styles.flMeasure}>
         m<sup>2</sup>
       </div>
-      <div className={jungPflLabel0}>
+      <div className={styles.jungPflLabel0}>
         Werden junge neben alten Pflanzen beobachtet?
       </div>
-      <div className={jungPflLabel1}>ja</div>
+      <div className={styles.jungPflLabel1}>ja</div>
       <div
-        className={jungPflVal1}
+        className={styles.jungPflVal1}
         data-id="jungpflanzenVorhanden_true"
       >
         <RadioButton
@@ -74,9 +56,9 @@ export const More = ({ saveToDb, row, errors }) => {
           saveToDb={jungpflanzenVorhandenOnSaveTrue}
         />
       </div>
-      <div className={jungPflLabel2}>nein</div>
+      <div className={styles.jungPflLabel2}>nein</div>
       <div
-        className={jungPflVal2}
+        className={styles.jungPflVal2}
         data-id="jungpflanzenVorhanden_false"
       >
         <RadioButton
@@ -87,16 +69,16 @@ export const More = ({ saveToDb, row, errors }) => {
           error={errors?.jungpflanzenVorhanden}
         />
       </div>
-      <div className={veghoeheLabel0}>Vegetationshöhe</div>
-      <div className={veghoeheImgClass}>
+      <div className={styles.veghoeheLabel0}>Vegetationshöhe</div>
+      <div className={styles.veghoeheImg}>
         <img
-          className={img}
+          className={styles.img}
           src={veghoeheImg}
           alt="Flächen-Anteile"
         />
       </div>
-      <div className={veghoeheMaxLabel}>Maximum (cm)</div>
-      <div className={veghoeheMaxVal}>
+      <div className={styles.veghoeheMaxLabel}>Maximum (cm)</div>
+      <div className={styles.veghoeheMaxVal}>
         <TextField2
           key={`${row?.id}vegetationshoeheMaximum`}
           name="vegetationshoeheMaximum"
@@ -106,8 +88,8 @@ export const More = ({ saveToDb, row, errors }) => {
           errors={errors}
         />
       </div>
-      <div className={veghoeheMittLabel}>Mittel (cm)</div>
-      <div className={veghoeheMittVal}>
+      <div className={styles.veghoeheMittLabel}>Mittel (cm)</div>
+      <div className={styles.veghoeheMittVal}>
         <TextField2
           key={`${row?.id}vegetationshoeheMittel`}
           name="vegetationshoeheMittel"
@@ -117,7 +99,7 @@ export const More = ({ saveToDb, row, errors }) => {
           errors={errors}
         />
       </div>
-      <div className={veghoeheMinLabel}>(Minimum)</div>
+      <div className={styles.veghoeheMinLabel}>(Minimum)</div>
     </div>
   )
 }
