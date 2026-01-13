@@ -7,14 +7,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../../../mobxContext.js'
 
-import {
-  mapIcon,
-  mapIconColorPop,
-  iconContainer,
-  menuTitle,
-  menuItem,
-  checkIcon,
-} from './PopIcon.module.css'
+import styles from './PopIcon.module.css'
 
 export const PopIcon = observer(() => {
   const store = useContext(MobxContext)
@@ -63,11 +56,11 @@ export const PopIcon = observer(() => {
         aria-haspopup="true"
         onClick={onClickIconContainer}
         title="Symbole und Beschriftung wählen"
-        className={`iconContainer ${iconContainer}`}
+        className={`iconContainer ${styles.iconContainer}`}
       >
         <MdLocalFlorist
           id="PopMapIcon"
-          className={`${mapIcon} ${mapIconColorPop}`}
+          className={`${styles.mapIcon} ${styles.mapIconColorPop}`}
         />
       </div>
       <Menu
@@ -76,51 +69,53 @@ export const PopIcon = observer(() => {
         open={Boolean(anchorEl)}
         onClose={onClose}
       >
-        <div className={menuTitle}>Symbole wählen:</div>
+        <div className={styles.menuTitle}>Symbole wählen:</div>
         <MenuItem
           onClick={onClickAllSame}
-          className={menuItem}
+          className={styles.menuItem}
         >
-          {popIcon === 'normal' && <FaCheck className={checkIcon} />}
+          {popIcon === 'normal' && <FaCheck className={styles.checkIcon} />}
           {'alle gleich (Blume)'}
         </MenuItem>
         <MenuItem
           onClick={onClickByStatusGroup}
-          className={menuItem}
+          className={styles.menuItem}
         >
-          {popIcon === 'statusGroup' && <FaCheck className={checkIcon} />}
+          {popIcon === 'statusGroup' && (
+            <FaCheck className={styles.checkIcon} />
+          )}
           {`nach Status, mit Buchstaben`}
         </MenuItem>
         <MenuItem
           onClick={onClickByStatusGroupSymbols}
-          className={menuItem}
+          className={styles.menuItem}
         >
           {popIcon === 'statusGroupSymbols' && (
-            <FaCheck className={checkIcon} />
+            <FaCheck className={styles.checkIcon} />
           )}
           {`nach Status, mit Symbolen`}
         </MenuItem>
-        <div className={menuTitle}>Beschriftung wählen:</div>
+        <div className={styles.menuTitle}>Beschriftung wählen:</div>
         <MenuItem
           onClick={onClickPopTpopNr}
-          className={menuItem}
+          className={styles.menuItem}
         >
-          {popLabel === 'nr' && <FaCheck className={checkIcon} />}
+          {popLabel === 'nr' && <FaCheck className={styles.checkIcon} />}
           {'Nr.'}
         </MenuItem>
         <MenuItem
           onClick={onClickFlurname}
-          className={menuItem}
+          className={styles.menuItem}
         >
-          {popLabel === 'name' && <FaCheck className={checkIcon} />}
+          {popLabel === 'name' && <FaCheck className={styles.checkIcon} />}
           {'Name'}
         </MenuItem>
         {/* TODO: add none to Markers */}
         <MenuItem
           onClick={onClickNoLabel}
-          className={menuItem}
+          className={styles.menuItem}
         >
-          {popLabel === 'none' && <FaCheck className={checkIcon} />}
+          {popLabel === 'none' && <FaCheck className={styles.checkIcon} />}
           {`keine`}
         </MenuItem>
       </Menu>

@@ -1,14 +1,14 @@
-import { container, input, label as labelClass } from './Checkbox.module.css'
+import styles from './Checkbox.module.css'
 
 export const Checkbox = ({ value, label, checked, onChange }) => (
-  <div className={container}>
-    <label className={labelClass}>
+  <div className={styles.container}>
+    <label className={styles.label}>
       <input
         type="checkbox"
         value={value}
         checked={checked}
         onChange={onChange}
-        className={input}
+        className={styles.input}
       />
       {label}
     </label>
