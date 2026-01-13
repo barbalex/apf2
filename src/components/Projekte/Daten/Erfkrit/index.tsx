@@ -4,6 +4,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
+import type { Erfkrit, ApErfkritWerteCode } from '../../../../models/apflora/index.js'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
@@ -16,9 +17,26 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { erfkrit } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
+
+interface ErfkritQueryResult {
+  data?: {
+    erfkritById?: Erfkrit
+  }
+}
+
+interface ListsQueryResult {
+  data?: {
+    allApErfkritWertes?: {
+      nodes: Array<{
+        value: ApErfkritWerteCode
+        label: string | null
+      }>
+    }
+  }
+}
 
 const fieldTypes = {
   apId: 'UUID',
@@ -34,9 +52,9 @@ export const Component = observer(() => {
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<ErfkritQueryResult>(query, {
     variables: {
       id,
     },
@@ -46,11 +64,11 @@ export const Component = observer(() => {
     data: dataLists,
     loading: loadingLists,
     error: errorLists,
-  } = useQuery(queryLists)
+  } = useQuery<ListsQueryResult>(queryLists)
 
   const row = data?.erfkritById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -86,7 +104,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     tsQueryClient.invalidateQueries({

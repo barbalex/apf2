@@ -688,7 +688,7 @@ export const Router = () => {
                       <Route
                         path=":erfkritId"
                         lazy={() =>
-                          import('../Projekte/Daten/Erfkrit/index.jsx')
+                          import('../Projekte/Daten/Erfkrit/index.tsx')
                         }
                         errorElement={<RouterErrorBoundary />}
                       />
