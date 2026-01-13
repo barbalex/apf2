@@ -5,7 +5,7 @@ import ReactMarkdownEditor, { Plugins } from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 
 import { Label } from '../../Label.jsx'
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 ReactMarkdownEditor.use(Plugins.AutoResize, {
   min: 47,
@@ -65,7 +65,7 @@ export const Editor = ({
   }, [])
 
   return (
-    <div className={`${container} react-markdown-editor-lite`}>
+    <div className={`${styles.container} react-markdown-editor-lite`}>
       <Label label={label} />
       <ReactMarkdownEditor
         ref={el}

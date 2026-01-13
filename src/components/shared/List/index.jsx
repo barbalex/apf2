@@ -5,7 +5,7 @@ import { FormTitle } from '../FormTitle/index.jsx'
 import { ErrorBoundary } from '../ErrorBoundary.jsx'
 import { navData } from '../../Bookmarks/NavTo/Navs/Projects.jsx'
 
-import { container, list, row } from './index.module.css'
+import styles from './index.module.css'
 
 export const List = ({
   navData,
@@ -20,20 +20,20 @@ export const List = ({
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title={navData.label}
           listFilter={navData.listFilter}
           MenuBarComponent={MenuBarComponent}
           menuBarProps={menuBarProps}
         />
-        <div className={list}>
+        <div className={styles.list}>
           {navData.menus.map((item) => {
             const label = item.label ?? item.labelEkf ?? item.labelEk
 
             return (
               <div
-                className={row}
+                className={styles.row}
                 key={item.id}
                 onClick={onClickRow.bind(this, item)}
               >

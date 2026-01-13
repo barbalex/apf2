@@ -2,7 +2,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdFilterAlt } from 'react-icons/md'
 
-import { button } from './FilterButton.module.css'
+import styles from './FilterButton.module.css'
 
 export const FilterButton = ({ toggleFilterInput }) => {
   const onClick = () => toggleFilterInput()
@@ -12,7 +12,7 @@ export const FilterButton = ({ toggleFilterInput }) => {
       <IconButton
         aria-label="Filtern"
         onClick={onClick}
-        className={button}
+        className={styles.button}
       >
         <MdFilterAlt />
       </IconButton>

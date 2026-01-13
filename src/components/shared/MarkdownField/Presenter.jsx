@@ -1,7 +1,7 @@
 import MarkdownIt from 'markdown-it'
 
 import { Label } from '../Label.jsx'
-import { container } from './Presenter.module.css'
+import styles from './Presenter.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -9,7 +9,7 @@ const mdParser = new MarkdownIt({ breaks: true })
 // see: https://stackoverflow.com/a/16261525/712005
 export const Presenter = ({ value, label }) => (
   <div
-    className={container}
+    className={styles.container}
     tabIndex="0"
   >
     <Label label={label} />
