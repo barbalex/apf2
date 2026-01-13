@@ -8,16 +8,32 @@ import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
+import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.js'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
+interface CreateEkfrequenzResult {
+  data?: {
+    createEkfrequenz?: {
+      ekfrequenz?: {
+        id: EkfrequenzId
+        apId: ApId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
+
 const iconStyle = { color: 'white' }
 
 // TODO: add menu to setOpenChooseApToCopyEkfrequenzsFrom
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { apId } = useParams()
@@ -29,9 +45,9 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const { setOpenChooseApToCopyEkfrequenzsFrom } = store
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateEkfrequenzResult | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateEkfrequenzResult>({
         mutation: gql`
           mutation createEkfrequenzForEkfrequenzsForm($apId: UUID!) {
             createEkfrequenz(input: { ekfrequenz: { apId: $apId } }) {
@@ -46,7 +62,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
