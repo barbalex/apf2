@@ -24,7 +24,7 @@ import { query } from './query.js'
 import { Menu } from './Menu.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 
-import { container } from './Tpopmassn.module.css'
+import styles from './Tpopmassn.module.css'
 
 const fieldTypes = {
   typ: 'Int',
@@ -328,7 +328,7 @@ export const Component = observer(({ showFilter = false }) => {
         MenuBarComponent={Menu}
         menuBarProps={{ row }}
       />
-      <div className={container}>
+      <div className={styles.container}>
         <TextField
           name="jahr"
           label="Jahr"

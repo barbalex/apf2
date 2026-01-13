@@ -19,13 +19,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Tabs } from './Tabs.jsx'
 
-import {
-  container,
-  scrollContainer,
-  columnContainer,
-  commentTitle,
-  comment,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const TpopmassnFilter = observer(() => {
   const { apId } = useParams()
@@ -117,7 +111,7 @@ export const TpopmassnFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FilterTitle
           title="Massnahmen"
           table="tpopmassn"
@@ -127,28 +121,28 @@ export const TpopmassnFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <div className={commentTitle}>Zusätzlich aktive Filter:</div>
+            <div className={styles.commentTitle}>Zusätzlich aktive Filter:</div>
             <ul>
               {!!navApFilterComment && (
-                <li className={comment}>{navApFilterComment}</li>
+                <li className={styles.comment}>{navApFilterComment}</li>
               )}
               {!!navHiearchyComment && (
-                <li className={comment}>{navHiearchyComment}</li>
+                <li className={styles.comment}>{navHiearchyComment}</li>
               )}
               {!!navLabelComment && (
-                <li className={comment}>{navLabelComment}</li>
+                <li className={styles.comment}>{navLabelComment}</li>
               )}
               {!!artHierarchyComment && (
-                <li className={comment}>{artHierarchyComment}</li>
+                <li className={styles.comment}>{artHierarchyComment}</li>
               )}
               {!!popHierarchyComment && (
-                <li className={comment}>{popHierarchyComment}</li>
+                <li className={styles.comment}>{popHierarchyComment}</li>
               )}
               {!!tpopHierarchyComment && (
-                <li className={comment}>{tpopHierarchyComment}</li>
+                <li className={styles.comment}>{tpopHierarchyComment}</li>
               )}
               {!!mapFilterComment && (
-                <li className={comment}>{mapFilterComment}</li>
+                <li className={styles.comment}>{mapFilterComment}</li>
               )}
             </ul>
           </>
@@ -158,8 +152,8 @@ export const TpopmassnFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <div className={scrollContainer}>
-          <div className={columnContainer}>
+        <div className={styles.scrollContainer}>
+          <div className={styles.columnContainer}>
             <TextField
               name="jahr"
               label="Jahr"
