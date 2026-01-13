@@ -1,13 +1,25 @@
-// https://stackoverflow.com/a/25296972/712005
-// also: https://gis.stackexchange.com/a/130553/13491
 import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
+import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
 import { useQuery } from '@apollo/client/react'
 
 import { MobxContext } from '../../../../mobxContext.js'
+
+interface DetailplanNode {
+  id: string
+  data: string | null
+  geom: {
+    geojson: string
+  } | null
+}
+
+interface DetailplaeneQueryResult {
+  allDetailplaenes: {
+    nodes: DetailplanNode[]
+  }
+}
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
 // need to fill or else popup will only happen when line is clicked
@@ -15,19 +27,20 @@ import { MobxContext } from '../../../../mobxContext.js'
 const style = () => ({
   fill: true,
   fillOpacity: 0,
-  color: 'green',
-  weight: 3,
+  color: 'red',
+  weight: 1,
   opacity: 1,
 })
 
-export const Betreuungsgebiete = observer(() => {
+export const Detailplaene = observer(() => {
   const { enqueNotification } = useContext(MobxContext)
 
-  const { data, error } = useQuery(gql`
-    query nsBetreuungsQuery {
-      allNsBetreuungs {
+  const { data, error } = useQuery<DetailplaeneQueryResult>(gql`
+    query karteDetailplaenesQuery {
+      allDetailplaenes {
         nodes {
-          id: gebietNr
+          id
+          data
           geom {
             geojson
           }
@@ -38,7 +51,7 @@ export const Betreuungsgebiete = observer(() => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der NS-Gebiets-Betreuer: ${error.message}`,
+      message: `Fehler beim Laden der Detailpläne: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -47,16 +60,16 @@ export const Betreuungsgebiete = observer(() => {
 
   if (!data) return null
 
-  const nodes = data?.allNsBetreuungs?.nodes ?? []
-  const betrGebiete = nodes.map((n) => ({
+  const nodes = data?.allDetailplaenes?.nodes ?? []
+  const detailplaene = nodes.map((n) => ({
     type: 'Feature',
-    properties: {},
+    properties: n.data ? JSON.parse(n.data) : null,
     geometry: JSON.parse(n?.geom?.geojson),
   }))
 
   return (
     <GeoJSON
-      data={betrGebiete}
+      data={detailplaene}
       style={style}
       interactive={false}
     />

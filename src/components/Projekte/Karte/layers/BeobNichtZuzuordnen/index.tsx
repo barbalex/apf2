@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
@@ -10,13 +10,40 @@ import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
+import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
+import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+interface BeobNichtZuzuordnenNode {
+  id: BeobId
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  datum: string | null
+  autor: string | null
+  quelle: string | null
+  absenz: boolean | null
+  aeTaxonomyByArtId: {
+    id: AeTaxonomyId
+    artname: string | null
+  } | null
+}
+
+interface BeobNichtZuzuordnenQueryResult {
+  allBeobs: {
+    nodes: BeobNichtZuzuordnenNode[]
+  }
+}
+
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
-  const hasHighlightedBeob = markers.some(
+  const hasHighlightedTpop = markers.some(
     (m) => m.options.icon.options.className === 'beobIconHighlighted',
   )
   const className =
-    hasHighlightedBeob ? 'beobClusterHighlighted' : 'beobCluster'
+    hasHighlightedTpop ?
+      'beobZugeordnetClusterHighlighted'
+    : 'beobZugeordnetCluster'
 
   return window.L.divIcon({
     html: markers.length,
@@ -25,24 +52,25 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
+const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(MobxContext)
   const { enqueNotification } = store
   const tree = store.tree
   const { beobGqlFilter } = tree
-
   const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: [
-      'BeobNichtBeurteiltForMapQuery',
-      beobGqlFilter('nichtBeurteilt').filtered,
+      'KarteBeobNichtZuzuordnenQuery',
+      beobGqlFilter('nichtZuzuordnen').filtered,
     ],
-    queryFn: async () =>
+    queryFn: () =>
       apolloClient.query({
-        query: query,
-        variables: { beobFilter: beobGqlFilter('nichtBeurteilt').filtered },
+        query,
+        variables: {
+          beobFilter: beobGqlFilter('nichtZuzuordnen').filtered,
+        },
         fetchPolicy: 'no-cache',
       }),
   })
@@ -63,7 +91,7 @@ const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${error.message}`,
+      message: `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -91,7 +119,7 @@ const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
   return beobMarkers
 })
 
-export const BeobNichtBeurteilt = observer(({ clustered }) => {
+export const BeobNichtZuzuordnen = observer(({ clustered }) => {
   const store = useContext(MobxContext)
   const tree = store.tree
   const { beobGqlFilter } = tree
@@ -103,11 +131,11 @@ export const BeobNichtBeurteilt = observer(({ clustered }) => {
   // thus query fetches data for all aps
   // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
   const gqlFilterHasApId =
-    !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId?.apartsByArtId
-      ?.some?.apId
+    !!beobGqlFilter('nichtZuzuordnen').filtered?.aeTaxonomyByArtId
+      ?.apartsByArtId?.some?.apId
   const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
 
-  return <BeobNichtBeurteiltMarker clustered={clustered} />
+  return <BeobNichtZuzuordnenMarker clustered={clustered} />
 })

@@ -14,6 +14,42 @@ import { query } from './query.js'
 import { updateTpopById } from './updateTpopById.js'
 import { tpop } from '../../../../shared/fragments.js'
 
+import type { TpopId, PopId, ApId } from '../../../../../models/apflora/public/Tpop.ts'
+import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+interface TpopNode {
+  id: TpopId
+  nr: number | null
+  status: number | null
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  flurname: string | null
+  popStatusWerteByStatus: {
+    id: number
+    text: string | null
+  } | null
+  popByPopId: {
+    id: PopId
+    nr: number | null
+    name: string | null
+    apByApId: {
+      id: ApId
+      aeTaxonomyByArtId: {
+        id: AeTaxonomyId
+        artname: string | null
+      } | null
+    } | null
+  } | null
+}
+
+interface TpopQueryResult {
+  allTpops: {
+    nodes: TpopNode[]
+  }
+}
+
 const iconCreateFunction = (cluster) => {
   const hasHighlightedTpop = cluster
     .getAllChildMarkers()

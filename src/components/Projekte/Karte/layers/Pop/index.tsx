@@ -11,6 +11,37 @@ import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
+import type { PopId, ApId } from '../../../../../models/apflora/public/Pop.ts'
+import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+interface PopNode {
+  id: PopId
+  nr: number | null
+  name: string | null
+  status: number | null
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  popStatusWerteByStatus: {
+    id: number
+    text: string | null
+  } | null
+  apByApId: {
+    id: ApId
+    aeTaxonomyByArtId: {
+      id: AeTaxonomyId
+      artname: string | null
+    } | null
+  } | null
+}
+
+interface PopQueryResult {
+  allPops: {
+    nodes: PopNode[]
+  }
+}
+
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedPop = markers.some(

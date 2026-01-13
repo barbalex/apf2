@@ -8,6 +8,12 @@ import { useQuery } from '@apollo/client/react'
 import { Checkbox } from '../shared/Checkbox.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 
+interface ShowForMultipleApsQueryResult {
+  allAps: {
+    totalCount: number
+  }
+}
+
 import styles from './ShowForMultipleAps.module.css'
 
 export const ShowForMultipleAps = observer(() => {
@@ -18,7 +24,7 @@ export const ShowForMultipleAps = observer(() => {
     store
   const { apGqlFilterForTree } = store.tree
 
-  const { data } = useQuery(
+  const { data } = useQuery<ShowForMultipleApsQueryResult>(
     gql`
       query LayersControlLayersQuery($apsFilter: ApFilter!) {
         allAps(filter: $apsFilter) {

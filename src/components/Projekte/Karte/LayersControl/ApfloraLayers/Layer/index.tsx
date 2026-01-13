@@ -23,6 +23,39 @@ import { query } from './query.js'
 import { PopIcon } from './PopIcon.jsx'
 import { TpopIcon } from './TpopIcon.jsx'
 
+interface NodeWithCoords {
+  id: string
+  wgs84Lat: number
+  wgs84Long: number
+}
+
+interface PopNode extends NodeWithCoords {
+  tpopsByPopId: {
+    nodes: NodeWithCoords[]
+  }
+}
+
+interface ApfloraLayersQueryResult {
+  pop?: {
+    nodes: PopNode[]
+  }
+  tpopByPop?: {
+    nodes: PopNode[]
+  }
+  beobNichtBeurteilt?: {
+    nodes: NodeWithCoords[]
+  }
+  beobNichtZuzuordnen?: {
+    nodes: NodeWithCoords[]
+  }
+  beobZugeordnet?: {
+    nodes: NodeWithCoords[]
+  }
+  beobZugeordnetAssignPolylines?: {
+    nodes: NodeWithCoords[]
+  }
+}
+
 import styles from './index.module.css'
 
 export const Layer = observer(({ apfloraLayer }) => {
@@ -73,7 +106,7 @@ export const Layer = observer(({ apfloraLayer }) => {
     showBeobZugeordnetAssignPolylines,
   }
 
-  const { data, error } = useQuery(query, {
+  const { data, error } = useQuery<ApfloraLayersQueryResult>(query, {
     variables,
   })
 

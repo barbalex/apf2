@@ -8,6 +8,39 @@ import { Polyline } from './Polyline.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
+import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
+import type { TpopId, PopId } from '../../../../../models/apflora/public/Tpop.ts'
+import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+interface BeobAssignLinesNode {
+  id: BeobId
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  datum: string | null
+  autor: string | null
+  quelle: string | null
+  aeTaxonomyByArtId: {
+    id: AeTaxonomyId
+    artname: string | null
+  } | null
+  tpopByTpopId: {
+    id: TpopId
+    popId: PopId
+    nr: number | null
+    flurname: string | null
+    wgs84Lat: number | null
+    wgs84Long: number | null
+  } | null
+}
+
+interface BeobAssignLinesQueryResult {
+  allBeobs: {
+    nodes: BeobAssignLinesNode[]
+  }
+}
+
 const Polylines = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store

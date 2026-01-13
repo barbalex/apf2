@@ -9,6 +9,19 @@ import { useQuery } from '@apollo/client/react'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
+interface BetreuungsgebietNode {
+  id: number
+  geom: {
+    geojson: string
+  } | null
+}
+
+interface BetreuungsgebieteQueryResult {
+  allNsBetreuungs: {
+    nodes: BetreuungsgebietNode[]
+  }
+}
+
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
 // need to fill or else popup will only happen when line is clicked
 // when fill is true, need to give stroke an opacity
@@ -20,17 +33,15 @@ const style = () => ({
   opacity: 1,
 })
 
-export const Forstreviere = observer(() => {
+export const Betreuungsgebiete = observer(() => {
   const { enqueNotification } = useContext(MobxContext)
 
-  const { data, error } = useQuery(gql`
-    query forstrevierQuery {
-      allForstreviers {
+  const { data, error } = useQuery<BetreuungsgebieteQueryResult>(gql`
+    query nsBetreuungsQuery {
+      allNsBetreuungs {
         nodes {
-          id: ogcFid
-          forevnr
-          revName
-          geom: wkbGeometry {
+          id: gebietNr
+          geom {
             geojson
           }
         }
@@ -40,7 +51,7 @@ export const Forstreviere = observer(() => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Forstreviere: ${error.message}`,
+      message: `Fehler beim Laden der NS-Gebiets-Betreuer: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -49,8 +60,8 @@ export const Forstreviere = observer(() => {
 
   if (!data) return null
 
-  const nodes = data?.allForstreviers?.nodes ?? []
-  const forstReviereData = nodes.map((n) => ({
+  const nodes = data?.allNsBetreuungs?.nodes ?? []
+  const betrGebiete = nodes.map((n) => ({
     type: 'Feature',
     properties: {},
     geometry: JSON.parse(n?.geom?.geojson),
@@ -58,7 +69,7 @@ export const Forstreviere = observer(() => {
 
   return (
     <GeoJSON
-      data={forstReviereData}
+      data={betrGebiete}
       style={style}
       interactive={false}
     />

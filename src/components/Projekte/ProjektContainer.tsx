@@ -6,7 +6,7 @@ import { useAtom } from 'jotai'
 import { SplitPane, Pane } from 'react-split-pane'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
-import { Karte } from './Karte/index.jsx'
+import { Karte } from './Karte/index.tsx'
 const TreeContainer = lazy(async () => ({
   default: (await import('./TreeContainer/index.jsx')).TreeContainer,
 }))

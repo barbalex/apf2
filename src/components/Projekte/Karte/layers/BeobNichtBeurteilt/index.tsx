@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
@@ -10,15 +10,38 @@ import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
+import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
+import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+interface BeobNichtBeurteiltNode {
+  id: BeobId
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  datum: string | null
+  autor: string | null
+  quelle: string | null
+  absenz: boolean | null
+  aeTaxonomyByArtId: {
+    id: AeTaxonomyId
+    artname: string | null
+  } | null
+}
+
+interface BeobNichtBeurteiltQueryResult {
+  allBeobs: {
+    nodes: BeobNichtBeurteiltNode[]
+  }
+}
+
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
-  const hasHighlightedTpop = markers.some(
+  const hasHighlightedBeob = markers.some(
     (m) => m.options.icon.options.className === 'beobIconHighlighted',
   )
   const className =
-    hasHighlightedTpop ?
-      'beobZugeordnetClusterHighlighted'
-    : 'beobZugeordnetCluster'
+    hasHighlightedBeob ? 'beobClusterHighlighted' : 'beobCluster'
 
   return window.L.divIcon({
     html: markers.length,
@@ -27,7 +50,7 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const BeobZugeordnetMarker = observer(({ clustered }) => {
+const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(MobxContext)
   const { enqueNotification } = store
@@ -38,13 +61,13 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
 
   const { data, error } = useQuery({
     queryKey: [
-      'BeobZugeordnetForMapQuery',
-      beobGqlFilter('zugeordnet').filtered,
+      'BeobNichtBeurteiltForMapQuery',
+      beobGqlFilter('nichtBeurteilt').filtered,
     ],
     queryFn: async () =>
       apolloClient.query({
         query: query,
-        variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
+        variables: { beobFilter: beobGqlFilter('nichtBeurteilt').filtered },
         fetchPolicy: 'no-cache',
       }),
   })
@@ -65,7 +88,7 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${error.message}`,
+      message: `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -93,7 +116,7 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
   return beobMarkers
 })
 
-export const BeobZugeordnet = observer(({ clustered }) => {
+export const BeobNichtBeurteilt = observer(({ clustered }) => {
   const store = useContext(MobxContext)
   const tree = store.tree
   const { beobGqlFilter } = tree
@@ -105,11 +128,11 @@ export const BeobZugeordnet = observer(({ clustered }) => {
   // thus query fetches data for all aps
   // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
   const gqlFilterHasApId =
-    !!beobGqlFilter('zugeordnet').filtered?.aeTaxonomyByArtId?.apartsByArtId
+    !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId?.apartsByArtId
       ?.some?.apId
   const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
 
-  return <BeobZugeordnetMarker clustered={clustered} />
+  return <BeobNichtBeurteiltMarker clustered={clustered} />
 })

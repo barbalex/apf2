@@ -8,6 +8,22 @@ import { useQuery } from '@apollo/client/react'
 
 import { MobxContext } from '../../../../mobxContext.js'
 
+interface MarkierungNode {
+  id: number
+  gebiet: string | null
+  pfostennum: string | null
+  markierung: string | null
+  wkbGeometry: {
+    geojson: string
+  } | null
+}
+
+interface MarkierungenQueryResult {
+  allMarkierungens: {
+    nodes: MarkierungNode[]
+  }
+}
+
 const style = () => ({
   fill: true,
   fillOpacity: 0,
@@ -30,7 +46,7 @@ export const Markierungen = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
-  const { data, error } = useQuery(gql`
+  const { data, error } = useQuery<MarkierungenQueryResult>(gql`
     query KarteMarkierungensQuery {
       allMarkierungens {
         nodes {

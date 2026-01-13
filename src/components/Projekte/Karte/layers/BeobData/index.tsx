@@ -18,8 +18,18 @@ import { Field } from './Field.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { beob } from '../../../../shared/fragments.js'
 
+import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
+
 import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
 import styles from './index.module.css'
+
+interface BeobByIdQueryResult {
+  beobById: {
+    id: BeobId
+    data: string | null
+    [key: string]: any
+  }
+}
 
 const topFieldNames = [
   'PRESENCE',

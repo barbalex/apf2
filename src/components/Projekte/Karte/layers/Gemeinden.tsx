@@ -1,11 +1,23 @@
 import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-
 import { useQuery } from '@apollo/client/react'
+import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
+
+interface GemeindeNode {
+  id: string
+  geom: {
+    geojson: string
+  } | null
+}
+
+interface GemeindenQueryResult {
+  allChAdministrativeUnits: {
+    nodes: GemeindeNode[]
+  }
+}
 
 // see: https://leafletjs.com/reference-1.6.0.html#path-option
 // need to fill or else popup will only happen when line is clicked
@@ -13,20 +25,21 @@ import { MobxContext } from '../../../../mobxContext.js'
 const style = () => ({
   fill: true,
   fillOpacity: 0,
-  color: 'red',
-  weight: 1,
+  color: 'orange',
+  weight: 3,
   opacity: 1,
 })
 
-export const Detailplaene = observer(() => {
+export const Gemeinden = observer(() => {
   const { enqueNotification } = useContext(MobxContext)
 
-  const { data, error } = useQuery(gql`
-    query karteDetailplaenesQuery {
-      allDetailplaenes {
+  const { data, error } = useQuery<GemeindenQueryResult>(gql`
+    query karteGemeindesQuery {
+      allChAdministrativeUnits(
+        filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
+      ) {
         nodes {
           id
-          data
           geom {
             geojson
           }
@@ -37,7 +50,7 @@ export const Detailplaene = observer(() => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Detailpläne: ${error.message}`,
+      message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -46,16 +59,16 @@ export const Detailplaene = observer(() => {
 
   if (!data) return null
 
-  const nodes = data?.allDetailplaenes?.nodes ?? []
-  const detailplaene = nodes.map((n) => ({
+  const nodes = data?.allChAdministrativeUnits?.nodes ?? []
+  const gemeinden = nodes.map((n) => ({
     type: 'Feature',
-    properties: n.data ? JSON.parse(n.data) : null,
+    properties: { Gemeinde: n.text ?? '' },
     geometry: JSON.parse(n?.geom?.geojson),
   }))
 
   return (
     <GeoJSON
-      data={detailplaene}
+      data={gemeinden}
       style={style}
       interactive={false}
     />

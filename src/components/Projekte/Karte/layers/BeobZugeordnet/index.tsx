@@ -10,6 +10,42 @@ import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.js'
 
+import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
+import type { TpopId, PopId } from '../../../../../models/apflora/public/Tpop.ts'
+import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+interface BeobZugeordnetNode {
+  id: BeobId
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  datum: string | null
+  autor: string | null
+  quelle: string | null
+  absenz: boolean | null
+  aeTaxonomyByArtId: {
+    id: AeTaxonomyId
+    artname: string | null
+  } | null
+  tpopByTpopId: {
+    id: TpopId
+    popId: PopId
+    nr: number | null
+    flurname: string | null
+    popByPopId: {
+      id: PopId
+      label: string | null
+    } | null
+  } | null
+}
+
+interface BeobZugeordnetQueryResult {
+  allBeobs: {
+    nodes: BeobZugeordnetNode[]
+  }
+}
+
 const iconCreateFunction = function (cluster) {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
@@ -27,25 +63,24 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
+const BeobZugeordnetMarker = observer(({ clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(MobxContext)
   const { enqueNotification } = store
   const tree = store.tree
   const { beobGqlFilter } = tree
+
   const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: [
-      'KarteBeobNichtZuzuordnenQuery',
-      beobGqlFilter('nichtZuzuordnen').filtered,
+      'BeobZugeordnetForMapQuery',
+      beobGqlFilter('zugeordnet').filtered,
     ],
-    queryFn: () =>
+    queryFn: async () =>
       apolloClient.query({
-        query,
-        variables: {
-          beobFilter: beobGqlFilter('nichtZuzuordnen').filtered,
-        },
+        query: query,
+        variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
         fetchPolicy: 'no-cache',
       }),
   })
@@ -66,7 +101,7 @@ const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
 
   if (error) {
     enqueNotification({
-      message: `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${error.message}`,
+      message: `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
       },
@@ -94,7 +129,7 @@ const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
   return beobMarkers
 })
 
-export const BeobNichtZuzuordnen = observer(({ clustered }) => {
+export const BeobZugeordnet = observer(({ clustered }) => {
   const store = useContext(MobxContext)
   const tree = store.tree
   const { beobGqlFilter } = tree
@@ -106,11 +141,11 @@ export const BeobNichtZuzuordnen = observer(({ clustered }) => {
   // thus query fetches data for all aps
   // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
   const gqlFilterHasApId =
-    !!beobGqlFilter('nichtZuzuordnen').filtered?.aeTaxonomyByArtId
-      ?.apartsByArtId?.some?.apId
+    !!beobGqlFilter('zugeordnet').filtered?.aeTaxonomyByArtId?.apartsByArtId
+      ?.some?.apId
   const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
 
-  return <BeobNichtZuzuordnenMarker clustered={clustered} />
+  return <BeobZugeordnetMarker clustered={clustered} />
 })
