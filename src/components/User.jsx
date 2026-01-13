@@ -21,7 +21,7 @@ import { MobxContext } from '../mobxContext.js'
 import { getUserFromIdb } from '../modules/getUserFromIdb.js'
 import { ErrorBoundary } from './shared/ErrorBoundary.jsx'
 
-import { div, input } from './User.module.css'
+import styles from './User.module.css'
 
 function tokenStateReducer(state, action) {
   switch (action.type) {
@@ -182,7 +182,7 @@ export const User = observer(() => {
         open={!token && !fetchingToken}
       >
         <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-        <div className={div}>
+        <div className={styles.div}>
           <FormControl
             error={!!nameErrorText}
             fullWidth
@@ -197,7 +197,7 @@ export const User = observer(() => {
               onBlur={onBlurName}
               autoFocus
               onKeyPress={onKeyPressName}
-              className={`user-name ${input}`}
+              className={`user-name ${styles.input}`}
             />
             <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
           </FormControl>
@@ -233,7 +233,7 @@ export const User = observer(() => {
                   </Tooltip>
                 </InputAdornment>
               }
-              className={`user-passwort ${input}`}
+              className={`user-passwort ${styles.input}`}
             />
             <FormHelperText id="passwortHelper">
               {passwordErrorText}

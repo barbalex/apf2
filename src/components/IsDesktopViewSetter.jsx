@@ -2,7 +2,7 @@ import { useResizeDetector } from 'react-resize-detector'
 import { useAtom } from 'jotai'
 
 import { setDesktopViewAtom } from '../JotaiStore/index.js'
-import { measuringDiv } from './IsDesktopViewSetter.module.css'
+import styles from './IsDesktopViewSetter.module.css'
 
 // this sets the isDesktopViewAtom depending on the width of this component,
 // in contrast to: window.innerWidth
@@ -24,7 +24,7 @@ export const IsDesktopViewSetter = () => {
 
   return (
     <div
-      className={measuringDiv}
+      className={styles.measuringDiv}
       ref={ref}
     />
   )
