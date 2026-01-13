@@ -5,19 +5,30 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 
 import styles from './KontrolljahrField.module.css'
 
+interface KontrolljahrFieldProps {
+  saveToDb: (event: {
+    target: { name: string; value: number[] }
+  }) => Promise<void>
+  name?: string
+  index: number
+  kontrolljahre: number[]
+  refetch: () => void
+}
+
 export const KontrolljahrField = ({
   saveToDb,
   name = 'kontrolljahre',
   index,
   kontrolljahre,
   refetch,
-}) => {
+}: KontrolljahrFieldProps) => {
   const [value, setValue] = useState(kontrolljahre[index])
   useEffect(() => {
     setValue(kontrolljahre[index])
   }, [index, kontrolljahre])
 
-  const onChange = (event) => setValue(ifIsNumericAsNumber(event.target.value))
+  const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setValue(ifIsNumericAsNumber(event.target.value))
 
   const onBlur = async () => {
     const newVal = [...kontrolljahre]
@@ -30,7 +41,8 @@ export const KontrolljahrField = ({
     refetch()
   }
 
-  const onKeyDown = (e) => e.key === 'Enter' && onBlur()
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) =>
+    e.key === 'Enter' && onBlur()
 
   return (
     <Input

@@ -4,10 +4,15 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
+import type {
+  Ekfrequenz,
+  ApId,
+  EkAbrechnungstypWerteCode,
+} from '../../../../models/apflora/index.js'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
-import { Kontrolljahre } from './Kontrolljahre.jsx'
+import { Kontrolljahre } from './Kontrolljahre.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { query } from './query.js'
 import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.js'
@@ -17,9 +22,33 @@ import { ekfrequenz } from '../../../shared/fragments.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { Menu } from './Menu.jsx'
+import { Menu } from './Menu.tsx'
 
 import styles from './index.module.css'
+
+interface EkfrequenzQueryResult {
+  data?: {
+    ekfrequenzById?: Ekfrequenz & {
+      apByApId?: {
+        id: ApId
+        ekfrequenzsByApId?: {
+          nodes: Ekfrequenz[]
+        }
+      }
+    }
+  }
+}
+
+interface EkAbrechnungstypWertesQueryResult {
+  data?: {
+    allEkAbrechnungstypWertes?: {
+      nodes: Array<{
+        value: EkAbrechnungstypWerteCode
+        label: string | null
+      }>
+    }
+  }
+}
 
 const fieldTypes = {
   apId: 'UUID',
@@ -50,23 +79,26 @@ export const Component = observer(() => {
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error, refetch } = useQuery(query, {
-    variables: {
-      id,
+  const { data, loading, error, refetch } = useQuery<EkfrequenzQueryResult>(
+    query,
+    {
+      variables: {
+        id,
+      },
     },
-  })
+  )
 
   const {
     data: dataEkAbrechnungstypWertes,
     loading: loadingEkAbrechnungstypWertes,
     error: errorEkAbrechnungstypWertes,
-  } = useQuery(queryEkAbrechnungstypWertes)
+  } = useQuery<EkAbrechnungstypWertesQueryResult>(queryEkAbrechnungstypWertes)
 
   const row = data?.ekfrequenzById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -102,7 +134,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      setFieldErrors({ [field]: error.message })
+      setFieldErrors({ [field]: (error as Error).message })
       return
     }
     setFieldErrors({})

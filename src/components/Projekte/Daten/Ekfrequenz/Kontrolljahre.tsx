@@ -2,12 +2,24 @@ import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
-import { KontrolljahrField } from './KontrolljahrField.jsx'
-import { KontrolljahrFieldEmpty } from './KontrolljahrFieldEmpty.jsx'
+import { KontrolljahrField } from './KontrolljahrField.tsx'
+import { KontrolljahrFieldEmpty } from './KontrolljahrFieldEmpty.tsx'
 
 import styles from './Kontrolljahre.module.css'
 
-export const Kontrolljahre = ({ kontrolljahre = [], saveToDb, refetch }) => {
+interface KontrolljahrProps {
+  kontrolljahre?: number[]
+  saveToDb: (event: {
+    target: { name: string; value: number[] }
+  }) => Promise<void>
+  refetch: () => void
+}
+
+export const Kontrolljahre = ({
+  kontrolljahre = [],
+  saveToDb,
+  refetch,
+}: KontrolljahrProps) => {
   const kontrolljahreSorted = [...kontrolljahre].sort(
     (a, b) => (a ?? 999999) - b,
   )
