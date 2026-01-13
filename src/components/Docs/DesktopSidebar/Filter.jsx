@@ -4,7 +4,7 @@ import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 
-import { input, deleteFilter } from './Filter.module.css'
+import styles from './Filter.module.css'
 
 export const Filter = ({ filter, setFilter }) => {
   const onChange = (e) => setFilter(e.target.value)
@@ -31,11 +31,11 @@ export const Filter = ({ filter, setFilter }) => {
               onClick={onClickEmptyFilter}
               title="Filter entfernen"
             >
-              <MdDeleteSweep className={deleteFilter} />
+              <MdDeleteSweep className={styles.deleteFilter} />
             </InputAdornment>
           : null
         }
-        className={input}
+        className={styles.input}
       />
     </FormControl>
   )

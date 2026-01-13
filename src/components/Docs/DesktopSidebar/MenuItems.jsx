@@ -7,7 +7,7 @@ import { MenuItem } from './MenuItem.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { menus } from '../menus.js'
 
-import { divider } from './MenuItems.module.css'
+import styles from './MenuItems.module.css'
 
 export const MenuItems = observer(() => {
   const store = useContext(MobxContext)
@@ -19,7 +19,7 @@ export const MenuItems = observer(() => {
 
   return (
     <List component="nav">
-      <Divider className={divider} />
+      <Divider className={styles.divider} />
       {nodesFiltered.map((node) => (
         <MenuItem
           key={node?.id}
