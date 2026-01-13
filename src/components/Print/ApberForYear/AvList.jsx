@@ -2,7 +2,7 @@ import { groupBy } from 'es-toolkit'
 import { sortBy } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import { container, avRow, nonAvRow, avClass, title } from './AvList.module.css'
+import styles from './AvList.module.css'
 
 export const AvList = ({ data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
@@ -17,8 +17,8 @@ export const AvList = ({ data }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <p className={title}>Artverantwortliche</p>
+      <div className={styles.container}>
+        <p className={styles.title}>Artverantwortliche</p>
         {avs.map((av) => {
           const array = sortBy(avGrouped[av], ['art'])
 
@@ -26,10 +26,10 @@ export const AvList = ({ data }) => {
             if (i === 0) {
               return (
                 <div
-                  className={avRow}
+                  className={styles.avRow}
                   key={o.art}
                 >
-                  <div className={avClass}>{o.av}</div>
+                  <div className={styles.avClass}>{o.av}</div>
                   <div>{o.art}</div>
                 </div>
               )
@@ -37,10 +37,10 @@ export const AvList = ({ data }) => {
 
             return (
               <div
-                className={nonAvRow}
+                className={styles.nonAvRow}
                 key={o.art}
               >
-                <div className={avClass} />
+                <div className={styles.avClass} />
                 <div>{o.art}</div>
               </div>
             )

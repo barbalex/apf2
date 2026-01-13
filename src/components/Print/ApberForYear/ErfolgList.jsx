@@ -1,34 +1,7 @@
 import { Fragment } from 'react'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import {
-  container,
-  table,
-  overallTitle,
-  apTitle,
-  ap as apClass,
-  erfolgSpanningTitle,
-  erfolgNicht,
-  erfolgWenig,
-  erfolgMaessig,
-  erfolgGut,
-  erfolgSehr,
-  erfolgVeraenderung,
-  erfolgUnsicher,
-  erfolgNichtBeurteilt,
-  keineMassnahme,
-  apExists,
-  keineMassnTitle,
-  apExistsTitle,
-  erfolgNichtBeurteiltTitle,
-  erfolgNichtTitle,
-  erfolgWenigTitle,
-  erfolgMaessigTitle,
-  erfolgGutTitle,
-  erfolgSehrTitle,
-  erfolgAenderungTitle,
-  erfolgUnsicherTitle,
-} from './ErfolgList.module.css'
+import styles from './ErfolgList.module.css'
 
 export const ErfolgList = ({ jahr, data }) => {
   const nodes = data?.jberAbc?.nodes ?? []
@@ -68,41 +41,41 @@ export const ErfolgList = ({ jahr, data }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <p className={overallTitle}>{`Erfolg ${jahr}`}</p>
-        <div className={table}>
-          <div className={apTitle}>Art</div>
-          <div className={erfolgSpanningTitle}>Erfolg</div>
-          <div className={keineMassnTitle}>
+      <div className={styles.container}>
+        <p className={styles.overallTitle}>{`Erfolg ${jahr}`}</p>
+        <div className={styles.table}>
+          <div className={styles.apTitle}>Art</div>
+          <div className={styles.erfolgSpanningTitle}>Erfolg</div>
+          <div className={styles.styles.keineMassnTitle}>
             <div>keine Massnahme</div>
             <div>im Berichtsjahr</div>
           </div>
-          <div className={apExistsTitle}>
+          <div className={styles.apExistsTitle}>
             <div>Aktionsplan</div>
             <div>erstellt</div>
           </div>
-          <div className={erfolgNichtTitle}>
+          <div className={styles.erfolgNichtTitle}>
             <div>nicht</div>
           </div>
-          <div className={erfolgWenigTitle}>
+          <div className={styles.erfolgWenigTitle}>
             <div>wenig</div>
           </div>
-          <div className={erfolgMaessigTitle}>
+          <div className={styles.erfolgMaessigTitle}>
             <div>mässig</div>
           </div>
-          <div className={erfolgGutTitle}>
+          <div className={styles.erfolgGutTitle}>
             <div>gut</div>
           </div>
-          <div className={erfolgSehrTitle}>
+          <div className={styles.erfolgSehrTitle}>
             <div>sehr</div>
           </div>
-          <div className={erfolgAenderungTitle}>
+          <div className={styles.erfolgAenderungTitle}>
             <div>Veränderung</div>
           </div>
-          <div className={erfolgUnsicherTitle}>
+          <div className={styles.erfolgUnsicherTitle}>
             <div>unsicher</div>
           </div>
-          <div className={erfolgNichtBeurteiltTitle}>
+          <div className={styles.erfolgNichtBeurteiltTitle}>
             <div>nicht beurteilt</div>
           </div>
           {apRows.map((row, index) => {
@@ -112,7 +85,7 @@ export const ErfolgList = ({ jahr, data }) => {
             return (
               <Fragment key={row.ap}>
                 <div
-                  className={apClass}
+                  className={styles.ap}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
@@ -120,7 +93,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.ap}
                 </div>
                 <div
-                  className={erfolgNicht}
+                  className={styles.erfolgNicht}
                   style={{
                     backgroundColor:
                       !!row.erfolgNicht ? 'red'
@@ -131,7 +104,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.erfolgNicht}
                 </div>
                 <div
-                  className={erfolgWenig}
+                  className={styles.erfolgWenig}
                   style={{
                     backgroundColor:
                       !!row.erfolgWenig ? 'orange'
@@ -142,7 +115,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.erfolgWenig}
                 </div>
                 <div
-                  className={erfolgMaessig}
+                  className={styles.erfolgMaessig}
                   style={{
                     backgroundColor:
                       !!row.erfolgMaessig ? 'yellow'
@@ -153,7 +126,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.erfolgMaessig}
                 </div>
                 <div
-                  className={erfolgGut}
+                  className={styles.erfolgGut}
                   style={{
                     backgroundColor:
                       !!row.erfolgGut ? '#00f6ff'
@@ -164,7 +137,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.erfolgGut}
                 </div>
                 <div
-                  className={erfolgSehr}
+                  className={styles.erfolgSehr}
                   style={{
                     backgroundColor:
                       !!row.erfolgSehr ? '#00ff00'
@@ -175,7 +148,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.erfolgSehr}
                 </div>
                 <div
-                  className={erfolgVeraenderung}
+                  className={styles.erfolgVeraenderung}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
@@ -183,7 +156,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.veraenderung}
                 </div>
                 <div
-                  className={erfolgUnsicher}
+                  className={styles.erfolgUnsicher}
                   style={{
                     backgroundColor:
                       !!row.erfolgUnsicher ? '#afafaf'
@@ -194,7 +167,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.erfolgUnsicher}
                 </div>
                 <div
-                  className={erfolgNichtBeurteilt}
+                  className={styles.erfolgNichtBeurteilt}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
@@ -202,7 +175,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.nichtBeurteilt}
                 </div>
                 <div
-                  className={keineMassnahme}
+                  className={styles.keineMassnahme}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}
@@ -210,7 +183,7 @@ export const ErfolgList = ({ jahr, data }) => {
                   {row.keineMassnahme}
                 </div>
                 <div
-                  className={apExists}
+                  className={styles.apExists}
                   style={{
                     ...(odd ? { backgroundColor: 'rgba(0,0,0,0.03)' } : {}),
                   }}

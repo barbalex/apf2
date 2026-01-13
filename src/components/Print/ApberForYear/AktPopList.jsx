@@ -7,30 +7,15 @@ import { useParams } from 'react-router'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 
-import {
-  container,
-  title,
-  apRow,
-  titleRow1,
-  titleRow2,
-  totalRow,
-  diffLeftColumn,
-  dataColumn,
-  diffColumn,
-  apColumn,
-  ursprColumn,
-  angesColumn,
-  totalColumn,
-  totalDiffColumn,
-} from './AktPopList.module.css'
+import styles from './AktPopList.module.css'
 
 const fallback = (
   <ErrorBoundary>
-    <div className={container}>
-      <p className={title}>
+    <div className={styles.container}>
+      <p className={styles.styles.title}>
         Übersicht über aktuelle Populationen aller AP-Arten
       </p>
-      <div className={titleRow1}>Lade Daten...</div>
+      <div className={styles.titleRow1}>Lade Daten...</div>
     </div>
   </ErrorBoundary>
 )
@@ -82,35 +67,35 @@ export const AktPopList = ({ year }) => {
   return (
     <ErrorBoundary>
       <Suspense fallback={fallback}>
-        <div className={container}>
-          <p className={title}>
+        <div className={styles.container}>
+          <p className={styles.title}>
             Übersicht über aktuelle Populationen aller AP-Arten
           </p>
-          <div className={titleRow1}>
-            <div className={diffLeftColumn} />
-            <div className={dataColumn}>aktuelle Werte</div>
-            <div className={diffColumn}>Differenz zum Vorjahr</div>
+          <div className={styles.titleRow1}>
+            <div className={styles.diffLeftColumn} />
+            <div className={styles.dataColumn}>aktuelle Werte</div>
+            <div className={styles.diffColumn}>Differenz zum Vorjahr</div>
           </div>
-          <div className={titleRow2}>
-            <div className={apColumn}>Aktionsplan</div>
-            <div className={ursprColumn}>ursprünglich</div>
-            <div className={angesColumn}>angesiedelt</div>
-            <div className={totalColumn}>total</div>
-            <div className={ursprColumn}>ursprünglich</div>
-            <div className={angesColumn}>angesiedelt</div>
-            <div className={totalDiffColumn}>total</div>
+          <div className={styles.titleRow2}>
+            <div className={styles.apColumn}>Aktionsplan</div>
+            <div className={styles.ursprColumn}>ursprünglich</div>
+            <div className={styles.angesColumn}>angesiedelt</div>
+            <div className={styles.totalColumn}>total</div>
+            <div className={styles.ursprColumn}>ursprünglich</div>
+            <div className={styles.angesColumn}>angesiedelt</div>
+            <div className={styles.totalDiffColumn}>total</div>
           </div>
           {aps.map((ap) => (
             <div
-              className={apRow}
+              className={styles.apRow}
               key={ap?.artname}
             >
-              <div className={apColumn}>{ap?.artname}</div>
-              <div className={ursprColumn}>{ap?.pop100}</div>
-              <div className={angesColumn}>{ap?.pop200}</div>
-              <div className={totalColumn}>{ap?.popTotal}</div>
+              <div className={styles.apColumn}>{ap?.artname}</div>
+              <div className={styles.ursprColumn}>{ap?.pop100}</div>
+              <div className={styles.angesColumn}>{ap?.pop200}</div>
+              <div className={styles.totalColumn}>{ap?.popTotal}</div>
               <div
-                className={ursprColumn}
+                className={styles.ursprColumn}
                 style={{
                   backgroundColor:
                     ap?.pop100Diff > 0 ? '#00ff00'
@@ -121,7 +106,7 @@ export const AktPopList = ({ year }) => {
                 {ap?.pop100Diff}
               </div>
               <div
-                className={angesColumn}
+                className={styles.angesColumn}
                 style={{
                   backgroundColor:
                     ap?.pop200Diff > 0 ? '#00ff00'
@@ -132,7 +117,7 @@ export const AktPopList = ({ year }) => {
                 {ap?.pop200Diff}
               </div>
               <div
-                className={totalDiffColumn}
+                className={styles.totalDiffColumn}
                 style={{
                   backgroundColor:
                     ap?.popTotalDiff > 0 ? '#00ff00'
@@ -144,13 +129,13 @@ export const AktPopList = ({ year }) => {
               </div>
             </div>
           ))}
-          <div className={totalRow}>
-            <div className={apColumn}>{aps.length}</div>
-            <div className={ursprColumn}>{pop100}</div>
-            <div className={angesColumn}>{pop200}</div>
-            <div className={totalColumn}>{popsTotal}</div>
+          <div className={styles.totalRow}>
+            <div className={styles.apColumn}>{aps.length}</div>
+            <div className={styles.ursprColumn}>{pop100}</div>
+            <div className={styles.angesColumn}>{pop200}</div>
+            <div className={styles.totalColumn}>{popsTotal}</div>
             <div
-              className={ursprColumn}
+              className={styles.ursprColumn}
               style={{
                 backgroundColor:
                   pop100Diff > 0 ? '#00ff00'
@@ -161,7 +146,7 @@ export const AktPopList = ({ year }) => {
               {pop100Diff}
             </div>
             <div
-              className={angesColumn}
+              className={styles.angesColumn}
               style={{
                 backgroundColor:
                   pop200Diff > 0 ? '#00ff00'
@@ -172,7 +157,7 @@ export const AktPopList = ({ year }) => {
               {pop200Diff}
             </div>
             <div
-              className={totalDiffColumn}
+              className={styles.totalDiffColumn}
               style={{
                 backgroundColor:
                   popTotalDiff > 0 ? '#00ff00'

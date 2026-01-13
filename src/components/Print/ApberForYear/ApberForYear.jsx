@@ -15,19 +15,7 @@ import { ApberForAps } from './ApberForAps.jsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../shared/Spinner.jsx'
 
-import {
-  container,
-  contentContainer,
-  firstPageTitle,
-  firstPageSubTitle,
-  firstPageFnsLogo,
-  firstPageDate,
-  firstPageBearbeiter,
-  secondPageTop,
-  secondPage,
-  secondPageTitle,
-  secondPageText,
-} from './ApberForYear.module.css'
+import styles from './ApberForYear.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
@@ -87,29 +75,29 @@ export const ApberForYear = () => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
-        <div className={contentContainer}>
-          <p className={firstPageTitle}>
+      <div className={styles.container}>
+        <div className={styles.contentContainer}>
+          <p className={styles.firstPageTitle}>
             Umsetzung der Aktionspläne Flora
             <br />
             im Kanton Zürich
           </p>
-          <p className={firstPageSubTitle}>{`Jahresbericht ${jahr}`}</p>
+          <p className={styles.firstPageSubTitle}>{`Jahresbericht ${jahr}`}</p>
           <img
-            className={firstPageFnsLogo}
+            className={styles.firstPageFnsLogo}
             src={fnslogo}
             alt="FNS"
             width="350"
           />
-          <p className={firstPageDate}>
+          <p className={styles.firstPageDate}>
             {DateTime.fromJSDate(new Date()).toFormat('dd.LL.yyyy')}
           </p>
-          <p className={firstPageBearbeiter}>Karin Marti, topos</p>
+          <p className={styles.firstPageBearbeiter}>Karin Marti, topos</p>
           {!!apberuebersicht?.bemerkungen && (
-            <div className={secondPage}>
-              <div className={secondPageTop} />
-              <label className={secondPageTitle}>Zusammenfassung</label>
-              <div className={secondPageText}>
+            <div className={styles.secondPage}>
+              <div className={styles.secondPageTop} />
+              <label className={styles.secondPageTitle}>Zusammenfassung</label>
+              <div className={styles.secondPageText}>
                 <div
                   dangerouslySetInnerHTML={{
                     __html: mdParser.render(apberuebersicht.bemerkungen),
