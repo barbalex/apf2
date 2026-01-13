@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-import { container } from './CellForValue.module.css'
-import { tableCell } from './index.module.css'
+import styles from './CellForValue.module.css'
+import indexStyles from './index.module.css'
 
 export const CellForValue = observer(
   ({ field, width, row, isOdd, firstChild }) => {
@@ -30,10 +30,10 @@ export const CellForValue = observer(
       <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={hovered.reset}
-        className={tableCell}
+        className={indexStyles.tableCell}
         style={tableCellStyle}
       >
-        <div className={container}>
+        <div className={styles.container}>
           <div>{value}</div>
         </div>
       </div>

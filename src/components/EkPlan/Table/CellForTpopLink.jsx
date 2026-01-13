@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-import { link } from './CellForTpopLink.module.css'
-import { tableCell } from './index.module.css'
+import styles from './CellForTpopLink.module.css'
+import indexStyles from './index.module.css'
 
 export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
   const store = useContext(MobxContext)
@@ -34,11 +34,11 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
-      className={tableCell}
+      className={indexStyles.tableCell}
       style={cellStyle}
     >
       <div
-        className={link}
+        className={styles.link}
         onClick={onClickLink}
         title="in neuem Fenster öffnen"
       >

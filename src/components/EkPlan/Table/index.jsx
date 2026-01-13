@@ -18,7 +18,7 @@ import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
 import { TpopRow } from './Row/index.jsx'
 import { EkplanTableHeader } from './Header.jsx'
 
-import { container, scrollContainer, exportButton } from './index.module.css'
+import styles from './index.module.css'
 
 const getTpopFilter = ({
   apValues,
@@ -263,12 +263,12 @@ export const EkPlanTable = observer(() => {
           variant="outlined"
           onClick={onClickExport}
           color="inherit"
-          className={exportButton}
+          className={styles.exportButton}
         >
           exportieren
         </Button>
-        <div className={container}>
-          <div className={scrollContainer}>
+        <div className={styles.container}>
+          <div className={styles.scrollContainer}>
             <EkplanTableHeader
               tpopLength={tpops.length !== 0 ? tpops.length : '...'}
               tpopFilter={tpopFilter}

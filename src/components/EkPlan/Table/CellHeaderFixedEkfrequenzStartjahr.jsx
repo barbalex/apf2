@@ -7,13 +7,8 @@ import { styled } from '@mui/material/styles'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
-import {
-  cell,
-  title,
-  dropdown,
-  textFilterContainer,
-} from './CellHeaderFixedEkfrequenz.module.css'
-import { faFilter } from './CellHeaderFixedEkfrequenzStartjahr.module.css'
+import ekfrequenzStyles from './CellHeaderFixedEkfrequenz.module.css'
+import styles from './CellHeaderFixedEkfrequenzStartjahr.module.css'
 
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
@@ -51,7 +46,7 @@ export const CellHeaderFixedEkfrequenzStartjahr = observer(({ column }) => {
   return (
     <>
       <div
-        className={cell}
+        className={ekfrequenzStyles.cell}
         aria-controls="ekfrequenzStartjahrHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
@@ -60,10 +55,10 @@ export const CellHeaderFixedEkfrequenzStartjahr = observer(({ column }) => {
           minWidth: column.width,
         }}
       >
-        <div className={title}>{label}</div>
-        <div className={dropdown}>
+        <div className={ekfrequenzStyles.title}>{label}</div>
+        <div className={ekfrequenzStyles.dropdown}>
           {filterEkfrequenzStartjahrEmpty || filterEkfrequenzStartjahr ?
-            <FaFilter className={faFilter} />
+            <FaFilter className={styles.faFilter} />
           : <Caret />}
         </div>
       </div>
@@ -81,7 +76,7 @@ export const CellHeaderFixedEkfrequenzStartjahr = observer(({ column }) => {
             'nicht Leerwerte filtern'
           : 'Leerwerte filtern'}
         </MenuItem>
-        <div className={textFilterContainer}>
+        <div className={ekfrequenzStyles.textFilterContainer}>
           <TextFilter
             column={column}
             closeMenu={closeMenu}

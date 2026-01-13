@@ -9,7 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../mobxContext.js'
 
-import { cell, title, dropdown } from './CellHeaderYear.module.css'
+import styles from './CellHeaderYear.module.css'
 
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
@@ -140,11 +140,11 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
         aria-controls="yearHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
-        className={cell}
+        className={styles.cell}
         style={style}
       >
-        <div className={title}>{column}</div>
-        <div className={dropdown}>
+        <div className={styles.title}>{column}</div>
+        <div className={styles.dropdown}>
           {filterSet ?
             <FaFilter />
           : <Caret />}

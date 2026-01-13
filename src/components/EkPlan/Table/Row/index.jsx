@@ -3,7 +3,7 @@ import { useRef } from 'react'
 import { useOnScreen } from '../../../../modules/useOnScreen.js'
 import { Visible } from './Visible.jsx'
 
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const TpopRow = ({ tpopId, index, setProcessing, years }) => {
   const ref = useRef(null)
@@ -11,7 +11,7 @@ export const TpopRow = ({ tpopId, index, setProcessing, years }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       ref={ref}
     >
       {isVisible && (

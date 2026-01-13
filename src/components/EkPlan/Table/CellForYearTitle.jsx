@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../mobxContext.js'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.js'
 
-import { infoRow, tableCell } from './index.module.css'
+import indexStyles from './index.module.css'
 
 export const CellForYearTitle = observer(({ row, isOdd }) => {
   const store = useContext(MobxContext)
@@ -25,12 +25,12 @@ export const CellForYearTitle = observer(({ row, isOdd }) => {
     <div
       onMouseEnter={onMouseEnter}
       onMouseLeave={hovered.reset}
-      className={tableCell}
+      className={indexStyles.tableCell}
       style={style}
     >
-      {showEk && <div className={infoRow}>EK:</div>}
-      {showEkf && <div className={infoRow}>EKF:</div>}
-      {showMassn && <div className={infoRow}>Ansied:</div>}
+      {showEk && <div className={indexStyles.infoRow}>EK:</div>}
+      {showEkf && <div className={indexStyles.infoRow}>EKF:</div>}
+      {showMassn && <div className={indexStyles.infoRow}>Ansied:</div>}
     </div>
   )
 })

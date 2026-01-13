@@ -8,13 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../../mobxContext.js'
 import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
 
-import {
-  cell,
-  title,
-  dropdown,
-  faFilter,
-  textFilterContainer,
-} from './CellHeaderFixedEkfrequenz.module.css'
+import styles from './CellHeaderFixedEkfrequenz.module.css'
 
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
@@ -52,7 +46,7 @@ export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
   return (
     <>
       <div
-        className={cell}
+        className={styles.cell}
         aria-controls="ekfrequenzHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
@@ -61,10 +55,10 @@ export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
           minWidth: column.width,
         }}
       >
-        <div className={title}>{label}</div>
-        <div className={dropdown}>
+        <div className={styles.title}>{label}</div>
+        <div className={styles.dropdown}>
           {filterEkfrequenzEmpty || filterEkfrequenz ?
-            <FaFilter className={faFilter} />
+            <FaFilter className={styles.faFilter} />
           : <Caret />}
         </div>
       </div>
@@ -82,7 +76,7 @@ export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
             'nicht Leerwerte filtern'
           : 'Leerwerte filtern'}
         </MenuItem>
-        <div className={textFilterContainer}>
+        <div className={styles.textFilterContainer}>
           <TextFilter
             column={column}
             closeMenu={closeMenu}

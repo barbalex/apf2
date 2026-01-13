@@ -10,7 +10,7 @@ import { MobxContext } from '../../../../mobxContext.js'
 import { TextFilter } from './TextFilter.jsx'
 import { BooleanFilter } from './BooleanFilter.jsx'
 
-import { cell, title, dropdown, faFilter } from './index.module.css'
+import styles from './index.module.css'
 
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
@@ -29,7 +29,7 @@ export const CellHeaderFixed = observer(({ column }) => {
   return (
     <>
       <div
-        className={cell}
+        className={styles.cell}
         aria-controls={`${name}ColumnHeaderMenu`}
         aria-haspopup="true"
         onClick={onClickCell}
@@ -39,16 +39,16 @@ export const CellHeaderFixed = observer(({ column }) => {
         }}
       >
         <div
-          className={title}
+          className={styles.title}
           data-label={label}
           style={{ ...(label === 'Art' ? { paddingLeft: 5 } : {}) }}
         >
           {label}
         </div>
         {!nofilter && (
-          <div className={dropdown}>
+          <div className={styles.dropdown}>
             {filterValue ?
-              <FaFilter className={faFilter} />
+              <FaFilter className={styles.faFilter} />
             : <Caret />}
           </div>
         )}
