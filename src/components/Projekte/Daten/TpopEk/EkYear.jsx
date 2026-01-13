@@ -2,7 +2,7 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { sortBy } from 'es-toolkit'
 
-import { styledTableRow } from './EkYear.module.css'
+import styles from './EkYear.module.css'
 
 const typRenamed = (e) => {
   switch (e.typ) {
@@ -26,7 +26,7 @@ export const EkYear = ({ data }) => {
   )
 
   return (
-    <TableRow className={styledTableRow}>
+    <TableRow className={styles.styledTableRow}>
       <TableCell>{data[0].jahr}</TableCell>
       <TableCell>
         {ekplans.map((e) => (

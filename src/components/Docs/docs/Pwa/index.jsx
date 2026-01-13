@@ -1,11 +1,11 @@
 import installieren from './installieren.png'
 
-import { dokuDate } from '../../DesktopDocs.module.css'
+import desktopStyles from '../../DesktopDocs.module.css'
 
 export const Component = () => (
   <>
     <h1>Progressive Web App</h1>
-    <p className={dokuDate}>21.12.2024</p>
+    <p className={desktopStyles.dokuDate}>21.12.2024</p>
     <p>
       apflora.ch ist eine{' '}
       <a
