@@ -40,7 +40,7 @@ export const Router = () => {
       >
         <Route
           index
-          lazy={() => import('../Home/index.jsx')}
+          lazy={() => import('../Home/index.tsx')}
         />
         <Route
           path="/Daten"
