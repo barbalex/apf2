@@ -7,7 +7,7 @@ import { EkPlanMenus } from './EkPlan.jsx'
 import { ProjekteMenus } from './Projekte/index.jsx'
 import { isMobileViewAtom } from '../../../JotaiStore/index.js'
 
-import { container, title, menu } from './index.module.css'
+import styles from './index.module.css'
 
 export const Bar = () => {
   const { search, pathname } = useLocation()
@@ -17,17 +17,17 @@ export const Bar = () => {
   const [isMobileView] = useAtom(isMobileViewAtom)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Button
         variant="outlined"
         component={Link}
         to={`/${search}`}
         title="Home"
-        className={title}
+        className={styles.title}
       >
         AP Flora
       </Button>
-      <div className={menu}>
+      <div className={styles.menu}>
         {showHome ?
           <HomeMenus />
         : showEkPlan ?

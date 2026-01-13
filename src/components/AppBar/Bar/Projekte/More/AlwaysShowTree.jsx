@@ -6,7 +6,7 @@ import { useAtom } from 'jotai'
 import { alwaysShowTreeAtom } from '../../../../../JotaiStore/index.js'
 import { constants } from '../../../../../modules/constants.js'
 
-import { formControlLabel } from './AlwaysShowTree.module.css'
+import styles from './AlwaysShowTree.module.css'
 
 export const AlwaysShowTree = () => {
   const [alwaysShowTree, setAlwaysShowTree] = useAtom(alwaysShowTreeAtom)
@@ -33,7 +33,7 @@ export const AlwaysShowTree = () => {
           />
         }
         label="Navigationsbaum immer anbieten"
-        className={formControlLabel}
+        className={styles.formControlLabel}
       />
     </Tooltip>
   )

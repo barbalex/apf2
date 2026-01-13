@@ -1,7 +1,7 @@
 import { useLocation, Link } from 'react-router'
 import Button from '@mui/material/Button'
 
-import { button } from './Dokumentation.module.css'
+import styles from './Dokumentation.module.css'
 
 export const Dokumentation = () => {
   const { search } = useLocation()
@@ -11,7 +11,7 @@ export const Dokumentation = () => {
       variant="text"
       component={Link}
       to={`/Dokumentation/${search}`}
-      className={button}
+      className={styles.button}
     >
       Dokumentation
     </Button>

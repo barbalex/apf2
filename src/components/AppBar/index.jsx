@@ -11,7 +11,7 @@ import { MobxContext } from '../../mobxContext.js'
 import { isMobileViewAtom } from '../../JotaiStore/index.js'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.jsx'
 
-import { container, appbar } from './index.module.css'
+import styles from './index.module.css'
 
 const isInIframe = inIframe()
 
@@ -43,10 +43,10 @@ export const Component = observer(() => {
     !!userId && pathname.startsWith(`/Daten/Benutzer/${userId}/EKF`)
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <IsDesktopViewSetter />
       <div
-        className={appbar}
+        className={styles.appbar}
         style={{ padding: isMobileView ? 0 : 4 }}
       >
         {showEkf ?
