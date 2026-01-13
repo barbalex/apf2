@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Dispatch, SetStateAction } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
@@ -15,10 +15,35 @@ import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantI
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora/TpopApberrelevantGrundWerteCode.ts'
+
 import styles from './Tpop.module.css'
 
+interface TpopListsQueryResult {
+  allTpopApberrelevantGrundWertes: {
+    nodes: Array<{
+      value: TpopApberrelevantGrundWerteCode
+      label: string
+    }>
+  }
+  allChAdministrativeUnits: {
+    nodes: Array<{
+      value: string
+      label: string
+    }>
+  }
+}
+
+interface TpopProps {
+  saveToDb: (event: React.ChangeEvent<HTMLInputElement>) => void
+  fieldErrors: Record<string, string>
+  setFieldErrors: Dispatch<SetStateAction<Record<string, string>>>
+  row: any
+  apJahr?: number
+}
+
 export const Tpop = observer(
-  ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }) => {
+  ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }: TpopProps) => {
     const store = useContext(MobxContext)
     const { enqueNotification } = store
 
@@ -30,7 +55,7 @@ export const Tpop = observer(
       data: dataLists,
       loading: loadingLists,
       error: errorLists,
-    } = useQuery(gql`
+    } = useQuery<TpopListsQueryResult>(gql`
       query TpopListsQueryForTpopFilter {
         allTpopApberrelevantGrundWertes(
           orderBy: SORT_ASC
@@ -165,7 +190,7 @@ export const Tpop = observer(
                 })
               } catch (error) {
                 return enqueNotification({
-                  message: error.message,
+                  message: (error as Error).message,
                   options: {
                     variant: 'error',
                   },

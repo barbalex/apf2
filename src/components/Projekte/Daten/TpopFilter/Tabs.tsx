@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, Dispatch, SetStateAction } from 'react'
 import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -8,7 +8,13 @@ import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from './Tabs.module.css'
 
-export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
+interface TabsProps {
+  activeTab: number
+  setActiveTab: Dispatch<SetStateAction<number>>
+  dataFilter: any[]
+}
+
+export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
   const store = useContext(MobxContext)
   const { dataFilterAddOr } = store.tree
 
@@ -17,7 +23,7 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }) => {
       (v) => v !== null,
     ).length === 0
 
-  const onChangeTab = (event, value) => {
+  const onChangeTab = (_event: React.SyntheticEvent, value: number) => {
     if (value > dataFilter.length - 1) {
       dataFilterAddOr({ table: 'tpop', val: tpop })
       setTimeout(() => setActiveTab(value), 0)

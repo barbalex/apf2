@@ -9,12 +9,37 @@ import { query } from './query.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Spinner } from '../../../../shared/Spinner.jsx'
 
+import type { EkfrequenzId } from '../../../../../models/apflora/EkfrequenzId.ts'
+import type { AdresseId } from '../../../../../models/apflora/AdresseId.ts'
+
 import styles from './index.module.css'
 
-export const Ek = ({ saveToDb, row, fieldErrors }) => {
+interface TpopEkFilterQueryResult {
+  allEkfrequenzs: {
+    nodes: Array<{
+      id: EkfrequenzId
+      code: string | null
+      anwendungsfall: string | null
+    }>
+  }
+  allAdresses: {
+    nodes: Array<{
+      value: AdresseId
+      label: string
+    }>
+  }
+}
+
+interface EkProps {
+  saveToDb: (event: React.ChangeEvent<HTMLInputElement>) => void
+  row: any
+  fieldErrors: Record<string, string>
+}
+
+export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
   const { apId } = useParams()
 
-  const { data: dataEk, loading } = useQuery(query, {
+  const { data: dataEk, loading } = useQuery<TpopEkFilterQueryResult>(query, {
     variables: {
       apId,
     },

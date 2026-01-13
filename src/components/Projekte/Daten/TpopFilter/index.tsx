@@ -8,13 +8,22 @@ import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { queryTpops } from './queryTpops.js'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { Ek } from './Ek/index.jsx'
-import { Tpop } from './Tpop.jsx'
+import { Ek } from './Ek/index.tsx'
+import { Tpop } from './Tpop.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
-import { Tabs } from './Tabs.jsx'
+import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
 import { ActiveFilters } from './ActiveFilters.js'
+
+interface TpopsQueryResult {
+  allTpops: {
+    totalCount: number
+  }
+  allTpopsFiltered: {
+    totalCount: number
+  }
+}
 
 import styles from './index.module.css'
 
@@ -24,7 +33,7 @@ export const TpopFilter = observer(() => {
   const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
-  const onChangeTab = (event, value) => setTab(value)
+  const onChangeTab = (_event: React.SyntheticEvent, value: string) => setTab(value)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -34,7 +43,7 @@ export const TpopFilter = observer(() => {
     }
   }, [activeTab, dataFilter.tpop.length])
 
-  const { data: dataTpops, error } = useQuery(queryTpops, {
+  const { data: dataTpops, error } = useQuery<TpopsQueryResult>(queryTpops, {
     variables: {
       filteredFilter: tpopGqlFilter.filtered,
       allFilter: tpopGqlFilter.all,
@@ -43,8 +52,8 @@ export const TpopFilter = observer(() => {
 
   const row = dataFilter.tpop[activeTab]
 
-  const [fieldErrors, setFieldErrors] = useState({})
-  const saveToDb = (event) =>
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpop',
       key: event.target.name,
