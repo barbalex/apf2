@@ -6,8 +6,8 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../mobxContext.js'
-import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
-import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 
 export const useTpopfreiwkontrsNavData = (props) => {
   const apolloClient = useApolloClient()

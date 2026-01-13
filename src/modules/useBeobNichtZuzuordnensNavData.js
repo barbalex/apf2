@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.jsx'
+import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 

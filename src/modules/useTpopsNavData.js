@@ -30,9 +30,9 @@ import { TpopIconPHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 import { TpopIconQ } from '../components/Projekte/Karte/layers/Tpop/statusGroup/q.tsx'
 import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroup/qHighlighted.tsx'
 
-import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
-import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
-import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.jsx'
+import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
+import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.js'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 

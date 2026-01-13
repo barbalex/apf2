@@ -6,8 +6,8 @@ import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
 import { MobxContext } from '../mobxContext.js'
-import { MovingIcon } from '../components/NavElements/MovingIcon.jsx'
-import { CopyingIcon } from '../components/NavElements/CopyingIcon.jsx'
+import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
+import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
