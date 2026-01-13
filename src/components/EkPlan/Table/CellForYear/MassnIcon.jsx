@@ -4,20 +4,14 @@ import { GoZap } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import {
-  container,
-  massnContainer,
-  massnSymbol,
-  nrOfMassn,
-  sumCounted,
-} from './MassnIcon.module.css'
+import styles from './MassnIcon.module.css'
 
 export const MassnIcon = observer(({ ansiedlungs }) => {
   const store = useContext(MobxContext)
   const { showCount, showEkCount } = store.ekPlan
 
   if (!ansiedlungs.length) {
-    return <div className={container}>&nbsp;</div>
+    return <div className={styles.container}>&nbsp;</div>
   }
 
   let sumCounted = null
@@ -30,17 +24,17 @@ export const MassnIcon = observer(({ ansiedlungs }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       style={{ justifyContent: showCount ? 'space-between' : 'center' }}
     >
-      <div className={massnContainer}>
-        <GoZap className={massnSymbol} />
+      <div className={styles.massnContainer}>
+        <GoZap className={styles.massnSymbol} />
         {showEkCount && ansiedlungs.length > 1 && (
-          <div className={nrOfMassn}>{ansiedlungs.length}</div>
+          <div className={styles.nrOfMassn}>{ansiedlungs.length}</div>
         )}
       </div>
       {showCount && (
-        <div className={sumCounted}>
+        <div className={styles.sumCounted}>
           {sumCounted !== null ? sumCounted : ' '}
         </div>
       )}

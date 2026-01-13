@@ -3,20 +3,14 @@ import { sum } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import {
-  container,
-  icon,
-  checkbox,
-  nrOfEk,
-  sumCounted,
-} from './EkIcon.module.css'
+import styles from './EkIcon.module.css'
 
 export const EkIcon = observer(({ planned, eks, einheits }) => {
   const store = useContext(MobxContext)
   const { showCount, showEkCount } = store.ekPlan
 
   if (!planned && !eks.length) {
-    return <div className={container}>&nbsp;</div>
+    return <div className={styles.container}>&nbsp;</div>
   }
 
   let sumCounted = null
@@ -53,13 +47,13 @@ export const EkIcon = observer(({ planned, eks, einheits }) => {
 
   return (
     <div
-      className={container}
+      className={styles.container}
       style={{
         justifyContent: showCount ? 'space-between' : 'center',
       }}
     >
       <div
-        className={checkbox}
+        className={styles.checkbox}
         style={{
           background: planned ? 'rgba(46, 125, 50, 0.05)' : 'none',
           border: planned ? '1px solid #2e7d32' : 'none',
@@ -68,17 +62,17 @@ export const EkIcon = observer(({ planned, eks, einheits }) => {
         {!!eks.length && (
           <svg
             viewBox="0 0 24 24"
-            className={icon}
+            className={styles.icon}
           >
             <polyline points="20 6 9 17 4 12" />
           </svg>
         )}
         {showEkCount && eks.length > 1 && (
-          <div className={nrOfEk}>{eks.length}</div>
+          <div className={styles.nrOfEk}>{eks.length}</div>
         )}
       </div>
       {showCount && (
-        <div className={sumCounted}>
+        <div className={styles.sumCounted}>
           {sumCounted !== null ? sumCounted : ' '}
         </div>
       )}
