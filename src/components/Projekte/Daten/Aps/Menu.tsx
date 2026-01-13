@@ -22,14 +22,32 @@ import { ApFilter } from '../../TreeContainer/ApFilter/index.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
+import type { ApId } from '../../../../models/apflora/Ap.js'
+import type { ProjId } from '../../../../models/apflora/Proj.js'
+
 import styles from './Menu.module.css'
+
+interface CreateApResult {
+  data?: {
+    createAp?: {
+      ap?: {
+        id: ApId
+        projId: ProjId
+      }
+    }
+  }
+}
+
+interface MenuProps {
+  toggleFilterInput?: () => void
+}
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }) => {
+export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const { projId, apId } = useParams()
+  const { projId, apId } = useParams<{ projId: string; apId: string }>()
 
   const store = useContext(MobxContext)
 
@@ -40,7 +58,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
   const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
   const onClickAdd = async () => {
-    let result
+    let result: CreateApResult | undefined
     try {
       result = await apolloClient.mutate({
         mutation: gql`
@@ -57,7 +75,7 @@ export const Menu = observer(({ toggleFilterInput }) => {
       })
     } catch (error) {
       return store.enqueNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },

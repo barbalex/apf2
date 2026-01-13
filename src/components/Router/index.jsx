@@ -570,7 +570,7 @@ export const Router = () => {
                 >
                   <Route
                     path="*"
-                    lazy={() => import('../Projekte/Daten/Aps/index.jsx')}
+                    lazy={() => import('../Projekte/Daten/Aps/index.tsx')}
                     errorElement={<RouterErrorBoundary />}
                   />
                   <Route
