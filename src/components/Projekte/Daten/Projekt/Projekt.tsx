@@ -14,7 +14,17 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
+import type { ProjektId } from '../../../../models/apflora/index.js'
+
 import styles from './Projekt.module.css'
+
+interface ProjektQueryResult {
+  projektById?: {
+    id: ProjektId
+    name: string | null
+    changedBy: string | null
+  }
+}
 
 const fieldTypes = {
   name: 'String',
@@ -28,9 +38,9 @@ export const Component = observer(() => {
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery(query, {
+  const { data, loading, error } = useQuery<ProjektQueryResult>(query, {
     variables: {
       id: projId,
     },
@@ -75,7 +85,7 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors({ [field]: (error as Error).message })
     }
     setFieldErrors({})
     tsQueryClient.invalidateQueries({
