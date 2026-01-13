@@ -1,6 +1,6 @@
 import { useNavigate, useParams, useLocation } from 'react-router'
 
-import { outerContainer, innerContainer } from './Item.module.css'
+import styles from './Item.module.css'
 
 export const Item = ({ projektCount, row }) => {
   const { search } = useLocation()
@@ -13,7 +13,7 @@ export const Item = ({ projektCount, row }) => {
 
   return (
     <div
-      className={outerContainer}
+      className={styles.outerContainer}
       onClick={onClick}
       style={{
         backgroundColor: ekfId === row.id ? 'rgb(255, 250, 198)' : 'unset',
@@ -21,7 +21,7 @@ export const Item = ({ projektCount, row }) => {
       }}
     >
       <div
-        className={innerContainer}
+        className={styles.innerContainer}
         style={{ height: innerContainerHeight }}
       >
         {projektCount > 1 && <div>{row.projekt}</div>}

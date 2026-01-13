@@ -14,7 +14,7 @@ import { dataByUserId as dataByUserIdGql } from './dataByUserId.js'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.js'
 import { Error } from '../shared/Error.jsx'
 
-import { container, innerContainer, noDataContainer } from './index.module.css'
+import styles from './index.module.css'
 
 const getEkfFromData = ({ data }) => {
   const ekfNodes =
@@ -78,7 +78,7 @@ export const Component = observer(() => {
 
   if (!loading && ekf.length === 0) {
     return (
-      <div className={noDataContainer}>
+      <div className={styles.noDataContainer}>
         {`Für das Jahr ${ekfYear} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
       </div>
     )
@@ -99,7 +99,7 @@ export const Component = observer(() => {
   }
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <SplitPane split="vertical">
         <Pane size="350px" minSize={100}>
           <EkfList ekf={ekf} />
@@ -110,7 +110,7 @@ export const Component = observer(() => {
           </Pane>
         ) : (
           <Pane>
-            <div className={innerContainer} />
+            <div className={styles.innerContainer} />
           </Pane>
         )}
       </SplitPane>

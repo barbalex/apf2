@@ -1,13 +1,13 @@
 import { uniq } from 'es-toolkit'
 
 import { Item } from './Item.jsx'
-import { container } from './index.module.css'
+import styles from './index.module.css'
 
 export const EkfList = ({ ekf }) => {
   const projektCount = uniq(ekf.map((e) => e.projekt)).length
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       {ekf.map((ek) => (
         <Item
           key={ek.id}
