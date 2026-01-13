@@ -1,12 +1,6 @@
 import { useState } from 'react'
 
-import {
-  container,
-  imageContainer,
-  img,
-  title,
-  notifContainer,
-} from './Image.module.css'
+import styles from './Image.module.css'
 
 export const Image = ({ artname, apId }) => {
   const [notif, setNotif] = useState(null)
@@ -17,10 +11,10 @@ export const Image = ({ artname, apId }) => {
   const onError = () => setNotif(`Für ${artname} wurde kein Bild gefunden`)
 
   return (
-    <div className={container}>
-      <div className={title}>{artname}</div>
+    <div className={styles.container}>
+      <div className={styles.title}>{artname}</div>
       {!notif && (
-        <div className={imageContainer}>
+        <div className={styles.imageContainer}>
           {!!apId && (
             <picture>
               <source
@@ -28,7 +22,7 @@ export const Image = ({ artname, apId }) => {
                 type="image/avif"
               />
               <img
-                className={img}
+                className={styles.img}
                 src={`/${apId}.webp`}
                 onError={onError}
                 alt={artname}
@@ -37,7 +31,7 @@ export const Image = ({ artname, apId }) => {
           )}
         </div>
       )}
-      {!!notif && <div className={notifContainer}>{notif}</div>}
+      {!!notif && <div className={styles.notifContainer}>{notif}</div>}
     </div>
   )
 }

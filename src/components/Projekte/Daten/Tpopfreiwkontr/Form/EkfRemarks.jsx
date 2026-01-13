@@ -1,10 +1,12 @@
 import { TextField2 } from '../../../../shared/TextField2.jsx'
-import { container, label, val } from './EkfRemarks.module.css'
+import styles from './EkfRemarks.module.css'
 
 export const EkfRemarks = ({ saveToDb, row, errors }) => (
-  <div className={container}>
-    <div className={label}>Mitteilungen zwischen AV/Topos und Freiwilligen</div>
-    <div className={val}>
+  <div className={styles.container}>
+    <div className={styles.label}>
+      Mitteilungen zwischen AV/Topos und Freiwilligen
+    </div>
+    <div className={styles.val}>
       <TextField2
         key={`${row?.id}ekfBemerkungen`}
         name="ekfBemerkungen"

@@ -1,10 +1,10 @@
 import { DateField as DateFieldComponent } from '../../../../shared/Date.jsx'
-import { container, label, val } from './Date.module.css'
+import styles from './Date.module.css'
 
 export const DateField = ({ saveToDb, row, errors }) => (
-  <div className={container}>
-    <div className={label}>Aufnahme-datum</div>
-    <div className={val}>
+  <div className={styles.container}>
+    <div className={styles.label}>Aufnahme-datum</div>
+    <div className={styles.val}>
       <DateFieldComponent
         key={`${row?.id}datum`}
         name="datum"
