@@ -507,7 +507,7 @@ export const Router = () => {
               />
               <Route
                 path=":issueId"
-                lazy={() => import('../Projekte/Daten/CurrentIssue/index.jsx')}
+                lazy={() => import('../Projekte/Daten/CurrentIssue/index.tsx')}
                 errorElement={<RouterErrorBoundary />}
               />
             </Route>

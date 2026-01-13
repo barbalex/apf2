@@ -9,6 +9,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
+import type Currentissue from '../../../../models/apflora/Currentissue.js'
+
 import styles from './index.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
@@ -22,10 +24,14 @@ const query = gql`
   ${currentIssueFragment}
 `
 
-export const Component = () => {
-  const { issueId } = useParams()
+interface CurrentIssueQueryResult {
+  currentissueById: Currentissue
+}
 
-  const { data, loading, error } = useQuery(query, {
+export const Component = () => {
+  const { issueId } = useParams<{ issueId: string }>()
+
+  const { data, loading, error } = useQuery<CurrentIssueQueryResult>(query, {
     variables: {
       id: issueId,
     },
