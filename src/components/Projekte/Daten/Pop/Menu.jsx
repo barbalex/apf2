@@ -25,7 +25,7 @@ import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
 
-import { menuTitle } from '../../../shared/Files/Menu/index.module.css'
+import styles from '../../../shared/Files/Menu/index.module.css'
 
 const iconStyle = { color: 'white' }
 
