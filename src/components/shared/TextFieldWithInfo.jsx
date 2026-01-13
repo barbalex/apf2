@@ -42,7 +42,7 @@ export const TextFieldWithInfo = observer(
         className={formControl}
       >
         <InputLabel
-          htmlFor={label}
+          htmlFor={name}
           shrink
         >
           {label}

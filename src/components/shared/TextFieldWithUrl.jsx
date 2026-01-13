@@ -44,7 +44,7 @@ export const TextFieldWithUrl = ({
         className={formControl}
       >
         <InputLabel
-          htmlFor={label}
+          htmlFor={name}
           shrink
         >
           {`${label} (gültige URL's beginnen mit "https://", "//" oder "www.")`}

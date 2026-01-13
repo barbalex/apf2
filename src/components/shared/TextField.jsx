@@ -45,7 +45,7 @@ export const TextField = observer(
         className={formControl}
       >
         <InputLabel
-          htmlFor={label}
+          htmlFor={name}
           shrink
           required={required}
         >
