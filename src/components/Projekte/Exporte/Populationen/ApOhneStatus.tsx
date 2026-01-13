@@ -8,7 +8,31 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+
 import styles from '../index.module.css'
+
+interface PopVonApOhneStatusQueryResult {
+  allPops: {
+    nodes: {
+      id: PopId
+      vPopVonapohnestatusesById: {
+        nodes: {
+          apId: ApId
+          artname: string | null
+          apBearbeitung: string | null
+          id: PopId
+          nr: number | null
+          name: string | null
+          status: string | null
+          x: number | null
+          y: number | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const ApOhneStatus = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +49,7 @@ export const ApOhneStatus = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopVonApOhneStatusQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -53,7 +77,7 @@ export const ApOhneStatus = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

@@ -8,7 +8,37 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+
 import styles from '../index.module.css'
+
+interface PopAnzMassnsQueryResult {
+  allPops: {
+    nodes: {
+      id: PopId
+      vPopAnzmassnsById: {
+        nodes: {
+          apId: ApId
+          artname: string | null
+          apBearbeitung: string | null
+          apStartJahr: number | null
+          apUmsetzung: string | null
+          id: PopId
+          nr: number | null
+          name: string | null
+          status: string | null
+          bekanntSeit: number | null
+          statusUnklar: boolean | null
+          statusUnklarBegruendung: string | null
+          x: number | null
+          y: number | null
+          anzahlMassnahmen: number | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const AnzMassnProPop = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +55,7 @@ export const AnzMassnProPop = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopAnzMassnsQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -59,7 +89,7 @@ export const AnzMassnProPop = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

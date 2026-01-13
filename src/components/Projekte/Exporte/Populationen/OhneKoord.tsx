@@ -8,7 +8,39 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+
 import styles from '../index.module.css'
+
+interface PopOhneKoordsQueryResult {
+  allPops: {
+    nodes: {
+      id: PopId
+      vPopOhnekoordsById: {
+        nodes: {
+          apId: ApId
+          artname: string | null
+          apBearbeitung: string | null
+          apStartJahr: number | null
+          apUmsetzung: string | null
+          id: PopId
+          nr: number | null
+          name: string | null
+          status: string | null
+          bekanntSeit: number | null
+          statusUnklar: boolean | null
+          statusUnklarBegruendung: string | null
+          x: number | null
+          y: number | null
+          createdAt: string | null
+          updatedAt: string | null
+          changedBy: string | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const OhneKoord = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +57,7 @@ export const OhneKoord = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopOhneKoordsQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -61,7 +93,7 @@ export const OhneKoord = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

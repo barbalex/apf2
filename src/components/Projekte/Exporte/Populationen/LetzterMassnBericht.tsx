@@ -8,7 +8,46 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+
 import styles from '../index.module.css'
+
+interface PopMitLetzterPopmassnberQueryResult {
+  allPops: {
+    nodes: {
+      id: PopId
+      vPopMitLetzterPopmassnbersByPopId: {
+        nodes: {
+          apId: ApId
+          artname: string | null
+          apBearbeitung: string | null
+          apStartJahr: number | null
+          apUmsetzung: string | null
+          popId: PopId
+          popNr: number | null
+          popName: string | null
+          popStatus: string | null
+          popBekanntSeit: number | null
+          popStatusUnklar: boolean | null
+          popStatusUnklarBegruendung: string | null
+          popX: number | null
+          popY: number | null
+          popCreatedAt: string | null
+          popUpdatedAt: string | null
+          popChangedBy: string | null
+          popmassnberId: string | null
+          popmassnberJahr: number | null
+          popmassnberEntwicklung: number | null
+          popmassnberBemerkungen: string | null
+          popmassnberCreatedAt: string | null
+          popmassnberUpdatedAt: string | null
+          popmassnberChangedBy: string | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const LetzterMassnBericht = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +64,7 @@ export const LetzterMassnBericht = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopMitLetzterPopmassnberQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -70,7 +109,7 @@ export const LetzterMassnBericht = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

@@ -27,7 +27,7 @@ export const Pops = observer(({ filtered = false }) => {
       disabled={!!queryState || (filtered && !popIsFiltered)}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -79,7 +79,7 @@ export const Pops = observer(({ filtered = false }) => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

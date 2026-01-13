@@ -8,7 +8,55 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+
 import styles from '../index.module.css'
+
+interface PopLastCountsQueryResult {
+  allPops: {
+    nodes: {
+      id: PopId
+      vPopLastCountsByPopId: {
+        nodes: {
+          artname: string | null
+          apId: ApId
+          popId: PopId
+          popNr: number | null
+          popName: string | null
+          popStatus: string | null
+          jahre: string | null
+          pflanzenTotal: number | null
+          pflanzenOhneJungpflanzen: number | null
+          triebeTotal: number | null
+          triebeBeweidung: number | null
+          keimlinge: number | null
+          davonRosetten: number | null
+          jungpflanzen: number | null
+          blatter: number | null
+          davonBluhendePflanzen: number | null
+          davonBluhendeTriebe: number | null
+          bluten: number | null
+          fertilePflanzen: number | null
+          fruchtendeTriebe: number | null
+          blutenstande: number | null
+          fruchtstande: number | null
+          gruppen: number | null
+          deckung: number | null
+          pflanzen5M2: number | null
+          triebeIn30M2: number | null
+          triebe50M2: number | null
+          triebeMahflache: number | null
+          flacheM2: number | null
+          pflanzstellen: number | null
+          stellen: number | null
+          andereZaehleinheit: string | null
+          artIstVorhanden: boolean | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const LetzteZaehlung = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +73,7 @@ export const LetzteZaehlung = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopLastCountsQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -77,7 +125,7 @@ export const LetzteZaehlung = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

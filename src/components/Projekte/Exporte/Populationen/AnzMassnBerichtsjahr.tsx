@@ -8,7 +8,47 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { ApId } from '../../../../models/apflora/public/ApId'
+import type { PopId } from '../../../../models/apflora/public/PopId'
+
 import styles from '../index.module.css'
+
+interface PopmassnberAnzMassnsQueryResult {
+  allPopmassnbers: {
+    nodes: {
+      id: string
+      vPopmassnberAnzmassnsById: {
+        nodes: {
+          apId: ApId
+          artname: string | null
+          apBearbeitung: string | null
+          apStartJahr: number | null
+          apUmsetzung: string | null
+          popId: PopId
+          popNr: number | null
+          popName: string | null
+          popStatus: string | null
+          popBekanntSeit: number | null
+          popStatusUnklar: boolean | null
+          popStatusUnklarBegruendung: string | null
+          popX: number | null
+          popY: number | null
+          popCreatedAt: string | null
+          popUpdatedAt: string | null
+          popChangedBy: string | null
+          id: string
+          jahr: number | null
+          entwicklung: number | null
+          bemerkungen: string | null
+          createdAt: string | null
+          updatedAt: string | null
+          changedBy: string | null
+          anzahlMassnahmen: number | null
+        }[]
+      }
+    }[]
+  }
+}
 
 export const AnzMassnBerichtsjahr = observer(() => {
   const store = useContext(MobxContext)
@@ -25,7 +65,7 @@ export const AnzMassnBerichtsjahr = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopmassnberAnzMassnsQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
@@ -71,7 +111,7 @@ export const AnzMassnBerichtsjahr = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },

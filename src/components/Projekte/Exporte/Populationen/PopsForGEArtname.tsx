@@ -8,9 +8,30 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
+import type { PopId } from '../../../../models/apflora/public/PopId'
+
 import styles from '../index.module.css'
 
-export const PopsForGoogleEarth = observer(() => {
+interface PopKmlNamenQueryResult {
+  allPops: {
+    nodes: {
+      id: PopId
+      vPopKmlnamenById: {
+        nodes: {
+          art: string | null
+          label: string | null
+          inhalte: string | null
+          id: PopId
+          wgs84Lat: number | null
+          wgs84Long: number | null
+          url: string | null
+        }[]
+      }
+    }[]
+  }
+}
+
+export const PopsForGEArtname = observer(() => {
   const store = useContext(MobxContext)
   const { enqueNotification } = store
 
@@ -25,15 +46,15 @@ export const PopsForGoogleEarth = observer(() => {
       disabled={!!queryState}
       onClick={async () => {
         setQueryState('lade Daten...')
-        let result
+        let result: { data: PopKmlNamenQueryResult }
         try {
           result = await apolloClient.query({
             query: gql`
-              query popKmlQuery {
-                allPops(filter: { vPopKmlsByIdExist: true }) {
+              query popKmlNamenQuery {
+                allPops(filter: { vPopKmlnamenByIdExist: true }) {
                   nodes {
                     id
-                    vPopKmlsById {
+                    vPopKmlnamenById {
                       nodes {
                         art
                         label
@@ -51,7 +72,7 @@ export const PopsForGoogleEarth = observer(() => {
           })
         } catch (error) {
           enqueNotification({
-            message: error.message,
+            message: (error as Error).message,
             options: {
               variant: 'error',
             },
@@ -59,13 +80,13 @@ export const PopsForGoogleEarth = observer(() => {
         }
         setQueryState('verarbeite...')
         const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
-          art: z?.vPopKmlsById?.nodes?.[0]?.art ?? '',
-          label: z?.vPopKmlsById?.nodes?.[0]?.label ?? '',
-          inhalte: z?.vPopKmlsById?.nodes?.[0]?.inhalte ?? '',
-          id: z?.vPopKmlsById?.nodes?.[0]?.id ?? '',
-          wgs84Lat: z?.vPopKmlsById?.nodes?.[0]?.wgs84Lat ?? '',
-          wgs84Long: z?.vPopKmlsById?.nodes?.[0]?.wgs84Long ?? '',
-          url: z?.vPopKmlsById?.nodes?.[0]?.url ?? '',
+          art: z?.vPopKmlnamenById?.nodes?.[0]?.art ?? '',
+          label: z?.vPopKmlnamenById?.nodes?.[0]?.label ?? '',
+          inhalte: z?.vPopKmlnamenById?.nodes?.[0]?.inhalte ?? '',
+          id: z?.vPopKmlnamenById?.nodes?.[0]?.id ?? '',
+          wgs84Lat: z?.vPopKmlnamenById?.nodes?.[0]?.wgs84Lat ?? '',
+          wgs84Long: z?.vPopKmlnamenById?.nodes?.[0]?.wgs84Long ?? '',
+          url: z?.vPopKmlnamenById?.nodes?.[0]?.url ?? '',
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
@@ -78,7 +99,7 @@ export const PopsForGoogleEarth = observer(() => {
         }
         exportModule({
           data: sortBy(rows, ['art', 'label']),
-          fileName: 'Populationen',
+          fileName: 'PopulationenNachNamen',
           store,
           kml: true,
           apolloClient,
@@ -86,7 +107,7 @@ export const PopsForGoogleEarth = observer(() => {
         setQueryState(undefined)
       }}
     >
-      {`Populationen für Google Earth (beschriftet mit PopNr)`}
+      {`Populationen für Google Earth (beschriftet mit Artname, PopNr)`}
       {queryState ?
         <span className={styles.progress}>{queryState}</span>
       : null}
