@@ -11,7 +11,7 @@ const Messages = lazy(async () => ({
   default: (await import('../Messages/index.tsx')).Messages,
 }))
 const Deletions = lazy(async () => ({
-  default: (await import('../Deletions/index.jsx')).Deletions,
+  default: (await import('../Deletions/index.tsx')).Deletions,
 }))
 import { inIframe } from '../../modules/inIframe.js'
 const ActiveNodeArraySetter = lazy(async () => ({
