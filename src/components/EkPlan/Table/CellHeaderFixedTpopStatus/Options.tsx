@@ -2,7 +2,7 @@ import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import { useQuery } from '@apollo/client/react'
 
-import { Option } from './Option.jsx'
+import { Option } from './Option.tsx'
 import { query } from './query.js'
 
 import styles from './Options.module.css'

@@ -7,8 +7,8 @@ import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { TextFilter } from './TextFilter.jsx'
-import { BooleanFilter } from './BooleanFilter.jsx'
+import { TextFilter } from './TextFilter.tsx'
+import { BooleanFilter } from './BooleanFilter.tsx'
 
 import styles from './index.module.css'
 

@@ -4,13 +4,13 @@ import { useQuery } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 
 const ApList = lazy(async () => ({
-  default: (await import('./ApList/index.jsx')).ApList,
+  default: (await import('./ApList/index.tsx')).ApList,
 }))
 const Table = lazy(async () => ({
-  default: (await import('./Table/index.jsx')).EkPlanTable,
+  default: (await import('./Table/index.tsx')).EkPlanTable,
 }))
 const Choose = lazy(async () => ({
-  default: (await import('./Choose.jsx')).Choose,
+  default: (await import('./Choose.tsx')).Choose,
 }))
 import { queryAps } from './queryAps.js'
 import { MobxContext } from '../../mobxContext.js'

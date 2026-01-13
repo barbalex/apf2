@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { Checkbox } from './Checkbox.jsx'
+import { Checkbox } from './Checkbox.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import indexStyles from '../index.module.css'

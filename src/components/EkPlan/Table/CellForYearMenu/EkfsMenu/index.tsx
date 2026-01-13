@@ -1,6 +1,6 @@
 import Menu from '@mui/material/Menu'
 
-import { Ekf } from './Ekf.jsx'
+import { Ekf } from './Ekf.tsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 

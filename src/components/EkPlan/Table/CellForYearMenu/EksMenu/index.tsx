@@ -1,6 +1,6 @@
 import Menu from '@mui/material/Menu'
 
-import { Eks } from './Eks.jsx'
+import { Eks } from './Eks.tsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 

@@ -6,7 +6,7 @@ import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { MobxContext } from '../../../../mobxContext.js'
 import { tpop } from '../../../shared/fragments.js'
-import { setEkplans } from '../setEkplans/index.jsx'
+import { setEkplans } from '../setEkplans/index.tsx'
 
 import styles from './index.module.css'
 

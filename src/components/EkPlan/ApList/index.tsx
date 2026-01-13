@@ -4,8 +4,8 @@ import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
-import { Ap } from './Ap/index.jsx'
-import { ChooseAp } from './ChooseAp/index.jsx'
+import { Ap } from './Ap/index.tsx'
+import { ChooseAp } from './ChooseAp/index.tsx'
 import { MobxContext } from '../../../mobxContext.js'
 
 import styles from './index.module.css'

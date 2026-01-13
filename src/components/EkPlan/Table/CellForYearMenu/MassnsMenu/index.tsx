@@ -1,6 +1,6 @@
 import Menu from '@mui/material/Menu'
 
-import { Massn } from './Massn.jsx'
+import { Massn } from './Massn.tsx'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 import { tpop } from '../../../shared/fragments.js'
-import { setStartjahr } from '../setStartjahr/index.jsx'
-import { setEkplans } from '../setEkplans/index.jsx'
+import { setStartjahr } from '../setStartjahr/index.tsx'
+import { setEkplans } from '../setEkplans/index.tsx'
 
 export const processChange = async ({
   apolloClient,

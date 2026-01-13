@@ -379,7 +379,7 @@ export const Router = () => {
         >
           <Route
             path="Projekte/:projId/EK-Planung"
-            lazy={() => import('../EkPlan/index.jsx')}
+            lazy={() => import('../EkPlan/index.tsx')}
             errorElement={<RouterErrorBoundary />}
           />
           <Route

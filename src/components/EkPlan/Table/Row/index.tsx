@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 
 import { useOnScreen } from '../../../../modules/useOnScreen.js'
-import { Visible } from './Visible.jsx'
+import { Visible } from './Visible.tsx'
 
 import styles from './index.module.css'
 

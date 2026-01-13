@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { TextFilter } from './CellHeaderFixed/TextFilter.jsx'
+import { TextFilter } from './CellHeaderFixed/TextFilter.tsx'
 
 import styles from './CellHeaderFixedEkfrequenz.module.css'
 
