@@ -8,7 +8,7 @@ import AsyncSelect from 'react-select/async'
 import { useApolloClient } from '@apollo/client/react'
 import { get } from 'es-toolkit/compat'
 
-import { container, labelClass, errorClass, select } from './Select.module.css'
+import styles from './Select.module.css'
 
 export const SelectLoadingOptions = ({
   row,
@@ -64,12 +64,12 @@ export const SelectLoadingOptions = ({
 
   return (
     <div
-      className={container}
+      className={styles.container}
       data-id={field}
     >
       {label && (
         <div
-          className={labelClass}
+          className={styles.labelClass}
           style={{ fontSize: labelSize ?? 12 }}
         >
           {label}
@@ -96,9 +96,9 @@ export const SelectLoadingOptions = ({
         classNamePrefix="react-select"
         loadOptions={loadOptions}
         openMenuOnFocus
-        className={`select-height-limited select-nocaret ${select}`}
+        className={`select-height-limited select-nocaret ${styles.select}`}
       />
-      {saveToDbError && <div className={errorClass}>{saveToDbError}</div>}
+      {saveToDbError && <div className={styles.errorClass}>{saveToDbError}</div>}
     </div>
   )
 }

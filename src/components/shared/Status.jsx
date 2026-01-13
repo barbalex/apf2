@@ -10,18 +10,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
 
-import {
-  fieldWithInfoContainer,
-  popoverContentRow,
-  statusContainer,
-  herkunftContainer,
-  herkunftColumnContainer,
-  herkunftColumnContainerLast,
-  groupLabelContainer,
-  input,
-  radio,
-  label,
-} from './Status.module.css'
+import styles from './Status.module.css'
 
 export const Status = ({
   apJahr = null,
@@ -111,7 +100,7 @@ export const Status = ({
 
   return (
     <div>
-      <div className={fieldWithInfoContainer}>
+      <div className={styles.fieldWithInfoContainer}>
         <FormControl
           fullWidth
           aria-describedby="bekanntSeitHelper"
@@ -127,16 +116,16 @@ export const Status = ({
             onBlur={onBlurBekanntSeit}
             endAdornment={
               <InfoWithPopover name="bekanntSeit">
-                <div className={popoverContentRow}>
+                <div className={styles.popoverContentRow}>
                   Dieses Feld immer ausfüllen
                 </div>
               </InfoWithPopover>
             }
-            className={input}
+            className={styles.input}
           />
         </FormControl>
       </div>
-      <div className={statusContainer}>
+      <div className={styles.statusContainer}>
         <FormControl
           component="fieldset"
           error={!!error}
@@ -144,7 +133,7 @@ export const Status = ({
           variant="standard"
         >
           <div
-            className={label}
+            className={styles.label}
             style={{ color: error ? '#f44336' : 'unset' }}
           >
             Status
@@ -154,14 +143,14 @@ export const Status = ({
             value={statusSelected.toString()}
             onChange={onChangeStatus}
           >
-            <div className={herkunftContainer}>
-              <div className={herkunftColumnContainer}>
-                <div className={groupLabelContainer}>ursprünglich:</div>
+            <div className={styles.herkunftContainer}>
+              <div className={styles.herkunftColumnContainer}>
+                <div className={styles.groupLabelContainer}>ursprünglich:</div>
                 <FormControlLabel
                   value="100"
                   control={
                     <Radio
-                      className={radio}
+                      className={styles.radio}
                       data-id="status_100"
                       color="primary"
                     />
@@ -174,7 +163,7 @@ export const Status = ({
                   value="101"
                   control={
                     <Radio
-                      className={radio}
+                      className={styles.radio}
                       data-id="status_101"
                       color="primary"
                     />
@@ -184,13 +173,15 @@ export const Status = ({
                   onClick={onClickButton}
                 />
               </div>
-              <div className={herkunftColumnContainer}>
-                <div className={groupLabelContainer}>{angesiedeltLabel}</div>
+              <div className={styles.herkunftColumnContainer}>
+                <div className={styles.groupLabelContainer}>
+                  {angesiedeltLabel}
+                </div>
                 <FormControlLabel
                   value="200"
                   control={
                     <Radio
-                      className={radio}
+                      className={styles.radio}
                       data-id="status_200"
                       color="primary"
                     />
@@ -203,7 +194,7 @@ export const Status = ({
                   value="201"
                   control={
                     <Radio
-                      className={radio}
+                      className={styles.radio}
                       data-id="status_201"
                       color="primary"
                     />
@@ -216,7 +207,7 @@ export const Status = ({
                   value="202"
                   control={
                     <Radio
-                      className={radio}
+                      className={styles.radio}
                       data-id="status_202"
                       color="primary"
                     />
@@ -226,13 +217,13 @@ export const Status = ({
                   onClick={onClickButton}
                 />
               </div>
-              <div className={herkunftColumnContainerLast}>
-                <div className={groupLabelContainer}>potenziell:</div>
+              <div className={styles.herkunftColumnContainerLast}>
+                <div className={styles.groupLabelContainer}>potenziell:</div>
                 <FormControlLabel
                   value="300"
                   control={
                     <Radio
-                      className={radio}
+                      className={styles.radio}
                       data-id="status_300"
                       color="primary"
                     />
