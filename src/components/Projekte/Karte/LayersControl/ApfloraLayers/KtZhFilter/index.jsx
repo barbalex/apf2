@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../../../mobxContext.js'
-import { layer, button } from './index.module.css'
+import styles from './index.module.css'
 
 export const KtZhFilter = observer(() => {
   const store = useContext(MobxContext)
@@ -17,12 +17,12 @@ export const KtZhFilter = observer(() => {
     })
 
   return (
-    <div className={layer}>
+    <div className={styles.layer}>
       <Button
         title="Kt. ZH filtern"
         onClick={onClickFilterZh}
         color="inherit"
-        className={button}
+        className={styles.button}
       >
         Kanton Zürich filtern
       </Button>

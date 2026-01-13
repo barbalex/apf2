@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/client/react'
 import { Checkbox } from '../shared/Checkbox.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 
-import { layer, comments, comment2 } from './ShowForMultipleAps.module.css'
+import styles from './ShowForMultipleAps.module.css'
 
 export const ShowForMultipleAps = observer(() => {
   const { apId } = useParams()
@@ -42,7 +42,7 @@ export const ShowForMultipleAps = observer(() => {
     : ''
 
   return (
-    <div className={layer}>
+    <div className={styles.layer}>
       <Checkbox
         value={showApfLayersForMultipleAps}
         label="Layer auch anzeigen, wenn mehr als eine Art aktiv ist"
@@ -51,11 +51,11 @@ export const ShowForMultipleAps = observer(() => {
       />
       {!apId && showApfLayersForMultipleAps && (
         <>
-          <div className={comments}>
+          <div className={styles.comments}>
             <span style={{ fontWeight: 700, color: color ?? 'inherit' }}>
               {comment}
             </span>
-            <span className={comment2}>
+            <span className={styles.comment2}>
               Je mehr, desto langsamer wird die App
             </span>
           </div>

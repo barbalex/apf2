@@ -23,19 +23,7 @@ import { query } from './query.js'
 import { PopIcon } from './PopIcon.jsx'
 import { TpopIcon } from './TpopIcon.jsx'
 
-import {
-  icon,
-  iconButton,
-  zoomToIcon,
-  layer as layerClass,
-  icons,
-  zoomTo,
-  mapIcon,
-  beobNichtBeurteiltMapIcon,
-  beobNichtZuzuordnenMapIcon,
-  beobZugeordnetMapIcon,
-  beobZugeordnetAssignPolylinesIcon,
-} from './index.module.css'
+import styles from './index.module.css'
 
 export const Layer = observer(({ apfloraLayer }) => {
   const { apId, popId, tpopId, beobId } = useParams()
@@ -188,14 +176,14 @@ export const Layer = observer(({ apfloraLayer }) => {
   if (error) return <Error error={error} />
 
   return (
-    <div className={layerClass}>
+    <div className={styles.layer}>
       <Checkbox
         value={apfloraLayer.value}
         label={apfloraLayer.label}
         checked={activeApfloraLayers.includes(apfloraLayer.value)}
         onChange={onChangeCheckbox}
       />
-      <div className={icons}>
+      <div className={styles.icons}>
         {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
           apfloraLayer.value,
         ) && (
@@ -204,21 +192,21 @@ export const Layer = observer(({ apfloraLayer }) => {
               title={zuordnenTitle}
               onClick={onClickZuordnen}
               color="inherit"
-              className={iconButton}
+              className={styles.iconButton}
             >
               {assigningBeob ?
                 <MdPauseCircleOutline
                   style={{
                     cursor: assigningispossible ? 'pointer' : 'not-allowed',
                   }}
-                  className={icon}
+                  className={styles.icon}
                 />
               : <MdPlayCircleOutline
                   style={{
                     color: assigningispossible ? 'black' : 'rgba(0,0,0,0.2)',
                     cursor: assigningispossible ? 'pointer' : 'not-allowed',
                   }}
-                  className={icon}
+                  className={styles.icon}
                 />
               }
             </Button>
@@ -233,7 +221,7 @@ export const Layer = observer(({ apfloraLayer }) => {
             <div>
               <MdLocalFlorist
                 id="BeobNichtBeurteiltMapIcon"
-                className={`${mapIcon} ${beobNichtBeurteiltMapIcon}`}
+                className={`${styles.mapIcon} ${styles.beobNichtBeurteiltMapIcon}`}
               />
             </div>
           )}
@@ -242,7 +230,7 @@ export const Layer = observer(({ apfloraLayer }) => {
             <div>
               <MdLocalFlorist
                 id="BeobNichtZuzuordnenMapIcon"
-                className={`${mapIcon} ${beobNichtZuzuordnenMapIcon}`}
+                className={`${styles.mapIcon} ${styles.beobNichtZuzuordnenMapIcon}`}
               />
             </div>
           )}
@@ -251,7 +239,7 @@ export const Layer = observer(({ apfloraLayer }) => {
             <div>
               <MdLocalFlorist
                 id="BeobZugeordnetMapIcon"
-                className={`${mapIcon} ${beobZugeordnetMapIcon}`}
+                className={`${styles.mapIcon} ${styles.beobZugeordnetMapIcon}`}
               />
             </div>
           )}
@@ -260,35 +248,35 @@ export const Layer = observer(({ apfloraLayer }) => {
             <div>
               <MdRemove
                 id="BeobZugeordnetAssignPolylinesMapIcon"
-                className={`material-icons ${beobZugeordnetAssignPolylinesIcon}`}
+                className={`material-icons ${styles.beobZugeordnetAssignPolylinesIcon}`}
               >
                 remove
               </MdRemove>
             </div>
           )}
-        <div className={zoomTo}>
+        <div className={styles.zoomTo}>
           <Button
             title={`auf alle ${apfloraLayer.label} zoomen`}
             onClick={onClickZoomToAll}
             color="inherit"
-            className={iconButton}
+            className={styles.iconButton}
           >
             <MdFilterCenterFocus
               style={zoomToAllIconStyle}
-              className={zoomToIcon}
+              className={styles.zoomToIcon}
             />
           </Button>
         </div>
-        <div className={zoomTo}>
+        <div className={styles.zoomTo}>
           <Button
             title={`auf aktive ${apfloraLayer.label} zoomen`}
             onClick={onClickZoomToActive}
             color="inherit"
-            className={iconButton}
+            className={styles.iconButton}
           >
             <MdFilterCenterFocus
               style={zoomToActiveIconStyle}
-              className={zoomToIcon}
+              className={styles.zoomToIcon}
             />
           </Button>
         </div>
