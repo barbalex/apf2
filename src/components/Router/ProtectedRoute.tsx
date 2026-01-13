@@ -8,7 +8,7 @@ import { useLocation, useParams, Navigate } from 'react-router'
 import { MobxContext } from '../../mobxContext.js'
 const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
 const Messages = lazy(async () => ({
-  default: (await import('../Messages/index.jsx')).Messages,
+  default: (await import('../Messages/index.tsx')).Messages,
 }))
 const Deletions = lazy(async () => ({
   default: (await import('../Deletions/index.jsx')).Deletions,

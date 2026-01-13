@@ -12,10 +12,36 @@ import { createUsermessage } from './createUsermessage.js'
 import { MobxContext } from '../../mobxContext.js'
 import { Error } from '../shared/Error.jsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { MessagesList } from './Messages/index.jsx'
+import { MessagesList } from './Messages/index.tsx'
 import { a } from '../Projekte/Karte/layers/Pop/statusGroup/a.js'
 
+import type { MessageId } from '../../models/apflora/public/Message.ts'
+import type { UserId } from '../../models/apflora/public/User.ts'
+
 import styles from './index.module.css'
+
+interface MessageNode {
+  id: MessageId
+  message: string | null
+  time: string | null
+  usermessagesByMessageId: {
+    totalCount: number
+  }
+}
+
+interface UserNode {
+  id: UserId
+  name: string | null
+}
+
+interface UsermessagesQueryResult {
+  allMessages: {
+    nodes: MessageNode[]
+  }
+  allUsers: {
+    nodes: UserNode[]
+  }
+}
 
 const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
   display: 'flex',
