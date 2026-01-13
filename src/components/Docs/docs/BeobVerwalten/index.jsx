@@ -1,4 +1,4 @@
-import { dokuDate } from '../../DesktopDocs.module.css'
+import desktopStyles from '../../DesktopDocs.module.css'
 import beobTable from './beobTable.webp'
 
 import { code } from '../../DesktopDocs.module.css'
@@ -6,11 +6,11 @@ import { code } from '../../DesktopDocs.module.css'
 export const Component = () => (
   <>
     <h1>Beobachtungen verwalten</h1>
-    <p className={dokuDate}>16.04.2023</p>
+    <p className={desktopStyles.dokuDate}>16.04.2023</p>
     <h2>1. Datenstruktur</h2>
     <p>
-      Beobachtungen werden in der Tabelle <code className={code}>beob</code>{' '}
-      gespeichert:
+      Beobachtungen werden in der Tabelle{' '}
+      <code className={desktopStyles.code}>beob</code> gespeichert:
       <br />
       <img
         src={beobTable}
@@ -24,7 +24,7 @@ export const Component = () => (
     <ol>
       <li>
         Den unveränderten Originaldaten der Beobachtung, enthalten im JSONB-Feld{' '}
-        <code className={code}>data</code>
+        <code className={desktopStyles.code}>data</code>
       </li>
       <li>
         In den übrigen Feldern: Extrahierten bzw. abgeleiteteten Daten, welche
@@ -41,7 +41,8 @@ export const Component = () => (
         Die Struktur von Beobachtungsdaten ist im Prinzip unerheblich.
         Änderungen daran auch. Wichtig ist einzig, dass zum Zeitpunkt des
         Imports klar ist, wie aus den Beobachtungsdaten die abgeleiteten Felder
-        in Tabelle <code className={code}>beob</code> generiert werden können
+        in Tabelle <code className={desktopStyles.code}>beob</code> generiert
+        werden können
       </li>
       <li>
         Somit können jederzeit Beobachtungen unabhängig von ihrer Datenstruktur
@@ -49,8 +50,9 @@ export const Component = () => (
       </li>
       <li>
         Schon vorhandene Beobachtungen können bei erneutem Import mit
-        aktuelleren ersetzt werden (<code className={code}>quelle</code> und{' '}
-        <code className={code}>id_field</code> vergleichen)
+        aktuelleren ersetzt werden (
+        <code className={desktopStyles.code}>quelle</code> und{' '}
+        <code className={desktopStyles.code}>id_field</code> vergleichen)
       </li>
       <li>
         Mit Hilfe der abgeleiteten Felder können gebaut werden:
@@ -65,79 +67,85 @@ export const Component = () => (
     <p>Felder der Tabelle &quot;beob&quot;:</p>
     <ul>
       <li>
-        <code className={code}>id</code>: id dieser Tabelle. Ohne Bezug zu
-        id&#39;s in den Beobachtungsdaten
+        <code className={desktopStyles.code}>id</code>: id dieser Tabelle. Ohne
+        Bezug zu id&#39;s in den Beobachtungsdaten
       </li>
       <li>
-        <code className={code}>data</code>: Unveränderte Originaldaten im JSONB
-        Format
+        <code className={desktopStyles.code}>data</code>: Unveränderte
+        Originaldaten im JSONB Format
       </li>
       <li>
-        <code className={code}>id_field</code>: Feld in den Originaldaten,
-        welches die Original-ID enthält. Dient dazu, gemeinsam mit dem Feld{' '}
-        <code className={code}>quelle</code> jederzeit mit neuen Versionen von
-        Originaldaten verbinden zu können. Extrahiert, um Beobachtungen bei
+        <code className={desktopStyles.code}>id_field</code>: Feld in den
+        Originaldaten, welches die Original-ID enthält. Dient dazu, gemeinsam
+        mit dem Feld <code className={desktopStyles.code}>quelle</code>{' '}
+        jederzeit mit neuen Versionen von Originaldaten verbinden zu können.
+        Extrahiert, um Beobachtungen bei re-Importen effizient aktualisieren zu
+        können
+      </li>
+      <li>
+        <code className={desktopStyles.code}>obs_id</code>: Wie id_field. Weil
+        ab 2022 Importe sowieso nur von Info Flora stammen sollen, dies ihre ID
+        ist und komplexe Abfragen beim Import mit Hilfe dieses Feldes
+        vereinfacht und beschleunigt werden. Extrahiert, um Beobachtungen bei
         re-Importen effizient aktualisieren zu können
       </li>
       <li>
-        <code className={code}>obs_id</code>: Wie id_field. Weil ab 2022 Importe
-        sowieso nur von Info Flora stammen sollen, dies ihre ID ist und komplexe
-        Abfragen beim Import mit Hilfe dieses Feldes vereinfacht und
-        beschleunigt werden. Extrahiert, um Beobachtungen bei re-Importen
-        effizient aktualisieren zu können
-      </li>
-      <li>
-        <code className={code}>quelle</code>
+        <code className={desktopStyles.code}>quelle</code>
         {`: Woher die Beobachtung stammt. Möglichst kurz und klar, ähnlich
         Literaturzitaten. Beispiel: "Info Spezies 2017". Extrahiert, um Beobachtungen effizient beschriften zu können`}
       </li>
       <li>
-        <code className={code}>art_id</code>: beschreibt die Art. Fremdschlüssel
-        aus Tabelle <code className={code}>ae_taxonomies</code>. Extrahiert, um
-        Beobachtungen effizient beschriften zu können
-      </li>
-      <li>
-        <code className={code}>art_id_original</code>: Am Unterschied zwischen
-        art_id_original (unverändert) und art_id (verändert) wird erkenntlich,
-        wenn die Zuordnung des Taxon verändert wurde. Extrahiert, um
-        Taxon-Änderungen effizient abfragen zu können
-      </li>
-      <li>
-        <code className={code}>autor</code>: Autor der Beobachtung. Extrahiert,
+        <code className={desktopStyles.code}>art_id</code>: beschreibt die Art.
+        Fremdschlüssel aus Tabelle{' '}
+        <code className={desktopStyles.code}>ae_taxonomies</code>. Extrahiert,
         um Beobachtungen effizient beschriften zu können
       </li>
       <li>
-        <code className={code}>datum</code>: Datum der Beobachtung. Extrahiert,
-        um Beobachtungen effizient beschriften zu können
+        <code className={desktopStyles.code}>art_id_original</code>: Am
+        Unterschied zwischen art_id_original (unverändert) und art_id
+        (verändert) wird erkenntlich, wenn die Zuordnung des Taxon verändert
+        wurde. Extrahiert, um Taxon-Änderungen effizient abfragen zu können
       </li>
       <li>
-        <code className={code}>geom_point</code>: Die Geometrie der Beobachtung.
-        Extrahiert, um Beobachtungen effizient in Karten anzeigen zu können
+        <code className={desktopStyles.code}>autor</code>: Autor der
+        Beobachtung. Extrahiert, um Beobachtungen effizient beschriften zu
+        können
       </li>
       <li>
-        <code className={code}>tpop_id</code>
+        <code className={desktopStyles.code}>datum</code>: Datum der
+        Beobachtung. Extrahiert, um Beobachtungen effizient beschriften zu
+        können
+      </li>
+      <li>
+        <code className={desktopStyles.code}>geom_point</code>: Die Geometrie
+        der Beobachtung. Extrahiert, um Beobachtungen effizient in Karten
+        anzeigen zu können
+      </li>
+      <li>
+        <code className={desktopStyles.code}>tpop_id</code>
         {`: dieser Teilpopulation wird die Beobachtung
         zugeordnet`}
       </li>
       <li>
-        <code className={code}>nicht_zuordnen</code>
+        <code className={desktopStyles.code}>nicht_zuordnen</code>
         {`: "Ja" oder "nein". Wird "ja" gesetzt, wenn eine Beobachtung
         keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld
         begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder
         die Beobachtung ist nicht (genau genug) lokalisierbar`}
       </li>
       <li>
-        <code className={code}>bemerkungen</code>: Bemerkungen zur Zuordnung
+        <code className={desktopStyles.code}>bemerkungen</code>: Bemerkungen zur
+        Zuordnung
       </li>
       <li>
-        <code className={code}>infoflora_informiert_datum</code>: Wann ein Email
-        an Info Flora generiert wurde
+        <code className={desktopStyles.code}>infoflora_informiert_datum</code>:
+        Wann ein Email an Info Flora generiert wurde
       </li>
       <li>
-        <code className={code}>created_at</code>,{' '}
-        <code className={code}>update_at</code>,{' '}
-        <code className={code}>changed_by</code>: Dokumentiert die letzte
-        Änderung am Datensatz
+        <code className={desktopStyles.code}>created_at</code>,{' '}
+        <code className={desktopStyles.code}>update_at</code>,{' '}
+        <code className={desktopStyles.code}>changed_by</code>: Dokumentiert die
+        letzte Änderung am Datensatz
       </li>
       <li>
         {`id_evab, id_evab_lc: Relikte aus der Zeit, als Beobachtungen aus EvAB
