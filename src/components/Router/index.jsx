@@ -1126,7 +1126,7 @@ export const Router = () => {
                               <Route
                                 path=":tpopmassnberId"
                                 lazy={() =>
-                                  import('../Projekte/Daten/Tpopmassnber/index.jsx')
+                                  import('../Projekte/Daten/Tpopmassnber/index.tsx')
                                 }
                                 errorElement={<RouterErrorBoundary />}
                               />
