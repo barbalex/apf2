@@ -3,11 +3,10 @@ import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { Form, useParams } from 'react-router'
-import type { Idealbiotop } from '../../../../models/apflora/index.js'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { DateField } from '../../../shared/Date.jsx'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -15,6 +14,8 @@ import { Error } from '../../../shared/Error.jsx'
 import { idealbiotop } from '../../../shared/fragments.js'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+
+import type { Idealbiotop } from '../../../../models/apflora/index.js'
 
 import styles from './Idealbiotop.module.css'
 

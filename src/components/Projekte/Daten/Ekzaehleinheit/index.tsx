@@ -4,14 +4,13 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import type { Ekzaehleinheit, ApId, TpopkontrzaehlEinheitWerteId } from '../../../../models/apflora/index.js'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { query } from './query.js'
-import { queryLists } from './queryLists.js'
+import { query } from './query.ts'
+import { queryLists } from './queryLists.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -22,6 +21,12 @@ import {
   tpopkontrzaehlEinheitWerte,
 } from '../../../shared/fragments.js'
 import { Menu } from './Menu.tsx'
+
+import type {
+  Ekzaehleinheit,
+  ApId,
+  TpopkontrzaehlEinheitWerteId,
+} from '../../../../models/apflora/index.js'
 
 import styles from './index.module.css'
 

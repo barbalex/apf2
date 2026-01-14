@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client/react'
 import CircularProgress from '@mui/material/CircularProgress'
 import { Form, useParams } from 'react-router'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 import { Row } from './Row/index.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'

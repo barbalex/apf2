@@ -2,12 +2,16 @@ import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { Qk } from './Qk/index.tsx'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 
-import type { ApId, QkName, ApqkQkName } from '../../../../models/apflora/index.js'
+import type {
+  ApId,
+  QkName,
+  ApqkQkName,
+} from '../../../../models/apflora/index.js'
 
 interface QkNode {
   name: QkName

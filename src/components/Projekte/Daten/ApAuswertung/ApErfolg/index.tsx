@@ -11,7 +11,7 @@ import {
 import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 import { CustomTick } from './CustomTick.tsx'
 import { Error } from '../../../../shared/Error.jsx'
 

@@ -19,8 +19,8 @@ import { useAtom } from 'jotai'
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.js'
-import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
+import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
+import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
@@ -96,10 +96,14 @@ export const Menu = observer(({ row }: MenuProps) => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<null | HTMLElement>(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<null | HTMLElement>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const [copyMenuAnchorEl, setCopyMenuAnchorEl] = useState<null | HTMLElement>(null)
+  const [copyMenuAnchorEl, setCopyMenuAnchorEl] = useState<null | HTMLElement>(
+    null,
+  )
   const copyMenuOpen = Boolean(copyMenuAnchorEl)
 
   const onClickDelete = async () => {
