@@ -1,8 +1,8 @@
 import { isEqual } from 'es-toolkit'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { isNodeOpen } from '../isNodeOpen.js'
-import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.js'
+import { isNodeOpen } from '../isNodeOpen.ts'
+import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
 
 export const toggleNodeSymbol = ({
   node,

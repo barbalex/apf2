@@ -12,8 +12,8 @@ import {
   MapMouseCoordinates,
   defaultValue as defaultMapMouseCoordinates,
 } from './MapMouseCoordinates.js'
-import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayers.js'
-import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.js'
+import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayers.ts'
+import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
 import { User, defaultValue as defaultUser } from './User.js'
 import { Tree, defaultValue as defaultTree } from './Tree/index.js'
 import { EkPlan, defaultValue as defaultEkPlan } from './EkPlan/index.js'
