@@ -18,12 +18,7 @@ import { Error } from '../../../../shared/Error.tsx'
 import type { ApberId } from '../../../../../models/apflora/Apber.ts'
 import type { ApErfkritWerteCode } from '../../../../../models/apflora/ApErfkritWerte.ts'
 
-import {
-  spinnerContainer,
-  spinnerText,
-  noDataContainer,
-  title,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface ApberNode {
   id: ApberId
@@ -48,12 +43,25 @@ const erfValueFromCode = {
   1: 4, // erfolgreich
   4: 5, // sehr erfolgreich
 }
-const findErfolg = ({ jahr, erfolgRawData }) =>
+
+interface FindErfolgProps {
+  jahr: number
+  erfolgRawData: Array<{
+    jahr: number
+    value: number | null
+  }>
+}
+const findErfolg = ({ jahr, erfolgRawData }: FindErfolgProps) =>
   erfolgRawData.find((e) => e.jahr === jahr)
-const makeErfolg = (jahr) => ({ jahr, value: null })
-const getErfolg = ({ jahr, erfolgRawData }) =>
+
+const makeErfolg = (jahr: number) => ({ jahr, value: null })
+
+const getErfolg = ({ jahr, erfolgRawData }: FindErfolgProps) =>
   findErfolg({ jahr, erfolgRawData }) || makeErfolg(jahr)
-const addMissingErfolgData = (erfolgRawData) => {
+
+const addMissingErfolgData = (
+  erfolgRawData: FindErfolgProps['erfolgRawData'],
+) => {
   const years = erfolgRawData.map((e) => e.jahr)
   const allYears = range(Math.min(...years), Math.max(...years) + 1)
   return allYears.map((jahr) => getErfolg({ jahr, erfolgRawData }))
@@ -85,13 +93,13 @@ export const ApErfolg = () => {
   return (
     <>
       {loadingErfolg ?
-        <div className={spinnerContainer}>
+        <div className={styles.spinnerContainer}>
           <CircularProgress />
-          <div className={spinnerText}>lade AP-Erfolg...</div>
+          <div className={styles.spinnerText}>lade AP-Erfolg...</div>
         </div>
       : erfolgRawData.length ?
         <>
-          <h4 className={title}>Erfolg des Aktionsplans</h4>
+          <h4 className={styles.title}>Erfolg des Aktionsplans</h4>
           <ResponsiveContainer
             width="99%"
             height={400}
@@ -133,8 +141,8 @@ export const ApErfolg = () => {
           </ResponsiveContainer>
         </>
       : <>
-          <h4 className={title}>Erfolg des Aktionsplans</h4>
-          <div className={noDataContainer}>Keine Daten gefunden</div>
+          <h4 className={styles.title}>Erfolg des Aktionsplans</h4>
+          <div className={styles.noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
