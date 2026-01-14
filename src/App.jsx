@@ -23,7 +23,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { theme } from './utils/materialTheme.js'
 
 import { initializeIdb } from './modules/initializeIdb.ts'
-import { MobxStore } from './store/index.js'
+import { MobxStore } from './store/index.ts'
 import { buildApolloClient } from './apolloClient.js'
 
 import { store as jotaiStore } from './JotaiStore/index.ts'

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
-import { initial as tpop } from '../../../../store/Tree/DataFilter/tpop.js'
+import { initial as tpop } from '../../../../store/Tree/DataFilter/tpop.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from './Tabs.module.css'
