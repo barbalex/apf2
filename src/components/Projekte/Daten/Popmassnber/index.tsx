@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -20,6 +20,7 @@ import {
   tpopmassnErfbeurtWerte,
 } from '../../../shared/fragments.js'
 import { Menu } from './Menu.tsx'
+
 import type {
   PopmassnberId,
   PopId,

@@ -8,7 +8,7 @@ import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import { Status } from '../../../shared/Status.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -108,7 +108,9 @@ export const PopFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <div className={styles.filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <div className={styles.filterCommentTitle}>
+              Zusätzlich aktive Filter:
+            </div>
             <ul>
               {!!navApFilterComment && (
                 <li className={styles.filterComment}>{navApFilterComment}</li>

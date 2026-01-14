@@ -16,7 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { pop } from '../../../shared/fragments.js'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.tsx'
 
