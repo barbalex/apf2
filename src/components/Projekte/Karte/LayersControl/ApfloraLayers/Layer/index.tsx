@@ -19,7 +19,7 @@ import { Checkbox } from '../../shared/Checkbox.jsx'
 import { Error } from '../../../../../shared/Error.jsx'
 import { getBounds } from '../../../../../../modules/getBounds.js'
 import { MobxContext } from '../../../../../../mobxContext.js'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { PopIcon } from './PopIcon.jsx'
 import { TpopIcon } from './TpopIcon.jsx'
 

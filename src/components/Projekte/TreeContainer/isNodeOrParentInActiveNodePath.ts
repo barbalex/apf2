@@ -1,6 +1,6 @@
 import { isEqual } from 'es-toolkit'
 
-import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.js'
+import { isNodeInActiveNodePath } from './isNodeInActiveNodePath.ts'
 
 export const isNodeOrParentInActiveNodePath = ({ node, activeNodeArray }) => {
   if (!node) return false
