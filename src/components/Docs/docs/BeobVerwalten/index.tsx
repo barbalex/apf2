@@ -1,8 +1,6 @@
 import desktopStyles from '../../DesktopDocs.module.css'
 import beobTable from './beobTable.webp'
 
-import { code } from '../../DesktopDocs.module.css'
-
 export const Component = () => (
   <>
     <h1>Beobachtungen verwalten</h1>
