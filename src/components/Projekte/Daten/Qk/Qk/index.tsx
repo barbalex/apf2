@@ -19,7 +19,7 @@ import { MobxContext } from '../../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../../shared/Error.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
-import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
 import type { QkName } from '../../../../../models/apflora/index.js'
 

@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField2 } from '../../../shared/TextField2.jsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { Select } from '../../../shared/Select.jsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'

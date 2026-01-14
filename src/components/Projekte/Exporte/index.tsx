@@ -1,4 +1,4 @@
-import { FormTitle } from '../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../shared/FormTitle/index.tsx'
 import { Ap } from './Ap/index.tsx'
 import { Beobachtungen } from './Beobachtungen/index.tsx'
 import { Kontrollen } from './Kontrollen/index.tsx'

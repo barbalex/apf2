@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.tsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryLists } from './queryLists.ts'
 import { MobxContext } from '../../../../mobxContext.js'

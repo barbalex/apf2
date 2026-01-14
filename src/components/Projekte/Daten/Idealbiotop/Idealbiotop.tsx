@@ -13,7 +13,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { idealbiotop } from '../../../shared/fragments.ts'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { Idealbiotop } from '../../../../models/apflora/index.js'
 

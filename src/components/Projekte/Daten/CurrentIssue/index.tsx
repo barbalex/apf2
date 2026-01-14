@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client/react'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'

@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { History as HistoryComponent } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { ApId } from '../../../../models/apflora/Ap.js'
 import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'

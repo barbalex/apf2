@@ -6,7 +6,7 @@ import { useLocation, useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'

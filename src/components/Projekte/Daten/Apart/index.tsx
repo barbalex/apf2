@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.js'

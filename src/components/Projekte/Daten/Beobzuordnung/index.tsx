@@ -7,7 +7,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
 
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { TextField2 } from '../../../shared/TextField2.jsx'
 import { CheckboxWithInfo } from '../../../shared/CheckboxWithInfo.jsx'
 import { Select } from '../../../shared/Select.jsx'

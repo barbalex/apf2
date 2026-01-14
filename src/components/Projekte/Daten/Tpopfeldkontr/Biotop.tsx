@@ -16,7 +16,7 @@ import { Error } from '../../../shared/Error.tsx'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { fieldTypes } from './Form.tsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
   TpopkontrId,

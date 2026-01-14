@@ -7,7 +7,7 @@ import { ApErfolg } from './ApErfolg/index.tsx'
 import { PopStatus } from './PopStatus/index.tsx'
 import { PopMenge } from './PopMenge/index.tsx'
 import { TpopKontrolliert } from './TpopKontrolliert/index.tsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { ApId } from '../../../../models/apflora/Ap.js'
 import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'

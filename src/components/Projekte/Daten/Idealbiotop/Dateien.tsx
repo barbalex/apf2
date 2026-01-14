@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client/react'
 
 import { FilesRouter } from '../../../shared/Files/index.jsx'
 import { query } from './query.ts'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { Idealbiotop } from '../../../../models/apflora/index.js'
 

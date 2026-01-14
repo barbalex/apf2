@@ -10,7 +10,7 @@ import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Status } from '../../../shared/Status.jsx'
 import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.jsx'
-import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
+import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.jsx'
 import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.jsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
@@ -22,7 +22,7 @@ import {
   tpop,
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.ts'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { query } from './query.ts'

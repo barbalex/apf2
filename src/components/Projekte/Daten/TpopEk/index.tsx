@@ -11,7 +11,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
+import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -28,7 +28,7 @@ import {
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.ts'
 import { fieldTypes } from '../Tpop/Tpop.jsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
   TpopId,

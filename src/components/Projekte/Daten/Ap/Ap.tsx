@@ -17,7 +17,7 @@ import { ApUsers } from './ApUsers/index.tsx'
 import { ap, aeTaxonomies } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { query } from './query.ts'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
 import type Ap from '../../../../models/apflora/Ap.js'

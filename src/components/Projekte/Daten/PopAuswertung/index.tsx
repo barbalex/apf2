@@ -20,7 +20,7 @@ import { query } from './query.ts'
 import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../modules/exists.js'
 import { Error } from '../../../shared/Error.tsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
   PopId,

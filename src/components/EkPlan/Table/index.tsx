@@ -14,7 +14,7 @@ import { exportRowFromTpop } from './exportRowFromTpop.ts'
 import { exportModule } from '../../../modules/export.js'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
-import { SpinnerOverlay } from '../../shared/SpinnerOverlay.jsx'
+import { SpinnerOverlay } from '../../shared/SpinnerOverlay.tsx'
 import { TpopRow } from './Row/index.tsx'
 import { EkplanTableHeader } from './Header.tsx'
 

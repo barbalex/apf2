@@ -9,7 +9,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { TextField } from '../../../shared/TextField.tsx'
-import { FormTitle } from '../../../shared/FormTitle/index.jsx'
+import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Select } from '../../../shared/Select.jsx'
 import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.js'

@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
-import { Checkbox2States } from '../../../../shared/Checkbox2States.jsx'
+import { Checkbox2States } from '../../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroup } from '../../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../../shared/Select.jsx'
 import { TextField } from '../../../../shared/TextField.tsx'
