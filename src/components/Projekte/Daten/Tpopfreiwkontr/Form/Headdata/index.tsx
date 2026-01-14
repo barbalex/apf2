@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { Select } from '../../../../../shared/Select.jsx'
+import { Select } from '../../../../../shared/Select.tsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.ts'
 import {

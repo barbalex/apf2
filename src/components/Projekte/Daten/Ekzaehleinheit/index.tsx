@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
-import { Select } from '../../../shared/Select.jsx'
+import { Select } from '../../../shared/Select.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'

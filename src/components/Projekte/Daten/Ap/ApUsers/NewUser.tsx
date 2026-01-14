@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 
 import { useApolloClient, useQuery } from '@apollo/client/react'
 
-import { Select } from '../../../../shared/Select.jsx'
+import { Select } from '../../../../shared/Select.tsx'
 
 import type { ApId } from '../../../../../models/apflora/Ap.js'
 

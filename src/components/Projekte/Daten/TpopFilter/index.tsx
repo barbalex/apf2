@@ -4,7 +4,7 @@ import Tab from '@mui/material/Tab'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 
-import { FilterTitle } from '../../../shared/FilterTitle.jsx'
+import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { queryTpops } from './queryTpops.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'

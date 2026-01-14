@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { query } from './query.ts'
-import { FilterTitle } from '../../../shared/FilterTitle.jsx'
+import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { Form } from './Form/index.tsx'
 import { Tabs } from './Tabs.tsx'

@@ -1,4 +1,4 @@
-import { RadioButtonGroup } from './RadioButtonGroup.jsx'
+import { RadioButtonGroup } from './RadioButtonGroup.tsx'
 import { InfoWithPopover } from './InfoWithPopover.jsx'
 
 import styles from './RadioButtonGroupWithInfo.module.css'

@@ -5,7 +5,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
+import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { MobxContext } from '../../../../mobxContext.js'

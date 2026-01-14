@@ -346,7 +346,7 @@ const idealbiotopHandle = {
   bookmarkFetcherName: 'useIdealbiotopNavData',
 }
 const RouterErrorBoundary = lazy(async () => ({
-  default: (await import('../shared/RouterErrorBoundary.jsx'))
+  default: (await import('../shared/RouterErrorBoundary.tsx'))
     .RouterErrorBoundary,
 }))
 import { isDesktopViewAtom } from '../../JotaiStore/index.js'

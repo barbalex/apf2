@@ -1,4 +1,4 @@
-import { RadioButton } from '../../../../shared/RadioButton.jsx'
+import { RadioButton } from '../../../../shared/RadioButton.tsx'
 import { TextField2 } from '../../../../shared/TextField2.jsx'
 
 import styles from './Verification.module.css'
