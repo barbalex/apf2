@@ -1,6 +1,6 @@
 import { isEqual } from 'es-toolkit'
 
-import { updateBeobById } from './updateBeobById.js'
+import { updateBeobById } from './updateBeobById.ts'
 
 export const saveNichtZuordnenToDb = async ({
   value,

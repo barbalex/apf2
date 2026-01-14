@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client/react'
 import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'

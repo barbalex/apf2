@@ -4,18 +4,13 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import type {
-  Ekfrequenz,
-  ApId,
-  EkAbrechnungstypWerteCode,
-} from '../../../../models/apflora/index.js'
 
 import { TextField } from '../../../shared/TextField.jsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { Kontrolljahre } from './Kontrolljahre.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { query } from './query.js'
-import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.js'
+import { query } from './query.ts'
+import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ekfrequenz } from '../../../shared/fragments.js'
@@ -23,6 +18,12 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { Menu } from './Menu.tsx'
+
+import type {
+  Ekfrequenz,
+  ApId,
+  EkAbrechnungstypWerteCode,
+} from '../../../../models/apflora/index.js'
 
 import styles from './index.module.css'
 
