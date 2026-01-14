@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 
 import { useQuery } from '@apollo/client/react'
 
-import { FilesRouter } from '../../../shared/Files/index.jsx'
+import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { ApId } from '../../../../models/apflora/Ap.js'

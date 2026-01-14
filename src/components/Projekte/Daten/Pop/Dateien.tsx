@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 
 import { useQuery } from '@apollo/client/react'
 
-import { FilesRouter } from '../../../shared/Files/index.jsx'
+import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { PopId } from '../../../../models/apflora/index.js'

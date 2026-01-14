@@ -1,4 +1,4 @@
-import { FilesRouter } from '../../../../shared/Files/index.jsx'
+import { FilesRouter } from '../../../../shared/Files/index.tsx'
 import styles from './Files.module.css'
 
 export const Files = ({ row }) => (

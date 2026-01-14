@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { History as HistoryComponent } from '../../../shared/History/index.jsx'
+import { History as HistoryComponent } from '../../../shared/History/index.tsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 

@@ -602,21 +602,21 @@ export const Router = () => {
                     >
                       <Route
                         index={true}
-                        lazy={() => import('../shared/Files/Files/index.jsx')}
+                        lazy={() => import('../shared/Files/Files/index.tsx')}
                         errorElement={<RouterErrorBoundary />}
                       />
                       <Route path=":fileId">
                         <Route
                           path="*"
                           lazy={() =>
-                            import('../shared/Files/Preview/index.jsx')
+                            import('../shared/Files/Preview/index.tsx')
                           }
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route
                           path="Vorschau"
                           lazy={() =>
-                            import('../shared/Files/Preview/index.jsx')
+                            import('../shared/Files/Preview/index.tsx')
                           }
                           errorElement={<RouterErrorBoundary />}
                         />
@@ -750,21 +750,21 @@ export const Router = () => {
                       >
                         <Route
                           index={true}
-                          lazy={() => import('../shared/Files/Files/index.jsx')}
+                          lazy={() => import('../shared/Files/Files/index.tsx')}
                           errorElement={<RouterErrorBoundary />}
                         />
                         <Route path=":fileId">
                           <Route
                             path="*"
                             lazy={() =>
-                              import('../shared/Files/Preview/index.jsx')
+                              import('../shared/Files/Preview/index.tsx')
                             }
                             errorElement={<RouterErrorBoundary />}
                           />
                           <Route
                             path="Vorschau"
                             lazy={() =>
-                              import('../shared/Files/Preview/index.jsx')
+                              import('../shared/Files/Preview/index.tsx')
                             }
                             errorElement={<RouterErrorBoundary />}
                           />
@@ -943,7 +943,7 @@ export const Router = () => {
                           <Route
                             index={true}
                             lazy={() =>
-                              import('../shared/Files/Files/index.jsx')
+                              import('../shared/Files/Files/index.tsx')
                             }
                             errorElement={<RouterErrorBoundary />}
                           />
@@ -951,14 +951,14 @@ export const Router = () => {
                             <Route
                               index={true}
                               lazy={() =>
-                                import('../shared/Files/Preview/index.jsx')
+                                import('../shared/Files/Preview/index.tsx')
                               }
                               errorElement={<RouterErrorBoundary />}
                             />
                             <Route
                               path="Vorschau"
                               lazy={() =>
-                                import('../shared/Files/Preview/index.jsx')
+                                import('../shared/Files/Preview/index.tsx')
                               }
                               errorElement={<RouterErrorBoundary />}
                             />
@@ -1019,7 +1019,7 @@ export const Router = () => {
                               <Route
                                 index={true}
                                 lazy={() =>
-                                  import('../shared/Files/Files/index.jsx')
+                                  import('../shared/Files/Files/index.tsx')
                                 }
                                 errorElement={<RouterErrorBoundary />}
                               />
@@ -1027,14 +1027,14 @@ export const Router = () => {
                                 <Route
                                   path="*"
                                   lazy={() =>
-                                    import('../shared/Files/Preview/index.jsx')
+                                    import('../shared/Files/Preview/index.tsx')
                                   }
                                   errorElement={<RouterErrorBoundary />}
                                 />
                                 <Route
                                   path="Vorschau"
                                   lazy={() =>
-                                    import('../shared/Files/Preview/index.jsx')
+                                    import('../shared/Files/Preview/index.tsx')
                                   }
                                   errorElement={<RouterErrorBoundary />}
                                 />
@@ -1088,7 +1088,7 @@ export const Router = () => {
                                   <Route
                                     index={true}
                                     lazy={() =>
-                                      import('../shared/Files/Files/index.jsx')
+                                      import('../shared/Files/Files/index.tsx')
                                     }
                                     errorElement={<RouterErrorBoundary />}
                                   />
@@ -1096,14 +1096,14 @@ export const Router = () => {
                                     <Route
                                       path="*"
                                       lazy={() =>
-                                        import('../shared/Files/Preview/index.jsx')
+                                        import('../shared/Files/Preview/index.tsx')
                                       }
                                       errorElement={<RouterErrorBoundary />}
                                     />
                                     <Route
                                       path="Vorschau"
                                       lazy={() =>
-                                        import('../shared/Files/Preview/index.jsx')
+                                        import('../shared/Files/Preview/index.tsx')
                                       }
                                       errorElement={<RouterErrorBoundary />}
                                     />
@@ -1186,7 +1186,7 @@ export const Router = () => {
                                   <Route
                                     index={true}
                                     lazy={() =>
-                                      import('../shared/Files/Files/index.jsx')
+                                      import('../shared/Files/Files/index.tsx')
                                     }
                                     errorElement={<RouterErrorBoundary />}
                                   />
@@ -1194,14 +1194,14 @@ export const Router = () => {
                                     <Route
                                       path="*"
                                       lazy={() =>
-                                        import('../shared/Files/Preview/index.jsx')
+                                        import('../shared/Files/Preview/index.tsx')
                                       }
                                       errorElement={<RouterErrorBoundary />}
                                     />
                                     <Route
                                       path="Vorschau"
                                       lazy={() =>
-                                        import('../shared/Files/Preview/index.jsx')
+                                        import('../shared/Files/Preview/index.tsx')
                                       }
                                       errorElement={<RouterErrorBoundary />}
                                     />
@@ -1270,7 +1270,7 @@ export const Router = () => {
                                   <Route
                                     index={true}
                                     lazy={() =>
-                                      import('../shared/Files/Files/index.jsx')
+                                      import('../shared/Files/Files/index.tsx')
                                     }
                                     errorElement={<RouterErrorBoundary />}
                                   />
@@ -1278,14 +1278,14 @@ export const Router = () => {
                                     <Route
                                       path="*"
                                       lazy={() =>
-                                        import('../shared/Files/Preview/index.jsx')
+                                        import('../shared/Files/Preview/index.tsx')
                                       }
                                       errorElement={<RouterErrorBoundary />}
                                     />
                                     <Route
                                       path="Vorschau"
                                       lazy={() =>
-                                        import('../shared/Files/Preview/index.jsx')
+                                        import('../shared/Files/Preview/index.tsx')
                                       }
                                       errorElement={<RouterErrorBoundary />}
                                     />
