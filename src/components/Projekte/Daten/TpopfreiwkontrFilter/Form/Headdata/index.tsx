@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client/react'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { Error } from '../../../../../shared/Error.jsx'
 
 import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'

@@ -9,8 +9,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Einheit } from './Einheit.tsx'
 import { Gezaehlt } from './Gezaehlt.tsx'
 import { Geschaetzt } from './Geschaetzt.tsx'
-import { query } from './query.js'
-import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
+import { query } from './query.ts'
+import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import { MobxContext } from '../../../../../../mobxContext.js'
 import { Error } from '../../../../../shared/Error.jsx'
 import { Spinner } from '../../../../../shared/Spinner.jsx'
@@ -18,7 +18,6 @@ import { Spinner } from '../../../../../shared/Spinner.jsx'
 import type { TpopkontrzaehlId } from '../../../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../../../models/apflora/TpopkontrId.ts'
 import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
-
 
 interface TpopkontrzaehlQueryResult {
   tpopkontrzaehlById: {

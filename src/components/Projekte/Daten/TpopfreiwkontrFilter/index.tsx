@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { Form } from './Form/index.tsx'

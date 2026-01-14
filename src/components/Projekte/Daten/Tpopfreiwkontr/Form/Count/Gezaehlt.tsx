@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../../../shared/TextField.jsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
-import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.js'
+import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
 
 interface GezaehltProps {

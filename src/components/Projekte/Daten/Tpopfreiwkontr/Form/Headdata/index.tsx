@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { Select } from '../../../../../shared/Select.jsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
-import { query } from './query.js'
+import { query } from './query.ts'
 import {
   adresse as adresseFragment,
   pop as popFragment,
@@ -44,7 +44,8 @@ export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
 
   const [errors, setErrors] = useState<string | null>(null)
 
-  const { data, loading, error } = useQuery<TpopfreiwkontrAdressesQueryResult>(query)
+  const { data, loading, error } =
+    useQuery<TpopfreiwkontrAdressesQueryResult>(query)
 
   const saveToDb = async (event) => {
     const { value } = event.target
@@ -140,7 +141,9 @@ export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
         className={styles.koordVal}
       >{`${tpop?.lv95X ?? ''} / ${tpop?.lv95Y ?? ''}`}</div>
       <div className={styles.tpopNrLabel}>Teilpop.Nr.</div>
-      <div className={styles.tpopNrVal}>{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</div>
+      <div
+        className={styles.tpopNrVal}
+      >{`${pop?.nr ?? ''}.${tpop?.nr ?? ''}`}</div>
       <div className={styles.bearbLabel}>BeobachterIn</div>
       <div className={styles.bearbVal}>
         <Select
