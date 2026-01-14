@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { updateUserById as updateUserByIdGql } from './updateUserById.js'

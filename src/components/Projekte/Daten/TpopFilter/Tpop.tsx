@@ -11,7 +11,7 @@ import { Status } from '../../../shared/Status.tsx'
 import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
-import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.jsx'
+import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.tsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { MobxContext } from '../../../../mobxContext.js'
 

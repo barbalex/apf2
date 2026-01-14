@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 
 import { EkfYear } from './EkfYear.tsx'
 import { User } from './User/index.tsx'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { Menus } from './Menus.tsx'
 
 import type { UserId } from '../../../models/apflora/public/User.ts'

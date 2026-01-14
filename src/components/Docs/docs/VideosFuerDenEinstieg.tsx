@@ -1,4 +1,4 @@
-import { YoutubeEmbed } from '../../shared/YoutubeEmbed.jsx'
+import { YoutubeEmbed } from '../../shared/YoutubeEmbed.tsx'
 
 import desktopStyles from '../DesktopDocs.module.css'
 

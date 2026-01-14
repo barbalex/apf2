@@ -1,5 +1,5 @@
 import desktopStyles from '../../DesktopDocs.module.css'
-import { YoutubeEmbed } from '../../../shared/YoutubeEmbed.jsx'
+import { YoutubeEmbed } from '../../../shared/YoutubeEmbed.tsx'
 import beobZuordnen from './beobZuordnen_01.png'
 
 export const Component = () => (

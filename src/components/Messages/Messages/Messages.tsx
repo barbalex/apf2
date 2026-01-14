@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
 
-import { createUsermessage } from '../createUsermessage.js'
+import { createUsermessage } from '../createUsermessage.ts'
 import { MobxContext } from '../../../mobxContext.js'
 
 import styles from './Messages.module.css'
