@@ -7,11 +7,11 @@ import { TextField } from '../../../shared/TextField.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { queryAeTaxonomiesById } from './queryAeTaxonomiesById.js'
-import { queryLists } from './queryLists.js'
-import { queryAps } from './queryAps.js'
-import { queryAdresses } from './queryAdresses.js'
-import { queryAeTaxonomies } from './queryAeTaxonomies.js'
+import { queryAeTaxonomiesById } from './queryAeTaxonomiesById.ts'
+import { queryLists } from './queryLists.ts'
+import { queryAps } from './queryAps.ts'
+import { queryAdresses } from './queryAdresses.ts'
+import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -93,12 +93,15 @@ export const ApFilter = observer(() => {
     }
   }, [activeTab, dataFilter.ap.length])
 
-  const { data: apsData, error: apsError } = useQuery<ApsQueryResult>(queryAps, {
-    variables: {
-      filteredFilter: apGqlFilter.filtered,
-      allFilter: apGqlFilter.all,
+  const { data: apsData, error: apsError } = useQuery<ApsQueryResult>(
+    queryAps,
+    {
+      variables: {
+        filteredFilter: apGqlFilter.filtered,
+        allFilter: apGqlFilter.all,
+      },
     },
-  })
+  )
 
   const {
     data: dataAdresses,

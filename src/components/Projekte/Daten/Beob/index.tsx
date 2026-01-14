@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
 import { exists } from '../../../../modules/exists.js'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'

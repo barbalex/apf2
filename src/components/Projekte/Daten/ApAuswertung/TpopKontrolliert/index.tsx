@@ -12,7 +12,7 @@ import {
 import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 import { CustomTooltip } from '../CustomTooltip.tsx'
 import { Error } from '../../../../shared/Error.jsx'
 
@@ -62,9 +62,12 @@ export const TpopKontrolliert = ({
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
-  const { data, error, loading } = useQuery<TpopKontrolliertQueryResult>(query, {
-    variables: { id, year: jahr ?? new Date().getFullYear() },
-  })
+  const { data, error, loading } = useQuery<TpopKontrolliertQueryResult>(
+    query,
+    {
+      variables: { id, year: jahr ?? new Date().getFullYear() },
+    },
+  )
   const erfolgData = (data?.tpopKontrolliertForJber?.nodes ?? []).map((d) => ({
     jahr: d.year,
     'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,

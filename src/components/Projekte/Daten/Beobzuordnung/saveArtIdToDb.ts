@@ -2,7 +2,7 @@ import { isEqual } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { updateBeobById } from './updateBeobById.js'
+import { updateBeobById } from './updateBeobById.ts'
 
 export const saveArtIdToDb = async ({
   value,
