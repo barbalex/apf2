@@ -147,9 +147,15 @@ export const File = observer(({ file, parent, refetch }) => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: error.message,
+      }))
     }
-    setFieldErrors({})
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
     refetch()
   }
 

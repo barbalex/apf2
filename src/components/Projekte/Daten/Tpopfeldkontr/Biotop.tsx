@@ -123,9 +123,15 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
-    setFieldErrors({})
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
     if (['jahr', 'datum', 'typ'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],

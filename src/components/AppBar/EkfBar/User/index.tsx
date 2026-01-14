@@ -88,12 +88,18 @@ export const User = observer(({ username, userOpen, toggleUserOpen }) => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: error.message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: error.message,
+      }))
     }
     tsQueryClient.invalidateQueries({
       queryKey: ['userByNameForEkfBar'],
     })
-    setFieldErrors({})
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
   }
 
   const onBlurPassword = (e) => {

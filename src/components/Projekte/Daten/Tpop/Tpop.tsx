@@ -252,7 +252,10 @@ export const Component = observer(() => {
         // no optimistic responce as geomPoint
       })
     } catch (error) {
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
     // update tpop on map
     if (
@@ -269,7 +272,10 @@ export const Component = observer(() => {
       })
     }
     if (Object.keys(fieldErrors).length) {
-      setFieldErrors({})
+      setFieldErrors((prev) => {
+        const { [field]: _, ...rest } = prev
+        return rest
+      })
     }
     if (['nr', 'flurname'].includes(field)) {
       tsQueryClient.invalidateQueries({

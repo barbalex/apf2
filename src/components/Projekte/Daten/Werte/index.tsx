@@ -132,10 +132,16 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
     refetch()
-    setFieldErrors({})
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
     if (['text', 'sort'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`tree${upperFirst(table)}`],

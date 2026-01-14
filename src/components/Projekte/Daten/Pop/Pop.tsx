@@ -97,7 +97,10 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
     // update pop on map
     if (
@@ -111,7 +114,10 @@ export const Component = observer(() => {
         queryKey: [`PopForMapQuery`],
       })
     }
-    setFieldErrors({})
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
     if (['name', 'nr'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],

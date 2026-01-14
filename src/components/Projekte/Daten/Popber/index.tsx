@@ -120,11 +120,17 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
     // only set if necessary (to reduce renders)
     if (Object.keys(fieldErrors).length) {
-      setFieldErrors({})
+      setFieldErrors((prev) => {
+        const { [field]: _, ...rest } = prev
+        return rest
+      })
     }
     if (['jahr', 'entwicklung'].includes(field)) {
       tsQueryClient.invalidateQueries({

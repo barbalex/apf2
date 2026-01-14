@@ -152,9 +152,15 @@ export const Component = observer(() => {
           [field]: 'Pro Art darf nur eine Einheit zielrelevant sein',
         })
       }
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
-    setFieldErrors({})
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
     if (['zaehleinheitId', 'sort'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeEkzaehleinheit`],

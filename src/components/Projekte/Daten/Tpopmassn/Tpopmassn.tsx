@@ -208,7 +208,10 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
           variables: { apId, typ: value ?? 1 },
         })
       } catch (error) {
-        return setFieldErrors({ [field]: (error as Error).message })
+        return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
       }
       const isAnpflanzung =
         zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
@@ -260,7 +263,10 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
           variables: { apId, typ: row.typ ?? 1 },
         })
       } catch (error) {
-        return setFieldErrors({ [field]: error.message })
+        return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: error.message,
+      }))
       }
       const isAnpflanzung =
         zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
@@ -305,7 +311,10 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
           variables: { apId, typ: row.typ ?? 1 },
         })
       } catch (error) {
-        return setFieldErrors({ [field]: error.message })
+        return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: error.message,
+      }))
       }
       const isAnpflanzung =
         zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
@@ -391,9 +400,15 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
-    setFieldErrors({})
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
     if (['jahr', 'datum', 'typ'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassn`],
