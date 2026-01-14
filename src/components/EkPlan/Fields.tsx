@@ -5,7 +5,7 @@ import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
 
 import { MobxContext } from '../../mobxContext.js'
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './Fields.module.css'
 

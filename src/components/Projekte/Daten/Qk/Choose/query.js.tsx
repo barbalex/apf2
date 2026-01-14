@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { qk } from '../../../../shared/fragments.js'
+import { qk } from '../../../../shared/fragments.ts'
 
 export const query = gql`
   query QkQueryForRow {

@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import { Fields } from './Fields.tsx'
 import { MobxContext } from '../../mobxContext.js'
 import { allFields } from '../../store/EkPlan/index.js'
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './Choose.module.css'
 

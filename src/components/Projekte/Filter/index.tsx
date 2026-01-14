@@ -4,7 +4,7 @@ import { TpopFilter } from '../Daten/TpopFilter/index.tsx'
 import { TpopmassnFilter } from '../Daten/TpopmassnFilter/index.tsx'
 import { TpopfeldkontrFilter } from '../Daten/TpopfeldkontrFilter/index.tsx'
 import { TpopfreiwkontrFilter } from '../Daten/TpopfreiwkontrFilter/index.tsx'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Title } from './Title.tsx'
 import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
 

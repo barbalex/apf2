@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import { DateTime } from 'luxon'
 
-import { apberuebersicht } from '../components/shared/fragments.js'
+import { apberuebersicht } from '../components/shared/fragments.ts'
 
 export const historize = async ({ store, apberuebersicht: row }) => {
   const { enqueNotification, apolloClient } = store

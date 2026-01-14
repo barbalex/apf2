@@ -9,7 +9,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 

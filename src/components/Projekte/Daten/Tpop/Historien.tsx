@@ -2,7 +2,7 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 import { History as SharedHistory } from '../../../shared/History/index.jsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'

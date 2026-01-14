@@ -5,7 +5,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { TextField } from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Status } from '../../../shared/Status.jsx'
@@ -21,10 +21,10 @@ import {
   popStatusWerte,
   tpop,
   tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments.js'
+} from '../../../shared/fragments.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 

@@ -21,15 +21,15 @@ import { saveArtIdToDb } from './saveArtIdToDb.ts'
 import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
 import { sendMail } from '../../../../modules/sendMail.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../shared/Error.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 import {
   aeTaxonomies,
   beob,
   pop,
   popStatusWerte,
-} from '../../../shared/fragments.js'
+} from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type BeobType from '../../../../models/apflora/Beob.js'

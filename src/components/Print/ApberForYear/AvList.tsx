@@ -1,7 +1,7 @@
 import { groupBy } from 'es-toolkit'
 import { sortBy } from 'es-toolkit'
 
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import styles from './AvList.module.css'
 
 export const AvList = ({ data }) => {

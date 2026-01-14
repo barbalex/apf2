@@ -1,5 +1,5 @@
 import { Sidebar } from './DesktopSidebar/index.tsx'
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './DesktopDocs.module.css'
 

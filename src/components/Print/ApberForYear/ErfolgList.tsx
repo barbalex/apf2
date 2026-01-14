@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import styles from './ErfolgList.module.css'
 
 export const ErfolgList = ({ jahr, data }) => {

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { assozart } from '../../../shared/fragments.js'
+import { assozart } from '../../../shared/fragments.ts'
 
 export const query = gql`
   query assozartByIdQuery($id: UUID!) {

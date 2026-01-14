@@ -5,8 +5,8 @@ import { useParams } from 'react-router'
 
 import { ApberForYear } from './ApberForYear.tsx'
 import { MobxContext } from '../../../mobxContext.js'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import { Spinner } from '../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+import { Spinner } from '../../shared/Spinner.tsx'
 
 import type { ApberuebersichtId } from '../../../models/apflora/public/Apberuebersicht.ts'
 

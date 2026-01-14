@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { aeTaxonomies, projekt } from '../shared/fragments.js'
+import { aeTaxonomies, projekt } from '../shared/fragments.ts'
 
 export const dataWithDateByUserId = gql`
   query ekfDataWithDateByUseridQuery($id: UUID!, $jahr: Int!) {

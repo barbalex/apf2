@@ -4,10 +4,10 @@ import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
-import { currentIssue as currentIssueFragment } from '../../../shared/fragments.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { currentIssue as currentIssueFragment } from '../../../shared/fragments.ts'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../shared/Error.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 
 import type Currentissue from '../../../../models/apflora/Currentissue.js'
 

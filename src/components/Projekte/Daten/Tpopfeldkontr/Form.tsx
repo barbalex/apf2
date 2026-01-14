@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
-import { TextField } from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Select } from '../../../shared/Select.jsx'
 import { JesNo } from '../../../shared/JesNo.jsx'
@@ -16,8 +16,8 @@ import { StringToCopy } from '../../../shared/StringToCopy.jsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { tpopfeldkontr } from '../../../shared/fragments.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { tpopfeldkontr } from '../../../shared/fragments.ts'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import type {
   TpopkontrId,

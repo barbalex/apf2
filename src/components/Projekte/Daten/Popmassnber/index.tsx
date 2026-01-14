@@ -6,19 +6,19 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
-import { TextField } from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../shared/Error.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 import {
   pop,
   popmassnber,
   tpopmassnErfbeurtWerte,
-} from '../../../shared/fragments.js'
+} from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
 import type {

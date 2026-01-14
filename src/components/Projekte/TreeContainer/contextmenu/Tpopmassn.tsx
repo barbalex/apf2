@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
   MenuItem,

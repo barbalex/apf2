@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopfeldkontr } from '../components/shared/fragments.js'
+import { tpopfeldkontr } from '../components/shared/fragments.ts'
 
 export const copyBiotopTo = async ({ id, apolloClient, copyingBiotop }) => {
   // fetch previous id from copyingBiotop

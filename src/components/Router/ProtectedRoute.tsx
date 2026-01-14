@@ -6,7 +6,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
 
 import { MobxContext } from '../../mobxContext.js'
-const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
+const User = lazy(async () => ({ default: (await import('../User.tsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.tsx')).Messages,
 }))
@@ -35,7 +35,7 @@ const ChooseApToCopyErfkritsFrom = lazy(async () => ({
     .ChooseApToCopyErfkritsFrom,
 }))
 
-import { Spinner } from '../shared/Spinner.jsx'
+import { Spinner } from '../shared/Spinner.tsx'
 import styles from './ProtectedRoute.module.css'
 
 const isInIframe = inIframe()

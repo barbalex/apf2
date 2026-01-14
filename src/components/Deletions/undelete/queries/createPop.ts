@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { pop } from '../../../shared/fragments.js'
+import { pop } from '../../../shared/fragments.ts'
 
 export default gql`
   mutation createPopForUndelete(

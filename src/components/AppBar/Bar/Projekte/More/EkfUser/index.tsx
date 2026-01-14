@@ -2,8 +2,8 @@ import { Suspense } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { useNavigate, useLocation } from 'react-router'
 
-import { Select } from '../../../../../shared/Select.jsx'
-import { Error } from '../../../../../shared/Error.jsx'
+import { Select } from '../../../../../shared/Select.tsx'
+import { Error } from '../../../../../shared/Error.tsx'
 import { queryAdresses } from './queryAdresses.js'
 
 import type { UserId } from '../../../../../../models/apflora/public/User.ts'

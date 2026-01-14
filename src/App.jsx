@@ -37,35 +37,35 @@ import { persistStore } from './modules/persistStore.js'
 import './app.css'
 
 const Notifier = lazy(async () => ({
-  default: (await import('./components/shared/Notifier.jsx')).Notifier,
+  default: (await import('./components/shared/Notifier.tsx')).Notifier,
 }))
 const NotificationDismisser = lazy(async () => ({
-  default: (await import('./components/shared/NotificationDismisser.jsx'))
+  default: (await import('./components/shared/NotificationDismisser.tsx'))
     .NotificationDismisser,
 }))
 const Router = lazy(async () => ({
   default: (await import('./components/Router/index.tsx')).Router,
 }))
 // const UnterhaltsRouter = lazy(async () => ({
-//   default: (await import('./components/Router/indexUnterhalt.jsx')).Router,
+//   default: (await import('./components/Router/indexUnterhalt.tsx')).Router,
 // }))
 const IsPrintSetter = lazy(async () => ({
-  default: (await import('./components/IsPrintSetter.jsx')).IsPrintSetter,
+  default: (await import('./components/IsPrintSetter.tsx')).IsPrintSetter,
 }))
 const MouseWheelHandler = lazy(async () => ({
-  default: (await import('./components/MouseWheelHandler.jsx'))
+  default: (await import('./components/MouseWheelHandler.tsx'))
     .MouseWheelHandler,
 }))
 const LastTouchedNodeSetter = lazy(async () => ({
-  default: (await import('./components/LastTouchedNodeSetter.jsx'))
+  default: (await import('./components/LastTouchedNodeSetter.tsx'))
     .LastTouchedNodeSetter,
 }))
 const LegacyBrowserInformer = lazy(async () => ({
-  default: (await import('./components/LegacyBrowserInformer.jsx'))
+  default: (await import('./components/LegacyBrowserInformer.tsx'))
     .LegacyBrowserInformer,
 }))
 const Spinner = lazy(async () => ({
-  default: (await import('./components/shared/Spinner.jsx')).Spinner,
+  default: (await import('./components/shared/Spinner.tsx')).Spinner,
 }))
 
 registerLocale('de', de)

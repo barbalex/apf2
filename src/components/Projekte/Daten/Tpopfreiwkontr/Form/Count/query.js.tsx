@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import {
   tpopkontrzaehl,
   tpopkontrzaehlEinheitWerte,
-} from '../../../../../shared/fragments.js'
+} from '../../../../../shared/fragments.ts'
 
 export const query = gql`
   query TpopkontrzaehlQueryForCount($id: UUID!) {

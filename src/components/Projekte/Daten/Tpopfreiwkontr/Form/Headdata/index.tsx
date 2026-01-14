@@ -13,8 +13,8 @@ import {
   tpop as tpopFragment,
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../../../shared/fragments.js'
-import { Error } from '../../../../../shared/Error.jsx'
+} from '../../../../../shared/fragments.ts'
+import { Error } from '../../../../../shared/Error.tsx'
 
 import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
 

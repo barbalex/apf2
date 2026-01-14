@@ -6,9 +6,9 @@ import { useQuery } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
 import { useNavigate, Outlet, useParams, useLocation } from 'react-router'
 
-import { ErrorBoundary } from '../ErrorBoundary.jsx'
-import { Error } from '../Error.jsx'
-import { Spinner } from '../Spinner.jsx'
+import { ErrorBoundary } from '../ErrorBoundary.tsx'
+import { Error } from '../Error.tsx'
+import { Spinner } from '../Spinner.tsx'
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
@@ -17,13 +17,30 @@ import {
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
-import { Uploader } from '../Uploader/index.jsx'
+import { Uploader } from '../Uploader/index.tsx'
 import { UploaderContext } from '../../../UploaderContext.js'
 import { MobxContext } from '../../../mobxContext.js'
-import { Menu } from './Menu/index.jsx'
+import { Menu } from './Menu/index.tsx'
 
 import './index.css'
 import styles from './index.module.css'
+
+interface FileNode {
+  id: string
+  fileId: string | null
+  name: string | null
+  beschreibung: string | null
+  fileMimeType: string | null
+  [key: string]: any
+}
+
+interface FileQueryResult {
+  data: {
+    [key: string]: {
+      nodes: FileNode[]
+    }
+  }
+}
 
 const fragmentObject = {
   ap: apFileFragment,
@@ -67,7 +84,7 @@ export const FilesRouter = observer(
         }
         ${fragment}
       `
-    const { data, error, isLoading, refetch } = useQuery({
+    const { data, error, isLoading, refetch } = useQuery<FileQueryResult>({
       queryKey: ['FileQuery', parentId],
       queryFn: () =>
         apolloClient.query({

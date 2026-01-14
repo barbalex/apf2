@@ -20,14 +20,14 @@ import { queryAps } from './queryAps.ts'
 import { MobxContext } from '../../mobxContext.js'
 import { appBaseUrl } from '../../modules/appBaseUrl.js'
 const Error = lazy(async () => ({
-  default: (await import('../shared/Error.jsx')).Error,
+  default: (await import('../shared/Error.tsx')).Error,
 }))
 const ErrorBoundary = lazy(async () => ({
-  default: (await import('../shared/ErrorBoundary.jsx')).ErrorBoundary,
+  default: (await import('../shared/ErrorBoundary.tsx')).ErrorBoundary,
 }))
-const User = lazy(async () => ({ default: (await import('../User.jsx')).User }))
+const User = lazy(async () => ({ default: (await import('../User.tsx')).User }))
 const Spinner = lazy(async () => ({
-  default: (await import('../shared/Spinner.jsx')).Spinner,
+  default: (await import('../shared/Spinner.tsx')).Spinner,
 }))
 
 import styles from './index.module.css'

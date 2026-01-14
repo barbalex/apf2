@@ -30,7 +30,7 @@ import {
   tpop as tpopFragment,
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
-} from '../../../../shared/fragments.js'
+} from '../../../../shared/fragments.ts'
 
 interface FormProps {
   data: any

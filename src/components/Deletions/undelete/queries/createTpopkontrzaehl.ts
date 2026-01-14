@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopkontrzaehl } from '../../../shared/fragments.js'
+import { tpopkontrzaehl } from '../../../shared/fragments.ts'
 
 export default gql`
   mutation createTpopkontrzaehlForUndelete(

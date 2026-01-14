@@ -8,8 +8,8 @@ import { Form, useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { Row } from './Row/index.tsx'
-import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../../shared/Error.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../../shared/Error.tsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
 import type { QkName } from '../../../../../models/apflora/index.js'

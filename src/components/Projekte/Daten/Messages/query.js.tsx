@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { message } from '../../../shared/fragments.js'
+import { message } from '../../../shared/fragments.ts'
 
 export const query = gql`
   query messagesQuery {

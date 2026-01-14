@@ -2,8 +2,8 @@ import { Suspense } from 'react'
 import { Outlet } from 'react-router'
 
 import { Sidebar } from './DesktopSidebar/index.tsx'
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
-import { Spinner } from '../shared/Spinner.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
+import { Spinner } from '../shared/Spinner.tsx'
 
 import styles from './DesktopDocs.module.css'
 

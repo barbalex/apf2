@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { projekt } from '../../../../../shared/fragments.js'
+import { projekt } from '../../../../../shared/fragments.ts'
 
 export default gql`
   query projektByIdForDelete($id: UUID!) {

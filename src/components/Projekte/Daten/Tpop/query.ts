@@ -6,7 +6,7 @@ import {
   popStatusWerte,
   tpop,
   tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments.js'
+} from '../../../shared/fragments.ts'
 
 export const query = gql`
   query tpopByIdQuery($id: UUID!) {

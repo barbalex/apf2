@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { ApUser } from './ApUser.tsx'
 import { NewUser } from './NewUser.tsx'
 import { Label } from '../../../../shared/Label.jsx'
-import { Error } from '../../../../shared/Error.jsx'
+import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApUserId } from '../../../../../models/apflora/ApUser.js'
 

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopmassn } from '../../../shared/fragments.js'
+import { tpopmassn } from '../../../shared/fragments.ts'
 
 export default gql`
   mutation createTpopmassnForUndelete(

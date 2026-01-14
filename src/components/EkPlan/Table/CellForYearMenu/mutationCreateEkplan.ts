@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ekplan } from '../../../shared/fragments.js'
+import { ekplan } from '../../../shared/fragments.ts'
 
 export const mutationCreateEkplan = gql`
   mutation createEkplan(

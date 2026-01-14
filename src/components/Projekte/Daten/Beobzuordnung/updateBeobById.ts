@@ -5,7 +5,7 @@ import {
   beob,
   pop,
   popStatusWerte,
-} from '../../../shared/fragments.js'
+} from '../../../shared/fragments.ts'
 
 export const updateBeobById = gql`
   mutation updateBeobForBeobzuordnung(

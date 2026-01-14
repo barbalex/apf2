@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ekfrequenz } from '../../../../shared/fragments.js'
+import { ekfrequenz } from '../../../../shared/fragments.ts'
 
 export const query = gql`
   query TpopEkFilterQuery($apId: UUID!) {

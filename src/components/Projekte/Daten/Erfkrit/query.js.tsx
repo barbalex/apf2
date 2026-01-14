@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { erfkrit } from '../../../shared/fragments.js'
+import { erfkrit } from '../../../shared/fragments.ts'
 
 export const query = gql`
   query erfkritByIdQuery($id: UUID!) {

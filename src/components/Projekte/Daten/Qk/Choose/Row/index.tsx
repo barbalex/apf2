@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import { query } from './query.ts'
-import { Error } from '../../../../../shared/Error.jsx'
+import { Error } from '../../../../../shared/Error.tsx'
 
 import type {
   ApId,

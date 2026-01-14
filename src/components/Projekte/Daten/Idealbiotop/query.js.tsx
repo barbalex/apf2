@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { idealbiotop } from '../../../shared/fragments.js'
+import { idealbiotop } from '../../../shared/fragments.ts'
 
 export const query = gql`
   query idealbiotopByIdQuery($id: UUID!) {

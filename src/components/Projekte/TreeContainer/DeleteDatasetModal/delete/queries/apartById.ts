@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { apart } from '../../../../../shared/fragments.js'
+import { apart } from '../../../../../shared/fragments.ts'
 
 export default gql`
   query apartByIdForDelete($id: UUID!) {

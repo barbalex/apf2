@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ap } from '../../../shared/fragments.js'
+import { ap } from '../../../shared/fragments.ts'
 
 export default gql`
   mutation createApForUndelete(

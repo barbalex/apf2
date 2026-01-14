@@ -8,7 +8,7 @@ import { Teilpopulationen } from './Teilpopulationen/index.tsx'
 import { Tipps } from './Tipps/index.tsx'
 import { Anwendung } from './Anwendung.tsx'
 import { Optionen } from './Optionen.tsx'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 

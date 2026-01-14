@@ -5,7 +5,7 @@ import {
   beob,
   popStatusWerte,
   tpop,
-} from '../../components/shared/fragments.js'
+} from '../../components/shared/fragments.ts'
 
 export const updateBeobById = gql`
   mutation updateBeobForCreateNewPopFromBeob($id: UUID!, $tpopId: UUID) {

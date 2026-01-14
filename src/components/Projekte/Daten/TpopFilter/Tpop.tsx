@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 
 import { useApolloClient, useQuery } from '@apollo/client/react'
 
-import { TextField } from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
 import { Status } from '../../../shared/Status.jsx'

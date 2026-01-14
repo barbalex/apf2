@@ -8,7 +8,7 @@ import {
   apErfkritWerte,
   tpopmassnTypWerte,
   zielTypWerte,
-} from '../../shared/fragments.js'
+} from '../../shared/fragments.ts'
 
 export const query = gql`
   query projektByIdForApberForYear(

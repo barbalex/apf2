@@ -10,7 +10,7 @@ import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.tsx'
 import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzStartjahr.tsx'
 import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.tsx'
 import { CellHeaderYear } from './CellHeaderYear.tsx'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
 import styles from './Header.module.css'
 

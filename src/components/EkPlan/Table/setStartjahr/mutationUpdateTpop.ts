@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpop } from '../../../shared/fragments.js'
+import { tpop } from '../../../shared/fragments.ts'
 
 export const mutationUpdateTpop = gql`
   mutation updateTpopForStartjahr(

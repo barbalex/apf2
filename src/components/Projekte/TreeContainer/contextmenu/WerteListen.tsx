@@ -1,4 +1,4 @@
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
   MenuItem,

@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { tpop } from '../../../shared/fragments.js'
+import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.tsx'
 
 import styles from './index.module.css'

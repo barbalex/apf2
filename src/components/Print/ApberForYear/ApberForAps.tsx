@@ -1,5 +1,5 @@
 import { ApberForAp } from '../ApberForAp/index.tsx'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
 export const ApberForAps = ({ jahr, data, jberData }) => {
   const aps = (data?.allAps?.nodes ?? []).filter(

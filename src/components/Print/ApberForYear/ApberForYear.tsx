@@ -12,8 +12,8 @@ import { AvList } from './AvList.tsx'
 import { AktPopList } from './AktPopList.tsx'
 import { ErfolgList } from './ErfolgList.tsx'
 import { ApberForAps } from './ApberForAps.tsx'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import { Spinner } from '../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+import { Spinner } from '../../shared/Spinner.tsx'
 
 import styles from './ApberForYear.module.css'
 

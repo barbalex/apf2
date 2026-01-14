@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ekfrequenz } from '../../../../../shared/fragments.js'
+import { ekfrequenz } from '../../../../../shared/fragments.ts'
 
 export default gql`
   query ekfrequenzByIdForDelete($id: UUID!) {

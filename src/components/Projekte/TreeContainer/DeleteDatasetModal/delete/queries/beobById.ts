@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { beob } from '../../../../../shared/fragments.js'
+import { beob } from '../../../../../shared/fragments.ts'
 
 export default gql`
   query beobByIdForDelete($id: UUID!) {

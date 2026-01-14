@@ -11,12 +11,12 @@ import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
 import { exists } from '../../../../../modules/exists.js'
-import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../../shared/Error.jsx'
-import { Spinner } from '../../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../../shared/Error.tsx'
+import { Spinner } from '../../../../shared/Spinner.tsx'
 import { Field } from './Field.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
-import { beob } from '../../../../shared/fragments.js'
+import { beob } from '../../../../shared/fragments.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
 

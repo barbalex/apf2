@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'

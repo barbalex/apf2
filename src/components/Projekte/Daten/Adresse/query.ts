@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { adresse } from '../../../shared/fragments.js'
+import { adresse } from '../../../shared/fragments.ts'
 
 export const query = gql`
   query adresseByIdForAdresse($id: UUID!) {

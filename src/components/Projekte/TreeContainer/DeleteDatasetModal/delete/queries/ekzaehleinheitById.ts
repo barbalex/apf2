@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ekzaehleinheit } from '../../../../../shared/fragments.js'
+import { ekzaehleinheit } from '../../../../../shared/fragments.ts'
 
 export default gql`
   query ekzaehleinheitByIdForDelete($id: UUID!) {

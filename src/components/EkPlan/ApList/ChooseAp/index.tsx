@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 
 import { queryApsToChoose } from './queryApsToChoose.ts'
 import { MobxContext } from '../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 

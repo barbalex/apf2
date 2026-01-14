@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpop } from '../../../shared/fragments.js'
+import { tpop } from '../../../shared/fragments.ts'
 import { setStartjahr } from '../setStartjahr/index.tsx'
 import { setEkplans } from '../setEkplans/index.tsx'
 

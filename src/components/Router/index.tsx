@@ -7,7 +7,7 @@ import {
 import { RouterProvider } from 'react-router/dom'
 import { useAtom } from 'jotai'
 
-import { Spinner } from '../shared/Spinner.jsx'
+import { Spinner } from '../shared/Spinner.tsx'
 
 // import { DatenNav } from '../Bookmarks/NavTo/Navs/Daten.tsx'
 
@@ -352,7 +352,7 @@ const RouterErrorBoundary = lazy(async () => ({
 import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 
 // WARNING: errorElement did not work
-// import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+// import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 export const Router = () => {
   const [isDesktopView] = useAtom(isDesktopViewAtom)
@@ -1613,14 +1613,14 @@ export const Router = () => {
             />
             <Route
               path="*"
-              lazy={() => import('../404.jsx')}
+              lazy={() => import('../404.tsx')}
               errorElement={<RouterErrorBoundary />}
             />
           </Route>
         </Route>
         <Route
           path="*"
-          lazy={() => import('../404.jsx')}
+          lazy={() => import('../404.tsx')}
         />
       </Route>,
     ),

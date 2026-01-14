@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 
 import { List as SharedList } from '../../../shared/List/index.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { Error } from '../../../shared/Error.jsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
+import { Error } from '../../../shared/Error.tsx'
 import { useProjektNavData } from '../../../../modules/useProjektNavData.js'
 
 export const List = () => {

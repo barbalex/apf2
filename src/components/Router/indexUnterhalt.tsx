@@ -7,7 +7,7 @@ import {
 import { RouterProvider } from 'react-router/dom'
 import { useAtom } from 'jotai'
 
-import { Spinner } from '../shared/Spinner.jsx'
+import { Spinner } from '../shared/Spinner.tsx'
 
 const DatenNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Daten.tsx')).Menu,
@@ -24,9 +24,9 @@ const datenHandle = {
 import { isDesktopViewAtom } from '../../JotaiStore/index.js'
 
 // WARNING: errorElement did not work
-// import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+// import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
-import { Unterhalt } from '../Unterhalt.jsx'
+import { Unterhalt } from '../Unterhalt.tsx'
 
 // uncomment unterhalt route for Unterhalt
 export const Router = () => {

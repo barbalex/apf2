@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 import {
   popmassnber,
   tpopmassnErfbeurtWerte,
-} from '../../../shared/fragments.js'
+} from '../../../shared/fragments.ts'
 
 export const query = gql`
   query popmassnberByIdQuery($id: UUID!) {

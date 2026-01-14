@@ -10,7 +10,7 @@ import {
   tpopApberrelevantGrundWerte as tpopApberrelevantGrundWerteFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
   ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
-} from '../../shared/fragments.js'
+} from '../../shared/fragments.ts'
 
 const fragments = {
   tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './ActiveFilters.module.css'
 

@@ -3,9 +3,9 @@ import Linkify from 'react-linkify'
 import { DateTime } from 'luxon'
 
 import { query } from './query.ts'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../shared/Error.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 
 import type { Message } from '../../../../models/apflora/index.js'
 

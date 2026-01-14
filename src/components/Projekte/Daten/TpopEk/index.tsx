@@ -14,11 +14,11 @@ import { useParams } from 'react-router'
 import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.jsx'
 import { Select } from '../../../shared/Select.jsx'
-import { TextField } from '../../../shared/TextField.jsx'
+import { TextField } from '../../../shared/TextField.tsx'
 import { query as tpopQuery } from '../Tpop/query.ts'
 import { EkYear } from './EkYear.tsx'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
@@ -26,7 +26,7 @@ import {
   popStatusWerte,
   tpop,
   tpopApberrelevantGrundWerte,
-} from '../../../shared/fragments.js'
+} from '../../../shared/fragments.ts'
 import { fieldTypes } from '../Tpop/Tpop.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 

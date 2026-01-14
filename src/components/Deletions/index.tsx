@@ -13,7 +13,7 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { undelete } from './undelete/index.tsx'
 import { MobxContext } from '../../mobxContext.js'
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 

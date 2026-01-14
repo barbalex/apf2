@@ -17,7 +17,7 @@ const Filter = lazy(async () => ({
   default: (await import('./Filter/index.tsx')).Filter,
 }))
 import { MobxContext } from '../../mobxContext.js'
-import { Spinner } from '../shared/Spinner.jsx'
+import { Spinner } from '../shared/Spinner.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.tsx'
 import { hideBookmarksAtom } from '../../JotaiStore/index.js'

@@ -8,9 +8,9 @@ import { useParams, useLocation } from 'react-router'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.js'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import { Error } from '../../shared/Error.jsx'
-import { Spinner } from '../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+import { Error } from '../../shared/Error.tsx'
+import { Spinner } from '../../shared/Spinner.tsx'
 
 import type { PopId } from '../../../models/apflora/public/Pop.ts'
 

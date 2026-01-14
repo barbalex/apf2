@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
-import { Spinner } from '../../shared/Spinner.jsx'
-import { Error } from '../../shared/Error.jsx'
+import { Spinner } from '../../shared/Spinner.tsx'
+import { Error } from '../../shared/Error.tsx'
 import { Bookmark } from '../Bookmark/index.tsx'
 
 // pass on TransitionGroup's props as other

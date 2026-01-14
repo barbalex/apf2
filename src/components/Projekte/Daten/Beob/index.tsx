@@ -9,9 +9,9 @@ import { arrayMoveImmutable } from 'array-move'
 
 import { exists } from '../../../../modules/exists.js'
 import { query } from './query.ts'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../shared/Error.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 import { Field as BeobField } from './Field.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 

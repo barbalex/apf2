@@ -4,7 +4,7 @@ import {
   aeTaxonomies,
   beob,
   popStatusWerte,
-} from '../../../../shared/fragments.js'
+} from '../../../../shared/fragments.ts'
 
 export const updateBeobById = gql`
   mutation updateBeobForKarteBeobNichtBeurteilt($id: UUID!, $tpopId: UUID) {

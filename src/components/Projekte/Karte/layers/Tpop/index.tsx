@@ -12,7 +12,7 @@ import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { query } from './query.ts'
 import { updateTpopById } from './updateTpopById.ts'
-import { tpop } from '../../../../shared/fragments.js'
+import { tpop } from '../../../../shared/fragments.ts'
 
 import type {
   TpopId,

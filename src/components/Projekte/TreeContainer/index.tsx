@@ -18,10 +18,10 @@ const DeleteDatasetModal = lazy(async () => ({
   default: (await import('./DeleteDatasetModal/index.tsx')).DatasetDeleteModal,
 }))
 const ErrorBoundary = lazy(async () => ({
-  default: (await import('../../shared/ErrorBoundary.jsx')).ErrorBoundary,
+  default: (await import('../../shared/ErrorBoundary.tsx')).ErrorBoundary,
 }))
 const Spinner = lazy(async () => ({
-  default: (await import('../../shared/Spinner.jsx')).Spinner,
+  default: (await import('../../shared/Spinner.tsx')).Spinner,
 }))
 
 import { MobxContext } from '../../../mobxContext.js'

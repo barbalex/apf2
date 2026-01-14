@@ -206,7 +206,7 @@ const TpopFromBeobPopList = lazy(async () => ({
   default: (await import('./TpopFromBeobPopList.tsx')).TpopFromBeobPopList,
 }))
 const ErrorBoundary = lazy(async () => ({
-  default: (await import('../../shared/ErrorBoundary.jsx')).ErrorBoundary,
+  default: (await import('../../shared/ErrorBoundary.tsx')).ErrorBoundary,
 }))
 
 import { copyBiotopTo } from '../../../modules/copyBiotopTo.js'

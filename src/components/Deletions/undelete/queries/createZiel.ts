@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ziel } from '../../../shared/fragments.js'
+import { ziel } from '../../../shared/fragments.ts'
 
 export default gql`
   mutation createZielForUndelete(

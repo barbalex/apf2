@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { ap, aeTaxonomies } from '../../../shared/fragments.js'
+import { ap, aeTaxonomies } from '../../../shared/fragments.ts'
 
 export const query = gql`
   query apByIdQueryForAp($id: UUID!) {

@@ -17,7 +17,7 @@ import { isEqual } from 'es-toolkit'
 import { useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.jsx'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'

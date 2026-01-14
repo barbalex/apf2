@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { popmassnber } from '../../../../../shared/fragments.js'
+import { popmassnber } from '../../../../../shared/fragments.ts'
 
 export default gql`
   query popmassnberByIdForDelete($id: UUID!) {

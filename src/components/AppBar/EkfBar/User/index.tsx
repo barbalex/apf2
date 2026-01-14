@@ -16,16 +16,19 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { query } from './query.js'
-import { TextField } from '../../../shared/TextField.jsx'
-import { Error } from '../../../shared/Error.jsx'
+import { TextField } from '../../../shared/TextField.tsx'
+import { Error } from '../../../shared/Error.tsx'
 import { updateUserById as updateUserByIdGql } from './updateUserById.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { logout } from '../../../../modules/logout.js'
 import { IdbContext } from '../../../../idbContext.js'
 
-import type { UserId, AdresseId } from '../../../../models/apflora/public/User.ts'
+import type {
+  UserId,
+  AdresseId,
+} from '../../../../models/apflora/public/User.ts'
 
 import styles from './index.module.css'
 

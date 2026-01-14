@@ -6,8 +6,8 @@ import { useParams } from 'react-router'
 
 import { apByIdJahr } from './apByIdJahr.js'
 import { ApberForAp } from '../ApberForAp/index.tsx'
-import { ErrorBoundary } from '../../shared/ErrorBoundary.jsx'
-import { Spinner } from '../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+import { Spinner } from '../../shared/Spinner.tsx'
 import type { ApberId, ApId } from '../../../models/apflora/public/Apber.ts'
 
 interface ApberQueryResult {

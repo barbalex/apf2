@@ -12,7 +12,7 @@ import { CellForEkfrequenzAbweichend } from '../CellForEkfrequenzAbweichend/inde
 import { CellForTpopLink } from '../CellForTpopLink.tsx'
 import { CellForValue } from '../CellForValue.tsx'
 import { CellForYear } from '../CellForYear/index.tsx'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { queryRow } from './queryRow.ts'
 import { tpopRowFromTpop } from './tpopRowFromTpop.ts'
 

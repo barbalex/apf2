@@ -16,8 +16,8 @@ import { standardQkYear } from '../../../../../modules/standardQkYear.js'
 import { query } from './query.ts'
 import { createMessageFunctions } from './createMessageFunctions.ts'
 import { MobxContext } from '../../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../../shared/Error.jsx'
+import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../../shared/Error.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
 import { FormTitle } from '../../../../shared/FormTitle/index.jsx'
 
@@ -45,6 +45,12 @@ interface QkProps {
   qks: QkNode[]
 }
 
+// QK query returns a very large, dynamic structure with many optional fields
+// Using Record for flexibility since the structure varies based on which QK checks are enabled
+interface QkQueryResult {
+  [key: string]: any
+}
+
 export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
   const { apId, projId } = useParams()
   const { search } = useLocation()
@@ -57,7 +63,7 @@ export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
 
-  const { data, error, loading, refetch } = useQuery(query, {
+  const { data, error, loading, refetch } = useQuery<QkQueryResult>(query, {
     // want to explicitly show user re-loading
     fetchPolicy: 'no-cache',
     notifyOnNetworkStatusChange: true,

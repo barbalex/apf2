@@ -1,6 +1,6 @@
 import { List } from '../../../shared/List/index.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
-import { Error } from '../../../shared/Error.jsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
+import { Error } from '../../../shared/Error.tsx'
 import { useRootNavData } from '../../../../modules/useRootNavData.js'
 
 export const Component = () => {

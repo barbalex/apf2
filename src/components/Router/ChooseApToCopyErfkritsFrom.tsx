@@ -14,7 +14,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../mobxContext.js'
-import { ErrorBoundary } from '../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import type { ErfkritId, ApId } from '../../models/apflora/public/Erfkrit.ts'
 

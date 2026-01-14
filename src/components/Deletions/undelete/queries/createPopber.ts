@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { popber } from '../../../shared/fragments.js'
+import { popber } from '../../../shared/fragments.ts'
 
 export default gql`
   mutation createPopberForUndelete(

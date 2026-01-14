@@ -7,7 +7,7 @@ import {
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 // create objects outside render
 const openLowerNodesData = {

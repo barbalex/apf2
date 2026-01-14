@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
-import { Spinner } from '../../../shared/Spinner.jsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { Error } from '../../../shared/Error.tsx'
+import { Spinner } from '../../../shared/Spinner.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.tsx'
 import { query } from './query.ts'

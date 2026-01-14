@@ -13,7 +13,7 @@ import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { CustomTick } from './CustomTick.tsx'
-import { Error } from '../../../../shared/Error.jsx'
+import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApberId } from '../../../../../models/apflora/Apber.js'
 import type { ApErfkritWerteCode } from '../../../../../models/apflora/ApErfkritWerte.js'

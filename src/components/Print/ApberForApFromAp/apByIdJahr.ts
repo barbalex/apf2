@@ -10,7 +10,7 @@ import {
   apErfkritWerte,
   tpopmassnTypWerte,
   zielTypWerte,
-} from '../../shared/fragments.js'
+} from '../../shared/fragments.ts'
 
 export const apByIdJahr = gql`
   query apByIdJahrForApberForApFromAp($apId: UUID!, $jahr: Int!) {

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { tpopkontr } from '../../components/shared/fragments.js'
+import { tpopkontr } from '../../components/shared/fragments.ts'
 
 export const createTpopkontr = gql`
   mutation createTpopkontr(
