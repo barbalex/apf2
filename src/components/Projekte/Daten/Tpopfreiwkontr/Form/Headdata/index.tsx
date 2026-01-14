@@ -5,7 +5,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { Select } from '../../../../../shared/Select.tsx'
-import { MobxContext } from '../../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../../mobxContext.ts'
 import { query } from './query.ts'
 import {
   adresse as adresseFragment,

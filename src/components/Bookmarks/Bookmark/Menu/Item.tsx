@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router'
 import { isEqual } from 'es-toolkit'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 export const Item = observer(({ menu, baseUrl, onClose }) => {
   const { pathname, search } = useLocation()

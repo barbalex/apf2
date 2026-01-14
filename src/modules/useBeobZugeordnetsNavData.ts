@@ -5,9 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
-import { useProjekteTabs } from './useProjekteTabs.js'
+import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobZugeordnetsNavData = (props) => {

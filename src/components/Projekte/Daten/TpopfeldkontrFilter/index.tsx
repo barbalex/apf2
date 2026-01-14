@@ -16,7 +16,7 @@ import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
 import { query } from './query.ts'
 import { queryTpopkontrs } from './queryTpopkontrs.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
@@ -28,7 +28,7 @@ import type {
   AdresseId,
   TpopEntwicklungWerteCode,
   TpopkontrIdbiotuebereinstWerteCode,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from './index.module.css'
 

@@ -15,13 +15,13 @@ import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { standardQkYear } from '../../../../../modules/standardQkYear.ts'
 import { query } from './query.ts'
 import { createMessageFunctions } from './createMessageFunctions.ts'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../../shared/Error.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
-import type { QkName } from '../../../../../models/apflora/index.ts'
+import type { QkName } from '../../../../../models/apflora/index.tsx'
 
 import styles from './index.module.css'
 

@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './CellForTpopLink.module.css'
 import indexStyles from './index.module.css'

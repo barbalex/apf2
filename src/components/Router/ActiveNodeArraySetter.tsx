@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { isEqual } from 'es-toolkit'
 import { useLocation } from 'react-router'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.ts'
 
 export const ActiveNodeArraySetter = observer(() => {

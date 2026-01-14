@@ -3,7 +3,7 @@ import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { fields } from './fields.ts'
 import { CellHeaderFixed } from './CellHeaderFixed/index.tsx'
 import { CellHeaderFixedEkfrequenz } from './CellHeaderFixedEkfrequenz.tsx'

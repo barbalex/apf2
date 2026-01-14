@@ -1,11 +1,11 @@
-import { tpopfreiwkontrFolder } from './tpopfreiwkontrFolder/index.js'
-import { tpopfeldkontrFolder } from './tpopfeldkontrFolder/index.js'
-import { tpop } from './tpop/index.js'
-import { tpopFolder } from './tpopFolder/index.js'
-import { pop } from './pop/index.js'
-import { popFolder } from './popFolder/index.js'
-import { zielFolder } from './zielFolder/index.js'
-import { zieljahrFolder } from './zieljahrFolder/index.js'
+import { tpopfreiwkontrFolder } from './tpopfreiwkontrFolder/index.ts'
+import { tpopfeldkontrFolder } from './tpopfeldkontrFolder/index.ts'
+import { tpop } from './tpop/index.ts'
+import { tpopFolder } from './tpopFolder/index.ts'
+import { pop } from './pop/index.ts'
+import { popFolder } from './popFolder/index.ts'
+import { zielFolder } from './zielFolder/index.ts'
+import { zieljahrFolder } from './zieljahrFolder/index.ts'
 
 export const openLowerNodes = ({
   id,

@@ -10,7 +10,7 @@ import { Danger } from '../../Tpopfreiwkontr/Form/Danger.tsx'
 import { Remarks } from '../../Tpopfreiwkontr/Form/Remarks.tsx'
 import { EkfRemarks } from '../../Tpopfreiwkontr/Form/EkfRemarks.tsx'
 import { Verification } from '../../Tpopfreiwkontr/Form/Verification.tsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 
 import styles from '../../Tpopfreiwkontr/Form/index.module.css'

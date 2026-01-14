@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import { styled } from '@mui/material/styles'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { Options } from './Options.tsx'
 
 import ekfrequenzStyles from '../CellHeaderFixedEkfrequenz.module.css'

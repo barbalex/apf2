@@ -5,7 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 export const Option = observer(({ option, type = 'tpop' }) => {
   const store = useContext(MobxContext)

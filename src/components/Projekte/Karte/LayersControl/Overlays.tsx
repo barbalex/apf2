@@ -24,7 +24,7 @@ import { useParams } from 'react-router'
 import { layerLegends } from './layerLegends.ts'
 
 import { Checkbox } from './shared/Checkbox.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './Overlays.module.css'
 

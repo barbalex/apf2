@@ -11,7 +11,7 @@ import { Kontrolljahre } from './Kontrolljahre.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ekfrequenz } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -23,7 +23,7 @@ import type {
   Ekfrequenz,
   ApId,
   EkAbrechnungstypWerteCode,
-} from '../../../../models/apflora/index.ts'
+} from '../../../../models/apflora/index.tsx'
 
 import styles from './index.module.css'
 

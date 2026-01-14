@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client/react'
 import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { PopId } from '../../../../models/apflora/index.ts'
+import type { PopId } from '../../../../models/apflora/index.tsx'
 
 interface PopQueryResult {
   data?: {

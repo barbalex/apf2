@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './Fields.module.css'

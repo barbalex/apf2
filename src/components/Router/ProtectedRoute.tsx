@@ -5,7 +5,7 @@ import { Outlet } from 'react-router'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 const User = lazy(async () => ({ default: (await import('../User.tsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.tsx')).Messages,

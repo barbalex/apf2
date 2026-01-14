@@ -2,8 +2,8 @@ import { types } from 'mobx-state-tree'
 import { uniq } from 'es-toolkit'
 import { groupBy } from 'es-toolkit'
 
-import { Ap } from './Ap.js'
-import { Hovered, defaultValue as defaultHovered } from './Hovered.js'
+import { Ap } from './Ap.ts'
+import { Hovered, defaultValue as defaultHovered } from './Hovered.ts'
 import { fields } from '../../components/EkPlan/Table/fields.ts'
 
 export const defaultFields = [

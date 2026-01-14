@@ -4,7 +4,7 @@ import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 window.L.drawLocal.draw.toolbar.buttons.polygon =
   'Umriss zeichnen, um räumlich zu filtern'

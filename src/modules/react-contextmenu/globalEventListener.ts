@@ -4,8 +4,8 @@ function _classCallCheck(instance, Constructor) {
   }
 }
 
-import { MENU_SHOW, MENU_HIDE } from './actions.js'
-import { uniqueId, hasOwnProp, canUseDOM } from './helpers.js'
+import { MENU_SHOW, MENU_HIDE } from './actions.ts'
+import { uniqueId, hasOwnProp, canUseDOM } from './helpers.ts'
 
 var GlobalEventListener = function GlobalEventListener() {
   var _this = this

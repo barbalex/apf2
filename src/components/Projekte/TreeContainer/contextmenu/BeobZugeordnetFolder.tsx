@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,

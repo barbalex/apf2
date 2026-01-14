@@ -82,7 +82,7 @@ function _toConsumableArray(arr) {
 
 import { Component } from 'react'
 
-import listener from './globalEventListener.js'
+import listener from './globalEventListener.ts'
 
 // collect ContextMenuTrigger's expected props to NOT pass them on as part of the context
 var ignoredTriggerProps = [

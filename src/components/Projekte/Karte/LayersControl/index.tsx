@@ -2,10 +2,10 @@ import { useContext, useState, useEffect, useRef } from 'react'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
-import { Overlays } from './Overlays.jsx'
-import { ApfloraLayers } from './ApfloraLayers/index.jsx'
-import { BaseLayers } from './BaseLayers/index.jsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { Overlays } from './Overlays.tsx'
+import { ApfloraLayers } from './ApfloraLayers/index.tsx'
+import { BaseLayers } from './BaseLayers/index.tsx'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './index.module.css'
 

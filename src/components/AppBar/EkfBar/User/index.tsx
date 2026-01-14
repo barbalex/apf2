@@ -18,12 +18,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { query } from './query.ts'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { updateUserById as updateUserByIdGql } from './updateUserById.js'
+import { updateUserById as updateUserByIdGql } from './updateUserById.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { logout } from '../../../../modules/logout.ts'
-import { IdbContext } from '../../../../idbContext.js'
+import { IdbContext } from '../../../../idbContext.ts'
 
 import type {
   UserId,

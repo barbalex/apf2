@@ -1,22 +1,22 @@
 import { types } from 'mobx-state-tree'
 
-import { ApfloraLayer } from './ApfloraLayer.js'
-import { Copying, defaultValue as defaultCopying } from './Copying.js'
+import { ApfloraLayer } from './ApfloraLayer.ts'
+import { Copying, defaultValue as defaultCopying } from './Copying.ts'
 import {
   CopyingBiotop,
   defaultValue as defaultCopyingBiotop,
-} from './CopyingBiotop.js'
-import { Map, defaultValue as defaultMap } from './Map.js'
-import { Moving, defaultValue as defaultMoving } from './Moving.js'
+} from './CopyingBiotop.ts'
+import { Map, defaultValue as defaultMap } from './Map.ts'
+import { Moving, defaultValue as defaultMoving } from './Moving.ts'
 import {
   MapMouseCoordinates,
   defaultValue as defaultMapMouseCoordinates,
-} from './MapMouseCoordinates.js'
+} from './MapMouseCoordinates.ts'
 import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayers.ts'
 import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
-import { User, defaultValue as defaultUser } from './User.js'
-import { Tree, defaultValue as defaultTree } from './Tree/index.js'
-import { EkPlan, defaultValue as defaultEkPlan } from './EkPlan/index.js'
+import { User, defaultValue as defaultUser } from './User.ts'
+import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
+import { EkPlan, defaultValue as defaultEkPlan } from './EkPlan/index.ts'
 
 const defaultSortedBeobFields = [
   'taxon',

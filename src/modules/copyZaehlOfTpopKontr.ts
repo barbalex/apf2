@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-import { copyTo } from './copyTo/index.js'
+import { copyTo } from './copyTo/index.ts'
 
 export const copyZaehlOfTpopKontr = async ({
   tpopkontrIdFrom,

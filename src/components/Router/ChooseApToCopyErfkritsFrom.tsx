@@ -13,7 +13,7 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { userIsReadOnly } from '../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import type { ErfkritId, ApId } from '../../models/apflora/public/Erfkrit.ts'

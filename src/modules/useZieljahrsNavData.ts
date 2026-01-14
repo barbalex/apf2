@@ -6,7 +6,7 @@ import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { countBy } from 'es-toolkit'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 
 const getZieljahrsCount = (ziels) => {
   const jahrs = countBy(ziels, (e) => e.jahr)

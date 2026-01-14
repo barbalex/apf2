@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../modules/tables.ts'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './LabelFilter.module.css'
 

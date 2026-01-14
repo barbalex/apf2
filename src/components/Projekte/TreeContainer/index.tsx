@@ -24,7 +24,7 @@ const Spinner = lazy(async () => ({
   default: (await import('../../shared/Spinner.tsx')).Spinner,
 }))
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import styles from './index.module.css'
 
 export const TreeContainer = observer(() => {

@@ -10,7 +10,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { upperFirst } from 'es-toolkit'
 
-import { ErrorBoundary } from '../../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { TextField } from '../../TextField.tsx'
 import {
   apFile as apFileFragment,
@@ -19,10 +19,10 @@ import {
   tpopFile as tpopFileFragment,
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
-} from '../../fragments.js'
-import { isImageFile } from '../isImageFile.js'
+} from '../../fragments.ts'
+import { isImageFile } from '../isImageFile.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import {
   container,

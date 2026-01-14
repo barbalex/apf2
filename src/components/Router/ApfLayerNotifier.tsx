@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 
 // TODO: only show messages if map is visible

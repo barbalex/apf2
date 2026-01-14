@@ -25,11 +25,11 @@ import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
 import { useAtom } from 'jotai'
 
-import type { TpopId, PopId } from '../../../../generated/apflora/models.js'
+import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'

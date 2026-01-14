@@ -5,7 +5,7 @@ import 'leaflet-easyprint'
 import { MdGetApp } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './PngControl.module.css'
 

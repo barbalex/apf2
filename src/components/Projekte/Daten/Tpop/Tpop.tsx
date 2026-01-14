@@ -14,7 +14,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.tsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
@@ -36,7 +36,7 @@ import type {
   TpopApberrelevantGrundWerteCode,
   EkfrequenzId,
   AdresseId,
-} from '../../../../models/apflora/index.ts'
+} from '../../../../models/apflora/index.tsx'
 
 import styles from './Tpop.module.css'
 

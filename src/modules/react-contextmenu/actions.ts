@@ -1,6 +1,6 @@
 import assign from 'object-assign'
 
-import { store } from './helpers.js'
+import { store } from './helpers.ts'
 
 export var MENU_SHOW = 'REACT_CONTEXTMENU_SHOW'
 export var MENU_HIDE = 'REACT_CONTEXTMENU_HIDE'

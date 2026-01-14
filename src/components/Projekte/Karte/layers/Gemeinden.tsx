@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 interface GemeindeNode {
   id: string

@@ -4,7 +4,7 @@ import fileDownload from 'js-file-download'
 import { format } from 'date-fns/format'
 import { groupBy } from 'es-toolkit'
 
-import { removeKmlNogoChar as clean } from './removeKmlNogoChar.js'
+import { removeKmlNogoChar as clean } from './removeKmlNogoChar.ts'
 
 // this version is ogc-compatible and can be used for https://map.geo.admin.ch
 export const exportKml_ogc = ({ fileName, data }) => {

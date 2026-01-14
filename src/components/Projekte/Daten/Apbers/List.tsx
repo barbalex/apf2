@@ -2,7 +2,7 @@ import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { useApbersNavData } from '../../../../modules/useApbersNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'

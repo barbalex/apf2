@@ -2,7 +2,7 @@ import { useState } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
 
-import { ErrorBoundary } from './ErrorBoundary.jsx'
+import { ErrorBoundary } from './ErrorBoundary.tsx'
 
 import styles from './StringToCopy.module.css'
 

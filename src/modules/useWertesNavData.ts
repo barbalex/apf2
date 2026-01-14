@@ -4,7 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useWertesNavData = () => {

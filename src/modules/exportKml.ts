@@ -2,7 +2,7 @@ import fileDownload from 'js-file-download'
 import { format } from 'date-fns/format'
 import { groupBy } from 'es-toolkit'
 
-import { removeKmlNogoChar } from './removeKmlNogoChar.js'
+import { removeKmlNogoChar } from './removeKmlNogoChar.ts'
 
 export const exportKml = ({ fileName, data }) => {
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`

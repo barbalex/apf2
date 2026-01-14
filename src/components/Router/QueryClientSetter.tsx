@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 
 export const QueryClientSetter = observer(() => {
   const tsQueryClient = useQueryClient()

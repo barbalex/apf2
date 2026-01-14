@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { tpopIcon } from './tpopIcon.ts'
 import { tpopIconHighlighted } from './tpopIconHighlighted.ts'
 import { u as uIcon } from './statusGroup/u.ts'

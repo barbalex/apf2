@@ -15,10 +15,10 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
-import { ZielId, ApId } from '../../../../models/apflora/index.ts'
+import { ZielId, ApId } from '../../../../models/apflora/index.tsx'
 
 interface CreateZielResult {
   createZiel: {

@@ -15,7 +15,7 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'

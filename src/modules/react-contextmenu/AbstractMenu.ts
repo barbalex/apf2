@@ -40,7 +40,7 @@ function _inherits(subClass, superClass) {
 
 import { Component } from 'react'
 
-import MenuItem from './MenuItem.js'
+import MenuItem from './MenuItem.ts'
 
 var AbstractMenu = (function (_Component) {
   _inherits(AbstractMenu, _Component)

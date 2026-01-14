@@ -16,7 +16,7 @@ import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyBiotopTo } from '../../../../modules/copyBiotopTo.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
@@ -25,7 +25,7 @@ import type {
   TpopkontrId,
   TpopId,
   TpopkontrzaehlId,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

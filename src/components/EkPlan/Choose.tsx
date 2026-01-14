@@ -10,7 +10,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { observer } from 'mobx-react-lite'
 
 import { Fields } from './Fields.tsx'
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { allFields } from '../../store/EkPlan/index.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 

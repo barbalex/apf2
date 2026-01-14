@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { NodeWithList } from './NodeWithList.tsx'
 import { RootNode } from './RootNode.tsx'
 import { useProjektNavData } from '../../../../modules/useProjektNavData.ts'

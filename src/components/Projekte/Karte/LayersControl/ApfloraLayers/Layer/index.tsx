@@ -18,10 +18,10 @@ import { useParams } from 'react-router'
 import { Checkbox } from '../../shared/Checkbox.tsx'
 import { Error } from '../../../../../shared/Error.tsx'
 import { getBounds } from '../../../../../../modules/getBounds.ts'
-import { MobxContext } from '../../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../../mobxContext.ts'
 import { query } from './query.ts'
-import { PopIcon } from './PopIcon.jsx'
-import { TpopIcon } from './TpopIcon.jsx'
+import { PopIcon } from './PopIcon.tsx'
+import { TpopIcon } from './TpopIcon.tsx'
 
 interface NodeWithCoords {
   id: string

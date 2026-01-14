@@ -9,11 +9,11 @@ import { observer } from 'mobx-react-lite'
 
 import { query } from './query.ts'
 import { createUsermessage } from './createUsermessage.ts'
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { Error } from '../shared/Error.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { MessagesList } from './Messages/index.tsx'
-import { a } from '../Projekte/Karte/layers/Pop/statusGroup/a.js'
+import { a } from '../Projekte/Karte/layers/Pop/statusGroup/a.ts'
 
 import type { MessageId } from '../../models/apflora/public/Message.ts'
 import type { UserId } from '../../models/apflora/public/User.ts'

@@ -1,10 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../../mobxContext.js'
-import { Layer } from './Layer/index.jsx'
-import { ShowForMultipleAps } from './ShowForMultipleAps.jsx'
-import { KtZhFilter } from './KtZhFilter/index.jsx'
+import { MobxContext } from '../../../../../mobxContext.ts'
+import { Layer } from './Layer/index.tsx'
+import { ShowForMultipleAps } from './ShowForMultipleAps.tsx'
+import { KtZhFilter } from './KtZhFilter/index.tsx'
 
 import styles from './index.module.css'
 

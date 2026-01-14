@@ -11,7 +11,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryLists } from './queryLists.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
@@ -26,7 +26,7 @@ import type {
   Ekzaehleinheit,
   ApId,
   TpopkontrzaehlEinheitWerteId,
-} from '../../../../models/apflora/index.ts'
+} from '../../../../models/apflora/index.tsx'
 
 import styles from './index.module.css'
 

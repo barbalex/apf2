@@ -18,14 +18,14 @@ import { useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
-import type { PopId, ApId, Pop } from '../../../../models/apflora/index.ts'
+import type { PopId, ApId, Pop } from '../../../../models/apflora/index.tsx'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

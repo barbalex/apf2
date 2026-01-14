@@ -8,7 +8,7 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'

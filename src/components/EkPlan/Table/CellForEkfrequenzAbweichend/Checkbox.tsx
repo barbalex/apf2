@@ -5,7 +5,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { tpop } from '../../../shared/fragments.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './Checkbox.module.css'
 

@@ -11,9 +11,9 @@ import { observer } from 'mobx-react-lite'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
-import type { TpopberId, TpopId } from '../../../../generated/apflora/models.js'
+import type { TpopberId, TpopId } from '../../../../generated/apflora/models.ts'
 
 interface CreateTpopberResult {
   createTpopber: {

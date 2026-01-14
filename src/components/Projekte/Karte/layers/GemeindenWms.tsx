@@ -12,9 +12,9 @@ import { useDebouncedCallback } from 'use-debounce'
 import { observer } from 'mobx-react-lite'
 
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.ts'
-import { Popup } from './Popup.jsx'
-import { onTileError } from './onTileError.js'
-import { MobxContext } from '../../../../mobxContext.js'
+import { Popup } from './Popup.tsx'
+import { onTileError } from './onTileError.ts'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 const StyledPopupContent = styled.div`
   white-space: pre;

@@ -1,6 +1,6 @@
 import MarkdownIt from 'markdown-it'
 
-import { Label } from '../Label.jsx'
+import { Label } from '../Label.tsx'
 import styles from './Presenter.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })

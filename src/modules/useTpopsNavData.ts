@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 
 import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.tsx'
 import { TpopIcon100Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100Highlighted.tsx'
@@ -33,7 +33,7 @@ import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
-import { useProjekteTabs } from './useProjekteTabs.js'
+import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const tpopIcons = {

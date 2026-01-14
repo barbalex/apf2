@@ -4,7 +4,7 @@ import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
 import { initial as tpopfreiwkontr } from '../../../../store/Tree/DataFilter/tpopfreiwkontr.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './Tabs.module.css'
 

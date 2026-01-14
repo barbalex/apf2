@@ -19,14 +19,14 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
 import type {
   TpopkontrId,
   TpopId,
   TpopkontrzaehlId,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from './Menu.module.css'
 

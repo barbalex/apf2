@@ -4,7 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.tsx'
 

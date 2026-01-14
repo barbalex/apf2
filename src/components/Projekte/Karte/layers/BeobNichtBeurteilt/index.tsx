@@ -6,8 +6,8 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
 
-import { Marker } from './Marker.jsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { Marker } from './Marker.tsx'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'

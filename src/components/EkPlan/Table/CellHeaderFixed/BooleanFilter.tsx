@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import MenuItem from '@mui/material/MenuItem'
 import { upperFirst } from 'es-toolkit'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450

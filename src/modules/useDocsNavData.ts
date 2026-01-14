@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { reaction } from 'mobx'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 import { menus } from '../components/Docs/menus.ts'
 
 export const useDocsNavData = () => {

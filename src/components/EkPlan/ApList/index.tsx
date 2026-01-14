@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 
 import { Ap } from './Ap/index.tsx'
 import { ChooseAp } from './ChooseAp/index.tsx'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './index.module.css'
 

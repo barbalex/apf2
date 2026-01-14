@@ -8,9 +8,9 @@ import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 import { motion } from 'framer-motion'
 
-import { Item } from './Item.jsx'
-import { Title } from './Title/index.jsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { Item } from './Item.tsx'
+import { Title } from './Title/index.tsx'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { usePrevious } from '../../../../modules/usePrevious.ts'
 

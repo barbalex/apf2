@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { Form } from './Form/index.tsx'
 import { Tabs } from './Tabs.tsx'
 

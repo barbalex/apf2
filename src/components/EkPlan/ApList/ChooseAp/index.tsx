@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { queryApsToChoose } from './queryApsToChoose.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'

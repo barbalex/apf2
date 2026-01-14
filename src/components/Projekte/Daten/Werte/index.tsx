@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'

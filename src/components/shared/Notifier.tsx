@@ -2,7 +2,7 @@ import { useEffect, useContext, useState } from 'react'
 import { useSnackbar } from 'notistack'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 
 export const Notifier = observer(() => {
   const { enqueueSnackbar } = useSnackbar()

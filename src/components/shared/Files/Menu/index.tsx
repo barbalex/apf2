@@ -1,10 +1,10 @@
 import { useLocation, useParams } from 'react-router'
 
-import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-import { MenuBar } from '../../MenuBar/index.jsx'
-import { Title } from './Title.jsx'
-import { ListMenus } from './ListMenus.jsx'
-import { PreviewMenus } from './PreviewMenus.jsx'
+import { ErrorBoundary } from '../../ErrorBoundary.tsx'
+import { MenuBar } from '../../MenuBar/index.tsx'
+import { Title } from './Title.tsx'
+import { ListMenus } from './ListMenus.tsx'
+import { PreviewMenus } from './PreviewMenus.tsx'
 
 export const Menu = ({ parent, files, refetch, containerRef }) => {
   const { fileId } = useParams()

@@ -15,7 +15,7 @@ import { upperFirst } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 

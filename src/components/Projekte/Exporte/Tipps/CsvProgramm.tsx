@@ -7,7 +7,7 @@ import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 
-import { CsvInExcelOeffnen } from './CsvInExcelOeffnen.jsx'
+import { CsvInExcelOeffnen } from './CsvInExcelOeffnen.tsx'
 import tippsStyles from './index.module.css'
 import styles from '../index.module.css'
 

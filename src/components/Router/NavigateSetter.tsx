@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 
 export const NavigateSetter = observer(() => {
   const navigate = useNavigate()

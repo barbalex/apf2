@@ -2,19 +2,19 @@
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
  */
-import { tables } from '../tables.js'
-import { copyTpopsOfPop } from '../copyTpopsOfPop.js'
-import { copyZaehlOfTpopKontr } from '../copyZaehlOfTpopKontr.js'
-import { queryTpopKontrById } from './queryTpopKontrById.js'
-import { queryTpopkontrzaehlById } from './queryTpopkontrzaehlById.js'
-import { queryTpopmassnById } from './queryTpopmassnById.js'
-import { queryTpopById } from './queryTpopById.js'
-import { queryPopById } from './queryPopById.js'
-import { createTpopkontr } from './createTpopkontr.js'
-import { createTpopkontrzaehl } from './createTpopkontrzaehl.js'
-import { createTpopmassn } from './createTpopmassn.js'
-import { createTpop } from './createTpop.js'
-import { createPop } from './createPop.js'
+import { tables } from '../tables.ts'
+import { copyTpopsOfPop } from '../copyTpopsOfPop.ts'
+import { copyZaehlOfTpopKontr } from '../copyZaehlOfTpopKontr.ts'
+import { queryTpopKontrById } from './queryTpopKontrById.ts'
+import { queryTpopkontrzaehlById } from './queryTpopkontrzaehlById.ts'
+import { queryTpopmassnById } from './queryTpopmassnById.ts'
+import { queryTpopById } from './queryTpopById.ts'
+import { queryPopById } from './queryPopById.ts'
+import { createTpopkontr } from './createTpopkontr.ts'
+import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
+import { createTpopmassn } from './createTpopmassn.ts'
+import { createTpop } from './createTpop.ts'
+import { createPop } from './createPop.ts'
 
 // copyTpopsOfPop can pass table and id separately
 export const copyTo = async ({

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { CellForYearTitle } from '../CellForYearTitle.tsx'
 import { CellForEkfrequenz } from '../CellForEkfrequenz/index.tsx'
 import { CellForEkfrequenzStartjahr } from '../CellForEkfrequenzStartjahr/index.tsx'

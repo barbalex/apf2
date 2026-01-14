@@ -4,7 +4,7 @@ import MaterialTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
 import { initial as ap } from '../../../../store/Tree/DataFilter/ap'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './Tabs.module.css'
 

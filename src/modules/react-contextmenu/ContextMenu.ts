@@ -71,11 +71,11 @@ import React from 'react'
 import cx from 'classnames'
 import assign from 'object-assign'
 
-import listener from './globalEventListener.js'
-import AbstractMenu from './AbstractMenu.js'
-import SubMenu from './SubMenu.js'
-import { hideMenu } from './actions.js'
-import { cssClasses, callIfExists, store } from './helpers.js'
+import listener from './globalEventListener.ts'
+import AbstractMenu from './AbstractMenu.ts'
+import SubMenu from './SubMenu.ts'
+import { hideMenu } from './actions.ts'
+import { cssClasses, callIfExists, store } from './helpers.ts'
 
 var ContextMenu = (function (_AbstractMenu) {
   _inherits(ContextMenu, _AbstractMenu)

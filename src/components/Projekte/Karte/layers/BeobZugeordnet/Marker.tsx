@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { beobIconString } from './beobIconString.ts'
 import { beobIconAbsenzString } from './beobIconAbsenzString.ts'
 import { beobIconHighlightedString } from './beobIconHighlightedString.ts'
@@ -17,7 +17,7 @@ import { getNearestTpop } from '../../../../../modules/getNearestTpop.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { updateBeobById } from './updateBeobById.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
-import { Data } from '../BeobData/index.jsx'
+import { Data } from '../BeobData/index.tsx'
 
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 

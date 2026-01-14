@@ -1,5 +1,5 @@
-import { queryTpop } from './queryTpop.js'
-import { updatePopById } from './updatePopById.js'
+import { queryTpop } from './queryTpop.ts'
+import { updatePopById } from './updatePopById.ts'
 
 export const copyTpopKoordToPop = async ({ id, store, apolloClient }) => {
   // fetch tpop

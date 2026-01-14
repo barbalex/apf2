@@ -5,7 +5,7 @@ import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 
 import { MenuItem } from './MenuItem.tsx'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { menus } from '../menus.ts'
 
 import styles from './MenuItems.module.css'

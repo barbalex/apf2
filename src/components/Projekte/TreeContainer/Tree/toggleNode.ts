@@ -1,7 +1,7 @@
 import { getSnapshot } from 'mobx-state-tree'
 
-import { isNodeOpen } from '../isNodeOpen.js'
-import { openNode } from '../openNode.js'
+import { isNodeOpen } from '../isNodeOpen.ts'
+import { openNode } from '../openNode.ts'
 
 export const toggleNode = ({
   node,

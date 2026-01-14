@@ -4,7 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../../../shared/TextField.tsx'
-import { MobxContext } from '../../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../../mobxContext.ts'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
 

@@ -1,9 +1,9 @@
-import { initial as ap } from './ap.js'
-import { initial as pop } from './pop.js'
-import { initial as tpop } from './tpop.js'
-import { initial as tpopmassn } from './tpopmassn.js'
-import { initial as tpopfeldkontr } from './tpopfeldkontr.js'
-import { initial as tpopfreiwkontr } from './tpopfreiwkontr.js'
+import { initial as ap } from './ap.ts'
+import { initial as pop } from './pop.ts'
+import { initial as tpop } from './tpop.ts'
+import { initial as tpopmassn } from './tpopmassn.ts'
+import { initial as tpopfeldkontr } from './tpopfeldkontr.ts'
+import { initial as tpopfreiwkontr } from './tpopfreiwkontr.ts'
 
 export const initialDataFilterValues = {
   ap: [ap],

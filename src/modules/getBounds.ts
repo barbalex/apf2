@@ -1,4 +1,4 @@
-import { bufferBoundsTo50m } from './bufferBoundsTo50m.js'
+import { bufferBoundsTo50m } from './bufferBoundsTo50m.ts'
 
 export const getBounds = (os) => {
   if (os.length === 0) return []

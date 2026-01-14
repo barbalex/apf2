@@ -218,7 +218,7 @@ import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.ts
 import { openLowerNodes } from './openLowerNodes/index.ts'
 import { closeLowerNodes } from './closeLowerNodes.ts'
 import { insertDataset } from './insertDataset.ts'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { useProjekteTabs } from '../../../modules/useProjekteTabs.ts'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.ts'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.ts'

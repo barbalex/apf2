@@ -2,7 +2,7 @@ import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,

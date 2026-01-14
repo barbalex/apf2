@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { Polyline } from './Polyline.jsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { Polyline } from './Polyline.tsx'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'

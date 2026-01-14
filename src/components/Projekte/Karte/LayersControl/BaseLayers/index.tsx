@@ -1,4 +1,4 @@
-import { BaseLayer } from './BaseLayer.jsx'
+import { BaseLayer } from './BaseLayer.tsx'
 import styles from '../ApfloraLayers/index.module.css'
 
 export const baseLayers = [

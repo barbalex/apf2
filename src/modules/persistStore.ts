@@ -3,8 +3,8 @@ import localForage from 'localforage'
 import { getSnapshot } from 'mobx-state-tree'
 import { persist } from 'mst-persist'
 
-import { isObject } from './isObject.js'
-import { setUserFromIdb } from './setUserFromIdb.js'
+import { isObject } from './isObject.ts'
+import { setUserFromIdb } from './setUserFromIdb.ts'
 
 const blacklist = [
   'user',

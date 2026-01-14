@@ -13,7 +13,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Field as BeobField } from './Field.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type BeobType from '../../../../models/apflora/Beob.ts'
 

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { queryAll } from './queryAll.ts'
 import { queryForExport } from './queryForExport.ts'
 import { CellForYearMenu } from './CellForYearMenu/index.tsx'

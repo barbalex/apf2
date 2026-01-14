@@ -12,7 +12,7 @@ import type {
   ApId,
   AeTaxonomiesId,
   PopStatusWerteCode,
-} from '../../../../models/apflora/index.ts'
+} from '../../../../models/apflora/index.tsx'
 
 import styles from './Historien.module.css'
 

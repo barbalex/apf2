@@ -4,10 +4,10 @@ import 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 import { debounce } from 'es-toolkit'
 
-import { ShowCoordinates } from './ShowCoordinates.jsx'
-import { PanToCoordinates } from './PanToCoordinates.jsx'
+import { ShowCoordinates } from './ShowCoordinates.tsx'
+import { PanToCoordinates } from './PanToCoordinates.tsx'
 import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './index.module.css'
 

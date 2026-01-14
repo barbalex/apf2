@@ -8,8 +8,8 @@ import { useParams } from 'react-router'
 
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
-import { Marker } from './Marker.jsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { Marker } from './Marker.tsx'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 import { updateTpopById } from './updateTpopById.ts'
 import { tpop } from '../../../../shared/fragments.ts'

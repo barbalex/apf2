@@ -5,7 +5,7 @@ import { sortBy } from 'es-toolkit'
 import type {
   TpopkontrId,
   EkplanId,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from './EkYear.module.css'
 

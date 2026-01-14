@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 
 export const LastTouchedNodeSetter = observer(() => {
   const store = useContext(MobxContext)

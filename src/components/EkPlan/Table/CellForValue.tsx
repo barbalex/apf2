@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './CellForValue.module.css'
 import indexStyles from './index.module.css'

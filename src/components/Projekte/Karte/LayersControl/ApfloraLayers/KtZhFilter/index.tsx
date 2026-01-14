@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../../mobxContext.ts'
 import styles from './index.module.css'
 
 export const KtZhFilter = observer(() => {

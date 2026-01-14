@@ -11,7 +11,7 @@ import { Gezaehlt } from './Gezaehlt.tsx'
 import { Geschaetzt } from './Geschaetzt.tsx'
 import { query } from './query.ts'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
-import { MobxContext } from '../../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../../mobxContext.ts'
 import { Error } from '../../../../../shared/Error.tsx'
 import { Spinner } from '../../../../../shared/Spinner.tsx'
 

@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import 'leaflet'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import styles from './ShowCoordinates.module.css'
 
 export const ShowCoordinates = observer(({ setControlType }) => {

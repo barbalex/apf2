@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import { observer } from 'mobx-react-lite'
 
-import { InfoWithPopover } from './InfoWithPopover.jsx'
+import { InfoWithPopover } from './InfoWithPopover.tsx'
 import styles from './TextFieldWithInfo.module.css'
 
 export const TextFieldWithInfo = observer(

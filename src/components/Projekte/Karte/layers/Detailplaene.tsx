@@ -5,7 +5,7 @@ import { gql } from '@apollo/client'
 
 import { useQuery } from '@apollo/client/react'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 interface DetailplanNode {
   id: string

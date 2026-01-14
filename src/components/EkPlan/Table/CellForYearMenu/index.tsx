@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { queryTpop } from './queryTpop.ts'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.ts'
 import { mutationCreateEkplan } from './mutationCreateEkplan.ts'

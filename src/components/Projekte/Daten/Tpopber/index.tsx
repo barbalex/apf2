@@ -8,7 +8,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
@@ -20,7 +20,7 @@ import type {
   TpopberId,
   TpopId,
   TpopEntwicklungWerteCode,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from './index.module.css'
 

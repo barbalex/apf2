@@ -7,7 +7,7 @@ import { Form, useParams } from 'react-router'
 import { TextField } from '../../../shared/TextField.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
@@ -15,7 +15,7 @@ import { idealbiotop } from '../../../shared/fragments.ts'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { Idealbiotop } from '../../../../models/apflora/index.ts'
+import type { Idealbiotop } from '../../../../models/apflora/index.tsx'
 
 import styles from './Idealbiotop.module.css'
 

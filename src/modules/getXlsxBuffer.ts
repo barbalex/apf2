@@ -3,8 +3,8 @@
  */
 import { Workbook } from 'exceljs'
 
-//import { getDataArrayFromExportObjectsWorker } from './getDataArrayFromExportObjectsWorker.js'
-import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.js'
+//import { getDataArrayFromExportObjectsWorker } from './getDataArrayFromExportObjectsWorker.ts'
+import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.ts'
 
 export const getXlsxBuffer = async ({ data, store }) => {
   /**

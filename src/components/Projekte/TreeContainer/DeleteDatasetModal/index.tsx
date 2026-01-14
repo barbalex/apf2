@@ -8,7 +8,7 @@ import { useLocation } from 'react-router'
 
 import { tables } from '../../../../modules/tables.ts'
 import { deleteModule } from './delete/index.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'

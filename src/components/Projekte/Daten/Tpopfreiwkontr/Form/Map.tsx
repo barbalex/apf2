@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { RadioButton } from '../../../../shared/RadioButton.tsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 
 import styles from './Map.module.css'
 

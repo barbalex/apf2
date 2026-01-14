@@ -4,7 +4,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
 import { toggleNodeSymbol } from '../../Projekte/TreeContainer/Tree/toggleNodeSymbol.ts'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './Label.module.css'
 

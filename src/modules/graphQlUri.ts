@@ -1,4 +1,4 @@
-import { isElectron } from './isElectron.js'
+import { isElectron } from './isElectron.ts'
 
 export const graphQlUri = () => {
   const isElectronApp = isElectron()

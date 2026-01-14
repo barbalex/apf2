@@ -4,6 +4,7 @@ import {
   defaultDataIdFromObject,
   ApolloLink,
   CombinedGraphQLErrors,
+  type NormalizedCacheObject,
 } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { setContext } from '@apollo/client/link/context'
@@ -11,14 +12,26 @@ import { ErrorLink } from '@apollo/client/link/error'
 import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-typename'
 import { jwtDecode } from 'jwt-decode'
 import { uniqBy } from 'es-toolkit'
+import type { Instance } from 'mobx-state-tree'
 
 import { graphQlUri } from './modules/graphQlUri.ts'
 import { existsPermissionError } from './modules/existsPermissionError.ts'
 import { existsTooLargeError } from './modules/existsTooLargeError.ts'
+import type { MobxStore } from './store/index.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 
-export const buildApolloClient = ({ store }) => {
+interface BuildApolloClientParams {
+  store: Instance<typeof MobxStore>
+}
+
+interface JwtPayload {
+  exp: number
+}
+
+export const buildApolloClient = ({
+  store,
+}: BuildApolloClientParams): ApolloClient<NormalizedCacheObject> => {
   const { enqueNotification } = store
 
   // TODO: use new functionality
@@ -26,7 +39,7 @@ export const buildApolloClient = ({ store }) => {
   const authLink = setContext((_, { headers }) => {
     const { token } = store.user
     if (token) {
-      const tokenDecoded = jwtDecode(token)
+      const tokenDecoded = jwtDecode<JwtPayload>(token)
       // for unknown reason, date.now returns three more after comma
       // numbers than the exp date contains
       const tokenIsValid = tokenDecoded.exp > Date.now() / 1000
@@ -184,12 +197,12 @@ export const buildApolloClient = ({ store }) => {
           'VTpopPopberundmassnber',
           'VTpopWebgisbun',
           'TpopOutsideZhForAp',
-        ].includes(object.__typename)
+        ].includes(object.__typename ?? '')
       ) {
         return defaultDataIdFromObject(object)
       }
-      if (object.id && isNaN(object.id)) {
-        return object.id
+      if (object.id && isNaN(Number(object.id))) {
+        return String(object.id)
       }
       return defaultDataIdFromObject(object)
     },

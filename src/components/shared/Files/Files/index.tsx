@@ -1,7 +1,7 @@
 import { useOutletContext } from 'react-router'
 
-import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-import { File } from './File.jsx'
+import { ErrorBoundary } from '../../ErrorBoundary.tsx'
+import { File } from './File.tsx'
 
 import styles from './index.module.css'
 

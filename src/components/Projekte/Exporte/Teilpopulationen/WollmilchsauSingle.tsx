@@ -7,7 +7,7 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'

@@ -6,7 +6,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 
-import { InfoWithPopover } from './InfoWithPopover.jsx'
+import { InfoWithPopover } from './InfoWithPopover.tsx'
 import styles from './CheckboxWithInfo.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization

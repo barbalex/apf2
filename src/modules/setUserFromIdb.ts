@@ -1,4 +1,4 @@
-import { getUserFromIdb } from './getUserFromIdb.js'
+import { getUserFromIdb } from './getUserFromIdb.ts'
 
 export const setUserFromIdb = async ({ idb, store }) => {
   const user = await getUserFromIdb({ idb })

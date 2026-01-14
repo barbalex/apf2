@@ -12,7 +12,7 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../../shared/Error.tsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
-import type { QkName } from '../../../../../models/apflora/index.ts'
+import type { QkName } from '../../../../../models/apflora/index.tsx'
 
 import styles from './index.module.css'
 

@@ -14,7 +14,7 @@ import type {
   TpopApberrelevantGrundWerteCode,
   EkfrequenzId,
   AdresseId,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from './Historien.module.css'
 

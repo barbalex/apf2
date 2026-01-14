@@ -1,6 +1,6 @@
 import { Tooltip } from '@mui/material'
 
-import { ErrorBoundary } from '../../ErrorBoundary.jsx'
+import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import styles from './Title.module.css'
 
 const FileNameForTooltip = ({ file, props, ref }) => (

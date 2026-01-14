@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
 
-import { IdbContext } from '../../idbContext.js'
-import { MobxContext as storeContext } from '../../mobxContext.js'
+import { IdbContext } from '../../idbContext.ts'
+import { MobxContext as storeContext } from '../../mobxContext.ts'
 import { logout } from '../../modules/logout.ts'
 
 import styles from './RouterErrorBoundary.module.css'

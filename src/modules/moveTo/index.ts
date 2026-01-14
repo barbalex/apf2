@@ -2,11 +2,11 @@
  * moves a dataset to a different parent
  * used when moving for instance tpop to other pop in tree
  */
-import { tables } from '../tables.js'
-import { updateTpopkontrById } from './updateTpopkontrById.js'
-import { updateTpopmassnById } from './updateTpopmassnById.js'
-import { updateTpopById } from './updateTpopById.js'
-import { updatePopById } from './updatePopById.js'
+import { tables } from '../tables.ts'
+import { updateTpopkontrById } from './updateTpopkontrById.ts'
+import { updateTpopmassnById } from './updateTpopmassnById.ts'
+import { updateTpopById } from './updateTpopById.ts'
+import { updatePopById } from './updatePopById.ts'
 
 export const moveTo = async ({ id: newParentId, store, apolloClient }) => {
   const { enqueNotification, moving, setMoving } = store

@@ -7,7 +7,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './CellHeaderYear.module.css'
 

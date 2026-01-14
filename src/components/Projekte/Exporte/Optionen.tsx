@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import optionenStyles from './Optionen.module.css'
 import styles from './index.module.css'

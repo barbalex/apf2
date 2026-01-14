@@ -1,4 +1,4 @@
-import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBeob.js'
+import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBeob.ts'
 
 export const showCoordOfBeobOnMapGeoAdminCh = async ({
   id,

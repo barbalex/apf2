@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { sum } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import styles from './EkIcon.module.css'
 
 export const EkIcon = observer(({ planned, eks, einheits }) => {

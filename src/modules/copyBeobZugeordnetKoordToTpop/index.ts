@@ -1,5 +1,5 @@
-import { queryBeob } from './queryBeob.js'
-import { updateTpopById } from './updateTpopById.js'
+import { queryBeob } from './queryBeob.ts'
+import { updateTpopById } from './updateTpopById.ts'
 
 export const copyBeobZugeordnetKoordToTpop = async ({
   id,

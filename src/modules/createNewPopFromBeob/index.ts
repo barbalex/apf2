@@ -2,10 +2,10 @@ import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'date-fns/isEqual'
 
-import { queryBeob } from './queryBeob.js'
-import { createPop } from './createPop.js'
-import { createTpop } from './createTpop.js'
-import { updateBeobById } from './updateBeobById.js'
+import { queryBeob } from './queryBeob.ts'
+import { createPop } from './createPop.ts'
+import { createTpop } from './createTpop.ts'
+import { updateBeobById } from './updateBeobById.ts'
 
 export const createNewPopFromBeob = async ({
   id,

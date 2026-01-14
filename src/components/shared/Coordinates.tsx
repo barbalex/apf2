@@ -9,7 +9,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.ts'
 import { epsg2056to4326 } from '../../modules/epsg2056to4326.ts'
 import {

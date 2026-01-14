@@ -16,8 +16,8 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
-import { MobxContext } from '../../../../mobxContext.js'
+import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerte.ts'
 

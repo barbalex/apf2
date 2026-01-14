@@ -5,7 +5,7 @@ import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
 import { query } from './query.ts'
-import { jberQuery } from './jberQuery.js'
+import { jberQuery } from './jberQuery.ts'
 import { query as queryForApberuebersicht } from '../../Projekte/Daten/Apberuebersicht/query.ts'
 import fnslogo from './fnslogo.png'
 import { AvList } from './AvList.tsx'

@@ -18,8 +18,8 @@ import {
   tpopmassnFile as tpopmassnFileFragment,
 } from '../fragments'
 import { Uploader } from '../Uploader/index.tsx'
-import { UploaderContext } from '../../../UploaderContext.js'
-import { MobxContext } from '../../../mobxContext.js'
+import { UploaderContext } from '../../../UploaderContext.ts'
+import { MobxContext } from '../../../mobxContext.ts'
 import { Menu } from './Menu/index.tsx'
 
 import './index.css'

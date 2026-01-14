@@ -9,7 +9,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import indexStyles from '../index.module.css'
 import styles from './index.module.css'

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'

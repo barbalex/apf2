@@ -4,8 +4,8 @@ import Tooltip from '@mui/material/Tooltip'
 import { FaPlus, FaEye } from 'react-icons/fa6'
 import { useNavigate, useLocation } from 'react-router'
 
-import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-import { UploaderContext } from '../../../../UploaderContext.js'
+import { ErrorBoundary } from '../../ErrorBoundary.tsx'
+import { UploaderContext } from '../../../../UploaderContext.ts'
 
 export const ListMenus = ({ files }) => {
   const navigate = useNavigate()

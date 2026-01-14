@@ -59,8 +59,8 @@ import { Component } from 'react'
 import cx from 'classnames'
 import assign from 'object-assign'
 
-import { showMenu, hideMenu } from './actions.js'
-import { callIfExists, cssClasses } from './helpers.js'
+import { showMenu, hideMenu } from './actions.ts'
+import { callIfExists, cssClasses } from './helpers.ts'
 
 var ContextMenuTrigger = (function (_Component) {
   _inherits(ContextMenuTrigger, _Component)

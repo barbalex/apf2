@@ -10,8 +10,8 @@ import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
 import axios from 'redaxios'
 
-import { MobxContext } from '../../../mobxContext.js'
-import { Popup } from './layers/Popup.jsx'
+import { MobxContext } from '../../../mobxContext.ts'
+import { Popup } from './layers/Popup.tsx'
 import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
 
 export const ClickListener = observer(() => {

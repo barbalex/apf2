@@ -8,13 +8,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 
-import type { ProjektId } from '../../../../models/apflora/index.ts'
+import type { ProjektId } from '../../../../models/apflora/index.tsx'
 
 import styles from './Projekt.module.css'
 

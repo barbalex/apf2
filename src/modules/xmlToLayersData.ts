@@ -8,7 +8,7 @@
  */
 import { sortBy } from 'es-toolkit'
 
-import { xmlToJson } from './xmlToJson.js'
+import { xmlToJson } from './xmlToJson.ts'
 
 export const xmlToLayersData = (xml) => {
   const obj = xmlToJson(xml)

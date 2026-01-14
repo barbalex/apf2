@@ -5,7 +5,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../../mobxContext.ts'
 
 import styles from './PopIcon.module.css'
 

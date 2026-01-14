@@ -16,8 +16,8 @@ import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { IdbContext } from '../idbContext.js'
-import { MobxContext } from '../mobxContext.js'
+import { IdbContext } from '../idbContext.ts'
+import { MobxContext } from '../mobxContext.ts'
 import { getUserFromIdb } from '../modules/getUserFromIdb.ts'
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 

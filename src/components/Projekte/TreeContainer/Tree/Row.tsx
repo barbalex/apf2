@@ -15,7 +15,7 @@ import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePat
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { toggleNode } from './toggleNode.ts'
 import { toggleNodeSymbol } from './toggleNodeSymbol.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 

@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
 import { initial as pop } from '../../../../store/Tree/DataFilter/pop'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './PopOrTabs.module.css'
 

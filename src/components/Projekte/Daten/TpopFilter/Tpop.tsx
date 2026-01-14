@@ -13,7 +13,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.tsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora/TpopApberrelevantGrundWerteCode.ts'
 

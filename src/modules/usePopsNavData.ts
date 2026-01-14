@@ -28,7 +28,7 @@ import { PopIconPHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.tsx'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'

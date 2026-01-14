@@ -1,4 +1,4 @@
-import { getAndValidateCoordinatesOfTpop } from './getAndValidateCoordinatesOfTpop.js'
+import { getAndValidateCoordinatesOfTpop } from './getAndValidateCoordinatesOfTpop.ts'
 
 export const showCoordOfTpopOnMapGeoAdminCh = async ({
   id,

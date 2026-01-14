@@ -9,7 +9,7 @@ import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
@@ -26,7 +26,7 @@ import type {
   PopId,
   ApId,
   TpopmassnErfbeurtWerteCode,
-} from '../../../../models/apflora/index.ts'
+} from '../../../../models/apflora/index.tsx'
 
 import styles from './index.module.css'
 

@@ -6,8 +6,8 @@ import { SplitPane, Pane } from 'react-split-pane'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import { ProjektContainer } from './ProjektContainer.jsx'
-import { MobxContext } from '../../mobxContext.js'
+import { ProjektContainer } from './ProjektContainer.tsx'
+import { MobxContext } from '../../mobxContext.ts'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import { inIframe } from '../../modules/inIframe.ts'

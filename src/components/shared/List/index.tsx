@@ -1,8 +1,8 @@
 import { useNavigate, useLocation } from 'react-router'
 import Highlighter from 'react-highlight-words'
 
-import { FormTitle } from '../FormTitle/index.jsx'
-import { ErrorBoundary } from '../ErrorBoundary.jsx'
+import { FormTitle } from '../FormTitle/index.tsx'
+import { ErrorBoundary } from '../ErrorBoundary.tsx'
 import { navData } from '../../Bookmarks/NavTo/Navs/Projects.tsx'
 
 import styles from './index.module.css'

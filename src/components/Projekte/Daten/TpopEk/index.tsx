@@ -19,7 +19,7 @@ import { query as tpopQuery } from '../Tpop/query.ts'
 import { EkYear } from './EkYear.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { query } from './query.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
@@ -27,7 +27,7 @@ import {
   tpop,
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.ts'
-import { fieldTypes } from '../Tpop/Tpop.jsx'
+import { fieldTypes } from '../Tpop/Tpop.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
@@ -40,7 +40,7 @@ import type {
   TpopkontrId,
   EkplanId,
   ApId,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from './index.module.css'
 

@@ -87,8 +87,8 @@ import { Component } from 'react'
 import cx from 'classnames'
 import assign from 'object-assign'
 
-import { hideMenu } from './actions.js'
-import { callIfExists, cssClasses, store } from './helpers.js'
+import { hideMenu } from './actions.ts'
+import { callIfExists, cssClasses, store } from './helpers.ts'
 
 var MenuItem = (function (_Component) {
   _inherits(MenuItem, _Component)

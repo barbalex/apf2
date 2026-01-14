@@ -5,7 +5,7 @@ import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 
 import type { ApId } from '../../models/apflora/public/Ap.ts'
 

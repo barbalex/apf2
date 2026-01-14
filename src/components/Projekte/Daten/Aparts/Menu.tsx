@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ApartId } from '../../../../models/apflora/Apart.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'

@@ -6,7 +6,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Error } from '../../shared/Error.tsx'

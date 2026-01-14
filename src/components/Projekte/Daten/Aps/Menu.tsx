@@ -19,7 +19,7 @@ import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { ApFilter } from '../../TreeContainer/ApFilter/index.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
 import type { ApId } from '../../../../models/apflora/Ap.ts'

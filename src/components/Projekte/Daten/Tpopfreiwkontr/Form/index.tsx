@@ -22,7 +22,7 @@ import { Files } from './Files.tsx'
 import { Count } from './Count/index.tsx'
 import { Verification } from './Verification.tsx'
 import { Image } from './Image.tsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 import {
   adresse as adresseFragment,

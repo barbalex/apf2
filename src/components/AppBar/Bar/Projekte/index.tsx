@@ -13,7 +13,7 @@ import { TbMap2 } from 'react-icons/tb'
 
 import { More } from './More/index.tsx'
 import { Daten } from './Daten.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'

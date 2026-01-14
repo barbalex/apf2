@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { uniq } from 'es-toolkit'
 
 import { logout } from '../../modules/logout.ts'
-import { IdbContext } from '../../idbContext.js'
+import { IdbContext } from '../../idbContext.ts'
 import { existsPermissionError } from '../../modules/existsPermissionError.ts'
 
 import styles from './Error.module.css'

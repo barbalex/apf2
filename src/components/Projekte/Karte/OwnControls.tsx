@@ -1,9 +1,9 @@
 import { useResizeDetector } from 'react-resize-detector'
 import { useDebouncedCallback } from 'use-debounce'
 
-import { LayersControl } from './LayersControl/index.jsx'
-import { FullscreenControl } from './FullscreenControl.jsx'
-import { PngControl } from './PngControl.jsx'
+import { LayersControl } from './LayersControl/index.tsx'
+import { FullscreenControl } from './FullscreenControl.tsx'
+import { PngControl } from './PngControl.tsx'
 
 import styles from './OwnControls.module.css'
 

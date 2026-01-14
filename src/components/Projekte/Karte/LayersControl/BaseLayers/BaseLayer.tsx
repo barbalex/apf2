@@ -1,8 +1,8 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { Radio } from '../shared/Radio.jsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { Radio } from '../shared/Radio.tsx'
+import { MobxContext } from '../../../../../mobxContext.ts'
 
 import styles from './BaseLayer.module.css'
 

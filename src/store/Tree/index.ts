@@ -7,28 +7,28 @@ import isUuid from 'is-uuid'
 import {
   NodeLabelFilter,
   defaultValue as defaultNodeLabelFilter,
-} from './NodeLabelFilter.js'
-import { Geojson } from './Geojson.js'
-import { initialDataFilterValues } from './DataFilter/initialValues.js'
-import { DataFilter } from './DataFilter/types.js'
-import { simpleTypes as popType } from './DataFilter/pop.js'
+} from './NodeLabelFilter.ts'
+import { Geojson } from './Geojson.ts'
+import { initialDataFilterValues } from './DataFilter/initialValues.ts'
+import { DataFilter } from './DataFilter/types.ts'
+import { simpleTypes as popType } from './DataFilter/pop.ts'
 import {
   simpleTypes as tpopType,
   initial as initialTpop,
-} from './DataFilter/tpop.js'
+} from './DataFilter/tpop.ts'
 import {
   simpleTypes as tpopmassnType,
   initial as initialTpopmassn,
-} from './DataFilter/tpopmassn.js'
+} from './DataFilter/tpopmassn.ts'
 import {
   simpleTypes as tpopfeldkontrType,
   initial as initialTpopfeldkontr,
-} from './DataFilter/tpopfeldkontr.js'
+} from './DataFilter/tpopfeldkontr.ts'
 import {
   simpleTypes as tpopfreiwkontrType,
   initial as initialTpopfreiwkontr,
-} from './DataFilter/tpopfreiwkontr.js'
-import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap.js'
+} from './DataFilter/tpopfreiwkontr.ts'
+import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 
 export const Tree = types

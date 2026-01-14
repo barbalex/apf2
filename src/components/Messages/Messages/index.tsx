@@ -1,4 +1,4 @@
-import { Messages } from './Messages.jsx'
+import { Messages } from './Messages.tsx'
 import styles from './index.module.css'
 
 export const MessagesList = ({ unreadMessages }) => (

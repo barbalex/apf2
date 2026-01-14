@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { Error } from '../../../../../shared/Error.tsx'
-import { queryAdresses } from './queryAdresses.js'
+import { queryAdresses } from './queryAdresses.ts'
 
 import type { UserId } from '../../../../../../models/apflora/public/User.ts'
 

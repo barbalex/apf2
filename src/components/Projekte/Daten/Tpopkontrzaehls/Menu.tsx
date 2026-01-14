@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'

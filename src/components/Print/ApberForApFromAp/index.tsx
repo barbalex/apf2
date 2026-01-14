@@ -4,7 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { apByIdJahr } from './apByIdJahr.js'
+import { apByIdJahr } from './apByIdJahr.ts'
 import { ApberForAp } from '../ApberForAp/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'

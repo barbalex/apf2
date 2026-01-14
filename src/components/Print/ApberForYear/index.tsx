@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
 import { ApberForYear } from './ApberForYear.tsx'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
 

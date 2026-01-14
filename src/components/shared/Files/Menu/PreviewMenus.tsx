@@ -20,9 +20,9 @@ import {
 import { useNavigate, useLocation, useParams } from 'react-router'
 import screenfull from 'screenfull'
 
-import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-import { UploaderContext } from '../../../../UploaderContext.js'
-import { MobxContext } from '../../../../mobxContext.js'
+import { ErrorBoundary } from '../../ErrorBoundary.tsx'
+import { UploaderContext } from '../../../../UploaderContext.ts'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './index.module.css'
 

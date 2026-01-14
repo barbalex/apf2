@@ -1,5 +1,5 @@
 import { RadioButtonGroup } from './RadioButtonGroup.tsx'
-import { InfoWithPopover } from './InfoWithPopover.jsx'
+import { InfoWithPopover } from './InfoWithPopover.tsx'
 
 import styles from './RadioButtonGroupWithInfo.module.css'
 

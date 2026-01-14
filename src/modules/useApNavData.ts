@@ -5,11 +5,11 @@ import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { countBy } from 'es-toolkit'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
-import { useProjekteTabs } from './useProjekteTabs.js'
+import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 

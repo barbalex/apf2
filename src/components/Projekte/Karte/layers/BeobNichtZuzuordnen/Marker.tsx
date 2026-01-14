@@ -6,14 +6,14 @@ import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { beobIconString } from './beobIconString.ts'
 import { beobIconAbsenzString } from './beobIconAbsenzString.ts'
 import { beobIconHighlightedString } from './beobIconHighlightedString.ts'
 import { beobIconHighlightedAbsenzString } from './beobIconHighlightedAbsenzString.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
-import { Data } from '../BeobData/index.jsx'
+import { Data } from '../BeobData/index.tsx'
 
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 

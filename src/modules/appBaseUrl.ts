@@ -1,5 +1,5 @@
 // in development should return local path
-import { isElectron } from './isElectron.js'
+import { isElectron } from './isElectron.ts'
 
 export const appBaseUrl = () => {
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')

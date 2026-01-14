@@ -18,7 +18,7 @@ import type { AeTaxonomyId } from '../../models/apflora/AeTaxonomy.ts'
 // but only in production!
 import { EkfList } from './List/index.tsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.tsx'
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.ts'
 import { Error } from '../shared/Error.tsx'

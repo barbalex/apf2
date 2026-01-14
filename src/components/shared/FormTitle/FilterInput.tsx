@@ -8,7 +8,7 @@ import { FaTimes } from 'react-icons/fa'
 import { useLocation } from 'react-router'
 import { styled } from '@mui/material/styles'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import styles from './FilterInput.module.css'
 
 // https://mui.com/material-ui/react-menu/#customization

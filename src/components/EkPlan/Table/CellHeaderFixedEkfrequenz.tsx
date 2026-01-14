@@ -5,7 +5,7 @@ import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import { styled } from '@mui/material/styles'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { TextFilter } from './CellHeaderFixed/TextFilter.tsx'
 
 import styles from './CellHeaderFixedEkfrequenz.module.css'

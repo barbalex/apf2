@@ -7,8 +7,8 @@ import { useMap } from 'react-leaflet'
 import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
 
-import { Marker } from './Marker.jsx'
-import { MobxContext } from '../../../../../mobxContext.js'
+import { Marker } from './Marker.tsx'
+import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 
 import type { PopId, ApId } from '../../../../../models/apflora/public/Pop.ts'

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa'
 import screenfull from 'screenfull'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 import styles from './FullscreenControl.module.css'
 

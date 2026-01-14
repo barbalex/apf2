@@ -24,13 +24,13 @@ import { theme } from './utils/materialTheme.ts'
 
 import { initializeIdb } from './modules/initializeIdb.ts'
 import { MobxStore } from './store/index.ts'
-import { buildApolloClient } from './apolloClient.js'
+import { buildApolloClient } from './apolloClient.ts'
 
 import { store as jotaiStore } from './JotaiStore/index.ts'
 
-import { MobxContext } from './mobxContext.js'
-import { IdbContext } from './idbContext.js'
-import { UploaderContext } from './UploaderContext.js'
+import { MobxContext } from './mobxContext.ts'
+import { IdbContext } from './idbContext.ts'
+import { UploaderContext } from './UploaderContext.ts'
 
 import { persistStore } from './modules/persistStore.ts'
 
@@ -86,7 +86,7 @@ export const App = () => {
   const store = MobxStore.create()
   const apolloClient = buildApolloClient({ store })
   const idbContext = { idb }
-  const uploaderRef = createRef(null)
+  const uploaderRef = createRef<HTMLElement>(null)
 
   useEffect(() => {
     persistStore({ store, idb })

@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 import Collapse from '@mui/material/Collapse'
 import { useAtom } from 'jotai'
 
-import { TestdataMessage } from './TestdataMessage.jsx'
-import { MobxContext } from '../../../mobxContext.js'
-import { FilterInput } from './FilterInput.jsx'
+import { TestdataMessage } from './TestdataMessage.tsx'
+import { MobxContext } from '../../../mobxContext.ts'
+import { FilterInput } from './FilterInput.tsx'
 import { navListFilterAtoms } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'

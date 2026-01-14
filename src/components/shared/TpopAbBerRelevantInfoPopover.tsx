@@ -1,4 +1,4 @@
-import { ErrorBoundary } from './ErrorBoundary.jsx'
+import { ErrorBoundary } from './ErrorBoundary.tsx'
 import styles from './TpopAbBerRelevantInfoPopover.module.css'
 
 export const TpopAbBerRelevantInfoPopover = (

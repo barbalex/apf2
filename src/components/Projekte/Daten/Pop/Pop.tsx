@@ -9,7 +9,7 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
 import { Status } from '../../../shared/Status.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -20,7 +20,7 @@ import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
-import type { Pop } from '../../../../models/apflora/index.ts'
+import type { Pop } from '../../../../models/apflora/index.tsx'
 
 import styles from './Pop.module.css'
 

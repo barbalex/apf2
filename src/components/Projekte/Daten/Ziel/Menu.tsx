@@ -14,7 +14,7 @@ import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ZielId } from '../../../../models/apflora/ZielId.ts'
 import type { ApId } from '../../../../models/apflora/ApId.ts'

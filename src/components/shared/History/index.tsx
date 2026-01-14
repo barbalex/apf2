@@ -1,5 +1,5 @@
-import { Data } from './Data.jsx'
-import { ErrorBoundary } from '../ErrorBoundary.jsx'
+import { Data } from './Data.tsx'
+import { ErrorBoundary } from '../ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 

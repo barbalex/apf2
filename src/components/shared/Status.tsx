@@ -7,7 +7,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 
-import { InfoWithPopover } from './InfoWithPopover.jsx'
+import { InfoWithPopover } from './InfoWithPopover.tsx'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.ts'
 
 import styles from './Status.module.css'

@@ -3,7 +3,7 @@ import { sum } from 'es-toolkit'
 import { GoZap } from 'react-icons/go'
 import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import styles from './MassnIcon.module.css'
 
 export const MassnIcon = observer(({ ansiedlungs }) => {

@@ -4,7 +4,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import ReactMarkdownEditor, { Plugins } from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 
-import { Label } from '../../Label.jsx'
+import { Label } from '../../Label.tsx'
 import styles from './index.module.css'
 
 ReactMarkdownEditor.use(Plugins.AutoResize, {

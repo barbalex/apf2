@@ -12,7 +12,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 
 import { undelete } from './undelete/index.tsx'
-import { MobxContext } from '../../mobxContext.js'
+import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'

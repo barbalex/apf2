@@ -15,7 +15,7 @@ import type {
   AdresseId,
   TpopEntwicklungWerteCode,
   TpopkontrIdbiotuebereinstWerteCode,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 interface TpopfeldkontrQueryResult {
   tpopkontrById?: {

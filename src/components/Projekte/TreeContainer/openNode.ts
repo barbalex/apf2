@@ -1,4 +1,4 @@
-import { isNodeOpen } from './isNodeOpen.js'
+import { isNodeOpen } from './isNodeOpen.ts'
 
 export const openNode = async ({ node, openNodes, store }) => {
   const { treeNodeLabelFilterResetExceptAp } = store

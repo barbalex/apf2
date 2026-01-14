@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
 
-import { MobxContext } from '../mobxContext.js'
+import { MobxContext } from '../mobxContext.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useApberuebersichtsNavData = (props) => {

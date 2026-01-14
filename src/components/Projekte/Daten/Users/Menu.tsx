@@ -16,7 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { UserId } from '../../../../models/apflora/UserId.ts'
 

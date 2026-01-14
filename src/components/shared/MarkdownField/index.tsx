@@ -1,10 +1,10 @@
 // extracted to shared component due to peer dependency to old react version
 // import { FocusWithin } from 'react-focus-within'
 
-import { Editor } from './Editor/index.jsx'
-import { Presenter } from './Presenter.jsx'
+import { Editor } from './Editor/index.tsx'
+import { Presenter } from './Presenter.tsx'
 import { TextField } from '../TextField.tsx'
-import { FocusWithin } from '../FocusWithin.jsx'
+import { FocusWithin } from '../FocusWithin.tsx'
 
 // render:
 // - TextField if no value exists

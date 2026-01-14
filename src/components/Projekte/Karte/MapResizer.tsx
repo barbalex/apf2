@@ -3,7 +3,7 @@ import { useMap } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 
 export const MapResizer = observer(({ children, mapContainerRef }) => {
   const map = useMap()

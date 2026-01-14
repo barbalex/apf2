@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
 import { MdFilterAlt } from 'react-icons/md'
 
-import { MobxContext } from '../../../../../mobxContext.js'
+import { MobxContext } from '../../../../../mobxContext.ts'
 
 import styles from './FilterInput.module.css'
 

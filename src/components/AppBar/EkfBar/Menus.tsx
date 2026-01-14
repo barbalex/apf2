@@ -12,7 +12,7 @@ import { useParams, useLocation } from 'react-router'
 
 import { EkfYear } from './EkfYear.tsx'
 import { User } from './User/index.tsx'
-import { MobxContext } from '../../../mobxContext.js'
+import { MobxContext } from '../../../mobxContext.ts'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.ts'
 

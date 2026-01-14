@@ -14,7 +14,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
-import { MobxContext } from '../../../../mobxContext.js'
+import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -25,7 +25,7 @@ import type {
   AdresseId,
   TpopEntwicklungWerteCode,
   TpopkontrIdbiotuebereinstWerteCode,
-} from '../../../../generated/apflora/models.js'
+} from '../../../../generated/apflora/models.ts'
 
 import styles from './Form.module.css'
 
