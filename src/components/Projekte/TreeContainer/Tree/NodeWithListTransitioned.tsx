@@ -6,8 +6,8 @@ import { isEqual } from 'es-toolkit'
 import { Row } from './Row.tsx'
 import { NodesList } from './NodesList/index.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { nodeFromMenu } from './nodeFromMenu.js'
-import { checkIfIsOpen } from './checkIfIsOpen.js'
+import { nodeFromMenu } from './nodeFromMenu.ts'
+import { checkIfIsOpen } from './checkIfIsOpen.ts'
 import { Folders } from './Folders.tsx'
 
 export const NodeWithListTransitioned = observer(
