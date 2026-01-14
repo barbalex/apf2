@@ -187,7 +187,7 @@ export const Component = observer(() => {
         />
         <div className={styles.formContainer}>
           <Select
-            key={`${row?.id}zaehleinheitId`}
+            key={`${id}zaehleinheitId`}
             name="zaehleinheitId"
             label="Zähleinheit"
             options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}

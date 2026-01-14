@@ -163,7 +163,7 @@ export const Component = observer(() => {
             error={fieldErrors.vergleichVorjahrGesamtziel}
           />
           <Select
-            key={`${row?.id}beurteilung`}
+            key={`${apberId}beurteilung`}
             name="beurteilung"
             label="Beurteilung"
             options={data?.allApErfkritWertes?.nodes ?? []}
@@ -173,7 +173,7 @@ export const Component = observer(() => {
             error={fieldErrors.beurteilung}
           />
           <Select
-            key={`${row?.id}veraenderungZumVorjahr`}
+            key={`${apberId}veraenderungZumVorjahr`}
             name="veraenderungZumVorjahr"
             label="Veränderung zum Vorjahr"
             options={veraenGegenVorjahrWerte}
@@ -253,7 +253,7 @@ export const Component = observer(() => {
             error={fieldErrors.datum}
           />
           <Select
-            key={`${row?.id}apId`}
+            key={`${apberId}apId`}
             name="bearbeiter"
             label="BearbeiterIn"
             options={data?.allAdresses?.nodes ?? []}

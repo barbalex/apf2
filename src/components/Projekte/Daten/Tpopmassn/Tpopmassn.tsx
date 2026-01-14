@@ -209,9 +209,9 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
         })
       } catch (error) {
         return setFieldErrors((prev) => ({
-        ...prev,
-        [field]: (error as Error).message,
-      }))
+          ...prev,
+          [field]: (error as Error).message,
+        }))
       }
       const isAnpflanzung =
         zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
@@ -264,9 +264,9 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
         })
       } catch (error) {
         return setFieldErrors((prev) => ({
-        ...prev,
-        [field]: error.message,
-      }))
+          ...prev,
+          [field]: error.message,
+        }))
       }
       const isAnpflanzung =
         zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
@@ -312,9 +312,9 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
         })
       } catch (error) {
         return setFieldErrors((prev) => ({
-        ...prev,
-        [field]: error.message,
-      }))
+          ...prev,
+          [field]: error.message,
+        }))
       }
       const isAnpflanzung =
         zieleinheitIdResult?.data?.allTpopmassnTypWertes?.nodes?.[0]
@@ -461,7 +461,7 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
           error={fieldErrors.beschreibung}
         />
         <Select
-          key={`${row?.id}bearbeiter`}
+          key={`${tpopmassnId}bearbeiter`}
           name="bearbeiter"
           label="BearbeiterIn"
           value={row.bearbeiter}
@@ -551,7 +551,7 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
         {isAnpflanzung && (
           <>
             <Select
-              key={`${row?.id}zieleinheitEinheit`}
+              key={`${tpopmassnId}zieleinheitEinheit`}
               name="zieleinheitEinheit"
               label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
               value={row.zieleinheitEinheit}

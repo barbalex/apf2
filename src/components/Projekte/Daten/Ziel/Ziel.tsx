@@ -76,9 +76,7 @@ export const Component = observer(() => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { data, loading, error } = useQuery<ZielQueryResult>(query, {
-    variables: {
-      id,
-    },
+    variables: { id },
   })
 
   const row = data?.zielById ?? {}
@@ -193,7 +191,7 @@ export const Component = observer(() => {
           />
           <h3 className={styles.subtitle}>Beurteilung</h3>
           <Select
-            key={`${row?.id}erreichung`}
+            key={`${id}erreichung`}
             name="erreichung"
             label="Ziel-Erreichung"
             options={erreichungOptions}

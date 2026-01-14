@@ -77,7 +77,7 @@ export const ApFilter = observer(() => {
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
     if (dataFilter.ap.length - 1 < activeTab) {
-      // filter was emtied, need to set correct tab
+      // filter was emptied, need to set correct tab
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.ap.length])

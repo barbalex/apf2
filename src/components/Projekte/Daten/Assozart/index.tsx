@@ -157,7 +157,7 @@ export const Component = observer(() => {
         />
         <div className={styles.formContainer}>
           <SelectLoadingOptions
-            key={`${row?.id}aeId`}
+            key={`${id}aeId`}
             field="aeId"
             valueLabelPath="aeTaxonomyByAeId.taxArtName"
             label="Art"

@@ -154,7 +154,7 @@ export const Component = observer(() => {
         />
         <div className={styles.formContainer}>
           <Select
-            key={`${row?.id}einheit`}
+            key={`${tpopkontrzaehlId}einheit`}
             name="einheit"
             label="Einheit"
             options={zaehlEinheitOptions}
