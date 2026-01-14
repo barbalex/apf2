@@ -6,7 +6,7 @@ import { Error } from '../../../shared/Error.jsx'
 import { Spinner } from '../../../shared/Spinner.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.jsx'
 import { Menu } from './Menu.tsx'
-import { query } from './query.js'
+import { query } from './query.ts'
 import { TpopfeldkontrForm } from './Form.tsx'
 
 import type {
