@@ -9,13 +9,7 @@ import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
-import {
-  container,
-  newUserContainer,
-  info,
-  infoList,
-  infoRow,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface ApUserNode {
   id: ApUserId
@@ -66,7 +60,7 @@ export const ApUsers = () => {
 
   if (loading) {
     return (
-      <div className={container}>
+      <div className={styles.container}>
         <Label label={'Benutzer mit Zugriff'} />
         lade Daten...
       </div>
@@ -76,9 +70,9 @@ export const ApUsers = () => {
   if (error) return <Error error={error} />
 
   return (
-    <div className={container}>
+    <div className={styles.container}>
       <Label label={'Benutzer mit Zugriff'} />
-      <div className={newUserContainer}>
+      <div className={styles.newUserContainer}>
         {apUsers.length ?
           apUsers.map((user) => (
             <ApUser
@@ -88,22 +82,22 @@ export const ApUsers = () => {
             />
           ))
         : 'Es wurden noch keine Zugriffe erteilt'}
-        <div className={info}>
+        <div className={styles.info}>
           <div>Zugriff hängt von der Rolle des Benutzers ab:</div>
-          <div className={infoList}>
-            <div className={infoRow}>
+          <div className={styles.infoList}>
+            <div className={styles.infoRow}>
               {
                 '"ap_writer" haben Schreib-Rechte, wenn sie oben aufgelistet sind'
               }
             </div>
-            <div className={infoRow}>
+            <div className={styles.infoRow}>
               {'"ap_reader" haben Lese-Rechte, wenn sie oben aufgelistet sind'}
             </div>
           </div>
           <div>Darüber hinaus haben immer Zugriff:</div>
-          <div className={infoList}>
-            <div className={infoRow}>{'"manager" (Schreib-Rechte)'}</div>
-            <div className={infoRow}>{'"reader" (Lese-Rechte)'}</div>
+          <div className={styles.infoList}>
+            <div className={styles.infoRow}>{'"manager" (Schreib-Rechte)'}</div>
+            <div className={styles.infoRow}>{'"reader" (Lese-Rechte)'}</div>
           </div>
           <div>
             {
