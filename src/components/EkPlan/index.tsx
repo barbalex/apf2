@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 
-import type { ApId } from '../../models/apflora/Ap'
-import type { EkzaehleinheitId } from '../../models/apflora/Ekzaehleinheit'
-import type { TpopkontrzaehlEinheitWerteId } from '../../models/apflora/TpopkontrzaehlEinheitWerte'
+import type { ApId } from '../../models/apflora/Ap.ts'
+import type { EkzaehleinheitId } from '../../models/apflora/Ekzaehleinheit.ts'
+import type { TpopkontrzaehlEinheitWerteId } from '../../models/apflora/TpopkontrzaehlEinheitWerte.ts'
 
 const ApList = lazy(async () => ({
   default: (await import('./ApList/index.tsx')).ApList,

@@ -21,7 +21,7 @@ import type {
   PopberId,
   PopId,
   TpopEntwicklungWerteCode,
-} from '../../../../models/apflora/index.js'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 

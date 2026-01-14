@@ -25,7 +25,7 @@ import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
-import type { PopId, ApId, Pop } from '../../../../models/apflora/index.js'
+import type { PopId, ApId, Pop } from '../../../../models/apflora/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

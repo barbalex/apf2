@@ -22,8 +22,8 @@ import { ApFilter } from '../../TreeContainer/ApFilter/index.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
-import type { ApId } from '../../../../models/apflora/Ap.js'
-import type { ProjId } from '../../../../models/apflora/Proj.js'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
+import type { ProjId } from '../../../../models/apflora/Proj.ts'
 
 import styles from './Menu.module.css'
 

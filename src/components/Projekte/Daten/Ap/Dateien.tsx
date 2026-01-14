@@ -6,8 +6,8 @@ import { useQuery } from '@apollo/client/react'
 import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { ApId } from '../../../../models/apflora/Ap.js'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 const apFilesQuery = gql`
   query apFilesQuery($apId: UUID!) {

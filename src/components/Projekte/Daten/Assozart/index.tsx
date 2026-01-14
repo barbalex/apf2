@@ -18,9 +18,9 @@ import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
-import type Assozart from '../../../../models/apflora/Assozart.js'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
-import type { ApId } from '../../../../models/apflora/Ap.js'
+import type Assozart from '../../../../models/apflora/Assozart.ts'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 import styles from './index.module.css'
 

@@ -9,8 +9,8 @@ import { PopMenge } from './PopMenge/index.tsx'
 import { TpopKontrolliert } from './TpopKontrolliert/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { ApId } from '../../../../models/apflora/Ap.js'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 import styles from './index.module.css'
 

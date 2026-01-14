@@ -10,7 +10,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { MobxContext } from '../../../../../mobxContext.js'
 import styles from './ApUser.module.css'
 
-import type { ApUserId } from '../../../../../models/apflora/ApUser.js'
+import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
 interface ApUserProps {
   user: {

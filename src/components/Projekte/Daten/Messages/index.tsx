@@ -7,7 +7,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 
-import type { Message } from '../../../../models/apflora/index.js'
+import type { Message } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 

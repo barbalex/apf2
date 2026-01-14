@@ -5,7 +5,7 @@ import { exists } from '../../../../modules/exists.ts'
 import type {
   TpopId,
   TpopStatusWerteCode,
-} from '../../../../models/apflora/index.js'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './CustomTooltip.module.css'
 

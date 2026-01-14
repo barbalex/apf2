@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 
-import type { ProjektId } from '../../../../models/apflora/index.js'
+import type { ProjektId } from '../../../../models/apflora/index.ts'
 
 import styles from './Projekt.module.css'
 

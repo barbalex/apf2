@@ -16,8 +16,8 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.js'
-import type { ProjId } from '../../../../models/apflora/Proj.js'
+import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.ts'
+import type { ProjId } from '../../../../models/apflora/Proj.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

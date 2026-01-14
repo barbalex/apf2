@@ -20,9 +20,9 @@ import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
-import type Apber from '../../../../models/apflora/Apber.js'
-import type { AdresseId } from '../../../../models/apflora/Adresse.js'
-import type { ApErfkritWerteCode } from '../../../../models/apflora/ApErfkritWerte.js'
+import type Apber from '../../../../models/apflora/Apber.ts'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
+import type { ApErfkritWerteCode } from '../../../../models/apflora/ApErfkritWerte.ts'
 
 import styles from './index.module.css'
 

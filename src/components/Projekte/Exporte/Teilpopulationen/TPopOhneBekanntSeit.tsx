@@ -7,7 +7,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { TpopId } from '../../../../models/apflora/public/TpopId'
+import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 

@@ -21,7 +21,7 @@ import { Error } from '../../../../shared/Error.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
-import type { QkName } from '../../../../../models/apflora/index.js'
+import type { QkName } from '../../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 

@@ -32,11 +32,11 @@ import {
 } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
-import type BeobType from '../../../../models/apflora/Beob.js'
-import type Ap from '../../../../models/apflora/Ap.js'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
-import type { TpopId } from '../../../../models/apflora/Tpop.js'
-import type { PopStatusWerteCode } from '../../../../models/apflora/PopStatusWerte.js'
+import type BeobType from '../../../../models/apflora/Beob.ts'
+import type Ap from '../../../../models/apflora/Ap.ts'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
+import type { PopStatusWerteCode } from '../../../../models/apflora/PopStatusWerte.ts'
 
 import styles from './index.module.css'
 

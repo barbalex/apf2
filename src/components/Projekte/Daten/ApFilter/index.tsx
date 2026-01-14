@@ -18,10 +18,10 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Tabs } from './Tabs.tsx'
 
-import type { AdresseId } from '../../../../models/apflora/Adresse.js'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
-import type { ApBearbstandWerteCode } from '../../../../models/apflora/ApBearbstandWerte.js'
-import type { ApUmsetzungWerteCode } from '../../../../models/apflora/ApUmsetzungWerte.js'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
+import type { ApBearbstandWerteCode } from '../../../../models/apflora/ApBearbstandWerte.ts'
+import type { ApUmsetzungWerteCode } from '../../../../models/apflora/ApUmsetzungWerte.ts'
 
 import {
   popover,

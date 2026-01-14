@@ -16,7 +16,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { PopmassnberId, PopId } from '../../../../models/apflora/index.js'
+import type { PopmassnberId, PopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

@@ -20,9 +20,9 @@ import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
-import type Ap from '../../../../models/apflora/Ap.js'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
-import type { AdresseId } from '../../../../models/apflora/Adresse.js'
+import type Ap from '../../../../models/apflora/Ap.ts'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './Ap.module.css'
 

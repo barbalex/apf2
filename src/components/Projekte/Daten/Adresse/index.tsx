@@ -17,7 +17,7 @@ import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { adresse } from '../../../shared/fragments.ts'
 
-import type Adresse from '../../../../models/apflora/Adresse.js'
+import type Adresse from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
 

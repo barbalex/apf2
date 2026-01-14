@@ -15,7 +15,7 @@ import { idealbiotop } from '../../../shared/fragments.ts'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { Idealbiotop } from '../../../../models/apflora/index.js'
+import type { Idealbiotop } from '../../../../models/apflora/index.ts'
 
 import styles from './Idealbiotop.module.css'
 

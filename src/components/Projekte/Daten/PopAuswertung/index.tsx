@@ -28,7 +28,7 @@ import type {
   EkzaehleinheitId,
   TpopkontrzaehlEinheitWerteId,
   TpopStatusWerteCode,
-} from '../../../../models/apflora/index.js'
+} from '../../../../models/apflora/index.ts'
 
 import {
   spinnerContainer,

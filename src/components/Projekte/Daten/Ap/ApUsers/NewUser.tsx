@@ -5,7 +5,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { Select } from '../../../../shared/Select.tsx'
 
-import type { ApId } from '../../../../../models/apflora/Ap.js'
+import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
 interface ApUser {
   userByUserName?: {

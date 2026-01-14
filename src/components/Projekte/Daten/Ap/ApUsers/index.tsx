@@ -7,7 +7,7 @@ import { NewUser } from './NewUser.tsx'
 import { Label } from '../../../../shared/Label.tsx'
 import { Error } from '../../../../shared/Error.tsx'
 
-import type { ApUserId } from '../../../../../models/apflora/ApUser.js'
+import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
 import {
   container,

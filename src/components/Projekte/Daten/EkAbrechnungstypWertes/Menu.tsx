@@ -19,7 +19,7 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerte.js'
+import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerte.ts'
 
 interface CreateEkAbrechnungstypWerteResult {
   data?: {

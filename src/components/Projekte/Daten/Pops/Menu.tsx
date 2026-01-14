@@ -22,7 +22,7 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
-import type { PopId, ApId } from '../../../../models/apflora/index.js'
+import type { PopId, ApId } from '../../../../models/apflora/index.ts'
 
 import styles from './Menu.module.css'
 

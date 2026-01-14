@@ -16,7 +16,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { AdresseId } from '../../../../models/apflora/Adresse.js'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

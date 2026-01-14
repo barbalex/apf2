@@ -19,8 +19,8 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.js'
-import type { ProjId } from '../../../../models/apflora/Proj.js'
+import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.ts'
+import type { ProjId } from '../../../../models/apflora/Proj.ts'
 
 interface CreateApberuebersichtResult {
   data?: {

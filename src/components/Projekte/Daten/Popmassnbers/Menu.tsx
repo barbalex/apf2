@@ -13,7 +13,7 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { PopmassnberId, PopId } from '../../../../models/apflora/index.js'
+import type { PopmassnberId, PopId } from '../../../../models/apflora/index.ts'
 
 interface CreatePopmassnberResult {
   data?: {

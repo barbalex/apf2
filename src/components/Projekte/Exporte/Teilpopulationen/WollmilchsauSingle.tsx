@@ -9,9 +9,9 @@ import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { ApId } from '../../../../models/apflora/public/ApId'
-import type { PopId } from '../../../../models/apflora/public/PopId'
-import type { TpopId } from '../../../../models/apflora/public/TpopId'
+import type { ApId } from '../../../../models/apflora/public/ApId.ts'
+import type { PopId } from '../../../../models/apflora/public/PopId.ts'
+import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from './WollmilchsauSingle.module.css'
 

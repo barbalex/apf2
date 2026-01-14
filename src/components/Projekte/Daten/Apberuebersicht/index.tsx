@@ -24,7 +24,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { historize } from '../../../../modules/historize.ts'
 import { Menu } from './Menu.tsx'
 
-import type Apberuebersicht from '../../../../models/apflora/Apberuebersicht.js'
+import type Apberuebersicht from '../../../../models/apflora/Apberuebersicht.ts'
 
 import styles from './index.module.css'
 

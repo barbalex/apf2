@@ -20,11 +20,11 @@ import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../../modules/exists.ts'
 import { Error } from '../../../../shared/Error.tsx'
 
-import type { ApId } from '../../../../../models/apflora/Ap.js'
-import type { PopId } from '../../../../../models/apflora/Pop.js'
-import type { EkzaehleinheitId } from '../../../../../models/apflora/Ekzaehleinheit.js'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../models/apflora/TpopkontrzaehlEinheitWerte.js'
-import type { PopStatusWerteCode } from '../../../../../models/apflora/PopStatusWerte.js'
+import type { ApId } from '../../../../../models/apflora/Ap.ts'
+import type { PopId } from '../../../../../models/apflora/Pop.ts'
+import type { EkzaehleinheitId } from '../../../../../models/apflora/Ekzaehleinheit.ts'
+import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../models/apflora/TpopkontrzaehlEinheitWerte.ts'
+import type { PopStatusWerteCode } from '../../../../../models/apflora/PopStatusWerte.ts'
 
 import {
   spinnerContainer,

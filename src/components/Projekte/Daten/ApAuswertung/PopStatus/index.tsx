@@ -16,7 +16,7 @@ import { query } from './query.ts'
 import { CustomTooltip } from '../CustomTooltip.tsx'
 import { Error } from '../../../../shared/Error.tsx'
 
-import type { ApId } from '../../../../../models/apflora/Ap.js'
+import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
 import {
   spinnerContainer,

@@ -15,7 +15,7 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import { Field as BeobField } from './Field.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type BeobType from '../../../../models/apflora/Beob.js'
+import type BeobType from '../../../../models/apflora/Beob.ts'
 
 import styles from './index.module.css'
 

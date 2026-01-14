@@ -18,7 +18,7 @@ import { SpinnerOverlay } from '../../shared/SpinnerOverlay.tsx'
 import { TpopRow } from './Row/index.tsx'
 import { EkplanTableHeader } from './Header.tsx'
 
-import type { TpopId } from '../../../models/apflora/Tpop'
+import type { TpopId } from '../../../models/apflora/Tpop.ts'
 
 import styles from './index.module.css'
 

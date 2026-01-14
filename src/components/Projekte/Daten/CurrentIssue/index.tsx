@@ -9,7 +9,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 
-import type Currentissue from '../../../../models/apflora/Currentissue.js'
+import type Currentissue from '../../../../models/apflora/Currentissue.ts'
 
 import styles from './index.module.css'
 

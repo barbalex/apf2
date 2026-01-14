@@ -8,7 +8,7 @@ import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import type { ErfkritId, ApId } from '../../../../models/apflora/index.js'
+import type { ErfkritId, ApId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'

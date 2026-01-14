@@ -5,14 +5,14 @@ import { useQuery } from '@apollo/client/react'
 import { sortBy } from 'es-toolkit'
 import { SplitPane, Pane } from 'react-split-pane'
 
-import type { UserId } from '../../models/apflora/User'
-import type { AdresseId } from '../../models/apflora/Adresse'
-import type { TpopkontrId } from '../../models/apflora/Tpopkontr'
-import type { TpopId } from '../../models/apflora/Tpop'
-import type { PopId } from '../../models/apflora/Pop'
-import type { ApId } from '../../models/apflora/Ap'
-import type { ProjektId } from '../../models/apflora/Projekt'
-import type { AeTaxonomyId } from '../../models/apflora/AeTaxonomy'
+import type { UserId } from '../../models/apflora/User.ts'
+import type { AdresseId } from '../../models/apflora/Adresse.ts'
+import type { TpopkontrId } from '../../models/apflora/Tpopkontr.ts'
+import type { TpopId } from '../../models/apflora/Tpop.ts'
+import type { PopId } from '../../models/apflora/Pop.ts'
+import type { ApId } from '../../models/apflora/Ap.ts'
+import type { ProjektId } from '../../models/apflora/Projekt.ts'
+import type { AeTaxonomyId } from '../../models/apflora/AeTaxonomy.ts'
 
 // when Karte was loaded async, it did not load,
 // but only in production!

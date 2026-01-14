@@ -14,8 +14,8 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { ApartId } from '../../../../models/apflora/Apart.js'
-import type { ApId } from '../../../../models/apflora/Ap.js'
+import type { ApartId } from '../../../../models/apflora/Apart.ts'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 interface CreateApartResult {
   data?: {

@@ -10,7 +10,7 @@ import { observer } from 'mobx-react-lite'
 import type {
   EkzaehleinheitId,
   ApId,
-} from '../../../../models/apflora/index.js'
+} from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'

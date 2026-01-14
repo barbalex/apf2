@@ -17,10 +17,10 @@ import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
-import type Apart from '../../../../models/apflora/Apart.js'
-import type { ApartId } from '../../../../models/apflora/Apart.js'
-import type { ApId } from '../../../../models/apflora/Ap.js'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.js'
+import type Apart from '../../../../models/apflora/Apart.ts'
+import type { ApartId } from '../../../../models/apflora/Apart.ts'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
+import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 import {
   container,

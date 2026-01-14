@@ -8,8 +8,8 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
-import type { ApId } from '../../../../models/apflora/public/ApId'
-import type { PopId } from '../../../../models/apflora/public/PopId'
+import type { ApId } from '../../../../models/apflora/public/ApId.ts'
+import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
