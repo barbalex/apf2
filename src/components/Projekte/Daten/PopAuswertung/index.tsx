@@ -30,14 +30,7 @@ import type {
   TpopStatusWerteCode,
 } from '../../../../models/apflora/index.tsx'
 
-import {
-  spinnerContainer,
-  spinnerText,
-  noDataContainer,
-  titleRow,
-  title,
-  container,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface TpopData {
   id: TpopId
@@ -141,17 +134,17 @@ export const Component = ({ height = 400 }: ComponentProps) => {
       <FormTitle title={`${popLabel}: Auswertung`} />
       <>
         {loading ?
-          <div className={spinnerContainer}>
+          <div className={styles.spinnerContainer}>
             <CircularProgress />
-            <div className={spinnerText}>
+            <div className={styles.spinnerText}>
               lade Mengen nach Teil-Populationen...
             </div>
           </div>
         : tpopMengeData.length ?
           <>
-            <div className={titleRow}>
+            <div className={styles.titleRow}>
               <h4
-                className={title}
+                className={styles.title}
               >{`"${zielEinheit}" nach Teil-Populationen`}</h4>
               <MuiTooltip title="Mehr Informationen">
                 <IconButton
@@ -166,7 +159,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
             <ResponsiveContainer
               width="99%"
               height={height}
-              className={container}
+              className={styles.container}
             >
               <AreaChart
                 width={600}
@@ -218,9 +211,9 @@ export const Component = ({ height = 400 }: ComponentProps) => {
             </ResponsiveContainer>
           </>
         : <>
-            <div className={titleRow}>
+            <div className={styles.titleRow}>
               <h4
-                className={title}
+                className={styles.title}
               >{`"${zielEinheit}" nach Teil-Populationen`}</h4>
               <MuiTooltip title="Mehr Informationen">
                 <IconButton
@@ -232,7 +225,7 @@ export const Component = ({ height = 400 }: ComponentProps) => {
                 </IconButton>
               </MuiTooltip>
             </div>
-            <div className={noDataContainer}>Keine Daten gefunden</div>
+            <div className={styles.noDataContainer}>Keine Daten gefunden</div>
           </>
         }
       </>
