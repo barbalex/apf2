@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 
-import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
 import { List } from './List.tsx'
 
 export const Component = () => {

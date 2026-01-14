@@ -20,7 +20,7 @@ import { MobxContext } from '../../mobxContext.js'
 import { Spinner } from '../shared/Spinner.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.tsx'
-import { hideBookmarksAtom } from '../../JotaiStore/index.js'
+import { hideBookmarksAtom } from '../../JotaiStore/index.ts'
 
 import styles from './ProjektContainer.module.css'
 import { fi } from 'date-fns/locale'

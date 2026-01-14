@@ -5,7 +5,7 @@ import { useAtom } from 'jotai'
 import { HomeMenus } from './Home/index.tsx'
 import { EkPlanMenus } from './EkPlan.tsx'
 import { ProjekteMenus } from './Projekte/index.tsx'
-import { isMobileViewAtom } from '../../../JotaiStore/index.js'
+import { isMobileViewAtom } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 

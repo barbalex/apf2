@@ -16,7 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { MobxContext } from '../../../../mobxContext.js'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
 import type { ZielId } from '../../../../models/apflora/ZielId.ts'
 import type { ApId } from '../../../../models/apflora/ApId.ts'

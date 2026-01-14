@@ -26,7 +26,7 @@ import { initializeIdb } from './modules/initializeIdb.js'
 import { MobxStore } from './store/index.js'
 import { buildApolloClient } from './apolloClient.js'
 
-import { store as jotaiStore } from './JotaiStore/index.js'
+import { store as jotaiStore } from './JotaiStore/index.ts'
 
 import { MobxContext } from './mobxContext.js'
 import { IdbContext } from './idbContext.js'

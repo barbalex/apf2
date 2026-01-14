@@ -8,7 +8,7 @@ import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
 
 export const List = observer(() => {
   const [isDesktopView] = useAtom(isDesktopViewAtom)

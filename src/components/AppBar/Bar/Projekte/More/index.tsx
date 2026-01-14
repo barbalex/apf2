@@ -23,7 +23,7 @@ import {
   enforceDesktopNavigationAtom,
   enforceMobileNavigationAtom,
   writeEnforceDesktopNavigationAtom,
-} from '../../../../../JotaiStore/index.js'
+} from '../../../../../JotaiStore/index.ts'
 
 import parentStyles from '../index.module.css'
 import styles from './index.module.css'

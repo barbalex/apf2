@@ -23,7 +23,7 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.js'
 import { copyTo } from '../../../../modules/copyTo/index.js'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
 import type { PopId, ApId, Pop } from '../../../../models/apflora/index.js'
 

@@ -17,7 +17,7 @@ import { useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
-} from '../../../JotaiStore/index.js'
+} from '../../../JotaiStore/index.ts'
 
 const CmApFolder = lazy(async () => ({
   default: (await import('./contextmenu/ApFolder.tsx')).Apfolder,

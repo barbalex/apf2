@@ -6,7 +6,7 @@ import { useAtom } from 'jotai'
 import { TestdataMessage } from './TestdataMessage.jsx'
 import { MobxContext } from '../../../mobxContext.js'
 import { FilterInput } from './FilterInput.jsx'
-import { navListFilterAtoms } from '../../../JotaiStore/index.js'
+import { navListFilterAtoms } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 

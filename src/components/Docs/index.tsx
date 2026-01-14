@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai'
 
-import { isDesktopViewAtom } from '../../JotaiStore/index.js'
+import { isDesktopViewAtom } from '../../JotaiStore/index.ts'
 import { MobileList } from './MobileList.tsx'
 import { DesktopDocs } from './DesktopDocs.tsx'
 

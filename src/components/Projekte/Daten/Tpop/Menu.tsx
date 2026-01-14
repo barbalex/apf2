@@ -38,7 +38,7 @@ import { copyTo } from '../../../../modules/copyTo/index.js'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.js'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.js'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.js'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.js'
+import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'

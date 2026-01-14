@@ -11,7 +11,7 @@ import { useSetAtom, useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
-} from '../../../../JotaiStore/index.js'
+} from '../../../../JotaiStore/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'

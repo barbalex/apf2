@@ -21,7 +21,7 @@ const datenHandle = {
   bookmarkFetcherName: 'useRootNavData',
 }
 
-import { isDesktopViewAtom } from '../../JotaiStore/index.js'
+import { isDesktopViewAtom } from '../../JotaiStore/index.ts'
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'

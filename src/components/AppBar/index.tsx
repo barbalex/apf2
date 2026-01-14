@@ -8,7 +8,7 @@ import { EkfBar } from './EkfBar/index.tsx'
 import { inIframe } from '../../modules/inIframe.js'
 import { Spinner } from '../shared/Spinner.tsx'
 import { MobxContext } from '../../mobxContext.js'
-import { isMobileViewAtom } from '../../JotaiStore/index.js'
+import { isMobileViewAtom } from '../../JotaiStore/index.ts'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.tsx'
 
 import styles from './index.module.css'

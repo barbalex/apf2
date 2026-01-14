@@ -5,7 +5,7 @@ import { remove } from 'es-toolkit'
 import { useAtom } from 'jotai'
 
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
-import { isDesktopViewAtom } from '../../../../JotaiStore/index.js'
+import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
