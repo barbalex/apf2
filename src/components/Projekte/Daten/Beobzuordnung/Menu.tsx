@@ -13,7 +13,7 @@ import {
   newTpopFromBeobBeobIdAtom,
 } from '../../../../JotaiStore/index.js'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { showCoordOfBeobOnMapsZhCh } from '../../../../modules/showCoordOfBeobOnMapsZhCh.js'

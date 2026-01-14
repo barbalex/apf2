@@ -10,8 +10,8 @@ import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.js'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
-import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.tsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 

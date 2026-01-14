@@ -27,7 +27,7 @@ import { useAtom } from 'jotai'
 
 import type { TpopId, PopId } from '../../../../generated/apflora/models.js'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'

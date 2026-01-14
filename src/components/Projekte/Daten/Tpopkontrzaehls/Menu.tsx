@@ -8,8 +8,8 @@ import { FaPlus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
-import { FilterButton } from '../../../shared/MenuBar/FilterButton.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.tsx'
+import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 

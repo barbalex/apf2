@@ -1,5 +1,5 @@
-import { MenuBar } from '../shared/MenuBar/index.jsx'
-import { FilterButton } from '../shared/MenuBar/FilterButton.jsx'
+import { MenuBar } from '../shared/MenuBar/index.tsx'
+import { FilterButton } from '../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 export const Menu = ({ toggleFilterInput }) => {

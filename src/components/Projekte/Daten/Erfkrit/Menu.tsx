@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
 import type { ErfkritId, ApId } from '../../../../models/apflora/index.js'
 
-import { MenuBar } from '../../../shared/MenuBar/index.jsx'
+import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
