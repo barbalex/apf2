@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
 import { useBeobNichtZuzuordnensNavData } from '../../../../modules/useBeobNichtZuzuordnensNavData.js'
-import { List as SharedList } from '../../../shared/List/index.jsx'
+import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from '../BeobNichtBeurteilts/Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'

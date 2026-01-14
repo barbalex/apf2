@@ -4,7 +4,7 @@ import { useAtom } from 'jotai'
 
 import { MobxContext } from '../../../../mobxContext.js'
 import { useApbersNavData } from '../../../../modules/useApbersNavData.js'
-import { List as SharedList } from '../../../shared/List/index.jsx'
+import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'
