@@ -121,9 +121,16 @@ export const Component = observer(() => {
         variables,
       })
     } catch (error) {
-      return setFieldErrors({ [field]: (error as Error).message })
+      return setFieldErrors((prev) => ({
+        ...prev,
+        [field]: (error as Error).message,
+      }))
     }
-    setFieldErrors({})
+    //  set fieldErrors to previous without the updated field
+    setFieldErrors((prev) => {
+      const { [field]: _, ...rest } = prev
+      return rest
+    })
     if (field === 'artId') {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
