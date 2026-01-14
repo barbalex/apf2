@@ -29,7 +29,7 @@ import {
   initial as initialTpopfreiwkontr,
 } from './DataFilter/tpopfreiwkontr.js'
 import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap.js'
-import { appBaseUrl } from '../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 
 export const Tree = types
   .model('Tree', {

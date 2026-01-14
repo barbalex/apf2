@@ -62,7 +62,7 @@ export const deleteModule = async ({ apolloClient, store, search }) => {
       }
     `
   } else {
-    const qrObject = await import(`./queries/${queryName}.js`)
+    const qrObject = await import(`./queries/${queryName}.ts`)
     query = qrObject.default
   }
   let result

@@ -13,7 +13,7 @@ const DatenNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Daten.tsx')).Menu,
 }))
 const datenBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useRootNavData.js')).useRootNavData,
+  default: (await import('../../modules/useRootNavData.ts')).useRootNavData,
 }))
 const datenHandle = {
   nav: DatenNav,

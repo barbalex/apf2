@@ -12,9 +12,9 @@ import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-type
 import { jwtDecode } from 'jwt-decode'
 import { uniqBy } from 'es-toolkit'
 
-import { graphQlUri } from './modules/graphQlUri.js'
-import { existsPermissionError } from './modules/existsPermissionError.js'
-import { existsTooLargeError } from './modules/existsTooLargeError.js'
+import { graphQlUri } from './modules/graphQlUri.ts'
+import { existsPermissionError } from './modules/existsPermissionError.ts'
+import { existsTooLargeError } from './modules/existsTooLargeError.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 

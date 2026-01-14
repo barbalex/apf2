@@ -12,7 +12,7 @@ export const FetcherImporter = ({ match, ...other }) => {
     if (fetcherModule || !fetcherName) return
 
     // return the module, not the hook as that would already be called
-    import(`../../../modules/${fetcherName}.js`).then((module) =>
+    import(`../../../modules/${fetcherName}.ts`).then((module) =>
       setFetcherModule(module),
     )
   }, [fetcherName, fetcherModule])

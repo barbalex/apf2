@@ -15,7 +15,7 @@ const DatenNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Daten.tsx')).Menu,
 }))
 const datenBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useRootNavData.js')).useRootNavData,
+  default: (await import('../../modules/useRootNavData.ts')).useRootNavData,
 }))
 const datenHandle = {
   nav: DatenNav,
@@ -26,7 +26,7 @@ const ProjekteNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Projects.tsx')).Menu,
 }))
 const projekteBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useProjekteNavData.js'))
+  default: (await import('../../modules/useProjekteNavData.ts'))
     .useProjekteNavData,
 }))
 const projekteHandle = {
@@ -35,7 +35,7 @@ const projekteHandle = {
   bookmarkFetcherName: 'useProjekteNavData',
 }
 const projektBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useProjektNavData.js'))
+  default: (await import('../../modules/useProjektNavData.ts'))
     .useProjektNavData,
 }))
 const projektHandle = {
@@ -43,7 +43,7 @@ const projektHandle = {
   bookmarkFetcherName: 'useProjektNavData',
 }
 const apberuebersichtsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApberuebersichtsNavData.js'))
+  default: (await import('../../modules/useApberuebersichtsNavData.ts'))
     .useApberuebersichtsNavData,
 }))
 const apberuebersichtsHandle = {
@@ -51,21 +51,21 @@ const apberuebersichtsHandle = {
   bookmarkFetcherName: 'useApberuebersichtsNavData',
 }
 const apsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApsNavData.js')).useApsNavData,
+  default: (await import('../../modules/useApsNavData.ts')).useApsNavData,
 }))
 const apsHandle = {
   bookmarkFetcher: apsBookmarkFetcher,
   bookmarkFetcherName: 'useApsNavData',
 }
 const usersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useUsersNavData.js')).useUsersNavData,
+  default: (await import('../../modules/useUsersNavData.ts')).useUsersNavData,
 }))
 const usersHandle = {
   bookmarkFetcher: usersBookmarkFetcher,
   bookmarkFetcherName: 'useUsersNavData',
 }
 const currentissuesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useCurrentissuesNavData.js'))
+  default: (await import('../../modules/useCurrentissuesNavData.ts'))
     .useCurrentissuesNavData,
 }))
 const currentissuesHandle = {
@@ -73,7 +73,7 @@ const currentissuesHandle = {
   bookmarkFetcherName: 'useCurrentissuesNavData',
 }
 const messagesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useMessagesNavData.js'))
+  default: (await import('../../modules/useMessagesNavData.ts'))
     .useMessagesNavData,
 }))
 const messagesHandle = {
@@ -81,14 +81,14 @@ const messagesHandle = {
   bookmarkFetcherName: 'useMessagesNavData',
 }
 const wertesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useWertesNavData.js')).useWertesNavData,
+  default: (await import('../../modules/useWertesNavData.ts')).useWertesNavData,
 }))
 const wertesHandle = {
   bookmarkFetcher: wertesBookmarkFetcher,
   bookmarkFetcherName: 'useWertesNavData',
 }
 const adressesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useAdressesNavData.js'))
+  default: (await import('../../modules/useAdressesNavData.ts'))
     .useAdressesNavData,
 }))
 const adressesHandle = {
@@ -97,7 +97,7 @@ const adressesHandle = {
 }
 const tpopApberrelevantGrundWertesBookmarkFetcher = lazy(async () => ({
   default: (
-    await import('../../modules/useTpopApberrelevantGrundWertesNavData.js')
+    await import('../../modules/useTpopApberrelevantGrundWertesNavData.ts')
   ).useTpopApberrelevantGrundWertesNavData,
 }))
 const tpopApberrelevantGrundWertesHandle = {
@@ -105,7 +105,7 @@ const tpopApberrelevantGrundWertesHandle = {
   bookmarkFetcherName: 'useTpopApberrelevantGrundWertesNavData',
 }
 const ekAbrechnungstypWertesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useEkAbrechnungstypWertesNavData.js'))
+  default: (await import('../../modules/useEkAbrechnungstypWertesNavData.ts'))
     .useEkAbrechnungstypWertesNavData,
 }))
 const ekAbrechnungstypWertesHandle = {
@@ -114,7 +114,7 @@ const ekAbrechnungstypWertesHandle = {
 }
 const tpopkontrzaehlEinheitWertesBookmarkFetcher = lazy(async () => ({
   default: (
-    await import('../../modules/useTpopkontrzaehlEinheitWertesNavData.js')
+    await import('../../modules/useTpopkontrzaehlEinheitWertesNavData.ts')
   ).useTpopkontrzaehlEinheitWertesNavData,
 }))
 const tpopkontrzaehlEinheitWertesHandle = {
@@ -122,14 +122,14 @@ const tpopkontrzaehlEinheitWertesHandle = {
   bookmarkFetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
 }
 const apBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApNavData.js')).useApNavData,
+  default: (await import('../../modules/useApNavData.ts')).useApNavData,
 }))
 const apHandle = {
   bookmarkFetcher: apBookmarkFetcher,
   bookmarkFetcherName: 'useApNavData',
 }
 const beobNichtBeurteiltsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useBeobNichtBeurteiltsNavData.js'))
+  default: (await import('../../modules/useBeobNichtBeurteiltsNavData.ts'))
     .useBeobNichtBeurteiltsNavData,
 }))
 const beobNichtBeurteiltHandle = {
@@ -137,7 +137,7 @@ const beobNichtBeurteiltHandle = {
   bookmarkFetcherName: 'useBeobNichtBeurteiltsNavData',
 }
 const beobNichtZuzuordnensBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useBeobNichtZuzuordnensNavData.js'))
+  default: (await import('../../modules/useBeobNichtZuzuordnensNavData.ts'))
     .useBeobNichtBeurteiltsNavData,
 }))
 const beobNichtZuzuordnenHandle = {
@@ -145,7 +145,7 @@ const beobNichtZuzuordnenHandle = {
   bookmarkFetcherName: 'useBeobNichtZuzuordnensNavData',
 }
 const beobZugeordnetsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useBeobZugeordnetsNavData.js'))
+  default: (await import('../../modules/useBeobZugeordnetsNavData.ts'))
     .useBeobZugeordnetsNavData,
 }))
 const beobZugeordnetHandle = {
@@ -153,14 +153,14 @@ const beobZugeordnetHandle = {
   bookmarkFetcherName: 'useBeobZugeordnetsNavData',
 }
 const popsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopsNavData.js')).usePopsNavData,
+  default: (await import('../../modules/usePopsNavData.ts')).usePopsNavData,
 }))
 const popsHandle = {
   bookmarkFetcher: popsBookmarkFetcher,
   bookmarkFetcherName: 'usePopsNavData',
 }
 const zielJahrsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useZieljahrsNavData.js'))
+  default: (await import('../../modules/useZieljahrsNavData.ts'))
     .useZieljahrsNavData,
 }))
 const zielJahrsHandle = {
@@ -168,7 +168,7 @@ const zielJahrsHandle = {
   bookmarkFetcherName: 'useZieljahrsNavData',
 }
 const zielsOfJahrBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useZielsOfJahrNavData.js'))
+  default: (await import('../../modules/useZielsOfJahrNavData.ts'))
     .useZielsOfJahrNavData,
 }))
 const zielsOfJahrHandle = {
@@ -176,14 +176,14 @@ const zielsOfJahrHandle = {
   bookmarkFetcherName: 'useZielsOfJahrNavData',
 }
 const zielBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useZielNavData.js')).useZielNavData,
+  default: (await import('../../modules/useZielNavData.ts')).useZielNavData,
 }))
 const zielHandle = {
   bookmarkFetcher: zielBookmarkFetcher,
   bookmarkFetcherName: 'useZielNavData',
 }
 const erfkritsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useErfkritsNavData.js'))
+  default: (await import('../../modules/useErfkritsNavData.ts'))
     .useErfkritsNavData,
 }))
 const erfkritsHandle = {
@@ -191,21 +191,21 @@ const erfkritsHandle = {
   bookmarkFetcherName: 'useErfkritsNavData',
 }
 const apbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApbersNavData.js')).useApbersNavData,
+  default: (await import('../../modules/useApbersNavData.ts')).useApbersNavData,
 }))
 const apbersHandle = {
   bookmarkFetcher: apbersBookmarkFetcher,
   bookmarkFetcherName: 'useApbersNavData',
 }
 const apartsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApartsNavData.js')).useApartsNavData,
+  default: (await import('../../modules/useApartsNavData.ts')).useApartsNavData,
 }))
 const apartsHandle = {
   bookmarkFetcher: apartsBookmarkFetcher,
   bookmarkFetcherName: 'useApartsNavData',
 }
 const assozartsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useAssozartsNavData.js'))
+  default: (await import('../../modules/useAssozartsNavData.ts'))
     .useAssozartsNavData,
 }))
 const assozartsHandle = {
@@ -213,7 +213,7 @@ const assozartsHandle = {
   bookmarkFetcherName: 'useAssozartsNavData',
 }
 const ekfrequenzsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useEkfrequenzsNavData.js'))
+  default: (await import('../../modules/useEkfrequenzsNavData.ts'))
     .useEkfrequenzNavData,
 }))
 const ekfrequenzsHandle = {
@@ -221,7 +221,7 @@ const ekfrequenzsHandle = {
   bookmarkFetcherName: 'useEkfrequenzsNavData',
 }
 const ekzaehleinheitsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useEkzaehleinheitsNavData.js'))
+  default: (await import('../../modules/useEkzaehleinheitsNavData.ts'))
     .useEkzaehleinheitsNavData,
 }))
 const ekzaehleinheitsHandle = {
@@ -229,14 +229,14 @@ const ekzaehleinheitsHandle = {
   bookmarkFetcherName: 'useEkzaehleinheitsNavData',
 }
 const popBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopNavData.js')).usePopNavData,
+  default: (await import('../../modules/usePopNavData.ts')).usePopNavData,
 }))
 const popHandle = {
   bookmarkFetcher: popBookmarkFetcher,
   bookmarkFetcherName: 'usePopNavData',
 }
 const popmassnbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopmassnbersNavData.js'))
+  default: (await import('../../modules/usePopmassnbersNavData.ts'))
     .usePopmassnbersNavData,
 }))
 const popmassnbersHandle = {
@@ -244,7 +244,7 @@ const popmassnbersHandle = {
   bookmarkFetcherName: 'usePopmassnbersNavData',
 }
 const popbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopbersNavData.js'))
+  default: (await import('../../modules/usePopbersNavData.ts'))
     .usePopbersNavData,
 }))
 const popbersHandle = {
@@ -252,21 +252,21 @@ const popbersHandle = {
   bookmarkFetcherName: 'usePopbersNavData',
 }
 const tpopsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopsNavData.js')).useTpopsNavData,
+  default: (await import('../../modules/useTpopsNavData.ts')).useTpopsNavData,
 }))
 const tpopsHandle = {
   bookmarkFetcher: tpopsBookmarkFetcher,
   bookmarkFetcherName: 'useTpopsNavData',
 }
 const tpopBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopNavData.js')).useTpopNavData,
+  default: (await import('../../modules/useTpopNavData.ts')).useTpopNavData,
 }))
 const tpopHandle = {
   bookmarkFetcher: tpopBookmarkFetcher,
   bookmarkFetcherName: 'useTpopNavData',
 }
 const tpopmassnsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopmassnsNavData.js'))
+  default: (await import('../../modules/useTpopmassnsNavData.ts'))
     .useTpopmassnsNavData,
 }))
 const tpopmassnsHandle = {
@@ -274,7 +274,7 @@ const tpopmassnsHandle = {
   bookmarkFetcherName: 'useTpopmassnsNavData',
 }
 const tpopmassnbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopmassnbersNavData.js'))
+  default: (await import('../../modules/useTpopmassnbersNavData.ts'))
     .useTpopmassnbersNavData,
 }))
 const tpopmassnbersHandle = {
@@ -282,7 +282,7 @@ const tpopmassnbersHandle = {
   bookmarkFetcherName: 'useTpopmassnbersNavData',
 }
 const tpopbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopbersNavData.js'))
+  default: (await import('../../modules/useTpopbersNavData.ts'))
     .useTpopbersNavData,
 }))
 const tpopbersHandle = {
@@ -290,7 +290,7 @@ const tpopbersHandle = {
   bookmarkFetcherName: 'useTpopbersNavData',
 }
 const tpopfreiwkontrsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfreiwkontrsNavData.js'))
+  default: (await import('../../modules/useTpopfreiwkontrsNavData.ts'))
     .useTpopfreiwkontrsNavData,
 }))
 const tpopfreiwkontrsHandle = {
@@ -298,7 +298,7 @@ const tpopfreiwkontrsHandle = {
   bookmarkFetcherName: 'useTpopfreiwkontrsNavData',
 }
 const tpopfeldkontrsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfeldkontrsNavData.js'))
+  default: (await import('../../modules/useTpopfeldkontrsNavData.ts'))
     .useTpopfeldkontrsNavData,
 }))
 const tpopfeldkontrsHandle = {
@@ -306,7 +306,7 @@ const tpopfeldkontrsHandle = {
   bookmarkFetcherName: 'useTpopfeldkontrsNavData',
 }
 const tpopfeldkontrBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfeldkontrNavData.js'))
+  default: (await import('../../modules/useTpopfeldkontrNavData.ts'))
     .useTpopfeldkontrNavData,
 }))
 const tpopfeldkontrHandle = {
@@ -314,7 +314,7 @@ const tpopfeldkontrHandle = {
   bookmarkFetcherName: 'useTpopfeldkontrNavData',
 }
 const tpopfeldkontrzaehlsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfeldkontrzaehlsNavData.js'))
+  default: (await import('../../modules/useTpopfeldkontrzaehlsNavData.ts'))
     .useTpopfeldkontrzaehlsNavData,
 }))
 const tpopfeldkontrzaehlsHandle = {
@@ -322,7 +322,7 @@ const tpopfeldkontrzaehlsHandle = {
   bookmarkFetcherName: 'useTpopfeldkontrzaehlsNavData',
 }
 const tpopmassnBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopmassnNavData.js'))
+  default: (await import('../../modules/useTpopmassnNavData.ts'))
     .useTpopmassnNavData,
 }))
 const tpopmassnHandle = {
@@ -330,7 +330,7 @@ const tpopmassnHandle = {
   bookmarkFetcherName: 'useTpopmassnNavData',
 }
 const tpopfreiwkontrBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfreiwkontrNavData.js'))
+  default: (await import('../../modules/useTpopfreiwkontrNavData.ts'))
     .useTpopfreiwkontrNavData,
 }))
 const tpopfreiwkontrHandle = {
@@ -338,7 +338,7 @@ const tpopfreiwkontrHandle = {
   bookmarkFetcherName: 'useTpopfreiwkontrNavData',
 }
 const idealbiotopBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useIdealbiotopNavData.js'))
+  default: (await import('../../modules/useIdealbiotopNavData.ts'))
     .useIdealbiotopNavData,
 }))
 const idealbiotopHandle = {

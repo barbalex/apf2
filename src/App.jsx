@@ -22,7 +22,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import { theme } from './utils/materialTheme.js'
 
-import { initializeIdb } from './modules/initializeIdb.js'
+import { initializeIdb } from './modules/initializeIdb.ts'
 import { MobxStore } from './store/index.js'
 import { buildApolloClient } from './apolloClient.js'
 
@@ -32,7 +32,7 @@ import { MobxContext } from './mobxContext.js'
 import { IdbContext } from './idbContext.js'
 import { UploaderContext } from './UploaderContext.js'
 
-import { persistStore } from './modules/persistStore.js'
+import { persistStore } from './modules/persistStore.ts'
 
 import './app.css'
 

@@ -24,19 +24,19 @@ export const exportModule = async ({
     })
   }
   if (kml) {
-    const { exportKml } = await import('./exportKml.js')
+    const { exportKml } = await import('./exportKml.ts')
     exportKml({
       fileName,
       data,
     })
   } else if (exportFileType === 'csv') {
-    const { exportCsv } = await import('./exportCsv.js')
+    const { exportCsv } = await import('./exportCsv.ts')
     exportCsv({
       fileName,
       data,
     })
   } else {
-    const { exportXlsx } = await import('./exportXlsx.js')
+    const { exportXlsx } = await import('./exportXlsx.ts')
     // pass some data in case something goes wrong
     await exportXlsx({
       fileName,
