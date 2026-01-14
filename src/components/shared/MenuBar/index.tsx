@@ -5,11 +5,7 @@ import { FaBars } from 'react-icons/fa6'
 import { styled } from '@mui/material/styles'
 import { useDebouncedCallback } from 'use-debounce'
 
-import {
-  measuredOuterContainer,
-  stylingContainer,
-  menuContent,
-} from './index.module.css'
+import styles from './index.module.css'
 
 const buttonWidth = 40
 
@@ -178,13 +174,13 @@ export const MenuBar = ({
 
   return (
     <div
-      className={measuredOuterContainer}
+      className={styles.measuredOuterContainer}
       ref={outerContainerRef}
       style={{ backgroundColor: bgColor }}
     >
       {titleComponent}
       <div
-        className={stylingContainer}
+        className={styles.stylingContainer}
         style={{
           maxWidth:
             Math.abs(outerContainerWidth ?? 0) - (titleComponentWidth ?? 0),
@@ -213,7 +209,7 @@ export const MenuBar = ({
                 // TODO: prevents more menu opening on very narrow screens
                 onClick={onCloseMenu}
                 style={{ backgroundColor: bgColor }}
-                className={`menubar-more-menus ${menuContent}`}
+                className={`menubar-more-menus ${styles.menuContent}`}
               >
                 {menus}
               </div>
