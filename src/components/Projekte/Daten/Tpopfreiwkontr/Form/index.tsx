@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
 import type { ApId } from '../../../../../models/apflora/ApId.ts'
 
-import { StringToCopyOnlyButton } from '../../../../shared/StringToCopyOnlyButton.jsx'
+import { StringToCopyOnlyButton } from '../../../../shared/StringToCopyOnlyButton.tsx'
 import { Title } from './Title.tsx'
 import { Headdata } from './Headdata/index.tsx'
 import { Besttime } from './Besttime.tsx'

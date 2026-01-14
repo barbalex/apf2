@@ -7,7 +7,7 @@ import { useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
-import { Status } from '../../../shared/Status.jsx'
+import { Status } from '../../../shared/Status.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { Coordinates } from '../../../shared/Coordinates.tsx'

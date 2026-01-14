@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
-import { SelectLoadingOptionsTypable } from '../../../shared/SelectLoadingOptionsTypable.jsx'
+import { SelectLoadingOptionsTypable } from '../../../shared/SelectLoadingOptionsTypable.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 
