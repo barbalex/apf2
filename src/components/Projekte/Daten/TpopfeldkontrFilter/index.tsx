@@ -14,8 +14,8 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { DateField } from '../../../shared/Date.jsx'
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.jsx'
-import { query } from './query.js'
-import { queryTpopkontrs } from './queryTpopkontrs.js'
+import { query } from './query.ts'
+import { queryTpopkontrs } from './queryTpopkontrs.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -106,7 +106,8 @@ export const TpopfeldkontrFilter = observer(() => {
 
   const row = dataFilter.tpopfeldkontr[activeTab]
 
-  const { data, loading, error } = useQuery<TpopfeldkontrFilterQueryResult>(query)
+  const { data, loading, error } =
+    useQuery<TpopfeldkontrFilterQueryResult>(query)
   const { data: dataTpopkontrs } = useQuery<TpopkontrsCountQueryResult>(
     queryTpopkontrs,
     {
@@ -191,7 +192,9 @@ export const TpopfeldkontrFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <div className={styles.filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <div className={styles.filterCommentTitle}>
+              Zusätzlich aktive Filter:
+            </div>
             <ul>
               {!!navApFilterComment && (
                 <li className={styles.filterComment}>{navApFilterComment}</li>

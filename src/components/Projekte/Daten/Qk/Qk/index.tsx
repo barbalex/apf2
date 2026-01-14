@@ -13,8 +13,8 @@ import { useParams, useLocation, Form } from 'react-router'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
 import { standardQkYear } from '../../../../../modules/standardQkYear.js'
-import { query } from './query.js'
-import { createMessageFunctions } from './createMessageFunctions.js'
+import { query } from './query.ts'
+import { createMessageFunctions } from './createMessageFunctions.ts'
 import { MobxContext } from '../../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../../shared/Error.jsx'
@@ -131,7 +131,9 @@ export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
             variant="outlined"
             className={styles.analyzingButton}
           >
-            <span className={styles.analyzingSpan}>Die Daten werden analysiert</span>
+            <span className={styles.analyzingSpan}>
+              Die Daten werden analysiert
+            </span>
             <CircularProgress />
           </Button>
         : <div>

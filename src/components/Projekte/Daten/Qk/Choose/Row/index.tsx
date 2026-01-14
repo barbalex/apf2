@@ -4,7 +4,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 import { Error } from '../../../../../shared/Error.jsx'
 
 import type {
