@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
-import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
+import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.js'

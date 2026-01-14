@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.tsx'
-import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
+import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { Status } from '../../../shared/Status.tsx'
 import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.tsx'

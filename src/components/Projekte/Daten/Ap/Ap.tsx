@@ -9,7 +9,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
-import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
+import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.tsx'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'

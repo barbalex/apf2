@@ -5,7 +5,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { TextField } from '../../../shared/TextField.tsx'
-import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
+import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { Status } from '../../../shared/Status.tsx'
 import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.tsx'

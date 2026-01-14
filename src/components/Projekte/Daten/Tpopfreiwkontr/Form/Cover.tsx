@@ -1,4 +1,4 @@
-import { TextField2 } from '../../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../../shared/TextField2.tsx'
 import anteilImg from './anteil.png'
 
 import styles from './Cover.module.css'

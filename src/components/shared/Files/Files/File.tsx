@@ -11,7 +11,7 @@ import { styled } from '@mui/material/styles'
 import { upperFirst } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../ErrorBoundary.jsx'
-import { TextField } from '../../TextField.jsx'
+import { TextField } from '../../TextField.tsx'
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,

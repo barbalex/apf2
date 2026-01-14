@@ -14,7 +14,7 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
-import { TextField2 } from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../shared/TextField2.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { Select } from '../../../shared/Select.tsx'

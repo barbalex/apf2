@@ -8,7 +8,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { TextField2 } from '../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../shared/TextField2.tsx'
 import { CheckboxWithInfo } from '../../../shared/CheckboxWithInfo.jsx'
 import { Select } from '../../../shared/Select.tsx'
 import { DateField } from '../../../shared/Date.tsx'

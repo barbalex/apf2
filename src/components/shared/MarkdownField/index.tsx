@@ -3,7 +3,7 @@
 
 import { Editor } from './Editor/index.jsx'
 import { Presenter } from './Presenter.jsx'
-import { TextField } from '../TextField.jsx'
+import { TextField } from '../TextField.tsx'
 import { FocusWithin } from '../FocusWithin.jsx'
 
 // render:

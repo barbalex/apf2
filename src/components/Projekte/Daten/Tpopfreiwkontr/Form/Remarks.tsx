@@ -1,4 +1,4 @@
-import { TextField2 } from '../../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../../shared/TextField2.tsx'
 import styles from './Remarks.module.css'
 
 export const Remarks = ({ saveToDb, row, errors }) => (

@@ -1,4 +1,4 @@
-import { TextField2 } from '../../../../shared/TextField2.jsx'
+import { TextField2 } from '../../../../shared/TextField2.tsx'
 import { RadioButton } from '../../../../shared/RadioButton.tsx'
 import veghoeheImg from './veghoehe.png'
 
