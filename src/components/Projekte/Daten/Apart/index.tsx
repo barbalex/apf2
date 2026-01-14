@@ -5,7 +5,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
+import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'

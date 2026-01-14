@@ -98,7 +98,9 @@ export const SelectLoadingOptions = ({
         openMenuOnFocus
         className={`select-height-limited select-nocaret ${styles.select}`}
       />
-      {saveToDbError && <div className={styles.errorClass}>{saveToDbError}</div>}
+      {saveToDbError && (
+        <div className={styles.errorClass}>{saveToDbError}</div>
+      )}
     </div>
   )
 }

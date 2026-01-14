@@ -5,7 +5,7 @@ import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.jsx'
+import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { exportModule } from '../../../../modules/export.js'
 import { MobxContext } from '../../../../mobxContext.js'
 
