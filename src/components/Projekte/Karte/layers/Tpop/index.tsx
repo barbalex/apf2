@@ -10,11 +10,15 @@ import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
-import { query } from './query.js'
-import { updateTpopById } from './updateTpopById.js'
+import { query } from './query.ts'
+import { updateTpopById } from './updateTpopById.ts'
 import { tpop } from '../../../../shared/fragments.js'
 
-import type { TpopId, PopId, ApId } from '../../../../../models/apflora/public/Tpop.ts'
+import type {
+  TpopId,
+  PopId,
+  ApId,
+} from '../../../../../models/apflora/public/Tpop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 interface TpopNode {
