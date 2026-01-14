@@ -23,18 +23,7 @@ import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 import type { ApBearbstandWerteCode } from '../../../../models/apflora/ApBearbstandWerte.ts'
 import type { ApUmsetzungWerteCode } from '../../../../models/apflora/ApUmsetzungWerte.ts'
 
-import {
-  popover,
-  title,
-  row,
-  columnLeft,
-  container,
-  fieldsContainer,
-  formContainer,
-  fieldContainer,
-  filterCommentTitle,
-  filterComment,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface ApsQueryResult {
   allAps: {
@@ -177,7 +166,7 @@ export const ApFilter = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FilterTitle
           title="Art"
           table="ap"
@@ -190,13 +179,15 @@ export const ApFilter = observer(() => {
         />
         {showFilterComments && (
           <>
-            <div className={filterCommentTitle}>Zusätzlich aktive Filter:</div>
+            <div className={styles.filterCommentTitle}>
+              Zusätzlich aktive Filter:
+            </div>
             <ul>
               {!!navApFilterComment && (
-                <li className={filterComment}>{navApFilterComment}</li>
+                <li className={styles.filterComment}>{navApFilterComment}</li>
               )}
               {!!navLabelComment && (
-                <li className={filterComment}>{navLabelComment}</li>
+                <li className={styles.filterComment}>{navLabelComment}</li>
               )}
             </ul>
           </>
@@ -206,8 +197,8 @@ export const ApFilter = observer(() => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
-        <div className={fieldsContainer}>
-          <div className={formContainer}>
+        <div className={styles.fieldsContainer}>
+          <div className={styles.formContainer}>
             <SelectLoadingOptions
               key={`${row?.id}artId`}
               field="artId"
@@ -233,14 +224,14 @@ export const ApFilter = observer(() => {
               dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
               loading={loadingLists}
               popover={
-                <div className={popover}>
-                  <div className={title}>Legende</div>
-                  <div className={row}>
-                    <div className={columnLeft}>keiner:</div>
+                <div className={styles.popover}>
+                  <div className={styles.title}>Legende</div>
+                  <div className={styles.row}>
+                    <div className={styles.columnLeft}>keiner:</div>
                     <div>kein Aktionsplan vorgesehen</div>
                   </div>
-                  <div className={row}>
-                    <div className={columnLeft}>erstellt:</div>
+                  <div className={styles.row}>
+                    <div className={styles.columnLeft}>erstellt:</div>
                     <div>Aktionsplan fertig, auf der Webseite der FNS</div>
                   </div>
                 </div>
@@ -256,25 +247,25 @@ export const ApFilter = observer(() => {
               value={row?.startJahr}
               saveToDb={saveToDb}
             />
-            <div className={fieldContainer}>
+            <div className={styles.fieldContainer}>
               <RadioButtonGroupWithInfo
                 key={`${row?.id}umsetzung`}
                 name="umsetzung"
                 dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
                 loading={loadingLists}
                 popover={
-                  <div className={popover}>
-                    <div className={title}>Legende</div>
-                    <div className={row}>
-                      <div className={columnLeft}>
+                  <div className={styles.popover}>
+                    <div className={styles.title}>Legende</div>
+                    <div className={styles.row}>
+                      <div className={styles.columnLeft}>
                         noch keine
                         <br />
                         Umsetzung:
                       </div>
                       <div>noch keine Massnahmen ausgeführt</div>
                     </div>
-                    <div className={row}>
-                      <div className={columnLeft}>in Umsetzung:</div>
+                    <div className={styles.row}>
+                      <div className={styles.columnLeft}>in Umsetzung:</div>
                       <div>
                         bereits Massnahmen ausgeführt (auch wenn AP noch nicht
                         erstellt)
