@@ -162,7 +162,7 @@ export const Component = observer(() => {
       />
       <div className={styles.formContainer}>
         <SelectLoadingOptions
-          key={`${row?.id}artId`}
+          key={`${apId}artId`}
           field="artId"
           valueLabelPath="aeTaxonomyByArtId.taxArtName"
           label="Art (das namensgebende Taxon)"
@@ -209,7 +209,7 @@ export const Component = observer(() => {
           error={fieldErrors.startJahr}
         />
         <RadioButtonGroupWithInfo
-          key={`${row?.id}umsetzung`}
+          key={`${apId}umsetzung`}
           name="umsetzung"
           dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
           loading={false}
@@ -244,7 +244,7 @@ export const Component = observer(() => {
           error={fieldErrors.umsetzung}
         />
         <Select
-          key={`${row?.id}bearbeiter`}
+          key={`${apId}bearbeiter`}
           name="bearbeiter"
           label="Verantwortlich"
           options={data?.allAdresses?.nodes ?? []}
