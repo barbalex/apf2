@@ -26,13 +26,7 @@ import type { EkzaehleinheitId } from '../../../../../models/apflora/Ekzaehleinh
 import type { TpopkontrzaehlEinheitWerteCode } from '../../../../../models/apflora/TpopkontrzaehlEinheitWerte.ts'
 import type { PopStatusWerteCode } from '../../../../../models/apflora/PopStatusWerte.ts'
 
-import {
-  spinnerContainer,
-  spinnerText,
-  noDataContainer,
-  titleRow,
-  title,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface ApAuswPopMengeNode {
   jahr: number | null
@@ -149,14 +143,18 @@ export const PopMenge = ({
   return (
     <>
       {loadingPopMenge ?
-        <div className={spinnerContainer}>
+        <div className={styles.spinnerContainer}>
           <CircularProgress />
-          <div className={spinnerText}>lade Mengen nach Populationen...</div>
+          <div className={styles.spinnerText}>
+            lade Mengen nach Populationen...
+          </div>
         </div>
       : popMengeData.length ?
         <>
-          <div className={titleRow}>
-            <h4 className={title}>{`"${zielEinheit}" nach Populationen`}</h4>
+          <div className={styles.titleRow}>
+            <h4
+              className={styles.title}
+            >{`"${zielEinheit}" nach Populationen`}</h4>
             {!print && (
               <MuiTooltip title="Mehr Informationen">
                 <IconButton
@@ -225,8 +223,10 @@ export const PopMenge = ({
           </ResponsiveContainer>
         </>
       : <>
-          <div className={titleRow}>
-            <h4 className={title}>{`"${zielEinheit}" nach Populationen`}</h4>
+          <div className={styles.titleRow}>
+            <h4
+              className={styles.title}
+            >{`"${zielEinheit}" nach Populationen`}</h4>
             {!print && (
               <MuiTooltip title="Mehr Informationen">
                 <IconButton
@@ -239,7 +239,7 @@ export const PopMenge = ({
               </MuiTooltip>
             )}
           </div>
-          <div className={noDataContainer}>Keine Daten gefunden</div>
+          <div className={styles.noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
