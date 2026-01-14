@@ -7,7 +7,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
 
-import { exists } from '../../../../modules/exists.js'
+import { exists } from '../../../../modules/exists.ts'
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'

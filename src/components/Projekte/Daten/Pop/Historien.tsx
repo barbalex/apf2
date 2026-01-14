@@ -4,7 +4,7 @@ import { useParams } from 'react-router'
 
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { History as HistoryComponent } from '../../../shared/History/index.tsx'
-import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {

@@ -1,7 +1,7 @@
 
 import 'leaflet'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import SwitchScaleControl from '../../../modules/SwitchScaleControl.js'
+import SwitchScaleControl from '../../../modules/SwitchScaleControl.ts'
 import { createControlComponent } from '@react-leaflet/core'
 
 const options = {

@@ -1,13 +1,13 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
+import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
   MenuItem,
-} from '../../../../modules/react-contextmenu/index.js'
+} from '../../../../modules/react-contextmenu/index.ts'
 
 // create objects outside render
 const copyBeobZugeordnetKoordToTpopData = {

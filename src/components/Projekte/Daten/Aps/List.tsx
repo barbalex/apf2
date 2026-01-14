@@ -6,7 +6,7 @@ import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { useApsNavData } from '../../../../modules/useApsNavData.js'
+import { useApsNavData } from '../../../../modules/useApsNavData.ts'
 
 export const List = observer(() => {
   const store = useContext(MobxContext)

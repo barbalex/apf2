@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { useRootNavData } from '../../../../modules/useRootNavData.js'
+import { useRootNavData } from '../../../../modules/useRootNavData.ts'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Nav } from '../Nav.tsx'

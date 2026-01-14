@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdMyLocation, MdClear } from 'react-icons/md'
 
-import { epsg2056to4326 } from '../../../../modules/epsg2056to4326.js'
+import { epsg2056to4326 } from '../../../../modules/epsg2056to4326.ts'
 import panCentreIcon from '../../../../etc/panTo.png'
 
 import styles from './PanToCoordinates.module.css'

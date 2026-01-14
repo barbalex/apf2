@@ -4,7 +4,7 @@ import { isEqual } from 'es-toolkit'
 import { useLocation } from 'react-router'
 
 import { MobxContext } from '../../mobxContext.js'
-import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.js'
+import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.ts'
 
 export const ActiveNodeArraySetter = observer(() => {
   const store = useContext(MobxContext)

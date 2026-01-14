@@ -6,7 +6,7 @@ import { debounce } from 'es-toolkit'
 
 import { ShowCoordinates } from './ShowCoordinates.jsx'
 import { PanToCoordinates } from './PanToCoordinates.jsx'
-import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.js'
+import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from './index.module.css'

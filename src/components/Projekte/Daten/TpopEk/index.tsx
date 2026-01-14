@@ -21,7 +21,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { query } from './query.ts'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
   popStatusWerte,
   tpop,

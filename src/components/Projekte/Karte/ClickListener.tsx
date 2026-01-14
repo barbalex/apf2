@@ -12,7 +12,7 @@ import axios from 'redaxios'
 
 import { MobxContext } from '../../../mobxContext.js'
 import { Popup } from './layers/Popup.jsx'
-import { xmlToLayersData } from '../../../modules/xmlToLayersData.js'
+import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
 
 export const ClickListener = observer(() => {
   const { apId } = useParams()

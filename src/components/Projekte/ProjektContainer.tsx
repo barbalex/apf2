@@ -18,7 +18,7 @@ const Filter = lazy(async () => ({
 }))
 import { MobxContext } from '../../mobxContext.js'
 import { Spinner } from '../shared/Spinner.tsx'
-import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
+import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.tsx'
 import { hideBookmarksAtom } from '../../JotaiStore/index.ts'
 

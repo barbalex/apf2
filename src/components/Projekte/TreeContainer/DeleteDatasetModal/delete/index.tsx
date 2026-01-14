@@ -5,7 +5,7 @@ import { omit } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { tables } from '../../../../../modules/tables.js'
+import { tables } from '../../../../../modules/tables.ts'
 
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'

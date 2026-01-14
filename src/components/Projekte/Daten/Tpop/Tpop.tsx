@@ -13,10 +13,10 @@ import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.tsx'
-//import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
+//import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { Coordinates } from '../../../shared/Coordinates.tsx'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
   popStatusWerte,
   tpop,

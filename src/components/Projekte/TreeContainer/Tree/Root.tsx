@@ -5,11 +5,11 @@ import { jwtDecode } from 'jwt-decode'
 import { MobxContext } from '../../../../mobxContext.js'
 import { NodeWithList } from './NodeWithList.tsx'
 import { RootNode } from './RootNode.tsx'
-import { useProjektNavData } from '../../../../modules/useProjektNavData.js'
-import { useUsersNavData } from '../../../../modules/useUsersNavData.js'
-import { useWertesNavData } from '../../../../modules/useWertesNavData.js'
-import { useMessagesNavData } from '../../../../modules/useMessagesNavData.js'
-import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.js'
+import { useProjektNavData } from '../../../../modules/useProjektNavData.ts'
+import { useUsersNavData } from '../../../../modules/useUsersNavData.ts'
+import { useWertesNavData } from '../../../../modules/useWertesNavData.ts'
+import { useMessagesNavData } from '../../../../modules/useMessagesNavData.ts'
+import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.ts'
 
 export const Root = observer(() => {
   const store = useContext(MobxContext)

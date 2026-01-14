@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { useOnScreen } from '../../../../modules/useOnScreen.js'
+import { useOnScreen } from '../../../../modules/useOnScreen.ts'
 import { Visible } from './Visible.tsx'
 
 import styles from './index.module.css'

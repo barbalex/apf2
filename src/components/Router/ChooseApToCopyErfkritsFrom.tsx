@@ -12,7 +12,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { userIsReadOnly } from '../../modules/userIsReadOnly.js'
+import { userIsReadOnly } from '../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../mobxContext.js'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 

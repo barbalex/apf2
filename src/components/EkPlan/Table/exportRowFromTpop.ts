@@ -1,6 +1,6 @@
 import { sum } from 'es-toolkit'
 
-import { appBaseUrl } from '../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../modules/appBaseUrl.ts'
 
 export const exportRowFromTpop = ({ tpop, years, store, ekfrequenzs }) => {
   const { einheitsByAp, showCount, fields, showEk, showEkf, showMassn } =

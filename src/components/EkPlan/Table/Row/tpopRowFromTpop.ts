@@ -1,5 +1,5 @@
 import { fields } from '../fields.ts'
-import { appBaseUrl } from '../../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
 
 export const tpopRowFromTpop = ({ tpop, store }) =>
   tpop ?

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import { observer } from 'mobx-react-lite'
 
-import { exists } from '../../modules/exists.js'
+import { exists } from '../../modules/exists.ts'
 import styles from './Select.module.css'
 
 export const SelectCreatable = observer(

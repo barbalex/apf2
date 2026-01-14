@@ -9,7 +9,7 @@ import { observer } from 'mobx-react-lite'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
 interface MenuProps {

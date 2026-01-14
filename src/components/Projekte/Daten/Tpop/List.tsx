@@ -4,7 +4,7 @@ import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { useTpopNavData } from '../../../../modules/useTpopNavData.js'
+import { useTpopNavData } from '../../../../modules/useTpopNavData.ts'
 
 export const List = () => {
   const { navData, error } = useTpopNavData()

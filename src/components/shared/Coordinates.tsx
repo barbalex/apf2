@@ -10,24 +10,24 @@ import { useQueryClient } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
 
 import { MobxContext } from '../../mobxContext.js'
-import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.js'
-import { epsg2056to4326 } from '../../modules/epsg2056to4326.js'
+import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.ts'
+import { epsg2056to4326 } from '../../modules/epsg2056to4326.ts'
 import {
   isValid as xIsValid,
   message as xMessage,
-} from '../../modules/lv95XIsValid.js'
+} from '../../modules/lv95XIsValid.ts'
 import {
   isValid as yIsValid,
   message as yMessage,
-} from '../../modules/lv95YIsValid.js'
+} from '../../modules/lv95YIsValid.ts'
 import {
   isValid as wgs84LatIsValid,
   message as wgs84LatMessage,
-} from '../../modules/wgs84LatIsValid.js'
+} from '../../modules/wgs84LatIsValid.ts'
 import {
   isValid as wgs84LongIsValid,
   message as wgs84LongMessage,
-} from '../../modules/wgs84LongIsValid.js'
+} from '../../modules/wgs84LongIsValid.ts'
 
 import styles from './Coordinates.module.css'
 

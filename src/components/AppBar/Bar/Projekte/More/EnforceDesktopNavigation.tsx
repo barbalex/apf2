@@ -7,7 +7,7 @@ import {
   enforceDesktopNavigationAtom,
   writeEnforceDesktopNavigationAtom,
 } from '../../../../../JotaiStore/index.ts'
-import { constants } from '../../../../../modules/constants.js'
+import { constants } from '../../../../../modules/constants.ts'
 
 import styles from './AlwaysShowTree.module.css'
 

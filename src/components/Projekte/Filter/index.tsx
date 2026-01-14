@@ -6,7 +6,7 @@ import { TpopfeldkontrFilter } from '../Daten/TpopfeldkontrFilter/index.tsx'
 import { TpopfreiwkontrFilter } from '../Daten/TpopfreiwkontrFilter/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Title } from './Title.tsx'
-import { useSearchParamsState } from '../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../modules/useSearchParamsState.ts'
 
 import styles from './index.module.css'
 

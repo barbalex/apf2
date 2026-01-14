@@ -16,8 +16,8 @@ import { isNodeOpen } from '../isNodeOpen.ts'
 import { toggleNode } from './toggleNode.ts'
 import { toggleNodeSymbol } from './toggleNodeSymbol.ts'
 import { MobxContext } from '../../../../mobxContext.js'
-import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.js'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 
 import styles from './Row.module.css'
 

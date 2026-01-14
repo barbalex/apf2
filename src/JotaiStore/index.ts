@@ -1,6 +1,6 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { constants } from '../modules/constants.js'
+import { constants } from '../modules/constants.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)

@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { exportModule } from '../../../../modules/export.js'
+import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import { ApId } from '../../../../models/apflora/index.ts'

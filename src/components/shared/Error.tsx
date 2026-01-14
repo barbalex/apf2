@@ -2,9 +2,9 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { uniq } from 'es-toolkit'
 
-import { logout } from '../../modules/logout.js'
+import { logout } from '../../modules/logout.ts'
 import { IdbContext } from '../../idbContext.js'
-import { existsPermissionError } from '../../modules/existsPermissionError.js'
+import { existsPermissionError } from '../../modules/existsPermissionError.ts'
 
 import styles from './Error.module.css'
 

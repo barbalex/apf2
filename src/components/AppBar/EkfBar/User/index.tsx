@@ -19,10 +19,10 @@ import { query } from './query.ts'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { updateUserById as updateUserByIdGql } from './updateUserById.js'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
-import { logout } from '../../../../modules/logout.js'
+import { logout } from '../../../../modules/logout.ts'
 import { IdbContext } from '../../../../idbContext.js'
 
 import type {

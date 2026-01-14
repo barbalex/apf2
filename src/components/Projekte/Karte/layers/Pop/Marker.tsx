@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
 import { MobxContext } from '../../../../../mobxContext.js'
-import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { popIconString } from './popIconString.ts'
 import { popHighlightedIconString } from './popHighlightedIconString.ts'
 import { u as uIcon } from './statusGroup/u.ts'
@@ -28,7 +28,7 @@ import { svg202 } from './statusGroupSymbols/202.ts'
 import { svg202Highlighted } from './statusGroupSymbols/202Highlighted.ts'
 import { svg300 } from './statusGroupSymbols/300.ts'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.ts'
-import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 

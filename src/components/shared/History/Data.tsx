@@ -1,6 +1,6 @@
 import { diffSentences } from 'diff'
 
-import { toStringIfPossible } from '../../../modules/toStringIfPossible.js'
+import { toStringIfPossible } from '../../../modules/toStringIfPossible.ts'
 import { Spinner } from '../Spinner'
 
 import styles from './Data.module.css'

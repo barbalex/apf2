@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Input from '@mui/material/Input'
 
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 
 import styles from './KontrolljahrField.module.css'
 

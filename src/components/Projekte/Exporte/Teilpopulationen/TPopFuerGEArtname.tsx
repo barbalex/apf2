@@ -5,7 +5,7 @@ import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
-import { exportModule } from '../../../../modules/export.js'
+import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import type { TpopId } from '../../../../models/apflora/public/TpopId'

@@ -17,7 +17,7 @@ import { useParams } from 'react-router'
 
 import { Checkbox } from '../../shared/Checkbox.tsx'
 import { Error } from '../../../../../shared/Error.tsx'
-import { getBounds } from '../../../../../../modules/getBounds.js'
+import { getBounds } from '../../../../../../modules/getBounds.ts'
 import { MobxContext } from '../../../../../../mobxContext.js'
 import { query } from './query.ts'
 import { PopIcon } from './PopIcon.jsx'

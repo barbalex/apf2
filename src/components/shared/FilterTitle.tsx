@@ -6,8 +6,8 @@ import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../mobxContext.js'
-import { exists } from '../../modules/exists.js'
-import { appBaseUrl } from '../../modules/appBaseUrl.js'
+import { exists } from '../../modules/exists.ts'
+import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 
 import styles from './FilterTitle.module.css'
 

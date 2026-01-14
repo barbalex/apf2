@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useLocation } from 'react-router'
 
-import { tables } from '../../../../modules/tables.js'
+import { tables } from '../../../../modules/tables.ts'
 import { deleteModule } from './delete/index.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'

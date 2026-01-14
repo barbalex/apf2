@@ -2,7 +2,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
   MenuItem,
-} from '../../../../modules/react-contextmenu/index.js'
+} from '../../../../modules/react-contextmenu/index.ts'
 
 const insertData = {
   action: 'insert',

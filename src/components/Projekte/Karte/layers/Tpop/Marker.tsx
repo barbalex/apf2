@@ -27,8 +27,8 @@ import { svg202 } from './statusGroupSymbols/202.ts'
 import { svg202Highlighted } from './statusGroupSymbols/202Highlighted.ts'
 import { svg300 } from './statusGroupSymbols/300.ts'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.ts'
-import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
-import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 

@@ -3,7 +3,7 @@ import { upperFirst } from 'es-toolkit'
 import { camelCase } from 'es-toolkit'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { tables } from '../../../modules/tables.js'
+import { tables } from '../../../modules/tables.ts'
 import {
   adresse as adresseFragment,
   user as userFragment,

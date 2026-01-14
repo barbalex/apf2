@@ -18,7 +18,7 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { IdbContext } from '../idbContext.js'
 import { MobxContext } from '../mobxContext.js'
-import { getUserFromIdb } from '../modules/getUserFromIdb.js'
+import { getUserFromIdb } from '../modules/getUserFromIdb.ts'
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 
 import styles from './User.module.css'

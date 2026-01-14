@@ -17,12 +17,12 @@ import { TpopfeldkontrentwicklungPopover } from '../../../shared/Tpopfeldkontren
 import { query } from './query.ts'
 import { queryTpopkontrs } from './queryTpopkontrs.ts'
 import { MobxContext } from '../../../../mobxContext.js'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Tabs } from './Tabs.tsx'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 
 import type {
   AdresseId,

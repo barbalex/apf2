@@ -5,7 +5,7 @@ import { useAtom } from 'jotai'
 
 import { Bar } from './Bar/index.tsx'
 import { EkfBar } from './EkfBar/index.tsx'
-import { inIframe } from '../../modules/inIframe.js'
+import { inIframe } from '../../modules/inIframe.ts'
 import { Spinner } from '../shared/Spinner.tsx'
 import { MobxContext } from '../../mobxContext.js'
 import { isMobileViewAtom } from '../../JotaiStore/index.ts'

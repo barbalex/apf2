@@ -1,7 +1,7 @@
 // TODO: need to debounce
 import axios from 'redaxios'
 
-import { xmlToJson } from '../../../../modules/xmlToJson.js'
+import { xmlToJson } from '../../../../modules/xmlToJson.ts'
 
 export const onTileError = async (store, map, layer, ignore) => {
   console.log('onTileError', { ignore, map, layer, store })

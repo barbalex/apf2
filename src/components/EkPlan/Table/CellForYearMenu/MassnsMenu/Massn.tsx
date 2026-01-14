@@ -10,7 +10,7 @@ import {
 } from 'react-icons/md'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
-import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import styles from '../EkfsMenu/Ekf.module.css'
 
 export const Massn = ({ tpop, massn, border }) => {

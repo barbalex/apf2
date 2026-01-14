@@ -4,7 +4,7 @@ import { MdEditNote } from 'react-icons/md'
 import { remove } from 'es-toolkit'
 import { useAtom } from 'jotai'
 
-import { useProjekteTabs } from '../../../../modules/useProjekteTabs.js'
+import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'

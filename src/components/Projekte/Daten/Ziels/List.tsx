@@ -2,7 +2,7 @@ import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { useZielsOfJahrNavData } from '../../../../modules/useZielsOfJahrNavData.js'
+import { useZielsOfJahrNavData } from '../../../../modules/useZielsOfJahrNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'

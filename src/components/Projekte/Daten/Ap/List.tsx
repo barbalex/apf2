@@ -5,7 +5,7 @@ import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { useApNavData } from '../../../../modules/useApNavData.js'
+import { useApNavData } from '../../../../modules/useApNavData.ts'
 
 export const List = () => {
   const params = useParams<{ projId: string }>()

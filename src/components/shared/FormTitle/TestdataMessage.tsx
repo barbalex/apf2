@@ -1,6 +1,6 @@
 import { useParams } from 'react-router'
 
-import { constants } from '../../../modules/constants.js'
+import { constants } from '../../../modules/constants.ts'
 import styles from './TestdataMessage.module.css'
 
 export const TestdataMessage = () => {

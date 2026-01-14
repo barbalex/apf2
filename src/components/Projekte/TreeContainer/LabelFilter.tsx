@@ -8,7 +8,7 @@ import { snakeCase } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { tables } from '../../../modules/tables.js'
+import { tables } from '../../../modules/tables.ts'
 import { MobxContext } from '../../../mobxContext.js'
 
 import styles from './LabelFilter.module.css'

@@ -6,7 +6,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { Select } from '../../../../../shared/Select.tsx'
 import { MobxContext } from '../../../../../../mobxContext.js'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
-import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
 
 import styles from './Einheit.module.css'
 

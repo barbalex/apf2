@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams, useLocation } from 'react-router'
 
 import { MobxContext } from '../../../mobxContext.js'
-import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.js'
+import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Error } from '../../shared/Error.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'

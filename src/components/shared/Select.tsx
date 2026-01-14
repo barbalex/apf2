@@ -1,6 +1,6 @@
 import ReactSelect from 'react-select'
 
-import { exists } from '../../modules/exists.js'
+import { exists } from '../../modules/exists.ts'
 import styles from './Select.module.css'
 
 export const Select = ({

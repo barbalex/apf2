@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
-import { exists } from '../../modules/exists.js'
+import { exists } from '../../modules/exists.ts'
 
 import styles from './RadioButtonGroup.module.css'
 

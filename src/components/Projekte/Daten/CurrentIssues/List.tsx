@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 
-import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.js'
+import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'

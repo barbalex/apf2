@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 
 import { IdbContext } from '../../idbContext.js'
 import { MobxContext as storeContext } from '../../mobxContext.js'
-import { logout } from '../../modules/logout.js'
+import { logout } from '../../modules/logout.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 

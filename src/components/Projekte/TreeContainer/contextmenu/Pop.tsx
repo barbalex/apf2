@@ -3,9 +3,9 @@ import { observer } from 'mobx-react-lite'
 import {
   ContextMenu,
   MenuItem,
-} from '../../../../modules/react-contextmenu/index.js'
+} from '../../../../modules/react-contextmenu/index.ts'
 
-import { userIsReadOnly } from '../../../../modules/userIsReadOnly.js'
+import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 

@@ -1,7 +1,7 @@
 import { List } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Error } from '../../../shared/Error.tsx'
-import { useRootNavData } from '../../../../modules/useRootNavData.js'
+import { useRootNavData } from '../../../../modules/useRootNavData.ts'
 
 export const Component = () => {
   const { navData, isLoading, error } = useRootNavData()

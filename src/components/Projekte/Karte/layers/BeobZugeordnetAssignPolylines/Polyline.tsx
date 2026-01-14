@@ -7,8 +7,8 @@ import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 
 import { MobxContext } from '../../../../../mobxContext.js'
-import { appBaseUrl } from '../../../../../modules/appBaseUrl.js'
-import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.js'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
+import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { Data } from '../BeobData/index.jsx'
 
 import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'

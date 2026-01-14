@@ -6,7 +6,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
   MenuItem,
-} from '../../../../modules/react-contextmenu/index.js'
+} from '../../../../modules/react-contextmenu/index.ts'
 
 // create objects outside render
 const showBeobOnMapData = {

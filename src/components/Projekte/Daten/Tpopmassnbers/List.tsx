@@ -2,7 +2,7 @@ import { useContext, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { useTpopmassnbersNavData } from '../../../../modules/useTpopmassnbersNavData.js'
+import { useTpopmassnbersNavData } from '../../../../modules/useTpopmassnbersNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'

@@ -18,7 +18,7 @@ import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { CustomTooltip } from './CustomTooltip.tsx'
-import { exists } from '../../../../modules/exists.js'
+import { exists } from '../../../../modules/exists.ts'
 import { Error } from '../../../shared/Error.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 

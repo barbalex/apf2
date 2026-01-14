@@ -1,6 +1,6 @@
 import { sortBy } from 'es-toolkit'
 
-import { exists } from '../../../../../modules/exists.js'
+import { exists } from '../../../../../modules/exists.ts'
 import styles from './CustomTooltip.module.css'
 
 const colorUrspruenglich = '#2e7d32'

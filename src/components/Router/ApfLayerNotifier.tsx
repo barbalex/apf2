@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
 import { MobxContext } from '../../mobxContext.js'
-import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
+import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 
 // TODO: only show messages if map is visible
 export const ApfLayerNotifier = observer(() => {

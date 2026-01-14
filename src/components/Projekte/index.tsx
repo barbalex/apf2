@@ -9,9 +9,9 @@ import { SplitPane, Pane } from 'react-split-pane'
 import { ProjektContainer } from './ProjektContainer.jsx'
 import { MobxContext } from '../../mobxContext.js'
 // import AppRenderer from '../../AppRenderer'
-import { appBaseUrl } from '../../modules/appBaseUrl.js'
-import { inIframe } from '../../modules/inIframe.js'
-import { useProjekteTabs } from '../../modules/useProjekteTabs.js'
+import { appBaseUrl } from '../../modules/appBaseUrl.ts'
+import { inIframe } from '../../modules/inIframe.ts'
+import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 
 const ApFilterController = lazy(async () => ({
   default: (await import('./ApFilterController.tsx')).ApFilterController,

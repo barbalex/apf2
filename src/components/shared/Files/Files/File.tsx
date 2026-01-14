@@ -21,7 +21,7 @@ import {
   tpopmassnFile as tpopmassnFileFragment,
 } from '../../fragments.js'
 import { isImageFile } from '../isImageFile.js'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import {

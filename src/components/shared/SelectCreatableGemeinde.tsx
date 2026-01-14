@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { IoMdLocate } from 'react-icons/io'
 
-import { exists } from '../../modules/exists.js'
+import { exists } from '../../modules/exists.ts'
 import styles from './SelectCreatableGemeinde.module.css'
 
 export const SelectCreatableGemeinde = ({

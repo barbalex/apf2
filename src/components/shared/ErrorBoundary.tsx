@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { ErrorBoundary as RawErrorBoundary } from 'react-error-boundary'
 import Button from '@mui/material/Button'
 
-import { logout } from '../../modules/logout.js'
+import { logout } from '../../modules/logout.ts'
 import { IdbContext } from '../../idbContext.js'
 
 import styles from './ErrorBoundary.module.css'

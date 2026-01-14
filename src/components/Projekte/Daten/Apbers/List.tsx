@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useAtom } from 'jotai'
 
 import { MobxContext } from '../../../../mobxContext.js'
-import { useApbersNavData } from '../../../../modules/useApbersNavData.js'
+import { useApbersNavData } from '../../../../modules/useApbersNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'

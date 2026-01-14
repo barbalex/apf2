@@ -18,7 +18,7 @@ const Choose = lazy(async () => ({
 }))
 import { queryAps } from './queryAps.ts'
 import { MobxContext } from '../../mobxContext.js'
-import { appBaseUrl } from '../../modules/appBaseUrl.js'
+import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 const Error = lazy(async () => ({
   default: (await import('../shared/Error.tsx')).Error,
 }))
