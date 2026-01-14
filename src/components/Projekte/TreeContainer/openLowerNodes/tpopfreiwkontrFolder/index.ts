@@ -5,7 +5,7 @@
  * 4. update openNodes
  * 5. refresh tree
  */
-import { query } from './query.js'
+import { query } from './query.ts'
 
 export const tpopfreiwkontrFolder = async ({
   id,

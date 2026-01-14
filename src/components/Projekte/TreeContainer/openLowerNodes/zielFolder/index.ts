@@ -6,7 +6,7 @@
  */
 import { groupBy } from 'es-toolkit'
 
-import { query } from './query.js'
+import { query } from './query.ts'
 
 export const zielFolder = async ({
   id,
