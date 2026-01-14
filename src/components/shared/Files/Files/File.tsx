@@ -24,18 +24,7 @@ import { isImageFile } from '../isImageFile.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 
-import {
-  container,
-  img,
-  imgReplacement,
-  delIcon,
-  downloadIcon,
-  spacer,
-  dateiTypField,
-  dateiNameField,
-  beschreibungField,
-  menuTitle,
-} from './File.module.css'
+import styles from './File.module.css'
 
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
@@ -165,15 +154,15 @@ export const File = observer(({ file, parent, refetch }) => {
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         {isImage ?
           <img
             src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
             alt={file.name}
-            className={img}
+            className={styles.img}
           />
-        : <div className={imgReplacement}>...</div>}
-        <div className={dateiTypField}>
+        : <div className={styles.styles.imgReplacement}>...</div>}
+        <div className={styles.dateiTypField}>
           <TextField
             name="fileMimeType"
             label="Datei-Typ"
@@ -184,8 +173,8 @@ export const File = observer(({ file, parent, refetch }) => {
             error={fieldErrors.fileMimeType}
           />
         </div>
-        <div className={spacer} />
-        <div className={dateiNameField}>
+        <div className={styles.styles.spacer} />
+        <div className={styles.dateiNameField}>
           <TextField
             name="name"
             label="Datei-Name"
@@ -196,8 +185,8 @@ export const File = observer(({ file, parent, refetch }) => {
             error={fieldErrors.name}
           />
         </div>
-        <div className={spacer} />
-        <div className={beschreibungField}>
+        <div className={styles.styles.spacer} />
+        <div className={styles.beschreibungField}>
           <TextField
             name="beschreibung"
             label="Beschreibung"
@@ -211,7 +200,7 @@ export const File = observer(({ file, parent, refetch }) => {
         <Tooltip title="herunterladen">
           <IconButton
             onClick={onClickDownload}
-            className={downloadIcon}
+            className={styles.downloadIcon}
           >
             <FaDownload />
           </IconButton>
@@ -222,7 +211,7 @@ export const File = observer(({ file, parent, refetch }) => {
             aria-owns={delMenuOpen ? 'delMenu' : undefined}
             aria-haspopup="true"
             onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
-            className={delIcon}
+            className={styles.delIcon}
           >
             <FaTimes />
           </IconButton>
@@ -233,7 +222,7 @@ export const File = observer(({ file, parent, refetch }) => {
           open={delMenuOpen}
           onClose={() => setDelMenuAnchorEl(null)}
         >
-          <h3 className={menuTitle}>löschen?</h3>
+          <h3 className={styles.menuTitle}>löschen?</h3>
           <MenuItem onClick={onClickDelete}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </StyledMenu>
