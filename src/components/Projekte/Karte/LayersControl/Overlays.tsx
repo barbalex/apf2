@@ -21,7 +21,7 @@ import { arrayMoveImmutable } from 'array-move'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
-import { layerLegends } from './layerLegends.js'
+import { layerLegends } from './layerLegends.ts'
 
 import { Checkbox } from './shared/Checkbox.jsx'
 import { MobxContext } from '../../../../mobxContext.js'

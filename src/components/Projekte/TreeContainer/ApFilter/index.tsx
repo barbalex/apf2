@@ -6,7 +6,7 @@ import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { apById } from './apById.js'
+import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
