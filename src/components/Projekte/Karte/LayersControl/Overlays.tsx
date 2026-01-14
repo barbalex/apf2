@@ -23,7 +23,7 @@ import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
 import { layerLegends } from './layerLegends.ts'
 
-import { Checkbox } from './shared/Checkbox.jsx'
+import { Checkbox } from './shared/Checkbox.tsx'
 import { MobxContext } from '../../../../mobxContext.js'
 
 import styles from './Overlays.module.css'

@@ -7,7 +7,7 @@ import { useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
-import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { Status } from '../../../shared/Status.jsx'
 import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
@@ -15,7 +15,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.jsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.js'
 import { MobxContext } from '../../../../mobxContext.js'
-import { Coordinates } from '../../../shared/Coordinates.jsx'
+import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import {
   popStatusWerte,

@@ -6,7 +6,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.jsx'
-import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { Status } from '../../../shared/Status.jsx'
 import { SelectCreatableGemeinde } from '../../../shared/SelectCreatableGemeinde.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'

@@ -1,4 +1,4 @@
-import { DateField as DateFieldComponent } from '../../../../shared/Date.jsx'
+import { DateField as DateFieldComponent } from '../../../../shared/Date.tsx'
 import styles from './Date.module.css'
 
 export const DateField = ({ saveToDb, row, errors }) => (

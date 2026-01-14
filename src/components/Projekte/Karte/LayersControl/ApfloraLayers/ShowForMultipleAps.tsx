@@ -5,7 +5,7 @@ import { gql } from '@apollo/client'
 
 import { useQuery } from '@apollo/client/react'
 
-import { Checkbox } from '../shared/Checkbox.jsx'
+import { Checkbox } from '../shared/Checkbox.tsx'
 import { MobxContext } from '../../../../../mobxContext.js'
 
 interface ShowForMultipleApsQueryResult {

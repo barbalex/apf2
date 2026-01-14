@@ -15,7 +15,7 @@ import { useQuery } from '@apollo/client/react'
 import { useMap } from 'react-leaflet'
 import { useParams } from 'react-router'
 
-import { Checkbox } from '../../shared/Checkbox.jsx'
+import { Checkbox } from '../../shared/Checkbox.tsx'
 import { Error } from '../../../../../shared/Error.tsx'
 import { getBounds } from '../../../../../../modules/getBounds.js'
 import { MobxContext } from '../../../../../../mobxContext.js'

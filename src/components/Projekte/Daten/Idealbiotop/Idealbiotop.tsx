@@ -5,7 +5,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react'
 import { Form, useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.tsx'
-import { DateField } from '../../../shared/Date.jsx'
+import { DateField } from '../../../shared/Date.tsx'
 import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'

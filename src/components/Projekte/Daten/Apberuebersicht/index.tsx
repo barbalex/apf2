@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
-import { MarkdownField } from '../../../shared/MarkdownField/index.jsx'
+import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.jsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'

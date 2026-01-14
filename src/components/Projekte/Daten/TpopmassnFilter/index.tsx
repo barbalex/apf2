@@ -8,7 +8,7 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.jsx'
 import { SelectLoadingOptionsTypable } from '../../../shared/SelectLoadingOptionsTypable.jsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
-import { DateField } from '../../../shared/Date.jsx'
+import { DateField } from '../../../shared/Date.tsx'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
 import { query } from './query.ts'
