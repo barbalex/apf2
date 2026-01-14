@@ -18,12 +18,7 @@ import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
-import {
-  spinnerContainer,
-  spinnerText,
-  noDataContainer,
-  title,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface PopStatusNode {
   year: number | null
@@ -102,13 +97,13 @@ export const PopStatus = ({
   return (
     <>
       {loadingPopStati ?
-        <div className={spinnerContainer}>
+        <div className={styles.spinnerContainer}>
           <CircularProgress />
-          <div className={spinnerText}>lade Populations-Stati...</div>
+          <div className={styles.spinnerText}>lade Populations-Stati...</div>
         </div>
       : rows.length ?
         <>
-          <h4 className={title}>Populationen nach Status</h4>
+          <h4 className={styles.title}>Populationen nach Status</h4>
           <ResponsiveContainer
             width="99%"
             height={height}
@@ -216,8 +211,8 @@ export const PopStatus = ({
           </ResponsiveContainer>
         </>
       : <>
-          <h4 className={title}>Populationen nach Status</h4>
-          <div className={noDataContainer}>Keine Daten gefunden</div>
+          <h4 className={styles.title}>Populationen nach Status</h4>
+          <div className={styles.noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
