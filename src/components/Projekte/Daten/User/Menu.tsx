@@ -17,7 +17,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.jsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { MobxContext } from '../../../../mobxContext.js'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.js'
-import { queryEkfTpops } from './queryEkfTpops.js'
+import { queryEkfTpops } from './queryEkfTpops.ts'
 
 import type { UserId } from '../../../../models/apflora/UserId.ts'
 import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { queryTpops } from './queryTpops.js'
+import { queryTpops } from './queryTpops.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { Ek } from './Ek/index.tsx'
@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
 import { Error } from '../../../shared/Error.jsx'
 import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-import { ActiveFilters } from './ActiveFilters.js'
+import { ActiveFilters } from './ActiveFilters.tsx'
 
 interface TpopsQueryResult {
   allTpops: {
@@ -33,7 +33,8 @@ export const TpopFilter = observer(() => {
   const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
-  const onChangeTab = (_event: React.SyntheticEvent, value: string) => setTab(value)
+  const onChangeTab = (_event: React.SyntheticEvent, value: string) =>
+    setTab(value)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

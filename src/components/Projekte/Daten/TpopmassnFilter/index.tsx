@@ -11,8 +11,8 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.jsx'
 import { DateField } from '../../../shared/Date.jsx'
 
 import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { query } from './query.js'
-import { queryAeTaxonomies } from './queryAeTaxonomies.js'
+import { query } from './query.ts'
+import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.js'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
@@ -80,12 +80,15 @@ export const TpopmassnFilter = observer(() => {
     }
   }, [activeTab, dataFilter.tpopmassn.length])
 
-  const { data, loading, error } = useQuery<TpopmassnsFilterQueryResult>(query, {
-    variables: {
-      filteredFilter: tpopmassnGqlFilter.filtered,
-      allFilter: tpopmassnGqlFilter.all,
+  const { data, loading, error } = useQuery<TpopmassnsFilterQueryResult>(
+    query,
+    {
+      variables: {
+        filteredFilter: tpopmassnGqlFilter.filtered,
+        allFilter: tpopmassnGqlFilter.all,
+      },
     },
-  })
+  )
 
   const row = dataFilter.tpopmassn[activeTab]
 
