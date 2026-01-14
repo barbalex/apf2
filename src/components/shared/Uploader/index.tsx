@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import { FileUploaderRegular, defineLocale } from '@uploadcare/react-uploader'
 import '@uploadcare/react-uploader/core.css'
 
-import { signature, expire } from '../../../utils/uploadcareSignature'
+import { signature, expire } from '../../../utils/uploadcareSignature.ts'
 import { UploaderContext } from '../../../UploaderContext.js'
 import { locale } from './locale.js'
 

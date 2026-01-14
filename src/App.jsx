@@ -20,7 +20,7 @@ import '@fontsource/roboto/700.css'
 import 'react-leaflet-markercluster/styles'
 import 'react-datepicker/dist/react-datepicker.css'
 
-import { theme } from './utils/materialTheme.js'
+import { theme } from './utils/materialTheme.ts'
 
 import { initializeIdb } from './modules/initializeIdb.ts'
 import { MobxStore } from './store/index.ts'
