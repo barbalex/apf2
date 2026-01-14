@@ -9,7 +9,7 @@ import { useParams } from 'react-router'
 
 import { Marker } from './Marker.jsx'
 import { MobxContext } from '../../../../../mobxContext.js'
-import { query } from './query.js'
+import { query } from './query.ts'
 
 import type { PopId, ApId } from '../../../../../models/apflora/public/Pop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
