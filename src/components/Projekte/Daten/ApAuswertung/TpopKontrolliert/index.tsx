@@ -18,14 +18,7 @@ import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
-import {
-  spinnerContainer,
-  spinnerText,
-  noDataContainer,
-  title,
-  titleTitle,
-  titleKontr,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface TpopKontrolliertNode {
   year: number | null
@@ -82,15 +75,15 @@ export const TpopKontrolliert = ({
   return (
     <>
       {loading ?
-        <div className={spinnerContainer}>
+        <div className={styles.spinnerContainer}>
           <CircularProgress />
-          <div className={spinnerText}>lade kontrollierte TPop...</div>
+          <div className={styles.spinnerText}>lade kontrollierte TPop...</div>
         </div>
       : erfolgData.length ?
         <>
-          <h4 className={title}>
-            (<span className={titleKontr}>kontrollierte</span>){' '}
-            <span className={titleTitle}>Teil-Populationen</span>
+          <h4 className={styles.title}>
+            (<span className={styles.titleKontr}>kontrollierte</span>){' '}
+            <span className={styles.titleTitle}>Teil-Populationen</span>
           </h4>
           <ResponsiveContainer
             width="99%"
@@ -153,11 +146,11 @@ export const TpopKontrolliert = ({
           </ResponsiveContainer>
         </>
       : <>
-          <h4 className={title}>
-            (<span className={titleKontr}>kontrollierte</span>){' '}
-            <span className={titleTitle}>Teil-Populationen</span>
+          <h4 className={styles.title}>
+            (<span className={styles.titleKontr}>kontrollierte</span>){' '}
+            <span className={styles.titleTitle}>Teil-Populationen</span>
           </h4>
-          <div className={noDataContainer}>Keine Daten gefunden</div>
+          <div className={styles.noDataContainer}>Keine Daten gefunden</div>
         </>
       }
     </>
