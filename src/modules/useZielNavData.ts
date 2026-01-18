@@ -13,10 +13,10 @@ export const useZielNavData = (props) => {
   const jahr = props?.jahr ?? params.jahr
   const zielId = props?.zielId ?? params.zielId
 
-  const { data, isLoading, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeZiel', zielId],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavZielQuery($zielId: UUID!) {
             zielById(id: $zielId) {
@@ -27,7 +27,11 @@ export const useZielNavData = (props) => {
         `,
         variables: { zielId },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
   const navData = {
@@ -52,5 +56,5 @@ export const useZielNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

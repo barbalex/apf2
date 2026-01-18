@@ -18,10 +18,10 @@ export const useTpopbersNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeTpopber', tpopId, store.tree.tpopberGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopbersQuery(
             $tpopbersFilter: TpopberFilter!
@@ -47,7 +47,11 @@ export const useTpopbersNavData = (props) => {
           tpopId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -65,7 +69,7 @@ export const useTpopbersNavData = (props) => {
     id: 'Kontroll-Berichte',
     listFilter: 'tpopber',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Kontroll-Berichte`,
-    label: `Kontroll-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Kontroll-Berichte (${count}/${totalCount})`,
     treeNodeType: 'folder',
     menuType: 'tpopberFolder',
     treeId: `${tpopId}TpopberFolder`,
@@ -106,5 +110,5 @@ export const useTpopbersNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
