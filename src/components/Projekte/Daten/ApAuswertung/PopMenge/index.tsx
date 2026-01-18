@@ -1,4 +1,5 @@
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'es-toolkit'
 import {
   AreaChart,
@@ -9,7 +10,6 @@ import {
   Tooltip,
   CartesianGrid,
 } from 'recharts'
-import CircularProgress from '@mui/material/CircularProgress'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MuiTooltip from '@mui/material/Tooltip'
@@ -18,7 +18,6 @@ import { useParams } from 'react-router'
 import { query } from './query.ts'
 import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../../modules/exists.ts'
-import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 import type { PopId } from '../../../../../models/apflora/Pop.ts'
@@ -85,20 +84,28 @@ export const PopMenge = ({
   isSubReport,
   jahr: jahrPassed,
 }: PopMengeProps) => {
+  const apolloClient = useApolloClient()
+
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
   const jahr = jahrPassed ?? new Date().getFullYear()
-  const {
-    data: dataPopMenge,
-    error: errorPopMenge,
-    loading: loadingPopMenge,
-  } = useQuery<PopMengeQueryResult>(query, {
-    variables: { id, jahr },
+  const { data: dataPopMenge } = useQuery({
+    queryKey: ['popMenge', id, jahr],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopMengeQueryResult>({
+        query,
+        variables: { id, jahr },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
-  const popsData = dataPopMenge?.allPops?.nodes ?? []
-  const popMengeRawData = dataPopMenge?.apAuswPopMenge?.nodes ?? []
+  const popsData = dataPopMenge?.data?.allPops?.nodes ?? []
+  const popMengeRawData = dataPopMenge?.data?.apAuswPopMenge?.nodes ?? []
   const popMengeData = popMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
@@ -122,7 +129,7 @@ export const PopMenge = ({
   ])
 
   const zielEinheit =
-    dataPopMenge?.allEkzaehleinheits?.nodes?.[0]
+    dataPopMenge?.data?.allEkzaehleinheits?.nodes?.[0]
       ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text ?? '(keine Einheit)'
 
   const onClickMoreInfo = () => {
@@ -133,8 +140,6 @@ export const PopMenge = ({
     window.open(url)
   }
 
-  if (errorPopMenge) return <Error error={errorPopMenge} />
-
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
@@ -142,14 +147,7 @@ export const PopMenge = ({
 
   return (
     <>
-      {loadingPopMenge ?
-        <div className={styles.spinnerContainer}>
-          <CircularProgress />
-          <div className={styles.spinnerText}>
-            lade Mengen nach Populationen...
-          </div>
-        </div>
-      : popMengeData.length ?
+      {popMengeData.length ?
         <>
           <div className={styles.titleRow}>
             <h4

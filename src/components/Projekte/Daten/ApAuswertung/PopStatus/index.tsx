@@ -1,4 +1,5 @@
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import {
   AreaChart,
   Area,
@@ -9,12 +10,10 @@ import {
   Legend,
   CartesianGrid,
 } from 'recharts'
-import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { CustomTooltip } from '../CustomTooltip.tsx'
-import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
@@ -62,18 +61,26 @@ export const PopStatus = ({
   isSubReport,
   year: yearPassed,
 }: PopStatusProps) => {
+  const apolloClient = useApolloClient()
+
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
   const year = yearPassed ?? new Date().getFullYear()
-  const {
-    data: dataPopStati,
-    error: errorPopStati,
-    loading: loadingPopStati,
-  } = useQuery<PopStatusQueryResult>(query, {
-    variables: { apId: id, year },
+  const { data: dataPopStati } = useQuery({
+    queryKey: ['popStatus', id, year],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopStatusQueryResult>({
+        query,
+        variables: { apId: id, year },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
-  const rows = dataPopStati?.popNachStatusForJber?.nodes ?? []
+  const rows = dataPopStati?.data?.popNachStatusForJber?.nodes ?? []
 
   const popStatusData = rows.map((row) => ({
     jahr: row.year,
@@ -87,8 +94,6 @@ export const PopStatus = ({
       row?.a8Lpop ? Number(row?.a8Lpop) : 0,
   }))
 
-  if (errorPopStati) return <Error error={errorPopStati} />
-
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
@@ -96,12 +101,7 @@ export const PopStatus = ({
 
   return (
     <>
-      {loadingPopStati ?
-        <div className={styles.spinnerContainer}>
-          <CircularProgress />
-          <div className={styles.spinnerText}>lade Populations-Stati...</div>
-        </div>
-      : rows.length ?
+      {rows.length ?
         <>
           <h4 className={styles.title}>Populationen nach Status</h4>
           <ResponsiveContainer
