@@ -15,10 +15,10 @@ export const useApberuebersichtsNavData = (props) => {
   const params = useParams()
   const projId = props?.projId ?? params?.projId
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeApberuebersicht', projId],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavApberuebersichtsQuery(
             $projId: UUID!
@@ -47,7 +47,11 @@ export const useApberuebersichtsNavData = (props) => {
           apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
@@ -65,7 +69,7 @@ export const useApberuebersichtsNavData = (props) => {
     id: 'AP-Berichte',
     listFilter: 'apberuebersicht',
     url: `/Daten/Projekte/${projId}/AP-Berichte`,
-    label: 'AP-Berichte ' + (isLoading ? '...' : `${count}/${totalCount}`),
+    label: 'AP-Berichte ' + `${count}/${totalCount}`,
     treeNodeType: 'folder',
     treeMenuType: 'apberuebersichtFolder',
     treeId: `${projId}/ApberuebersichtFolder`,
@@ -89,5 +93,5 @@ export const useApberuebersichtsNavData = (props) => {
     ),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
