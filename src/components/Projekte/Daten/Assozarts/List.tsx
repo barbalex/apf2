@@ -11,7 +11,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData } = useAssozartsNavData()
+  const navData = useAssozartsNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

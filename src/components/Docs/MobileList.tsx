@@ -11,7 +11,7 @@ export const MobileList = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData } = useDocsNavData()
+  const navData = useDocsNavData()
 
   return (
     <SharedList
