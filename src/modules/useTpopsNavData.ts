@@ -96,10 +96,10 @@ export const useTpopsNavData = (props) => {
   const showTpopIcon =
     store.activeApfloraLayers?.includes('tpop') && karteIsVisible
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeTpop', popId, store.tree.tpopGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopsQuery($tpopsFilter: TpopFilter!, $popId: UUID!) {
             popById(id: $popId) {
@@ -126,7 +126,11 @@ export const useTpopsNavData = (props) => {
           popId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -170,7 +174,7 @@ export const useTpopsNavData = (props) => {
     id: 'Teil-Populationen',
     listFilter: 'tpop',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen`,
-    label: `Teil-Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Teil-Populationen (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: `tpopFolder`,
     treeId: `${popId}TpopFolder`,
@@ -236,5 +240,5 @@ export const useTpopsNavData = (props) => {
     }),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

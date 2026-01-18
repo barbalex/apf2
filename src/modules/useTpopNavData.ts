@@ -49,7 +49,7 @@ export const useTpopNavData = (props) => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeTpop',
       tpopId,
@@ -60,8 +60,8 @@ export const useTpopNavData = (props) => {
       store.tree.tpopberGqlFilterForTree,
       store.tree.beobZugeordnetGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavTpopQuery(
             $tpopId: UUID!
@@ -150,7 +150,11 @@ export const useTpopNavData = (props) => {
           },
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () => reaction(() => store.tree.tpopmassnGqlFilterForTree, refetch),
@@ -286,7 +290,7 @@ export const useTpopNavData = (props) => {
       },
       {
         id: 'Massnahmen',
-        label: `Massnahmen (${isLoading ? '...' : `${filteredMassnCount}/${massnCount}`})`,
+        label: `Massnahmen (${filteredMassnCount}/${massnCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'tpopmassnFolder',
         treeId: `${tpopId}TpopmassnFolder`,
@@ -309,7 +313,7 @@ export const useTpopNavData = (props) => {
       },
       {
         id: 'Massnahmen-Berichte',
-        label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredTpopmassnbersCount}/${popmassnbersCount}`})`,
+        label: `Massnahmen-Berichte (${filteredTpopmassnbersCount}/${popmassnbersCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'tpopmassnberFolder',
         treeId: `${tpopId}MassnberFolder`,
@@ -332,7 +336,7 @@ export const useTpopNavData = (props) => {
       },
       {
         id: 'Feld-Kontrollen',
-        label: `Feld-Kontrollen (${isLoading ? '...' : `${filteredFeldkontrCount}/${feldkontrCount}`})`,
+        label: `Feld-Kontrollen (${filteredFeldkontrCount}/${feldkontrCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'tpopfeldkontrFolder',
         treeId: `${tpopId}FeldkontrFolder`,
@@ -354,7 +358,7 @@ export const useTpopNavData = (props) => {
       },
       {
         id: 'Freiwilligen-Kontrollen',
-        label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${filteredFreiwkontrCount}/${freiwkontrCount}`})`,
+        label: `Freiwilligen-Kontrollen (${filteredFreiwkontrCount}/${freiwkontrCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'tpopfreiwkontrFolder',
         treeId: `${tpopId}FreiwkontrFolder`,
@@ -376,7 +380,7 @@ export const useTpopNavData = (props) => {
       },
       {
         id: 'Kontroll-Berichte',
-        label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredTpopbersCount}/${tpopbersCount}`})`,
+        label: `Kontroll-Berichte (${filteredTpopbersCount}/${tpopbersCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'tpopberFolder',
         treeId: `${tpopId}TpopberFolder`,
@@ -399,7 +403,7 @@ export const useTpopNavData = (props) => {
       },
       {
         id: 'Beobachtungen',
-        label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredBeobZugeordnetCount}/${beobZugeordnetCount}`})`,
+        label: `Beobachtungen zugeordnet (${filteredBeobZugeordnetCount}/${beobZugeordnetCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'beobZugeordnetFolder',
         treeId: `${tpopId}BeobZugeordnetFolder`,
@@ -488,5 +492,5 @@ export const useTpopNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
