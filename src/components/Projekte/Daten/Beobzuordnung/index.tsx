@@ -4,7 +4,8 @@ import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -22,8 +23,6 @@ import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
 import { sendMail } from '../../../../modules/sendMail.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import {
   aeTaxonomies,
   beob,
@@ -153,15 +152,23 @@ export const Component = observer(() => {
 
   const store = useContext(MobxContext)
 
-  const { data, loading, error, refetch } = useQuery<BeobzuordnungQueryResult>(
-    query,
-    {
-      variables: { id, apId },
+  const { data, refetch } = useQuery({
+    queryKey: ['beobzuordnung', id, apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<BeobzuordnungQueryResult>({
+        query,
+        variables: { id, apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
-  )
+    suspense: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
 
-  const row = data?.beobById ?? {}
-  const ap = data?.apById ?? {}
+  const row = data?.data?.beobById ?? {}
+  const ap = data?.data?.apById ?? {}
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = (inputValue: string) =>
@@ -270,10 +277,6 @@ export const Component = observer(() => {
     ap,
     row,
   })
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>

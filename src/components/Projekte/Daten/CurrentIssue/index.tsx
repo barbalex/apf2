@@ -1,13 +1,12 @@
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { currentIssue as currentIssueFragment } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 
 import type Currentissue from '../../../../models/apflora/Currentissue.ts'
 
@@ -29,19 +28,28 @@ interface CurrentIssueQueryResult {
 }
 
 export const Component = () => {
+  const apolloClient = useApolloClient()
+
   const { issueId } = useParams<{ issueId: string }>()
 
-  const { data, loading, error } = useQuery<CurrentIssueQueryResult>(query, {
-    variables: {
-      id: issueId,
+  const { data } = useQuery({
+    queryKey: ['currentIssue', issueId],
+    queryFn: async () => {
+      const result = await apolloClient.query<CurrentIssueQueryResult>({
+        query,
+        variables: {
+          id: issueId,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.currentissueById ?? {}
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
+  const row = data?.data?.currentissueById
 
   if (!row) return null
 
@@ -53,7 +61,7 @@ export const Component = () => {
           <div
             className={styles.content}
             dangerouslySetInnerHTML={{
-              __html: mdParser.render(row.issue),
+              __html: mdParser.render(row?.issue ?? ''),
             }}
           />
         </div>
