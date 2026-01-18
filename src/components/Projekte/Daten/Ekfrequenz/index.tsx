@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -15,8 +15,6 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ekfrequenz } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -82,22 +80,39 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error, refetch } = useQuery<EkfrequenzQueryResult>(
-    query,
-    {
-      variables: {
-        id,
-      },
+  const { data, refetch } = useQuery({
+    queryKey: ['ekfrequenz', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<EkfrequenzQueryResult>({
+        query,
+        variables: {
+          id,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
-  )
+    suspense: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
 
-  const {
-    data: dataEkAbrechnungstypWertes,
-    loading: loadingEkAbrechnungstypWertes,
-    error: errorEkAbrechnungstypWertes,
-  } = useQuery<EkAbrechnungstypWertesQueryResult>(queryEkAbrechnungstypWertes)
+  const { data: dataEkAbrechnungstypWertes } = useQuery({
+    queryKey: ['ekAbrechnungstypWertes'],
+    queryFn: async () => {
+      const result =
+        await apolloClient.query<EkAbrechnungstypWertesQueryResult>({
+          query: queryEkAbrechnungstypWertes,
+          fetchPolicy: 'no-cache',
+        })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
+    staleTime: Infinity, // This data rarely changes
+  })
 
-  const row = data?.ekfrequenzById ?? {}
+  const row = data?.data?.ekfrequenzById ?? {}
 
   const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -136,14 +151,18 @@ export const Component = observer(() => {
       })
     } catch (error) {
       setFieldErrors((prev) => ({
-      ...prev,
-      [field]: (error as Error).message,
-    }))
+        ...prev,
+        [field]: (error as Error).message,
+      }))
       return
     }
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
+    })
+    // Invalidate query to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['ekfrequenz', id],
     })
     if (field === 'code') {
       tsQueryClient.invalidateQueries({
@@ -153,9 +172,6 @@ export const Component = observer(() => {
     return
   }
 
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <div className={styles.container}>
@@ -211,23 +227,17 @@ export const Component = observer(() => {
             saveToDb={saveToDb}
             error={fieldErrors.kontrolljahreAb}
           />
-          <div>
-            {errorEkAbrechnungstypWertes ?
-              errorEkAbrechnungstypWertes.message
-            : <RadioButtonGroup
-                name="ekAbrechnungstyp"
-                dataSource={
-                  dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes
-                    ?.nodes ?? []
-                }
-                loading={loadingEkAbrechnungstypWertes}
-                label="EK-Abrechnungstyp"
-                value={row.ekAbrechnungstyp}
-                saveToDb={saveToDb}
-                error={fieldErrors.ekAbrechnungstyp}
-              />
+          <RadioButtonGroup
+            name="ekAbrechnungstyp"
+            dataSource={
+              dataEkAbrechnungstypWertes?.data?.allEkAbrechnungstypWertes
+                ?.nodes ?? []
             }
-          </div>
+            label="EK-Abrechnungstyp"
+            value={row.ekAbrechnungstyp}
+            saveToDb={saveToDb}
+            error={fieldErrors.ekAbrechnungstyp}
+          />
           <TextField
             name="bemerkungen"
             label="Bemerkungen"

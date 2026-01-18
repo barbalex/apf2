@@ -137,8 +137,10 @@ export const Component = observer(() => {
         [field]: (error as Error).message,
       }))
     }
-    // without refetch artname is not renewed
-    refetch()
+    // Invalidate queries to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['apart', id],
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest

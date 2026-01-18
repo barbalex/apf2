@@ -143,6 +143,10 @@ export const Component = observer(() => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // Invalidate query to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['assozart', id],
+    })
     if (field === 'aeId') {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeAssozart`],
