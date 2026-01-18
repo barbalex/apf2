@@ -20,10 +20,10 @@ export const useTpopmassnsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeTpopmassn', tpopId, store.tree.tpopmassnGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopmassnsQuery(
             $tpopmassnsFilter: TpopmassnFilter!
@@ -52,7 +52,11 @@ export const useTpopmassnsNavData = (props) => {
           tpopId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -82,7 +86,7 @@ export const useTpopmassnsNavData = (props) => {
     id: 'Massnahmen',
     listFilter: 'tpopmassn',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen`,
-    label: `Massnahmen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Massnahmen (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'tpopmassnFolder',
     treeId: `${tpopId}TpopmassnFolder`,
@@ -141,5 +145,5 @@ export const useTpopmassnsNavData = (props) => {
     }),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

@@ -23,10 +23,10 @@ export const useTpopfeldkontrsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeTpopfeldkontr', tpopId, store.tree.ekGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopfeldkontrsQuery(
             $eksFilter: TpopkontrFilter!
@@ -59,7 +59,11 @@ export const useTpopfeldkontrsNavData = (props) => {
           tpopId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -89,8 +93,8 @@ export const useTpopfeldkontrsNavData = (props) => {
     id: 'Feld-Kontrollen',
     listFilter: 'tpopkontr',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen`,
-    label: `Feld-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-    labelShort: `EK (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Feld-Kontrollen (${count}/${totalCount})`,
+    labelShort: `EK (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'tpopfeldkontr',
     treeId: `${tpopId}FeldkontrFolder`,
@@ -154,5 +158,5 @@ export const useTpopfeldkontrsNavData = (props) => {
     }),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
