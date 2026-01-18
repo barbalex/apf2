@@ -1,9 +1,9 @@
 import { useContext, useState, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -13,7 +13,6 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apart } from '../../../shared/fragments.ts'
-import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
@@ -59,11 +58,21 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, error, refetch } = useQuery<ApartQueryResult>(query, {
-    variables: { id },
+  const { data, refetch } = useQuery({
+    queryKey: ['apart', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApartQueryResult>({
+        query,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
-  const row = data?.apartById ?? {}
+  const row = data?.data?.apartById ?? {}
 
   // do not include already chosen assozarten
   const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes ?? [])
@@ -139,8 +148,6 @@ export const Component = observer(() => {
     })
   }
 
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
       <div className={container}>
@@ -149,7 +156,6 @@ export const Component = observer(() => {
           MenuBarComponent={Menu}
         />
         <div className={fieldsContainer}>
-          <Suspense fallback={<Spinner />}>
             <div>
               In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
               Gründe um mehrere zu erfassen:
@@ -178,6 +184,7 @@ export const Component = observer(() => {
               <br />
               <br />
             </div>
+          <Suspense fallback={<Spinner />}>
             <div className={formContainer}>
               <SelectLoadingOptions
                 key={`${row?.id}artId`}
