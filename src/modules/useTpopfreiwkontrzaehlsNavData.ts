@@ -18,14 +18,14 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeTpopfreiwkontrzaehl',
       tpopkontrId,
       store.tree.tpopkontrzaehlGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopfreiwkontrzaehlsQuery(
             $tpopkontrzaehlsFilter: TpopkontrzaehlFilter!
@@ -54,7 +54,11 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
           tpopkontrId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -73,7 +77,7 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     id: 'Zaehlungen',
     listFilter: 'tpopkontrzaehl',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen/${tpopkontrId}/Zaehlungen`,
-    label: `Zählungen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Zählungen (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'tpopfreiwkontrzaehlFolder',
     treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
@@ -122,5 +126,5 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
