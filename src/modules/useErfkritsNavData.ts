@@ -90,5 +90,5 @@ export const useErfkritsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

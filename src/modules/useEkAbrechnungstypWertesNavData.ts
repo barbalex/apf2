@@ -83,5 +83,5 @@ export const useEkAbrechnungstypWertesNavData = () => {
     })),
   }
 
-  return { navData }
+  return navData
 }

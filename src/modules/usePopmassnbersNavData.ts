@@ -112,5 +112,5 @@ export const usePopmassnbersNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

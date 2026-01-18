@@ -84,5 +84,5 @@ export const useAssozartsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

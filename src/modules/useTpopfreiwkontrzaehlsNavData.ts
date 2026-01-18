@@ -126,5 +126,5 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

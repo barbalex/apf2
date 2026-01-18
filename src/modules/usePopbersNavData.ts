@@ -99,5 +99,5 @@ export const usePopbersNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

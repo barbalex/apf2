@@ -74,5 +74,5 @@ export const useUsersNavData = () => {
     })),
   }
 
-  return { navData }
+  return navData
 }

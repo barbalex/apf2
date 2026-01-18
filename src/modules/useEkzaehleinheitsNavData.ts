@@ -94,5 +94,5 @@ export const useEkzaehleinheitsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

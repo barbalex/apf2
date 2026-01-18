@@ -57,5 +57,5 @@ export const useCurrentissuesNavData = () => {
     })),
   }
 
-  return { navData }
+  return navData
 }

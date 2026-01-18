@@ -76,5 +76,5 @@ export const useApartsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

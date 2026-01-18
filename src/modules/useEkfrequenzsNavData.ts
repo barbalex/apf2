@@ -86,5 +86,5 @@ export const useEkfrequenzsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

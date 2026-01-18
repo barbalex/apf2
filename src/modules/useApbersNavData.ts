@@ -76,5 +76,5 @@ export const useApbersNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

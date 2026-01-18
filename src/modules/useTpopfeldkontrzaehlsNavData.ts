@@ -128,5 +128,5 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

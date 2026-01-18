@@ -74,5 +74,5 @@ export const useAdressesNavData = () => {
     })),
   }
 
-  return { navData }
+  return navData
 }

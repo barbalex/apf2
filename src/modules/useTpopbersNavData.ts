@@ -110,5 +110,5 @@ export const useTpopbersNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }
