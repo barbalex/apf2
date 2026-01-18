@@ -1,7 +1,8 @@
 import { useContext, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { useQuery } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import { sortBy } from 'es-toolkit'
 import { SplitPane, Pane } from 'react-split-pane'
 
@@ -21,7 +22,6 @@ import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/in
 import { MobxContext } from '../../mobxContext.ts'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.ts'
-import { Error } from '../shared/Error.tsx'
 
 import styles from './index.module.css'
 
@@ -109,6 +109,7 @@ export const Component = observer(() => {
   const navigate = useNavigate()
   const { userId, ekfId, ekfYear } = useParams()
   const { isPrint, isEkfSinglePrint } = useContext(MobxContext)
+  const apolloClient = useApolloClient()
 
   const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
@@ -116,29 +117,34 @@ export const Component = observer(() => {
   const query =
     ekfRefYear === ekfYear ? dataByUserIdGql : dataWithDateByUserIdGql
 
-  const { data, loading, error } = useQuery<EkfQueryResult>(query, {
-    variables: { id: userId, jahr: +ekfYear },
-    fetchPolicy: 'network-only',
+  const { data } = useQuery({
+    queryKey: ['ekf', userId, ekfYear],
+    queryFn: async () => {
+      const result = await apolloClient.query<EkfQueryResult>({
+        query,
+        variables: { id: userId, jahr: +ekfYear },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
-  const ekf = getEkfFromData({ data })
+  const ekf = getEkfFromData({ data: data?.data })
 
   useEffect(() => {
     // navigate to first kontrId so form is shown for first ekf
     // IF none is choosen yet
-    if (!loading && ekf.length > 0 && !ekfId) {
+    if (ekf.length > 0 && !ekfId) {
       navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${ekf[0].id}${search}`)
     }
     // adding ekf as dependency causes infinite loop
     // https://github.com/barbalex/apf2/issues/629
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ekfYear, ekfId, navigate, userId, search, loading])
+  }, [ekfYear, ekfId, navigate, userId, search])
 
-  if (error) {
-    return <Error error={error} />
-  }
-
-  if (!loading && ekf.length === 0) {
+  if (ekf.length === 0) {
     return (
       <div className={styles.noDataContainer}>
         {`Für das Jahr ${ekfYear} existieren offenbar keine Erfolgskontrollen mit Ihnen als BearbeiterIn`}
