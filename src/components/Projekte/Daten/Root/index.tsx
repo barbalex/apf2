@@ -1,14 +1,8 @@
 import { List } from '../../../shared/List/index.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { useRootNavData } from '../../../../modules/useRootNavData.ts'
 
 export const Component = () => {
-  const { navData, isLoading, error } = useRootNavData()
-
-  if (isLoading) return <Spinner />
-
-  if (error) return <Error error={error} />
+  const { navData } = useRootNavData()
 
   return <List navData={navData} />
 }

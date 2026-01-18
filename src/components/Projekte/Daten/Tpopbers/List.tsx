@@ -6,15 +6,12 @@ import { useTpopbersNavData } from '../../../../modules/useTpopbersNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 
 export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useTpopbersNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useTpopbersNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
