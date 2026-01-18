@@ -13,7 +13,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData } = useBeobNichtZuzuordnensNavData()
+  const navData = useBeobNichtZuzuordnensNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

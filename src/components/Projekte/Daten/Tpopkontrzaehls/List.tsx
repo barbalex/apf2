@@ -10,7 +10,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData } = useTpopfeldkontrzaehlsNavData()
+  const navData = useTpopfeldkontrzaehlsNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
