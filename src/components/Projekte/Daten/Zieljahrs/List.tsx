@@ -5,16 +5,13 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { useZieljahrsNavData } from '../../../../modules/useZieljahrsNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { Menu } from './Menu.tsx'
 
 export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useZieljahrsNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useZieljahrsNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
