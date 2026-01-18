@@ -2,13 +2,10 @@ import { Suspense } from 'react'
 
 import { useRootNavData } from '../../../../modules/useRootNavData.ts'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { Nav } from '../Nav.tsx'
 
 export const Menu = () => {
-  const { navData, error } = useRootNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useRootNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

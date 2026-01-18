@@ -5,16 +5,13 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { useApsNavData } from '../../../../modules/useApsNavData.ts'
 
 export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useApsNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useApsNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
