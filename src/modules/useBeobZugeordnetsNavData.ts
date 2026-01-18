@@ -135,5 +135,5 @@ export const useBeobZugeordnetsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

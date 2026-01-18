@@ -31,5 +31,5 @@ export const useDocsNavData = () => {
     [],
   )
 
-  return { navData }
+  return navData
 }

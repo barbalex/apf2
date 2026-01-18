@@ -211,5 +211,5 @@ export const usePopsNavData = (props) => {
     }),
   }
 
-  return { navData }
+  return navData
 }

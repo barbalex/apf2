@@ -89,5 +89,5 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     ),
   }
 
-  return { navData }
+  return navData
 }

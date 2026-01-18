@@ -105,5 +105,5 @@ export const useZielsOfJahrNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

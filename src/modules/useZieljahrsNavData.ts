@@ -106,5 +106,5 @@ export const useZieljahrsNavData = (props) => {
     menus,
   }
 
-  return { navData }
+  return navData
 }

@@ -580,5 +580,5 @@ export const useApNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }

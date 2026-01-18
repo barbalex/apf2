@@ -150,5 +150,5 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

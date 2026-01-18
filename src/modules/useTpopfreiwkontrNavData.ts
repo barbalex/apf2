@@ -198,5 +198,5 @@ export const useTpopfreiwkontrNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }
