@@ -1,4 +1,5 @@
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { range } from 'es-toolkit'
 import {
   LineChart,
@@ -8,12 +9,10 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts'
-import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { CustomTick } from './CustomTick.tsx'
-import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApberId } from '../../../../../models/apflora/Apber.ts'
 import type { ApErfkritWerteCode } from '../../../../../models/apflora/ApErfkritWerte.ts'
@@ -68,22 +67,28 @@ const addMissingErfolgData = (
 }
 
 export const ApErfolg = () => {
+  const apolloClient = useApolloClient()
+
   const { apId: id } = useParams<{ apId: string }>()
 
-  const {
-    data: dataErfolg,
-    error: errorErfolg,
-    loading: loadingErfolg,
-  } = useQuery<ApErfolgQueryResult>(query, {
-    variables: { id },
+  const { data: dataErfolg } = useQuery({
+    queryKey: ['apErfolg', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApErfolgQueryResult>({
+        query,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
-  const erfolgRawData = (dataErfolg?.allApbers?.nodes ?? []).map((e) => ({
+  const erfolgRawData = (dataErfolg?.data?.allApbers?.nodes ?? []).map((e) => ({
     jahr: e.jahr,
     value: erfValueFromCode[e.beurteilung],
   }))
   const erfolgData = addMissingErfolgData(erfolgRawData)
-
-  if (errorErfolg) return <Error error={errorErfolg} />
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
@@ -92,12 +97,7 @@ export const ApErfolg = () => {
 
   return (
     <>
-      {loadingErfolg ?
-        <div className={styles.spinnerContainer}>
-          <CircularProgress />
-          <div className={styles.spinnerText}>lade AP-Erfolg...</div>
-        </div>
-      : erfolgRawData.length ?
+      {erfolgRawData.length ?
         <>
           <h4 className={styles.title}>Erfolg des Aktionsplans</h4>
           <ResponsiveContainer
