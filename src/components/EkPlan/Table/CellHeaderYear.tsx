@@ -4,8 +4,8 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../mobxContext.ts'
 
@@ -64,26 +64,45 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
     tpopCountWithEkplanInYear: TpopCountWithEkplanInYear
   }
 
-  const { data, loading, error } = useQuery<TpopQueryForCellHeaderYearResult>(
-    gql`
-      query TpopQueryForCellHeaderYear(
-        $kontrFilter: TpopFilter!
-        $ansiedlungFilter: TpopFilter!
-        $ekplanFilter: TpopFilter!
-      ) {
-        tpopCountWithKontrInYear: allTpops(filter: $kontrFilter) {
-          totalCount
-        }
-        tpopCountWithAnsiedlungsInYear: allTpops(filter: $ansiedlungFilter) {
-          totalCount
-        }
-        tpopCountWithEkplanInYear: allTpops(filter: $ekplanFilter) {
-          totalCount
-        }
-      }
-    `,
-    { variables: { kontrFilter, ansiedlungFilter, ekplanFilter } },
-  )
+  const { data } = useQuery({
+    queryKey: [
+      'tpopCountsForYear',
+      column,
+      kontrFilter,
+      ansiedlungFilter,
+      ekplanFilter,
+    ],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopQueryForCellHeaderYearResult>(
+        {
+          query: gql`
+            query TpopQueryForCellHeaderYear(
+              $kontrFilter: TpopFilter!
+              $ansiedlungFilter: TpopFilter!
+              $ekplanFilter: TpopFilter!
+            ) {
+              tpopCountWithKontrInYear: allTpops(filter: $kontrFilter) {
+                totalCount
+              }
+              tpopCountWithAnsiedlungsInYear: allTpops(
+                filter: $ansiedlungFilter
+              ) {
+                totalCount
+              }
+              tpopCountWithEkplanInYear: allTpops(filter: $ekplanFilter) {
+                totalCount
+              }
+            }
+          `,
+          variables: { kontrFilter, ansiedlungFilter, ekplanFilter },
+          fetchPolicy: 'no-cache',
+        },
+      )
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
+  })
 
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -95,17 +114,17 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
   const yearHasKontrollen =
     filterKontrolleYear && filterKontrolleYear !== column ?
       false
-    : data?.tpopCountWithKontrInYear?.totalCount > 0
+    : data?.data?.tpopCountWithKontrInYear?.totalCount > 0
 
   const yearHasAnsiedlungen =
     filterAnsiedlungYear && filterAnsiedlungYear !== column ?
       false
-    : data?.tpopCountWithAnsiedlungsInYear?.totalCount > 0
+    : data?.data?.tpopCountWithAnsiedlungsInYear?.totalCount > 0
 
   const yearHasEkplan =
     filterEkplanYear && filterEkplanYear !== column ?
       false
-    : data?.tpopCountWithEkplanInYear?.totalCount > 0
+    : data?.data?.tpopCountWithEkplanInYear?.totalCount > 0
 
   const closeMenu = () => setAnchorEl(null)
   const onClickCell = (e) => setAnchorEl(e.currentTarget)
