@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
@@ -14,8 +14,6 @@ import { queryLists } from './queryLists.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import {
   ekzaehleinheit,
   tpopkontrzaehlEinheitWerte,
@@ -78,13 +76,24 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<EkzaehleinheitQueryResult>(query, {
-    variables: {
-      id,
+  const { data } = useQuery({
+    queryKey: ['ekzaehleinheit', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<EkzaehleinheitQueryResult>({
+        query,
+        variables: {
+          id,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.ekzaehleinheitById ?? {}
+  const row = data?.data?.ekzaehleinheitById ?? {}
 
   const ekzaehleinheitenOfAp = (
     row?.apByApId?.ekzaehleinheitsByApId?.nodes ?? []
@@ -93,14 +102,21 @@ export const Component = observer(() => {
   const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
   const zaehleinheitWerteFilter =
     notToShow.length ? { id: { notIn: notToShow } } : { id: { isNull: false } }
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery<ListsQueryResult>(queryLists, {
-    variables: {
-      filter: zaehleinheitWerteFilter,
+  const { data: dataLists } = useQuery({
+    queryKey: ['ekzaehleinheitLists', zaehleinheitWerteFilter],
+    queryFn: async () => {
+      const result = await apolloClient.query<ListsQueryResult>({
+        query: queryLists,
+        variables: {
+          filter: zaehleinheitWerteFilter,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
   const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,6 +177,10 @@ export const Component = observer(() => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // Invalidate query to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['ekzaehleinheit', id],
+    })
     if (['zaehleinheitId', 'sort'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeEkzaehleinheit`],
@@ -169,14 +189,6 @@ export const Component = observer(() => {
   }
 
   // console.log('Ekzaehleinheit rendering, loading:', loading)
-
-  if (loading) return <Spinner />
-
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
 
   return (
     <ErrorBoundary>
@@ -190,8 +202,9 @@ export const Component = observer(() => {
             key={`${id}zaehleinheitId`}
             name="zaehleinheitId"
             label="Zähleinheit"
-            options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-            loading={loadingLists}
+            options={
+              dataLists?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+            }
             value={row.zaehleinheitId}
             saveToDb={saveToDb}
             error={fieldErrors.zaehleinheitId}
