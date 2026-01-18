@@ -12,7 +12,7 @@ export const useWertesNavData = () => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeWertes',
       store.tree.adresseGqlFilterForTree,
@@ -20,8 +20,8 @@ export const useWertesNavData = () => {
       store.tree.ekAbrechnungstypWerteGqlFilterForTree,
       store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavWertesQuery(
             $adressesFilter: AdresseFilter!
@@ -71,7 +71,11 @@ export const useWertesNavData = () => {
             store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
@@ -133,7 +137,7 @@ export const useWertesNavData = () => {
     menus: [
       {
         id: 'Adressen',
-        label: `Adressen (${isLoading ? '...' : `${adressesFilteredCount}/${adressesCount}`})`,
+        label: `Adressen (${adressesFilteredCount}/${adressesCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'adresseFolder',
         treeId: `AdresseFolder`,
@@ -145,7 +149,7 @@ export const useWertesNavData = () => {
       },
       {
         id: 'ApberrelevantGrundWerte',
-        label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${tpopApberrelevantGrundWerteFilteredCount}/${tpopApberrelevantGrundWerteCount}`})`,
+        label: `Teil-Population: Grund für AP-Bericht Relevanz (${tpopApberrelevantGrundWerteFilteredCount}/${tpopApberrelevantGrundWerteCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'tpopApberrelevantGrundWerteFolder',
         treeId: `tpopApberrelevantGrundWerteFolder`,
@@ -157,7 +161,7 @@ export const useWertesNavData = () => {
       },
       {
         id: 'EkAbrechnungstypWerte',
-        label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${ekAbrechnungstypWerteFilteredCount}/${ekAbrechnungstypWerteCount}`})`,
+        label: `Teil-Population: EK-Abrechnungstypen (${ekAbrechnungstypWerteFilteredCount}/${ekAbrechnungstypWerteCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'ekAbrechnungstypWerteFolder',
         treeId: `EkAbrechnungstypWerteFolder`,
@@ -169,7 +173,7 @@ export const useWertesNavData = () => {
       },
       {
         id: 'TpopkontrzaehlEinheitWerte',
-        label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${tpopkontrzaehlEinheitWerteFilteredCount}/${tpopkontrzaehlEinheitWerteCount}`})`,
+        label: `Teil-Population: Zähl-Einheiten (${tpopkontrzaehlEinheitWerteFilteredCount}/${tpopkontrzaehlEinheitWerteCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'TpopkontrzaehlEinheitWerte',
         treeId: `tpopkontrzaehlEinheitWerteFolder`,
@@ -182,5 +186,5 @@ export const useWertesNavData = () => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

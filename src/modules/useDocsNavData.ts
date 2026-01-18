@@ -31,5 +31,5 @@ export const useDocsNavData = () => {
     [],
   )
 
-  return { isLoading: false, error: undefined, navData }
+  return { navData }
 }
