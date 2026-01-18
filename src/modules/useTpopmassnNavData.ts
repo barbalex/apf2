@@ -36,10 +36,10 @@ export const useTpopmassnNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeTpopmassn', tpopmassnId],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavTpopmassnQuery($tpopmassnId: UUID!) {
             tpopmassnById(id: $tpopmassnId) {
@@ -55,7 +55,11 @@ export const useTpopmassnNavData = (props) => {
           tpopmassnId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
@@ -155,5 +159,5 @@ export const useTpopmassnNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
