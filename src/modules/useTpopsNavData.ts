@@ -240,5 +240,5 @@ export const useTpopsNavData = (props) => {
     }),
   }
 
-  return { navData }
+  return navData
 }

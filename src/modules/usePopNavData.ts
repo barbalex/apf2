@@ -332,5 +332,5 @@ export const usePopNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }

@@ -84,5 +84,5 @@ export const useRootNavData = () => {
     ],
   }
 
-  return { navData }
+  return navData
 }

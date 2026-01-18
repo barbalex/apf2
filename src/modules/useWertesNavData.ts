@@ -186,5 +186,5 @@ export const useWertesNavData = () => {
     ],
   }
 
-  return { navData }
+  return navData
 }

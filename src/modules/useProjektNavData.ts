@@ -123,5 +123,5 @@ export const useProjektNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }

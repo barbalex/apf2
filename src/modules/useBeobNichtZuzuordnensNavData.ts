@@ -150,5 +150,5 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     })),
   }
 
-  return { navData }
+  return navData
 }

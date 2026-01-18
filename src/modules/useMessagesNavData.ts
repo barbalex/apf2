@@ -45,5 +45,5 @@ export const useMessagesNavData = () => {
     hasChildren: false,
   }
 
-  return { navData }
+  return navData
 }

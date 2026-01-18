@@ -93,5 +93,5 @@ export const useApberuebersichtsNavData = (props) => {
     ),
   }
 
-  return { navData }
+  return navData
 }

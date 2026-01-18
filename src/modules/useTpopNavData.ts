@@ -492,5 +492,5 @@ export const useTpopNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }

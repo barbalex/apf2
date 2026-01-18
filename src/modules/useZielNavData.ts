@@ -56,5 +56,5 @@ export const useZielNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }

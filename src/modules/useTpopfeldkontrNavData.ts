@@ -237,5 +237,5 @@ export const useTpopfeldkontrNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }
