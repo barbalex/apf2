@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { ApUser } from './ApUser.tsx'
 import { NewUser } from './NewUser.tsx'
 import { Label } from '../../../../shared/Label.tsx'
-import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
@@ -27,47 +27,45 @@ interface ApUsersQueryResult {
 }
 
 export const ApUsers = () => {
+  const apolloClient = useApolloClient()
+
   const { apId } = useParams<{ apId: string }>()
 
-  const { data, error, loading, refetch } = useQuery<ApUsersQueryResult>(
-    gql`
-      query apUsersForApQuery($apId: UUID!) {
-        allApUsers(
-          filter: {
-            apId: { equalTo: $apId }
-            # uncommented because ap_writer's dont see other names otherwise
-            # userByUserName: {
-            #   role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
-            # }
-          }
-        ) {
-          nodes {
-            id
-            userName
-            userByUserName {
-              id
-              role
+  const { data, refetch } = useQuery({
+    queryKey: ['apUsers', apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApUsersQueryResult>({
+        query: gql`
+          query apUsersForApQuery($apId: UUID!) {
+            allApUsers(
+              filter: {
+                apId: { equalTo: $apId }
+                # uncommented because ap_writer's dont see other names otherwise
+                # userByUserName: {
+                #   role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
+                # }
+              }
+            ) {
+              nodes {
+                id
+                userName
+                userByUserName {
+                  id
+                  role
+                }
+              }
             }
           }
-        }
-      }
-    `,
-    {
-      variables: { apId },
+        `,
+        variables: { apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
-  )
-  const apUsers = data ? (data?.allApUsers?.nodes ?? []) : []
-
-  if (loading) {
-    return (
-      <div className={styles.container}>
-        <Label label={'Benutzer mit Zugriff'} />
-        lade Daten...
-      </div>
-    )
-  }
-
-  if (error) return <Error error={error} />
+    suspense: true,
+  })
+  const apUsers = data?.data?.allApUsers?.nodes ?? []
 
   return (
     <div className={styles.container}>
