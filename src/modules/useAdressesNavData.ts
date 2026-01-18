@@ -12,10 +12,10 @@ export const useAdressesNavData = () => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, error, refetch } = useQuery({
     queryKey: ['treeAdresse', store.tree.adresseGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeAdressesQuery($adressesFilter: AdresseFilter!) {
             allAdresses(filter: $adressesFilter, orderBy: LABEL_ASC) {
@@ -33,7 +33,11 @@ export const useAdressesNavData = () => {
           adressesFilter: store.tree.adresseGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -50,7 +54,7 @@ export const useAdressesNavData = () => {
     id: 'Adressen',
     listFilter: 'adresse',
     url: `/Daten/Werte-Listen/Adressen`,
-    label: `Adressen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Adressen (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'adresseFolder',
     treeId: `AdresseFolder`,
@@ -70,5 +74,5 @@ export const useAdressesNavData = () => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

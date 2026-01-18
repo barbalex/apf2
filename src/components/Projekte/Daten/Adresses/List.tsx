@@ -12,9 +12,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useAdressesNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useAdressesNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
