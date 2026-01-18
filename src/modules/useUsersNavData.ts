@@ -12,10 +12,10 @@ export const useUsersNavData = () => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeUser', store.tree.userGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeUsersQuery($usersFilter: UserFilter!) {
             allUsers(filter: $usersFilter, orderBy: LABEL_ASC) {
@@ -33,7 +33,11 @@ export const useUsersNavData = () => {
           usersFilter: store.tree.userGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -51,7 +55,7 @@ export const useUsersNavData = () => {
     id: 'Benutzer',
     listFilter: 'user',
     url: `/Daten/Benutzer`,
-    label: `Benutzer (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Benutzer (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'userFolder',
     treeId: 'Benutzer',
@@ -70,5 +74,5 @@ export const useUsersNavData = () => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

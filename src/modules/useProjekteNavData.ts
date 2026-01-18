@@ -5,10 +5,10 @@ import { useQuery } from '@tanstack/react-query'
 export const useProjekteNavData = () => {
   const apolloClient = useApolloClient()
 
-  const { data, isLoading, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeProjects'],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavProjectsQuery {
             allProjekts {
@@ -21,7 +21,11 @@ export const useProjekteNavData = () => {
           }
         `,
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
   const count = data?.data?.allProjekts?.nodes?.length ?? 0
@@ -29,12 +33,12 @@ export const useProjekteNavData = () => {
   const navData = {
     id: 'projekte',
     url: '/Daten/Projekte',
-    label: `Projekte (${isLoading ? '...' : count})`,
+    label: `Projekte (${count})`,
     menus: (data?.data?.allProjekts?.nodes ?? []).map((p) => ({
       id: p.id,
       label: p.name,
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
