@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -112,7 +112,6 @@ export const Component = observer(() => {
     }
   }
 
-  if (loading) return <Spinner />
   if (error) return <Error error={error} />
 
   return (
@@ -122,49 +121,51 @@ export const Component = observer(() => {
           title="Adresse"
           MenuBarComponent={Menu}
         />
-        <div className={styles.fieldsContainer}>
-          <div className={styles.formContainer}>
-            <TextField
-              name="name"
-              label="Name"
-              type="text"
-              value={row.name}
-              saveToDb={saveToDb}
-              error={fieldErrors.name}
-            />
-            <TextField
-              name="adresse"
-              label="Adresse"
-              type="text"
-              value={row.adresse}
-              saveToDb={saveToDb}
-              error={fieldErrors.adresse}
-            />
-            <TextField
-              name="telefon"
-              label="Telefon"
-              type="text"
-              value={row.telefon}
-              saveToDb={saveToDb}
-              error={fieldErrors.telefon}
-            />
-            <TextField
-              name="email"
-              label="Email"
-              type="email"
-              value={row.email}
-              saveToDb={saveToDb}
-              error={fieldErrors.email}
-            />
-            <Checkbox2States
-              name="freiwErfko"
-              label="freiwillige ErfolgskontrolleurIn"
-              value={row.freiwErfko}
-              saveToDb={saveToDb}
-              error={fieldErrors.freiwErfko}
-            />
+        <Suspense fallback={<Spinner />}>
+          <div className={styles.fieldsContainer}>
+            <div className={styles.formContainer}>
+              <TextField
+                name="name"
+                label="Name"
+                type="text"
+                value={row.name}
+                saveToDb={saveToDb}
+                error={fieldErrors.name}
+              />
+              <TextField
+                name="adresse"
+                label="Adresse"
+                type="text"
+                value={row.adresse}
+                saveToDb={saveToDb}
+                error={fieldErrors.adresse}
+              />
+              <TextField
+                name="telefon"
+                label="Telefon"
+                type="text"
+                value={row.telefon}
+                saveToDb={saveToDb}
+                error={fieldErrors.telefon}
+              />
+              <TextField
+                name="email"
+                label="Email"
+                type="email"
+                value={row.email}
+                saveToDb={saveToDb}
+                error={fieldErrors.email}
+              />
+              <Checkbox2States
+                name="freiwErfko"
+                label="freiwillige ErfolgskontrolleurIn"
+                value={row.freiwErfko}
+                saveToDb={saveToDb}
+                error={fieldErrors.freiwErfko}
+              />
+            </div>
           </div>
-        </div>
+        </Suspense>
       </div>
     </ErrorBoundary>
   )
