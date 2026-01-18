@@ -1,6 +1,5 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
 
 import { EkIcon } from './EkIcon.tsx'
 import { MassnIcon } from './MassnIcon.tsx'
