@@ -88,10 +88,10 @@ export const usePopsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreePopsQuery($popsFilter: PopFilter!, $apId: UUID!) {
             apById(id: $apId) {
@@ -115,7 +115,11 @@ export const usePopsNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -157,7 +161,7 @@ export const usePopsNavData = (props) => {
     id: 'Populationen',
     listFilter: 'pop',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen`,
-    label: `Populationen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Populationen (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'popFolder',
     treeId: `${apId}PopFolder`,
@@ -207,5 +211,5 @@ export const usePopsNavData = (props) => {
     }),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

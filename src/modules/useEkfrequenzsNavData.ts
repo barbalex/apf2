@@ -16,10 +16,10 @@ export const useEkfrequenzsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeEkfrequenz', apId, store.tree.ekfrequenzGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeEkfrequenzsQuery(
             $ekfrequenzsFilter: EkfrequenzFilter!
@@ -44,7 +44,11 @@ export const useEkfrequenzsNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -62,7 +66,7 @@ export const useEkfrequenzsNavData = (props) => {
     id: 'EK-Frequenzen',
     listFilter: 'ekfrequenz',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen`,
-    label: `EK-Frequenzen (${isLoading ? '...' : `${rows.length}/${totalCount}`})`,
+    label: `EK-Frequenzen (${rows.length}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'ekfrequenzFolder',
     treeId: `${apId}EkfrequenzFolder`,
@@ -82,5 +86,5 @@ export const useEkfrequenzsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
