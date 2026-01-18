@@ -12,13 +12,13 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeTpopkontrzaehlEinheitWerte',
       store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopkontrzaehlEinheitWertesQuery(
             $filter: TpopkontrzaehlEinheitWerteFilter!
@@ -41,7 +41,11 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
           filter: store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -62,7 +66,7 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     id: 'TpopkontrzaehlEinheitWerte',
     listFilter: 'tpopkontrzaehlEinheitWerte',
     url: `/Daten/Werte-Listen/TpopkontrzaehlEinheitWerte`,
-    label: `Teil-Population: Zähl-Einheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Teil-Population: Zähl-Einheiten (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'TpopkontrzaehlEinheitWerte',
     treeId: `tpopkontrzaehlEinheitWerteFolder`,
@@ -84,5 +88,5 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     ),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
