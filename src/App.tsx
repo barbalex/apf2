@@ -10,13 +10,6 @@ import { Provider as JotaiProvider } from 'jotai'
 import { Analytics } from '@vercel/analytics/react'
 //import { onPatch } from 'mobx-state-tree'
 
-// see: https://github.com/fontsource/fontsource/blob/master/packages/roboto
-import '@fontsource/roboto-mono'
-import '@fontsource/roboto-mono/700.css'
-// see: https://github.com/fontsource/fontsource/tree/master/packages/roboto-mono
-import '@fontsource/roboto'
-import '@fontsource/roboto/500.css'
-import '@fontsource/roboto/700.css'
 import 'react-leaflet-markercluster/styles'
 import 'react-datepicker/dist/react-datepicker.css'
 
