@@ -16,14 +16,14 @@ export const useEkzaehleinheitsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeEkzaehleinheit',
       apId,
       store.tree.ekzaehleinheitGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeEkzaehleinheitsQuery(
             $ekzaehleinheitsFilter: EkzaehleinheitFilter!
@@ -51,7 +51,11 @@ export const useEkzaehleinheitsNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -70,7 +74,7 @@ export const useEkzaehleinheitsNavData = (props) => {
     id: 'EK-Zähleinheiten',
     listFilter: 'ekzaehleinheit',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/EK-Zähleinheiten`,
-    label: `EK-Zähleinheiten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `EK-Zähleinheiten (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'ekzaehleinheitFolder',
     treeId: `${apId}EkzaehleinheitFolder`,
@@ -90,5 +94,5 @@ export const useEkzaehleinheitsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

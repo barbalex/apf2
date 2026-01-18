@@ -15,15 +15,15 @@ export const useAssozartsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeAssozart',
       projId,
       apId,
       store.tree.assozartGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeAssozartsQuery(
             $assozartsFilter: AssozartFilter!
@@ -49,7 +49,11 @@ export const useAssozartsNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -67,7 +71,7 @@ export const useAssozartsNavData = (props) => {
     id: 'assoziierte-Arten',
     listFilter: 'assozart',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten`,
-    label: `Assoziierte Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Assoziierte Arten (${count}/${totalCount})`,
     menus: (data?.data?.apById?.assozartsByApId?.nodes ?? []).map((p) => ({
       id: p.id,
       label: p.label,
@@ -80,5 +84,5 @@ export const useAssozartsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
