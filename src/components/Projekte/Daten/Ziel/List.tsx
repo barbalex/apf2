@@ -6,7 +6,7 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import { useZielNavData } from '../../../../modules/useZielNavData.ts'
 
 export const List = () => {
-  const { navData } = useZielNavData()
+  const navData = useZielNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

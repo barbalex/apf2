@@ -5,7 +5,7 @@ import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 
 export const List = () => {
-  const { navData } = useCurrentissuesNavData()
+  const navData = useCurrentissuesNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
