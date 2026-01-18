@@ -12,13 +12,13 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeTpopApberrelevantGrundWerte',
       store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopApberrelevantGrundWerteQuery(
             $tpopApberrelevantGrundWertsFilter: TpopApberrelevantGrundWerteFilter!
@@ -42,7 +42,11 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
             store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -63,7 +67,7 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     id: 'ApberrelevantGrundWerte',
     listFilter: 'tpopApberrelevantGrundWerte',
     url: `/Daten/Werte-Listen/ApberrelevantGrundWerte`,
-    label: `Teil-Population: Grund für AP-Bericht Relevanz (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Teil-Population: Grund für AP-Bericht Relevanz (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'tpopApberrelevantGrundWerteFolder',
     treeId: `tpopApberrelevantGrundWerteFolder`,
@@ -85,5 +89,5 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     ),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

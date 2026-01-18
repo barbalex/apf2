@@ -10,10 +10,10 @@ export const useRootNavData = () => {
   const apolloClient = useApolloClient()
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeRoot', store.tree.userGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavRootQuery($usersFilter: UserFilter!) {
             allProjekts {
@@ -37,7 +37,11 @@ export const useRootNavData = () => {
           usersFilter: store.tree.userGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
@@ -59,11 +63,11 @@ export const useRootNavData = () => {
     menus: [
       {
         id: 'Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13',
-        label: `Projekte (${isLoading ? '...' : projectsCount})`,
+        label: `Projekte (${projectsCount})`,
       },
       {
         id: 'Benutzer',
-        label: `Benutzer (${isLoading ? '...' : `${usersFilteredCount}/${usersCount}`})`,
+        label: `Benutzer (${usersFilteredCount}/${usersCount})`,
       },
       {
         id: 'Werte-Listen',
@@ -71,14 +75,14 @@ export const useRootNavData = () => {
       },
       {
         id: 'Mitteilungen',
-        label: `Mitteilungen (${isLoading ? '...' : messagesCount})`,
+        label: `Mitteilungen (${messagesCount})`,
       },
       {
         id: 'Aktuelle-Fehler',
-        label: `Aktuelle Fehler (${isLoading ? '...' : currentIssuesCount})`,
+        label: `Aktuelle Fehler (${currentIssuesCount})`,
       },
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
