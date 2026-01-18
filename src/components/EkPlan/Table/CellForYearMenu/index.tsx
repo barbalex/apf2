@@ -5,8 +5,8 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.ts'
 import { queryTpop } from './queryTpop.ts'
@@ -206,19 +206,29 @@ export const CellForYearMenu = observer(() => {
     tpopById: TpopNode | null
   }
 
-  const { data } = useQuery<EkplanmenuTpopQueryResult>(queryTpop, {
-    variables: {
-      tpopId,
-      jahr: year,
-      showEk,
-      showEkf,
-      showMassn,
+  const { data } = useQuery({
+    queryKey: ['CellForYearMenu', tpopId, year, showEk, showEkf, showMassn],
+    queryFn: async () => {
+      const result = await apolloClient.query<EkplanmenuTpopQueryResult>({
+        query: queryTpop,
+        variables: {
+          tpopId,
+          jahr: year,
+          showEk,
+          showEkf,
+          showMassn,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
   })
-  const tpop = data?.tpopById ?? {}
-  const eks = data?.tpopById?.eks?.nodes ?? []
-  const ekfs = data?.tpopById?.ekfs?.nodes ?? []
-  const massns = data?.tpopById?.massns?.nodes ?? []
+  const tpop = data?.data?.tpopById ?? {}
+  const eks = data?.data?.tpopById?.eks?.nodes ?? []
+  const ekfs = data?.data?.tpopById?.ekfs?.nodes ?? []
+  const massns = data?.data?.tpopById?.massns?.nodes ?? []
 
   return (
     <>
