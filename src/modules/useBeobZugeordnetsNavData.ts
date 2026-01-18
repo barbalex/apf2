@@ -29,14 +29,14 @@ export const useBeobZugeordnetsNavData = (props) => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeBeobZugeordnet',
       tpopId,
       store.tree.beobZugeordnetGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavBeobZugeordnetsQuery(
             $beobZugeordnetFilter: BeobFilter!
@@ -65,7 +65,11 @@ export const useBeobZugeordnetsNavData = (props) => {
           allBeobZugeordnetFilter: { tpopId: { equalTo: tpopId } },
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () => reaction(() => store.tree.beobZugeordnetGqlFilterForTree, refetch),
@@ -85,8 +89,8 @@ export const useBeobZugeordnetsNavData = (props) => {
     id: 'Beobachtungen',
     listFilter: 'beobZugeordnet',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen`,
-    label: `Beobachtungen zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-    labelShort: `Beob. zugeordnet (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    label: `Beobachtungen zugeordnet (${filteredCount}/${count})`,
+    labelShort: `Beob. zugeordnet (${filteredCount}/${count})`,
     treeNodeType: 'folder',
     treeMenuType: 'beobZugeordnetFolder',
     treeId: `${tpopId}BeobZugeordnetFolder`,
@@ -131,5 +135,5 @@ export const useBeobZugeordnetsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

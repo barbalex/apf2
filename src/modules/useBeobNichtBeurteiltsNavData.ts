@@ -41,14 +41,14 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
   }
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeBeobNichtBeurteilt',
       apId,
       store.tree.beobNichtBeurteiltGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavBeobNichtBeurteiltsQuery(
             $beobNichtBeurteiltFilter: BeobFilter!
@@ -87,7 +87,11 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
           allBeobNichtBeurteiltFilter,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () =>
@@ -108,8 +112,8 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     id: 'nicht-beurteilte-Beobachtungen',
     listFilter: 'beobNichtBeurteilt',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-beurteilte-Beobachtungen`,
-    label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-    labelShort: `Beob. nicht beurteilt (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    label: `Beobachtungen nicht beurteilt (${filteredCount}/${count})`,
+    labelShort: `Beob. nicht beurteilt (${filteredCount}/${count})`,
     treeNodeType: 'folder',
     treeNodeMenuType: 'beobNichtBeurteiltFolder',
     treeId: `${apId}BeobNichtBeurteiltFolder`,
@@ -146,5 +150,5 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
