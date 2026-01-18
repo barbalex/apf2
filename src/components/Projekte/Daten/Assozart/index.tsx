@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
@@ -14,8 +14,6 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { assozart } from '../../../shared/fragments.ts'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type Assozart from '../../../../models/apflora/Assozart.ts'
@@ -54,13 +52,24 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<AssozartQueryResult>(query, {
-    variables: {
-      id,
+  const { data } = useQuery({
+    queryKey: ['assozart', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<AssozartQueryResult>({
+        query,
+        variables: {
+          id,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.assozartById ?? {}
+  const row = data?.data?.assozartById ?? {}
 
   // do not include already choosen assozarten
   const assozartenOfAp = (row?.apByApId?.assozartsByApId?.nodes ?? [])
@@ -140,10 +149,6 @@ export const Component = observer(() => {
       })
     }
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>

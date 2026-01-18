@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -15,7 +16,6 @@ import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { Tabs } from './Tabs.tsx'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
@@ -65,6 +65,8 @@ interface AeTaxonomiesByIdQueryResult {
 }
 
 export const ApFilter = observer(() => {
+  const apolloClient = useApolloClient()
+
   const store = useContext(MobxContext)
   const {
     dataFilter,
@@ -82,42 +84,73 @@ export const ApFilter = observer(() => {
     }
   }, [activeTab, dataFilter.ap.length])
 
-  const { data: apsData, error: apsError } = useQuery<ApsQueryResult>(
-    queryAps,
-    {
-      variables: {
-        filteredFilter: apGqlFilter.filtered,
-        allFilter: apGqlFilter.all,
-      },
+  const { data: apsData } = useQuery({
+    queryKey: ['aps', apGqlFilter.filtered, apGqlFilter.all],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApsQueryResult>({
+        query: queryAps,
+        variables: {
+          filteredFilter: apGqlFilter.filtered,
+          allFilter: apGqlFilter.all,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
-  )
+    suspense: true,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
 
-  const {
-    data: dataAdresses,
-    error: errorAdresses,
-    loading: loadingAdresses,
-  } = useQuery<AdressesQueryResult>(queryAdresses)
-
-  const {
-    data: dataLists,
-    error: errorLists,
-    loading: loadingLists,
-  } = useQuery<ListsQueryResult>(queryLists)
-
-  const {
-    data: dataAeTaxonomiesById,
-    error: errorAeTaxonomiesById,
-    loading: loadingAeTaxonomiesById,
-  } = useQuery<AeTaxonomiesByIdQueryResult>(queryAeTaxonomiesById, {
-    variables: {
-      id: dataFilter.ap?.[activeTab]?.artId,
-      run: !!dataFilter.ap?.[activeTab]?.artId,
+  const { data: dataAdresses } = useQuery({
+    queryKey: ['adresses'],
+    queryFn: async () => {
+      const result = await apolloClient.query<AdressesQueryResult>({
+        query: queryAdresses,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
+    staleTime: Infinity, // This data rarely changes
+  })
+
+  const { data: dataLists } = useQuery({
+    queryKey: ['apFilterLists'],
+    queryFn: async () => {
+      const result = await apolloClient.query<ListsQueryResult>({
+        query: queryLists,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
+    staleTime: Infinity, // This data rarely changes
+  })
+
+  const { data: dataAeTaxonomiesById } = useQuery({
+    queryKey: ['aeTaxonomiesById', dataFilter.ap?.[activeTab]?.artId],
+    queryFn: async () => {
+      const result = await apolloClient.query<AeTaxonomiesByIdQueryResult>({
+        query: queryAeTaxonomiesById,
+        variables: {
+          id: dataFilter.ap?.[activeTab]?.artId,
+          run: !!dataFilter.ap?.[activeTab]?.artId,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    enabled: !!dataFilter.ap?.[activeTab]?.artId,
+    staleTime: Infinity, // Keep data fresh until artId changes
   })
 
   const artname =
-    !!dataFilter.ap?.[activeTab]?.artId && !loadingAeTaxonomiesById ?
-      (dataAeTaxonomiesById?.aeTaxonomyById?.artname ?? '')
+    !!dataFilter.ap?.[activeTab]?.artId ?
+      (dataAeTaxonomiesById?.data?.aeTaxonomyById?.artname ?? '')
     : ''
 
   const row = dataFilter.ap[activeTab]
@@ -142,13 +175,6 @@ export const ApFilter = observer(() => {
     return filter
   }
 
-  const errors = [
-    ...(errorAdresses ? [errorAdresses] : []),
-    ...(apsError ? [apsError] : []),
-    ...(errorLists ? [errorLists] : []),
-    ...(errorAeTaxonomiesById ? [errorAeTaxonomiesById] : []),
-  ]
-
   const navApFilterComment =
     nurApFilter ?
       `Navigationsbaum, "nur AP"-Filter: Nur AP-Arten werden berücksichtigt.`
@@ -160,8 +186,6 @@ export const ApFilter = observer(() => {
 
   const showFilterComments = !!navApFilterComment || !!navLabelComment
 
-  if (errors.length) return <Error errors={errors} />
-
   if (!row) return null
 
   return (
@@ -170,8 +194,8 @@ export const ApFilter = observer(() => {
         <FilterTitle
           title="Art"
           table="ap"
-          totalNr={apsData?.allAps?.totalCount ?? '...'}
-          filteredNr={apsData?.filteredAps?.totalCount ?? '...'}
+          totalNr={apsData?.data?.allAps?.totalCount ?? '...'}
+          filteredNr={apsData?.data?.filteredAps?.totalCount ?? '...'}
           // need to pass row even though not used
           // to ensure title re-renders an change of row
           row={row}
@@ -221,8 +245,7 @@ export const ApFilter = observer(() => {
             <RadioButtonGroupWithInfo
               key={`${row?.id}bearbeitung`}
               name="bearbeitung"
-              dataSource={dataLists?.allApBearbstandWertes?.nodes ?? []}
-              loading={loadingLists}
+              dataSource={dataLists?.data?.allApBearbstandWertes?.nodes ?? []}
               popover={
                 <div className={styles.popover}>
                   <div className={styles.title}>Legende</div>
@@ -251,8 +274,7 @@ export const ApFilter = observer(() => {
               <RadioButtonGroupWithInfo
                 key={`${row?.id}umsetzung`}
                 name="umsetzung"
-                dataSource={dataLists?.allApUmsetzungWertes?.nodes ?? []}
-                loading={loadingLists}
+                dataSource={dataLists?.data?.allApUmsetzungWertes?.nodes ?? []}
                 popover={
                   <div className={styles.popover}>
                     <div className={styles.title}>Legende</div>
@@ -282,8 +304,7 @@ export const ApFilter = observer(() => {
               key={`${row?.id}bearbeiter`}
               name="bearbeiter"
               label="Verantwortlich"
-              options={dataAdresses?.allAdresses?.nodes ?? []}
-              loading={loadingAdresses}
+              options={dataAdresses?.data?.allAdresses?.nodes ?? []}
               value={row?.bearbeiter}
               saveToDb={saveToDb}
             />
