@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
-
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { Select } from '../../../../shared/Select.tsx'
 
@@ -36,25 +36,34 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
 
   const [error, setError] = useState<string | null>(null)
 
-  const {
-    data,
-    loading,
-    error: queryError,
-  } = useQuery<BenutzerQueryResult>(gql`
-    query benutzerForNewUser {
-      allUsers(
-        orderBy: NAME_ASC
-        filter: { role: { in: ["apflora_ap_writer", "apflora_ap_reader"] } }
-      ) {
-        nodes {
-          id
-          name
-          role
-        }
-      }
-    }
-  `)
-  const userData = data ? (data?.allUsers?.nodes ?? []) : []
+  const { data } = useQuery({
+    queryKey: ['benutzerForNewUser'],
+    queryFn: async () => {
+      const result = await apolloClient.query<BenutzerQueryResult>({
+        query: gql`
+          query benutzerForNewUser {
+            allUsers(
+              orderBy: NAME_ASC
+              filter: {
+                role: { in: ["apflora_ap_writer", "apflora_ap_reader"] }
+              }
+            ) {
+              nodes {
+                id
+                name
+                role
+              }
+            }
+          }
+        `,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
+  })
+  const userData = data?.data?.allUsers?.nodes ?? []
   const apUserIds = apUsers.map((u) => u?.userByUserName?.id)
   const options = userData
     .filter((d) => !apUserIds.includes(d.id))
@@ -84,10 +93,6 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
     refetch()
   }
 
-  useEffect(() => {
-    if (queryError) setError(queryError.message)
-  }, [queryError])
-
   return (
     <Select
       key={apUsers.length}
@@ -95,7 +100,6 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
       label="Neuem Benutzer Zugriff erteilen"
       name="neuerBenutzer"
       options={options}
-      loading={loading}
       error={error}
       saveToDb={saveToDb}
     />
