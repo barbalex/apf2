@@ -3,12 +3,9 @@ import { Suspense } from 'react'
 import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 
 export const List = () => {
-  const { navData, error } = useCurrentissuesNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useCurrentissuesNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
