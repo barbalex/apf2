@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -36,12 +36,25 @@ interface AdresseQueryResult {
 export const Component = observer(() => {
   const { adrId } = useParams<{ adrId: string }>()
   const store = useContext(MobxContext)
+  const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data, error, loading } = useQuery<AdresseQueryResult>(query, {
-    variables: { id: adrId },
+  const {
+    data,
+    error,
+    isLoading: loading,
+  } = useQuery({
+    queryKey: ['Adresse', adrId],
+    queryFn: async () => {
+      const result = await apolloClient.query<AdresseQueryResult>({
+        query,
+        variables: { id: adrId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
-  const apolloClient = useApolloClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
