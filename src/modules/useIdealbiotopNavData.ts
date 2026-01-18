@@ -10,10 +10,10 @@ export const useIdealbiotopNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const { data, isLoading, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeIdealbiotop', apId],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavIdealbiotopQuery($apId: UUID!) {
             apById(id: $apId) {
@@ -32,7 +32,11 @@ export const useIdealbiotopNavData = (props) => {
         `,
         variables: { apId },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
   const idealbiotop = data?.data?.apById?.idealbiotopsByApId?.nodes?.[0]
@@ -72,5 +76,5 @@ export const useIdealbiotopNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

@@ -12,13 +12,13 @@ export const useEkAbrechnungstypWertesNavData = () => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeEkAbrechnungstypWerte',
       store.tree.ekAbrechnungstypWerteGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeEkAbrechnungstypWertesQuery(
             $filter: EkAbrechnungstypWerteFilter!
@@ -41,7 +41,11 @@ export const useEkAbrechnungstypWertesNavData = () => {
           filter: store.tree.ekAbrechnungstypWerteGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -59,7 +63,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
     id: 'EkAbrechnungstypWerte',
     listFilter: 'ekAbrechnungstypWerte',
     url: `/Daten/Werte-Listen/EkAbrechnungstypWerte`,
-    label: `Teil-Population: EK-Abrechnungstypen (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Teil-Population: EK-Abrechnungstypen (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'ekAbrechnungstypWerteFolder',
     treeId: `EkAbrechnungstypWerteFolder`,
@@ -79,5 +83,5 @@ export const useEkAbrechnungstypWertesNavData = () => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
