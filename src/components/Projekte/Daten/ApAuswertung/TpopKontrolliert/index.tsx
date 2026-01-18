@@ -1,4 +1,5 @@
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import {
   LineChart,
   XAxis,
@@ -9,12 +10,10 @@ import {
   Legend,
   Tooltip,
 } from 'recharts'
-import CircularProgress from '@mui/material/CircularProgress'
 import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { CustomTooltip } from '../CustomTooltip.tsx'
-import { Error } from '../../../../shared/Error.tsx'
 
 import type { ApId } from '../../../../../models/apflora/Ap.ts'
 
@@ -52,34 +51,38 @@ export const TpopKontrolliert = ({
   isSubReport,
   jahr,
 }: TpopKontrolliertProps) => {
+  const apolloClient = useApolloClient()
+
   const { apId } = useParams<{ apId: string }>()
   const id = apIdPassed ?? (apId as ApId)
 
-  const { data, error, loading } = useQuery<TpopKontrolliertQueryResult>(
-    query,
-    {
-      variables: { id, year: jahr ?? new Date().getFullYear() },
+  const { data } = useQuery({
+    queryKey: ['tpopKontrolliert', id, jahr ?? new Date().getFullYear()],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopKontrolliertQueryResult>({
+        query,
+        variables: { id, year: jahr ?? new Date().getFullYear() },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
+  })
+  const erfolgData = (data?.data?.tpopKontrolliertForJber?.nodes ?? []).map(
+    (d) => ({
+      jahr: d.year,
+      'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
+      kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,
+    }),
   )
-  const erfolgData = (data?.tpopKontrolliertForJber?.nodes ?? []).map((d) => ({
-    jahr: d.year,
-    'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
-    kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,
-  }))
-
-  if (error) return <Error error={error} />
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
   return (
     <>
-      {loading ?
-        <div className={styles.spinnerContainer}>
-          <CircularProgress />
-          <div className={styles.spinnerText}>lade kontrollierte TPop...</div>
-        </div>
-      : erfolgData.length ?
+      {erfolgData.length ?
         <>
           <h4 className={styles.title}>
             (<span className={styles.titleKontr}>kontrollierte</span>){' '}

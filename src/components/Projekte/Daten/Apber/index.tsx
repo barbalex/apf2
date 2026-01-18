@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { gql } from '@apollo/client'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -16,8 +16,6 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apber } from '../../../shared/fragments.ts'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type Apber from '../../../../models/apflora/Apber.ts'
@@ -77,13 +75,23 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<ApberQueryResult>(query, {
-    variables: {
-      id: apberId,
+  const { data } = useQuery({
+    queryKey: ['apber', apberId],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApberQueryResult>({
+        query,
+        variables: {
+          id: apberId,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
   })
 
-  const row = data?.apberById ?? {}
+  const row = data?.data?.apberById ?? {}
 
   const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -135,10 +143,6 @@ export const Component = observer(() => {
     }
   }
 
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
       <div className={styles.container}>
@@ -166,8 +170,7 @@ export const Component = observer(() => {
             key={`${apberId}beurteilung`}
             name="beurteilung"
             label="Beurteilung"
-            options={data?.allApErfkritWertes?.nodes ?? []}
-            loading={loading}
+            options={data?.data?.allApErfkritWertes?.nodes ?? []}
             value={row.beurteilung}
             saveToDb={saveToDb}
             error={fieldErrors.beurteilung}
@@ -256,8 +259,7 @@ export const Component = observer(() => {
             key={`${apberId}apId`}
             name="bearbeiter"
             label="BearbeiterIn"
-            options={data?.allAdresses?.nodes ?? []}
-            loading={loading}
+            options={data?.data?.allAdresses?.nodes ?? []}
             value={row.bearbeiter}
             saveToDb={saveToDb}
             error={fieldErrors.bearbeiter}
