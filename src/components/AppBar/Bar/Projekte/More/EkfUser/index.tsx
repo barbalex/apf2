@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
-import { useQuery } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import { useNavigate, useLocation } from 'react-router'
 
 import { Select } from '../../../../../shared/Select.tsx'
-import { Error } from '../../../../../shared/Error.tsx'
 import { queryAdresses } from './queryAdresses.ts'
 
 import type { UserId } from '../../../../../../models/apflora/public/User.ts'
@@ -27,8 +27,20 @@ const ekfRefYear = new Date(ekfRefDate).getFullYear()
 export const EkfUser = ({ closeMenu }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery<UsersQueryResult>(queryAdresses)
+  const { data } = useQuery({
+    queryKey: ['ekfUsers'],
+    queryFn: async () => {
+      const result = await apolloClient.query<UsersQueryResult>({
+        query: queryAdresses,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
+  })
 
   const choose = (event) => {
     const value = event.target.value
@@ -39,15 +51,13 @@ export const EkfUser = ({ closeMenu }) => {
     )
   }
 
-  if (error) return <Error error={error} />
-
   return (
     <div className={styles.container}>
       <Suspense fallback={'lade...'}>
         <Select
           value={''}
           label="EKF sehen als"
-          options={data?.allUsers?.nodes ?? []}
+          options={data?.data?.allUsers?.nodes ?? []}
           loading={false}
           saveToDb={choose}
           maxHeight={120}
