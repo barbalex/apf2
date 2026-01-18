@@ -1,6 +1,7 @@
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { Option } from './Option.tsx'
 import { query } from './query.ts'
@@ -20,8 +21,21 @@ interface PopStatusWerteQueryResult {
 }
 
 export const Options = ({ type }) => {
-  const { data } = useQuery<PopStatusWerteQueryResult>(query)
-  const options = data?.allPopStatusWertes?.nodes ?? []
+  const apolloClient = useApolloClient()
+
+  const { data } = useQuery({
+    queryKey: ['PopStatusWertes'],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopStatusWerteQueryResult>({
+        query,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
+  })
+  const options = data?.data?.allPopStatusWertes?.nodes ?? []
 
   return (
     <FormGroup className={styles.formGroup}>
