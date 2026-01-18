@@ -36,14 +36,14 @@ export const useTpopfreiwkontrNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeTpopfreiwkontr',
       tpopkontrId,
       store.tree.tpopkontrzaehlGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavTpopfreiwkontrQuery(
             $tpopkontrId: UUID!
@@ -71,7 +71,11 @@ export const useTpopfreiwkontrNavData = (props) => {
           tpopkontrzaehlFilter: store.tree.tpopkontrzaehlGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () => reaction(() => store.tree.tpopkontrzaehlGqlFilterForTree, refetch),
@@ -143,7 +147,7 @@ export const useTpopfreiwkontrNavData = (props) => {
       },
       {
         id: 'Zaehlungen',
-        label: `Zählungen (${isLoading ? '...' : `${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount}`})`,
+        label: `Zählungen (${filteredTpopkontrzaehlCount}/${tpopkontrzaehlCount})`,
         hideInNavList: true,
         treeNodeType: 'folder',
         treeMenuType: 'tpopfreiwkontrzaehlFolder',
@@ -194,5 +198,5 @@ export const useTpopfreiwkontrNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
