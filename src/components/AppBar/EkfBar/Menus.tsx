@@ -1,7 +1,8 @@
 import { useContext, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import { Link } from 'react-router'
 import { MdPrint, MdHourglassEmpty } from 'react-icons/md'
 import Button from '@mui/material/Button'
@@ -39,6 +40,7 @@ interface EkfMenusQueryResult {
 export const Menus = observer(() => {
   const { userId, ekfId, ekfYear } = useParams()
   const { search } = useLocation()
+  const apolloClient = useApolloClient()
 
   const store = useContext(MobxContext)
   const { user, setIsPrint, setIsEkfSinglePrint } = store
@@ -55,13 +57,23 @@ export const Menus = observer(() => {
   const query =
     ekfRefYear === ekfYear ? dataByUserIdQuery : dataWithDateByUserIdQuery
 
-  const { data } = useQuery<EkfMenusQueryResult>(query, {
-    variables: { id: userId, jahr: +ekfYear },
-    fetchPolicy: 'network-only',
+  const { data } = useQuery({
+    queryKey: ['ekfMenus', userId, ekfYear],
+    queryFn: async () => {
+      const result = await apolloClient.query<EkfMenusQueryResult>({
+        query,
+        variables: { id: userId, jahr: +ekfYear },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
   const ekfCount = (
-    data?.userById?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ?? []
+    data?.data?.userById?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ??
+    []
   ).length
 
   const [userOpen, setUserOpen] = useState(false)
