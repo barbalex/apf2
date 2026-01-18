@@ -7,7 +7,6 @@ import { useApbersNavData } from '../../../../modules/useApbersNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
 
 export const List = observer(() => {
@@ -16,9 +15,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useApbersNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useApbersNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

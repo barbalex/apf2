@@ -5,16 +5,13 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { useZielsOfJahrNavData } from '../../../../modules/useZielsOfJahrNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { Menu } from './Menu.tsx'
 
 export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useZielsOfJahrNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useZielsOfJahrNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
