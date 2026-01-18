@@ -19,10 +19,10 @@ export const useTpopfreiwkontrsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeTpopfreiwkontr', tpopId, store.tree.ekfGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeTpopfreiwkontrsQuery(
             $ekfsFilter: TpopkontrFilter!
@@ -53,7 +53,11 @@ export const useTpopfreiwkontrsNavData = (props) => {
           tpopId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -83,8 +87,8 @@ export const useTpopfreiwkontrsNavData = (props) => {
     id: 'Freiwilligen-Kontrollen',
     listFilter: 'tpopkontr',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen`,
-    label: `Freiwilligen-Kontrollen (${isLoading ? '...' : `${count}/${totalCount}`})`,
-    labelShort: `EKF (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Freiwilligen-Kontrollen (${count}/${totalCount})`,
+    labelShort: `EKF (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'tpopfreiwkontrFolder',
     treeId: `${tpopId}TpopfreiwkontrFolder`,
@@ -143,5 +147,5 @@ export const useTpopfreiwkontrsNavData = (props) => {
     }),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

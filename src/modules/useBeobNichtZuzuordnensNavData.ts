@@ -40,14 +40,14 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     },
   }
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeBeobNichtZuzuordnen',
       apId,
       store.tree.beobNichtZuzuordnenGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavBeobNichtZuzuordnensQuery(
             $beobNichtZuzuordnenFilter: BeobFilter!
@@ -86,7 +86,11 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
           allBeobNichtZuzuordnenFilter,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () =>
@@ -108,8 +112,8 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     id: 'nicht-zuzuordnende-Beobachtungen',
     listFilter: 'beobNichtZuzuordnen',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/nicht-zuzuordnende-Beobachtungen`,
-    label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
-    labelShort: `Beob. nicht zuzuordnen (${isLoading ? '...' : `${filteredCount}/${count}`})`,
+    label: `Beobachtungen nicht zuzuordnen (${filteredCount}/${count})`,
+    labelShort: `Beob. nicht zuzuordnen (${filteredCount}/${count})`,
     treeNodeType: 'folder',
     treeMenuType: 'beobNichtZuzuordnenFolder',
     treeId: `${apId}BeobNichtZuzuordnenFolder`,
@@ -146,5 +150,5 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
