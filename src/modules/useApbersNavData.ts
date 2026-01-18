@@ -15,10 +15,10 @@ export const useApbersNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeApber', projId, apId, store.tree.apberGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeApbersQuery($apbersFilter: ApberFilter!, $apId: UUID!) {
             apById(id: $apId) {
@@ -41,7 +41,11 @@ export const useApbersNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -59,7 +63,7 @@ export const useApbersNavData = (props) => {
     id: 'AP-Berichte',
     listFilter: 'apber',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
-    label: `AP-Berichte (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `AP-Berichte (${count}/${totalCount})`,
     menus: (data?.data?.apById?.apbersByApId?.nodes ?? []).map((p) => ({
       id: p.id,
       label: p.label,
@@ -72,5 +76,5 @@ export const useApbersNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

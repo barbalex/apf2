@@ -47,7 +47,7 @@ export const usePopNavData = (props) => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treePop',
       popId,
@@ -55,8 +55,8 @@ export const usePopNavData = (props) => {
       store.tree.popberGqlFilterForTree,
       store.tree.popmassnberGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavPopQuery(
             $popId: UUID!
@@ -104,7 +104,11 @@ export const usePopNavData = (props) => {
           popmassnberFilter: store.tree.popmassnberGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () => reaction(() => store.tree.tpopGqlFilterForTree, refetch),
@@ -206,7 +210,7 @@ export const usePopNavData = (props) => {
       },
       {
         id: 'Teil-Populationen',
-        label: `Teil-Populationen (${isLoading ? '...' : `${filteredTpopsCount}/${tpopsCount}`})`,
+        label: `Teil-Populationen (${filteredTpopsCount}/${tpopsCount})`,
         treeNodeType: 'folder',
         treeMenuType: `tpopFolder`,
         treeId: `${popId}TpopFolder`,
@@ -228,7 +232,7 @@ export const usePopNavData = (props) => {
       },
       {
         id: 'Kontroll-Berichte',
-        label: `Kontroll-Berichte (${isLoading ? '...' : `${filteredPopbersCount}/${popbersCount}`})`,
+        label: `Kontroll-Berichte (${filteredPopbersCount}/${popbersCount})`,
         treeNodeType: 'folder',
         treeMenuType: `popberFolder`,
         treeId: `${popId}PopberFolder`,
@@ -249,7 +253,7 @@ export const usePopNavData = (props) => {
       },
       {
         id: 'Massnahmen-Berichte',
-        label: `Massnahmen-Berichte (${isLoading ? '...' : `${filteredPopmassnbersCount}/${popmassnbersCount}`})`,
+        label: `Massnahmen-Berichte (${filteredPopmassnbersCount}/${popmassnbersCount})`,
         treeNodeType: 'folder',
         treeMenuType: `popmassnberFolder`,
         treeId: `${popId}PopmassnberFolder`,
@@ -328,5 +332,5 @@ export const usePopNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
