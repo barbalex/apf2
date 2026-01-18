@@ -1,6 +1,7 @@
 import { useContext, lazy, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 
 import type { ApId } from '../../models/apflora/Ap.ts'
@@ -34,6 +35,7 @@ import styles from './index.module.css'
 
 export const Component = observer(() => {
   const store = useContext(MobxContext)
+  const apolloClient = useApolloClient()
   const { user } = store
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
   const {
@@ -82,13 +84,23 @@ export const Component = observer(() => {
     }
   }
 
-  const { data, loading, error } = useQuery<EkplanApQueryResult>(queryAps, {
-    variables: {
-      ids: aps.map((ap) => ap.value),
+  const { data } = useQuery({
+    queryKey: ['ekplanAps', aps.map((ap) => ap.value)],
+    queryFn: async () => {
+      const result = await apolloClient.query<EkplanApQueryResult>({
+        query: queryAps,
+        variables: {
+          ids: aps.map((ap) => ap.value),
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
     },
+    suspense: true,
   })
-  setApsData(data)
-  setApsDataLoading(loading)
+  setApsData(data?.data)
+  setApsDataLoading(false)
 
   const onClickAnleitung = () => {
     const url = `${appBaseUrl()}Dokumentation/erfolgs-kontrollen-planen`
@@ -118,14 +130,6 @@ export const Component = observer(() => {
     setFilterAnsiedlungYear(null)
     setFilterKontrolleYear(null)
     setFilterEkplanYear(null)
-  }
-
-  if (error) {
-    return (
-      <Suspense fallback={<Spinner />}>
-        <Error error={error as Error} />
-      </Suspense>
-    )
   }
 
   return (
