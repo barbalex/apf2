@@ -88,5 +88,5 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     ),
   }
 
-  return { navData }
+  return navData
 }

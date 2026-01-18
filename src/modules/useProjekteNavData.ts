@@ -40,5 +40,5 @@ export const useProjekteNavData = () => {
     })),
   }
 
-  return { navData }
+  return navData
 }

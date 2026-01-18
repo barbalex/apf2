@@ -76,5 +76,5 @@ export const useIdealbiotopNavData = (props) => {
     ],
   }
 
-  return { navData }
+  return navData
 }
