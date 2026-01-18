@@ -15,10 +15,10 @@ export const useApartsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeApart', projId, apId, store.tree.apartGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeApartsQuery($apartsFilter: ApartFilter!, $apId: UUID!) {
             apById(id: $apId) {
@@ -41,7 +41,11 @@ export const useApartsNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -59,7 +63,7 @@ export const useApartsNavData = (props) => {
     id: 'Taxa',
     listFilter: 'apart',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Taxa`,
-    label: `Taxa (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Taxa (${count}/${totalCount})`,
     menus: (data?.data?.apById?.apartsByApId?.nodes ?? []).map((p) => ({
       id: p.id,
       label: p.label,
@@ -72,5 +76,5 @@ export const useApartsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

@@ -16,10 +16,10 @@ export const useErfkritsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeErfkrit', projId, apId, store.tree.erfkritGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeErfkritsQuery(
             $erfkritsFilter: ErfkritFilter!
@@ -48,7 +48,11 @@ export const useErfkritsNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -66,7 +70,7 @@ export const useErfkritsNavData = (props) => {
     id: 'AP-Erfolgskriterien',
     listFilter: 'erfkrit',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien`,
-    label: `AP-Erfolgskriterien (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `AP-Erfolgskriterien (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'erfkritFolder',
     treeId: `${apId}ErfkritFolder`,
@@ -86,5 +90,5 @@ export const useErfkritsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
