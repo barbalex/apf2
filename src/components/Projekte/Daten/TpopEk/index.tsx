@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -7,8 +7,8 @@ import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import { groupBy } from 'es-toolkit'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
@@ -24,7 +24,7 @@ import { query } from './query.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
   popStatusWerte,
-  tpop,
+  tpop as tpopFragment,
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.ts'
 import { fieldTypes } from '../Tpop/Tpop.tsx'
@@ -43,6 +43,87 @@ import type {
 } from '../../../../generated/apflora/models.ts'
 
 import styles from './index.module.css'
+
+interface EkPlanTableProps {
+  loadingEk: boolean
+  errorEk: any
+  ekGroupedByYear: Record<string, any[]>
+}
+
+const EkPlanTable = ({
+  loadingEk,
+  errorEk,
+  ekGroupedByYear,
+}: EkPlanTableProps) => {
+  if (loadingEk) {
+    return (
+      <Table
+        size="small"
+        className={styles.styledTable}
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell>Jahr</TableCell>
+            <TableCell>geplant</TableCell>
+            <TableCell>ausgeführt</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>Lade...</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    )
+  }
+
+  if (errorEk) {
+    return (
+      <Table
+        size="small"
+        className={styles.styledTable}
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell>Jahr</TableCell>
+            <TableCell>geplant</TableCell>
+            <TableCell>ausgeführt</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>{errorEk.message}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    )
+  }
+
+  return (
+    <Table
+      size="small"
+      className={styles.styledTable}
+    >
+      <TableHead>
+        <TableRow>
+          <TableCell>Jahr</TableCell>
+          <TableCell>geplant</TableCell>
+          <TableCell>ausgeführt</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {Object.keys(ekGroupedByYear)
+          .reverse()
+          .map((year) => (
+            <EkYear
+              key={year}
+              data={ekGroupedByYear[year]}
+            />
+          ))}
+      </TableBody>
+    </Table>
+  )
+}
 
 interface TpopEkQueryResult {
   tpopById?: {
@@ -131,16 +212,19 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const {
-    data,
-    loading,
-    error,
-    refetch: refetchTpop,
-  } = useQuery<TpopEkQueryResult>(tpopQuery, {
-    variables: { id: tpopId },
+  const { data: tpopData, error: tpopError } = useQuery({
+    queryKey: ['TpopEk', tpopId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopEkQueryResult>({
+        query: tpopQuery,
+        variables: { id: tpopId },
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-  const row = data?.tpopById ?? {}
+  const tpop = tpopData?.tpopById ?? {}
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const saveToDb = async (event) => {
@@ -185,7 +269,7 @@ export const Component = observer(() => {
               }
             }
             ${popStatusWerte}
-            ${tpop}
+            ${tpopFragment}
             ${tpopApberrelevantGrundWerte}
           `,
         variables,
@@ -200,8 +284,8 @@ export const Component = observer(() => {
     // update tpop on map
     if (
       (value &&
-        ((field === 'ylv95Y' && row?.lv95X) ||
-          (field === 'lv95X' && row?.y))) ||
+        ((field === 'ylv95Y' && tpop?.lv95X) ||
+          (field === 'lv95X' && tpop?.y))) ||
       (!value && (field === 'ylv95Y' || field === 'lv95X'))
     ) {
       tsQueryClient.invalidateQueries({
@@ -226,12 +310,20 @@ export const Component = observer(() => {
 
   const {
     data: dataEk,
-    loading: loadingEk,
+    isLoading: loadingEk,
     error: errorEk,
-  } = useQuery<TpopEkListsQueryResult>(query, {
-    variables: {
-      id: tpopId,
-      apId,
+  } = useQuery({
+    queryKey: ['TpopEkLists', tpopId, apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopEkListsQueryResult>({
+        query: query,
+        variables: {
+          id: tpopId,
+          apId,
+        },
+      })
+      if (result.error) throw result.error
+      return result.data
     },
   })
 
@@ -261,9 +353,10 @@ export const Component = observer(() => {
     (e) => e.jahr,
   )
 
-  if (loadingEk) return <Spinner />
+  if (tpopError)
+    return <div>Fehler beim Laden der Teilpopulation: {tpopError.message}</div>
 
-  if (!row) return null
+  if (!tpop) return null
 
   return (
     <ErrorBoundary>
@@ -276,7 +369,7 @@ export const Component = observer(() => {
               dataSource={ekfrequenzOptions}
               loading={loadingEk}
               label="EK-Frequenz"
-              value={row.ekfrequenz}
+              value={tpop.ekfrequenz}
               saveToDb={saveToDb}
               error={fieldErrors.ekfrequenz}
             />
@@ -284,7 +377,7 @@ export const Component = observer(() => {
           <Checkbox2States
             name="ekfrequenzAbweichend"
             label="EK-Frequenz abweichend"
-            value={row.ekfrequenzAbweichend}
+            value={tpop.ekfrequenzAbweichend}
             saveToDb={saveToDb}
             error={fieldErrors.ekfrequenzAbweichend}
           />
@@ -292,7 +385,7 @@ export const Component = observer(() => {
             name="ekfrequenzStartjahr"
             label="Startjahr"
             type="number"
-            value={row.ekfrequenzStartjahr}
+            value={tpop.ekfrequenzStartjahr}
             saveToDb={saveToDb}
             error={fieldErrors.ekfrequenzStartjahr}
           />
@@ -302,43 +395,39 @@ export const Component = observer(() => {
             label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
             options={dataEk?.allAdresses?.nodes ?? []}
             loading={loadingEk}
-            value={row.ekfKontrolleur}
+            value={tpop.ekfKontrolleur}
             saveToDb={saveToDb}
             error={fieldErrors.ekfKontrolleur}
           />
         </div>
         <h5 className={styles.ekplanTitle}>EK-Plan</h5>
-        <Table
-          size="small"
-          className={styles.styledTable}
+        <Suspense
+          fallback={
+            <Table
+              size="small"
+              className={styles.styledTable}
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Jahr</TableCell>
+                  <TableCell>geplant</TableCell>
+                  <TableCell>ausgeführt</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Lade...</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          }
         >
-          <TableHead>
-            <TableRow>
-              <TableCell>Jahr</TableCell>
-              <TableCell>geplant</TableCell>
-              <TableCell>ausgeführt</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {loadingEk ?
-              <TableRow>
-                <TableCell>Lade...</TableCell>
-              </TableRow>
-            : errorEk ?
-              <TableRow>
-                <TableCell>{errorEk.message}</TableCell>
-              </TableRow>
-            : Object.keys(ekGroupedByYear)
-                .reverse()
-                .map((year) => (
-                  <EkYear
-                    key={year}
-                    data={ekGroupedByYear[year]}
-                  />
-                ))
-            }
-          </TableBody>
-        </Table>
+          <EkPlanTable
+            loadingEk={loadingEk}
+            errorEk={errorEk}
+            ekGroupedByYear={ekGroupedByYear}
+          />
+        </Suspense>
       </div>
     </ErrorBoundary>
   )
