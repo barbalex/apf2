@@ -1,4 +1,5 @@
-import { useQuery } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
 import { Link } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import Button from '@mui/material/Button'
@@ -22,15 +23,26 @@ interface UserQueryResult {
 export const EkfBar = () => {
   const { userId } = useParams()
   const { search } = useLocation()
+  const apolloClient = useApolloClient()
 
   // if no ekfAdresseId
   // need to fetch adresse.id for this user
   // and use that instead
-  const { data: userData } = useQuery<UserQueryResult>(query, {
-    variables: { userId: userId ?? '99999999-9999-9999-9999-999999999999' },
+  const { data: userData } = useQuery({
+    queryKey: ['ekfUser', userId],
+    queryFn: async () => {
+      const result = await apolloClient.query<UserQueryResult>({
+        query,
+        variables: { userId: userId ?? '99999999-9999-9999-9999-999999999999' },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
-  const userName = userData?.userById?.name ?? null
+  const userName = userData?.data?.userById?.name ?? null
 
   return (
     <div className={styles.container}>
