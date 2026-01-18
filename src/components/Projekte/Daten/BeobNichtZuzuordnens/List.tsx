@@ -6,7 +6,6 @@ import { useBeobNichtZuzuordnensNavData } from '../../../../modules/useBeobNicht
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from '../BeobNichtBeurteilts/Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 
 const menuBarProps = { apfloraLayer: 'beobNichtZuzuordnen' }
 
@@ -14,9 +13,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useBeobNichtZuzuordnensNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useBeobNichtZuzuordnensNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

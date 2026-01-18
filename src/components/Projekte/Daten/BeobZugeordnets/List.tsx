@@ -6,7 +6,6 @@ import { useBeobZugeordnetsNavData } from '../../../../modules/useBeobZugeordnet
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from '../BeobNichtBeurteilts/Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 
 const menuBarProps = { apfloraLayer: 'beobZugeordnet' }
 
@@ -14,9 +13,7 @@ export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useBeobZugeordnetsNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useBeobZugeordnetsNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
