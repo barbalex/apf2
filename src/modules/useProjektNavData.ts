@@ -16,10 +16,10 @@ export const useProjektNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeProject', projId],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavProjectQuery(
             $projId: UUID!
@@ -50,7 +50,11 @@ export const useProjektNavData = (props) => {
           apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () => reaction(() => store.tree.apGqlFilterForTree, refetch),
@@ -92,7 +96,7 @@ export const useProjektNavData = (props) => {
       },
       {
         id: 'Arten',
-        label: `Arten (${isLoading ? '...' : `${artsCount}/${allArtsCount}`})`,
+        label: `Arten (${artsCount}/${allArtsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'apFolder',
         treeId: `${projId}/ApFolder`,
@@ -105,7 +109,7 @@ export const useProjektNavData = (props) => {
       },
       {
         id: 'AP-Berichte',
-        label: `AP-Berichte (${isLoading ? '...' : `${apberuebersichtsCount}/${allApberuebersichtsCount}`})`,
+        label: `AP-Berichte (${apberuebersichtsCount}/${allApberuebersichtsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'apberuebersichtFolder',
         treeId: `${projId}ApberuebersichtFolder`,
@@ -119,5 +123,5 @@ export const useProjektNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

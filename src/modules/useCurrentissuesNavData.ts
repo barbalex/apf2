@@ -7,10 +7,10 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useCurrentissuesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const { data, isLoading, error } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeCurrentissues'],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeCurrentissuesQuery {
             allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
@@ -23,7 +23,11 @@ export const useCurrentissuesNavData = () => {
           }
         `,
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
   // subtract 1 for "fehlt hier was"
@@ -32,7 +36,7 @@ export const useCurrentissuesNavData = () => {
   const navData = {
     id: 'Aktuelle-Fehler',
     url: `/Daten/Aktuelle-Fehler`,
-    label: `Aktuelle Fehler (${isLoading ? '...' : count})`,
+    label: `Aktuelle Fehler (${count})`,
     totalCount: data?.data?.allCurrentissues?.totalCount ?? 0,
     treeNodeType: 'table',
     treeMenuType: 'currentissues',
@@ -53,5 +57,5 @@ export const useCurrentissuesNavData = () => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
