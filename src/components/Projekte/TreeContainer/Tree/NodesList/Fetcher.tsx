@@ -11,15 +11,8 @@ export const Fetcher = ({
 }) => {
   const { fetcherName, fetcherParams } = menu
 
-  const result = fetcherModule?.[fetcherName]?.(fetcherParams)
+  const navData = fetcherModule?.[fetcherName]?.(fetcherParams)
 
-  const navData = result?.navData
-  const error = result?.error
-
-  if (error) {
-    console.log('TableFolder.Fetcher, error:', error)
-    return null
-  }
   // do not want to show self i.e. 'Massnahme' in 'Massnahmen'
   const menus = navData?.menus?.filter?.((m) => !m.isSelf)
 

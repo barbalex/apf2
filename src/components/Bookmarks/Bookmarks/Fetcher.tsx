@@ -1,7 +1,6 @@
 import { Suspense } from 'react'
 
 import { Spinner } from '../../shared/Spinner.tsx'
-import { Error } from '../../shared/Error.tsx'
 import { Bookmark } from '../Bookmark/index.tsx'
 
 // pass on TransitionGroup's props as other
@@ -12,9 +11,7 @@ export const Fetcher = ({ params, fetcherModule, ...other }) => {
   // there is a weird * param containing the pathname. Remove it
   delete params['*']
 
-  const { navData, error } = fetcherModule(params)
-
-  if (error) return <Error error={error} />
+  const navData = fetcherModule(params)
 
   return (
     <Suspense fallback={<Spinner />}>
