@@ -5,7 +5,7 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import { Nav } from '../Nav.tsx'
 
 export const Menu = () => {
-  const { navData } = useRootNavData()
+  const navData = useRootNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

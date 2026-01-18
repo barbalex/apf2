@@ -5,7 +5,7 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import { useProjektNavData } from '../../../../modules/useProjektNavData.ts'
 
 export const List = () => {
-  const { navData } = useProjektNavData()
+  const navData = useProjektNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

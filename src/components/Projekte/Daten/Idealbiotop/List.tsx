@@ -5,7 +5,7 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import { useIdealbiotopNavData } from '../../../../modules/useIdealbiotopNavData.ts'
 
 export const List = () => {
-  const { navData } = useIdealbiotopNavData()
+  const navData = useIdealbiotopNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

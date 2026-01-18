@@ -6,7 +6,7 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import { useTpopmassnNavData } from '../../../../modules/useTpopmassnNavData.ts'
 
 export const List = () => {
-  const { navData } = useTpopmassnNavData()
+  const navData = useTpopmassnNavData()
 
   return (
     <Suspense fallback={<Spinner />}>

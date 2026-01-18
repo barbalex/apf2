@@ -8,7 +8,7 @@ import { useApNavData } from '../../../../modules/useApNavData.ts'
 
 export const List = () => {
   const params = useParams<{ projId: string }>()
-  const { navData } = useApNavData(params)
+  const navData = useApNavData(params)
 
   return (
     <Suspense fallback={<Spinner />}>
