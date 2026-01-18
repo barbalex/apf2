@@ -15,10 +15,10 @@ export const useApsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeAp', projId, store.tree.apGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeApsQuery($apsFilter: ApFilter!, $projId: UUID!) {
             allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
@@ -37,7 +37,11 @@ export const useApsNavData = (props) => {
           projId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -55,7 +59,7 @@ export const useApsNavData = (props) => {
     id: 'Arten',
     listFilter: 'ap',
     url: `/Daten/Projekte/${projId}/Arten`,
-    label: `Arten (${isLoading ? '...' : `${count}/${totalCount}`})`,
+    label: `Arten (${count}/${totalCount})`,
     treeNodeType: 'folder',
     treeMenuType: 'apFolder',
     treeId: `${projId}ApFolder`,
@@ -81,5 +85,5 @@ export const useApsNavData = (props) => {
     })),
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }

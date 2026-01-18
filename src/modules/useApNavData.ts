@@ -370,7 +370,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'AP-Ziele',
-        label: `AP-Ziele Jahre (${isLoading ? '...' : `${filteredApZielJahrsCount}/${apZielJahrsCount}`})`,
+        label: `AP-Ziele Jahre (${filteredApZielJahrsCount}/${apZielJahrsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'zielFolder',
         treeId: `${apId}ApzielFolder`,
@@ -383,7 +383,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'AP-Erfolgskriterien',
-        label: `AP-Erfolgskriterien (${isLoading ? '...' : `${filteredErfkritsCount}/${erfkritsCount}`})`,
+        label: `AP-Erfolgskriterien (${filteredErfkritsCount}/${erfkritsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'erfkritFolder',
         treeId: `${apId}ErfkritFolder`,
@@ -396,7 +396,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'AP-Berichte',
-        label: `AP-Berichte (${isLoading ? '...' : `${filteredApbersCount}/${apbersCount}`})`,
+        label: `AP-Berichte (${filteredApbersCount}/${apbersCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'apberFolder',
         treeId: `${apId}ApberFolder`,
@@ -422,7 +422,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'Taxa',
-        label: `Taxa (${isLoading ? '...' : `${filteredApartsCount}/${apartsCount}`})`,
+        label: `Taxa (${filteredApartsCount}/${apartsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'apartFolder',
         treeId: `${apId}ApartFolder`,
@@ -435,7 +435,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'assoziierte-Arten',
-        label: `Assoziierte Arten (${isLoading ? '...' : `${filteredAssozartsCount}/${assozartsCount}`})`,
+        label: `Assoziierte Arten (${filteredAssozartsCount}/${assozartsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'assozartFolder',
         treeId: `${apId}AssozartFolder`,
@@ -448,7 +448,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'EK-Frequenzen',
-        label: `EK-Frequenzen (${isLoading ? '...' : `${filteredEkfrequenzsCount}/${ekfrequenzsCount}`})`,
+        label: `EK-Frequenzen (${filteredEkfrequenzsCount}/${ekfrequenzsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'ekfrequenzFolder',
         treeId: `${apId}EkfrequenzFolder`,
@@ -461,7 +461,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'EK-Zähleinheiten',
-        label: `EK-Zähleinheiten (${isLoading ? '...' : `${filteredEkzaehleinheitsCount}/${ekzaehleinheitsCount}`})`,
+        label: `EK-Zähleinheiten (${filteredEkzaehleinheitsCount}/${ekzaehleinheitsCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'ekzaehleinheitFolder',
         treeId: `${apId}EkzaehleinheitFolder`,
@@ -474,7 +474,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'nicht-beurteilte-Beobachtungen',
-        label: `Beobachtungen nicht beurteilt (${isLoading ? '...' : `${filteredBeobsNichtBeurteiltCount}/${beobsNichtBeurteiltCount}`})`,
+        label: `Beobachtungen nicht beurteilt (${filteredBeobsNichtBeurteiltCount}/${beobsNichtBeurteiltCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'beobNichtBeurteiltFolder',
         treeId: `${apId}BeobNichtBeurteiltFolder`,
@@ -495,7 +495,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'nicht-zuzuordnende-Beobachtungen',
-        label: `Beobachtungen nicht zuzuordnen (${isLoading ? '...' : `${filteredBeobsNichtZuzuordnenCount}/${beobsNichtZuzuordnenCount}`})`,
+        label: `Beobachtungen nicht zuzuordnen (${filteredBeobsNichtZuzuordnenCount}/${beobsNichtZuzuordnenCount})`,
         treeNodeType: 'folder',
         treeMenuType: 'beobNichtZuzuordnenFolder',
         treeId: `${apId}BeobNichtZuzuordnenFolder`,
