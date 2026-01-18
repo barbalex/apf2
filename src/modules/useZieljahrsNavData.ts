@@ -22,10 +22,10 @@ export const useZieljahrsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['treeZieljahrs', apId, store.tree.zielGqlFilterForTree],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query TreeZieljahrsQuery($zielsFilter: ZielFilter!, $apId: UUID!) {
             apById(id: $apId) {
@@ -54,7 +54,11 @@ export const useZieljahrsNavData = (props) => {
           apId,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
@@ -88,7 +92,7 @@ export const useZieljahrsNavData = (props) => {
 
   const navData = {
     id: 'AP-Ziele',
-    label: `AP-Ziele Jahre (${isLoading ? '...' : `${menus.length}/${zieljahrsCount}`})`,
+    label: `AP-Ziele Jahre (${menus.length}/${zieljahrsCount})`,
     listFilter: 'ziel',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele`,
     treeNodeType: 'folder',
@@ -102,5 +106,5 @@ export const useZieljahrsNavData = (props) => {
     menus,
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
