@@ -46,7 +46,7 @@ export const EkYear = ({ data }: EkYearProps) => {
       <TableCell>{data[0].jahr}</TableCell>
       <TableCell>
         {ekplans.map((e) => (
-          <div key={e.id}>{e.typ.toUpperCase()}</div>
+          <div key={e.id}>{e.typ?.toUpperCase() ?? ''}</div>
         ))}
       </TableCell>
       <TableCell>
