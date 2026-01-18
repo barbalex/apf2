@@ -62,7 +62,7 @@ export const useApNavData = (props) => {
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: [
       'treeAp',
       projId,
@@ -78,8 +78,8 @@ export const useApNavData = (props) => {
       store.tree.beobNichtBeurteiltGqlFilterForTree,
       store.tree.beobNichtZuzuordnenGqlFilterForTree,
     ],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query({
         query: gql`
           query NavApQuery(
             $apId: UUID!
@@ -229,7 +229,11 @@ export const useApNavData = (props) => {
           allBeobNichtBeurteiltFilter,
         },
         fetchPolicy: 'no-cache',
-      }),
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
   useEffect(
     () => reaction(() => store.tree.popGqlFilterForTree, refetch),
@@ -351,7 +355,7 @@ export const useApNavData = (props) => {
       },
       {
         id: 'Populationen',
-        label: `Populationen (${isLoading ? '...' : `${filteredPopsCount}/${popsCount}`})`,
+        label: `Populationen (${filteredPopsCount}/${popsCount})`,
         listFilter: 'pop',
         treeNodeType: 'folder',
         treeMenuType: 'popFolder',
@@ -576,5 +580,5 @@ export const useApNavData = (props) => {
     ],
   }
 
-  return { isLoading, error, navData }
+  return { navData }
 }
