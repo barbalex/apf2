@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -75,11 +75,21 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, error, loading } = useQuery<ApQueryResult>(query, {
-    variables: { id: apId },
+  const { data } = useQuery({
+    queryKey: ['ap', apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApQueryResult>({
+        query,
+        variables: { id: apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
-  const row: Ap = data?.apById ?? {}
+  const row: Ap = data?.data?.apById ?? {}
 
   const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -175,7 +185,7 @@ export const Component = observer(() => {
         />
         <RadioButtonGroupWithInfo
           name="bearbeitung"
-          dataSource={data?.allApBearbstandWertes?.nodes ?? []}
+          dataSource={data?.data?.allApBearbstandWertes?.nodes ?? []}
           loading={false}
           popover={
             <div className={styles.popover}>
@@ -211,7 +221,7 @@ export const Component = observer(() => {
         <RadioButtonGroupWithInfo
           key={`${apId}umsetzung`}
           name="umsetzung"
-          dataSource={data?.allApUmsetzungWertes?.nodes ?? []}
+          dataSource={data?.data?.allApUmsetzungWertes?.nodes ?? []}
           loading={false}
           popover={
             <div className={styles.popover}>
@@ -247,7 +257,7 @@ export const Component = observer(() => {
           key={`${apId}bearbeiter`}
           name="bearbeiter"
           label="Verantwortlich"
-          options={data?.allAdresses?.nodes ?? []}
+          options={data?.data?.allAdresses?.nodes ?? []}
           loading={false}
           value={row.bearbeiter}
           saveToDb={saveToDb}
