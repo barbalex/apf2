@@ -161,7 +161,7 @@ export const File = observer(({ file, parent, refetch }) => {
             alt={file.name}
             className={styles.img}
           />
-        : <div className={styles.styles.imgReplacement}>...</div>}
+        : <div className={styles.imgReplacement}>...</div>}
         <div className={styles.dateiTypField}>
           <TextField
             name="fileMimeType"
@@ -173,7 +173,7 @@ export const File = observer(({ file, parent, refetch }) => {
             error={fieldErrors.fileMimeType}
           />
         </div>
-        <div className={styles.styles.spacer} />
+        <div className={styles.spacer} />
         <div className={styles.dateiNameField}>
           <TextField
             name="name"
@@ -185,7 +185,7 @@ export const File = observer(({ file, parent, refetch }) => {
             error={fieldErrors.name}
           />
         </div>
-        <div className={styles.styles.spacer} />
+        <div className={styles.spacer} />
         <div className={styles.beschreibungField}>
           <TextField
             name="beschreibung"

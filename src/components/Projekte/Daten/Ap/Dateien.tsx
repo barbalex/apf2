@@ -1,7 +1,7 @@
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
-
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -32,12 +32,24 @@ interface ApFilesQueryResult {
 }
 
 export const Component = () => {
+  const apolloClient = useApolloClient()
+
   const { apId } = useParams<{ apId: string }>()
-  const { data } = useQuery<ApFilesQueryResult>(apFilesQuery, {
-    variables: { apId },
+  const { data } = useQuery({
+    queryKey: ['apFiles', apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApFilesQueryResult>({
+        query: apFilesQuery,
+        variables: { apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result
+    },
+    suspense: true,
   })
 
-  const artname = data?.apById?.aeTaxonomyByArtId?.artname ?? 'Art'
+  const artname = data?.data?.apById?.aeTaxonomyByArtId?.artname ?? 'Art'
 
   return (
     <>

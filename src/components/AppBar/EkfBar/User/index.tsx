@@ -168,7 +168,7 @@ export const User = observer(
             <Error error={error} />
           : <ErrorBoundary>
               <div className={styles.container}>
-                <div className={styles.styles.fieldsContainer}>
+                <div className={styles.fieldsContainer}>
                   <div className={styles.formContainer}>
                     <TextField
                       name="email"
