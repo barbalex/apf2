@@ -6,15 +6,12 @@ import { useAssozartsNavData } from '../../../../modules/useAssozartsNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 
 export const List = observer(() => {
   const store = useContext(MobxContext)
   const { nodeLabelFilter } = store.tree
 
-  const { navData, error } = useAssozartsNavData()
-
-  if (error) return <Error error={error} />
+  const { navData } = useAssozartsNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
