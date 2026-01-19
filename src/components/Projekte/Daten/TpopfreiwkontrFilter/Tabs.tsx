@@ -1,4 +1,4 @@
-import { useContext, Dispatch, SetStateAction } from 'react'
+import { useContext, Dispatch, SetStateAction, type SyntheticEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -23,7 +23,7 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }: TabsProps
       (v) => v !== null,
     ).length === 0
 
-  const onChangeTab = (_event: React.SyntheticEvent, value: number) => {
+  const onChangeTab = (_event: SyntheticEvent, value: number) => {
     if (value > dataFilter.length - 1) {
       dataFilterAddOr({
         table: 'tpopfreiwkontr',

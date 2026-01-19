@@ -1,4 +1,4 @@
-import { useContext, Dispatch, SetStateAction } from 'react'
+import { useContext, Dispatch, SetStateAction, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
@@ -35,7 +35,7 @@ interface TpopListsQueryResult {
 }
 
 interface TpopProps {
-  saveToDb: (event: React.ChangeEvent<HTMLInputElement>) => void
+  saveToDb: (event: ChangeEvent<HTMLInputElement>) => void
   fieldErrors: Record<string, string>
   setFieldErrors: Dispatch<SetStateAction<Record<string, string>>>
   row: any
