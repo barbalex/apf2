@@ -1,11 +1,10 @@
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Qk } from './Qk/index.tsx'
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 
 import type {
   ApId,
@@ -38,10 +37,20 @@ interface QkQueryResult {
 
 export const Component = () => {
   const { apId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { data, loading, error } = useQuery<QkQueryResult>(query, {
-    variables: { apId },
-    fetchPolicy: 'no-cache',
+  const { data } = useQuery<QkQueryResult>({
+    queryKey: ['qk', apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<QkQueryResult>({
+        query,
+        variables: { apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
   /**
    * DO NOT get allQks.nodes.apqksByQkName.totalCount
@@ -59,10 +68,6 @@ export const Component = () => {
   )
 
   const qkCount = data?.allQks?.totalCount
-
-  if (error) return <Error error={error} />
-
-  if (loading) return <Spinner />
 
   return (
     <ErrorBoundary>
