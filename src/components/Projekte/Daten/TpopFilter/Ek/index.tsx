@@ -1,5 +1,6 @@
 import { type ChangeEvent } from 'react'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Checkbox2States } from '../../../../shared/Checkbox2States.tsx'
@@ -8,7 +9,6 @@ import { Select } from '../../../../shared/Select.tsx'
 import { TextField } from '../../../../shared/TextField.tsx'
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
-import { Spinner } from '../../../../shared/Spinner.tsx'
 
 import type { EkfrequenzId } from '../../../../../models/apflora/EkfrequenzId.ts'
 import type { AdresseId } from '../../../../../models/apflora/AdresseId.ts'
@@ -39,11 +39,20 @@ interface EkProps {
 
 export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
   const { apId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { data: dataEk, loading } = useQuery<TpopEkFilterQueryResult>(query, {
-    variables: {
-      apId,
+  const { data: dataEk } = useQuery<TpopEkFilterQueryResult>({
+    queryKey: ['tpopFilterEk', apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopEkFilterQueryResult>({
+        query,
+        variables: { apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
@@ -60,8 +69,6 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
     }
   })
 
-  if (loading) return <Spinner />
-
   if (!row) return null
 
   return (
@@ -71,7 +78,6 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
           <RadioButtonGroup
             name="ekfrequenz"
             dataSource={ekfrequenzOptions}
-            loading={loading}
             label="EK-Frequenz"
             value={row.ekfrequenz}
             saveToDb={saveToDb}
@@ -98,7 +104,6 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
           name="ekfKontrolleur"
           label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
           options={dataEk?.allAdresses?.nodes ?? []}
-          loading={loading}
           value={row.ekfKontrolleur}
           saveToDb={saveToDb}
           error={fieldErrors.ekfKontrolleur}
