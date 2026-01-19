@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -12,8 +12,6 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import {
   pop,
   popmassnber,
@@ -72,15 +70,23 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<PopmassnberQueryResult>(query, {
-    variables: {
-      id,
+  const { data } = useQuery({
+    queryKey: ['popmassnber', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopmassnberQueryResult>({
+        query,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.popmassnberById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -133,16 +139,16 @@ export const Component = observer(() => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // Invalidate queries to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['popmassnber', id],
+    })
     if (['jahr', 'beurteilung'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treePopmassnber`],
       })
     }
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
@@ -164,7 +170,6 @@ export const Component = observer(() => {
             name="beurteilung"
             label="Entwicklung"
             dataSource={data?.allTpopmassnErfbeurtWertes?.nodes ?? []}
-            loading={loading}
             value={row.beurteilung}
             saveToDb={saveToDb}
             error={fieldErrors.beurteilung}
