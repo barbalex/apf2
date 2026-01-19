@@ -3,8 +3,8 @@ import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.ts'
 
@@ -43,33 +43,33 @@ const pointToLayer = (feature, latlng) =>
   window.L.circleMarker(latlng, pTLOptions)
 
 export const Markierungen = observer(() => {
-  const store = useContext(MobxContext)
-  const { enqueNotification } = store
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery<MarkierungenQueryResult>(gql`
-    query KarteMarkierungensQuery {
-      allMarkierungens {
-        nodes {
-          id: ogcFid
-          gebiet
-          pfostennum
-          markierung
-          wkbGeometry {
-            geojson
+  const { data } = useQuery({
+    queryKey: ['markierungen'],
+    queryFn: async () => {
+      const result = await apolloClient.query<MarkierungenQueryResult>({
+        query: gql`
+          query KarteMarkierungensQuery {
+            allMarkierungens {
+              nodes {
+                id: ogcFid
+                gebiet
+                pfostennum
+                markierung
+                wkbGeometry {
+                  geojson
+                }
+              }
+            }
           }
-        }
-      }
-    }
-  `)
-
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der Markierungen für die Karte: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
+        `,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+  })
 
   if (!data) return null
 
