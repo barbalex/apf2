@@ -157,8 +157,6 @@ const apHistoriesQuery = gql`
   }
 `
 
-const simplebarStyle = { maxHeight: '100%', height: '100%' }
-
 export const Component = () => {
   const apolloClient = useApolloClient()
 

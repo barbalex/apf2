@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { History as HistoryComponent } from '../../../shared/History/index.tsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -122,19 +122,26 @@ interface PopHistoryQueryResult {
   }
 }
 
-const simplebarStyle = { maxHeight: '100%', height: '100%' }
-
 export const Component = () => {
   const { popId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { error, data, loading } = useQuery<PopHistoryQueryResult>(query, {
-    variables: {
-      popId,
+  const { data } = useQuery({
+    queryKey: ['popHistory', popId],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopHistoryQueryResult>({
+        query,
+        variables: { popId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.popById
-  const rows = data?.allPopHistories.nodes ?? []
+  const rows = data?.allPopHistories?.nodes ?? []
   const label = row?.label ?? 'Population'
 
   const openDocs = () => {
@@ -143,14 +150,6 @@ export const Component = () => {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }
-
-  if (loading) {
-    return <Spinner message="lade Historien" />
-  }
-
-  if (error) {
-    return <div className={styles.errorContainer}>{error.message}</div>
   }
 
   return (

@@ -205,8 +205,6 @@ const query = gql`
   }
 `
 
-const simplebarStyle = { maxHeight: '100%', height: '100%' }
-
 export const Component = () => {
   const { tpopId } = useParams()
 
