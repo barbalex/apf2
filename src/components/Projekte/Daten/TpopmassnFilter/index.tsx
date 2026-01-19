@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -16,7 +17,6 @@ import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { Tabs } from './Tabs.tsx'
 
 import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
@@ -80,15 +80,30 @@ export const TpopmassnFilter = observer(() => {
     }
   }, [activeTab, dataFilter.tpopmassn.length])
 
-  const { data, loading, error } = useQuery<TpopmassnsFilterQueryResult>(
-    query,
-    {
-      variables: {
-        filteredFilter: tpopmassnGqlFilter.filtered,
-        allFilter: tpopmassnGqlFilter.all,
-      },
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
+  const { data } = useQuery({
+    queryKey: [
+      'tpopmassnFilter',
+      tpopmassnGqlFilter.filtered,
+      tpopmassnGqlFilter.all,
+    ],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopmassnsFilterQueryResult>({
+        query,
+        variables: {
+          filteredFilter: tpopmassnGqlFilter.filtered,
+          allFilter: tpopmassnGqlFilter.all,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
-  )
+    suspense: true,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  })
 
   const row = dataFilter.tpopmassn[activeTab]
 
@@ -96,13 +111,21 @@ export const TpopmassnFilter = observer(() => {
     (n) => n.value === row?.typ,
   )?.anpflanzung
 
-  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
     dataFilterSetValue({
       table: 'tpopmassn',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })
+    tsQueryClient.invalidateQueries({
+      queryKey: [
+        'tpopmassnFilter',
+        tpopmassnGqlFilter.filtered,
+        tpopmassnGqlFilter.all,
+      ],
+    })
+  }
 
   const navApFilterComment =
     apFilter ?
@@ -144,8 +167,6 @@ export const TpopmassnFilter = observer(() => {
     !!popHierarchyComment ||
     !!tpopHierarchyComment ||
     !!mapFilter
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
@@ -209,7 +230,6 @@ export const TpopmassnFilter = observer(() => {
               name="typ"
               label="Typ"
               dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
-              loading={loading}
               value={row?.typ}
               saveToDb={saveToDb}
             />
@@ -225,7 +245,6 @@ export const TpopmassnFilter = observer(() => {
               name="bearbeiter"
               label="BearbeiterIn"
               options={data?.allAdresses?.nodes ?? []}
-              loading={loading}
               value={row?.bearbeiter}
               saveToDb={saveToDb}
             />
@@ -306,7 +325,6 @@ export const TpopmassnFilter = observer(() => {
                   name="zieleinheitEinheit"
                   label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                   options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-                  loading={loading}
                   value={row?.zieleinheitEinheit}
                   saveToDb={saveToDb}
                 />
