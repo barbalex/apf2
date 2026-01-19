@@ -1,8 +1,8 @@
 import { useContext, useState, Suspense, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -14,8 +14,6 @@ import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { pop } from '../../../shared/fragments.ts'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
@@ -25,12 +23,10 @@ import type { Pop } from '../../../../models/apflora/index.tsx'
 import styles from './Pop.module.css'
 
 interface PopQueryResult {
-  data?: {
-    popById?: Pop & {
-      apByApId?: {
-        id: string
-        startJahr: number | null
-      }
+  popById?: Pop & {
+    apByApId?: {
+      id: string
+      startJahr: number | null
     }
   }
 }
@@ -55,11 +51,27 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, error, refetch } = useQuery<PopQueryResult>(query, {
-    variables: { id: popId },
+  const { data } = useQuery({
+    queryKey: ['pop', popId],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopQueryResult>({
+        query,
+        variables: { id: popId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
   const row = data?.popById ?? {}
+
+  const refetchForm = () => {
+    tsQueryClient.invalidateQueries({
+      queryKey: ['pop', popId],
+    })
+  }
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -118,6 +130,10 @@ export const Component = observer(() => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // Invalidate queries to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['pop', popId],
+    })
     if (['name', 'nr'].includes(field)) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],
@@ -125,11 +141,9 @@ export const Component = observer(() => {
     }
   }
 
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
-      <Suspense fallback={<Spinner />}>
+      <Suspense fallback={<div>Loading...</div>}>
         <FormTitle
           title="Population"
           MenuBarComponent={Menu}
@@ -178,7 +192,7 @@ export const Component = observer(() => {
           />
           <Coordinates
             row={row}
-            refetchForm={refetch}
+            refetchForm={refetchForm}
             table="pop"
           />
         </div>
