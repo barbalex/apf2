@@ -18,6 +18,7 @@ import { toggleNodeSymbol } from './toggleNodeSymbol.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
+import { prefetchNodeData } from '../../../../modules/prefetchNodeData.ts'
 
 import styles from './Row.module.css'
 
@@ -85,6 +86,11 @@ export const Row = observer(({ node, transitionState, ref }) => {
   const onClickNodeSymbol = () =>
     toggleNodeSymbol({ node, store, search, navigate })
 
+  const onMouseEnterNode = () => {
+    // Prefetch data when hovering over node
+    prefetchNodeData({ node, store })
+  }
+
   const nodeStyle = {
     ...(transitionState ? transitionStyles[transitionState] : {}),
     color: nodeIsInActiveNodePath ? '#D84315' : 'inherit',
@@ -116,6 +122,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
         ref={ref}
         className={styles.node}
         style={nodeStyle}
+        onMouseEnter={onMouseEnterNode}
       >
         {useSymbolIcon && (
           <div

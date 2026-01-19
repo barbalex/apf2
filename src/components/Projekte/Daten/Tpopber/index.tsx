@@ -12,6 +12,7 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { tpopber } from '../../../shared/fragments.ts'
+import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 
 import type {
@@ -60,20 +61,7 @@ export const Component = observer(() => {
     queryKey: ['tpopber', tpopberId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopberQueryResult>({
-        query: gql`
-          query tpopberByIdQuery($id: UUID!) {
-            tpopberById(id: $id) {
-              ...TpopberFields
-            }
-            allTpopEntwicklungWertes(orderBy: SORT_ASC) {
-              nodes {
-                value: code
-                label: text
-              }
-            }
-          }
-          ${tpopber}
-        `,
+        query,
         variables: { id: tpopberId },
       })
       if (result.error) throw result.error
