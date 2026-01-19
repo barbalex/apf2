@@ -160,8 +160,6 @@ export const prefetchNodeData = async ({
 }) => {
   const { menuType, tableId, id } = node
 
-  console.log('Prefetching data for node:', node)
-
   // Only prefetch for node types we have queries for
   const config = nodeQueryConfigs[menuType]
   if (!config) return

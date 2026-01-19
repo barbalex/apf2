@@ -1,5 +1,7 @@
-import { Link, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
+
+import { PrefetchLink } from '../../shared/PrefetchLink.tsx'
 
 import styles from './Nav.module.css'
 
@@ -11,7 +13,7 @@ export const Nav = ({ item, baseUrl, needsBorderRight = false }) => {
 
   return (
     <Tooltip title={item.label}>
-      <Link
+      <PrefetchLink
         to={{
           pathname: `${baseUrl ?? pathnameWithoutLastSlash}/${item.id}`,
           search,
@@ -23,7 +25,7 @@ export const Nav = ({ item, baseUrl, needsBorderRight = false }) => {
         className={styles.link}
       >
         {item.label}
-      </Link>
+      </PrefetchLink>
     </Tooltip>
   )
 }

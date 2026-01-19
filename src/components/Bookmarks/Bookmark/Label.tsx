@@ -1,10 +1,11 @@
 import { useContext } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
 import { toggleNodeSymbol } from '../../Projekte/TreeContainer/Tree/toggleNodeSymbol.ts'
 import { MobxContext } from '../../../mobxContext.ts'
+import { PrefetchLink } from '../../shared/PrefetchLink.tsx'
 
 import styles from './Label.module.css'
 
@@ -46,7 +47,7 @@ export const Label = observer(
 
     const label =
       linksToSomewhereElse ?
-        <Link
+        <PrefetchLink
           to={{ pathname: navData.url, search }}
           onClick={onClick}
           ref={ref}
@@ -54,7 +55,7 @@ export const Label = observer(
           className={styles.link}
         >
           {navData.labelShort ?? navData.label}
-        </Link>
+        </PrefetchLink>
       : <div
           className={styles.text}
           ref={ref}

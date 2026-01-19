@@ -1,5 +1,7 @@
-import { useLocation, Link } from 'react-router'
+import { useLocation } from 'react-router'
 import Button from '@mui/material/Button'
+
+import { PrefetchLink } from '../../../shared/PrefetchLink.tsx'
 
 import styles from './Dokumentation.module.css'
 
@@ -9,7 +11,7 @@ export const Dokumentation = () => {
   return (
     <Button
       variant="text"
-      component={Link}
+      component={PrefetchLink}
       to={`/Dokumentation/${search}`}
       className={styles.button}
     >
