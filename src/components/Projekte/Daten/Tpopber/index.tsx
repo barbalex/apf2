@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -11,8 +11,6 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { tpopber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
@@ -58,25 +56,32 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<TpopberQueryResult>(
-    gql`
-      query tpopberByIdQuery($id: UUID!) {
-        tpopberById(id: $id) {
-          ...TpopberFields
-        }
-        allTpopEntwicklungWertes(orderBy: SORT_ASC) {
-          nodes {
-            value: code
-            label: text
+  const { data } = useQuery<TpopberQueryResult>({
+    queryKey: ['tpopber', tpopberId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopberQueryResult>({
+        query: gql`
+          query tpopberByIdQuery($id: UUID!) {
+            tpopberById(id: $id) {
+              ...TpopberFields
+            }
+            allTpopEntwicklungWertes(orderBy: SORT_ASC) {
+              nodes {
+                value: code
+                label: text
+              }
+            }
           }
-        }
-      }
-      ${tpopber}
-    `,
-    {
-      variables: { id: tpopberId },
+          ${tpopber}
+        `,
+        variables: { id: tpopberId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
-  )
+    suspense: true,
+  })
 
   const row = data?.tpopberById
 
@@ -119,6 +124,8 @@ export const Component = observer(() => {
         [field]: (error as Error).message,
       }))
     }
+    // invalidate tpopber query
+    tsQueryClient.invalidateQueries({ queryKey: ['tpopber', tpopberId] })
     // only set if necessary (to reduce renders)
     if (Object.keys(fieldErrors).length) {
       setFieldErrors((prev) => {
@@ -132,10 +139,6 @@ export const Component = observer(() => {
       })
     }
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
@@ -157,7 +160,6 @@ export const Component = observer(() => {
             name="entwicklung"
             label="Entwicklung"
             dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-            loading={loading}
             value={row.entwicklung}
             saveToDb={saveToDb}
             error={fieldErrors.entwicklung}
