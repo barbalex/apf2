@@ -1,11 +1,11 @@
 import { useContext, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { MobxContext } from '../../../../../../mobxContext.ts'
 import { query } from './query.ts'
-import { Error } from '../../../../../shared/Error.tsx'
 
 import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
 
@@ -28,8 +28,24 @@ interface HeaddataProps {
 export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
   const store = useContext(MobxContext)
   const { dataFilterSetValue } = store.tree
-  const { data, loading, error } =
-    useQuery<TpopfreiwkontrAdressesFilterQueryResult>(query)
+
+  const apolloClient = useApolloClient()
+
+  const { data } = useQuery<TpopfreiwkontrAdressesFilterQueryResult>({
+    queryKey: ['tpopfreiwkontrFilterAdresses'],
+    queryFn: async () => {
+      const result =
+        await apolloClient.query<TpopfreiwkontrAdressesFilterQueryResult>({
+          query,
+          fetchPolicy: 'no-cache',
+        })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  })
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
@@ -38,8 +54,6 @@ export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
       value: event.target.value,
       index: activeTab,
     })
-
-  if (error) return <Error error={error} />
 
   return (
     <div className={styles.container}>
@@ -51,7 +65,6 @@ export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
           value={row?.bearbeiter}
           field="bearbeiter"
           options={data?.allAdresses?.nodes ?? []}
-          loading={loading}
           saveToDb={saveToDb}
         />
       </div>
