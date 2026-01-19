@@ -11,7 +11,8 @@ import {
 } from 'react-icons/md'
 import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
 import { useParams } from 'react-router'
 
@@ -106,8 +107,18 @@ export const Layer = observer(({ apfloraLayer }) => {
     showBeobZugeordnetAssignPolylines,
   }
 
-  const { data, error } = useQuery<ApfloraLayersQueryResult>(query, {
-    variables,
+  const apolloClient = useApolloClient()
+  const { data, error } = useQuery({
+    queryKey: ['apfloraLayer', layer, variables],
+    queryFn: async () => {
+      const result = await apolloClient.query<ApfloraLayersQueryResult>({
+        query,
+        variables,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
   const assigningispossible =
