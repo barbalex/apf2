@@ -12,6 +12,7 @@ import { upperFirst } from 'es-toolkit'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { TextField } from '../../TextField.tsx'
+import { SuspenseImage } from '../../SuspenseImage.tsx'
 import {
   apFile as apFileFragment,
   idealbiotopFile as idealbiotopFileFragment,
@@ -156,10 +157,11 @@ export const File = observer(({ file, parent, refetch }) => {
     <ErrorBoundary>
       <div className={styles.container}>
         {isImage ?
-          <img
+          <SuspenseImage
             src={`https://ucarecdn.com/${file.fileId}/-/resize/80x/-/quality/lightest/${file.name}`}
             alt={file.name}
             className={styles.img}
+            fallback={<div className={styles.imgReplacement}>...</div>}
           />
         : <div className={styles.imgReplacement}>...</div>}
         <div className={styles.dateiTypField}>

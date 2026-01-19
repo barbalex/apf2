@@ -3,6 +3,7 @@ import { useOutletContext, useParams } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
 import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
 
+import { SuspenseImage } from '../../SuspenseImage.tsx'
 import '@cyntler/react-doc-viewer/dist/index.css'
 import './style.css'
 import styles from './index.module.css'
@@ -54,7 +55,7 @@ export const Component = () => {
       ref={ref}
     >
       {isImage && width && (
-        <img
+        <SuspenseImage
           src={`https://ucarecdn.com/${row.fileId}/-/preview/${Math.floor(width - 10)}x${Math.floor(
             height - 10,
           )}/-/format/auto/-/quality/smart/`}
@@ -62,6 +63,20 @@ export const Component = () => {
           width={width - 10}
           height={height - 10}
           style={imageStyle}
+          fallback={
+            <div
+              style={{
+                width: width - 10,
+                height: height - 10,
+                background: '#f0f0f0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              Loading...
+            </div>
+          }
         />
       )}
       {isPdf && (
