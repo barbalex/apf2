@@ -221,7 +221,14 @@ export const buildApolloClient = ({
       batchHttpLink,
     ]),
     cache,
-    defaultOptions: { fetchPolicy: 'cache-and-network' },
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'no-cache',
+      },
+      query: {
+        fetchPolicy: 'no-cache',
+      },
+    },
   })
   // make client available in store
   store.setApolloClient(client)
