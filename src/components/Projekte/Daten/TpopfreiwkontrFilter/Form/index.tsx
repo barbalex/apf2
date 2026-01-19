@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { Headdata } from './Headdata/index.tsx'
@@ -24,7 +24,7 @@ export const Form = observer(({ row, activeTab }: FormProps) => {
   const store = useContext(MobxContext)
   const { dataFilterSetValue } = store.tree
 
-  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpopfreiwkontr',
       key: event.target.name,

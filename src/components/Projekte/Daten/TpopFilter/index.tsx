@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, type SyntheticEvent, type ChangeEvent } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { observer } from 'mobx-react-lite'
@@ -33,7 +33,7 @@ export const TpopFilter = observer(() => {
   const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
-  const onChangeTab = (_event: React.SyntheticEvent, value: string) =>
+  const onChangeTab = (_event: SyntheticEvent, value: string) =>
     setTab(value)
 
   const [activeTab, setActiveTab] = useState(0)
@@ -54,7 +54,7 @@ export const TpopFilter = observer(() => {
   const row = dataFilter.tpop[activeTab]
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
-  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpop',
       key: event.target.name,
