@@ -9,9 +9,9 @@ import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField2 } from '../../../shared/TextField2.tsx'
@@ -21,8 +21,6 @@ import { Select } from '../../../shared/Select.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { user as userFragment } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type { UserId } from '../../../../models/apflora/UserId.ts'
@@ -95,8 +93,18 @@ export const Component = () => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const { data, loading, error } = useQuery<UserQueryResult>(query, {
-    variables: { id: userId },
+  const { data } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: async () => {
+      const result = await apolloClient.query<UserQueryResult>({
+        query,
+        variables: { id: userId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
   const row = data?.userById ?? {}
@@ -139,6 +147,9 @@ export const Component = () => {
       return setErrors({ [field]: (error as Error).message })
     }
     setErrors({})
+    tsQueryClient.invalidateQueries({
+      queryKey: ['user', userId],
+    })
     if (field === 'name') {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeUser`],
@@ -189,10 +200,6 @@ export const Component = () => {
       setEditPassword(false)
     }
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   if (!row) return null
 
@@ -245,7 +252,6 @@ export const Component = () => {
             field="adresseId"
             label="Zugehörige Adresse"
             options={data?.allAdresses?.nodes ?? []}
-            loading={loading}
             saveToDb={saveToDb}
             error={errors.adresseId}
           />
