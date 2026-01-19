@@ -1,9 +1,9 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -11,8 +11,6 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 
 import type { ProjektId } from '../../../../models/apflora/index.tsx'
 
@@ -40,15 +38,23 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<ProjektQueryResult>(query, {
-    variables: {
-      id: projId,
+  const { data } = useQuery({
+    queryKey: ['projekt', projId],
+    queryFn: async () => {
+      const result = await apolloClient.query<ProjektQueryResult>({
+        query,
+        variables: { id: projId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.projektById ?? {}
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -94,14 +100,14 @@ export const Component = observer(() => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // Invalidate queries to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['projekt', projId],
+    })
     tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
