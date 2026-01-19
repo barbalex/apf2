@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'es-toolkit'
 import {
   AreaChart,
@@ -10,7 +11,6 @@ import {
   CartesianGrid,
   ResponsiveContainer,
 } from 'recharts'
-import CircularProgress from '@mui/material/CircularProgress'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import MuiTooltip from '@mui/material/Tooltip'
@@ -19,7 +19,6 @@ import { useParams } from 'react-router'
 import { query } from './query.ts'
 import { CustomTooltip } from './CustomTooltip.tsx'
 import { exists } from '../../../../modules/exists.ts'
-import { Error } from '../../../shared/Error.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
@@ -80,9 +79,20 @@ interface ComponentProps {
 
 export const Component = ({ height = 400 }: ComponentProps) => {
   const { apId, popId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { data, error, loading } = useQuery<PopAuswertungQueryResult>(query, {
-    variables: { apId, id: popId },
+  const { data } = useQuery({
+    queryKey: ['popAuswertung', apId, popId],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopAuswertungQueryResult>({
+        query,
+        variables: { apId, id: popId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
   const popLabel = data?.popById?.label ?? 'Population'
@@ -122,8 +132,6 @@ export const Component = ({ height = 400 }: ComponentProps) => {
     window.open(url)
   }
 
-  if (error) return <Error error={error} />
-
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821
 
@@ -132,103 +140,94 @@ export const Component = ({ height = 400 }: ComponentProps) => {
   return (
     <>
       <FormTitle title={`${popLabel}: Auswertung`} />
-      <>
-        {loading ?
-          <div className={styles.spinnerContainer}>
-            <CircularProgress />
-            <div className={styles.spinnerText}>
-              lade Mengen nach Teil-Populationen...
-            </div>
-          </div>
-        : tpopMengeData.length ?
-          <>
-            <div className={styles.titleRow}>
-              <h4
-                className={styles.title}
-              >{`"${zielEinheit}" nach Teil-Populationen`}</h4>
-              <MuiTooltip title="Mehr Informationen">
-                <IconButton
-                  aria-label="Mehr Informationen"
-                  onClick={onClickMoreInfo}
-                  size="large"
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </MuiTooltip>
-            </div>
-            <ResponsiveContainer
-              width="99%"
-              height={height}
-              className={styles.container}
-            >
-              <AreaChart
-                width={600}
-                height={300}
-                data={tpopMengeData}
-                margin={{ top: 10, right: 10, left: 27 }}
+      {tpopMengeData.length ?
+        <>
+          <div className={styles.titleRow}>
+            <h4
+              className={styles.title}
+            >{`"${zielEinheit}" nach Teil-Populationen`}</h4>
+            <MuiTooltip title="Mehr Informationen">
+              <IconButton
+                aria-label="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large"
               >
-                <XAxis dataKey="jahr" />
-                <YAxis
-                  interval={0}
-                  label={{
-                    value: zielEinheit,
-                    angle: -90,
-                    position: 'insideLeft',
-                    offset: -15,
-                  }}
-                  tickFormatter={formatNumber}
-                />
-                {tpopIdsWithDataSorted.reverse().map((id) => {
-                  const tpop = tpopsData.find((p) => p.id === id)
-                  let color
-                  if (!tpop) {
-                    color = 'grey'
-                  } else {
-                    const isUrspruenglich = tpop?.status < 200
-                    color =
-                      isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
-                  }
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </MuiTooltip>
+          </div>
+          <ResponsiveContainer
+            width="99%"
+            height={height}
+            className={styles.container}
+          >
+            <AreaChart
+              width={600}
+              height={300}
+              data={tpopMengeData}
+              margin={{ top: 10, right: 10, left: 27 }}
+            >
+              <XAxis dataKey="jahr" />
+              <YAxis
+                interval={0}
+                label={{
+                  value: zielEinheit,
+                  angle: -90,
+                  position: 'insideLeft',
+                  offset: -15,
+                }}
+                tickFormatter={formatNumber}
+              />
+              {tpopIdsWithDataSorted.reverse().map((id) => {
+                const tpop = tpopsData.find((p) => p.id === id)
+                let color
+                if (!tpop) {
+                  color = 'grey'
+                } else {
+                  const isUrspruenglich = tpop?.status < 200
+                  color =
+                    isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
+                }
 
-                  return (
-                    <Area
-                      key={id}
-                      type="linear"
-                      dataKey={id}
-                      stackId="1"
-                      stroke={color}
-                      strokeWidth={2}
-                      fill={color}
-                      isAnimationActive={true}
-                    />
-                  )
-                })}
-                <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  horizontal={false}
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </>
-        : <>
-            <div className={styles.titleRow}>
-              <h4
-                className={styles.title}
-              >{`"${zielEinheit}" nach Teil-Populationen`}</h4>
-              <MuiTooltip title="Mehr Informationen">
-                <IconButton
-                  aria-label="Mehr Informationen"
-                  onClick={onClickMoreInfo}
-                  size="large"
-                >
-                  <IoMdInformationCircleOutline />
-                </IconButton>
-              </MuiTooltip>
-            </div>
-            <div className={styles.noDataContainer}>Keine Daten gefunden</div>
-          </>
-        }
-      </>
+                return (
+                  <Area
+                    key={id}
+                    type="linear"
+                    dataKey={id}
+                    stackId="1"
+                    stroke={color}
+                    strokeWidth={2}
+                    fill={color}
+                    isAnimationActive={true}
+                  />
+                )
+              })}
+              <Tooltip content={<CustomTooltip tpopsData={tpopsData} />} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                horizontal={false}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </>
+      : <>
+          <div className={styles.titleRow}>
+            <h4
+              className={styles.title}
+            >{`"${zielEinheit}" nach Teil-Populationen`}</h4>
+            <MuiTooltip title="Mehr Informationen">
+              <IconButton
+                aria-label="Mehr Informationen"
+                onClick={onClickMoreInfo}
+                size="large"
+              >
+                <IoMdInformationCircleOutline />
+              </IconButton>
+            </MuiTooltip>
+          </div>
+          <div className={styles.noDataContainer}>Keine Daten gefunden</div>
+        </>
+      }
     </>
   )
 }
