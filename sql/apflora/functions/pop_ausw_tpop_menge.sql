@@ -1,3 +1,4 @@
+-- graphql name: popAuswTpopMenge
 CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
   RETURNS SETOF apflora.ausw_pop_menge
   AS $$
@@ -113,7 +114,7 @@ ORDER BY
 END;
 $$
 LANGUAGE plpgsql
-SECURITY DEFINER STABLE;
+STABLE;
 
 ALTER FUNCTION apflora.pop_ausw_tpop_menge(popid uuid) OWNER TO postgres;
 
