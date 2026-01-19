@@ -45,60 +45,10 @@ import type {
 import styles from './index.module.css'
 
 interface EkPlanTableProps {
-  loadingEk: boolean
-  errorEk: any
   ekGroupedByYear: Record<string, any[]>
 }
 
-const EkPlanTable = ({
-  loadingEk,
-  errorEk,
-  ekGroupedByYear,
-}: EkPlanTableProps) => {
-  if (loadingEk) {
-    return (
-      <Table
-        size="small"
-        className={styles.styledTable}
-      >
-        <TableHead>
-          <TableRow>
-            <TableCell>Jahr</TableCell>
-            <TableCell>geplant</TableCell>
-            <TableCell>ausgeführt</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>Lade...</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    )
-  }
-
-  if (errorEk) {
-    return (
-      <Table
-        size="small"
-        className={styles.styledTable}
-      >
-        <TableHead>
-          <TableRow>
-            <TableCell>Jahr</TableCell>
-            <TableCell>geplant</TableCell>
-            <TableCell>ausgeführt</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            <TableCell>{errorEk.message}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    )
-  }
-
+const EkPlanTable = ({ ekGroupedByYear }: EkPlanTableProps) => {
   return (
     <Table
       size="small"
@@ -212,7 +162,7 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data: tpopData, error: tpopError } = useQuery({
+  const { data: tpopData } = useQuery({
     queryKey: ['TpopEk', tpopId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopEkQueryResult>({
@@ -222,6 +172,7 @@ export const Component = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
+    suspense: true,
   })
 
   const tpop = tpopData?.tpopById ?? {}
@@ -308,11 +259,7 @@ export const Component = observer(() => {
     }
   }
 
-  const {
-    data: dataEk,
-    isLoading: loadingEk,
-    error: errorEk,
-  } = useQuery({
+  const { data: dataEk } = useQuery({
     queryKey: ['TpopEkLists', tpopId, apId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopEkListsQueryResult>({
@@ -325,6 +272,7 @@ export const Component = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
+    suspense: true,
   })
 
   const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
@@ -353,9 +301,6 @@ export const Component = observer(() => {
     (e) => e.jahr,
   )
 
-  if (tpopError)
-    return <div>Fehler beim Laden der Teilpopulation: {tpopError.message}</div>
-
   if (!tpop) return null
 
   return (
@@ -367,7 +312,6 @@ export const Component = observer(() => {
             <RadioButtonGroup
               name="ekfrequenz"
               dataSource={ekfrequenzOptions}
-              loading={loadingEk}
               label="EK-Frequenz"
               value={tpop.ekfrequenz}
               saveToDb={saveToDb}
@@ -394,7 +338,6 @@ export const Component = observer(() => {
             name="ekfKontrolleur"
             label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
             options={dataEk?.allAdresses?.nodes ?? []}
-            loading={loadingEk}
             value={tpop.ekfKontrolleur}
             saveToDb={saveToDb}
             error={fieldErrors.ekfKontrolleur}
@@ -422,11 +365,7 @@ export const Component = observer(() => {
             </Table>
           }
         >
-          <EkPlanTable
-            loadingEk={loadingEk}
-            errorEk={errorEk}
-            ekGroupedByYear={ekGroupedByYear}
-          />
+          <EkPlanTable ekGroupedByYear={ekGroupedByYear} />
         </Suspense>
       </div>
     </ErrorBoundary>
