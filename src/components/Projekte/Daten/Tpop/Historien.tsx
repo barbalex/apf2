@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { History as SharedHistory } from '../../../shared/History/index.tsx'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -207,11 +207,20 @@ const query = gql`
 
 export const Component = () => {
   const { tpopId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { error, data, loading } = useQuery<TpopHistoryQueryResult>(query, {
-    variables: {
-      tpopId,
+  const { data } = useQuery<TpopHistoryQueryResult>({
+    queryKey: ['tpopHistorien', tpopId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopHistoryQueryResult>({
+        query,
+        variables: { tpopId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.tpopById
@@ -223,12 +232,6 @@ export const Component = () => {
       return window.open(url, '_blank', 'toolbar=no')
     }
     window.open(url)
-  }
-
-  if (loading) return <Spinner />
-
-  if (error) {
-    return <div className={styles.errorContainer}>{error.message}</div>
   }
 
   return (
