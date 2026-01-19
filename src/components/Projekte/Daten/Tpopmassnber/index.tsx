@@ -1,9 +1,9 @@
 import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -12,9 +12,7 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { tpopmassnber } from '../../../shared/fragments.ts'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
@@ -66,10 +64,18 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<TpopmassnberQueryResult>(query, {
-    variables: {
-      id,
+  const { data } = useQuery<TpopmassnberQueryResult>({
+    queryKey: ['tpopmassnber', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopmassnberQueryResult>({
+        query,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.tpopmassnberById ?? {}
@@ -122,6 +128,8 @@ export const Component = observer(() => {
         [field]: (error as Error).message,
       }))
     }
+    // invalidate tpopmassnber query
+    tsQueryClient.invalidateQueries({ queryKey: ['tpopmassnber', id] })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -132,10 +140,6 @@ export const Component = observer(() => {
       })
     }
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
@@ -157,7 +161,6 @@ export const Component = observer(() => {
             name="beurteilung"
             label="Entwicklung"
             dataSource={data?.allTpopmassnErfbeurtWertes?.nodes ?? []}
-            loading={loading}
             value={row.beurteilung}
             saveToDb={saveToDb}
             error={fieldErrors.beurteilung}
