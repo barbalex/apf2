@@ -2,8 +2,8 @@ import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.ts'
 
@@ -33,30 +33,31 @@ const style = () => ({
 })
 
 export const Detailplaene = observer(() => {
-  const { enqueNotification } = useContext(MobxContext)
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery<DetailplaeneQueryResult>(gql`
-    query karteDetailplaenesQuery {
-      allDetailplaenes {
-        nodes {
-          id
-          data
-          geom {
-            geojson
+  const { data } = useQuery({
+    queryKey: ['detailplaene'],
+    queryFn: async () => {
+      const result = await apolloClient.query<DetailplaeneQueryResult>({
+        query: gql`
+          query karteDetailplaenesQuery {
+            allDetailplaenes {
+              nodes {
+                id
+                data
+                geom {
+                  geojson
+                }
+              }
+            }
           }
-        }
-      }
-    }
-  `)
-
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der Detailpläne: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
+        `,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+  })
 
   if (!data) return null
 
