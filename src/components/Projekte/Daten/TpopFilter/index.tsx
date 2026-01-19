@@ -1,8 +1,15 @@
-import { useContext, useState, useEffect, type SyntheticEvent, type ChangeEvent } from 'react'
+import {
+  useContext,
+  useState,
+  useEffect,
+  type SyntheticEvent,
+  type ChangeEvent,
+} from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { queryTpops } from './queryTpops.ts'
@@ -11,7 +18,6 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { Ek } from './Ek/index.tsx'
 import { Tpop } from './Tpop.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { ActiveFilters } from './ActiveFilters.tsx'
@@ -33,8 +39,7 @@ export const TpopFilter = observer(() => {
   const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
-  const onChangeTab = (_event: SyntheticEvent, value: string) =>
-    setTab(value)
+  const onChangeTab = (_event: SyntheticEvent, value: string) => setTab(value)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -44,11 +49,23 @@ export const TpopFilter = observer(() => {
     }
   }, [activeTab, dataFilter.tpop.length])
 
-  const { data: dataTpops, error } = useQuery<TpopsQueryResult>(queryTpops, {
-    variables: {
-      filteredFilter: tpopGqlFilter.filtered,
-      allFilter: tpopGqlFilter.all,
+  const apolloClient = useApolloClient()
+
+  const { data: dataTpops } = useQuery<TpopsQueryResult>({
+    queryKey: ['tpopsCount', tpopGqlFilter.filtered, tpopGqlFilter.all],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopsQueryResult>({
+        query: queryTpops,
+        variables: {
+          filteredFilter: tpopGqlFilter.filtered,
+          allFilter: tpopGqlFilter.all,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = dataFilter.tpop[activeTab]
@@ -61,8 +78,6 @@ export const TpopFilter = observer(() => {
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
