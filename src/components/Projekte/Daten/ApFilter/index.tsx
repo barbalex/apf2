@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -156,7 +156,7 @@ export const ApFilter = observer(() => {
   const row = dataFilter.ap[activeTab]
   // console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
 
-  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 

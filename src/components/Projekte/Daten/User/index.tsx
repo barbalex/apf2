@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ChangeEvent, type FocusEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -105,7 +105,7 @@ export const Component = () => {
     setErrors({})
   }, [row.id])
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
     try {
@@ -146,7 +146,7 @@ export const Component = () => {
     }
   }
 
-  const onBlurPassword = (event: React.FocusEvent<HTMLInputElement>) => {
+  const onBlurPassword = (event: FocusEvent<HTMLInputElement>) => {
     setPasswordErrorText('')
     const password = event.target.value
     setPassword(password)
@@ -157,7 +157,7 @@ export const Component = () => {
     }
   }
 
-  const onBlurPassword2 = async (event: React.FocusEvent<HTMLInputElement>) => {
+  const onBlurPassword2 = async (event: FocusEvent<HTMLInputElement>) => {
     setPassword2ErrorText('')
     const password2 = event.target.value
     setPassword2(password2)
@@ -170,7 +170,7 @@ export const Component = () => {
       // then tell user if it worked
       try {
         const fakeEvent = { target: { name: 'pass', value: password2 } }
-        await saveToDb(fakeEvent as React.ChangeEvent<HTMLInputElement>)
+        await saveToDb(fakeEvent as ChangeEvent<HTMLInputElement>)
       } catch (error) {
         setErrors({ pass: (error as Error).message })
         return setPasswordMessage((error as Error).message)
