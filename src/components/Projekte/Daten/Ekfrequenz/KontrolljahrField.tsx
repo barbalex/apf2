@@ -1,4 +1,9 @@
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type KeyboardEvent,
+} from 'react'
 import Input from '@mui/material/Input'
 
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -27,7 +32,7 @@ export const KontrolljahrField = ({
     setValue(kontrolljahre[index])
   }, [index, kontrolljahre])
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const onChange = (event: ChangeEvent<HTMLInputElement>) =>
     setValue(ifIsNumericAsNumber(event.target.value))
 
   const onBlur = async () => {
@@ -41,7 +46,7 @@ export const KontrolljahrField = ({
     refetch()
   }
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) =>
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) =>
     e.key === 'Enter' && onBlur()
 
   return (

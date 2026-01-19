@@ -1,4 +1,4 @@
-import { useContext, useState, Suspense } from 'react'
+import { useContext, useState, Suspense, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient, useQuery } from '@apollo/client/react'
@@ -61,7 +61,7 @@ export const Component = observer(() => {
 
   const row = data?.popById ?? {}
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 

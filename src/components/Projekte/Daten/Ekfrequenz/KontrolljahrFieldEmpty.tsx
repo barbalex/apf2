@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ChangeEvent, type KeyboardEvent } from 'react'
 import Input from '@mui/material/Input'
 
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -6,7 +6,9 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import styles from './KontrolljahrFieldEmpty.module.css'
 
 interface KontrolljahrFieldEmptyProps {
-  saveToDb: (event: { target: { name: string; value: number[] } }) => Promise<void>
+  saveToDb: (event: {
+    target: { name: string; value: number[] }
+  }) => Promise<void>
   name?: string
   kontrolljahre: number[]
   refetch: () => void
@@ -20,7 +22,8 @@ export const KontrolljahrFieldEmpty = ({
 }: KontrolljahrFieldEmptyProps) => {
   const [value, setValue] = useState<string | number>('')
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(ifIsNumericAsNumber(event.target.value))
+  const onChange = (event: ChangeEvent<HTMLInputElement>) =>
+    setValue(ifIsNumericAsNumber(event.target.value))
 
   const onBlur = async () => {
     if (value === '') return
@@ -29,7 +32,8 @@ export const KontrolljahrFieldEmpty = ({
     refetch()
   }
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && onBlur()
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) =>
+    e.key === 'Enter' && onBlur()
 
   return (
     <Input
