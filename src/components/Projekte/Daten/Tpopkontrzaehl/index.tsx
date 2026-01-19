@@ -1,9 +1,9 @@
 import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -13,9 +13,7 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { tpopkontrzaehl } from '../../../shared/fragments.ts'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
@@ -70,11 +68,21 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<TpopkontrzaehlQueryResult>(query, {
-    variables: {
-      id: tpopkontrzaehlId,
-      tpopkontrId,
+  const { data } = useQuery<TpopkontrzaehlQueryResult>({
+    queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopkontrzaehlQueryResult>({
+        query,
+        variables: {
+          id: tpopkontrzaehlId,
+          tpopkontrId,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
@@ -130,6 +138,10 @@ export const Component = observer(() => {
         [field]: (error as Error).message,
       }))
     }
+    // invalidate tpopkontrzaehl query
+    tsQueryClient.invalidateQueries({
+      queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -140,10 +152,6 @@ export const Component = observer(() => {
   }
 
   // console.log('Tpopkontrzaehl rendering')
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error errors={[error]} />
 
   return (
     <ErrorBoundary>
@@ -158,7 +166,6 @@ export const Component = observer(() => {
             name="einheit"
             label="Einheit"
             options={zaehlEinheitOptions}
-            loading={loading}
             value={row.einheit}
             saveToDb={saveToDb}
             error={fieldErrors.einheit}
