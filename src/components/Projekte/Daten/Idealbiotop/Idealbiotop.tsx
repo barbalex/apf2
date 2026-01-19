@@ -1,8 +1,9 @@
 import { useState, useContext, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { Form, useParams } from 'react-router'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { DateField } from '../../../shared/Date.tsx'
@@ -10,9 +11,7 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { idealbiotop } from '../../../shared/fragments.ts'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type { Idealbiotop } from '../../../../models/apflora/index.tsx'
@@ -20,14 +19,10 @@ import type { Idealbiotop } from '../../../../models/apflora/index.tsx'
 import styles from './Idealbiotop.module.css'
 
 interface IdealbiotopQueryResult {
-  data?: {
-    allIdealbiotops?: {
-      nodes: Idealbiotop[]
-    }
+  allIdealbiotops?: {
+    nodes: Idealbiotop[]
   }
 }
-
-const simplebarStyle = { maxHeight: '100%', height: '100%' }
 
 const fieldTypes = {
   apId: 'UUID',
@@ -57,11 +52,22 @@ export const Component = observer(() => {
   const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<IdealbiotopQueryResult>(query, {
-    variables: { id: apId },
+  const { data } = useQuery({
+    queryKey: ['idealbiotop', apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<IdealbiotopQueryResult>({
+        query,
+        variables: { id: apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
   const row = data?.allIdealbiotops?.nodes?.[0] ?? {}
@@ -112,11 +118,11 @@ export const Component = observer(() => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // Invalidate query to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['idealbiotop', apId],
+    })
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
