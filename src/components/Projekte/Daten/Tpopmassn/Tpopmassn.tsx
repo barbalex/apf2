@@ -1,9 +1,9 @@
 import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -18,8 +18,6 @@ import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { exists } from '../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -145,8 +143,18 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<TpopmassnQueryResult>(query, {
-    variables: { id: tpopmassnId },
+  const { data } = useQuery<TpopmassnQueryResult>({
+    queryKey: ['tpopmassn', tpopmassnId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopmassnQueryResult>({
+        query,
+        variables: { id: tpopmassnId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
   const notMassnCountUnit =
@@ -405,6 +413,8 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
         [field]: (error as Error).message,
       }))
     }
+    // invalidate tpopmassn query
+    tsQueryClient.invalidateQueries({ queryKey: ['tpopmassn', tpopmassnId] })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -415,10 +425,6 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
       })
     }
   }
-
-  if (error) return <Error error={error} />
-
-  if (loading) return <Spinner />
 
   return (
     <ErrorBoundary>
