@@ -2,9 +2,9 @@ import { useContext, useState, type ChangeEvent } from 'react'
 import { isEqual } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -15,9 +15,7 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { ziel as zielFragment } from '../../../shared/fragments.ts'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type { ZielId } from '../../../../models/apflora/ZielId.ts'
@@ -75,8 +73,18 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<ZielQueryResult>(query, {
-    variables: { id },
+  const { data } = useQuery({
+    queryKey: ['ziel', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<ZielQueryResult>({
+        query,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
   const row = data?.zielById ?? {}
@@ -127,6 +135,9 @@ export const Component = observer(() => {
       return rest
     })
     tsQueryClient.invalidateQueries({
+      queryKey: ['ziel', id],
+    })
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeZiel`],
     })
     tsQueryClient.invalidateQueries({
@@ -151,10 +162,6 @@ export const Component = observer(() => {
     }
   }
 
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
       <div className={styles.container}>
@@ -175,7 +182,6 @@ export const Component = observer(() => {
             name="typ"
             label="Zieltyp"
             dataSource={data?.allZielTypWertes?.nodes ?? []}
-            loading={loading}
             value={row.typ}
             saveToDb={saveToDb}
             error={fieldErrors.typ}
