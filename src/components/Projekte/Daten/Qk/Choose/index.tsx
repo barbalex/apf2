@@ -1,15 +1,14 @@
-import { useState } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
-import { useQuery } from '@apollo/client/react'
-import CircularProgress from '@mui/material/CircularProgress'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { Form, useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { Row } from './Row/index.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../../shared/Error.tsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
 import type { QkName } from '../../../../../models/apflora/index.tsx'
@@ -36,12 +35,25 @@ interface ChooseProps {
 
 export const Component = ({ refetchTab }: ChooseProps) => {
   const { apId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { data, error, loading } = useQuery<QkChooseQueryResult>(query)
+  const { data } = useQuery<QkChooseQueryResult>({
+    queryKey: ['qkChoose'],
+    queryFn: async () => {
+      const result = await apolloClient.query<QkChooseQueryResult>({
+        query,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
+  })
   const rows = data?.allQks?.nodes
 
   const [filter, setFilter] = useState('')
-  const onChangeFilter = (event) => setFilter(event.target.value)
+  const onChangeFilter = (event: ChangeEvent<HTMLInputElement>) =>
+    setFilter(event.target.value)
 
   const rowsFiltered =
     filter ?
@@ -55,15 +67,6 @@ export const Component = ({ refetchTab }: ChooseProps) => {
   const label =
     filter ? `filtern: ${rowsFiltered.length}/${rows.length}` : 'filtern'
 
-  if (loading) {
-    return (
-      <div className={styles.spinnerContainer}>
-        <CircularProgress />
-        <div className={styles.spinnerText}>lade Daten...</div>
-      </div>
-    )
-  }
-  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <FormTitle title="Qualitätskontrollen wählen" />
