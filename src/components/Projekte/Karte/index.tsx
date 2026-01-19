@@ -196,8 +196,6 @@ export const Karte = observer(({ mapContainerRef }) => {
   // tool would erroneously add new markers from last time it build
   // see: https://github.com/barbalex/apf2/issues/467
 
-  // console.log('map rendering')
-
   return (
     <div
       className={`outer-map-container ${styles.container}`}
@@ -236,7 +234,7 @@ export const Karte = observer(({ mapContainerRef }) => {
               return (
                 <Pane
                   key={`${overlayName}/${index}`}
-                  className={stylesoverlayName}
+                  className={overlayName}
                   name={overlayName}
                   style={{ zIndex: 200 + index }}
                 >

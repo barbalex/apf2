@@ -4,8 +4,8 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
 import { gql } from '@apollo/client'
-
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.ts'
 
@@ -34,29 +34,33 @@ const style = () => ({
 })
 
 export const Betreuungsgebiete = observer(() => {
-  const { enqueNotification } = useContext(MobxContext)
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery<BetreuungsgebieteQueryResult>(gql`
-    query nsBetreuungsQuery {
-      allNsBetreuungs {
-        nodes {
-          id: gebietNr
-          geom {
-            geojson
+  const { data } = useQuery({
+    queryKey: ['betreuungsgebiete'],
+    queryFn: async () => {
+      const result = await apolloClient.query<BetreuungsgebieteQueryResult>({
+        query: gql`
+          query nsBetreuungsQuery {
+            allNsBetreuungs {
+              nodes {
+                id: gebietNr
+                geom {
+                  geojson
+                }
+              }
+            }
           }
-        }
-      }
-    }
-  `)
-
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der NS-Gebiets-Betreuer: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
+        `,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    // suspense: true provokes a weird error:
+    // Map container is being reused by another instance
+    // suspense: true,
+  })
 
   if (!data) return null
 
