@@ -1,5 +1,6 @@
 import { useParams } from 'react-router'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { query } from './query.ts'
@@ -8,20 +9,27 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import type { Idealbiotop } from '../../../../models/apflora/index.tsx'
 
 interface IdealbiotopQueryResult {
-  data?: {
-    allIdealbiotops?: {
-      nodes: Idealbiotop[]
-    }
+  allIdealbiotops?: {
+    nodes: Idealbiotop[]
   }
 }
 
 export const Component = () => {
   const { apId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { data, loading, error } = useQuery<IdealbiotopQueryResult>(query, {
-    variables: {
-      id: apId,
+  const { data } = useQuery({
+    queryKey: ['idealbiotop', apId],
+    queryFn: async () => {
+      const result = await apolloClient.query<IdealbiotopQueryResult>({
+        query,
+        variables: { id: apId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.allIdealbiotops?.nodes?.[0] ?? {}
