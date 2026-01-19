@@ -2,8 +2,8 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
-
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { Checkbox } from '../shared/Checkbox.tsx'
 import { MobxContext } from '../../../../../mobxContext.ts'
@@ -24,20 +24,27 @@ export const ShowForMultipleAps = observer(() => {
     store
   const { apGqlFilterForTree } = store.tree
 
-  const { data } = useQuery<ShowForMultipleApsQueryResult>(
-    gql`
-      query LayersControlLayersQuery($apsFilter: ApFilter!) {
-        allAps(filter: $apsFilter) {
-          totalCount
-        }
-      }
-    `,
-    {
-      variables: {
-        apsFilter: apGqlFilterForTree,
-      },
+  const apolloClient = useApolloClient()
+  const { data } = useQuery({
+    queryKey: ['apsCount', apGqlFilterForTree],
+    queryFn: async () => {
+      const result = await apolloClient.query<ShowForMultipleApsQueryResult>({
+        query: gql`
+          query LayersControlLayersQuery($apsFilter: ApFilter!) {
+            allAps(filter: $apsFilter) {
+              totalCount
+            }
+          }
+        `,
+        variables: {
+          apsFilter: apGqlFilterForTree,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
-  )
+  })
 
   const apsCount = data?.allAps?.totalCount ?? 0
 
