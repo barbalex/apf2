@@ -1,9 +1,16 @@
+import { type SyntheticEvent } from 'react'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
 import styles from './Title.module.css'
 
-type TabValue = 'ap' | 'pop' | 'tpop' | 'tpopmassn' | 'tpopfeldkontr' | 'tpopfreiwkontr'
+type TabValue =
+  | 'ap'
+  | 'pop'
+  | 'tpop'
+  | 'tpopmassn'
+  | 'tpopfeldkontr'
+  | 'tpopfreiwkontr'
 
 const titleObject: Record<TabValue, string> = {
   ap: 'Art Filter',
@@ -20,7 +27,8 @@ interface TitleProps {
 }
 
 export const Title = ({ activeTab, setActiveTab }: TitleProps) => {
-  const onChangeTab = (_event: React.SyntheticEvent, value: TabValue) => setActiveTab(value)
+  const onChangeTab = (_event: SyntheticEvent, value: TabValue) =>
+    setActiveTab(value)
 
   return (
     <div className={styles.container}>

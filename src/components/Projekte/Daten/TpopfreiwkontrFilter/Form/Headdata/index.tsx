@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 
@@ -31,7 +31,7 @@ export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
   const { data, loading, error } =
     useQuery<TpopfreiwkontrAdressesFilterQueryResult>(query)
 
-  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpopfreiwkontr',
       key: 'bearbeiter',
