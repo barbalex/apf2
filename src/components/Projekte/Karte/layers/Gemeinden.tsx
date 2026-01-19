@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 
 import { MobxContext } from '../../../../mobxContext.ts'
@@ -31,31 +32,32 @@ const style = () => ({
 })
 
 export const Gemeinden = observer(() => {
-  const { enqueNotification } = useContext(MobxContext)
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery<GemeindenQueryResult>(gql`
-    query karteGemeindesQuery {
-      allChAdministrativeUnits(
-        filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
-      ) {
-        nodes {
-          id
-          geom {
-            geojson
+  const { data } = useQuery({
+    queryKey: ['gemeinden'],
+    queryFn: async () => {
+      const result = await apolloClient.query<GemeindenQueryResult>({
+        query: gql`
+          query karteGemeindesQuery {
+            allChAdministrativeUnits(
+              filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
+            ) {
+              nodes {
+                id
+                geom {
+                  geojson
+                }
+              }
+            }
           }
-        }
-      }
-    }
-  `)
-
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der Gemeinden für die Karte: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
+        `,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+  })
 
   if (!data) return null
 
