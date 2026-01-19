@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -96,7 +96,7 @@ export const TpopmassnFilter = observer(() => {
     (n) => n.value === row?.typ,
   )?.anpflanzung
 
-  const saveToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'tpopmassn',
       key: event.target.name,
