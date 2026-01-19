@@ -2,17 +2,15 @@ import { useContext, useState, type ChangeEvent } from 'react'
 import { upperFirst } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
 import type { TpopApberrelevantGrundWerteId } from '../../../../models/apflora/TpopApberrelevantGrundWerteId.ts'
@@ -70,10 +68,20 @@ export const Component = observer(() => {
       }
     }
   `
-  const { data, loading, error, refetch } = useQuery<WerteQueryResult>(query, {
-    variables: {
-      id,
+  const { data } = useQuery({
+    queryKey: ['werte', table, id],
+    queryFn: async () => {
+      const result = await apolloClient.query<WerteQueryResult>({
+        query,
+        variables: {
+          id,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.[`${table}ById`] ?? {}
@@ -137,7 +145,9 @@ export const Component = observer(() => {
         [field]: (error as Error).message,
       }))
     }
-    refetch()
+    tsQueryClient.invalidateQueries({
+      queryKey: ['werte', table, id],
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -148,10 +158,6 @@ export const Component = observer(() => {
       })
     }
   }
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
