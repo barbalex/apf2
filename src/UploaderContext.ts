@@ -1,4 +1,5 @@
-import { createContext } from 'react'
+import { createContext, type RefObject } from 'react'
 
-export const UploaderContext =
-  createContext<React.RefObject<HTMLElement> | null>(null)
+export const UploaderContext = createContext<RefObject<HTMLElement> | null>(
+  null,
+)
