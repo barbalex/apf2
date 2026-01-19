@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -71,7 +71,7 @@ export const Component = observer(() => {
 
   const row = data?.data?.assozartById ?? {}
 
-  // do not include already choosen assozarten
+  // do not include already chosen assozarten
   const assozartenOfAp = (row?.apByApId?.assozartsByApId?.nodes ?? [])
     .map((o) => o.aeId)
     // but do include the art included in the row
@@ -86,7 +86,7 @@ export const Component = observer(() => {
       : { taxArtName: { includesInsensitive: inputValue } }
     : { taxArtName: { isNull: false } }
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 

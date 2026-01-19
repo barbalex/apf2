@@ -1,3 +1,4 @@
+import { type ChangeEvent } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { useParams } from 'react-router'
 
@@ -31,7 +32,7 @@ interface TpopEkFilterQueryResult {
 }
 
 interface EkProps {
-  saveToDb: (event: React.ChangeEvent<HTMLInputElement>) => void
+  saveToDb: (event: ChangeEvent<HTMLInputElement>) => void
   row: any
   fieldErrors: Record<string, string>
 }

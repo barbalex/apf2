@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, type SyntheticEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -24,7 +24,7 @@ export const Tabs = observer(
         (v) => v !== null,
       ).length === 0
 
-    const onChangeTab = (event: React.SyntheticEvent, value: number) => {
+    const onChangeTab = (event: SyntheticEvent, value: number) => {
       if (value > dataFilter.length - 1) {
         dataFilterAddOr({ table: 'tpopmassn', val: tpopmassn })
         setTimeout(() => setActiveTab(value), 0)
