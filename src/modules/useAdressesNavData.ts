@@ -32,7 +32,6 @@ export const useAdressesNavData = () => {
         variables: {
           adressesFilter: store.tree.adresseGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

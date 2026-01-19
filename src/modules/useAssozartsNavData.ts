@@ -48,7 +48,6 @@ export const useAssozartsNavData = (props) => {
           assozartsFilter: store.tree.assozartGqlFilterForTree,
           apId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

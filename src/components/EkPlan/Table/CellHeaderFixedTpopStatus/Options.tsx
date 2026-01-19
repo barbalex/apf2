@@ -28,7 +28,6 @@ export const Options = ({ type }) => {
     queryFn: async () => {
       const result = await apolloClient.query<PopStatusWerteQueryResult>({
         query,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

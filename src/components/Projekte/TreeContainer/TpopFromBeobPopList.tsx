@@ -54,7 +54,6 @@ export const TpopFromBeobPopList = observer(
         const result = await apolloClient.query<AllPopsQueryResult>({
           query,
           variables: { apId },
-          fetchPolicy: 'no-cache',
         })
         if (result.error) throw result.error
         return result.data

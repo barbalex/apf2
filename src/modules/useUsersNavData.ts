@@ -32,7 +32,6 @@ export const useUsersNavData = () => {
         variables: {
           usersFilter: store.tree.userGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

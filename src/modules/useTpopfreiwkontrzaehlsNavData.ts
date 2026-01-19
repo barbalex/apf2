@@ -53,7 +53,6 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
           tpopkontrzaehlsFilter: store.tree.tpopkontrzaehlGqlFilterForTree,
           tpopkontrId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

@@ -40,7 +40,6 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
         variables: {
           filter: store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

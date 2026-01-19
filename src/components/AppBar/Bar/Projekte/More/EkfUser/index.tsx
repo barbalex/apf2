@@ -34,7 +34,6 @@ export const EkfUser = ({ closeMenu }) => {
     queryFn: async () => {
       const result = await apolloClient.query<UsersQueryResult>({
         query: queryAdresses,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

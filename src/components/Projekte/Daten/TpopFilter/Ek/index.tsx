@@ -47,7 +47,6 @@ export const Ek = ({ saveToDb, row, fieldErrors }: EkProps) => {
       const result = await apolloClient.query<TpopEkFilterQueryResult>({
         query,
         variables: { apId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

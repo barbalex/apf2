@@ -215,7 +215,6 @@ export const Component = () => {
       const result = await apolloClient.query<TpopHistoryQueryResult>({
         query,
         variables: { tpopId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

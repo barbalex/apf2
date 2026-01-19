@@ -77,7 +77,6 @@ export const Tpop = observer(
               }
             }
           `,
-          fetchPolicy: 'no-cache',
         })
         if (result.error) throw result.error
         return result.data

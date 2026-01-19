@@ -34,7 +34,6 @@ export const EkfBar = () => {
       const result = await apolloClient.query<UserQueryResult>({
         query,
         variables: { userId: userId ?? '99999999-9999-9999-9999-999999999999' },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

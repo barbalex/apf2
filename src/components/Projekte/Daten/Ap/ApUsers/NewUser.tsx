@@ -56,7 +56,6 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
             }
           }
         `,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

@@ -77,7 +77,6 @@ export const ApErfolg = () => {
       const result = await apolloClient.query<ApErfolgQueryResult>({
         query,
         variables: { id },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

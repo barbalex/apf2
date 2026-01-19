@@ -64,7 +64,6 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
       apolloClient.query({
         query,
         variables: { id },
-        fetchPolicy: 'no-cache',
       }),
   })
   // DO NOT use apId from url because this form is also used for mass prints

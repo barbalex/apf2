@@ -88,7 +88,6 @@ export const Component = observer(() => {
         variables: {
           id,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result
@@ -103,7 +102,6 @@ export const Component = observer(() => {
       const result =
         await apolloClient.query<EkAbrechnungstypWertesQueryResult>({
           query: queryEkAbrechnungstypWertes,
-          fetchPolicy: 'no-cache',
         })
       if (result.error) throw result.error
       return result

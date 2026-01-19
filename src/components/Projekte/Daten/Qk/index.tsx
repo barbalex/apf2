@@ -45,7 +45,6 @@ export const Component = () => {
       const result = await apolloClient.query<QkQueryResult>({
         query,
         variables: { apId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

@@ -51,7 +51,6 @@ export const usePopmassnbersNavData = (props) => {
           popmassnbersFilter: store.tree.popmassnberGqlFilterForTree,
           popId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

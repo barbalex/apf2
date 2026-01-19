@@ -43,7 +43,6 @@ export const useEkfrequenzsNavData = (props) => {
           ekfrequenzsFilter: store.tree.ekfrequenzGqlFilterForTree,
           apId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

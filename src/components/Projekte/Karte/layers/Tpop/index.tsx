@@ -95,7 +95,6 @@ const ObservedTpop = observer(({ clustered }) => {
       apolloClient.query({
         query,
         variables: { tpopFilter },
-        fetchPolicy: 'no-cache',
       }),
   })
 

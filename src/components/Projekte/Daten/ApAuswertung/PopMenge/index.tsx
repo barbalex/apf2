@@ -96,7 +96,6 @@ export const PopMenge = ({
       const result = await apolloClient.query<PopMengeQueryResult>({
         query,
         variables: { id, jahr },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

@@ -81,7 +81,6 @@ export const useTpopfeldkontrNavData = (props) => {
           tpopkontrId,
           tpopkontrzaehlFilter: store.tree.tpopkontrzaehlGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

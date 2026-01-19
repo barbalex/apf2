@@ -71,7 +71,6 @@ const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
         variables: {
           beobFilter: beobGqlFilter('nichtZuzuordnen').filtered,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

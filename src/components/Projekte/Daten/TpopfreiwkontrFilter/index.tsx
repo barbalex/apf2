@@ -58,7 +58,6 @@ export const TpopfreiwkontrFilter = observer(() => {
           filteredFilter: ekfGqlFilter.filtered,
           allFilter: ekfGqlFilter.all,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

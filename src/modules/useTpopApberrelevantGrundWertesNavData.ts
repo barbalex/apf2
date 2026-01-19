@@ -41,7 +41,6 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
           tpopApberrelevantGrundWertsFilter:
             store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

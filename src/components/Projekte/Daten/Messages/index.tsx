@@ -24,7 +24,6 @@ export const Component = () => {
     queryFn: async () => {
       const result = await apolloClient.query<MessagesQueryResult>({
         query,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

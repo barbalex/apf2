@@ -26,7 +26,6 @@ export const useZielNavData = (props) => {
           }
         `,
         variables: { zielId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

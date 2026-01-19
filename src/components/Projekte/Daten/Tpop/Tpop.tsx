@@ -170,7 +170,6 @@ export const Component = observer(() => {
       const result = await apolloClient.query<TpopQueryResult>({
         query,
         variables: { id: tpopId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data
@@ -208,7 +207,6 @@ export const Component = observer(() => {
             }
           }
         `,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

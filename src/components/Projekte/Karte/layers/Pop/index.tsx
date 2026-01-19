@@ -74,7 +74,6 @@ const ObservedPop = observer(() => {
       apolloClient.query({
         query: query,
         variables: { popFilter },
-        fetchPolicy: 'no-cache',
       }),
   })
 

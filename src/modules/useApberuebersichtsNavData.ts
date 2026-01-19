@@ -46,7 +46,6 @@ export const useApberuebersichtsNavData = (props) => {
           projId,
           apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

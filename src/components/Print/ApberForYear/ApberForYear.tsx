@@ -33,7 +33,6 @@ export const ApberForYear = () => {
         variables: {
           id: apberuebersichtId,
         },
-        fetchPolicy: 'no-cache',
       })
       const jahr = data1?.apberuebersichtById?.jahr
       // then get data
@@ -44,7 +43,6 @@ export const ApberForYear = () => {
           jahr,
           apberuebersichtId,
         },
-        fetchPolicy: 'no-cache',
       })
       // then get jber data
       // WARNING: this HAS to be queried later or somehow loading never ended
@@ -53,7 +51,6 @@ export const ApberForYear = () => {
         variables: {
           jahr,
         },
-        fetchPolicy: 'no-cache',
       })
 
       return { data, jberData, jahr }

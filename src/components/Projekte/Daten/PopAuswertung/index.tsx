@@ -87,7 +87,6 @@ export const Component = ({ height = 400 }: ComponentProps) => {
       const result = await apolloClient.query<PopAuswertungQueryResult>({
         query,
         variables: { apId, id: popId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

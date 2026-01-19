@@ -61,7 +61,6 @@ export const User = observer(
         apolloClient.query({
           query,
           variables: { name: username },
-          fetchPolicy: 'no-cache',
         }),
     })
 

@@ -41,7 +41,6 @@ export const Component = () => {
       const result = await apolloClient.query<ApFilesQueryResult>({
         query: apFilesQuery,
         variables: { apId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

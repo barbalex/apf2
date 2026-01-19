@@ -149,7 +149,6 @@ export const useTpopNavData = (props) => {
             tpopId: { equalTo: tpopId },
           },
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

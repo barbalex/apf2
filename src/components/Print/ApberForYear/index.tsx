@@ -36,7 +36,6 @@ export const Component = () => {
           }
         `,
         variables: { apberuebersichtId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

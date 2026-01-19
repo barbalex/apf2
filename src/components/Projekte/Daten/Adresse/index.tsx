@@ -49,7 +49,6 @@ export const Component = observer(() => {
       const result = await apolloClient.query<AdresseQueryResult>({
         query,
         variables: { id: adrId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

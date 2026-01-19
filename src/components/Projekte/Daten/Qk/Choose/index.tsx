@@ -42,7 +42,6 @@ export const Component = ({ refetchTab }: ChooseProps) => {
     queryFn: async () => {
       const result = await apolloClient.query<QkChooseQueryResult>({
         query,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

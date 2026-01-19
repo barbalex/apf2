@@ -37,7 +37,6 @@ export const Component = () => {
           apberId,
           apId,
         },
-        fetchPolicy: 'no-cache',
       })
       const jahr = apberData?.apberById?.jahr
       if (apberError) throw apberError
@@ -46,7 +45,6 @@ export const Component = () => {
       const { data, error } = await apolloClient.query({
         query: apByIdJahr,
         variables: { apId, jahr },
-        fetchPolicy: 'no-cache',
       })
       if (error) throw error
       return { data, jahr }

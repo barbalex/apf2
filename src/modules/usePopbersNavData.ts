@@ -40,7 +40,6 @@ export const usePopbersNavData = (props) => {
           popbersFilter: store.tree.popberGqlFilterForTree,
           popId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

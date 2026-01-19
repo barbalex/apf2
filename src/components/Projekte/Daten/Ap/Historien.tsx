@@ -167,7 +167,6 @@ export const Component = () => {
       const result = await apolloClient.query<ApHistoriesQueryResult>({
         query: apHistoriesQuery,
         variables: { apId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

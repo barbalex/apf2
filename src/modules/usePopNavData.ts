@@ -103,7 +103,6 @@ export const usePopNavData = (props) => {
           popberFilter: store.tree.popberGqlFilterForTree,
           popmassnberFilter: store.tree.popmassnberGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

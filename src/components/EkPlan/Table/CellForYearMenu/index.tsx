@@ -218,7 +218,6 @@ export const CellForYearMenu = observer(() => {
           showEkf,
           showMassn,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

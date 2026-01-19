@@ -46,7 +46,6 @@ export const useTpopbersNavData = (props) => {
           tpopbersFilter: store.tree.tpopberGqlFilterForTree,
           tpopId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

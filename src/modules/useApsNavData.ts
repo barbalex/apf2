@@ -36,7 +36,6 @@ export const useApsNavData = (props) => {
           apsFilter: store.tree.apGqlFilterForTree,
           projId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

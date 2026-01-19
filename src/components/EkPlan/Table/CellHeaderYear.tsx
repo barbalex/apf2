@@ -95,7 +95,6 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
             }
           `,
           variables: { kontrFilter, ansiedlungFilter, ekplanFilter },
-          fetchPolicy: 'no-cache',
         },
       )
       if (result.error) throw result.error

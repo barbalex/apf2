@@ -77,7 +77,6 @@ export const Component = observer(() => {
           id: tpopkontrzaehlId,
           tpopkontrId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

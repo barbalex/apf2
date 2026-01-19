@@ -84,7 +84,6 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
       apolloClient.query({
         query: query,
         variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
-        fetchPolicy: 'no-cache',
       }),
   })
 

@@ -71,7 +71,6 @@ export const Component = observer(() => {
       apolloClient.query({
         query,
         variables: { id: apberuebersichtId },
-        fetchPolicy: 'no-cache',
       }),
   })
 

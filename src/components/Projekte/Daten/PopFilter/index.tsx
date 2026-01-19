@@ -62,7 +62,6 @@ export const PopFilter = observer(() => {
           filteredFilter: popGqlFilter.filtered,
           allFilter: popGqlFilter.all,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

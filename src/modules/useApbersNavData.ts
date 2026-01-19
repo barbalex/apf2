@@ -40,7 +40,6 @@ export const useApbersNavData = (props) => {
           apbersFilter: store.tree.apberGqlFilterForTree,
           apId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

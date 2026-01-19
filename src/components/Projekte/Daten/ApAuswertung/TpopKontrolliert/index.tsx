@@ -62,7 +62,6 @@ export const TpopKontrolliert = ({
       const result = await apolloClient.query<TpopKontrolliertQueryResult>({
         query,
         variables: { id, year: jahr ?? new Date().getFullYear() },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

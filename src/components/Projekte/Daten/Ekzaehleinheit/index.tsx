@@ -84,7 +84,6 @@ export const Component = observer(() => {
         variables: {
           id,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result
@@ -110,7 +109,6 @@ export const Component = observer(() => {
         variables: {
           filter: zaehleinheitWerteFilter,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

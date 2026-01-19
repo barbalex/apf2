@@ -76,7 +76,6 @@ export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
           apId,
           projId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

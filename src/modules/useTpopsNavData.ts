@@ -125,7 +125,6 @@ export const useTpopsNavData = (props) => {
           tpopsFilter: store.tree.tpopGqlFilterForTree,
           popId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

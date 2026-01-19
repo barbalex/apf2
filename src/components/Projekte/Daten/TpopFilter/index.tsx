@@ -60,7 +60,6 @@ export const TpopFilter = observer(() => {
           filteredFilter: tpopGqlFilter.filtered,
           allFilter: tpopGqlFilter.all,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

@@ -158,7 +158,6 @@ export const Component = observer(() => {
       const result = await apolloClient.query<BeobzuordnungQueryResult>({
         query,
         variables: { id, apId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

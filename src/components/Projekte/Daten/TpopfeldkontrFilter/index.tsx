@@ -112,7 +112,6 @@ export const TpopfeldkontrFilter = observer(() => {
     queryFn: async () => {
       const result = await apolloClient.query<TpopfeldkontrFilterQueryResult>({
         query,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data
@@ -129,7 +128,6 @@ export const TpopfeldkontrFilter = observer(() => {
           filteredFilter: ekGqlFilter.filtered,
           allFilter: ekGqlFilter.all,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

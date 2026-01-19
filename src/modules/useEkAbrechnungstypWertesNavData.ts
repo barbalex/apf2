@@ -40,7 +40,6 @@ export const useEkAbrechnungstypWertesNavData = () => {
         variables: {
           filter: store.tree.ekAbrechnungstypWerteGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

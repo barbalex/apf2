@@ -49,7 +49,6 @@ export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
       const result =
         await apolloClient.query<TpopfreiwkontrAdressesQueryResult>({
           query,
-          fetchPolicy: 'no-cache',
         })
       if (result.error) throw result.error
       return result.data

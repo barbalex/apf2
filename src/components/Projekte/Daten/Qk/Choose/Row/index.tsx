@@ -47,7 +47,6 @@ export const Row = ({ apId, qk }: RowProps) => {
       apolloClient.query({
         query: query,
         variables: { apId, qkName: qk.name },
-        fetchPolicy: 'no-cache',
       }),
   })
   const apqk = data?.data?.apqkByApIdAndQkName

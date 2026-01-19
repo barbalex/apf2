@@ -149,7 +149,6 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
       const result = await apolloClient.query<TpopmassnQueryResult>({
         query,
         variables: { id: tpopmassnId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

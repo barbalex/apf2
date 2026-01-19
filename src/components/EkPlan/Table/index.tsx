@@ -219,7 +219,6 @@ export const EkPlanTable = observer(() => {
         .query<EkplanTpopQueryResult>({
           query: queryAll,
           variables: { tpopFilter },
-          fetchPolicy: 'no-cache',
         })
         .then((result) => result.data),
   })

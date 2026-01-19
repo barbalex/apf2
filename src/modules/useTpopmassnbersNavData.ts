@@ -53,7 +53,6 @@ export const useTpopmassnbersNavData = (props) => {
           tpopmassnbersFilter: store.tree.tpopmassnberGqlFilterForTree,
           tpopId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

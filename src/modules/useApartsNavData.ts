@@ -40,7 +40,6 @@ export const useApartsNavData = (props) => {
           apartsFilter: store.tree.apartGqlFilterForTree,
           apId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

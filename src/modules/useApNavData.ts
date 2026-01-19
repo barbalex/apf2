@@ -228,7 +228,6 @@ export const useApNavData = (props) => {
           allBeobNichtZuzuordnenFilter,
           allBeobNichtBeurteiltFilter,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

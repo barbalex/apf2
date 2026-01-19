@@ -93,7 +93,6 @@ export const ApFilter = observer(() => {
           filteredFilter: apGqlFilter.filtered,
           allFilter: apGqlFilter.all,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result
@@ -107,7 +106,6 @@ export const ApFilter = observer(() => {
     queryFn: async () => {
       const result = await apolloClient.query<AdressesQueryResult>({
         query: queryAdresses,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result
@@ -121,7 +119,6 @@ export const ApFilter = observer(() => {
     queryFn: async () => {
       const result = await apolloClient.query<ListsQueryResult>({
         query: queryLists,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result
@@ -139,7 +136,6 @@ export const ApFilter = observer(() => {
           id: dataFilter.ap?.[activeTab]?.artId,
           run: !!dataFilter.ap?.[activeTab]?.artId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

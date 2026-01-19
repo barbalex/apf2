@@ -64,7 +64,6 @@ export const useBeobZugeordnetsNavData = (props) => {
           },
           allBeobZugeordnetFilter: { tpopId: { equalTo: tpopId } },
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

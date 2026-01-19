@@ -70,7 +70,6 @@ export const AktPopList = ({ year }) => {
           previousYear,
           jahr: year,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
   const aps = data?.data?.jberAktPop?.nodes ?? []

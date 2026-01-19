@@ -92,7 +92,6 @@ export const Component = observer(() => {
         variables: {
           ids: aps.map((ap) => ap.value),
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

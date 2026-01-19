@@ -68,7 +68,6 @@ const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
       apolloClient.query({
         query: query,
         variables: { beobFilter: beobGqlFilter('nichtBeurteilt').filtered },
-        fetchPolicy: 'no-cache',
       }),
   })
 

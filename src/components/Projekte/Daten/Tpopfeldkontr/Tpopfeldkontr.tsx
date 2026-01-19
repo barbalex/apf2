@@ -86,7 +86,6 @@ export const Component = () => {
       const result = await apolloClient.query<TpopfeldkontrQueryResult>({
         query,
         variables: { id: tpopkontrId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

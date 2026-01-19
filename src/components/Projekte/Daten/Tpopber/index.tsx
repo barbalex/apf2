@@ -75,7 +75,6 @@ export const Component = observer(() => {
           ${tpopber}
         `,
         variables: { id: tpopberId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

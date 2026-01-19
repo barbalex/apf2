@@ -86,7 +86,6 @@ export const Data = observer(({ id }) => {
         variables: {
           id,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

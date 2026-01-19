@@ -192,7 +192,6 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
         variables: {
           filter: filtered ? tpopGqlFilter.filtered : { or: [] },
           // seems to have no or little influence on ram usage:
-          //fetchPolicy: 'no-cache',
         },
       })
     } catch (error) {

@@ -64,7 +64,6 @@ export const Component = observer(() => {
       const result = await apolloClient.query<ApartQueryResult>({
         query,
         variables: { id },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

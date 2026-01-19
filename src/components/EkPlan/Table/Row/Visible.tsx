@@ -174,7 +174,6 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
           showLv95X: fieldsShown.includes('lv95X'),
           showLv95Y: fieldsShown.includes('lv95Y'),
         },
-        fetchPolicy: 'no-cache',
       })
       return result.data
     },

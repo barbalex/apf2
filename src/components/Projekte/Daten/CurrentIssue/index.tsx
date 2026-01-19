@@ -40,7 +40,6 @@ export const Component = () => {
         variables: {
           id: issueId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

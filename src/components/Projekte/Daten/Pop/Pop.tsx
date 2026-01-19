@@ -57,7 +57,6 @@ export const Component = observer(() => {
       const result = await apolloClient.query<PopQueryResult>({
         query,
         variables: { id: popId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

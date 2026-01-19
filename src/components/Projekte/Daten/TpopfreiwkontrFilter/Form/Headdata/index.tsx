@@ -37,7 +37,6 @@ export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
       const result =
         await apolloClient.query<TpopfreiwkontrAdressesFilterQueryResult>({
           query,
-          fetchPolicy: 'no-cache',
         })
       if (result.error) throw result.error
       return result.data

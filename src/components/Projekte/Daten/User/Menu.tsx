@@ -100,7 +100,6 @@ export const Menu = observer(
             jahr: thisYear,
             include: !!row.adresseId,
           },
-          fetchPolicy: 'no-cache',
         })
         if (result.error) throw result.error
         return result.data

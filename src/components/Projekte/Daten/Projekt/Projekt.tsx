@@ -44,7 +44,6 @@ export const Component = observer(() => {
       const result = await apolloClient.query<ProjektQueryResult>({
         query,
         variables: { id: projId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

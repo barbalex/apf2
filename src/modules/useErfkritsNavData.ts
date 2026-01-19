@@ -47,7 +47,6 @@ export const useErfkritsNavData = (props) => {
           erfkritsFilter: store.tree.erfkritGqlFilterForTree,
           apId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

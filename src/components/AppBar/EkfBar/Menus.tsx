@@ -63,7 +63,6 @@ export const Menus = observer(() => {
       const result = await apolloClient.query<EkfMenusQueryResult>({
         query,
         variables: { id: userId, jahr: +ekfYear },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

@@ -57,7 +57,6 @@ const Polylines = observer(() => {
       apolloClient.query({
         query: query,
         variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
-        fetchPolicy: 'no-cache',
       }),
   })
 

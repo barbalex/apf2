@@ -62,7 +62,6 @@ export const Beob = observer(() => {
         variables: {
           id,
         },
-        fetchPolicy: 'no-cache',
       }),
   })
 

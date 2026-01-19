@@ -114,7 +114,6 @@ export const Layer = observer(({ apfloraLayer }) => {
       const result = await apolloClient.query<ApfloraLayersQueryResult>({
         query,
         variables,
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

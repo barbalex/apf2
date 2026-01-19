@@ -49,7 +49,6 @@ export const useProjektNavData = (props) => {
           apFilter: store.tree.apGqlFilterForTree,
           apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

@@ -90,7 +90,6 @@ export const FilesRouter = observer(
         apolloClient.query({
           query,
           variables: { parentId },
-          fetchPolicy: 'no-cache',
         }),
     })
 

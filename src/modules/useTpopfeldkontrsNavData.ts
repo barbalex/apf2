@@ -58,7 +58,6 @@ export const useTpopfeldkontrsNavData = (props) => {
           eksFilter: store.tree.ekGqlFilterForTree,
           tpopId,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

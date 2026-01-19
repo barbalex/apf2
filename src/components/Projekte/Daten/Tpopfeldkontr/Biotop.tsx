@@ -71,7 +71,6 @@ export const Component = observer(() => {
       const result = await apolloClient.query<BiotopQueryResult>({
         query,
         variables: { id: tpopkontrId },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

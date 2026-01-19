@@ -95,7 +95,6 @@ export const TpopmassnFilter = observer(() => {
           filteredFilter: tpopmassnGqlFilter.filtered,
           allFilter: tpopmassnGqlFilter.all,
         },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result.data

@@ -73,7 +73,6 @@ export const PopStatus = ({
       const result = await apolloClient.query<PopStatusQueryResult>({
         query,
         variables: { apId: id, year },
-        fetchPolicy: 'no-cache',
       })
       if (result.error) throw result.error
       return result

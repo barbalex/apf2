@@ -118,7 +118,6 @@ export const Count = observer(
           variables: {
             id: id || '99999999-9999-9999-9999-999999999999',
           },
-          fetchPolicy: 'no-cache',
         })
         if (result.error) throw result.error
         return result.data
