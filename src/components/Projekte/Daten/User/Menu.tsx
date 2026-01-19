@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation, Link } from 'react-router'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -90,12 +90,24 @@ export const Menu = observer(
     const tsQueryClient = useQueryClient()
 
     const thisYear = new Date().getFullYear()
-    const { data, refetch } = useQuery<EkfTpopsQueryResult>(queryEkfTpops, {
-      variables: {
-        id: row.adresseId || '9999999999999999999999999',
-        jahr: thisYear,
-        include: !!row.adresseId,
+    const { data } = useQuery({
+      queryKey: ['ekfTpops', row.adresseId, thisYear],
+      queryFn: async () => {
+        const result = await apolloClient.query<EkfTpopsQueryResult>({
+          query: queryEkfTpops,
+          variables: {
+            id: row.adresseId,
+            jahr: thisYear,
+            include: !!row.adresseId,
+          },
+          fetchPolicy: 'no-cache',
+        })
+        if (result.error) throw result.error
+        return result.data
       },
+      enabled: !!row.adresseId,
+      staleTime: Infinity,
+      gcTime: Infinity,
     })
     const ekfTpops = data?.ekfTpops?.nodes ?? []
     const hasEkfTpops = !!ekfTpops.length
@@ -239,7 +251,9 @@ export const Menu = observer(
             variant: 'info',
           },
         })
-        refetch()
+        tsQueryClient.invalidateQueries({
+          queryKey: ['ekfTpops', row.adresseId, thisYear],
+        })
       }
     }
 
