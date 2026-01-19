@@ -1,6 +1,7 @@
 import { useContext } from 'react'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import List from '@mui/material/List'
 import ListItemButton from '@mui/material/ListItemButton'
 import { observer } from 'mobx-react-lite'
@@ -9,8 +10,6 @@ import { useParams, useLocation } from 'react-router'
 import { MobxContext } from '../../../mobxContext.ts'
 import { createNewTpopFromBeob } from '../../../modules/createNewTpopFromBeob.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
-import { Error } from '../../shared/Error.tsx'
-import { Spinner } from '../../shared/Spinner.tsx'
 
 import type { PopId } from '../../../models/apflora/public/Pop.ts'
 
@@ -49,13 +48,19 @@ export const TpopFromBeobPopList = observer(
         }
       }
     `
-    const { data, error, loading } = useQuery<AllPopsQueryResult>(query, {
-      variables: { apId },
+    const { data } = useQuery({
+      queryKey: ['popsForTpopFromBeob', apId],
+      queryFn: async () => {
+        const result = await apolloClient.query<AllPopsQueryResult>({
+          query,
+          variables: { apId },
+          fetchPolicy: 'no-cache',
+        })
+        if (result.error) throw result.error
+        return result.data
+      },
+      suspense: true,
     })
-
-    if (loading) return <Spinner />
-
-    if (error) return <Error error={error} />
 
     const pops = data?.allPops?.nodes ?? []
 
