@@ -1,6 +1,7 @@
-import { useContext, useState, useEffect } from 'react'
+import { useContext, useState, useEffect, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -12,7 +13,6 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { PopOrTabs } from './PopOrTabs.tsx'
 
 import styles from './index.module.css'
@@ -30,6 +30,8 @@ export const PopFilter = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(MobxContext)
+  const apolloClient = useApolloClient()
+
   const {
     dataFilter: dataFilterRaw,
     nodeLabelFilter,
@@ -51,16 +53,26 @@ export const PopFilter = observer(() => {
     }
   }, [activeTab, dataFilter.pop.length])
 
-  const { data: dataPops, error } = useQuery<PopFilterQueryResult>(query, {
-    variables: {
-      filteredFilter: popGqlFilter.filtered,
-      allFilter: popGqlFilter.all,
+  const { data: dataPops } = useQuery({
+    queryKey: ['popFilter', popGqlFilter.filtered, popGqlFilter.all],
+    queryFn: async () => {
+      const result = await apolloClient.query<PopFilterQueryResult>({
+        query,
+        variables: {
+          filteredFilter: popGqlFilter.filtered,
+          allFilter: popGqlFilter.all,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = dataFilter.pop[activeTab]
 
-  const saveToDb = async (event) =>
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) =>
     dataFilterSetValue({
       table: 'pop',
       key: event.target.name,
@@ -93,8 +105,6 @@ export const PopFilter = observer(() => {
     !!navLabelComment ||
     !!hierarchyComment ||
     !!mapFilter
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
