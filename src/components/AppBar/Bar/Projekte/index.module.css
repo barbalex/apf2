@@ -3,6 +3,7 @@
   border-color: rgba(255, 255, 255, 0.5);
   border-radius: 4px;
   text-transform: none;
+  font-weight: 700;
   text-wrap: none;
   /* prevent text from breaking into multiple lines */
   flex-shrink: 0;
@@ -39,6 +40,7 @@
 .dokuButton {
   color: white !important;
   text-transform: none !important;
+  font-weight: 700 !important;
   flex-shrink: 0;
   flex-grow: 0;
   text-transform: none !important;

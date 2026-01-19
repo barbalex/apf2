@@ -1,6 +1,7 @@
 .mehrButton {
   color: white !important;
   text-transform: none !important;
+  font-weight: 700 !important;
   /* prevent text from breaking into multiple lines */
   flex-shrink: 0;
   flex-grow: 0;

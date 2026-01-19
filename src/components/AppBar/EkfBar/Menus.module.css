@@ -1,6 +1,7 @@
 .button {
   color: white !important;
   text-transform: none !important;
+  font-weight: 700 !important;
 }
 
 .iconButton {

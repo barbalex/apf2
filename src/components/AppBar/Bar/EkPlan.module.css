@@ -2,6 +2,7 @@
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   text-transform: none !important;
+  font-weight: 700 !important;
   width: 140px !important;
 }
 
@@ -9,5 +10,6 @@
   color: white !important;
   border-color: rgba(255, 255, 255, 0.5) !important;
   text-transform: none !important;
+  font-weight: 700 !important;
   width: 130px !important;
 }
