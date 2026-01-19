@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, type ChangeEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -6,7 +6,8 @@ import Button from '@mui/material/Button'
 import Badge from '@mui/material/Badge'
 import Paper from '@mui/material/Paper'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { FaExternalLinkAlt } from 'react-icons/fa'
 import CircularProgress from '@mui/material/CircularProgress'
 import { useParams, useLocation, Form } from 'react-router'
@@ -17,7 +18,6 @@ import { query } from './query.ts'
 import { createMessageFunctions } from './createMessageFunctions.ts'
 import { MobxContext } from '../../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../../shared/Error.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
@@ -63,21 +63,31 @@ export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
 
-  const { data, error, loading, refetch } = useQuery<QkQueryResult>(query, {
-    // want to explicitly show user re-loading
-    fetchPolicy: 'no-cache',
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      ...qkNameQueries,
-      berichtjahr,
-      notIsBerichtjahr: !berichtjahr,
-      apId,
-      projId,
+  const apolloClient = useApolloClient()
+  const { data, refetch, isFetching } = useQuery<QkQueryResult>({
+    queryKey: ['qk', apId, projId, berichtjahr, qkNameQueries],
+    queryFn: async () => {
+      const result = await apolloClient.query<QkQueryResult>({
+        query,
+        variables: {
+          ...qkNameQueries,
+          berichtjahr,
+          notIsBerichtjahr: !berichtjahr,
+          apId,
+          projId,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
-  const onChangeBerichtjahr = (event) => setBerichtjahr(+event.target.value)
-  const onChangeFilter = (event) => setFilter(event.target.value)
+  const onChangeBerichtjahr = (event: ChangeEvent<HTMLInputElement>) =>
+    setBerichtjahr(+event.target.value)
+  const onChangeFilter = (event: ChangeEvent<HTMLInputElement>) =>
+    setFilter(event.target.value)
 
   const messageFunctions = createMessageFunctions({
     data,
@@ -99,7 +109,6 @@ export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
     return true
   })
 
-  if (error) return <Error error={error} />
   return (
     <ErrorBoundary>
       <FormTitle title="Qualitätskontrollen ausführen" />
@@ -131,7 +140,7 @@ export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
             onChange={onChangeFilter}
           />
         </FormControl>
-        {loading ?
+        {isFetching ?
           <Button
             onClick={refetch}
             variant="outlined"
@@ -207,7 +216,7 @@ export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
             </Paper>
           ))}
         </div>
-        {!loading && messageGroups.length === 0 && (
+        {!isFetching && messageGroups.length === 0 && (
           <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
         )}
       </div>
