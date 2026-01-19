@@ -3,8 +3,8 @@ import { sortBy, uniqBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { Einheit } from './Einheit.tsx'
 import { Gezaehlt } from './Gezaehlt.tsx'
@@ -12,8 +12,6 @@ import { Geschaetzt } from './Geschaetzt.tsx'
 import { query } from './query.ts'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import { MobxContext } from '../../../../../../mobxContext.ts'
-import { Error } from '../../../../../shared/Error.tsx'
-import { Spinner } from '../../../../../shared/Spinner.tsx'
 
 import type { TpopkontrzaehlId } from '../../../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../../../models/apflora/TpopkontrId.ts'
@@ -112,15 +110,20 @@ export const Count = observer(
     const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
 
-    const {
-      data,
-      loading,
-      error,
-      refetch: refetchMe,
-    } = useQuery<TpopkontrzaehlQueryResult>(query, {
-      variables: {
-        id: id || '99999999-9999-9999-9999-999999999999',
+    const { data, refetch: refetchMe } = useQuery<TpopkontrzaehlQueryResult>({
+      queryKey: ['tpopkontrzaehl', id],
+      queryFn: async () => {
+        const result = await apolloClient.query<TpopkontrzaehlQueryResult>({
+          query,
+          variables: {
+            id: id || '99999999-9999-9999-9999-999999999999',
+          },
+          fetchPolicy: 'no-cache',
+        })
+        if (result.error) throw result.error
+        return result.data
       },
+      suspense: true,
     })
 
     const row = data?.tpopkontrzaehlById ?? {}
@@ -211,9 +214,6 @@ export const Count = observer(
         </div>
       )
     }
-    if (loading) return <Spinner />
-
-    if (error) return <Error error={error} />
 
     return (
       <div
