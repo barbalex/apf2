@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -93,7 +93,7 @@ export const Component = observer(() => {
 
   const row = data?.data?.apberById ?? {}
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 

@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -119,7 +119,7 @@ export const Component = observer(() => {
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 

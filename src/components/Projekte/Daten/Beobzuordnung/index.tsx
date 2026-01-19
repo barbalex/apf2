@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, type ChangeEvent } from 'react'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
@@ -179,7 +179,7 @@ export const Component = observer(() => {
       }
     : { artname: { isNull: false }, apartsByArtIdExist: true }
 
-  const onSaveArtIdToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const onSaveArtIdToDb = (event: ChangeEvent<HTMLInputElement>) =>
     saveArtIdToDb({
       value: event.target.value,
       row,
@@ -198,7 +198,7 @@ export const Component = observer(() => {
       search,
     })
 
-  const onSaveTpopIdToDb = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const onSaveTpopIdToDb = (event: ChangeEvent<HTMLInputElement>) =>
     saveTpopIdToDb({
       value: event.target.value,
       id,
@@ -208,7 +208,7 @@ export const Component = observer(() => {
       search,
     })
 
-  const onUpdateField = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onUpdateField = (event: ChangeEvent<HTMLInputElement>) => {
     const changedField = event.target.name
     apolloClient.mutate({
       mutation: gql`
