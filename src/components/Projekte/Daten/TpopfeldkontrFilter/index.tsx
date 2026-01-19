@@ -2,7 +2,8 @@ import { useState, useContext, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { Form, useParams } from 'react-router'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -19,8 +20,6 @@ import { queryTpopkontrs } from './queryTpopkontrs.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 
@@ -106,17 +105,37 @@ export const TpopfeldkontrFilter = observer(() => {
 
   const row = dataFilter.tpopfeldkontr[activeTab]
 
-  const { data, loading, error } =
-    useQuery<TpopfeldkontrFilterQueryResult>(query)
-  const { data: dataTpopkontrs } = useQuery<TpopkontrsCountQueryResult>(
-    queryTpopkontrs,
-    {
-      variables: {
-        filteredFilter: ekGqlFilter.filtered,
-        allFilter: ekGqlFilter.all,
-      },
+  const apolloClient = useApolloClient()
+
+  const { data } = useQuery<TpopfeldkontrFilterQueryResult>({
+    queryKey: ['tpopfeldkontrFilterData'],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopfeldkontrFilterQueryResult>({
+        query,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
-  )
+    suspense: true,
+  })
+
+  const { data: dataTpopkontrs } = useQuery<TpopkontrsCountQueryResult>({
+    queryKey: ['tpopkontrsCount', ekGqlFilter.filtered, ekGqlFilter.all],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopkontrsCountQueryResult>({
+        query: queryTpopkontrs,
+        variables: {
+          filteredFilter: ekGqlFilter.filtered,
+          allFilter: ekGqlFilter.all,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
+  })
 
   const [tab, setTab] = useSearchParamsState('feldkontrTab', 'entwicklung')
   const onChangeTab = (event, value) => setTab(value)
@@ -175,10 +194,6 @@ export const TpopfeldkontrFilter = observer(() => {
     !!popHierarchyComment ||
     !!tpopHierarchyComment ||
     !!mapFilter
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
@@ -273,7 +288,6 @@ export const TpopfeldkontrFilter = observer(() => {
                 name="bearbeiter"
                 label="BearbeiterIn"
                 options={data?.allAdresses?.nodes ?? []}
-                loading={loading}
                 value={row?.bearbeiter}
                 saveToDb={saveToDb}
               />
@@ -301,7 +315,6 @@ export const TpopfeldkontrFilter = observer(() => {
                 name="entwicklung"
                 label="Entwicklung"
                 dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-                loading={loading}
                 popover={TpopfeldkontrentwicklungPopover}
                 value={row?.entwicklung}
                 saveToDb={saveToDb}
@@ -385,7 +398,6 @@ export const TpopfeldkontrFilter = observer(() => {
                 name="lrDelarze"
                 label="Lebensraum nach Delarze"
                 options={aeLrWerte}
-                loading={loading}
                 value={row?.lrDelarze}
                 saveToDb={saveToDb}
               />
@@ -394,7 +406,6 @@ export const TpopfeldkontrFilter = observer(() => {
                 name="lrUmgebungDelarze"
                 label="Umgebung nach Delarze"
                 options={aeLrWerte}
-                loading={loading}
                 value={row?.lrUmgebungDelarze}
                 saveToDb={saveToDb}
               />
@@ -455,7 +466,6 @@ export const TpopfeldkontrFilter = observer(() => {
                 dataSource={
                   data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []
                 }
-                loading={loading}
                 value={row?.idealbiotopUebereinstimmung}
                 saveToDb={saveToDb}
               />
