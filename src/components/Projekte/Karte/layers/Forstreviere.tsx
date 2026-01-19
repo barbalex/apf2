@@ -4,8 +4,8 @@ import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
 import { gql } from '@apollo/client'
-
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.ts'
 
@@ -36,31 +36,32 @@ const style = () => ({
 })
 
 export const Forstreviere = observer(() => {
-  const { enqueNotification } = useContext(MobxContext)
+  const apolloClient = useApolloClient()
 
-  const { data, error } = useQuery<FostrreviereQueryResult>(gql`
-    query forstrevierQuery {
-      allForstreviers {
-        nodes {
-          id: ogcFid
-          forevnr
-          revName
-          geom: wkbGeometry {
-            geojson
+  const { data } = useQuery({
+    queryKey: ['forstreviere'],
+    queryFn: async () => {
+      const result = await apolloClient.query<FostrreviereQueryResult>({
+        query: gql`
+          query forstrevierQuery {
+            allForstreviers {
+              nodes {
+                id: ogcFid
+                forevnr
+                revName
+                geom: wkbGeometry {
+                  geojson
+                }
+              }
+            }
           }
-        }
-      }
-    }
-  `)
-
-  if (error) {
-    enqueNotification({
-      message: `Fehler beim Laden der Forstreviere: ${error.message}`,
-      options: {
-        variant: 'error',
-      },
-    })
-  }
+        `,
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+  })
 
   if (!data) return null
 
