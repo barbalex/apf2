@@ -1,6 +1,7 @@
 import { useEffect, useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { query } from './query.ts'
@@ -46,11 +47,23 @@ export const TpopfreiwkontrFilter = observer(() => {
 
   const row = dataFilter.tpopfreiwkontr[activeTab]
 
-  const { data: dataTpopkontrs } = useQuery<TpopkontrsQueryResult>(query, {
-    variables: {
-      filteredFilter: ekfGqlFilter.filtered,
-      allFilter: ekfGqlFilter.all,
+  const apolloClient = useApolloClient()
+
+  const { data: dataTpopkontrs } = useQuery<TpopkontrsQueryResult>({
+    queryKey: ['tpopfreiwkontrsCount', ekfGqlFilter.filtered, ekfGqlFilter.all],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopkontrsQueryResult>({
+        query,
+        variables: {
+          filteredFilter: ekfGqlFilter.filtered,
+          allFilter: ekfGqlFilter.all,
+        },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const navApFilterComment =
