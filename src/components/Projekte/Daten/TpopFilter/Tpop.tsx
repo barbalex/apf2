@@ -1,8 +1,8 @@
 import { useContext, Dispatch, SetStateAction, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
@@ -51,32 +51,39 @@ export const Tpop = observer(
 
     //console.log('Tpop rendering')
 
-    const {
-      data: dataLists,
-      loading: loadingLists,
-      error: errorLists,
-    } = useQuery<TpopListsQueryResult>(gql`
-      query TpopListsQueryForTpopFilter {
-        allTpopApberrelevantGrundWertes(
-          orderBy: SORT_ASC
-          filter: { code: { isNull: false } }
-        ) {
-          nodes {
-            value: code
-            label: text
-          }
-        }
-        allChAdministrativeUnits(
-          filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
-          orderBy: TEXT_ASC
-        ) {
-          nodes {
-            value: text
-            label: text
-          }
-        }
-      }
-    `)
+    const { data: dataLists } = useQuery<TpopListsQueryResult>({
+      queryKey: ['tpopFilterLists'],
+      queryFn: async () => {
+        const result = await apolloClient.query<TpopListsQueryResult>({
+          query: gql`
+            query TpopListsQueryForTpopFilter {
+              allTpopApberrelevantGrundWertes(
+                orderBy: SORT_ASC
+                filter: { code: { isNull: false } }
+              ) {
+                nodes {
+                  value: code
+                  label: text
+                }
+              }
+              allChAdministrativeUnits(
+                filter: { localisedcharacterstring: { equalTo: "Gemeinde" } }
+                orderBy: TEXT_ASC
+              ) {
+                nodes {
+                  value: text
+                  label: text
+                }
+              }
+            }
+          `,
+          fetchPolicy: 'no-cache',
+        })
+        if (result.error) throw result.error
+        return result.data
+      },
+      suspense: true,
+    })
 
     // console.log('TpopFilter, tpop', { row: getSnapshot(row) })
 
@@ -133,45 +140,40 @@ export const Tpop = observer(
           saveToDb={saveToDb}
           error={fieldErrors.apberRelevant}
         />
-        {errorLists ?
-          <div>errorLists.message</div>
-        : <RadioButtonGroupWithInfo
-            name="apberRelevantGrund"
-            dataSource={dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []}
-            popover={TpopAbBerRelevantInfoPopover}
-            label="Grund für AP-Bericht (Nicht-)Relevanz"
-            value={row.apberRelevantGrund}
-            saveToDb={saveToDb}
-            error={fieldErrors.apberRelevantGrund}
-          />
-        }
-        {errorLists ?
-          <div>errorLists.message</div>
-        : <SelectCreatableGemeinde
-            key={`${row?.id}gemeinde`}
-            name="gemeinde"
-            value={row.gemeinde}
-            error={fieldErrors.gemeinde}
-            label="Gemeinde"
-            options={dataLists?.allChAdministrativeUnits?.nodes ?? []}
-            loading={loadingLists}
-            showLocate={false}
-            onClickLocate={async () => {
-              if (!row.lv95X) {
-                return setFieldErrors({
-                  gemeinde: 'Es fehlen Koordinaten',
-                })
-              }
-              const geojson = row?.geomPoint?.geojson
-              if (!geojson) return
-              const geojsonParsed = JSON.parse(geojson)
-              if (!geojsonParsed) return
-              let result
-              try {
-                result = await apolloClient.query({
-                  // this is a hack
-                  // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
-                  query: gql`
+        <RadioButtonGroupWithInfo
+          name="apberRelevantGrund"
+          dataSource={dataLists?.allTpopApberrelevantGrundWertes?.nodes ?? []}
+          popover={TpopAbBerRelevantInfoPopover}
+          label="Grund für AP-Bericht (Nicht-)Relevanz"
+          value={row.apberRelevantGrund}
+          saveToDb={saveToDb}
+          error={fieldErrors.apberRelevantGrund}
+        />
+        <SelectCreatableGemeinde
+          key={`${row?.id}gemeinde`}
+          name="gemeinde"
+          value={row.gemeinde}
+          error={fieldErrors.gemeinde}
+          label="Gemeinde"
+          options={dataLists?.allChAdministrativeUnits?.nodes ?? []}
+          loading={false}
+          showLocate={false}
+          onClickLocate={async () => {
+            if (!row.lv95X) {
+              return setFieldErrors({
+                gemeinde: 'Es fehlen Koordinaten',
+              })
+            }
+            const geojson = row?.geomPoint?.geojson
+            if (!geojson) return
+            const geojsonParsed = JSON.parse(geojson)
+            if (!geojsonParsed) return
+            let result
+            try {
+              result = await apolloClient.query({
+                // this is a hack
+                // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
+                query: gql`
                         query tpopGemeindeFilterQuery {
                           allChAdministrativeUnits(
                             filter: {
@@ -187,35 +189,34 @@ export const Tpop = observer(
                           }
                         }
                       `,
-                })
-              } catch (error) {
-                return enqueNotification({
-                  message: (error as Error).message,
-                  options: {
-                    variant: 'error',
-                  },
-                })
-              }
-              const gemeinde =
-                result?.data?.allChAdministrativeUnits?.nodes?.[0]?.text ?? ''
-              // keep following method in case table ch_administrative_units is removed again
-              /*const gemeinde = await getGemeindeForKoord({
+              })
+            } catch (error) {
+              return enqueNotification({
+                message: (error as Error).message,
+                options: {
+                  variant: 'error',
+                },
+              })
+            }
+            const gemeinde =
+              result?.data?.allChAdministrativeUnits?.nodes?.[0]?.text ?? ''
+            // keep following method in case table ch_administrative_units is removed again
+            /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,
                     lv95Y: row.lv95Y,
                     store,
                   })*/
-              if (gemeinde) {
-                const fakeEvent = {
-                  target: { value: gemeinde, name: 'gemeinde' },
-                }
-                //handleChange(fakeEvent)
-                //handleBlur(fakeEvent)
-                saveToDb(fakeEvent)
+            if (gemeinde) {
+              const fakeEvent = {
+                target: { value: gemeinde, name: 'gemeinde' },
               }
-            }}
-            saveToDb={saveToDb}
-          />
-        }
+              //handleChange(fakeEvent)
+              //handleBlur(fakeEvent)
+              saveToDb(fakeEvent)
+            }
+          }}
+          saveToDb={saveToDb}
+        />
         <TextField
           name="radius"
           label="Radius (m)"
