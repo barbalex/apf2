@@ -187,6 +187,8 @@ export const TpopfeldkontrForm = observer(
         [field]: (error as Error).message,
       }))
     }
+    // invalidate tpopfeldkontr query
+    tsQueryClient.invalidateQueries({ queryKey: ['tpopfeldkontr', row.id] })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest

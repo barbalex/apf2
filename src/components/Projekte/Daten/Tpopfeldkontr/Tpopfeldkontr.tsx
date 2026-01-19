@@ -1,9 +1,8 @@
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 import { query } from './query.ts'
@@ -79,16 +78,23 @@ interface TpopfeldkontrQueryResult {
 
 export const Component = () => {
   const { tpopkontrId } = useParams()
+  const apolloClient = useApolloClient()
 
-  const { data, loading, error } = useQuery<TpopfeldkontrQueryResult>(query, {
-    variables: { id: tpopkontrId },
+  const { data } = useQuery<TpopfeldkontrQueryResult>({
+    queryKey: ['tpopfeldkontr', tpopkontrId],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopfeldkontrQueryResult>({
+        query,
+        variables: { id: tpopkontrId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
   const row = data?.tpopkontrById ?? {}
-
-  if (error) return <Error error={error} />
-
-  if (loading) return <Spinner />
 
   return (
     <ErrorBoundary>
