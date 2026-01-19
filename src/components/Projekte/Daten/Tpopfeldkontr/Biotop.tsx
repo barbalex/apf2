@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -12,9 +12,7 @@ import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Error } from '../../../shared/Error.tsx'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { fieldTypes } from './Form.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
@@ -67,10 +65,18 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<BiotopQueryResult>(query, {
-    variables: {
-      id: tpopkontrId,
+  const { data } = useQuery<BiotopQueryResult>({
+    queryKey: ['tpopfeldkontrBiotop', tpopkontrId],
+    queryFn: async () => {
+      const result = await apolloClient.query<BiotopQueryResult>({
+        query,
+        variables: { id: tpopkontrId },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
 
   const row = data?.tpopkontrById ?? {}
@@ -128,6 +134,10 @@ export const Component = observer(() => {
         [field]: (error as Error).message,
       }))
     }
+    // invalidate tpopfeldkontr query
+    tsQueryClient.invalidateQueries({
+      queryKey: ['tpopfeldkontrBiotop', tpopkontrId],
+    })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
@@ -144,10 +154,6 @@ export const Component = observer(() => {
       (e) => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`,
     )
     .map((o) => ({ value: o, label: o }))
-
-  if (loading) return <Spinner />
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
@@ -168,7 +174,6 @@ export const Component = observer(() => {
           name="lrDelarze"
           label="Lebensraum nach Delarze"
           options={aeLrWerte}
-          loading={loading}
           value={row.lrDelarze}
           saveToDb={saveToDb}
           error={fieldErrors.lrDelarze}
@@ -178,7 +183,6 @@ export const Component = observer(() => {
           name="lrUmgebungDelarze"
           label="Umgebung nach Delarze"
           options={aeLrWerte}
-          loading={loading}
           value={row.lrUmgebungDelarze}
           saveToDb={saveToDb}
           error={fieldErrors.lrUmgebungDelarze}
@@ -245,7 +249,6 @@ export const Component = observer(() => {
           name="idealbiotopUebereinstimmung"
           label="Übereinstimmung mit Idealbiotop"
           dataSource={data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []}
-          loading={loading}
           value={row.idealbiotopUebereinstimmung}
           saveToDb={saveToDb}
           error={fieldErrors.idealbiotopUebereinstimmung}
