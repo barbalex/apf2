@@ -1,10 +1,11 @@
 // extracted to shared component due to peer dependency to old react version
 // import { FocusWithin } from 'react-focus-within'
+import React from 'react'
+import { useFocusWithin } from 'react-aria'
 
 import { Editor } from './Editor/index.tsx'
 import { Presenter } from './Presenter.tsx'
 import { TextField } from '../TextField.tsx'
-import { FocusWithin } from '../FocusWithin.tsx'
 
 // render:
 // - TextField if no value exists
@@ -14,20 +15,24 @@ import { FocusWithin } from '../FocusWithin.tsx'
 export const MarkdownField = (props) => {
   const { label, value } = props
 
+  let [events, setEvents] = React.useState<string[]>([])
+  let [isFocusWithin, setFocusWithin] = React.useState(false)
+  let { focusWithinProps } = useFocusWithin({
+    onFocusWithin: (e) => setEvents((events) => [...events, 'focus within']),
+    onBlurWithin: (e) => setEvents((events) => [...events, 'blur within']),
+    onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),
+  })
+
   return (
-    <FocusWithin>
-      {({ isFocused, focusProps }) => (
-        <div {...focusProps}>
-          {isFocused ?
-            <Editor {...props} />
-          : value ?
-            <Presenter
-              value={value}
-              label={label}
-            />
-          : <TextField {...props} />}
-        </div>
-      )}
-    </FocusWithin>
+    <div {...focusWithinProps}>
+      {isFocusWithin ?
+        <Editor {...props} />
+      : value ?
+        <Presenter
+          value={value}
+          label={label}
+        />
+      : <TextField {...props} />}
+    </div>
   )
 }
