@@ -1,15 +1,14 @@
 import { useContext, useState, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
-import { queryLists } from './queryLists.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -26,19 +25,12 @@ import type {
 import styles from './index.module.css'
 
 interface ErfkritQueryResult {
-  data?: {
-    erfkritById?: Erfkrit
-  }
-}
-
-interface ListsQueryResult {
-  data?: {
-    allApErfkritWertes?: {
-      nodes: Array<{
-        value: ApErfkritWerteCode
-        label: string | null
-      }>
-    }
+  erfkritById?: Erfkrit
+  allApErfkritWertes?: {
+    nodes: Array<{
+      value: ApErfkritWerteCode
+      label: string | null
+    }>
   }
 }
 
@@ -58,17 +50,19 @@ export const Component = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, loading, error } = useQuery<ErfkritQueryResult>(query, {
-    variables: {
-      id,
+  const { data } = useQuery({
+    queryKey: ['erfkrit', id],
+    queryFn: async () => {
+      const result = await apolloClient.query<ErfkritQueryResult>({
+        query,
+        variables: { id },
+        fetchPolicy: 'no-cache',
+      })
+      if (result.error) throw result.error
+      return result.data
     },
+    suspense: true,
   })
-
-  const {
-    data: dataLists,
-    loading: loadingLists,
-    error: errorLists,
-  } = useQuery<ListsQueryResult>(queryLists)
 
   const row = data?.erfkritById ?? {}
 
@@ -117,18 +111,14 @@ export const Component = observer(() => {
       const { [field]: _, ...rest } = prev
       return rest
     })
+    // Invalidate queries to refetch data
+    tsQueryClient.invalidateQueries({
+      queryKey: ['erfkrit', id],
+    })
     tsQueryClient.invalidateQueries({
       queryKey: [`treeErfkrit`],
     })
   }
-
-  if (loading) return <Spinner />
-
-  const errors = [
-    ...(error ? [error] : []),
-    ...(errorLists ? [errorLists] : []),
-  ]
-  if (errors.length) return <Error errors={errors} />
 
   return (
     <ErrorBoundary>
@@ -141,8 +131,7 @@ export const Component = observer(() => {
           <RadioButtonGroup
             name="erfolg"
             label="Beurteilung"
-            dataSource={dataLists?.allApErfkritWertes?.nodes ?? []}
-            loading={loadingLists}
+            dataSource={data?.allApErfkritWertes?.nodes ?? []}
             value={row.erfolg}
             saveToDb={saveToDb}
             error={fieldErrors.erfolg}

@@ -7,6 +7,12 @@ export const query = gql`
     erfkritById(id: $id) {
       ...ErfkritFields
     }
+    allApErfkritWertes(orderBy: SORT_ASC) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
   }
   ${erfkrit}
 `
