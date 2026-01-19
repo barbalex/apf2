@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -72,7 +72,7 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
       label: `${d.name ?? '(kein Name)'} (${d.role.replace('apflora_', '')})`,
     }))
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const name = event.target.value
     try {
       await apolloClient.mutate<any>({

@@ -1,4 +1,4 @@
-import { useContext, useState, Suspense } from 'react'
+import { useContext, useState, Suspense, type ChangeEvent } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { observer } from 'mobx-react-lite'
@@ -60,7 +60,7 @@ export const Component = observer(() => {
 
   const row: Adresse = data?.adresseById ?? {}
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 

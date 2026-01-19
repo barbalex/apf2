@@ -1,4 +1,4 @@
-import { useContext, useState, Suspense } from 'react'
+import { useContext, useState, Suspense, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -96,7 +96,7 @@ export const Component = observer(() => {
   // because apart did not exist...
   // maybe do later
 
-  const saveToDb = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -158,34 +158,34 @@ export const Component = observer(() => {
           MenuBarComponent={Menu}
         />
         <div className={fieldsContainer}>
-            <div>
-              In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
-              Gründe um mehrere zu erfassen:
-              <ul>
-                <li>Die Art hat Synonyme</li>
-                <li>
-                  Die Art umfasst eng verwandte Arten, die nicht synonym sind
-                  (z.B. Unterarten)
-                </li>
-                <li>
-                  Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
-                  SISF (2005) und DB-TAXREF (2017)
-                </li>
-              </ul>
-            </div>
-            <div>
-              {
-                'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
-              }
-              <br />
-              <br />
-            </div>
-            <div>
-              Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
-              werden auch die Kontrollen an InfoFlora geliefert.
-              <br />
-              <br />
-            </div>
+          <div>
+            In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
+            Gründe um mehrere zu erfassen:
+            <ul>
+              <li>Die Art hat Synonyme</li>
+              <li>
+                Die Art umfasst eng verwandte Arten, die nicht synonym sind
+                (z.B. Unterarten)
+              </li>
+              <li>
+                Beobachtungen liegen in unterschiedlichen Taxonomien vor, z.B.
+                SISF (2005) und DB-TAXREF (2017)
+              </li>
+            </ul>
+          </div>
+          <div>
+            {
+              'Beobachtungen aller Taxa stehen im Ordner "Beobachtungen nicht beurteilt" zur Verfügung und können Teilpopulationen zugeordnet werden.'
+            }
+            <br />
+            <br />
+          </div>
+          <div>
+            Das namensgebende Taxon gibt nicht nur den Namen. Unter ihrer id
+            werden auch die Kontrollen an InfoFlora geliefert.
+            <br />
+            <br />
+          </div>
           <Suspense fallback={<Spinner />}>
             <div className={formContainer}>
               <SelectLoadingOptions
