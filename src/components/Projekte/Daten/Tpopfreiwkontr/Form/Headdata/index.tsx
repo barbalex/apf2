@@ -1,8 +1,8 @@
 import { useState, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
-import { useApolloClient, useQuery } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { MobxContext } from '../../../../../../mobxContext.ts'
@@ -14,7 +14,6 @@ import {
   tpopfreiwkontr as tpopfreiwkontrFragment,
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
 } from '../../../../../shared/fragments.ts'
-import { Error } from '../../../../../shared/Error.tsx'
 
 import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
 
@@ -44,8 +43,19 @@ export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
 
   const [errors, setErrors] = useState<string | null>(null)
 
-  const { data, loading, error } =
-    useQuery<TpopfreiwkontrAdressesQueryResult>(query)
+  const { data } = useQuery<TpopfreiwkontrAdressesQueryResult>({
+    queryKey: ['tpopfreiwkontrAdresses'],
+    queryFn: async () => {
+      const result =
+        await apolloClient.query<TpopfreiwkontrAdressesQueryResult>({
+          query,
+          fetchPolicy: 'no-cache',
+        })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
+  })
 
   const saveToDb = async (event) => {
     const { value } = event.target
@@ -129,7 +139,6 @@ export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
   const status =
     [200, 201, 202].includes(statusValue) ? 'angesiedelt' : 'natürlich'
 
-  if (error) return <Error error={error} />
   return (
     <div className={styles.container}>
       <div className={styles.popLabel}>Population</div>
@@ -152,7 +161,6 @@ export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
           value={row.bearbeiter}
           field="bearbeiter"
           options={data?.allAdresses?.nodes ?? []}
-          loading={loading}
           saveToDb={saveToDb}
           error={
             row.bearbeiter && !userCount && !isPrint ?
