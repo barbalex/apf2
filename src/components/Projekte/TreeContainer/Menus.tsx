@@ -466,29 +466,22 @@ export const Menus = observer(() => {
       async showCoordOfTpopOnMapsZhCh() {
         showCoordOfTpopOnMapsZhCh({
           id,
-          enqueNotification,
-          apolloClient,
+
         })
       },
       async showCoordOfTpopOnMapGeoAdminCh() {
         showCoordOfTpopOnMapGeoAdminCh({
           id,
-          enqueNotification,
-          apolloClient,
         })
       },
       async showCoordOfBeobOnMapsZhCh() {
         showCoordOfBeobOnMapsZhCh({
           id,
-          enqueNotification,
-          apolloClient,
         })
       },
       async showCoordOfBeobOnMapGeoAdminCh() {
         showCoordOfBeobOnMapGeoAdminCh({
           id,
-          enqueNotification,
-          apolloClient,
         })
       },
     }

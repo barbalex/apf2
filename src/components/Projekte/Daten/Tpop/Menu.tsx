@@ -313,15 +313,11 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickShowCoordOfTpopOnMapGeoAdminCh = () =>
     showCoordOfTpopOnMapGeoAdminCh({
       id: tpopId,
-      apolloClient,
-      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
 
   const onClickShowCoordOfTpopOnMapsZhCh = () =>
     showCoordOfTpopOnMapsZhCh({
       id: tpopId,
-      apolloClient,
-      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
 
   // to paste copied feldkontr/freiwkontr/massn

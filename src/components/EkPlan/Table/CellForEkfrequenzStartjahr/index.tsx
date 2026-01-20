@@ -45,7 +45,6 @@ export const CellForEkfrequenzStartjahr = observer(
         value,
         ekfrequenz,
         row,
-        enqueNotification,
         store,
       })
       setProcessing(false)

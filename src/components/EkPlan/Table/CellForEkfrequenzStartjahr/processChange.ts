@@ -2,18 +2,14 @@ import { gql } from '@apollo/client'
 
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.tsx'
-import {store as jotaiStore,
+import {
+  store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 
-export const processChange = async ({
-  value,
-  ekfrequenz,
-  row,
-  enqueNotification,
-  store,
-}) => {
+export const processChange = async ({ value, ekfrequenz, row, store }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   try {
@@ -48,7 +44,7 @@ export const processChange = async ({
       },
     })
   } catch (error) {
-    enqueNotification({
+    jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

@@ -128,16 +128,7 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
     return () => {
       isActive = false
     }
-  }, [
-    apolloClient,
-    data,
-    enqueNotification,
-    isLoading,
-    refetch,
-    row.id,
-    user.name,
-    zaehls.length,
-  ])
+  }, [apolloClient, data, isLoading, refetch, row.id, user.name, zaehls.length])
 
   if (isLoading) return <Spinner />
 

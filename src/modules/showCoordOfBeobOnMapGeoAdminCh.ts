@@ -4,16 +4,8 @@ import {
   store as jotaiStore,
   enqueNotificationAtom,
 } from '../JotaiStore/index.ts'
-export const showCoordOfBeobOnMapGeoAdminCh = async ({
-  id,
-  enqueNotification,
-  apolloClient,
-}) => {
-  const beob = await getAndValidateCoordinatesOfBeob({
-    id,
-    enqueNotification,
-    apolloClient,
-  })
+export const showCoordOfBeobOnMapGeoAdminCh = async ({ id }) => {
+  const beob = await getAndValidateCoordinatesOfBeob({ id })
   const lv95X = beob?.lv95X
   const lv95Y = beob?.lv95Y
   if (lv95X && lv95Y) {

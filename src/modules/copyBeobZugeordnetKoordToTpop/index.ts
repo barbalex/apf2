@@ -4,12 +4,11 @@ import { updateTpopById } from './updateTpopById.ts'
 import {
   store as jotaiStore,
   enqueNotificationAtom,
+  apolloClientAtom,
 } from '../../JotaiStore/index.ts'
-export const copyBeobZugeordnetKoordToTpop = async ({
-  id,
-  store,
-  apolloClient,
-}) => {
+
+export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   // fetch beob coodinates
   let beobResult
   try {

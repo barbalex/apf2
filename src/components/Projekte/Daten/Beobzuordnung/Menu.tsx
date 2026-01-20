@@ -50,8 +50,6 @@ export const Menu = observer(() => {
     setCopyingBeobZugeordnetKoordToTpop(true)
     await copyBeobZugeordnetKoordToTpop({
       id: beobId,
-      apolloClient,
-      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
     setCopyingBeobZugeordnetKoordToTpop(false)
   }
@@ -59,16 +57,12 @@ export const Menu = observer(() => {
   const onClickShowCoordOfBeobOnMapGeoAdminCh = () => {
     showCoordOfBeobOnMapGeoAdminCh({
       id: beobId,
-      apolloClient,
-      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
   }
 
   const onClickShowCoordOfBeobOnMapsZhCh = () => {
     showCoordOfBeobOnMapsZhCh({
       id: beobId,
-      apolloClient,
-      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
   }
 
