@@ -4,6 +4,11 @@ import { isEqual } from 'date-fns/isEqual'
 import { gql } from '@apollo/client'
 
 import {
+  store as jotaiStore,
+  apolloClientAtom,
+  tsQueryClientAtom,
+} from '../JotaiStore/index.ts'
+import {
   beob as beobFragment,
   tpop,
   aeTaxonomies,
@@ -83,10 +88,11 @@ export const createNewTpopFromBeob = async ({
   beobId,
   projId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',
-  apolloClient,
   store,
   search,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const { enqueNotification } = store
   const tree = store.tree
   const { addOpenNodes } = tree
@@ -235,28 +241,28 @@ export const createNewTpopFromBeob = async ({
   addOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`BeobZugeordnetForMapQuery`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`BeobNichtBeurteiltForMapQuery`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`BeobAssignLinesQuery`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
   store.tree.setLastTouchedNode(newActiveNodeArray)
