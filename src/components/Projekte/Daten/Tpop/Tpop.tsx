@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'

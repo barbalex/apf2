@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -14,8 +13,7 @@ import {
   userNameAtom,
 } from '../../../../JotaiStore/index.ts'
 
-
-export const Checkbox = observer(({ row, value, field }) => {
+export const Checkbox = ({ row, value, field }) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
@@ -92,4 +90,4 @@ export const Checkbox = observer(({ row, value, field }) => {
       </div>
     </div>
   )
-})
+}
