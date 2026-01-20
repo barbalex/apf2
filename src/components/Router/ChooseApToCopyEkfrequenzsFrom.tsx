@@ -24,7 +24,7 @@ import type {
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
-import { addNotificationAtom, userAtom } from '../../JotaiStore/index.ts'
+import { addNotificationAtom, userNameAtom } from '../../JotaiStore/index.ts'
 
 interface ExistingEkfrequenzNode {
   id: EkfrequenzId
@@ -75,7 +75,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const store = useContext(MobxContext)
-  const user = useAtomValue(userAtom)
+  const userName = useAtomValue(userNameAtom)
   const {
     openChooseApToCopyEkfrequenzsFrom,
     setOpenChooseApToCopyEkfrequenzsFrom,
@@ -249,7 +249,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
               kontrolljahre: ekf.kontrolljahre ?? null,
               kontrolljahreAb: ekf.kontrolljahreAb ?? null,
               sort: ekf.sort ?? null,
-              changedBy: user.name,
+              changedBy: userName,
             },
           }),
         ),
