@@ -13,6 +13,7 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
+import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
@@ -20,6 +21,7 @@ import { IdbContext } from '../idbContext.ts'
 import { MobxContext } from '../mobxContext.ts'
 import { getUserFromIdb } from '../modules/getUserFromIdb.ts'
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
+import { userAtom } from '../JotaiStore/index.ts'
 
 import styles from './User.module.css'
 
@@ -38,7 +40,7 @@ export const User = observer(() => {
   const apolloClient = useApolloClient()
   const { idb } = useContext(IdbContext)
   const store = useContext(MobxContext)
-  const { user } = store
+  const [user, setUser] = useAtom(userAtom)
 
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -155,23 +157,23 @@ export const User = observer(() => {
 
   useEffect(() => {
     let isActive = true
-    getUserFromIdb({ idb }).then((user) => {
+    getUserFromIdb({ idb }).then((userFromIdb) => {
       if (!isActive) return
 
       dispatchTokenState({
         type: 'set',
-        payload: user.token,
+        payload: userFromIdb.token,
       })
-      if (store.user.token !== user.token) {
-        //console.log('User: setting store.user from idb.user')
-        store.setUser({ name: user.name, token: user.token, id: user.id })
+      if (user.token !== userFromIdb.token) {
+        //console.log('User: setting user from idb.user')
+        setUser({ name: userFromIdb.name, token: userFromIdb.token, id: userFromIdb.id })
       }
     })
 
     return () => {
       isActive = false
     }
-  }, [idb, store, store.user.token])
+  }, [idb, user.token, setUser])
 
   const { token, fetchingToken } = tokenState
 
