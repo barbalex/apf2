@@ -6,7 +6,8 @@ import { gql } from '@apollo/client'
 import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  addNotificationAtom} from '../JotaiStore/index.ts'
+  addNotificationAtom,
+  navigateAtom} from '../JotaiStore/index.ts'
 import {
   beob as beobFragment,
   tpop,
@@ -96,6 +97,7 @@ export const createNewTpopFromBeob = async ({
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const navigate = jotaiStore.get(navigateAtom)
   const tree = store.tree
   const { addOpenNodes } = tree
   let beobResult
@@ -241,7 +243,7 @@ export const createNewTpopFromBeob = async ({
     .filter((n) => !isEqual(n, tree.activeNodeArray))
 
   addOpenNodes(newOpenNodes)
-  store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
