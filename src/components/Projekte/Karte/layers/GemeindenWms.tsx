@@ -8,7 +8,6 @@ import { useMapEvent } from 'react-leaflet'
 import axios from 'redaxios'
 import * as ReactDOMServer from 'react-dom/server'
 import { useDebouncedCallback } from 'use-debounce'
-import { observer } from 'mobx-react-lite'
 
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.ts'
 import { Popup } from './Popup.tsx'
