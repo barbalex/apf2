@@ -9,7 +9,8 @@ const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
 export const historizeForAp = async ({ store, year, apId }) => {
-  const { apolloClient } = store  try {
+  const { apolloClient } = store
+  try {
     await apolloClient.mutate({
       mutation: gql`
         mutation historizeForAp($year: Int!, $apId: UUID!) {
