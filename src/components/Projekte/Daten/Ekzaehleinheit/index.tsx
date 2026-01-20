@@ -1,9 +1,9 @@
-import { useContext, useState, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, type ChangeEvent } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
@@ -11,7 +11,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryLists } from './queryLists.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
@@ -66,10 +66,10 @@ const fieldTypes = {
   sort: 'Int',
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { zaehleinheitId: id } = useParams()
 
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
 
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
@@ -124,7 +124,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({
@@ -244,4 +244,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
