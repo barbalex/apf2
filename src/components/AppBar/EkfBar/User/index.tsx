@@ -1,5 +1,4 @@
 import { useState, useContext, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'
@@ -14,6 +13,7 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -21,7 +21,7 @@ import { Error } from '../../../shared/Error.tsx'
 import { updateUserById as updateUserByIdGql } from './updateUserById.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { logout } from '../../../../modules/logout.ts'
 import { IdbContext } from '../../../../idbContext.ts'
 
@@ -47,10 +47,8 @@ interface UserProps {
   toggleUserOpen: () => void
 }
 
-export const User = observer(
-  ({ username, userOpen, toggleUserOpen }: UserProps) => {
-    const store = useContext(MobxContext)
-    const { idb } = useContext(IdbContext)
+export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
+  const { idb } = useContext(IdbContext)
 
     const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
@@ -67,6 +65,7 @@ export const User = observer(
     const row: Row = data?.data?.userByName ?? {}
 
     const [fieldErrors, setFieldErrors] = useState({})
+    const userName = useAtomValue(userNameAtom)
 
     const [editPassword, setEditPassword] = useState(false)
     const [password, setPassword] = useState('')
@@ -84,7 +83,7 @@ export const User = observer(
       const variables = {
         id: row.id,
         [field]: value,
-        changedBy: store.user.name,
+        changedBy: userName,
       }
       try {
         await apolloClient.mutate({
@@ -314,5 +313,4 @@ export const User = observer(
         </Dialog>
       </Suspense>
     )
-  },
-)
+}

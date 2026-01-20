@@ -1,6 +1,5 @@
-import { useState, useContext } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { FaTimes, FaDownload } from 'react-icons/fa'
@@ -24,14 +23,11 @@ import {
 } from '../../fragments.ts'
 import { isImageFile } from '../isImageFile.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './File.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
@@ -49,9 +45,8 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-export const File = observer(({ file, parent, refetch }) => {
+export const File = ({ file, parent, refetch }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
 
@@ -97,6 +92,8 @@ export const File = observer(({ file, parent, refetch }) => {
   const onClickDownload = () =>
     window.open(`https://ucarecdn.com/${file.fileId}/-/inline/no/`)
 
+  const userName = useAtomValue(userNameAtom)
+
   const saveToDb = async (event) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
@@ -104,7 +101,7 @@ export const File = observer(({ file, parent, refetch }) => {
     const variables = {
       id: file.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       const mutationName = `update${upperFirst(parent)}FileById`
@@ -238,4 +235,4 @@ export const File = observer(({ file, parent, refetch }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}
