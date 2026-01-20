@@ -5,14 +5,18 @@
  * 4. refresh tree
  */
 import { query } from './query.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+} from '../../../../../JotaiStore/index.ts'
 
 export const zieljahrFolder = async ({
   parentId: apId,
   projId = '99999999-9999-9999-9999-999999999999',
-  apolloClient,
   store,
   jahr: jahrString,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   const tree = store.tree
   const jahr = +jahrString
   const { addOpenNodes } = tree
