@@ -289,3 +289,18 @@ export const removeNotificationAtom = atom(null, (get, set, key) => {
 
 // navigate function atom
 export const navigateAtom = atom(undefined)
+
+// User
+export const userAtom = atomWithStorage('user', {
+  name: '',
+  token: null,
+  id: null,
+})
+
+export const userNameAtom = atom((get) => get(userAtom).name)
+export const userTokenAtom = atom((get) => get(userAtom).token)
+export const userIdAtom = atom((get) => get(userAtom).id)
+
+export const setUserAtom = atom(null, (get, set, newUser) => {
+  set(userAtom, newUser)
+})
