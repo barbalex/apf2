@@ -3,14 +3,12 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { observer } from 'mobx-react-lite'
 
 import styles from './TextField.module.css'
 
-export const TextField = observer(
-  ({
-    value,
-    label,
+export const TextField = ({
+  value,
+  label,
     name,
     type = 'text',
     multiLine = false,
@@ -77,5 +75,4 @@ export const TextField = observer(
         )}
       </FormControl>
     )
-  },
-)
+  }

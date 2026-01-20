@@ -1,5 +1,3 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { uniq } from 'es-toolkit'
 
 import { logout } from '../../modules/logout.ts'
@@ -12,7 +10,7 @@ const LogoutButton = styled(Button)`
   margin-top: 10px !important;
 `*/
 
-export const Error = observer(({ errors: errorsPassed, error }) => {
+export const Error = ({ errors: errorsPassed, error }) => {
   // allow user to pass single error or multiple errors
   let errors = errorsPassed
   if (error && !errorsPassed) errors = [error]
@@ -63,4 +61,4 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
       </ul>
     </div>
   )
-})
+}
