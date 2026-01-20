@@ -3,15 +3,20 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
+import {
+  store as jotaiStore,
+  navigateAtom,
+} from '../../../../JotaiStore/index.js'
 
 export const toggleNodeSymbol = ({
   node,
   store,
   search,
-  navigate,
   doNotSwitchToNodesParent = false,
 }) => {
   if (!node.url) throw new Error('passed node has no url')
+
+  const navigate = jotaiStore.get(navigateAtom)
   const {
     openNodes: openNodesRaw,
     setOpenNodes,

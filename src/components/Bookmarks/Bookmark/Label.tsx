@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useLocation } from 'react-router'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 
@@ -12,7 +12,6 @@ import styles from './Label.module.css'
 export const Label = observer(
   ({ navData, outerContainerRef, labelStyle, ref }) => {
     const { pathname, search } = useLocation()
-    const navigate = useNavigate()
     const store = useContext(MobxContext)
 
     // issue: relative paths are not working!!!???
@@ -41,7 +40,6 @@ export const Label = observer(
         },
         store,
         search,
-        navigate,
       })
     }
 

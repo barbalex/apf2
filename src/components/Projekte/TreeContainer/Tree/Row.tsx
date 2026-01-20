@@ -7,7 +7,7 @@ import {
 } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
-import { useNavigate, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 import { upperFirst } from 'es-toolkit'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
@@ -30,7 +30,6 @@ const transitionStyles = {
 }
 
 export const Row = observer(({ node, transitionState, ref }) => {
-  const navigate = useNavigate()
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
@@ -78,13 +77,11 @@ export const Row = observer(({ node, transitionState, ref }) => {
     toggleNode({
       node,
       store,
-      navigate,
       search,
       onlyShowActivePath,
     })
 
-  const onClickNodeSymbol = () =>
-    toggleNodeSymbol({ node, store, search, navigate })
+  const onClickNodeSymbol = () => toggleNodeSymbol({ node, store, search })
 
   const onMouseEnterNode = () => {
     // Prefetch data when hovering over node
