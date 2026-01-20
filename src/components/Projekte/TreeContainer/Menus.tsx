@@ -340,7 +340,6 @@ export const Menus = observer(() => {
           menuType,
           singleElementName,
           id,
-          apolloClient,
           store,
           search,
           jahr,

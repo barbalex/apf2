@@ -5,6 +5,11 @@ import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../modules/tables.ts'
 import {
+  store as jotaiStore,
+  apolloClientAtom,
+  tsQueryClientAtom,
+} from '../../../JotaiStore/index.ts'
+import {
   adresse as adresseFragment,
   user as userFragment,
   tpopApberrelevantGrundWerte as tpopApberrelevantGrundWerteFragment,
@@ -24,11 +29,12 @@ export const insertDataset = async ({
   menuType,
   singleElementUrlName: singleElementName,
   url,
-  apolloClient,
   store,
   search,
   jahr: jahrPassed,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const { enqueNotification } = store
   const { openNodes: openNodesRaw, setOpenNodes } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
@@ -226,7 +232,7 @@ export const insertDataset = async ({
   // console.log('insertDataset', { table, parentTable })
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
-    store.tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+    tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
   const queryKeyTable =
     parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
@@ -238,7 +244,7 @@ export const insertDataset = async ({
     : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
     : table === 'tpopkontrzaehl_einheit_werte' ? 'treePopkontrzaehlEinheitWerte'
     : `tree${upperFirst(table)}`
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
   // console.log('insertDataset', {
@@ -270,27 +276,27 @@ export const insertDataset = async ({
   //   queryKeyTable,
   //   queryKeyFolder,
   // })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolder],
   })
   if (table === 'ziel') {
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
   }
   if (parentTable === 'tpopfeldkontr') {
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
   }
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }
