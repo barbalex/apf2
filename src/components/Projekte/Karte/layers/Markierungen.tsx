@@ -1,12 +1,8 @@
-import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-
-import { MobxContext } from '../../../../mobxContext.ts'
 
 interface MarkierungNode {
   id: number
@@ -42,7 +38,7 @@ const pTLOptions = {
 const pointToLayer = (feature, latlng) =>
   window.L.circleMarker(latlng, pTLOptions)
 
-export const Markierungen = observer(() => {
+export const Markierungen = () => {
   const apolloClient = useApolloClient()
 
   const { data } = useQuery({
@@ -91,4 +87,4 @@ export const Markierungen = observer(() => {
       interactive={false}
     />
   )
-})
+}

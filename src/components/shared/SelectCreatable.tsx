@@ -1,25 +1,23 @@
 // seems not in use
 import { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
-import { observer } from 'mobx-react-lite'
 
 import { exists } from '../../modules/exists.ts'
 import styles from './Select.module.css'
 
-export const SelectCreatable = observer(
-  ({
-    value,
-    field = '',
-    label,
-    name,
-    error,
-    options: optionsIn,
-    loading,
-    maxHeight = null,
-    noCaret = false,
-    saveToDb,
-  }) => {
-    const [stateValue, setStateValue] = useState(null)
+export const SelectCreatable = ({
+  value,
+  field = '',
+  label,
+  name,
+  error,
+  options: optionsIn,
+  loading,
+  maxHeight = null,
+  noCaret = false,
+  saveToDb,
+}) => {
+  const [stateValue, setStateValue] = useState(null)
 
     const onChange = (option) => {
       const fakeEvent = {
@@ -98,5 +96,4 @@ export const SelectCreatable = observer(
         {error && <div className={styles.errorClass}>{error}</div>}
       </div>
     )
-  },
-)
+}
