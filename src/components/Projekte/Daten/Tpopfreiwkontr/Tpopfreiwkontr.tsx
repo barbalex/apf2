@@ -1,5 +1,5 @@
 import { useEffect, useContext } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -51,8 +51,8 @@ import styles from './Tpopfreiwkontr.module.css'
 
 import {
   addNotificationAtom,
+  userNameAtom,
 } from '../../../../JotaiStore/index.ts'
-
 
 export const Component = observer(({ id: idPassed }: ComponentProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
@@ -60,7 +60,8 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
   const { pathname } = useLocation()
 
   const store = useContext(MobxContext)
-  const { isPrint, user } = store
+  const { isPrint } = store
+  const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
 
   const id = idPassed ?? params.tpopkontrId
@@ -131,7 +132,7 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
     return () => {
       isActive = false
     }
-  }, [apolloClient, data, isLoading, refetch, row.id, user.name, zaehls.length])
+  }, [apolloClient, data, isLoading, refetch, row.id, userName, zaehls.length])
 
   if (isLoading) return <Spinner />
 

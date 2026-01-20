@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -21,10 +20,7 @@ import type { ErfkritId, ApId } from '../../models/apflora/public/Erfkrit.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../JotaiStore/index.ts'
-
+import { addNotificationAtom, userNameAtom } from '../../JotaiStore/index.ts'
 
 interface ExistingErfkritNode {
   id: ErfkritId
@@ -64,13 +60,15 @@ interface ApOptionsQueryResult {
   }
 }
 
-export const ChooseApToCopyErfkritsFrom = observer(() => {
+export const ChooseApToCopyErfkritsFrom = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const store = useContext(MobxContext)
-  const { user, openChooseApToCopyErfkritsFrom, setOpenChooseApToCopyErfkritsFrom } = store
+  const { openChooseApToCopyErfkritsFrom, setOpenChooseApToCopyErfkritsFrom } =
+    store
+  const userName = useAtomValue(userNameAtom)
   const onCloseChooseApDialog = () => setOpenChooseApToCopyErfkritsFrom(false)
 
   const onChooseAp = async (option) => {
@@ -312,4 +310,4 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
       </Dialog>
     </ErrorBoundary>
   )
-})
+}

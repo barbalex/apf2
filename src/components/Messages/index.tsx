@@ -1,15 +1,15 @@
-import { useContext, Suspense } from 'react'
+import { Suspense } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
 import { createUsermessage } from './createUsermessage.ts'
-import { MobxContext } from '../../mobxContext.ts'
+import { userNameAtom } from '../../JotaiStore/index.ts'
 import { Error } from '../shared/Error.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { MessagesList } from './Messages/index.tsx'
@@ -60,10 +60,8 @@ const getAYearAgo = () => {
 
 const aYearAgo = getAYearAgo()
 
-export const Messages = observer(() => {
-  const store = useContext(MobxContext)
-  const { user } = store
-  const userName = user.name
+export const Messages = () => {
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -125,4 +123,4 @@ export const Messages = observer(() => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}

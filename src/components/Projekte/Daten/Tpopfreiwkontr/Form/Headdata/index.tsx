@@ -3,9 +3,11 @@ import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { MobxContext } from '../../../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 import {
   adresse as adresseFragment,
@@ -36,7 +38,8 @@ import styles from './index.module.css'
 
 export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
   const store = useContext(MobxContext)
-  const { user, isPrint } = store
+  const { isPrint } = store
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
