@@ -41,12 +41,10 @@ export const CellForEkfrequenz = observer(
       const value = e.target.value || null
       setProcessing(true)
       await processChangeWorker.processChange({
-        apolloClient,
         value,
         row,
         enqueNotification,
         store,
-        tsQueryClient,
       })
       setProcessing(false)
     }

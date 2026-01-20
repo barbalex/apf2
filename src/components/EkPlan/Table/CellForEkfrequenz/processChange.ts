@@ -3,15 +3,20 @@ import { gql } from '@apollo/client'
 import { tpop } from '../../../shared/fragments.ts'
 import { setStartjahr } from '../setStartjahr/index.tsx'
 import { setEkplans } from '../setEkplans/index.tsx'
+import {
+  store as jotaiStore,
+  tsQueryClientAtom,
+  apolloClientAtom,
+} from '../../../../JotaiStore/index.ts'
 
 export const processChange = async ({
-  apolloClient,
   value,
   row,
   enqueNotification,
   store,
-  tsQueryClient,
 }) => {
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   try {
     await apolloClient.mutate({
       mutation: gql`
