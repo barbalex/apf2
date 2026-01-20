@@ -1,15 +1,15 @@
-import { useState, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
@@ -55,10 +55,10 @@ interface BiotopQueryResult {
   } | null
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { tpopkontrId } = useParams()
 
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -87,7 +87,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     if (field === 'jahr') {
       variables.datum = null
@@ -255,4 +255,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

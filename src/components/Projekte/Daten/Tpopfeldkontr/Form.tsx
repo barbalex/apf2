@@ -1,8 +1,8 @@
-import { useState, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -14,7 +14,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -125,14 +125,13 @@ const tpopkontrTypWerte = [
   },
 ]
 
-export const TpopfeldkontrForm = observer(
-  ({ row, data }: TpopfeldkontrFormProps) => {
-    const store = useContext(MobxContext)
+export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
+  const userName = useAtomValue(userNameAtom)
 
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
+  const apolloClient = useApolloClient()
+  const tsQueryClient = useQueryClient()
 
-    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const saveToDb = async (event) => {
     const field = event.target.name
@@ -141,7 +140,7 @@ export const TpopfeldkontrForm = observer(
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     if (field === 'jahr') {
       variables.datum = null
@@ -345,5 +344,4 @@ export const TpopfeldkontrForm = observer(
       </div>
     </ErrorBoundary>
   )
-},
-)
+}
