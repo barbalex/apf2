@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
 
@@ -65,6 +65,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId } = useParams()
@@ -103,7 +104,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -146,7 +147,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopId },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -207,6 +208,8 @@ export const Menu = observer(({ row }: MenuProps) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
   const showMapIfNotYetVisible = (projekteTabs) => {
     const isVisible = projekteTabs.includes('karte')
+
+
     if (!isVisible) {
       setProjekteTabs([...projekteTabs, 'karte'])
     }

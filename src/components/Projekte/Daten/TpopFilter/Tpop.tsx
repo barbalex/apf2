@@ -1,4 +1,5 @@
 import { useContext, Dispatch, SetStateAction, type ChangeEvent } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -20,9 +21,10 @@ import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora
 import styles from './Tpop.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes: {
     nodes: Array<{
@@ -48,6 +50,7 @@ interface TpopProps {
 
 export const Tpop = observer(
   ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }: TpopProps) => {
+    const addNotification = useSetAtom(addNotificationAtom)
     const store = useContext(MobxContext)
     const apolloClient = useApolloClient()
 
@@ -192,7 +195,7 @@ export const Tpop = observer(
                       `,
               })
             } catch (error) {
-              return jotaiStore.set(addNotificationAtom, {
+              return addNotification({
                 message: (error as Error).message,
                 options: {
                   variant: 'error',

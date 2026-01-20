@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useApolloClient } from '@apollo/client/react'
@@ -15,9 +16,10 @@ import type { PopId, ApId } from '../../../../../models/apflora/public/Pop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../../JotaiStore/index.ts'
+
+
 interface PopNode {
   id: PopId
   nr: number | null
@@ -97,7 +99,7 @@ const ObservedPop = observer(() => {
   }, [map])
 
   if (error) {
-    jotaiStore.set(addNotificationAtom, {
+    addNotification({
       message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
@@ -122,6 +124,7 @@ const ObservedPop = observer(() => {
 })
 
 export const Pop = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const tree = store.tree
   const { popGqlFilter } = tree

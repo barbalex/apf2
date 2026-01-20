@@ -14,6 +14,9 @@ import {
   addNotificationAtom,
 } from '../../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const moveTo = async ({
   id: newParentId,
   store,
@@ -32,7 +35,7 @@ export const moveTo = async ({
   const dbTable = tabelle?.dbTable ?? table
   const idField = tabelle?.idField
   if (!idField) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: 'change was not saved: Reason: idField was not found',
       options: {
         variant: 'error',
@@ -41,7 +44,7 @@ export const moveTo = async ({
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: 'change was not saved: Reason: parentIdField was not found',
       options: {
         variant: 'error',

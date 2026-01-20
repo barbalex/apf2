@@ -35,6 +35,10 @@ import {
   store as jotaiStore,
   addNotificationAtom,
 } from '../../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const Tree = types
   .model('Tree', {
     // used to open tree2 on a specific activeNodeArray
@@ -315,7 +319,7 @@ export const Tree = types
           self.setApFilter(false)
           // need timeout or notification will not appear
           setTimeout(() =>
-            jotaiStore.set(addNotificationAtom, {
+            addNotification({
               message:
                 'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
               options: {
@@ -414,7 +418,7 @@ export const Tree = types
           self.setApFilter(false)
           // need timeout or notification will not appear
           setTimeout(() =>
-            jotaiStore.set(addNotificationAtom, {
+            addNotification({
               message:
                 'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
               options: {

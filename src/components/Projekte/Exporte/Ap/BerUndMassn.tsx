@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -12,9 +13,10 @@ import { ApId, AdresseId } from '../../../../models/apflora/index.tsx'
 import styles from '../index.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface ApApberUndMassnsQueryResult {
   allAps: {
     nodes: Array<{
@@ -54,6 +56,7 @@ interface ApApberUndMassnsQueryResult {
 }
 
 export const BerUndMassn = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
@@ -105,7 +108,7 @@ export const BerUndMassn = observer(() => {
         `,
       })
     } catch (error) {
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -133,7 +136,7 @@ export const BerUndMassn = observer(() => {
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

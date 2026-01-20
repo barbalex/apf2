@@ -13,12 +13,13 @@ import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { useAtom } from 'jotai'
-import {
-  newTpopFromBeobDialogOpenAtom,
+import { useSetAtom,  useAtom } from 'jotai'
+import {newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
   addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
+
+
 
 const CmApFolder = lazy(async () => ({
   default: (await import('./contextmenu/ApFolder.tsx')).Apfolder,
@@ -230,6 +231,7 @@ import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpop
 import styles from './Menus.module.css'
 
 export const Menus = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
   const { projId, apId, popId } = params
   const { search } = useLocation()
@@ -271,7 +273,7 @@ export const Menus = observer(() => {
   const handleClick = (e, data, element) => {
     // console.log('TreeContainer, handleClick', { e, data, element })
     if (!data) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: 'no data passed with click',
         options: {
           variant: 'error',
@@ -279,7 +281,7 @@ export const Menus = observer(() => {
       })
     }
     if (!element) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: 'no element passed with click',
         options: {
           variant: 'error',
@@ -289,7 +291,7 @@ export const Menus = observer(() => {
     const { table, action, actionTable } = data
     const { firstElementChild } = element
     if (!firstElementChild) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: 'no firstElementChild passed with click',
         options: {
           variant: 'error',
@@ -488,7 +490,7 @@ export const Menus = observer(() => {
     if (Object.keys(actions).includes(action)) {
       actions[action]()
     } else {
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: `action "${action}" unknown, therefore not executed`,
         options: {
           variant: 'error',

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -32,12 +33,14 @@ import type { TpopkontrzaehlMethodeWerteId } from '../../../../models/apflora/Tp
 import styles from './index.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 export const CellForYearMenu = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -72,7 +75,7 @@ export const CellForYearMenu = observer(() => {
       })
     } catch (error) {
       closeYearCellMenu()
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -86,7 +89,7 @@ export const CellForYearMenu = observer(() => {
         variables: { id },
       })
     } catch (error) {
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -115,7 +118,7 @@ export const CellForYearMenu = observer(() => {
         variables,
       })
     } catch (error) {
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

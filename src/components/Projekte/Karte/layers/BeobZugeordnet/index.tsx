@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
@@ -18,9 +19,10 @@ import type {
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../../JotaiStore/index.ts'
+
+
 interface BeobZugeordnetNode {
   id: BeobId
   wgs84Lat: number
@@ -105,7 +107,7 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
   // }, [leafletMap])
 
   if (error) {
-    jotaiStore.set(addNotificationAtom, {
+    addNotification({
       message: `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
@@ -135,6 +137,7 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
 })
 
 export const BeobZugeordnet = observer(({ clustered }) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const tree = store.tree
   const { beobGqlFilter } = tree

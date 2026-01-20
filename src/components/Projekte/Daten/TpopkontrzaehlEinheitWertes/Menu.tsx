@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -22,9 +23,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface CreateTpopkontrzaehlEinheitWerteResult {
   data: {
     createTpopkontrzaehlEinheitWerte: {
@@ -42,6 +44,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, tpopkontrzaehlEinheitWerteId } = useParams()
@@ -70,7 +73,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

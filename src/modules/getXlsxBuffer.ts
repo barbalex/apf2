@@ -10,6 +10,10 @@ import {
   store as jotaiStore,
   addNotificationAtom,
 } from '../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const getXlsxBuffer = async ({ data, store }) => {
   /**
    * using this worker may make the ui more responsive
@@ -69,7 +73,7 @@ export const getXlsxBuffer = async ({ data, store }) => {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
     console.log(error)
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

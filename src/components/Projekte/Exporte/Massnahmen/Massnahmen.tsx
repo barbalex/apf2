@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -12,9 +13,10 @@ import { ApId, PopId, TpopId, TpopmassnId, AdresseId } from '../../../../models/
 import styles from '../index.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface TpopmassnQueryResult {
   allTpopmassns: {
     nodes: Array<{
@@ -128,6 +130,7 @@ interface MassnahmenProps {
 }
 
 export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const { tableIsFiltered } = store
   const { tpopmassnGqlFilter } = store.tree
@@ -270,7 +273,7 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
             },
           })
         } catch (error) {
-          jotaiStore.set(addNotificationAtom, {
+          addNotification({
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -364,7 +367,7 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return jotaiStore.set(addNotificationAtom, {
+          return addNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

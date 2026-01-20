@@ -11,6 +11,10 @@ import {store as jotaiStore,
   tsQueryClientAtom,
   addNotificationAtom} from '../../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 export const createNewPopFromBeob = async ({
   id,
   apId = '99999999-9999-9999-9999-999999999999',
@@ -30,7 +34,7 @@ export const createNewPopFromBeob = async ({
       variables: { id },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -57,7 +61,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -80,7 +84,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -98,7 +102,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

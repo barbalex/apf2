@@ -7,6 +7,10 @@ import {
   apolloClientAtom,
 } from '../../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   // fetch beob coodinates
@@ -17,7 +21,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
       variables: { id },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -48,7 +52,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
       },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

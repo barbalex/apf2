@@ -1,4 +1,5 @@
 import { useEffect, useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -49,10 +50,12 @@ interface ComponentProps {
 import styles from './Tpopfreiwkontr.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 export const Component = observer(({ id: idPassed }: ComponentProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
   const { pathname } = useLocation()
 
@@ -116,7 +119,7 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
           .catch((error) => {
             if (!isActive) return
 
-            jotaiStore.set(addNotificationAtom, {
+            addNotification({
               message: (error as Error).message,
               options: {
                 variant: 'error',

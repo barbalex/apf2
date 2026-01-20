@@ -14,7 +14,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -51,6 +51,7 @@ interface DeleteApResult {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams<{ projId: string; apId: string }>()
@@ -80,7 +81,7 @@ export const Menu = observer(() => {
         variables: { projId },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -118,7 +119,7 @@ export const Menu = observer(() => {
         variables: { id: apId },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -239,6 +240,8 @@ export const Menu = observer(() => {
       </MenuBar>
       <MuiMenu
         id="apDelMenu"
+
+
         anchorEl={delMenuAnchorEl}
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}

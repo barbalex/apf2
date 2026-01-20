@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -16,9 +17,10 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 import styles from './WollmilchsauSingle.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface ApByArtIdQueryResult {
   apByArtId: {
     id: ApId
@@ -184,6 +186,7 @@ interface TPopErsteUndLetzteKontrolleFilteredQueryResult {
 }
 
 export const WollmilchsauSingle = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
@@ -225,7 +228,7 @@ export const WollmilchsauSingle = observer(() => {
               variables: { aeId },
             })
           } catch (error) {
-            jotaiStore.set(addNotificationAtom, {
+            addNotification({
               message: (error as Error).message,
               options: { variant: 'error' },
             })
@@ -818,7 +821,7 @@ export const WollmilchsauSingle = observer(() => {
           }))
           setEwmMessage('')
           if (rows.length === 0) {
-            return jotaiStore.set(addNotificationAtom, {
+            return addNotification({
               message: 'Die Abfrage retournierte 0 Datensätze',
               options: {
                 variant: 'warning',

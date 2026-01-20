@@ -4,6 +4,10 @@ import {
   store as jotaiStore,
   addNotificationAtom,
 } from '../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const historizeForAp = async ({ store, year, apId }) => {
   const { apolloClient } = store  try {
     await apolloClient.mutate({
@@ -21,7 +25,7 @@ export const historizeForAp = async ({ store, year, apId }) => {
     })
   } catch (error) {
     console.log('Error from mutating historize:', error)
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
       options: {
         variant: 'error',
@@ -29,7 +33,7 @@ export const historizeForAp = async ({ store, year, apId }) => {
     })
   }
   // notify user
-  jotaiStore.set(addNotificationAtom, {
+  addNotification({
     message: `Art, Pop und TPop wurden für das Jahr ${year} historisiert`,
     options: {
       variant: 'success',

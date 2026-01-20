@@ -1,4 +1,5 @@
 import { useRef, useContext, Suspense } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -26,9 +27,10 @@ import './index.css'
 import styles from './index.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
+
+
 interface FileNode {
   id: string
   fileId: string | null
@@ -57,6 +59,7 @@ const fragmentObject = {
 
 export const FilesRouter = observer(
   ({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
+  const addNotification = useSetAtom(addNotificationAtom)
     const store = useContext(MobxContext)
     const { fileId } = useParams()
     const { search } = useLocation()
@@ -140,7 +143,7 @@ export const FilesRouter = observer(
           })
         } catch (error) {
           console.log(error)
-          jotaiStore.set(addNotificationAtom, {
+          addNotification({
             message: error.message,
             options: {
               variant: 'error',
@@ -159,7 +162,7 @@ export const FilesRouter = observer(
 
     const onFileUploadFailed = (error) => {
       console.error('Upload failed:', error)
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: error?.message ?? 'Upload fehlgeschlagen',
         options: {
           variant: 'error',

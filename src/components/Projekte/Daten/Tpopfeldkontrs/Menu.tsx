@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -53,6 +53,7 @@ interface MenuProps {
 }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -91,7 +92,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -172,6 +173,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     })
 
   const isMovingEk = moving.table === 'tpopfeldkontr'
+
+
   const onClickMoveEkfToHere = () =>
     moveTo({
       id: tpopId,

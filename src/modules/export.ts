@@ -7,6 +7,9 @@ import {
   addNotificationAtom,
 } from '../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const exportModule = async ({
   data: dataPassed,
   fileName,
@@ -21,7 +24,7 @@ export const exportModule = async ({
   // 2. depending on typename check if this table is filtered
   // 3. if yes: filter by dataFilterState by converting camelCase to lower_case
   if (data.length === 0) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: 'Es gibt offenbar keine Daten, welche exportiert werden können',
       options: {
         variant: 'warning',

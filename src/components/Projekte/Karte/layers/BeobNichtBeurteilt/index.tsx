@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -14,9 +15,10 @@ import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../../JotaiStore/index.ts'
+
+
 interface BeobNichtBeurteiltNode {
   id: BeobId
   wgs84Lat: number
@@ -89,7 +91,7 @@ const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
   // }, [leafletMap])
 
   if (error) {
-    jotaiStore.set(addNotificationAtom, {
+    addNotification({
       message: `Fehler beim Laden der Nicht beurteilten Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
@@ -119,6 +121,7 @@ const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
 })
 
 export const BeobNichtBeurteilt = observer(({ clustered }) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const tree = store.tree
   const { beobGqlFilter } = tree

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -12,9 +13,10 @@ import { BeobId } from '../../../../models/apflora/index.tsx'
 import styles from '../index.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface BeobArtChangedQueryResult {
   allVBeobArtChangeds: {
     nodes: Array<{
@@ -50,6 +52,7 @@ interface BeobArtChangedQueryResult {
 }
 
 export const BeobArtChanged = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const { mapFilter } = store.tree
 
@@ -147,7 +150,7 @@ export const BeobArtChanged = observer(() => {
           })
     } catch (error) {
       setQueryState(undefined)
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -158,7 +161,7 @@ export const BeobArtChanged = observer(() => {
     const rows = result.data?.allVBeobArtChangeds?.nodes ?? []
     if (rows.length === 0) {
       setQueryState(undefined)
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

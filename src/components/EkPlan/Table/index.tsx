@@ -1,4 +1,5 @@
 import { useContext, useState, Suspense } from 'react'
+import { useSetAtom } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
@@ -21,7 +22,6 @@ import { EkplanTableHeader } from './Header.tsx'
 import type { TpopId } from '../../../models/apflora/Tpop.ts'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
 
@@ -148,6 +148,7 @@ const getTpopFilter = ({
 }
 
 export const EkPlanTable = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const store = useContext(MobxContext)
   const {
@@ -247,7 +248,7 @@ export const EkPlanTable = observer(() => {
         variables: { tpopFilter, apIds: apValues },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: `Fehler beim Abfragen für den Export: ${(error as Error).message}`,
         options: {
           variant: 'error',
@@ -279,6 +280,8 @@ export const EkPlanTable = observer(() => {
       <Suspense fallback={<Spinner />}>
         <Button
           variant="outlined"
+
+
           onClick={onClickExport}
           color="inherit"
           className={styles.exportButton}

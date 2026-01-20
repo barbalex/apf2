@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -40,9 +41,10 @@ import type {
 import styles from './Tpop.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface TpopQueryResult {
   tpopById?: {
     id: TpopId
@@ -160,6 +162,7 @@ export const fieldTypes = {
 }
 
 export const Component = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { tpopId } = useParams()
 
   const store = useContext(MobxContext)
@@ -412,7 +415,7 @@ export const Component = observer(() => {
                       `,
               })
             } catch (error) {
-              return jotaiStore.set(addNotificationAtom, {
+              return addNotification({
                 message: error.message,
                 options: {
                   variant: 'error',

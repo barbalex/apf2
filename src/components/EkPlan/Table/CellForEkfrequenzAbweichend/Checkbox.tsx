@@ -1,4 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -10,10 +11,12 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import styles from './Checkbox.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 export const Checkbox = observer(({ row, value, field }) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -58,7 +61,7 @@ export const Checkbox = observer(({ row, value, field }) => {
       })
     } catch (error) {
       setChecked(!checked)
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: error.message,
         options: {
           variant: 'error',

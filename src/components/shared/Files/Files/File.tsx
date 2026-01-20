@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -28,9 +29,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import styles from './File.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
     maxHeight: 48 * 4.5,
@@ -48,6 +50,7 @@ const fragmentObject = {
 }
 
 export const File = observer(({ file, parent, refetch }) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
@@ -80,7 +83,7 @@ export const File = observer(({ file, parent, refetch }) => {
       })
     } catch (error) {
       console.log(error)
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
         options: {
           variant: 'error',

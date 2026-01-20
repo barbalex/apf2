@@ -14,7 +14,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -48,6 +48,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId } = useParams()
@@ -75,7 +76,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -123,7 +124,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: popId },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -173,6 +174,8 @@ export const Menu = observer(({ row }: MenuProps) => {
   const isMoving =
     moving.id !== '99999999-9999-9999-9999-999999999999' &&
     moving.table === 'pop'
+
+
   const isTpopMoving =
     moving.id !== '99999999-9999-9999-9999-999999999999' &&
     moving.table === 'tpop'

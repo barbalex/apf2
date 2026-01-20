@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -15,9 +16,10 @@ import type { AdresseId } from '../../../../models/apflora/public/AdresseId.ts'
 import styles from '../index.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface TPopQueryResult {
   allTpops: {
     nodes: {
@@ -99,6 +101,7 @@ interface TPopProps {
 }
 
 export const TPop = observer(({ filtered = false }: TPopProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const { tableIsFiltered } = store
   const { tpopGqlFilter } = store.tree
@@ -199,7 +202,7 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
         },
       })
     } catch (error) {
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: (error as Error).message,
         options: { variant: 'error' },
       })
@@ -279,7 +282,7 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
     //console.time('exporting')
     if (rows.length === 0) {
       setQueryState(undefined)
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

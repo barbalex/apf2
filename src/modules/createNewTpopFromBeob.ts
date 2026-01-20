@@ -14,6 +14,10 @@ import {
   popStatusWerte,
 } from '../components/shared/fragments.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 const createTpop = gql`
   mutation createTpopFroCreateNewTpopFromBeob(
     $popId: UUID
@@ -108,7 +112,7 @@ export const createNewTpopFromBeob = async ({
       variables: { beobId },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -136,7 +140,7 @@ export const createNewTpopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -145,7 +149,7 @@ export const createNewTpopFromBeob = async ({
   }
   const tpop = tpopResult?.data?.createTpop?.tpop
   if (!tpop) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message:
         'Sorry, ein Fehler ist aufgetreten: Die Datenbank hat die ID der neu geschaffenen TPop nicht retourniert',
       options: {
@@ -163,7 +167,7 @@ export const createNewTpopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

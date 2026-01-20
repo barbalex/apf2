@@ -8,6 +8,10 @@ import {
   addNotificationAtom,
 } from '../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 export const historize = async ({ store, apberuebersicht: row }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   // 1. historize
@@ -26,7 +30,7 @@ export const historize = async ({ store, apberuebersicht: row }) => {
     })
   } catch (error) {
     console.log('Error from mutating historize:', error)
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
       options: {
         variant: 'error',
@@ -61,7 +65,7 @@ export const historize = async ({ store, apberuebersicht: row }) => {
       variables,
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -69,7 +73,7 @@ export const historize = async ({ store, apberuebersicht: row }) => {
     })
   }
   // notify user
-  jotaiStore.set(addNotificationAtom, {
+  addNotification({
     message: `Arten, Pop und TPop wurden für das Jahr ${row?.jahr} historisiert`,
     options: {
       variant: 'success',

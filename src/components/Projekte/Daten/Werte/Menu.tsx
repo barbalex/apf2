@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,9 +21,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
+
 interface MenuProps {
   row: {
     id: string
@@ -34,6 +36,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row, table }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
 
@@ -67,7 +70,7 @@ export const Menu = observer(({ row, table }: MenuProps) => {
       })
     } catch (error) {
       console.log('error', error)
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -106,7 +109,7 @@ export const Menu = observer(({ row, table }: MenuProps) => {
       })
     } catch (error) {
       console.log('error', error)
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

@@ -5,6 +5,10 @@ import {
   store as jotaiStore,
   addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const undelete = async ({
   deletedDatasets,
   dataset,
@@ -24,7 +28,7 @@ export const undelete = async ({
   try {
     mutation = await import(`./queries/${queryName}.ts`).then((m) => m.default)
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
       options: {
         variant: 'error',
@@ -39,7 +43,7 @@ export const undelete = async ({
     })
   } catch (error) {
     console.log('undelete error:', error)
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

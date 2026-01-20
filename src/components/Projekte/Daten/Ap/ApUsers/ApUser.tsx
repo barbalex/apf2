@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -13,9 +14,10 @@ import styles from './ApUser.module.css'
 import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../../../JotaiStore/index.ts'
+
+
 interface ApUserProps {
   user: {
     id: ApUserId
@@ -29,6 +31,7 @@ interface ApUserProps {
 }
 
 export const ApUser = observer(({ user, refetch }: ApUserProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
   const onClickDelete = async () => {
@@ -44,7 +47,7 @@ export const ApUser = observer(({ user, refetch }: ApUserProps) => {
         variables: { id: user.id },
       })
     } catch (error) {
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: (error as Error).message,
         options: { variant: 'error' },
       })

@@ -6,6 +6,10 @@ import {
   apolloClientAtom,
 } from '../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 const beobById = gql`
   query beobById($id: UUID!) {
     beobById(id: $id) {
@@ -25,7 +29,7 @@ export const getAndValidateCoordinatesOfBeob = async ({ id }) => {
       variables: { id },
     })
   } catch (error) {
-    jotaiStore.set(addNotificationAtom, {
+    addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -36,7 +40,7 @@ export const getAndValidateCoordinatesOfBeob = async ({ id }) => {
   const lv95X = beob?.lv95X
   const lv95Y = beob?.lv95Y
   if (!lv95X) {
-    jotaiStore.set(addNotificationAtom, {
+    addNotification({
       message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
       options: {
         variant: 'error',

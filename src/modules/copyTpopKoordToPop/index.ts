@@ -5,6 +5,10 @@ import {store as jotaiStore,
   tsQueryClientAtom,
   addNotificationAtom} from '../../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 export const copyTpopKoordToPop = async ({ id, store }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
@@ -16,7 +20,7 @@ export const copyTpopKoordToPop = async ({ id, store }) => {
       variables: { id },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -51,7 +55,7 @@ export const copyTpopKoordToPop = async ({ id, store }) => {
       // no optimistic response as geomPoint
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

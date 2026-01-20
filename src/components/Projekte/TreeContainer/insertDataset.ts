@@ -16,6 +16,10 @@ import {
   ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
 } from '../../shared/fragments.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 const fragments = {
   tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,
   tpopkontrzaehlEinheitWerte: tpopkontrzaehlEinheitWerteFragment,
@@ -41,7 +45,7 @@ export const insertDataset = async ({
   const tableMetadata = tables.find((t) => t.table === table)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: `no table meta data found for table "${table}"`,
       options: {
         variant: 'error',
@@ -55,7 +59,7 @@ export const insertDataset = async ({
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: 'new dataset not created as no idField could be found',
       options: {
         variant: 'error',
@@ -184,7 +188,7 @@ export const insertDataset = async ({
       result = await apolloClient.mutate({ mutation })
     }
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

@@ -8,7 +8,7 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,6 +20,8 @@ import {showTreeMenusAtom,
   addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import { ZielId, ApId } from '../../../../models/apflora/index.tsx'
+
+
 
 interface CreateZielResult {
   createZiel: {
@@ -37,6 +39,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, jahr } = useParams()
@@ -63,7 +66,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

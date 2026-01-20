@@ -5,13 +5,17 @@ import {
   store as jotaiStore,
   addNotificationAtom,
 } from '../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const exportXlsx = async ({ fileName, data, store }) => {
   const { getXlsxBuffer } = await import('./getXlsxBuffer.ts')
   let buffer
   try {
     buffer = await getXlsxBuffer({ data, store })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

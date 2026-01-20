@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -21,9 +22,10 @@ import type { ErfkritId, ApId } from '../../models/apflora/public/Erfkrit.ts'
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../JotaiStore/index.ts'
+
+
 interface ExistingErfkritNode {
   id: ErfkritId
 }
@@ -63,6 +65,7 @@ interface ApOptionsQueryResult {
 }
 
 export const ChooseApToCopyErfkritsFrom = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -210,7 +213,7 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
 
     // 3. inform user
     setOpenChooseApToCopyErfkritsFrom(false)
-    jotaiStore.set(addNotificationAtom, {
+    addNotification({
       message: `Die Erfolgskriterien wurden kopiert`,
       options: { variant: 'info' },
     })

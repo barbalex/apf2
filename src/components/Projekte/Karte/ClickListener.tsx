@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -15,10 +16,12 @@ import { Popup } from './layers/Popup.tsx'
 import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
 
 import {
-  store as jotaiStore,
   addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
+
+
 export const ClickListener = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
 
   const store = useContext(MobxContext)
@@ -303,7 +306,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          jotaiStore.set(addNotificationAtom, {
+          addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',
@@ -377,7 +380,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          jotaiStore.set(addNotificationAtom, {
+          addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',
@@ -451,7 +454,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          jotaiStore.set(addNotificationAtom, {
+          addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',

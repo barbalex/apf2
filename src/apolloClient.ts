@@ -68,6 +68,10 @@ export const buildApolloClient = ({
           path.includes('historize') &&
           message &&
           message.includes('Unique-Constraint')
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
         ) {
           return false
         }
@@ -99,7 +103,7 @@ export const buildApolloClient = ({
               locations,
             )}, Path: ${path}`,
           )
-          return jotaiStore.set(addNotificationAtom, {
+          return addNotification({
             message: `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
               locations,
             )}, Path: ${path}`,
@@ -112,7 +116,7 @@ export const buildApolloClient = ({
     }
     if (error) {
       console.log(`apollo client Network error:`, error.message)
-      jotaiStore.set(addNotificationAtom, {
+      addNotification({
         message: `apollo client Network error: ${error.message}`,
         options: {
           variant: 'error',

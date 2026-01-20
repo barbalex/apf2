@@ -11,6 +11,10 @@ import {store as jotaiStore,
   apolloClientAtom,
   addNotificationAtom} from '../../../../../JotaiStore/index.ts'
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
@@ -22,7 +26,7 @@ export const deleteModule = async ({ store, search }) => {
   const tableMetadata = tables.find((t) => t.table === tablePassed)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
       options: {
         variant: 'error',
@@ -69,7 +73,7 @@ export const deleteModule = async ({ store, search }) => {
     })
   } catch (error) {
     console.log(error)
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -104,7 +108,7 @@ export const deleteModule = async ({ store, search }) => {
       variables: { id: toDeleteId },
     })
   } catch (error) {
-    return jotaiStore.set(addNotificationAtom, {
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

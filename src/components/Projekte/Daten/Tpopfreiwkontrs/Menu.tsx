@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -44,6 +44,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
   const apolloClient = useApolloClient()
@@ -63,6 +64,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
                 tpopkontr: {
                   tpopId: $tpopId
                   typ: "Freiwilligen-Erfolgskontrolle"
+
+
                 }
               }
             ) {
@@ -78,7 +81,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         },
       })
     } catch (error) {
-      return jotaiStore.set(addNotificationAtom, {
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
