@@ -7,7 +7,6 @@ import { isObject } from './isObject.ts'
 import { setUserFromIdb } from './setUserFromIdb.ts'
 
 const blacklist = [
-  'user',
   'hideMapControls',
   'overlays', // 2022.10.26 added overlay. Need to refresh or users will not get new ones
   'apfloraLayers', // 2022.10.28 added. Need to refresh or users will not get new ones
@@ -49,7 +48,7 @@ export const persistStore = ({ store, idb }) => {
       ;[store.tree.dataFilterEmpty()]
     }
 
-    const username = await setUserFromIdb({ idb, store })
+    const username = await setUserFromIdb({ idb })
     const isUser = !!username
 
     // if (window.Cypress) {
