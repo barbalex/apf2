@@ -64,7 +64,6 @@ export const Marker = observer(({ beob }) => {
     const nearestTpop = await getNearestTpop({
       apId,
       latLng: event.target._latlng,
-      apolloClient,
     })
     const newActiveNodeArray = [
       'Projekte',

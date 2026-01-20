@@ -2,13 +2,17 @@ import { queryEkfrequenz } from './queryEkfrequenz.ts'
 import { queryTpopkontr } from './queryTpopkontr.ts'
 import { queryTpopmassn } from './queryTpopmassn.ts'
 import { mutationUpdateTpop } from './mutationUpdateTpop.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+} from '../../../../JotaiStore/index.ts'
 
 export const setStartjahr = async ({
   row,
   ekfrequenz,
-  apolloClient,
   store,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   const { enqueNotification } = store
 
   // 1  get ekfrequenz's kontrolljahreAb

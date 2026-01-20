@@ -62,7 +62,6 @@ export const processChange = async ({
     ekfrequenzStartjahr = await setStartjahr({
       row,
       ekfrequenz: value,
-      apolloClient,
       store,
     })
   }
@@ -73,7 +72,6 @@ export const processChange = async ({
       tpopId: row.id,
       ekfrequenz: value,
       ekfrequenzStartjahr,
-      apolloClient,
       store,
     })
   }

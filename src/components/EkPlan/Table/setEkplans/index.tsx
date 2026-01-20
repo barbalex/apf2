@@ -2,14 +2,18 @@ import { queryEkplans } from './queryEkplans.ts'
 import { queryEkfrequenz } from './queryEkfrequenz.ts'
 import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
 import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+} from '../../../../JotaiStore/index.ts'
 
 export const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
-  apolloClient,
   store,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   // TODO:
   // only return if set ekfrequenz has kontrolljahre?
   // but then: query ekplans beginning when? This year

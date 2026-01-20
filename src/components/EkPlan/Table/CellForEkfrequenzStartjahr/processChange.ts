@@ -61,7 +61,6 @@ export const processChange = async ({
     tpopId: row.id,
     ekfrequenz,
     ekfrequenzStartjahr: value,
-    apolloClient,
     store,
   })
 
