@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogActions from '@mui/material/DialogActions'
@@ -16,7 +16,6 @@ import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { IdbContext } from '../idbContext.ts'
 import { getUserFromIdb } from '../modules/getUserFromIdb.ts'
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 import { userAtom } from '../JotaiStore/index.ts'
@@ -36,7 +35,6 @@ function tokenStateReducer(state, action) {
 
 export const User = () => {
   const apolloClient = useApolloClient()
-  const { idb } = useContext(IdbContext)
   const [user, setUser] = useAtom(userAtom)
 
   const [name, setName] = useState('')
@@ -113,10 +111,8 @@ export const User = () => {
     } catch (error) {
       console.log(error)
     }
-    // refresh currentUser in idb
-    idb.currentUser.clear()
-    await idb.currentUser.put({
-      name,
+    setUser({
+      name: nameToUse,
       token: result?.data?.login?.jwtToken,
       id: userResult?.data?.userByName?.id,
     })
@@ -151,26 +147,6 @@ export const User = () => {
   const onKeyPressPassword = (e) => e.key === 'Enter' && onBlurPassword(e)
   const onClickShowPass = () => setShowPass(!showPass)
   const onMouseDownShowPass = (e) => e.preventDefault()
-
-  useEffect(() => {
-    let isActive = true
-    getUserFromIdb({ idb }).then((userFromIdb) => {
-      if (!isActive) return
-
-      dispatchTokenState({
-        type: 'set',
-        payload: userFromIdb.token,
-      })
-      if (user.token !== userFromIdb.token) {
-        //console.log('User: setting user from idb.user')
-        setUser({ name: userFromIdb.name, token: userFromIdb.token, id: userFromIdb.id })
-      }
-    })
-
-    return () => {
-      isActive = false
-    }
-  }, [idb, user.token, setUser])
 
   const { token, fetchingToken } = tokenState
 

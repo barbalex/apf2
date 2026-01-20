@@ -4,7 +4,11 @@ import { getSnapshot } from 'mobx-state-tree'
 import { persist } from 'mst-persist'
 
 import { isObject } from './isObject.ts'
-import { setUserFromIdb } from './setUserFromIdb.ts'
+import {
+  store as jotaiStore,
+  navigateAtom,
+  userNameAtom,
+} from '../JotaiStore/index.ts'
 
 const blacklist = [
   'hideMapControls',
@@ -13,7 +17,10 @@ const blacklist = [
   'sortedBeobFields', // 2023.10.26 added because needs to update when changed in code
 ]
 
-export const persistStore = ({ store, idb }) => {
+export const persistStore = (store) => {
+  const username = jotaiStore.get(userNameAtom)
+  const navigate = jotaiStore.get(navigateAtom)
+
   const visitedTopDomain = window.location.pathname === '/'
 
   persist('store', store, {
@@ -48,22 +55,11 @@ export const persistStore = ({ store, idb }) => {
       ;[store.tree.dataFilterEmpty()]
     }
 
-    const username = await setUserFromIdb({ idb })
     const isUser = !!username
-
-    // if (window.Cypress) {
-    //   // enable directly using these in tests
-    //   window.__client__ = apolloClient
-    //   window.__store__ = store
-    //   window.__idb__ = idb
-    // }
-
-    // window.store = store
 
     // set last activeNodeArray
     // only if top domain was visited
     if (isUser && visitedTopDomain) {
-      const navigate = jotaiStore.get(navigateAtom)
       return navigate?.(`/Daten/${store.tree.activeNodeArray.join('/')}`)
     }
   })

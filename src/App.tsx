@@ -22,7 +22,6 @@ import { buildApolloClient } from './apolloClient.ts'
 import { store as jotaiStore } from './JotaiStore/index.ts'
 
 import { MobxContext } from './mobxContext.ts'
-import { IdbContext } from './idbContext.ts'
 import { UploaderContext } from './UploaderContext.ts'
 
 import { persistStore } from './modules/persistStore.ts'
@@ -75,55 +74,51 @@ const queryClient = new QueryClient({
 })
 
 export const App = () => {
-  const idb = initializeIdb()
   const store = MobxStore.create()
   const apolloClient = buildApolloClient({ store })
-  const idbContext = { idb }
   const uploaderRef = createRef<HTMLElement>(null)
 
   useEffect(() => {
-    persistStore({ store, idb })
+    persistStore(store)
   }, [])
 
   return (
     <JotaiProvider store={jotaiStore}>
-      <IdbContext value={idbContext}>
-        <MobxContext value={store}>
-          <ApolloProvider client={apolloClient}>
-            <QueryClientProvider client={queryClient}>
-              <StyledEngineProvider injectFirst>
-                <uc-upload-ctx-provider
-                  id="uploaderctx"
-                  ctx-name="uploadcare"
-                  ref={uploaderRef}
-                ></uc-upload-ctx-provider>
-                <ThemeProvider theme={theme}>
-                  <SnackbarProvider
-                    maxSnack={3}
-                    preventDuplicate
-                    autoHideDuration={10000}
-                    action={(key) => <NotificationDismisser nKey={key} />}
-                  >
-                    <UploaderContext value={uploaderRef}>
-                      {/* <Suspense fallback={<Spinner />}> */}
-                      <Router />
-                      {/*<UnterhaltsRouter />*/}
-                      {/* </Suspense> */}
-                      {/* <Suspense fallback={null}> */}
-                      <Notifier />
-                      <IsPrintSetter />
-                      <LastTouchedNodeSetter />
-                      <MouseWheelHandler />
-                      <LegacyBrowserInformer />
-                      {/* </Suspense> */}
-                    </UploaderContext>
-                  </SnackbarProvider>
-                </ThemeProvider>
-              </StyledEngineProvider>
-            </QueryClientProvider>
-          </ApolloProvider>
-        </MobxContext>
-      </IdbContext>
+      <MobxContext value={store}>
+        <ApolloProvider client={apolloClient}>
+          <QueryClientProvider client={queryClient}>
+            <StyledEngineProvider injectFirst>
+              <uc-upload-ctx-provider
+                id="uploaderctx"
+                ctx-name="uploadcare"
+                ref={uploaderRef}
+              ></uc-upload-ctx-provider>
+              <ThemeProvider theme={theme}>
+                <SnackbarProvider
+                  maxSnack={3}
+                  preventDuplicate
+                  autoHideDuration={10000}
+                  action={(key) => <NotificationDismisser nKey={key} />}
+                >
+                  <UploaderContext value={uploaderRef}>
+                    {/* <Suspense fallback={<Spinner />}> */}
+                    <Router />
+                    {/*<UnterhaltsRouter />*/}
+                    {/* </Suspense> */}
+                    {/* <Suspense fallback={null}> */}
+                    <Notifier />
+                    <IsPrintSetter />
+                    <LastTouchedNodeSetter />
+                    <MouseWheelHandler />
+                    <LegacyBrowserInformer />
+                    {/* </Suspense> */}
+                  </UploaderContext>
+                </SnackbarProvider>
+              </ThemeProvider>
+            </StyledEngineProvider>
+          </QueryClientProvider>
+        </ApolloProvider>
+      </MobxContext>
       <Analytics debug={false} />
     </JotaiProvider>
   )
