@@ -1,23 +1,23 @@
-import { useContext, useState, useEffect } from 'react'
-import { useSetAtom } from 'jotai'
+import { useState, useEffect } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { tpop } from '../../../shared/fragments.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './Checkbox.module.css'
 
 import {
   addNotificationAtom,
+  userNameAtom,
 } from '../../../../JotaiStore/index.ts'
 
 
 export const Checkbox = observer(({ row, value, field }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -56,7 +56,7 @@ export const Checkbox = observer(({ row, value, field }) => {
         variables: {
           id: row.id,
           [field]: !checked,
-          changedBy: store.user.name,
+          changedBy: userName,
         },
       })
     } catch (error) {

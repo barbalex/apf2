@@ -6,12 +6,13 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   addNotificationAtom,
+  userNameAtom,
 } from '../../../../JotaiStore/index.js'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const setStartjahr = async ({ row, ekfrequenz, store }) => {
+export const setStartjahr = async ({ row, ekfrequenz }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
@@ -120,7 +121,7 @@ export const setStartjahr = async ({ row, ekfrequenz, store }) => {
       variables: {
         id: row.id,
         ekfrequenzStartjahr,
-        changedBy: store.user.name,
+        changedBy: jotaiStore.get(userNameAtom),
       },
     })
   } catch (error) {
