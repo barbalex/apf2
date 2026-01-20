@@ -147,7 +147,6 @@ export const Menu = observer(() => {
     moveTo({
       id: apId,
       store,
-      apolloClient,
     })
 
   const onClickStopMoving = () =>
