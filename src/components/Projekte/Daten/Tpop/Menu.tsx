@@ -39,7 +39,7 @@ import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.ts'
 import {showTreeMenusAtom,
-  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'
@@ -103,7 +103,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -146,7 +146,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

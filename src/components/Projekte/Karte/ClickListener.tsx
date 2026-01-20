@@ -16,7 +16,7 @@ import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
 export const ClickListener = observer(() => {
   const { apId } = useParams()
@@ -303,7 +303,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',
@@ -377,7 +377,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',
@@ -451,7 +451,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',

@@ -10,7 +10,7 @@ import Button from '@mui/material/Button'
 import { useSetAtom, useAtom } from 'jotai'
 import {newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
-  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'

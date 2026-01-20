@@ -17,7 +17,7 @@ import type { TpopberId, TpopId } from '../../../../generated/apflora/models.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateTpopberResult {
   createTpopber: {
@@ -61,7 +61,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { tpopId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

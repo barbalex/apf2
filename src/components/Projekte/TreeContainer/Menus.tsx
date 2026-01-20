@@ -17,7 +17,7 @@ import { useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
 
 const CmApFolder = lazy(async () => ({
@@ -271,7 +271,7 @@ export const Menus = observer(() => {
   const handleClick = (e, data, element) => {
     // console.log('TreeContainer, handleClick', { e, data, element })
     if (!data) {
-      return enqueNotification({
+      return jotaiStore.set(addNotificationAtom, {
         message: 'no data passed with click',
         options: {
           variant: 'error',
@@ -279,7 +279,7 @@ export const Menus = observer(() => {
       })
     }
     if (!element) {
-      return enqueNotification({
+      return jotaiStore.set(addNotificationAtom, {
         message: 'no element passed with click',
         options: {
           variant: 'error',
@@ -289,7 +289,7 @@ export const Menus = observer(() => {
     const { table, action, actionTable } = data
     const { firstElementChild } = element
     if (!firstElementChild) {
-      return enqueNotification({
+      return jotaiStore.set(addNotificationAtom, {
         message: 'no firstElementChild passed with click',
         options: {
           variant: 'error',
@@ -488,7 +488,7 @@ export const Menus = observer(() => {
     if (Object.keys(actions).includes(action)) {
       actions[action]()
     } else {
-      enqueNotification({
+      jotaiStore.set(addNotificationAtom, {
         message: `action "${action}" unknown, therefore not executed`,
         options: {
           variant: 'error',

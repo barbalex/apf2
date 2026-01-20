@@ -24,7 +24,7 @@ import type { ProjId } from '../../../../models/apflora/Proj.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateApberuebersichtResult {
   data?: {
@@ -77,7 +77,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { projId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

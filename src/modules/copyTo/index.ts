@@ -20,7 +20,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../JotaiStore/index.ts'
 
 // copyTpopsOfPop can pass table and id separately
@@ -92,7 +92,7 @@ export const copyTo = async ({
   }
 
   if (!row) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: 'change was not saved because dataset was not found in store',
       options: {
         variant: 'error',

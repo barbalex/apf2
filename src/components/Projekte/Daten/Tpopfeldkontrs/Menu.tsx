@@ -21,7 +21,7 @@ import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import {showTreeMenusAtom,
-  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import type {
   TpopkontrId,
@@ -91,7 +91,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

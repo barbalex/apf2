@@ -9,7 +9,7 @@ import { updateBeobById } from './updateBeobById.ts'
 import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  enqueNotificationAtom} from '../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../JotaiStore/index.ts'
 
 export const createNewPopFromBeob = async ({
   id,
@@ -30,7 +30,7 @@ export const createNewPopFromBeob = async ({
       variables: { id },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -57,7 +57,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -80,7 +80,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -98,7 +98,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

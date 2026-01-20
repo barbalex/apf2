@@ -17,7 +17,7 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import {showTreeMenusAtom,
-  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import type { ZielId } from '../../../../models/apflora/ZielId.ts'
 import type { ApId } from '../../../../models/apflora/ApId.ts'
@@ -66,7 +66,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

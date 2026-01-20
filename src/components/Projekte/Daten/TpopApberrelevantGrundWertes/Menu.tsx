@@ -23,7 +23,7 @@ import type { TpopApberrelevantGrundWerteCode } from '../../../../generated/apfl
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateTpopApberrelevantGrundWerteResult {
   createTpopApberrelevantGrundWerte: {
@@ -67,7 +67,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
           `,
         })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

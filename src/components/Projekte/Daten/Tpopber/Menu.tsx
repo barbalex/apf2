@@ -22,7 +22,7 @@ import styles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateTpopberResult {
   createTpopber: {
@@ -62,7 +62,7 @@ export const Menu = observer(() => {
         variables: { tpopId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -102,7 +102,7 @@ export const Menu = observer(() => {
         variables: { id: tpopberId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

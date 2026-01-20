@@ -28,7 +28,7 @@ import styles from './index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 export const PreviewMenus = observer(
   ({ parent, files, refetch, containerRef }) => {
@@ -88,7 +88,7 @@ export const PreviewMenus = observer(
         })
       } catch (error) {
         console.log(error)
-        return jotaiStore.set(enqueNotificationAtom, {
+        return jotaiStore.set(addNotificationAtom, {
           message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
           options: {
             variant: 'error',

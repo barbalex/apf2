@@ -11,7 +11,7 @@ import styles from './Checkbox.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 export const Checkbox = observer(({ row, value, field }) => {
   const store = useContext(MobxContext)
@@ -58,7 +58,7 @@ export const Checkbox = observer(({ row, value, field }) => {
       })
     } catch (error) {
       setChecked(!checked)
-      jotaiStore.set(enqueNotificationAtom, {
+      jotaiStore.set(addNotificationAtom, {
         message: error.message,
         options: {
           variant: 'error',

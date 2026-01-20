@@ -23,7 +23,7 @@ import styles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateAssozartResult {
   data?: {
@@ -79,7 +79,7 @@ export const Menu = observer(() => {
         variables: { apId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -122,7 +122,7 @@ export const Menu = observer(() => {
         variables: { id: assozartId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

@@ -13,7 +13,7 @@ import styles from '../index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface KontrzaehlAnzproeinheitQueryResult {
   allVKontrzaehlAnzproeinheits: {
@@ -206,7 +206,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
             `,
           })
         } catch (error) {
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -217,7 +217,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
         const rows = result.data?.allVKontrzaehlAnzproeinheits?.nodes ?? []
         setQueryState(undefined)
         if (rows.length === 0) {
-          return jotaiStore.set(enqueNotificationAtom, {
+          return jotaiStore.set(addNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

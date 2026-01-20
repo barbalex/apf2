@@ -27,7 +27,7 @@ import styles from './index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
 interface FileNode {
   id: string
@@ -140,7 +140,7 @@ export const FilesRouter = observer(
           })
         } catch (error) {
           console.log(error)
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: error.message,
             options: {
               variant: 'error',
@@ -159,7 +159,7 @@ export const FilesRouter = observer(
 
     const onFileUploadFailed = (error) => {
       console.error('Upload failed:', error)
-      jotaiStore.set(enqueNotificationAtom, {
+      jotaiStore.set(addNotificationAtom, {
         message: error?.message ?? 'Upload fehlgeschlagen',
         options: {
           variant: 'error',

@@ -20,6 +20,11 @@ import { EkplanTableHeader } from './Header.tsx'
 
 import type { TpopId } from '../../../models/apflora/Tpop.ts'
 
+import {
+  store as jotaiStore,
+  addNotificationAtom,
+} from '../../../JotaiStore/index.ts'
+
 import styles from './index.module.css'
 
 const getTpopFilter = ({
@@ -242,7 +247,7 @@ export const EkPlanTable = observer(() => {
         variables: { tpopFilter, apIds: apValues },
       })
     } catch (error) {
-      return enqueNotification({
+      return jotaiStore.set(addNotificationAtom, {
         message: `Fehler beim Abfragen für den Export: ${(error as Error).message}`,
         options: {
           variant: 'error',

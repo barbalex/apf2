@@ -7,7 +7,7 @@ import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../JotaiStore/index.ts'
 // TODO: only show messages if map is visible
 export const ApfLayerNotifier = observer(() => {
@@ -27,7 +27,7 @@ export const ApfLayerNotifier = observer(() => {
     ) {
       // Either: apId was unset
       // Or: with unset apId an apfloraLayer was activated
-      jotaiStore.set(enqueNotificationAtom, {
+      jotaiStore.set(addNotificationAtom, {
         message: `In der Standard-Einstellung werden Apflora-Layer nur eingeblendet, wenn bloss eine einzelne Art im Navigationsbaum aktiv ist. Sie können im Layertool der Karte "Layer auch anzeigen, wenn mehr als eine Art aktiv ist" wählen, wenn sie explizit die Layer für mehrere Arten anzeigen möchten. Und die dafür erforderliche Geduld sowie einen genügend leistungsfähigen Computer haben.`,
         options: {
           variant: 'info',
@@ -46,7 +46,7 @@ export const ApfLayerNotifier = observer(() => {
       showApfLayersForMultipleAps &&
       mapIsOpen
     ) {
-      jotaiStore.set(enqueNotificationAtom, {
+      jotaiStore.set(addNotificationAtom, {
         message: `Sie laden in der Karte apflora-Informationen für mehrere Arten. Potentiell kann es sich um zehntausende von Datensätzen handeln. Sie müssen mit Verzögerungen bis hin zu Abstürzen rechnen. Empfehlung bei Problemen: minimieren Sie die Anzahl Arten mit einem Filter`,
         options: {
           variant: 'info',

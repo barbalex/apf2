@@ -33,7 +33,7 @@ import styles from './index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
@@ -72,7 +72,7 @@ export const CellForYearMenu = observer(() => {
       })
     } catch (error) {
       closeYearCellMenu()
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -86,7 +86,7 @@ export const CellForYearMenu = observer(() => {
         variables: { id },
       })
     } catch (error) {
-      jotaiStore.set(enqueNotificationAtom, {
+      jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -115,7 +115,7 @@ export const CellForYearMenu = observer(() => {
         variables,
       })
     } catch (error) {
-      jotaiStore.set(enqueNotificationAtom, {
+      jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

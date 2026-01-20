@@ -14,7 +14,7 @@ import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../../JotaiStore/index.ts'
 interface ApUserProps {
   user: {
@@ -30,7 +30,6 @@ interface ApUserProps {
 
 export const ApUser = observer(({ user, refetch }: ApUserProps) => {
   const apolloClient = useApolloClient()
-  const { enqueNotification } = useContext(MobxContext)
 
   const onClickDelete = async () => {
     try {
@@ -45,7 +44,7 @@ export const ApUser = observer(({ user, refetch }: ApUserProps) => {
         variables: { id: user.id },
       })
     } catch (error) {
-      enqueNotification({
+      jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: { variant: 'error' },
       })

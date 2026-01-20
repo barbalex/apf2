@@ -19,7 +19,7 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateEkzaehleinheitResult {
   data?: {
@@ -65,7 +65,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

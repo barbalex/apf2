@@ -3,7 +3,7 @@ import { format } from 'date-fns/format'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../JotaiStore/index.ts'
 export const exportXlsx = async ({ fileName, data, store }) => {
   const { getXlsxBuffer } = await import('./getXlsxBuffer.ts')
@@ -11,7 +11,7 @@ export const exportXlsx = async ({ fileName, data, store }) => {
   try {
     buffer = await getXlsxBuffer({ data, store })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

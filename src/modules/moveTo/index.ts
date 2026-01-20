@@ -11,7 +11,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../JotaiStore/index.ts'
 
 export const moveTo = async ({
@@ -32,7 +32,7 @@ export const moveTo = async ({
   const dbTable = tabelle?.dbTable ?? table
   const idField = tabelle?.idField
   if (!idField) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: 'change was not saved: Reason: idField was not found',
       options: {
         variant: 'error',
@@ -41,7 +41,7 @@ export const moveTo = async ({
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: 'change was not saved: Reason: parentIdField was not found',
       options: {
         variant: 'error',

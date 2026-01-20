@@ -4,7 +4,7 @@ import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
 import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
 import {store as jotaiStore,
   apolloClientAtom,
-  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 export const setEkplans = async ({
   tpopId,
@@ -29,7 +29,7 @@ export const setEkplans = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Fehler beim Abfragen der bisherigen EK-Pläne: ${error.message}`,
       options: {
         variant: 'error',
@@ -49,7 +49,7 @@ export const setEkplans = async ({
         },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: `Fehler beim Löschen der bisherigen EK-Pläne: ${error.message}`,
         options: {
           variant: 'error',
@@ -67,7 +67,7 @@ export const setEkplans = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Fehler beim Abfragen der Kontrolljahre: ${error.message}`,
       options: {
         variant: 'error',
@@ -79,7 +79,7 @@ export const setEkplans = async ({
   const typ = ekfrequenz.ektyp.toUpperCase()
   const kontrolljahre = ekfrequenz.kontrolljahre || []
   if (kontrolljahre.length === 0) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht. Weil aber für die gewählte EK-Frequenz keine Kontrolljahre existieren, wurden keine neuen Kontrolljahre gesetzt`,
       options: {
         variant: 'info',
@@ -101,7 +101,7 @@ export const setEkplans = async ({
   try {
     await Promise.all(mutationPromises)
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
       options: {
         variant: 'error',
@@ -115,7 +115,7 @@ export const setEkplans = async ({
   //   type: 'conjunction',
   // })
   // jahreList = formatter.format(kontrolljahre.map((j) => j.toString()))
-  // jotaiStore.set(enqueNotificationAtom, {
+  // jotaiStore.set(addNotificationAtom, {
   //   message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${
   //     kontrolljahre.length > 1 ? 'die Jahre' : 'das Jahr'
   //   } ${jahreList} gesetzt`,

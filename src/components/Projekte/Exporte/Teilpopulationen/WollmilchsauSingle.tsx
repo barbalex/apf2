@@ -17,7 +17,7 @@ import styles from './WollmilchsauSingle.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface ApByArtIdQueryResult {
   apByArtId: {
@@ -225,7 +225,7 @@ export const WollmilchsauSingle = observer(() => {
               variables: { aeId },
             })
           } catch (error) {
-            jotaiStore.set(enqueNotificationAtom, {
+            jotaiStore.set(addNotificationAtom, {
               message: (error as Error).message,
               options: { variant: 'error' },
             })
@@ -818,7 +818,7 @@ export const WollmilchsauSingle = observer(() => {
           }))
           setEwmMessage('')
           if (rows.length === 0) {
-            return jotaiStore.set(enqueNotificationAtom, {
+            return jotaiStore.set(addNotificationAtom, {
               message: 'Die Abfrage retournierte 0 Datensätze',
               options: {
                 variant: 'warning',

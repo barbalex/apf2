@@ -6,7 +6,7 @@ import { gql } from '@apollo/client'
 import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  enqueNotificationAtom} from '../JotaiStore/index.ts'
+  addNotificationAtom} from '../JotaiStore/index.ts'
 import {
   beob as beobFragment,
   tpop,
@@ -108,7 +108,7 @@ export const createNewTpopFromBeob = async ({
       variables: { beobId },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -136,7 +136,7 @@ export const createNewTpopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -145,7 +145,7 @@ export const createNewTpopFromBeob = async ({
   }
   const tpop = tpopResult?.data?.createTpop?.tpop
   if (!tpop) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message:
         'Sorry, ein Fehler ist aufgetreten: Die Datenbank hat die ID der neu geschaffenen TPop nicht retourniert',
       options: {
@@ -163,7 +163,7 @@ export const createNewTpopFromBeob = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

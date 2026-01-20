@@ -13,7 +13,7 @@ import styles from '../index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface BeobZugeordnetQueryResult {
   allVBeobZugeordnets: {
@@ -97,7 +97,7 @@ export const BeobZugeordnet = observer(() => {
           })
         } catch (error) {
           setQueryState(undefined)
-          return jotaiStore.set(enqueNotificationAtom, {
+          return jotaiStore.set(addNotificationAtom, {
             message: (error as Error).message,
             options: {
               variant: 'error',

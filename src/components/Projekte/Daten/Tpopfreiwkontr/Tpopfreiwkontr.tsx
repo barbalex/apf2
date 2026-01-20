@@ -50,7 +50,7 @@ import styles from './Tpopfreiwkontr.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 export const Component = observer(({ id: idPassed }: ComponentProps) => {
   const params = useParams()
@@ -116,7 +116,7 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
           .catch((error) => {
             if (!isActive) return
 
-            jotaiStore.set(enqueNotificationAtom, {
+            jotaiStore.set(addNotificationAtom, {
               message: (error as Error).message,
               options: {
                 variant: 'error',

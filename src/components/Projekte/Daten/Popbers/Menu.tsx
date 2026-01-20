@@ -17,7 +17,7 @@ import type { PopberId, PopId } from '../../../../models/apflora/index.tsx'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreatePopberResult {
   data?: {
@@ -63,7 +63,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { popId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

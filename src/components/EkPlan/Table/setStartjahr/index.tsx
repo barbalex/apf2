@@ -4,7 +4,7 @@ import { queryTpopmassn } from './queryTpopmassn.ts'
 import { mutationUpdateTpop } from './mutationUpdateTpop.ts'
 import {store as jotaiStore,
   apolloClientAtom,
-  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 export const setStartjahr = async ({
   row,
@@ -20,7 +20,7 @@ export const setStartjahr = async ({
       variables: { id: ekfrequenz },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Fehler beim Abfragen der EK-Frequenz: ${error.message}`,
       options: {
         variant: 'error',
@@ -39,7 +39,7 @@ export const setStartjahr = async ({
   const kontrolljahreAb =
     ekfrequenzResult?.data?.ekfrequenzById?.kontrolljahreAb ?? null
   if (!kontrolljahreAb) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Bei der gewählten EK-Frequenz wurde das Feld 'Kontrolljahre ab' nicht erfasst. Daher konnte das Startjahr nicht berechnet werden`,
       options: {
         variant: 'error',
@@ -58,7 +58,7 @@ export const setStartjahr = async ({
         variables: { tpopId: row.id },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
         options: {
           variant: 'error',
@@ -71,7 +71,7 @@ export const setStartjahr = async ({
       ),
     )
     if (!ekfrequenzStartjahr) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: `Offenbar gibt es keine Kontrolle. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
         options: {
           variant: 'info',
@@ -91,7 +91,7 @@ export const setStartjahr = async ({
         variables: { tpopId: row.id },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
         options: {
           variant: 'error',
@@ -104,7 +104,7 @@ export const setStartjahr = async ({
       ),
     )
     if (!ekfrequenzStartjahr) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: `Offenbar gibt es keine Ansiedlung. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
         options: {
           variant: 'info',
@@ -123,7 +123,7 @@ export const setStartjahr = async ({
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Fehler beim Aktualisieren der Teil-Population: ${error.message}`,
       options: {
         variant: 'error',
@@ -135,7 +135,7 @@ export const setStartjahr = async ({
   //   kontrolljahreAb === 'EK' ?
   //     `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
   //   : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
-  // jotaiStore.set(enqueNotificationAtom, {
+  // jotaiStore.set(addNotificationAtom, {
   //   message,
   //   options: {
   //     variant: 'success',

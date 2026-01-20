@@ -21,7 +21,7 @@ import { existsTooLargeError } from './modules/existsTooLargeError.ts'
 import {
   store as jotaiStore,
   apolloClientAtom,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from './JotaiStore/index.ts'
 
 import type { MobxStore } from './store/index.ts'
@@ -99,7 +99,7 @@ export const buildApolloClient = ({
               locations,
             )}, Path: ${path}`,
           )
-          return jotaiStore.set(enqueNotificationAtom, {
+          return jotaiStore.set(addNotificationAtom, {
             message: `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
               locations,
             )}, Path: ${path}`,
@@ -112,7 +112,7 @@ export const buildApolloClient = ({
     }
     if (error) {
       console.log(`apollo client Network error:`, error.message)
-      jotaiStore.set(enqueNotificationAtom, {
+      jotaiStore.set(addNotificationAtom, {
         message: `apollo client Network error: ${error.message}`,
         options: {
           variant: 'error',

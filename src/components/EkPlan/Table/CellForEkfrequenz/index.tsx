@@ -14,7 +14,7 @@ import styles from './index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 
 const processChangeWorkerFactory = createWorkerFactory(

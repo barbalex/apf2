@@ -5,7 +5,7 @@ import { xmlToJson } from '../../../../modules/xmlToJson.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 export const onTileError = async (store, map, layer, ignore) => {
   console.log('onTileError', { ignore, map, layer, store })
@@ -37,7 +37,7 @@ export const onTileError = async (store, map, layer, ignore) => {
   const errorMessage =
     data?.HTML?.BODY?.SERVICEEXCEPTIONREPORT?.SERVICEEXCEPTION?.['#text']
   // console.log(`onTileError errorMessage:`, errorMessage)
-  jotaiStore.set(enqueNotificationAtom, {
+  jotaiStore.set(addNotificationAtom, {
     message: errorMessage,
     options: {
       variant: 'error',

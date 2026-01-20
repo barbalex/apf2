@@ -9,7 +9,7 @@ import { tables } from '../../../../../modules/tables.js'
 import {store as jotaiStore,
   tsQueryClientAtom,
   apolloClientAtom,
-  enqueNotificationAtom} from '../../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../../JotaiStore/index.ts'
 
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
@@ -22,7 +22,7 @@ export const deleteModule = async ({ store, search }) => {
   const tableMetadata = tables.find((t) => t.table === tablePassed)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
       options: {
         variant: 'error',
@@ -69,7 +69,7 @@ export const deleteModule = async ({ store, search }) => {
     })
   } catch (error) {
     console.log(error)
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -104,7 +104,7 @@ export const deleteModule = async ({ store, search }) => {
       variables: { id: toDeleteId },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

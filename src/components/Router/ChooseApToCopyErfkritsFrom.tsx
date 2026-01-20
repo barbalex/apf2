@@ -22,7 +22,7 @@ import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../JotaiStore/index.ts'
 interface ExistingErfkritNode {
   id: ErfkritId
@@ -210,7 +210,7 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
 
     // 3. inform user
     setOpenChooseApToCopyErfkritsFrom(false)
-    jotaiStore.set(enqueNotificationAtom, {
+    jotaiStore.set(addNotificationAtom, {
       message: `Die Erfolgskriterien wurden kopiert`,
       options: { variant: 'info' },
     })

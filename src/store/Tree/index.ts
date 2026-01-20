@@ -33,7 +33,7 @@ import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../JotaiStore/index.ts'
 export const Tree = types
   .model('Tree', {
@@ -315,7 +315,7 @@ export const Tree = types
           self.setApFilter(false)
           // need timeout or notification will not appear
           setTimeout(() =>
-            jotaiStore.set(enqueNotificationAtom, {
+            jotaiStore.set(addNotificationAtom, {
               message:
                 'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
               options: {
@@ -414,7 +414,7 @@ export const Tree = types
           self.setApFilter(false)
           // need timeout or notification will not appear
           setTimeout(() =>
-            jotaiStore.set(enqueNotificationAtom, {
+            jotaiStore.set(addNotificationAtom, {
               message:
                 'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
               options: {

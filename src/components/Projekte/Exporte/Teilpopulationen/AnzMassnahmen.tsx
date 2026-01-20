@@ -16,7 +16,7 @@ import styles from '../index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface TPopAnzMassnsQueryResult {
   allTpops: {
@@ -145,7 +145,7 @@ export const AnzMassnahmen = observer(() => {
             `,
           })
         } catch (error) {
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: (error as Error).message,
             options: { variant: 'error' },
           })
@@ -206,7 +206,7 @@ export const AnzMassnahmen = observer(() => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return jotaiStore.set(enqueNotificationAtom, {
+          return jotaiStore.set(addNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

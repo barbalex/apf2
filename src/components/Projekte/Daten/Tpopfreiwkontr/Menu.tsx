@@ -26,7 +26,7 @@ import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateTpopkontrResult {
   data: {
@@ -80,7 +80,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { tpopId, typ: 'Freiwilligen-Erfolgskontrolle' },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: error.message,
         options: {
           variant: 'error',
@@ -120,7 +120,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopkontrId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: error.message,
         options: {
           variant: 'error',

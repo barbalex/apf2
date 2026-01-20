@@ -41,7 +41,7 @@ import styles from './Tpop.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface TpopQueryResult {
   tpopById?: {
@@ -412,7 +412,7 @@ export const Component = observer(() => {
                       `,
               })
             } catch (error) {
-              return jotaiStore.set(enqueNotificationAtom, {
+              return jotaiStore.set(addNotificationAtom, {
                 message: error.message,
                 options: {
                   variant: 'error',

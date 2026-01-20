@@ -19,7 +19,7 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../../JotaiStore/index.ts'
 interface BeobZugeordnetNode {
   id: BeobId
@@ -105,7 +105,7 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
   // }, [leafletMap])
 
   if (error) {
-    jotaiStore.set(enqueNotificationAtom, {
+    jotaiStore.set(addNotificationAtom, {
       message: `Fehler beim Laden der Nicht zugeordneten Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',

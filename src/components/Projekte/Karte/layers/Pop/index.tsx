@@ -16,7 +16,7 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../../JotaiStore/index.ts'
 interface PopNode {
   id: PopId
@@ -97,7 +97,7 @@ const ObservedPop = observer(() => {
   }, [map])
 
   if (error) {
-    jotaiStore.set(enqueNotificationAtom, {
+    jotaiStore.set(addNotificationAtom, {
       message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',

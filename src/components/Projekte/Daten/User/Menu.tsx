@@ -73,7 +73,7 @@ import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 const iconStyle = { color: 'white' }
 
@@ -134,7 +134,7 @@ export const Menu = observer(
           `,
         })
       } catch (error) {
-        return jotaiStore.set(enqueNotificationAtom, {
+        return jotaiStore.set(addNotificationAtom, {
           message: (error as Error).message,
           options: {
             variant: 'error',
@@ -172,7 +172,7 @@ export const Menu = observer(
           variables: { id: row.id },
         })
       } catch (error) {
-        return jotaiStore.set(enqueNotificationAtom, {
+        return jotaiStore.set(addNotificationAtom, {
           message: (error as Error).message,
           options: {
             variant: 'error',
@@ -240,7 +240,7 @@ export const Menu = observer(
       }
       if (errors.length) {
         errors.forEach((error) =>
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: error.message,
             options: {
               variant: 'error',
@@ -248,7 +248,7 @@ export const Menu = observer(
           }),
         )
       } else {
-        jotaiStore.set(enqueNotificationAtom, {
+        jotaiStore.set(addNotificationAtom, {
           message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
           options: {
             variant: 'info',

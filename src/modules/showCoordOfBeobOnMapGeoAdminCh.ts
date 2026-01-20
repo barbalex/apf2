@@ -2,7 +2,7 @@ import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBe
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../JotaiStore/index.ts'
 export const showCoordOfBeobOnMapGeoAdminCh = async ({ id }) => {
   const beob = await getAndValidateCoordinatesOfBeob({ id })

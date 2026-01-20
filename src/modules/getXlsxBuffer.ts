@@ -8,7 +8,7 @@ import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.t
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../JotaiStore/index.ts'
 export const getXlsxBuffer = async ({ data, store }) => {
   /**
@@ -69,7 +69,7 @@ export const getXlsxBuffer = async ({ data, store }) => {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
     console.log(error)
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

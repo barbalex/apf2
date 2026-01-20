@@ -34,7 +34,7 @@ import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 const iconStyle = { color: 'white' }
 
@@ -65,7 +65,7 @@ export const Menu = observer(() => {
         variables: { tpopId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -105,7 +105,7 @@ export const Menu = observer(() => {
         variables: { id: tpopmassnberId },
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

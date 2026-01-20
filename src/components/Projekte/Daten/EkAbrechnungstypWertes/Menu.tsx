@@ -23,7 +23,7 @@ import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbr
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateEkAbrechnungstypWerteResult {
   data?: {
@@ -69,7 +69,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

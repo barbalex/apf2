@@ -3,7 +3,7 @@ import { updatePopById } from './updatePopById.ts'
 import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  enqueNotificationAtom} from '../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../JotaiStore/index.ts'
 
 export const copyTpopKoordToPop = async ({ id, store }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
@@ -16,7 +16,7 @@ export const copyTpopKoordToPop = async ({ id, store }) => {
       variables: { id },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -51,7 +51,7 @@ export const copyTpopKoordToPop = async ({ id, store }) => {
       // no optimistic response as geomPoint
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

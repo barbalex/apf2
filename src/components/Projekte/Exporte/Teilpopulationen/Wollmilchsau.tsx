@@ -17,7 +17,7 @@ import wollmilchsauStyles from './Wollmilchsau.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface TPopErsteUndLetzteKontrolleQueryResult {
   allTpops: {
@@ -360,7 +360,7 @@ export const Wollmilchsau = observer(() => {
           })
         } catch (error) {
           console.log('Teilpopulationen Export, onClickEwm', { error })
-          jotaiStore.set(enqueNotificationAtom, {
+          jotaiStore.set(addNotificationAtom, {
             message: (error as Error).message,
             options: { variant: 'error' },
           })
@@ -781,7 +781,7 @@ export const Wollmilchsau = observer(() => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return jotaiStore.set(enqueNotificationAtom, {
+          return jotaiStore.set(addNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

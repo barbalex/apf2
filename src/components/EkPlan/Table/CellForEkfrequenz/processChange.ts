@@ -7,7 +7,7 @@ import {
   store as jotaiStore,
   tsQueryClientAtom,
   apolloClientAtom,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const processChange = async ({ value, row, store }) => {
@@ -45,7 +45,7 @@ export const processChange = async ({ value, row, store }) => {
       },
     })
   } catch (error) {
-    jotaiStore.set(enqueNotificationAtom, {
+    jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

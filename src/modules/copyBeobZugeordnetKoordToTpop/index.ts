@@ -3,7 +3,7 @@ import { updateTpopById } from './updateTpopById.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
   apolloClientAtom,
 } from '../../JotaiStore/index.ts'
 
@@ -17,7 +17,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
       variables: { id },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -48,7 +48,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
       },
     })
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

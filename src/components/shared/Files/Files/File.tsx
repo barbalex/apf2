@@ -29,7 +29,7 @@ import styles from './File.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
@@ -80,7 +80,7 @@ export const File = observer(({ file, parent, refetch }) => {
       })
     } catch (error) {
       console.log(error)
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
         options: {
           variant: 'error',

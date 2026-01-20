@@ -22,7 +22,7 @@ import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../JotaiStore/index.ts'
 interface ExistingEkfrequenzNode {
   id: EkfrequenzId
@@ -256,7 +256,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
 
     // 3. inform user
     setOpenChooseApToCopyEkfrequenzsFrom(false)
-    jotaiStore.set(enqueNotificationAtom, {
+    jotaiStore.set(addNotificationAtom, {
       message: `Die EK-Frequenzen wurden kopiert`,
       options: {
         variant: 'info',

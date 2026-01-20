@@ -267,7 +267,7 @@ export const apolloClientAtom = atom(null)
 // Notifications
 export const notificationsAtom = atom([])
 
-export const enqueNotificationAtom = atom(null, (get, set, note) => {
+export const addNotificationAtom = atom(null, (get, set, note) => {
   const notifications = get(notificationsAtom)
   const key = note.options?.key ?? new Date().getTime() + Math.random()
   set(notificationsAtom, [

@@ -21,7 +21,7 @@ import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface MenuProps {
   row: {
@@ -67,7 +67,7 @@ export const Menu = observer(({ row, table }: MenuProps) => {
       })
     } catch (error) {
       console.log('error', error)
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -106,7 +106,7 @@ export const Menu = observer(({ row, table }: MenuProps) => {
       })
     } catch (error) {
       console.log('error', error)
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

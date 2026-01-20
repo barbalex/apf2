@@ -22,7 +22,7 @@ import type { UserId } from '../../../../models/apflora/UserId.ts'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
 interface CreateUserResult {
   data: {
@@ -65,7 +65,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return jotaiStore.set(enqueNotificationAtom, {
+      return jotaiStore.set(addNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

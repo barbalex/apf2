@@ -7,7 +7,7 @@ import { tables } from '../../../modules/tables.ts'
 import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  enqueNotificationAtom} from '../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../JotaiStore/index.ts'
 import {
   adresse as adresseFragment,
   user as userFragment,
@@ -41,7 +41,7 @@ export const insertDataset = async ({
   const tableMetadata = tables.find((t) => t.table === table)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `no table meta data found for table "${table}"`,
       options: {
         variant: 'error',
@@ -55,7 +55,7 @@ export const insertDataset = async ({
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: 'new dataset not created as no idField could be found',
       options: {
         variant: 'error',
@@ -184,7 +184,7 @@ export const insertDataset = async ({
       result = await apolloClient.mutate({ mutation })
     }
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

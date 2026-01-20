@@ -3,7 +3,7 @@ import { camelCase } from 'es-toolkit'
 
 import {
   store as jotaiStore,
-  enqueNotificationAtom,
+  addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
 export const undelete = async ({
   deletedDatasets,
@@ -24,7 +24,7 @@ export const undelete = async ({
   try {
     mutation = await import(`./queries/${queryName}.ts`).then((m) => m.default)
   } catch (error) {
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`,
       options: {
         variant: 'error',
@@ -39,7 +39,7 @@ export const undelete = async ({
     })
   } catch (error) {
     console.log('undelete error:', error)
-    return jotaiStore.set(enqueNotificationAtom, {
+    return jotaiStore.set(addNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
