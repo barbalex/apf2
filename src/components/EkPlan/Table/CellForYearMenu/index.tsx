@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -10,6 +10,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom, addNotificationAtom } from '../../../../JotaiStore/index.ts'
 import { queryTpop } from './queryTpop.ts'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.ts'
 import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
@@ -105,12 +106,14 @@ export const CellForYearMenu = observer(() => {
   const onClickEkEntfernen = () => removeEkPlan('EK')
   const onClickEkfEntfernen = () => removeEkPlan('EKF')
 
+  const userName = useAtomValue(userNameAtom)
+
   const addEkPlan = async (typ) => {
     const variables = {
       tpopId,
       jahr: year,
       typ,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({

@@ -11,14 +11,12 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { IdbContext } from '../idbContext.ts'
-import { MobxContext } from '../mobxContext.ts'
 import { getUserFromIdb } from '../modules/getUserFromIdb.ts'
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 import { userAtom } from '../JotaiStore/index.ts'
@@ -36,10 +34,9 @@ function tokenStateReducer(state, action) {
   }
 }
 
-export const User = observer(() => {
+export const User = () => {
   const apolloClient = useApolloClient()
   const { idb } = useContext(IdbContext)
-  const store = useContext(MobxContext)
   const [user, setUser] = useAtom(userAtom)
 
   const [name, setName] = useState('')
@@ -253,4 +250,4 @@ export const User = observer(() => {
       </Dialog>
     </ErrorBoundary>
   )
-})
+}

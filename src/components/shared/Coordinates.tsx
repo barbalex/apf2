@@ -1,15 +1,15 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../mobxContext.ts'
+import { userNameAtom } from '../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.ts'
 import { epsg2056to4326 } from '../../modules/epsg2056to4326.ts'
 import {
@@ -31,15 +31,14 @@ import {
 
 import styles from './Coordinates.module.css'
 
-export const Coordinates = observer(({ row, refetchForm, table }) => {
+export const Coordinates = ({ row, refetchForm, table }) => {
   const { lv95X, lv95Y, id } = row || {}
   const wgs84Lat = row?.geomPoint?.x
   const wgs84Long = row?.geomPoint?.y
 
-  const store = useContext(MobxContext)
-
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
+  const userName = useAtomValue(userNameAtom)
 
   const [lv95XState, setLv95XState] = useState(lv95X || '')
   const [lv95YState, setLv95YState] = useState(lv95Y || '')
@@ -98,11 +97,11 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
               }
             }
           `,
-        // no optimistic responce as geomPoint
+        // no optimistic response as geomPoint
         variables: {
           id: row.id,
           geomPoint,
-          changedBy: store.user.name,
+          changedBy: userName,
         },
       })
     } catch (error) {
@@ -372,4 +371,4 @@ export const Coordinates = observer(({ row, refetchForm, table }) => {
       </div>
     </>
   )
-})
+}
