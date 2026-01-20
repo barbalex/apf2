@@ -11,7 +11,6 @@ import { useAtom, useAtomValue } from 'jotai'
 import { logout } from '../../../../../modules/logout.ts'
 import { EkfUser } from './EkfUser/index.tsx'
 import { MobxContext } from '../../../../../mobxContext.ts'
-import { IdbContext } from '../../../../../idbContext.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { ShowBookmarksMenu } from './ShowBookmarksMenu.tsx'
 import { EnforceDesktopNavigation } from './EnforceDesktopNavigation.tsx'
@@ -38,7 +37,6 @@ export const More = observer(
     const store = useContext(MobxContext)
     const { deletedDatasets, setShowDeletions } = store
     const userName = useAtomValue(userNameAtom)
-    const { idb } = useContext(IdbContext)
 
     const [anchorEl, setAnchorEl] = useState(null)
     const closeMenu = () => setAnchorEl(null)
@@ -65,8 +63,6 @@ export const More = observer(
       // before setAnchor has finished
       setTimeout(() => passedOnClickExporte())
     }
-
-    const onClickLogout = () => logout(idb)
 
     const onClickUptime = () => {
       window.open('https://uptime.apflora.ch')
@@ -136,7 +132,7 @@ export const More = observer(
             <AlwaysShowTree />
           </MenuItem>
           <MenuItem
-            onClick={onClickLogout}
+            onClick={logout}
             data-id="appbar-more-logout"
           >{`${userName} abmelden (und Cache leeren)`}</MenuItem>
           <MenuItem onClick={onClickUptime}>

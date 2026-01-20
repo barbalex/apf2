@@ -304,3 +304,11 @@ export const userIdAtom = atom((get) => get(userAtom).id)
 export const setUserAtom = atom(null, (get, set, newUser) => {
   set(userAtom, newUser)
 })
+
+export const removeUserAtom = atom(null, (get, set) => {
+  set(userAtom, {
+    name: '',
+    token: null,
+    id: null,
+  })
+})
