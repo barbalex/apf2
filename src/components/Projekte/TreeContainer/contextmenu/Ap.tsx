@@ -1,8 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -27,10 +29,11 @@ const moveData = {
 
 export const Ap = observer(({ onClick }) => {
   const store = useContext(MobxContext)
-  const { user, moving } = store
+  const { moving } = store
+  const userToken = useAtomValue(userTokenAtom)
 
   const isMoving = moving.table && moving.table === 'pop'
-  const mayWrite = !userIsReadOnly(user.token)
+  const mayWrite = !userIsReadOnly(userToken)
 
   return (
     <ErrorBoundary>
