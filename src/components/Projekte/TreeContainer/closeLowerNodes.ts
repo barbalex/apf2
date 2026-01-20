@@ -1,6 +1,8 @@
 import { isEqual } from 'es-toolkit'
 import { getSnapshot } from 'mobx-state-tree'
 
+import { store as jotaiStore, navigateAtom } from '../../../JotaiStore/index.ts'
+
 export const closeLowerNodes = async ({ url, store, search }) => {
   const { setOpenNodes } = store.tree
   const openNodes = getSnapshot(store.tree.openNodes)
@@ -13,6 +15,7 @@ export const closeLowerNodes = async ({ url, store, search }) => {
   if (isEqual(activeNodeArray.slice(0, url.length), url)) {
     // active node will be closed
     // navigate to url
-    store.navigate(`/Daten/${url.join('/')}${search}`)
+    const navigate = jotaiStore.get(navigateAtom)
+    navigate(`/Daten/${url.join('/')}${search}`)
   }
 }

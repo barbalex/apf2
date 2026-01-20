@@ -64,7 +64,8 @@ export const persistStore = ({ store, idb }) => {
     // set last activeNodeArray
     // only if top domain was visited
     if (isUser && visitedTopDomain) {
-      return store.navigate?.(`/Daten/${store.tree.activeNodeArray.join('/')}`)
+      const navigate = jotaiStore.get(navigateAtom)
+      return navigate?.(`/Daten/${store.tree.activeNodeArray.join('/')}`)
     }
   })
 }

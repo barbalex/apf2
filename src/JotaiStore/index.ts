@@ -286,3 +286,6 @@ export const removeNotificationAtom = atom(null, (get, set, key) => {
     notifications.filter((n) => n.key !== key),
   )
 })
+
+// navigate function atom
+export const navigateAtom = atom(undefined)

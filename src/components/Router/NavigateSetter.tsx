@@ -1,12 +1,13 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../mobxContext.ts'
+import { navigateAtom } from '../../JotaiStore/index.ts'
 
-export const NavigateSetter = observer(() => {
+export const NavigateSetter = () => {
   const navigate = useNavigate()
-  const { navigate: navigateInStore, setNavigate } = useContext(MobxContext)
+  const setNavigate = useSetAtom(navigateAtom)
+  const navigateInStore = useAtomValue(navigateAtom)
   const navigateSet = useRef(false)
 
   useEffect(() => {
@@ -21,4 +22,4 @@ export const NavigateSetter = observer(() => {
   }, [navigate, navigateInStore, setNavigate])
 
   return null
-})
+}

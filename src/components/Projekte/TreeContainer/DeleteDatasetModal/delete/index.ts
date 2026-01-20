@@ -11,6 +11,7 @@ import {
   tsQueryClientAtom,
   apolloClientAtom,
   addNotificationAtom,
+  navigateAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -22,6 +23,7 @@ const isFreiwilligenKontrolle = (activeNodeArray) =>
 export const deleteModule = async ({ store, search }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const navigate = jotaiStore.get(navigateAtom)
   const {
     emptyToDelete,
     addDeletedDataset,
@@ -143,7 +145,7 @@ export const deleteModule = async ({ store, search }) => {
       newActiveNodeArray1.pop()
     }
     setTimeout(
-      () => store.navigate(`/Daten/${newActiveNodeArray1.join('/')}${search}`),
+      () => navigate(`/Daten/${newActiveNodeArray1.join('/')}${search}`),
       300,
     )
   }

@@ -6,14 +6,16 @@ import { queryBeob } from './queryBeob.ts'
 import { createPop } from './createPop.ts'
 import { createTpop } from './createTpop.ts'
 import { updateBeobById } from './updateBeobById.ts'
-import {store as jotaiStore,
+import {
+  store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  addNotificationAtom} from '../../JotaiStore/index.ts'
+  addNotificationAtom,
+  navigateAtom,
+} from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
-
 
 export const createNewPopFromBeob = async ({
   id,
@@ -24,6 +26,7 @@ export const createNewPopFromBeob = async ({
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const navigate = jotaiStore.get(navigateAtom)
   const tree = store.tree
   const { addOpenNodes } = tree
 
@@ -176,7 +179,7 @@ export const createNewPopFromBeob = async ({
     .filter((n) => !isEqual(n, tree.activeNodeArray))
 
   addOpenNodes(newOpenNodes)
-  store.navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],

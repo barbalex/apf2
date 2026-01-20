@@ -4,10 +4,13 @@ import { camelCase } from 'es-toolkit'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../modules/tables.ts'
-import {store as jotaiStore,
+import {
+  store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  addNotificationAtom} from '../../../JotaiStore/index.ts'
+  addNotificationAtom,
+  navigateAtom,
+} from '../../../JotaiStore/index.ts'
 import {
   adresse as adresseFragment,
   user as userFragment,
@@ -18,7 +21,6 @@ import {
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
-
 
 const fragments = {
   tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,
@@ -38,6 +40,7 @@ export const insertDataset = async ({
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const navigate = jotaiStore.get(navigateAtom)
   const { openNodes: openNodesRaw, setOpenNodes } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
   let table = tablePassed
@@ -201,7 +204,7 @@ export const insertDataset = async ({
   const newActiveNodeArray = [...url, row[idField]]
   // need to add single name to the url, i.e. 'Art' for ap
   const to = `/Daten/${newActiveNodeArray.join('/')}${singleElementName ? `/${singleElementName}` : ''}${search}`
-  setTimeout(() => store.navigate(to), 300)
+  setTimeout(() => navigate(to), 300)
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {

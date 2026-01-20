@@ -7,6 +7,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
+  navigateAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveArtIdToDb = async ({ value, row, store, search }) => {
@@ -15,6 +16,7 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   const openNodes = getSnapshot(openNodesRaw)
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const navigate = jotaiStore.get(navigateAtom)
 
   if (!value) return
 
@@ -72,7 +74,7 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
     [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]],
   ]
   setOpenNodes(newOpenNodes)
-  store.navigate(`/Daten/${newANA.join('/')}${search}`)
+  navigate(`/Daten/${newANA.join('/')}${search}`)
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
