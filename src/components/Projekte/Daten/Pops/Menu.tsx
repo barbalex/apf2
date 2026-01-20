@@ -114,7 +114,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const onClickMovePopToHere = () =>
     moveTo({
       id: apId,
-      apolloClient,
       store,
     })
 

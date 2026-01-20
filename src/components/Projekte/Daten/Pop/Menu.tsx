@@ -183,7 +183,6 @@ export const Menu = observer(({ row }: MenuProps) => {
     if (isTpopMoving) {
       return moveTo({
         id: popId,
-        apolloClient,
         store,
       })
     }
