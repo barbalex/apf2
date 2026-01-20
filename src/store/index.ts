@@ -121,7 +121,6 @@ export const MobxStore = types
   .volatile(() => ({
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
-    navigate: undefined,
   }))
   .actions((self) => ({
     setOpenChooseApToCopyErfkritsFrom(val) {
@@ -132,9 +131,6 @@ export const MobxStore = types
     },
     setSortedBeobFields(val) {
       self.sortedBeobFields = val.filter((v) => !!v)
-    },
-    setNavigate(val) {
-      self.navigate = val
     },
     setHideMapControls(val) {
       self.hideMapControls = val
