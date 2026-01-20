@@ -271,4 +271,4 @@ export const Component = () => {
       </div>
     </ErrorBoundary>
   )
-})
+}

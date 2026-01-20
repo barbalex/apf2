@@ -1,9 +1,9 @@
-import { useContext, useState, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, type ChangeEvent } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -11,7 +11,7 @@ import { Kontrolljahre } from './Kontrolljahre.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryEkAbrechnungstypWertes } from './queryEkAbrechnungstypWertes.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ekfrequenz } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -70,10 +70,8 @@ const kontrolljahreAbWertes = [
   { value: 'ANSIEDLUNG', label: 'Ansiedlung' },
 ]
 
-export const Component = observer(() => {
+export const Component = () => {
   const { ekfrequenzId: id } = useParams()
-
-  const store = useContext(MobxContext)
 
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()
@@ -111,6 +109,7 @@ export const Component = observer(() => {
   })
 
   const row = data?.data?.ekfrequenzById ?? {}
+  const userName = useAtomValue(userNameAtom)
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -119,7 +118,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({
@@ -256,4 +255,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
