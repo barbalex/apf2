@@ -2,6 +2,7 @@ import { useContext, lazy, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
+import { useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
 
 import type { ApId } from '../../models/apflora/Ap.ts'
@@ -20,6 +21,7 @@ const Choose = lazy(async () => ({
 import { queryAps } from './queryAps.ts'
 import { MobxContext } from '../../mobxContext.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
+import { userTokenAtom } from '../../JotaiStore/index.ts'
 const Error = lazy(async () => ({
   default: (await import('../shared/Error.tsx')).Error,
 }))
@@ -36,7 +38,7 @@ import styles from './index.module.css'
 export const Component = observer(() => {
   const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
-  const { user } = store
+  const userToken = useAtomValue(userTokenAtom)
   const { aps, setApsData, setApsDataLoading } = store.ekPlan
   const {
     setFilterAp,
@@ -135,7 +137,7 @@ export const Component = observer(() => {
     <ErrorBoundary>
       <div className={styles.container}>
         <Suspense fallback={<Spinner />}>
-          {!!user.token && (
+          {!!userToken && (
             <>
               <div className={styles.header}>
                 <ApList />
