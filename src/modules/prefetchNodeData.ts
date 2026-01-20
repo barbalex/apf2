@@ -26,6 +26,12 @@ import { query as projektQuery } from '../components/Projekte/Daten/Projekt/quer
 import { query as beobQuery } from '../components/Projekte/Daten/Beob/query.ts'
 import { query as apberuebersichtQuery } from '../components/Projekte/Daten/Apberuebersicht/query.ts'
 
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+  tsQueryClientAtom,
+} from '../JotaiStore/index.js'
+
 interface NodeQueryConfig {
   query: any
   queryKey: (id: string, node?: any) => any[]
@@ -151,14 +157,10 @@ const nodeQueryConfigs: Record<string, NodeQueryConfig> = {
   },
 }
 
-export const prefetchNodeData = async ({
-  node,
-  store,
-}: {
-  node: any
-  store: Instance<typeof MobxStore>
-}) => {
+export const prefetchNodeData = async (node: any) => {
   const { menuType, tableId, id } = node
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
 
   // Only prefetch for node types we have queries for
   const config = nodeQueryConfigs[menuType]
@@ -167,7 +169,6 @@ export const prefetchNodeData = async ({
   const nodeId = tableId || id
   if (!nodeId) return
 
-  const { tsQueryClient, apolloClient } = store
   if (!tsQueryClient || !apolloClient) return
 
   // Check if data is already in cache

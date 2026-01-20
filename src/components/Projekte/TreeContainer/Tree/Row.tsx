@@ -88,7 +88,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
 
   const onMouseEnterNode = () => {
     // Prefetch data when hovering over node
-    prefetchNodeData({ node, store })
+    prefetchNodeData(node)
   }
 
   const nodeStyle = {
