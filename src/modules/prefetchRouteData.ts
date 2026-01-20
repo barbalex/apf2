@@ -26,6 +26,12 @@ import { query as projektQuery } from '../components/Projekte/Daten/Projekt/quer
 import { query as beobQuery } from '../components/Projekte/Daten/Beob/query.ts'
 import { query as apberuebersichtQuery } from '../components/Projekte/Daten/Apberuebersicht/query.ts'
 
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+  tsQueryClientAtom,
+} from '../JotaiStore/index.ts'
+
 interface RouteConfig {
   // Pattern to match the route path
   pattern: RegExp
@@ -293,16 +299,10 @@ const routeConfigs: RouteConfig[] = [
 /**
  * Prefetch data for a route before navigating to it
  * @param path - The route path to prefetch data for
- * @param store - MobX store instance
  */
-export const prefetchRouteData = async ({
-  path,
-  store,
-}: {
-  path: string
-  store: Instance<typeof MobxStore>
-}) => {
-  const { tsQueryClient, apolloClient } = store
+export const prefetchRouteData = async (path: string) => {
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   if (!tsQueryClient || !apolloClient) return
 
   // Decode the path to handle URL-encoded characters

@@ -5,7 +5,6 @@ import Highlighter from 'react-highlight-words'
 import { FormTitle } from '../FormTitle/index.tsx'
 import { ErrorBoundary } from '../ErrorBoundary.tsx'
 import { navData } from '../../Bookmarks/NavTo/Navs/Projects.tsx'
-import { MobxContext } from '../../../mobxContext.ts'
 import { prefetchRouteData } from '../../../modules/prefetchRouteData.ts'
 
 import styles from './index.module.css'
@@ -18,19 +17,18 @@ export const List = ({
 }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
-  const store = useContext(MobxContext)
 
   const onClickRow = async (item) => {
     const path = `./${item.id}${search}`
     // Prefetch before navigating (in case user didn't hover)
-    await prefetchRouteData({ path, store })
+    await prefetchRouteData(path)
     navigate(path)
   }
 
   const onMouseEnterRow = (item) => {
     const path = `./${item.id}${search}`
     // Prefetch on hover
-    prefetchRouteData({ path, store })
+    prefetchRouteData(path)
   }
 
   return (

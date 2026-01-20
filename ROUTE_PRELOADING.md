@@ -42,7 +42,7 @@ Implemented comprehensive route data preloading to eliminate loading states when
 **Usage**:
 
 ```typescript
-await prefetchRouteData({ path: '/Daten/Projekte/...', store })
+await prefetchRouteData('/Daten/Projekte/...')
 ```
 
 ### 2. PrefetchLink Component

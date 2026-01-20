@@ -24,7 +24,7 @@ export const PrefetchLink = observer(
         : null
 
       if (path) {
-        prefetchRouteData({ path, store })
+        prefetchRouteData(path)
       }
     }
 
