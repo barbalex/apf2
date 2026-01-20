@@ -308,7 +308,7 @@ export const Menu = observer(({ row }: MenuProps) => {
 
   const onCopyCoordToPop = async () => {
     setCopyingCoordToTpop(true)
-    await copyTpopKoordToPop({ id: tpopId, store, apolloClient })
+    await copyTpopKoordToPop({ id: tpopId, store })
     setCopyingCoordToTpop(false)
   }
 

@@ -1,7 +1,14 @@
 import { queryTpop } from './queryTpop.ts'
 import { updatePopById } from './updatePopById.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+  tsQueryClientAtom,
+} from '../../JotaiStore/index.ts'
 
-export const copyTpopKoordToPop = async ({ id, store, apolloClient }) => {
+export const copyTpopKoordToPop = async ({ id, store }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   // fetch tpop
   let tpopResult
   try {
@@ -42,7 +49,7 @@ export const copyTpopKoordToPop = async ({ id, store, apolloClient }) => {
         id: popId,
         geomPoint,
       },
-      // no optimistic responce as geomPoint
+      // no optimistic response as geomPoint
     })
   } catch (error) {
     return store.enqueNotification({
@@ -52,10 +59,10 @@ export const copyTpopKoordToPop = async ({ id, store, apolloClient }) => {
       },
     })
   }
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`PopForMapQuery`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`TpopForMapQuery`],
   })
 
