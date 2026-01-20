@@ -1,4 +1,3 @@
-// seems not in use?
 import { isEqual } from 'es-toolkit'
 
 import { updateBeobById } from './updateBeobById.ts'

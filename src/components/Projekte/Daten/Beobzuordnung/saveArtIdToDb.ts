@@ -1,4 +1,3 @@
-// seems not in use
 import { isEqual } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'

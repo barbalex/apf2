@@ -182,7 +182,6 @@ export const Component = observer(() => {
     saveArtIdToDb({
       value: event.target.value,
       row,
-      apolloClient,
       store,
       search,
     })
@@ -192,7 +191,6 @@ export const Component = observer(() => {
       value,
       id,
       refetch,
-      apolloClient,
       store,
       search,
     })
@@ -202,7 +200,6 @@ export const Component = observer(() => {
       value: event.target.value,
       id,
       type,
-      apolloClient,
       store,
       search,
     })
