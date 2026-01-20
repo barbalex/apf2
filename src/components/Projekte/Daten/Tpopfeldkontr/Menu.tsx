@@ -210,7 +210,6 @@ export const Menu = observer(({ row }: MenuProps) => {
     if (isMovingFeldkontr) {
       return moveTo({
         id: tpopId,
-        apolloClient,
         store,
       })
     }
