@@ -2,16 +2,21 @@ import { gql } from '@apollo/client'
 
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.tsx'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+  tsQueryClientAtom,
+} from '../../../../JotaiStore/index.ts'
 
 export const processChange = async ({
-  apolloClient,
   value,
   ekfrequenz,
   row,
   enqueNotification,
   store,
-  tsQueryClient,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   try {
     await apolloClient.mutate({
       mutation: gql`

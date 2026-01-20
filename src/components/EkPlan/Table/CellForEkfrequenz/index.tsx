@@ -1,6 +1,4 @@
 import { useContext, useState } from 'react'
-import { useApolloClient } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -20,9 +18,6 @@ const processChangeWorkerFactory = createWorkerFactory(
 
 export const CellForEkfrequenz = observer(
   ({ row, isOdd, field, width, setProcessing, data }) => {
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
-
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { hovered, apValues } = store.ekPlan

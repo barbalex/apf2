@@ -1,7 +1,5 @@
 import { useContext, useState, useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client/react'
-import { useQueryClient } from '@tanstack/react-query'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import { MobxContext } from '../../../../mobxContext.ts'
@@ -16,9 +14,6 @@ const processChangeWorkerFactory = createWorkerFactory(
 
 export const CellForEkfrequenzStartjahr = observer(
   ({ row, isOdd, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
-    const apolloClient = useApolloClient()
-    const tsQueryClient = useQueryClient()
-
     const store = useContext(MobxContext)
     const { enqueNotification } = store
     const { hovered } = store.ekPlan
@@ -44,13 +39,11 @@ export const CellForEkfrequenzStartjahr = observer(
         e.target.value || e.target.value === 0 ? +e.target.value : null
       setProcessing(true)
       await processChangeWorker.processChange({
-        apolloClient,
         value,
         ekfrequenz,
         row,
         enqueNotification,
         store,
-        tsQueryClient,
       })
       setProcessing(false)
     }
