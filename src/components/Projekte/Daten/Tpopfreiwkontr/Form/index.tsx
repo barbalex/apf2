@@ -5,6 +5,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 import type { ApId } from '../../../../../models/apflora/ApId.ts'
 
 import { StringToCopyOnlyButton } from '../../../../shared/StringToCopyOnlyButton.tsx'
@@ -24,6 +25,7 @@ import { Verification } from './Verification.tsx'
 import { Image } from './Image.tsx'
 import { MobxContext } from '../../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
+import { userNameAtom } from '../../../../../JotaiStore/index.ts'
 import {
   adresse as adresseFragment,
   pop as popFragment,
@@ -64,10 +66,9 @@ const fieldTypes = {
 
 export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
   const store = useContext(MobxContext)
-  const { isPrint, user } = store
+  const { isPrint } = store
   const { dataFilterSetValue } = store.tree
-  const { token } = user
-  const role = token ? jwtDecode(token).role : null
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -131,7 +132,7 @@ export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: user.name,
+      changedBy: userName,
     }
     let field2
     if (field === 'datum') field2 = 'jahr'
