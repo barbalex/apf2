@@ -1,8 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -31,7 +33,9 @@ const resetCopyingData = {
 }
 
 export const Tpopfreiwkontr = observer(({ onClick }) => {
-  const { copying, user } = useContext(MobxContext)
+  const store = useContext(MobxContext)
+  const { copying } = store
+  const userToken = useAtomValue(userTokenAtom)
 
   return (
     <ErrorBoundary>
@@ -40,7 +44,7 @@ export const Tpopfreiwkontr = observer(({ onClick }) => {
         hideOnLeave={true}
       >
         <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
-        {!userIsReadOnly(user.token, 'freiw') && (
+        {!userIsReadOnly(userToken, 'freiw') && (
           <>
             <MenuItem
               onClick={onClick}
