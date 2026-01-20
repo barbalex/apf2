@@ -4,7 +4,7 @@ import { camelCase } from 'es-toolkit'
 import {
   store as jotaiStore,
   addNotificationAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../JotaiStore/index.js'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)

@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 
-import { undelete } from './undelete/index.tsx'
+import { undelete } from './undelete/index.ts'
 import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 

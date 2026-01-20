@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 import { tpop } from '../../../shared/fragments.ts'
-import { setEkplans } from '../setEkplans/index.tsx'
+import { setEkplans } from '../setEkplans/index.ts'
 import {
   store as jotaiStore,
   apolloClientAtom,
@@ -11,7 +11,6 @@ import {
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
-
 
 export const processChange = async ({ value, ekfrequenz, row, store }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)

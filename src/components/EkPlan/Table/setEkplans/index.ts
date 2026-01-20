@@ -1,14 +1,15 @@
-import { queryEkplans } from './queryEkplans.ts'
-import { queryEkfrequenz } from './queryEkfrequenz.ts'
-import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
-import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
-import {store as jotaiStore,
+import { queryEkplans } from './queryEkplans.js'
+import { queryEkfrequenz } from './queryEkfrequenz.js'
+import { mutationDeleteEkplan } from './mutationDeleteEkplan.js'
+import { mutationCreateEkplan } from './mutationCreateEkplan.js'
+import {
+  store as jotaiStore,
   apolloClientAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.js'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
-
 
 export const setEkplans = async ({
   tpopId,
@@ -21,7 +22,7 @@ export const setEkplans = async ({
   // only return if set ekfrequenz has kontrolljahre?
   // but then: query ekplans beginning when? This year
   //console.log('setEkplans', { ekfrequenzValue })
-  if (!ekfrequenzStartjahr) return  // 1. query all ekplans beginning with ekfrequenzStartJahr
+  if (!ekfrequenzStartjahr) return // 1. query all ekplans beginning with ekfrequenzStartJahr
   let ekplansToDeleteResult
   try {
     ekplansToDeleteResult = await apolloClient.query({
