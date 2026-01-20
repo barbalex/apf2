@@ -16,6 +16,7 @@ import {
   store as jotaiStore,
   enqueNotificationAtom,
 } from '../../../../JotaiStore/index.ts'
+
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.ts'),
 )
@@ -41,7 +42,6 @@ export const CellForEkfrequenz = observer(
       await processChangeWorker.processChange({
         value,
         row,
-        enqueNotification,
         store,
       })
       setProcessing(false)
