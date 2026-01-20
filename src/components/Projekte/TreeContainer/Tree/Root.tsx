@@ -1,8 +1,7 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { jwtDecode } from 'jwt-decode'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userAtom } from '../../../../JotaiStore/index.ts'
 import { NodeWithList } from './NodeWithList.tsx'
 import { RootNode } from './RootNode.tsx'
 import { useProjektNavData } from '../../../../modules/useProjektNavData.ts'
@@ -11,9 +10,9 @@ import { useWertesNavData } from '../../../../modules/useWertesNavData.ts'
 import { useMessagesNavData } from '../../../../modules/useMessagesNavData.ts'
 import { useCurrentissuesNavData } from '../../../../modules/useCurrentissuesNavData.ts'
 
-export const Root = observer(() => {
-  const store = useContext(MobxContext)
-  const token = store.user?.token
+export const Root = () => {
+  const user = useAtomValue(userAtom)
+  const token = user?.token
   const role = token ? jwtDecode(token).role : null
 
   return (
@@ -25,4 +24,4 @@ export const Root = observer(() => {
       <RootNode fetcher={useCurrentissuesNavData} />
     </>
   )
-})
+}

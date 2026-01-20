@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -17,14 +17,14 @@ import { userIsReadOnly } from '../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
-import type { EkfrequenzId, ApId } from '../../models/apflora/public/Ekfrequenz.ts'
+import type {
+  EkfrequenzId,
+  ApId,
+} from '../../models/apflora/public/Ekfrequenz.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../JotaiStore/index.ts'
-
+import { addNotificationAtom, userAtom } from '../../JotaiStore/index.ts'
 
 interface ExistingEkfrequenzNode {
   id: EkfrequenzId
@@ -75,37 +75,42 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const store = useContext(MobxContext)
-  const { user, openChooseApToCopyEkfrequenzsFrom, setOpenChooseApToCopyEkfrequenzsFrom } = store
+  const user = useAtomValue(userAtom)
+  const {
+    openChooseApToCopyEkfrequenzsFrom,
+    setOpenChooseApToCopyEkfrequenzsFrom,
+  } = store
   const onCloseChooseApDialog = () =>
     setOpenChooseApToCopyEkfrequenzsFrom(false)
 
   const onChooseAp = async (option) => {
     const newApId = option.value
-    // 0. choosing no option is not possible so needs not be catched
+    // 0. choosing no option is not possible so needs not be cached
     // 1. delete existing ekfrequenz
     // 1.1: query existing ekfrequenz
     let existingEkfrequenzResult
     try {
-      existingEkfrequenzResult = await apolloClient.query<ExistingEkfrequenzQueryResult>({
-        query: gql`
-          query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
-            allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
-              nodes {
-                id
+      existingEkfrequenzResult =
+        await apolloClient.query<ExistingEkfrequenzQueryResult>({
+          query: gql`
+            query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
+              allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
+                nodes {
+                  id
+                }
               }
             }
-          }
-        `,
-        variables: {
-          apId,
-        },
-        // got errors when not setting 'network-only' policy
-        // when copying repeatedly
-        // apollo seemed to use local cache which was not up to date any more
-        // so probably not the newly inserted were queried but the earlier deleted ones
-        // which created conflicts with uniqueness
-        fetchPolicy: 'network-only',
-      })
+          `,
+          variables: {
+            apId,
+          },
+          // got errors when not setting 'network-only' policy
+          // when copying repeatedly
+          // apollo seemed to use local cache which was not up to date any more
+          // so probably not the newly inserted were queried but the earlier deleted ones
+          // which created conflicts with uniqueness
+          fetchPolicy: 'network-only',
+        })
     } catch (error) {
       console.log({ error })
       setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
