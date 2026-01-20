@@ -1,19 +1,19 @@
+// seems not in use
 import { isEqual } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { updateBeobById } from './updateBeobById.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+} from '../../../../JotaiStore/index.ts'
 
-export const saveArtIdToDb = async ({
-  value,
-  row,
-  apolloClient,
-  store,
-  search,
-}) => {
+export const saveArtIdToDb = async ({ value, row, store, search }) => {
   const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
+  const apolloClient = jotaiStore.get(apolloClientAtom)
 
   if (!value) return
 
