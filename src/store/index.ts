@@ -122,7 +122,6 @@ export const MobxStore = types
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
     notifications: [],
-    apolloClient: null,
     navigate: undefined,
   }))
   .actions((self) => ({
@@ -137,9 +136,6 @@ export const MobxStore = types
     },
     setNavigate(val) {
       self.navigate = val
-    },
-    setApolloClient(val) {
-      self.apolloClient = val
     },
     setHideMapControls(val) {
       self.hideMapControls = val

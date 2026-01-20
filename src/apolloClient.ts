@@ -234,7 +234,6 @@ export const buildApolloClient = ({
     },
   })
   // make client available in store
-  store.setApolloClient(client)
   jotaiStore.set(apolloClientAtom, client)
 
   return client
