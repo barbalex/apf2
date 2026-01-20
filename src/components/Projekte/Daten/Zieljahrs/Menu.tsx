@@ -96,7 +96,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       id: apId,
       projId,
       apId,
-      apolloClient,
       store,
       menuType: 'zielFolder',
     })

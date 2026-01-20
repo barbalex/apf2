@@ -6,6 +6,10 @@ import { pop } from './pop/index.ts'
 import { popFolder } from './popFolder/index.ts'
 import { zielFolder } from './zielFolder/index.ts'
 import { zieljahrFolder } from './zieljahrFolder/index.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+} from '../../../../JotaiStore/index.ts'
 
 export const openLowerNodes = ({
   id,
@@ -14,10 +18,10 @@ export const openLowerNodes = ({
   apId,
   projId,
   menuType,
-  apolloClient,
   store,
   jahr,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   /**
    * 1. load all data
    * 2. build openNodes for all data using setOpenNodesFromActiveNodeArray

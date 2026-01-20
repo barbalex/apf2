@@ -96,7 +96,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       projId,
       apId,
       popId,
-      apolloClient,
       store,
       menuType: 'tpopFolder',
     })

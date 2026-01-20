@@ -123,7 +123,6 @@ export const MobxStore = types
     deletedDatasets: [],
     notifications: [],
     apolloClient: null,
-    tsQueryClient: null,
     navigate: undefined,
   }))
   .actions((self) => ({
@@ -141,9 +140,6 @@ export const MobxStore = types
     },
     setApolloClient(val) {
       self.apolloClient = val
-    },
-    setTsQueryClient(val) {
-      self.tsQueryClient = val
     },
     setHideMapControls(val) {
       self.hideMapControls = val

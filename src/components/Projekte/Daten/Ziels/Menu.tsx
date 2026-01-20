@@ -94,7 +94,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       projId,
       apId,
       parentId: apId,
-      apolloClient,
       store,
       jahr,
       menuType: 'zieljahrFolder',

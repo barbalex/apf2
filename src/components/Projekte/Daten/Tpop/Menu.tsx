@@ -182,7 +182,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       projId,
       apId,
       popId,
-      apolloClient,
       store,
       menuType: 'tpop',
       parentId: popId,

@@ -353,7 +353,6 @@ export const Menus = observer(() => {
           projId,
           popId,
           menuType,
-          apolloClient,
           store,
           jahr,
         })

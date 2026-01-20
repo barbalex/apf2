@@ -1,8 +1,7 @@
-import { useContext, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../mobxContext.ts'
 import {
   store as jotaiStore,
   tsQueryClientAtom,
@@ -10,22 +9,19 @@ import {
 
 export const QueryClientSetter = observer(() => {
   const tsQueryClient = useQueryClient()
-  const store = useContext(MobxContext)
-  const { setTsQueryClient } = store
+  const tsQueryClientInJotaiStore = jotaiStore.get(tsQueryClientAtom)
 
   const wasSet = useRef(false)
 
   useEffect(() => {
-    if (store.tsQueryClient) return
+    if (tsQueryClientInJotaiStore) return
     // prevent setting navigate twice
     // only because of strict mode?
     if (wasSet.current) return
 
-    // console.log('NavigateSetter setting navigate')
-    setTsQueryClient(tsQueryClient)
     jotaiStore.set(tsQueryClientAtom, tsQueryClient)
     wasSet.current = true
-  }, [tsQueryClient, setTsQueryClient, store.tsQueryClient])
+  }, [tsQueryClient, tsQueryClientInJotaiStore])
 
   return null
 })

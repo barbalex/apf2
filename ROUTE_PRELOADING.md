@@ -148,7 +148,7 @@ Routes are matched using regex patterns with parameter extraction:
 
 ### MobX Integration
 
-- Uses `store.apolloClient` and `store.tsQueryClient`
+- Uses `jotaiStore.apolloClient` and `jotaiStore.tsQueryClient`
 - Observer pattern for reactivity
 - Consistent with existing hover prefetch pattern
 
