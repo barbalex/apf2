@@ -2,7 +2,6 @@
 // but: querying did not work
 // and covers background
 // so: not used
-import { useContext } from 'react'
 import { useMap, WMSTileLayer } from 'react-leaflet'
 // import styled from '@emotion/styled'
 import { useMapEvent } from 'react-leaflet'
@@ -14,7 +13,6 @@ import { observer } from 'mobx-react-lite'
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.ts'
 import { Popup } from './Popup.tsx'
 import { onTileError } from './onTileError.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 const StyledPopupContent = styled.div`
   white-space: pre;
@@ -39,9 +37,8 @@ const layer = {
   wms_base_url: `https://wms.geo.admin.ch/`,
 }
 
-export const WMS = observer(() => {
+export const WMS = () => {
   const map = useMap()
-  const store = useContext(MobxContext)
 
   useMapEvent('click', async (e) => {
     // console.log({ layer })
@@ -173,7 +170,7 @@ export const WMS = observer(() => {
   })
 
   const onTileErrorDebounced = useDebouncedCallback(
-    onTileError.bind(this, store, map, layer),
+    onTileError.bind(this, map, layer),
     600,
   )
 
@@ -198,4 +195,4 @@ export const WMS = observer(() => {
       }}
     />
   )
-})
+}

@@ -71,7 +71,6 @@ export const processChange = async ({ value, row, store }) => {
       tpopId: row.id,
       ekfrequenz: value,
       ekfrequenzStartjahr,
-      store,
     })
   }
   // don't await as this would block the ui and it doesn't matter if user navigates away

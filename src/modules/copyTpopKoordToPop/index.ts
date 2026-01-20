@@ -9,7 +9,7 @@ const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
 
-export const copyTpopKoordToPop = async ({ id, store }) => {
+export const copyTpopKoordToPop = async ({ id }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   // fetch tpop

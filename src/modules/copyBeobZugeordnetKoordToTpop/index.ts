@@ -10,8 +10,7 @@ import {
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-
-export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
+export const copyBeobZugeordnetKoordToTpop = async ({ id }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   // fetch beob coodinates
   let beobResult

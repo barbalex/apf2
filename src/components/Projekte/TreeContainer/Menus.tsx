@@ -13,13 +13,12 @@ import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { useSetAtom,  useAtom } from 'jotai'
-import {newTpopFromBeobDialogOpenAtom,
+import { useSetAtom, useAtom } from 'jotai'
+import {
+  newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
   addNotificationAtom,
 } from '../../../JotaiStore/index.ts'
-
-
 
 const CmApFolder = lazy(async () => ({
   default: (await import('./contextmenu/ApFolder.tsx')).Apfolder,
@@ -447,7 +446,7 @@ export const Menus = observer(() => {
         copyBiotopTo({ id, copyingBiotop })
       },
       copyTpopKoordToPop() {
-        copyTpopKoordToPop({ id, store })
+        copyTpopKoordToPop({ id })
       },
       createNewPopFromBeob() {
         createNewPopFromBeob({
@@ -463,12 +462,11 @@ export const Menus = observer(() => {
         setNewTpopFromBeobDialogOpen(true)
       },
       copyBeobZugeordnetKoordToTpop() {
-        copyBeobZugeordnetKoordToTpop({ id, store, apolloClient })
+        copyBeobZugeordnetKoordToTpop({ id })
       },
       async showCoordOfTpopOnMapsZhCh() {
         showCoordOfTpopOnMapsZhCh({
           id,
-
         })
       },
       async showCoordOfTpopOnMapGeoAdminCh() {

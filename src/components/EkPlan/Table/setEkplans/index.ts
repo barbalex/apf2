@@ -15,7 +15,6 @@ export const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
-  store,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   // TODO:

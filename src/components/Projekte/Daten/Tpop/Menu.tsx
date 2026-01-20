@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtom } from 'jotai'
 
 import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
 
@@ -38,8 +38,10 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'
@@ -209,7 +211,6 @@ export const Menu = observer(({ row }: MenuProps) => {
   const showMapIfNotYetVisible = (projekteTabs) => {
     const isVisible = projekteTabs.includes('karte')
 
-
     if (!isVisible) {
       setProjekteTabs([...projekteTabs, 'karte'])
     }
@@ -309,7 +310,7 @@ export const Menu = observer(({ row }: MenuProps) => {
 
   const onCopyCoordToPop = async () => {
     setCopyingCoordToTpop(true)
-    await copyTpopKoordToPop({ id: tpopId, store })
+    await copyTpopKoordToPop({ id: tpopId })
     setCopyingCoordToTpop(false)
   }
 

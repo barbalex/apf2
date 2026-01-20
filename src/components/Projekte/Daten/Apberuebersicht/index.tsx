@@ -140,7 +140,7 @@ export const Component = observer(() => {
     if (!row?.jahr)
       return console.log('Apberuebersicht, onClickHistorize: year missing')
     setHistorizing(true)
-    await historize({ store, apberuebersicht: row })
+    await historize({ apberuebersicht: row })
     tsQueryClient.invalidateQueries({
       queryKey: ['Apberuebersicht'],
     })

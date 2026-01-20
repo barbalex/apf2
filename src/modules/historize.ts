@@ -11,8 +11,7 @@ import {
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-
-export const historize = async ({ store, apberuebersicht: row }) => {
+export const historize = async ({ apberuebersicht: row }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   // 1. historize
   try {

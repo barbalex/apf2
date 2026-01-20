@@ -20,10 +20,7 @@ import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora
 
 import styles from './Tpop.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes: {
@@ -208,7 +205,6 @@ export const Tpop = observer(
             /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,
                     lv95Y: row.lv95Y,
-                    store,
                   })*/
             if (gemeinde) {
               const fakeEvent = {

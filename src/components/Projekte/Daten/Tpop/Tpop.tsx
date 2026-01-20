@@ -40,10 +40,7 @@ import type {
 
 import styles from './Tpop.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TpopQueryResult {
   tpopById?: {
@@ -428,7 +425,6 @@ export const Component = observer(() => {
             /*const gemeinde = await getGemeindeForKoord({
                     lv95X: row.lv95X,
                     lv95Y: row.lv95Y,
-                    store,
                   })*/
             if (gemeinde) {
               const fakeEvent = {
