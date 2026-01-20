@@ -3,11 +3,10 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
-import { useApolloClient } from '@apollo/client/react'
 import { useLocation } from 'react-router'
 
 import { tables } from '../../../../modules/tables.ts'
-import { deleteModule } from './delete/index.tsx'
+import { deleteModule } from './delete/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
@@ -18,8 +17,6 @@ export const DatasetDeleteModal = observer(() => {
 
   const store = useContext(MobxContext)
   const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = store
-
-  const apolloClient = useApolloClient()
 
   const table = tables.find((t) => t.table === toDeleteTable)
   let tableName = null
@@ -35,7 +32,6 @@ export const DatasetDeleteModal = observer(() => {
 
   const onClickLoeschen = () =>
     deleteModule({
-      apolloClient,
       store,
       search,
     })

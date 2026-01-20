@@ -5,12 +5,19 @@ import { omit } from 'es-toolkit'
 import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { tables } from '../../../../../modules/tables.ts'
+import { tables } from '../../../../../modules/tables.js'
+import {
+  store as jotaiStore,
+  tsQueryClientAtom,
+  apolloClientAtom,
+} from '../../../../../JotaiStore/index.ts'
 
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
-export const deleteModule = async ({ apolloClient, store, search }) => {
+export const deleteModule = async ({ store, search }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const {
     emptyToDelete,
     addDeletedDataset,
@@ -146,7 +153,7 @@ export const deleteModule = async ({ apolloClient, store, search }) => {
   store.tree.setOpenNodes(newOpenNodes)
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
-    store.tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+    tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
 
   const queryKeyTable =
@@ -158,7 +165,7 @@ export const deleteModule = async ({ apolloClient, store, search }) => {
     : table === 'tpopkontrzaehl_einheit_werte' ?
       'treeTpopkontrzaehlEinheitWerte'
     : `tree${upperFirst(table)}`
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
   const queryKeyFolders =
@@ -180,19 +187,19 @@ export const deleteModule = async ({ apolloClient, store, search }) => {
   //   queryKeyFoldersTable,parentTable,
   //   queryToInvalidate: `tree${upperFirst(queryKeyFoldersTable)}Folders`,
   // })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolders],
   })
   if (table === 'ziel') {
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
   }
   if (parentTable === 'tpopfeldkontr') {
-    store.tsQueryClient.invalidateQueries({
+    tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
   }
