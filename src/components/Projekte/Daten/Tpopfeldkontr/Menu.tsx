@@ -246,7 +246,6 @@ export const Menu = observer(({ row }: MenuProps) => {
     copyBiotopTo({
       id: tpopkontrId,
       copyingBiotop,
-      apolloClient,
     })
 
   const onClickSetFeldkontrCopying = () => {

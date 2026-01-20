@@ -442,7 +442,7 @@ export const Menus = observer(() => {
         setCopyingBiotop({ id: null, label: null })
       },
       copyBiotop() {
-        copyBiotopTo({ id, copyingBiotop, apolloClient })
+        copyBiotopTo({ id, copyingBiotop })
       },
       copyTpopKoordToPop() {
         copyTpopKoordToPop({ id, store })
