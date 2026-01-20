@@ -95,7 +95,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     moveTo({
       id: apId,
       store,
-      apolloClient,
     })
 
   const onClickStopMoving = () =>

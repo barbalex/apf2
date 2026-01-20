@@ -410,7 +410,6 @@ export const Menus = observer(() => {
         moveTo({
           id: nodeType === 'folder' ? parentId : id,
           store,
-          apolloClient,
         })
       },
       markForCopying() {
