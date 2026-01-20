@@ -67,7 +67,6 @@ export const openLowerNodes = ({
         apId,
         projId,
         popId,
-        apolloClient,
         store,
       })
       break
