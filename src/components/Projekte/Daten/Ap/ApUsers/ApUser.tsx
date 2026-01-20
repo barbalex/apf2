@@ -1,6 +1,4 @@
-import { useContext } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -8,7 +6,6 @@ import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { MobxContext } from '../../../../../mobxContext.ts'
 import styles from './ApUser.module.css'
 
 import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
@@ -30,7 +27,7 @@ interface ApUserProps {
   refetch: () => void
 }
 
-export const ApUser = observer(({ user, refetch }: ApUserProps) => {
+export const ApUser = ({ user, refetch }: ApUserProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
@@ -73,4 +70,4 @@ export const ApUser = observer(({ user, refetch }: ApUserProps) => {
       </Tooltip>
     </div>
   )
-})
+}
