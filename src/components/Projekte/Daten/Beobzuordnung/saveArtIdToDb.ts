@@ -7,6 +7,7 @@ import { updateBeobById } from './updateBeobById.ts'
 import {
   store as jotaiStore,
   apolloClientAtom,
+  tsQueryClientAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveArtIdToDb = async ({ value, row, store, search }) => {
@@ -14,6 +15,7 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
   const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
 
   if (!value) return
 
@@ -72,22 +74,22 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   ]
   setOpenNodes(newOpenNodes)
   store.navigate(`/Daten/${newANA.join('/')}${search}`)
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobnichtbeurteilt`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
   store.tree.setLastTouchedNode(newANA)

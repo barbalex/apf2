@@ -1,15 +1,22 @@
+// seems not in use?
 import { isEqual } from 'es-toolkit'
 
 import { updateBeobById } from './updateBeobById.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+  tsQueryClientAtom,
+} from '../../../../JotaiStore/index.ts'
 
 export const saveNichtZuordnenToDb = async ({
   value,
   id,
   refetch: refetchPassed,
-  apolloClient,
   store,
   search,
 }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const variables = {
     id,
     nichtZuordnen: value,
@@ -20,16 +27,16 @@ export const saveNichtZuordnenToDb = async ({
     mutation: updateBeobById,
     variables,
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  store.tsQueryClient.invalidateQueries({
+  tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
   // need to update activeNodeArray and openNodes
