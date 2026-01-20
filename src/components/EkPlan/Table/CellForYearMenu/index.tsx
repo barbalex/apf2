@@ -31,6 +31,10 @@ import type { TpopkontrzaehlMethodeWerteId } from '../../../../models/apflora/Tp
 
 import styles from './index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 export const CellForYearMenu = observer(() => {
@@ -68,7 +72,7 @@ export const CellForYearMenu = observer(() => {
       })
     } catch (error) {
       closeYearCellMenu()
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -82,7 +86,7 @@ export const CellForYearMenu = observer(() => {
         variables: { id },
       })
     } catch (error) {
-      store.enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -111,7 +115,7 @@ export const CellForYearMenu = observer(() => {
         variables,
       })
     } catch (error) {
-      store.enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

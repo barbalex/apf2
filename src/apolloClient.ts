@@ -18,7 +18,11 @@ import { useSetAtom } from 'jotai'
 import { graphQlUri } from './modules/graphQlUri.ts'
 import { existsPermissionError } from './modules/existsPermissionError.ts'
 import { existsTooLargeError } from './modules/existsTooLargeError.ts'
-import { store as jotaiStore, apolloClientAtom } from './JotaiStore/index.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+  enqueNotificationAtom,
+} from './JotaiStore/index.ts'
 
 import type { MobxStore } from './store/index.ts'
 
@@ -35,8 +39,6 @@ interface JwtPayload {
 export const buildApolloClient = ({
   store,
 }: BuildApolloClientParams): ApolloClient<NormalizedCacheObject> => {
-  const { enqueNotification } = store
-
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
   const authLink = setContext((_, { headers }) => {
@@ -97,7 +99,7 @@ export const buildApolloClient = ({
               locations,
             )}, Path: ${path}`,
           )
-          return enqueNotification({
+          return jotaiStore.set(enqueNotificationAtom, {
             message: `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
               locations,
             )}, Path: ${path}`,
@@ -110,7 +112,7 @@ export const buildApolloClient = ({
     }
     if (error) {
       console.log(`apollo client Network error:`, error.message)
-      enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: `apollo client Network error: ${error.message}`,
         options: {
           variant: 'error',

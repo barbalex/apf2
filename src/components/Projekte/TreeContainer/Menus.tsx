@@ -17,6 +17,7 @@ import { useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
+  enqueNotificationAtom,
 } from '../../../JotaiStore/index.ts'
 
 const CmApFolder = lazy(async () => ({
@@ -238,7 +239,6 @@ export const Menus = observer(() => {
     activeApfloraLayers,
     setActiveApfloraLayers,
     setIdOfTpopBeingLocalized,
-    enqueNotification,
     toDeleteId,
     setToDelete,
     setCopying,

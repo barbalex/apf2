@@ -23,7 +23,8 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
+import {showTreeMenusAtom,
+  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import type { PopId, ApId, Pop } from '../../../../models/apflora/index.tsx'
 
@@ -74,7 +75,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -122,7 +123,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: popId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

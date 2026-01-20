@@ -21,6 +21,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateTpopkontrzaehlEinheitWerteResult {
   data: {
     createTpopkontrzaehlEinheitWerte: {
@@ -66,7 +70,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

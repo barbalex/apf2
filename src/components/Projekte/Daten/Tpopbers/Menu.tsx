@@ -15,6 +15,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopberId, TpopId } from '../../../../generated/apflora/models.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateTpopberResult {
   createTpopber: {
     tpopber: {
@@ -57,7 +61,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { tpopId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

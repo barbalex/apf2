@@ -48,13 +48,16 @@ interface ComponentProps {
 
 import styles from './Tpopfreiwkontr.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 export const Component = observer(({ id: idPassed }: ComponentProps) => {
   const params = useParams()
   const { pathname } = useLocation()
 
   const store = useContext(MobxContext)
-  const { enqueNotification, isPrint, user } = store
-
+  const { isPrint, user } = store
   const apolloClient = useApolloClient()
 
   const id = idPassed ?? params.tpopkontrId
@@ -113,7 +116,7 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
           .catch((error) => {
             if (!isActive) return
 
-            enqueNotification({
+            jotaiStore.set(enqueNotificationAtom, {
               message: (error as Error).message,
               options: {
                 variant: 'error',

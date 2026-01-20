@@ -11,6 +11,10 @@ import { ApId, PopId, TpopId, TpopmassnId, AdresseId } from '../../../../models/
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface TpopmassnQueryResult {
   allTpopmassns: {
     nodes: Array<{
@@ -125,7 +129,7 @@ interface MassnahmenProps {
 
 export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
   const store = useContext(MobxContext)
-  const { enqueNotification, tableIsFiltered } = store
+  const { tableIsFiltered } = store
   const { tpopmassnGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -266,7 +270,7 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
             },
           })
         } catch (error) {
-          enqueNotification({
+          jotaiStore.set(enqueNotificationAtom, {
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -360,7 +364,7 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return jotaiStore.set(enqueNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

@@ -3,6 +3,10 @@ import axios from 'redaxios'
 
 import { xmlToJson } from '../../../../modules/xmlToJson.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 export const onTileError = async (store, map, layer, ignore) => {
   console.log('onTileError', { ignore, map, layer, store })
   const mapSize = map.getSize()
@@ -33,7 +37,7 @@ export const onTileError = async (store, map, layer, ignore) => {
   const errorMessage =
     data?.HTML?.BODY?.SERVICEEXCEPTIONREPORT?.SERVICEEXCEPTION?.['#text']
   // console.log(`onTileError errorMessage:`, errorMessage)
-  store.enqueNotification({
+  jotaiStore.set(enqueNotificationAtom, {
     message: errorMessage,
     options: {
       variant: 'error',

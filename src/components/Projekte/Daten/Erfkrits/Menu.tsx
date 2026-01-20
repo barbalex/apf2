@@ -15,6 +15,10 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateErfkritResult {
   data?: {
     createErfkrit?: {
@@ -60,7 +64,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

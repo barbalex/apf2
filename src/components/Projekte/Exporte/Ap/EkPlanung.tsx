@@ -11,6 +11,10 @@ import { ApId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface EkPlanungNachAbrechnungstypQueryResult {
   allVEkPlanungNachAbrechnungstyps: {
     nodes: Array<{
@@ -28,8 +32,6 @@ interface EkPlanungNachAbrechnungstypQueryResult {
 
 export const EkPlanung = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -57,7 +59,7 @@ export const EkPlanung = observer(() => {
         `,
       })
     } catch (error) {
-      enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -79,7 +81,7 @@ export const EkPlanung = observer(() => {
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

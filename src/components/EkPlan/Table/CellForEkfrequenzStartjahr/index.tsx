@@ -8,6 +8,10 @@ import { setEkplans } from '../setEkplans/index.tsx'
 
 import styles from './index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.ts'),
 )
@@ -15,7 +19,6 @@ const processChangeWorkerFactory = createWorkerFactory(
 export const CellForEkfrequenzStartjahr = observer(
   ({ row, isOdd, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
     const store = useContext(MobxContext)
-    const { enqueNotification } = store
     const { hovered } = store.ekPlan
     const isHovered = hovered.tpopId === row.id
 

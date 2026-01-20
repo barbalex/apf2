@@ -14,6 +14,10 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface TPopAnzMassnsQueryResult {
   allTpops: {
     totalCount: number
@@ -70,8 +74,6 @@ interface TPopAnzMassnsQueryResult {
 
 export const AnzMassnahmen = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -143,7 +145,7 @@ export const AnzMassnahmen = observer(() => {
             `,
           })
         } catch (error) {
-          enqueNotification({
+          jotaiStore.set(enqueNotificationAtom, {
             message: (error as Error).message,
             options: { variant: 'error' },
           })
@@ -204,7 +206,7 @@ export const AnzMassnahmen = observer(() => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return jotaiStore.set(enqueNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

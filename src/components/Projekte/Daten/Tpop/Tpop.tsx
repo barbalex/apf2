@@ -39,6 +39,10 @@ import type {
 
 import styles from './Tpop.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface TpopQueryResult {
   tpopById?: {
     id: TpopId
@@ -159,8 +163,6 @@ export const Component = observer(() => {
   const { tpopId } = useParams()
 
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -410,7 +412,7 @@ export const Component = observer(() => {
                       `,
               })
             } catch (error) {
-              return enqueNotification({
+              return jotaiStore.set(enqueNotificationAtom, {
                 message: error.message,
                 options: {
                   variant: 'error',

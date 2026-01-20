@@ -20,6 +20,10 @@ import type { EkfrequenzId, ApId } from '../../models/apflora/public/Ekfrequenz.
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../JotaiStore/index.ts'
 interface ExistingEkfrequenzNode {
   id: EkfrequenzId
 }
@@ -68,13 +72,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const store = useContext(MobxContext)
-  const {
-    user,
-    enqueNotification,
-    openChooseApToCopyEkfrequenzsFrom,
-    setOpenChooseApToCopyEkfrequenzsFrom,
-  } = store
-
+  const { user, openChooseApToCopyEkfrequenzsFrom, setOpenChooseApToCopyEkfrequenzsFrom } = store
   const onCloseChooseApDialog = () =>
     setOpenChooseApToCopyEkfrequenzsFrom(false)
 
@@ -258,7 +256,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
 
     // 3. inform user
     setOpenChooseApToCopyEkfrequenzsFrom(false)
-    enqueNotification({
+    jotaiStore.set(enqueNotificationAtom, {
       message: `Die EK-Frequenzen wurden kopiert`,
       options: {
         variant: 'info',

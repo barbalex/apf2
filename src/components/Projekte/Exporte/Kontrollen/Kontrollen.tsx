@@ -11,6 +11,10 @@ import { ApId, PopId, TpopId, TpopkontrId, AdresseId, TpopkontrzaehlId } from '.
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface TpopkontrQueryResult {
   allTpopkontrs: {
     nodes: Array<{
@@ -156,7 +160,6 @@ interface KontrollenProps {
 
 export const Kontrollen = observer(({ filtered = false }: KontrollenProps) => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const { tpopkontrGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -326,7 +329,7 @@ export const Kontrollen = observer(({ filtered = false }: KontrollenProps) => {
             },
           })
         } catch (error) {
-          enqueNotification({
+          jotaiStore.set(enqueNotificationAtom, {
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -445,7 +448,7 @@ export const Kontrollen = observer(({ filtered = false }: KontrollenProps) => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return jotaiStore.set(enqueNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

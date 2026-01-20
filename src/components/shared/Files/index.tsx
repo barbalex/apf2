@@ -25,6 +25,10 @@ import { Menu } from './Menu/index.tsx'
 import './index.css'
 import styles from './index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../JotaiStore/index.ts'
 interface FileNode {
   id: string
   fileId: string | null
@@ -136,7 +140,7 @@ export const FilesRouter = observer(
           })
         } catch (error) {
           console.log(error)
-          store.enqueNotification({
+          jotaiStore.set(enqueNotificationAtom, {
             message: error.message,
             options: {
               variant: 'error',
@@ -155,7 +159,7 @@ export const FilesRouter = observer(
 
     const onFileUploadFailed = (error) => {
       console.error('Upload failed:', error)
-      store.enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: error?.message ?? 'Upload fehlgeschlagen',
         options: {
           variant: 'error',

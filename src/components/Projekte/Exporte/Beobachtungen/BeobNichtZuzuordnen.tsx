@@ -11,6 +11,10 @@ import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface BeobNichtZuzuordnenQueryResult {
   allVBeobNichtZuzuordnens: {
     nodes: Array<{
@@ -44,8 +48,6 @@ interface BeobNichtZuzuordnenQueryResult {
 
 export const BeobNichtZuzuordnen = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -95,7 +97,7 @@ export const BeobNichtZuzuordnen = observer(() => {
           })
         } catch (error) {
           setQueryState(undefined)
-          return enqueNotification({
+          return jotaiStore.set(enqueNotificationAtom, {
             message: (error as Error).message,
             options: {
               variant: 'error',

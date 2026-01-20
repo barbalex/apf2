@@ -1,5 +1,9 @@
 import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBeob.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../JotaiStore/index.ts'
 export const showCoordOfBeobOnMapGeoAdminCh = async ({
   id,
   enqueNotification,

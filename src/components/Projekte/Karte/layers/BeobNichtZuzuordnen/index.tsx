@@ -13,6 +13,10 @@ import { query } from './query.ts'
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
 interface BeobNichtZuzuordnenNode {
   id: BeobId
   wgs84Lat: number
@@ -55,7 +59,6 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const tree = store.tree
   const { beobGqlFilter } = tree
   const apolloClient = useApolloClient()
@@ -89,7 +92,7 @@ const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
   // }, [leafletMap])
 
   if (error) {
-    enqueNotification({
+    jotaiStore.set(enqueNotificationAtom, {
       message: `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',

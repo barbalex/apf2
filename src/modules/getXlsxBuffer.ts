@@ -6,6 +6,10 @@ import { Workbook } from 'exceljs'
 //import { getDataArrayFromExportObjectsWorker } from './getDataArrayFromExportObjectsWorker.ts'
 import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../JotaiStore/index.ts'
 export const getXlsxBuffer = async ({ data, store }) => {
   /**
    * using this worker may make the ui more responsive
@@ -65,7 +69,7 @@ export const getXlsxBuffer = async ({ data, store }) => {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
     console.log(error)
-    return store.enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

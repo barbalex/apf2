@@ -6,11 +6,10 @@ import { queryBeob } from './queryBeob.ts'
 import { createPop } from './createPop.ts'
 import { createTpop } from './createTpop.ts'
 import { updateBeobById } from './updateBeobById.ts'
-import {
-  store as jotaiStore,
+import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../../JotaiStore/index.ts'
+  enqueNotificationAtom} from '../../JotaiStore/index.ts'
 
 export const createNewPopFromBeob = async ({
   id,
@@ -21,8 +20,6 @@ export const createNewPopFromBeob = async ({
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-
-  const { enqueNotification } = store
   const tree = store.tree
   const { addOpenNodes } = tree
 
@@ -33,7 +30,7 @@ export const createNewPopFromBeob = async ({
       variables: { id },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -60,7 +57,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -83,7 +80,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -101,7 +98,7 @@ export const createNewPopFromBeob = async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

@@ -38,7 +38,8 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.ts'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
+import {showTreeMenusAtom,
+  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'
@@ -102,7 +103,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -145,7 +146,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -313,14 +314,14 @@ export const Menu = observer(({ row }: MenuProps) => {
     showCoordOfTpopOnMapGeoAdminCh({
       id: tpopId,
       apolloClient,
-      enqueNotification: store.enqueNotification,
+      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
 
   const onClickShowCoordOfTpopOnMapsZhCh = () =>
     showCoordOfTpopOnMapsZhCh({
       id: tpopId,
       apolloClient,
-      enqueNotification: store.enqueNotification,
+      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
 
   // to paste copied feldkontr/freiwkontr/massn

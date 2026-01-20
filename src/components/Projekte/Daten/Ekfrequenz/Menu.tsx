@@ -19,6 +19,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateEkfrequenzResult {
   data?: {
     createEkfrequenz?: {
@@ -59,7 +63,7 @@ export const Menu = observer(() => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -100,7 +104,7 @@ export const Menu = observer(() => {
         variables: { id: ekfrequenzId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

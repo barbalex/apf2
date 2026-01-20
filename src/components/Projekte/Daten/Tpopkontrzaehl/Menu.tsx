@@ -21,6 +21,10 @@ import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateTpopkontrzaehlResult {
   data: {
     createTpopkontrzaehl: {
@@ -66,7 +70,7 @@ export const Menu = observer(() => {
         variables: { tpopkontrId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -109,7 +113,7 @@ export const Menu = observer(() => {
         variables: { id: tpopkontrzaehlId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

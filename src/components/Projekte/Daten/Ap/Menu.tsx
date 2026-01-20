@@ -22,7 +22,8 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
+import {showTreeMenusAtom,
+  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
@@ -79,7 +80,7 @@ export const Menu = observer(() => {
         variables: { projId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -117,7 +118,7 @@ export const Menu = observer(() => {
         variables: { id: apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

@@ -12,6 +12,10 @@ import { ApId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface ApAnzmassnsQueryResult {
   allAps: {
     nodes: Array<{
@@ -41,8 +45,6 @@ interface ApAnzmassnsQueryResult {
 
 export const AnzMassn = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -82,7 +84,7 @@ export const AnzMassn = observer(() => {
         `,
       })
     } catch (error) {
-      enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -101,7 +103,7 @@ export const AnzMassn = observer(() => {
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

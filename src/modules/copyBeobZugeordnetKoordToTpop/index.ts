@@ -1,6 +1,10 @@
 import { queryBeob } from './queryBeob.ts'
 import { updateTpopById } from './updateTpopById.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../JotaiStore/index.ts'
 export const copyBeobZugeordnetKoordToTpop = async ({
   id,
   store,
@@ -14,7 +18,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({
       variables: { id },
     })
   } catch (error) {
-    return store.enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -45,7 +49,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({
       },
     })
   } catch (error) {
-    return store.enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

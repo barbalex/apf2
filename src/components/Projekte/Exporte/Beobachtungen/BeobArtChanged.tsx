@@ -11,6 +11,10 @@ import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface BeobArtChangedQueryResult {
   allVBeobArtChangeds: {
     nodes: Array<{
@@ -47,7 +51,6 @@ interface BeobArtChangedQueryResult {
 
 export const BeobArtChanged = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const { mapFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -144,7 +147,7 @@ export const BeobArtChanged = observer(() => {
           })
     } catch (error) {
       setQueryState(undefined)
-      return enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -155,7 +158,7 @@ export const BeobArtChanged = observer(() => {
     const rows = result.data?.allVBeobArtChangeds?.nodes ?? []
     if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

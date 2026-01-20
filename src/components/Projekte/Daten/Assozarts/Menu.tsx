@@ -17,6 +17,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import type { AssozartId } from '../../../../models/apflora/Assozart.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateAssozartResult {
   data?: {
     createAssozart?: {
@@ -61,7 +65,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

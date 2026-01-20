@@ -26,6 +26,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 export const PreviewMenus = observer(
   ({ parent, files, refetch, containerRef }) => {
     const store = useContext(MobxContext)
@@ -84,7 +88,7 @@ export const PreviewMenus = observer(
         })
       } catch (error) {
         console.log(error)
-        return store.enqueNotification({
+        return jotaiStore.set(enqueNotificationAtom, {
           message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
           options: {
             variant: 'error',

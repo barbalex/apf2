@@ -21,6 +21,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopApberrelevantGrundWerteCode } from '../../../../generated/apflora/models.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateTpopApberrelevantGrundWerteResult {
   createTpopApberrelevantGrundWerte: {
     tpopApberrelevantGrundWerte: {
@@ -63,7 +67,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
           `,
         })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

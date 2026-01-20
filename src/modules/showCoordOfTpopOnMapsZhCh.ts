@@ -1,5 +1,9 @@
 import { getAndValidateCoordinatesOfTpop } from './getAndValidateCoordinatesOfTpop.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../JotaiStore/index.ts'
 export const showCoordOfTpopOnMapsZhCh = async ({
   id,
   enqueNotification,

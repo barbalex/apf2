@@ -19,6 +19,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface MenuProps {
   row: {
     id: string
@@ -63,7 +67,7 @@ export const Menu = observer(({ row, table }: MenuProps) => {
       })
     } catch (error) {
       console.log('error', error)
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -102,7 +106,7 @@ export const Menu = observer(({ row, table }: MenuProps) => {
       })
     } catch (error) {
       console.log('error', error)
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

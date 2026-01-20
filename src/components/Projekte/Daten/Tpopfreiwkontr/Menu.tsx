@@ -24,6 +24,10 @@ import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateTpopkontrResult {
   data: {
     createTpopkontr: {
@@ -76,7 +80,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { tpopId, typ: 'Freiwilligen-Erfolgskontrolle' },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: error.message,
         options: {
           variant: 'error',
@@ -116,7 +120,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopkontrId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: error.message,
         options: {
           variant: 'error',

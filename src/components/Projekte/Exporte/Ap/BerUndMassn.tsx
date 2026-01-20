@@ -11,6 +11,10 @@ import { ApId, AdresseId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface ApApberUndMassnsQueryResult {
   allAps: {
     nodes: Array<{
@@ -51,8 +55,6 @@ interface ApApberUndMassnsQueryResult {
 
 export const BerUndMassn = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -103,7 +105,7 @@ export const BerUndMassn = observer(() => {
         `,
       })
     } catch (error) {
-      enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -131,7 +133,7 @@ export const BerUndMassn = observer(() => {
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

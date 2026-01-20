@@ -11,6 +11,10 @@ import { ApId, PopId, TpopId, TpopkontrId } from '../../../../models/apflora/ind
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface KontrzaehlAnzproeinheitQueryResult {
   allVKontrzaehlAnzproeinheits: {
     nodes: Array<{
@@ -99,8 +103,6 @@ interface KontrzaehlAnzproeinheitQueryResult {
 
 export const KontrAnzProZaehlEinheit = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -204,7 +206,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
             `,
           })
         } catch (error) {
-          enqueNotification({
+          jotaiStore.set(enqueNotificationAtom, {
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -215,7 +217,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
         const rows = result.data?.allVKontrzaehlAnzproeinheits?.nodes ?? []
         setQueryState(undefined)
         if (rows.length === 0) {
-          return enqueNotification({
+          return jotaiStore.set(enqueNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

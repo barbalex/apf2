@@ -71,6 +71,10 @@ interface MenuProps {
 import styles from './Menu.module.css'
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(
@@ -130,7 +134,7 @@ export const Menu = observer(
           `,
         })
       } catch (error) {
-        return store.enqueNotification({
+        return jotaiStore.set(enqueNotificationAtom, {
           message: (error as Error).message,
           options: {
             variant: 'error',
@@ -168,7 +172,7 @@ export const Menu = observer(
           variables: { id: row.id },
         })
       } catch (error) {
-        return store.enqueNotification({
+        return jotaiStore.set(enqueNotificationAtom, {
           message: (error as Error).message,
           options: {
             variant: 'error',
@@ -236,7 +240,7 @@ export const Menu = observer(
       }
       if (errors.length) {
         errors.forEach((error) =>
-          store.enqueNotification({
+          jotaiStore.set(enqueNotificationAtom, {
             message: error.message,
             options: {
               variant: 'error',
@@ -244,7 +248,7 @@ export const Menu = observer(
           }),
         )
       } else {
-        store.enqueNotification({
+        jotaiStore.set(enqueNotificationAtom, {
           message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
           options: {
             variant: 'info',

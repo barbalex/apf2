@@ -6,11 +6,10 @@ import { gql } from '@apollo/client'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../../../modules/tables.js'
-import {
-  store as jotaiStore,
+import {store as jotaiStore,
   tsQueryClientAtom,
   apolloClientAtom,
-} from '../../../../../JotaiStore/index.ts'
+  enqueNotificationAtom} from '../../../../../JotaiStore/index.ts'
 
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
@@ -18,22 +17,12 @@ const isFreiwilligenKontrolle = (activeNodeArray) =>
 export const deleteModule = async ({ store, search }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const {
-    emptyToDelete,
-    addDeletedDataset,
-    enqueNotification,
-    toDeleteTable: tablePassed,
-    toDeleteId,
-    toDeleteUrl,
-    toDeleteLabel,
-    toDeleteAfterDeletionHook,
-  } = store
-
+  const { emptyToDelete, addDeletedDataset, toDeleteTable: tablePassed, toDeleteId, toDeleteUrl, toDeleteLabel, toDeleteAfterDeletionHook } = store
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === tablePassed)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
       options: {
         variant: 'error',
@@ -80,7 +69,7 @@ export const deleteModule = async ({ store, search }) => {
     })
   } catch (error) {
     console.log(error)
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -115,7 +104,7 @@ export const deleteModule = async ({ store, search }) => {
       variables: { id: toDeleteId },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

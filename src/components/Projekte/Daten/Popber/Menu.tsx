@@ -20,6 +20,10 @@ import type { PopberId, PopId } from '../../../../models/apflora/index.tsx'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreatePopberResult {
   data?: {
     createPopber?: {
@@ -60,7 +64,7 @@ export const Menu = observer(() => {
         variables: { popId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -103,7 +107,7 @@ export const Menu = observer(() => {
         variables: { id: popberId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

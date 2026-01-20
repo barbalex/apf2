@@ -19,6 +19,10 @@ import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora
 
 import styles from './Tpop.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes: {
     nodes: Array<{
@@ -45,8 +49,6 @@ interface TpopProps {
 export const Tpop = observer(
   ({ saveToDb, fieldErrors, setFieldErrors, row, apJahr }: TpopProps) => {
     const store = useContext(MobxContext)
-    const { enqueNotification } = store
-
     const apolloClient = useApolloClient()
 
     //console.log('Tpop rendering')
@@ -190,7 +192,7 @@ export const Tpop = observer(
                       `,
               })
             } catch (error) {
-              return enqueNotification({
+              return jotaiStore.set(enqueNotificationAtom, {
                 message: (error as Error).message,
                 options: {
                   variant: 'error',

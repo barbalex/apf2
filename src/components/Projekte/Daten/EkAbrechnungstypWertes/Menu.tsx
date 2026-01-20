@@ -21,6 +21,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerte.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateEkAbrechnungstypWerteResult {
   data?: {
     createEkAbrechnungstypWerte?: {
@@ -65,7 +69,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

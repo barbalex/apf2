@@ -20,6 +20,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { UserId } from '../../../../models/apflora/UserId.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateUserResult {
   data: {
     createUser: {
@@ -61,7 +65,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

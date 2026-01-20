@@ -20,6 +20,10 @@ import type { ErfkritId, ApId } from '../../models/apflora/public/Erfkrit.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../JotaiStore/index.ts'
 interface ExistingErfkritNode {
   id: ErfkritId
 }
@@ -63,13 +67,7 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const store = useContext(MobxContext)
-  const {
-    user,
-    enqueNotification,
-    openChooseApToCopyErfkritsFrom,
-    setOpenChooseApToCopyErfkritsFrom,
-  } = store
-
+  const { user, openChooseApToCopyErfkritsFrom, setOpenChooseApToCopyErfkritsFrom } = store
   const onCloseChooseApDialog = () => setOpenChooseApToCopyErfkritsFrom(false)
 
   const onChooseAp = async (option) => {
@@ -212,7 +210,7 @@ export const ChooseApToCopyErfkritsFrom = observer(() => {
 
     // 3. inform user
     setOpenChooseApToCopyErfkritsFrom(false)
-    enqueNotification({
+    jotaiStore.set(enqueNotificationAtom, {
       message: `Die Erfolgskriterien wurden kopiert`,
       options: { variant: 'info' },
     })

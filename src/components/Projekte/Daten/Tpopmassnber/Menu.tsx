@@ -32,6 +32,10 @@ interface CreateTpopmassnberResult {
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
@@ -61,7 +65,7 @@ export const Menu = observer(() => {
         variables: { tpopId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -101,7 +105,7 @@ export const Menu = observer(() => {
         variables: { id: tpopmassnberId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

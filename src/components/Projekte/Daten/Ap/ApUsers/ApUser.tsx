@@ -12,6 +12,10 @@ import styles from './ApUser.module.css'
 
 import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
 interface ApUserProps {
   user: {
     id: ApUserId

@@ -8,10 +8,9 @@ import { isEqual } from 'es-toolkit'
 import Button from '@mui/material/Button'
 
 import { useSetAtom, useAtom } from 'jotai'
-import {
-  newTpopFromBeobDialogOpenAtom,
+import {newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
-} from '../../../../JotaiStore/index.ts'
+  enqueNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -52,7 +51,7 @@ export const Menu = observer(() => {
     await copyBeobZugeordnetKoordToTpop({
       id: beobId,
       apolloClient,
-      enqueNotification: store.enqueNotification,
+      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
     setCopyingBeobZugeordnetKoordToTpop(false)
   }
@@ -61,7 +60,7 @@ export const Menu = observer(() => {
     showCoordOfBeobOnMapGeoAdminCh({
       id: beobId,
       apolloClient,
-      enqueNotification: store.enqueNotification,
+      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
   }
 
@@ -69,7 +68,7 @@ export const Menu = observer(() => {
     showCoordOfBeobOnMapsZhCh({
       id: beobId,
       apolloClient,
-      enqueNotification: store.enqueNotification,
+      enqueNotification: (note) => jotaiStore.set(enqueNotificationAtom, note),
     })
   }
 

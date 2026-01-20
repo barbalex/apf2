@@ -15,6 +15,10 @@ import type {
 } from '../../../../../models/apflora/public/Tpop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
 interface BeobAssignLinesNode {
   id: BeobId
   wgs84Lat: number
@@ -46,7 +50,6 @@ interface BeobAssignLinesQueryResult {
 
 const Polylines = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const { beobGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -61,7 +64,7 @@ const Polylines = observer(() => {
   })
 
   if (error) {
-    enqueNotification({
+    jotaiStore.set(enqueNotificationAtom, {
       message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',

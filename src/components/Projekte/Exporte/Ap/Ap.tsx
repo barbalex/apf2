@@ -11,6 +11,10 @@ import { ApId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface ApQueryResult {
   allAps: {
     nodes: Array<{
@@ -41,7 +45,7 @@ interface ApProps {
 
 export const Ap = observer(({ filtered = false }: ApProps) => {
   const store = useContext(MobxContext)
-  const { enqueNotification, tableIsFiltered } = store
+  const { tableIsFiltered } = store
   const { apGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -86,7 +90,7 @@ export const Ap = observer(({ filtered = false }: ApProps) => {
         },
       })
     } catch (error) {
-      enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -106,7 +110,7 @@ export const Ap = observer(({ filtered = false }: ApProps) => {
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

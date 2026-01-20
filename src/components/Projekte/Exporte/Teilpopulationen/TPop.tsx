@@ -14,6 +14,10 @@ import type { AdresseId } from '../../../../models/apflora/public/AdresseId.ts'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface TPopQueryResult {
   allTpops: {
     nodes: {
@@ -96,7 +100,7 @@ interface TPopProps {
 
 export const TPop = observer(({ filtered = false }: TPopProps) => {
   const store = useContext(MobxContext)
-  const { enqueNotification, tableIsFiltered } = store
+  const { tableIsFiltered } = store
   const { tpopGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -195,7 +199,7 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
         },
       })
     } catch (error) {
-      enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: { variant: 'error' },
       })
@@ -275,7 +279,7 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
     //console.time('exporting')
     if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

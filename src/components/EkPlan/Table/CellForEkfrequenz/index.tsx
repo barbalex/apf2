@@ -12,6 +12,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import indexStyles from '../index.module.css'
 import styles from './index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.ts'),
 )
@@ -19,7 +23,6 @@ const processChangeWorkerFactory = createWorkerFactory(
 export const CellForEkfrequenz = observer(
   ({ row, isOdd, field, width, setProcessing, data }) => {
     const store = useContext(MobxContext)
-    const { enqueNotification } = store
     const { hovered, apValues } = store.ekPlan
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)

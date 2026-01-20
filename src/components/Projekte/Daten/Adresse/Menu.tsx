@@ -20,6 +20,10 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateAdresseResult {
   data?: {
     createAdresse?: {
@@ -67,7 +71,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       console.log('error:', error)
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -106,7 +110,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       console.log('error:', error)
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

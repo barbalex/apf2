@@ -20,6 +20,10 @@ import type { TpopberId, TpopId } from '../../../../generated/apflora/models.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateTpopberResult {
   createTpopber: {
     tpopber: {
@@ -58,7 +62,7 @@ export const Menu = observer(() => {
         variables: { tpopId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -98,7 +102,7 @@ export const Menu = observer(() => {
         variables: { id: tpopberId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

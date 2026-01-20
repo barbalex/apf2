@@ -27,6 +27,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './File.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
     maxHeight: 48 * 4.5,
@@ -76,7 +80,7 @@ export const File = observer(({ file, parent, refetch }) => {
       })
     } catch (error) {
       console.log(error)
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
         options: {
           variant: 'error',

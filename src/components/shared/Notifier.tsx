@@ -1,13 +1,16 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { observer } from 'mobx-react-lite'
+import { useAtom, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../mobxContext.ts'
+import {
+  notificationsAtom,
+  removeNotificationAtom,
+} from '../../JotaiStore/index.ts'
 
-export const Notifier = observer(() => {
+export const Notifier = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const store = useContext(MobxContext)
-  const { notifications, removeNotification } = store
+  const [notifications] = useAtom(notificationsAtom)
+  const removeNotification = useSetAtom(removeNotificationAtom)
   const [displayed, setDisplayed] = useState([])
 
   useEffect(() => {
@@ -19,10 +22,10 @@ export const Notifier = observer(() => {
       enqueueSnackbar(notification.message, notification.options)
       // Keep track of snackbars that we've displayed
       setDisplayed([...displayed, notification.key])
-      // Dispatch action to remove snackbar from mobx store
+      // Dispatch action to remove snackbar from jotai store
       removeNotification(notification.key)
     })
   }, [displayed, enqueueSnackbar, notifications, removeNotification])
 
   return null
-})
+}

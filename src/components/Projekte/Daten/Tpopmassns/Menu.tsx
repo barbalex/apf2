@@ -20,6 +20,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateTpopmassnResult {
   data: {
     createTpopmassn: {
@@ -67,7 +71,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

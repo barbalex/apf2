@@ -16,6 +16,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import type { ApberId } from '../../../../models/apflora/Apber.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateApberResult {
   data?: {
     createApber?: {
@@ -60,7 +64,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

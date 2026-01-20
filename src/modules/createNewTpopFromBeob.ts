@@ -3,11 +3,10 @@ import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'date-fns/isEqual'
 import { gql } from '@apollo/client'
 
-import {
-  store as jotaiStore,
+import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../JotaiStore/index.ts'
+  enqueNotificationAtom} from '../JotaiStore/index.ts'
 import {
   beob as beobFragment,
   tpop,
@@ -93,7 +92,6 @@ export const createNewTpopFromBeob = async ({
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const { enqueNotification } = store
   const tree = store.tree
   const { addOpenNodes } = tree
   let beobResult
@@ -110,7 +108,7 @@ export const createNewTpopFromBeob = async ({
       variables: { beobId },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -138,7 +136,7 @@ export const createNewTpopFromBeob = async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -147,7 +145,7 @@ export const createNewTpopFromBeob = async ({
   }
   const tpop = tpopResult?.data?.createTpop?.tpop
   if (!tpop) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message:
         'Sorry, ein Fehler ist aufgetreten: Die Datenbank hat die ID der neu geschaffenen TPop nicht retourniert',
       options: {
@@ -165,7 +163,7 @@ export const createNewTpopFromBeob = async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',

@@ -21,6 +21,10 @@ import type {
 } from '../../../../../models/apflora/public/Tpop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
 interface TpopNode {
   id: TpopId
   nr: number | null
@@ -77,11 +81,7 @@ const getTpopFilter = (tpopGqlFilter) => {
 
 const ObservedTpop = observer(({ clustered }) => {
   const store = useContext(MobxContext)
-  const {
-    enqueNotification,
-    setIdOfTpopBeingLocalized,
-    idOfTpopBeingLocalized,
-  } = store
+  const { setIdOfTpopBeingLocalized, idOfTpopBeingLocalized } = store
   const { tpopGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -158,7 +158,7 @@ const ObservedTpop = observer(({ clustered }) => {
           queryKey: [`TpopForMapQuery`],
         })
       } catch (error) {
-        enqueNotification({
+        jotaiStore.set(enqueNotificationAtom, {
           message: error.message,
           options: {
             variant: 'error',
@@ -186,7 +186,7 @@ const ObservedTpop = observer(({ clustered }) => {
   }, [idOfTpopBeingLocalized, leafletMap._container])
 
   if (error) {
-    enqueNotification({
+    jotaiStore.set(enqueNotificationAtom, {
       message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',

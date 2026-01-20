@@ -31,6 +31,10 @@ import {
 import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../JotaiStore/index.ts'
 export const Tree = types
   .model('Tree', {
     // used to open tree2 on a specific activeNodeArray
@@ -311,7 +315,7 @@ export const Tree = types
           self.setApFilter(false)
           // need timeout or notification will not appear
           setTimeout(() =>
-            store.enqueNotification({
+            jotaiStore.set(enqueNotificationAtom, {
               message:
                 'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
               options: {
@@ -410,7 +414,7 @@ export const Tree = types
           self.setApFilter(false)
           // need timeout or notification will not appear
           setTimeout(() =>
-            store.enqueNotification({
+            jotaiStore.set(enqueNotificationAtom, {
               message:
                 'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
               options: {

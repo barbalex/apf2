@@ -15,6 +15,10 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 interface CreateAdresseResult {
   data?: {
     createAdresse?: {
@@ -55,7 +59,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return store.enqueNotification({
+      return jotaiStore.set(enqueNotificationAtom, {
         message: (error as Error).message,
         options: {
           variant: 'error',

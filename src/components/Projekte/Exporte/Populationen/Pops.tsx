@@ -9,9 +9,13 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../index.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 export const Pops = observer(({ filtered = false }) => {
   const store = useContext(MobxContext)
-  const { enqueNotification, tableIsFiltered } = store
+  const { tableIsFiltered } = store
   const { popGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -78,7 +82,7 @@ export const Pops = observer(({ filtered = false }) => {
             },
           })
         } catch (error) {
-          enqueNotification({
+          jotaiStore.set(enqueNotificationAtom, {
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -108,7 +112,7 @@ export const Pops = observer(({ filtered = false }) => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return jotaiStore.set(enqueNotificationAtom, {
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

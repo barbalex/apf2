@@ -9,9 +9,12 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './Checkbox.module.css'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 export const Checkbox = observer(({ row, value, field }) => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -55,7 +58,7 @@ export const Checkbox = observer(({ row, value, field }) => {
       })
     } catch (error) {
       setChecked(!checked)
-      enqueNotification({
+      jotaiStore.set(enqueNotificationAtom, {
         message: error.message,
         options: {
           variant: 'error',

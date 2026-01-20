@@ -14,6 +14,10 @@ import { query } from './query.ts'
 import type { PopId, ApId } from '../../../../../models/apflora/public/Pop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
 interface PopNode {
   id: PopId
   nr: number | null
@@ -59,7 +63,6 @@ const iconCreateFunction = function (cluster) {
 const ObservedPop = observer(() => {
   const map = useMap()
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const tree = store.tree
   const { popGqlFilter } = tree
 
@@ -94,7 +97,7 @@ const ObservedPop = observer(() => {
   }, [map])
 
   if (error) {
-    enqueNotification({
+    jotaiStore.set(enqueNotificationAtom, {
       message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',

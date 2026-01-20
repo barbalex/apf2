@@ -2,9 +2,14 @@ import { gql } from '@apollo/client'
 import { DateTime } from 'luxon'
 
 import { apberuebersicht } from '../components/shared/fragments.ts'
+import {
+  store as jotaiStore,
+  apolloClientAtom,
+  enqueNotificationAtom,
+} from '../JotaiStore/index.ts'
 
 export const historize = async ({ store, apberuebersicht: row }) => {
-  const { enqueNotification, apolloClient } = store
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   // 1. historize
   try {
     await apolloClient.mutate({
@@ -21,7 +26,7 @@ export const historize = async ({ store, apberuebersicht: row }) => {
     })
   } catch (error) {
     console.log('Error from mutating historize:', error)
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
       options: {
         variant: 'error',
@@ -56,7 +61,7 @@ export const historize = async ({ store, apberuebersicht: row }) => {
       variables,
     })
   } catch (error) {
-    return enqueNotification({
+    return jotaiStore.set(enqueNotificationAtom, {
       message: error.message,
       options: {
         variant: 'error',
@@ -64,7 +69,7 @@ export const historize = async ({ store, apberuebersicht: row }) => {
     })
   }
   // notify user
-  enqueNotification({
+  jotaiStore.set(enqueNotificationAtom, {
     message: `Arten, Pop und TPop wurden für das Jahr ${row?.jahr} historisiert`,
     options: {
       variant: 'success',

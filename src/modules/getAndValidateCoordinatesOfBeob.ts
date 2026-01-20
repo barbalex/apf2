@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client'
 
+import {
+  store as jotaiStore,
+  enqueNotificationAtom,
+} from '../JotaiStore/index.ts'
 const beobById = gql`
   query beobById($id: UUID!) {
     beobById(id: $id) {
