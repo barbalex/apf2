@@ -6,6 +6,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -13,6 +14,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { ziel as zielFragment } from '../../../shared/fragments.ts'
@@ -67,6 +69,7 @@ export const Component = observer(() => {
   const tsQueryClient = useQueryClient()
 
   const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
   const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
@@ -95,7 +98,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({

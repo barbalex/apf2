@@ -1,5 +1,4 @@
-import { useContext, useState, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, Suspense } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -10,6 +9,7 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -19,7 +19,7 @@ import { query as tpopQuery } from '../Tpop/query.ts'
 import { EkYear } from './EkYear.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
@@ -154,10 +154,8 @@ interface TpopEkListsQueryResult {
   } | null
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { tpopId, apId } = useParams()
-
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -177,6 +175,7 @@ export const Component = observer(() => {
 
   const tpop = tpopData?.tpopById ?? {}
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const userName = useAtomValue(userNameAtom)
 
   const saveToDb = async (event) => {
     const field = event.target.name
@@ -185,7 +184,7 @@ export const Component = observer(() => {
     const variables = {
       id: tpopId,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({
@@ -370,4 +369,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
