@@ -288,7 +288,6 @@ export const copyTo = async ({
     copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
-      apolloClient,
       store,
     })
     tsQueryClient.invalidateQueries({
@@ -312,7 +311,6 @@ export const copyTo = async ({
     copyTpopsOfPop({
       popIdFrom: id,
       popIdTo: newId,
-      apolloClient,
       store,
     })
   }

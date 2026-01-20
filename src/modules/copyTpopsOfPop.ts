@@ -1,13 +1,10 @@
 import { gql } from '@apollo/client'
 
 import { copyTo } from './copyTo/index.ts'
+import { store as jotaiStore, apolloClientAtom } from '../JotaiStore/index.ts'
 
-export const copyTpopsOfPop = async ({
-  popIdFrom,
-  popIdTo,
-  apolloClient,
-  store,
-}) => {
+export const copyTpopsOfPop = async ({ popIdFrom, popIdTo, store }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   // 1. fetch all tpops
   const { data } = await apolloClient.query({
     query: gql`
@@ -29,7 +26,6 @@ export const copyTpopsOfPop = async ({
       parentId: popIdTo,
       table: 'tpop',
       id: tpop.id,
-      apolloClient,
       store,
     }),
   )
