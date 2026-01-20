@@ -7,5 +7,6 @@ export const logout = async () => {
   localForage.clear()
    
   jotaiStore.set(removeUserAtom)
+  // TODO:remove all atomWithStorage!
   window.location.reload(true)
 }
