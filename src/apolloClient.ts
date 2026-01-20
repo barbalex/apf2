@@ -28,6 +28,9 @@ import type { MobxStore } from './store/index.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 interface BuildApolloClientParams {
   store: Instance<typeof MobxStore>
 }
@@ -68,10 +71,6 @@ export const buildApolloClient = ({
           path.includes('historize') &&
           message &&
           message.includes('Unique-Constraint')
-
-const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
-
         ) {
           return false
         }
