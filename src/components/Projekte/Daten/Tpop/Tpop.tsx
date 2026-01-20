@@ -26,7 +26,10 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
-import { addNotificationAtom, userAtom } from '../../../../JotaiStore/index.ts'
+import {
+  addNotificationAtom,
+  userNameAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type {
   TpopId,
@@ -221,7 +224,7 @@ export const Component = () => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({
