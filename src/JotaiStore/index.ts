@@ -260,3 +260,6 @@ export const navListFilterAtoms = {
   // and an atom always needs to be returned
   undefined: adresseNavListFilterIsVisibleAtom,
 }
+
+export const tsQueryClientAtom = atom(null)
+export const apolloClientAtom = atom(null)

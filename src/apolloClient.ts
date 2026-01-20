@@ -13,10 +13,13 @@ import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-type
 import { jwtDecode } from 'jwt-decode'
 import { uniqBy } from 'es-toolkit'
 import type { Instance } from 'mobx-state-tree'
+import { useSetAtom } from 'jotai'
 
 import { graphQlUri } from './modules/graphQlUri.ts'
 import { existsPermissionError } from './modules/existsPermissionError.ts'
 import { existsTooLargeError } from './modules/existsTooLargeError.ts'
+import { store as jotaiStore, apolloClientAtom } from './JotaiStore/index.ts'
+
 import type { MobxStore } from './store/index.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
@@ -232,5 +235,7 @@ export const buildApolloClient = ({
   })
   // make client available in store
   store.setApolloClient(client)
+  jotaiStore.set(apolloClientAtom, client)
+
   return client
 }
