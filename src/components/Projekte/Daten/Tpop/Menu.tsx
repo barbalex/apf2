@@ -234,7 +234,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       // move to this pop
       return moveTo({
         id: popId,
-        apolloClient,
         store,
       })
     }
@@ -242,7 +241,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       // move to this tpop
       return moveTo({
         id: tpopId,
-        apolloClient,
         store,
       })
     }

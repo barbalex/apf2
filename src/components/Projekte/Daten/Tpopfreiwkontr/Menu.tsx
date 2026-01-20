@@ -162,7 +162,6 @@ export const Menu = observer(({ row }: MenuProps) => {
     if (isMovingTpopfreiwkontr) {
       return moveTo({
         id: tpopId,
-        apolloClient,
         store,
       })
     }
