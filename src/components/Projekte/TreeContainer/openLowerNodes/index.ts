@@ -41,13 +41,13 @@ export const openLowerNodes = ({
   // })
   switch (menuType) {
     case 'popFolder':
-      popFolder({ id, projId, apolloClient, store })
+      popFolder({ id, projId, store })
       break
     case 'pop':
-      pop({ id, apId, projId, apolloClient, store })
+      pop({ id, apId, projId, store })
       break
     case 'tpopFolder':
-      tpopFolder({ id, apId, projId, apolloClient, store })
+      tpopFolder({ id, apId, projId, store })
       break
     case 'tpop':
       tpop({ id, popId, apId, projId, apolloClient, store })
