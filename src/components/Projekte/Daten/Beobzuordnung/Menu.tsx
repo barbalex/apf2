@@ -80,7 +80,6 @@ export const Menu = observer(() => {
       id: beobId,
       apId,
       projId,
-      apolloClient,
       store,
       search,
     })

@@ -454,7 +454,6 @@ export const Menus = observer(() => {
           id,
           apId,
           projId,
-          apolloClient,
           store,
           search,
         })
