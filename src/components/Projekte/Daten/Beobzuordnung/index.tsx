@@ -1,12 +1,12 @@
-import { useContext, type ChangeEvent } from 'react'
+import { type ChangeEvent } from 'react'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { TextField2 } from '../../../shared/TextField2.tsx'
@@ -21,7 +21,7 @@ import { saveNichtZuordnenToDb } from './saveNichtZuordnenToDb.ts'
 import { saveArtIdToDb } from './saveArtIdToDb.ts'
 import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
 import { sendMail } from '../../../../modules/sendMail.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   aeTaxonomies,
@@ -139,7 +139,7 @@ const getTpopZuordnenSource = ({ row, ap }: { row: any; ap: any }) => {
   }))
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { beobId: id, apId } = useParams<{ beobId: string; apId: string }>()
   const { search, pathname } = useLocation()
   const type =
@@ -150,7 +150,7 @@ export const Component = observer(() => {
 
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
 
   const { data, refetch } = useQuery({
     queryKey: ['beobzuordnung', id, apId],
@@ -264,7 +264,7 @@ export const Component = observer(() => {
       variables: {
         id,
         [event.target.name]: event.target.value,
-        changedBy: store.user.name,
+        changedBy: user.name,
       },
     })
   }
@@ -382,4 +382,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

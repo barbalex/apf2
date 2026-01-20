@@ -1,6 +1,5 @@
-import { useContext, useState, Suspense, type ChangeEvent } from 'react'
+import { useState, Suspense, type ChangeEvent } from 'react'
 import Button from '@mui/material/Button'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
@@ -8,13 +7,14 @@ import { format } from 'date-fns/format'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
 import { TextFieldNonUpdatable } from '../../../shared/TextFieldNonUpdatable.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apberuebersicht } from '../../../shared/fragments.ts'
@@ -50,11 +50,10 @@ const getIsBeforeMarchOfFollowingYear = (jahr: number | null | undefined) => {
   return (currentMonth < 3 && previousYear === jahr) || currentYear === jahr
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { apberuebersichtId } = useParams<{ apberuebersichtId: string }>()
 
-  const store = useContext(MobxContext)
-  const { user } = store
+  const user = useAtomValue(userAtom)
   const { token } = user
   const role = token ? jwtDecode(token).role : null
   const userIsManager = role === 'apflora_manager'
@@ -83,7 +82,7 @@ export const Component = observer(() => {
     const variables = {
       id: row?.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: user.name,
     }
     try {
       await apolloClient.mutate({
@@ -225,4 +224,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
