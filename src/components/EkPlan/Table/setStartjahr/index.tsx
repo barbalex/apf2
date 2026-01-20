@@ -2,10 +2,13 @@ import { queryEkfrequenz } from './queryEkfrequenz.ts'
 import { queryTpopkontr } from './queryTpopkontr.ts'
 import { queryTpopmassn } from './queryTpopmassn.ts'
 import { mutationUpdateTpop } from './mutationUpdateTpop.ts'
-import {
-  store as jotaiStore,
+import {store as jotaiStore,
   apolloClientAtom,
-} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 
 export const setStartjahr = async ({
   row,
@@ -13,8 +16,6 @@ export const setStartjahr = async ({
   store,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
-  const { enqueNotification } = store
-
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
   try {
@@ -23,7 +24,7 @@ export const setStartjahr = async ({
       variables: { id: ekfrequenz },
     })
   } catch (error) {
-    return enqueNotification({
+    return addNotification({
       message: `Fehler beim Abfragen der EK-Frequenz: ${error.message}`,
       options: {
         variant: 'error',
@@ -42,7 +43,7 @@ export const setStartjahr = async ({
   const kontrolljahreAb =
     ekfrequenzResult?.data?.ekfrequenzById?.kontrolljahreAb ?? null
   if (!kontrolljahreAb) {
-    return enqueNotification({
+    return addNotification({
       message: `Bei der gewählten EK-Frequenz wurde das Feld 'Kontrolljahre ab' nicht erfasst. Daher konnte das Startjahr nicht berechnet werden`,
       options: {
         variant: 'error',
@@ -61,7 +62,7 @@ export const setStartjahr = async ({
         variables: { tpopId: row.id },
       })
     } catch (error) {
-      return enqueNotification({
+      return addNotification({
         message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
         options: {
           variant: 'error',
@@ -74,7 +75,7 @@ export const setStartjahr = async ({
       ),
     )
     if (!ekfrequenzStartjahr) {
-      return enqueNotification({
+      return addNotification({
         message: `Offenbar gibt es keine Kontrolle. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
         options: {
           variant: 'info',
@@ -94,7 +95,7 @@ export const setStartjahr = async ({
         variables: { tpopId: row.id },
       })
     } catch (error) {
-      return enqueNotification({
+      return addNotification({
         message: `Fehler beim Abfragen der EK-Kontrollen: ${error.message}`,
         options: {
           variant: 'error',
@@ -107,7 +108,7 @@ export const setStartjahr = async ({
       ),
     )
     if (!ekfrequenzStartjahr) {
-      return enqueNotification({
+      return addNotification({
         message: `Offenbar gibt es keine Ansiedlung. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
         options: {
           variant: 'info',
@@ -126,7 +127,7 @@ export const setStartjahr = async ({
       },
     })
   } catch (error) {
-    return store.enqueNotification({
+    return addNotification({
       message: `Fehler beim Aktualisieren der Teil-Population: ${error.message}`,
       options: {
         variant: 'error',
@@ -138,7 +139,7 @@ export const setStartjahr = async ({
   //   kontrolljahreAb === 'EK' ?
   //     `Entsprechend der letzten Kontrolle wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
   //   : `Entsprechend der letzten Ansiedlung wird als EK-Frequenz-Startjahr ${ekfrequenzStartjahr} gesetzt`
-  // enqueNotification({
+  // addNotification({
   //   message,
   //   options: {
   //     variant: 'success',

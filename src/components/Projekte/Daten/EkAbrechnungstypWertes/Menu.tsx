@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -21,6 +22,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerte.ts'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 interface CreateEkAbrechnungstypWerteResult {
   data?: {
     createEkAbrechnungstypWerte?: {
@@ -38,6 +44,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, ekAbrechnungstypWerteId } = useParams<{
@@ -65,7 +72,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

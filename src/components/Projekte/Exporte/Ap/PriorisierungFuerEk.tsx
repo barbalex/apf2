@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -10,6 +11,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ApId, AdresseId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface ApPopEkPrioQueryResult {
   allAps: {
@@ -55,9 +61,8 @@ interface ApPopEkPrioQueryResult {
 }
 
 export const PriorisierungFuerEk = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -116,7 +121,7 @@ export const PriorisierungFuerEk = observer(() => {
         `,
       })
     } catch (error) {
-      enqueNotification({
+      addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -156,7 +161,7 @@ export const PriorisierungFuerEk = observer(() => {
     }))
     if (rows.length === 0) {
       setQueryState(undefined)
-      return enqueNotification({
+      return addNotification({
         message: 'Die Abfrage retournierte 0 Datensätze',
         options: {
           variant: 'warning',

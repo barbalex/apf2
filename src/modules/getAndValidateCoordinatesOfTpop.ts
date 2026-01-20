@@ -1,5 +1,15 @@
 import { gql } from '@apollo/client'
 
+import {
+  store as jotaiStore,
+  addNotificationAtom,
+  apolloClientAtom,
+} from '../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
 const tpopById = gql`
   query tpopById($id: UUID!) {
     tpopById(id: $id) {
@@ -10,11 +20,8 @@ const tpopById = gql`
   }
 `
 
-export const getAndValidateCoordinatesOfTpop = async ({
-  id,
-  enqueNotification,
-  apolloClient,
-}) => {
+export const getAndValidateCoordinatesOfTpop = async ({ id }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   let tpopResult
   try {
     tpopResult = await apolloClient.query({
@@ -22,7 +29,7 @@ export const getAndValidateCoordinatesOfTpop = async ({
       variables: { id },
     })
   } catch (error) {
-    enqueNotification({
+    addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -32,7 +39,7 @@ export const getAndValidateCoordinatesOfTpop = async ({
   const tpop = tpopResult?.data?.tpopById
   const { lv95X, lv95Y } = tpop
   if (!lv95X) {
-    enqueNotification({
+    addNotification({
       message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,
       options: {
         variant: 'warning',

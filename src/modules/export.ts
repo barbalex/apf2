@@ -2,6 +2,14 @@
 //import exportKml from './exportKml_ogc'
 import { omit } from 'es-toolkit'
 
+import {
+  store as jotaiStore,
+  addNotificationAtom,
+} from '../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 export const exportModule = async ({
   data: dataPassed,
   fileName,
@@ -16,7 +24,7 @@ export const exportModule = async ({
   // 2. depending on typename check if this table is filtered
   // 3. if yes: filter by dataFilterState by converting camelCase to lower_case
   if (data.length === 0) {
-    return apolloClient.enqueNotification({
+    return addNotification({
       message: 'Es gibt offenbar keine Daten, welche exportiert werden können',
       options: {
         variant: 'warning',

@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
 
@@ -38,7 +38,8 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyTpopKoordToPop } from '../../../../modules/copyTpopKoordToPop/index.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOnMapsZhCh.ts'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
+import {showTreeMenusAtom,
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'
@@ -64,6 +65,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId } = useParams()
@@ -102,7 +104,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -145,7 +147,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -206,6 +208,8 @@ export const Menu = observer(({ row }: MenuProps) => {
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
   const showMapIfNotYetVisible = (projekteTabs) => {
     const isVisible = projekteTabs.includes('karte')
+
+
     if (!isVisible) {
       setProjekteTabs([...projekteTabs, 'karte'])
     }
@@ -312,15 +316,11 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickShowCoordOfTpopOnMapGeoAdminCh = () =>
     showCoordOfTpopOnMapGeoAdminCh({
       id: tpopId,
-      apolloClient,
-      enqueNotification: store.enqueNotification,
     })
 
   const onClickShowCoordOfTpopOnMapsZhCh = () =>
     showCoordOfTpopOnMapsZhCh({
       id: tpopId,
-      apolloClient,
-      enqueNotification: store.enqueNotification,
     })
 
   // to paste copied feldkontr/freiwkontr/massn

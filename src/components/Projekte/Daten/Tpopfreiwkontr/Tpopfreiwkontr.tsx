@@ -1,4 +1,5 @@
 import { useEffect, useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -48,13 +49,18 @@ interface ComponentProps {
 
 import styles from './Tpopfreiwkontr.module.css'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 export const Component = observer(({ id: idPassed }: ComponentProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
   const { pathname } = useLocation()
 
   const store = useContext(MobxContext)
-  const { enqueNotification, isPrint, user } = store
-
+  const { isPrint, user } = store
   const apolloClient = useApolloClient()
 
   const id = idPassed ?? params.tpopkontrId
@@ -113,7 +119,7 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
           .catch((error) => {
             if (!isActive) return
 
-            enqueNotification({
+            addNotification({
               message: (error as Error).message,
               options: {
                 variant: 'error',
@@ -125,16 +131,7 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
     return () => {
       isActive = false
     }
-  }, [
-    apolloClient,
-    data,
-    enqueNotification,
-    isLoading,
-    refetch,
-    row.id,
-    user.name,
-    zaehls.length,
-  ])
+  }, [apolloClient, data, isLoading, refetch, row.id, user.name, zaehls.length])
 
   if (isLoading) return <Spinner />
 

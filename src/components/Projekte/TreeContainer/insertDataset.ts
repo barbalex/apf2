@@ -4,11 +4,10 @@ import { camelCase } from 'es-toolkit'
 import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../modules/tables.ts'
-import {
-  store as jotaiStore,
+import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../JotaiStore/index.ts'
 import {
   adresse as adresseFragment,
   user as userFragment,
@@ -16,6 +15,10 @@ import {
   tpopkontrzaehlEinheitWerte as tpopkontrzaehlEinheitWerteFragment,
   ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
 } from '../../shared/fragments.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 
 const fragments = {
   tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,
@@ -35,7 +38,6 @@ export const insertDataset = async ({
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const { enqueNotification } = store
   const { openNodes: openNodesRaw, setOpenNodes } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
   let table = tablePassed
@@ -43,7 +45,7 @@ export const insertDataset = async ({
   const tableMetadata = tables.find((t) => t.table === table)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
-    return enqueNotification({
+    return addNotification({
       message: `no table meta data found for table "${table}"`,
       options: {
         variant: 'error',
@@ -57,7 +59,7 @@ export const insertDataset = async ({
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
-    return enqueNotification({
+    return addNotification({
       message: 'new dataset not created as no idField could be found',
       options: {
         variant: 'error',
@@ -186,7 +188,7 @@ export const insertDataset = async ({
       result = await apolloClient.mutate({ mutation })
     }
   } catch (error) {
-    return enqueNotification({
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

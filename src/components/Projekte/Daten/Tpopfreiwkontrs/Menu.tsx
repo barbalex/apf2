@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,7 +20,8 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
+import {showTreeMenusAtom,
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'
@@ -43,6 +44,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
   const apolloClient = useApolloClient()
@@ -62,6 +64,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
                 tpopkontr: {
                   tpopId: $tpopId
                   typ: "Freiwilligen-Erfolgskontrolle"
+
+
                 }
               }
             ) {
@@ -77,7 +81,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

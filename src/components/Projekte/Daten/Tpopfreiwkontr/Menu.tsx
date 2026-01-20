@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -24,6 +25,11 @@ import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 interface CreateTpopkontrResult {
   data: {
     createTpopkontr: {
@@ -43,6 +49,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
@@ -76,7 +83,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { tpopId, typ: 'Freiwilligen-Erfolgskontrolle' },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: error.message,
         options: {
           variant: 'error',
@@ -116,7 +123,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopkontrId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: error.message,
         options: {
           variant: 'error',

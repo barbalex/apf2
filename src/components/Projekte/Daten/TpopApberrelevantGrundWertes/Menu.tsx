@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -21,6 +22,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopApberrelevantGrundWerteCode } from '../../../../generated/apflora/models.ts'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 interface CreateTpopApberrelevantGrundWerteResult {
   createTpopApberrelevantGrundWerte: {
     tpopApberrelevantGrundWerte: {
@@ -36,6 +42,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, tpopApberrelevantGrundWerteId } = useParams()
@@ -63,7 +70,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
           `,
         })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

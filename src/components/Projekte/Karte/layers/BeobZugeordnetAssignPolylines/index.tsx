@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { observer } from 'mobx-react-lite'
@@ -14,6 +15,11 @@ import type {
   PopId,
 } from '../../../../../models/apflora/public/Tpop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+import {
+  addNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
+
 
 interface BeobAssignLinesNode {
   id: BeobId
@@ -46,7 +52,6 @@ interface BeobAssignLinesQueryResult {
 
 const Polylines = observer(() => {
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const { beobGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -61,7 +66,7 @@ const Polylines = observer(() => {
   })
 
   if (error) {
-    enqueNotification({
+    addNotification({
       message: `Fehler beim Laden der Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
@@ -78,6 +83,7 @@ const Polylines = observer(() => {
 })
 
 export const BeobZugeordnetAssignPolylines = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const tree = store.tree
   const { beobGqlFilter } = tree

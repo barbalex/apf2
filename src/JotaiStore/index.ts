@@ -263,3 +263,26 @@ export const navListFilterAtoms = {
 
 export const tsQueryClientAtom = atom(null)
 export const apolloClientAtom = atom(null)
+
+// Notifications
+export const notificationsAtom = atom([])
+
+export const addNotificationAtom = atom(null, (get, set, note) => {
+  const notifications = get(notificationsAtom)
+  const key = note.options?.key ?? new Date().getTime() + Math.random()
+  set(notificationsAtom, [
+    ...notifications,
+    {
+      key,
+      ...note,
+    },
+  ])
+})
+
+export const removeNotificationAtom = atom(null, (get, set, key) => {
+  const notifications = get(notificationsAtom)
+  set(
+    notificationsAtom,
+    notifications.filter((n) => n.key !== key),
+  )
+})

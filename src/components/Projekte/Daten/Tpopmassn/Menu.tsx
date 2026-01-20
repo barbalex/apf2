@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -25,6 +26,11 @@ import type { TpopId } from '../../../../models/apflora/TpopId.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 interface CreateTpopmassnResult {
   data: {
     createTpopmassn: {
@@ -43,6 +49,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ row }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopmassnId } = useParams()
@@ -72,7 +79,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -112,7 +119,7 @@ export const Menu = observer(({ row }: MenuProps) => {
         variables: { id: tpopmassnId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

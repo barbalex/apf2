@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -10,6 +11,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface BeobZugeordnetQueryResult {
   allVBeobZugeordnets: {
@@ -43,9 +49,8 @@ interface BeobZugeordnetQueryResult {
 }
 
 export const BeobZugeordnet = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -95,7 +100,7 @@ export const BeobZugeordnet = observer(() => {
           })
         } catch (error) {
           setQueryState(undefined)
-          return enqueNotification({
+          return addNotification({
             message: (error as Error).message,
             options: {
               variant: 'error',

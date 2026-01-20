@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,6 +21,11 @@ import type { AssozartId } from '../../../../models/apflora/Assozart.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface CreateAssozartResult {
   data?: {
@@ -45,6 +51,7 @@ interface DeleteAssozartResult {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, assozartId } = useParams<{
@@ -75,7 +82,7 @@ export const Menu = observer(() => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -118,7 +125,7 @@ export const Menu = observer(() => {
         variables: { id: assozartId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

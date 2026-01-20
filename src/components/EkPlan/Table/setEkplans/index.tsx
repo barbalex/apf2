@@ -2,10 +2,13 @@ import { queryEkplans } from './queryEkplans.ts'
 import { queryEkfrequenz } from './queryEkfrequenz.ts'
 import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
 import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
-import {
-  store as jotaiStore,
+import {store as jotaiStore,
   apolloClientAtom,
-} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
 
 export const setEkplans = async ({
   tpopId,
@@ -18,9 +21,7 @@ export const setEkplans = async ({
   // only return if set ekfrequenz has kontrolljahre?
   // but then: query ekplans beginning when? This year
   //console.log('setEkplans', { ekfrequenzValue })
-  if (!ekfrequenzStartjahr) return
-  const { enqueNotification } = store
-  // 1. query all ekplans beginning with ekfrequenzStartJahr
+  if (!ekfrequenzStartjahr) return  // 1. query all ekplans beginning with ekfrequenzStartJahr
   let ekplansToDeleteResult
   try {
     ekplansToDeleteResult = await apolloClient.query({
@@ -32,7 +33,7 @@ export const setEkplans = async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return addNotification({
       message: `Fehler beim Abfragen der bisherigen EK-Pläne: ${error.message}`,
       options: {
         variant: 'error',
@@ -52,7 +53,7 @@ export const setEkplans = async ({
         },
       })
     } catch (error) {
-      return enqueNotification({
+      return addNotification({
         message: `Fehler beim Löschen der bisherigen EK-Pläne: ${error.message}`,
         options: {
           variant: 'error',
@@ -70,7 +71,7 @@ export const setEkplans = async ({
       },
     })
   } catch (error) {
-    return enqueNotification({
+    return addNotification({
       message: `Fehler beim Abfragen der Kontrolljahre: ${error.message}`,
       options: {
         variant: 'error',
@@ -82,7 +83,7 @@ export const setEkplans = async ({
   const typ = ekfrequenz.ektyp.toUpperCase()
   const kontrolljahre = ekfrequenz.kontrolljahre || []
   if (kontrolljahre.length === 0) {
-    return enqueNotification({
+    return addNotification({
       message: `Ab ${ekfrequenzStartjahr} wurden die bestehenden EK-Pläne gelöscht. Weil aber für die gewählte EK-Frequenz keine Kontrolljahre existieren, wurden keine neuen Kontrolljahre gesetzt`,
       options: {
         variant: 'info',
@@ -104,7 +105,7 @@ export const setEkplans = async ({
   try {
     await Promise.all(mutationPromises)
   } catch (error) {
-    return enqueNotification({
+    return addNotification({
       message: `Fehler beim Schaffen neuer EK-Pläne: ${error.message}`,
       options: {
         variant: 'error',
@@ -118,7 +119,7 @@ export const setEkplans = async ({
   //   type: 'conjunction',
   // })
   // jahreList = formatter.format(kontrolljahre.map((j) => j.toString()))
-  // enqueNotification({
+  // addNotification({
   //   message: `Ab ${ekfrequenzStartjahr} wurden allfällige bestehende EK-Pläne gelöscht und gemäss EK-Frequenz neue für ${
   //     kontrolljahre.length > 1 ? 'die Jahre' : 'das Jahr'
   //   } ${jahreList} gesetzt`,

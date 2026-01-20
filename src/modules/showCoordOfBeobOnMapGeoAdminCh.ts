@@ -1,15 +1,11 @@
 import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBeob.ts'
 
-export const showCoordOfBeobOnMapGeoAdminCh = async ({
-  id,
-  enqueNotification,
-  apolloClient,
-}) => {
-  const beob = await getAndValidateCoordinatesOfBeob({
-    id,
-    enqueNotification,
-    apolloClient,
-  })
+import {
+  store as jotaiStore,
+  addNotificationAtom,
+} from '../JotaiStore/index.ts'
+export const showCoordOfBeobOnMapGeoAdminCh = async ({ id }) => {
+  const beob = await getAndValidateCoordinatesOfBeob({ id })
   const lv95X = beob?.lv95X
   const lv95Y = beob?.lv95Y
   if (lv95X && lv95Y) {

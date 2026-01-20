@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -8,6 +9,11 @@ import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface MassnWebgisBunQueryResult {
   allVMassnWebgisbuns: {
@@ -52,9 +58,8 @@ interface MassnWebgisBunQueryResult {
 }
 
 export const MassnWebgisBun = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -114,7 +119,7 @@ export const MassnWebgisBun = observer(() => {
             `,
           })
         } catch (error) {
-          enqueNotification({
+          addNotification({
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -125,7 +130,7 @@ export const MassnWebgisBun = observer(() => {
         const rows = result.data?.allVMassnWebgisbuns.nodes ?? []
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return addNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

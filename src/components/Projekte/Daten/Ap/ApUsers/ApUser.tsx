@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -11,6 +12,11 @@ import { MobxContext } from '../../../../../mobxContext.ts'
 import styles from './ApUser.module.css'
 
 import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
+
+import {
+  addNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
+
 
 interface ApUserProps {
   user: {
@@ -25,8 +31,8 @@ interface ApUserProps {
 }
 
 export const ApUser = observer(({ user, refetch }: ApUserProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
-  const { enqueNotification } = useContext(MobxContext)
 
   const onClickDelete = async () => {
     try {
@@ -41,7 +47,7 @@ export const ApUser = observer(({ user, refetch }: ApUserProps) => {
         variables: { id: user.id },
       })
     } catch (error) {
-      enqueNotification({
+      addNotification({
         message: (error as Error).message,
         options: { variant: 'error' },
       })

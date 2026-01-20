@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -19,6 +20,11 @@ import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import type { EkfrequenzId, ApId } from '../../models/apflora/public/Ekfrequenz.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../JotaiStore/index.ts'
+
 
 interface ExistingEkfrequenzNode {
   id: EkfrequenzId
@@ -64,17 +70,12 @@ interface ApOptionsQueryResult {
 }
 
 export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
   const store = useContext(MobxContext)
-  const {
-    user,
-    enqueNotification,
-    openChooseApToCopyEkfrequenzsFrom,
-    setOpenChooseApToCopyEkfrequenzsFrom,
-  } = store
-
+  const { user, openChooseApToCopyEkfrequenzsFrom, setOpenChooseApToCopyEkfrequenzsFrom } = store
   const onCloseChooseApDialog = () =>
     setOpenChooseApToCopyEkfrequenzsFrom(false)
 
@@ -258,7 +259,7 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
 
     // 3. inform user
     setOpenChooseApToCopyEkfrequenzsFrom(false)
-    enqueNotification({
+    addNotification({
       message: `Die EK-Frequenzen wurden kopiert`,
       options: {
         variant: 'info',

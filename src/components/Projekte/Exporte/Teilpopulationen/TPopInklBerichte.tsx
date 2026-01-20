@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -12,6 +13,11 @@ import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface TPopPopberundmassnberQueryResult {
   allVTpopPopberundmassnbers: {
@@ -74,9 +80,8 @@ interface TPopPopberundmassnberQueryResult {
 }
 
 export const TPopInklBerichte = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -154,7 +159,7 @@ export const TPopInklBerichte = observer(() => {
             `,
           })
         } catch (error) {
-          enqueNotification({
+          addNotification({
             message: (error as Error).message,
             options: { variant: 'error' },
           })
@@ -163,7 +168,7 @@ export const TPopInklBerichte = observer(() => {
         const rows = result.data?.allVTpopPopberundmassnbers?.nodes ?? []
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return addNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

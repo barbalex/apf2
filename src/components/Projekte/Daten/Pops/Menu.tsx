@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
+import { useSetAtom,  useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,7 +20,8 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { showTreeMenusAtom } from '../../../../JotaiStore/index.ts'
+import {showTreeMenusAtom,
+  addNotificationAtom} from '../../../../JotaiStore/index.ts'
 
 import type { PopId, ApId } from '../../../../models/apflora/index.tsx'
 
@@ -44,6 +45,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams()
@@ -71,7 +73,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -108,6 +110,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     })
 
   const isMovingPop = moving.table === 'pop'
+
+
   const popMovingFromThisAp = moving.fromParentId === apId
 
   const onClickMovePopToHere = () =>

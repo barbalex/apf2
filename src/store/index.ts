@@ -121,7 +121,6 @@ export const MobxStore = types
   .volatile(() => ({
     toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
-    notifications: [],
     navigate: undefined,
   }))
   .actions((self) => ({
@@ -139,19 +138,6 @@ export const MobxStore = types
     },
     setHideMapControls(val) {
       self.hideMapControls = val
-    },
-    enqueNotification(note) {
-      const key = note.options && note.options.key
-      self.notifications = [
-        ...self.notifications,
-        {
-          key: key || new Date().getTime() + Math.random(),
-          ...note,
-        },
-      ]
-    },
-    removeNotification(note) {
-      self.notifications = self.notifications.filter((n) => n.key !== note)
     },
     setShowDeletions(val) {
       self.showDeletions = val

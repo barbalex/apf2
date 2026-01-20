@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -19,6 +20,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 interface CreateEkfrequenzResult {
   data?: {
     createEkfrequenz?: {
@@ -33,6 +39,7 @@ interface CreateEkfrequenzResult {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, ekfrequenzId } = useParams()
@@ -59,7 +66,7 @@ export const Menu = observer(() => {
         variables: { apId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -100,7 +107,7 @@ export const Menu = observer(() => {
         variables: { id: ekfrequenzId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

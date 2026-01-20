@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -15,6 +16,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface CreateTpopkontrzaehlResult {
   data: {
@@ -34,6 +40,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
   const apolloClient = useApolloClient()
@@ -64,7 +71,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

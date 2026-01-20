@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,6 +21,11 @@ import type { PopberId, PopId } from '../../../../models/apflora/index.tsx'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 interface CreatePopberResult {
   data?: {
     createPopber?: {
@@ -34,6 +40,7 @@ interface CreatePopberResult {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, popberId } = useParams()
@@ -60,7 +67,7 @@ export const Menu = observer(() => {
         variables: { popId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -103,7 +110,7 @@ export const Menu = observer(() => {
         variables: { id: popberId },
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

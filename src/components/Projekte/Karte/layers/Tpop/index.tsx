@@ -1,4 +1,5 @@
 import { useContext, useEffect } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -20,6 +21,11 @@ import type {
   ApId,
 } from '../../../../../models/apflora/public/Tpop.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+import {
+  addNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
+
 
 interface TpopNode {
   id: TpopId
@@ -77,11 +83,7 @@ const getTpopFilter = (tpopGqlFilter) => {
 
 const ObservedTpop = observer(({ clustered }) => {
   const store = useContext(MobxContext)
-  const {
-    enqueNotification,
-    setIdOfTpopBeingLocalized,
-    idOfTpopBeingLocalized,
-  } = store
+  const { setIdOfTpopBeingLocalized, idOfTpopBeingLocalized } = store
   const { tpopGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -158,7 +160,7 @@ const ObservedTpop = observer(({ clustered }) => {
           queryKey: [`TpopForMapQuery`],
         })
       } catch (error) {
-        enqueNotification({
+        addNotification({
           message: error.message,
           options: {
             variant: 'error',
@@ -186,7 +188,7 @@ const ObservedTpop = observer(({ clustered }) => {
   }, [idOfTpopBeingLocalized, leafletMap._container])
 
   if (error) {
-    enqueNotification({
+    addNotification({
       message: `Fehler beim Laden der Teil-Populationen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
@@ -218,6 +220,7 @@ const ObservedTpop = observer(({ clustered }) => {
 })
 
 export const Tpop = observer(({ clustered }) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const tree = store.tree
   const { tpopGqlFilter } = tree

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -19,6 +20,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface CreateAdresseResult {
   data?: {
@@ -43,6 +49,7 @@ interface DeleteAdresseResult {
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -67,7 +74,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       console.log('error:', error)
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',
@@ -106,7 +113,7 @@ export const Menu = observer(() => {
       })
     } catch (error) {
       console.log('error:', error)
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

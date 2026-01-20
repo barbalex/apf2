@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
@@ -14,11 +15,17 @@ import { MobxContext } from '../../../mobxContext.ts'
 import { Popup } from './layers/Popup.tsx'
 import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
 
+import {
+  addNotificationAtom,
+} from '../../../JotaiStore/index.ts'
+
+
 export const ClickListener = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
 
   const store = useContext(MobxContext)
-  const { activeOverlays: activeOverlaysRaw, enqueNotification } = store
+  const { activeOverlays: activeOverlaysRaw } = store
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const apolloClient = useApolloClient()
@@ -299,7 +306,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          enqueNotification({
+          addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',
@@ -373,7 +380,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          enqueNotification({
+          addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',
@@ -447,7 +454,7 @@ export const ClickListener = observer(() => {
           failedToFetch = true
         }
         failedToFetch &&
-          enqueNotification({
+          addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
               variant: 'info',

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -71,6 +72,11 @@ interface MenuProps {
 import styles from './Menu.module.css'
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 const iconStyle = { color: 'white' }
 
 export const Menu = observer(
@@ -81,6 +87,7 @@ export const Menu = observer(
     passwordMessage,
     setPasswordMessage,
   }: MenuProps) => {
+    const addNotification = useSetAtom(addNotificationAtom)
     const { search, pathname } = useLocation()
     const navigate = useNavigate()
 
@@ -130,7 +137,7 @@ export const Menu = observer(
           `,
         })
       } catch (error) {
-        return store.enqueNotification({
+        return addNotification({
           message: (error as Error).message,
           options: {
             variant: 'error',
@@ -168,7 +175,7 @@ export const Menu = observer(
           variables: { id: row.id },
         })
       } catch (error) {
-        return store.enqueNotification({
+        return addNotification({
           message: (error as Error).message,
           options: {
             variant: 'error',
@@ -236,7 +243,7 @@ export const Menu = observer(
       }
       if (errors.length) {
         errors.forEach((error) =>
-          store.enqueNotification({
+          addNotification({
             message: error.message,
             options: {
               variant: 'error',
@@ -244,7 +251,7 @@ export const Menu = observer(
           }),
         )
       } else {
-        store.enqueNotification({
+        addNotification({
           message: `${ekfTpopsWithoutEkfThisYear.length} EKF-Formulare erzeugt`,
           options: {
             variant: 'info',

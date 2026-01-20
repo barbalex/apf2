@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -20,6 +21,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { UserId } from '../../../../models/apflora/UserId.ts'
 
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
+
 interface CreateUserResult {
   data: {
     createUser: {
@@ -37,6 +43,7 @@ interface MenuProps {
 const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, userId } = useParams()
@@ -61,7 +68,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         `,
       })
     } catch (error) {
-      return store.enqueNotification({
+      return addNotification({
         message: (error as Error).message,
         options: {
           variant: 'error',

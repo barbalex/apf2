@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -10,6 +11,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ApId, PopId, TpopId, TpopkontrId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface KontrzaehlAnzproeinheitQueryResult {
   allVKontrzaehlAnzproeinheits: {
@@ -98,9 +104,8 @@ interface KontrzaehlAnzproeinheitQueryResult {
 }
 
 export const KontrAnzProZaehlEinheit = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -204,7 +209,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
             `,
           })
         } catch (error) {
-          enqueNotification({
+          addNotification({
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -215,7 +220,7 @@ export const KontrAnzProZaehlEinheit = observer(() => {
         const rows = result.data?.allVKontrzaehlAnzproeinheits?.nodes ?? []
         setQueryState(undefined)
         if (rows.length === 0) {
-          return enqueNotification({
+          return addNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

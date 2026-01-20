@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
@@ -12,6 +13,11 @@ import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface PopAnzKontrsQueryResult {
   allPops: {
@@ -41,9 +47,8 @@ interface PopAnzKontrsQueryResult {
 }
 
 export const AnzKontrProPop = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -88,7 +93,7 @@ export const AnzKontrProPop = observer(() => {
             `,
           })
         } catch (error) {
-          enqueNotification({
+          addNotification({
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -117,7 +122,7 @@ export const AnzKontrProPop = observer(() => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return addNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

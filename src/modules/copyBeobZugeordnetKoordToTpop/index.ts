@@ -1,11 +1,18 @@
 import { queryBeob } from './queryBeob.ts'
 import { updateTpopById } from './updateTpopById.ts'
 
-export const copyBeobZugeordnetKoordToTpop = async ({
-  id,
-  store,
-  apolloClient,
-}) => {
+import {
+  store as jotaiStore,
+  addNotificationAtom,
+  apolloClientAtom,
+} from '../../JotaiStore/index.ts'
+
+const addNotification = (notification) =>
+  jotaiStore.set(addNotificationAtom, notification)
+
+
+export const copyBeobZugeordnetKoordToTpop = async ({ id, store }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
   // fetch beob coodinates
   let beobResult
   try {
@@ -14,7 +21,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({
       variables: { id },
     })
   } catch (error) {
-    return store.enqueNotification({
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
@@ -45,7 +52,7 @@ export const copyBeobZugeordnetKoordToTpop = async ({
       },
     })
   } catch (error) {
-    return store.enqueNotification({
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',

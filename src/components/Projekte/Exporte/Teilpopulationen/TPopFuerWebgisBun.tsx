@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -10,6 +11,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface TPopWebgisBunQueryResult {
   allVTpopWebgisbuns: {
@@ -62,9 +68,8 @@ interface TPopWebgisBunQueryResult {
 }
 
 export const TPopFuerWebgisBun = observer(() => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
-
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -132,7 +137,7 @@ export const TPopFuerWebgisBun = observer(() => {
             `,
           })
         } catch (error) {
-          enqueNotification({
+          addNotification({
             message: (error as Error).message,
             options: { variant: 'error' },
           })
@@ -141,7 +146,7 @@ export const TPopFuerWebgisBun = observer(() => {
         const rows = result.data?.allVTpopWebgisbuns?.nodes ?? []
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return addNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',

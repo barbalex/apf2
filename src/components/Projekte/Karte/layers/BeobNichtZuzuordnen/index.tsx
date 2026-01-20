@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
@@ -12,6 +13,11 @@ import { query } from './query.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
 import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
+
+import {
+  addNotificationAtom,
+} from '../../../../../JotaiStore/index.ts'
+
 
 interface BeobNichtZuzuordnenNode {
   id: BeobId
@@ -55,7 +61,6 @@ const iconCreateFunction = function (cluster) {
 const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
   // const leafletMap = useMap()
   const store = useContext(MobxContext)
-  const { enqueNotification } = store
   const tree = store.tree
   const { beobGqlFilter } = tree
   const apolloClient = useApolloClient()
@@ -89,7 +94,7 @@ const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
   // }, [leafletMap])
 
   if (error) {
-    enqueNotification({
+    addNotification({
       message: `Fehler beim Laden der Nicht zuzuordnenden Beobachtungen für die Karte: ${error.message}`,
       options: {
         variant: 'error',
@@ -119,6 +124,7 @@ const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
 })
 
 export const BeobNichtZuzuordnen = observer(({ clustered }) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const tree = store.tree
   const { beobGqlFilter } = tree

@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react'
+import { useSetAtom } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -10,6 +11,11 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { ApId, PopId, TpopId, TpopmassnId, AdresseId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
+
+import {
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
+
 
 interface TpopmassnQueryResult {
   allTpopmassns: {
@@ -124,8 +130,9 @@ interface MassnahmenProps {
 }
 
 export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { enqueNotification, tableIsFiltered } = store
+  const { tableIsFiltered } = store
   const { tpopmassnGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -266,7 +273,7 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
             },
           })
         } catch (error) {
-          enqueNotification({
+          addNotification({
             message: (error as Error).message,
             options: {
               variant: 'error',
@@ -360,7 +367,7 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
         }))
         if (rows.length === 0) {
           setQueryState(undefined)
-          return enqueNotification({
+          return addNotification({
             message: 'Die Abfrage retournierte 0 Datensätze',
             options: {
               variant: 'warning',
