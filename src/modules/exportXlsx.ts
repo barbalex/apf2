@@ -9,11 +9,11 @@ import {
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const exportXlsx = async ({ fileName, data, store }) => {
+export const exportXlsx = async ({ fileName, data }) => {
   const { getXlsxBuffer } = await import('./getXlsxBuffer.ts')
   let buffer
   try {
-    buffer = await getXlsxBuffer({ data, store })
+    buffer = await getXlsxBuffer({ data })
   } catch (error) {
     return addNotification({
       message: error.message,

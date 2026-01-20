@@ -14,7 +14,7 @@ import {
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const getXlsxBuffer = async ({ data, store }) => {
+export const getXlsxBuffer = async ({ data }) => {
   /**
    * using this worker may make the ui more responsive
    * but only while this code runs
@@ -80,5 +80,6 @@ export const getXlsxBuffer = async ({ data, store }) => {
       },
     })
   }
+  
   return buffer
 }

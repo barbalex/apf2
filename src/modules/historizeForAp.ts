@@ -2,14 +2,16 @@ import { gql } from '@apollo/client'
 
 import {
   store as jotaiStore,
+  apolloClientAtom,
   addNotificationAtom,
 } from '../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const historizeForAp = async ({ store, year, apId }) => {
-  const { apolloClient } = store
+export const historizeForAp = async ({ year, apId }) => {
+  const apolloClient = jotaiStore.get(apolloClientAtom)
+
   try {
     await apolloClient.mutate({
       mutation: gql`
@@ -33,6 +35,7 @@ export const historizeForAp = async ({ store, year, apId }) => {
       },
     })
   }
+
   // notify user
   addNotification({
     message: `Art, Pop und TPop wurden für das Jahr ${year} historisiert`,
@@ -40,5 +43,6 @@ export const historizeForAp = async ({ store, year, apId }) => {
       variant: 'success',
     },
   })
+
   return
 }

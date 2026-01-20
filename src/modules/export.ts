@@ -49,7 +49,6 @@ export const exportModule = async ({
     await exportXlsx({
       fileName,
       data,
-      store: apolloClient,
     })
   }
 }
