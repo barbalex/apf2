@@ -132,7 +132,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const onClickCopyPopToHere = () =>
     copyTo({
       parentId: apId,
-      apolloClient,
       store,
     })
 

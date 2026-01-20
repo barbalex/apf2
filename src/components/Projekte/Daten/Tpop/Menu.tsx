@@ -277,7 +277,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       // copy to this pop
       return copyTo({
         parentId: popId,
-        apolloClient,
         store,
       })
     }
@@ -285,7 +284,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       // copy to this tpop
       return copyTo({
         parentId: tpopId,
-        apolloClient,
         store,
       })
     }
@@ -332,7 +330,6 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickCopyLowerElementToHere = () =>
     copyTo({
       parentId: tpopId,
-      apolloClient,
       store,
     })
 

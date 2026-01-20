@@ -213,7 +213,6 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickCopyTpopToHere = () =>
     copyTo({
       parentId: popId,
-      apolloClient,
       store,
     })
 
@@ -222,7 +221,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       // copy to this ap
       return copyTo({
         parentId: apId,
-        apolloClient,
         store,
       })
     }

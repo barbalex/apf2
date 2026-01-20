@@ -95,7 +95,9 @@ export const Menu = observer(({ row }: MenuProps) => {
     )
   }
 
-  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
@@ -190,7 +192,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       // copy to this tpop
       return copyTo({
         parentId: tpopId,
-        apolloClient,
         store,
       })
     }

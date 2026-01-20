@@ -240,7 +240,6 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickCopyFeldkontrToHere = () =>
     copyTo({
       parentId: tpopId,
-      apolloClient,
       store,
     })
 

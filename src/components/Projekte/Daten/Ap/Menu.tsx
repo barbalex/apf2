@@ -162,7 +162,6 @@ export const Menu = observer(() => {
   const onClickCopyTo = () =>
     copyTo({
       parentId: apId,
-      apolloClient,
       store,
     })
 
