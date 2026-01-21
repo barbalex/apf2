@@ -190,12 +190,12 @@ export const Menu = observer(() => {
       withNextLevel: false,
     })
 
-  const isMoving = !!moving.table
-  const isCopying = !!copying.table
+  const isMoving = !!moving?.table
+  const isCopying = !!copying?.table
 
   return (
     <ErrorBoundary>
-      <MenuBar rerenderer={`${moving.id}/${copying.id}`}>
+      <MenuBar rerenderer={`${moving?.id}/${copying?.id}`}>
         <Tooltip title="Neue Art erstellen">
           <IconButton onClick={onClickAdd}>
             <FaPlus style={iconStyle} />
@@ -219,29 +219,29 @@ export const Menu = observer(() => {
         {isMoving &&
           moving.toTable === 'ap' &&
           moving.fromParentId !== apId && (
-            <Tooltip title={`Verschiebe ${moving.label} zu dieser Art`}>
+            <Tooltip title={`Verschiebe ${moving?.label} zu dieser Art`}>
               <IconButton onClick={onClickMoveHere}>
                 <MdOutlineMoveDown style={iconStyle} />
               </IconButton>
             </Tooltip>
           )}
         {isMoving && (
-          <Tooltip title={`Verschieben von '${moving.label}' abbrechen`}>
+          <Tooltip title={`Verschieben von '${moving?.label}' abbrechen`}>
             <IconButton onClick={onClickStopMoving}>
               <BsSignStopFill style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {isCopying && (
-          <Tooltip title={`Kopiere '${copying.label}' in diese Art`}>
+          <Tooltip title={`Kopiere '${copying?.label}' in diese Art`}>
             <IconButton onClick={onClickCopyTo}>
               <MdContentCopy style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {isCopying && (
-          <Tooltip title={`Kopieren von '${copying.label}' abbrechen`}>
-            <IconButton onClick={onClickStopCopying}>
+          <Tooltip title={`Kopieren von '${copying?.label}' abbrechen`}>
+            <IconButton onClick={onClickStopCopying}
               <BsSignStopFill style={iconStyle} />
             </IconButton>
           </Tooltip>

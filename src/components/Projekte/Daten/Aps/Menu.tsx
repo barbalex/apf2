@@ -138,8 +138,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       withNextLevel: false,
     })
 
-  const isMoving = !!moving.table
-  const isCopying = !!copying.table
+  const isMoving = !!moving?.table
+  const isCopying = !!copying?.table
 
   return (
     <ErrorBoundary>
