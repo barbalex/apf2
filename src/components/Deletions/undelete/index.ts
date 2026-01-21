@@ -7,12 +7,13 @@ import {
   removeDeletedDatasetByIdAtom,
   deletedDatasetsAtom,
   apolloClientAtom,
+  setShowDeletionsAtom,
 } from '../../../JotaiStore/index.js'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const undelete = async ({ id, setShowDeletions }) => {
+export const undelete = async ({ id }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const deletedDatasets = jotaiStore.get(deletedDatasetsAtom)
 
@@ -61,7 +62,7 @@ export const undelete = async ({ id, setShowDeletions }) => {
   }
 
   // 2. remove dataset from deletedDatasets
-  if (deletedDatasets.length === 1) setShowDeletions(false)
+  if (deletedDatasets.length === 1) jotaiStore.set(setShowDeletionsAtom, false)
   jotaiStore.set(removeDeletedDatasetByIdAtom, dataset.id)
 
   if (afterDeletionHook) afterDeletionHook()

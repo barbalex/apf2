@@ -90,7 +90,6 @@ export const MobxStore = types
     assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
     ekPlan: types.optional(EkPlan, defaultEkPlan),
-    showDeletions: types.optional(types.boolean, false),
     map: types.optional(Map, defaultMap),
     sortedBeobFields: types.optional(
       types.array(types.string),
@@ -111,9 +110,6 @@ export const MobxStore = types
     },
     setHideMapControls(val) {
       self.hideMapControls = val
-    },
-    setShowDeletions(val) {
-      self.showDeletions = val
     },
     setApfloraLayers(val) {
       self.apfloraLayers = val

@@ -491,3 +491,13 @@ export const removeDeletedDatasetByIdAtom = atom(
     set(deletedDatasetsAtom, current.filter((d) => d.id !== id))
   },
 )
+
+// showDeletions atom and actions
+export const showDeletionsAtom = atom(false)
+
+export const setShowDeletionsAtom = atom(
+  (get) => get(showDeletionsAtom),
+  (get, set, val) => {
+    set(showDeletionsAtom, val)
+  },
+)

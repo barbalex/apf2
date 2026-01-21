@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -8,32 +8,30 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { DateTime } from 'luxon'
 import TextField from '@mui/material/TextField'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { undelete } from './undelete/index.ts'
-import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
-import { deletedDatasetsAtom } from '../../JotaiStore/index.js'
+import {
+  deletedDatasetsAtom,
+  showDeletionsAtom,
+  setShowDeletionsAtom,
+} from '../../JotaiStore/index.js'
 
 import styles from './index.module.css'
 
-export const Deletions = observer(() => {
+export const Deletions = () => {
   const apolloClient = useApolloClient()
-  const store = useContext(MobxContext)
-  const { showDeletions, setShowDeletions } = store
+  const showDeletions = useAtomValue(showDeletionsAtom)
+  const setShowDeletions = useSetAtom(setShowDeletionsAtom)
   const deletedDatasets = useAtomValue(deletedDatasetsAtom)
 
   const [chosenDeletions, setChosenDeletions] = useState([])
 
   const onClickUndo = async () => {
     // loop through all chosenDeletions
-    await Promise.all(
-      chosenDeletions.map(
-        async (id) => await undelete({ id, setShowDeletions }),
-      ),
-    )
+    await Promise.all(chosenDeletions.map(async (id) => await undelete({ id })))
     setChosenDeletions([])
     if (chosenDeletions.length === deletedDatasets.length) {
       setShowDeletions(false)
@@ -141,4 +139,4 @@ export const Deletions = observer(() => {
       </Dialog>
     </ErrorBoundary>
   )
-})
+}
