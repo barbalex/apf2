@@ -1,10 +1,11 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { userTokenAtom } from '../../../../JotaiStore/index.ts'
+import {
+  userTokenAtom,
+  copyingAtom,
+  copyingBiotopAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -42,9 +43,9 @@ const resetCopyingBiotopData = {
   action: 'resetCopyingBiotop',
 }
 
-export const Tpopfeldkontr = observer(({ onClick }) => {
-  const store = useContext(MobxContext)
-  const { copying, copyingBiotop } = store
+export const Tpopfeldkontr = ({ onClick }) => {
+  const copying = useAtomValue(copyingAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const userToken = useAtomValue(userTokenAtom)
 
   return (
@@ -115,4 +116,4 @@ export const Tpopfeldkontr = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}

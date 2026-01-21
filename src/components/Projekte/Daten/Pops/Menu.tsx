@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,8 +20,12 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { PopId, ApId } from '../../../../models/apflora/index.tsx'
 
@@ -51,7 +55,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { projId, apId } = useParams()
 
   const store = useContext(MobxContext)
-  const { setMoving, moving, setCopying, copying } = store
+  const { setMoving, moving } = store
+  const [copying] = useAtom(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -110,7 +116,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     })
 
   const isMovingPop = moving.table === 'pop'
-
 
   const popMovingFromThisAp = moving.fromParentId === apId
 
