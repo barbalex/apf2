@@ -7,7 +7,11 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -21,6 +25,7 @@ export const useTpopmassnsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+  const moving = useAtomValue(movingAtom)
 
   const { data, refetch } = useQuery({
     queryKey: ['treeTpopmassn', tpopId, store.tree.tpopmassnGqlFilterForTree],
@@ -70,7 +75,10 @@ export const useTpopmassnsNavData = (props) => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

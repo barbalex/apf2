@@ -96,6 +96,7 @@ export const useTpopsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+  const moving = useAtomValue(movingAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -160,7 +161,10 @@ export const useTpopsNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

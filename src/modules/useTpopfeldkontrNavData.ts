@@ -53,6 +53,7 @@ export const useTpopfeldkontrNavData = (props) => {
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
 
   const store = useContext(MobxContext)
+  const moving = useAtomValue(movingAtom)
 
   const { data, refetch } = useQuery({
     queryKey: [
@@ -140,7 +141,7 @@ export const useTpopfeldkontrNavData = (props) => {
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,
     copyingBiotopId: copyingBiotop.id,
-    movingId: store.moving.id,
+    movingId: moving.id,
     tpopkontrId,
   })
 
