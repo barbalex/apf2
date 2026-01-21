@@ -321,6 +321,16 @@ export const setOpenChooseApToCopyErfkritsFromAtom = atom(
   },
 )
 
+// Print state
+export const isPrintAtom = atom(false)
+export const setIsPrintAtom = atom(null, (get, set, val) => {
+  set(isPrintAtom, val)
+})
+export const isEkfSinglePrintAtom = atom(false)
+export const setIsEkfSinglePrintAtom = atom(null, (get, set, val) => {
+  set(isEkfSinglePrintAtom, val)
+})
+
 // User
 export const userAtom = atomWithStorage('user', {
   name: '',
