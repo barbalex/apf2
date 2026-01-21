@@ -4,8 +4,10 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { countBy } from 'es-toolkit'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import { activeApfloraLayersAtom } from '../JotaiStore/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
@@ -23,12 +25,13 @@ export const useApNavData = (props) => {
 
   const store = useContext(MobxContext)
 
+  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
   const showPopIcon =
-    store.activeApfloraLayers?.includes('pop') && karteIsVisible
+    activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
-    store.activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
+    activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const showBeobnichtzuzuordnenIcon =
-    store.activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
+    activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
 
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
@@ -283,12 +286,7 @@ export const useApNavData = (props) => {
   useEffect(
     () =>
       reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint:disable-next-line react-hooks/exhaustive-deps
     [],
   )
 

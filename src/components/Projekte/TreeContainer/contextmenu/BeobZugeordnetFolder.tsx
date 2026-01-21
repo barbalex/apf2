@@ -1,7 +1,6 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import { activeApfloraLayersAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -15,9 +14,8 @@ const showBeobOnMapData = {
   idTable: 'ap',
 }
 
-export const BeobZugeordnetFolder = observer(({ onClick }) => {
-  const store = useContext(MobxContext)
-  const { activeApfloraLayers } = store
+export const BeobZugeordnetFolder = ({ onClick }) => {
+  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
 
   return (
     <ErrorBoundary>
@@ -37,4 +35,4 @@ export const BeobZugeordnetFolder = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}
