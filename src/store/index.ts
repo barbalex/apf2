@@ -5,15 +5,11 @@ import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 
 export const MobxStore = types
   .model({
-    activeOverlays: types.array(types.string),
     activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
   })
   .actions((self) => ({
-    setActiveOverlays(val) {
-      self.activeOverlays = val
-    },
     setActiveBaseLayer(val) {
       self.activeBaseLayer = val
     },

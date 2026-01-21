@@ -171,6 +171,11 @@ export const setMapOverlaysAtom = atom(
   (get) => get(mapOverlaysAtom),
   (get, set, value) => set(mapOverlaysAtom, value),
 )
+export const mapActiveOverlaysAtom = atomWithStorage('mapActiveOverlays', [])
+export const setMapActiveOverlaysAtom = atom(
+  (get) => get(mapActiveOverlaysAtom),
+  (get, set, value) => set(mapActiveOverlaysAtom, value),
+)
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },

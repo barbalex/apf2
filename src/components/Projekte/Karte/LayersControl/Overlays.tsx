@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Button from '@mui/material/Button'
 import { MdDragHandle, MdInfoOutline } from 'react-icons/md'
 import {
@@ -18,17 +18,16 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { arrayMoveImmutable } from 'array-move'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { layerLegends } from './layerLegends.ts'
 
 import { Checkbox } from './shared/Checkbox.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   mapOverlaysAtom,
   setMapOverlaysAtom,
+  mapActiveOverlaysAtom,
+  setMapActiveOverlaysAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import styles from './Overlays.module.css'
@@ -109,17 +108,13 @@ const SortableItem = ({
   )
 }
 
-export const Overlays = observer(() => {
+export const Overlays = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
   const overlays = useAtomValue(mapOverlaysAtom)
   const setOverlays = useSetAtom(setMapOverlaysAtom)
-  const {
-    activeOverlays: activeOverlaysIn,
-    setActiveOverlays,
-  } = store
-  const activeOverlays = getSnapshot(activeOverlaysIn)
+  const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
+  const setActiveOverlays = useSetAtom(setMapActiveOverlaysAtom)
 
   const [draggingOverlay, setDraggingOverlay] = useState(null)
   const onDragStart = ({ active }) => setDraggingOverlay(active)
@@ -185,4 +180,4 @@ export const Overlays = observer(() => {
       </DndContext>
     </div>
   )
-})
+}
