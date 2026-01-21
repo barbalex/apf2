@@ -11,6 +11,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  mapActiveApfloraLayersAtom,
 } from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
@@ -52,8 +53,9 @@ export const useTpopNavData = (props) => {
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
 
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const showBeobzugeordnetIcon =
-    store.activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
+    activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
@@ -194,7 +196,10 @@ export const useTpopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
+    () => {
+      const unsub = jotaiStore.sub(mapActiveApfloraLayersAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

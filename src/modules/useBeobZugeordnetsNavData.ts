@@ -4,8 +4,10 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -24,8 +26,9 @@ export const useBeobZugeordnetsNavData = (props) => {
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
 
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const showBeobzugeordnetIcon =
-    store.activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
+    activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
@@ -72,11 +75,6 @@ export const useBeobZugeordnetsNavData = (props) => {
   })
   useEffect(
     () => reaction(() => store.tree.beobZugeordnetGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

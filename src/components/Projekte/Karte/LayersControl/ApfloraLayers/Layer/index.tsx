@@ -25,6 +25,8 @@ import {
   assigningBeobAtom,
   setAssigningBeobAtom,
   setMapBoundsAtom,
+  mapActiveApfloraLayersAtom,
+  setMapActiveApfloraLayersAtom,
 } from '../../../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 import { PopIcon } from './PopIcon.tsx'
@@ -70,16 +72,13 @@ export const Layer = observer(({ apfloraLayer }) => {
 
   const map = useMap()
   const store = useContext(MobxContext)
-  const {
-    activeApfloraLayers: activeApfloraLayersRaw,
-    setActiveApfloraLayers,
-  } = store
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const setAssigningBeob = useSetAtom(setAssigningBeobAtom)
   const setMapBounds = useSetAtom(setMapBoundsAtom)
   const tree = store.tree
   const { beobGqlFilter } = tree
-  const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
 
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')

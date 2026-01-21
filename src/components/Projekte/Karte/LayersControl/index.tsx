@@ -1,17 +1,20 @@
 import { useContext, useState, useEffect, useRef } from 'react'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { Overlays } from './Overlays.tsx'
 import { ApfloraLayers } from './ApfloraLayers/index.tsx'
 import { BaseLayers } from './BaseLayers/index.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { mapApfloraLayersAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 export const LayersControl = observer(() => {
   const store = useContext(MobxContext)
-  const { apfloraLayers, overlays } = store
+  const { overlays } = store
+  const apfloraLayers = useAtomValue(mapApfloraLayersAtom)
 
   const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)
   const [overlaysExpanded, setOverlaysExpanded] = useState(false)

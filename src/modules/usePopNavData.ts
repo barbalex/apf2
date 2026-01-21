@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
 import {
+  mapActiveApfloraLayersAtom,
   copyingAtom,
   movingAtom,
   store as jotaiStore,
@@ -48,8 +49,9 @@ export const usePopNavData = (props) => {
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
-  const showTpopIcon =
-    store.activeApfloraLayers?.includes('tpop') && karteIsVisible
+
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const showTpopIcon = activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
@@ -132,11 +134,7 @@ export const usePopNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
-  useEffect(
-    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   useEffect(
     () => reaction(() => store.map.popIcon, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps

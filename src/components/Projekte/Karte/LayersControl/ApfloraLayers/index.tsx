@@ -1,16 +1,14 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../../mobxContext.ts'
+import { mapApfloraLayersAtom } from '../../../../../JotaiStore/index.ts'
 import { Layer } from './Layer/index.tsx'
 import { ShowForMultipleAps } from './ShowForMultipleAps.tsx'
 import { KtZhFilter } from './KtZhFilter/index.tsx'
 
 import styles from './index.module.css'
 
-export const ApfloraLayers = observer(() => {
-  const store = useContext(MobxContext)
-  const { apfloraLayers } = store
+export const ApfloraLayers = () => {
+  const apfloraLayers = useAtomValue(mapApfloraLayersAtom)
 
   return (
     <div className={styles.container}>
@@ -27,4 +25,4 @@ export const ApfloraLayers = observer(() => {
       <KtZhFilter />
     </div>
   )
-})
+}
