@@ -13,7 +13,7 @@ import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
@@ -258,7 +258,7 @@ export const Menus = observer(() => {
 
   const setCopying = useSetAtom(setCopyingAtom)
   const setMoving = useSetAtom(setMovingAtom)
-  const [copyingBiotop] = useAtom(copyingBiotopAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
 
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(

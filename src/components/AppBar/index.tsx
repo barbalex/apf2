@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useContext } from 'react'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
 import { observer } from 'mobx-react-lite'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { Bar } from './Bar/index.tsx'
 import { EkfBar } from './EkfBar/index.tsx'
@@ -23,7 +23,7 @@ export const Component = observer(() => {
   const store = useContext(MobxContext)
   const activeNodeArray = store.tree.activeNodeArray
 
-  const [isMobileView] = useAtom(isMobileViewAtom)
+  const isMobileView = useAtomValue(isMobileViewAtom)
 
   useEffect(() => {
     if (isInIframe) return
