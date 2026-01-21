@@ -234,26 +234,6 @@ export const Tree = types
       if (aNA[0] === 'Dokumentation') return 'doc'
       return undefined
     },
-    get openProjekts() {
-      const openNodes = getSnapshot(self.openNodes)
-      const openProjekts = [
-        ...new Set(
-          openNodes.filter((n) => n[0] === 'Projekte' && n[1]).map((n) => n[1]),
-        ),
-      ]
-      return openProjekts
-    },
-    get openAps() {
-      const openNodes = getSnapshot(self.openNodes)
-      const openAps = [
-        ...new Set(
-          openNodes
-            .filter((n) => n[0] === 'Projekte' && n[2] === 'Arten' && n[3])
-            .map((n) => n[3]),
-        ),
-      ]
-      return openAps
-    },
     get projIdInActiveNodeArray() {
       if (self.activeNodeArray.includes('Projekte')) {
         const indexOfId = self.activeNodeArray.indexOf('Projekte') + 1
@@ -1716,7 +1696,7 @@ export const Tree = types
     },
     beobGqlFilter(type) {
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
-      // 1. prepare hiearchy filter
+      // 1. prepare hierarchy filter
       const projId = self.projIdInActiveNodeArray
 
       // need list of all open apIds
