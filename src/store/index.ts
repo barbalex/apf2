@@ -7,6 +7,7 @@ export const MobxStore = types
     tree: types.optional(Tree, defaultTree),
   })
   .actions((self) => ({
+    // TODO: move to modules where possible
     tableIsFiltered(table) {
       // check nodeLabelFilter
       const nodeLabelFilterExists = !!self.tree.nodeLabelFilter[table]
