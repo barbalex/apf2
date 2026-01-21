@@ -2,7 +2,6 @@ import { types } from 'mobx-state-tree'
 
 import { ApfloraLayer } from './ApfloraLayer.ts'
 import { Map, defaultValue as defaultMap } from './Map.ts'
-import { Moving, defaultValue as defaultMoving } from './Moving.ts'
 import {
   MapMouseCoordinates,
   defaultValue as defaultMapMouseCoordinates,
@@ -88,7 +87,6 @@ export const MobxStore = types
     ),
     isPrint: types.optional(types.boolean, false),
     isEkfSinglePrint: types.optional(types.boolean, false),
-    moving: types.optional(Moving, defaultMoving),
     mapMouseCoordinates: types.optional(
       MapMouseCoordinates,
       defaultMapMouseCoordinates,
@@ -210,9 +208,6 @@ export const MobxStore = types
     },
     setIsEkfSinglePrint(val) {
       self.isEkfSinglePrint = val
-    },
-    setMoving({ table, id, label, toTable, fromParentId }) {
-      self.moving = { table, id, label, toTable, fromParentId }
     },
     setMapMouseCoordinates({ x, y }) {
       self.mapMouseCoordinates = { x, y }
