@@ -1,16 +1,23 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { MdEdit as EditIcon, MdViewList as ListIcon } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../../../mobxContext.ts'
-import { userNameAtom, addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import {
+  userNameAtom,
+  addNotificationAtom,
+  ekPlanShowEkAtom,
+  ekPlanShowEkfAtom,
+  ekPlanShowMassnAtom,
+  ekPlanYearClickedAtom,
+  ekPlanYearMenuAnchorAtom,
+  ekPlanCloseYearCellMenuAtom,
+} from '../../../../JotaiStore/index.ts'
 import { queryTpop } from './queryTpop.ts'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.ts'
 import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
@@ -35,20 +42,17 @@ import styles from './index.module.css'
 
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
-export const CellForYearMenu = observer(() => {
+export const CellForYearMenu = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const store = useContext(MobxContext)
-  const {
-    showEk,
-    showEkf,
-    showMassn,
-    yearClicked,
-    yearMenuAnchor,
-    closeYearCellMenu,
-  } = store.ekPlan
+  const showEk = useAtomValue(ekPlanShowEkAtom)
+  const showEkf = useAtomValue(ekPlanShowEkfAtom)
+  const showMassn = useAtomValue(ekPlanShowMassnAtom)
+  const yearClicked = useAtomValue(ekPlanYearClickedAtom)
+  const yearMenuAnchor = useAtomValue(ekPlanYearMenuAnchorAtom)
+  const closeYearCellMenu = useSetAtom(ekPlanCloseYearCellMenuAtom)
   const { year, tpopId } = yearClicked
 
   const [eksAnchor, setEksAnchor] = useState(null)
@@ -388,4 +392,4 @@ export const CellForYearMenu = observer(() => {
       )}
     </>
   )
-})
+}
