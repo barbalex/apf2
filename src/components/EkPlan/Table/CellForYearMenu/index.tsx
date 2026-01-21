@@ -33,11 +33,6 @@ import type { TpopkontrzaehlMethodeWerteId } from '../../../../models/apflora/Tp
 
 import styles from './index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
-
 const anchorOrigin = { horizontal: 'right', vertical: 'top' }
 
 export const CellForYearMenu = observer(() => {
