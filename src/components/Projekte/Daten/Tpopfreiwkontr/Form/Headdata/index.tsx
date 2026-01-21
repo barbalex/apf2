@@ -1,13 +1,14 @@
-import { useState, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
-import { MobxContext } from '../../../../../../mobxContext.ts'
-import { userNameAtom } from '../../../../../../JotaiStore/index.ts'
+import {
+  userNameAtom,
+  isPrintAtom,
+} from '../../../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 import {
   adresse as adresseFragment,
@@ -36,9 +37,8 @@ interface HeaddataProps {
 
 import styles from './index.module.css'
 
-export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
-  const store = useContext(MobxContext)
-  const { isPrint } = store
+export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
+  const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
@@ -174,4 +174,4 @@ export const Headdata = observer(({ pop, tpop, row }: HeaddataProps) => {
       <div className={styles.statusLabel}>{status}</div>
     </div>
   )
-})
+}

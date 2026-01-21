@@ -1,14 +1,12 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { RadioButton } from '../../../../shared/RadioButton.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
+import { isPrintAtom } from '../../../../../JotaiStore/index.ts'
 
 import styles from './Map.module.css'
 
-export const Map = observer(({ saveToDb, row, errors }) => {
-  const store = useContext(MobxContext)
-  const { isPrint } = store
+export const Map = ({ saveToDb, row, errors }) => {
+  const isPrint = useAtomValue(isPrintAtom)
 
   const onSaveFalse = () => {
     const fakeEvent = {
@@ -63,4 +61,4 @@ export const Map = observer(({ saveToDb, row, errors }) => {
       </div>
     </div>
   )
-})
+}

@@ -66,7 +66,7 @@ const fieldTypes = {
 
 export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
   const store = useContext(MobxContext)
-  const { isPrint } = store
+  const isPrint = useAtomValue(isPrintAtom)
   const { dataFilterSetValue } = store.tree
   const userName = useAtomValue(userNameAtom)
 
@@ -225,7 +225,7 @@ export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
   }, [row.id])
 
   return (
-    <div  className={styles.formContainer}>
+    <div className={styles.formContainer}>
       <div className={styles.gridContainer}>
         <Title row={row} />
         <Headdata
