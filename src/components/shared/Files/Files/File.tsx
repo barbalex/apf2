@@ -23,11 +23,12 @@ import {
 } from '../../fragments.ts'
 import { isImageFile } from '../isImageFile.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
-import { userNameAtom } from '../../../../JotaiStore/index.ts'
+import {
+  userNameAtom,
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './File.module.css'
-
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
