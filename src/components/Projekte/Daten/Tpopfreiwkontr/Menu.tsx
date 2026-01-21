@@ -31,6 +31,7 @@ import {
   setCopyingAtom,
   movingAtom,
   setMovingAtom,
+  setIsPrintAtom,
 } from '../../../../JotaiStore/index.ts'
 
 interface CreateTpopkontrResult {
@@ -58,7 +59,7 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
 
   const store = useContext(MobxContext)
-  const { setIsPrint } = store
+  const setIsPrint = useSetAtom(setIsPrintAtom)
   const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)

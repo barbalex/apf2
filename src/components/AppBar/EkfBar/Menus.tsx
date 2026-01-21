@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
-import { observer } from 'mobx-react-lite'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { Link } from 'react-router'
@@ -10,10 +9,16 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Badge from '@mui/material/Badge'
 import { useParams, useLocation } from 'react-router'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { EkfYear } from './EkfYear.tsx'
 import { User } from './User/index.tsx'
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  setIsPrintAtom,
+  setIsEkfSinglePrintAtom,
+  userTokenAtom,
+  userNameAtom,
+} from '../../../JotaiStore/index.ts'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.ts'
 
@@ -37,16 +42,17 @@ interface EkfMenusQueryResult {
   } | null
 }
 
-export const Menus = observer(() => {
+export const Menus = () => {
   const { userId, ekfId, ekfYear } = useParams()
   const { search } = useLocation()
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
-  const { user, setIsPrint, setIsEkfSinglePrint } = store
+  const token = useAtomValue(userTokenAtom)
+  const username = useAtomValue(userNameAtom)
+  const setIsPrint = useSetAtom(setIsPrintAtom)
+  const setIsEkfSinglePrint = useSetAtom(setIsEkfSinglePrintAtom)
   const ekfIsActive = !!ekfId
 
-  const { token, name: username } = user
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
@@ -93,7 +99,7 @@ export const Menus = observer(() => {
   const onClickPrintAll = () => {
     setPreparingEkfMultiprint(true)
     setIsPrint(true)
-    // TODO: need to know when all tpopfreiwkontr forms have finisched rendering
+    // TODO: need to know when all tpopfreiwkontr forms have finished rendering
     // idea for hack: use ekfCount to set timeout value?
     setTimeout(
       () => {
@@ -176,4 +182,4 @@ export const Menus = observer(() => {
       </Tooltip>
     </>
   )
-})
+}

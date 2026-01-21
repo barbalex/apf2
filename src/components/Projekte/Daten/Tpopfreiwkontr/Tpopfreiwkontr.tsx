@@ -1,6 +1,5 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useLocation, useParams } from 'react-router'
@@ -8,7 +7,6 @@ import { useLocation, useParams } from 'react-router'
 import { query } from './query.ts'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Form } from './Form/index.tsx'
@@ -52,15 +50,15 @@ import styles from './Tpopfreiwkontr.module.css'
 import {
   addNotificationAtom,
   userNameAtom,
+  isPrintAtom,
 } from '../../../../JotaiStore/index.ts'
 
-export const Component = observer(({ id: idPassed }: ComponentProps) => {
+export const Component = ({ id: idPassed }: ComponentProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
   const { pathname } = useLocation()
 
-  const store = useContext(MobxContext)
-  const { isPrint } = store
+  const isPrint = useAtomValue(isPrintAtom)
   const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
 
@@ -171,4 +169,4 @@ export const Component = observer(({ id: idPassed }: ComponentProps) => {
       }
     </div>
   )
-})
+}

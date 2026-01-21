@@ -78,8 +78,6 @@ export const MobxStore = types
       [47.159, 8.354],
       [47.696, 8.984],
     ]),
-    isPrint: types.optional(types.boolean, false),
-    isEkfSinglePrint: types.optional(types.boolean, false),
     mapMouseCoordinates: types.optional(
       MapMouseCoordinates,
       defaultMapMouseCoordinates,
@@ -151,12 +149,6 @@ export const MobxStore = types
     dataFilterTreeIsFiltered() {
       const tables = Object.keys(self.tree.dataFilter)
       return tables.some((table) => self.tableIsFiltered(table))
-    },
-    setIsPrint(val) {
-      self.isPrint = val
-    },
-    setIsEkfSinglePrint(val) {
-      self.isEkfSinglePrint = val
     },
     setMapMouseCoordinates({ x, y }) {
       self.mapMouseCoordinates = { x, y }

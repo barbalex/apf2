@@ -1,5 +1,4 @@
-import { useContext, lazy, Suspense, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
+import { lazy, Suspense, useRef } from 'react'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
@@ -16,22 +15,20 @@ const Exporte = lazy(async () => ({
 const Filter = lazy(async () => ({
   default: (await import('./Filter/index.tsx')).Filter,
 }))
-import { MobxContext } from '../../mobxContext.ts'
 import { Spinner } from '../shared/Spinner.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.tsx'
-import { hideBookmarksAtom } from '../../JotaiStore/index.ts'
+import { hideBookmarksAtom, isPrintAtom } from '../../JotaiStore/index.ts'
 
 import styles from './ProjektContainer.module.css'
 import { fi } from 'date-fns/locale'
 import { first } from 'rxjs'
 
-export const ProjektContainer = observer(() => {
+export const ProjektContainer = () => {
   const { projId, apberuebersichtId, apberId } = useParams()
   const { pathname } = useLocation()
 
-  const store = useContext(MobxContext)
-  const { isPrint } = store
+  const isPrint = useAtomValue(isPrintAtom)
 
   const hideBookmarks = useAtomValue(hideBookmarksAtom)
 
@@ -158,4 +155,4 @@ export const ProjektContainer = observer(() => {
       </div>
     </div>
   )
-})
+}
