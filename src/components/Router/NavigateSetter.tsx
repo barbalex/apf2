@@ -12,7 +12,6 @@ export const NavigateSetter = () => {
     // only because of strict mode?
     if (navigateSet.current) return
 
-    console.log('NavigateSetter setting navigate:', typeof navigate)
     store.set(navigateObjectAtom, navigate)
     navigateSet.current = true
   }, [navigate])
