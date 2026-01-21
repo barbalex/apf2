@@ -2,7 +2,7 @@ import { useContext, lazy, Suspense, useRef } from 'react'
 import { observer } from 'mobx-react-lite'
 import { Outlet } from 'react-router'
 import { useParams, useLocation } from 'react-router'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { SplitPane, Pane } from 'react-split-pane'
 
 // DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
@@ -33,7 +33,7 @@ export const ProjektContainer = observer(() => {
   const store = useContext(MobxContext)
   const { isPrint } = store
 
-  const [hideBookmarks] = useAtom(hideBookmarksAtom)
+  const hideBookmarks = useAtomValue(hideBookmarksAtom)
 
   const treeTabValues = [
     'tree',
