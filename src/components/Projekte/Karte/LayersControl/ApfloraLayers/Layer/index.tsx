@@ -1,6 +1,7 @@
 // TODO: let each item call it's data itself
 
 import { useContext } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import Button from '@mui/material/Button'
 import {
   MdPauseCircleOutline,
@@ -20,6 +21,10 @@ import { Checkbox } from '../../shared/Checkbox.tsx'
 import { Error } from '../../../../../shared/Error.tsx'
 import { getBounds } from '../../../../../../modules/getBounds.ts'
 import { MobxContext } from '../../../../../../mobxContext.ts'
+import {
+  assigningBeobAtom,
+  setAssigningBeobAtom,
+} from '../../../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 import { PopIcon } from './PopIcon.tsx'
 import { TpopIcon } from './TpopIcon.tsx'
@@ -67,10 +72,10 @@ export const Layer = observer(({ apfloraLayer }) => {
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     setActiveApfloraLayers,
-    assigningBeob,
-    setAssigningBeob,
     setBounds,
   } = store
+  const assigningBeob = useAtomValue(assigningBeobAtom)
+  const setAssigningBeob = useSetAtom(setAssigningBeobAtom)
   const tree = store.tree
   const { beobGqlFilter } = tree
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
