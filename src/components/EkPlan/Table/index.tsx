@@ -1,11 +1,9 @@
-import { useContext, useState, Suspense } from 'react'
-import { useSetAtom } from 'jotai'
+import { useState, Suspense } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 
-import { MobxContext } from '../../../mobxContext.ts'
 import { queryAll } from './queryAll.ts'
 import { queryForExport } from './queryForExport.ts'
 import { CellForYearMenu } from './CellForYearMenu/index.tsx'
@@ -23,6 +21,34 @@ import type { TpopId } from '../../../models/apflora/Tpop.ts'
 
 import {
   addNotificationAtom,
+  ekPlanApsAtom,
+  ekPlanApValuesAtom,
+  ekPlanYearMenuAnchorAtom,
+  ekPlanShowEkAtom,
+  ekPlanShowEkfAtom,
+  ekPlanShowMassnAtom,
+  ekPlanFilterApAtom,
+  ekPlanFilterPopNrAtom,
+  ekPlanFilterPopNameAtom,
+  ekPlanFilterPopStatusAtom,
+  ekPlanFilterNrAtom,
+  ekPlanFilterGemeindeAtom,
+  ekPlanFilterFlurnameAtom,
+  ekPlanFilterStatusAtom,
+  ekPlanFilterBekanntSeitAtom,
+  ekPlanFilterLv95XAtom,
+  ekPlanFilterLv95YAtom,
+  ekPlanFilterEkfKontrolleurAtom,
+  ekPlanFilterEkfrequenzAbweichendAtom,
+  ekPlanFilterEkAbrechnungstypAtom,
+  ekPlanFilterEkfrequenzAtom,
+  ekPlanFilterEkfrequenzStartjahrAtom,
+  ekPlanFilterEkfrequenzEmptyAtom,
+  ekPlanFilterEkfrequenzStartjahrEmptyAtom,
+  ekPlanFilterAnsiedlungYearAtom,
+  ekPlanFilterKontrolleYearAtom,
+  ekPlanFilterEkplanYearAtom,
+  ekPlanPastYearsAtom,
 } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -147,39 +173,44 @@ const getTpopFilter = ({
   return tpopFilter
 }
 
-export const EkPlanTable = observer(() => {
+export const EkPlanTable = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
-  const store = useContext(MobxContext)
-  const {
-    aps,
-    apValues,
-    yearMenuAnchor,
-    showEk,
-    showEkf,
-    showMassn,
-    filterAp,
-    filterPopNr,
-    filterPopName,
-    filterPopStatus,
-    filterNr,
-    filterGemeinde,
-    filterFlurname,
-    filterStatus,
-    filterBekanntSeit,
-    filterLv95X,
-    filterLv95Y,
-    filterEkfKontrolleur,
-    filterEkfrequenzAbweichend,
-    filterEkAbrechnungstyp,
-    filterEkfrequenz,
-    filterEkfrequenzStartjahr,
-    filterEkfrequenzEmpty,
-    filterEkfrequenzStartjahrEmpty,
-    filterAnsiedlungYear,
-    filterKontrolleYear,
-    filterEkplanYear,
-  } = store.ekPlan
+
+  const aps = useAtomValue(ekPlanApsAtom)
+  const apValues = useAtomValue(ekPlanApValuesAtom)
+  const yearMenuAnchor = useAtomValue(ekPlanYearMenuAnchorAtom)
+  const showEk = useAtomValue(ekPlanShowEkAtom)
+  const showEkf = useAtomValue(ekPlanShowEkfAtom)
+  const showMassn = useAtomValue(ekPlanShowMassnAtom)
+  const filterAp = useAtomValue(ekPlanFilterApAtom)
+  const filterPopNr = useAtomValue(ekPlanFilterPopNrAtom)
+  const filterPopName = useAtomValue(ekPlanFilterPopNameAtom)
+  const filterPopStatus = useAtomValue(ekPlanFilterPopStatusAtom)
+  const filterNr = useAtomValue(ekPlanFilterNrAtom)
+  const filterGemeinde = useAtomValue(ekPlanFilterGemeindeAtom)
+  const filterFlurname = useAtomValue(ekPlanFilterFlurnameAtom)
+  const filterStatus = useAtomValue(ekPlanFilterStatusAtom)
+  const filterBekanntSeit = useAtomValue(ekPlanFilterBekanntSeitAtom)
+  const filterLv95X = useAtomValue(ekPlanFilterLv95XAtom)
+  const filterLv95Y = useAtomValue(ekPlanFilterLv95YAtom)
+  const filterEkfKontrolleur = useAtomValue(ekPlanFilterEkfKontrolleurAtom)
+  const filterEkfrequenzAbweichend = useAtomValue(
+    ekPlanFilterEkfrequenzAbweichendAtom,
+  )
+  const filterEkAbrechnungstyp = useAtomValue(ekPlanFilterEkAbrechnungstypAtom)
+  const filterEkfrequenz = useAtomValue(ekPlanFilterEkfrequenzAtom)
+  const filterEkfrequenzStartjahr = useAtomValue(
+    ekPlanFilterEkfrequenzStartjahrAtom,
+  )
+  const filterEkfrequenzEmpty = useAtomValue(ekPlanFilterEkfrequenzEmptyAtom)
+  const filterEkfrequenzStartjahrEmpty = useAtomValue(
+    ekPlanFilterEkfrequenzStartjahrEmptyAtom,
+  )
+  const filterAnsiedlungYear = useAtomValue(ekPlanFilterAnsiedlungYearAtom)
+  const filterKontrolleYear = useAtomValue(ekPlanFilterKontrolleYearAtom)
+  const filterEkplanYear = useAtomValue(ekPlanFilterEkplanYearAtom)
+  const pastYears = useAtomValue(ekPlanPastYearsAtom)
 
   const [processing, setProcessing] = useState(false)
 
@@ -230,7 +261,7 @@ export const EkPlanTable = observer(() => {
   })
 
   const tpops = data?.allTpops?.nodes ?? []
-  const years = getYears(store.ekPlan.pastYears)
+  const years = getYears(pastYears)
 
   // when this value changes, year columns are re-rendered as it is added as key
   // needed because otherwise when changing filters column widths can be off
@@ -280,8 +311,6 @@ export const EkPlanTable = observer(() => {
       <Suspense fallback={<Spinner />}>
         <Button
           variant="outlined"
-
-
           onClick={onClickExport}
           color="inherit"
           className={styles.exportButton}
@@ -311,4 +340,4 @@ export const EkPlanTable = observer(() => {
       {!!yearMenuAnchor && <CellForYearMenu />}
     </ErrorBoundary>
   )
-})
+}

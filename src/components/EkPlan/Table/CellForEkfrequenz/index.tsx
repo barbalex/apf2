@@ -1,5 +1,5 @@
-import { useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import List from '@mui/material/List'
@@ -7,7 +7,12 @@ import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  ekPlanHoveredAtom,
+  ekPlanSetHoveredTpopIdAtom,
+  ekPlanResetHoveredAtom,
+  ekPlanApValuesAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import indexStyles from '../index.module.css'
 import styles from './index.module.css'
@@ -21,10 +26,12 @@ const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.ts'),
 )
 
-export const CellForEkfrequenz = observer(
+export const CellForEkfrequenz = (
   ({ row, isOdd, field, width, setProcessing, data }) => {
-    const store = useContext(MobxContext)
-    const { hovered, apValues } = store.ekPlan
+    const hovered = useAtomValue(ekPlanHoveredAtom)
+    const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
+    const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
+    const apValues = useAtomValue(ekPlanApValuesAtom)
 
     const processChangeWorker = useWorker(processChangeWorkerFactory)
 
@@ -34,7 +41,7 @@ export const CellForEkfrequenz = observer(
       ...allEkfrequenzs.map((a) => (a.code || '').length),
     )
 
-    const onMouseEnter = () => hovered.setTpopId(row.id)
+    const onMouseEnter = () => setHoveredTpopId(row.id)
 
     const onChange = async (e) => {
       const value = e.target.value || null
@@ -66,7 +73,7 @@ export const CellForEkfrequenz = observer(
       <>
         <div
           onMouseEnter={onMouseEnter}
-          onMouseLeave={hovered.reset}
+          onMouseLeave={resetHovered}
           onClick={onOpen}
           className={indexStyles.cellForSelect}
           style={cellStyle}
