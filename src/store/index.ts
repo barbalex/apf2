@@ -1,11 +1,6 @@
 import { types } from 'mobx-state-tree'
 
 import { ApfloraLayer } from './ApfloraLayer.ts'
-import { Copying, defaultValue as defaultCopying } from './Copying.ts'
-import {
-  CopyingBiotop,
-  defaultValue as defaultCopyingBiotop,
-} from './CopyingBiotop.ts'
 import { Map, defaultValue as defaultMap } from './Map.ts'
 import { Moving, defaultValue as defaultMoving } from './Moving.ts'
 import {
@@ -93,8 +88,6 @@ export const MobxStore = types
     ),
     isPrint: types.optional(types.boolean, false),
     isEkfSinglePrint: types.optional(types.boolean, false),
-    copying: types.optional(Copying, defaultCopying),
-    copyingBiotop: types.optional(CopyingBiotop, defaultCopyingBiotop),
     moving: types.optional(Moving, defaultMoving),
     mapMouseCoordinates: types.optional(
       MapMouseCoordinates,
@@ -217,12 +210,6 @@ export const MobxStore = types
     },
     setIsEkfSinglePrint(val) {
       self.isEkfSinglePrint = val
-    },
-    setCopying({ table, id, label, withNextLevel }) {
-      self.copying = { table, id, label, withNextLevel }
-    },
-    setCopyingBiotop({ id, label }) {
-      self.copyingBiotop = { id, label }
     },
     setMoving({ table, id, label, toTable, fromParentId }) {
       self.moving = { table, id, label, toTable, fromParentId }
