@@ -42,6 +42,7 @@ const addNotification = (notification) =>
 export const Tree = types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
+    // maybe later migrate to jotai?
     openNodes: types.array(
       types.array(types.union(types.string, types.number)),
     ),
@@ -50,6 +51,7 @@ export const Tree = types
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
     mapFilterResetter: types.optional(types.number, 0),
+    // next migrate these two to Jotai?
     showPopIcon: types.optional(types.boolean, true),
     showTpopIcon: types.optional(types.boolean, true),
   })
