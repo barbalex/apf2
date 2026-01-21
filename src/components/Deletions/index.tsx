@@ -10,22 +10,20 @@ import { DateTime } from 'luxon'
 import TextField from '@mui/material/TextField'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
+import { useAtomValue } from 'jotai'
 
 import { undelete } from './undelete/index.ts'
 import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
+import { deletedDatasetsAtom } from '../../JotaiStore/index.js'
 
 import styles from './index.module.css'
 
 export const Deletions = observer(() => {
   const apolloClient = useApolloClient()
   const store = useContext(MobxContext)
-  const {
-    removeDeletedDatasetById,
-    deletedDatasets,
-    showDeletions,
-    setShowDeletions,
-  } = store
+  const { showDeletions, setShowDeletions } = store
+  const deletedDatasets = useAtomValue(deletedDatasetsAtom)
 
   const [chosenDeletions, setChosenDeletions] = useState([])
 
@@ -33,15 +31,7 @@ export const Deletions = observer(() => {
     // loop through all chosenDeletions
     await Promise.all(
       chosenDeletions.map(
-        async (id) =>
-          await undelete({
-            deletedDatasets,
-            dataset: deletedDatasets.find((d) => d.id === id),
-            setShowDeletions,
-            removeDeletedDatasetById,
-            apolloClient,
-            store,
-          }),
+        async (id) => await undelete({ id, setShowDeletions }),
       ),
     )
     setChosenDeletions([])

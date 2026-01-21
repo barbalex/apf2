@@ -23,6 +23,7 @@ import {
   enforceMobileNavigationAtom,
   writeEnforceDesktopNavigationAtom,
   userNameAtom,
+  deletedDatasetsAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 import parentStyles from '../index.module.css'
@@ -35,7 +36,8 @@ export const More = observer(
     const isMobileView = useAtomValue(isMobileViewAtom)
 
     const store = useContext(MobxContext)
-    const { deletedDatasets, setShowDeletions } = store
+    const { setShowDeletions } = store
+    const deletedDatasets = useAtomValue(deletedDatasetsAtom)
     const userName = useAtomValue(userNameAtom)
 
     const [anchorEl, setAnchorEl] = useState(null)
