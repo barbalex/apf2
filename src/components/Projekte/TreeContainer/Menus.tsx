@@ -226,6 +226,14 @@ import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeob
 import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidateCoordinatesOfTpop.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
+import {
+  addNotificationAtom,
+  newTpopFromBeobDialogOpenAtom,
+  newTpopFromBeobBeobIdAtom,
+  setCopyingAtom,
+  copyingBiotopAtom,
+  setCopyingBiotopAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './Menus.module.css'
 
@@ -242,16 +250,17 @@ export const Menus = observer(() => {
     setIdOfTpopBeingLocalized,
     toDeleteId,
     setToDelete,
-    setCopying,
     setMoving,
-    copyingBiotop,
-    setCopyingBiotop,
   } = store
   const { setOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
+
+  const setCopying = useSetAtom(setCopyingAtom)
+  const [copyingBiotop] = useAtom(copyingBiotopAtom)
+  const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
 
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
     newTpopFromBeobDialogOpenAtom,

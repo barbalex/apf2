@@ -20,8 +20,12 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'
@@ -51,7 +55,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
   const { projId, apId, popId, tpopId } = useParams()
   const store = useContext(MobxContext)
-  const { setMoving, moving, setCopying, copying } = store
+  const { setMoving, moving } = store
+  const [copying] = useAtom(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
 
   const onClickAdd = async () => {
     let result: CreateTpopkontrResult | undefined
