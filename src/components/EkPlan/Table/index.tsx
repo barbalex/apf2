@@ -289,12 +289,11 @@ export const EkPlanTable = () => {
     const tpops = result?.data?.allTpops?.nodes ?? []
     const ekfrequenzs = result?.data?.allEkfrequenzs?.nodes ?? []
     const data = tpops.map((tpop) =>
-      exportRowFromTpop({ tpop, years, store, ekfrequenzs }),
+      exportRowFromTpop({ tpop, years, ekfrequenzs }),
     )
     exportModule({
       data,
       fileName: 'ek-planung',
-      store,
       apolloClient,
     })
   }
