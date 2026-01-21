@@ -4,7 +4,10 @@ import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { userTokenAtom } from '../../../../JotaiStore/index.ts'
+import {
+  userTokenAtom,
+  copyingAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -34,7 +37,8 @@ const resetCopyingData = {
 
 export const TpopfreiwkontrFolder = observer(({ onClick }) => {
   const store = useContext(MobxContext)
-  const { copying, moving } = store
+  const { moving } = store
+  const copying = useAtomValue(copyingAtom)
   const userToken = useAtomValue(userTokenAtom)
 
   const isMoving = moving.table && moving.table === 'tpopfreiwkontr'

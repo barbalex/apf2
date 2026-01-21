@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -32,6 +32,10 @@ import styles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+  copyingBiotopAtom,
+  setCopyingBiotopAtom,
 } from '../../../../JotaiStore/index.ts'
 
 
@@ -68,14 +72,11 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
 
   const store = useContext(MobxContext)
-  const {
-    moving,
-    setMoving,
-    copying,
-    setCopying,
-    copyingBiotop,
-    setCopyingBiotop,
-  } = store
+  const { moving, setMoving } = store
+  const [copying] = useAtom(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
+  const [copyingBiotop] = useAtom(copyingBiotopAtom)
+  const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
   const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
   const apolloClient = useApolloClient()
