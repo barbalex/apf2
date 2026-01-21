@@ -228,9 +228,7 @@ import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMap
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import {
   setCopyingAtom,
-  copyingBiotopAtom,
   setCopyingBiotopAtom,
-  movingAtom,
   setMovingAtom,
 } from '../../../JotaiStore/index.ts'
 
@@ -258,7 +256,6 @@ export const Menus = observer(() => {
 
   const setCopying = useSetAtom(setCopyingAtom)
   const setMoving = useSetAtom(setMovingAtom)
-  const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
 
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
@@ -451,7 +448,7 @@ export const Menus = observer(() => {
         setCopyingBiotop({ id: null, label: null })
       },
       copyBiotop() {
-        copyBiotopTo({ id, copyingBiotop })
+        copyBiotopTo({ id })
       },
       copyTpopKoordToPop() {
         copyTpopKoordToPop({ id })
