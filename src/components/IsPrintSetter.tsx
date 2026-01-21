@@ -1,11 +1,10 @@
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useSetAtom } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import { setIsPrintAtom } from '../JotaiStore/index.ts'
 
-export const IsPrintSetter = observer(() => {
-  const store = useContext(MobxContext)
-  const { setIsPrint } = store
+export const IsPrintSetter = () => {
+  const setIsPrint = useSetAtom(setIsPrintAtom)
 
   /**
    * In Firefox this does not work! Bug is open since 7 years:
@@ -26,4 +25,4 @@ export const IsPrintSetter = observer(() => {
 
   // using render props on Layout to pass down appbarheight without using store
   return null
-})
+}

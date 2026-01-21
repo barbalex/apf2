@@ -1,10 +1,12 @@
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { sortBy } from 'es-toolkit'
+import { useAtomValue } from 'jotai'
 import { SplitPane, Pane } from 'react-split-pane'
+
+import { isPrintAtom, isEkfSinglePrintAtom } from '../../JotaiStore/index.ts'
 
 import type { UserId } from '../../models/apflora/User.ts'
 import type { AdresseId } from '../../models/apflora/Adresse.ts'
@@ -19,7 +21,6 @@ import type { AeTaxonomyId } from '../../models/apflora/AeTaxonomy.ts'
 // but only in production!
 import { EkfList } from './List/index.tsx'
 import { Component as Tpopfreiwkontr } from '../Projekte/Daten/Tpopfreiwkontr/index.tsx'
-import { MobxContext } from '../../mobxContext.ts'
 import { dataByUserId as dataByUserIdGql } from './dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdGql } from './dataWithDateByUserId.ts'
 
@@ -104,11 +105,12 @@ const getEkfFromData = ({ data }) => {
   return sortBy(ekf, ['projekt', 'art', 'popSort', 'tpopSort'])
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { search } = useLocation()
   const navigate = useNavigate()
   const { userId, ekfId, ekfYear } = useParams()
-  const { isPrint, isEkfSinglePrint } = useContext(MobxContext)
+  const isPrint = useAtomValue(isPrintAtom)
+  const isEkfSinglePrint = useAtomValue(isEkfSinglePrintAtom)
   const apolloClient = useApolloClient()
 
   const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
@@ -188,4 +190,4 @@ export const Component = observer(() => {
       </SplitPane>
     </div>
   )
-})
+}
