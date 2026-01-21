@@ -1,16 +1,27 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  ekPlanShowEkAtom,
+  ekPlanShowEkfAtom,
+  ekPlanShowMassnAtom,
+  ekPlanHoveredAtom,
+  ekPlanSetHoveredTpopIdAtom,
+  ekPlanResetHoveredAtom,
+} from '../../../JotaiStore/index.ts'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.ts'
 
 import indexStyles from './index.module.css'
 
-export const CellForYearTitle = observer(({ row, isOdd }) => {
-  const store = useContext(MobxContext)
-  const { showEk, showEkf, showMassn, hovered } = store.ekPlan
+export const CellForYearTitle = ({ row, isOdd }) => {
+  const showEk = useAtomValue(ekPlanShowEkAtom)
+  const showEkf = useAtomValue(ekPlanShowEkfAtom)
+  const showMassn = useAtomValue(ekPlanShowMassnAtom)
+  const hovered = useAtomValue(ekPlanHoveredAtom)
+  const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
+  const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
+
   const isHovered = hovered.tpopId === row.id
-  const onMouseEnter = () => hovered.setTpopId(row.id)
+  const onMouseEnter = () => setHoveredTpopId(row.id)
 
   const style = {
     maxWidth: yearColumnWidth,
@@ -24,7 +35,7 @@ export const CellForYearTitle = observer(({ row, isOdd }) => {
   return (
     <div
       onMouseEnter={onMouseEnter}
-      onMouseLeave={hovered.reset}
+      onMouseLeave={resetHovered}
       className={indexStyles.tableCell}
       style={style}
     >
@@ -33,4 +44,4 @@ export const CellForYearTitle = observer(({ row, isOdd }) => {
       {showMassn && <div className={indexStyles.infoRow}>Ansied:</div>}
     </div>
   )
-})
+}
