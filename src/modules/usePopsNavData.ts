@@ -90,6 +90,7 @@ export const usePopsNavData = (props) => {
 
   const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
+  const moving = useAtomValue(movingAtom)
 
   const { data, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
@@ -144,7 +145,10 @@ export const usePopsNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
