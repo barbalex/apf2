@@ -1,8 +1,7 @@
-import { useContext, lazy, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { lazy, Suspense } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import Button from '@mui/material/Button'
 
 import type { ApId } from '../../models/apflora/Ap.ts'
@@ -19,9 +18,32 @@ const Choose = lazy(async () => ({
   default: (await import('./Choose.tsx')).Choose,
 }))
 import { queryAps } from './queryAps.ts'
-import { MobxContext } from '../../mobxContext.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
-import { userTokenAtom } from '../../JotaiStore/index.ts'
+import {
+  userTokenAtom,
+  ekPlanApsAtom,
+  ekPlanSetApsDataAtom,
+  ekPlanSetApsDataLoadingAtom,
+  ekPlanSetFilterApAtom,
+  ekPlanSetFilterPopNrAtom,
+  ekPlanSetFilterPopNameAtom,
+  ekPlanSetFilterPopStatusAtom,
+  ekPlanSetFilterNrAtom,
+  ekPlanSetFilterGemeindeAtom,
+  ekPlanSetFilterFlurnameAtom,
+  ekPlanSetFilterStatusAtom,
+  ekPlanSetFilterBekanntSeitAtom,
+  ekPlanSetFilterLv95XAtom,
+  ekPlanSetFilterLv95YAtom,
+  ekPlanSetFilterEkfKontrolleurAtom,
+  ekPlanSetFilterEkfrequenzAbweichendAtom,
+  ekPlanSetFilterEkAbrechnungstypAtom,
+  ekPlanSetFilterEkfrequenzAtom,
+  ekPlanSetFilterEkfrequenzStartjahrAtom,
+  ekPlanSetFilterAnsiedlungYearAtom,
+  ekPlanSetFilterKontrolleYearAtom,
+  ekPlanSetFilterEkplanYearAtom,
+} from '../../JotaiStore/index.ts'
 const Error = lazy(async () => ({
   default: (await import('../shared/Error.tsx')).Error,
 }))
@@ -35,32 +57,37 @@ const Spinner = lazy(async () => ({
 
 import styles from './index.module.css'
 
-export const Component = observer(() => {
-  const store = useContext(MobxContext)
+export const Component = () => {
   const apolloClient = useApolloClient()
   const userToken = useAtomValue(userTokenAtom)
-  const { aps, setApsData, setApsDataLoading } = store.ekPlan
-  const {
-    setFilterAp,
-    setFilterPopNr,
-    setFilterPopName,
-    setFilterPopStatus,
-    setFilterNr,
-    setFilterGemeinde,
-    setFilterFlurname,
-    setFilterStatus,
-    setFilterBekanntSeit,
-    setFilterLv95X,
-    setFilterLv95Y,
-    setFilterEkfKontrolleur,
-    setFilterEkfrequenzAbweichend,
-    setFilterEkAbrechnungstyp,
-    setFilterEkfrequenz,
-    setFilterEkfrequenzStartjahr,
-    setFilterAnsiedlungYear,
-    setFilterKontrolleYear,
-    setFilterEkplanYear,
-  } = store.ekPlan
+  const aps = useAtomValue(ekPlanApsAtom)
+  const setApsData = useSetAtom(ekPlanSetApsDataAtom)
+  const setApsDataLoading = useSetAtom(ekPlanSetApsDataLoadingAtom)
+  const setFilterAp = useSetAtom(ekPlanSetFilterApAtom)
+  const setFilterPopNr = useSetAtom(ekPlanSetFilterPopNrAtom)
+  const setFilterPopName = useSetAtom(ekPlanSetFilterPopNameAtom)
+  const setFilterPopStatus = useSetAtom(ekPlanSetFilterPopStatusAtom)
+  const setFilterNr = useSetAtom(ekPlanSetFilterNrAtom)
+  const setFilterGemeinde = useSetAtom(ekPlanSetFilterGemeindeAtom)
+  const setFilterFlurname = useSetAtom(ekPlanSetFilterFlurnameAtom)
+  const setFilterStatus = useSetAtom(ekPlanSetFilterStatusAtom)
+  const setFilterBekanntSeit = useSetAtom(ekPlanSetFilterBekanntSeitAtom)
+  const setFilterLv95X = useSetAtom(ekPlanSetFilterLv95XAtom)
+  const setFilterLv95Y = useSetAtom(ekPlanSetFilterLv95YAtom)
+  const setFilterEkfKontrolleur = useSetAtom(ekPlanSetFilterEkfKontrolleurAtom)
+  const setFilterEkfrequenzAbweichend = useSetAtom(
+    ekPlanSetFilterEkfrequenzAbweichendAtom,
+  )
+  const setFilterEkAbrechnungstyp = useSetAtom(
+    ekPlanSetFilterEkAbrechnungstypAtom,
+  )
+  const setFilterEkfrequenz = useSetAtom(ekPlanSetFilterEkfrequenzAtom)
+  const setFilterEkfrequenzStartjahr = useSetAtom(
+    ekPlanSetFilterEkfrequenzStartjahrAtom,
+  )
+  const setFilterAnsiedlungYear = useSetAtom(ekPlanSetFilterAnsiedlungYearAtom)
+  const setFilterKontrolleYear = useSetAtom(ekPlanSetFilterKontrolleYearAtom)
+  const setFilterEkplanYear = useSetAtom(ekPlanSetFilterEkplanYearAtom)
 
   interface TpopkontrzaehlEinheitWerteNode {
     id: TpopkontrzaehlEinheitWerteId
@@ -169,4 +196,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

@@ -1,5 +1,6 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 import { useContext, useState, useRef } from 'react'
+import { useAtomValue } from 'jotai'
 import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
 import 'leaflet'
 import 'proj4'
@@ -62,6 +63,7 @@ import 'leaflet-draw/dist/leaflet.draw.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 
 import { MobxContext } from '../../../mobxContext.ts'
+import { assigningBeobAtom } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -129,6 +131,7 @@ export const Karte = observer(({ mapContainerRef }) => {
   const mapRef = useRef(null)
 
   const store = useContext(MobxContext)
+  const assigningBeob = useAtomValue(assigningBeobAtom)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     showApfLayersForMultipleAps,
@@ -136,7 +139,6 @@ export const Karte = observer(({ mapContainerRef }) => {
     activeOverlays: activeOverlaysRaw,
     activeBaseLayer,
     bounds: boundsRaw,
-    assigningBeob,
     hideMapControls,
   } = store
   const tree = store.tree

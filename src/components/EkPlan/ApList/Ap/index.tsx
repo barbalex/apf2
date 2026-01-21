@@ -1,16 +1,20 @@
-import { useContext } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  ekPlanRemoveApAtom,
+  ekPlanApsDataAtom,
+  ekPlanApsDataLoadingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const Ap = observer(({ ap }) => {
-  const store = useContext(MobxContext)
-  const { removeAp, apsData, apsDataLoading } = store.ekPlan
+export const Ap = ({ ap }) => {
+  const removeAp = useSetAtom(ekPlanRemoveApAtom)
+  const apsData = useAtomValue(ekPlanApsDataAtom)
+  const apsDataLoading = useAtomValue(ekPlanApsDataLoadingAtom)
 
   const onClickDelete = () => removeAp(ap)
 
@@ -54,4 +58,4 @@ export const Ap = observer(({ ap }) => {
       )}
     </div>
   )
-})
+}

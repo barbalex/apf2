@@ -1,18 +1,17 @@
-import { useState, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useAtomValue } from 'jotai'
 import { FaPlus } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
 import { Ap } from './Ap/index.tsx'
 import { ChooseAp } from './ChooseAp/index.tsx'
-import { MobxContext } from '../../../mobxContext.ts'
+import { ekPlanApsAtom } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const ApList = observer(() => {
-  const store = useContext(MobxContext)
-  const { aps } = store.ekPlan
+export const ApList = () => {
+  const aps = useAtomValue(ekPlanApsAtom)
 
   const [showChoose, setShowChoose] = useState(aps.length === 0)
   const onClickAdd = () => setShowChoose(true)
@@ -44,4 +43,4 @@ export const ApList = observer(() => {
       )}
     </div>
   )
-})
+}

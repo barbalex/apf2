@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -7,14 +7,47 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { Fields } from './Fields.tsx'
-import { MobxContext } from '../../mobxContext.ts'
-import { allFields } from '../../store/EkPlan/index.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
+import {
+  ekPlanFieldsAtom,
+  ekPlanShowEkAtom,
+  ekPlanShowEkfAtom,
+  ekPlanShowCountAtom,
+  ekPlanShowEkCountAtom,
+  ekPlanShowMassnAtom,
+  ekPlanPastYearsAtom,
+  ekPlanSetShowEkAtom,
+  ekPlanSetShowEkfAtom,
+  ekPlanSetShowCountAtom,
+  ekPlanSetShowEkCountAtom,
+  ekPlanSetShowMassnAtom,
+  ekPlanSetPastYearsAtom,
+} from '../../JotaiStore/index.ts'
 
 import styles from './Choose.module.css'
+
+const allFields = [
+  'ap',
+  'popNr',
+  'popName',
+  'popStatus',
+  'nr',
+  'gemeinde',
+  'flurname',
+  'status',
+  'bekanntSeit',
+  'lv95X',
+  'lv95Y',
+  'link',
+  'ekfKontrolleur',
+  'ekAbrechnungstyp',
+  'ekfrequenz',
+  'ekfrequenzStartjahr',
+  'ekfrequenzAbweichend',
+]
 
 const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
   overflowY: 'hidden',
@@ -30,23 +63,21 @@ const DenserCheckbox = (props) => (
   <div className={styles.checkboxDensifier}>{props.children}</div>
 )
 
-export const Choose = observer(() => {
-  const store = useContext(MobxContext)
-  const {
-    fields,
-    showEk,
-    setShowEk,
-    showEkf,
-    setShowEkf,
-    showCount,
-    setShowCount,
-    showEkCount,
-    setShowEkCount,
-    showMassn,
-    setShowMassn,
-    pastYears,
-    setPastYears,
-  } = store.ekPlan
+export const Choose = () => {
+  const fields = useAtomValue(ekPlanFieldsAtom)
+  const showEk = useAtomValue(ekPlanShowEkAtom)
+  const showEkf = useAtomValue(ekPlanShowEkfAtom)
+  const showCount = useAtomValue(ekPlanShowCountAtom)
+  const showEkCount = useAtomValue(ekPlanShowEkCountAtom)
+  const showMassn = useAtomValue(ekPlanShowMassnAtom)
+  const pastYears = useAtomValue(ekPlanPastYearsAtom)
+
+  const setShowEk = useSetAtom(ekPlanSetShowEkAtom)
+  const setShowEkf = useSetAtom(ekPlanSetShowEkfAtom)
+  const setShowCount = useSetAtom(ekPlanSetShowCountAtom)
+  const setShowEkCount = useSetAtom(ekPlanSetShowEkCountAtom)
+  const setShowMassn = useSetAtom(ekPlanSetShowMassnAtom)
+  const setPastYears = useSetAtom(ekPlanSetPastYearsAtom)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeShowEk = () => setShowEk(!showEk)
@@ -199,4 +230,4 @@ export const Choose = observer(() => {
       </StyledDialog>
     </ErrorBoundary>
   )
-})
+}

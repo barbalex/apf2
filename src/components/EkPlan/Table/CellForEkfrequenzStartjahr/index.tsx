@@ -1,75 +1,81 @@
-import { useContext, useState, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  ekPlanHoveredAtom,
+  ekPlanSetHoveredTpopIdAtom,
+  ekPlanResetHoveredAtom,
+} from '../../../../JotaiStore/index.ts'
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.tsx'
 
 import styles from './index.module.css'
 
-import {
-  store as jotaiStore,
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
 const processChangeWorkerFactory = createWorkerFactory(
   () => import('./processChange.ts'),
 )
 
-export const CellForEkfrequenzStartjahr = observer(
-  ({ row, isOdd, width, setProcessing, ekfrequenzStartjahr, ekfrequenz }) => {
-    const store = useContext(MobxContext)
-    const { hovered } = store.ekPlan
-    const isHovered = hovered.tpopId === row.id
+export const CellForEkfrequenzStartjahr = ({
+  row,
+  isOdd,
+  width,
+  setProcessing,
+  ekfrequenzStartjahr,
+  ekfrequenz,
+}) => {
+  const hovered = useAtomValue(ekPlanHoveredAtom)
+  const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
+  const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
+  const isHovered = hovered.tpopId === row.id
 
-    const processChangeWorker = useWorker(processChangeWorkerFactory)
+  const processChangeWorker = useWorker(processChangeWorkerFactory)
 
-    const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
-    useEffect(
-      () => setStateValue(ekfrequenzStartjahr ?? ''),
-      [ekfrequenzStartjahr],
-    )
+  const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
+  useEffect(
+    () => setStateValue(ekfrequenzStartjahr ?? ''),
+    [ekfrequenzStartjahr],
+  )
 
-    const onMouseEnter = () => hovered.setTpopId(row.id)
+  const onMouseEnter = () => setHoveredTpopId(row.id)
 
-    const onChange = (e) => {
-      const value = e.target.value || e.target.value === 0 ? e.target.value : ''
-      setStateValue(value)
-    }
+  const onChange = (e) => {
+    const value = e.target.value || e.target.value === 0 ? e.target.value : ''
+    setStateValue(value)
+  }
 
-    const onBlur = async (e) => {
-      const value =
-        e.target.value || e.target.value === 0 ? +e.target.value : null
-      setProcessing(true)
-      await processChangeWorker.processChange({
-        value,
-        ekfrequenz,
-        row,
-      })
-      setProcessing(false)
-    }
+  const onBlur = async (e) => {
+    const value =
+      e.target.value || e.target.value === 0 ? +e.target.value : null
+    setProcessing(true)
+    await processChangeWorker.processChange({
+      value,
+      ekfrequenz,
+      row,
+    })
+    setProcessing(false)
+  }
 
-    return (
-      <div
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={hovered.reset}
-        style={{
-          minWidth: width,
-          maxWidth: width,
-          backgroundColor:
-            isHovered ? 'hsla(45, 100%, 90%, 1)'
-            : isOdd ? 'rgb(255, 255, 252)'
-            : 'unset',
-        }}
-        className={styles.container}
-      >
-        <input
-          value={stateValue}
-          onChange={onChange}
-          onBlur={onBlur}
-          className={styles.input}
-        />
-      </div>
-    )
-  },
-)
+  return (
+    <div
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={hovered.reset}
+      style={{
+        minWidth: width,
+        maxWidth: width,
+        backgroundColor:
+          isHovered ? 'hsla(45, 100%, 90%, 1)'
+          : isOdd ? 'rgb(255, 255, 252)'
+          : 'unset',
+      }}
+      className={styles.container}
+    >
+      <input
+        value={stateValue}
+        onChange={onChange}
+        onBlur={onBlur}
+        className={styles.input}
+      />
+    </div>
+  )
+}

@@ -1,19 +1,19 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 import MenuItem from '@mui/material/MenuItem'
-import { upperFirst } from 'es-toolkit'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  ekPlanFilterEkfrequenzAbweichendAtom,
+  ekPlanSetFilterEkfrequenzAbweichendAtom,
+} from '../../../../JotaiStore/index.ts'
 
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450
 // and: https://reactjs.org/docs/forwarding-refs.html
-export const BooleanFilter = observer(({ column, closeMenu, ref }) => {
-  const store = useContext(MobxContext)
+export const BooleanFilter = ({ column, closeMenu, ref }) => {
   const { name } = column
 
-  const storeValue = store.ekPlan?.[`filter${upperFirst(name)}`]
-  const storeSetFunction = store.ekPlan?.[`setFilter${upperFirst(name)}`]
+  const storeValue = useAtomValue(ekPlanFilterEkfrequenzAbweichendAtom)
+  const storeSetFunction = useSetAtom(ekPlanSetFilterEkfrequenzAbweichendAtom)
 
   let valueText = 'wahre Werte'
   if (name === 'ekfrequenzAbweichend') {
@@ -34,4 +34,4 @@ export const BooleanFilter = observer(({ column, closeMenu, ref }) => {
       {!storeValue ? `${valueText} filtern` : `${valueText} nicht filtern`}
     </MenuItem>
   )
-})
+}

@@ -1,14 +1,16 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import { sum } from 'es-toolkit'
 import { GoZap } from 'react-icons/go'
-import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  ekPlanShowCountAtom,
+  ekPlanShowEkCountAtom,
+} from '../../../../JotaiStore/index.ts'
 import styles from './MassnIcon.module.css'
 
-export const MassnIcon = observer(({ ansiedlungs }) => {
-  const store = useContext(MobxContext)
-  const { showCount, showEkCount } = store.ekPlan
+export const MassnIcon = ({ ansiedlungs }) => {
+  const showCount = useAtomValue(ekPlanShowCountAtom)
+  const showEkCount = useAtomValue(ekPlanShowEkCountAtom)
 
   if (!ansiedlungs.length) {
     return <div className={styles.container}>&nbsp;</div>
@@ -40,4 +42,4 @@ export const MassnIcon = observer(({ ansiedlungs }) => {
       )}
     </div>
   )
-})
+}

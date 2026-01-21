@@ -1,12 +1,17 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import { styled } from '@mui/material/styles'
-import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../mobxContext.ts'
 import { TextFilter } from './CellHeaderFixed/TextFilter.tsx'
+import {
+  ekPlanFilterEkfrequenzEmptyAtom,
+  ekPlanSetFilterEmptyEkfrequenzAtom,
+  ekPlanFilterEkfrequenzAtom,
+  ekPlanSetFilterEkfrequenzAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './CellHeaderFixedEkfrequenz.module.css'
 
@@ -18,14 +23,13 @@ const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
 
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
-  const store = useContext(MobxContext)
-  const {
-    filterEkfrequenzEmpty,
-    setFilterEmptyEkfrequenz,
-    filterEkfrequenz,
-    setFilterEkfrequenz,
-  } = store.ekPlan
+export const CellHeaderFixedEkfrequenz = ({ column }) => {
+  const filterEkfrequenzEmpty = useAtomValue(ekPlanFilterEkfrequenzEmptyAtom)
+  const setFilterEmptyEkfrequenz = useSetAtom(
+    ekPlanSetFilterEmptyEkfrequenzAtom,
+  )
+  const filterEkfrequenz = useAtomValue(ekPlanFilterEkfrequenzAtom)
+  const setFilterEkfrequenz = useSetAtom(ekPlanSetFilterEkfrequenzAtom)
 
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -85,4 +89,4 @@ export const CellHeaderFixedEkfrequenz = observer(({ column }) => {
       </StyledMenu>
     </>
   )
-})
+}

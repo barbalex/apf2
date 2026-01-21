@@ -1,24 +1,55 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useContext } from 'react'
+import { useState } from 'react'
+import { useAtomValue } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import { upperFirst } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.ts'
 import { TextFilter } from './TextFilter.tsx'
 import { BooleanFilter } from './BooleanFilter.tsx'
+import {
+  ekPlanFilterApAtom,
+  ekPlanFilterPopNrAtom,
+  ekPlanFilterPopNameAtom,
+  ekPlanFilterPopStatusAtom,
+  ekPlanFilterNrAtom,
+  ekPlanFilterGemeindeAtom,
+  ekPlanFilterFlurnameAtom,
+  ekPlanFilterStatusAtom,
+  ekPlanFilterBekanntSeitAtom,
+  ekPlanFilterLv95XAtom,
+  ekPlanFilterLv95YAtom,
+  ekPlanFilterEkfKontrolleurAtom,
+  ekPlanFilterEkfrequenzAbweichendAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixed = observer(({ column }) => {
-  const { name, label, nofilter } = column
-  const store = useContext(MobxContext)
+// Mapping from field name to filter atom
+const filterAtomMap = {
+  ap: ekPlanFilterApAtom,
+  popNr: ekPlanFilterPopNrAtom,
+  popName: ekPlanFilterPopNameAtom,
+  popStatus: ekPlanFilterPopStatusAtom,
+  nr: ekPlanFilterNrAtom,
+  gemeinde: ekPlanFilterGemeindeAtom,
+  flurname: ekPlanFilterFlurnameAtom,
+  status: ekPlanFilterStatusAtom,
+  bekanntSeit: ekPlanFilterBekanntSeitAtom,
+  lv95X: ekPlanFilterLv95XAtom,
+  lv95Y: ekPlanFilterLv95YAtom,
+  ekfKontrolleur: ekPlanFilterEkfKontrolleurAtom,
+  ekfrequenzAbweichend: ekPlanFilterEkfrequenzAbweichendAtom,
+}
 
-  const filterValue = store.ekPlan?.[`filter${upperFirst(name)}`]
+export const CellHeaderFixed = ({ column }) => {
+  const { name, label, nofilter } = column
+
+  const filterAtom = filterAtomMap[name]
+  const filterValue = useAtomValue(filterAtom ?? ekPlanFilterApAtom)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const closeMenu = () => setAnchorEl(null)
@@ -75,4 +106,4 @@ export const CellHeaderFixed = observer(({ column }) => {
       </Menu>
     </>
   )
-})
+}

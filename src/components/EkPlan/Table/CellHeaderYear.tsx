@@ -1,5 +1,5 @@
-import { useState, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
@@ -7,26 +7,35 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  ekPlanHoveredAtom,
+  ekPlanSetHoveredYearAtom,
+  ekPlanResetHoveredAtom,
+  ekPlanFilterAnsiedlungYearAtom,
+  ekPlanSetFilterAnsiedlungYearAtom,
+  ekPlanFilterKontrolleYearAtom,
+  ekPlanSetFilterKontrolleYearAtom,
+  ekPlanFilterEkplanYearAtom,
+  ekPlanSetFilterEkplanYearAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './CellHeaderYear.module.css'
 
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderYear = observer(({ column, tpopFilter }) => {
+export const CellHeaderYear = ({ column, tpopFilter }) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const store = useContext(MobxContext)
-  const {
-    hovered,
-    filterAnsiedlungYear,
-    setFilterAnsiedlungYear,
-    filterKontrolleYear,
-    setFilterKontrolleYear,
-    filterEkplanYear,
-    setFilterEkplanYear,
-  } = store.ekPlan
+  const hovered = useAtomValue(ekPlanHoveredAtom)
+  const setHoveredYear = useSetAtom(ekPlanSetHoveredYearAtom)
+  const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
+  const filterAnsiedlungYear = useAtomValue(ekPlanFilterAnsiedlungYearAtom)
+  const setFilterAnsiedlungYear = useSetAtom(ekPlanSetFilterAnsiedlungYearAtom)
+  const filterKontrolleYear = useAtomValue(ekPlanFilterKontrolleYearAtom)
+  const setFilterKontrolleYear = useSetAtom(ekPlanSetFilterKontrolleYearAtom)
+  const filterEkplanYear = useAtomValue(ekPlanFilterEkplanYearAtom)
+  const setFilterEkplanYear = useSetAtom(ekPlanSetFilterEkplanYearAtom)
 
   const kontrFilter = {
     ...tpopFilter,
@@ -161,7 +170,7 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
     )
   }
 
-  const onMouseEnter = () => hovered.setYear(column)
+  const onMouseEnter = () => setHoveredYear(column)
 
   const isHovered = hovered.year === column
   const style = {
@@ -172,7 +181,7 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
     <>
       <div
         onMouseEnter={onMouseEnter}
-        onMouseLeave={hovered.reset}
+        onMouseLeave={resetHovered}
         aria-controls="yearHeaderMenu"
         aria-haspopup="true"
         onClick={onClickCell}
@@ -222,4 +231,4 @@ export const CellHeaderYear = observer(({ column, tpopFilter }) => {
       </Menu>
     </>
   )
-})
+}

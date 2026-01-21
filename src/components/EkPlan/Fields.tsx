@@ -1,17 +1,16 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
 
-import { MobxContext } from '../../mobxContext.ts'
+import { ekPlanFieldsAtom, ekPlanToggleFieldAtom } from '../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './Fields.module.css'
 
-export const Fields = observer(() => {
-  const store = useContext(MobxContext)
-  const { fields, toggleField } = store.ekPlan
+export const Fields = () => {
+  const fields = useAtomValue(ekPlanFieldsAtom)
+  const toggleField = useSetAtom(ekPlanToggleFieldAtom)
 
   return (
     <ErrorBoundary>
@@ -223,4 +222,4 @@ export const Fields = observer(() => {
       </DialogContent>
     </ErrorBoundary>
   )
-})
+}

@@ -1,20 +1,20 @@
-import { useContext, useRef } from 'react'
+import { useRef } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { queryApsToChoose } from './queryApsToChoose.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { ekPlanApsAtom, ekPlanAddApAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'
 
-export const ChooseAp = observer(({ setShowChoose }) => {
+export const ChooseAp = ({ setShowChoose }) => {
   const { projId } = useParams()
 
-  const store = useContext(MobxContext)
-  const { aps, addAp } = store.ekPlan
+  const aps = useAtomValue(ekPlanApsAtom)
+  const addAp = useSetAtom(ekPlanAddApAtom)
   const apolloClient = useApolloClient()
 
   const apValues = aps.map((a) => a.value)
@@ -97,4 +97,4 @@ export const ChooseAp = observer(({ setShowChoose }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

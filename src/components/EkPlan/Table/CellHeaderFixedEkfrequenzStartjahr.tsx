@@ -1,12 +1,17 @@
-import { useState, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import { styled } from '@mui/material/styles'
 
-import { MobxContext } from '../../../mobxContext.ts'
 import { TextFilter } from './CellHeaderFixed/TextFilter.tsx'
+import {
+  ekPlanFilterEkfrequenzStartjahrEmptyAtom,
+  ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
+  ekPlanFilterEkfrequenzStartjahrAtom,
+  ekPlanSetFilterEkfrequenzStartjahrAtom,
+} from '../../../JotaiStore/index.ts'
 import ekfrequenzStyles from './CellHeaderFixedEkfrequenz.module.css'
 import styles from './CellHeaderFixedEkfrequenzStartjahr.module.css'
 
@@ -18,14 +23,19 @@ const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
 
 const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 
-export const CellHeaderFixedEkfrequenzStartjahr = observer(({ column }) => {
-  const store = useContext(MobxContext)
-  const {
-    filterEkfrequenzStartjahrEmpty,
-    setFilterEmptyEkfrequenzStartjahr,
-    filterEkfrequenzStartjahr,
-    setFilterEkfrequenzStartjahr,
-  } = store.ekPlan
+export const CellHeaderFixedEkfrequenzStartjahr = ({ column }) => {
+  const filterEkfrequenzStartjahrEmpty = useAtomValue(
+    ekPlanFilterEkfrequenzStartjahrEmptyAtom,
+  )
+  const setFilterEmptyEkfrequenzStartjahr = useSetAtom(
+    ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
+  )
+  const filterEkfrequenzStartjahr = useAtomValue(
+    ekPlanFilterEkfrequenzStartjahrAtom,
+  )
+  const setFilterEkfrequenzStartjahr = useSetAtom(
+    ekPlanSetFilterEkfrequenzStartjahrAtom,
+  )
 
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -85,4 +95,4 @@ export const CellHeaderFixedEkfrequenzStartjahr = observer(({ column }) => {
       </StyledMenu>
     </>
   )
-})
+}

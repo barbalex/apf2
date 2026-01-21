@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useContext, useEffect, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, useRef } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import FormControl from '@mui/material/FormControl'
@@ -10,7 +10,64 @@ import Tooltip from '@mui/material/Tooltip'
 import { MdClear } from 'react-icons/md'
 import { upperFirst } from 'es-toolkit'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  ekPlanFilterApAtom,
+  ekPlanFilterPopNrAtom,
+  ekPlanFilterPopNameAtom,
+  ekPlanFilterPopStatusAtom,
+  ekPlanFilterNrAtom,
+  ekPlanFilterGemeindeAtom,
+  ekPlanFilterFlurnameAtom,
+  ekPlanFilterStatusAtom,
+  ekPlanFilterBekanntSeitAtom,
+  ekPlanFilterLv95XAtom,
+  ekPlanFilterLv95YAtom,
+  ekPlanFilterEkfKontrolleurAtom,
+  ekPlanSetFilterApAtom,
+  ekPlanSetFilterPopNrAtom,
+  ekPlanSetFilterPopNameAtom,
+  ekPlanSetFilterPopStatusAtom,
+  ekPlanSetFilterNrAtom,
+  ekPlanSetFilterGemeindeAtom,
+  ekPlanSetFilterFlurnameAtom,
+  ekPlanSetFilterStatusAtom,
+  ekPlanSetFilterBekanntSeitAtom,
+  ekPlanSetFilterLv95XAtom,
+  ekPlanSetFilterLv95YAtom,
+  ekPlanSetFilterEkfKontrolleurAtom,
+  ekPlanSetFilterEmptyEkfrequenzAtom,
+  ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
+} from '../../../../JotaiStore/index.ts'
+
+const filterAtomMap = {
+  ap: ekPlanFilterApAtom,
+  popNr: ekPlanFilterPopNrAtom,
+  popName: ekPlanFilterPopNameAtom,
+  popStatus: ekPlanFilterPopStatusAtom,
+  nr: ekPlanFilterNrAtom,
+  gemeinde: ekPlanFilterGemeindeAtom,
+  flurname: ekPlanFilterFlurnameAtom,
+  status: ekPlanFilterStatusAtom,
+  bekanntSeit: ekPlanFilterBekanntSeitAtom,
+  lv95X: ekPlanFilterLv95XAtom,
+  lv95Y: ekPlanFilterLv95YAtom,
+  ekfKontrolleur: ekPlanFilterEkfKontrolleurAtom,
+}
+
+const setFilterAtomMap = {
+  ap: ekPlanSetFilterApAtom,
+  popNr: ekPlanSetFilterPopNrAtom,
+  popName: ekPlanSetFilterPopNameAtom,
+  popStatus: ekPlanSetFilterPopStatusAtom,
+  nr: ekPlanSetFilterNrAtom,
+  gemeinde: ekPlanSetFilterGemeindeAtom,
+  flurname: ekPlanSetFilterFlurnameAtom,
+  status: ekPlanSetFilterStatusAtom,
+  bekanntSeit: ekPlanSetFilterBekanntSeitAtom,
+  lv95X: ekPlanSetFilterLv95XAtom,
+  lv95Y: ekPlanSetFilterLv95YAtom,
+  ekfKontrolleur: ekPlanSetFilterEkfKontrolleurAtom,
+}
 
 const valForStore = (valPassed) => {
   let val = valPassed
@@ -24,10 +81,13 @@ const valForState = (valPassed) => {
   return val
 }
 
-export const TextFilter = observer(({ column, closeMenu }) => {
-  const store = useContext(MobxContext)
-  const { setFilterEmptyEkfrequenz, setFilterEmptyEkfrequenzStartjahr } =
-    store.ekPlan
+export const TextFilter = ({ column, closeMenu }) => {
+  const setFilterEmptyEkfrequenz = useSetAtom(
+    ekPlanSetFilterEmptyEkfrequenzAtom,
+  )
+  const setFilterEmptyEkfrequenzStartjahr = useSetAtom(
+    ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
+  )
   const { name } = column
 
   const type =
@@ -44,8 +104,10 @@ export const TextFilter = observer(({ column, closeMenu }) => {
       'number'
     : 'text'
 
-  const storeValue = store.ekPlan?.[`filter${upperFirst(name)}`]
-  const storeSetFunction = store.ekPlan?.[`setFilter${upperFirst(name)}`]
+  const filterAtom = filterAtomMap[name]
+  const setFilterAtom = setFilterAtomMap[name]
+  const storeValue = useAtomValue(filterAtom ?? ekPlanFilterApAtom)
+  const storeSetFunction = useSetAtom(setFilterAtom ?? ekPlanSetFilterApAtom)
 
   const [localValue, setLocalValue] = useState('')
   useEffect(() => {
@@ -125,4 +187,4 @@ export const TextFilter = observer(({ column, closeMenu }) => {
       />
     </FormControl>
   )
-})
+}

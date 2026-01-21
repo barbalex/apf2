@@ -1,13 +1,15 @@
-import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import { sum } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  ekPlanShowCountAtom,
+  ekPlanShowEkCountAtom,
+} from '../../../../JotaiStore/index.ts'
 import styles from './EkIcon.module.css'
 
-export const EkIcon = observer(({ planned, eks, einheits }) => {
-  const store = useContext(MobxContext)
-  const { showCount, showEkCount } = store.ekPlan
+export const EkIcon = ({ planned, eks, einheits }) => {
+  const showCount = useAtomValue(ekPlanShowCountAtom)
+  const showEkCount = useAtomValue(ekPlanShowEkCountAtom)
 
   if (!planned && !eks.length) {
     return <div className={styles.container}>&nbsp;</div>
@@ -78,4 +80,4 @@ export const EkIcon = observer(({ planned, eks, einheits }) => {
       )}
     </div>
   )
-})
+}
