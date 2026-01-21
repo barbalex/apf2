@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 
-import { apfloraLayersAtom } from '../../../../../JotaiStore/index.ts'
+import { mapApfloraLayersAtom } from '../../../../../JotaiStore/index.ts'
 import { Layer } from './Layer/index.tsx'
 import { ShowForMultipleAps } from './ShowForMultipleAps.tsx'
 import { KtZhFilter } from './KtZhFilter/index.tsx'
@@ -8,7 +8,7 @@ import { KtZhFilter } from './KtZhFilter/index.tsx'
 import styles from './index.module.css'
 
 export const ApfloraLayers = () => {
-  const apfloraLayers = useAtomValue(apfloraLayersAtom)
+  const apfloraLayers = useAtomValue(mapApfloraLayersAtom)
 
   return (
     <div className={styles.container}>

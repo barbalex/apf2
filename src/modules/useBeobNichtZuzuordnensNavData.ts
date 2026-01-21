@@ -7,7 +7,7 @@ import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { activeApfloraLayersAtom } from '../JotaiStore/index.ts'
+import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -24,7 +24,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const showBeobnichtzuzuordnenIcon =
     activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
   const [, setRerenderer] = useState(0)

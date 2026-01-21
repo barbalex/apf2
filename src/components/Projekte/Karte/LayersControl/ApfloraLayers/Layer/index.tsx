@@ -25,8 +25,8 @@ import {
   assigningBeobAtom,
   setAssigningBeobAtom,
   setMapBoundsAtom,
-  activeApfloraLayersAtom,
-  setActiveApfloraLayersAtom,
+  mapActiveApfloraLayersAtom,
+  setMapActiveApfloraLayersAtom,
 } from '../../../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 import { PopIcon } from './PopIcon.tsx'
@@ -72,8 +72,8 @@ export const Layer = observer(({ apfloraLayer }) => {
 
   const map = useMap()
   const store = useContext(MobxContext)
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
-  const setActiveApfloraLayers = useSetAtom(setActiveApfloraLayersAtom)
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const setAssigningBeob = useSetAtom(setAssigningBeobAtom)
   const setMapBounds = useSetAtom(setMapBoundsAtom)

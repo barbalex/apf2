@@ -7,7 +7,7 @@ import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { activeApfloraLayersAtom } from '../JotaiStore/index.ts'
+import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
@@ -25,9 +25,8 @@ export const useApNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
-  const showPopIcon =
-    activeApfloraLayers?.includes('pop') && karteIsVisible
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const showPopIcon = activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const showBeobnichtzuzuordnenIcon =

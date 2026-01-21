@@ -7,7 +7,7 @@ import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { activeApfloraLayersAtom } from '../JotaiStore/index.ts'
+import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -24,7 +24,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
 
   const store = useContext(MobxContext)
 
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const showBeobnichtbeurteiltIcon =
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const [, setRerenderer] = useState(0)

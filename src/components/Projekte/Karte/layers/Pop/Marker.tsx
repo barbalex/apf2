@@ -6,7 +6,7 @@ import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../../../../../mobxContext.ts'
-import { apfloraLayersAtom } from '../../../../../JotaiStore/index.ts'
+import { mapApfloraLayersAtom } from '../../../../../JotaiStore/index.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { popIconString } from './popIconString.ts'
 import { popHighlightedIconString } from './popHighlightedIconString.ts'
@@ -70,7 +70,7 @@ export const Marker = observer(({ pop }) => {
 
   const store = useContext(MobxContext)
   const { openTree2WithActiveNodeArray, map } = store
-  const apfloraLayers = useAtomValue(apfloraLayersAtom)
+  const apfloraLayers = useAtomValue(mapApfloraLayersAtom)
   const { popIcon: popIconName, popLabel: popLabelName } = map
 
   const nrLabel = pop?.nr?.toString?.() ?? '(keine Nr)'

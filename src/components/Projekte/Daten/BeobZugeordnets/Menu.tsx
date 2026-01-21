@@ -10,8 +10,8 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../../../modules/useProjekteTaps.ts'
 import {
-  activeApfloraLayersAtom,
-  setActiveApfloraLayersAtom,
+  mapActiveApfloraLayersAtom,
+  setMapActiveApfloraLayersAtom,
 } from '../../../../JotaiStore/index.ts'
 
 interface MenuProps {
@@ -26,8 +26,8 @@ const iconStyle = { color: 'white' }
 export const Menu = ({ apfloraLayer, toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
-  const setActiveApfloraLayers = useSetAtom(setActiveApfloraLayersAtom)
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
 
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
   const showMapIfNotYetVisible = (projekteTabs: string[]) => {

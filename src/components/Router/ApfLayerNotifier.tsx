@@ -8,7 +8,7 @@ import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 
 import {
   addNotificationAtom,
-  activeApfloraLayersAtom,
+  mapActiveApfloraLayersAtom,
 } from '../../JotaiStore/index.ts'
 
 // TODO: only show messages if map is visible
@@ -16,7 +16,7 @@ export const ApfLayerNotifier = observer(() => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
   const { showApfLayersForMultipleAps } = store
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const { apId } = useParams()
 
   const [projekteTabs] = useProjekteTabs()

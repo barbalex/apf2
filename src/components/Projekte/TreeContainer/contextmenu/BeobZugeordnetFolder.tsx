@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 
-import { activeApfloraLayersAtom } from '../../../../JotaiStore/index.ts'
+import { mapActiveApfloraLayersAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -15,7 +15,7 @@ const showBeobOnMapData = {
 }
 
 export const BeobZugeordnetFolder = ({ onClick }) => {
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
 
   return (
     <ErrorBoundary>

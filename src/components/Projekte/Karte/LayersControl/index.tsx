@@ -7,14 +7,14 @@ import { Overlays } from './Overlays.tsx'
 import { ApfloraLayers } from './ApfloraLayers/index.tsx'
 import { BaseLayers } from './BaseLayers/index.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { apfloraLayersAtom } from '../../../../JotaiStore/index.ts'
+import { mapApfloraLayersAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
 export const LayersControl = observer(() => {
   const store = useContext(MobxContext)
   const { overlays } = store
-  const apfloraLayers = useAtomValue(apfloraLayersAtom)
+  const apfloraLayers = useAtomValue(mapApfloraLayersAtom)
 
   const [baseLayersExpanded, setBaseLayersExpanded] = useState(true)
   const [overlaysExpanded, setOverlaysExpanded] = useState(false)

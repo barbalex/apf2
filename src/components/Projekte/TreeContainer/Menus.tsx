@@ -232,8 +232,8 @@ import {
   setMovingAtom,
   setToDeleteAtom,
   setIdOfTpopBeingLocalizedAtom,
-  activeApfloraLayersAtom,
-  setActiveApfloraLayersAtom,
+  mapActiveApfloraLayersAtom,
+  setMapActiveApfloraLayersAtom,
 } from '../../../JotaiStore/index.ts'
 
 import styles from './Menus.module.css'
@@ -251,8 +251,8 @@ export const Menus = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
-  const setActiveApfloraLayers = useSetAtom(setActiveApfloraLayersAtom)
+  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
   const setCopying = useSetAtom(setCopyingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
