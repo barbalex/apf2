@@ -299,6 +299,12 @@ export const navigateObjectAtom = atom(
 )
 export const navigateAtom = atom((get) => get(navigateObjectBaseAtom)?.fn)
 
+// Assigning Beob
+export const assigningBeobAtom = atom(false)
+export const setAssigningBeobAtom = atom(null, (get, set, val) => {
+  set(assigningBeobAtom, val)
+})
+
 // User
 export const userAtom = atomWithStorage('user', {
   name: '',
@@ -419,7 +425,7 @@ export const clearAllStorageAtom = atom(null, (get, set) => {
     id: null,
     label: null,
   })
-  
+
   // Reset moving state
   set(movingAtom, {
     table: null,
@@ -488,7 +494,10 @@ export const removeDeletedDatasetByIdAtom = atom(
   (get) => get(deletedDatasetsAtom),
   (get, set, id) => {
     const current = get(deletedDatasetsAtom)
-    set(deletedDatasetsAtom, current.filter((d) => d.id !== id))
+    set(
+      deletedDatasetsAtom,
+      current.filter((d) => d.id !== id),
+    )
   },
 )
 
@@ -537,7 +546,10 @@ export const ekPlanAddApAtom = atom(null, (get, set, ap) => {
 })
 export const ekPlanRemoveApAtom = atom(null, (get, set, ap) => {
   const current = get(ekPlanApsAtom)
-  set(ekPlanApsAtom, current.filter((a) => a.value !== ap.value))
+  set(
+    ekPlanApsAtom,
+    current.filter((a) => a.value !== ap.value),
+  )
 })
 
 // EkPlan fields
@@ -556,7 +568,10 @@ export const ekPlanSetFieldsAtom = atom(null, (get, set, fields) => {
 export const ekPlanToggleFieldAtom = atom(null, (get, set, field) => {
   const current = get(ekPlanFieldsAtom)
   if (current.includes(field)) {
-    set(ekPlanFieldsAtom, current.filter((f) => f !== field))
+    set(
+      ekPlanFieldsAtom,
+      current.filter((f) => f !== field),
+    )
   } else {
     const unique = [...new Set([...current, field])]
     set(ekPlanFieldsAtom, unique)
@@ -569,7 +584,10 @@ export const ekPlanAddFieldAtom = atom(null, (get, set, field) => {
 })
 export const ekPlanRemoveFieldAtom = atom(null, (get, set, field) => {
   const current = get(ekPlanFieldsAtom)
-  set(ekPlanFieldsAtom, current.filter((f) => f !== field))
+  set(
+    ekPlanFieldsAtom,
+    current.filter((f) => f !== field),
+  )
 })
 
 // EkPlan hovered
@@ -654,21 +672,33 @@ export const ekPlanSetFilterLv95YAtom = atom(null, (get, set, val) => {
 export const ekPlanSetFilterEkfKontrolleurAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterEkfKontrolleurAtom, val)
 })
-export const ekPlanSetFilterEkAbrechnungstypAtom = atom(null, (get, set, val) => {
-  set(ekPlanFilterEkAbrechnungstypAtom, val)
-})
+export const ekPlanSetFilterEkAbrechnungstypAtom = atom(
+  null,
+  (get, set, val) => {
+    set(ekPlanFilterEkAbrechnungstypAtom, val)
+  },
+)
 export const ekPlanSetFilterEkfrequenzAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterEkfrequenzAtom, val)
 })
-export const ekPlanSetFilterEkfrequenzStartjahrAtom = atom(null, (get, set, val) => {
-  set(ekPlanFilterEkfrequenzStartjahrAtom, val ? +val : null)
-})
-export const ekPlanSetFilterEkfrequenzAbweichendAtom = atom(null, (get, set, val) => {
-  set(ekPlanFilterEkfrequenzAbweichendAtom, val)
-})
-export const ekPlanSetFilterEmptyEkfrequenzAtom = atom(null, (get, set, val) => {
-  set(ekPlanFilterEkfrequenzEmptyAtom, val)
-})
+export const ekPlanSetFilterEkfrequenzStartjahrAtom = atom(
+  null,
+  (get, set, val) => {
+    set(ekPlanFilterEkfrequenzStartjahrAtom, val ? +val : null)
+  },
+)
+export const ekPlanSetFilterEkfrequenzAbweichendAtom = atom(
+  null,
+  (get, set, val) => {
+    set(ekPlanFilterEkfrequenzAbweichendAtom, val)
+  },
+)
+export const ekPlanSetFilterEmptyEkfrequenzAtom = atom(
+  null,
+  (get, set, val) => {
+    set(ekPlanFilterEkfrequenzEmptyAtom, val)
+  },
+)
 export const ekPlanSetFilterAnsiedlungYearAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterAnsiedlungYearAtom, val)
 })
@@ -678,9 +708,12 @@ export const ekPlanSetFilterKontrolleYearAtom = atom(null, (get, set, val) => {
 export const ekPlanSetFilterEkplanYearAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterEkplanYearAtom, val)
 })
-export const ekPlanSetFilterEmptyEkfrequenzStartjahrAtom = atom(null, (get, set, val) => {
-  set(ekPlanFilterEkfrequenzStartjahrEmptyAtom, val)
-})
+export const ekPlanSetFilterEmptyEkfrequenzStartjahrAtom = atom(
+  null,
+  (get, set, val) => {
+    set(ekPlanFilterEkfrequenzStartjahrEmptyAtom, val)
+  },
+)
 
 // EkPlan pastYears
 export const ekPlanPastYearsAtom = atom(5)
