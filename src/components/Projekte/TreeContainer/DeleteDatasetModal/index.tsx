@@ -4,11 +4,16 @@ import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
 import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { tables } from '../../../../modules/tables.ts'
 import { deleteModule } from './delete/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import {
+  toDeleteAtom,
+  emptyToDeleteAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -16,17 +21,18 @@ export const DatasetDeleteModal = observer(() => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const { toDeleteTable, toDeleteLabel, emptyToDelete, toDeleteId } = store
+  const toDelete = useAtomValue(toDeleteAtom)
+  const emptyToDelete = useSetAtom(emptyToDeleteAtom)
 
-  const table = tables.find((t) => t.table === toDeleteTable)
+  const table = tables.find((t) => t.table === toDelete.table)
   let tableName = null
   if (table && table.labelSingular) {
     tableName = table.labelSingular
   }
-  let question = `${tableName ? `${tableName} "` : ''}${toDeleteLabel}${
+  let question = `${tableName ? `${tableName} "` : ''}${toDelete.label}${
     tableName ? '"' : ''
   } löschen?`
-  if (!toDeleteLabel) {
+  if (!toDelete.label) {
     question = `${tableName} löschen?`
   }
 
@@ -39,7 +45,7 @@ export const DatasetDeleteModal = observer(() => {
   return (
     <ErrorBoundary>
       <Dialog
-        open={!!toDeleteId}
+        open={!!toDelete.id}
         className={styles.dialog}
       >
         {question}

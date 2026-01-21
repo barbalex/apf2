@@ -79,12 +79,6 @@ export const MobxStore = types
       [47.159, 8.354],
       [47.696, 8.984],
     ]),
-    toDeleteTable: types.maybeNull(types.string),
-    toDeleteId: types.maybeNull(types.string),
-    toDeleteLabel: types.maybeNull(types.string),
-    toDeleteUrl: types.maybeNull(
-      types.array(types.union(types.string, types.number)),
-    ),
     isPrint: types.optional(types.boolean, false),
     isEkfSinglePrint: types.optional(types.boolean, false),
     mapMouseCoordinates: types.optional(
@@ -108,7 +102,6 @@ export const MobxStore = types
   // structure of these variables is not controlled
   // so need to define this as volatile
   .volatile(() => ({
-    toDeleteAfterDeletionHook: null,
     deletedDatasets: [],
   }))
   .actions((self) => ({
@@ -135,21 +128,6 @@ export const MobxStore = types
     },
     removeDeletedDatasetById(id) {
       self.deletedDatasets = self.deletedDatasets.filter((d) => d.id !== id)
-    },
-    setToDelete({ table, id, label, url, afterDeletionHook }) {
-      self.toDeleteTable = table
-      self.toDeleteId = id
-      self.toDeleteLabel = label
-      // without slicing deleting ekzaehleinheit errored
-      self.toDeleteUrl = url.slice()
-      self.toDeleteAfterDeletionHook = afterDeletionHook
-    },
-    emptyToDelete() {
-      self.toDeleteTable = null
-      self.toDeleteId = null
-      self.toDeleteLabel = null
-      self.toDeleteUrl = null
-      self.toDeleteAfterDeletionHook = null
     },
     setApfloraLayers(val) {
       self.apfloraLayers = val

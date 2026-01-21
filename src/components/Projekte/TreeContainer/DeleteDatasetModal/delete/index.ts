@@ -12,6 +12,8 @@ import {
   apolloClientAtom,
   addNotificationAtom,
   navigateAtom,
+  toDeleteAtom,
+  emptyToDeleteAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -24,15 +26,15 @@ export const deleteModule = async ({ store, search }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
-  const {
-    emptyToDelete,
-    addDeletedDataset,
-    toDeleteTable: tablePassed,
-    toDeleteId,
-    toDeleteUrl,
-    toDeleteLabel,
-    toDeleteAfterDeletionHook,
-  } = store
+  const toDelete = jotaiStore.get(toDeleteAtom)
+  const { addDeletedDataset } = store
+
+  const tablePassed = toDelete.table
+  const toDeleteId = toDelete.id
+  const toDeleteUrl = toDelete.url
+  const toDeleteLabel = toDelete.label
+  const toDeleteAfterDeletionHook = toDelete.afterDeletionHook
+
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === tablePassed)
   const parentTable = tableMetadata?.parentTable
@@ -211,5 +213,5 @@ export const deleteModule = async ({ store, search }) => {
   if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
 
   // reset datasetToDelete
-  emptyToDelete()
+  jotaiStore.set(emptyToDeleteAtom, undefined)
 }

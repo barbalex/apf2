@@ -429,3 +429,39 @@ export const clearAllStorageAtom = atom(null, (get, set) => {
     fromParentId: null,
   })
 })
+
+// toDelete atom and actions
+export const toDeleteAtom = atom({
+  table: null,
+  id: null,
+  label: null,
+  url: null,
+  afterDeletionHook: null,
+})
+
+export const setToDeleteAtom = atom(
+  (get) => get(toDeleteAtom),
+  (get, set, { table, id, label, url, afterDeletionHook }) => {
+    set(toDeleteAtom, {
+      table,
+      id,
+      label,
+      // without slicing deleting ekzaehleinheit errored
+      url: url ? url.slice() : null,
+      afterDeletionHook,
+    })
+  },
+)
+
+export const emptyToDeleteAtom = atom(
+  (get) => get(toDeleteAtom),
+  (get, set) => {
+    set(toDeleteAtom, {
+      table: null,
+      id: null,
+      label: null,
+      url: null,
+      afterDeletionHook: null,
+    })
+  },
+)

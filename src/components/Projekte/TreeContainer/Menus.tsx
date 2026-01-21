@@ -230,6 +230,7 @@ import {
   setCopyingAtom,
   setCopyingBiotopAtom,
   setMovingAtom,
+  setToDeleteAtom,
 } from '../../../JotaiStore/index.ts'
 
 import styles from './Menus.module.css'
@@ -245,8 +246,6 @@ export const Menus = observer(() => {
     activeApfloraLayers,
     setActiveApfloraLayers,
     setIdOfTpopBeingLocalized,
-    toDeleteId,
-    setToDelete,
   } = store
   const { setOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
@@ -257,6 +256,7 @@ export const Menus = observer(() => {
   const setCopying = useSetAtom(setCopyingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
+  const setToDelete = useSetAtom(setToDeleteAtom)
 
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
     newTpopFromBeobDialogOpenAtom,

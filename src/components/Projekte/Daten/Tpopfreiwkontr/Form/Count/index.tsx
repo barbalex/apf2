@@ -5,6 +5,7 @@ import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 
 import { Einheit } from './Einheit.tsx'
 import { Gezaehlt } from './Gezaehlt.tsx'
@@ -12,6 +13,7 @@ import { Geschaetzt } from './Geschaetzt.tsx'
 import { query } from './query.ts'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import { MobxContext } from '../../../../../../mobxContext.ts'
+import { setToDeleteAtom } from '../../../../../../JotaiStore/index.ts'
 
 import type { TpopkontrzaehlId } from '../../../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../../../models/apflora/TpopkontrId.ts'
@@ -104,7 +106,7 @@ export const Count = observer(
     ekzaehleinheitsOriginal = [],
   }: CountProps) => {
     const store = useContext(MobxContext)
-    const { setToDelete } = store
+    const setToDelete = useSetAtom(setToDeleteAtom)
     const { activeNodeArray } = store.tree
 
     const apolloClient = useApolloClient()

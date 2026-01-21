@@ -1,6 +1,9 @@
 import { useContext, lazy, Suspense } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
+
+import { toDeleteAtom } from '../../../JotaiStore/index.ts'
 
 const LabelFilter = lazy(async () => ({
   default: (await import('./LabelFilter.tsx')).LabelFilter,
@@ -32,7 +35,7 @@ export const TreeContainer = observer(() => {
   const { projId } = params
 
   const store = useContext(MobxContext)
-  const { toDeleteId } = store
+  const toDelete = useAtomValue(toDeleteAtom)
 
   //console.log('TreeContainer',{data})
   // console.log('TreeContainer rendering')
@@ -43,7 +46,7 @@ export const TreeContainer = observer(() => {
         className={styles.container}
         data-id="tree-container1"
       >
-        {!!toDeleteId && (
+        {!!toDelete.id && (
           <Suspense fallback={null}>
             <DeleteDatasetModal />
           </Suspense>
