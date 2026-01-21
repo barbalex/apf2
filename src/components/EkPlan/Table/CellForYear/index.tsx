@@ -48,7 +48,7 @@ export const CellForYear = ({
     setYearClicked({
       year,
       tpopId: row.id,
-      title: `${row.ap.value} Pop: ${row.popNr.value}, TPop: ${row.nr.value}, ${year}`,
+      title: `${row.ap?.value ?? ''} Pop: ${row.popNr?.value ?? ''}, TPop: ${row.nr?.value ?? ''}, ${year}`,
       ekPlan,
       ekfPlan,
     })
