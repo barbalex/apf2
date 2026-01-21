@@ -103,7 +103,10 @@ export const useTpopfeldkontrNavData = (props) => {
   const copying = useAtomValue(copyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
   useEffect(
-    () => jotaiStore.sub(copyingBiotopAtom, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingBiotopAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -113,7 +116,10 @@ export const useTpopfeldkontrNavData = (props) => {
     [],
   )
   useEffect(
-    () => jotaiStore.sub(copyingAtom, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
