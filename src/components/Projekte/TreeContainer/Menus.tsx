@@ -232,6 +232,8 @@ import {
   setMovingAtom,
   setToDeleteAtom,
   setIdOfTpopBeingLocalizedAtom,
+  activeApfloraLayersAtom,
+  setActiveApfloraLayersAtom,
 } from '../../../JotaiStore/index.ts'
 
 import styles from './Menus.module.css'
@@ -243,13 +245,14 @@ export const Menus = observer(() => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const { activeApfloraLayers, setActiveApfloraLayers } = store
   const { setOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
+  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
+  const setActiveApfloraLayers = useSetAtom(setActiveApfloraLayersAtom)
   const setCopying = useSetAtom(setCopyingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
@@ -443,7 +446,6 @@ export const Menus = observer(() => {
         // })
         copyTo({
           parentId: nodeType === 'folder' ? parentId : id,
-          store,
         })
       },
       markForCopyingBiotop() {

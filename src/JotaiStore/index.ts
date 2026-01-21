@@ -128,6 +128,23 @@ export const setIdOfTpopBeingLocalizedAtom = atom(
   (get) => get(idOfTpopBeingLocalizedAtom),
   (get, set, value) => set(idOfTpopBeingLocalizedAtom, value),
 )
+// apfloraLayers is not stored - needs to update when code changes
+export const apfloraLayersAtom = atom([
+  { label: 'Populationen', value: 'pop' },
+  { label: 'Teil-Populationen', value: 'tpop' },
+  { label: 'Beobachtungen: zugeordnet', value: 'beobZugeordnet' },
+  { label: 'Beobachtungen: nicht beurteilt', value: 'beobNichtBeurteilt' },
+  { label: 'Beobachtungen: nicht zuzuordnen', value: 'beobNichtZuzuordnen' },
+  { label: 'Zuordnungs-Linien', value: 'beobZugeordnetAssignPolylines' },
+])
+export const activeApfloraLayersAtom = atomWithStorage<string[]>(
+  'activeApfloraLayers',
+  [],
+)
+export const setActiveApfloraLayersAtom = atom(
+  (get) => get(activeApfloraLayersAtom),
+  (get, set, value) => set(activeApfloraLayersAtom, value),
+)
 export const showTreeMenusAtom = atom((get) => {
   // always show tree menus on desktop
   const isDesktopView = get(isDesktopViewAtom)
