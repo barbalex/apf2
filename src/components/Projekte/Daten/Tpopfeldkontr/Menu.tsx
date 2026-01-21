@@ -252,11 +252,7 @@ export const Menu = observer(({ row }: MenuProps) => {
       store,
     })
 
-  const onClickCopyBiotopToHere = () =>
-    copyBiotopTo({
-      id: tpopkontrId,
-      copyingBiotop,
-    })
+  const onClickCopyBiotopToHere = () => copyBiotopTo({ id: tpopkontrId })
 
   const onClickSetFeldkontrCopying = () => {
     setCopying({
