@@ -30,7 +30,7 @@ import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 
 import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
@@ -179,7 +179,7 @@ export const usePopsNavData = (props) => {
     component: NodeWithList,
     menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
       const labelRightElements = []
-      const isMoving = store.moving.id === p.id
+      const isMoving = moving.id === p.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
