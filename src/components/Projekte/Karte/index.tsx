@@ -67,6 +67,7 @@ import {
   assigningBeobAtom,
   hideMapControlsAtom,
   mapBoundsAtom,
+  activeApfloraLayersAtom,
 } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -138,8 +139,8 @@ export const Karte = observer(({ mapContainerRef }) => {
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const hideMapControls = useAtomValue(hideMapControlsAtom)
   const bounds = useAtomValue(mapBoundsAtom)
+  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
   const {
-    activeApfloraLayers: activeApfloraLayersRaw,
     showApfLayersForMultipleAps,
     overlays,
     activeOverlays: activeOverlaysRaw,
@@ -147,7 +148,6 @@ export const Karte = observer(({ mapContainerRef }) => {
   } = store
   const tree = store.tree
   const { mapFilter } = tree
-  const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
   const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const showApfLayers = showApfLayersForMultipleAps || !!apId
