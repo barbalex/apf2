@@ -7,7 +7,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -113,7 +113,7 @@ export const useTpopmassnsNavData = (props) => {
     component: NodeWithList,
     menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map((p) => {
       const labelRightElements = []
-      const isMoving = store.moving.id === p.id
+      const isMoving = moving.id === p.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }

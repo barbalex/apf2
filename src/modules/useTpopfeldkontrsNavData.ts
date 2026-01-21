@@ -10,6 +10,7 @@ import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   copyingBiotopAtom,
+  movingAtom,
   store as jotaiStore,
 } from '../JotaiStore/index.ts'
 
@@ -82,8 +83,12 @@ export const useTpopfeldkontrsNavData = (props) => {
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
+  const moving = useAtomValue(movingAtom)
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -126,7 +131,7 @@ export const useTpopfeldkontrsNavData = (props) => {
     component: NodeWithList,
     menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map((p) => {
       const labelRightElements = []
-      const isMoving = store.moving.id === p.id
+      const isMoving = moving.id === p.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
