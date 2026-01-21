@@ -1,11 +1,8 @@
-import { useContext } from 'react'
 import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
-import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../../mobxContext.ts'
 import {
   mapTpopIconAtom,
   mapTpopLabelAtom,
@@ -33,6 +30,7 @@ import { svg202Highlighted } from './statusGroupSymbols/202Highlighted.ts'
 import { svg300 } from './statusGroupSymbols/300.ts'
 import { svg300Highlighted } from './statusGroupSymbols/300Highlighted.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
+import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
@@ -67,12 +65,10 @@ const getIconHtml = ({ isHighlighted, tpop, tpopIconName }) => {
   return html
 }
 
-export const Marker = observer(({ tpop }) => {
+export const Marker = ({ tpop }) => {
   const { apId, projId, tpopId } = useParams()
   const { search } = useLocation()
 
-  const store = useContext(MobxContext)
-  const { openTree2WithActiveNodeArray } = store
   const tpopIconName = useAtomValue(mapTpopIconAtom)
   const tpopLabelName = useAtomValue(mapTpopLabelAtom)
 
@@ -187,4 +183,4 @@ export const Marker = observer(({ tpop }) => {
       </Tooltip>
     </LeafletMarker>
   )
-})
+}

@@ -1,10 +1,6 @@
 import { types } from 'mobx-state-tree'
 
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
-import {
-  store as jotaiStore,
-  setTree2SrcByActiveNodeArrayAtom,
-} from '../JotaiStore/index.ts'
 
 export const MobxStore = types
   .model({
@@ -38,20 +34,6 @@ export const MobxStore = types
     dataFilterTreeIsFiltered() {
       const tables = Object.keys(self.tree.dataFilter)
       return tables.some((table) => self.tableIsFiltered(table))
-    },
-    openTree2WithActiveNodeArray({
-      activeNodeArray,
-      search,
-      projekteTabs,
-      setProjekteTabs,
-      onlyShowActivePath,
-    }) {
-      jotaiStore.set(setTree2SrcByActiveNodeArrayAtom, {
-        activeNodeArray,
-        search,
-        onlyShowActivePath,
-      })
-      setProjekteTabs([...projekteTabs, 'tree2', 'daten2'])
     },
     treeNodeLabelFilterResetExceptAp() {
       self.tree.nodeLabelFilter = {

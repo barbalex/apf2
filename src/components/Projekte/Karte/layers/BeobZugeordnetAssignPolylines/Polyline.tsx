@@ -1,24 +1,18 @@
-import { useContext } from 'react'
 import { Polyline as LeafletPolyline, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
-
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
+import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { Data } from '../BeobData/index.tsx'
 
 import markerStyles from '../BeobNichtBeurteilt/Marker.module.css'
 
-export const Polyline = observer(({ beob }) => {
+export const Polyline = ({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const { search } = useLocation()
-
-  const store = useContext(MobxContext)
-  const { openTree2WithActiveNodeArray } = store
 
   const isHighlighted = beobId === beob.id
   const beobLatLng = new window.L.LatLng(beob.wgs84Lat, beob.wgs84Long)

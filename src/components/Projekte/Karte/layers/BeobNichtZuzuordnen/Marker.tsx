@@ -1,28 +1,22 @@
-import { useContext } from 'react'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
-
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { beobIconString } from './beobIconString.ts'
 import { beobIconAbsenzString } from './beobIconAbsenzString.ts'
 import { beobIconHighlightedString } from './beobIconHighlightedString.ts'
 import { beobIconHighlightedAbsenzString } from './beobIconHighlightedAbsenzString.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
+import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { Data } from '../BeobData/index.tsx'
 
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 
-export const Marker = observer(({ beob }) => {
+export const Marker = ({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const { search } = useLocation()
-
-  const store = useContext(MobxContext)
-  const { openTree2WithActiveNodeArray } = store
 
   const isHighlighted = beobId === beob.id
   const isAbsenz = beob.absenz

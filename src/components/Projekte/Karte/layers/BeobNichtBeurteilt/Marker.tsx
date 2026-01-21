@@ -1,15 +1,12 @@
-import { useContext } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { MobxContext } from '../../../../../mobxContext.ts'
 import {
   assigningBeobAtom,
   setTreeLastTouchedNodeAtom,
@@ -22,19 +19,18 @@ import { getNearestTpop } from '../../../../../modules/getNearestTpop.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { updateBeobById } from './updateBeobById.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
+import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { Data } from '../BeobData/index.tsx'
 
 import styles from './Marker.module.css'
 
-export const Marker = observer(({ beob }) => {
+export const Marker = ({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
   const setTreeLastTouchedNode = useSetAtom(setTreeLastTouchedNodeAtom)
 
-  const store = useContext(MobxContext)
   const assigningBeob = useAtomValue(assigningBeobAtom)
-  const { openTree2WithActiveNodeArray } = store
 
   const tsQueryClient = useQueryClient()
   const apolloClient = useApolloClient()

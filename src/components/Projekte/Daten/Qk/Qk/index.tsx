@@ -1,11 +1,10 @@
-import { useState, useContext, type ChangeEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import Button from '@mui/material/Button'
 import Badge from '@mui/material/Badge'
 import Paper from '@mui/material/Paper'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { FaExternalLinkAlt } from 'react-icons/fa'
@@ -16,9 +15,9 @@ import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { standardQkYear } from '../../../../../modules/standardQkYear.ts'
 import { query } from './query.ts'
 import { createMessageFunctions } from './createMessageFunctions.ts'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
+import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
 import type { QkName } from '../../../../../models/apflora/index.tsx'
@@ -51,14 +50,11 @@ interface QkQueryResult {
   [key: string]: any
 }
 
-export const Qk = observer(({ qkNameQueries, qks }: QkProps) => {
+export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const { apId, projId } = useParams()
   const { search } = useLocation()
 
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
-
-  const store = useContext(MobxContext)
-  const { openTree2WithActiveNodeArray } = store
 
   const [berichtjahr, setBerichtjahr] = useState(standardQkYear())
   const [filter, setFilter] = useState('')
