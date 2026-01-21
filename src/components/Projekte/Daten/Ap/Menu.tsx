@@ -241,7 +241,7 @@ export const Menu = observer(() => {
         )}
         {isCopying && (
           <Tooltip title={`Kopieren von '${copying?.label}' abbrechen`}>
-            <IconButton onClick={onClickStopCopying}
+            <IconButton onClick={onClickStopCopying}>
               <BsSignStopFill style={iconStyle} />
             </IconButton>
           </Tooltip>
