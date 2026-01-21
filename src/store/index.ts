@@ -2,17 +2,11 @@ import { types } from 'mobx-state-tree'
 
 import { ApfloraLayer } from './ApfloraLayer.ts'
 import { Map, defaultValue as defaultMap } from './Map.ts'
-import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayers.ts'
 import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 
 export const MobxStore = types
   .model({
-    apfloraLayers: types.optional(
-      types.array(ApfloraLayer),
-      standardApfloraLayers,
-    ),
-    activeApfloraLayers: types.array(types.string),
     showApfLayersForMultipleAps: types.optional(types.boolean, false),
     overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.array(types.string),
@@ -21,12 +15,6 @@ export const MobxStore = types
     map: types.optional(Map, defaultMap),
   })
   .actions((self) => ({
-    setApfloraLayers(val) {
-      self.apfloraLayers = val
-    },
-    setActiveApfloraLayers(val) {
-      self.activeApfloraLayers = val
-    },
     toggleShowApfLayersForMultipleAps() {
       self.showApfLayersForMultipleAps = !self.showApfLayersForMultipleAps
     },

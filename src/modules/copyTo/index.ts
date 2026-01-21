@@ -32,7 +32,6 @@ export const copyTo = async ({
   parentId,
   table: tablePassed,
   id: idPassed,
-  store,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   tsQueryClient = jotaiStore.get(tsQueryClientAtom)
@@ -293,7 +292,6 @@ export const copyTo = async ({
     copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
-      store,
     })
     tsQueryClient.invalidateQueries({
       queryKey: ['treeTpopfeldkontr'],
@@ -316,7 +314,6 @@ export const copyTo = async ({
     copyTpopsOfPop({
       popIdFrom: id,
       popIdTo: newId,
-      store,
     })
   }
 }
