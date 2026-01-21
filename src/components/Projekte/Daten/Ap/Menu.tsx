@@ -22,8 +22,12 @@ import { MobxContext } from '../../../../mobxContext.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
@@ -61,7 +65,9 @@ export const Menu = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { setMoving, moving, copying, setCopying } = store
+  const { setMoving, moving } = store
+  const [copying] = useAtom(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
   const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
   const onClickAdd = async () => {

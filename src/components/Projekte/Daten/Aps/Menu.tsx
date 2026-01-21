@@ -20,8 +20,12 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { ApFilter } from '../../TreeContainer/ApFilter/index.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { ProjId } from '../../../../models/apflora/Proj.ts'
@@ -56,7 +60,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { setMoving, moving, copying, setCopying } = store
+  const { setMoving, moving } = store
+  const [copying] = useAtom(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
   const [showTreeMenus] = useAtom(showTreeMenusAtom)
 
   const onClickAdd = async () => {
