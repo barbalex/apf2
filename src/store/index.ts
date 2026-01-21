@@ -5,14 +5,10 @@ import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 
 export const MobxStore = types
   .model({
-    activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
   })
   .actions((self) => ({
-    setActiveBaseLayer(val) {
-      self.activeBaseLayer = val
-    },
     tableIsFiltered(table) {
       // check nodeLabelFilter
       const nodeLabelFilterExists = !!self.tree.nodeLabelFilter[table]

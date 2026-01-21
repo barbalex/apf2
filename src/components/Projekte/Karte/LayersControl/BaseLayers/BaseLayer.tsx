@@ -1,14 +1,16 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { Radio } from '../shared/Radio.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
+import {
+  mapActiveBaseLayerAtom,
+  setMapActiveBaseLayerAtom,
+} from '../../../../../JotaiStore/index.ts'
 
 import styles from './BaseLayer.module.css'
 
-export const BaseLayer = observer(({ layer }) => {
-  const store = useContext(MobxContext)
-  const { activeBaseLayer, setActiveBaseLayer } = store
+export const BaseLayer = ({ layer }) => {
+  const activeBaseLayer = useAtomValue(mapActiveBaseLayerAtom)
+  const setActiveBaseLayer = useSetAtom(setMapActiveBaseLayerAtom)
   const onChange = () => setActiveBaseLayer(layer.value)
   const onClick = (event) => {
     if (layer.value === activeBaseLayer) {
@@ -33,4 +35,4 @@ export const BaseLayer = observer(({ layer }) => {
       />
     </div>
   )
-})
+}
