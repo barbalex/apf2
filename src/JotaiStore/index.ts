@@ -113,6 +113,16 @@ export const setMapMouseCoordinatesAtom = atom(
   (get) => get(mapMouseCoordinatesAtom),
   (get, set, { x, y }) => set(mapMouseCoordinatesAtom, { x, y }),
 )
+// setting bounds works imperatively with map.fitBounds since v3
+// but keeping bounds in store as last used bounds will be re-applied on next map opening
+export const mapBoundsAtom = atomWithStorage('mapBounds', [
+  [47.159, 8.354],
+  [47.696, 8.984],
+])
+export const setMapBoundsAtom = atom(
+  (get) => get(mapBoundsAtom),
+  (get, set, value) => set(mapBoundsAtom, value),
+)
 export const showTreeMenusAtom = atom((get) => {
   // always show tree menus on desktop
   const isDesktopView = get(isDesktopViewAtom)

@@ -1,15 +1,12 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { useMap } from 'react-leaflet'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import { mapBoundsAtom } from '../../../JotaiStore/index.ts'
 
-export const MapResizer = observer(({ children, mapContainerRef }) => {
+export const MapResizer = ({ children, mapContainerRef }) => {
   const map = useMap()
-  const store = useContext(MobxContext)
-  const { bounds: boundsRaw } = store
-  const bounds = getSnapshot(boundsRaw)
+  const bounds = useAtomValue(mapBoundsAtom)
 
   // need this to prevent map from greying out on resize
   // https://github.com/PaulLeCam/react-leaflet/issues/1074
@@ -49,4 +46,4 @@ export const MapResizer = observer(({ children, mapContainerRef }) => {
   }, [bounds, map])
 
   return children
-})
+}

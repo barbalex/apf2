@@ -24,6 +24,7 @@ import { MobxContext } from '../../../../../../mobxContext.ts'
 import {
   assigningBeobAtom,
   setAssigningBeobAtom,
+  setMapBoundsAtom,
 } from '../../../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 import { PopIcon } from './PopIcon.tsx'
@@ -72,10 +73,10 @@ export const Layer = observer(({ apfloraLayer }) => {
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     setActiveApfloraLayers,
-    setBounds,
   } = store
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const setAssigningBeob = useSetAtom(setAssigningBeobAtom)
+  const setMapBounds = useSetAtom(setMapBoundsAtom)
   const tree = store.tree
   const { beobGqlFilter } = tree
   const activeApfloraLayers = getSnapshot(activeApfloraLayersRaw)
@@ -166,7 +167,7 @@ export const Layer = observer(({ apfloraLayer }) => {
     if (activeApfloraLayers.includes(apfloraLayer.value)) {
       const newBounds = getBounds(layerData)
       map.fitBounds(newBounds)
-      setBounds(newBounds)
+      setMapBounds(newBounds)
     }
   }
 
@@ -177,7 +178,7 @@ export const Layer = observer(({ apfloraLayer }) => {
       const newBounds = getBounds(highlightedObjects)
       if (newBounds) {
         map.fitBounds(newBounds)
-        setBounds(newBounds)
+        setMapBounds(newBounds)
       }
     }
   }

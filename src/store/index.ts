@@ -18,12 +18,6 @@ export const MobxStore = types
     activeOverlays: types.array(types.string),
     activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
     idOfTpopBeingLocalized: types.optional(types.maybeNull(types.string), null),
-    // setting bounds works imperatively with map.fitBounds since v3
-    // but keeping bounds in store as last used bounds will be re-applied on next map opening
-    bounds: types.optional(types.array(types.array(types.number)), [
-      [47.159, 8.354],
-      [47.696, 8.984],
-    ]),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
   })
@@ -48,9 +42,6 @@ export const MobxStore = types
     },
     setIdOfTpopBeingLocalized(val) {
       self.idOfTpopBeingLocalized = val
-    },
-    setBounds(val) {
-      self.bounds = val
     },
     tableIsFiltered(table) {
       // check nodeLabelFilter
