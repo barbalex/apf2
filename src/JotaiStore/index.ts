@@ -1,6 +1,9 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
+import queryString from 'query-string'
+
 import { constants } from '../modules/constants.ts'
+import { appBaseUrl } from '../modules/appBaseUrl.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
@@ -215,6 +218,43 @@ export const setMapBeobDetailsOpenAtom = atom(
   (get) => get(mapBeobDetailsOpenAtom),
   (get, set, value) => set(mapBeobDetailsOpenAtom, value),
 )
+
+// used to open tree2 on a specific activeNodeArray
+export const tree2SrcAtom = atom('')
+export const resetTree2SrcAtom = atom(null, (get, set) => {
+  set(tree2SrcAtom, '')
+})
+export const setTree2SrcByActiveNodeArrayAtom = atom(
+  null,
+  (get, set, { activeNodeArray, search, onlyShowActivePath }) => {
+    const iFrameSearch = queryString.parse(search)
+    // need to alter projekteTabs:
+    if (Array.isArray(iFrameSearch.projekteTabs)) {
+      iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
+        // - remove non-tree2 values
+        .filter((t) => t.includes('2'))
+        // - rewrite tree2 values to tree values
+        .map((t) => t.replace('2', ''))
+    } else if (iFrameSearch.projekteTabs) {
+      iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
+        // - remove non-tree2 values
+        .filter((t) => t.includes('2'))
+        // - rewrite tree2 values to tree values
+        .map((t) => t.replace('2', ''))
+    }
+    if (onlyShowActivePath) {
+      iFrameSearch.onlyShowActivePath = true
+    }
+    const newSearch = queryString.stringify(iFrameSearch)
+    // pass this via src to iframe
+    const iFrameSrc = `${appBaseUrl().slice(
+      0,
+      -1,
+    )}${`/Daten/${activeNodeArray.join('/')}`}?${newSearch}`
+    set(tree2SrcAtom, iFrameSrc)
+  },
+)
+
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },

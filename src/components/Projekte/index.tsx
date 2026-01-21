@@ -1,5 +1,4 @@
-import { useContext, lazy, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { lazy, Suspense } from 'react'
 import { useLocation } from 'react-router'
 import queryString from 'query-string'
 import { SplitPane, Pane } from 'react-split-pane'
@@ -7,9 +6,8 @@ import { useAtomValue } from 'jotai'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import { isPrintAtom } from '../../JotaiStore/index.ts'
+import { isPrintAtom, tree2SrcAtom } from '../../JotaiStore/index.ts'
 import { ProjektContainer } from './ProjektContainer.tsx'
-import { MobxContext } from '../../mobxContext.ts'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import { inIframe } from '../../modules/inIframe.ts'
@@ -25,11 +23,10 @@ const isInIframe = inIframe()
 
 const tree2TabValues = ['tree2', 'daten2', 'filter2', 'karte2']
 
-export const Component = observer(() => {
+export const Component = () => {
   const { pathname, search } = useLocation()
-  const store = useContext(MobxContext)
   const isPrint = useAtomValue(isPrintAtom)
-  const { tree2Src } = store.tree
+  const tree2Src = useAtomValue(tree2SrcAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const tree2Tabs = [
@@ -110,4 +107,4 @@ export const Component = observer(() => {
       </div>
     </>
   )
-})
+}

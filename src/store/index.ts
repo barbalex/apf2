@@ -1,6 +1,10 @@
 import { types } from 'mobx-state-tree'
 
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
+import {
+  store as jotaiStore,
+  setTree2SrcByActiveNodeArrayAtom,
+} from '../JotaiStore/index.ts'
 
 export const MobxStore = types
   .model({
@@ -42,7 +46,7 @@ export const MobxStore = types
       setProjekteTabs,
       onlyShowActivePath,
     }) {
-      self.tree.setTree2SrcByActiveNodeArray({
+      jotaiStore.set(setTree2SrcByActiveNodeArrayAtom, {
         activeNodeArray,
         search,
         onlyShowActivePath,

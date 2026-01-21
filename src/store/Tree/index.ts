@@ -41,8 +41,6 @@ const addNotification = (notification) =>
 
 export const Tree = types
   .model('Tree', {
-    // used to open tree2 on a specific activeNodeArray
-    tree2Src: types.optional(types.string, ''),
     activeNodeArray: types.array(types.union(types.string, types.number)),
     // lastTouchedNode is needed to keep the last clicked arrow known
     // so it does not jump
@@ -106,40 +104,6 @@ export const Tree = types
     },
     dataFilterEmpty() {
       self.dataFilter = initialDataFilterValues
-    },
-    resetTree2Src() {
-      self.tree2Src = ''
-    },
-    setTree2SrcByActiveNodeArray({
-      activeNodeArray,
-      search,
-      onlyShowActivePath,
-    }) {
-      const iFrameSearch = queryString.parse(search)
-      // need to alter projekteTabs:
-      if (Array.isArray(iFrameSearch.projekteTabs)) {
-        iFrameSearch.projekteTabs = iFrameSearch.projekteTabs
-          // - remove non-tree2 values
-          .filter((t) => t.includes('2'))
-          // - rewrite tree2 values to tree values
-          .map((t) => t.replace('2', ''))
-      } else if (iFrameSearch.projekteTabs) {
-        iFrameSearch.projekteTabs = [iFrameSearch.projekteTabs]
-          // - remove non-tree2 values
-          .filter((t) => t.includes('2'))
-          // - rewrite tree2 values to tree values
-          .map((t) => t.replace('2', ''))
-      }
-      if (onlyShowActivePath) {
-        iFrameSearch.onlyShowActivePath = true
-      }
-      const newSearch = queryString.stringify(iFrameSearch)
-      // pass this via src to iframe
-      const iFrameSrc = `${appBaseUrl().slice(
-        0,
-        -1,
-      )}${`/Daten/${activeNodeArray.join('/')}`}?${newSearch}`
-      self.tree2Src = iFrameSrc
     },
     setMapFilter(val) {
       self.mapFilter = val

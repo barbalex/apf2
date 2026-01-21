@@ -1,11 +1,9 @@
-import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { remove } from 'es-toolkit'
 import { jwtDecode } from 'jwt-decode'
-import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation, useNavigate } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { MdFilterAlt, MdInfoOutline, MdEditNote } from 'react-icons/md'
 import { FaDownload } from 'react-icons/fa6'
 import { VscListTree } from 'react-icons/vsc'
@@ -13,18 +11,18 @@ import { TbMap2 } from 'react-icons/tb'
 
 import { More } from './More/index.tsx'
 import { Daten } from './Daten.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import {
   isDesktopViewAtom,
   hideTreeAtom,
   userTokenAtom,
+  resetTree2SrcAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const ProjekteMenus = observer(() => {
+export const ProjekteMenus = () => {
   const { projId } = useParams()
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -34,8 +32,7 @@ export const ProjekteMenus = observer(() => {
 
   const hideTree = useAtomValue(hideTreeAtom)
 
-  const store = useContext(MobxContext)
-  const { resetTree2Src } = store.tree
+  const resetTree2Src = useSetAtom(resetTree2SrcAtom)
 
   const token = useAtomValue(userTokenAtom)
   const tokenDecoded = token ? jwtDecode(token) : null
@@ -292,4 +289,4 @@ export const ProjekteMenus = observer(() => {
       />
     </MenuBar>
   )
-})
+}
