@@ -4,8 +4,10 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import { copyingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -72,8 +74,9 @@ export const useTpopmassnsNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  const copying = useAtomValue(copyingAtom)
   useEffect(
-    () => reaction(() => store.copying.id, rerender),
+    () => jotaiStore.sub(copyingAtom, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -111,7 +114,7 @@ export const useTpopmassnsNavData = (props) => {
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = store.copying.id === p.id
+      const isCopying = copying.id === p.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }
