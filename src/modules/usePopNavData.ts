@@ -12,6 +12,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  mapPopIconAtom,
 } from '../JotaiStore/index.ts'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'

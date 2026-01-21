@@ -34,6 +34,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  mapPopIconAtom,
 } from '../JotaiStore/index.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'

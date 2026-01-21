@@ -12,6 +12,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  mapTpopIconAtom,
 } from '../JotaiStore/index.ts'
 
 import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.tsx'

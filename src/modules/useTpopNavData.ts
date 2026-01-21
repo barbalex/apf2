@@ -12,6 +12,7 @@ import {
   movingAtom,
   store as jotaiStore,
   mapActiveApfloraLayersAtom,
+  mapTpopIconAtom,
 } from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
