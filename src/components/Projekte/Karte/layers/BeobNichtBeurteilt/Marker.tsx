@@ -189,4 +189,4 @@ export const Marker = ({ beob }) => {
       </Popup>
     </LeafletMarker>
   )
-})
+}

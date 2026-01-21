@@ -178,4 +178,4 @@ export const Marker = ({ pop }) => {
       </Tooltip>
     </LeafletMarker>
   )
-})
+}

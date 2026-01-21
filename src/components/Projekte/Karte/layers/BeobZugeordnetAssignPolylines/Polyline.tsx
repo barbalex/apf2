@@ -163,4 +163,4 @@ export const Polyline = ({ beob }) => {
       </Popup>
     </LeafletPolyline>
   )
-})
+}
