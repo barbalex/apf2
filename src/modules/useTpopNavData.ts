@@ -7,7 +7,11 @@ import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 
@@ -43,6 +47,7 @@ export const useTpopNavData = (props) => {
 
   const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
+  const moving = useAtomValue(movingAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -204,7 +209,10 @@ export const useTpopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -253,7 +261,7 @@ export const useTpopNavData = (props) => {
     : TpopIconQ
 
   const labelRightElements = getLabelRightElements({
-    movingId: store.moving.id,
+    movingId: moving.id,
     copyingId: copying.id,
     tpopId,
   })
