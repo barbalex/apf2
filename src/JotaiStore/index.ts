@@ -289,8 +289,15 @@ export const removeNotificationAtom = atom(null, (get, set, key) => {
 
 // navigate function atom
 // Store as object because Jotai doesn't handle bare functions well
-export const navigateObjectAtom = atom(undefined)
-export const navigateAtom = atom((get) => get(navigateObjectAtom)?.fn)
+// The setter accepts a function and wraps it in { fn: function }
+const navigateObjectBaseAtom = atom(undefined)
+export const navigateObjectAtom = atom(
+  (get) => get(navigateObjectBaseAtom),
+  (get, set, navigateFunction) => {
+    set(navigateObjectBaseAtom, { fn: navigateFunction })
+  },
+)
+export const navigateAtom = atom((get) => get(navigateObjectBaseAtom)?.fn)
 
 // User
 export const userAtom = atomWithStorage('user', {
