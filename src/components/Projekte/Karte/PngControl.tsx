@@ -5,7 +5,7 @@ import 'leaflet-easyprint'
 import { MdGetApp } from 'react-icons/md'
 import { useSetAtom } from 'jotai'
 
-import { setHideMapControlsAtom } from '../../../JotaiStore/index.ts'
+import { setMapHideControlsAtom } from '../../../JotaiStore/index.ts'
 
 import styles from './PngControl.module.css'
 
@@ -18,7 +18,7 @@ const options = {
 }
 
 export const PngControl = () => {
-  const setHideMapControls = useSetAtom(setHideMapControlsAtom)
+  const setHideMapControls = useSetAtom(setMapHideControlsAtom)
   const map = useMap()
   const [printPlugin, setPrintPlugin] = useState({})
 

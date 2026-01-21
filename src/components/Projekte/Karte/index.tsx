@@ -65,7 +65,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import { MobxContext } from '../../../mobxContext.ts'
 import {
   assigningBeobAtom,
-  hideMapControlsAtom,
+  mapHideControlsAtom,
   mapBoundsAtom,
   mapActiveApfloraLayersAtom,
 } from '../../../JotaiStore/index.ts'
@@ -137,7 +137,7 @@ export const Karte = observer(({ mapContainerRef }) => {
 
   const store = useContext(MobxContext)
   const assigningBeob = useAtomValue(assigningBeobAtom)
-  const hideMapControls = useAtomValue(hideMapControlsAtom)
+  const hideMapControls = useAtomValue(mapHideControlsAtom)
   const bounds = useAtomValue(mapBoundsAtom)
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const {

@@ -103,10 +103,10 @@ export const hideTreeAtom = atom((get) => {
   return hideTree
 })
 // lets not save this in storage - is only used while printing
-export const hideMapControlsAtom = atom(false)
-export const setHideMapControlsAtom = atom(
-  (get) => get(hideMapControlsAtom),
-  (get, set, value) => set(hideMapControlsAtom, value),
+export const mapHideControlsAtom = atom(false)
+export const setMapHideControlsAtom = atom(
+  (get) => get(mapHideControlsAtom),
+  (get, set, value) => set(mapHideControlsAtom, value),
 )
 export const mapMouseCoordinatesAtom = atom({ x: 2683000, y: 1247500 })
 export const setMapMouseCoordinatesAtom = atom(
