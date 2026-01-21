@@ -81,7 +81,7 @@
     "react-leaflet": "5.0.0",
     "react-leaflet-markercluster": "5.0.0-rc.0",
     "react-linkify": "1.0.0-alpha",
-    "react-markdown-editor-lite": "1.4.1",
+    "react-markdown-editor-lite": "1.4.2",
     "react-resize-detector": "12.3.0",
     "react-router": "7.12.0",
     "react-select": "5.10.2",
@@ -139,7 +139,6 @@
     "graphql": "peer dependency of @apollo/client",
     "rxjs": "peer dependency of @apollo/client",
     "@emotion/react": "unfortunately needed by @mui/material",
-    "@emotion/styled": "unfortunately needed by @mui/material",
-    "react-markdown-editor-lite": "1.4.0 or 1.4.1: error: React is not defined"
+    "@emotion/styled": "unfortunately needed by @mui/material"
   }
 }
