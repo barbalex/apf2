@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -27,7 +27,6 @@ import {
   setCopyingAtom,
 } from '../../../../JotaiStore/index.ts'
 
-
 interface CreateTpopmassnResult {
   data: {
     createTpopmassn: {
@@ -53,7 +52,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
 
   const store = useContext(MobxContext)
   const { setMoving, moving } = store
-  const [copying] = useAtom(copyingAtom)
+  const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
