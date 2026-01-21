@@ -322,6 +322,30 @@ export const removeUserAtom = atom(null, (get, set) => {
   })
 })
 
+// Copying
+export const copyingAtom = atom({
+  table: null,
+  id: null,
+  label: null,
+  withNextLevel: false,
+})
+
+export const setCopyingAtom = atom(
+  null,
+  (get, set, { table, id, label, withNextLevel }) => {
+    set(copyingAtom, { table, id, label, withNextLevel })
+  },
+)
+
+export const copyingBiotopAtom = atom({
+  id: null,
+  label: null,
+})
+
+export const setCopyingBiotopAtom = atom(null, (get, set, { id, label }) => {
+  set(copyingBiotopAtom, { id, label })
+})
+
 export const clearAllStorageAtom = atom(null, (get, set) => {
   // Reset user
   set(userAtom, { name: '', token: null, id: null })
@@ -368,4 +392,16 @@ export const clearAllStorageAtom = atom(null, (get, set) => {
   set(userNavListFilterIsVisibleAtom, false)
   set(zielNavListFilterIsVisibleAtom, false)
   set(docNavListFilterIsVisibleAtom, false)
+
+  // Reset copying state
+  set(copyingAtom, {
+    table: null,
+    id: null,
+    label: null,
+    withNextLevel: false,
+  })
+  set(copyingBiotopAtom, {
+    id: null,
+    label: null,
+  })
 })
