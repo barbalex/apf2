@@ -1,13 +1,12 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 
 import { navigateAtom } from '../../JotaiStore/index.ts'
 
 export const NavigateSetter = () => {
   const navigate = useNavigate()
-  const setNavigate = useSetAtom(navigateAtom)
-  const navigateInStore = useAtomValue(navigateAtom)
+  const [navigateInStore, setNavigate] = useAtom(navigateAtom)
   const navigateSet = useRef(false)
 
   useEffect(() => {
