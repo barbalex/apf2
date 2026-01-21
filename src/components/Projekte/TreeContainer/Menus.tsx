@@ -382,6 +382,13 @@ export const Menus = observer(() => {
             tsQueryClient.invalidateQueries({
               queryKey: [`tree${upperFirst(table)}`],
             })
+            // also invalidate parent queries for folder counts
+            tsQueryClient.invalidateQueries({
+              queryKey: [`treeApFolders`],
+            })
+            tsQueryClient.invalidateQueries({
+              queryKey: [`treeAp`],
+            })
           },
         })
       },
