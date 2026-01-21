@@ -162,7 +162,10 @@ export const useTpopsNavData = (props) => {
   )
   const copying = useAtomValue(copyingAtom)
   useEffect(
-    () => jotaiStore.sub(copyingAtom, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

@@ -88,7 +88,10 @@ export const useTpopfeldkontrsNavData = (props) => {
     [],
   )
   useEffect(
-    () => jotaiStore.sub(copyingAtom, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
