@@ -21,10 +21,15 @@ import { arrayMoveImmutable } from 'array-move'
 import { observer } from 'mobx-react-lite'
 import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { layerLegends } from './layerLegends.ts'
 
 import { Checkbox } from './shared/Checkbox.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  mapOverlaysAtom,
+  setMapOverlaysAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './Overlays.module.css'
 
@@ -108,13 +113,12 @@ export const Overlays = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(MobxContext)
+  const overlays = useAtomValue(mapOverlaysAtom)
+  const setOverlays = useSetAtom(setMapOverlaysAtom)
   const {
-    overlays: overlaysIn,
     activeOverlays: activeOverlaysIn,
-    setOverlays,
     setActiveOverlays,
   } = store
-  const overlays = getSnapshot(overlaysIn)
   const activeOverlays = getSnapshot(activeOverlaysIn)
 
   const [draggingOverlay, setDraggingOverlay] = useState(null)

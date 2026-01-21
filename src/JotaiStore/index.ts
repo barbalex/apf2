@@ -136,6 +136,41 @@ export const setMapShowApfLayersForMultipleApsAtom = atom(
   (get) => get(mapShowApfLayersForMultipleApsAtom),
   (get, set, value) => set(mapShowApfLayersForMultipleApsAtom, value),
 )
+// make this a regular atom so we can change the default value
+export const mapOverlaysAtom = atom([
+  { label: 'Markierungen', value: 'Markierungen' },
+  { label: 'Detailpläne', value: 'Detailplaene' },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Flächen',
+    value: 'MassnahmenFlaechen',
+  },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Linien',
+    value: 'MassnahmenLinien',
+  },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Punkte',
+    value: 'MassnahmenPunkte',
+  },
+  { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
+  { label: 'ZH Übersichtsplan', value: 'ZhUep' },
+  { label: 'Gemeinden', value: 'Gemeinden' },
+  { label: 'SVO grau', value: 'ZhSvoGrey' },
+  { label: 'SVO farbig', value: 'ZhSvoColor' },
+  { label: 'Pflegeplan', value: 'ZhPflegeplan' },
+  {
+    label: 'Lebensraum- und Vegetationskartierungen',
+    value: 'ZhLrVegKartierungen',
+  },
+  { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
+  { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
+  { label: 'Forstreviere (WMS)', value: 'ZhForstreviereWms' },
+  { label: 'Forstreviere. Stand: 2025.04.10', value: 'Forstreviere' },
+])
+export const setMapOverlaysAtom = atom(
+  (get) => get(mapOverlaysAtom),
+  (get, set, value) => set(mapOverlaysAtom, value),
+)
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },
