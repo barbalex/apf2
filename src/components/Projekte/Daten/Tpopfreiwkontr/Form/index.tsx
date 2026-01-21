@@ -25,7 +25,11 @@ import { Verification } from './Verification.tsx'
 import { Image } from './Image.tsx'
 import { MobxContext } from '../../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
-import { userNameAtom } from '../../../../../JotaiStore/index.ts'
+import {
+  userNameAtom,
+  isPrintAtom,
+  userTokenAtom,
+} from '../../../../../JotaiStore/index.ts'
 import {
   adresse as adresseFragment,
   pop as popFragment,
@@ -69,11 +73,14 @@ export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
   const isPrint = useAtomValue(isPrintAtom)
   const { dataFilterSetValue } = store.tree
   const userName = useAtomValue(userNameAtom)
+  const token = useAtomValue(userTokenAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  const role = token ? jwtDecode(token)?.role : null
 
   const ekzaehleinheitsOriginal =
     data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
