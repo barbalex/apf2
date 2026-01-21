@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -23,6 +23,8 @@ import type { TpopId } from '../../../../models/apflora/TpopId.ts'
 
 import {
   addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 
@@ -50,7 +52,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { tpopId } = useParams()
 
   const store = useContext(MobxContext)
-  const { setMoving, moving, setCopying, copying } = store
+  const { setMoving, moving } = store
+  const [copying] = useAtom(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
