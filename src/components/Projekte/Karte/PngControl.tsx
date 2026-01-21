@@ -1,11 +1,11 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import 'leaflet'
 import { useMap } from 'react-leaflet'
 import 'leaflet-easyprint'
 import { MdGetApp } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import { setHideMapControlsAtom } from '../../../JotaiStore/index.ts'
 
 import styles from './PngControl.module.css'
 
@@ -17,8 +17,8 @@ const options = {
   hideControlContainer: true,
 }
 
-export const PngControl = observer(() => {
-  const { setHideMapControls } = useContext(MobxContext)
+export const PngControl = () => {
+  const setHideMapControls = useSetAtom(setHideMapControlsAtom)
   const map = useMap()
   const [printPlugin, setPrintPlugin] = useState({})
 
@@ -57,4 +57,4 @@ export const PngControl = observer(() => {
       <MdGetApp className={styles.icon} />
     </button>
   )
-})
+}

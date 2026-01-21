@@ -32,14 +32,10 @@ export const MobxStore = types
       MapMouseCoordinates,
       defaultMapMouseCoordinates,
     ),
-    hideMapControls: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
   })
   .actions((self) => ({
-    setHideMapControls(val) {
-      self.hideMapControls = val
-    },
     setApfloraLayers(val) {
       self.apfloraLayers = val
     },

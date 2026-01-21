@@ -63,7 +63,10 @@ import 'leaflet-draw/dist/leaflet.draw.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 
 import { MobxContext } from '../../../mobxContext.ts'
-import { assigningBeobAtom } from '../../../JotaiStore/index.ts'
+import {
+  assigningBeobAtom,
+  hideMapControlsAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -132,6 +135,7 @@ export const Karte = observer(({ mapContainerRef }) => {
 
   const store = useContext(MobxContext)
   const assigningBeob = useAtomValue(assigningBeobAtom)
+  const hideMapControls = useAtomValue(hideMapControlsAtom)
   const {
     activeApfloraLayers: activeApfloraLayersRaw,
     showApfLayersForMultipleAps,
@@ -139,7 +143,6 @@ export const Karte = observer(({ mapContainerRef }) => {
     activeOverlays: activeOverlaysRaw,
     activeBaseLayer,
     bounds: boundsRaw,
-    hideMapControls,
   } = store
   const tree = store.tree
   const { mapFilter } = tree

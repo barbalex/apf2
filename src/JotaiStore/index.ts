@@ -102,6 +102,12 @@ export const hideTreeAtom = atom((get) => {
   const hideTree = !alwaysShowTree && isMobileView
   return hideTree
 })
+// lets not save this in storage - is only used while printing
+export const hideMapControlsAtom = atom(false)
+export const setHideMapControlsAtom = atom(
+  (get) => get(hideMapControlsAtom),
+  (get, set, value) => set(hideMapControlsAtom, value),
+)
 export const showTreeMenusAtom = atom((get) => {
   // always show tree menus on desktop
   const isDesktopView = get(isDesktopViewAtom)
