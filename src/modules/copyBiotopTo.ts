@@ -4,10 +4,12 @@ import { tpopfeldkontr } from '../components/shared/fragments.ts'
 import {
   store as jotaiStore,
   apolloClientAtom,
+  copyingBiotopAtom,
 } from '../JotaiStore/index.ts'
 
-export const copyBiotopTo = async ({ id, copyingBiotop }) => {
+export const copyBiotopTo = async ({ id }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
+  const copyingBiotop = jotaiStore.get(copyingBiotopAtom)
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id
   const { data: dataFrom } = await apolloClient.query({

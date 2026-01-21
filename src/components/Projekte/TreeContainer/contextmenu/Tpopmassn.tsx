@@ -1,10 +1,10 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { userTokenAtom } from '../../../../JotaiStore/index.ts'
+import {
+  userTokenAtom,
+  copyingAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -32,9 +32,8 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const Tpopmassn = observer(({ onClick }) => {
-  const store = useContext(MobxContext)
-  const { copying } = store
+export const Tpopmassn = ({ onClick }) => {
+  const copying = useAtomValue(copyingAtom)
   const userToken = useAtomValue(userTokenAtom)
 
   return (
@@ -83,4 +82,4 @@ export const Tpopmassn = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}

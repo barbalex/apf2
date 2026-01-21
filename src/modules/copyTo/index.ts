@@ -21,6 +21,7 @@ import {
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
+  copyingAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -36,7 +37,7 @@ export const copyTo = async ({
   const apolloClient = jotaiStore.get(apolloClientAtom)
   tsQueryClient = jotaiStore.get(tsQueryClientAtom)
 
-  const { copying } = store
+  const copying = jotaiStore.get(copyingAtom)
   const table = tablePassed ?? copying.table
   const id = idPassed ?? copying.id
   const withNextLevel = copying.withNextLevel ?? false

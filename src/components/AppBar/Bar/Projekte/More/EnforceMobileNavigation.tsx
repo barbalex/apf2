@@ -1,7 +1,7 @@
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { Tooltip } from '@mui/material'
-import { useAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import {
   enforceMobileNavigationAtom,
@@ -12,8 +12,8 @@ import { constants } from '../../../../../modules/constants.ts'
 import styles from './AlwaysShowTree.module.css'
 
 export const EnforceMobileNavigation = () => {
-  const [enforceMobileNavigation] = useAtom(enforceMobileNavigationAtom)
-  const [, setEnforceMobileNavigation] = useAtom(
+  const enforceMobileNavigation = useAtomValue(enforceMobileNavigationAtom)
+  const setEnforceMobileNavigation = useSetAtom(
     writeEnforceMobileNavigationAtom,
   )
   const toggleEnforceMobileNavigation = () =>

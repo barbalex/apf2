@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
 
@@ -41,6 +41,10 @@ import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOn
 import {
   showTreeMenusAtom,
   addNotificationAtom,
+  movingAtom,
+  setMovingAtom,
+  copyingAtom,
+  setCopyingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
@@ -78,11 +82,11 @@ export const Menu = observer(({ row }: MenuProps) => {
     idOfTpopBeingLocalized,
     activeApfloraLayers,
     setActiveApfloraLayers,
-    setMoving,
-    moving,
-    setCopying,
-    copying,
   } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -331,7 +335,7 @@ export const Menu = observer(({ row }: MenuProps) => {
       store,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   // ISSUE: refs are sometimes/often not set on first render
   // trying to measure widths of menus leads to complete chaos

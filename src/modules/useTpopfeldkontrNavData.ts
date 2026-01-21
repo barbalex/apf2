@@ -4,8 +4,15 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import {
+  copyingAtom,
+  copyingBiotopAtom,
+  movingAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -46,6 +53,9 @@ export const useTpopfeldkontrNavData = (props) => {
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
 
   const store = useContext(MobxContext)
+  const moving = useAtomValue(movingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
 
   const { data, refetch } = useQuery({
     queryKey: [
@@ -95,17 +105,26 @@ export const useTpopfeldkontrNavData = (props) => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
-    () => reaction(() => store.copyingBiotop, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingBiotopAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(
-    () => reaction(() => store.copying.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -119,9 +138,9 @@ export const useTpopfeldkontrNavData = (props) => {
     data?.data?.tpopkontrById?.tpopkontrFilesByTpopkontrId?.totalCount ?? 0
 
   const labelRightElements = getLabelRightElements({
-    copyingId: store.copying.id,
-    copyingBiotopId: store.copyingBiotop.id,
-    movingId: store.moving.id,
+    copyingId: copying.id,
+    copyingBiotopId: copyingBiotop.id,
+    movingId: moving.id,
     tpopkontrId,
   })
 

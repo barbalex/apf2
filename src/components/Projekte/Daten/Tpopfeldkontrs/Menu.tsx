@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,8 +20,16 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+  copyingBiotopAtom,
+  setCopyingBiotopAtom,
+  movingAtom,
+  setMovingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type {
   TpopkontrId,
@@ -62,14 +70,12 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { projId, apId, popId, tpopId } = useParams()
 
   const store = useContext(MobxContext)
-  const {
-    setMoving,
-    moving,
-    setCopying,
-    copying,
-    copyingBiotop,
-    setCopyingBiotop,
-  } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
+  const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
   const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
   const onClickAdd = async () => {
@@ -174,7 +180,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
 
   const isMovingEk = moving.table === 'tpopfeldkontr'
 
-
   const onClickMoveEkfToHere = () =>
     moveTo({
       id: tpopId,
@@ -210,7 +215,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     setCopyingBiotop({ id: null, label: null })
   }
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>

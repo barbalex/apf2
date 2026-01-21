@@ -5,7 +5,7 @@ import { remove } from 'es-toolkit'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation, useNavigate } from 'react-router'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { MdFilterAlt, MdInfoOutline, MdEditNote } from 'react-icons/md'
 import { FaDownload } from 'react-icons/fa6'
 import { VscListTree } from 'react-icons/vsc'
@@ -29,10 +29,10 @@ export const ProjekteMenus = observer(() => {
   const { search } = useLocation()
   const navigate = useNavigate()
 
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const isDesktopView = useAtomValue(isDesktopViewAtom)
   const isMobileView = !isDesktopView
 
-  const [hideTree] = useAtom(hideTreeAtom)
+  const hideTree = useAtomValue(hideTreeAtom)
 
   const store = useContext(MobxContext)
   const { resetTree2Src } = store.tree

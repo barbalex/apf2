@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,8 +20,14 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'
@@ -51,7 +57,10 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
   const { projId, apId, popId, tpopId } = useParams()
   const store = useContext(MobxContext)
-  const { setMoving, moving, setCopying, copying } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
 
   const onClickAdd = async () => {
     let result: CreateTpopkontrResult | undefined
@@ -64,8 +73,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
                 tpopkontr: {
                   tpopId: $tpopId
                   typ: "Freiwilligen-Erfolgskontrolle"
-
-
                 }
               }
             ) {
@@ -158,7 +165,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       withNextLevel: false,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>

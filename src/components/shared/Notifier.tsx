@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSnackbar } from 'notistack'
-import { useAtom, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import {
   notificationsAtom,
@@ -9,7 +9,7 @@ import {
 
 export const Notifier = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const [notifications] = useAtom(notificationsAtom)
+  const notifications = useAtomValue(notificationsAtom)
   const removeNotification = useSetAtom(removeNotificationAtom)
   const [displayed, setDisplayed] = useState([])
 

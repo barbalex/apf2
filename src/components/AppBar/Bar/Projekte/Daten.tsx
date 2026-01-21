@@ -2,7 +2,7 @@ import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { MdEditNote } from 'react-icons/md'
 import { remove } from 'es-toolkit'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
@@ -14,7 +14,7 @@ export const Daten = ({ treeNr = '', hide = false }) => {
   const isDaten = projekteTabs.includes(`daten${treeNr}`)
   const isTree = projekteTabs.includes(`tree${treeNr}`)
 
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const isDesktopView = useAtomValue(isDesktopViewAtom)
 
   const onClickButton = () => {
     const copyOfProjekteTabs = [...projekteTabs]

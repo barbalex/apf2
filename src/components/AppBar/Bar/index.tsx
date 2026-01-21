@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button'
 import { useLocation, Link } from 'react-router'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { HomeMenus } from './Home/index.tsx'
 import { EkPlanMenus } from './EkPlan.tsx'
@@ -14,7 +14,7 @@ export const Bar = () => {
   const showHome = pathname === '/' || pathname.startsWith('/Dokumentation')
   const showEkPlan = pathname.includes('/EK-Planung')
 
-  const [isMobileView] = useAtom(isMobileViewAtom)
+  const isMobileView = useAtomValue(isMobileViewAtom)
 
   return (
     <div className={styles.container}>

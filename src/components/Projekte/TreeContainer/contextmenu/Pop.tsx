@@ -1,5 +1,3 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 import {
   ContextMenu,
@@ -7,8 +5,7 @@ import {
 } from '../../../../modules/react-contextmenu/index.ts'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { userTokenAtom } from '../../../../JotaiStore/index.ts'
+import { userTokenAtom, copyingAtom, movingAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 // create objects outside render
@@ -48,9 +45,9 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const Pop = observer(({ onClick }) => {
-  const store = useContext(MobxContext)
-  const { copying, moving } = store
+export const Pop = ({ onClick }) => {
+  const moving = useAtomValue(movingAtom)
+  const copying = useAtomValue(copyingAtom)
   const userToken = useAtomValue(userTokenAtom)
 
   const isMoving = moving.table && moving.table === 'tpop'
@@ -136,4 +133,4 @@ export const Pop = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}

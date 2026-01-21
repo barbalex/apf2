@@ -10,7 +10,7 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -20,8 +20,14 @@ import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { ApFilter } from '../../TreeContainer/ApFilter/index.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { ProjId } from '../../../../models/apflora/Proj.ts'
@@ -56,8 +62,11 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { setMoving, moving, copying, setCopying } = store
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   const onClickAdd = async () => {
     let result: CreateApResult | undefined
@@ -129,8 +138,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       withNextLevel: false,
     })
 
-  const isMoving = !!moving.table
-  const isCopying = !!copying.table
+  const isMoving = !!moving?.table
+  const isCopying = !!copying?.table
 
   return (
     <ErrorBoundary>
@@ -153,8 +162,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         {isMoving &&
           moving.toTable === 'ap' &&
           moving.fromParentId !== apId && (
-
-
             <Tooltip title={`Verschiebe ${moving.label} zu dieser Art`}>
               <IconButton onClick={onClickMoveHere}>
                 <MdOutlineMoveDown style={iconStyle} />

@@ -8,7 +8,7 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -111,7 +111,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       search,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>

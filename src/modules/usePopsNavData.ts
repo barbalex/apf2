@@ -4,6 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { PopIcon100 } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/100.tsx'
 import { PopIcon100Highlighted } from '../components/Projekte/Karte/layers/Pop/statusGroupSymbols/100Highlighted.tsx'
@@ -29,6 +30,7 @@ import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 
 import { MobxContext } from '../mobxContext.ts'
+import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
@@ -87,6 +89,8 @@ export const usePopsNavData = (props) => {
   const popId = props?.popId ?? params.popId
 
   const store = useContext(MobxContext)
+  const copying = useAtomValue(copyingAtom)
+  const moving = useAtomValue(movingAtom)
 
   const { data, refetch } = useQuery({
     queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
@@ -141,12 +145,18 @@ export const usePopsNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(
-    () => reaction(() => store.copying.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -173,11 +183,11 @@ export const usePopsNavData = (props) => {
     component: NodeWithList,
     menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
       const labelRightElements = []
-      const isMoving = store.moving.id === p.id
+      const isMoving = moving.id === p.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = store.copying.id === p.id
+      const isCopying = copying.id === p.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }

@@ -5,7 +5,7 @@ import {
   createRoutesFromElements,
 } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { Spinner } from '../shared/Spinner.tsx'
 
@@ -355,7 +355,7 @@ import { isDesktopViewAtom } from '../../JotaiStore/index.ts'
 // import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 export const Router = () => {
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const isDesktopView = useAtomValue(isDesktopViewAtom)
 
   // TODO: error in dev-tools
   // Cannot update a component (`Unknown`) while rendering a different component (`Unknown`). To locate the bad setState() call inside `Unknown`, follow the stack trace as described in https://react.dev/link/setstate-in-render

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -32,8 +32,13 @@ import styles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+  copyingBiotopAtom,
+  setCopyingBiotopAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../../JotaiStore/index.ts'
-
 
 interface CreateTpopkontrResult {
   createTpopkontr: {
@@ -68,14 +73,12 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
 
   const store = useContext(MobxContext)
-  const {
-    moving,
-    setMoving,
-    copying,
-    setCopying,
-    copyingBiotop,
-    setCopyingBiotop,
-  } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
+  const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
   const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
   const apolloClient = useApolloClient()
@@ -249,11 +252,7 @@ export const Menu = observer(({ row }: MenuProps) => {
       store,
     })
 
-  const onClickCopyBiotopToHere = () =>
-    copyBiotopTo({
-      id: tpopkontrId,
-      copyingBiotop,
-    })
+  const onClickCopyBiotopToHere = () => copyBiotopTo({ id: tpopkontrId })
 
   const onClickSetFeldkontrCopying = () => {
     setCopying({

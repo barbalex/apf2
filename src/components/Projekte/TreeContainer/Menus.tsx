@@ -13,7 +13,7 @@ import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
 
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
@@ -226,6 +226,11 @@ import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeob
 import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidateCoordinatesOfTpop.ts'
 import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
+import {
+  setCopyingAtom,
+  setCopyingBiotopAtom,
+  setMovingAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './Menus.module.css'
 
@@ -242,16 +247,16 @@ export const Menus = observer(() => {
     setIdOfTpopBeingLocalized,
     toDeleteId,
     setToDelete,
-    setCopying,
-    setMoving,
-    copyingBiotop,
-    setCopyingBiotop,
   } = store
   const { setOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
+
+  const setCopying = useSetAtom(setCopyingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
 
   const [newTpopFromBeobDialogOpen, setNewTpopFromBeobDialogOpen] = useAtom(
     newTpopFromBeobDialogOpenAtom,
@@ -443,7 +448,7 @@ export const Menus = observer(() => {
         setCopyingBiotop({ id: null, label: null })
       },
       copyBiotop() {
-        copyBiotopTo({ id, copyingBiotop })
+        copyBiotopTo({ id })
       },
       copyTpopKoordToPop() {
         copyTpopKoordToPop({ id })

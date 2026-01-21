@@ -4,8 +4,14 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 
@@ -40,6 +46,8 @@ export const useTpopNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+  const copying = useAtomValue(copyingAtom)
+  const moving = useAtomValue(movingAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -201,12 +209,18 @@ export const useTpopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(
-    () => reaction(() => store.copying.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -247,8 +261,8 @@ export const useTpopNavData = (props) => {
     : TpopIconQ
 
   const labelRightElements = getLabelRightElements({
-    movingId: store.moving.id,
-    copyingId: store.copying.id,
+    movingId: moving.id,
+    copyingId: copying.id,
     tpopId,
   })
 

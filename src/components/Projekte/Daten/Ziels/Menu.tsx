@@ -110,7 +110,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       search,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>

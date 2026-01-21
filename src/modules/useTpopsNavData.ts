@@ -4,8 +4,14 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 
 import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.tsx'
 import { TpopIcon100Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100Highlighted.tsx'
@@ -90,6 +96,7 @@ export const useTpopsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+  const moving = useAtomValue(movingAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -154,12 +161,19 @@ export const useTpopsNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
+  const copying = useAtomValue(copyingAtom)
   useEffect(
-    () => reaction(() => store.copying.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -194,11 +208,11 @@ export const useTpopsNavData = (props) => {
     component: NodeWithList,
     menus: (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((p) => {
       const labelRightElements = []
-      const isMoving = store.moving.id === p.id
+      const isMoving = moving.id === p.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = store.copying.id === p.id
+      const isCopying = copying.id === p.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }

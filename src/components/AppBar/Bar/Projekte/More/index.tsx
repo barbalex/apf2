@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { logout } from '../../../../../modules/logout.ts'
 import { EkfUser } from './EkfUser/index.tsx'
@@ -32,7 +32,7 @@ export const More = observer(
   ({ onClickExporte: passedOnClickExporte, role }) => {
     const { projId } = useParams()
 
-    const [isMobileView] = useAtom(isMobileViewAtom)
+    const isMobileView = useAtomValue(isMobileViewAtom)
 
     const store = useContext(MobxContext)
     const { deletedDatasets, setShowDeletions } = store

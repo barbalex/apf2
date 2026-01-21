@@ -14,7 +14,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -23,8 +23,14 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+  copyingAtom,
+  setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { PopId, ApId, Pop } from '../../../../models/apflora/index.tsx'
 
@@ -54,7 +60,10 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId } = useParams()
 
   const store = useContext(MobxContext)
-  const { setMoving, moving, setCopying, copying } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -175,7 +184,6 @@ export const Menu = observer(({ row }: MenuProps) => {
     moving.id !== '99999999-9999-9999-9999-999999999999' &&
     moving.table === 'pop'
 
-
   const isTpopMoving =
     moving.id !== '99999999-9999-9999-9999-999999999999' &&
     moving.table === 'tpop'
@@ -246,7 +254,7 @@ export const Menu = observer(({ row }: MenuProps) => {
       withNextLevel: false,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>

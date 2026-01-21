@@ -12,6 +12,8 @@ import {
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -25,7 +27,8 @@ export const moveTo = async ({
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
 
-  const { moving, setMoving } = store
+  const moving = jotaiStore.get(movingAtom)
+  const setMoving = jotaiStore.get(setMovingAtom)
   const table = moving?.table
   const id = moving?.id
 

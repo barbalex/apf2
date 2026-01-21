@@ -5,7 +5,7 @@ import {
   createRoutesFromElements,
 } from 'react-router'
 import { RouterProvider } from 'react-router/dom'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { Spinner } from '../shared/Spinner.tsx'
 
@@ -30,7 +30,7 @@ import { Unterhalt } from '../Unterhalt.tsx'
 
 // uncomment unterhalt route for Unterhalt
 export const Router = () => {
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const isDesktopView = useAtomValue(isDesktopViewAtom)
 
   const router = createBrowserRouter(
     createRoutesFromElements(
