@@ -133,7 +133,7 @@ const fieldTypes = {
   planVorhanden: 'Boolean',
 }
 
-export const Component = observer(({ showFilter = false }: ComponentProps) => {
+export const Component = ({ showFilter = false }: ComponentProps) => {
   const { tpopmassnId, apId } = useParams()
 
   const apolloClient = useApolloClient()
