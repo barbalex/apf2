@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { Menu } from './Menu/index.tsx'
 import { Transition } from 'react-transition-group'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { Label } from './Label.tsx'
 import { showBookmarksMenuAtom } from '../../../JotaiStore/index.ts'
@@ -16,7 +16,7 @@ const transitionStyles = {
 }
 
 export const Bookmark = ({ navData, in: inProp }) => {
-  const [showBookmarksMenu] = useAtom(showBookmarksMenuAtom)
+  const showBookmarksMenu = useAtomValue(showBookmarksMenuAtom)
 
   const outerContainerRef = useRef(null)
   const labelRef = useRef(null)

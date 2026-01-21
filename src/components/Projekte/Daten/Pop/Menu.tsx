@@ -14,7 +14,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -60,9 +60,9 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId } = useParams()
 
   const store = useContext(MobxContext)
-  const [moving] = useAtom(movingAtom)
+  const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
-  const [copying] = useAtom(copyingAtom)
+  const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
@@ -254,7 +254,7 @@ export const Menu = observer(({ row }: MenuProps) => {
       withNextLevel: false,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>
