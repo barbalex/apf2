@@ -29,24 +29,18 @@ export const deleteModule = async ({ store, search }) => {
   const toDelete = jotaiStore.get(toDeleteAtom)
   const { addDeletedDataset } = store
 
-  const tablePassed = toDelete.table
-  const toDeleteId = toDelete.id
-  const toDeleteUrl = toDelete.url
-  const toDeleteLabel = toDelete.label
-  const toDeleteAfterDeletionHook = toDelete.afterDeletionHook
-
   // some tables need to be translated, i.e. tpopfreiwkontr
-  const tableMetadata = tables.find((t) => t.table === tablePassed)
+  const tableMetadata = tables.find((t) => t.table === toDelete.table)
   const parentTable = tableMetadata?.parentTable
   if (!tableMetadata) {
     return addNotification({
-      message: `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`,
+      message: `Error in action deleteDatasetDemand: no table meta data found for table "${toDelete.table}"`,
       options: {
         variant: 'error',
       },
     })
   }
-  const table = tableMetadata.dbTable ? tableMetadata.dbTable : tablePassed
+  const table = tableMetadata.dbTable ? tableMetadata.dbTable : toDelete.table
   // console.log('deleteModule', { tableMetadata, table, parentTable })
 
   /**
@@ -82,7 +76,7 @@ export const deleteModule = async ({ store, search }) => {
   try {
     result = await apolloClient.query({
       query,
-      variables: { id: toDeleteId },
+      variables: { id: toDelete.id },
     })
   } catch (error) {
     console.log(error)
@@ -99,12 +93,12 @@ export const deleteModule = async ({ store, search }) => {
   // add to datasetsDeleted
   addDeletedDataset({
     table,
-    id: toDeleteId,
-    label: toDeleteLabel,
-    url: toDeleteUrl,
+    id: toDelete.id,
+    label: toDelete.label,
+    url: toDelete.url,
     data,
     time: Date.now(),
-    afterDeletionHook: toDeleteAfterDeletionHook,
+    afterDeletionHook: toDelete.afterDeletionHook,
   })
 
   try {
@@ -118,7 +112,7 @@ export const deleteModule = async ({ store, search }) => {
           }
         }
       `,
-      variables: { id: toDeleteId },
+      variables: { id: toDelete.id },
     })
   } catch (error) {
     return addNotification({
@@ -136,10 +130,10 @@ export const deleteModule = async ({ store, search }) => {
   // set new url if necessary
   const activeNodeArray1 = store?.tree?.activeNodeArray
   if (
-    isEqual(activeNodeArray1, toDeleteUrl) &&
+    isEqual(activeNodeArray1, toDelete.url) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
   ) {
-    const newActiveNodeArray1 = [...toDeleteUrl]
+    const newActiveNodeArray1 = [...toDelete.url]
     newActiveNodeArray1.pop()
     // if zieljahr is active, need to pop again,
     // (in case there is no other ziel left in same year)
@@ -155,7 +149,7 @@ export const deleteModule = async ({ store, search }) => {
   // remove from openNodes
   const openNodesRaw = store?.tree?.openNodes
   const openNodes = getSnapshot(openNodesRaw)
-  const newOpenNodes = openNodes.filter((n) => !isEqual(n, toDeleteUrl))
+  const newOpenNodes = openNodes.filter((n) => !isEqual(n, toDelete.url))
   store.tree.setOpenNodes(newOpenNodes)
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
@@ -210,7 +204,7 @@ export const deleteModule = async ({ store, search }) => {
     })
   }
 
-  if (toDeleteAfterDeletionHook) toDeleteAfterDeletionHook()
+  if (toDelete.afterDeletionHook) toDelete.afterDeletionHook()
 
   // reset datasetToDelete
   jotaiStore.set(emptyToDeleteAtom, undefined)
