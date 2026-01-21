@@ -23,7 +23,7 @@ import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
 
@@ -83,9 +83,9 @@ export const Menu = observer(({ row }: MenuProps) => {
     activeApfloraLayers,
     setActiveApfloraLayers,
   } = store
-  const [moving] = useAtom(movingAtom)
+  const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
-  const [copying] = useAtom(copyingAtom)
+  const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
@@ -335,7 +335,7 @@ export const Menu = observer(({ row }: MenuProps) => {
       store,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   // ISSUE: refs are sometimes/often not set on first render
   // trying to measure widths of menus leads to complete chaos
