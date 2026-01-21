@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -69,9 +69,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
 
   const store = useContext(MobxContext)
   const { setMoving, moving } = store
-  const [copying] = useAtom(copyingAtom)
+  const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
-  const [copyingBiotop] = useAtom(copyingBiotopAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
   const { activeNodeArray, openNodes, setOpenNodes } = store.tree
 
@@ -212,7 +212,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     setCopyingBiotop({ id: null, label: null })
   }
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>

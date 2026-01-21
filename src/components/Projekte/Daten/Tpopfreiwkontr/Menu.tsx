@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -59,9 +59,9 @@ export const Menu = observer(({ row }: MenuProps) => {
 
   const store = useContext(MobxContext)
   const { setIsPrint } = store
-  const [moving] = useAtom(movingAtom)
+  const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
-  const [copying] = useAtom(copyingAtom)
+  const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()

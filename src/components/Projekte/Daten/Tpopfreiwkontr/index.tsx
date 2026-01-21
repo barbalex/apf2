@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
 import { Component as Tpopfreiwkontr } from './Tpopfreiwkontr.tsx'
@@ -11,7 +11,7 @@ interface ComponentProps {
 }
 
 export const Component = ({ id }: ComponentProps) => {
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const isDesktopView = useAtomValue(isDesktopViewAtom)
 
   if (isDesktopView) return <Tpopfreiwkontr id={id} />
 
