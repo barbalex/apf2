@@ -28,6 +28,8 @@ import {
   addNotificationAtom,
   copyingAtom,
   setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import type { PopId, ApId, Pop } from '../../../../models/apflora/index.tsx'
@@ -58,7 +60,8 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId } = useParams()
 
   const store = useContext(MobxContext)
-  const { setMoving, moving } = store
+  const [moving] = useAtom(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
   const [copying] = useAtom(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 

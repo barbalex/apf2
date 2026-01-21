@@ -14,7 +14,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -27,6 +27,8 @@ import {
   addNotificationAtom,
   copyingAtom,
   setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
@@ -65,7 +67,8 @@ export const Menu = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { setMoving, moving } = store
+  const [moving] = useAtom(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
   const [copying] = useAtom(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
   const [showTreeMenus] = useAtom(showTreeMenusAtom)
@@ -246,8 +249,6 @@ export const Menu = observer(() => {
       </MenuBar>
       <MuiMenu
         id="apDelMenu"
-
-
         anchorEl={delMenuAnchorEl}
         open={delMenuOpen}
         onClose={() => setDelMenuAnchorEl(null)}
