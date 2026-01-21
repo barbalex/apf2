@@ -6,6 +6,7 @@ import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
 import {
   store as jotaiStore,
   navigateAtom,
+  setTreeLastTouchedNodeAtom,
 } from '../../../../JotaiStore/index.js'
 
 export const toggleNodeSymbol = ({
@@ -17,12 +18,7 @@ export const toggleNodeSymbol = ({
   if (!node.url) throw new Error('passed node has no url')
 
   const navigate = jotaiStore.get(navigateAtom)
-  const {
-    openNodes: openNodesRaw,
-    setOpenNodes,
-    activeNodeArray,
-    setLastTouchedNode,
-  } = store.tree
+  const { openNodes: openNodesRaw, setOpenNodes, activeNodeArray } = store.tree
 
   const openNodes = getSnapshot(openNodesRaw)
 
@@ -44,6 +40,6 @@ export const toggleNodeSymbol = ({
   } else {
     newOpenNodes.push(node.url)
   }
-  setLastTouchedNode(node.url)
+  jotaiStore.set(setTreeLastTouchedNodeAtom, node.url)
   setOpenNodes(newOpenNodes)
 }

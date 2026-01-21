@@ -255,6 +255,13 @@ export const setTree2SrcByActiveNodeArrayAtom = atom(
   },
 )
 
+// treeLastTouchedNode - tracks the last touched tree node for scrolling
+export const treeLastTouchedNodeAtom = atom([])
+export const setTreeLastTouchedNodeAtom = atom(
+  (get) => get(treeLastTouchedNodeAtom),
+  (get, set, value) => set(treeLastTouchedNodeAtom, value),
+)
+
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },

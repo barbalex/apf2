@@ -42,15 +42,6 @@ const addNotification = (notification) =>
 export const Tree = types
   .model('Tree', {
     activeNodeArray: types.array(types.union(types.string, types.number)),
-    // lastTouchedNode is needed to keep the last clicked arrow known
-    // so it does not jump
-    // before using this, activeNodeArray was used instead
-    // but then when an arrow out of sight of the active node
-    // is clicked, the list jumps back to the active node :-(
-    lastTouchedNode: types.optional(
-      types.array(types.union(types.string, types.number)),
-      [],
-    ),
     openNodes: types.array(
       types.array(types.union(types.string, types.number)),
     ),
@@ -110,9 +101,6 @@ export const Tree = types
     },
     emptyMapFilter() {
       self.setMapFilter(undefined)
-    },
-    setLastTouchedNode(val) {
-      self.lastTouchedNode = val
     },
     setOpenNodes(val) {
       // val should always be created from a snapshot of openNodes
@@ -1843,7 +1831,6 @@ export const Tree = types
 
 export const defaultValue = {
   activeNodeArray: [],
-  lastTouchedNode: [],
   openNodes: [],
   apFilter: true,
   nodeLabelFilter: defaultNodeLabelFilter,

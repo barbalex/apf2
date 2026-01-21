@@ -12,6 +12,7 @@ import {
   tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
+  setTreeLastTouchedNodeAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -208,7 +209,7 @@ export const createNewPopFromBeob = async ({
   tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
-  store.tree.setLastTouchedNode(newActiveNodeArray)
+  jotaiStore.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
 
   return
 }
