@@ -9,7 +9,6 @@ import {
 import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayers.ts'
 import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
-import { EkPlan, defaultValue as defaultEkPlan } from './EkPlan/index.ts'
 
 const defaultSortedBeobFields = [
   'taxon',
@@ -89,7 +88,6 @@ export const MobxStore = types
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
-    ekPlan: types.optional(EkPlan, defaultEkPlan),
     map: types.optional(Map, defaultMap),
     sortedBeobFields: types.optional(
       types.array(types.string),
