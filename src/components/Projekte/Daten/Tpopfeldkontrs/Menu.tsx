@@ -27,6 +27,8 @@ import {
   setCopyingAtom,
   copyingBiotopAtom,
   setCopyingBiotopAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import type {
@@ -68,7 +70,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { projId, apId, popId, tpopId } = useParams()
 
   const store = useContext(MobxContext)
-  const { setMoving, moving } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
