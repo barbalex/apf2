@@ -3,11 +3,14 @@ import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'date-fns/isEqual'
 import { gql } from '@apollo/client'
 
-import {store as jotaiStore,
+import {
+  store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
-  navigateAtom} from '../JotaiStore/index.ts'
+  navigateAtom,
+  setTreeLastTouchedNodeAtom,
+} from '../JotaiStore/index.ts'
 import {
   beob as beobFragment,
   tpop,
@@ -17,7 +20,6 @@ import {
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
-
 
 const createTpop = gql`
   mutation createTpopFroCreateNewTpopFromBeob(
@@ -269,5 +271,5 @@ export const createNewTpopFromBeob = async ({
   tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
-  store.tree.setLastTouchedNode(newActiveNodeArray)
+  jotaiStore.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
 }
