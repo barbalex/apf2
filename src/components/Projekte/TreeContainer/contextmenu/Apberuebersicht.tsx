@@ -1,8 +1,7 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -19,8 +18,8 @@ const deleteData = {
   table: 'apberuebersicht',
 }
 
-export const Apberuebersicht = observer(({ onClick }) => {
-  const { user } = useContext(MobxContext)
+export const Apberuebersicht = ({ onClick }) => {
+  const userToken = useAtomValue(userTokenAtom)
 
   return (
     <ErrorBoundary>
@@ -29,7 +28,7 @@ export const Apberuebersicht = observer(({ onClick }) => {
         hideOnLeave={true}
       >
         <div className="react-contextmenu-title">AP-Bericht</div>
-        {!userIsReadOnly(user.token) && (
+        {!userIsReadOnly(userToken) && (
           <>
             <MenuItem
               onClick={onClick}
@@ -48,4 +47,4 @@ export const Apberuebersicht = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}

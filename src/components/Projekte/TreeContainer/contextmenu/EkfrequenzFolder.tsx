@@ -1,8 +1,10 @@
 import { useContext, useState } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -17,7 +19,8 @@ const insertData = {
 
 export const EkfrequenzFolder = observer(({ onClick }) => {
   const store = useContext(MobxContext)
-  const { user, setOpenChooseApToCopyEkfrequenzsFrom } = store
+  const { setOpenChooseApToCopyEkfrequenzsFrom } = store
+  const userToken = useAtomValue(userTokenAtom)
 
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
@@ -35,7 +38,7 @@ export const EkfrequenzFolder = observer(({ onClick }) => {
         hideOnLeave={true}
       >
         <div className="react-contextmenu-title">EK-Frequenz</div>
-        {!userIsReadOnly(user.token) && (
+        {!userIsReadOnly(userToken) && (
           <>
             <MenuItem
               onClick={onClick}

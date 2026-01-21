@@ -1,13 +1,9 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { GeoJSON } from 'react-leaflet'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-
-import { MobxContext } from '../../../../mobxContext.ts'
 
 interface BetreuungsgebietNode {
   id: number
@@ -33,7 +29,7 @@ const style = () => ({
   opacity: 1,
 })
 
-export const Betreuungsgebiete = observer(() => {
+export const Betreuungsgebiete = () => {
   const apolloClient = useApolloClient()
 
   const { data } = useQuery({
@@ -77,4 +73,4 @@ export const Betreuungsgebiete = observer(() => {
       interactive={false}
     />
   )
-})
+}

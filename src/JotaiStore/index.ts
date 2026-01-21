@@ -289,3 +289,74 @@ export const removeNotificationAtom = atom(null, (get, set, key) => {
 
 // navigate function atom
 export const navigateAtom = atom(undefined)
+
+// User
+export const userAtom = atomWithStorage('user', {
+  name: '',
+  token: null,
+  id: null,
+})
+
+export const userNameAtom = atom((get) => get(userAtom).name)
+export const userTokenAtom = atom((get) => get(userAtom).token)
+export const userIdAtom = atom((get) => get(userAtom).id)
+
+export const setUserAtom = atom(null, (get, set, newUser) => {
+  set(userAtom, newUser)
+})
+
+export const removeUserAtom = atom(null, (get, set) => {
+  set(userAtom, {
+    name: '',
+    token: null,
+    id: null,
+  })
+})
+
+export const clearAllStorageAtom = atom(null, (get, set) => {
+  // Reset user
+  set(userAtom, { name: '', token: null, id: null })
+  
+  // Reset dialog state
+  set(newTpopFromBeobDialogOpenAtom, false)
+  set(newTpopFromBeobBeobIdAtom, null)
+  
+  // Reset navigation state
+  set(enforceDesktopNavigationAtom, false)
+  set(enforceMobileNavigationAtom, false)
+  set(isDesktopViewAtom, false)
+  set(showBookmarksMenuAtom, false)
+  set(alwaysShowTreeAtom, false)
+  
+  // Reset all nav list filters
+  set(adresseNavListFilterIsVisibleAtom, false)
+  set(apNavListFilterIsVisibleAtom, false)
+  set(apartNavListFilterIsVisibleAtom, false)
+  set(apberNavListFilterIsVisibleAtom, false)
+  set(apberuebersichtNavListFilterIsVisibleAtom, false)
+  set(aperfkritNavListFilterIsVisibleAtom, false)
+  set(apzielNavListFilterIsVisibleAtom, false)
+  set(apzielberNavListFilterIsVisibleAtom, false)
+  set(assozartNavListFilterIsVisibleAtom, false)
+  set(beobNichtBeurteiltNavListFilterIsVisibleAtom, false)
+  set(beobNichtZuzuordnenNavListFilterIsVisibleAtom, false)
+  set(beobZugeordnetNavListFilterIsVisibleAtom, false)
+  set(ekAbrechnungstypWerteNavListFilterIsVisibleAtom, false)
+  set(ekfrequenzNavListFilterIsVisibleAtom, false)
+  set(ekzaehleinheitNavListFilterIsVisibleAtom, false)
+  set(erfkritNavListFilterIsVisibleAtom, false)
+  set(popNavListFilterIsVisibleAtom, false)
+  set(popberNavListFilterIsVisibleAtom, false)
+  set(popmassnberNavListFilterIsVisibleAtom, false)
+  set(tpopNavListFilterIsVisibleAtom, false)
+  set(tpopApberrelevantGrundWerteNavListFilterIsVisibleAtom, false)
+  set(tpopberNavListFilterIsVisibleAtom, false)
+  set(tpopkontrNavListFilterIsVisibleAtom, false)
+  set(tpopkontrzaehlNavListFilterIsVisibleAtom, false)
+  set(tpopkontrzaehlEinheitWerteNavListFilterIsVisibleAtom, false)
+  set(tpopmassnNavListFilterIsVisibleAtom, false)
+  set(tpopmassnberNavListFilterIsVisibleAtom, false)
+  set(userNavListFilterIsVisibleAtom, false)
+  set(zielNavListFilterIsVisibleAtom, false)
+  set(docNavListFilterIsVisibleAtom, false)
+})

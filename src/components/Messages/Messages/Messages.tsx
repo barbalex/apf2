@@ -1,20 +1,17 @@
-import { useContext } from 'react'
 import Button from '@mui/material/Button'
 import Linkify from 'react-linkify'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
 import { DateTime } from 'luxon'
+import { useAtomValue } from 'jotai'
 
 import { createUsermessage } from '../createUsermessage.ts'
-import { MobxContext } from '../../../mobxContext.ts'
+import { userNameAtom } from '../../../JotaiStore/index.ts'
 
 import styles from './Messages.module.css'
 
-export const Messages = observer(({ unreadMessages }) => {
-  const store = useContext(MobxContext)
-  const { user } = store
-  const userName = user.name
+export const Messages = ({ unreadMessages }) => {
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -56,4 +53,4 @@ export const Messages = observer(({ unreadMessages }) => {
       })}
     </div>
   )
-})
+}

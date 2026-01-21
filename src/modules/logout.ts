@@ -1,9 +1,14 @@
 import localForage from 'localforage'
 
-export const logout = async (idb) => {
+import {
+  store as jotaiStore,
+  clearAllStorageAtom,
+} from '../JotaiStore/index.ts'
+
+export const logout = async () => {
   console.log('LOGGING OUT')
   localForage.clear()
-   
-  idb?.delete?.()
+
+  jotaiStore.set(clearAllStorageAtom)
   window.location.reload(true)
 }

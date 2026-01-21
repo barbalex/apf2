@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -15,7 +14,6 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TpopAbBerRelevantInfoPopover } from '../../../shared/TpopAbBerRelevantInfoPopover.tsx'
 //import { getGemeindeForKoord } from '../../../../modules/getGemeindeForKoord.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { Coordinates } from '../../../shared/Coordinates.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
@@ -27,6 +25,10 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
+import {
+  addNotificationAtom,
+  userNameAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type {
   TpopId,
@@ -39,8 +41,6 @@ import type {
 } from '../../../../models/apflora/index.tsx'
 
 import styles from './Tpop.module.css'
-
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TpopQueryResult {
   tpopById?: {
@@ -158,11 +158,11 @@ export const fieldTypes = {
   statusUnklar: 'Boolean',
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { tpopId } = useParams()
 
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -223,7 +223,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({
@@ -262,7 +262,7 @@ export const Component = observer(() => {
             ${tpopApberrelevantGrundWerte}
           `,
         variables,
-        // no optimistic responce as geomPoint
+        // no optimistic response as geomPoint
       })
     } catch (error) {
       return setFieldErrors((prev) => ({
@@ -599,4 +599,4 @@ export const Component = observer(() => {
       </div>
     </>
   )
-})
+}

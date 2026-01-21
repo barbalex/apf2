@@ -22,6 +22,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   addNotificationAtom,
+  userTokenAtom,
 } from './JotaiStore/index.ts'
 
 import type { MobxStore } from './store/index.ts'
@@ -45,7 +46,7 @@ export const buildApolloClient = ({
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
   const authLink = setContext((_, { headers }) => {
-    const { token } = store.user
+    const token = jotaiStore.get(userTokenAtom)
     if (token) {
       const tokenDecoded = jwtDecode<JwtPayload>(token)
       // for unknown reason, date.now returns three more after comma

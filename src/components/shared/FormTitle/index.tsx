@@ -1,5 +1,4 @@
 import { useContext, useState, useRef, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
 import Collapse from '@mui/material/Collapse'
 import { useAtom } from 'jotai'
 

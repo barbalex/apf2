@@ -4,8 +4,10 @@ import { Outlet } from 'react-router'
 // import { getSnapshot } from 'mobx-state-tree'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../../mobxContext.ts'
+import { userAtom } from '../../JotaiStore/index.ts'
 const User = lazy(async () => ({ default: (await import('../User.tsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.tsx')).Messages,
@@ -45,7 +47,8 @@ export const Component = observer(() => {
   const { userId } = useParams()
 
   const store = useContext(MobxContext)
-  const { showDeletions, user } = store
+  const { showDeletions } = store
+  const user = useAtomValue(userAtom)
 
   const token = user?.token
   const tokenDecoded = token ? jwtDecode(token) : null

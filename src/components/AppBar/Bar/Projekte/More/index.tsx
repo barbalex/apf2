@@ -6,12 +6,11 @@ import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 
 import { logout } from '../../../../../modules/logout.ts'
 import { EkfUser } from './EkfUser/index.tsx'
 import { MobxContext } from '../../../../../mobxContext.ts'
-import { IdbContext } from '../../../../../idbContext.ts'
 import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { ShowBookmarksMenu } from './ShowBookmarksMenu.tsx'
 import { EnforceDesktopNavigation } from './EnforceDesktopNavigation.tsx'
@@ -23,6 +22,7 @@ import {
   enforceDesktopNavigationAtom,
   enforceMobileNavigationAtom,
   writeEnforceDesktopNavigationAtom,
+  userNameAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 import parentStyles from '../index.module.css'
@@ -35,8 +35,8 @@ export const More = observer(
     const [isMobileView] = useAtom(isMobileViewAtom)
 
     const store = useContext(MobxContext)
-    const { deletedDatasets, user, setShowDeletions } = store
-    const { idb } = useContext(IdbContext)
+    const { deletedDatasets, setShowDeletions } = store
+    const userName = useAtomValue(userNameAtom)
 
     const [anchorEl, setAnchorEl] = useState(null)
     const closeMenu = () => setAnchorEl(null)
@@ -63,8 +63,6 @@ export const More = observer(
       // before setAnchor has finished
       setTimeout(() => passedOnClickExporte())
     }
-
-    const onClickLogout = () => logout(idb)
 
     const onClickUptime = () => {
       window.open('https://uptime.apflora.ch')
@@ -134,9 +132,9 @@ export const More = observer(
             <AlwaysShowTree />
           </MenuItem>
           <MenuItem
-            onClick={onClickLogout}
+            onClick={logout}
             data-id="appbar-more-logout"
-          >{`${user.name} abmelden (und Cache leeren)`}</MenuItem>
+          >{`${userName} abmelden (und Cache leeren)`}</MenuItem>
           <MenuItem onClick={onClickUptime}>
             Verfügbarkeit der Server von apflora.ch
           </MenuItem>

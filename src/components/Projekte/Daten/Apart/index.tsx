@@ -1,15 +1,15 @@
-import { useContext, useState, Suspense, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, Suspense, type ChangeEvent } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apart } from '../../../shared/fragments.ts'
@@ -48,10 +48,10 @@ interface ApartQueryResult {
   }
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { taxonId: id } = useParams<{ taxonId: string }>()
 
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -102,7 +102,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate<any>({
@@ -206,4 +206,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

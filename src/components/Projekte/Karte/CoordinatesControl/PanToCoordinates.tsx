@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
 import 'leaflet'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -17,7 +16,7 @@ import styles from './PanToCoordinates.module.css'
 const xIsValid = (x) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y) => !y || (y >= 1075346 && y < 1299942)
 
-export const PanToCoordinates = observer(({ setControlType, map }) => {
+export const PanToCoordinates = ({ setControlType, map }) => {
   const xkoordField = useRef(null)
 
   useEffect(() => {
@@ -192,4 +191,4 @@ export const PanToCoordinates = observer(({ setControlType, map }) => {
       </Tooltip>
     </div>
   )
-})
+}

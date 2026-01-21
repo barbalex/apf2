@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useQueryClient } from '@tanstack/react-query'
 
 import {
@@ -7,7 +6,7 @@ import {
   tsQueryClientAtom,
 } from '../../JotaiStore/index.ts'
 
-export const QueryClientSetter = observer(() => {
+export const QueryClientSetter = () => {
   const tsQueryClient = useQueryClient()
   const tsQueryClientInJotaiStore = jotaiStore.get(tsQueryClientAtom)
 
@@ -24,4 +23,4 @@ export const QueryClientSetter = observer(() => {
   }, [tsQueryClient, tsQueryClientInJotaiStore])
 
   return null
-})
+}

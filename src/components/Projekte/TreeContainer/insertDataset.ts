@@ -10,6 +10,7 @@ import {
   tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
+  userNameAtom,
 } from '../../../JotaiStore/index.ts'
 import {
   adresse as adresseFragment,
@@ -171,7 +172,7 @@ export const insertDataset = async ({
     mutation = gql`
       mutation createWerte {
         create${upperFirst(tableName)}(input: { ${tableName}: {
-          changedBy: "${store.user.name}"
+          changedBy: "${jotaiStore.get(userNameAtom)}"
         } }) {
           ${tableName} {
             ...${fields}

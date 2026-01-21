@@ -1,8 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -31,7 +33,9 @@ const resetCopyingData = {
 }
 
 export const PopFolder = observer(({ onClick }) => {
-  const { copying, user, moving } = useContext(MobxContext)
+  const store = useContext(MobxContext)
+  const { copying, moving } = store
+  const userToken = useAtomValue(userTokenAtom)
 
   const isMoving = moving.table && moving.table === 'pop'
   const isCopying = copying.table && copying.table === 'pop'
@@ -55,7 +59,7 @@ export const PopFolder = observer(({ onClick }) => {
         >
           alle schliessen
         </MenuItem>
-        {!userIsReadOnly(user.token) && (
+        {!userIsReadOnly(userToken) && (
           <>
             <MenuItem
               onClick={onClick}

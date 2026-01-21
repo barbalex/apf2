@@ -1,11 +1,7 @@
-import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-
-import { MobxContext } from '../../../../mobxContext.ts'
 
 interface DetailplanNode {
   id: string
@@ -32,7 +28,7 @@ const style = () => ({
   opacity: 1,
 })
 
-export const Detailplaene = observer(() => {
+export const Detailplaene = () => {
   const apolloClient = useApolloClient()
 
   const { data } = useQuery({
@@ -74,4 +70,4 @@ export const Detailplaene = observer(() => {
       interactive={false}
     />
   )
-})
+}

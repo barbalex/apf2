@@ -8,6 +8,7 @@ import {
   tsQueryClientAtom,
   apolloClientAtom,
   addNotificationAtom,
+  userNameAtom,
 } from '../../../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -44,7 +45,7 @@ export const processChange = async ({ value, row, store }) => {
       variables: {
         id: row.id,
         ekfrequenz: value,
-        changedBy: store.user.name,
+        changedBy: jotaiStore.get(userNameAtom),
       },
     })
   } catch (error) {
@@ -61,7 +62,6 @@ export const processChange = async ({ value, row, store }) => {
     ekfrequenzStartjahr = await setStartjahr({
       row,
       ekfrequenz: value,
-      store,
     })
   }
   // set ekplans if startjahr exists

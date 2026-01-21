@@ -14,7 +14,6 @@ import {
 } from './MapMouseCoordinates.ts'
 import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayers.ts'
 import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
-import { User, defaultValue as defaultUser } from './User.ts'
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 import { EkPlan, defaultValue as defaultEkPlan } from './EkPlan/index.ts'
 
@@ -92,7 +91,6 @@ export const MobxStore = types
     toDeleteUrl: types.maybeNull(
       types.array(types.union(types.string, types.number)),
     ),
-    user: types.optional(User, defaultUser),
     isPrint: types.optional(types.boolean, false),
     isEkfSinglePrint: types.optional(types.boolean, false),
     copying: types.optional(Copying, defaultCopying),
@@ -213,9 +211,6 @@ export const MobxStore = types
     dataFilterTreeIsFiltered() {
       const tables = Object.keys(self.tree.dataFilter)
       return tables.some((table) => self.tableIsFiltered(table))
-    },
-    setUser(val) {
-      self.user = val
     },
     setIsPrint(val) {
       self.isPrint = val

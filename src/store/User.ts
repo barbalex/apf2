@@ -1,12 +1,10 @@
-import { types } from 'mobx-state-tree'
+export interface User {
+  name: string
+  token: string | null
+  id: string | null
+}
 
-export const User = types.model('User', {
-  name: types.optional(types.string, ''),
-  token: types.optional(types.maybeNull(types.string), null),
-  id: types.optional(types.maybeNull(types.string), null),
-})
-
-export const defaultValue = {
+export const defaultValue: User = {
   name: '',
   token: null,
   id: null,

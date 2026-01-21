@@ -1,9 +1,9 @@
-import { useContext, useState, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { gql } from '@apollo/client'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -12,7 +12,7 @@ import { Select } from '../../../shared/Select.tsx'
 import { DateField } from '../../../shared/Date.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { apber } from '../../../shared/fragments.ts'
@@ -65,10 +65,10 @@ interface ApberQueryResult {
   }
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { apberId } = useParams<{ apberId: string }>()
 
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -99,7 +99,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate<any>({
@@ -271,4 +271,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

@@ -1,8 +1,7 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -19,10 +18,10 @@ const deleteData = {
   table: 'user',
 }
 
-export const User = observer(({ onClick }) => {
-  const { user } = useContext(MobxContext)
+export const User = ({ onClick }) => {
+  const userToken = useAtomValue(userTokenAtom)
 
-  const mayWrite = !userIsReadOnly(user.token)
+  const mayWrite = !userIsReadOnly(userToken)
 
   return (
     <ErrorBoundary>
@@ -50,4 +49,4 @@ export const User = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}

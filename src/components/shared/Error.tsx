@@ -1,9 +1,6 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { uniq } from 'es-toolkit'
 
 import { logout } from '../../modules/logout.ts'
-import { IdbContext } from '../../idbContext.ts'
 import { existsPermissionError } from '../../modules/existsPermissionError.ts'
 
 import styles from './Error.module.css'
@@ -13,8 +10,7 @@ const LogoutButton = styled(Button)`
   margin-top: 10px !important;
 `*/
 
-export const Error = observer(({ errors: errorsPassed, error }) => {
-  const { idb } = useContext(IdbContext)
+export const Error = ({ errors: errorsPassed, error }) => {
   // allow user to pass single error or multiple errors
   let errors = errorsPassed
   if (error && !errorsPassed) errors = [error]
@@ -26,7 +22,7 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
   if (existsPermissionError(errorsToUse)) {
     console.log('Permission error exists, will log out', { errorsToUse })
     // during login don't show permission error
-    return logout(idb)
+    return logout()
     /*// if token is not accepted, ask user to logout
     return (
       <div className={container}>
@@ -35,7 +31,7 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
         <LogoutButton
           variant="outlined"
           onClick={() => {
-            logout(idb)
+            logout()
           }}
         >
           Neu anmelden
@@ -47,7 +43,9 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
   const errorMessages = errorsToUse.map((e) => e.message)
   const uniqueMessages = uniq(errorMessages)
   if (uniqueMessages.length === 1) {
-    return <div className={styles.container}>{`Fehler: ${uniqueMessages[0]}`}</div>
+    return (
+      <div className={styles.container}>{`Fehler: ${uniqueMessages[0]}`}</div>
+    )
   }
 
   // console.log('Error.jsx: errorsToUse:', errorsToUse)
@@ -63,4 +61,4 @@ export const Error = observer(({ errors: errorsPassed, error }) => {
       </ul>
     </div>
   )
-})
+}

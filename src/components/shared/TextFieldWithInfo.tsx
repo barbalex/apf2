@@ -3,15 +3,13 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { observer } from 'mobx-react-lite'
 
 import { InfoWithPopover } from './InfoWithPopover.tsx'
 import styles from './TextFieldWithInfo.module.css'
 
-export const TextFieldWithInfo = observer(
-  ({
-    value: propsValue,
-    label,
+export const TextFieldWithInfo = ({
+  value: propsValue,
+  label,
     name,
     type = 'text',
     multiLine = false,
@@ -71,5 +69,4 @@ export const TextFieldWithInfo = observer(
         )}
       </FormControl>
     )
-  },
-)
+  }

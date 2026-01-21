@@ -1,9 +1,9 @@
-import { useContext, useState, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, type ChangeEvent } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -15,7 +15,7 @@ import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { exists } from '../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { query } from './query.ts'
@@ -139,8 +139,6 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const store = useContext(MobxContext)
-
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const { data } = useQuery<TpopmassnQueryResult>({
@@ -163,6 +161,7 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
   const row = data?.tpopmassnById ?? {}
 
   const isAnpflanzung = row?.tpopmassnTypWerteByTyp?.anpflanzung
+  const userName = useAtomValue(userNameAtom)
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -171,7 +170,7 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     if (field === 'jahr') {
       variables.datum = null
@@ -621,4 +620,4 @@ export const Component = observer(({ showFilter = false }: ComponentProps) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

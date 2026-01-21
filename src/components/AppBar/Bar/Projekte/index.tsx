@@ -5,7 +5,7 @@ import { remove } from 'es-toolkit'
 import { jwtDecode } from 'jwt-decode'
 import { observer } from 'mobx-react-lite'
 import { Link, useParams, useLocation, useNavigate } from 'react-router'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { MdFilterAlt, MdInfoOutline, MdEditNote } from 'react-icons/md'
 import { FaDownload } from 'react-icons/fa6'
 import { VscListTree } from 'react-icons/vsc'
@@ -16,8 +16,11 @@ import { Daten } from './Daten.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
-import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
-import { hideTreeAtom } from '../../../../JotaiStore/index.ts'
+import {
+  isDesktopViewAtom,
+  hideTreeAtom,
+  userTokenAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -32,10 +35,9 @@ export const ProjekteMenus = observer(() => {
   const [hideTree] = useAtom(hideTreeAtom)
 
   const store = useContext(MobxContext)
-  const { user } = store
   const { resetTree2Src } = store.tree
 
-  const token = user?.token
+  const token = useAtomValue(userTokenAtom)
   const tokenDecoded = token ? jwtDecode(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
 

@@ -42,7 +42,6 @@ export const CellForEkfrequenz = observer(
       await processChangeWorker.processChange({
         value,
         row,
-        store,
       })
       setProcessing(false)
     }

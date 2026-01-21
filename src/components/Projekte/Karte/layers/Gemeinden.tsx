@@ -1,11 +1,7 @@
-import { useContext } from 'react'
 import { GeoJSON } from 'react-leaflet'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { observer } from 'mobx-react-lite'
-
-import { MobxContext } from '../../../../mobxContext.ts'
 
 interface GemeindeNode {
   id: string
@@ -31,7 +27,7 @@ const style = () => ({
   opacity: 1,
 })
 
-export const Gemeinden = observer(() => {
+export const Gemeinden = () => {
   const apolloClient = useApolloClient()
 
   const { data } = useQuery({
@@ -74,4 +70,4 @@ export const Gemeinden = observer(() => {
       interactive={false}
     />
   )
-})
+}

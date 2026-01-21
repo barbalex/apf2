@@ -1,20 +1,12 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useRouteError } from 'react-router'
 import Button from '@mui/material/Button'
 
-import { IdbContext } from '../../idbContext.ts'
-import { MobxContext as storeContext } from '../../mobxContext.ts'
 import { logout } from '../../modules/logout.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 
-export const RouterErrorBoundary = observer(({ children }) => {
+export const RouterErrorBoundary = ({ children }) => {
   const error = useRouteError()
-
-  const idb = useContext(IdbContext)
-  const store = useContext(storeContext)
-  const onLogout = () => logout(idb)
 
   const onReload = () => window.location.reload(true)
 
@@ -36,7 +28,7 @@ export const RouterErrorBoundary = observer(({ children }) => {
         <Button
           className={styles.button}
           variant="outlined"
-          onClick={onLogout}
+          onClick={logout}
           color="inherit"
         >
           Cache leeren und neu starten (neue Anmeldung nötig)
@@ -44,4 +36,4 @@ export const RouterErrorBoundary = observer(({ children }) => {
       </div>
     </div>
   )
-})
+}

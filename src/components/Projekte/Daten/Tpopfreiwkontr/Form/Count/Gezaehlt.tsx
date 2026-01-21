@@ -1,10 +1,10 @@
-import { useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../../../shared/TextField.tsx'
-import { MobxContext } from '../../../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../../../JotaiStore/index.ts'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
 
@@ -13,8 +13,8 @@ interface GezaehltProps {
   refetch: () => void
 }
 
-export const Gezaehlt = observer(({ row, refetch }: GezaehltProps) => {
-  const store = useContext(MobxContext)
+export const Gezaehlt = ({ row, refetch }: GezaehltProps) => {
+  const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -30,7 +30,7 @@ export const Gezaehlt = observer(({ row, refetch }: GezaehltProps) => {
       anzahl: val,
       methode: 2,
       einheit: row.einheit,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate({
@@ -56,4 +56,4 @@ export const Gezaehlt = observer(({ row, refetch }: GezaehltProps) => {
       errors={errors}
     />
   )
-})
+}

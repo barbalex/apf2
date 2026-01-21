@@ -1,8 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -25,7 +27,9 @@ const resetCopyingData = {
 }
 
 export const TpopmassnFolder = observer(({ onClick }) => {
-  const { copying, user, moving } = useContext(MobxContext)
+  const store = useContext(MobxContext)
+  const { copying, moving } = store
+  const userToken = useAtomValue(userTokenAtom)
 
   const isMoving = moving.table && moving.table === 'tpopmassn'
   const isCopying = copying.table && copying.table === 'tpopmassn'
@@ -37,7 +41,7 @@ export const TpopmassnFolder = observer(({ onClick }) => {
         hideOnLeave={true}
       >
         <div className="react-contextmenu-title">Massnahmen</div>
-        {!userIsReadOnly(user.token) && (
+        {!userIsReadOnly(userToken) && (
           <>
             <MenuItem
               onClick={onClick}

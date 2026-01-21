@@ -1,15 +1,15 @@
-import { useContext, useState, Suspense, type ChangeEvent } from 'react'
+import { useState, Suspense, type ChangeEvent } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userNameAtom } from '../../../../JotaiStore/index.ts'
 import { Menu } from './Menu.tsx'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -33,9 +33,9 @@ interface AdresseQueryResult {
   adresseById: Adresse
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { adrId } = useParams<{ adrId: string }>()
-  const store = useContext(MobxContext)
+  const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -66,7 +66,7 @@ export const Component = observer(() => {
     const variables = {
       id: row.id,
       [field]: value,
-      changedBy: store.user.name,
+      changedBy: userName,
     }
     try {
       await apolloClient.mutate<any>({
@@ -168,4 +168,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
