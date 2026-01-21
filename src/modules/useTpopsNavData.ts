@@ -12,6 +12,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  mapTpopIconAtom,
 } from '../JotaiStore/index.ts'
 
 import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.tsx'
@@ -153,7 +154,10 @@ export const useTpopsNavData = (props) => {
   const rerender = () => setRerenderer((prev) => prev + 1)
 
   useEffect(
-    () => reaction(() => store.map.tpopIcon, rerender),
+    () => {
+      const unsub = jotaiStore.sub(mapTpopIconAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -183,7 +187,7 @@ export const useTpopsNavData = (props) => {
   const count = data?.data?.popById?.tpopsByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
 
-  const tpopIconName = store.map.tpopIcon
+  const tpopIconName = jotaiStore.get(mapTpopIconAtom)
 
   const navData = {
     id: 'Teil-Populationen',

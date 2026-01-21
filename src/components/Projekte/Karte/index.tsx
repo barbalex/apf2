@@ -69,6 +69,9 @@ import {
   mapBoundsAtom,
   mapActiveApfloraLayersAtom,
   mapShowApfLayersForMultipleApsAtom,
+  mapOverlaysAtom,
+  mapActiveOverlaysAtom,
+  mapActiveBaseLayerAtom,
 } from '../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
@@ -144,10 +147,11 @@ export const Karte = observer(({ mapContainerRef }) => {
   const showApfLayersForMultipleAps = useAtomValue(
     mapShowApfLayersForMultipleApsAtom,
   )
-  const { overlays, activeOverlays: activeOverlaysRaw, activeBaseLayer } = store
+  const overlays = useAtomValue(mapOverlaysAtom)
+  const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
+  const activeBaseLayer = useAtomValue(mapActiveBaseLayerAtom)
   const tree = store.tree
   const { mapFilter } = tree
-  const activeOverlays = getSnapshot(activeOverlaysRaw)
 
   const showApfLayers = showApfLayersForMultipleAps || !!apId
   const showPop = activeApfloraLayers.includes('pop') && showApfLayers

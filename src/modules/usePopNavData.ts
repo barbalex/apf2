@@ -12,6 +12,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  mapPopIconAtom,
 } from '../JotaiStore/index.ts'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'
@@ -136,7 +137,10 @@ export const usePopNavData = (props) => {
   )
 
   useEffect(
-    () => reaction(() => store.map.popIcon, rerender),
+    () => {
+      const unsub = jotaiStore.sub(mapPopIconAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -176,7 +180,7 @@ export const usePopNavData = (props) => {
   const filesCount = data?.data?.popById?.popFilesByPopId?.totalCount ?? 0
   const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
 
-  const popIconName = store.map.popIcon
+  const popIconName = jotaiStore.get(mapPopIconAtom)
 
   const popIconIsHighlighted = props?.popId === params.popId
   const PopIcon =

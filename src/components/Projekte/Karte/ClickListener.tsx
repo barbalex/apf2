@@ -1,8 +1,5 @@
-import { useContext } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useMapEvent } from 'react-leaflet/hooks'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -11,22 +8,19 @@ import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
 import axios from 'redaxios'
 
-import { MobxContext } from '../../../mobxContext.ts'
 import { Popup } from './layers/Popup.tsx'
 import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
 
 import {
   addNotificationAtom,
+  mapActiveOverlaysAtom,
 } from '../../../JotaiStore/index.ts'
 
-
-export const ClickListener = observer(() => {
+export const ClickListener = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
-  const { activeOverlays: activeOverlaysRaw } = store
-  const activeOverlays = getSnapshot(activeOverlaysRaw)
+  const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
 
   const apolloClient = useApolloClient()
 
@@ -487,4 +481,4 @@ export const ClickListener = observer(() => {
   })
 
   return null
-})
+}

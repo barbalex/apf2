@@ -1,8 +1,7 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { DndProvider } from 'react-dnd'
@@ -16,11 +15,12 @@ import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../../shared/Error.tsx'
 import { Spinner } from '../../../../shared/Spinner.tsx'
 import { Field } from './Field.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { beob } from '../../../../shared/fragments.ts'
 import {
   sortedBeobFieldsAtom,
   setSortedBeobFieldsAtom,
+  mapBeobDetailsOpenAtom,
+  setMapBeobDetailsOpenAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
@@ -44,14 +44,14 @@ const topFieldNames = [
   'locality_descript',
 ]
 
-export const Data = observer(({ id }) => {
+export const Data = ({ id }) => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
   const sortedBeobFieldsPassed = useAtomValue(sortedBeobFieldsAtom)
   const setSortedBeobFields = useSetAtom(setSortedBeobFieldsAtom)
 
-  const { setBeobDetailsOpen, beobDetailsOpen } = store.map
+  const beobDetailsOpen = useAtomValue(mapBeobDetailsOpenAtom)
+  const setBeobDetailsOpen = useSetAtom(setMapBeobDetailsOpenAtom)
   const onClickDetails = (event) => setBeobDetailsOpen(!beobDetailsOpen)
 
   // use existing sorting if available and no own has been set yet
@@ -196,4 +196,4 @@ export const Data = observer(({ id }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

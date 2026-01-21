@@ -1,28 +1,12 @@
 import { types } from 'mobx-state-tree'
 
-import { ApfloraLayer } from './ApfloraLayer.ts'
-import { Map, defaultValue as defaultMap } from './Map.ts'
-import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 
 export const MobxStore = types
   .model({
-    overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
-    activeOverlays: types.array(types.string),
-    activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
     tree: types.optional(Tree, defaultTree),
-    map: types.optional(Map, defaultMap),
   })
   .actions((self) => ({
-    setOverlays(val) {
-      self.overlays = val
-    },
-    setActiveOverlays(val) {
-      self.activeOverlays = val
-    },
-    setActiveBaseLayer(val) {
-      self.activeBaseLayer = val
-    },
     tableIsFiltered(table) {
       // check nodeLabelFilter
       const nodeLabelFilterExists = !!self.tree.nodeLabelFilter[table]

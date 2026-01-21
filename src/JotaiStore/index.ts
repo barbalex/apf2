@@ -136,6 +136,85 @@ export const setMapShowApfLayersForMultipleApsAtom = atom(
   (get) => get(mapShowApfLayersForMultipleApsAtom),
   (get, set, value) => set(mapShowApfLayersForMultipleApsAtom, value),
 )
+// make this a regular atom so we can change the default value
+export const mapOverlaysAtom = atom([
+  { label: 'Markierungen', value: 'Markierungen' },
+  { label: 'Detailpläne', value: 'Detailplaene' },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Flächen',
+    value: 'MassnahmenFlaechen',
+  },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Linien',
+    value: 'MassnahmenLinien',
+  },
+  {
+    label: 'Massnahmenpläne der aktiven Art, Punkte',
+    value: 'MassnahmenPunkte',
+  },
+  { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
+  { label: 'ZH Übersichtsplan', value: 'ZhUep' },
+  { label: 'Gemeinden', value: 'Gemeinden' },
+  { label: 'SVO grau', value: 'ZhSvoGrey' },
+  { label: 'SVO farbig', value: 'ZhSvoColor' },
+  { label: 'Pflegeplan', value: 'ZhPflegeplan' },
+  {
+    label: 'Lebensraum- und Vegetationskartierungen',
+    value: 'ZhLrVegKartierungen',
+  },
+  { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
+  { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
+  { label: 'Forstreviere (WMS)', value: 'ZhForstreviereWms' },
+  { label: 'Forstreviere. Stand: 2025.04.10', value: 'Forstreviere' },
+])
+export const setMapOverlaysAtom = atom(
+  (get) => get(mapOverlaysAtom),
+  (get, set, value) => set(mapOverlaysAtom, value),
+)
+export const mapActiveOverlaysAtom = atomWithStorage('mapActiveOverlays', [])
+export const setMapActiveOverlaysAtom = atom(
+  (get) => get(mapActiveOverlaysAtom),
+  (get, set, value) => set(mapActiveOverlaysAtom, value),
+)
+export const mapActiveBaseLayerAtom = atomWithStorage(
+  'mapActiveBaseLayer',
+  'OsmColor',
+)
+export const setMapActiveBaseLayerAtom = atom(
+  (get) => get(mapActiveBaseLayerAtom),
+  (get, set, value) => set(mapActiveBaseLayerAtom, value),
+)
+export const mapPopIconAtom = atomWithStorage(
+  'mapPopIcon',
+  'statusGroupSymbols',
+)
+export const setMapPopIconAtom = atom(
+  (get) => get(mapPopIconAtom),
+  (get, set, value) => set(mapPopIconAtom, value),
+)
+export const mapTpopIconAtom = atomWithStorage(
+  'mapTpopIcon',
+  'statusGroupSymbols',
+)
+export const setMapTpopIconAtom = atom(
+  (get) => get(mapTpopIconAtom),
+  (get, set, value) => set(mapTpopIconAtom, value),
+)
+export const mapPopLabelAtom = atomWithStorage('mapPopLabel', 'nr')
+export const setMapPopLabelAtom = atom(
+  (get) => get(mapPopLabelAtom),
+  (get, set, value) => set(mapPopLabelAtom, value),
+)
+export const mapTpopLabelAtom = atomWithStorage('mapTpopLabel', 'nr')
+export const setMapTpopLabelAtom = atom(
+  (get) => get(mapTpopLabelAtom),
+  (get, set, value) => set(mapTpopLabelAtom, value),
+)
+export const mapBeobDetailsOpenAtom = atom(false)
+export const setMapBeobDetailsOpenAtom = atom(
+  (get) => get(mapBeobDetailsOpenAtom),
+  (get, set, value) => set(mapBeobDetailsOpenAtom, value),
+)
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },
