@@ -465,3 +465,39 @@ export const emptyToDeleteAtom = atom(
     })
   },
 )
+
+// deletedDatasets atom and actions
+export const deletedDatasetsAtom = atom([])
+
+export const setDeletedDatasetsAtom = atom(
+  (get) => get(deletedDatasetsAtom),
+  (get, set, val) => {
+    set(deletedDatasetsAtom, val)
+  },
+)
+
+export const addDeletedDatasetAtom = atom(
+  (get) => get(deletedDatasetsAtom),
+  (get, set, val) => {
+    const current = get(deletedDatasetsAtom)
+    set(deletedDatasetsAtom, [...current, val])
+  },
+)
+
+export const removeDeletedDatasetByIdAtom = atom(
+  (get) => get(deletedDatasetsAtom),
+  (get, set, id) => {
+    const current = get(deletedDatasetsAtom)
+    set(deletedDatasetsAtom, current.filter((d) => d.id !== id))
+  },
+)
+
+// showDeletions atom and actions
+export const showDeletionsAtom = atom(false)
+
+export const setShowDeletionsAtom = atom(
+  (get) => get(showDeletionsAtom),
+  (get, set, val) => {
+    set(showDeletionsAtom, val)
+  },
+)

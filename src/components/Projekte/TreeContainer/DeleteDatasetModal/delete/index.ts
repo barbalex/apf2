@@ -14,6 +14,7 @@ import {
   navigateAtom,
   toDeleteAtom,
   emptyToDeleteAtom,
+  addDeletedDatasetAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -27,7 +28,6 @@ export const deleteModule = async ({ store, search }) => {
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
   const toDelete = jotaiStore.get(toDeleteAtom)
-  const { addDeletedDataset } = store
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === toDelete.table)
@@ -91,7 +91,7 @@ export const deleteModule = async ({ store, search }) => {
   data = omit(data, ['__typename'])
 
   // add to datasetsDeleted
-  addDeletedDataset({
+  jotaiStore.set(addDeletedDatasetAtom, {
     table,
     id: toDelete.id,
     label: toDelete.label,

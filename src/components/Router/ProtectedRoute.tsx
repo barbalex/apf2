@@ -1,13 +1,11 @@
-import { useContext, lazy, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { lazy, Suspense } from 'react'
 import { Outlet } from 'react-router'
 // import { getSnapshot } from 'mobx-state-tree'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../mobxContext.ts'
-import { userAtom } from '../../JotaiStore/index.ts'
+import { userAtom, showDeletionsAtom } from '../../JotaiStore/index.ts'
 const User = lazy(async () => ({ default: (await import('../User.tsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.tsx')).Messages,
@@ -42,12 +40,11 @@ import styles from './ProtectedRoute.module.css'
 
 const isInIframe = inIframe()
 
-export const Component = observer(() => {
+export const Component = () => {
   const { pathname, search } = useLocation()
   const { userId } = useParams()
 
-  const store = useContext(MobxContext)
-  const { showDeletions } = store
+  const showDeletions = useAtomValue(showDeletionsAtom)
   const user = useAtomValue(userAtom)
 
   const token = user?.token
@@ -99,4 +96,4 @@ export const Component = observer(() => {
       </Suspense>
     </div>
   )
-})
+}

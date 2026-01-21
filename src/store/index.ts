@@ -90,7 +90,6 @@ export const MobxStore = types
     assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
     ekPlan: types.optional(EkPlan, defaultEkPlan),
-    showDeletions: types.optional(types.boolean, false),
     map: types.optional(Map, defaultMap),
     sortedBeobFields: types.optional(
       types.array(types.string),
@@ -99,11 +98,6 @@ export const MobxStore = types
     openChooseApToCopyEkfrequenzsFrom: types.optional(types.boolean, false),
     openChooseApToCopyErfkritsFrom: types.optional(types.boolean, false),
   })
-  // structure of these variables is not controlled
-  // so need to define this as volatile
-  .volatile(() => ({
-    deletedDatasets: [],
-  }))
   .actions((self) => ({
     setOpenChooseApToCopyErfkritsFrom(val) {
       self.openChooseApToCopyErfkritsFrom = val
@@ -116,18 +110,6 @@ export const MobxStore = types
     },
     setHideMapControls(val) {
       self.hideMapControls = val
-    },
-    setShowDeletions(val) {
-      self.showDeletions = val
-    },
-    setDeletedDatasets(val) {
-      self.deletedDatasets = val
-    },
-    addDeletedDataset(val) {
-      self.deletedDatasets = [...self.deletedDatasets, val]
-    },
-    removeDeletedDatasetById(id) {
-      self.deletedDatasets = self.deletedDatasets.filter((d) => d.id !== id)
     },
     setApfloraLayers(val) {
       self.apfloraLayers = val

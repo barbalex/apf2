@@ -1,12 +1,11 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { logout } from '../../../../../modules/logout.ts'
 import { EkfUser } from './EkfUser/index.tsx'
@@ -23,19 +22,21 @@ import {
   enforceMobileNavigationAtom,
   writeEnforceDesktopNavigationAtom,
   userNameAtom,
+  deletedDatasetsAtom,
+  setShowDeletionsAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 import parentStyles from '../index.module.css'
 import styles from './index.module.css'
 
-export const More = observer(
+export const More = 
   ({ onClickExporte: passedOnClickExporte, role }) => {
     const { projId } = useParams()
 
     const isMobileView = useAtomValue(isMobileViewAtom)
 
-    const store = useContext(MobxContext)
-    const { deletedDatasets, setShowDeletions } = store
+    const setShowDeletions = useSetAtom(setShowDeletionsAtom)
+    const deletedDatasets = useAtomValue(deletedDatasetsAtom)
     const userName = useAtomValue(userNameAtom)
 
     const [anchorEl, setAnchorEl] = useState(null)
@@ -142,5 +143,4 @@ export const More = observer(
         </Menu>
       </Tooltip>
     )
-  },
-)
+  }
