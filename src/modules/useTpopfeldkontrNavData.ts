@@ -54,6 +54,8 @@ export const useTpopfeldkontrNavData = (props) => {
 
   const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
+  const copying = useAtomValue(copyingAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
 
   const { data, refetch } = useQuery({
     queryKey: [
@@ -102,9 +104,6 @@ export const useTpopfeldkontrNavData = (props) => {
   )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
-  const copying = useAtomValue(copyingAtom)
-  const copyingBiotop = useAtomValue(copyingBiotopAtom)
-  const moving = useAtomValue(movingAtom)
   useEffect(
     () => {
       const unsub = jotaiStore.sub(copyingBiotopAtom, rerender)
