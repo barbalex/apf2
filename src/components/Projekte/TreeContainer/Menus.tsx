@@ -227,9 +227,6 @@ import { getAndValidateCoordinatesOfTpop } from '../../../modules/getAndValidate
 import { showCoordOfTpopOnMapsZhCh } from '../../../modules/showCoordOfTpopOnMapsZhCh.ts'
 import { showCoordOfTpopOnMapGeoAdminCh } from '../../../modules/showCoordOfTpopOnMapGeoAdminCh.ts'
 import {
-  addNotificationAtom,
-  newTpopFromBeobDialogOpenAtom,
-  newTpopFromBeobBeobIdAtom,
   setCopyingAtom,
   copyingBiotopAtom,
   setCopyingBiotopAtom,
