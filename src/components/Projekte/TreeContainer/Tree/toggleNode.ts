@@ -16,6 +16,12 @@ export const toggleNode = ({
   if (!node.url) throw new Error('passed node has no url')
 
   const navigate = jotaiStore.get(navigateAtom)
+
+  if (!navigate || typeof navigate !== 'function') {
+    console.error('navigate is not a function:', navigate)
+    throw new Error('navigate function not available in Jotai store')
+  }
+
   const {
     openNodes: openNodesRaw,
     activeNodeArray,

@@ -288,7 +288,9 @@ export const removeNotificationAtom = atom(null, (get, set, key) => {
 })
 
 // navigate function atom
-export const navigateAtom = atom(undefined)
+// Store as object because Jotai doesn't handle bare functions well
+export const navigateObjectAtom = atom(undefined)
+export const navigateAtom = atom((get) => get(navigateObjectAtom)?.fn)
 
 // User
 export const userAtom = atomWithStorage('user', {
@@ -316,18 +318,18 @@ export const removeUserAtom = atom(null, (get, set) => {
 export const clearAllStorageAtom = atom(null, (get, set) => {
   // Reset user
   set(userAtom, { name: '', token: null, id: null })
-  
+
   // Reset dialog state
   set(newTpopFromBeobDialogOpenAtom, false)
   set(newTpopFromBeobBeobIdAtom, null)
-  
+
   // Reset navigation state
   set(enforceDesktopNavigationAtom, false)
   set(enforceMobileNavigationAtom, false)
   set(isDesktopViewAtom, false)
   set(showBookmarksMenuAtom, false)
   set(alwaysShowTreeAtom, false)
-  
+
   // Reset all nav list filters
   set(adresseNavListFilterIsVisibleAtom, false)
   set(apNavListFilterIsVisibleAtom, false)
