@@ -374,7 +374,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialAp)
       }
       let setApFilter = false
@@ -499,7 +499,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpop)
       }
       // 3. build data filter
@@ -578,7 +578,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpop)
       }
       // 2. build data filter
@@ -753,7 +753,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpop)
       }
       // 2. build data filter
@@ -854,7 +854,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpopmassn)
       }
       // 3. build data filter
@@ -940,7 +940,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpopmassn)
       }
       // 2. build data filter
@@ -1355,7 +1355,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpopfeldkontr)
       }
       // 3. build data filter
@@ -1393,7 +1393,7 @@ export const Tree = types
             coveredBy: self.mapFilter,
           }
         }
-        // Object needt to filter by typ
+        // Object need to filter by typ
         if (!singleFilter.typ) {
           singleFilter.typ = { distinctFrom: 'Freiwilligen-Erfolgskontrolle' }
         }
@@ -1438,7 +1438,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpopfeldkontr)
       }
       // 2. build data filter
@@ -1471,7 +1471,7 @@ export const Tree = types
             coveredBy: self.mapFilter,
           }
         }
-        // Object needt to filter by typ
+        // Object need to filter by typ
         if (!singleFilter.typ) {
           singleFilter.typ = { distinctFrom: 'Freiwilligen-Erfolgskontrolle' }
         }
@@ -1543,7 +1543,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpopfreiwkontr)
       }
       // 3. build data filter
@@ -1581,7 +1581,7 @@ export const Tree = types
             coveredBy: self.mapFilter,
           }
         }
-        // Object needt to filter by typ
+        // Object need to filter by typ
         if (!singleFilter.typ) {
           singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
         }
@@ -1625,7 +1625,7 @@ export const Tree = types
       } else if (filterArrayInStore.length === 0) {
         // Add empty filter if no criteria exist yet
         // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after loopin
+        // If no filters were added: this empty element will be removed after looping
         filterArrayInStore.push(initialTpopfreiwkontr)
       }
       // 2. build data filter
@@ -1690,9 +1690,6 @@ export const Tree = types
       return {
         or: [self.ekGqlFilter?.filtered, self.ekfGqlFilter.filtered],
       }
-    },
-    get tpopkontrIsFiltered() {
-      return self.ekfIsFiltered ?? self.ekIsFiltered
     },
     beobGqlFilter(type) {
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
@@ -1860,37 +1857,6 @@ export const Tree = types
       const filter = {
         wgs84Lat: { isNull: false },
         tpopId: { isNull: false },
-      }
-
-      // node label filter
-      if (self.nodeLabelFilter.beob) {
-        filter.label = {
-          includesInsensitive: self.nodeLabelFilter.beob,
-        }
-      }
-
-      // mapFilter
-      if (self.mapFilter) {
-        filter.geomPoint = {
-          coveredBy: self.mapFilter,
-        }
-      }
-
-      return filter
-    },
-    beobGqlFilterForTree(type) {
-      const filter = {
-        wgs84Lat: { isNull: false },
-      }
-      if (type === 'zugeordnet') {
-        filter.tpopId = { isNull: false }
-      }
-      if (type === 'nichtBeurteilt') {
-        filter.tpopId = { isNull: true }
-        filter.nichtZuordnen = { equalTo: false }
-      }
-      if (type === 'nichtZuzuordnen') {
-        filter.nichtZuordnen = { equalTo: true }
       }
 
       // node label filter
