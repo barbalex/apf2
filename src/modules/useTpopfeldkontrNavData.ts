@@ -4,8 +4,14 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import {
+  copyingAtom,
+  copyingBiotopAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -94,8 +100,10 @@ export const useTpopfeldkontrNavData = (props) => {
   )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
+  const copying = useAtomValue(copyingAtom)
+  const copyingBiotop = useAtomValue(copyingBiotopAtom)
   useEffect(
-    () => reaction(() => store.copyingBiotop, rerender),
+    () => jotaiStore.sub(copyingBiotopAtom, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -105,7 +113,7 @@ export const useTpopfeldkontrNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.copying.id, rerender),
+    () => jotaiStore.sub(copyingAtom, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -119,8 +127,8 @@ export const useTpopfeldkontrNavData = (props) => {
     data?.data?.tpopkontrById?.tpopkontrFilesByTpopkontrId?.totalCount ?? 0
 
   const labelRightElements = getLabelRightElements({
-    copyingId: store.copying.id,
-    copyingBiotopId: store.copyingBiotop.id,
+    copyingId: copying.id,
+    copyingBiotopId: copyingBiotop.id,
     movingId: store.moving.id,
     tpopkontrId,
   })
