@@ -10,7 +10,7 @@ import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useSetAtom, useAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -57,9 +57,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const { projId, apId } = useParams()
 
   const store = useContext(MobxContext)
-  const [moving] = useAtom(movingAtom)
+  const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
-  const [copying] = useAtom(copyingAtom)
+  const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
@@ -153,7 +153,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       withNextLevel: false,
     })
 
-  const [showTreeMenus] = useAtom(showTreeMenusAtom)
+  const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
   return (
     <ErrorBoundary>

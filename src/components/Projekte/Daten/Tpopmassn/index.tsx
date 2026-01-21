@@ -1,11 +1,11 @@
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
 import { Component as Tpopmassn } from './Tpopmassn.tsx'
 import { List } from './List.tsx'
 
 export const Component = () => {
-  const [isDesktopView] = useAtom(isDesktopViewAtom)
+  const isDesktopView = useAtomValue(isDesktopViewAtom)
 
   if (isDesktopView) return <Tpopmassn />
 
