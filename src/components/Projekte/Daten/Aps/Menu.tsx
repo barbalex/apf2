@@ -10,7 +10,7 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -25,6 +25,8 @@ import {
   addNotificationAtom,
   copyingAtom,
   setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import type { ApId } from '../../../../models/apflora/Ap.ts'
@@ -60,7 +62,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { setMoving, moving } = store
+  const [moving] = useAtom(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
   const [copying] = useAtom(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
   const [showTreeMenus] = useAtom(showTreeMenusAtom)
@@ -159,8 +162,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         {isMoving &&
           moving.toTable === 'ap' &&
           moving.fromParentId !== apId && (
-
-
             <Tooltip title={`Verschiebe ${moving.label} zu dieser Art`}>
               <IconButton onClick={onClickMoveHere}>
                 <MdOutlineMoveDown style={iconStyle} />
