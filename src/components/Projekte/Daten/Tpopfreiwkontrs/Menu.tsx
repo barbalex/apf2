@@ -25,6 +25,8 @@ import {
   addNotificationAtom,
   copyingAtom,
   setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
@@ -55,7 +57,8 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
   const { projId, apId, popId, tpopId } = useParams()
   const store = useContext(MobxContext)
-  const { setMoving, moving } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 

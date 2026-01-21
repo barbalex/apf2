@@ -30,6 +30,8 @@ import {
   addNotificationAtom,
   copyingAtom,
   setCopyingAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 interface CreateTpopmassnResult {
@@ -56,7 +58,8 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId, tpopId, tpopmassnId } = useParams()
 
   const store = useContext(MobxContext)
-  const { moving, setMoving } = store
+  const moving = useAtomValue(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
