@@ -17,7 +17,6 @@ export const MobxStore = types
     overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.array(types.string),
     activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
-    idOfTpopBeingLocalized: types.optional(types.maybeNull(types.string), null),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
   })
@@ -39,9 +38,6 @@ export const MobxStore = types
     },
     setActiveBaseLayer(val) {
       self.activeBaseLayer = val
-    },
-    setIdOfTpopBeingLocalized(val) {
-      self.idOfTpopBeingLocalized = val
     },
     tableIsFiltered(table) {
       // check nodeLabelFilter

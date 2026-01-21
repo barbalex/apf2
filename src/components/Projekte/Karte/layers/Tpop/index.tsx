@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -24,8 +24,9 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 
 import {
   addNotificationAtom,
+  idOfTpopBeingLocalizedAtom,
+  setIdOfTpopBeingLocalizedAtom,
 } from '../../../../../JotaiStore/index.ts'
-
 
 interface TpopNode {
   id: TpopId
@@ -83,8 +84,11 @@ const getTpopFilter = (tpopGqlFilter) => {
 
 const ObservedTpop = observer(({ clustered }) => {
   const store = useContext(MobxContext)
-  const { setIdOfTpopBeingLocalized, idOfTpopBeingLocalized } = store
   const { tpopGqlFilter } = store.tree
+
+  const idOfTpopBeingLocalized = useAtomValue(idOfTpopBeingLocalizedAtom)
+  const setIdOfTpopBeingLocalized = useSetAtom(setIdOfTpopBeingLocalizedAtom)
+  const addNotification = useSetAtom(addNotificationAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -106,7 +110,6 @@ const ObservedTpop = observer(({ clustered }) => {
 
       // since 2018 10 31 using idOfTpopBeingLocalized directly
       // returns null, so need to use store.idOfTpopBeingLocalized
-      const { idOfTpopBeingLocalized } = store
       //console.log('Tpop, on dblclick', { idOfTpopBeingLocalized })
       if (!idOfTpopBeingLocalized) return
       /**

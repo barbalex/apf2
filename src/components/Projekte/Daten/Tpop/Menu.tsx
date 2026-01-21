@@ -45,6 +45,8 @@ import {
   setMovingAtom,
   copyingAtom,
   setCopyingAtom,
+  idOfTpopBeingLocalizedAtom,
+  setIdOfTpopBeingLocalizedAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
@@ -77,12 +79,9 @@ export const Menu = observer(({ row }: MenuProps) => {
   const { projId, apId, popId, tpopId } = useParams()
 
   const store = useContext(MobxContext)
-  const {
-    setIdOfTpopBeingLocalized,
-    idOfTpopBeingLocalized,
-    activeApfloraLayers,
-    setActiveApfloraLayers,
-  } = store
+  const { activeApfloraLayers, setActiveApfloraLayers } = store
+  const idOfTpopBeingLocalized = useAtomValue(idOfTpopBeingLocalizedAtom)
+  const setIdOfTpopBeingLocalized = useSetAtom(setIdOfTpopBeingLocalizedAtom)
   const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)

@@ -123,6 +123,11 @@ export const setMapBoundsAtom = atom(
   (get) => get(mapBoundsAtom),
   (get, set, value) => set(mapBoundsAtom, value),
 )
+export const idOfTpopBeingLocalizedAtom = atom<string | null>(null)
+export const setIdOfTpopBeingLocalizedAtom = atom(
+  (get) => get(idOfTpopBeingLocalizedAtom),
+  (get, set, value) => set(idOfTpopBeingLocalizedAtom, value),
+)
 export const showTreeMenusAtom = atom((get) => {
   // always show tree menus on desktop
   const isDesktopView = get(isDesktopViewAtom)
