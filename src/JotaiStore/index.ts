@@ -108,6 +108,11 @@ export const setHideMapControlsAtom = atom(
   (get) => get(hideMapControlsAtom),
   (get, set, value) => set(hideMapControlsAtom, value),
 )
+export const mapMouseCoordinatesAtom = atom({ x: 2683000, y: 1247500 })
+export const setMapMouseCoordinatesAtom = atom(
+  (get) => get(mapMouseCoordinatesAtom),
+  (get, set, { x, y }) => set(mapMouseCoordinatesAtom, { x, y }),
+)
 export const showTreeMenusAtom = atom((get) => {
   // always show tree menus on desktop
   const isDesktopView = get(isDesktopViewAtom)

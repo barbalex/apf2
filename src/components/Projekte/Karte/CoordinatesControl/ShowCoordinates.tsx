@@ -1,12 +1,11 @@
-import { useContext } from 'react'
 import 'leaflet'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import { mapMouseCoordinatesAtom } from '../../../../JotaiStore/index.ts'
 import styles from './ShowCoordinates.module.css'
 
-export const ShowCoordinates = observer(({ setControlType }) => {
-  const { mapMouseCoordinates } = useContext(MobxContext)
+export const ShowCoordinates = ({ setControlType }) => {
+  const mapMouseCoordinates = useAtomValue(mapMouseCoordinatesAtom)
   const x = mapMouseCoordinates.x?.toLocaleString('de-ch')
   const y = mapMouseCoordinates.y?.toLocaleString('de-ch')
 
@@ -21,4 +20,4 @@ export const ShowCoordinates = observer(({ setControlType }) => {
       {`${x}, ${y}`}
     </div>
   )
-})
+}

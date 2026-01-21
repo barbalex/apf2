@@ -2,10 +2,6 @@ import { types } from 'mobx-state-tree'
 
 import { ApfloraLayer } from './ApfloraLayer.ts'
 import { Map, defaultValue as defaultMap } from './Map.ts'
-import {
-  MapMouseCoordinates,
-  defaultValue as defaultMapMouseCoordinates,
-} from './MapMouseCoordinates.ts'
 import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayers.ts'
 import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
@@ -28,10 +24,6 @@ export const MobxStore = types
       [47.159, 8.354],
       [47.696, 8.984],
     ]),
-    mapMouseCoordinates: types.optional(
-      MapMouseCoordinates,
-      defaultMapMouseCoordinates,
-    ),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
   })
@@ -87,9 +79,6 @@ export const MobxStore = types
     dataFilterTreeIsFiltered() {
       const tables = Object.keys(self.tree.dataFilter)
       return tables.some((table) => self.tableIsFiltered(table))
-    },
-    setMapMouseCoordinates({ x, y }) {
-      self.mapMouseCoordinates = { x, y }
     },
     openTree2WithActiveNodeArray({
       activeNodeArray,

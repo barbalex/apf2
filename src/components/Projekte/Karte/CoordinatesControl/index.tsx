@@ -1,13 +1,13 @@
-import { useState, useEffect, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect } from 'react'
 import 'leaflet'
 import { useMapEvents } from 'react-leaflet'
 import { debounce } from 'es-toolkit'
+import { useSetAtom } from 'jotai'
 
 import { ShowCoordinates } from './ShowCoordinates.tsx'
 import { PanToCoordinates } from './PanToCoordinates.tsx'
 import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { setMapMouseCoordinatesAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -21,8 +21,8 @@ import styles from './index.module.css'
  * - render coordinates
  */
 
-export const CoordinatesControl = observer(() => {
-  const { setMapMouseCoordinates } = useContext(MobxContext)
+export const CoordinatesControl = () => {
+  const setMapMouseCoordinates = useSetAtom(setMapMouseCoordinatesAtom)
   const [controlType, setControlType] = useState('coordinates')
 
   const setMouseCoords = (e) => {
@@ -55,4 +55,4 @@ export const CoordinatesControl = observer(() => {
       }
     </div>
   )
-})
+}
