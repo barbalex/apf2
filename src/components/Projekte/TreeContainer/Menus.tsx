@@ -230,6 +230,8 @@ import {
   setCopyingAtom,
   copyingBiotopAtom,
   setCopyingBiotopAtom,
+  movingAtom,
+  setMovingAtom,
 } from '../../../JotaiStore/index.ts'
 
 import styles from './Menus.module.css'
@@ -247,7 +249,6 @@ export const Menus = observer(() => {
     setIdOfTpopBeingLocalized,
     toDeleteId,
     setToDelete,
-    setMoving,
   } = store
   const { setOpenNodes, openNodes: openNodesRaw } = store.tree
   const openNodes = getSnapshot(openNodesRaw)
@@ -256,6 +257,7 @@ export const Menus = observer(() => {
   const tsQueryClient = useQueryClient()
 
   const setCopying = useSetAtom(setCopyingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
   const [copyingBiotop] = useAtom(copyingBiotopAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
 

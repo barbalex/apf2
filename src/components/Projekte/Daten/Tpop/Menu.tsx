@@ -41,6 +41,10 @@ import { showCoordOfTpopOnMapsZhCh } from '../../../../modules/showCoordOfTpopOn
 import {
   showTreeMenusAtom,
   addNotificationAtom,
+  movingAtom,
+  setMovingAtom,
+  copyingAtom,
+  setCopyingAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
@@ -78,11 +82,11 @@ export const Menu = observer(({ row }: MenuProps) => {
     idOfTpopBeingLocalized,
     activeApfloraLayers,
     setActiveApfloraLayers,
-    setMoving,
-    moving,
-    setCopying,
-    copying,
   } = store
+  const [moving] = useAtom(movingAtom)
+  const setMoving = useSetAtom(setMovingAtom)
+  const [copying] = useAtom(copyingAtom)
+  const setCopying = useSetAtom(setCopyingAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
