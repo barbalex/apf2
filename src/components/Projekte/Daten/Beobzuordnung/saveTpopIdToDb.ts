@@ -8,6 +8,7 @@ import {
   apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
+  setTreeLastTouchedNodeAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
@@ -244,5 +245,5 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
   tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  setTimeout(() => store.tree.setLastTouchedNode(newANA), 1000)
+  setTimeout(() => jotaiStore.set(setTreeLastTouchedNodeAtom, newANA), 1000)
 }

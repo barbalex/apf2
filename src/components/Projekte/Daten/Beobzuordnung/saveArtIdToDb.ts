@@ -8,6 +8,7 @@ import {
   apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
+  setTreeLastTouchedNodeAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveArtIdToDb = async ({ value, row, store, search }) => {
@@ -93,5 +94,5 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  store.tree.setLastTouchedNode(newANA)
+  jotaiStore.set(setTreeLastTouchedNodeAtom, newANA)
 }

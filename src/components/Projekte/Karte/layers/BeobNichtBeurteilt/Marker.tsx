@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
@@ -10,7 +10,10 @@ import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { MobxContext } from '../../../../../mobxContext.ts'
-import { assigningBeobAtom } from '../../../../../JotaiStore/index.ts'
+import {
+  assigningBeobAtom,
+  setTreeLastTouchedNodeAtom,
+} from '../../../../../JotaiStore/index.ts'
 import { beobIconString } from './beobIconString.ts'
 import { beobIconAbsenzString } from './beobIconAbsenzString.ts'
 import { beobIconHighlightedString } from './beobIconHighlightedString.ts'
@@ -27,6 +30,7 @@ export const Marker = observer(({ beob }) => {
   const { apId, projId, beobId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
+  const setTreeLastTouchedNode = useSetAtom(setTreeLastTouchedNodeAtom)
 
   const store = useContext(MobxContext)
   const assigningBeob = useAtomValue(assigningBeobAtom)
@@ -102,7 +106,7 @@ export const Marker = observer(({ beob }) => {
     tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    store.tree.setLastTouchedNode([
+    setTreeLastTouchedNode([
       'Projekte',
       projId,
       'Arten',

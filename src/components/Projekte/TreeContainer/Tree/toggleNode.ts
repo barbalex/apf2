@@ -5,6 +5,7 @@ import { openNode } from '../openNode.ts'
 import {
   store as jotaiStore,
   navigateAtom,
+  setTreeLastTouchedNodeAtom,
 } from '../../../../JotaiStore/index.js'
 
 export const toggleNode = ({
@@ -22,11 +23,7 @@ export const toggleNode = ({
     throw new Error('navigate function not available in Jotai store')
   }
 
-  const {
-    openNodes: openNodesRaw,
-    activeNodeArray,
-    setLastTouchedNode,
-  } = store.tree
+  const { openNodes: openNodesRaw, activeNodeArray } = store.tree
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
 
@@ -58,5 +55,5 @@ export const toggleNode = ({
   navigate(
     `/Daten/${newActiveNodeArray.join('/')}${node.singleElementName && !onlyShowActivePath ? `/${node.singleElementName}` : ''}${search}`,
   )
-  setLastTouchedNode(node.url)
+  jotaiStore.set(setTreeLastTouchedNodeAtom, node.url)
 }

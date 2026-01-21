@@ -6,6 +6,7 @@ import {
   apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
+  setTreeLastTouchedNodeAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveNichtZuordnenToDb = async ({
@@ -59,6 +60,6 @@ export const saveNichtZuordnenToDb = async ({
   })
   addOpenNodes(newOpenNodes)
   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-  store.tree.setLastTouchedNode(newActiveNodeArray)
+  jotaiStore.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
   if (refetchPassed) refetchPassed()
 }

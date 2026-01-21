@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
@@ -10,7 +10,10 @@ import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 
 import { MobxContext } from '../../../../../mobxContext.ts'
-import { assigningBeobAtom } from '../../../../../JotaiStore/index.ts'
+import {
+  assigningBeobAtom,
+  setTreeLastTouchedNodeAtom,
+} from '../../../../../JotaiStore/index.ts'
 import { beobIconString } from './beobIconString.ts'
 import { beobIconAbsenzString } from './beobIconAbsenzString.ts'
 import { beobIconHighlightedString } from './beobIconHighlightedString.ts'
@@ -30,6 +33,7 @@ export const Marker = observer(({ beob }) => {
 
   const store = useContext(MobxContext)
   const assigningBeob = useAtomValue(assigningBeobAtom)
+  const setTreeLastTouchedNode = useSetAtom(setTreeLastTouchedNodeAtom)
   const { openTree2WithActiveNodeArray } = store
 
   const apolloClient = useApolloClient()
@@ -109,7 +113,7 @@ export const Marker = observer(({ beob }) => {
     tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    store.tree.setLastTouchedNode(newActiveNodeArray)
+    setTreeLastTouchedNode(newActiveNodeArray)
     //map.redraw()
   }
 

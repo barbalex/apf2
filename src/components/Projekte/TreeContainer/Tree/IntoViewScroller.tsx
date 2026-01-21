@@ -1,7 +1,9 @@
 import { useEffect, useContext } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../../../../mobxContext.ts'
+import { treeLastTouchedNodeAtom } from '../../../../JotaiStore/index.ts'
 import { isElementInViewport } from '../../../../modules/isElementInViewport.ts'
 
 export const IntoViewScroller = observer(() => {
@@ -9,7 +11,7 @@ export const IntoViewScroller = observer(() => {
   const { activeNodeArray } = store.tree
   // when opening a folder without activating it, lastTouchedNode is not same as activeNodeArray
   // in this case we do NOT want to scroll to active node that may be out of view
-  const lastTouchedNode = store.tree.lastTouchedNode?.slice()
+  const lastTouchedNode = useAtomValue(treeLastTouchedNodeAtom)
   // when loading on url, lastTouchedNode may not be set
   const urlToFocus = lastTouchedNode.length ? lastTouchedNode : activeNodeArray
 
