@@ -9,6 +9,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { exists } from '../../../../../modules/exists.ts'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
@@ -17,6 +18,10 @@ import { Spinner } from '../../../../shared/Spinner.tsx'
 import { Field } from './Field.tsx'
 import { MobxContext } from '../../../../../mobxContext.ts'
 import { beob } from '../../../../shared/fragments.ts'
+import {
+  sortedBeobFieldsAtom,
+  setSortedBeobFieldsAtom,
+} from '../../../../../JotaiStore/index.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
 
@@ -43,8 +48,8 @@ export const Data = observer(({ id }) => {
   const apolloClient = useApolloClient()
 
   const store = useContext(MobxContext)
-  const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
-    store
+  const sortedBeobFieldsPassed = useAtomValue(sortedBeobFieldsAtom)
+  const setSortedBeobFields = useSetAtom(setSortedBeobFieldsAtom)
 
   const { setBeobDetailsOpen, beobDetailsOpen } = store.map
   const onClickDetails = (event) => setBeobDetailsOpen(!beobDetailsOpen)

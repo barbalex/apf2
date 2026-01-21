@@ -10,56 +10,6 @@ import { standardApfloraLayers } from '../components/Projekte/Karte/apfloraLayer
 import { overlays as standardOverlays } from '../components/Projekte/Karte/overlays.ts'
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 
-const defaultSortedBeobFields = [
-  'taxon',
-  'ESPECE',
-  'presence',
-  'PRESENCE',
-  'xy_radius',
-  'abundance_cat',
-  'abundance',
-  'CAT_ABONDANCE_1',
-  'XY_PRECISION',
-  'observers',
-  'NOM_PERSONNE_OBS',
-  'PRENOM_PERSONNE_OBS',
-  'obs_day',
-  'obs_month',
-  'obs_year',
-  'J_NOTE',
-  'M_NOTE',
-  'A_NOTE',
-  'remarks',
-  'locality_descript',
-  'DESC_LOCALITE',
-  'DESC_LOCALITE_',
-  'municipality',
-  'canton',
-  'NOM_COMMUNE',
-  'CO_CANTON',
-  'interpretation_note',
-  'doubt_status',
-  'phenology_code',
-  'count_unit',
-  'obs_type',
-  'original_taxon',
-  'taxon_expert',
-  'determinavit_cf',
-  'specimen_type',
-  'NOM_ORIGINAL',
-  'NOM_COMPLET',
-  'introduction',
-  'DETERMINAVIT_CF',
-  'DETERMINAVIT_CF_',
-  'x_swiss',
-  'y_swiss',
-  'COORDONNEE_FED_E',
-  'COORDONNEE_FED_N',
-  'FNS_XGIS',
-  'FNS_YGIS',
-  'STATION',
-]
-
 export const MobxStore = types
   .model({
     apfloraLayers: types.optional(
@@ -86,15 +36,8 @@ export const MobxStore = types
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
-    sortedBeobFields: types.optional(
-      types.array(types.string),
-      defaultSortedBeobFields,
-    ),
   })
   .actions((self) => ({
-    setSortedBeobFields(val) {
-      self.sortedBeobFields = val.filter((v) => !!v)
-    },
     setHideMapControls(val) {
       self.hideMapControls = val
     },

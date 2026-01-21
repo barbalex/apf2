@@ -1,11 +1,11 @@
-import { useContext, useEffect, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, Suspense } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useQuery } from '@tanstack/react-query'
 import { arrayMoveImmutable } from 'array-move'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { exists } from '../../../../modules/exists.ts'
 import { query } from './query.ts'
@@ -13,7 +13,10 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Error } from '../../../shared/Error.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Field as BeobField } from './Field.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  sortedBeobFieldsAtom,
+  setSortedBeobFieldsAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type BeobType from '../../../../models/apflora/Beob.ts'
 
@@ -25,12 +28,11 @@ interface BeobQueryResult {
   }
 }
 
-export const Beob = observer(() => {
+export const Beob = () => {
   const { beobId: id } = useParams<{ beobId: string }>()
 
-  const store = useContext(MobxContext)
-  const { sortedBeobFields: sortedBeobFieldsPassed, setSortedBeobFields } =
-    store
+  const sortedBeobFieldsPassed = useAtomValue(sortedBeobFieldsAtom)
+  const setSortedBeobFields = useSetAtom(setSortedBeobFieldsAtom)
   const sortedBeobFields = sortedBeobFieldsPassed.slice()
 
   const apolloClient = useApolloClient()
@@ -137,4 +139,4 @@ export const Beob = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
