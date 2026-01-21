@@ -128,6 +128,14 @@ export const setIdOfTpopBeingLocalizedAtom = atom(
   (get) => get(idOfTpopBeingLocalizedAtom),
   (get, set, value) => set(idOfTpopBeingLocalizedAtom, value),
 )
+export const mapShowApfLayersForMultipleApsAtom = atomWithStorage(
+  'mapShowApfLayersForMultipleAps',
+  false,
+)
+export const setMapShowApfLayersForMultipleApsAtom = atom(
+  (get) => get(mapShowApfLayersForMultipleApsAtom),
+  (get, set, value) => set(mapShowApfLayersForMultipleApsAtom, value),
+)
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },

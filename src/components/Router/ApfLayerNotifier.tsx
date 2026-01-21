@@ -1,21 +1,21 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 
-import { MobxContext } from '../../mobxContext.ts'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 
 import {
   addNotificationAtom,
   mapActiveApfloraLayersAtom,
+  mapShowApfLayersForMultipleApsAtom,
 } from '../../JotaiStore/index.ts'
 
 // TODO: only show messages if map is visible
-export const ApfLayerNotifier = observer(() => {
+export const ApfLayerNotifier = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const { showApfLayersForMultipleAps } = store
+  const showApfLayersForMultipleAps = useAtomValue(
+    mapShowApfLayersForMultipleApsAtom,
+  )
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const { apId } = useParams()
 
@@ -63,4 +63,4 @@ export const ApfLayerNotifier = observer(() => {
   }, [showApfLayersForMultipleAps, activeApfloraLayers.length, apId, mapIsOpen])
 
   return null
-})
+}

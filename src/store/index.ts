@@ -7,7 +7,6 @@ import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 
 export const MobxStore = types
   .model({
-    showApfLayersForMultipleAps: types.optional(types.boolean, false),
     overlays: types.optional(types.array(ApfloraLayer), standardOverlays),
     activeOverlays: types.array(types.string),
     activeBaseLayer: types.optional(types.maybeNull(types.string), 'OsmColor'),
@@ -15,9 +14,6 @@ export const MobxStore = types
     map: types.optional(Map, defaultMap),
   })
   .actions((self) => ({
-    toggleShowApfLayersForMultipleAps() {
-      self.showApfLayersForMultipleAps = !self.showApfLayersForMultipleAps
-    },
     setOverlays(val) {
       self.overlays = val
     },

@@ -1,12 +1,17 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useContext } from 'react'
+import { observer } from 'mobx-react-lite'
 
 import { Checkbox } from '../shared/Checkbox.tsx'
 import { MobxContext } from '../../../../../mobxContext.ts'
+import {
+  mapShowApfLayersForMultipleApsAtom,
+  setMapShowApfLayersForMultipleApsAtom,
+} from '../../../../../JotaiStore/index.ts'
 
 interface ShowForMultipleApsQueryResult {
   allAps: {
@@ -20,8 +25,12 @@ export const ShowForMultipleAps = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(MobxContext)
-  const { showApfLayersForMultipleAps, toggleShowApfLayersForMultipleAps } =
-    store
+  const showApfLayersForMultipleAps = useAtomValue(
+    mapShowApfLayersForMultipleApsAtom,
+  )
+  const setShowApfLayersForMultipleAps = useSetAtom(
+    setMapShowApfLayersForMultipleApsAtom,
+  )
   const { apGqlFilterForTree } = store.tree
 
   const apolloClient = useApolloClient()
@@ -59,7 +68,9 @@ export const ShowForMultipleAps = observer(() => {
         value={showApfLayersForMultipleAps}
         label="Layer auch anzeigen, wenn mehr als eine Art aktiv ist"
         checked={showApfLayersForMultipleAps}
-        onChange={toggleShowApfLayersForMultipleAps}
+        onChange={() =>
+          setShowApfLayersForMultipleAps(!showApfLayersForMultipleAps)
+        }
       />
       {!apId && showApfLayersForMultipleAps && (
         <>
