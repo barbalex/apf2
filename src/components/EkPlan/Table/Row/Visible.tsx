@@ -1,10 +1,9 @@
-import { useRef, useContext, Suspense } from 'react'
+import { useRef, Suspense } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
 import { CellForYearTitle } from '../CellForYearTitle.tsx'
 import { CellForEkfrequenz } from '../CellForEkfrequenz/index.tsx'
 import { CellForEkfrequenzStartjahr } from '../CellForEkfrequenzStartjahr/index.tsx'
@@ -15,6 +14,10 @@ import { CellForYear } from '../CellForYear/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { queryRow } from './queryRow.ts'
 import { tpopRowFromTpop } from './tpopRowFromTpop.ts'
+import {
+  ekPlanFieldsAtom,
+  ekPlanApValuesAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 import type { PopId } from '../../../../models/apflora/Pop.ts'
@@ -28,9 +31,9 @@ import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
 
 const isItOdd = (num) => num % 2 === 0
 
-export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
-  const store = useContext(MobxContext)
-  const fieldsShown = store.ekPlan.fields
+export const Visible = ({ tpopId, index, setProcessing, years }) => {
+  const fieldsShown = useAtomValue(ekPlanFieldsAtom)
+  const apValues = useAtomValue(ekPlanApValuesAtom)
   const isOdd = isItOdd(index)
 
   const apolloClient = useApolloClient()
@@ -149,18 +152,12 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
   }
 
   const { data, error } = useQuery<RowQueryForEkPlanResult>({
-    queryKey: [
-      'RowQueryForEkPlan',
-      store.ekPlan.apValues,
-      tpopId,
-      years,
-      fieldsShown,
-    ],
+    queryKey: ['RowQueryForEkPlan', apValues, tpopId, years, fieldsShown],
     queryFn: async () => {
       const result = await apolloClient.query<RowQueryForEkPlanResult>({
         query: queryRow,
         variables: {
-          apIds: store.ekPlan.apValues,
+          apIds: apValues,
           tpopId,
           years,
           showEkf: fieldsShown.includes('ekfKontrolleur'),
@@ -185,11 +182,11 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
   const ekfrequenzStartjahr = tpop?.ekfrequenzStartjahr
   const ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend
 
-  const row = tpopRowFromTpop({ tpop, store })
+  const row = tpopRowFromTpop(tpop)
   const tpopColumns = Object.values(row)
     .filter((o) => typeof o === 'object')
     .filter((o) => !!o.name)
-    .filter((o) => store.ekPlan.fields.includes(o.name) || !!o.alwaysShow)
+    .filter((o) => fieldsShown.includes(o.name) || !!o.alwaysShow)
 
   if (error) return `Fehler: ${(error as Error).message}`
 
@@ -311,4 +308,4 @@ export const Visible = observer(({ tpopId, index, setProcessing, years }) => {
       </Suspense>
     </ErrorBoundary>
   )
-})
+}
