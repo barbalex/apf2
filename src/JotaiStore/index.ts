@@ -346,6 +346,21 @@ export const setCopyingBiotopAtom = atom(null, (get, set, { id, label }) => {
   set(copyingBiotopAtom, { id, label })
 })
 
+export const movingAtom = atom({
+  table: null,
+  id: null,
+  label: null,
+  toTable: null,
+  fromParentId: null,
+})
+
+export const setMovingAtom = atom(
+  null,
+  (get, set, { table, id, label, toTable, fromParentId }) => {
+    set(movingAtom, { table, id, label, toTable, fromParentId })
+  },
+)
+
 export const clearAllStorageAtom = atom(null, (get, set) => {
   // Reset user
   set(userAtom, { name: '', token: null, id: null })
@@ -403,5 +418,14 @@ export const clearAllStorageAtom = atom(null, (get, set) => {
   set(copyingBiotopAtom, {
     id: null,
     label: null,
+  })
+  
+  // Reset moving state
+  set(movingAtom, {
+    table: null,
+    id: null,
+    label: null,
+    toTable: null,
+    fromParentId: null,
   })
 })

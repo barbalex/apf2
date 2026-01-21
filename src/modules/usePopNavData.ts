@@ -7,7 +7,11 @@ import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
@@ -49,6 +53,7 @@ export const usePopNavData = (props) => {
 
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
+  const moving = useAtomValue(movingAtom)
 
   const { data, refetch } = useQuery({
     queryKey: [
@@ -143,7 +148,10 @@ export const usePopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.moving.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(movingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -181,7 +189,7 @@ export const usePopNavData = (props) => {
     : PopIconQ
 
   const labelRightElements = getLabelRightElements({
-    movingId: store.moving.id,
+    movingId: moving.id,
     copyingId: copying.id,
     popId,
   })
