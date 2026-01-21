@@ -1,8 +1,7 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -25,8 +24,8 @@ const showCoordOfBeobOnMapGeoAdminChData = {
   action: 'showCoordOfBeobOnMapGeoAdminCh',
 }
 
-export const BeobNichtZuzuordnen = observer(({ onClick }) => {
-  const { user } = useContext(MobxContext)
+export const BeobNichtZuzuordnen = ({ onClick }) => {
+  const userToken = useAtomValue(userTokenAtom)
 
   return (
     <ErrorBoundary>
@@ -35,7 +34,7 @@ export const BeobNichtZuzuordnen = observer(({ onClick }) => {
         hideOnLeave={true}
       >
         <div className="react-contextmenu-title">Beobachtung</div>
-        {!userIsReadOnly(user.token) && (
+        {!userIsReadOnly(userToken) && (
           <>
             <MenuItem
               onClick={onClick}
@@ -74,4 +73,4 @@ export const BeobNichtZuzuordnen = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}
