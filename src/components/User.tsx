@@ -16,7 +16,6 @@ import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { getUserFromIdb } from '../modules/getUserFromIdb.ts'
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
 import { userAtom } from '../JotaiStore/index.ts'
 
@@ -50,6 +49,11 @@ export const User = () => {
 
   const nameInput = useRef(null)
   const passwordInput = useRef(null)
+
+  // Sync tokenState with user atom from Jotai
+  useEffect(() => {
+    dispatchTokenState({ type: 'set', payload: user.token })
+  }, [user.token])
 
   // callbacks pass name or password
   // because state is not up to date yet
