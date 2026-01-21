@@ -501,3 +501,229 @@ export const setShowDeletionsAtom = atom(
     set(showDeletionsAtom, val)
   },
 )
+
+// EkPlan atoms
+export const ekPlanShowEkAtom = atom(true)
+export const ekPlanShowEkfAtom = atom(true)
+export const ekPlanShowCountAtom = atom(true)
+export const ekPlanShowEkCountAtom = atom(true)
+export const ekPlanShowMassnAtom = atom(true)
+
+export const ekPlanSetShowEkAtom = atom(null, (get, set, val) => {
+  set(ekPlanShowEkAtom, val)
+})
+export const ekPlanSetShowEkfAtom = atom(null, (get, set, val) => {
+  set(ekPlanShowEkfAtom, val)
+})
+export const ekPlanSetShowCountAtom = atom(null, (get, set, val) => {
+  set(ekPlanShowCountAtom, val)
+})
+export const ekPlanSetShowEkCountAtom = atom(null, (get, set, val) => {
+  set(ekPlanShowEkCountAtom, val)
+})
+export const ekPlanSetShowMassnAtom = atom(null, (get, set, val) => {
+  set(ekPlanShowMassnAtom, val)
+})
+
+// EkPlan aps
+export const ekPlanApsAtom = atom([])
+export const ekPlanApValuesAtom = atom((get) => {
+  const aps = get(ekPlanApsAtom)
+  return aps.map((a) => a.value)
+})
+export const ekPlanAddApAtom = atom(null, (get, set, ap) => {
+  const current = get(ekPlanApsAtom)
+  set(ekPlanApsAtom, [...current, ap])
+})
+export const ekPlanRemoveApAtom = atom(null, (get, set, ap) => {
+  const current = get(ekPlanApsAtom)
+  set(ekPlanApsAtom, current.filter((a) => a.value !== ap.value))
+})
+
+// EkPlan fields
+const defaultFields = [
+  'ap',
+  'popNr',
+  'nr',
+  'ekfrequenz',
+  'ekfrequenzStartjahr',
+  'ekfrequenzAbweichend',
+]
+export const ekPlanFieldsAtom = atom(defaultFields)
+export const ekPlanSetFieldsAtom = atom(null, (get, set, fields) => {
+  set(ekPlanFieldsAtom, fields)
+})
+export const ekPlanToggleFieldAtom = atom(null, (get, set, field) => {
+  const current = get(ekPlanFieldsAtom)
+  if (current.includes(field)) {
+    set(ekPlanFieldsAtom, current.filter((f) => f !== field))
+  } else {
+    const unique = [...new Set([...current, field])]
+    set(ekPlanFieldsAtom, unique)
+  }
+})
+export const ekPlanAddFieldAtom = atom(null, (get, set, field) => {
+  const current = get(ekPlanFieldsAtom)
+  const unique = [...new Set([...current, field])]
+  set(ekPlanFieldsAtom, unique)
+})
+export const ekPlanRemoveFieldAtom = atom(null, (get, set, field) => {
+  const current = get(ekPlanFieldsAtom)
+  set(ekPlanFieldsAtom, current.filter((f) => f !== field))
+})
+
+// EkPlan hovered
+export const ekPlanHoveredAtom = atom({ year: null, tpopId: null })
+export const ekPlanSetHoveredAtom = atom(null, (get, set, val) => {
+  set(ekPlanHoveredAtom, val)
+})
+export const ekPlanSetHoveredYearAtom = atom(null, (get, set, val) => {
+  const current = get(ekPlanHoveredAtom)
+  set(ekPlanHoveredAtom, { ...current, year: val })
+})
+export const ekPlanSetHoveredTpopIdAtom = atom(null, (get, set, val) => {
+  const current = get(ekPlanHoveredAtom)
+  set(ekPlanHoveredAtom, { ...current, tpopId: val })
+})
+export const ekPlanResetHoveredAtom = atom(null, (get, set) => {
+  set(ekPlanHoveredAtom, { year: null, tpopId: null })
+})
+
+// EkPlan data loading
+export const ekPlanApsDataLoadingAtom = atom(true)
+export const ekPlanSetApsDataLoadingAtom = atom(null, (get, set, val) => {
+  set(ekPlanApsDataLoadingAtom, val)
+})
+
+// EkPlan filters
+export const ekPlanFilterApAtom = atom(null)
+export const ekPlanFilterPopNrAtom = atom(null)
+export const ekPlanFilterPopNameAtom = atom(null)
+export const ekPlanFilterPopStatusAtom = atom([100, 101, 200, 201, 202, 300])
+export const ekPlanFilterNrAtom = atom(null)
+export const ekPlanFilterGemeindeAtom = atom(null)
+export const ekPlanFilterFlurnameAtom = atom(null)
+export const ekPlanFilterStatusAtom = atom([100, 101, 200, 201, 202, 300])
+export const ekPlanFilterBekanntSeitAtom = atom(null)
+export const ekPlanFilterLv95XAtom = atom(null)
+export const ekPlanFilterLv95YAtom = atom(null)
+export const ekPlanFilterEkfKontrolleurAtom = atom(null)
+export const ekPlanFilterEkAbrechnungstypAtom = atom(null)
+export const ekPlanFilterEkfrequenzAtom = atom(null)
+export const ekPlanFilterEkfrequenzStartjahrAtom = atom(null)
+export const ekPlanFilterEkfrequenzAbweichendAtom = atom(false)
+export const ekPlanFilterEkfrequenzEmptyAtom = atom(false)
+export const ekPlanFilterEkfrequenzStartjahrEmptyAtom = atom(false)
+export const ekPlanFilterAnsiedlungYearAtom = atom(null)
+export const ekPlanFilterKontrolleYearAtom = atom(null)
+export const ekPlanFilterEkplanYearAtom = atom(null)
+
+export const ekPlanSetFilterApAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterApAtom, val)
+})
+export const ekPlanSetFilterPopNrAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterPopNrAtom, val ? +val : null)
+})
+export const ekPlanSetFilterPopNameAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterPopNameAtom, val)
+})
+export const ekPlanSetFilterPopStatusAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterPopStatusAtom, val || [100, 101, 200, 201, 202, 300])
+})
+export const ekPlanSetFilterNrAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterNrAtom, val ? +val : null)
+})
+export const ekPlanSetFilterGemeindeAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterGemeindeAtom, val)
+})
+export const ekPlanSetFilterFlurnameAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterFlurnameAtom, val)
+})
+export const ekPlanSetFilterStatusAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterStatusAtom, val || [100, 101, 200, 201, 202, 300])
+})
+export const ekPlanSetFilterBekanntSeitAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterBekanntSeitAtom, val ? +val : null)
+})
+export const ekPlanSetFilterLv95XAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterLv95XAtom, val ? +val : null)
+})
+export const ekPlanSetFilterLv95YAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterLv95YAtom, val ? +val : null)
+})
+export const ekPlanSetFilterEkfKontrolleurAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkfKontrolleurAtom, val)
+})
+export const ekPlanSetFilterEkAbrechnungstypAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkAbrechnungstypAtom, val)
+})
+export const ekPlanSetFilterEkfrequenzAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkfrequenzAtom, val)
+})
+export const ekPlanSetFilterEkfrequenzStartjahrAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkfrequenzStartjahrAtom, val ? +val : null)
+})
+export const ekPlanSetFilterEkfrequenzAbweichendAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkfrequenzAbweichendAtom, val)
+})
+export const ekPlanSetFilterEmptyEkfrequenzAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkfrequenzEmptyAtom, val)
+})
+export const ekPlanSetFilterAnsiedlungYearAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterAnsiedlungYearAtom, val)
+})
+export const ekPlanSetFilterKontrolleYearAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterKontrolleYearAtom, val)
+})
+export const ekPlanSetFilterEkplanYearAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkplanYearAtom, val)
+})
+export const ekPlanSetFilterEmptyEkfrequenzStartjahrAtom = atom(null, (get, set, val) => {
+  set(ekPlanFilterEkfrequenzStartjahrEmptyAtom, val)
+})
+
+// EkPlan pastYears
+export const ekPlanPastYearsAtom = atom(5)
+export const ekPlanSetPastYearsAtom = atom(null, (get, set, val) => {
+  set(ekPlanPastYearsAtom, val)
+})
+
+// EkPlan volatile state
+export const ekPlanYearMenuAnchorAtom = atom(null)
+export const ekPlanSetYearMenuAnchorAtom = atom(null, (get, set, anchor) => {
+  set(ekPlanYearMenuAnchorAtom, anchor)
+})
+
+const initialYearClicked = {
+  year: null,
+  tpopId: null,
+  title: null,
+  ekPlan: false,
+  ekfPlan: false,
+}
+export const ekPlanYearClickedAtom = atom(initialYearClicked)
+export const ekPlanSetYearClickedAtom = atom(null, (get, set, val) => {
+  set(ekPlanYearClickedAtom, val)
+})
+export const ekPlanCloseYearCellMenuAtom = atom(null, (get, set) => {
+  set(ekPlanYearMenuAnchorAtom, null)
+  set(ekPlanYearClickedAtom, initialYearClicked)
+})
+
+export const ekPlanApsDataAtom = atom([])
+export const ekPlanSetApsDataAtom = atom(null, (get, set, val) => {
+  set(ekPlanApsDataAtom, val)
+})
+
+// EkPlan einheitsByAp computed value
+export const ekPlanEinheitsByApAtom = atom((get) => {
+  const apsData = get(ekPlanApsDataAtom)
+  const nodes = apsData?.allAps?.nodes ?? []
+  const e = {}
+  nodes.forEach((node) => {
+    e[node.id] = (node?.ekzaehleinheitsByApId?.nodes ?? []).map(
+      (o) => o.tpopkontrzaehlEinheitWerteByZaehleinheitId.code,
+    )
+  })
+  return e
+})

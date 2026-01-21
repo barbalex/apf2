@@ -1,18 +1,22 @@
-import { useContext } from 'react'
 import { FaExternalLinkAlt } from 'react-icons/fa'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  ekPlanHoveredAtom,
+  ekPlanSetHoveredTpopIdAtom,
+  ekPlanResetHoveredAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './CellForTpopLink.module.css'
 import indexStyles from './index.module.css'
 
-export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
-  const store = useContext(MobxContext)
+export const CellForTpopLink = ({ field, width, row, isOdd }) => {
+  const hovered = useAtomValue(ekPlanHoveredAtom)
+  const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
+  const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
 
-  const { hovered } = store.ekPlan
   const isHovered = hovered.tpopId === row.id
-  const onMouseEnter = () => hovered.setTpopId(row.id)
+  const onMouseEnter = () => setHoveredTpopId(row.id)
 
   const onClickLink = () => {
     if (window.matchMedia('(display-mode: standalone)').matches) {
@@ -33,7 +37,7 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
   return (
     <div
       onMouseEnter={onMouseEnter}
-      onMouseLeave={hovered.reset}
+      onMouseLeave={resetHovered}
       className={indexStyles.tableCell}
       style={cellStyle}
     >
@@ -48,4 +52,4 @@ export const CellForTpopLink = observer(({ field, width, row, isOdd }) => {
       </div>
     </div>
   )
-})
+}

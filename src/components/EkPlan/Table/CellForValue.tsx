@@ -1,20 +1,24 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  ekPlanHoveredAtom,
+  ekPlanSetHoveredTpopIdAtom,
+  ekPlanResetHoveredAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './CellForValue.module.css'
 import indexStyles from './index.module.css'
 
-export const CellForValue = observer(
+export const CellForValue = (
   ({ field, width, row, isOdd, firstChild }) => {
-    const store = useContext(MobxContext)
+    const hovered = useAtomValue(ekPlanHoveredAtom)
+    const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
+    const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
 
     const { value } = field
 
-    const { hovered } = store.ekPlan
     const isHovered = hovered.tpopId === row.id
-    const onMouseEnter = () => hovered.setTpopId(row.id)
+    const onMouseEnter = () => setHoveredTpopId(row.id)
 
     const tableCellStyle = {
       width,
@@ -29,7 +33,7 @@ export const CellForValue = observer(
     return (
       <div
         onMouseEnter={onMouseEnter}
-        onMouseLeave={hovered.reset}
+        onMouseLeave={resetHovered}
         className={indexStyles.tableCell}
         style={tableCellStyle}
       >
