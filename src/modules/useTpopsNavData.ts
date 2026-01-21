@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
 import {
+  activeApfloraLayersAtom,
   copyingAtom,
   movingAtom,
   store as jotaiStore,
@@ -100,8 +101,9 @@ export const useTpopsNavData = (props) => {
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
-  const showTpopIcon =
-    store.activeApfloraLayers?.includes('tpop') && karteIsVisible
+
+  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
+  const showTpopIcon = activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const { data, refetch } = useQuery({
     queryKey: ['treeTpop', popId, store.tree.tpopGqlFilterForTree],

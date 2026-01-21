@@ -4,8 +4,10 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import { activeApfloraLayersAtom } from '../JotaiStore/index.ts'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -22,8 +24,9 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
 
   const store = useContext(MobxContext)
 
+  const activeApfloraLayers = useAtomValue(activeApfloraLayersAtom)
   const showBeobnichtzuzuordnenIcon =
-    store.activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
+    activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
@@ -94,11 +97,6 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
   useEffect(
     () =>
       reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.activeApfloraLayers.slice(), rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
