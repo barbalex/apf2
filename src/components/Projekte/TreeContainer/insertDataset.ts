@@ -285,6 +285,13 @@ export const insertDataset = async ({
   tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolder],
   })
+  // also invalidate parent queries for folder counts
+  tsQueryClient.invalidateQueries({
+    queryKey: [`treeApFolders`],
+  })
+  tsQueryClient.invalidateQueries({
+    queryKey: [`treeAp`],
+  })
   if (table === 'ziel') {
     tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
