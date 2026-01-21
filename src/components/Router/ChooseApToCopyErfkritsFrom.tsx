@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -13,14 +13,18 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { userIsReadOnly } from '../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import type { ErfkritId, ApId } from '../../models/apflora/public/Erfkrit.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
-import { addNotificationAtom, userNameAtom } from '../../JotaiStore/index.ts'
+import {
+  addNotificationAtom,
+  userNameAtom,
+  openChooseApToCopyErfkritsFromAtom,
+  setOpenChooseApToCopyErfkritsFromAtom,
+} from '../../JotaiStore/index.ts'
 
 interface ExistingErfkritNode {
   id: ErfkritId
@@ -65,15 +69,18 @@ export const ChooseApToCopyErfkritsFrom = () => {
   const { apId } = useParams()
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
-  const store = useContext(MobxContext)
-  const { openChooseApToCopyErfkritsFrom, setOpenChooseApToCopyErfkritsFrom } =
-    store
   const userName = useAtomValue(userNameAtom)
+  const openChooseApToCopyErfkritsFrom = useAtomValue(
+    openChooseApToCopyErfkritsFromAtom,
+  )
+  const setOpenChooseApToCopyErfkritsFrom = useSetAtom(
+    setOpenChooseApToCopyErfkritsFromAtom,
+  )
   const onCloseChooseApDialog = () => setOpenChooseApToCopyErfkritsFrom(false)
 
   const onChooseAp = async (option) => {
     const newApId = option.value
-    // 0. choosing no option is not possible so needs not be catched
+    // 0. choosing no option is not possible so needs not be cached
     // 1. delete existing erfkrit
     // 1.1: query existing erfkrit
     let existingErfkritResult
@@ -170,6 +177,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
                 $apId: UUID!
                 $erfolg: Int
                 $kriterien: String
+                $changedBy: String
               ) {
                 createErfkrit(
                   input: {
@@ -177,6 +185,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
                       apId: $apId
                       erfolg: $erfolg
                       kriterien: $kriterien
+                      changedBy: $changedBy
                     }
                   }
                 ) {
@@ -193,11 +202,10 @@ export const ChooseApToCopyErfkritsFrom = () => {
             // somehow in dev i got errors claiming the strings were not utf-8
             // invalid byte sequence for encoding "UTF8"
             variables: {
-              anwendungsfall: ekf.anwendungsfall,
               apId: apId,
               erfolg: ekf.erfolg,
               kriterien: ekf.kriterien,
-              changedBy: user.name,
+              changedBy: userName,
             },
           }),
         ),

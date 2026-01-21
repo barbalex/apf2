@@ -92,16 +92,8 @@ export const MobxStore = types
       types.array(types.string),
       defaultSortedBeobFields,
     ),
-    openChooseApToCopyEkfrequenzsFrom: types.optional(types.boolean, false),
-    openChooseApToCopyErfkritsFrom: types.optional(types.boolean, false),
   })
   .actions((self) => ({
-    setOpenChooseApToCopyErfkritsFrom(val) {
-      self.openChooseApToCopyErfkritsFrom = val
-    },
-    setOpenChooseApToCopyEkfrequenzsFrom(val) {
-      self.openChooseApToCopyEkfrequenzsFrom = val
-    },
     setSortedBeobFields(val) {
       self.sortedBeobFields = val.filter((v) => !!v)
     },

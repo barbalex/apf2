@@ -1,6 +1,5 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -14,7 +13,6 @@ import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { userIsReadOnly } from '../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../mobxContext.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import type {
@@ -24,7 +22,12 @@ import type {
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
-import { addNotificationAtom, userNameAtom } from '../../JotaiStore/index.ts'
+import {
+  addNotificationAtom,
+  userNameAtom,
+  openChooseApToCopyEkfrequenzsFromAtom,
+  setOpenChooseApToCopyEkfrequenzsFromAtom,
+} from '../../JotaiStore/index.ts'
 
 interface ExistingEkfrequenzNode {
   id: EkfrequenzId
@@ -69,17 +72,18 @@ interface ApOptionsQueryResult {
   }
 }
 
-export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
+export const ChooseApToCopyEkfrequenzsFrom = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { apId } = useParams()
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
-  const store = useContext(MobxContext)
   const userName = useAtomValue(userNameAtom)
-  const {
-    openChooseApToCopyEkfrequenzsFrom,
-    setOpenChooseApToCopyEkfrequenzsFrom,
-  } = store
+  const openChooseApToCopyEkfrequenzsFrom = useAtomValue(
+    openChooseApToCopyEkfrequenzsFromAtom,
+  )
+  const setOpenChooseApToCopyEkfrequenzsFrom = useSetAtom(
+    setOpenChooseApToCopyEkfrequenzsFromAtom,
+  )
   const onCloseChooseApDialog = () =>
     setOpenChooseApToCopyEkfrequenzsFrom(false)
 
@@ -369,4 +373,4 @@ export const ChooseApToCopyEkfrequenzsFrom = observer(() => {
       </Dialog>
     </ErrorBoundary>
   )
-})
+}

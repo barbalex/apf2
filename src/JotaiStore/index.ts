@@ -305,6 +305,22 @@ export const setAssigningBeobAtom = atom(null, (get, set, val) => {
   set(assigningBeobAtom, val)
 })
 
+// Choose AP dialogs
+export const openChooseApToCopyEkfrequenzsFromAtom = atom(false)
+export const setOpenChooseApToCopyEkfrequenzsFromAtom = atom(
+  null,
+  (get, set, val) => {
+    set(openChooseApToCopyEkfrequenzsFromAtom, val)
+  },
+)
+export const openChooseApToCopyErfkritsFromAtom = atom(false)
+export const setOpenChooseApToCopyErfkritsFromAtom = atom(
+  null,
+  (get, set, val) => {
+    set(openChooseApToCopyErfkritsFromAtom, val)
+  },
+)
+
 // User
 export const userAtom = atomWithStorage('user', {
   name: '',

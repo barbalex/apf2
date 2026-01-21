@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -8,18 +7,16 @@ import { FaPlus } from 'react-icons/fa6'
 import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 import type { ErfkritId, ApId } from '../../../../models/apflora/index.tsx'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import {
   addNotificationAtom,
+  setOpenChooseApToCopyErfkritsFromAtom,
 } from '../../../../JotaiStore/index.ts'
-
 
 interface CreateErfkritResult {
   data?: {
@@ -38,7 +35,7 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -47,8 +44,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const store = useContext(MobxContext)
-  const { setOpenChooseApToCopyErfkritsFrom } = store
+  const setOpenChooseApToCopyErfkritsFrom = useSetAtom(
+    setOpenChooseApToCopyErfkritsFromAtom,
+  )
 
   const onClickAdd = async () => {
     let result: CreateErfkritResult | undefined
@@ -108,4 +106,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

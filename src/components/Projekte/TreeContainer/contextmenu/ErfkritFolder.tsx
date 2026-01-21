@@ -1,10 +1,11 @@
-import { useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
-import { useAtomValue } from 'jotai'
+import { useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { userTokenAtom } from '../../../../JotaiStore/index.ts'
+import {
+  userTokenAtom,
+  setOpenChooseApToCopyErfkritsFromAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -17,11 +18,11 @@ const insertData = {
   table: 'erfkrit',
 }
 
-export const ErfkritFolder = observer(({ onClick }) => {
-  const store = useContext(MobxContext)
-  const { openChooseApToCopyErfkritsFrom, setOpenChooseApToCopyErfkritsFrom } =
-    store
+export const ErfkritFolder = ({ onClick }) => {
   const userToken = useAtomValue(userTokenAtom)
+  const setOpenChooseApToCopyErfkritsFrom = useSetAtom(
+    setOpenChooseApToCopyErfkritsFromAtom,
+  )
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
   // i.e. to know what node was clicked
@@ -54,4 +55,4 @@ export const ErfkritFolder = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}
