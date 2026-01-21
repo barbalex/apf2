@@ -1,8 +1,7 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { userTokenAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,
@@ -15,8 +14,8 @@ const insertData = {
   table: 'ekzaehleinheit',
 }
 
-export const EkzaehleinheitFolder = observer(({ onClick }) => {
-  const { user } = useContext(MobxContext)
+export const EkzaehleinheitFolder = ({ onClick }) => {
+  const userToken = useAtomValue(userTokenAtom)
 
   return (
     <ErrorBoundary>
@@ -25,7 +24,7 @@ export const EkzaehleinheitFolder = observer(({ onClick }) => {
         hideOnLeave={true}
       >
         <div className="react-contextmenu-title">EK-Zähleinheit</div>
-        {!userIsReadOnly(user.token) && (
+        {!userIsReadOnly(userToken) && (
           <MenuItem
             onClick={onClick}
             data={insertData}
@@ -36,4 +35,4 @@ export const EkzaehleinheitFolder = observer(({ onClick }) => {
       </ContextMenu>
     </ErrorBoundary>
   )
-})
+}
