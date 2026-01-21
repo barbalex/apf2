@@ -4,8 +4,10 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import { copyingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
@@ -62,13 +64,17 @@ export const useTpopmassnNavData = (props) => {
   })
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
+  const copying = useAtomValue(copyingAtom)
   useEffect(
     () => reaction(() => store.moving.id, rerender),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(
-    () => reaction(() => store.copying.id, rerender),
+    () => {
+      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -79,7 +85,7 @@ export const useTpopmassnNavData = (props) => {
     data?.data?.tpopmassnById?.tpopmassnFilesByTpopmassnId?.totalCount ?? 0
 
   const labelRightElements = getLabelRightElements({
-    copyingId: store.copying.id,
+    copyingId: copying.id,
     movingId: store.moving.id,
     tpopmassnId,
   })
