@@ -1,38 +1,38 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { FaCog, FaCheck } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import {
   mapTpopIconAtom,
   setMapTpopIconAtom,
   mapPopIconAtom,
   setMapPopIconAtom,
+  treeShowPopIconAtom,
+  toggleTreeShowPopIconAtom,
+  setTreeShowPopIconAtom,
+  treeShowTpopIconAtom,
+  toggleTreeShowTpopIconAtom,
+  setTreeShowTpopIconAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import styles from './Menu.module.css'
 
-export const Menu = observer(() => {
-  const store = useContext(MobxContext)
-  const { tree } = store
+export const Menu = () => {
   const tpopIcon = useAtomValue(mapTpopIconAtom)
   const setTpopIcon = useSetAtom(setMapTpopIconAtom)
   const popIcon = useAtomValue(mapPopIconAtom)
   const setPopIcon = useSetAtom(setMapPopIconAtom)
-  const {
-    showTpopIcon,
-    toggleShowTpopIcon,
-    setDoShowTpopIcon,
-    showPopIcon,
-    toggleShowPopIcon,
-    setDoShowPopIcon,
-  } = tree
+  const showTpopIcon = useAtomValue(treeShowTpopIconAtom)
+  const toggleShowTpopIcon = useSetAtom(toggleTreeShowTpopIconAtom)
+  const setDoShowTpopIcon = useSetAtom(setTreeShowTpopIconAtom)
+  const showPopIcon = useAtomValue(treeShowPopIconAtom)
+  const toggleShowPopIcon = useSetAtom(toggleTreeShowPopIconAtom)
+  const setDoShowPopIcon = useSetAtom(setTreeShowPopIconAtom)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickConfig = (event) => setAnchorEl(event.currentTarget)
@@ -40,34 +40,34 @@ export const Menu = observer(() => {
 
   const onClickAllTpopSame = () => {
     setTpopIcon('normal')
-    setDoShowTpopIcon()
+    setDoShowTpopIcon(true)
   }
 
   const onClickTpopByStatusGroup = () => {
     setTpopIcon('statusGroup')
-    setDoShowTpopIcon()
+    setDoShowTpopIcon(true)
   }
 
   const onClickTpopByStatusGroupSymbols = () => {
     setTpopIcon('statusGroupSymbols')
-    setDoShowTpopIcon()
+    setDoShowTpopIcon(true)
   }
 
   const onClickTpopNoSymbols = () => toggleShowTpopIcon()
 
   const onClickAllPopSame = () => {
     setPopIcon('normal')
-    setDoShowPopIcon()
+    setDoShowPopIcon(true)
   }
 
   const onClickPopByStatusGroup = () => {
     setPopIcon('statusGroup')
-    setDoShowPopIcon()
+    setDoShowPopIcon(true)
   }
 
   const onClickPopByStatusGroupSymbols = () => {
     setPopIcon('statusGroupSymbols')
-    setDoShowPopIcon()
+    setDoShowPopIcon(true)
   }
 
   const onClickPopNoSymbols = () => toggleShowPopIcon()
@@ -184,4 +184,4 @@ export const Menu = observer(() => {
       </MuiMenu>
     </div>
   )
-})
+}

@@ -13,6 +13,7 @@ import {
   store as jotaiStore,
   mapActiveApfloraLayersAtom,
   mapTpopIconAtom,
+  treeShowTpopIconAtom,
 } from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
@@ -213,7 +214,10 @@ export const useTpopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.tree.showTpopIcon, rerender),
+    () => {
+      const unsub = jotaiStore.sub(treeShowTpopIconAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -269,6 +273,8 @@ export const useTpopNavData = (props) => {
     : tpopIconIsHighlighted ? TpopIconQHighlighted
     : TpopIconQ
 
+  const showTpopIcon = jotaiStore.get(treeShowTpopIconAtom)
+
   const labelRightElements = getLabelRightElements({
     movingId: moving.id,
     copyingId: copying.id,
@@ -297,7 +303,7 @@ export const useTpopNavData = (props) => {
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: true,
     // TODO: show only if map is visible and tpop layer active
-    labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+    labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
     labelRightElements:
       labelRightElements.length ? labelRightElements : undefined,
     component: NodeWithList,
@@ -306,7 +312,7 @@ export const useTpopNavData = (props) => {
         id: 'Teil-Population',
         label: `Teil-Population`,
         isSelf: true,
-        labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+        labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
         labelRightElements:
           labelRightElements.length ? labelRightElements : undefined,
       },

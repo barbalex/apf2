@@ -13,6 +13,7 @@ import {
   movingAtom,
   store as jotaiStore,
   mapTpopIconAtom,
+  treeShowTpopIconAtom,
 } from '../JotaiStore/index.ts'
 
 import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.tsx'
@@ -162,7 +163,10 @@ export const useTpopsNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.tree.showTpopIcon, rerender),
+    () => {
+      const unsub = jotaiStore.sub(treeShowTpopIconAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -252,7 +256,7 @@ export const useTpopsNavData = (props) => {
         fetcherName: 'useTpopNavData',
         fetcherParams: { projId, apId, popId, tpopId: p.id },
         hasChildren: true,
-        labelLeftElements: store.tree.showTpopIcon ? [TpopIcon] : undefined,
+        labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
         labelRightElements:
           labelRightElements.length ? labelRightElements : undefined,
       }

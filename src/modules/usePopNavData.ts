@@ -13,6 +13,7 @@ import {
   movingAtom,
   store as jotaiStore,
   mapPopIconAtom,
+  treeShowPopIconAtom,
 } from '../JotaiStore/index.ts'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'
@@ -145,7 +146,10 @@ export const usePopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.tree.showPopIcon, rerender),
+    () => {
+      const unsub = jotaiStore.sub(treeShowPopIconAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -196,6 +200,8 @@ export const usePopNavData = (props) => {
     popId,
   })
 
+  const showPopIcon = jotaiStore.get(treeShowPopIconAtom)
+
   const navData = {
     id: popId,
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}`,
@@ -210,7 +216,7 @@ export const usePopNavData = (props) => {
     fetcherName: 'usePopNavData',
     fetcherParams: { projId, apId, popId },
     status,
-    labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
+    labelLeftElements: showPopIcon ? [PopIcon] : undefined,
     labelRightElements:
       labelRightElements.length ? labelRightElements : undefined,
     component: NodeWithList,
@@ -218,7 +224,7 @@ export const usePopNavData = (props) => {
       {
         id: 'Population',
         label: `Population`,
-        labelLeftElements: store.tree.showPopIcon ? [PopIcon] : undefined,
+        labelLeftElements: showPopIcon ? [PopIcon] : undefined,
         labelRightElements:
           labelRightElements.length ? labelRightElements : undefined,
         isSelf: true,

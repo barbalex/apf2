@@ -51,25 +51,10 @@ export const Tree = types
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
     mapFilterResetter: types.optional(types.number, 0),
-    // next migrate these two to Jotai?
-    showPopIcon: types.optional(types.boolean, true),
-    showTpopIcon: types.optional(types.boolean, true),
   })
   .actions((self) => ({
     incrementMapFilterResetter() {
       self.mapFilterResetter += 1
-    },
-    toggleShowPopIcon() {
-      self.showPopIcon = !self.showPopIcon
-    },
-    setDoShowPopIcon() {
-      self.showPopIcon = true
-    },
-    toggleShowTpopIcon() {
-      self.showTpopIcon = !self.showTpopIcon
-    },
-    setDoShowTpopIcon() {
-      self.showTpopIcon = true
     },
     dataFilterEmptyTable({ table }) {
       self.dataFilter[table] = initialDataFilterValues[table]

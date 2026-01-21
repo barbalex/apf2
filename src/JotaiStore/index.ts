@@ -262,6 +262,28 @@ export const setTreeLastTouchedNodeAtom = atom(
   (get, set, value) => set(treeLastTouchedNodeAtom, value),
 )
 
+// treeShowPopIcon - controls whether to show pop icons in tree
+export const treeShowPopIconAtom = atomWithStorage('treeShowPopIcon', true)
+export const toggleTreeShowPopIconAtom = atom(
+  (get) => get(treeShowPopIconAtom),
+  (get, set) => set(treeShowPopIconAtom, !get(treeShowPopIconAtom)),
+)
+export const setTreeShowPopIconAtom = atom(
+  (get) => get(treeShowPopIconAtom),
+  (get, set, value) => set(treeShowPopIconAtom, value),
+)
+
+// treeShowTpopIcon - controls whether to show tpop icons in tree
+export const treeShowTpopIconAtom = atomWithStorage('treeShowTpopIcon', true)
+export const toggleTreeShowTpopIconAtom = atom(
+  (get) => get(treeShowTpopIconAtom),
+  (get, set) => set(treeShowTpopIconAtom, !get(treeShowTpopIconAtom)),
+)
+export const setTreeShowTpopIconAtom = atom(
+  (get) => get(treeShowTpopIconAtom),
+  (get, set, value) => set(treeShowTpopIconAtom, value),
+)
+
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },
