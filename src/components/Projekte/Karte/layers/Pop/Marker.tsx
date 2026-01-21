@@ -3,8 +3,10 @@ import { Marker as LeafletMarker, Tooltip, Popup } from 'react-leaflet'
 import { observer } from 'mobx-react-lite'
 import Button from '@mui/material/Button'
 import { useParams, useLocation } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../../../../../mobxContext.ts'
+import { apfloraLayersAtom } from '../../../../../JotaiStore/index.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { popIconString } from './popIconString.ts'
 import { popHighlightedIconString } from './popHighlightedIconString.ts'
@@ -67,7 +69,8 @@ export const Marker = observer(({ pop }) => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const { apfloraLayers, openTree2WithActiveNodeArray, map } = store
+  const { openTree2WithActiveNodeArray, map } = store
+  const apfloraLayers = useAtomValue(apfloraLayersAtom)
   const { popIcon: popIconName, popLabel: popLabelName } = map
 
   const nrLabel = pop?.nr?.toString?.() ?? '(keine Nr)'
