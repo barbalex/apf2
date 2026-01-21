@@ -33,7 +33,6 @@ export const MobxStore = types
       defaultMapMouseCoordinates,
     ),
     hideMapControls: types.optional(types.boolean, false),
-    exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
   })
@@ -95,9 +94,6 @@ export const MobxStore = types
     },
     setMapMouseCoordinates({ x, y }) {
       self.mapMouseCoordinates = { x, y }
-    },
-    setExportFileType(val) {
-      self.exportFileType = val
     },
     openTree2WithActiveNodeArray({
       activeNodeArray,

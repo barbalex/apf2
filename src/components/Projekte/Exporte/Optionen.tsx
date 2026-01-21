@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Collapse from '@mui/material/Collapse'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
@@ -8,16 +8,19 @@ import Card from '@mui/material/Card'
 import CardActions from '@mui/material/CardActions'
 import IconButton from '@mui/material/IconButton'
 import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  exportFileTypeAtom,
+  setExportFileTypeAtom,
+} from '../../../JotaiStore/index.ts'
 
 import optionenStyles from './Optionen.module.css'
 import styles from './index.module.css'
 
-export const Optionen = observer(() => {
-  const store = useContext(MobxContext)
-  const { setExportFileType, exportFileType } = store
+export const Optionen = () => {
+  const exportFileType = useAtomValue(exportFileTypeAtom)
+  const setExportFileType = useSetAtom(setExportFileTypeAtom)
   const [expanded, setExpanded] = useState(false)
 
   return (
@@ -63,4 +66,4 @@ export const Optionen = observer(() => {
       </Collapse>
     </Card>
   )
-})
+}

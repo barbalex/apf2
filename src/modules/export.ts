@@ -5,6 +5,7 @@ import { omit } from 'es-toolkit'
 import {
   store as jotaiStore,
   addNotificationAtom,
+  exportFileTypeAtom,
 } from '../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -16,7 +17,7 @@ export const exportModule = async ({
   kml,
   apolloClient,
 }) => {
-  const { exportFileType } = apolloClient
+  const exportFileType = jotaiStore.get(exportFileTypeAtom)
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   // TODO: filter by dataFilterState

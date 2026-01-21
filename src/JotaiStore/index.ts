@@ -847,3 +847,10 @@ export const setSortedBeobFieldsAtom = atom(null, (get, set, val) => {
     val.filter((v) => !!v),
   )
 })
+
+// exportFileType
+export const exportFileTypeAtom = atomWithStorage('exportFileType', 'xlsx')
+
+export const setExportFileTypeAtom = atom(null, (get, set, val) => {
+  set(exportFileTypeAtom, val)
+})
