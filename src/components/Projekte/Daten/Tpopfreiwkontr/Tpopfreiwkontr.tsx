@@ -105,7 +105,7 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
                 tpopkontrId: row.id,
                 einheit:
                   z?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.code ?? null,
-                changedBy: user.name,
+                changedBy: userName,
               },
             }),
           ),
