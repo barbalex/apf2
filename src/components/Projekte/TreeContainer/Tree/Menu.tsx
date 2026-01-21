@@ -5,16 +5,26 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { MobxContext } from '../../../../mobxContext.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
+import {
+  mapTpopIconAtom,
+  setMapTpopIconAtom,
+  mapPopIconAtom,
+  setMapPopIconAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './Menu.module.css'
 
 export const Menu = observer(() => {
   const store = useContext(MobxContext)
-  const { map, tree } = store
-  const { tpopIcon, setTpopIcon, popIcon, setPopIcon } = map
+  const { tree } = store
+  const tpopIcon = useAtomValue(mapTpopIconAtom)
+  const setTpopIcon = useSetAtom(setMapTpopIconAtom)
+  const popIcon = useAtomValue(mapPopIconAtom)
+  const setPopIcon = useSetAtom(setMapPopIconAtom)
   const {
     showTpopIcon,
     toggleShowTpopIcon,

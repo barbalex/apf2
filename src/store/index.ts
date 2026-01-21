@@ -1,12 +1,10 @@
 import { types } from 'mobx-state-tree'
 
-import { Map, defaultValue as defaultMap } from './Map.ts'
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
 
 export const MobxStore = types
   .model({
     tree: types.optional(Tree, defaultTree),
-    map: types.optional(Map, defaultMap),
   })
   .actions((self) => ({
     tableIsFiltered(table) {

@@ -204,7 +204,10 @@ export const useTpopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.map.tpopIcon, rerender),
+    () => {
+      const unsub = jotaiStore.sub(mapTpopIconAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -255,7 +258,7 @@ export const useTpopNavData = (props) => {
   const filesCount = data?.data?.tpopById?.tpopFilesByTpopId?.totalCount ?? 0
   const historiesCount = data?.data?.allTpopHistories?.totalCount ?? 0
 
-  const tpopIconName = store.map.tpopIcon
+  const tpopIconName = jotaiStore.get(mapTpopIconAtom)
 
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
   const TpopIcon =

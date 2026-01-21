@@ -184,6 +184,37 @@ export const setMapActiveBaseLayerAtom = atom(
   (get) => get(mapActiveBaseLayerAtom),
   (get, set, value) => set(mapActiveBaseLayerAtom, value),
 )
+export const mapPopIconAtom = atomWithStorage(
+  'mapPopIcon',
+  'statusGroupSymbols',
+)
+export const setMapPopIconAtom = atom(
+  (get) => get(mapPopIconAtom),
+  (get, set, value) => set(mapPopIconAtom, value),
+)
+export const mapTpopIconAtom = atomWithStorage(
+  'mapTpopIcon',
+  'statusGroupSymbols',
+)
+export const setMapTpopIconAtom = atom(
+  (get) => get(mapTpopIconAtom),
+  (get, set, value) => set(mapTpopIconAtom, value),
+)
+export const mapPopLabelAtom = atomWithStorage('mapPopLabel', 'nr')
+export const setMapPopLabelAtom = atom(
+  (get) => get(mapPopLabelAtom),
+  (get, set, value) => set(mapPopLabelAtom, value),
+)
+export const mapTpopLabelAtom = atomWithStorage('mapTpopLabel', 'nr')
+export const setMapTpopLabelAtom = atom(
+  (get) => get(mapTpopLabelAtom),
+  (get, set, value) => set(mapTpopLabelAtom, value),
+)
+export const mapBeobDetailsOpenAtom = atom(false)
+export const setMapBeobDetailsOpenAtom = atom(
+  (get) => get(mapBeobDetailsOpenAtom),
+  (get, set, value) => set(mapBeobDetailsOpenAtom, value),
+)
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },

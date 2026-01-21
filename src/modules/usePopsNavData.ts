@@ -30,7 +30,11 @@ import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 
 import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
@@ -135,7 +139,10 @@ export const usePopsNavData = (props) => {
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
-    () => reaction(() => store.map.popIcon, rerender),
+    () => {
+      const unsub = jotaiStore.sub(mapPopIconAtom, rerender)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
@@ -164,7 +171,7 @@ export const usePopsNavData = (props) => {
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
 
-  const popIconName = store.map.popIcon
+  const popIconName = jotaiStore.get(mapPopIconAtom)
 
   const navData = {
     id: 'Populationen',

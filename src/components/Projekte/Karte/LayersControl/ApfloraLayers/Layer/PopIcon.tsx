@@ -1,18 +1,24 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { MdLocalFlorist } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../../../../mobxContext.ts'
+import {
+  mapPopIconAtom,
+  setMapPopIconAtom,
+  mapPopLabelAtom,
+  setMapPopLabelAtom,
+} from '../../../../../../JotaiStore/index.ts'
 
 import styles from './PopIcon.module.css'
 
-export const PopIcon = observer(() => {
-  const store = useContext(MobxContext)
-  const { map } = store
-  const { popIcon, setPopIcon, setPopLabel, popLabel } = map
+export const PopIcon = () => {
+  const popIcon = useAtomValue(mapPopIconAtom)
+  const setPopIcon = useSetAtom(setMapPopIconAtom)
+  const popLabel = useAtomValue(mapPopLabelAtom)
+  const setPopLabel = useSetAtom(setMapPopLabelAtom)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = (e) => setAnchorEl(e.currentTarget)
@@ -121,4 +127,4 @@ export const PopIcon = observer(() => {
       </Menu>
     </>
   )
-})
+}

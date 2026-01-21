@@ -1,18 +1,24 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { MdLocalFlorist } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../../../../mobxContext.ts'
+import {
+  mapTpopIconAtom,
+  setMapTpopIconAtom,
+  mapTpopLabelAtom,
+  setMapTpopLabelAtom,
+} from '../../../../../../JotaiStore/index.ts'
 
 import styles from './PopIcon.module.css'
 
-export const TpopIcon = observer(() => {
-  const store = useContext(MobxContext)
-  const { map } = store
-  const { tpopIcon, setTpopIcon, tpopLabel, setTpopLabel } = map
+export const TpopIcon = () => {
+  const tpopIcon = useAtomValue(mapTpopIconAtom)
+  const setTpopIcon = useSetAtom(setMapTpopIconAtom)
+  const tpopLabel = useAtomValue(mapTpopLabelAtom)
+  const setTpopLabel = useSetAtom(setMapTpopLabelAtom)
 
   const [anchorEl, setAnchorEl] = useState(null)
   const onClickIconContainer = (e) => setAnchorEl(e.currentTarget)
@@ -81,7 +87,9 @@ export const TpopIcon = observer(() => {
           className={styles.menuItem}
           onClick={onClickByStatusGroup}
         >
-          {tpopIcon === 'statusGroup' && <FaCheck className={styles.checkIcon} />}
+          {tpopIcon === 'statusGroup' && (
+            <FaCheck className={styles.checkIcon} />
+          )}
           {`nach Status, mit Buchstaben`}
         </MenuItem>
         <MenuItem
@@ -118,4 +126,4 @@ export const TpopIcon = observer(() => {
       </Menu>
     </>
   )
-})
+}
