@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { useAtomValue } from 'jotai'
 import { Marker as LeafletMarker, Popup } from 'react-leaflet'
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
@@ -9,6 +10,7 @@ import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
 
 import { MobxContext } from '../../../../../mobxContext.ts'
+import { assigningBeobAtom } from '../../../../../JotaiStore/index.ts'
 import { beobIconString } from './beobIconString.ts'
 import { beobIconAbsenzString } from './beobIconAbsenzString.ts'
 import { beobIconHighlightedString } from './beobIconHighlightedString.ts'
@@ -27,7 +29,8 @@ export const Marker = observer(({ beob }) => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const { assigningBeob, openTree2WithActiveNodeArray } = store
+  const assigningBeob = useAtomValue(assigningBeobAtom)
+  const { openTree2WithActiveNodeArray } = store
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()

@@ -86,7 +86,6 @@ export const MobxStore = types
     ),
     hideMapControls: types.optional(types.boolean, false),
     exportFileType: types.optional(types.maybeNull(types.string), 'xlsx'),
-    assigningBeob: types.optional(types.boolean, false),
     tree: types.optional(Tree, defaultTree),
     map: types.optional(Map, defaultMap),
     sortedBeobFields: types.optional(
@@ -172,9 +171,6 @@ export const MobxStore = types
     },
     setExportFileType(val) {
       self.exportFileType = val
-    },
-    setAssigningBeob(val) {
-      self.assigningBeob = val
     },
     openTree2WithActiveNodeArray({
       activeNodeArray,
