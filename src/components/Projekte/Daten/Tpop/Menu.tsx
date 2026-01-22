@@ -1,10 +1,8 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import {
   FaPlus,
   FaMinus,
@@ -29,7 +27,6 @@ import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
@@ -49,6 +46,8 @@ import {
   setIdOfTpopBeingLocalizedAtom,
   mapActiveApfloraLayersAtom,
   setMapActiveApfloraLayersAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
@@ -74,13 +73,12 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row }: MenuProps) => {
+export const Menu = ({ row }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId } = useParams()
 
-  const store = useContext(MobxContext)
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
   const idOfTpopBeingLocalized = useAtomValue(idOfTpopBeingLocalizedAtom)
@@ -89,6 +87,8 @@ export const Menu = observer(({ row }: MenuProps) => {
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -164,11 +164,9 @@ export const Menu = observer(({ row }: MenuProps) => {
     }
 
     // remove active path from openNodes
-    const openNodesRaw = store?.tree?.openNodes
-    const openNodes = getSnapshot(openNodesRaw)
     const activePath = pathname.split('/').filter((p) => !!p)
     const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    store.tree.setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes)
 
     // update tree query
     tsQueryClient.invalidateQueries({
@@ -192,7 +190,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       projId,
       apId,
       popId,
-      store,
       menuType: 'tpop',
       parentId: popId,
     })
@@ -209,7 +206,6 @@ export const Menu = observer(({ row }: MenuProps) => {
         'Teil-Populationen',
         tpopId,
       ],
-      store,
       search,
     })
 
@@ -242,17 +238,11 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickMoveInTree = () => {
     if (isMovingTpop) {
       // move to this pop
-      return moveTo({
-        id: popId,
-        store,
-      })
+      return moveTo({ id: popId })
     }
     if (isMovingTpopfeldkontr || isMovingTpopfreiwkontr || isMovingTpopmassn) {
       // move to this tpop
-      return moveTo({
-        id: tpopId,
-        store,
-      })
+      return moveTo({ id: tpopId })
     }
     setMoving({
       id: row.id,
@@ -283,17 +273,11 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickCopy = () => {
     if (isCopyingTpop) {
       // copy to this pop
-      return copyTo({
-        parentId: popId,
-        store,
-      })
+      return copyTo({ parentId: popId })
     }
     if (isCopyingFeldkontr || isCopyingFreiwkontr || isCopyingMassn) {
       // copy to this tpop
-      return copyTo({
-        parentId: tpopId,
-        store,
-      })
+      return copyTo({ parentId: tpopId })
     }
     setCopying({
       table: 'tpop',
@@ -331,11 +315,7 @@ export const Menu = observer(({ row }: MenuProps) => {
     })
 
   // to paste copied feldkontr/freiwkontr/massn
-  const onClickCopyLowerElementToHere = () =>
-    copyTo({
-      parentId: tpopId,
-      store,
-    })
+  const onClickCopyLowerElementToHere = () => copyTo({ parentId: tpopId })
 
   const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
@@ -481,4 +461,4 @@ export const Menu = observer(({ row }: MenuProps) => {
       </MuiMenu>
     </ErrorBoundary>
   )
-})
+}

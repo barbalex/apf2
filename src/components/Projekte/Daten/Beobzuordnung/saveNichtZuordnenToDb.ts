@@ -7,18 +7,22 @@ import {
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeAddOpenNodesAtom,
+  treeActiveNodeArrayAtom,
+  treeOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveNichtZuordnenToDb = async ({
   value,
   id,
   refetch: refetchPassed,
-  store,
   search,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
   const variables = {
     id,
     nichtZuordnen: value,
@@ -42,7 +46,6 @@ export const saveNichtZuordnenToDb = async ({
     queryKey: [`treeAp`],
   })
   // need to update activeNodeArray and openNodes
-  const { activeNodeArray, openNodes, addOpenNodes } = store.tree
 
   let newActiveNodeArray = [...activeNodeArray]
   newActiveNodeArray[4] =
@@ -58,7 +61,7 @@ export const saveNichtZuordnenToDb = async ({
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
   })
-  addOpenNodes(newOpenNodes)
+  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
   jotaiStore.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
   if (refetchPassed) refetchPassed()

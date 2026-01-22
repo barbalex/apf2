@@ -1,17 +1,21 @@
 import { isEqual } from 'es-toolkit'
-import { getSnapshot } from 'mobx-state-tree'
 
-import { store as jotaiStore, navigateAtom } from '../../../JotaiStore/index.ts'
+import {
+  store as jotaiStore,
+  navigateAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
+} from '../../../JotaiStore/index.ts'
 
-export const closeLowerNodes = async ({ url, store, search }) => {
-  const { setOpenNodes } = store.tree
-  const openNodes = getSnapshot(store.tree.openNodes)
-  const activeNodeArray = getSnapshot(store.tree.activeNodeArray)
+export const closeLowerNodes = async ({ url, search }) => {
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
   const newOpenNodes = openNodes.filter((n) => {
     const partWithEqualLength = n.slice(0, url.length)
     return !isEqual(partWithEqualLength, url)
   })
-  setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
   if (isEqual(activeNodeArray.slice(0, url.length), url)) {
     // active node will be closed
     // navigate to url

@@ -7,10 +7,17 @@ import { BsCaretDown } from 'react-icons/bs'
 import { useResizeDetector } from 'react-resize-detector'
 import { observer } from 'mobx-react-lite'
 import { motion } from 'framer-motion'
+import { useAtomValue } from 'jotai'
 
 import { Item } from './Item.tsx'
 import { Title } from './Title/index.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  treeActiveNodeArrayAtom,
+  treeActiveFilterTableAtom,
+  treeNodeLabelFilterAtom,
+  store as jotaiStore,
+} from '../../../../JotaiStore/index.ts'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { usePrevious } from '../../../../modules/usePrevious.ts'
 
@@ -32,7 +39,10 @@ const StyledMenu = styled((props) => <MuiMenu {...props} />)(() => ({
 
 export const Menu = observer(({ navData }) => {
   const store = useContext(MobxContext)
-  const { nodeLabelFilter, activeFilterTable, activeNodeArray } = store.tree
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  const activeFilterTable = jotaiStore.get(treeActiveFilterTableAtom)
+  const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+
   const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
 
   const [anchorEl, setAnchorEl] = useState(null)

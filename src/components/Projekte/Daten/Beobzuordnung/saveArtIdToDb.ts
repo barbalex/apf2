@@ -1,6 +1,5 @@
 import { isEqual } from 'es-toolkit'
 import { gql } from '@apollo/client'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
@@ -9,12 +8,14 @@ import {
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeActiveNodeArrayAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveArtIdToDb = async ({ value, row, store, search }) => {
-  const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
-  const aNA = getSnapshot(activeNodeArray)
-  const openNodes = getSnapshot(openNodesRaw)
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
@@ -44,14 +45,14 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
     `,
     variables: { id: value },
   })
-  // aNA = activeNodeArray
+  // activeNodeArray is already loaded
   const newApId = result?.data?.aeTaxonomyById?.apByArtId?.id
 
   // do not navigate if newApId is not found
   if (!newApId) return
 
-  const newANA = [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]]
-  const oldParentNodeUrl = aNA.toSpliced(-1)
+  const newANA = [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4], activeNodeArray[5]]
+  const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
   const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
 
   // need to close:
@@ -66,15 +67,15 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   const newOpenNodes = [
     ...openNodes.filter(
       (n) =>
-        !isEqual(n, aNA) &&
+        !isEqual(n, activeNodeArray) &&
         !isEqual(n, oldParentNodeUrl) &&
         !isEqual(n, oldGParentNodeUrl),
     ),
-    [aNA[0], aNA[1], aNA[2], newApId],
-    [aNA[0], aNA[1], aNA[2], newApId, aNA[4]],
-    [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]],
+    [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId],
+    [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4]],
+    [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4], activeNodeArray[5]],
   ]
-  setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newANA.join('/')}${search}`)
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],

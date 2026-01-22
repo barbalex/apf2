@@ -13,7 +13,7 @@ import { checkIfIsOpen } from './checkIfIsOpen.ts'
 
 export const NodeWithList = observer(({ menu }) => {
   const store = useContext(MobxContext)
-  const isOpen = checkIfIsOpen({ store, menu })
+  const isOpen = checkIfIsOpen({ menu })
   const node = nodeFromMenu(menu)
 
   return (

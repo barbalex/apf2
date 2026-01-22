@@ -1,15 +1,18 @@
-import { useContext, useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
-import { snakeCase } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { tables } from '../../../modules/tables.ts'
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeActiveFilterTableAtom,
+  treeSetNodeLabelFilterKeyAtom,
+  treeEmptyNodeLabelFilterAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './LabelFilter.module.css'
 
@@ -21,8 +24,8 @@ const getValues = ({ activeFilterTable, nodeLabelFilter }) => {
     filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
     // make sure 0 is kept
     if (!filterValue && filterValue !== 0) filterValue = ''
-    // should be to_under_score_case
-    const table = tables.find((t) => t.table === snakeCase(activeFilterTable))
+    // activeFilterTable is already in snake_case format, no conversion needed. Was: snakeCase
+    const table = tables.find((t) => t.table === activeFilterTable)
     const tableLabel = table ? table.label : null
     // danger: Projekte can not be filtered because no parent folder
     if (tableLabel !== 'Projekte') {
@@ -33,13 +36,14 @@ const getValues = ({ activeFilterTable, nodeLabelFilter }) => {
   return { labelText, filterValue }
 }
 
-export const LabelFilter = observer(() => {
-  const store = useContext(MobxContext)
-  const { nodeLabelFilter: nodeLabelFilterRaw, activeFilterTable } = store.tree
-  const nodeLabelFilter = getSnapshot(nodeLabelFilterRaw)
-  const setNodeLabelFilterKey = store.tree.nodeLabelFilter.setKey
-  const empty = store.tree.nodeLabelFilter.empty
-  const isFiltered = store.tree.nodeLabelFilter.isFiltered()
+export const LabelFilter = () => {
+  const activeFilterTable = useAtomValue(treeActiveFilterTableAtom)
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const setNodeLabelFilterKey = useSetAtom(treeSetNodeLabelFilterKeyAtom)
+  const empty = useSetAtom(treeEmptyNodeLabelFilterAtom)
+  const isFiltered = Object.values(nodeLabelFilter).some(
+    (v) => v !== null && v !== '',
+  )
 
   const { labelText, filterValue } = getValues({
     activeFilterTable,
@@ -105,4 +109,4 @@ export const LabelFilter = observer(() => {
       />
     </FormControl>
   )
-})
+}

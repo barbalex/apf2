@@ -1,16 +1,15 @@
-import { getSnapshot } from 'mobx-state-tree'
-
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { openNode } from '../openNode.ts'
 import {
   store as jotaiStore,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../../../../JotaiStore/index.js'
 
 export const toggleNode = ({
   node,
-  store,
   search,
   onlyShowActivePath = false,
 }) => {
@@ -23,18 +22,17 @@ export const toggleNode = ({
     throw new Error('navigate function not available in Jotai store')
   }
 
-  const { openNodes: openNodesRaw, activeNodeArray } = store.tree
-  const aNA = getSnapshot(activeNodeArray)
-  const openNodes = getSnapshot(openNodesRaw)
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
 
   let newActiveNodeArray = []
   if (!isNodeOpen({ openNodes, url: node.url })) {
     // node is closed
     // open it and make it the active node
-    openNode({ node, openNodes, store })
+    openNode({ node, openNodes })
     newActiveNodeArray = [...node.url]
     // some elements are numbers but they are contained in url as text
-  } else if (node.urlLabel == aNA.slice(-1)[0]) {
+  } else if (node.urlLabel == activeNodeArray.slice(-1)[0]) {
     // the node is open
     // AND it is the active node
     // BEFORE 2024.12.12:

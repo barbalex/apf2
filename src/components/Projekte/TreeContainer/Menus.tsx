@@ -1,8 +1,7 @@
-import { useContext, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { uniq } from 'es-toolkit'
 import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -11,13 +10,14 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
   addNotificationAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../JotaiStore/index.ts'
 
 const CmApFolder = lazy(async () => ({
@@ -219,7 +219,6 @@ import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.ts
 import { openLowerNodes } from './openLowerNodes/index.ts'
 import { closeLowerNodes } from './closeLowerNodes.ts'
 import { insertDataset } from './insertDataset.ts'
-import { MobxContext } from '../../../mobxContext.ts'
 import { useProjekteTabs } from '../../../modules/useProjekteTabs.ts'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.ts'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.ts'
@@ -238,15 +237,14 @@ import {
 
 import styles from './Menus.module.css'
 
-export const Menus = observer(() => {
+export const Menus = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
   const { projId, apId, popId } = params
   const { search } = useLocation()
 
-  const store = useContext(MobxContext)
-  const { setOpenNodes, openNodes: openNodesRaw } = store.tree
-  const openNodes = getSnapshot(openNodesRaw)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -347,7 +345,6 @@ export const Menus = observer(() => {
           menuType,
           singleElementName,
           id,
-          store,
           search,
           jahr,
         })
@@ -360,14 +357,12 @@ export const Menus = observer(() => {
           projId,
           popId,
           menuType,
-          store,
           jahr,
         })
       },
       closeLowerNodes() {
         closeLowerNodes({
           url,
-          store,
           search,
         })
       },
@@ -422,7 +417,6 @@ export const Menus = observer(() => {
       move() {
         moveTo({
           id: nodeType === 'folder' ? parentId : id,
-          store,
         })
       },
       markForCopying() {
@@ -465,7 +459,6 @@ export const Menus = observer(() => {
           id,
           apId,
           projId,
-          store,
           search,
         })
       },
@@ -598,4 +591,4 @@ export const Menus = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

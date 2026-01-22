@@ -1,11 +1,9 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { MdOutlineMoveDown, MdContentCopy, MdPrint } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
@@ -17,7 +15,6 @@ import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 
@@ -32,6 +29,8 @@ import {
   movingAtom,
   setMovingAtom,
   setIsPrintAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 interface CreateTpopkontrResult {
@@ -52,18 +51,19 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row }: MenuProps) => {
+export const Menu = ({ row }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopkontrId } = useParams()
 
-  const store = useContext(MobxContext)
   const setIsPrint = useSetAtom(setIsPrintAtom)
   const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -140,11 +140,9 @@ export const Menu = observer(({ row }: MenuProps) => {
     }
 
     // remove active path from openNodes
-    const openNodesRaw = store?.tree?.openNodes
-    const openNodes = getSnapshot(openNodesRaw)
     const activePath = pathname.split('/').filter((p) => !!p)
     const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    store.tree.setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes)
 
     // update tree query
     tsQueryClient.invalidateQueries({
@@ -175,10 +173,7 @@ export const Menu = observer(({ row }: MenuProps) => {
 
   const onClickMoveInTree = () => {
     if (isMovingTpopfreiwkontr) {
-      return moveTo({
-        id: tpopId,
-        store,
-      })
+      return moveTo({ id: tpopId })
     }
     setMoving({
       id: row.id,
@@ -204,10 +199,7 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickCopy = () => {
     if (isCopyingTpopfreiwkontr) {
       // copy to this tpop
-      return copyTo({
-        parentId: tpopId,
-        store,
-      })
+      return copyTo({ parentId: tpopId })
     }
     setCopying({
       table: 'tpopfreiwkontr',
@@ -313,4 +305,4 @@ export const Menu = observer(({ row }: MenuProps) => {
       </MuiMenu>
     </ErrorBoundary>
   )
-})
+}

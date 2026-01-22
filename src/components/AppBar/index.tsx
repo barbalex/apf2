@@ -1,27 +1,27 @@
-import { Suspense, useEffect, useContext } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Outlet, useLocation, useParams, useNavigate } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import { useAtomValue } from 'jotai'
 
 import { Bar } from './Bar/index.tsx'
 import { EkfBar } from './EkfBar/index.tsx'
 import { inIframe } from '../../modules/inIframe.ts'
 import { Spinner } from '../shared/Spinner.tsx'
-import { MobxContext } from '../../mobxContext.ts'
-import { isMobileViewAtom } from '../../JotaiStore/index.ts'
+import {
+  isMobileViewAtom,
+  treeActiveNodeArrayAtom,
+} from '../../JotaiStore/index.ts'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.tsx'
 
 import styles from './index.module.css'
 
 const isInIframe = inIframe()
 
-export const Component = observer(() => {
+export const Component = () => {
   const navigate = useNavigate()
   const { userId } = useParams()
   const { pathname, search } = useLocation()
 
-  const store = useContext(MobxContext)
-  const activeNodeArray = store.tree.activeNodeArray
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
 
   const isMobileView = useAtomValue(isMobileViewAtom)
 
@@ -58,4 +58,4 @@ export const Component = observer(() => {
       </Suspense>
     </div>
   )
-})
+}

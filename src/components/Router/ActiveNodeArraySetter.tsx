@@ -1,14 +1,14 @@
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { isEqual } from 'es-toolkit'
 import { useLocation } from 'react-router'
 
-import { MobxContext } from '../../mobxContext.ts'
+import { treeActiveNodeArrayAtom, treeSetActiveNodeArrayAtom } from '../../JotaiStore/index.ts'
 import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.ts'
 
-export const ActiveNodeArraySetter = observer(() => {
-  const store = useContext(MobxContext)
-  const { activeNodeArray, setActiveNodeArray } = store.tree
+export const ActiveNodeArraySetter = () => {
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  const setActiveNodeArray = useSetAtom(treeSetActiveNodeArrayAtom)
 
   const { pathname } = useLocation()
 
@@ -23,4 +23,4 @@ export const ActiveNodeArraySetter = observer(() => {
   }, [activeNodeArray, pathname, setActiveNodeArray])
 
   return null
-})
+}

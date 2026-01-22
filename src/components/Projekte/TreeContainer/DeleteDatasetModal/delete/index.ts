@@ -3,7 +3,6 @@ import { upperFirst } from 'es-toolkit'
 import { camelCase } from 'es-toolkit'
 import { omit } from 'es-toolkit'
 import { gql } from '@apollo/client'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../../../modules/tables.js'
 import {
@@ -15,6 +14,9 @@ import {
   toDeleteAtom,
   emptyToDeleteAtom,
   addDeletedDatasetAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -23,7 +25,7 @@ const addNotification = (notification) =>
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
-export const deleteModule = async ({ store, search }) => {
+export const deleteModule = async ({ search }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
@@ -128,7 +130,7 @@ export const deleteModule = async ({ store, search }) => {
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = store?.tree?.activeNodeArray
+  const activeNodeArray1 = jotaiStore.get(treeActiveNodeArrayAtom)
   if (
     isEqual(activeNodeArray1, toDelete.url) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
@@ -147,10 +149,9 @@ export const deleteModule = async ({ store, search }) => {
   }
 
   // remove from openNodes
-  const openNodesRaw = store?.tree?.openNodes
-  const openNodes = getSnapshot(openNodesRaw)
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
   const newOpenNodes = openNodes.filter((n) => !isEqual(n, toDelete.url))
-  store.tree.setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
     tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })

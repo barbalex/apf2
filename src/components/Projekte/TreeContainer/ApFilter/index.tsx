@@ -4,12 +4,17 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { getSnapshot } from 'mobx-state-tree'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import {
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -19,15 +24,10 @@ export const ApFilter = observer(({ color }) => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const {
-    apFilter,
-    setApFilter,
-    activeNodeArray,
-    openNodes: openNodesRaw,
-    setOpenNodes,
-  } = store.tree
-  const aNA = getSnapshot(activeNodeArray)
-  const openNodes = getSnapshot(openNodesRaw)
+  const { apFilter, setApFilter } = store.tree
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -53,10 +53,14 @@ export const ApFilter = observer(({ color }) => {
         })
       }
       const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung) //@485
-      if (!isAp && aNA[2] === 'Arten') {
+      if (!isAp && activeNodeArray[2] === 'Arten') {
         // not a real ap
         // shorten active node array to Arten
-        const newActiveNodeArray = [aNA[0], aNA[1], aNA[2]]
+        const newActiveNodeArray = [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+        ]
         navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
         // remove from openNodes
         const newOpenNodes = openNodes.filter((n) => {

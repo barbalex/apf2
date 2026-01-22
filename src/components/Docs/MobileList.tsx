@@ -1,15 +1,12 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../../JotaiStore/index.ts'
 import { useDocsNavData } from '../../modules/useDocsNavData.ts'
 import { List as SharedList } from '../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 
-export const MobileList = observer(() => {
-  const store = useContext(MobxContext)
-  const { nodeLabelFilter } = store.tree
+export const MobileList = () => {
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
 
   const navData = useDocsNavData()
 
@@ -20,4 +17,4 @@ export const MobileList = observer(() => {
       highlightSearchString={nodeLabelFilter.doc}
     />
   )
-})
+}

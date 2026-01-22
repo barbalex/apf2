@@ -9,6 +9,7 @@ import { query } from './query.ts'
 import {
   store as jotaiStore,
   apolloClientAtom,
+  treeAddOpenNodesAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 export const tpopfreiwkontrFolder = async ({
@@ -16,12 +17,9 @@ export const tpopfreiwkontrFolder = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   popId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
-  store,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
 
-  const tree = store.tree
-  const { addOpenNodes } = tree
   // 1. load all data
   const { data } = await apolloClient.query({
     query: query,
@@ -94,5 +92,5 @@ export const tpopfreiwkontrFolder = async ({
   })
 
   // 3. update openNodes
-  addOpenNodes(newOpenNodes)
+  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
 }

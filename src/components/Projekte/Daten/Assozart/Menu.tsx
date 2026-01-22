@@ -1,11 +1,10 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
@@ -24,6 +23,8 @@ import styles from '../../../shared/Files/Menu/index.module.css'
 
 import {
   addNotificationAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 
@@ -61,6 +62,8 @@ export const Menu = observer(() => {
   }>()
 
   const store = useContext(MobxContext)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -134,11 +137,9 @@ export const Menu = observer(() => {
     }
 
     // remove active path from openNodes
-    const openNodesRaw = store?.tree?.openNodes
-    const openNodes = getSnapshot(openNodesRaw)
     const activePath = pathname.split('/').filter((p) => !!p)
     const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    store.tree.setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes)
 
     // update tree query
     tsQueryClient.invalidateQueries({

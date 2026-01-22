@@ -2,6 +2,7 @@ import { useContext, useState, useEffect, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -14,6 +15,7 @@ import { queryAps } from './queryAps.ts'
 import { queryAdresses } from './queryAdresses.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -71,10 +73,10 @@ export const ApFilter = observer(() => {
   const {
     dataFilter,
     apFilter: nurApFilter,
-    nodeLabelFilter,
     apGqlFilter,
     dataFilterSetValue,
   } = store.tree
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

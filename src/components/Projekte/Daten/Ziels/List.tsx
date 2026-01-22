@@ -1,15 +1,14 @@
-import { useContext, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { Suspense } from 'react'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
 import { useZielsOfJahrNavData } from '../../../../modules/useZielsOfJahrNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
-export const List = observer(() => {
-  const store = useContext(MobxContext)
-  const { nodeLabelFilter } = store.tree
+export const List = () => {
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
 
   const navData = useZielsOfJahrNavData()
 
@@ -22,4 +21,4 @@ export const List = observer(() => {
       />
     </Suspense>
   )
-})
+}

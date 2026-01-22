@@ -1,18 +1,22 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import MenuItem from '@mui/material/MenuItem'
 import { useLocation, useNavigate } from 'react-router'
 import { isEqual } from 'es-toolkit'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import {
+  treeActiveNodeArrayAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+} from '../../../../JotaiStore/index.ts'
 
-export const Item = observer(({ menu, baseUrl, onClose }) => {
+export const Item = ({ menu, baseUrl, onClose }) => {
   const { pathname, search } = useLocation()
   const navigate = useNavigate()
 
-  const store = useContext(MobxContext)
-  const activeNodeArray = store.tree.activeNodeArray
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   // issue: relative paths are not working!!!???
   const pathnameWithoutLastSlash = pathname.replace(/\/$/, '')
@@ -34,10 +38,10 @@ export const Item = observer(({ menu, baseUrl, onClose }) => {
       .split('/')
       .filter((e) => !!e)
       .slice(1)
-    const newOpenNodes = store.tree.openNodes.filter(
+    const newOpenNodes = openNodes.filter(
       (n) => !isEqual(n.slice(0, url.length), url),
     )
-    store.tree.setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes)
     // 3. close menu
     onClose()
   }
@@ -54,4 +58,4 @@ export const Item = observer(({ menu, baseUrl, onClose }) => {
         menu.labelRightElements.map((El, index) => <El key={index} />)}
     </MenuItem>
   )
-})
+}

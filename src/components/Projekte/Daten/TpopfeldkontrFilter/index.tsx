@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { Form, useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -18,6 +19,7 @@ import { TpopfeldkontrentwicklungPopover } from '../../../shared/Tpopfeldkontren
 import { query } from './query.ts'
 import { queryTpopkontrs } from './queryTpopkontrs.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -86,7 +88,6 @@ export const TpopfeldkontrFilter = observer(() => {
   const {
     dataFilter,
     ekGqlFilter,
-    nodeLabelFilter,
     mapFilter,
     apFilter,
     artIsFiltered,
@@ -94,6 +95,7 @@ export const TpopfeldkontrFilter = observer(() => {
     tpopIsFiltered,
     dataFilterSetValue,
   } = store.tree
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

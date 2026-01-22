@@ -1,19 +1,19 @@
-import { useContext, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { Suspense } from 'react'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
 import { useApbersNavData } from '../../../../modules/useApbersNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
+import {
+  isDesktopViewAtom,
+  treeNodeLabelFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 
-export const List = observer(() => {
+export const List = () => {
   const isDesktopView = useAtomValue(isDesktopViewAtom)
 
-  const store = useContext(MobxContext)
-  const { nodeLabelFilter } = store.tree
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
 
   const navData = useApbersNavData()
 
@@ -26,4 +26,4 @@ export const List = observer(() => {
       />
     </Suspense>
   )
-})
+}

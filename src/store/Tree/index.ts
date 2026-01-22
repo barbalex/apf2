@@ -4,10 +4,6 @@ import { merge } from 'es-toolkit'
 import queryString from 'query-string'
 import isUuid from 'is-uuid'
 
-import {
-  NodeLabelFilter,
-  defaultValue as defaultNodeLabelFilter,
-} from './NodeLabelFilter.ts'
 import { Geojson } from './Geojson.ts'
 import { initialDataFilterValues } from './DataFilter/initialValues.ts'
 import { DataFilter } from './DataFilter/types.ts'
@@ -34,6 +30,9 @@ import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import {
   store as jotaiStore,
   addNotificationAtom,
+  treeOpenNodesAtom,
+  treeActiveNodeArrayAtom,
+  treeNodeLabelFilterAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -41,18 +40,28 @@ const addNotification = (notification) =>
 
 export const Tree = types
   .model('Tree', {
-    activeNodeArray: types.array(types.union(types.string, types.number)),
-    // maybe later migrate to jotai?
-    openNodes: types.array(
-      types.array(types.union(types.string, types.number)),
-    ),
     apFilter: types.optional(types.boolean, true),
-    nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
     mapFilterResetter: types.optional(types.number, 0),
   })
+  .volatile(() => ({
+    // Track nodeLabelFilter changes to make getters reactive
+    nodeLabelFilterVersion: 0,
+  }))
   .actions((self) => ({
+    incrementNodeLabelFilterVersion() {
+      self.nodeLabelFilterVersion += 1
+    },
+    afterCreate() {
+      // Subscribe to jotai atom changes and increment version to trigger mobx reactions
+      jotaiStore.sub(treeNodeLabelFilterAtom, () => {
+        // Use queueMicrotask to avoid synchronous mutation during jotai update
+        queueMicrotask(() => {
+          self.incrementNodeLabelFilterVersion()
+        })
+      })
+    },
     incrementMapFilterResetter() {
       self.mapFilterResetter += 1
     },
@@ -89,112 +98,35 @@ export const Tree = types
     emptyMapFilter() {
       self.setMapFilter(undefined)
     },
-    setOpenNodes(val) {
-      // val should always be created from a snapshot of openNodes
-      // to ensure not mutating openNodes!!!
-      // need set to ensure contained arrays are unique
-      const set = new Set(val.map(JSON.stringify))
-      self.openNodes = Array.from(set).map(JSON.parse)
-    },
-    addOpenNodes(nodes) {
-      // need set to ensure contained arrays are unique
-      const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
-      self.openNodes = Array.from(set).map(JSON.parse)
-    },
-    addOpenNodesForNodeArray(nodeArray) {
-      const extraOpenNodes = []
-      nodeArray.forEach((v, i) => {
-        extraOpenNodes.push(nodeArray.slice(0, i + 1))
-      })
-      this.addOpenNodes(extraOpenNodes)
-    },
     setApFilter(val) {
       self.apFilter = val
     },
-    setActiveNodeArray(val) {
-      if (isEqual(val, self.activeNodeArray)) {
-        // do not do this if already set
-        // trying to stop vicious cycle of reloading in first start after update
-        return
-      }
-      // always set missing open nodes?
-      self.addOpenNodesForNodeArray(val)
-      self.activeNodeArray = val
-    },
   }))
   .views((self) => ({
-    get activeFilterTable() {
-      const aNA = getSnapshot(self.activeNodeArray)
-      if (aNA.length > 10) {
-        if (aNA[10] === 'Zaehlungen') return 'tpopkontrzaehl'
-      }
-      if (aNA.length > 8) {
-        if (aNA[8] === 'Massnahmen') return 'tpopmassn'
-        if (aNA[8] === 'Freiwilligen-Kontrollen') return 'tpopkontr'
-        if (aNA[8] === 'Feld-Kontrollen') return 'tpopkontr'
-        if (aNA[8] === 'Massnahmen-Berichte') return 'tpopmassnber'
-        if (aNA[8] === 'Kontroll-Berichte') return 'tpopber'
-        if (aNA[8] === 'Beobachtungen') return 'beob'
-      }
-      if (aNA.length > 6) {
-        if (aNA[6] === 'Teil-Populationen') return 'tpop'
-        if (aNA[6] === 'Kontroll-Berichte') return 'popber'
-        if (aNA[6] === 'Massnahmen-Berichte') return 'popmassnber'
-        if (aNA[6] === 'Massnahmen-Berichte') return 'popmassnber'
-      }
-      if (aNA.length > 4) {
-        if (aNA[4] === 'Populationen') return 'pop'
-        if (aNA[4] === 'AP-Ziele') return 'ziel'
-        if (aNA[4] === 'AP-Erfolgskriterien') return 'erfkrit'
-        if (aNA[4] === 'AP-Berichte') return 'apber'
-        if (aNA[4] === 'Idealbiotop') return undefined // or pop?
-        if (aNA[4] === 'Taxa') return 'apart'
-        if (aNA[4] === 'assoziierte-Arten') return 'assozart'
-        if (aNA[4] === 'EK-Frequenzen') return 'ekfrequenz'
-        if (aNA[4] === 'EK-Zähleinheiten') return 'ekzaehleinheit'
-        if (aNA[4] === 'nicht-beurteilte-Beobachtungen') return 'beob'
-        if (aNA[4] === 'nicht-zuzuordnende-Beobachtungen') return 'beob'
-        if (aNA[4] === 'Qualitätskontrollen') return undefined
-        if (aNA[4] === 'Qualitätskontrollen-wählen') return undefined
-      }
-      if (aNA.length > 2) {
-        if (aNA[2] === 'Arten') return 'ap'
-        if (aNA[2] === 'AP-Berichte') return 'apberuebersicht'
-      }
-      if (aNA.length > 1) {
-        if (aNA[1] === 'Adressen') return 'adresse'
-        if (aNA[1] === 'ApberrelevantGrundWerte')
-          return 'tpopApberrelevantGrundWerte'
-        if (aNA[1] === 'EkAbrechnungstypWerte') return 'ekAbrechnungstypWerte'
-        if (aNA[1] === 'TpopkontrzaehlEinheitWerte')
-          return 'tpopkontrzaehlEinheitWerte'
-      }
-      if (aNA[0] === 'Benutzer') return 'user'
-      if (aNA[0] === 'Dokumentation') return 'doc'
-      return undefined
-    },
     get projIdInActiveNodeArray() {
-      if (self.activeNodeArray.includes('Projekte')) {
-        const indexOfId = self.activeNodeArray.indexOf('Projekte') + 1
-        if (self.activeNodeArray.length > indexOfId) {
-          const id = self.activeNodeArray?.[indexOfId]
+      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+      if (activeNodeArray.includes('Projekte')) {
+        const indexOfId = activeNodeArray.indexOf('Projekte') + 1
+        if (activeNodeArray.length > indexOfId) {
+          const id = activeNodeArray?.[indexOfId]
           if (isUuid.anyNonNil(id)) return id
         }
       }
       return undefined
     },
     get apIdInActiveNodeArray() {
-      if (
-        self.activeNodeArray.length > 3 &&
-        self.activeNodeArray[2] === 'Arten'
-      ) {
-        const id = self.activeNodeArray[3]
+      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+      if (activeNodeArray.length > 3 && activeNodeArray[2] === 'Arten') {
+        const id = activeNodeArray[3]
         if (isUuid.anyNonNil(id)) return id
       }
       return undefined
     },
     get apGqlFilter() {
       const store = getParent(self)
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const singleFilterByHierarchy = {}
       // 2. prepare data filter
@@ -262,9 +194,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.ap) {
+        if (nodeLabelFilter.ap) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.ap,
+            includesInsensitive: nodeLabelFilter.ap,
           }
         }
         // Object could be empty if no filters exist
@@ -296,6 +228,9 @@ export const Tree = types
     },
     get apGqlFilterForTree() {
       const store = getParent(self)
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.ap ? [...getSnapshot(self.dataFilter.ap)] : []
@@ -361,9 +296,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.ap) {
+        if (nodeLabelFilter.ap) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.ap,
+            includesInsensitive: nodeLabelFilter.ap,
           }
         }
         // Object could be empty if no filters exist
@@ -403,6 +338,8 @@ export const Tree = types
       return entries.length > 0
     },
     get popGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
@@ -461,9 +398,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.pop) {
+        if (nodeLabelFilter.pop) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.pop,
+            includesInsensitive: nodeLabelFilter.pop,
           }
         }
         // add mapFilter
@@ -500,6 +437,9 @@ export const Tree = types
       return popGqlFilter
     },
     get popGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.pop ? [...getSnapshot(self.dataFilter.pop)] : []
@@ -535,9 +475,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.pop) {
+        if (nodeLabelFilter.pop) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.pop,
+            includesInsensitive: nodeLabelFilter.pop,
           }
         }
         // add mapFilter
@@ -577,6 +517,8 @@ export const Tree = types
       return entries.length > 0
     },
     get tpopGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -637,9 +579,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpop) {
+        if (nodeLabelFilter.tpop) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpop,
+            includesInsensitive: nodeLabelFilter.tpop,
           }
         }
         // add mapFilter
@@ -675,6 +617,9 @@ export const Tree = types
       return tpopGqlFilter
     },
     get tpopGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpop ? [...getSnapshot(self.dataFilter.tpop)] : []
@@ -710,9 +655,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpop) {
+        if (nodeLabelFilter.tpop) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpop,
+            includesInsensitive: nodeLabelFilter.tpop,
           }
         }
         // add mapFilter
@@ -753,6 +698,8 @@ export const Tree = types
       return entries.length > 0
     },
     get tpopmassnGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -817,9 +764,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopmassn) {
+        if (nodeLabelFilter.tpopmassn) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpopmassn,
+            includesInsensitive: nodeLabelFilter.tpopmassn,
           }
         }
         // add mapFilter
@@ -860,6 +807,9 @@ export const Tree = types
       return tpopmassnGqlFilter
     },
     get tpopmassnGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpopmassn ?
@@ -898,9 +848,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopmassn) {
+        if (nodeLabelFilter.tpopmassn) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpopmassn,
+            includesInsensitive: nodeLabelFilter.tpopmassn,
           }
         }
         // add mapFilter
@@ -945,6 +895,9 @@ export const Tree = types
       return entries.length > 0
     },
     get tpopmassnberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const tpopId = self.tpopIdInActiveNodeArray
@@ -952,9 +905,9 @@ export const Tree = types
         gqlFilter.tpopId = { equalTo: tpopId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.tpopmassnber) {
+      if (nodeLabelFilter.tpopmassnber) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.tpopmassnber,
+          includesInsensitive: nodeLabelFilter.tpopmassnber,
         }
       }
 
@@ -963,12 +916,15 @@ export const Tree = types
       return gqlFilter
     },
     get tpopkontrzaehlEinheitWerteGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
       // 2. node label filter
-      if (self.nodeLabelFilter.tpopkontrzaehlEinheitWerte) {
+      if (nodeLabelFilter.tpopkontrzaehlEinheitWerte) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.tpopkontrzaehlEinheitWerte,
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehlEinheitWerte,
         }
       }
 
@@ -977,12 +933,15 @@ export const Tree = types
       return gqlFilter
     },
     get ekAbrechnungstypWerteGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
       // 2. node label filter
-      if (self.nodeLabelFilter.ekAbrechnungstypWerte) {
+      if (nodeLabelFilter.ekAbrechnungstypWerte) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.ekAbrechnungstypWerte,
+          includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte,
         }
       }
 
@@ -991,25 +950,31 @@ export const Tree = types
       return gqlFilter
     },
     get tpopApberrelevantGrundWerteGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // include a condition that ensures a filter is always set
       const gqlFilter = { id: { isNull: false } }
       // 1. hierarchy filter: none
       // 2. node label filter
-      if (self.nodeLabelFilter.tpopApberrelevantGrundWerte) {
+      if (nodeLabelFilter.tpopApberrelevantGrundWerte) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.tpopApberrelevantGrundWerte,
+          includesInsensitive: nodeLabelFilter.tpopApberrelevantGrundWerte,
         }
       }
 
       return gqlFilter
     },
     get adresseGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
       // 2. node label filter
-      if (self.nodeLabelFilter.adresse) {
+      if (nodeLabelFilter.adresse) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.adresse,
+          includesInsensitive: nodeLabelFilter.adresse,
         }
       }
 
@@ -1018,12 +983,15 @@ export const Tree = types
       return gqlFilter
     },
     get userGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
       // 2. node label filter
-      if (self.nodeLabelFilter.user) {
+      if (nodeLabelFilter.user) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.user,
+          includesInsensitive: nodeLabelFilter.user,
         }
       }
 
@@ -1032,11 +1000,14 @@ export const Tree = types
       return gqlFilter
     },
     get apberuebersichtGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // node label filter
-      if (self.nodeLabelFilter.apberuebersicht) {
+      if (nodeLabelFilter.apberuebersicht) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.apberuebersicht,
+          includesInsensitive: nodeLabelFilter.apberuebersicht,
         }
       }
 
@@ -1045,6 +1016,9 @@ export const Tree = types
       return gqlFilter
     },
     get zielGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1052,12 +1026,12 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.ziel) {
+      if (nodeLabelFilter.ziel) {
         gqlFilter.or = [
-          { label: { includesInsensitive: self.nodeLabelFilter.ziel } },
+          { label: { includesInsensitive: nodeLabelFilter.ziel } },
         ]
-        if (!isNaN(self.nodeLabelFilter.ziel)) {
-          gqlFilter.or.push({ jahr: { equalTo: +self.nodeLabelFilter.ziel } })
+        if (!isNaN(nodeLabelFilter.ziel)) {
+          gqlFilter.or.push({ jahr: { equalTo: +nodeLabelFilter.ziel } })
         }
       }
 
@@ -1066,6 +1040,9 @@ export const Tree = types
       return gqlFilter
     },
     get apberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1073,9 +1050,9 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.apber) {
+      if (nodeLabelFilter.apber) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.apber,
+          includesInsensitive: nodeLabelFilter.apber,
         }
       }
 
@@ -1084,6 +1061,9 @@ export const Tree = types
       return gqlFilter
     },
     get apartGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1091,9 +1071,9 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.apart) {
+      if (nodeLabelFilter.apart) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.apart,
+          includesInsensitive: nodeLabelFilter.apart,
         }
       }
 
@@ -1102,6 +1082,9 @@ export const Tree = types
       return gqlFilter
     },
     get assozartGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1109,9 +1092,9 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.assozart) {
+      if (nodeLabelFilter.assozart) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.assozart,
+          includesInsensitive: nodeLabelFilter.assozart,
         }
       }
 
@@ -1120,6 +1103,9 @@ export const Tree = types
       return gqlFilter
     },
     get erfkritGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1127,9 +1113,9 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.erfkrit) {
+      if (nodeLabelFilter.erfkrit) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.erfkrit,
+          includesInsensitive: nodeLabelFilter.erfkrit,
         }
       }
 
@@ -1138,6 +1124,9 @@ export const Tree = types
       return gqlFilter
     },
     get ekfrequenzGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1145,9 +1134,9 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.ekfrequenz) {
+      if (nodeLabelFilter.ekfrequenz) {
         gqlFilter.code = {
-          includesInsensitive: self.nodeLabelFilter.ekfrequenz,
+          includesInsensitive: nodeLabelFilter.ekfrequenz,
         }
       }
 
@@ -1156,6 +1145,9 @@ export const Tree = types
       return gqlFilter
     },
     get ekzaehleinheitGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1163,9 +1155,9 @@ export const Tree = types
         gqlFilter.apId = { equalTo: apId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.ekzaehleinheit) {
+      if (nodeLabelFilter.ekzaehleinheit) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.ekzaehleinheit,
+          includesInsensitive: nodeLabelFilter.ekzaehleinheit,
         }
       }
 
@@ -1174,6 +1166,9 @@ export const Tree = types
       return gqlFilter
     },
     get popberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const popId = self.popIdInActiveNodeArray
@@ -1181,9 +1176,9 @@ export const Tree = types
         gqlFilter.popId = { equalTo: popId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.popber) {
+      if (nodeLabelFilter.popber) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.popber,
+          includesInsensitive: nodeLabelFilter.popber,
         }
       }
 
@@ -1192,6 +1187,9 @@ export const Tree = types
       return gqlFilter
     },
     get popmassnberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const popId = self.popIdInActiveNodeArray
@@ -1199,9 +1197,9 @@ export const Tree = types
         gqlFilter.popId = { equalTo: popId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.popmassnber) {
+      if (nodeLabelFilter.popmassnber) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.popmassnber,
+          includesInsensitive: nodeLabelFilter.popmassnber,
         }
       }
 
@@ -1210,6 +1208,9 @@ export const Tree = types
       return gqlFilter
     },
     get tpopkontrzaehlGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const tpopkontrId = self.tpopkontrIdInActiveNodeArray
@@ -1217,9 +1218,9 @@ export const Tree = types
         gqlFilter.tpopkontrId = { equalTo: tpopkontrId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.tpopkontrzaehl) {
+      if (nodeLabelFilter.tpopkontrzaehl) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.tpopkontrzaehl,
+          includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
         }
       }
 
@@ -1228,6 +1229,9 @@ export const Tree = types
       return gqlFilter
     },
     get tpopberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
       const tpopId = self.tpopIdInActiveNodeArray
@@ -1235,9 +1239,9 @@ export const Tree = types
         gqlFilter.tpopId = { equalTo: tpopId }
       }
       // 2. node label filter
-      if (self.nodeLabelFilter.tpopber) {
+      if (nodeLabelFilter.tpopber) {
         gqlFilter.label = {
-          includesInsensitive: self.nodeLabelFilter.tpopber,
+          includesInsensitive: nodeLabelFilter.tpopber,
         }
       }
 
@@ -1246,6 +1250,8 @@ export const Tree = types
       return gqlFilter
     },
     get ekGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -1318,9 +1324,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopfeldkontr) {
+        if (nodeLabelFilter.tpopfeldkontr) {
           singleFilter.label = {
-            includesInsensitive: self.nodeLabelFilter.tpopfeldkontr,
+            includesInsensitive: nodeLabelFilter.tpopfeldkontr,
           }
         }
         // add mapFilter
@@ -1358,6 +1364,9 @@ export const Tree = types
       return ekGqlFilter
     },
     get ekGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpopfeldkontr ?
@@ -1396,9 +1405,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopkontr) {
+        if (nodeLabelFilter.tpopkontr) {
           singleFilter.labelEk = {
-            includesInsensitive: self.nodeLabelFilter.tpopkontr,
+            includesInsensitive: nodeLabelFilter.tpopkontr,
           }
         }
         // add mapFilter
@@ -1439,6 +1448,8 @@ export const Tree = types
       return entries.length > 0
     },
     get ekfGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -1506,9 +1517,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopkontr) {
+        if (nodeLabelFilter.tpopkontr) {
           singleFilter.labelEkf = {
-            includesInsensitive: self.nodeLabelFilter.tpopkontr,
+            includesInsensitive: nodeLabelFilter.tpopkontr,
           }
         }
         // add mapFilter
@@ -1545,6 +1556,9 @@ export const Tree = types
       return ekfGqlFilter
     },
     get ekfGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpopfreiwkontr ?
@@ -1583,9 +1597,9 @@ export const Tree = types
           singleFilter[key] = { [expression]: value }
         })
         // add node label filter
-        if (self.nodeLabelFilter.tpopkontr) {
+        if (nodeLabelFilter.tpopkontr) {
           singleFilter.labelEkf = {
-            includesInsensitive: self.nodeLabelFilter.tpopkontr,
+            includesInsensitive: nodeLabelFilter.tpopkontr,
           }
         }
         // add mapFilter
@@ -1631,6 +1645,8 @@ export const Tree = types
       }
     },
     beobGqlFilter(type) {
+      // Access volatile property to make this getter reactive to jotai changes
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
       // 1. prepare hierarchy filter
       const projId = self.projIdInActiveNodeArray
@@ -1640,12 +1656,13 @@ export const Tree = types
       // reason: ['Benutzer', '738eaf0c-35e5-11e9-97ea-57d86602b143', 'EKF', 2023]
       // Solution: check all positions in array
       const apId = self.apIdInActiveNodeArray
+      const openNodes = jotaiStore.get(treeOpenNodesAtom)
       const openApIds =
         apId ?
           [apId]
         : [
             ...new Set(
-              self.openNodes
+              openNodes
                 .filter((n) => n[0] && n[0] === 'Projekte')
                 .filter((n) => n[1] && n[1] === projId)
                 .filter((n) => n[2] && n[2] === 'Arten')
@@ -1662,7 +1679,7 @@ export const Tree = types
               apId: { in: openApIds },
               // need to include nodeLabelFilter
               aeTaxonomyByArtId: {
-                artname: { includesInsensitive: self.nodeLabelFilter.ap ?? '' },
+                artname: { includesInsensitive: nodeLabelFilter.ap ?? '' },
               },
             },
           },
@@ -1707,11 +1724,11 @@ export const Tree = types
       }
 
       // node label filter
-      const nodeLabelFilter =
-        self.nodeLabelFilter.beob ?
+      const nodeLabelFilterObj =
+        nodeLabelFilter.beob ?
           {
             label: {
-              includesInsensitive: self.nodeLabelFilter.beob,
+              includesInsensitive: nodeLabelFilter.beob,
             },
           }
         : {}
@@ -1732,7 +1749,7 @@ export const Tree = types
           singleFilterByParentFiltersForFiltered,
         )
       }
-      singleFilter = merge(singleFilter, nodeLabelFilter)
+      singleFilter = merge(singleFilter, nodeLabelFilterObj)
       singleFilter = merge(singleFilter, mapFilter)
 
       const beobGqlFilter = {
@@ -1748,6 +1765,9 @@ export const Tree = types
       return beobGqlFilter
     },
     get beobNichtBeurteiltGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
         tpopId: { isNull: true },
@@ -1755,9 +1775,9 @@ export const Tree = types
       }
 
       // node label filter
-      if (self.nodeLabelFilter.beob) {
+      if (nodeLabelFilter.beob) {
         filter.label = {
-          includesInsensitive: self.nodeLabelFilter.beob,
+          includesInsensitive: nodeLabelFilter.beob,
         }
       }
 
@@ -1771,15 +1791,18 @@ export const Tree = types
       return filter
     },
     get beobNichtZuzuordnenGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
         nichtZuordnen: { equalTo: true },
       }
 
       // node label filter
-      if (self.nodeLabelFilter.beob) {
+      if (nodeLabelFilter.beob) {
         filter.label = {
-          includesInsensitive: self.nodeLabelFilter.beob,
+          includesInsensitive: nodeLabelFilter.beob,
         }
       }
 
@@ -1793,15 +1816,18 @@ export const Tree = types
       return filter
     },
     get beobZugeordnetGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
         tpopId: { isNull: false },
       }
 
       // node label filter
-      if (self.nodeLabelFilter.beob) {
+      if (nodeLabelFilter.beob) {
         filter.label = {
-          includesInsensitive: self.nodeLabelFilter.beob,
+          includesInsensitive: nodeLabelFilter.beob,
         }
       }
 
@@ -1817,8 +1843,5 @@ export const Tree = types
   }))
 
 export const defaultValue = {
-  activeNodeArray: [],
-  openNodes: [],
   apFilter: true,
-  nodeLabelFilter: defaultNodeLabelFilter,
 }

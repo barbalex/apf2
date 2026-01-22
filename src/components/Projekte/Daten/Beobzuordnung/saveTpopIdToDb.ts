@@ -1,6 +1,5 @@
 import { isEqual } from 'es-toolkit'
 import { gql } from '@apollo/client'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
@@ -9,12 +8,17 @@ import {
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeActiveNodeArrayAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const openNodesRaw = jotaiStore.get(treeOpenNodesAtom)
 
   const variables = {
     id,
@@ -29,9 +33,6 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
   })
 
   // need to update activeNodeArray and openNodes
-  const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
-  const aNA = getSnapshot(activeNodeArray)
-  const openNodes = getSnapshot(openNodesRaw)
   let newANA
   let newOpenNodes
 
@@ -48,14 +49,14 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
       `,
       variables: { id: value },
     })
-    // aNA = activeNodeArray
+    // activeNodeArray is already loaded
     const popId = result?.data?.tpopById?.popId
     const tpopId = result?.data?.tpopById?.id
     newANA = [
-      aNA[0],
-      aNA[1],
-      aNA[2],
-      aNA[3],
+      activeNodeArray[0],
+      activeNodeArray[1],
+      activeNodeArray[2],
+      activeNodeArray[3],
       'Populationen',
       popId,
       'Teil-Populationen',
@@ -63,7 +64,7 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
       'Beobachtungen',
       id,
     ]
-    const oldParentNodeUrl = aNA.toSpliced(-1)
+    const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
     const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
     const oldGGParentNodeUrl = oldGParentNodeUrl.toSpliced(-1)
     const oldGGGParentNodeUrl = oldGGParentNodeUrl.toSpliced(-1)
@@ -71,34 +72,47 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(
-          (n) => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
+          (n) => !isEqual(n, activeNodeArray) && !isEqual(n, oldParentNodeUrl),
         ),
-        [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen'],
-        [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
+          'Populationen',
+        ],
+        [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
+          'Populationen',
+          popId,
+        ],
+        [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
         ],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
           tpopId,
         ],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
@@ -106,10 +120,10 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
           'Beobachtungen',
         ],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
@@ -123,19 +137,26 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
       newOpenNodes = [
         ...openNodes.filter(
           (n) =>
-            !isEqual(n, aNA) &&
+            !isEqual(n, activeNodeArray) &&
             !isEqual(n, oldParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
             !isEqual(n, oldGGParentNodeUrl) &&
             !isEqual(n, oldGGGParentNodeUrl),
         ),
-        [aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
+          'Populationen',
+          popId,
+        ],
+        [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
@@ -151,10 +172,10 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
           tpopId,
         ],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
@@ -162,10 +183,10 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
           'Beobachtungen',
         ],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
@@ -178,14 +199,14 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
   } else {
     // needs to go to nicht-beurteilte-Beobachtungen
     newANA = [
-      aNA[0],
-      aNA[1],
-      aNA[2],
-      aNA[3],
+      activeNodeArray[0],
+      activeNodeArray[1],
+      activeNodeArray[2],
+      activeNodeArray[3],
       'nicht-beurteilte-Beobachtungen',
       id,
     ]
-    const oldParentNodeUrl = aNA.toSpliced(-1)
+    const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
     const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
     const oldGGParentNodeUrl = oldGParentNodeUrl.toSpliced(-1)
     const oldGGGParentNodeUrl = oldGGParentNodeUrl.toSpliced(-1)
@@ -194,16 +215,29 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
     if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
       newOpenNodes = [
         ...openNodes.filter(
-          (n) => !isEqual(n, aNA) && !isEqual(n, oldParentNodeUrl),
+          (n) => !isEqual(n, activeNodeArray) && !isEqual(n, oldParentNodeUrl),
         ),
-        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen'],
-        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id],
+        [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
+          'nicht-beurteilte-Beobachtungen',
+        ],
+        [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
+          'nicht-beurteilte-Beobachtungen',
+          id,
+        ],
       ]
     } else {
       newOpenNodes = [
         ...openNodes.filter(
           (n) =>
-            !isEqual(n, aNA) &&
+            !isEqual(n, activeNodeArray) &&
             !isEqual(n, oldParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
             !isEqual(n, oldGParentNodeUrl) &&
@@ -211,13 +245,26 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
             !isEqual(n, oldGGGParentNodeUrl) &&
             !isEqual(n, oldGGGGParentNodeUrl),
         ),
-        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen'],
-        [aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id],
+        [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
+          'nicht-beurteilte-Beobachtungen',
+        ],
+        [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
+          'nicht-beurteilte-Beobachtungen',
+          id,
+        ],
       ]
     }
   }
   navigate(`/Daten/${newANA.join('/')}${search}`)
-  setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })

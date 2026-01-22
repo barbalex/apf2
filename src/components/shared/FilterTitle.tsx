@@ -4,8 +4,10 @@ import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
 import { MobxContext } from '../../mobxContext.ts'
+import { treeEmptyNodeLabelFilterAtom } from '../../JotaiStore/index.ts'
 import { exists } from '../../modules/exists.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import { tableIsFiltered } from '../../modules/tableIsFiltered.ts'
@@ -22,6 +24,7 @@ export const FilterTitle = observer(
       dataFilterEmptyTable,
       setApFilter,
     } = store.tree
+    const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
 
     const existsTableFilter = tableIsFiltered({ table, tree: store.tree })
     const tables = Object.keys(store.tree.dataFilter)
@@ -34,7 +37,7 @@ export const FilterTitle = observer(
     const onEmptyTable = () => dataFilterEmptyTable({ table })
 
     const onEmptyTree = () => {
-      store.tree.nodeLabelFilter.empty()
+      emptyNodeLabelFilter()
       dataFilterEmpty()
       emptyMapFilter()
       setApFilter(false)

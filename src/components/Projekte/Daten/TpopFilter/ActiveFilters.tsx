@@ -1,8 +1,10 @@
 import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../../../../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './ActiveFilters.module.css'
@@ -12,8 +14,8 @@ export const ActiveFilters = observer(() => {
 
   const store = useContext(MobxContext)
 
-  const { nodeLabelFilter, mapFilter, apFilter, artIsFiltered, popIsFiltered } =
-    store.tree
+  const { mapFilter, apFilter, artIsFiltered, popIsFiltered } = store.tree
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
 
   const navApFilterComment =
     apFilter ?
@@ -59,14 +61,18 @@ export const ActiveFilters = observer(() => {
         {!!navHiearchyComment && (
           <li className={styles.comment}>{navHiearchyComment}</li>
         )}
-        {!!navLabelComment && <li className={styles.comment}>{navLabelComment}</li>}
+        {!!navLabelComment && (
+          <li className={styles.comment}>{navLabelComment}</li>
+        )}
         {!!artHierarchyComment && (
           <li className={styles.comment}>{artHierarchyComment}</li>
         )}
         {!!popHierarchyComment && (
           <li className={styles.comment}>{popHierarchyComment}</li>
         )}
-        {!!mapFilterComment && <li className={styles.comment}>{mapFilterComment}</li>}
+        {!!mapFilterComment && (
+          <li className={styles.comment}>{mapFilterComment}</li>
+        )}
       </ul>
     </ErrorBoundary>
   )

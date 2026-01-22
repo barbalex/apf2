@@ -1,6 +1,7 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import queryString from 'query-string'
+import { isEqual } from 'es-toolkit'
 
 import { constants } from '../modules/constants.ts'
 import { appBaseUrl } from '../modules/appBaseUrl.ts'
@@ -19,6 +20,99 @@ function atomWithToggleAndStorage(key, initialValue, storage) {
 }
 
 export const store = createStore()
+
+// Tree atoms (migrated from mobx)
+export const treeOpenNodesAtom = atom([])
+export const treeSetOpenNodesAtom = atom(
+  (get) => null,
+  (get, set, val) => {
+    // val should always be created from a snapshot of openNodes
+    // to ensure not mutating openNodes!!!
+    // need set to ensure contained arrays are unique
+    const uniqueSet = new Set(val)
+    set(treeOpenNodesAtom, Array.from(uniqueSet))
+  },
+)
+
+export const treeAddOpenNodesAtom = atom(
+  (get) => null,
+  (get, set, nodes) => {
+    // need set to ensure contained arrays are unique
+    const currentOpenNodes = get(treeOpenNodesAtom)
+    const uniqueSet = new Set([...currentOpenNodes, ...nodes])
+    set(treeOpenNodesAtom, Array.from(uniqueSet))
+  },
+)
+
+export const treeActiveNodeArrayAtom = atom([])
+export const treeActiveFilterTableAtom = atom((get) => {
+  const activeNodeArray = get(treeActiveNodeArrayAtom)
+  if (activeNodeArray.length > 10) {
+    if (activeNodeArray[10] === 'Zaehlungen') return 'tpopkontrzaehl'
+  }
+  if (activeNodeArray.length > 8) {
+    if (activeNodeArray[8] === 'Massnahmen') return 'tpopmassn'
+    if (activeNodeArray[8] === 'Freiwilligen-Kontrollen') return 'tpopkontr'
+    if (activeNodeArray[8] === 'Feld-Kontrollen') return 'tpopkontr'
+    if (activeNodeArray[8] === 'Massnahmen-Berichte') return 'tpopmassnber'
+    if (activeNodeArray[8] === 'Kontroll-Berichte') return 'tpopber'
+    if (activeNodeArray[8] === 'Beobachtungen') return 'beob'
+  }
+  if (activeNodeArray.length > 6) {
+    if (activeNodeArray[6] === 'Teil-Populationen') return 'tpop'
+    if (activeNodeArray[6] === 'Kontroll-Berichte') return 'popber'
+    if (activeNodeArray[6] === 'Massnahmen-Berichte') return 'popmassnber'
+  }
+  if (activeNodeArray.length > 4) {
+    if (activeNodeArray[4] === 'Populationen') return 'pop'
+    if (activeNodeArray[4] === 'AP-Ziele') return 'ziel'
+    if (activeNodeArray[4] === 'AP-Erfolgskriterien') return 'erfkrit'
+    if (activeNodeArray[4] === 'AP-Berichte') return 'apber'
+    if (activeNodeArray[4] === 'Idealbiotop') return undefined // or pop?
+    if (activeNodeArray[4] === 'Taxa') return 'apart'
+    if (activeNodeArray[4] === 'assoziierte-Arten') return 'assozart'
+    if (activeNodeArray[4] === 'EK-Frequenzen') return 'ekfrequenz'
+    if (activeNodeArray[4] === 'EK-Zähleinheiten') return 'ekzaehleinheit'
+    if (activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen') return 'beob'
+    if (activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen') return 'beob'
+    if (activeNodeArray[4] === 'Qualitätskontrollen') return undefined
+    if (activeNodeArray[4] === 'Qualitätskontrollen-wählen') return undefined
+  }
+  if (activeNodeArray.length > 2) {
+    if (activeNodeArray[2] === 'Arten') return 'ap'
+    if (activeNodeArray[2] === 'AP-Berichte') return 'apberuebersicht'
+  }
+  if (activeNodeArray.length > 1) {
+    if (activeNodeArray[1] === 'Adressen') return 'adresse'
+    if (activeNodeArray[1] === 'ApberrelevantGrundWerte')
+      return 'tpopApberrelevantGrundWerte'
+    if (activeNodeArray[1] === 'EkAbrechnungstypWerte')
+      return 'ekAbrechnungstypWerte'
+    if (activeNodeArray[1] === 'TpopkontrzaehlEinheitWerte')
+      return 'tpopkontrzaehlEinheitWerte'
+  }
+  if (activeNodeArray[0] === 'Benutzer') return 'user'
+  if (activeNodeArray[0] === 'Dokumentation') return 'doc'
+  return undefined
+})
+export const treeSetActiveNodeArrayAtom = atom(
+  (get) => get(treeActiveNodeArrayAtom),
+  (get, set, val) => {
+    if (isEqual(val, get(treeActiveNodeArrayAtom))) {
+      // do not do this if already set
+      // trying to stop vicious cycle of reloading in first start after update
+      return
+    }
+    // always set missing open nodes
+    const extraOpenNodes = []
+    val.forEach((v, i) => {
+      extraOpenNodes.push(val.slice(0, i + 1))
+    })
+    set(treeAddOpenNodesAtom, extraOpenNodes)
+
+    set(treeActiveNodeArrayAtom, val)
+  },
+)
 
 export const newTpopFromBeobDialogOpenAtom = atomWithStorage(
   'newTpopFromBeobDialogOpen',
@@ -282,6 +376,131 @@ export const toggleTreeShowTpopIconAtom = atom(
 export const setTreeShowTpopIconAtom = atom(
   (get) => get(treeShowTpopIconAtom),
   (get, set, value) => set(treeShowTpopIconAtom, value),
+)
+
+// treeNodeLabelFilter - stores filter values for tree node labels
+export const treeNodeLabelFilterAtom = atomWithStorage('treeNodeLabelFilter', {
+  ap: null,
+  pop: null,
+  tpop: null,
+  tpopkontr: null,
+  tpopfeldkontr: null,
+  tpopfreiwkontr: null,
+  tpopkontrzaehl: null,
+  tpopmassn: null,
+  ziel: null,
+  erfkrit: null,
+  apber: null,
+  apberuebersicht: null,
+  idealbiotop: null,
+  assozart: null,
+  ekzaehleinheit: null,
+  ekfrequenz: null,
+  popber: null,
+  popmassnber: null,
+  tpopber: null,
+  tpopmassnber: null,
+  apart: null,
+  projekt: null,
+  beob: null,
+  beobprojekt: null,
+  adresse: null,
+  gemeinde: null,
+  user: null,
+  ekAbrechnungstypWerte: null,
+  tpopApberrelevantGrundWerte: null,
+  tpopkontrzaehlEinheitWerte: null,
+  doc: '',
+})
+
+export const treeSetNodeLabelFilterKeyAtom = atom(
+  (get) => null,
+  (get, set, { key, value }) => {
+    const current = get(treeNodeLabelFilterAtom)
+    // only write if changed
+    if (current[key] !== value) {
+      set(treeNodeLabelFilterAtom, { ...current, [key]: value })
+    }
+  },
+)
+
+export const treeEmptyNodeLabelFilterAtom = atom(
+  (get) => null,
+  (get, set) => {
+    set(treeNodeLabelFilterAtom, {
+      ap: null,
+      pop: null,
+      tpop: null,
+      tpopkontr: null,
+      tpopfeldkontr: null,
+      tpopfreiwkontr: null,
+      tpopkontrzaehl: null,
+      tpopmassn: null,
+      ziel: null,
+      erfkrit: null,
+      apber: null,
+      apberuebersicht: null,
+      idealbiotop: null,
+      assozart: null,
+      ekzaehleinheit: null,
+      ekfrequenz: null,
+      popber: null,
+      popmassnber: null,
+      tpopber: null,
+      tpopmassnber: null,
+      apart: null,
+      projekt: null,
+      beob: null,
+      beobprojekt: null,
+      adresse: null,
+      gemeinde: null,
+      user: null,
+      ekAbrechnungstypWerte: null,
+      tpopApberrelevantGrundWerte: null,
+      tpopkontrzaehlEinheitWerte: null,
+      doc: '',
+    })
+  },
+)
+
+export const treeResetNodeLabelFilterKeepingApAtom = atom(
+  (get) => null,
+  (get, set) => {
+    const current = get(treeNodeLabelFilterAtom)
+    set(treeNodeLabelFilterAtom, {
+      ap: current.ap,
+      pop: null,
+      tpop: null,
+      tpopkontr: null,
+      tpopfeldkontr: null,
+      tpopfreiwkontr: null,
+      tpopkontrzaehl: null,
+      tpopmassn: null,
+      ziel: null,
+      erfkrit: null,
+      apber: null,
+      apberuebersicht: null,
+      idealbiotop: null,
+      assozart: null,
+      ekzaehleinheit: null,
+      ekfrequenz: null,
+      popber: null,
+      popmassnber: null,
+      tpopber: null,
+      tpopmassnber: null,
+      apart: null,
+      projekt: null,
+      beob: null,
+      beobprojekt: null,
+      adresse: null,
+      gemeinde: null,
+      user: null,
+      ekAbrechnungstypWerte: null,
+      tpopApberrelevantGrundWerte: null,
+      tpopkontrzaehlEinheitWerte: null,
+      doc: '',
+    })
+  },
 )
 
 // apfloraLayers is not stored - needs to update when code changes
