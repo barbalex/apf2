@@ -2,7 +2,7 @@ import { useContext, useState, useEffect, type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -15,7 +15,11 @@ import { queryAps } from './queryAps.ts'
 import { queryAdresses } from './queryAdresses.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -70,13 +74,10 @@ export const ApFilter = observer(() => {
   const apolloClient = useApolloClient()
 
   const store = useContext(MobxContext)
-  const {
-    dataFilter,
-    apFilter: nurApFilter,
-    apGqlFilter,
-    dataFilterSetValue,
-  } = store.tree
+  const { apFilter: nurApFilter, apGqlFilter } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -152,13 +153,12 @@ export const ApFilter = observer(() => {
     : ''
 
   const row = dataFilter.ap[activeTab]
-  // console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'ap',
       key: field,
       value,

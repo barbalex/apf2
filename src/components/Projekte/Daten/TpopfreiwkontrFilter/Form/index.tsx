@@ -1,5 +1,6 @@
-import { useContext, type ChangeEvent } from 'react'
+import { type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
 import { Headdata } from './Headdata/index.tsx'
 import { DateField as Date } from '../../Tpopfreiwkontr/Form/Date.tsx'
@@ -10,7 +11,7 @@ import { Danger } from '../../Tpopfreiwkontr/Form/Danger.tsx'
 import { Remarks } from '../../Tpopfreiwkontr/Form/Remarks.tsx'
 import { EkfRemarks } from '../../Tpopfreiwkontr/Form/EkfRemarks.tsx'
 import { Verification } from '../../Tpopfreiwkontr/Form/Verification.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
+import { treeDataFilterSetValueAtom } from '../../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 
 import styles from '../../Tpopfreiwkontr/Form/index.module.css'
@@ -21,11 +22,10 @@ interface FormProps {
 }
 
 export const Form = observer(({ row, activeTab }: FormProps) => {
-  const store = useContext(MobxContext)
-  const { dataFilterSetValue } = store.tree
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpopfreiwkontr',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),

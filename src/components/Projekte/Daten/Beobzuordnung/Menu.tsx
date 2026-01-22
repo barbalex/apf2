@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { isEqual } from 'es-toolkit'
 import Button from '@mui/material/Button'
 
