@@ -62,7 +62,7 @@ export const Tree = types
       self.apFilterVersion += 1
     },
     incrementMapFilterVersion() {
-      mapFilterVersion += 1
+      self.mapFilterVersion += 1
     },
     afterCreate() {
       // Subscribe to jotai atom changes and increment version to trigger mobx reactions
@@ -1673,7 +1673,9 @@ export const Tree = types
     },
     beobGqlFilter(type) {
       // Access volatile property to make this getter reactive to jotai changes
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
       // 1. prepare hierarchy filter
       const projId = jotaiStore.get(treeProjIdInActiveNodeArrayAtom)
@@ -1760,7 +1762,7 @@ export const Tree = types
           }
         : {}
       // mapFilter
-      const mapFilter =
+      const mapFilterObj =
         mapFilter ?
           {
             geomPoint: {
@@ -1777,7 +1779,7 @@ export const Tree = types
         )
       }
       singleFilter = merge(singleFilter, nodeLabelFilterObj)
-      singleFilter = merge(singleFilter, mapFilter)
+      singleFilter = merge(singleFilter, mapFilterObj)
 
       const beobGqlFilter = {
         all:
