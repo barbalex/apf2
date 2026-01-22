@@ -11,6 +11,8 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
+import { useAtomValue, useSetAtom } from 'jotai'
+
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { queryTpops } from './queryTpops.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
@@ -18,6 +20,10 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { Ek } from './Ek/index.tsx'
 import { Tpop } from './Tpop.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import {
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
+} from '../../../../JotaiStore/index.ts'
 import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { ActiveFilters } from './ActiveFilters.tsx'
@@ -35,8 +41,10 @@ import styles from './index.module.css'
 
 export const TpopFilter = observer(() => {
   const store = useContext(MobxContext)
+  const { tpopGqlFilter } = store.tree
 
-  const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
   const onChangeTab = (_event: SyntheticEvent, value: string) => setTab(value)
@@ -70,7 +78,7 @@ export const TpopFilter = observer(() => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpop',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),

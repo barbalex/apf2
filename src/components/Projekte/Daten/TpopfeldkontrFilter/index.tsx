@@ -23,6 +23,8 @@ import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
   treeApFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -90,13 +92,13 @@ export const TpopfeldkontrFilter = observer(() => {
 
   const store = useContext(MobxContext)
   const {
-    dataFilter,
     ekGqlFilter,
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
-    dataFilterSetValue,
   } = store.tree
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
@@ -144,7 +146,7 @@ export const TpopfeldkontrFilter = observer(() => {
   const onChangeTab = (event, value) => setTab(value)
 
   const saveToDb = async (event) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpopfeldkontr',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
