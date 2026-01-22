@@ -1218,6 +1218,26 @@ export const treeTpopkontrzaehlGqlFilterForTreeAtom = atom((get) => {
   return gqlFilter
 })
 
+export const treeTpopberGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const gqlFilter = {}
+  // 1. hierarchy filter
+  const tpopId = get(treeTpopIdInActiveNodeArrayAtom)
+  if (tpopId) {
+    gqlFilter.tpopId = { equalTo: tpopId }
+  }
+  // 2. node label filter
+  if (nodeLabelFilter.tpopber) {
+    gqlFilter.label = {
+      includesInsensitive: nodeLabelFilter.tpopber,
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
