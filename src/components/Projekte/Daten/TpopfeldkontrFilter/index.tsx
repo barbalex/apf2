@@ -19,7 +19,11 @@ import { TpopfeldkontrentwicklungPopover } from '../../../shared/Tpopfeldkontren
 import { query } from './query.ts'
 import { queryTpopkontrs } from './queryTpopkontrs.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -88,14 +92,14 @@ export const TpopfeldkontrFilter = observer(() => {
   const {
     dataFilter,
     ekGqlFilter,
-    mapFilter,
-    apFilter,
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
     dataFilterSetValue,
   } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

@@ -16,7 +16,11 @@ import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -65,14 +69,14 @@ export const TpopmassnFilter = observer(() => {
   const {
     dataFilter,
     tpopmassnGqlFilter,
-    mapFilter,
-    apFilter,
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
     dataFilterSetValue,
   } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

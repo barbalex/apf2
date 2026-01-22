@@ -12,7 +12,11 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { query } from './query.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { PopOrTabs } from './PopOrTabs.tsx'
@@ -37,12 +41,12 @@ export const PopFilter = observer(() => {
   const {
     dataFilter: dataFilterRaw,
     popGqlFilter,
-    mapFilter,
     artIsFiltered,
-    apFilter,
     dataFilterSetValue,
   } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
 
   // somehow to live updates without this
   const dataFilter = dataFilterRaw.toJSON()
