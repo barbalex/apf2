@@ -69,6 +69,22 @@ export const treeSetApFilterAtom = atom(
   },
 )
 
+export const treeMapFilterAtom = atom(undefined)
+export const treeSetMapFilterAtom = atom(
+  (get) => null,
+  (get, set, val) => {
+    set(treeMapFilterAtom, val)
+  },
+)
+export const treeEmptyMapFilterAtom = atom(null, (get, set) => {
+  set(treeMapFilterAtom, undefined)
+})
+
+export const treeMapFilterResetterAtom = atom(0)
+export const treeIncrementMapFilterResetterAtom = atom(null, (get, set) => {
+  set(treeMapFilterResetterAtom, get(treeMapFilterResetterAtom) + 1)
+})
+
 export const treeActiveFilterTableAtom = atom((get) => {
   const activeNodeArray = get(treeActiveNodeArrayAtom)
   if (activeNodeArray.length > 10) {

@@ -23,6 +23,7 @@ import {
   apolloClientAtom,
   addNotificationAtom,
   userTokenAtom,
+  treeSetMapFilterAtom,
 } from './JotaiStore/index.ts'
 
 import type { MobxStore } from './store/index.ts'
@@ -95,7 +96,7 @@ export const buildApolloClient = ({
         }
         if (existsTooLargeError(uniqueQraphQLErrors)) {
           // could be a too large ktZh geojson file being passed in mapFilter
-          store.tree.setMapFilter(undefined)
+          jotaiStore.set(treeSetMapFilterAtom, undefined)
         }
         uniqueQraphQLErrors.map(({ message, locations, path }) => {
           console.log(
