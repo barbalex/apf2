@@ -6,10 +6,15 @@ import InputAdornment from '@mui/material/InputAdornment'
 import { MdDeleteSweep } from 'react-icons/md'
 import { snakeCase } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { tables } from '../../../modules/tables.ts'
 import { MobxContext } from '../../../mobxContext.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeSetNodeLabelFilterKeyAtom,
+  treeEmptyNodeLabelFilterAtom,
+} from '../../../JotaiStore/index.ts'
 
 import styles from './LabelFilter.module.css'
 
@@ -35,11 +40,13 @@ const getValues = ({ activeFilterTable, nodeLabelFilter }) => {
 
 export const LabelFilter = observer(() => {
   const store = useContext(MobxContext)
-  const { nodeLabelFilter: nodeLabelFilterRaw, activeFilterTable } = store.tree
-  const nodeLabelFilter = getSnapshot(nodeLabelFilterRaw)
-  const setNodeLabelFilterKey = store.tree.nodeLabelFilter.setKey
-  const empty = store.tree.nodeLabelFilter.empty
-  const isFiltered = store.tree.nodeLabelFilter.isFiltered()
+  const { activeFilterTable } = store.tree
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const setNodeLabelFilterKey = useSetAtom(treeSetNodeLabelFilterKeyAtom)
+  const empty = useSetAtom(treeEmptyNodeLabelFilterAtom)
+  const isFiltered = Object.values(nodeLabelFilter).some(
+    (v) => v !== null && v !== '',
+  )
 
   const { labelText, filterValue } = getValues({
     activeFilterTable,

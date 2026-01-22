@@ -17,7 +17,11 @@ import { isNodeOpen } from '../isNodeOpen.ts'
 import { toggleNode } from './toggleNode.ts'
 import { toggleNodeSymbol } from './toggleNodeSymbol.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { treeOpenNodesAtom, treeActiveNodeArrayAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeOpenNodesAtom,
+  treeActiveNodeArrayAtom,
+  treeNodeLabelFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { prefetchNodeData } from '../../../../modules/prefetchNodeData.ts'
@@ -35,7 +39,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const { nodeLabelFilter } = store.tree
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
   const activeId = activeNodeArray[activeNodeArray.length - 1]
