@@ -1,10 +1,11 @@
-import { useContext, type ChangeEvent } from 'react'
+import { type ChangeEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import { useSetAtom } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
-import { MobxContext } from '../../../../../../mobxContext.ts'
+import { treeDataFilterSetValueAtom } from '../../../../../../JotaiStore/index.ts'
 import { query } from './query.ts'
 
 import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
@@ -26,8 +27,7 @@ interface HeaddataProps {
 }
 
 export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
-  const store = useContext(MobxContext)
-  const { dataFilterSetValue } = store.tree
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const apolloClient = useApolloClient()
 
@@ -47,7 +47,7 @@ export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
   })
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpopfreiwkontr',
       key: 'bearbeiter',
       value: event.target.value,

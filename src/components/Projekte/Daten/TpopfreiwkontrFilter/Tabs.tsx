@@ -1,10 +1,11 @@
-import { useContext, Dispatch, SetStateAction, type SyntheticEvent } from 'react'
+import { Dispatch, SetStateAction, type SyntheticEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useSetAtom } from 'jotai'
 
 import { initial as tpopfreiwkontr } from '../../../../store/Tree/DataFilter/tpopfreiwkontr.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { treeDataFilterAddOrAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './Tabs.module.css'
 
@@ -14,55 +15,56 @@ interface TabsProps {
   dataFilter: any[]
 }
 
-export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
-  const store = useContext(MobxContext)
-  const { dataFilterAddOr } = store.tree
+export const Tabs = observer(
+  ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
+    const addDataFilterOr = useSetAtom(treeDataFilterAddOrAtom)
 
-  const lastFilterIsEmpty =
-    Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
-      (v) => v !== null,
-    ).length === 0
+    const lastFilterIsEmpty =
+      Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
+        (v) => v !== null,
+      ).length === 0
 
-  const onChangeTab = (_event: SyntheticEvent, value: number) => {
-    if (value > dataFilter.length - 1) {
-      dataFilterAddOr({
-        table: 'tpopfreiwkontr',
-        val: tpopfreiwkontr,
-      })
-      setTimeout(() => setActiveTab(value), 0)
-      return
+    const onChangeTab = (_event: SyntheticEvent, value: number) => {
+      if (value > dataFilter.length - 1) {
+        addDataFilterOr({
+          table: 'tpopfreiwkontr',
+          val: tpopfreiwkontr,
+        })
+        setTimeout(() => setActiveTab(value), 0)
+        return
+      }
+      setActiveTab(value)
     }
-    setActiveTab(value)
-  }
 
-  return (
-    <>
-      <div className={styles.title}>Filter-Kriterien:</div>
-      <MuiTabs
-        value={activeTab}
-        onChange={onChangeTab}
-        indicatorColor="primary"
-        textColor="primary"
-        variant="scrollable"
-        scrollButtons="auto"
-        className={styles.tabs}
-      >
-        {dataFilter.map((filter, index) => (
+    return (
+      <>
+        <div className={styles.title}>Filter-Kriterien:</div>
+        <MuiTabs
+          value={activeTab}
+          onChange={onChangeTab}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="scrollable"
+          scrollButtons="auto"
+          className={styles.tabs}
+        >
+          {dataFilter.map((filter, index) => (
+            <Tab
+              key={index}
+              label={index + 1}
+              value={index}
+              className={styles.tab}
+            />
+          ))}
           <Tab
-            key={index}
-            label={index + 1}
-            value={index}
+            key={dataFilter.length}
+            label="oder"
+            value={dataFilter.length}
+            disabled={lastFilterIsEmpty}
             className={styles.tab}
           />
-        ))}
-        <Tab
-          key={dataFilter.length}
-          label="oder"
-          value={dataFilter.length}
-          disabled={lastFilterIsEmpty}
-          className={styles.tab}
-        />
-      </MuiTabs>
-    </>
-  )
-})
+        </MuiTabs>
+      </>
+    )
+  },
+)

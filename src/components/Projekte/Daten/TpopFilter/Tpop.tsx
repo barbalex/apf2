@@ -86,8 +86,6 @@ export const Tpop = observer(
       suspense: true,
     })
 
-    // console.log('TpopFilter, tpop', { row: getSnapshot(row) })
-
     if (!row) return null
 
     return (
