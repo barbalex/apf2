@@ -1,7 +1,6 @@
 import { types } from 'mobx-state-tree'
 
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
-import { tableIsFiltered } from '../modules/tableIsFiltered.ts'
 
 export const MobxStore = types
   .model({
@@ -9,12 +8,6 @@ export const MobxStore = types
   })
   .actions((self) => ({
     // TODO: move to modules where possible
-    dataFilterTreeIsFiltered() {
-      const tables = Object.keys(self.tree.dataFilter)
-      return tables.some((table) =>
-        tableIsFiltered({ table, tree: self.tree }),
-      )
-    },
     treeNodeLabelFilterResetExceptAp() {
       self.tree.nodeLabelFilter = {
         ap: self.tree.nodeLabelFilter.ap,

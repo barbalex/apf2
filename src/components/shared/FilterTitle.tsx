@@ -15,7 +15,6 @@ import styles from './FilterTitle.module.css'
 export const FilterTitle = observer(
   ({ title, table, totalNr, filteredNr, activeTab }) => {
     const store = useContext(MobxContext)
-    const { dataFilterTreeIsFiltered } = store
     const {
       emptyMapFilter,
       dataFilterEmpty,
@@ -25,7 +24,11 @@ export const FilterTitle = observer(
     } = store.tree
 
     const existsTableFilter = tableIsFiltered({ table, tree: store.tree })
-    const existsTreeFilter = dataFilterTreeIsFiltered()
+    const tables = Object.keys(store.tree.dataFilter)
+    const existsTreeFilter = tables.some((table) =>
+      tableIsFiltered({ table, tree: store.tree }),
+    )
+    console.log('FilterTitle', { tables, existsTreeFilter, existsTableFilter })
 
     const onEmptyTab = () => dataFilterEmptyTab({ table, activeTab })
     const onEmptyTable = () => dataFilterEmptyTable({ table })
