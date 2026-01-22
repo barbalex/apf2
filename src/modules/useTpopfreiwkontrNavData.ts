@@ -11,6 +11,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  treeTpopkontrzaehlGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -46,7 +47,7 @@ export const useTpopfreiwkontrNavData = (props) => {
     queryKey: [
       'treeTpopfreiwkontr',
       tpopkontrId,
-      store.tree.tpopkontrzaehlGqlFilterForTree,
+      tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -74,7 +75,7 @@ export const useTpopfreiwkontrNavData = (props) => {
         `,
         variables: {
           tpopkontrId,
-          tpopkontrzaehlFilter: store.tree.tpopkontrzaehlGqlFilterForTree,
+          tpopkontrzaehlFilter: tpopkontrzaehlGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -82,11 +83,14 @@ export const useTpopfreiwkontrNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.tpopkontrzaehlGqlFilterForTree, refetch),
+  useEffect(() => {
+    const unsub = jotaiStore.sub(
+      treeTpopkontrzaehlGqlFilterForTreeAtom,
+      refetch,
+    )
+    return unsub
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  }, [])
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
