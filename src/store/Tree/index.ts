@@ -54,6 +54,7 @@ import {
   treeTpopberGqlFilterForTreeAtom,
   treeEkGqlFilterAtom,
   treeEkGqlFilterForTreeAtom,
+  treeEkfGqlFilterAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -205,115 +206,7 @@ export const Tree = types
       return jotaiStore.get(treeEkGqlFilterForTreeAtom)
     },
     get ekfGqlFilter() {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.mapFilterVersion
-      self.dataFilterVersion
-      self.activeNodeArrayVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const mapFilter = jotaiStore.get(treeMapFilterAtom)
-      const dataFilter = jotaiStore.get(treeDataFilterAtom)
-      // 1. prepare hierarchy filter
-      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
-      const apHiearchyFilter =
-        apId ?
-          { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
-        : {}
-      const projHiearchyFilter = {}
-      const singleFilterByHierarchy = merge(
-        merge(
-          { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
-          apHiearchyFilter,
-        ),
-        projHiearchyFilter,
-      )
-      const singleFilterByParentFiltersForAll = {
-        tpopByTpopId: self.tpopGqlFilter.all,
-      }
-      const singleFilterForAll = merge(
-        singleFilterByHierarchy,
-        singleFilterByParentFiltersForAll,
-      )
-      const singleFilterByParentFiltersForFiltered = {
-        tpopByTpopId: self.tpopGqlFilter.filtered,
-      }
-      // 2. prepare data filter
-      let filterArrayInStore =
-        dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
-      if (filterArrayInStore.length > 1) {
-        // check if last is empty
-        // empty last is just temporary because user created new "oder" and has not yet input criteria
-        // remove it or filter result will be wrong (show all) if criteria.length > 1!
-        const last = filterArrayInStore[filterArrayInStore.length - 1]
-        const lastIsEmpty =
-          Object.values(last).filter((v) => v !== null).length === 0
-        if (lastIsEmpty) {
-          // popping did not work
-          filterArrayInStore = filterArrayInStore.slice(0, -1)
-        }
-      } else if (filterArrayInStore.length === 0) {
-        // Add empty filter if no criteria exist yet
-        // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after looping
-        filterArrayInStore.push(initialTpopfreiwkontr)
-      }
-      // 3. build data filter
-      const filterArray = []
-      for (const filter of filterArrayInStore) {
-        // add hierarchy filter
-        const singleFilter = {
-          ...merge(
-            singleFilterByHierarchy,
-            singleFilterByParentFiltersForFiltered,
-          ),
-        }
-        // add data filter
-        const dataFilter = { ...filter }
-        const filterValues = Object.entries(dataFilter).filter(
-          (e) => e[1] !== null,
-        )
-        filterValues.forEach(([key, value]) => {
-          const expression =
-            tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
-          singleFilter[key] = { [expression]: value }
-        })
-        // add node label filter
-        if (nodeLabelFilter.tpopkontr) {
-          singleFilter.labelEkf = {
-            includesInsensitive: nodeLabelFilter.tpopkontr,
-          }
-        }
-        // add mapFilter
-        if (mapFilter) {
-          if (!singleFilter.tpopByTpopId) {
-            singleFilter.tpopByTpopId = {}
-          }
-          singleFilter.tpopByTpopId.geomPoint = {
-            coveredBy: mapFilter,
-          }
-        }
-        // Object need to filter by typ
-        if (!singleFilter.typ) {
-          singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
-        }
-        filterArray.push(singleFilter)
-      }
-
-      // extra check to ensure no empty objects exist
-      const filterArrayWithoutEmptyObjects = filterArray.filter(
-        (el) => Object.keys(el).length > 0,
-      )
-
-      const ekfGqlFilter = {
-        all:
-          Object.keys(singleFilterForAll).length ?
-            singleFilterForAll
-          : { or: [] },
-        filtered: { or: filterArrayWithoutEmptyObjects },
-      }
-
-      // console.log('ekfGqlFilter:', ekfGqlFilter)
-
-      return ekfGqlFilter
+      return jotaiStore.get(treeEkfGqlFilterAtom)
     },
     get ekfGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes

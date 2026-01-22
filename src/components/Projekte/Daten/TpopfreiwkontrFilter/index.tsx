@@ -8,6 +8,7 @@ import { useAtomValue } from 'jotai'
 import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { treeEkfGqlFilterAtom } from '../../../../JotaiStore/index.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -36,7 +37,7 @@ export const TpopfreiwkontrFilter = observer(() => {
 
   const store = useContext(MobxContext)
   const tree = store.tree
-  const { ekfGqlFilter } = tree
+  const ekfGqlFilter = useAtomValue(treeEkfGqlFilterAtom)
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
