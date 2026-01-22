@@ -979,6 +979,22 @@ export const treeAdresseGqlFilterForTreeAtom = atom((get) => {
   return gqlFilter
 })
 
+export const treeUserGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const gqlFilter = {}
+
+  // node label filter
+  if (nodeLabelFilter.user) {
+    gqlFilter.label = {
+      includesInsensitive: nodeLabelFilter.user,
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
