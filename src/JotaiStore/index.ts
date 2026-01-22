@@ -69,6 +69,33 @@ export const treeApIdInActiveNodeArrayAtom = atom((get) => {
   return undefined
 })
 
+export const treePopIdInActiveNodeArrayAtom = atom((get) => {
+  const activeNodeArray = get(treeActiveNodeArrayAtom)
+  if (activeNodeArray.length > 5 && activeNodeArray[4] === 'Populationen') {
+    const id = activeNodeArray[5]
+    if (isUuid.anyNonNil(id)) return id
+  }
+  return undefined
+})
+
+export const treeTpopIdInActiveNodeArrayAtom = atom((get) => {
+  const activeNodeArray = get(treeActiveNodeArrayAtom)
+  if (activeNodeArray.length > 7 && activeNodeArray[6] === 'Teil-Populationen') {
+    const id = activeNodeArray[7]
+    if (isUuid.anyNonNil(id)) return id
+  }
+  return undefined
+})
+
+export const treeTpopkontrIdInActiveNodeArrayAtom = atom((get) => {
+  const activeNodeArray = get(treeActiveNodeArrayAtom)
+  if (activeNodeArray.length > 9 && (activeNodeArray[8] === 'Feld-Kontrollen' || activeNodeArray[8] === 'Freiwilligen-Kontrollen')) {
+    const id = activeNodeArray[9]
+    if (isUuid.anyNonNil(id)) return id
+  }
+  return undefined
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
