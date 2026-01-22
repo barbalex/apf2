@@ -8,9 +8,11 @@ import { isEqual } from 'es-toolkit'
 import Button from '@mui/material/Button'
 
 import { useSetAtom, useAtom } from 'jotai'
-import {newTpopFromBeobDialogOpenAtom,
+import {
+  newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -73,7 +75,6 @@ export const Menu = observer(() => {
       id: beobId,
       apId,
       projId,
-      store,
       search,
     })
     setTimeout(() => {
