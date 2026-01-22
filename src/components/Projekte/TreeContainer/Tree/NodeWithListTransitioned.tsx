@@ -19,7 +19,7 @@ export const NodeWithListTransitioned = observer(
     parentTransitionState,
   }) => {
     const store = useContext(MobxContext)
-    const isOpen = checkIfIsOpen({ menu, store })
+    const isOpen = checkIfIsOpen({ menu })
     const node = nodeFromMenu(menu)
     const ref = useRef(null)
 

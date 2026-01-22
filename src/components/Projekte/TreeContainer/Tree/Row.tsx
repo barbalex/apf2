@@ -81,7 +81,7 @@ export const Row = observer(({ node, transitionState, ref }) => {
       onlyShowActivePath,
     })
 
-  const onClickNodeSymbol = () => toggleNodeSymbol({ node, store, search })
+  const onClickNodeSymbol = () => toggleNodeSymbol({ node, search })
 
   const onMouseEnterNode = () => {
     // Prefetch data when hovering over node
