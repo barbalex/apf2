@@ -6,6 +6,7 @@ import isUuid from 'is-uuid'
 
 import { constants } from '../modules/constants.ts'
 import { appBaseUrl } from '../modules/appBaseUrl.ts'
+import { initialDataFilterValues } from './initialDataFilterValues.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
@@ -83,6 +84,95 @@ export const treeEmptyMapFilterAtom = atom(null, (get, set) => {
 export const treeMapFilterResetterAtom = atom(0)
 export const treeIncrementMapFilterResetterAtom = atom(null, (get, set) => {
   set(treeMapFilterResetterAtom, get(treeMapFilterResetterAtom) + 1)
+})
+
+// dataFilter atoms
+export const treeDataFilterAtom = atom(initialDataFilterValues)
+
+export const treeDataFilterEmptyTableAtom = atom(
+  null,
+  (get, set, { table }: { table: string }) => {
+    const current = get(treeDataFilterAtom)
+    set(treeDataFilterAtom, {
+      ...current,
+      [table]: initialDataFilterValues[table],
+    })
+  },
+)
+
+export const treeDataFilterEmptyTabAtom = atom(
+  null,
+  (get, set, { table, activeTab }: { table: string; activeTab: number }) => {
+    const current = get(treeDataFilterAtom)
+    const tableData = [...current[table]]
+    if (tableData.length === 1) {
+      const firstElement = { ...tableData[0] }
+      Object.keys(firstElement).forEach((key) => (firstElement[key] = null))
+      set(treeDataFilterAtom, {
+        ...current,
+        [table]: [firstElement],
+      })
+      return
+    }
+    tableData.splice(activeTab, 1)
+    set(treeDataFilterAtom, {
+      ...current,
+      [table]: tableData,
+    })
+  },
+)
+
+export const treeDataFilterAddOrAtom = atom(
+  null,
+  (get, set, { table, val }: { table: string; val: any }) => {
+    const current = get(treeDataFilterAtom)
+    set(treeDataFilterAtom, {
+      ...current,
+      [table]: [...current[table], val],
+    })
+  },
+)
+
+export const treeDataFilterSetValueAtom = atom(
+  null,
+  (
+    get,
+    set,
+    {
+      table,
+      key,
+      value,
+      index,
+    }: { table: string; key: string; value: any; index?: number },
+  ) => {
+    const current = get(treeDataFilterAtom)
+    const tableData = [...current[table]]
+    if (index !== undefined) {
+      if (!tableData[index]) {
+        tableData.push(initialDataFilterValues[table])
+      }
+      tableData[index] = {
+        ...tableData[index],
+        [key]: value,
+      }
+      set(treeDataFilterAtom, {
+        ...current,
+        [table]: tableData,
+      })
+      return
+    }
+    set(treeDataFilterAtom, {
+      ...current,
+      [table]: {
+        ...tableData,
+        [key]: value,
+      },
+    })
+  },
+)
+
+export const treeDataFilterEmptyAtom = atom(null, (get, set) => {
+  set(treeDataFilterAtom, initialDataFilterValues)
 })
 
 export const treeActiveFilterTableAtom = atom((get) => {

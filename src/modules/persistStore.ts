@@ -1,6 +1,5 @@
 import localForage from 'localforage'
 //import { onPatch } from 'mobx-state-tree'
-import { getSnapshot } from 'mobx-state-tree'
 import { persist } from 'mst-persist'
 
 import { isObject } from './isObject.ts'
@@ -9,6 +8,8 @@ import {
   navigateAtom,
   userNameAtom,
   treeActiveNodeArrayAtom,
+  treeDataFilterAtom,
+  treeDataFilterEmptyAtom,
 } from '../JotaiStore/index.ts'
 
 const blacklist = [
@@ -32,25 +33,16 @@ export const persistStore = (store) => {
      * Goal: prevent errors because previous persisted structure was invalid
      * Idea: test if is object. Only then empty
      */
-    const dataFilterTreeAp = getSnapshot(store.tree.dataFilter.ap)
-    const dataFilterTreePop = getSnapshot(store.tree.dataFilter.pop)
-    const dataFilterTreeTpop = getSnapshot(store.tree.dataFilter.tpop)
-    const dataFilterTreeTpopmassn = getSnapshot(store.tree.dataFilter.tpopmassn)
-    const dataFilterTreeTpopfeldkontr = getSnapshot(
-      store.tree.dataFilter.tpopfeldkontr,
-    )
-    const dataFilterTreeTpopfreiwkontr = getSnapshot(
-      store.tree.dataFilter.tpopfreiwkontr,
-    )
+    const dataFilter = jotaiStore.get(treeDataFilterAtom)
     if (
-      isObject(dataFilterTreeAp) ||
-      isObject(dataFilterTreePop) ||
-      isObject(dataFilterTreeTpop) ||
-      isObject(dataFilterTreeTpopmassn) ||
-      isObject(dataFilterTreeTpopfeldkontr) ||
-      isObject(dataFilterTreeTpopfreiwkontr)
+      isObject(dataFilter.ap) ||
+      isObject(dataFilter.pop) ||
+      isObject(dataFilter.tpop) ||
+      isObject(dataFilter.tpopmassn) ||
+      isObject(dataFilter.tpopfeldkontr) ||
+      isObject(dataFilter.tpopfreiwkontr)
     ) {
-      ;[store.tree.dataFilterEmpty()]
+      jotaiStore.set(treeDataFilterEmptyAtom)
     }
 
     const isUser = !!username
@@ -59,7 +51,7 @@ export const persistStore = (store) => {
     // only if top domain was visited
     if (isUser && visitedTopDomain) {
       const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
-      return navigate?.(`/Daten/${activeNodeArray.join('/')}`)    
+      return navigate?.(`/Daten/${activeNodeArray.join('/')}`)
     }
   })
 }
