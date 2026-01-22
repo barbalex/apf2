@@ -19,11 +19,7 @@ import {
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const moveTo = async ({
-  id: newParentId,
-  store,
-  // apolloClient
-}) => {
+export const moveTo = async ({ id: newParentId }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
 

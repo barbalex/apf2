@@ -9,6 +9,7 @@ import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useLocation } from 'react-router'
 import { upperFirst } from 'es-toolkit'
+import { useAtomValue } from 'jotai'
 
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
 import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePath.ts'
@@ -16,6 +17,7 @@ import { isNodeOpen } from '../isNodeOpen.ts'
 import { toggleNode } from './toggleNode.ts'
 import { toggleNodeSymbol } from './toggleNodeSymbol.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { treeOpenNodesAtom, treeActiveNodeArrayAtom } from '../../../../JotaiStore/index.ts'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { prefetchNodeData } from '../../../../modules/prefetchNodeData.ts'
@@ -33,7 +35,9 @@ export const Row = observer(({ node, transitionState, ref }) => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const { openNodes, nodeLabelFilter, activeNodeArray } = store.tree
+  const { nodeLabelFilter } = store.tree
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
   const activeId = activeNodeArray[activeNodeArray.length - 1]
   const nodeIsActive = node.id === activeId
 
@@ -76,7 +80,6 @@ export const Row = observer(({ node, transitionState, ref }) => {
   const onClickNode = () =>
     toggleNode({
       node,
-      store,
       search,
       onlyShowActivePath,
     })
