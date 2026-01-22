@@ -18,6 +18,8 @@ import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
   addNotificationAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../JotaiStore/index.ts'
 
 const CmApFolder = lazy(async () => ({
@@ -245,7 +247,8 @@ export const Menus = observer(() => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const { setOpenNodes, openNodes: openNodesRaw } = store.tree
+  const openNodesRaw = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
   const openNodes = getSnapshot(openNodesRaw)
 
   const apolloClient = useApolloClient()
@@ -347,7 +350,6 @@ export const Menus = observer(() => {
           menuType,
           singleElementName,
           id,
-          store,
           search,
           jahr,
         })
@@ -367,7 +369,6 @@ export const Menus = observer(() => {
       closeLowerNodes() {
         closeLowerNodes({
           url,
-          store,
           search,
         })
       },
@@ -465,7 +466,6 @@ export const Menus = observer(() => {
           id,
           apId,
           projId,
-          store,
           search,
         })
       },
