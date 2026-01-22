@@ -6,7 +6,6 @@ import isUuid from 'is-uuid'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import { simpleTypes as popType } from './DataFilter/pop.ts'
-import { simpleTypes as tpopType } from './DataFilter/tpop.ts'
 import { simpleTypes as tpopmassnType } from './DataFilter/tpopmassn.ts'
 import { simpleTypes as tpopfeldkontrType } from './DataFilter/tpopfeldkontr.ts'
 import { simpleTypes as tpopfreiwkontrType } from './DataFilter/tpopfreiwkontr.ts'
@@ -31,6 +30,8 @@ import {
   treeApGqlFilterForTreeAtom,
   treePopGqlFilterAtom,
   treePopGqlFilterForTreeAtom,
+  treeTpopGqlFilterAtom,
+  treeTpopGqlFilterForTreeAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -110,183 +111,10 @@ export const Tree = types
       return jotaiStore.get(treePopGqlFilterForTreeAtom)
     },
     get tpopGqlFilter() {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.mapFilterVersion
-      self.dataFilterVersion
-      self.activeNodeArrayVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const mapFilter = jotaiStore.get(treeMapFilterAtom)
-      const dataFilter = jotaiStore.get(treeDataFilterAtom)
-      // 1. prepare hierarchy filter
-      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
-      const apHiearchyFilter =
-        apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
-      const projHiearchyFilter = {}
-      const singleFilterByHierarchy = merge(
-        apHiearchyFilter,
-        projHiearchyFilter,
-      )
-      const singleFilterByParentFiltersForAll = {
-        popByPopId: self.popGqlFilter.all,
-      }
-      const singleFilterForAll = merge(
-        singleFilterByHierarchy,
-        singleFilterByParentFiltersForAll,
-      )
-      const singleFilterByParentFiltersForFiltered = {
-        popByPopId: self.popGqlFilter.filtered,
-      }
-      // 2. prepare data filter
-      let filterArrayInStore = dataFilter.tpop ? [...dataFilter.tpop] : []
-      if (filterArrayInStore.length > 1) {
-        // check if last is empty
-        // empty last is just temporary because user created new "oder" and has not yet input criteria
-        // remove it or filter result will be wrong (show all) if criteria.length > 1!
-        const last = filterArrayInStore[filterArrayInStore.length - 1]
-        const lastIsEmpty =
-          Object.values(last).filter((v) => v !== null).length === 0
-        if (lastIsEmpty) {
-          // popping did not work
-          filterArrayInStore = filterArrayInStore.slice(0, -1)
-        }
-      } else if (filterArrayInStore.length === 0) {
-        // Add empty filter if no criteria exist yet
-        // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after looping
-        filterArrayInStore.push(initialTpop)
-      }
-      // 3. build data filter
-      const filterArray = []
-      for (const filter of filterArrayInStore) {
-        // add hierarchy filter
-        // BEWARE: merge without spreading leads to the same object being used during the for loop!
-        const singleFilter = {
-          ...merge(
-            singleFilterByHierarchy,
-            singleFilterByParentFiltersForFiltered,
-          ),
-        }
-        // add data filter
-        const dataFilterTpop = { ...filter }
-        const tpopFilterValues = Object.entries(dataFilterTpop).filter(
-          (e) => e[1] !== null,
-        )
-        tpopFilterValues.forEach(([key, value]) => {
-          const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-          singleFilter[key] = { [expression]: value }
-        })
-        // add node label filter
-        if (nodeLabelFilter.tpop) {
-          singleFilter.label = {
-            includesInsensitive: nodeLabelFilter.tpop,
-          }
-        }
-        // add mapFilter
-        if (mapFilter) {
-          singleFilter.geomPoint = {
-            coveredBy: mapFilter,
-          }
-        }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
-        }
-        // Object has filter criteria. Add it!
-        filterArray.push(singleFilter)
-      }
-
-      // extra check to ensure no empty objects exist
-      const filterArrayWithoutEmptyObjects = filterArray.filter(
-        (el) => Object.keys(el).length > 0,
-      )
-
-      const tpopGqlFilter = {
-        all:
-          Object.keys(singleFilterForAll).length ?
-            singleFilterForAll
-          : { or: [] },
-        filtered: { or: filterArrayWithoutEmptyObjects },
-      }
-
-      return tpopGqlFilter
+      return jotaiStore.get(treeTpopGqlFilterAtom)
     },
     get tpopGqlFilterForTree() {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.nodeLabelFilterVersion
-      self.mapFilterVersion
-      self.dataFilterVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const mapFilter = jotaiStore.get(treeMapFilterAtom)
-      const dataFilter = jotaiStore.get(treeDataFilterAtom)
-      // 1. prepare data filter
-      let filterArrayInStore = dataFilter.tpop ? [...dataFilter.tpop] : []
-      if (filterArrayInStore.length > 1) {
-        // check if last is empty
-        // empty last is just temporary because user created new "oder" and has not yet input criteria
-        // remove it or filter result will be wrong (show all) if criteria.length > 1!
-        const last = filterArrayInStore[filterArrayInStore.length - 1]
-        const lastIsEmpty =
-          Object.values(last).filter((v) => v !== null).length === 0
-        if (lastIsEmpty) {
-          // popping did not work
-          filterArrayInStore = filterArrayInStore.slice(0, -1)
-        }
-      } else if (filterArrayInStore.length === 0) {
-        // Add empty filter if no criteria exist yet
-        // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after looping
-        filterArrayInStore.push(initialTpop)
-      }
-      // 2. build data filter
-      const filterArray = []
-      for (const filter of filterArrayInStore) {
-        // add hierarchy filter
-        const singleFilter = {}
-        // add data filter
-        const dataFilterTpop = { ...filter }
-        const tpopFilterValues = Object.entries(dataFilterTpop).filter(
-          (e) => e[1] !== null,
-        )
-        tpopFilterValues.forEach(([key, value]) => {
-          const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
-          singleFilter[key] = { [expression]: value }
-        })
-        // add node label filter
-        if (nodeLabelFilter.tpop) {
-          singleFilter.label = {
-            includesInsensitive: nodeLabelFilter.tpop,
-          }
-        }
-        // add mapFilter
-        if (mapFilter) {
-          singleFilter.geomPoint = {
-            coveredBy: mapFilter,
-          }
-        }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
-        }
-        // Object has filter criteria. Add it!
-        filterArray.push(singleFilter)
-      }
-
-      // extra check to ensure no empty objects exist
-      const filterArrayWithoutEmptyObjects = filterArray.filter(
-        (el) => Object.keys(el).length > 0,
-      )
-
-      const tpopGqlFilter = { or: filterArrayWithoutEmptyObjects }
-
-      // console.log('tpopGqlFilter:', tpopGqlFilter)
-
-      return tpopGqlFilter
+      return jotaiStore.get(treeTpopGqlFilterForTreeAtom)
     },
     get tpopmassnGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes

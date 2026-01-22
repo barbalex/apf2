@@ -2,7 +2,6 @@ import { useEffect, useContext, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -14,6 +13,7 @@ import {
   store as jotaiStore,
   mapTpopIconAtom,
   treeShowTpopIconAtom,
+  treeTpopGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 
 import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.tsx'
@@ -100,6 +100,7 @@ export const useTpopsNavData = (props) => {
 
   const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
+  const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -108,7 +109,7 @@ export const useTpopsNavData = (props) => {
   const showTpopIcon = activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeTpop', popId, store.tree.tpopGqlFilterForTree],
+    queryKey: ['treeTpop', popId, tpopGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -133,7 +134,7 @@ export const useTpopsNavData = (props) => {
           }
         `,
         variables: {
-          tpopsFilter: store.tree.tpopGqlFilterForTree,
+          tpopsFilter: tpopGqlFilterForTree,
           popId,
         },
       })
@@ -146,7 +147,10 @@ export const useTpopsNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.tpopGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeTpopGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

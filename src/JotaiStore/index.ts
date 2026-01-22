@@ -9,6 +9,7 @@ import { appBaseUrl } from '../modules/appBaseUrl.ts'
 import { initialDataFilterValues } from './initialDataFilterValues.ts'
 import { simpleTypes as apType } from '../store/Tree/DataFilter/ap.ts'
 import { simpleTypes as popType } from '../store/Tree/DataFilter/pop.ts'
+import { simpleTypes as tpopType } from '../store/Tree/DataFilter/tpop.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
@@ -108,7 +109,7 @@ export const treeTpopkontrIdInActiveNodeArrayAtom = atom((get) => {
 // IsFiltered atoms - these check if filters are active
 export const treeArtIsFilteredAtom = atom((get) => {
   const apFilter = get(treeApFilterAtom)
-  const apGqlFilter = store.tree.apGqlFilter
+  const apGqlFilter = get(treeApGqlFilterAtom)
   const firstFilterObject = {
     ...(apGqlFilter?.filtered?.or?.[0] ?? {}),
   }
@@ -125,8 +126,7 @@ export const treeArtIsFilteredAtom = atom((get) => {
 })
 
 export const treePopIsFilteredAtom = atom((get) => {
-  // TODO: use jotai version of popGqlFilter here
-  const popGqlFilter = store.tree.popGqlFilter
+  const popGqlFilter = get(treePopGqlFilterAtom)
   const firstFilterObject = {
     ...(popGqlFilter?.filtered?.or?.[0] ?? {}),
   }
@@ -137,8 +137,7 @@ export const treePopIsFilteredAtom = atom((get) => {
 })
 
 export const treeTpopIsFilteredAtom = atom((get) => {
-  // TODO: use jotai version of tpopGqlFilter here
-  const tpopGqlFilter = store.tree.tpopGqlFilter
+  const tpopGqlFilter = get(treeTpopGqlFilterAtom)
   const firstFilterObject = {
     ...(tpopGqlFilter?.filtered?.or?.[0] ?? {}),
   }
@@ -149,7 +148,7 @@ export const treeTpopIsFilteredAtom = atom((get) => {
 })
 
 export const treeTpopmassnIsFilteredAtom = atom((get) => {
-  // TODO: use jotai version of tpopmassnGqlFilter here
+  // TODO: migrate tpopmassnGqlFilter to jotai
   const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
   const firstFilterObject = {
     ...(tpopmassnGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -161,7 +160,7 @@ export const treeTpopmassnIsFilteredAtom = atom((get) => {
 })
 
 export const treeEkIsFilteredAtom = atom((get) => {
-  // TODO: use jotai version of ekGqlFilter here
+  // TODO: migrate ekGqlFilter to jotai
   const ekGqlFilter = store.tree.ekGqlFilter
   const firstFilterObject = {
     ...(ekGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -173,7 +172,7 @@ export const treeEkIsFilteredAtom = atom((get) => {
 })
 
 export const treeEkfIsFilteredAtom = atom((get) => {
-  // TODO: use jotai version of ekfGqlFilter here
+  // TODO: migrate ekfGqlFilter to jotai
   const ekfGqlFilter = store.tree.ekfGqlFilter
   const firstFilterObject = {
     ...(ekfGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -376,8 +375,8 @@ export const treePopGqlFilterAtom = atom((get) => {
   const dataFilter = get(treeDataFilterAtom)
   const apId = get(treeApIdInActiveNodeArrayAtom)
 
-  // Access mobx store for parent filter
-  const apGqlFilter = store.tree.apGqlFilter
+  // Access jotai atom for parent filter
+  const apGqlFilter = get(treeApGqlFilterAtom)
 
   // 1. prepare hierarchy filter
   const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
@@ -532,6 +531,154 @@ export const treePopGqlFilterForTreeAtom = atom((get) => {
   const popGqlFilter = { or: filterArrayWithoutEmptyObjects }
 
   return popGqlFilter
+})
+
+export const treeTpopGqlFilterAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const mapFilter = get(treeMapFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+  const apId = get(treeApIdInActiveNodeArrayAtom)
+
+  // Access jotai atom for parent filter
+  const popGqlFilter = get(treePopGqlFilterAtom)
+
+  // 1. prepare hierarchy filter
+  const apHiearchyFilter =
+    apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
+  const projHiearchyFilter = {}
+  const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
+  const singleFilterByParentFiltersForAll = {
+    popByPopId: popGqlFilter.all,
+  }
+  const singleFilterForAll = merge(
+    singleFilterByHierarchy,
+    singleFilterByParentFiltersForAll,
+  )
+  const singleFilterByParentFiltersForFiltered = {
+    popByPopId: popGqlFilter.filtered,
+  }
+
+  // 2. prepare data filter
+  let filterArrayInStore = dataFilter.tpop ? [...dataFilter.tpop] : []
+  if (filterArrayInStore.length > 1) {
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    filterArrayInStore.push(initialDataFilterValues.tpop[0])
+  }
+
+  // 3. build data filter
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    // add hierarchy filter
+    // BEWARE: merge without spreading leads to the same object being used during the for loop!
+    const singleFilter = {
+      ...merge(singleFilterByHierarchy, singleFilterByParentFiltersForFiltered),
+    }
+    // add data filter
+    const dataFilterTpop = { ...filter }
+    const tpopFilterValues = Object.entries(dataFilterTpop).filter(
+      (e) => e[1] !== null,
+    )
+    tpopFilterValues.forEach(([key, value]) => {
+      const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // add node label filter
+    if (nodeLabelFilter.tpop) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.tpop,
+      }
+    }
+    // add mapFilter
+    if (mapFilter) {
+      singleFilter.geomPoint = {
+        coveredBy: mapFilter,
+      }
+    }
+    // Object could be empty if no filters exist
+    if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
+      break
+    }
+    filterArray.push(singleFilter)
+  }
+
+  // extra check to ensure no empty objects exist
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const tpopGqlFilter = {
+    all:
+      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    filtered: { or: filterArrayWithoutEmptyObjects },
+  }
+
+  return tpopGqlFilter
+})
+
+export const treeTpopGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const mapFilter = get(treeMapFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+
+  // 1. prepare data filter
+  let filterArrayInStore = dataFilter.tpop ? [...dataFilter.tpop] : []
+  if (filterArrayInStore.length > 1) {
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    filterArrayInStore.push(initialDataFilterValues.tpop[0])
+  }
+
+  // 2. build data filter
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    const singleFilter = {}
+    // add data filter
+    const dataFilterTpop = { ...filter }
+    const tpopFilterValues = Object.entries(dataFilterTpop).filter(
+      (e) => e[1] !== null,
+    )
+    tpopFilterValues.forEach(([key, value]) => {
+      const expression = tpopType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // add node label filter
+    if (nodeLabelFilter.tpop) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.tpop,
+      }
+    }
+    // add mapFilter
+    if (mapFilter) {
+      singleFilter.geomPoint = {
+        coveredBy: mapFilter,
+      }
+    }
+    // Object could be empty if no filters exist
+    if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
+      break
+    }
+    filterArray.push(singleFilter)
+  }
+
+  // extra check to ensure no empty objects exist
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const tpopGqlFilter = { or: filterArrayWithoutEmptyObjects }
+
+  return tpopGqlFilter
 })
 
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {

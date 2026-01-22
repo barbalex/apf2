@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
@@ -16,7 +15,10 @@ import type { AdresseId } from '../../../../models/apflora/public/AdresseId.ts'
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import {
+  addNotificationAtom,
+  treeTpopGqlFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 
 interface TPopQueryResult {
   allTpops: {
@@ -98,10 +100,10 @@ interface TPopProps {
   filtered?: boolean
 }
 
-export const TPop = observer(({ filtered = false }: TPopProps) => {
+export const TPop = ({ filtered = false }: TPopProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { tpopGqlFilter } = store.tree
+  const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 
@@ -311,4 +313,4 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
       : null}
     </Button>
   )
-})
+}
