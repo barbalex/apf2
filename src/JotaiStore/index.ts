@@ -45,6 +45,56 @@ export const treeAddOpenNodesAtom = atom(
 )
 
 export const treeActiveNodeArrayAtom = atom([])
+export const treeActiveFilterTableAtom = atom((get) => {
+  const activeNodeArray = get(treeActiveNodeArrayAtom)
+  if (activeNodeArray.length > 10) {
+    if (activeNodeArray[10] === 'Zaehlungen') return 'tpopkontrzaehl'
+  }
+  if (activeNodeArray.length > 8) {
+    if (activeNodeArray[8] === 'Massnahmen') return 'tpopmassn'
+    if (activeNodeArray[8] === 'Freiwilligen-Kontrollen') return 'tpopkontr'
+    if (activeNodeArray[8] === 'Feld-Kontrollen') return 'tpopkontr'
+    if (activeNodeArray[8] === 'Massnahmen-Berichte') return 'tpopmassnber'
+    if (activeNodeArray[8] === 'Kontroll-Berichte') return 'tpopber'
+    if (activeNodeArray[8] === 'Beobachtungen') return 'beob'
+  }
+  if (activeNodeArray.length > 6) {
+    if (activeNodeArray[6] === 'Teil-Populationen') return 'tpop'
+    if (activeNodeArray[6] === 'Kontroll-Berichte') return 'popber'
+    if (activeNodeArray[6] === 'Massnahmen-Berichte') return 'popmassnber'
+  }
+  if (activeNodeArray.length > 4) {
+    if (activeNodeArray[4] === 'Populationen') return 'pop'
+    if (activeNodeArray[4] === 'AP-Ziele') return 'ziel'
+    if (activeNodeArray[4] === 'AP-Erfolgskriterien') return 'erfkrit'
+    if (activeNodeArray[4] === 'AP-Berichte') return 'apber'
+    if (activeNodeArray[4] === 'Idealbiotop') return undefined // or pop?
+    if (activeNodeArray[4] === 'Taxa') return 'apart'
+    if (activeNodeArray[4] === 'assoziierte-Arten') return 'assozart'
+    if (activeNodeArray[4] === 'EK-Frequenzen') return 'ekfrequenz'
+    if (activeNodeArray[4] === 'EK-Zähleinheiten') return 'ekzaehleinheit'
+    if (activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen') return 'beob'
+    if (activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen') return 'beob'
+    if (activeNodeArray[4] === 'Qualitätskontrollen') return undefined
+    if (activeNodeArray[4] === 'Qualitätskontrollen-wählen') return undefined
+  }
+  if (activeNodeArray.length > 2) {
+    if (activeNodeArray[2] === 'Arten') return 'ap'
+    if (activeNodeArray[2] === 'AP-Berichte') return 'apberuebersicht'
+  }
+  if (activeNodeArray.length > 1) {
+    if (activeNodeArray[1] === 'Adressen') return 'adresse'
+    if (activeNodeArray[1] === 'ApberrelevantGrundWerte')
+      return 'tpopApberrelevantGrundWerte'
+    if (activeNodeArray[1] === 'EkAbrechnungstypWerte')
+      return 'ekAbrechnungstypWerte'
+    if (activeNodeArray[1] === 'TpopkontrzaehlEinheitWerte')
+      return 'tpopkontrzaehlEinheitWerte'
+  }
+  if (activeNodeArray[0] === 'Benutzer') return 'user'
+  if (activeNodeArray[0] === 'Dokumentation') return 'doc'
+  return undefined
+})
 export const treeSetActiveNodeArrayAtom = atom(
   (get) => get(treeActiveNodeArrayAtom),
   (get, set, val) => {
