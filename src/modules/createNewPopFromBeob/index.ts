@@ -13,6 +13,9 @@ import {
   addNotificationAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeOpenNodesAtom,
+  treeAddOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -22,14 +25,13 @@ export const createNewPopFromBeob = async ({
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
-  store,
   search,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
-  const tree = store.tree
-  const { addOpenNodes } = tree
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
 
   let beobResult
   try {
@@ -129,7 +131,7 @@ export const createNewPopFromBeob = async ({
   ]
 
   let newOpenNodes = [
-    ...tree.openNodes,
+    ...openNodes,
     // add Beob and it's not yet existing parents to open nodes
     [`Projekte`, projId, `Arten`, apId, `Populationen`],
     [`Projekte`, projId, `Arten`, apId, `Populationen`, tpop.popId],
@@ -177,9 +179,9 @@ export const createNewPopFromBeob = async ({
     ],
   ]
     // and remove old node
-    .filter((n) => !isEqual(n, tree.activeNodeArray))
+    .filter((n) => !isEqual(n, activeNodeArray))
 
-  addOpenNodes(newOpenNodes)
+  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   tsQueryClient.invalidateQueries({
