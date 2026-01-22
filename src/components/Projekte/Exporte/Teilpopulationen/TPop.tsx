@@ -7,6 +7,7 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'
@@ -15,10 +16,7 @@ import type { AdresseId } from '../../../../models/apflora/public/AdresseId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TPopQueryResult {
   allTpops: {
@@ -103,7 +101,6 @@ interface TPopProps {
 export const TPop = observer(({ filtered = false }: TPopProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { tableIsFiltered } = store
   const { tpopGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -299,7 +296,7 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
     //console.timeEnd('exporting')
   }
 
-  const tpopIsFiltered = tableIsFiltered('tpop')
+  const tpopIsFiltered = tableIsFiltered({ table: 'tpop', tree: store.tree })
 
   return (
     <Button

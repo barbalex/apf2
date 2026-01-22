@@ -8,13 +8,14 @@ import { observer } from 'mobx-react-lite'
 import { MobxContext } from '../../mobxContext.ts'
 import { exists } from '../../modules/exists.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
+import { tableIsFiltered } from '../../modules/tableIsFiltered.ts'
 
 import styles from './FilterTitle.module.css'
 
 export const FilterTitle = observer(
   ({ title, table, totalNr, filteredNr, activeTab }) => {
     const store = useContext(MobxContext)
-    const { tableIsFiltered, dataFilterTreeIsFiltered } = store
+    const { dataFilterTreeIsFiltered } = store
     const {
       emptyMapFilter,
       dataFilterEmpty,
@@ -23,7 +24,7 @@ export const FilterTitle = observer(
       setApFilter,
     } = store.tree
 
-    const existsTableFilter = tableIsFiltered(table)
+    const existsTableFilter = tableIsFiltered({ table, tree: store.tree })
     const existsTreeFilter = dataFilterTreeIsFiltered()
 
     const onEmptyTab = () => dataFilterEmptyTab({ table, activeTab })

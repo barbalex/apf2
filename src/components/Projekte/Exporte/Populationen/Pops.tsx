@@ -7,6 +7,7 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import styles from '../index.module.css'
 
@@ -18,14 +19,13 @@ import {
 export const Pops = observer(({ filtered = false }) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { tableIsFiltered } = store
   const { popGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
 
-  const popIsFiltered = tableIsFiltered('pop')
+  const popIsFiltered = tableIsFiltered({ table: 'pop', tree: store.tree })
 
   return (
     <Button
