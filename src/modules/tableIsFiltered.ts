@@ -1,6 +1,9 @@
+import { store as jotaiStore, treeNodeLabelFilterAtom } from '../JotaiStore/index.ts'
+
 export const tableIsFiltered = ({ table, tree }) => {
   // check nodeLabelFilter
-  const nodeLabelFilterExists = !!tree.nodeLabelFilter[table]
+  const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+  const nodeLabelFilterExists = !!nodeLabelFilter[table]
   if (nodeLabelFilterExists) return true
   // check mapFilter in tables with (parent) coordinates
   if (
