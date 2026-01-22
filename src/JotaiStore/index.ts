@@ -328,6 +328,131 @@ export const setTreeShowTpopIconAtom = atom(
   (get, set, value) => set(treeShowTpopIconAtom, value),
 )
 
+// treeNodeLabelFilter - stores filter values for tree node labels
+export const treeNodeLabelFilterAtom = atomWithStorage('treeNodeLabelFilter', {
+  ap: null,
+  pop: null,
+  tpop: null,
+  tpopkontr: null,
+  tpopfeldkontr: null,
+  tpopfreiwkontr: null,
+  tpopkontrzaehl: null,
+  tpopmassn: null,
+  ziel: null,
+  erfkrit: null,
+  apber: null,
+  apberuebersicht: null,
+  idealbiotop: null,
+  assozart: null,
+  ekzaehleinheit: null,
+  ekfrequenz: null,
+  popber: null,
+  popmassnber: null,
+  tpopber: null,
+  tpopmassnber: null,
+  apart: null,
+  projekt: null,
+  beob: null,
+  beobprojekt: null,
+  adresse: null,
+  gemeinde: null,
+  user: null,
+  ekAbrechnungstypWerte: null,
+  tpopApberrelevantGrundWerte: null,
+  tpopkontrzaehlEinheitWerte: null,
+  doc: '',
+})
+
+export const treeSetNodeLabelFilterKeyAtom = atom(
+  (get) => null,
+  (get, set, { key, value }) => {
+    const current = get(treeNodeLabelFilterAtom)
+    // only write if changed
+    if (current[key] !== value) {
+      set(treeNodeLabelFilterAtom, { ...current, [key]: value })
+    }
+  },
+)
+
+export const treeEmptyNodeLabelFilterAtom = atom(
+  (get) => null,
+  (get, set) => {
+    set(treeNodeLabelFilterAtom, {
+      ap: null,
+      pop: null,
+      tpop: null,
+      tpopkontr: null,
+      tpopfeldkontr: null,
+      tpopfreiwkontr: null,
+      tpopkontrzaehl: null,
+      tpopmassn: null,
+      ziel: null,
+      erfkrit: null,
+      apber: null,
+      apberuebersicht: null,
+      idealbiotop: null,
+      assozart: null,
+      ekzaehleinheit: null,
+      ekfrequenz: null,
+      popber: null,
+      popmassnber: null,
+      tpopber: null,
+      tpopmassnber: null,
+      apart: null,
+      projekt: null,
+      beob: null,
+      beobprojekt: null,
+      adresse: null,
+      gemeinde: null,
+      user: null,
+      ekAbrechnungstypWerte: null,
+      tpopApberrelevantGrundWerte: null,
+      tpopkontrzaehlEinheitWerte: null,
+      doc: '',
+    })
+  },
+)
+
+export const treeResetNodeLabelFilterKeepingApAtom = atom(
+  (get) => null,
+  (get, set) => {
+    const current = get(treeNodeLabelFilterAtom)
+    set(treeNodeLabelFilterAtom, {
+      ap: current.ap,
+      pop: null,
+      tpop: null,
+      tpopkontr: null,
+      tpopfeldkontr: null,
+      tpopfreiwkontr: null,
+      tpopkontrzaehl: null,
+      tpopmassn: null,
+      ziel: null,
+      erfkrit: null,
+      apber: null,
+      apberuebersicht: null,
+      idealbiotop: null,
+      assozart: null,
+      ekzaehleinheit: null,
+      ekfrequenz: null,
+      popber: null,
+      popmassnber: null,
+      tpopber: null,
+      tpopmassnber: null,
+      apart: null,
+      projekt: null,
+      beob: null,
+      beobprojekt: null,
+      adresse: null,
+      gemeinde: null,
+      user: null,
+      ekAbrechnungstypWerte: null,
+      tpopApberrelevantGrundWerte: null,
+      tpopkontrzaehlEinheitWerte: null,
+      doc: '',
+    })
+  },
+)
+
 // apfloraLayers is not stored - needs to update when code changes
 export const mapApfloraLayersAtom = atom([
   { label: 'Populationen', value: 'pop' },
