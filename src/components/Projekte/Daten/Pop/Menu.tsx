@@ -1,9 +1,8 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
@@ -17,7 +16,6 @@ import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
@@ -54,13 +52,12 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ row }: MenuProps) => {
+export const Menu = ({ row }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, popId } = useParams()
 
-  const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
@@ -169,7 +166,6 @@ export const Menu = observer(({ row }: MenuProps) => {
       projId,
       apId,
       popId,
-      store,
       menuType: 'pop',
       parentId: apId,
     })
@@ -177,7 +173,6 @@ export const Menu = observer(({ row }: MenuProps) => {
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
       url: ['Projekte', projId, 'Arten', apId, 'Populationen', popId],
-      store,
       search,
     })
 
@@ -193,10 +188,7 @@ export const Menu = observer(({ row }: MenuProps) => {
 
   const onClickMoveInTree = () => {
     if (isTpopMoving) {
-      return moveTo({
-        id: popId,
-        store,
-      })
+      return moveTo({ id: popId })
     }
     setMoving({
       id: popId,
@@ -221,19 +213,12 @@ export const Menu = observer(({ row }: MenuProps) => {
   const isCopyingTpop = copying.table === 'tpop'
 
   // TODO: add for feldkontr/freiwkontr/massn in tpop menu
-  const onClickCopyTpopToHere = () =>
-    copyTo({
-      parentId: popId,
-      store,
-    })
+  const onClickCopyTpopToHere = () => copyTo({ parentId: popId })
 
   const onClickCopyPop = (withNextLevel) => {
     if (isCopyingPop) {
       // copy to this ap
-      return copyTo({
-        parentId: apId,
-        store,
-      })
+      return copyTo({ parentId: apId })
     }
     setCopying({
       table: 'pop',
@@ -376,4 +361,4 @@ export const Menu = observer(({ row }: MenuProps) => {
       </MuiMenu>
     </ErrorBoundary>
   )
-})
+}

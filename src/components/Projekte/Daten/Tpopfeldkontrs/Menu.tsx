@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,7 +8,6 @@ import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
@@ -19,7 +17,6 @@ import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   showTreeMenusAtom,
   addNotificationAtom,
@@ -63,7 +60,7 @@ interface MenuProps {
   toggleFilterInput?: () => void
 }
 
-export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -72,7 +69,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId } = useParams()
 
-  const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
@@ -162,7 +158,6 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       projId,
       apId,
       popId,
-      store,
       menuType: 'tpopfeldkontrFolder',
     })
 
@@ -179,17 +174,12 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
         tpopId,
         'Feld-Kontrollen',
       ],
-      store,
       search,
     })
 
   const isMovingEk = moving.table === 'tpopfeldkontr'
 
-  const onClickMoveEkfToHere = () =>
-    moveTo({
-      id: tpopId,
-      store,
-    })
+  const onClickMoveEkfToHere = () => moveTo({ id: tpopId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -204,11 +194,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const isCopyingBiotop = !!copyingBiotop.id
   const isCopying = isCopyingEk || isCopyingBiotop
 
-  const onClickCopyEkfToHere = () =>
-    copyTo({
-      parentId: tpopId,
-      store,
-    })
+  const onClickCopyEkfToHere = () => copyTo({ parentId: tpopId })
 
   const onClickStopCopying = () => {
     setCopying({
@@ -282,4 +268,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}
