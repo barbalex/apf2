@@ -217,4 +217,4 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
       </div>
     </ErrorBoundary>
   )
-});
+}
