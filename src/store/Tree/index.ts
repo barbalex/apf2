@@ -1,18 +1,7 @@
-import { types, getParent } from 'mobx-state-tree'
-import { isEqual } from 'es-toolkit'
-import { merge } from 'es-toolkit'
-import queryString from 'query-string'
-import isUuid from 'is-uuid'
-
-import { appBaseUrl } from '../../modules/appBaseUrl.ts'
-import { simpleTypes as popType } from './DataFilter/pop.ts'
-import { simpleTypes as tpopmassnType } from './DataFilter/tpopmassn.ts'
-import { simpleTypes as tpopfeldkontrType } from './DataFilter/tpopfeldkontr.ts'
-import { simpleTypes as tpopfreiwkontrType } from './DataFilter/tpopfreiwkontr.ts'
+import { types } from 'mobx-state-tree'
 
 import {
   store as jotaiStore,
-  addNotificationAtom,
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeProjIdInActiveNodeArrayAtom,
@@ -62,9 +51,6 @@ import {
   treeBeobZugeordnetGqlFilterForTreeAtom,
   treeTpopkontrGqlFilterAtom,
 } from '../../JotaiStore/index.ts'
-
-const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
 
 export const Tree = types
   .model('Tree', {})

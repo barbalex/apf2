@@ -1,5 +1,4 @@
-import { useEffect, useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -7,7 +6,6 @@ import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { treeEkfGqlFilterAtom } from '../../../../JotaiStore/index.ts'
 import {
   treeNodeLabelFilterAtom,
@@ -32,11 +30,9 @@ interface TpopkontrsQueryResult {
 
 import styles from './index.module.css'
 
-export const TpopfreiwkontrFilter = observer(() => {
+export const TpopfreiwkontrFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
-  const tree = store.tree
   const ekfGqlFilter = useAtomValue(treeEkfGqlFilterAtom)
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
@@ -166,4 +162,4 @@ export const TpopfreiwkontrFilter = observer(() => {
       </div>
     </div>
   )
-})
+}
