@@ -101,25 +101,8 @@ export const Tree = types
       const set = new Set([...self.openNodes, ...nodes].map(JSON.stringify))
       self.openNodes = Array.from(set).map(JSON.parse)
     },
-    addOpenNodesForNodeArray(nodeArray) {
-      const extraOpenNodes = []
-      nodeArray.forEach((v, i) => {
-        extraOpenNodes.push(nodeArray.slice(0, i + 1))
-      })
-      this.addOpenNodes(extraOpenNodes)
-    },
     setApFilter(val) {
       self.apFilter = val
-    },
-    setActiveNodeArray(val) {
-      if (isEqual(val, self.activeNodeArray)) {
-        // do not do this if already set
-        // trying to stop vicious cycle of reloading in first start after update
-        return
-      }
-      // always set missing open nodes?
-      self.addOpenNodesForNodeArray(val)
-      self.activeNodeArray = val
     },
   }))
   .views((self) => ({
