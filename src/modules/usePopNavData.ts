@@ -14,6 +14,7 @@ import {
   mapPopIconAtom,
   treeShowPopIconAtom,
   treeTpopGqlFilterForTreeAtom,
+  treePopberGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'
@@ -49,6 +50,7 @@ export const usePopNavData = (props) => {
   const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
+  const popberGqlFilterForTree = useAtomValue(treePopberGqlFilterForTreeAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -65,7 +67,7 @@ export const usePopNavData = (props) => {
       'treePop',
       popId,
       tpopGqlFilterForTree,
-      store.tree.popberGqlFilterForTree,
+      popberGqlFilterForTree,
       store.tree.popmassnberGqlFilterForTree,
     ],
     queryFn: async () => {
@@ -113,7 +115,7 @@ export const usePopNavData = (props) => {
         variables: {
           popId,
           tpopFilter: tpopGqlFilterForTree,
-          popberFilter: store.tree.popberGqlFilterForTree,
+          popberFilter: popberGqlFilterForTree,
           popmassnberFilter: store.tree.popmassnberGqlFilterForTree,
         },
       })
@@ -130,11 +132,10 @@ export const usePopNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
-  useEffect(
-    () => reaction(() => store.tree.popberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treePopberGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
   useEffect(
     () => reaction(() => store.tree.popmassnberGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
