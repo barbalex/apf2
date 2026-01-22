@@ -4,7 +4,6 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { RiFolderCloseFill } from 'react-icons/ri'
@@ -29,6 +28,8 @@ import {
   setCopyingAtom,
   movingAtom,
   setMovingAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
@@ -72,6 +73,8 @@ export const Menu = observer(() => {
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
   const showTreeMenus = useAtomValue(showTreeMenusAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const onClickAdd = async () => {
     let result: CreateApResult | undefined
@@ -137,11 +140,9 @@ export const Menu = observer(() => {
     }
 
     // remove active path from openNodes
-    const openNodesRaw = store?.tree?.openNodes
-    const openNodes = getSnapshot(openNodesRaw)
     const activePath = pathname.split('/').filter((p) => !!p)
     const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    store.tree.setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes)
 
     // update tree query
     tsQueryClient.invalidateQueries({
