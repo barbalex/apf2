@@ -18,6 +18,7 @@ import {
   treeApFilterAtom,
   treeDataFilterAtom,
   treeDataFilterSetValueAtom,
+  treeArtIsFilteredAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -40,12 +41,13 @@ export const PopFilter = observer(() => {
   const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
-  const { popGqlFilter, artIsFiltered } = store.tree
+  const { popGqlFilter } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
 
   // somehow to live updates without this
   const dataFilterPop = dataFilter.pop

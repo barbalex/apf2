@@ -8,6 +8,8 @@ import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
   treeApFilterAtom,
+  treeArtIsFilteredAtom,
+  treePopIsFilteredAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
@@ -18,10 +20,11 @@ export const ActiveFilters = observer(() => {
 
   const store = useContext(MobxContext)
 
-  const { artIsFiltered, popIsFiltered } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
+  const popIsFiltered = useAtomValue(treePopIsFilteredAtom)
 
   const navApFilterComment =
     apFilter ?
