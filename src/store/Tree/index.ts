@@ -19,6 +19,9 @@ import {
   treeActiveNodeArrayAtom,
   treeProjIdInActiveNodeArrayAtom,
   treeApIdInActiveNodeArrayAtom,
+  treePopIdInActiveNodeArrayAtom,
+  treeTpopIdInActiveNodeArrayAtom,
+  treeTpopkontrIdInActiveNodeArrayAtom,
   treeApFilterAtom,
   treeSetApFilterAtom,
   treeMapFilterAtom,
@@ -41,6 +44,8 @@ export const Tree = types
     mapFilterVersion: 0,
     // Track dataFilter changes to make getters reactive
     dataFilterVersion: 0,
+    // Track activeNodeArray changes to make getters reactive
+    activeNodeArrayVersion: 0,
   }))
   .actions((self) => ({
     incrementNodeLabelFilterVersion() {
@@ -54,6 +59,9 @@ export const Tree = types
     },
     incrementDataFilterVersion() {
       self.dataFilterVersion += 1
+    },
+    incrementActiveNodeArrayVersion() {
+      self.activeNodeArrayVersion += 1
     },
     afterCreate() {
       // Subscribe to jotai atom changes and increment version to trigger mobx reactions
@@ -76,6 +84,11 @@ export const Tree = types
       jotaiStore.sub(treeDataFilterAtom, () => {
         queueMicrotask(() => {
           self.incrementDataFilterVersion()
+        })
+      })
+      jotaiStore.sub(treeActiveNodeArrayAtom, () => {
+        queueMicrotask(() => {
+          self.incrementActiveNodeArrayVersion()
         })
       })
     },
@@ -311,6 +324,7 @@ export const Tree = types
       self.nodeLabelFilterVersion
       self.mapFilterVersion
       self.dataFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
@@ -496,6 +510,7 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
       self.dataFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
@@ -683,6 +698,7 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
       self.dataFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
@@ -883,10 +899,11 @@ export const Tree = types
     get tpopmassnberGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const tpopId = self.tpopIdInActiveNodeArray
+      const tpopId = jotaiStore.get(treeTpopIdInActiveNodeArrayAtom)
       if (tpopId) {
         gqlFilter.tpopId = { equalTo: tpopId }
       }
@@ -1004,6 +1021,7 @@ export const Tree = types
     get zielGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1028,6 +1046,7 @@ export const Tree = types
     get apberGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1049,6 +1068,7 @@ export const Tree = types
     get apartGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1070,6 +1090,7 @@ export const Tree = types
     get assozartGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1091,6 +1112,7 @@ export const Tree = types
     get erfkritGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1112,6 +1134,7 @@ export const Tree = types
     get ekfrequenzGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1133,6 +1156,7 @@ export const Tree = types
     get ekzaehleinheitGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1154,10 +1178,11 @@ export const Tree = types
     get popberGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const popId = self.popIdInActiveNodeArray
+      const popId = jotaiStore.get(treePopIdInActiveNodeArrayAtom)
       if (popId) {
         gqlFilter.popId = { equalTo: popId }
       }
@@ -1175,10 +1200,11 @@ export const Tree = types
     get popmassnberGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const popId = self.popIdInActiveNodeArray
+      const popId = jotaiStore.get(treePopIdInActiveNodeArrayAtom)
       if (popId) {
         gqlFilter.popId = { equalTo: popId }
       }
@@ -1196,10 +1222,11 @@ export const Tree = types
     get tpopkontrzaehlGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const tpopkontrId = self.tpopkontrIdInActiveNodeArray
+      const tpopkontrId = jotaiStore.get(treeTpopkontrIdInActiveNodeArrayAtom)
       if (tpopkontrId) {
         gqlFilter.tpopkontrId = { equalTo: tpopkontrId }
       }
@@ -1217,10 +1244,11 @@ export const Tree = types
     get tpopberGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const tpopId = self.tpopIdInActiveNodeArray
+      const tpopId = jotaiStore.get(treeTpopIdInActiveNodeArrayAtom)
       if (tpopId) {
         gqlFilter.tpopId = { equalTo: tpopId }
       }
@@ -1239,6 +1267,7 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
       self.dataFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
@@ -1441,6 +1470,7 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
       self.dataFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
@@ -1641,6 +1671,7 @@ export const Tree = types
     beobGqlFilter(type) {
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
+      self.activeNodeArrayVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet

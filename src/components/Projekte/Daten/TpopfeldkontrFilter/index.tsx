@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { Form, useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -91,12 +91,8 @@ export const TpopfeldkontrFilter = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(MobxContext)
-  const {
-    ekGqlFilter,
-    artIsFiltered,
-    popIsFiltered,
-    tpopIsFiltered,
-  } = store.tree
+  const { ekGqlFilter, artIsFiltered, popIsFiltered, tpopIsFiltered } =
+    store.tree
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
