@@ -3,10 +3,12 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
 import { Form } from './Form/index.tsx'
 import { Tabs } from './Tabs.tsx'
 
@@ -29,13 +31,13 @@ export const TpopfreiwkontrFilter = observer(() => {
   const {
     dataFilter,
     ekfGqlFilter,
-    nodeLabelFilter,
     mapFilter,
     apFilter,
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
   } = tree
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

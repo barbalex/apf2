@@ -1,20 +1,18 @@
-import { useContext, useState, useEffect, useRef } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, useRef } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
 import { MdFilterAlt } from 'react-icons/md'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../../../mobxContext.ts'
 import {
   treeActiveFilterTableAtom,
   treeNodeLabelFilterAtom,
   treeSetNodeLabelFilterKeyAtom,
   treeEmptyNodeLabelFilterAtom,
 } from '../../../../../JotaiStore/index.ts'
-import { useAtomValue, useSetAtom } from 'jotai'
 
 import styles from './FilterInput.module.css'
 
