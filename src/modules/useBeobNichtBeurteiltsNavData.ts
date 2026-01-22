@@ -7,7 +7,11 @@ import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
+import {
+  mapActiveApfloraLayersAtom,
+  treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -25,6 +29,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
   const store = useContext(MobxContext)
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
+    treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  )
   const showBeobnichtbeurteiltIcon =
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const [, setRerenderer] = useState(0)
@@ -48,7 +55,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     queryKey: [
       'treeBeobNichtBeurteilt',
       apId,
-      store.tree.beobNichtBeurteiltGqlFilterForTree,
+      beobNichtBeurteiltGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -76,7 +83,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
         `,
         variables: {
           beobNichtBeurteiltFilter: {
-            ...store.tree.beobNichtBeurteiltGqlFilterForTree,
+            ...beobNichtBeurteiltGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -95,12 +102,13 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () =>
-      reaction(() => store.tree.beobNichtBeurteiltGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(
+      treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+      refetch,
+    )
+    return unsub
+  }, [])
 
   const count = data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
   const filteredCount = data?.data?.filteredBeobsNichtBeurteilt?.totalCount ?? 0

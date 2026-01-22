@@ -14,6 +14,7 @@ import {
   treeApberGqlFilterForTreeAtom,
   treeApartGqlFilterForTreeAtom,
   treeAssozartGqlFilterForTreeAtom,
+  treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   store as jotaiStore,
 } from '../JotaiStore/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
@@ -40,6 +41,9 @@ export const useApNavData = (props) => {
   const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
   const assozartGqlFilterForTree = useAtomValue(
     treeAssozartGqlFilterForTreeAtom,
+  )
+  const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
+    treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   )
   const showPopIcon = activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
@@ -92,7 +96,7 @@ export const useApNavData = (props) => {
       erfkritGqlFilterForTree,
       ekfrequenzGqlFilterForTree,
       ekzaehleinheitGqlFilterForTree,
-      store.tree.beobNichtBeurteiltGqlFilterForTree,
+      beobNichtBeurteiltGqlFilterForTree,
       store.tree.beobNichtZuzuordnenGqlFilterForTree,
     ],
     queryFn: async () => {
@@ -219,7 +223,7 @@ export const useApNavData = (props) => {
           ekfrequenzFilter: ekfrequenzGqlFilterForTree,
           ekzaehleinheitFilter: ekzaehleinheitGqlFilterForTree,
           beobNichtBeurteiltFilter: {
-            ...store.tree.beobNichtBeurteiltGqlFilterForTree,
+            ...beobNichtBeurteiltGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -282,12 +286,13 @@ export const useApNavData = (props) => {
     )
     return unsub
   }, [])
-  useEffect(
-    () =>
-      reaction(() => store.tree.beobNichtBeurteiltGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(
+      treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+      refetch,
+    )
+    return unsub
+  }, [])
   useEffect(
     () =>
       reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),

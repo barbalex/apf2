@@ -57,6 +57,7 @@ import {
   treeEkfGqlFilterAtom,
   treeEkfGqlFilterForTreeAtom,
   treeBeobGqlFilterAtom,
+  treeBeobNichtBeurteiltGqlFilterForTreeAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -222,32 +223,7 @@ export const Tree = types
       return jotaiStore.get(treeBeobGqlFilterAtom(type))
     },
     get beobNichtBeurteiltGqlFilterForTree() {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.nodeLabelFilterVersion
-      self.mapFilterVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const mapFilter = jotaiStore.get(treeMapFilterAtom)
-      const filter = {
-        wgs84Lat: { isNull: false },
-        tpopId: { isNull: true },
-        nichtZuordnen: { equalTo: false },
-      }
-
-      // node label filter
-      if (nodeLabelFilter.beob) {
-        filter.label = {
-          includesInsensitive: nodeLabelFilter.beob,
-        }
-      }
-
-      // mapFilter
-      if (mapFilter) {
-        filter.geomPoint = {
-          coveredBy: mapFilter,
-        }
-      }
-
-      return filter
+      return jotaiStore.get(treeBeobNichtBeurteiltGqlFilterForTreeAtom)
     },
     get beobNichtZuzuordnenGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
