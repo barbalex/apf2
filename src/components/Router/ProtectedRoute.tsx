@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
 import { Outlet } from 'react-router'
-// import { getSnapshot } from 'mobx-state-tree'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
 import { useAtomValue } from 'jotai'

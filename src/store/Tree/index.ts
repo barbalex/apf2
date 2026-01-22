@@ -1,29 +1,9 @@
-import { types, getParent, getSnapshot } from 'mobx-state-tree'
+import { types, getParent } from 'mobx-state-tree'
 import { isEqual } from 'es-toolkit'
 import { merge } from 'es-toolkit'
 import queryString from 'query-string'
 import isUuid from 'is-uuid'
 
-import { initialDataFilterValues } from './DataFilter/initialValues.ts'
-import { DataFilter } from './DataFilter/types.ts'
-import { simpleTypes as popType } from './DataFilter/pop.ts'
-import {
-  simpleTypes as tpopType,
-  initial as initialTpop,
-} from './DataFilter/tpop.ts'
-import {
-  simpleTypes as tpopmassnType,
-  initial as initialTpopmassn,
-} from './DataFilter/tpopmassn.ts'
-import {
-  simpleTypes as tpopfeldkontrType,
-  initial as initialTpopfeldkontr,
-} from './DataFilter/tpopfeldkontr.ts'
-import {
-  simpleTypes as tpopfreiwkontrType,
-  initial as initialTpopfreiwkontr,
-} from './DataFilter/tpopfreiwkontr.ts'
-import { simpleTypes as apType, initial as initialAp } from './DataFilter/ap.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 
 import {
@@ -37,15 +17,14 @@ import {
   treeMapFilterAtom,
   treeSetMapFilterAtom,
   treeNodeLabelFilterAtom,
+  treeDataFilterAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
 export const Tree = types
-  .model('Tree', {
-    dataFilter: types.optional(DataFilter, initialDataFilterValues),
-  })
+  .model('Tree', {})
   .volatile(() => ({
     // Track nodeLabelFilter changes to make getters reactive
     nodeLabelFilterVersion: 0,
@@ -53,6 +32,8 @@ export const Tree = types
     apFilterVersion: 0,
     // Track mapFilter changes to make getters reactive
     mapFilterVersion: 0,
+    // Track dataFilter changes to make getters reactive
+    dataFilterVersion: 0,
   }))
   .actions((self) => ({
     incrementNodeLabelFilterVersion() {
@@ -63,6 +44,9 @@ export const Tree = types
     },
     incrementMapFilterVersion() {
       self.mapFilterVersion += 1
+    },
+    incrementDataFilterVersion() {
+      self.dataFilterVersion += 1
     },
     afterCreate() {
       // Subscribe to jotai atom changes and increment version to trigger mobx reactions
@@ -82,33 +66,11 @@ export const Tree = types
           self.incrementMapFilterVersion()
         })
       })
-    },
-    dataFilterEmptyTable({ table }) {
-      self.dataFilter[table] = initialDataFilterValues[table]
-    },
-    dataFilterEmptyTab({ table, activeTab }) {
-      if (self.dataFilter[table].length === 1) {
-        const firstElement = self.dataFilter[table][0]
-        Object.keys(firstElement).forEach((key) => (firstElement[key] = null))
-        return
-      }
-      self.dataFilter[table].splice(activeTab, 1)
-    },
-    dataFilterAddOr({ table, val }) {
-      self.dataFilter?.[table]?.push(val)
-    },
-    dataFilterSetValue({ table, key, value, index }) {
-      if (index !== undefined) {
-        if (!self.dataFilter[table][index]) {
-          self.tree?.dataFilter?.[table]?.push(initialDataFilterValues[table])
-        }
-        self.dataFilter[table][index][key] = value
-        return
-      }
-      self.dataFilter[table][key] = value
-    },
-    dataFilterEmpty() {
-      self.dataFilter = initialDataFilterValues
+      jotaiStore.sub(treeDataFilterAtom, () => {
+        queueMicrotask(() => {
+          self.incrementDataFilterVersion()
+        })
+      })
     },
   }))
   .views((self) => ({
@@ -126,13 +88,14 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.apFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const apFilter = jotaiStore.get(treeApFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
       const singleFilterByHierarchy = {}
       // 2. prepare data filter
-      let filterArrayInStore =
-        self.dataFilter.ap ? [...getSnapshot(self.dataFilter.ap)] : []
+      let filterArrayInStore = dataFilter.ap ? [...dataFilter.ap] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -232,11 +195,12 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.apFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const apFilter = jotaiStore.get(treeApFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare data filter
-      let filterArrayInStore =
-        self.dataFilter.ap ? [...getSnapshot(self.dataFilter.ap)] : []
+      let filterArrayInStore = dataFilter.ap ? [...dataFilter.ap] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -347,8 +311,10 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
@@ -368,8 +334,7 @@ export const Tree = types
         apByApId: self.apGqlFilter.filtered,
       }
       // 2. prepare data filter
-      let filterArrayInStore =
-        self.dataFilter.pop ? [...getSnapshot(self.dataFilter.pop)] : []
+      let filterArrayInStore = dataFilter.pop ? [...dataFilter.pop] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -449,11 +414,12 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare data filter
-      let filterArrayInStore =
-        self.dataFilter.pop ? [...getSnapshot(self.dataFilter.pop)] : []
+      let filterArrayInStore = dataFilter.pop ? [...dataFilter.pop] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -530,8 +496,10 @@ export const Tree = types
     get tpopGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -552,8 +520,7 @@ export const Tree = types
         popByPopId: self.popGqlFilter.filtered,
       }
       // 2. prepare data filter
-      let filterArrayInStore =
-        self.dataFilter.tpop ? [...getSnapshot(self.dataFilter.tpop)] : []
+      let filterArrayInStore = dataFilter.tpop ? [...dataFilter.tpop] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -633,11 +600,12 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare data filter
-      let filterArrayInStore =
-        self.dataFilter.tpop ? [...getSnapshot(self.dataFilter.tpop)] : []
+      let filterArrayInStore = dataFilter.tpop ? [...dataFilter.tpop] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -715,8 +683,10 @@ export const Tree = types
     get tpopmassnGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -740,9 +710,7 @@ export const Tree = types
       }
       // 2. prepare data filter
       let filterArrayInStore =
-        self.dataFilter.tpopmassn ?
-          [...getSnapshot(self.dataFilter.tpopmassn)]
-        : []
+        dataFilter.tpopmassn ? [...dataFilter.tpopmassn] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -827,13 +795,13 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
-        self.dataFilter.tpopmassn ?
-          [...getSnapshot(self.dataFilter.tpopmassn)]
-        : []
+        dataFilter.tpopmassn ? [...dataFilter.tpopmassn] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1271,8 +1239,10 @@ export const Tree = types
     get ekGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -1304,9 +1274,7 @@ export const Tree = types
       }
       // 2. prepare data filter
       let filterArrayInStore =
-        self.dataFilter.tpopfeldkontr ?
-          [...getSnapshot(self.dataFilter.tpopfeldkontr)]
-        : []
+        dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1388,13 +1356,13 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
-        self.dataFilter.tpopfeldkontr ?
-          [...getSnapshot(self.dataFilter.tpopfeldkontr)]
-        : []
+        dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1473,8 +1441,10 @@ export const Tree = types
     get ekfGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -1501,9 +1471,7 @@ export const Tree = types
       }
       // 2. prepare data filter
       let filterArrayInStore =
-        self.dataFilter.tpopfreiwkontr ?
-          [...getSnapshot(self.dataFilter.tpopfreiwkontr)]
-        : []
+        dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1584,13 +1552,13 @@ export const Tree = types
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
       self.mapFilterVersion
+      self.dataFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
+      const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
-        self.dataFilter.tpopfreiwkontr ?
-          [...getSnapshot(self.dataFilter.tpopfreiwkontr)]
-        : []
+        dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
       if (filterArrayInStore.length > 1) {
         // check if last is empty
         // empty last is just temporary because user created new "oder" and has not yet input criteria

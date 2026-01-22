@@ -10,7 +10,6 @@ import {
   MdFilterCenterFocus,
   MdRemove,
 } from 'react-icons/md'
-import { getSnapshot } from 'mobx-state-tree'
 import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
