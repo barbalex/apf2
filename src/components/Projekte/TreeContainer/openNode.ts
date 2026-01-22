@@ -4,7 +4,7 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../JotaiStore/index.ts'
 
-export const openNode = async ({ node, openNodes, store }) => {
+export const openNode = async ({ node, openNodes, store = null }) => {
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen({ openNodes, url: node.url })) return
