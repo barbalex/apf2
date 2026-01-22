@@ -9,10 +9,14 @@ import {
   tsQueryClientAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeActiveNodeArrayAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 export const saveArtIdToDb = async ({ value, row, store, search }) => {
-  const { activeNodeArray, openNodes: openNodesRaw, setOpenNodes } = store.tree
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const openNodesRaw = jotaiStore.get(treeOpenNodesAtom)
   const aNA = getSnapshot(activeNodeArray)
   const openNodes = getSnapshot(openNodesRaw)
   const apolloClient = jotaiStore.get(apolloClientAtom)
@@ -74,7 +78,7 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
     [aNA[0], aNA[1], aNA[2], newApId, aNA[4]],
     [aNA[0], aNA[1], aNA[2], newApId, aNA[4], aNA[5]],
   ]
-  setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newANA.join('/')}${search}`)
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],

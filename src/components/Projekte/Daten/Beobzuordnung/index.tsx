@@ -194,7 +194,6 @@ export const Component = observer(() => {
       value,
       id,
       refetch,
-      store,
       search,
     })
 
