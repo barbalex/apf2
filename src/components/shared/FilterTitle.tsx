@@ -4,13 +4,17 @@ import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MobxContext } from '../../mobxContext.ts'
 import {
   treeEmptyNodeLabelFilterAtom,
   treeSetApFilterAtom,
   treeEmptyMapFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterEmptyTableAtom,
+  treeDataFilterEmptyTabAtom,
+  treeDataFilterEmptyAtom,
 } from '../../JotaiStore/index.ts'
 import { exists } from '../../modules/exists.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
@@ -21,24 +25,26 @@ import styles from './FilterTitle.module.css'
 export const FilterTitle = observer(
   ({ title, table, totalNr, filteredNr, activeTab }) => {
     const store = useContext(MobxContext)
-    const { dataFilterEmpty, dataFilterEmptyTab, dataFilterEmptyTable } =
-      store.tree
     const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
     const setApFilter = useSetAtom(treeSetApFilterAtom)
     const emptyMapFilter = useSetAtom(treeEmptyMapFilterAtom)
+    const dataFilter = useAtomValue(treeDataFilterAtom)
+    const emptyDataFilterTable = useSetAtom(treeDataFilterEmptyTableAtom)
+    const emptyDataFilterTab = useSetAtom(treeDataFilterEmptyTabAtom)
+    const emptyDataFilter = useSetAtom(treeDataFilterEmptyAtom)
 
     const existsTableFilter = tableIsFiltered({ table, tree: store.tree })
-    const tables = Object.keys(store.tree.dataFilter)
+    const tables = Object.keys(dataFilter)
     const existsTreeFilter = tables.some((table) =>
       tableIsFiltered({ table, tree: store.tree }),
     )
 
-    const onEmptyTab = () => dataFilterEmptyTab({ table, activeTab })
-    const onEmptyTable = () => dataFilterEmptyTable({ table })
+    const onEmptyTab = () => emptyDataFilterTab({ table, activeTab })
+    const onEmptyTable = () => emptyDataFilterTable({ table })
 
     const onEmptyTree = () => {
       emptyNodeLabelFilter()
-      dataFilterEmpty()
+      emptyDataFilter()
       emptyMapFilter()
       setApFilter(false)
     }

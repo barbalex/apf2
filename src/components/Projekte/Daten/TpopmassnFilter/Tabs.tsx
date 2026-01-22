@@ -1,10 +1,11 @@
-import { useContext, type SyntheticEvent } from 'react'
+import { type SyntheticEvent } from 'react'
 import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useSetAtom } from 'jotai'
 
 import { initial as tpopmassn } from '../../../../store/Tree/DataFilter/tpopmassn.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { treeDataFilterAddOrAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './Tabs.module.css'
 
@@ -16,8 +17,7 @@ interface TabsProps {
 
 export const Tabs = observer(
   ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
-    const store = useContext(MobxContext)
-    const { dataFilterAddOr } = store.tree
+    const addDataFilterOr = useSetAtom(treeDataFilterAddOrAtom)
 
     const lastFilterIsEmpty =
       Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
@@ -26,7 +26,7 @@ export const Tabs = observer(
 
     const onChangeTab = (event: SyntheticEvent, value: number) => {
       if (value > dataFilter.length - 1) {
-        dataFilterAddOr({ table: 'tpopmassn', val: tpopmassn })
+        addDataFilterOr({ table: 'tpopmassn', val: tpopmassn })
         setTimeout(() => setActiveTab(value), 0)
         return
       }

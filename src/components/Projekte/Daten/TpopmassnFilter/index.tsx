@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -20,6 +20,8 @@ import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
   treeApFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -66,17 +68,13 @@ export const TpopmassnFilter = observer(() => {
   const { apId } = useParams()
 
   const store = useContext(MobxContext)
-  const {
-    dataFilter,
-    tpopmassnGqlFilter,
-    artIsFiltered,
-    popIsFiltered,
-    tpopIsFiltered,
-    dataFilterSetValue,
-  } = store.tree
+  const { tpopmassnGqlFilter, artIsFiltered, popIsFiltered, tpopIsFiltered } =
+    store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -117,7 +115,7 @@ export const TpopmassnFilter = observer(() => {
   )?.anpflanzung
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpopmassn',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
