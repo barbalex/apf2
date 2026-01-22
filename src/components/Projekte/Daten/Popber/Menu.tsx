@@ -26,7 +26,6 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
-
 interface CreatePopberResult {
   data?: {
     createPopber?: {
