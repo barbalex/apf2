@@ -1538,6 +1538,80 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   return ekfGqlFilter
 })
 
+export const treeEkfGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const mapFilter = get(treeMapFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+  
+  // 1. prepare data filter
+  let filterArrayInStore =
+    dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
+  if (filterArrayInStore.length > 1) {
+    // check if last is empty
+    // empty last is just temporary because user created new "oder" and has not yet input criteria
+    // remove it or filter result will be wrong (show all) if criteria.length > 1!
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      // popping did not work
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    // Add empty filter if no criteria exist yet
+    // Goal: enable adding filters for hierarchy, label and geometry
+    // If no filters were added: this empty element will be removed after looping
+    filterArrayInStore.push(initialTpopfreiwkontr)
+  }
+  
+  // 2. build data filter
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    // add hierarchy filter
+    const singleFilter = {}
+    // add data filter
+    const dataFilterObj = { ...filter }
+    const filterValues = Object.entries(dataFilterObj).filter(
+      (e) => e[1] !== null,
+    )
+    filterValues.forEach(([key, value]) => {
+      const expression =
+        tpopfreiwkontrType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // add node label filter
+    if (nodeLabelFilter.tpopkontr) {
+      singleFilter.labelEkf = {
+        includesInsensitive: nodeLabelFilter.tpopkontr,
+      }
+    }
+    // add mapFilter
+    if (mapFilter) {
+      if (!singleFilter.tpopByTpopId) {
+        singleFilter.tpopByTpopId = {}
+      }
+      singleFilter.tpopByTpopId.geomPoint = {
+        coveredBy: mapFilter,
+      }
+    }
+    // Object needs to filter by typ
+    if (!singleFilter.typ) {
+      singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
+    }
+    // Object has filter criteria. Add it!
+    filterArray.push(singleFilter)
+  }
+
+  // extra check to ensure no empty objects exist
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const ekfGqlFilter = { or: filterArrayWithoutEmptyObjects }
+
+  return ekfGqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })

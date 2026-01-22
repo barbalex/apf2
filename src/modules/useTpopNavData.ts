@@ -17,6 +17,7 @@ import {
   treeTpopmassnberGqlFilterForTreeAtom,
   treeTpopberGqlFilterForTreeAtom,
   treeEkGqlFilterForTreeAtom,
+  treeEkfGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
@@ -62,6 +63,7 @@ export const useTpopNavData = (props) => {
   )
   const tpopberGqlFilterForTree = useAtomValue(treeTpopberGqlFilterForTreeAtom)
   const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
+  const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -79,7 +81,7 @@ export const useTpopNavData = (props) => {
       tpopmassnGqlFilterForTree,
       tpopmassnberGqlFilterForTree,
       ekGqlFilterForTree,
-      store.tree.ekfGqlFilterForTree,
+      ekfGqlFilterForTree,
       tpopberGqlFilterForTree,
       store.tree.beobZugeordnetGqlFilterForTree,
     ],
@@ -165,7 +167,7 @@ export const useTpopNavData = (props) => {
           tpopmassnFilter: tpopmassnGqlFilterForTree,
           tpopmassnberFilter: tpopmassnberGqlFilterForTree,
           tpopfeldkontrFilter: ekGqlFilterForTree,
-          tpopfreiwkontrFilter: store.tree.ekfGqlFilterForTree,
+          tpopfreiwkontrFilter: ekfGqlFilterForTree,
           tpopberFilter: tpopberGqlFilterForTree,
           beobZugeordnetFilter: {
             ...store.tree.beobZugeordnetGqlFilterForTree,
@@ -206,7 +208,10 @@ export const useTpopNavData = (props) => {
     [],
   )
   useEffect(
-    () => reaction(() => store.tree.ekfGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeEkfGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

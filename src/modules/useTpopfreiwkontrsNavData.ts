@@ -7,7 +7,12 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store as jotaiStore,
+  treeEkfGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 
@@ -20,9 +25,10 @@ export const useTpopfreiwkontrsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+  const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeTpopfreiwkontr', tpopId, store.tree.ekfGqlFilterForTree],
+    queryKey: ['treeTpopfreiwkontr', tpopId, ekfGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -51,7 +57,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
           }
         `,
         variables: {
-          ekfsFilter: store.tree.ekfGqlFilterForTree,
+          ekfsFilter: ekfGqlFilterForTree,
           tpopId,
         },
       })
@@ -64,7 +70,10 @@ export const useTpopfreiwkontrsNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.ekfGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeEkfGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
