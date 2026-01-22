@@ -1,9 +1,7 @@
-import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import { FaPlus } from 'react-icons/fa6'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { RiFolderCloseFill } from 'react-icons/ri'
@@ -19,7 +17,6 @@ import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import { ApFilter } from '../../TreeContainer/ApFilter/index.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   showTreeMenusAtom,
   addNotificationAtom,
@@ -51,13 +48,11 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams<{ projId: string; apId: string }>()
-
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -102,11 +97,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     navigate(`/Daten/Projekte/${projId}/Arten/${id}${search}`)
   }
 
-  const onClickMoveHere = () =>
-    moveTo({
-      id: apId,
-      store,
-    })
+  const onClickMoveHere = () => moveTo({ id: apId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -117,16 +108,11 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       fromParentId: null,
     })
 
-  const onClickCopyTo = () =>
-    copyTo({
-      parentId: apId,
-      store,
-    })
+  const onClickCopyTo = () => copyTo({ parentId: apId })
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
       url: ['Projekte', projId, 'Arten', apId],
-      store,
       search,
     })
 
@@ -195,4 +181,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

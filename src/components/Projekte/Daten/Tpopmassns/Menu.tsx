@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -9,14 +8,12 @@ import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'
@@ -46,13 +43,12 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
   const { tpopId } = useParams()
 
-  const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
@@ -98,11 +94,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   }
 
   const isMovingMassn = moving.table === 'tpopmassn'
-  const onClickMoveMassnToHere = () =>
-    moveTo({
-      id: tpopId,
-      store,
-    })
+  const onClickMoveMassnToHere = () => moveTo({ id: tpopId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -114,11 +106,7 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
     })
 
   const isCopyingMassn = copying.table === 'tpopmassn'
-  const onClickCopyMassnToHere = () =>
-    copyTo({
-      parentId: tpopId,
-      store,
-    })
+  const onClickCopyMassnToHere = () => copyTo({ parentId: tpopId })
 
   const onClickStopCopying = () =>
     setCopying({
@@ -172,4 +160,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

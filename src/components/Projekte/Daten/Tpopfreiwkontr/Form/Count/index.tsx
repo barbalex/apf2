@@ -1,19 +1,19 @@
-import { useContext } from 'react'
 import { sortBy, uniqBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { MdAddCircleOutline, MdDeleteForever } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { Einheit } from './Einheit.tsx'
 import { Gezaehlt } from './Gezaehlt.tsx'
 import { Geschaetzt } from './Geschaetzt.tsx'
 import { query } from './query.ts'
 import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
-import { MobxContext } from '../../../../../../mobxContext.ts'
-import { setToDeleteAtom } from '../../../../../../JotaiStore/index.ts'
+import {
+  setToDeleteAtom,
+  treeActiveNodeArrayAtom,
+} from '../../../../../../JotaiStore/index.ts'
 
 import type { TpopkontrzaehlId } from '../../../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../../../models/apflora/TpopkontrId.ts'
@@ -93,8 +93,7 @@ const getZaehleinheitWerte = ({
   }))
 }
 
-export const Count = observer(
-  ({
+export const Count = ({
     id,
     tpopkontrId,
     nr,
@@ -105,9 +104,8 @@ export const Count = observer(
     ekzaehleinheits = [],
     ekzaehleinheitsOriginal = [],
   }: CountProps) => {
-    const store = useContext(MobxContext)
     const setToDelete = useSetAtom(setToDeleteAtom)
-    const { activeNodeArray } = store.tree
+    const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
 
     const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
@@ -256,5 +254,4 @@ export const Count = observer(
         )}
       </div>
     )
-  },
-)
+  }
