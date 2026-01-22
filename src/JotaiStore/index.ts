@@ -1602,6 +1602,15 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
   return ekfGqlFilter
 })
 
+export const treeTpopkontrGqlFilterAtom = atom((get) => {
+  const ekGqlFilter = get(treeEkGqlFilterAtom)
+  const ekfGqlFilter = get(treeEkfGqlFilterAtom)
+  
+  return {
+    or: [ekGqlFilter?.filtered, ekfGqlFilter.filtered],
+  }
+})
+
 // Function that returns an atom for beobGqlFilter based on type parameter
 export const treeBeobGqlFilterAtom = (
   type: 'nichtBeurteilt' | 'nichtZuzuordnen' | 'zugeordnet',
@@ -3133,3 +3142,20 @@ export const exportFileTypeAtom = atomWithStorage('exportFileType', 'xlsx')
 export const setExportFileTypeAtom = atom(null, (get, set, val) => {
   set(exportFileTypeAtom, val)
 })
+
+// Helper to get gql filter atom by table name
+export const getGqlFilterAtomByTable = (table: string) => {
+  const atomMap = {
+    ap: treeApGqlFilterAtom,
+    pop: treePopGqlFilterAtom,
+    tpop: treeTpopGqlFilterAtom,
+    tpopmassn: treeTpopmassnGqlFilterAtom,
+    ek: treeEkGqlFilterAtom,
+    ekf: treeEkfGqlFilterAtom,
+    tpopkontr: treeTpopkontrGqlFilterAtom,
+    beobNichtBeurteilt: treeBeobGqlFilterAtom('nichtBeurteilt'),
+    beobNichtZuzuordnen: treeBeobGqlFilterAtom('nichtZuzuordnen'),
+    beobZugeordnet: treeBeobGqlFilterAtom('zugeordnet'),
+  }
+  return atomMap[table]
+}

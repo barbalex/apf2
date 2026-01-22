@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { FaTrash, FaTrashAlt, FaRegTrashAlt } from 'react-icons/fa'
 import { MdInfoOutline } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
@@ -6,7 +5,6 @@ import Tooltip from '@mui/material/Tooltip'
 import { observer } from 'mobx-react-lite'
 import { useSetAtom, useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../mobxContext.ts'
 import {
   treeEmptyNodeLabelFilterAtom,
   treeSetApFilterAtom,
@@ -24,7 +22,6 @@ import styles from './FilterTitle.module.css'
 
 export const FilterTitle = observer(
   ({ title, table, totalNr, filteredNr, activeTab }) => {
-    const store = useContext(MobxContext)
     const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
     const setApFilter = useSetAtom(treeSetApFilterAtom)
     const emptyMapFilter = useSetAtom(treeEmptyMapFilterAtom)
@@ -33,11 +30,9 @@ export const FilterTitle = observer(
     const emptyDataFilterTab = useSetAtom(treeDataFilterEmptyTabAtom)
     const emptyDataFilter = useSetAtom(treeDataFilterEmptyAtom)
 
-    const existsTableFilter = tableIsFiltered({ table, tree: store.tree })
+    const existsTableFilter = tableIsFiltered({ table })
     const tables = Object.keys(dataFilter)
-    const existsTreeFilter = tables.some((table) =>
-      tableIsFiltered({ table, tree: store.tree }),
-    )
+    const existsTreeFilter = tables.some((table) => tableIsFiltered({ table }))
 
     const onEmptyTab = () => emptyDataFilterTab({ table, activeTab })
     const onEmptyTable = () => emptyDataFilterTable({ table })

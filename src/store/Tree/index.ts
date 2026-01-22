@@ -60,6 +60,7 @@ import {
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   treeBeobZugeordnetGqlFilterForTreeAtom,
+  treeTpopkontrGqlFilterAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -217,9 +218,7 @@ export const Tree = types
       return jotaiStore.get(treeEkfGqlFilterForTreeAtom)
     },
     get tpopkontrGqlFilter() {
-      return {
-        or: [self.ekGqlFilter?.filtered, self.ekfGqlFilter.filtered],
-      }
+      return jotaiStore.get(treeTpopkontrGqlFilterAtom)
     },
     beobGqlFilter(type) {
       return jotaiStore.get(treeBeobGqlFilterAtom(type))

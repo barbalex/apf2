@@ -2,9 +2,10 @@ import {
   store as jotaiStore,
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
+  getGqlFilterAtomByTable,
 } from '../JotaiStore/index.ts'
 
-export const tableIsFiltered = ({ table, tree }) => {
+export const tableIsFiltered = ({ table }) => {
   // check nodeLabelFilter
   const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
   const nodeLabelFilterExists = !!nodeLabelFilter[table]
@@ -21,8 +22,10 @@ export const tableIsFiltered = ({ table, tree }) => {
   }
   // check data and hierarchy filter: is included in gqlFilter
   // check gql filter
-  // TODO: use jotai store instead of mobx store
-  const gqlFilter = tree?.[`${table}GqlFilter`]?.filtered?.or?.[0] ?? {}
+  const gqlFilterAtom = getGqlFilterAtomByTable(table)
+  if (!gqlFilterAtom) return false
+
+  const gqlFilter = jotaiStore.get(gqlFilterAtom)?.filtered?.or?.[0] ?? {}
   const isGqlFilter = Object.keys(gqlFilter).length > 0
   return isGqlFilter
 }

@@ -1,11 +1,10 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import { ApId } from '../../../../models/apflora/index.tsx'
@@ -16,7 +15,6 @@ import {
   addNotificationAtom,
   treeApGqlFilterAtom,
 } from '../../../../JotaiStore/index.ts'
-
 
 interface ApQueryResult {
   allAps: {
@@ -48,7 +46,6 @@ interface ApProps {
 
 export const Ap = ({ filtered = false }: ApProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apGqlFilter = useAtomValue(treeApGqlFilterAtom)
 
   const apolloClient = useApolloClient()
@@ -123,13 +120,11 @@ export const Ap = ({ filtered = false }: ApProps) => {
     exportModule({
       data: rows,
       fileName: `Arten${filtered ? '_gefiltert' : ''}`,
-      store,
-      apolloClient,
     })
     setQueryState(undefined)
   }
 
-  const apIsFiltered = tableIsFiltered({ table: 'ap', tree: store.tree })
+  const apIsFiltered = tableIsFiltered({ table: 'ap' })
 
   return (
     <Button

@@ -11,12 +11,7 @@ import {
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const exportModule = async ({
-  data: dataPassed,
-  fileName,
-  kml,
-  apolloClient,
-}) => {
+export const exportModule = async ({ data: dataPassed, fileName, kml }) => {
   const exportFileType = jotaiStore.get(exportFileTypeAtom)
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
