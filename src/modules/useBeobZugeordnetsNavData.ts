@@ -1,20 +1,21 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
-import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
+import {
+  mapActiveApfloraLayersAtom,
+  treeBeobZugeordnetGqlFilterForTreeAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobZugeordnetsNavData = (props) => {
   const apolloClient = useApolloClient()
-  const store = useContext(MobxContext)
 
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -27,6 +28,9 @@ export const useBeobZugeordnetsNavData = (props) => {
   const karteIsVisible = projekteTabs.includes('karte')
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const beobZugeordnetGqlFilterForTree = useAtomValue(
+    treeBeobZugeordnetGqlFilterForTreeAtom,
+  )
   const showBeobzugeordnetIcon =
     activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
   const [, setRerenderer] = useState(0)
@@ -36,7 +40,7 @@ export const useBeobZugeordnetsNavData = (props) => {
     queryKey: [
       'treeBeobZugeordnet',
       tpopId,
-      store.tree.beobZugeordnetGqlFilterForTree,
+      beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -62,7 +66,7 @@ export const useBeobZugeordnetsNavData = (props) => {
         `,
         variables: {
           beobZugeordnetFilter: {
-            ...store.tree.beobZugeordnetGqlFilterForTree,
+            ...beobZugeordnetGqlFilterForTree,
             tpopId: { equalTo: tpopId },
           },
           allBeobZugeordnetFilter: { tpopId: { equalTo: tpopId } },
@@ -73,11 +77,10 @@ export const useBeobZugeordnetsNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.beobZugeordnetGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeBeobZugeordnetGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
 
   const count = data?.data?.beobsZugeordnet?.totalCount ?? 0
   const filteredCount = data?.data?.filteredBeobsZugeordnet?.totalCount ?? 0

@@ -1,11 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   movingAtom,
@@ -18,6 +17,7 @@ import {
   treeTpopberGqlFilterForTreeAtom,
   treeEkGqlFilterForTreeAtom,
   treeEkfGqlFilterForTreeAtom,
+  treeBeobZugeordnetGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
@@ -64,6 +64,9 @@ export const useTpopNavData = (props) => {
   const tpopberGqlFilterForTree = useAtomValue(treeTpopberGqlFilterForTreeAtom)
   const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
   const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
+  const beobZugeordnetGqlFilterForTree = useAtomValue(
+    treeBeobZugeordnetGqlFilterForTreeAtom,
+  )
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -83,7 +86,7 @@ export const useTpopNavData = (props) => {
       ekGqlFilterForTree,
       ekfGqlFilterForTree,
       tpopberGqlFilterForTree,
-      store.tree.beobZugeordnetGqlFilterForTree,
+      beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -170,7 +173,7 @@ export const useTpopNavData = (props) => {
           tpopfreiwkontrFilter: ekfGqlFilterForTree,
           tpopberFilter: tpopberGqlFilterForTree,
           beobZugeordnetFilter: {
-            ...store.tree.beobZugeordnetGqlFilterForTree,
+            ...beobZugeordnetGqlFilterForTree,
             tpopId: { equalTo: tpopId },
           },
         },
@@ -220,11 +223,14 @@ export const useTpopNavData = (props) => {
     return unsub
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-  useEffect(
-    () => reaction(() => store.tree.beobZugeordnetGqlFilterForTree, refetch),
+  useEffect(() => {
+    const unsub = jotaiStore.sub(
+      treeBeobZugeordnetGqlFilterForTreeAtom,
+      refetch,
+    )
+    return unsub
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  }, [])
   useEffect(
     () => {
       const unsub = jotaiStore.sub(mapActiveApfloraLayersAtom, rerender)

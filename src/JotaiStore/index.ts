@@ -1766,6 +1766,31 @@ export const treeBeobNichtZuzuordnenGqlFilterForTreeAtom = atom((get) => {
   return filter
 })
 
+export const treeBeobZugeordnetGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const mapFilter = get(treeMapFilterAtom)
+  const filter = {
+    wgs84Lat: { isNull: false },
+    tpopId: { isNull: false },
+  }
+
+  // node label filter
+  if (nodeLabelFilter.beob) {
+    filter.label = {
+      includesInsensitive: nodeLabelFilter.beob,
+    }
+  }
+
+  // mapFilter
+  if (mapFilter) {
+    filter.geomPoint = {
+      coveredBy: mapFilter,
+    }
+  }
+
+  return filter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
