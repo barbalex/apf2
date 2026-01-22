@@ -963,6 +963,22 @@ export const treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom = atom(
   },
 )
 
+export const treeAdresseGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const gqlFilter = {}
+  // 1. hierarchy filter: none
+  // 2. node label filter
+  if (nodeLabelFilter.adresse) {
+    gqlFilter.label = {
+      includesInsensitive: nodeLabelFilter.adresse,
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })

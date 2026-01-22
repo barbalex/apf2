@@ -1,23 +1,21 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   store as jotaiStore,
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
+  treeAdresseGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useWertesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
   const tpopkontrzaehlEinheitWerteGqlFilterForTree = useAtomValue(
     treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   )
@@ -27,11 +25,12 @@ export const useWertesNavData = () => {
   const tpopApberrelevantGrundWerteGqlFilterForTree = useAtomValue(
     treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
   )
+  const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
     queryKey: [
       'treeWertes',
-      store.tree.adresseGqlFilterForTree,
+      adresseGqlFilterForTree,
       tpopApberrelevantGrundWerteGqlFilterForTree,
       ekAbrechnungstypWerteGqlFilterForTree,
       tpopkontrzaehlEinheitWerteGqlFilterForTree,
@@ -78,7 +77,7 @@ export const useWertesNavData = () => {
           }
         `,
         variables: {
-          adressesFilter: store.tree.adresseGqlFilterForTree,
+          adressesFilter: adresseGqlFilterForTree,
           tpopApberrelevantGrundWerteFilter:
             tpopApberrelevantGrundWerteGqlFilterForTree,
           ekAbrechnungstypWerteFilter: ekAbrechnungstypWerteGqlFilterForTree,
@@ -93,7 +92,10 @@ export const useWertesNavData = () => {
   })
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.adresseGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeAdresseGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

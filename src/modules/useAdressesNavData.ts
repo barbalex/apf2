@@ -1,19 +1,22 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeAdresseGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useAdressesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
   const { data, error, refetch } = useQuery({
-    queryKey: ['treeAdresse', store.tree.adresseGqlFilterForTree],
+    queryKey: ['treeAdresse', adresseGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -30,7 +33,7 @@ export const useAdressesNavData = () => {
           }
         `,
         variables: {
-          adressesFilter: store.tree.adresseGqlFilterForTree,
+          adressesFilter: adresseGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -42,7 +45,10 @@ export const useAdressesNavData = () => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.adresseGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeAdresseGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
