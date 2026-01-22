@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 import { upperFirst } from 'es-toolkit'
 import { camelCase } from 'es-toolkit'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { tables } from '../../../modules/tables.ts'
 import {
@@ -11,6 +10,8 @@ import {
   addNotificationAtom,
   navigateAtom,
   userNameAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../JotaiStore/index.ts'
 import {
   adresse as adresseFragment,
@@ -35,15 +36,13 @@ export const insertDataset = async ({
   menuType,
   singleElementUrlName: singleElementName,
   url,
-  store,
   search,
   jahr: jahrPassed,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
-  const { openNodes: openNodesRaw, setOpenNodes } = store.tree
-  const openNodes = getSnapshot(openNodesRaw)
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find((t) => t.table === table)
@@ -234,7 +233,7 @@ export const insertDataset = async ({
     const newOpenNode = [...newActiveNodeArray, 'Zaehlungen', zaehlId]
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
-  setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
   // console.log('insertDataset', { table, parentTable })
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {

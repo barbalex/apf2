@@ -75,7 +75,6 @@ export const TpopFromBeobPopList = observer(
                   beobId,
                   projId,
                   apId,
-                  store,
                   search,
                 })
                 closeNewTpopFromBeobDialog()

@@ -1,4 +1,8 @@
 import { isNodeOpen } from './isNodeOpen.ts'
+import {
+  store as jotaiStore,
+  treeSetOpenNodesAtom,
+} from '../../../JotaiStore/index.ts'
 
 export const openNode = async ({ node, openNodes, store }) => {
   // make sure this node's url is not yet contained
@@ -11,7 +15,7 @@ export const openNode = async ({ node, openNodes, store }) => {
     newOpenNodes.push([...node.url, 'Zaehlungen'])
   }
 
-  store.tree.setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
 
   if (node.menuType === 'ap') {
     // if ap is changed, need to empty nodeLabelFilter,
