@@ -1794,7 +1794,9 @@ export const Tree = types
     get beobNichtBeurteiltGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
         tpopId: { isNull: true },
@@ -1820,7 +1822,9 @@ export const Tree = types
     get beobNichtZuzuordnenGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
         nichtZuordnen: { equalTo: true },
@@ -1845,7 +1849,9 @@ export const Tree = types
     get beobZugeordnetGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
         tpopId: { isNull: false },
