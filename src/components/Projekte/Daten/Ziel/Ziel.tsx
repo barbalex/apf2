@@ -5,7 +5,6 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { getSnapshot } from 'mobx-state-tree'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -76,10 +75,8 @@ export const Component = observer(() => {
   const store = useContext(MobxContext)
   const userName = useAtomValue(userNameAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
-  const openNodesRaw = useAtomValue(treeOpenNodesAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
-  const aNA = getSnapshot(activeNodeArray)
-  const openNodes = getSnapshot(openNodesRaw)
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
@@ -157,12 +154,12 @@ export const Component = observer(() => {
     })
     // if jahr of ziel is updated, activeNodeArray und openNodes need to change
     if (field === 'jahr') {
-      const newActiveNodeArray = [...aNA]
+      const newActiveNodeArray = [...activeNodeArray]
       newActiveNodeArray[5] = +value
-      const oldParentNodeUrl = aNA.toSpliced(-1)
+      const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
       const newParentNodeUrl = newActiveNodeArray.toSpliced(-1)
       const newOpenNodes = openNodes.map((n) => {
-        if (isEqual(n, aNA)) return newActiveNodeArray
+        if (isEqual(n, activeNodeArray)) return newActiveNodeArray
         if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
         return n
       })
