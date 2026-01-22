@@ -15,6 +15,7 @@ import {
   treeShowPopIconAtom,
   treeTpopGqlFilterForTreeAtom,
   treePopberGqlFilterForTreeAtom,
+  treePopmassnberGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'
@@ -51,6 +52,9 @@ export const usePopNavData = (props) => {
   const copying = useAtomValue(copyingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
   const popberGqlFilterForTree = useAtomValue(treePopberGqlFilterForTreeAtom)
+  const popmassnberGqlFilterForTree = useAtomValue(
+    treePopmassnberGqlFilterForTreeAtom,
+  )
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -68,7 +72,7 @@ export const usePopNavData = (props) => {
       popId,
       tpopGqlFilterForTree,
       popberGqlFilterForTree,
-      store.tree.popmassnberGqlFilterForTree,
+      popmassnberGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -116,7 +120,7 @@ export const usePopNavData = (props) => {
           popId,
           tpopFilter: tpopGqlFilterForTree,
           popberFilter: popberGqlFilterForTree,
-          popmassnberFilter: store.tree.popmassnberGqlFilterForTree,
+          popmassnberFilter: popmassnberGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -136,11 +140,10 @@ export const usePopNavData = (props) => {
     const unsub = jotaiStore.sub(treePopberGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
-  useEffect(
-    () => reaction(() => store.tree.popmassnberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treePopmassnberGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
 
   useEffect(
     () => {
