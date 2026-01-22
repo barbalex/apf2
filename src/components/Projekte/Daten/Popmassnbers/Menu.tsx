@@ -16,10 +16,7 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { PopmassnberId, PopId } from '../../../../models/apflora/index.tsx'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface CreatePopmassnberResult {
   data?: {
