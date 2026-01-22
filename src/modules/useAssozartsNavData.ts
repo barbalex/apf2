@@ -1,11 +1,14 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeAssozartGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 
 export const useAssozartsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -13,15 +16,12 @@ export const useAssozartsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const store = useContext(MobxContext)
+  const assozartGqlFilterForTree = useAtomValue(
+    treeAssozartGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
-    queryKey: [
-      'treeAssozart',
-      projId,
-      apId,
-      store.tree.assozartGqlFilterForTree,
-    ],
+    queryKey: ['treeAssozart', projId, apId, assozartGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -45,7 +45,7 @@ export const useAssozartsNavData = (props) => {
           }
         `,
         variables: {
-          assozartsFilter: store.tree.assozartGqlFilterForTree,
+          assozartsFilter: assozartGqlFilterForTree,
           apId,
         },
       })
@@ -54,14 +54,11 @@ export const useAssozartsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.assozartGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  // react to filter changes
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeAssozartGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
 
   const count = data?.data?.apById?.assozartsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0

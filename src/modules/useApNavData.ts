@@ -85,7 +85,7 @@ export const useApNavData = (props) => {
       apberGqlFilterForTree,
       apartGqlFilterForTree,
       store.tree.erfkritGqlFilterForTree,
-      store.tree.assozartGqlFilterForTree,
+      assozartGqlFilterForTree,
       store.tree.ekfrequenzGqlFilterForTree,
       store.tree.ekzaehleinheitGqlFilterForTree,
       store.tree.beobNichtBeurteiltGqlFilterForTree,
@@ -211,7 +211,7 @@ export const useApNavData = (props) => {
           erfkritFilter: store.tree.erfkritGqlFilterForTree,
           apberFilter: apberGqlFilterForTree,
           apartFilter: apartGqlFilterForTree,
-          assozartFilter: store.tree.assozartGqlFilterForTree,
+          assozartFilter: assozartGqlFilterForTree,
           ekfrequenzFilter: store.tree.ekfrequenzGqlFilterForTree,
           ekzaehleinheitFilter: store.tree.ekzaehleinheitGqlFilterForTree,
           beobNichtBeurteiltFilter: {
@@ -259,13 +259,12 @@ export const useApNavData = (props) => {
     const unsub = jotaiStore.sub(treeApartGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeAssozartGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
   useEffect(
     () => reaction(() => store.tree.erfkritGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.assozartGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
