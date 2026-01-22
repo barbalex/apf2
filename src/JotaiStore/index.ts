@@ -1056,6 +1056,28 @@ export const treeApberGqlFilterForTreeAtom = atom((get) => {
   return gqlFilter
 })
 
+export const treeApartGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const apId = get(treeApIdInActiveNodeArrayAtom)
+  const gqlFilter = {}
+
+  // 1. hierarchy filter
+  if (apId) {
+    gqlFilter.apId = { equalTo: apId }
+  }
+
+  // 2. node label filter
+  if (nodeLabelFilter.apart) {
+    gqlFilter.label = {
+      includesInsensitive: nodeLabelFilter.apart,
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })

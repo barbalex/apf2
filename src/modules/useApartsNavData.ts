@@ -1,11 +1,14 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeApartGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 
 export const useApartsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -13,10 +16,10 @@ export const useApartsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const store = useContext(MobxContext)
+  const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeApart', projId, apId, store.tree.apartGqlFilterForTree],
+    queryKey: ['treeApart', projId, apId, apartGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -37,7 +40,7 @@ export const useApartsNavData = (props) => {
           }
         `,
         variables: {
-          apartsFilter: store.tree.apartGqlFilterForTree,
+          apartsFilter: apartGqlFilterForTree,
           apId,
         },
       })
@@ -46,14 +49,11 @@ export const useApartsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.apartGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  // react to filter changes
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeApartGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
 
   const count = data?.data?.apById?.apartsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0

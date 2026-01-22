@@ -43,6 +43,7 @@ import {
   treeApberuebersichtGqlFilterForTreeAtom,
   treeZielGqlFilterForTreeAtom,
   treeApberGqlFilterForTreeAtom,
+  treeApartGqlFilterForTreeAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -161,26 +162,7 @@ export const Tree = types
       return jotaiStore.get(treeApberGqlFilterForTreeAtom)
     },
     get apartGqlFilterForTree() {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.nodeLabelFilterVersion
-      self.activeNodeArrayVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const gqlFilter = {}
-      // 1. hierarchy filter
-      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
-      if (apId) {
-        gqlFilter.apId = { equalTo: apId }
-      }
-      // 2. node label filter
-      if (nodeLabelFilter.apart) {
-        gqlFilter.label = {
-          includesInsensitive: nodeLabelFilter.apart,
-        }
-      }
-
-      if (Object.keys(gqlFilter).length === 0) return { or: [] }
-
-      return gqlFilter
+      return jotaiStore.get(treeApartGqlFilterForTreeAtom)
     },
     get assozartGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes

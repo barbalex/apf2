@@ -12,6 +12,7 @@ import {
   treePopGqlFilterForTreeAtom,
   treeZielGqlFilterForTreeAtom,
   treeApberGqlFilterForTreeAtom,
+  treeApartGqlFilterForTreeAtom,
   store as jotaiStore,
 } from '../JotaiStore/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
@@ -35,6 +36,7 @@ export const useApNavData = (props) => {
   const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
   const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
   const apberGqlFilterForTree = useAtomValue(treeApberGqlFilterForTreeAtom)
+  const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
   const showPopIcon = activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
@@ -81,8 +83,8 @@ export const useApNavData = (props) => {
       popGqlFilterForTree,
       zielGqlFilterForTree,
       apberGqlFilterForTree,
+      apartGqlFilterForTree,
       store.tree.erfkritGqlFilterForTree,
-      store.tree.apartGqlFilterForTree,
       store.tree.assozartGqlFilterForTree,
       store.tree.ekfrequenzGqlFilterForTree,
       store.tree.ekzaehleinheitGqlFilterForTree,
@@ -208,7 +210,7 @@ export const useApNavData = (props) => {
           zielFilter: zielGqlFilterForTree,
           erfkritFilter: store.tree.erfkritGqlFilterForTree,
           apberFilter: apberGqlFilterForTree,
-          apartFilter: store.tree.apartGqlFilterForTree,
+          apartFilter: apartGqlFilterForTree,
           assozartFilter: store.tree.assozartGqlFilterForTree,
           ekfrequenzFilter: store.tree.ekfrequenzGqlFilterForTree,
           ekzaehleinheitFilter: store.tree.ekzaehleinheitGqlFilterForTree,
@@ -253,13 +255,12 @@ export const useApNavData = (props) => {
     const unsub = jotaiStore.sub(treeApberGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeApartGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
   useEffect(
     () => reaction(() => store.tree.erfkritGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.apartGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
