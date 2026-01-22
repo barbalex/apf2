@@ -32,6 +32,7 @@ import {
   addNotificationAtom,
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
+  treeProjIdInActiveNodeArrayAtom,
   treeNodeLabelFilterAtom,
 } from '../../JotaiStore/index.ts'
 
@@ -103,17 +104,6 @@ export const Tree = types
     },
   }))
   .views((self) => ({
-    get projIdInActiveNodeArray() {
-      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
-      if (activeNodeArray.includes('Projekte')) {
-        const indexOfId = activeNodeArray.indexOf('Projekte') + 1
-        if (activeNodeArray.length > indexOfId) {
-          const id = activeNodeArray?.[indexOfId]
-          if (isUuid.anyNonNil(id)) return id
-        }
-      }
-      return undefined
-    },
     get apIdInActiveNodeArray() {
       const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
       if (activeNodeArray.length > 3 && activeNodeArray[2] === 'Arten') {
@@ -1649,7 +1639,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
       // 1. prepare hierarchy filter
-      const projId = self.projIdInActiveNodeArray
+      const projId = jotaiStore.get(treeProjIdInActiveNodeArrayAtom)
 
       // need list of all open apIds
       // issue: 2023 passed. https://github.com/barbalex/apf2/issues/616
