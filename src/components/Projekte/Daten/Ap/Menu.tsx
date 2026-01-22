@@ -1,9 +1,8 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { RiFolderCloseFill } from 'react-icons/ri'
@@ -17,7 +16,6 @@ import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
@@ -57,13 +55,11 @@ interface DeleteApResult {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(() => {
+export const Menu = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams<{ projId: string; apId: string }>()
-
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -155,11 +151,7 @@ export const Menu = observer(() => {
     navigate(`/Daten/Projekte/${projId}/Arten${search}`)
   }
 
-  const onClickMoveHere = () =>
-    moveTo({
-      id: apId,
-      store,
-    })
+  const onClickMoveHere = () => moveTo({ id: apId })
 
   const onClickStopMoving = () =>
     setMoving({
@@ -170,16 +162,11 @@ export const Menu = observer(() => {
       fromParentId: null,
     })
 
-  const onClickCopyTo = () =>
-    copyTo({
-      parentId: apId,
-      store,
-    })
+  const onClickCopyTo = () => copyTo({ parentId: apId })
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
       url: ['Projekte', projId, 'Arten', apId],
-      store,
       search,
     })
 
@@ -260,4 +247,4 @@ export const Menu = observer(() => {
       </MuiMenu>
     </ErrorBoundary>
   )
-})
+}
