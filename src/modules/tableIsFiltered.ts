@@ -1,4 +1,8 @@
-import { store as jotaiStore, treeNodeLabelFilterAtom } from '../JotaiStore/index.ts'
+import {
+  store as jotaiStore,
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+} from '../JotaiStore/index.ts'
 
 export const tableIsFiltered = ({ table, tree }) => {
   // check nodeLabelFilter
@@ -6,11 +10,12 @@ export const tableIsFiltered = ({ table, tree }) => {
   const nodeLabelFilterExists = !!nodeLabelFilter[table]
   if (nodeLabelFilterExists) return true
   // check mapFilter in tables with (parent) coordinates
+  const mapFilter = jotaiStore.get(treeMapFilterAtom)
   if (
     ['pop', 'tpop', 'tpopfeldkontr', 'tpopfreiwkontr', 'tpopmassn'].includes(
       table,
     ) &&
-    tree.mapFilter
+    mapFilter
   ) {
     return true
   }

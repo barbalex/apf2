@@ -4,7 +4,6 @@ import { merge } from 'es-toolkit'
 import queryString from 'query-string'
 import isUuid from 'is-uuid'
 
-import { Geojson } from './Geojson.ts'
 import { initialDataFilterValues } from './DataFilter/initialValues.ts'
 import { DataFilter } from './DataFilter/types.ts'
 import { simpleTypes as popType } from './DataFilter/pop.ts'
@@ -35,6 +34,8 @@ import {
   treeProjIdInActiveNodeArrayAtom,
   treeApFilterAtom,
   treeSetApFilterAtom,
+  treeMapFilterAtom,
+  treeSetMapFilterAtom,
   treeNodeLabelFilterAtom,
 } from '../../JotaiStore/index.ts'
 
@@ -44,14 +45,14 @@ const addNotification = (notification) =>
 export const Tree = types
   .model('Tree', {
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
-    mapFilter: types.maybe(Geojson),
-    mapFilterResetter: types.optional(types.number, 0),
   })
   .volatile(() => ({
     // Track nodeLabelFilter changes to make getters reactive
     nodeLabelFilterVersion: 0,
     // Track apFilter changes to make getters reactive
     apFilterVersion: 0,
+    // Track mapFilter changes to make getters reactive
+    mapFilterVersion: 0,
   }))
   .actions((self) => ({
     incrementNodeLabelFilterVersion() {
@@ -59,6 +60,9 @@ export const Tree = types
     },
     incrementApFilterVersion() {
       self.apFilterVersion += 1
+    },
+    incrementMapFilterVersion() {
+      mapFilterVersion += 1
     },
     afterCreate() {
       // Subscribe to jotai atom changes and increment version to trigger mobx reactions
@@ -73,9 +77,11 @@ export const Tree = types
           self.incrementApFilterVersion()
         })
       })
-    },
-    incrementMapFilterResetter() {
-      self.mapFilterResetter += 1
+      jotaiStore.sub(treeMapFilterAtom, () => {
+        queueMicrotask(() => {
+          self.incrementMapFilterVersion()
+        })
+      })
     },
     dataFilterEmptyTable({ table }) {
       self.dataFilter[table] = initialDataFilterValues[table]
@@ -104,14 +110,9 @@ export const Tree = types
     dataFilterEmpty() {
       self.dataFilter = initialDataFilterValues
     },
-    setMapFilter(val) {
-      self.mapFilter = val
-    },
-    emptyMapFilter() {
-      self.setMapFilter(undefined)
-    },
   }))
   .views((self) => ({
+    // TODO: migrate to jotaiStore next
     get apIdInActiveNodeArray() {
       const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
       if (activeNodeArray.length > 3 && activeNodeArray[2] === 'Arten') {
@@ -344,7 +345,10 @@ export const Tree = types
     },
     get popGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
@@ -409,9 +413,9 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           singleFilter.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object could be empty if no filters exist
@@ -444,7 +448,9 @@ export const Tree = types
     get popGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.pop ? [...getSnapshot(self.dataFilter.pop)] : []
@@ -486,9 +492,9 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           singleFilter.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object could be empty if no filters exist
@@ -523,7 +529,9 @@ export const Tree = types
     },
     get tpopGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -590,9 +598,9 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           singleFilter.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object could be empty if no filters exist
@@ -624,7 +632,9 @@ export const Tree = types
     get tpopGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpop ? [...getSnapshot(self.dataFilter.tpop)] : []
@@ -666,9 +676,9 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           singleFilter.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object could be empty if no filters exist
@@ -704,7 +714,9 @@ export const Tree = types
     },
     get tpopmassnGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -775,12 +787,12 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           if (!singleFilter.tpopByTpopId) {
             singleFilter.tpopByTpopId = {}
           }
           singleFilter.tpopByTpopId.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object could be empty if no filters exist
@@ -814,7 +826,9 @@ export const Tree = types
     get tpopmassnGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpopmassn ?
@@ -859,12 +873,12 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           if (!singleFilter.tpopByTpopId) {
             singleFilter.tpopByTpopId = {}
           }
           singleFilter.tpopByTpopId.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object could be empty if no filters exist
@@ -1256,7 +1270,9 @@ export const Tree = types
     },
     get ekGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -1335,12 +1351,12 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           if (!singleFilter.tpopByTpopId) {
             singleFilter.tpopByTpopId = {}
           }
           singleFilter.tpopByTpopId.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object need to filter by typ
@@ -1371,7 +1387,9 @@ export const Tree = types
     get ekGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpopfeldkontr ?
@@ -1416,12 +1434,12 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           if (!singleFilter.tpopByTpopId) {
             singleFilter.tpopByTpopId = {}
           }
           singleFilter.tpopByTpopId.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object need to filter by typ
@@ -1454,7 +1472,9 @@ export const Tree = types
     },
     get ekfGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
       const apHiearchyFilter =
@@ -1528,12 +1548,12 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           if (!singleFilter.tpopByTpopId) {
             singleFilter.tpopByTpopId = {}
           }
           singleFilter.tpopByTpopId.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object need to filter by typ
@@ -1563,7 +1583,9 @@ export const Tree = types
     get ekfGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.mapFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const mapFilter = jotaiStore.get(treeMapFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.tpopfreiwkontr ?
@@ -1608,12 +1630,12 @@ export const Tree = types
           }
         }
         // add mapFilter
-        if (self.mapFilter) {
+        if (mapFilter) {
           if (!singleFilter.tpopByTpopId) {
             singleFilter.tpopByTpopId = {}
           }
           singleFilter.tpopByTpopId.geomPoint = {
-            coveredBy: self.mapFilter,
+            coveredBy: mapFilter,
           }
         }
         // Object needs to filter by typ
@@ -1739,10 +1761,10 @@ export const Tree = types
         : {}
       // mapFilter
       const mapFilter =
-        self.mapFilter ?
+        mapFilter ?
           {
             geomPoint: {
-              coveredBy: self.mapFilter,
+              coveredBy: mapFilter,
             },
           }
         : {}
@@ -1787,9 +1809,9 @@ export const Tree = types
       }
 
       // mapFilter
-      if (self.mapFilter) {
+      if (mapFilter) {
         filter.geomPoint = {
-          coveredBy: self.mapFilter,
+          coveredBy: mapFilter,
         }
       }
 
@@ -1812,9 +1834,9 @@ export const Tree = types
       }
 
       // mapFilter
-      if (self.mapFilter) {
+      if (mapFilter) {
         filter.geomPoint = {
-          coveredBy: self.mapFilter,
+          coveredBy: mapFilter,
         }
       }
 
@@ -1837,9 +1859,9 @@ export const Tree = types
       }
 
       // mapFilter
-      if (self.mapFilter) {
+      if (mapFilter) {
         filter.geomPoint = {
-          coveredBy: self.mapFilter,
+          coveredBy: mapFilter,
         }
       }
 
