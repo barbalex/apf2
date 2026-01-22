@@ -7,15 +7,19 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
-import { ApId, PopId, TpopId, TpopmassnId, AdresseId } from '../../../../models/apflora/index.tsx'
+import {
+  ApId,
+  PopId,
+  TpopId,
+  TpopmassnId,
+  AdresseId,
+} from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TpopmassnQueryResult {
   allTpopmassns: {
@@ -132,14 +136,16 @@ interface MassnahmenProps {
 export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { tableIsFiltered } = store
   const { tpopmassnGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
 
-  const tpopmassnIsFiltered = tableIsFiltered('tpopmassn')
+  const tpopmassnIsFiltered = tableIsFiltered({
+    table: 'tpopmassn',
+    tree: store.tree,
+  })
 
   return (
     <Button

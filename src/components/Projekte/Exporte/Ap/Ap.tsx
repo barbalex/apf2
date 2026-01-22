@@ -7,6 +7,7 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 import { MobxContext } from '../../../../mobxContext.ts'
+import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import { ApId } from '../../../../models/apflora/index.tsx'
 
@@ -48,7 +49,6 @@ interface ApProps {
 export const Ap = observer(({ filtered = false }: ApProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { tableIsFiltered } = store
   const { apGqlFilter } = store.tree
 
   const apolloClient = useApolloClient()
@@ -129,7 +129,7 @@ export const Ap = observer(({ filtered = false }: ApProps) => {
     setQueryState(undefined)
   }
 
-  const apIsFiltered = tableIsFiltered('ap')
+  const apIsFiltered = tableIsFiltered({ table: 'ap', tree: store.tree })
 
   return (
     <Button

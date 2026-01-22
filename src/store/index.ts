@@ -1,6 +1,7 @@
 import { types } from 'mobx-state-tree'
 
 import { Tree, defaultValue as defaultTree } from './Tree/index.ts'
+import { tableIsFiltered } from '../modules/tableIsFiltered.ts'
 
 export const MobxStore = types
   .model({
@@ -8,33 +9,11 @@ export const MobxStore = types
   })
   .actions((self) => ({
     // TODO: move to modules where possible
-    tableIsFiltered(table) {
-      // check nodeLabelFilter
-      const nodeLabelFilterExists = !!self.tree.nodeLabelFilter[table]
-      if (nodeLabelFilterExists) return true
-      // check mapFilter in tables with (parent) coordinates
-      if (
-        [
-          'pop',
-          'tpop',
-          'tpopfeldkontr',
-          'tpopfreiwkontr',
-          'tpopmassn',
-        ].includes(table) &&
-        self.tree.mapFilter
-      ) {
-        return true
-      }
-      // check data and hierarchy filter: is included in gqlFilter
-      // check gql filter
-      const gqlFilter =
-        self.tree?.[`${table}GqlFilter`]?.filtered?.or?.[0] ?? {}
-      const isGqlFilter = Object.keys(gqlFilter).length > 0
-      return isGqlFilter
-    },
     dataFilterTreeIsFiltered() {
       const tables = Object.keys(self.tree.dataFilter)
-      return tables.some((table) => self.tableIsFiltered(table))
+      return tables.some((table) =>
+        tableIsFiltered({ table, tree: self.tree }),
+      )
     },
     treeNodeLabelFilterResetExceptAp() {
       self.tree.nodeLabelFilter = {
