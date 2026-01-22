@@ -1138,6 +1138,26 @@ export const treeEkfrequenzGqlFilterForTreeAtom = atom((get) => {
   return gqlFilter
 })
 
+export const treeEkzaehleinheitGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const gqlFilter = {}
+  // 1. hierarchy filter
+  const apId = get(treeApIdInActiveNodeArrayAtom)
+  if (apId) {
+    gqlFilter.apId = { equalTo: apId }
+  }
+  // 2. node label filter
+  if (nodeLabelFilter.ekzaehleinheit) {
+    gqlFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekzaehleinheit,
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
