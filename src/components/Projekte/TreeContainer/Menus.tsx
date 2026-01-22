@@ -10,7 +10,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import { useParams, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 import {
@@ -244,9 +243,8 @@ export const Menus = () => {
   const { projId, apId, popId } = params
   const { search } = useLocation()
 
-  const openNodesRaw = useAtomValue(treeOpenNodesAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
-  const openNodes = getSnapshot(openNodesRaw)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()

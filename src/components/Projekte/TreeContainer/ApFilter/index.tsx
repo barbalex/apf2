@@ -4,7 +4,6 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { getSnapshot } from 'mobx-state-tree'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { apById } from './apById.ts'
@@ -27,9 +26,7 @@ export const ApFilter = observer(({ color }) => {
   const store = useContext(MobxContext)
   const { apFilter, setApFilter } = store.tree
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
-  const aNA = getSnapshot(activeNodeArray)
-  const openNodesRaw = useAtomValue(treeOpenNodesAtom)
-  const openNodes = getSnapshot(openNodesRaw)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
@@ -56,10 +53,14 @@ export const ApFilter = observer(({ color }) => {
         })
       }
       const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung) //@485
-      if (!isAp && aNA[2] === 'Arten') {
+      if (!isAp && activeNodeArray[2] === 'Arten') {
         // not a real ap
         // shorten active node array to Arten
-        const newActiveNodeArray = [aNA[0], aNA[1], aNA[2]]
+        const newActiveNodeArray = [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+        ]
         navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
         // remove from openNodes
         const newOpenNodes = openNodes.filter((n) => {
