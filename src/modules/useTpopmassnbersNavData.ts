@@ -1,11 +1,14 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeTpopmassnberGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopmassnbersNavData = (props) => {
@@ -16,14 +19,12 @@ export const useTpopmassnbersNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
+  const tpopmassnberGqlFilterForTree = useAtomValue(
+    treeTpopmassnberGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
-    queryKey: [
-      'treeTpopmassnber',
-      tpopId,
-      store.tree.tpopmassnberGqlFilterForTree,
-    ],
+    queryKey: ['treeTpopmassnber', tpopId, tpopmassnberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -50,7 +51,7 @@ export const useTpopmassnbersNavData = (props) => {
           }
         `,
         variables: {
-          tpopmassnbersFilter: store.tree.tpopmassnberGqlFilterForTree,
+          tpopmassnbersFilter: tpopmassnberGqlFilterForTree,
           tpopId,
         },
       })
@@ -63,7 +64,13 @@ export const useTpopmassnbersNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.tpopmassnberGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(
+        treeTpopmassnberGqlFilterForTreeAtom,
+        refetch,
+      )
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
