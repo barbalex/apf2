@@ -34,6 +34,8 @@ import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import {
   store as jotaiStore,
   addNotificationAtom,
+  treeOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -41,11 +43,6 @@ const addNotification = (notification) =>
 
 export const Tree = types
   .model('Tree', {
-    activeNodeArray: types.array(types.union(types.string, types.number)),
-    // maybe later migrate to jotai?
-    openNodes: types.array(
-      types.array(types.union(types.string, types.number)),
-    ),
     apFilter: types.optional(types.boolean, true),
     nodeLabelFilter: types.optional(NodeLabelFilter, defaultNodeLabelFilter),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
@@ -95,7 +92,7 @@ export const Tree = types
   }))
   .views((self) => ({
     get activeFilterTable() {
-      const aNA = getSnapshot(self.activeNodeArray)
+      const aNA = jotaiStore.get(treeActiveNodeArrayAtom)
       if (aNA.length > 10) {
         if (aNA[10] === 'Zaehlungen') return 'tpopkontrzaehl'
       }
@@ -145,21 +142,20 @@ export const Tree = types
       return undefined
     },
     get projIdInActiveNodeArray() {
-      if (self.activeNodeArray.includes('Projekte')) {
-        const indexOfId = self.activeNodeArray.indexOf('Projekte') + 1
-        if (self.activeNodeArray.length > indexOfId) {
-          const id = self.activeNodeArray?.[indexOfId]
+      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+      if (activeNodeArray.includes('Projekte')) {
+        const indexOfId = activeNodeArray.indexOf('Projekte') + 1
+        if (activeNodeArray.length > indexOfId) {
+          const id = activeNodeArray?.[indexOfId]
           if (isUuid.anyNonNil(id)) return id
         }
       }
       return undefined
     },
     get apIdInActiveNodeArray() {
-      if (
-        self.activeNodeArray.length > 3 &&
-        self.activeNodeArray[2] === 'Arten'
-      ) {
-        const id = self.activeNodeArray[3]
+      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+      if (activeNodeArray.length > 3 && activeNodeArray[2] === 'Arten') {
+        const id = activeNodeArray[3]
         if (isUuid.anyNonNil(id)) return id
       }
       return undefined
@@ -1611,12 +1607,13 @@ export const Tree = types
       // reason: ['Benutzer', '738eaf0c-35e5-11e9-97ea-57d86602b143', 'EKF', 2023]
       // Solution: check all positions in array
       const apId = self.apIdInActiveNodeArray
+      const openNodes = jotaiStore.get(treeOpenNodesAtom)
       const openApIds =
         apId ?
           [apId]
         : [
             ...new Set(
-              self.openNodes
+              openNodes
                 .filter((n) => n[0] && n[0] === 'Projekte')
                 .filter((n) => n[1] && n[1] === projId)
                 .filter((n) => n[2] && n[2] === 'Arten')
@@ -1788,8 +1785,6 @@ export const Tree = types
   }))
 
 export const defaultValue = {
-  activeNodeArray: [],
-  openNodes: [],
   apFilter: true,
   nodeLabelFilter: defaultNodeLabelFilter,
 }

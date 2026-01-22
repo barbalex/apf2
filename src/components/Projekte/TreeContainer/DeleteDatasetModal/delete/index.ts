@@ -16,6 +16,7 @@ import {
   addDeletedDatasetAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../../../../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -129,7 +130,7 @@ export const deleteModule = async ({ search }) => {
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = store?.tree?.activeNodeArray
+  const activeNodeArray1 = jotaiStore.get(treeActiveNodeArrayAtom)
   if (
     isEqual(activeNodeArray1, toDelete.url) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
