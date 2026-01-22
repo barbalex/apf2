@@ -1,6 +1,7 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import queryString from 'query-string'
+import { isEqual } from 'es-toolkit'
 
 import { constants } from '../modules/constants.ts'
 import { appBaseUrl } from '../modules/appBaseUrl.ts'
@@ -23,20 +24,44 @@ export const store = createStore()
 // Tree atoms (migrated from mobx)
 export const treeOpenNodesAtom = atom([])
 export const treeSetOpenNodesAtom = atom(
-  (get) => get(treeOpenNodesAtom),
+  (get) => null,
   (get, set, val) => {
     // val should always be created from a snapshot of openNodes
     // to ensure not mutating openNodes!!!
     // need set to ensure contained arrays are unique
-    const uniqueSet = new Set(val.map(JSON.stringify))
-    set(treeOpenNodesAtom, Array.from(uniqueSet).map(JSON.parse))
+    const uniqueSet = new Set(val)
+    set(treeOpenNodesAtom, Array.from(uniqueSet))
+  },
+)
+
+export const treeAddOpenNodesAtom = atom(
+  (get) => null,
+  (get, set, nodes) => {
+    // need set to ensure contained arrays are unique
+    const currentOpenNodes = get(treeOpenNodesAtom)
+    const uniqueSet = new Set([...currentOpenNodes, ...nodes])
+    set(treeOpenNodesAtom, Array.from(uniqueSet))
   },
 )
 
 export const treeActiveNodeArrayAtom = atom([])
 export const treeSetActiveNodeArrayAtom = atom(
   (get) => get(treeActiveNodeArrayAtom),
-  (get, set, val) => set(treeActiveNodeArrayAtom, val),
+  (get, set, val) => {
+    if (isEqual(val, get(treeActiveNodeArrayAtom))) {
+      // do not do this if already set
+      // trying to stop vicious cycle of reloading in first start after update
+      return
+    }
+    // always set missing open nodes
+    const extraOpenNodes = []
+    val.forEach((v, i) => {
+      extraOpenNodes.push(val.slice(0, i + 1))
+    })
+    set(treeAddOpenNodesAtom, extraOpenNodes)
+
+    set(treeActiveNodeArrayAtom, val)
+  },
 )
 
 export const newTpopFromBeobDialogOpenAtom = atomWithStorage(
