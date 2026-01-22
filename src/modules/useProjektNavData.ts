@@ -1,11 +1,15 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeApGqlFilterForTreeAtom,
+  treeApberuebersichtGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useProjektNavData = (props) => {
@@ -14,7 +18,10 @@ export const useProjektNavData = (props) => {
   const projId =
     props?.projId ?? params?.projId ?? 'e57f56f4-4376-11e8-ab21-4314b6749d13'
 
-  const store = useContext(MobxContext)
+  const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
+  const apberuebersichtGqlFilterForTree = useAtomValue(
+    treeApberuebersichtGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
     queryKey: ['treeProject', projId],
@@ -46,8 +53,8 @@ export const useProjektNavData = (props) => {
         `,
         variables: {
           projId,
-          apFilter: store.tree.apGqlFilterForTree,
-          apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
+          apFilter: apGqlFilterForTree,
+          apberuebersichtFilter: apberuebersichtGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -55,16 +62,17 @@ export const useProjektNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.apGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.apberuebersichtGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeApGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
+  useEffect(() => {
+    const unsub = jotaiStore.sub(
+      treeApberuebersichtGqlFilterForTreeAtom,
+      refetch,
+    )
+    return unsub
+  }, [])
 
   const label = data?.data?.projektById?.label ?? 'Projekt'
   const artsCount = data?.data?.projektById?.apsByProjId?.totalCount ?? 0
