@@ -5,6 +5,12 @@ import queryString from 'query-string'
 import isUuid from 'is-uuid'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
+import { simpleTypes as apType } from './DataFilter/ap.ts'
+import { simpleTypes as popType } from './DataFilter/pop.ts'
+import { simpleTypes as tpopType } from './DataFilter/tpop.ts'
+import { simpleTypes as tpopmassnType } from './DataFilter/tpopmassn.ts'
+import { simpleTypes as tpopfeldkontrType } from './DataFilter/tpopfeldkontr.ts'
+import { simpleTypes as tpopfreiwkontrType } from './DataFilter/tpopfreiwkontr.ts'
 
 import {
   store as jotaiStore,
@@ -126,7 +132,7 @@ export const Tree = types
         })
         if (conflictingFilterExists) {
           setApFilter = false
-          self.setApFilter(false)
+          jotaiStore.set(treeSetApFilterAtom, false)
           // need timeout or notification will not appear
           setTimeout(() =>
             addNotification({
