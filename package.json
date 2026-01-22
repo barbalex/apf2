@@ -63,7 +63,6 @@
     "mobx": "6.15.0",
     "mobx-react-lite": "4.1.1",
     "mobx-state-tree": "7.0.2",
-    "mst-persist": "0.1.4",
     "notistack": "3.0.2",
     "proj4": "2.20.2",
     "proj4leaflet": "1.0.2",
