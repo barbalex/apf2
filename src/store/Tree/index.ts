@@ -18,6 +18,7 @@ import {
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeProjIdInActiveNodeArrayAtom,
+  treeApIdInActiveNodeArrayAtom,
   treeApFilterAtom,
   treeSetApFilterAtom,
   treeMapFilterAtom,
@@ -81,14 +82,6 @@ export const Tree = types
   }))
   .views((self) => ({
     // TODO: migrate to jotaiStore next
-    get apIdInActiveNodeArray() {
-      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
-      if (activeNodeArray.length > 3 && activeNodeArray[2] === 'Arten') {
-        const id = activeNodeArray[3]
-        if (isUuid.anyNonNil(id)) return id
-      }
-      return undefined
-    },
     get apGqlFilter() {
       const store = getParent(self)
       // Access volatile property to make this getter reactive to jotai changes
@@ -322,7 +315,7 @@ export const Tree = types
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
       const projHiearchyFilter = {}
       const singleFilterByHierarchy = merge(
@@ -507,7 +500,7 @@ export const Tree = types
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       const apHiearchyFilter =
         apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
       const projHiearchyFilter = {}
@@ -694,7 +687,7 @@ export const Tree = types
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       const apHiearchyFilter =
         apId ?
           { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
@@ -1014,7 +1007,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       if (apId) {
         gqlFilter.apId = { equalTo: apId }
       }
@@ -1038,7 +1031,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       if (apId) {
         gqlFilter.apId = { equalTo: apId }
       }
@@ -1059,7 +1052,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       if (apId) {
         gqlFilter.apId = { equalTo: apId }
       }
@@ -1080,7 +1073,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       if (apId) {
         gqlFilter.apId = { equalTo: apId }
       }
@@ -1101,7 +1094,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       if (apId) {
         gqlFilter.apId = { equalTo: apId }
       }
@@ -1122,7 +1115,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       if (apId) {
         gqlFilter.apId = { equalTo: apId }
       }
@@ -1143,7 +1136,7 @@ export const Tree = types
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       if (apId) {
         gqlFilter.apId = { equalTo: apId }
       }
@@ -1250,7 +1243,7 @@ export const Tree = types
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       const apHiearchyFilter =
         apId ?
           { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
@@ -1452,7 +1445,7 @@ export const Tree = types
       const mapFilter = jotaiStore.get(treeMapFilterAtom)
       const dataFilter = jotaiStore.get(treeDataFilterAtom)
       // 1. prepare hierarchy filter
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       const apHiearchyFilter =
         apId ?
           { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
@@ -1658,7 +1651,7 @@ export const Tree = types
       // issue: 2023 passed. https://github.com/barbalex/apf2/issues/616
       // reason: ['Benutzer', '738eaf0c-35e5-11e9-97ea-57d86602b143', 'EKF', 2023]
       // Solution: check all positions in array
-      const apId = self.apIdInActiveNodeArray
+      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
       const openNodes = jotaiStore.get(treeOpenNodesAtom)
       const openApIds =
         apId ?
