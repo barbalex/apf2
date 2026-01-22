@@ -1,10 +1,10 @@
-import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useSetAtom } from 'jotai'
 
 import { initial as pop } from '../../../../store/Tree/DataFilter/pop'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { treeDataFilterAddOrAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './PopOrTabs.module.css'
 
@@ -16,8 +16,7 @@ interface PopOrTabsProps {
 
 export const PopOrTabs = observer(
   ({ activeTab, setActiveTab, dataFilter }: PopOrTabsProps) => {
-    const store = useContext(MobxContext)
-    const { dataFilterAddOr } = store.tree
+    const addDataFilterOr = useSetAtom(treeDataFilterAddOrAtom)
 
     const lastFilterIsEmpty =
       Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
@@ -26,7 +25,7 @@ export const PopOrTabs = observer(
 
     const onChangeTab = (event, value) => {
       if (value > dataFilter.length - 1) {
-        dataFilterAddOr({ table: 'pop', val: pop })
+        addDataFilterOr({ table: 'pop', val: pop })
         setTimeout(() => setActiveTab(value), 0)
         return
       }

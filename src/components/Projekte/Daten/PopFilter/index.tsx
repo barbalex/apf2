@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
@@ -16,6 +16,8 @@ import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
   treeApFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -38,26 +40,23 @@ export const PopFilter = observer(() => {
   const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
-  const {
-    dataFilter: dataFilterRaw,
-    popGqlFilter,
-    artIsFiltered,
-    dataFilterSetValue,
-  } = store.tree
+  const { popGqlFilter, artIsFiltered } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   // somehow to live updates without this
-  const dataFilter = dataFilterRaw.toJSON()
+  const dataFilterPop = dataFilter.pop
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
-    if (dataFilter.pop.length - 1 < activeTab) {
+    if (dataFilterPop.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
       setActiveTab(0)
     }
-  }, [activeTab, dataFilter.pop.length])
+  }, [activeTab, dataFilterPop.length])
 
   const { data: dataPops } = useQuery({
     queryKey: ['popFilter', popGqlFilter.filtered, popGqlFilter.all],
@@ -75,10 +74,10 @@ export const PopFilter = observer(() => {
     suspense: true,
   })
 
-  const row = dataFilter.pop[activeTab]
+  const row = dataFilterPop[activeTab]
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'pop',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
@@ -146,7 +145,7 @@ export const PopFilter = observer(() => {
           </>
         )}
         <PopOrTabs
-          dataFilter={dataFilter.pop}
+          dataFilter={dataFilterPop}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />

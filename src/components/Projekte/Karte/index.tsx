@@ -7,7 +7,6 @@ import 'proj4'
 import 'proj4leaflet'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
 
 import { MapResizer } from './MapResizer.tsx'
