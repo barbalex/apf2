@@ -1,12 +1,13 @@
 import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import queryString from 'query-string'
-import { isEqual } from 'es-toolkit'
+import { isEqual, merge } from 'es-toolkit'
 import isUuid from 'is-uuid'
 
 import { constants } from '../modules/constants.ts'
 import { appBaseUrl } from '../modules/appBaseUrl.ts'
 import { initialDataFilterValues } from './initialDataFilterValues.ts'
+import { simpleTypes as popType } from '../store/Tree/DataFilter/pop.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
@@ -168,6 +169,184 @@ export const treeEkfIsFilteredAtom = atom((get) => {
     (e) => !['tpopByTpopId'].includes(e[0]),
   )
   return entries.length > 0
+})
+
+// GqlFilter atoms - these build GraphQL filters
+export const treePopGqlFilterAtom = atom((get) => {
+  // Access jotai atoms
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const mapFilter = get(treeMapFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+  const apId = get(treeApIdInActiveNodeArrayAtom)
+  
+  // Access mobx store for parent filter
+  const apGqlFilter = store.tree.apGqlFilter
+  
+  // 1. prepare hierarchy filter
+  const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
+  const projHiearchyFilter = {}
+  const singleFilterByHierarchy = merge(
+    apHiearchyFilter,
+    projHiearchyFilter,
+  )
+  const singleFilterByParentFiltersForAll = {
+    apByApId: apGqlFilter.all,
+  }
+  const singleFilterForAll = merge(
+    singleFilterByHierarchy,
+    singleFilterByParentFiltersForAll,
+  )
+  const singleFilterByParentFiltersForFiltered = {
+    apByApId: apGqlFilter.filtered,
+  }
+  
+  // 2. prepare data filter
+  let filterArrayInStore = dataFilter.pop ? [...dataFilter.pop] : []
+  if (filterArrayInStore.length > 1) {
+    // check if last is empty
+    // empty last is just temporary because user created new "oder" and has not yet input criteria
+    // remove it or filter result will be wrong (show all) if criteria.length > 1!
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      // popping did not work
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    // Add empty filter if no criteria exist yet
+    // Goal: enable adding filters for hierarchy, label and geometry
+    // If no filters were added: this empty element will be removed after looping
+    filterArrayInStore.push(initialDataFilterValues.pop[0])
+  }
+  
+  // 3. build data filter
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    // add hierarchy filter
+    const singleFilter = {
+      ...merge(
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForFiltered,
+      ),
+    }
+    // add data filter
+    const dataFilterPop = { ...filter }
+    const popFilterValues = Object.entries(dataFilterPop).filter(
+      (e) => e[1] !== null,
+    )
+    popFilterValues.forEach(([key, value]) => {
+      const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // add node label filter
+    if (nodeLabelFilter.pop) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.pop,
+      }
+    }
+    // add mapFilter
+    if (mapFilter) {
+      singleFilter.geomPoint = {
+        coveredBy: mapFilter,
+      }
+    }
+    // Object could be empty if no filters exist
+    // Do not add empty objects
+    if (
+      Object.values(singleFilter).filter((v) => v !== null).length === 0
+    ) {
+      break
+    }
+    filterArray.push(singleFilter)
+  }
+
+  // extra check to ensure no empty objects exist
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const popGqlFilter = {
+    all:
+      Object.keys(singleFilterForAll).length ?
+        singleFilterForAll
+      : { or: [] },
+    filtered: { or: filterArrayWithoutEmptyObjects },
+  }
+
+  return popGqlFilter
+})
+
+export const treePopGqlFilterForTreeAtom = atom((get) => {
+  // Access jotai atoms
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const mapFilter = get(treeMapFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+  
+  // 1. prepare data filter
+  let filterArrayInStore = dataFilter.pop ? [...dataFilter.pop] : []
+  if (filterArrayInStore.length > 1) {
+    // check if last is empty
+    // empty last is just temporary because user created new "oder" and has not yet input criteria
+    // remove it or filter result will be wrong (show all) if criteria.length > 1!
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      // popping did not work
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    // Add empty filter if no criteria exist yet
+    // Goal: enable adding filters for hierarchy, label and geometry
+    // If no filters were added: this empty element will be removed after looping
+    filterArrayInStore.push(initialDataFilterValues.pop[0])
+  }
+  
+  // 2. build data filter
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    // add hierarchy filter
+    const singleFilter = {}
+    // add data filter
+    const dataFilterPop = { ...filter }
+    const popFilterValues = Object.entries(dataFilterPop).filter(
+      (e) => e[1] !== null,
+    )
+    popFilterValues.forEach(([key, value]) => {
+      const expression = popType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // add node label filter
+    if (nodeLabelFilter.pop) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.pop,
+      }
+    }
+    // add mapFilter
+    if (mapFilter) {
+      singleFilter.geomPoint = {
+        coveredBy: mapFilter,
+      }
+    }
+    // Object could be empty if no filters exist
+    // Do not add empty objects
+    if (
+      Object.values(singleFilter).filter((v) => v !== null).length === 0
+    ) {
+      break
+    }
+    filterArray.push(singleFilter)
+  }
+
+  // extra check to ensure no empty objects exist
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const popGqlFilter = { or: filterArrayWithoutEmptyObjects }
+
+  return popGqlFilter
 })
 
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
