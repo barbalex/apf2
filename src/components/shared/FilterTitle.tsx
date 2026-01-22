@@ -10,6 +10,7 @@ import { MobxContext } from '../../mobxContext.ts'
 import {
   treeEmptyNodeLabelFilterAtom,
   treeSetApFilterAtom,
+  treeEmptyMapFilterAtom,
 } from '../../JotaiStore/index.ts'
 import { exists } from '../../modules/exists.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
@@ -21,13 +22,13 @@ export const FilterTitle = observer(
   ({ title, table, totalNr, filteredNr, activeTab }) => {
     const store = useContext(MobxContext)
     const {
-      emptyMapFilter,
       dataFilterEmpty,
       dataFilterEmptyTab,
       dataFilterEmptyTable,
     } = store.tree
     const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
     const setApFilter = useSetAtom(treeSetApFilterAtom)
+    const emptyMapFilter = useSetAtom(treeEmptyMapFilterAtom)
 
     const existsTableFilter = tableIsFiltered({ table, tree: store.tree })
     const tables = Object.keys(store.tree.dataFilter)
