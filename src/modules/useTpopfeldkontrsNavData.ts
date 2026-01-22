@@ -12,6 +12,7 @@ import {
   copyingBiotopAtom,
   movingAtom,
   store as jotaiStore,
+  treeEkGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
@@ -29,9 +30,10 @@ export const useTpopfeldkontrsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
 
   const store = useContext(MobxContext)
+  const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeTpopfeldkontr', tpopId, store.tree.ekGqlFilterForTree],
+    queryKey: ['treeTpopfeldkontr', tpopId, ekGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -62,7 +64,7 @@ export const useTpopfeldkontrsNavData = (props) => {
           }
         `,
         variables: {
-          eksFilter: store.tree.ekGqlFilterForTree,
+          eksFilter: ekGqlFilterForTree,
           tpopId,
         },
       })
@@ -75,7 +77,10 @@ export const useTpopfeldkontrsNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.ekGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeEkGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
