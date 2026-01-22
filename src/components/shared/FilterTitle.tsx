@@ -7,7 +7,10 @@ import { observer } from 'mobx-react-lite'
 import { useSetAtom } from 'jotai'
 
 import { MobxContext } from '../../mobxContext.ts'
-import { treeEmptyNodeLabelFilterAtom } from '../../JotaiStore/index.ts'
+import {
+  treeEmptyNodeLabelFilterAtom,
+  treeSetApFilterAtom,
+} from '../../JotaiStore/index.ts'
 import { exists } from '../../modules/exists.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import { tableIsFiltered } from '../../modules/tableIsFiltered.ts'
@@ -22,9 +25,9 @@ export const FilterTitle = observer(
       dataFilterEmpty,
       dataFilterEmptyTab,
       dataFilterEmptyTable,
-      setApFilter,
     } = store.tree
     const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
+    const setApFilter = useSetAtom(treeSetApFilterAtom)
 
     const existsTableFilter = tableIsFiltered({ table, tree: store.tree })
     const tables = Object.keys(store.tree.dataFilter)

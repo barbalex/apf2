@@ -1,6 +1,4 @@
-import { useContext } from 'react'
 import Switch from '@mui/material/Switch'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
@@ -8,23 +6,24 @@ import { useSetAtom, useAtomValue } from 'jotai'
 
 import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
+  treeApFilterAtom,
+  treeSetApFilterAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
-export const ApFilter = observer(({ color }) => {
+export const ApFilter = ({ color }) => {
   const { apId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
 
-  const store = useContext(MobxContext)
-  const { apFilter, setApFilter } = store.tree
+  const apFilter = useAtomValue(treeApFilterAtom)
+  const setApFilter = useSetAtom(treeSetApFilterAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
@@ -98,4 +97,4 @@ export const ApFilter = observer(({ color }) => {
       </div>
     </ErrorBoundary>
   )
-})
+}

@@ -33,6 +33,8 @@ import {
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeProjIdInActiveNodeArrayAtom,
+  treeApFilterAtom,
+  treeSetApFilterAtom,
   treeNodeLabelFilterAtom,
 } from '../../JotaiStore/index.ts'
 
@@ -41,7 +43,6 @@ const addNotification = (notification) =>
 
 export const Tree = types
   .model('Tree', {
-    apFilter: types.optional(types.boolean, true),
     dataFilter: types.optional(DataFilter, initialDataFilterValues),
     mapFilter: types.maybe(Geojson),
     mapFilterResetter: types.optional(types.number, 0),
@@ -49,10 +50,15 @@ export const Tree = types
   .volatile(() => ({
     // Track nodeLabelFilter changes to make getters reactive
     nodeLabelFilterVersion: 0,
+    // Track apFilter changes to make getters reactive
+    apFilterVersion: 0,
   }))
   .actions((self) => ({
     incrementNodeLabelFilterVersion() {
       self.nodeLabelFilterVersion += 1
+    },
+    incrementApFilterVersion() {
+      self.apFilterVersion += 1
     },
     afterCreate() {
       // Subscribe to jotai atom changes and increment version to trigger mobx reactions
@@ -60,6 +66,11 @@ export const Tree = types
         // Use queueMicrotask to avoid synchronous mutation during jotai update
         queueMicrotask(() => {
           self.incrementNodeLabelFilterVersion()
+        })
+      })
+      jotaiStore.sub(treeApFilterAtom, () => {
+        queueMicrotask(() => {
+          self.incrementApFilterVersion()
         })
       })
     },
@@ -99,9 +110,6 @@ export const Tree = types
     emptyMapFilter() {
       self.setMapFilter(undefined)
     },
-    setApFilter(val) {
-      self.apFilter = val
-    },
   }))
   .views((self) => ({
     get apIdInActiveNodeArray() {
@@ -116,7 +124,9 @@ export const Tree = types
       const store = getParent(self)
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.apFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const apFilter = jotaiStore.get(treeApFilterAtom)
       // 1. prepare hierarchy filter
       const singleFilterByHierarchy = {}
       // 2. prepare data filter
@@ -140,7 +150,7 @@ export const Tree = types
         filterArrayInStore.push(initialAp)
       }
       let setApFilter = false
-      if (self.apFilter) {
+      if (apFilter) {
         setApFilter = true
         const conflictingFilterExists = filterArrayInStore.some((filter) => {
           const apFilterKeys = Object.entries(filter)
@@ -220,7 +230,9 @@ export const Tree = types
       const store = getParent(self)
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
+      self.apFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+      const apFilter = jotaiStore.get(treeApFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
         self.dataFilter.ap ? [...getSnapshot(self.dataFilter.ap)] : []
@@ -242,7 +254,7 @@ export const Tree = types
         filterArrayInStore.push(initialAp)
       }
       let setApFilter = false
-      if (self.apFilter) {
+      if (apFilter) {
         setApFilter = true
         const conflictingFilterExists = filterArrayInStore.some((filter) => {
           const apFilterKeys = Object.entries(filter)
@@ -254,7 +266,7 @@ export const Tree = types
         })
         if (conflictingFilterExists) {
           setApFilter = false
-          self.setApFilter(false)
+          jotaiStore.set(treeSetApFilterAtom, false)
           // need timeout or notification will not appear
           setTimeout(() =>
             addNotification({
@@ -313,6 +325,9 @@ export const Tree = types
       return apGqlFilter
     },
     get artIsFiltered() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.apFilterVersion
+      const apFilter = jotaiStore.get(treeApFilterAtom)
       const firstFilterObject = {
         ...(self.apGqlFilter?.filtered?.or?.[0] ?? {}),
       }
@@ -320,7 +335,7 @@ export const Tree = types
         (e) => e[0] !== 'projId',
       )
       // if apFilter is set: ignore that value
-      if (self.apFilter) {
+      if (apFilter) {
         entries = entries.filter(
           (e) => !(e[0] === 'bearbeitung' && isEqual(e[1], { in: [1, 2, 3] })),
         )

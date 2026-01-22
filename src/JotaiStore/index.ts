@@ -59,6 +59,16 @@ export const treeProjIdInActiveNodeArrayAtom = atom((get) => {
   return undefined
 })
 
+export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
+  getOnInit: true,
+})
+export const treeSetApFilterAtom = atom(
+  (get) => null,
+  (get, set, val) => {
+    set(treeApFilterAtom, val)
+  },
+)
+
 export const treeActiveFilterTableAtom = atom((get) => {
   const activeNodeArray = get(treeActiveNodeArrayAtom)
   if (activeNodeArray.length > 10) {

@@ -1,11 +1,14 @@
-import { useContext, useEffect } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import { MobxContext } from '../../mobxContext.ts'
+import {
+  treeApFilterAtom,
+  treeSetApFilterAtom,
+} from '../../JotaiStore/index.ts'
 
 import type { ApId } from '../../models/apflora/public/Ap.ts'
 
@@ -16,11 +19,11 @@ interface ApFilterControllerQueryResult {
   }
 }
 
-export const ApFilterController = observer(() => {
+export const ApFilterController = () => {
   const apolloClient = useApolloClient()
   const { apId } = useParams()
-  const store = useContext(MobxContext)
-  const { apFilter, setApFilter } = store.tree
+  const apFilter = useAtomValue(treeApFilterAtom)
+  const setApFilter = useSetAtom(treeSetApFilterAtom)
 
   useEffect(() => {
     // if active apId is not an ap and apFilter is true,
@@ -48,4 +51,4 @@ export const ApFilterController = observer(() => {
   }, [apFilter, apId, apolloClient, setApFilter])
 
   return null
-})
+}
