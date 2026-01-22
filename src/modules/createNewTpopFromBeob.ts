@@ -10,6 +10,9 @@ import {
   addNotificationAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../JotaiStore/index.ts'
 import {
   beob as beobFragment,
@@ -94,14 +97,22 @@ export const createNewTpopFromBeob = async ({
   beobId,
   projId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',
-  store,
   search,
 }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)
-  const tree = store.tree
-  const { addOpenNodes } = tree
+  const tree = {
+    openNodes: jotaiStore.get(treeOpenNodesAtom),
+    activeNodeArray: jotaiStore.get(treeActiveNodeArrayAtom),
+  }
+  const addOpenNodes = (nodes) => {
+    const currentOpenNodes = jotaiStore.get(treeOpenNodesAtom)
+    const uniqueSet = new Set(
+      [...currentOpenNodes, ...nodes].map(JSON.stringify),
+    )
+    jotaiStore.set(treeSetOpenNodesAtom, Array.from(uniqueSet).map(JSON.parse))
+  }
   let beobResult
   try {
     beobResult = await apolloClient.query({
