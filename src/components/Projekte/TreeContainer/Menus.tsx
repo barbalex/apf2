@@ -1,8 +1,7 @@
-import { useContext, lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { uniq } from 'es-toolkit'
 import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
@@ -221,7 +220,6 @@ import { copyTpopKoordToPop } from '../../../modules/copyTpopKoordToPop/index.ts
 import { openLowerNodes } from './openLowerNodes/index.ts'
 import { closeLowerNodes } from './closeLowerNodes.ts'
 import { insertDataset } from './insertDataset.ts'
-import { MobxContext } from '../../../mobxContext.ts'
 import { useProjekteTabs } from '../../../modules/useProjekteTabs.ts'
 import { showCoordOfBeobOnMapsZhCh } from '../../../modules/showCoordOfBeobOnMapsZhCh.ts'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../modules/showCoordOfBeobOnMapGeoAdminCh.ts'
@@ -240,13 +238,12 @@ import {
 
 import styles from './Menus.module.css'
 
-export const Menus = observer(() => {
+export const Menus = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const params = useParams()
   const { projId, apId, popId } = params
   const { search } = useLocation()
 
-  const store = useContext(MobxContext)
   const openNodesRaw = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
   const openNodes = getSnapshot(openNodesRaw)
@@ -362,7 +359,6 @@ export const Menus = observer(() => {
           projId,
           popId,
           menuType,
-          store,
           jahr,
         })
       },
@@ -423,7 +419,6 @@ export const Menus = observer(() => {
       move() {
         moveTo({
           id: nodeType === 'folder' ? parentId : id,
-          store,
         })
       },
       markForCopying() {
@@ -598,4 +593,4 @@ export const Menus = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

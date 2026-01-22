@@ -17,7 +17,7 @@ export const openNode = async ({ node, openNodes, store }) => {
 
   jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
 
-  if (node.menuType === 'ap') {
+  if (node.menuType === 'ap' && store) {
     // if ap is changed, need to empty nodeLabelFilter,
     // with exception of the ap key
     store.tree.nodeLabelFilter = {
