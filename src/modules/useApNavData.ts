@@ -10,6 +10,8 @@ import { MobxContext } from '../mobxContext.ts'
 import {
   mapActiveApfloraLayersAtom,
   treePopGqlFilterForTreeAtom,
+  treeZielGqlFilterForTreeAtom,
+  store as jotaiStore,
 } from '../JotaiStore/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
@@ -30,6 +32,7 @@ export const useApNavData = (props) => {
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
+  const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
   const showPopIcon = activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
@@ -74,7 +77,7 @@ export const useApNavData = (props) => {
       projId,
       apId,
       popGqlFilterForTree,
-      store.tree.zielGqlFilterForTree,
+      zielGqlFilterForTree,
       store.tree.erfkritGqlFilterForTree,
       store.tree.apberGqlFilterForTree,
       store.tree.apartGqlFilterForTree,
@@ -200,7 +203,7 @@ export const useApNavData = (props) => {
         variables: {
           apId,
           popFilter: popGqlFilterForTree,
-          zielFilter: store.tree.zielGqlFilterForTree,
+          zielFilter: zielGqlFilterForTree,
           erfkritFilter: store.tree.erfkritGqlFilterForTree,
           apberFilter: store.tree.apberGqlFilterForTree,
           apartFilter: store.tree.apartGqlFilterForTree,
@@ -240,11 +243,10 @@ export const useApNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.zielGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeZielGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
   useEffect(
     () => reaction(() => store.tree.erfkritGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps

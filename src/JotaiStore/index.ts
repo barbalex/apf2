@@ -1011,6 +1011,29 @@ export const treeApberuebersichtGqlFilterForTreeAtom = atom((get) => {
   return gqlFilter
 })
 
+export const treeZielGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const apId = get(treeApIdInActiveNodeArrayAtom)
+  const gqlFilter = {}
+
+  // 1. hierarchy filter
+  if (apId) {
+    gqlFilter.apId = { equalTo: apId }
+  }
+
+  // 2. node label filter
+  if (nodeLabelFilter.ziel) {
+    gqlFilter.or = [{ label: { includesInsensitive: nodeLabelFilter.ziel } }]
+    if (!isNaN(nodeLabelFilter.ziel)) {
+      gqlFilter.or.push({ jahr: { equalTo: +nodeLabelFilter.ziel } })
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })

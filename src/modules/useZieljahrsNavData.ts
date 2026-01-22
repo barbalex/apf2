@@ -1,12 +1,15 @@
-import { useEffect, useContext, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { countBy } from 'es-toolkit'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeZielGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 
 const getZieljahrsCount = (ziels) => {
   const jahrs = countBy(ziels, (e) => e.jahr)
@@ -20,10 +23,10 @@ export const useZieljahrsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const store = useContext(MobxContext)
+  const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeZieljahrs', apId, store.tree.zielGqlFilterForTree],
+    queryKey: ['treeZieljahrs', apId, zielGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -50,7 +53,7 @@ export const useZieljahrsNavData = (props) => {
           }
         `,
         variables: {
-          zielsFilter: store.tree.zielGqlFilterForTree,
+          zielsFilter: zielGqlFilterForTree,
           apId,
         },
       })
@@ -59,14 +62,11 @@ export const useZieljahrsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.zielGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  // react to filter changes
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeZielGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
 
   const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
   const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
