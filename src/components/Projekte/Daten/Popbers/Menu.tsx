@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -7,12 +6,10 @@ import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { PopberId, PopId } from '../../../../models/apflora/index.tsx'
 
@@ -38,13 +35,11 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
   const { popId } = useParams()
-
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
