@@ -9,6 +9,7 @@ import { MobxContext } from '../mobxContext.ts'
 import {
   store as jotaiStore,
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+  treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
@@ -19,13 +20,16 @@ export const useWertesNavData = () => {
   const tpopkontrzaehlEinheitWerteGqlFilterForTree = useAtomValue(
     treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   )
+  const ekAbrechnungstypWerteGqlFilterForTree = useAtomValue(
+    treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
     queryKey: [
       'treeWertes',
       store.tree.adresseGqlFilterForTree,
       store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
-      store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+      ekAbrechnungstypWerteGqlFilterForTree,
       tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: async () => {
@@ -73,8 +77,7 @@ export const useWertesNavData = () => {
           adressesFilter: store.tree.adresseGqlFilterForTree,
           tpopApberrelevantGrundWerteFilter:
             store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
-          ekAbrechnungstypWerteFilter:
-            store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+          ekAbrechnungstypWerteFilter: ekAbrechnungstypWerteGqlFilterForTree,
           tpopkontrzaehlEinheitWerteFilter:
             tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
@@ -100,8 +103,13 @@ export const useWertesNavData = () => {
     [],
   )
   useEffect(
-    () =>
-      reaction(() => store.tree.ekAbrechnungstypWerteGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(
+        treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+        refetch,
+      )
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

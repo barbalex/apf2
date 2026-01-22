@@ -1,21 +1,26 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkAbrechnungstypWertesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const ekAbrechnungstypWerteGqlFilterForTree = useAtomValue(
+    treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
     queryKey: [
       'treeEkAbrechnungstypWerte',
-      store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+      ekAbrechnungstypWerteGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -38,7 +43,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
           }
         `,
         variables: {
-          filter: store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+          filter: ekAbrechnungstypWerteGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -50,8 +55,13 @@ export const useEkAbrechnungstypWertesNavData = () => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () =>
-      reaction(() => store.tree.ekAbrechnungstypWerteGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(
+        treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+        refetch,
+      )
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

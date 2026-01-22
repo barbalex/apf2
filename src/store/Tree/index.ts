@@ -36,6 +36,7 @@ import {
   treeTpopmassnGqlFilterForTreeAtom,
   treeTpopmassnberGqlFilterForTreeAtom,
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+  treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -133,21 +134,7 @@ export const Tree = types
       return jotaiStore.get(treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom)
     },
     get ekAbrechnungstypWerteGqlFilterForTree() {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.nodeLabelFilterVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const gqlFilter = {}
-      // 1. hierarchy filter: none
-      // 2. node label filter
-      if (nodeLabelFilter.ekAbrechnungstypWerte) {
-        gqlFilter.label = {
-          includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte,
-        }
-      }
-
-      if (Object.keys(gqlFilter).length === 0) return { or: [] }
-
-      return gqlFilter
+      return jotaiStore.get(treeEkAbrechnungstypWerteGqlFilterForTreeAtom)
     },
     get tpopApberrelevantGrundWerteGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes

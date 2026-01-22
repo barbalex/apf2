@@ -930,6 +930,22 @@ export const treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom = atom(
   },
 )
 
+export const treeEkAbrechnungstypWerteGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const gqlFilter = {}
+  // 1. hierarchy filter: none
+  // 2. node label filter
+  if (nodeLabelFilter.ekAbrechnungstypWerte) {
+    gqlFilter.label = {
+      includesInsensitive: nodeLabelFilter.ekAbrechnungstypWerte,
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
