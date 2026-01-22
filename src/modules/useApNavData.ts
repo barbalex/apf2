@@ -15,6 +15,7 @@ import {
   treeApartGqlFilterForTreeAtom,
   treeAssozartGqlFilterForTreeAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   store as jotaiStore,
 } from '../JotaiStore/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
@@ -44,6 +45,9 @@ export const useApNavData = (props) => {
   )
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  )
+  const beobNichtZuzuordnenGqlFilterForTree = useAtomValue(
+    treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   )
   const showPopIcon = activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
@@ -97,7 +101,7 @@ export const useApNavData = (props) => {
       ekfrequenzGqlFilterForTree,
       ekzaehleinheitGqlFilterForTree,
       beobNichtBeurteiltGqlFilterForTree,
-      store.tree.beobNichtZuzuordnenGqlFilterForTree,
+      beobNichtZuzuordnenGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -235,7 +239,7 @@ export const useApNavData = (props) => {
             },
           },
           beobNichtZuzuordnenFilter: {
-            ...store.tree.beobNichtZuzuordnenGqlFilterForTree,
+            ...beobNichtZuzuordnenGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -293,12 +297,13 @@ export const useApNavData = (props) => {
     )
     return unsub
   }, [])
-  useEffect(
-    () =>
-      reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),
-    // eslint:disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(
+      treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
+      refetch,
+    )
+    return unsub
+  }, [])
 
   const label = data?.data?.apById?.label
   const popsCount = data?.data?.apById?.popsByApId?.totalCount ?? 0

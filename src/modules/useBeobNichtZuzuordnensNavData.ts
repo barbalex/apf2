@@ -1,13 +1,15 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
-import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
+import {
+  mapActiveApfloraLayersAtom,
+  treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
+  store as jotaiStore,
+} from '../JotaiStore/index.ts'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -22,9 +24,10 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
 
-  const store = useContext(MobxContext)
-
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const beobNichtZuzuordnenGqlFilterForTree = useAtomValue(
+    treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
+  )
   const showBeobnichtzuzuordnenIcon =
     activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
   const [, setRerenderer] = useState(0)
@@ -47,7 +50,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     queryKey: [
       'treeBeobNichtZuzuordnen',
       apId,
-      store.tree.beobNichtZuzuordnenGqlFilterForTree,
+      beobNichtZuzuordnenGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -75,7 +78,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
         `,
         variables: {
           beobNichtZuzuordnenFilter: {
-            ...store.tree.beobNichtZuzuordnenGqlFilterForTree,
+            ...beobNichtZuzuordnenGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -94,12 +97,13 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () =>
-      reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(
+      treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
+      refetch,
+    )
+    return unsub
+  }, [])
 
   const count = data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
   const filteredCount =

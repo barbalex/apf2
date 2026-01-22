@@ -1,12 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   mapActiveApfloraLayersAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
@@ -25,8 +23,6 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
-
-  const store = useContext(MobxContext)
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
