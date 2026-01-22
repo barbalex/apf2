@@ -1,19 +1,20 @@
-import { useContext } from 'react'
 import { Link, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
-
-import { MobxContext } from '../../../mobxContext.ts'
+import { useAtomValue, useSetAtom } from 'jotai'
+import {
+  treeNodeLabelFilterAtom,
+  treeSetNodeLabelFilterKeyAtom,
+} from '../../../JotaiStore/index.ts'
 import { MenuItems } from './MenuItems.tsx'
 import { Filter } from './Filter.tsx'
 import { IntoViewScroller } from './IntoViewScroller.tsx'
 
 import styles from './index.module.css'
 
-export const Sidebar = observer(() => {
+export const Sidebar = () => {
   const { search } = useLocation()
 
-  const store = useContext(MobxContext)
-  const { setKey: setNodeLabelFilterKey } = store.tree.nodeLabelFilter
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const setNodeLabelFilterKey = useSetAtom(treeSetNodeLabelFilterKeyAtom)
   const setFilter = (val) =>
     setNodeLabelFilterKey({
       value: val,
@@ -30,7 +31,7 @@ export const Sidebar = observer(() => {
           Dokumentation
         </Link>
         <Filter
-          filter={store.tree.nodeLabelFilter.doc ?? ''}
+          filter={nodeLabelFilter.doc ?? ''}
           setFilter={setFilter}
         />
       </div>
@@ -38,4 +39,4 @@ export const Sidebar = observer(() => {
       <IntoViewScroller />
     </div>
   )
-})
+}

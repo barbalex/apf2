@@ -1,12 +1,15 @@
 import { useContext, useState, useEffect } from 'react'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../JotaiStore/index.ts'
 import { menus } from '../components/Docs/menus.ts'
 
 export const useDocsNavData = () => {
   const store = useContext(MobxContext)
-  const filterValue = store.tree.nodeLabelFilter.doc
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const filterValue = nodeLabelFilter.doc
 
   const navData = {
     id: 'Dokumentation',
