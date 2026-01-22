@@ -56,6 +56,7 @@ import {
   treeEkGqlFilterForTreeAtom,
   treeEkfGqlFilterAtom,
   treeEkfGqlFilterForTreeAtom,
+  treeBeobGqlFilterAtom,
 } from '../../JotaiStore/index.ts'
 
 const addNotification = (notification) =>
@@ -218,127 +219,7 @@ export const Tree = types
       }
     },
     beobGqlFilter(type) {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.mapFilterVersion
-      self.activeNodeArrayVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const mapFilter = jotaiStore.get(treeMapFilterAtom)
-      // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
-      // 1. prepare hierarchy filter
-      const projId = jotaiStore.get(treeProjIdInActiveNodeArrayAtom)
-
-      // need list of all open apIds
-      // issue: 2023 passed. https://github.com/barbalex/apf2/issues/616
-      // reason: ['Benutzer', '738eaf0c-35e5-11e9-97ea-57d86602b143', 'EKF', 2023]
-      // Solution: check all positions in array
-      const apId = jotaiStore.get(treeApIdInActiveNodeArrayAtom)
-      const openNodes = jotaiStore.get(treeOpenNodesAtom)
-      const openApIds =
-        apId ?
-          [apId]
-        : [
-            ...new Set(
-              openNodes
-                .filter((n) => n[0] && n[0] === 'Projekte')
-                .filter((n) => n[1] && n[1] === projId)
-                .filter((n) => n[2] && n[2] === 'Arten')
-                .filter((n) => n[3])
-                .map((n) => n[3]),
-            ),
-          ]
-
-      const apFilter = {
-        aeTaxonomyByArtId: {
-          apartsByArtId: {
-            // important: NEVER load from all species!
-            some: {
-              apId: { in: openApIds },
-              // need to include nodeLabelFilter
-              aeTaxonomyByArtId: {
-                artname: { includesInsensitive: nodeLabelFilter.ap ?? '' },
-              },
-            },
-          },
-        },
-      }
-
-      const apHiearchyFilter =
-        apId ?
-          { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
-        : {}
-      const projHiearchyFilter = {}
-      const singleFilterByHierarchy = merge(
-        apHiearchyFilter,
-        projHiearchyFilter,
-      )
-      const typeFilter = {
-        wgs84Lat: { isNull: false },
-      }
-      if (type === 'zugeordnet') {
-        typeFilter.tpopId = { isNull: false }
-      }
-      if (type === 'nichtBeurteilt') {
-        typeFilter.tpopId = { isNull: true }
-        typeFilter.nichtZuordnen = { equalTo: false }
-      }
-      if (type === 'nichtZuzuordnen') {
-        typeFilter.nichtZuordnen = { equalTo: true }
-      }
-
-      const singleFilterByParentFiltersForAll = {
-        tpopByTpopId: self.tpopGqlFilter.all,
-      }
-      const singleFilterForAll =
-        type === 'zugeordnet' ?
-          merge(
-            merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
-            singleFilterByParentFiltersForAll,
-          )
-        : merge(typeFilter, apFilter)
-      const singleFilterByParentFiltersForFiltered = {
-        tpopByTpopId: self.tpopGqlFilter.filtered,
-      }
-
-      // node label filter
-      const nodeLabelFilterObj =
-        nodeLabelFilter.beob ?
-          {
-            label: {
-              includesInsensitive: nodeLabelFilter.beob,
-            },
-          }
-        : {}
-      // mapFilter
-      const mapFilterObj =
-        mapFilter ?
-          {
-            geomPoint: {
-              coveredBy: mapFilter,
-            },
-          }
-        : {}
-      let singleFilter = merge(typeFilter, apFilter)
-      if (type === 'zugeordnet') {
-        singleFilter = merge(singleFilter, singleFilterByHierarchy)
-        singleFilter = merge(
-          singleFilter,
-          singleFilterByParentFiltersForFiltered,
-        )
-      }
-      singleFilter = merge(singleFilter, nodeLabelFilterObj)
-      singleFilter = merge(singleFilter, mapFilterObj)
-
-      const beobGqlFilter = {
-        all:
-          Object.keys(singleFilterForAll).length ?
-            singleFilterForAll
-          : { or: [] },
-        filtered: singleFilter,
-      }
-
-      // console.log('beobGqlFilter:', { beobGqlFilter, nodeLabelFilter, type })
-
-      return beobGqlFilter
+      return jotaiStore.get(treeBeobGqlFilterAtom(type))
     },
     get beobNichtBeurteiltGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes

@@ -11,8 +11,14 @@ import { simpleTypes as apType } from '../store/Tree/DataFilter/ap.ts'
 import { simpleTypes as popType } from '../store/Tree/DataFilter/pop.ts'
 import { simpleTypes as tpopType } from '../store/Tree/DataFilter/tpop.ts'
 import { simpleTypes as tpopmassnType } from '../store/Tree/DataFilter/tpopmassn.ts'
-import { simpleTypes as tpopfeldkontrType, initial as initialTpopfeldkontr } from '../store/Tree/DataFilter/tpopfeldkontr.ts'
-import { simpleTypes as tpopfreiwkontrType, initial as initialTpopfreiwkontr } from '../store/Tree/DataFilter/tpopfreiwkontr.ts'
+import {
+  simpleTypes as tpopfeldkontrType,
+  initial as initialTpopfeldkontr,
+} from '../store/Tree/DataFilter/tpopfeldkontr.ts'
+import {
+  simpleTypes as tpopfreiwkontrType,
+  initial as initialTpopfreiwkontr,
+} from '../store/Tree/DataFilter/tpopfreiwkontr.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
@@ -1243,13 +1249,11 @@ export const treeEkGqlFilterAtom = atom((get) => {
   const mapFilter = get(treeMapFilterAtom)
   const dataFilter = get(treeDataFilterAtom)
   const tpopGqlFilter = get(treeTpopGqlFilterAtom)
-  
+
   // 1. prepare hierarchy filter
   const apId = get(treeApIdInActiveNodeArrayAtom)
   const apHiearchyFilter =
-    apId ?
-      { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
-    : {}
+    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(
     merge(
@@ -1273,7 +1277,7 @@ export const treeEkGqlFilterAtom = atom((get) => {
   const singleFilterByParentFiltersForFiltered = {
     tpopByTpopId: tpopGqlFilter.filtered,
   }
-  
+
   // 2. prepare data filter
   let filterArrayInStore =
     dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
@@ -1294,16 +1298,13 @@ export const treeEkGqlFilterAtom = atom((get) => {
     // If no filters were added: this empty element will be removed after looping
     filterArrayInStore.push(initialTpopfeldkontr)
   }
-  
+
   // 3. build data filter
   const filterArray = []
   for (const filter of filterArrayInStore) {
     // add hierarchy filter
     const singleFilter = {
-      ...merge(
-        singleFilterByHierarchy,
-        singleFilterByParentFiltersForFiltered,
-      ),
+      ...merge(singleFilterByHierarchy, singleFilterByParentFiltersForFiltered),
     }
     // add data filter
     const dataFilterObj = { ...filter }
@@ -1345,9 +1346,7 @@ export const treeEkGqlFilterAtom = atom((get) => {
 
   const ekGqlFilter = {
     all:
-      Object.keys(singleFilterForAll).length ?
-        singleFilterForAll
-      : { or: [] },
+      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1358,7 +1357,7 @@ export const treeEkGqlFilterForTreeAtom = atom((get) => {
   const nodeLabelFilter = get(treeNodeLabelFilterAtom)
   const mapFilter = get(treeMapFilterAtom)
   const dataFilter = get(treeDataFilterAtom)
-  
+
   // 1. prepare data filter
   let filterArrayInStore =
     dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
@@ -1379,7 +1378,7 @@ export const treeEkGqlFilterForTreeAtom = atom((get) => {
     // If no filters were added: this empty element will be removed after looping
     filterArrayInStore.push(initialTpopfeldkontr)
   }
-  
+
   // 2. build data filter
   const filterArray = []
   for (const filter of filterArrayInStore) {
@@ -1387,9 +1386,7 @@ export const treeEkGqlFilterForTreeAtom = atom((get) => {
     const singleFilter = {}
     // add data filter
     const dataFilter = { ...filter }
-    const filterValues = Object.entries(dataFilter).filter(
-      (e) => e[1] !== null,
-    )
+    const filterValues = Object.entries(dataFilter).filter((e) => e[1] !== null)
     filterValues.forEach(([key, value]) => {
       const expression =
         tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
@@ -1433,13 +1430,11 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   const mapFilter = get(treeMapFilterAtom)
   const dataFilter = get(treeDataFilterAtom)
   const tpopGqlFilter = get(treeTpopGqlFilterAtom)
-  
+
   // 1. prepare hierarchy filter
   const apId = get(treeApIdInActiveNodeArrayAtom)
   const apHiearchyFilter =
-    apId ?
-      { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
-    : {}
+    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(
     merge(
@@ -1458,7 +1453,7 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   const singleFilterByParentFiltersForFiltered = {
     tpopByTpopId: tpopGqlFilter.filtered,
   }
-  
+
   // 2. prepare data filter
   let filterArrayInStore =
     dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
@@ -1479,16 +1474,13 @@ export const treeEkfGqlFilterAtom = atom((get) => {
     // If no filters were added: this empty element will be removed after looping
     filterArrayInStore.push(initialTpopfreiwkontr)
   }
-  
+
   // 3. build data filter
   const filterArray = []
   for (const filter of filterArrayInStore) {
     // add hierarchy filter
     const singleFilter = {
-      ...merge(
-        singleFilterByHierarchy,
-        singleFilterByParentFiltersForFiltered,
-      ),
+      ...merge(singleFilterByHierarchy, singleFilterByParentFiltersForFiltered),
     }
     // add data filter
     const dataFilterObj = { ...filter }
@@ -1529,9 +1521,7 @@ export const treeEkfGqlFilterAtom = atom((get) => {
 
   const ekfGqlFilter = {
     all:
-      Object.keys(singleFilterForAll).length ?
-        singleFilterForAll
-      : { or: [] },
+      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1542,7 +1532,7 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
   const nodeLabelFilter = get(treeNodeLabelFilterAtom)
   const mapFilter = get(treeMapFilterAtom)
   const dataFilter = get(treeDataFilterAtom)
-  
+
   // 1. prepare data filter
   let filterArrayInStore =
     dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
@@ -1563,7 +1553,7 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
     // If no filters were added: this empty element will be removed after looping
     filterArrayInStore.push(initialTpopfreiwkontr)
   }
-  
+
   // 2. build data filter
   const filterArray = []
   for (const filter of filterArrayInStore) {
@@ -1611,6 +1601,119 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
 
   return ekfGqlFilter
 })
+
+// Function that returns an atom for beobGqlFilter based on type parameter
+export const treeBeobGqlFilterAtom = (
+  type: 'nichtBeurteilt' | 'nichtZuzuordnen' | 'zugeordnet',
+) =>
+  atom((get) => {
+    const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+    const mapFilter = get(treeMapFilterAtom)
+    const tpopGqlFilter = get(treeTpopGqlFilterAtom)
+
+    // 1. prepare hierarchy filter
+    const projId = get(treeProjIdInActiveNodeArrayAtom)
+
+    // need list of all open apIds
+    const apId = get(treeApIdInActiveNodeArrayAtom)
+    const openNodes = get(treeOpenNodesAtom)
+    const openApIds =
+      apId ?
+        [apId]
+      : [
+          ...new Set(
+            openNodes
+              .filter((n) => n[0] && n[0] === 'Projekte')
+              .filter((n) => n[1] && n[1] === projId)
+              .filter((n) => n[2] && n[2] === 'Arten')
+              .filter((n) => n[3])
+              .map((n) => n[3]),
+          ),
+        ]
+
+    const apFilter = {
+      aeTaxonomyByArtId: {
+        apartsByArtId: {
+          // important: NEVER load from all species!
+          some: {
+            apId: { in: openApIds },
+            // need to include nodeLabelFilter
+            aeTaxonomyByArtId: {
+              artname: { includesInsensitive: nodeLabelFilter.ap ?? '' },
+            },
+          },
+        },
+      },
+    }
+
+    const apHiearchyFilter =
+      apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+    const projHiearchyFilter = {}
+    const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
+    const typeFilter = {
+      wgs84Lat: { isNull: false },
+    }
+    if (type === 'zugeordnet') {
+      typeFilter.tpopId = { isNull: false }
+    }
+    if (type === 'nichtBeurteilt') {
+      typeFilter.tpopId = { isNull: true }
+      typeFilter.nichtZuordnen = { equalTo: false }
+    }
+    if (type === 'nichtZuzuordnen') {
+      typeFilter.nichtZuordnen = { equalTo: true }
+    }
+
+    const singleFilterByParentFiltersForAll = {
+      tpopByTpopId: tpopGqlFilter.all,
+    }
+    const singleFilterForAll =
+      type === 'zugeordnet' ?
+        merge(
+          merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
+          singleFilterByParentFiltersForAll,
+        )
+      : merge(typeFilter, apFilter)
+    const singleFilterByParentFiltersForFiltered = {
+      tpopByTpopId: tpopGqlFilter.filtered,
+    }
+
+    // node label filter
+    const nodeLabelFilterObj =
+      nodeLabelFilter.beob ?
+        {
+          label: {
+            includesInsensitive: nodeLabelFilter.beob,
+          },
+        }
+      : {}
+    // mapFilter
+    const mapFilterObj =
+      mapFilter ?
+        {
+          geomPoint: {
+            coveredBy: mapFilter,
+          },
+        }
+      : {}
+    let singleFilter = merge(typeFilter, apFilter)
+    if (type === 'zugeordnet') {
+      singleFilter = merge(singleFilter, singleFilterByHierarchy)
+      singleFilter = merge(singleFilter, singleFilterByParentFiltersForFiltered)
+    }
+    singleFilter = merge(singleFilter, nodeLabelFilterObj)
+    singleFilter = merge(singleFilter, mapFilterObj)
+
+    const beobGqlFilter = {
+      all:
+        Object.keys(singleFilterForAll).length ?
+          singleFilterForAll
+        : { or: [] },
+      filtered: singleFilter,
+    }
+
+    return beobGqlFilter
+  })
 
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
