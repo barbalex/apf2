@@ -8,7 +8,11 @@ import { useAtomValue } from 'jotai'
 import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 import { Form } from './Form/index.tsx'
 import { Tabs } from './Tabs.tsx'
 
@@ -31,13 +35,13 @@ export const TpopfreiwkontrFilter = observer(() => {
   const {
     dataFilter,
     ekfGqlFilter,
-    mapFilter,
-    apFilter,
     artIsFiltered,
     popIsFiltered,
     tpopIsFiltered,
   } = tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

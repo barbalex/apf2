@@ -4,7 +4,11 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './ActiveFilters.module.css'
@@ -14,8 +18,10 @@ export const ActiveFilters = observer(() => {
 
   const store = useContext(MobxContext)
 
-  const { mapFilter, apFilter, artIsFiltered, popIsFiltered } = store.tree
+  const { artIsFiltered, popIsFiltered } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
 
   const navApFilterComment =
     apFilter ?
