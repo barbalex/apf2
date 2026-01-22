@@ -14,6 +14,9 @@ import {
   treeApberGqlFilterForTreeAtom,
   treeApartGqlFilterForTreeAtom,
   treeAssozartGqlFilterForTreeAtom,
+  treeErfkritGqlFilterForTreeAtom,
+  treeEkfrequenzGqlFilterForTreeAtom,
+  treeEkzaehleinheitGqlFilterForTreeAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   store as jotaiStore,
@@ -42,6 +45,15 @@ export const useApNavData = (props) => {
   const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
   const assozartGqlFilterForTree = useAtomValue(
     treeAssozartGqlFilterForTreeAtom,
+  )
+  const erfkritGqlFilterForTree = useAtomValue(
+    treeErfkritGqlFilterForTreeAtom,
+  )
+  const ekfrequenzGqlFilterForTree = useAtomValue(
+    treeEkfrequenzGqlFilterForTreeAtom,
+  )
+  const ekzaehleinheitGqlFilterForTree = useAtomValue(
+    treeEkzaehleinheitGqlFilterForTreeAtom,
   )
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,

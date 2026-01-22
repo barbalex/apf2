@@ -1,5 +1,4 @@
 import type { Instance } from 'mobx-state-tree'
-import type { MobxStore } from '../store/index.ts'
 
 // Import queries for different routes
 import { query as apQuery } from '../components/Projekte/Daten/Ap/query.ts'

@@ -42,6 +42,9 @@ export const useTpopfreiwkontrNavData = (props) => {
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
 
   const store = useContext(MobxContext)
+  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
+    treeTpopkontrzaehlGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
     queryKey: [
