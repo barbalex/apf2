@@ -28,6 +28,7 @@ import {
   treeArtIsFilteredAtom,
   treePopIsFilteredAtom,
   treeTpopIsFilteredAtom,
+  treeEkGqlFilterAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -93,8 +94,7 @@ const tpopkontrTypWerte = [
 export const TpopfeldkontrFilter = observer(() => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
-  const { ekGqlFilter } = store.tree
+  const ekGqlFilter = useAtomValue(treeEkGqlFilterAtom)
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)

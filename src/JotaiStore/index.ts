@@ -160,8 +160,7 @@ export const treeTpopmassnIsFilteredAtom = atom((get) => {
 })
 
 export const treeEkIsFilteredAtom = atom((get) => {
-  // TODO: migrate ekGqlFilter to jotai
-  const ekGqlFilter = store.tree.ekGqlFilter
+  const ekGqlFilter = get(treeEkGqlFilterAtom)
   const firstFilterObject = {
     ...(ekGqlFilter?.filtered?.or?.[0] ?? {}),
   }
@@ -1236,6 +1235,122 @@ export const treeTpopberGqlFilterForTreeAtom = atom((get) => {
   if (Object.keys(gqlFilter).length === 0) return { or: [] }
 
   return gqlFilter
+})
+
+export const treeEkGqlFilterAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const mapFilter = get(treeMapFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+  const tpopGqlFilter = get(treeTpopGqlFilterAtom)
+  
+  // 1. prepare hierarchy filter
+  const apId = get(treeApIdInActiveNodeArrayAtom)
+  const apHiearchyFilter =
+    apId ?
+      { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+    : {}
+  const projHiearchyFilter = {}
+  const singleFilterByHierarchy = merge(
+    merge(
+      {
+        or: [
+          { typ: { isNull: true } },
+          { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+        ],
+      },
+      apHiearchyFilter,
+    ),
+    projHiearchyFilter,
+  )
+  const singleFilterByParentFiltersForAll = {
+    tpopByTpopId: tpopGqlFilter.all,
+  }
+  const singleFilterForAll = merge(
+    singleFilterByHierarchy,
+    singleFilterByParentFiltersForAll,
+  )
+  const singleFilterByParentFiltersForFiltered = {
+    tpopByTpopId: tpopGqlFilter.filtered,
+  }
+  
+  // 2. prepare data filter
+  let filterArrayInStore =
+    dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
+  if (filterArrayInStore.length > 1) {
+    // check if last is empty
+    // empty last is just temporary because user created new "oder" and has not yet input criteria
+    // remove it or filter result will be wrong (show all) if criteria.length > 1!
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      // popping did not work
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    // Add empty filter if no criteria exist yet
+    // Goal: enable adding filters for hierarchy, label and geometry
+    // If no filters were added: this empty element will be removed after looping
+    filterArrayInStore.push(initialTpopfeldkontr)
+  }
+  
+  // 3. build data filter
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    // add hierarchy filter
+    const singleFilter = {
+      ...merge(
+        singleFilterByHierarchy,
+        singleFilterByParentFiltersForFiltered,
+      ),
+    }
+    // add data filter
+    const dataFilterObj = { ...filter }
+    const filterValues = Object.entries(dataFilterObj).filter(
+      (e) => e[1] !== null,
+    )
+    filterValues.forEach(([key, value]) => {
+      const expression =
+        tpopfeldkontrType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+    // add node label filter
+    if (nodeLabelFilter.tpopfeldkontr) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.tpopfeldkontr,
+      }
+    }
+    // add mapFilter
+    if (mapFilter) {
+      if (!singleFilter.tpopByTpopId) {
+        singleFilter.tpopByTpopId = {}
+      }
+      singleFilter.tpopByTpopId.geomPoint = {
+        coveredBy: mapFilter,
+      }
+    }
+    // Object need to filter by typ
+    if (!singleFilter.typ) {
+      singleFilter.typ = { distinctFrom: 'Freiwilligen-Erfolgskontrolle' }
+    }
+    // Object has filter criteria. Add it!
+    filterArray.push(singleFilter)
+  }
+
+  // extra check to ensure no empty objects exist
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const ekGqlFilter = {
+    all:
+      Object.keys(singleFilterForAll).length ?
+        singleFilterForAll
+      : { or: [] },
+    filtered: { or: filterArrayWithoutEmptyObjects },
+  }
+
+  return ekGqlFilter
 })
 
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
