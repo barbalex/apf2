@@ -5,7 +5,6 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
@@ -38,6 +37,8 @@ import {
   setCopyingBiotopAtom,
   movingAtom,
   setMovingAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
 interface CreateTpopkontrResult {
@@ -79,7 +80,9 @@ export const Menu = observer(({ row }: MenuProps) => {
   const setCopying = useSetAtom(setCopyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
-  const { activeNodeArray, openNodes, setOpenNodes } = store.tree
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
+  const { activeNodeArray } = store.tree
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -194,11 +197,9 @@ export const Menu = observer(({ row }: MenuProps) => {
     }
 
     // remove active path from openNodes
-    const openNodesRaw = store?.tree?.openNodes
-    const openNodes = getSnapshot(openNodesRaw)
     const activePath = pathname.split('/').filter((p) => !!p)
     const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    store.tree.setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes)
 
     // update tree query
     tsQueryClient.invalidateQueries({
