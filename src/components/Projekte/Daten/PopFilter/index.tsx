@@ -1,5 +1,4 @@
-import { useContext, useState, useEffect, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -11,7 +10,6 @@ import { Status } from '../../../shared/Status.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -19,6 +17,7 @@ import {
   treeDataFilterAtom,
   treeDataFilterSetValueAtom,
   treeArtIsFilteredAtom,
+  treePopGqlFilterAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -35,13 +34,12 @@ interface PopFilterQueryResult {
   }
 }
 
-export const PopFilter = observer(() => {
+export const PopFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
-  const { popGqlFilter } = store.tree
+  const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
@@ -190,4 +188,4 @@ export const PopFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

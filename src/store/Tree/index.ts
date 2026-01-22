@@ -5,7 +5,6 @@ import queryString from 'query-string'
 import isUuid from 'is-uuid'
 
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
-import { simpleTypes as apType } from './DataFilter/ap.ts'
 import { simpleTypes as popType } from './DataFilter/pop.ts'
 import { simpleTypes as tpopType } from './DataFilter/tpop.ts'
 import { simpleTypes as tpopmassnType } from './DataFilter/tpopmassn.ts'
@@ -28,6 +27,8 @@ import {
   treeSetMapFilterAtom,
   treeNodeLabelFilterAtom,
   treeDataFilterAtom,
+  treeApGqlFilterAtom,
+  treeApGqlFilterForTreeAtom,
   treePopGqlFilterAtom,
   treePopGqlFilterForTreeAtom,
 } from '../../JotaiStore/index.ts'
@@ -96,212 +97,11 @@ export const Tree = types
     },
   }))
   .views((self) => ({
-    // TODO: migrate to jotaiStore next
     get apGqlFilter() {
-      const store = getParent(self)
-      // Access volatile property to make this getter reactive to jotai changes
-      self.nodeLabelFilterVersion
-      self.apFilterVersion
-      self.dataFilterVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const apFilter = jotaiStore.get(treeApFilterAtom)
-      const dataFilter = jotaiStore.get(treeDataFilterAtom)
-      // 1. prepare hierarchy filter
-      const singleFilterByHierarchy = {}
-      // 2. prepare data filter
-      let filterArrayInStore = dataFilter.ap ? [...dataFilter.ap] : []
-      if (filterArrayInStore.length > 1) {
-        // check if last is empty
-        // empty last is just temporary because user created new "oder" and has not yet input criteria
-        // remove it or filter result will be wrong (show all) if criteria.length > 1!
-        const last = filterArrayInStore[filterArrayInStore.length - 1]
-        const lastIsEmpty =
-          Object.values(last).filter((v) => v !== null).length === 0
-        if (lastIsEmpty) {
-          // popping did not work
-          filterArrayInStore = filterArrayInStore.slice(0, -1)
-        }
-      } else if (filterArrayInStore.length === 0) {
-        // Add empty filter if no criteria exist yet
-        // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after looping
-        filterArrayInStore.push(initialAp)
-      }
-      let setApFilter = false
-      if (apFilter) {
-        setApFilter = true
-        const conflictingFilterExists = filterArrayInStore.some((filter) => {
-          const apFilterKeys = Object.entries(filter)
-            .filter((e) => e[1] !== null)
-            .map(([key]) => key)
-          return apFilterKeys.some((val) =>
-            ['bearbeitung', 'apId'].includes(val),
-          )
-        })
-        if (conflictingFilterExists) {
-          setApFilter = false
-          jotaiStore.set(treeSetApFilterAtom, false)
-          // need timeout or notification will not appear
-          setTimeout(() =>
-            addNotification({
-              message:
-                'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
-              options: {
-                variant: 'info',
-              },
-            }),
-          )
-        }
-      }
-      const filterArray = []
-      for (const filter of filterArrayInStore) {
-        // add hierarchy filter
-        const singleFilter = { ...singleFilterByHierarchy }
-        // add apFilter
-        if (setApFilter) {
-          // add apFilter if no conflicting values are set
-          singleFilter.bearbeitung = { in: [1, 2, 3] }
-        }
-        // add data filter
-        const dataFilterAp = { ...filter }
-        const apFilterValues = Object.entries(dataFilterAp).filter(
-          (e) => e[1] !== null,
-        )
-        apFilterValues.forEach(([key, value]) => {
-          const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-          singleFilter[key] = { [expression]: value }
-        })
-        // add node label filter
-        if (nodeLabelFilter.ap) {
-          singleFilter.label = {
-            includesInsensitive: nodeLabelFilter.ap,
-          }
-        }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
-        }
-        filterArray.push(singleFilter)
-      }
-
-      // extra check
-      const filterArrayWithoutEmptyObjects = filterArray.filter(
-        (el) => Object.keys(el).length > 0,
-      )
-
-      const apGqlFilter = {
-        all:
-          Object.keys(singleFilterByHierarchy).length ?
-            singleFilterByHierarchy
-          : { or: [] },
-        filtered: { or: filterArrayWithoutEmptyObjects },
-      }
-
-      // console.log('apGqlFilter:', apGqlFilter)
-
-      return apGqlFilter
+      return jotaiStore.get(treeApGqlFilterAtom)
     },
     get apGqlFilterForTree() {
-      const store = getParent(self)
-      // Access volatile property to make this getter reactive to jotai changes
-      self.nodeLabelFilterVersion
-      self.apFilterVersion
-      self.dataFilterVersion
-      const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
-      const apFilter = jotaiStore.get(treeApFilterAtom)
-      const dataFilter = jotaiStore.get(treeDataFilterAtom)
-      // 1. prepare data filter
-      let filterArrayInStore = dataFilter.ap ? [...dataFilter.ap] : []
-      if (filterArrayInStore.length > 1) {
-        // check if last is empty
-        // empty last is just temporary because user created new "oder" and has not yet input criteria
-        // remove it or filter result will be wrong (show all) if criteria.length > 1!
-        const last = filterArrayInStore[filterArrayInStore.length - 1]
-        const lastIsEmpty =
-          Object.values(last).filter((v) => v !== null).length === 0
-        if (lastIsEmpty) {
-          // popping did not work
-          filterArrayInStore = filterArrayInStore.slice(0, -1)
-        }
-      } else if (filterArrayInStore.length === 0) {
-        // Add empty filter if no criteria exist yet
-        // Goal: enable adding filters for hierarchy, label and geometry
-        // If no filters were added: this empty element will be removed after looping
-        filterArrayInStore.push(initialAp)
-      }
-      let setApFilter = false
-      if (apFilter) {
-        setApFilter = true
-        const conflictingFilterExists = filterArrayInStore.some((filter) => {
-          const apFilterKeys = Object.entries(filter)
-            .filter((e) => e[1] !== null)
-            .map(([key]) => key)
-          return apFilterKeys.some((val) =>
-            ['bearbeitung', 'apId'].includes(val),
-          )
-        })
-        if (conflictingFilterExists) {
-          setApFilter = false
-          jotaiStore.set(treeSetApFilterAtom, false)
-          // need timeout or notification will not appear
-          setTimeout(() =>
-            addNotification({
-              message:
-                'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
-              options: {
-                variant: 'info',
-              },
-            }),
-          )
-        }
-      }
-      const filterArray = []
-      for (const filter of filterArrayInStore) {
-        // add hierarchy filter
-        const singleFilter = {}
-        // add apFilter
-        if (setApFilter) {
-          // add apFilter if no conflicting values are set
-          singleFilter.bearbeitung = { in: [1, 2, 3] }
-        }
-        // add data filter
-        const dataFilterAp = { ...filter }
-        const apFilterValues = Object.entries(dataFilterAp).filter(
-          (e) => e[1] !== null,
-        )
-        apFilterValues.forEach(([key, value]) => {
-          const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
-          singleFilter[key] = { [expression]: value }
-        })
-        // add node label filter
-        if (nodeLabelFilter.ap) {
-          singleFilter.label = {
-            includesInsensitive: nodeLabelFilter.ap,
-          }
-        }
-        // Object could be empty if no filters exist
-        // Do not add empty objects
-        if (
-          Object.values(singleFilter).filter((v) => v !== null).length === 0
-        ) {
-          break
-        }
-        filterArray.push(singleFilter)
-      }
-
-      // extra check
-      const filterArrayWithoutEmptyObjects = filterArray.filter(
-        (el) => Object.keys(el).length > 0,
-      )
-
-      const apGqlFilter = { or: filterArrayWithoutEmptyObjects }
-
-      // console.log('apGqlFilter:', apGqlFilter)
-
-      return apGqlFilter
+      return jotaiStore.get(treeApGqlFilterForTreeAtom)
     },
     get popGqlFilter() {
       return jotaiStore.get(treePopGqlFilterAtom)

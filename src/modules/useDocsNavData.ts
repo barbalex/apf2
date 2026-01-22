@@ -1,13 +1,14 @@
-import { useContext, useState, useEffect } from 'react'
-import { reaction } from 'mobx'
+import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../JotaiStore/index.ts'
+import {
+  store as jotaiStore,
+  treeNodeLabelFilterAtom,
+  treeApGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { menus } from '../components/Docs/menus.ts'
 
 export const useDocsNavData = () => {
-  const store = useContext(MobxContext)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const filterValue = nodeLabelFilter.doc
 
@@ -29,7 +30,10 @@ export const useDocsNavData = () => {
   const refetch = () => setRerenderer((prev) => prev + 1)
 
   useEffect(
-    () => reaction(() => store.tree.apGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeApGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

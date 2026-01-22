@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -29,13 +29,13 @@ import { PopIconPHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.tsx'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
   mapPopIconAtom,
   treeShowPopIconAtom,
+  treePopGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
@@ -94,12 +94,12 @@ export const usePopsNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
-  const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
+  const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
-    queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
+    queryKey: ['treePop', projId, apId, popGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -121,7 +121,7 @@ export const usePopsNavData = (props) => {
           }
         `,
         variables: {
-          popsFilter: store.tree.popGqlFilterForTree,
+          popsFilter: popGqlFilterForTree,
           apId,
         },
       })
@@ -133,11 +133,6 @@ export const usePopsNavData = (props) => {
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.popGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
@@ -167,6 +162,14 @@ export const usePopsNavData = (props) => {
   useEffect(
     () => {
       const unsub = jotaiStore.sub(copyingAtom, rerender)
+      return unsub
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
+  useEffect(
+    () => {
+      const unsub = jotaiStore.sub(treePopGqlFilterForTreeAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,5 +1,4 @@
-import { useContext, useState, useEffect, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -14,11 +13,12 @@ import { queryLists } from './queryLists.ts'
 import { queryAps } from './queryAps.ts'
 import { queryAdresses } from './queryAdresses.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   treeNodeLabelFilterAtom,
   treeDataFilterAtom,
   treeDataFilterSetValueAtom,
+  treeApFilterAtom,
+  treeApGqlFilterAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -70,11 +70,11 @@ interface AeTaxonomiesByIdQueryResult {
   }
 }
 
-export const ApFilter = observer(() => {
+export const ApFilter = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
-  const { apFilter: nurApFilter, apGqlFilter } = store.tree
+  const nurApFilter = useAtomValue(treeApFilterAtom)
+  const apGqlFilter = useAtomValue(treeApGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
@@ -317,4 +317,4 @@ export const ApFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

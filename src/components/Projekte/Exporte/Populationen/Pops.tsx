@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -13,13 +13,13 @@ import styles from '../index.module.css'
 
 import {
   addNotificationAtom,
+  treePopGqlFilterAtom,
 } from '../../../../JotaiStore/index.ts'
-
 
 export const Pops = observer(({ filtered = false }) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { popGqlFilter } = store.tree
+  const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 

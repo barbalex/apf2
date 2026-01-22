@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
@@ -15,6 +14,7 @@ import styles from '../index.module.css'
 
 import {
   addNotificationAtom,
+  treeApGqlFilterAtom,
 } from '../../../../JotaiStore/index.ts'
 
 
@@ -46,10 +46,10 @@ interface ApProps {
   filtered?: boolean
 }
 
-export const Ap = observer(({ filtered = false }: ApProps) => {
+export const Ap = ({ filtered = false }: ApProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { apGqlFilter } = store.tree
+  const apGqlFilter = useAtomValue(treeApGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 
@@ -144,4 +144,4 @@ export const Ap = observer(({ filtered = false }: ApProps) => {
       : null}
     </Button>
   )
-})
+}

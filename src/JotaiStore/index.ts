@@ -7,6 +7,7 @@ import isUuid from 'is-uuid'
 import { constants } from '../modules/constants.ts'
 import { appBaseUrl } from '../modules/appBaseUrl.ts'
 import { initialDataFilterValues } from './initialDataFilterValues.ts'
+import { simpleTypes as apType } from '../store/Tree/DataFilter/ap.ts'
 import { simpleTypes as popType } from '../store/Tree/DataFilter/pop.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
@@ -81,7 +82,10 @@ export const treePopIdInActiveNodeArrayAtom = atom((get) => {
 
 export const treeTpopIdInActiveNodeArrayAtom = atom((get) => {
   const activeNodeArray = get(treeActiveNodeArrayAtom)
-  if (activeNodeArray.length > 7 && activeNodeArray[6] === 'Teil-Populationen') {
+  if (
+    activeNodeArray.length > 7 &&
+    activeNodeArray[6] === 'Teil-Populationen'
+  ) {
     const id = activeNodeArray[7]
     if (isUuid.anyNonNil(id)) return id
   }
@@ -90,7 +94,11 @@ export const treeTpopIdInActiveNodeArrayAtom = atom((get) => {
 
 export const treeTpopkontrIdInActiveNodeArrayAtom = atom((get) => {
   const activeNodeArray = get(treeActiveNodeArrayAtom)
-  if (activeNodeArray.length > 9 && (activeNodeArray[8] === 'Feld-Kontrollen' || activeNodeArray[8] === 'Freiwilligen-Kontrollen')) {
+  if (
+    activeNodeArray.length > 9 &&
+    (activeNodeArray[8] === 'Feld-Kontrollen' ||
+      activeNodeArray[8] === 'Freiwilligen-Kontrollen')
+  ) {
     const id = activeNodeArray[9]
     if (isUuid.anyNonNil(id)) return id
   }
@@ -117,6 +125,7 @@ export const treeArtIsFilteredAtom = atom((get) => {
 })
 
 export const treePopIsFilteredAtom = atom((get) => {
+  // TODO: use jotai version of popGqlFilter here
   const popGqlFilter = store.tree.popGqlFilter
   const firstFilterObject = {
     ...(popGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -128,6 +137,7 @@ export const treePopIsFilteredAtom = atom((get) => {
 })
 
 export const treeTpopIsFilteredAtom = atom((get) => {
+  // TODO: use jotai version of tpopGqlFilter here
   const tpopGqlFilter = store.tree.tpopGqlFilter
   const firstFilterObject = {
     ...(tpopGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -139,6 +149,7 @@ export const treeTpopIsFilteredAtom = atom((get) => {
 })
 
 export const treeTpopmassnIsFilteredAtom = atom((get) => {
+  // TODO: use jotai version of tpopmassnGqlFilter here
   const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
   const firstFilterObject = {
     ...(tpopmassnGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -150,6 +161,7 @@ export const treeTpopmassnIsFilteredAtom = atom((get) => {
 })
 
 export const treeEkIsFilteredAtom = atom((get) => {
+  // TODO: use jotai version of ekGqlFilter here
   const ekGqlFilter = store.tree.ekGqlFilter
   const firstFilterObject = {
     ...(ekGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -161,6 +173,7 @@ export const treeEkIsFilteredAtom = atom((get) => {
 })
 
 export const treeEkfIsFilteredAtom = atom((get) => {
+  // TODO: use jotai version of ekfGqlFilter here
   const ekfGqlFilter = store.tree.ekfGqlFilter
   const firstFilterObject = {
     ...(ekfGqlFilter?.filtered?.or?.[0] ?? {}),
@@ -172,23 +185,204 @@ export const treeEkfIsFilteredAtom = atom((get) => {
 })
 
 // GqlFilter atoms - these build GraphQL filters
+export const treeApGqlFilterAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const apFilter = get(treeApFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+
+  // 1. prepare hierarchy filter
+  const singleFilterByHierarchy = {}
+
+  // 2. prepare data filter
+  let filterArrayInStore = dataFilter.ap ? [...dataFilter.ap] : []
+  if (filterArrayInStore.length > 1) {
+    // check if last is empty
+    // empty last is just temporary because user created new "oder" and has not yet input criteria
+    // remove it or filter result will be wrong (show all) if criteria.length > 1!
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    // Add empty filter if no criteria exist yet
+    filterArrayInStore.push(initialDataFilterValues.ap[0])
+  }
+
+  let setApFilter = false
+  if (apFilter) {
+    setApFilter = true
+    const conflictingFilterExists = filterArrayInStore.some((filter) => {
+      const apFilterKeys = Object.entries(filter)
+        .filter((e) => e[1] !== null)
+        .map(([key]) => key)
+      return apFilterKeys.some((val) => ['bearbeitung', 'apId'].includes(val))
+    })
+    if (conflictingFilterExists) {
+      setApFilter = false
+      store.set(treeSetApFilterAtom, false)
+      // need timeout or notification will not appear
+      setTimeout(() => {
+        store.set(addNotificationAtom, {
+          message:
+            'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
+          options: {
+            variant: 'info',
+          },
+        })
+      })
+    }
+  }
+
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    const singleFilter = { ...singleFilterByHierarchy }
+
+    // add apFilter
+    if (setApFilter) {
+      singleFilter.bearbeitung = { in: [1, 2, 3] }
+    }
+
+    // add data filter
+    const dataFilterAp = { ...filter }
+    const apFilterValues = Object.entries(dataFilterAp).filter(
+      (e) => e[1] !== null,
+    )
+    apFilterValues.forEach(([key, value]) => {
+      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+
+    // add node label filter
+    if (nodeLabelFilter.ap) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.ap,
+      }
+    }
+
+    // Object could be empty if no filters exist
+    if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
+      break
+    }
+    filterArray.push(singleFilter)
+  }
+
+  // extra check
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const apGqlFilter = {
+    all:
+      Object.keys(singleFilterByHierarchy).length ?
+        singleFilterByHierarchy
+      : { or: [] },
+    filtered: { or: filterArrayWithoutEmptyObjects },
+  }
+
+  return apGqlFilter
+})
+
+export const treeApGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const apFilter = get(treeApFilterAtom)
+  const dataFilter = get(treeDataFilterAtom)
+
+  // 1. prepare data filter
+  let filterArrayInStore = dataFilter.ap ? [...dataFilter.ap] : []
+  if (filterArrayInStore.length > 1) {
+    const last = filterArrayInStore[filterArrayInStore.length - 1]
+    const lastIsEmpty =
+      Object.values(last).filter((v) => v !== null).length === 0
+    if (lastIsEmpty) {
+      filterArrayInStore = filterArrayInStore.slice(0, -1)
+    }
+  } else if (filterArrayInStore.length === 0) {
+    filterArrayInStore.push(initialDataFilterValues.ap[0])
+  }
+
+  let setApFilter = false
+  if (apFilter) {
+    setApFilter = true
+    const conflictingFilterExists = filterArrayInStore.some((filter) => {
+      const apFilterKeys = Object.entries(filter)
+        .filter((e) => e[1] !== null)
+        .map(([key]) => key)
+      return apFilterKeys.some((val) => ['bearbeitung', 'apId'].includes(val))
+    })
+    if (conflictingFilterExists) {
+      setApFilter = false
+      store.set(treeSetApFilterAtom, false)
+      // need timeout or notification will not appear
+      setTimeout(() => {
+        store.set(addNotificationAtom, {
+          message:
+            'Der "nur AP"-Filter wurde ausgeschaltet. Er verträgt sich nicht mit dem Formular-Filter',
+          options: {
+            variant: 'info',
+          },
+        })
+      })
+    }
+  }
+
+  const filterArray = []
+  for (const filter of filterArrayInStore) {
+    const singleFilter = {}
+
+    // add apFilter
+    if (setApFilter) {
+      singleFilter.bearbeitung = { in: [1, 2, 3] }
+    }
+
+    // add data filter
+    const dataFilterAp = { ...filter }
+    const apFilterValues = Object.entries(dataFilterAp).filter(
+      (e) => e[1] !== null,
+    )
+    apFilterValues.forEach(([key, value]) => {
+      const expression = apType[key] === 'string' ? 'includes' : 'equalTo'
+      singleFilter[key] = { [expression]: value }
+    })
+
+    // add node label filter
+    if (nodeLabelFilter.ap) {
+      singleFilter.label = {
+        includesInsensitive: nodeLabelFilter.ap,
+      }
+    }
+
+    // Object could be empty if no filters exist
+    if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
+      break
+    }
+    filterArray.push(singleFilter)
+  }
+
+  const filterArrayWithoutEmptyObjects = filterArray.filter(
+    (el) => Object.keys(el).length > 0,
+  )
+
+  const apGqlFilter = { or: filterArrayWithoutEmptyObjects }
+
+  return apGqlFilter
+})
+
 export const treePopGqlFilterAtom = atom((get) => {
   // Access jotai atoms
   const nodeLabelFilter = get(treeNodeLabelFilterAtom)
   const mapFilter = get(treeMapFilterAtom)
   const dataFilter = get(treeDataFilterAtom)
   const apId = get(treeApIdInActiveNodeArrayAtom)
-  
+
   // Access mobx store for parent filter
   const apGqlFilter = store.tree.apGqlFilter
-  
+
   // 1. prepare hierarchy filter
   const apHiearchyFilter = apId ? { apId: { equalTo: apId } } : {}
   const projHiearchyFilter = {}
-  const singleFilterByHierarchy = merge(
-    apHiearchyFilter,
-    projHiearchyFilter,
-  )
+  const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
   const singleFilterByParentFiltersForAll = {
     apByApId: apGqlFilter.all,
   }
@@ -199,7 +393,7 @@ export const treePopGqlFilterAtom = atom((get) => {
   const singleFilterByParentFiltersForFiltered = {
     apByApId: apGqlFilter.filtered,
   }
-  
+
   // 2. prepare data filter
   let filterArrayInStore = dataFilter.pop ? [...dataFilter.pop] : []
   if (filterArrayInStore.length > 1) {
@@ -219,16 +413,13 @@ export const treePopGqlFilterAtom = atom((get) => {
     // If no filters were added: this empty element will be removed after looping
     filterArrayInStore.push(initialDataFilterValues.pop[0])
   }
-  
+
   // 3. build data filter
   const filterArray = []
   for (const filter of filterArrayInStore) {
     // add hierarchy filter
     const singleFilter = {
-      ...merge(
-        singleFilterByHierarchy,
-        singleFilterByParentFiltersForFiltered,
-      ),
+      ...merge(singleFilterByHierarchy, singleFilterByParentFiltersForFiltered),
     }
     // add data filter
     const dataFilterPop = { ...filter }
@@ -253,9 +444,7 @@ export const treePopGqlFilterAtom = atom((get) => {
     }
     // Object could be empty if no filters exist
     // Do not add empty objects
-    if (
-      Object.values(singleFilter).filter((v) => v !== null).length === 0
-    ) {
+    if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
       break
     }
     filterArray.push(singleFilter)
@@ -268,9 +457,7 @@ export const treePopGqlFilterAtom = atom((get) => {
 
   const popGqlFilter = {
     all:
-      Object.keys(singleFilterForAll).length ?
-        singleFilterForAll
-      : { or: [] },
+      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -282,7 +469,7 @@ export const treePopGqlFilterForTreeAtom = atom((get) => {
   const nodeLabelFilter = get(treeNodeLabelFilterAtom)
   const mapFilter = get(treeMapFilterAtom)
   const dataFilter = get(treeDataFilterAtom)
-  
+
   // 1. prepare data filter
   let filterArrayInStore = dataFilter.pop ? [...dataFilter.pop] : []
   if (filterArrayInStore.length > 1) {
@@ -302,7 +489,7 @@ export const treePopGqlFilterForTreeAtom = atom((get) => {
     // If no filters were added: this empty element will be removed after looping
     filterArrayInStore.push(initialDataFilterValues.pop[0])
   }
-  
+
   // 2. build data filter
   const filterArray = []
   for (const filter of filterArrayInStore) {
@@ -331,9 +518,7 @@ export const treePopGqlFilterForTreeAtom = atom((get) => {
     }
     // Object could be empty if no filters exist
     // Do not add empty objects
-    if (
-      Object.values(singleFilter).filter((v) => v !== null).length === 0
-    ) {
+    if (Object.values(singleFilter).filter((v) => v !== null).length === 0) {
       break
     }
     filterArray.push(singleFilter)
