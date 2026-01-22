@@ -20,6 +20,25 @@ function atomWithToggleAndStorage(key, initialValue, storage) {
 
 export const store = createStore()
 
+// Tree atoms (migrated from mobx)
+export const treeOpenNodesAtom = atom([])
+export const treeSetOpenNodesAtom = atom(
+  (get) => get(treeOpenNodesAtom),
+  (get, set, val) => {
+    // val should always be created from a snapshot of openNodes
+    // to ensure not mutating openNodes!!!
+    // need set to ensure contained arrays are unique
+    const uniqueSet = new Set(val.map(JSON.stringify))
+    set(treeOpenNodesAtom, Array.from(uniqueSet).map(JSON.parse))
+  },
+)
+
+export const treeActiveNodeArrayAtom = atom([])
+export const treeSetActiveNodeArrayAtom = atom(
+  (get) => get(treeActiveNodeArrayAtom),
+  (get, set, val) => set(treeActiveNodeArrayAtom, val),
+)
+
 export const newTpopFromBeobDialogOpenAtom = atomWithStorage(
   'newTpopFromBeobDialogOpen',
   false,

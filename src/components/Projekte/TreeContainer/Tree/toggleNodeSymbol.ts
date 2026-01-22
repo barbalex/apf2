@@ -1,5 +1,4 @@
 import { isEqual } from 'es-toolkit'
-import { getSnapshot } from 'mobx-state-tree'
 
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
@@ -7,20 +6,21 @@ import {
   store as jotaiStore,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../../../../JotaiStore/index.js'
 
 export const toggleNodeSymbol = ({
   node,
-  store,
   search,
   doNotSwitchToNodesParent = false,
 }) => {
   if (!node.url) throw new Error('passed node has no url')
 
   const navigate = jotaiStore.get(navigateAtom)
-  const { openNodes: openNodesRaw, setOpenNodes, activeNodeArray } = store.tree
-
-  const openNodes = getSnapshot(openNodesRaw)
+  const openNodes = jotaiStore.get(treeOpenNodesAtom)
+  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
 
   let newOpenNodes = [...openNodes]
   if (isNodeOpen({ openNodes, url: node.url })) {
@@ -41,5 +41,5 @@ export const toggleNodeSymbol = ({
     newOpenNodes.push(node.url)
   }
   jotaiStore.set(setTreeLastTouchedNodeAtom, node.url)
-  setOpenNodes(newOpenNodes)
+  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
 }

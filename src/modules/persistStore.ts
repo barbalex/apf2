@@ -8,6 +8,7 @@ import {
   store as jotaiStore,
   navigateAtom,
   userNameAtom,
+  treeActiveNodeArrayAtom,
 } from '../JotaiStore/index.ts'
 
 const blacklist = [
@@ -57,7 +58,8 @@ export const persistStore = (store) => {
     // set last activeNodeArray
     // only if top domain was visited
     if (isUser && visitedTopDomain) {
-      return navigate?.(`/Daten/${store.tree.activeNodeArray.join('/')}`)
+      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+      return navigate?.(`/Daten/${activeNodeArray.join('/')}`)    
     }
   })
 }
