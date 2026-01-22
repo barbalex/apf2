@@ -1098,6 +1098,26 @@ export const treeAssozartGqlFilterForTreeAtom = atom((get) => {
   return gqlFilter
 })
 
+export const treeErfkritGqlFilterForTreeAtom = atom((get) => {
+  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+  const gqlFilter = {}
+  // 1. hierarchy filter
+  const apId = get(treeApIdInActiveNodeArrayAtom)
+  if (apId) {
+    gqlFilter.apId = { equalTo: apId }
+  }
+  // 2. node label filter
+  if (nodeLabelFilter.erfkrit) {
+    gqlFilter.label = {
+      includesInsensitive: nodeLabelFilter.erfkrit,
+    }
+  }
+
+  if (Object.keys(gqlFilter).length === 0) return { or: [] }
+
+  return gqlFilter
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })

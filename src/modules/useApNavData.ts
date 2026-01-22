@@ -84,8 +84,8 @@ export const useApNavData = (props) => {
       zielGqlFilterForTree,
       apberGqlFilterForTree,
       apartGqlFilterForTree,
-      store.tree.erfkritGqlFilterForTree,
       assozartGqlFilterForTree,
+      erfkritGqlFilterForTree,
       store.tree.ekfrequenzGqlFilterForTree,
       store.tree.ekzaehleinheitGqlFilterForTree,
       store.tree.beobNichtBeurteiltGqlFilterForTree,
@@ -208,7 +208,7 @@ export const useApNavData = (props) => {
           apId,
           popFilter: popGqlFilterForTree,
           zielFilter: zielGqlFilterForTree,
-          erfkritFilter: store.tree.erfkritGqlFilterForTree,
+          erfkritFilter: erfkritGqlFilterForTree,
           apberFilter: apberGqlFilterForTree,
           apartFilter: apartGqlFilterForTree,
           assozartFilter: assozartGqlFilterForTree,
@@ -263,11 +263,10 @@ export const useApNavData = (props) => {
     const unsub = jotaiStore.sub(treeAssozartGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
-  useEffect(
-    () => reaction(() => store.tree.erfkritGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeErfkritGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
   useEffect(
     () => reaction(() => store.tree.ekfrequenzGqlFilterForTree, refetch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
