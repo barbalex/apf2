@@ -1,11 +1,14 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeEkfrequenzGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkfrequenzsNavData = (props) => {
@@ -14,10 +17,12 @@ export const useEkfrequenzsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const store = useContext(MobxContext)
+  const ekfrequenzGqlFilterForTree = useAtomValue(
+    treeEkfrequenzGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeEkfrequenz', apId, store.tree.ekfrequenzGqlFilterForTree],
+    queryKey: ['treeEkfrequenz', apId, ekfrequenzGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -40,7 +45,7 @@ export const useEkfrequenzsNavData = (props) => {
           }
         `,
         variables: {
-          ekfrequenzsFilter: store.tree.ekfrequenzGqlFilterForTree,
+          ekfrequenzsFilter: ekfrequenzGqlFilterForTree,
           apId,
         },
       })
@@ -49,14 +54,11 @@ export const useEkfrequenzsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.ekfrequenzGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+  // react to filter changes
+  useEffect(() => {
+    const unsub = jotaiStore.sub(treeEkfrequenzGqlFilterForTreeAtom, refetch)
+    return unsub
+  }, [])
 
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
   const rows = data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []
