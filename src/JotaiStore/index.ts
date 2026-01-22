@@ -2,6 +2,7 @@ import { createStore, atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import queryString from 'query-string'
 import { isEqual } from 'es-toolkit'
+import isUuid from 'is-uuid'
 
 import { constants } from '../modules/constants.ts'
 import { appBaseUrl } from '../modules/appBaseUrl.ts'
@@ -45,6 +46,29 @@ export const treeAddOpenNodesAtom = atom(
 )
 
 export const treeActiveNodeArrayAtom = atom([])
+
+export const treeProjIdInActiveNodeArrayAtom = atom((get) => {
+  const activeNodeArray = get(treeActiveNodeArrayAtom)
+  if (activeNodeArray.includes('Projekte')) {
+    const indexOfId = activeNodeArray.indexOf('Projekte') + 1
+    if (activeNodeArray.length > indexOfId) {
+      const id = activeNodeArray?.[indexOfId]
+      if (isUuid.anyNonNil(id)) return id
+    }
+  }
+  return undefined
+})
+
+export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
+  getOnInit: true,
+})
+export const treeSetApFilterAtom = atom(
+  (get) => null,
+  (get, set, val) => {
+    set(treeApFilterAtom, val)
+  },
+)
+
 export const treeActiveFilterTableAtom = atom((get) => {
   const activeNodeArray = get(treeActiveNodeArrayAtom)
   if (activeNodeArray.length > 10) {
