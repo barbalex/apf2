@@ -29,6 +29,9 @@ import {
   setCopyingBiotopAtom,
   movingAtom,
   setMovingAtom,
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
 } from '../../../../JotaiStore/index.ts'
 
 import type {
@@ -76,7 +79,9 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
   const setCopying = useSetAtom(setCopyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const setCopyingBiotop = useSetAtom(setCopyingBiotopAtom)
-  const { activeNodeArray, openNodes, setOpenNodes } = store.tree
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const onClickAdd = async () => {
     // 1. create new tpopkontr
