@@ -13,6 +13,9 @@ import {
   treeMapFilterAtom,
   treeApFilterAtom,
   treeDataFilterAtom,
+  treeArtIsFilteredAtom,
+  treePopIsFilteredAtom,
+  treeTpopIsFilteredAtom,
 } from '../../../../JotaiStore/index.ts'
 import { Form } from './Form/index.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -33,11 +36,14 @@ export const TpopfreiwkontrFilter = observer(() => {
 
   const store = useContext(MobxContext)
   const tree = store.tree
-  const { ekfGqlFilter, artIsFiltered, popIsFiltered, tpopIsFiltered } = tree
+  const { ekfGqlFilter } = tree
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
+  const popIsFiltered = useAtomValue(treePopIsFilteredAtom)
+  const tpopIsFiltered = useAtomValue(treeTpopIsFilteredAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {

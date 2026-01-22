@@ -301,24 +301,6 @@ export const Tree = types
 
       return apGqlFilter
     },
-    get artIsFiltered() {
-      // Access volatile property to make this getter reactive to jotai changes
-      self.apFilterVersion
-      const apFilter = jotaiStore.get(treeApFilterAtom)
-      const firstFilterObject = {
-        ...(self.apGqlFilter?.filtered?.or?.[0] ?? {}),
-      }
-      let entries = Object.entries(firstFilterObject).filter(
-        (e) => e[0] !== 'projId',
-      )
-      // if apFilter is set: ignore that value
-      if (apFilter) {
-        entries = entries.filter(
-          (e) => !(e[0] === 'bearbeitung' && isEqual(e[1], { in: [1, 2, 3] })),
-        )
-      }
-      return entries.length > 0
-    },
     get popGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
       self.nodeLabelFilterVersion
@@ -496,15 +478,6 @@ export const Tree = types
       // console.log('popGqlFilter:', popGqlFilter)
 
       return popGqlFilter
-    },
-    get popIsFiltered() {
-      const firstFilterObject = {
-        ...(self.popGqlFilter?.filtered?.or?.[0] ?? {}),
-      }
-      const entries = Object.entries(firstFilterObject).filter(
-        (e) => !['apId', 'apByApId', 'geomPoint'].includes(e[0]),
-      )
-      return entries.length > 0
     },
     get tpopGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
@@ -684,15 +657,6 @@ export const Tree = types
       // console.log('tpopGqlFilter:', tpopGqlFilter)
 
       return tpopGqlFilter
-    },
-    get tpopIsFiltered() {
-      const firstFilterObject = {
-        ...(self.tpopGqlFilter?.filtered?.or?.[0] ?? {}),
-      }
-      const entries = Object.entries(firstFilterObject).filter(
-        (e) => !['apId', 'popId', 'popByPopId', 'geomPoint'].includes(e[0]),
-      )
-      return entries.length > 0
     },
     get tpopmassnGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
@@ -885,16 +849,6 @@ export const Tree = types
       // console.log('tpopmassnGqlFilter:', tpopmassnGqlFilter)
 
       return tpopmassnGqlFilter
-    },
-    get tpopmassnIsFiltered() {
-      const firstFilterObject = {
-        ...(self.tpopmassnGqlFilter?.filtered?.or?.[0] ?? {}),
-      }
-      // console.log('tpopmassnIsFiltered, firstFilterObject:', firstFilterObject)
-      const entries = Object.entries(firstFilterObject).filter(
-        (e) => !['apId', 'popId', 'tpopByTpopId', 'geomPoint'].includes(e[0]),
-      )
-      return entries.length > 0
     },
     get tpopmassnberGqlFilterForTree() {
       // Access volatile property to make this getter reactive to jotai changes
@@ -1457,15 +1411,6 @@ export const Tree = types
 
       return ekGqlFilter
     },
-    get ekIsFiltered() {
-      const firstFilterObject = {
-        ...(self.ekGqlFilter?.filtered?.or?.[0] ?? {}),
-      }
-      const entries = Object.entries(firstFilterObject).filter(
-        (e) => !['tpopByTpopId'].includes(e[0]),
-      )
-      return entries.length > 0
-    },
     get ekfGqlFilter() {
       // Access volatile property to make this getter reactive to jotai changes
       self.mapFilterVersion
@@ -1653,15 +1598,6 @@ export const Tree = types
       // console.log('ekfGqlFilter:', ekfGqlFilter)
 
       return ekfGqlFilter
-    },
-    get ekfIsFiltered() {
-      const firstFilterObject = {
-        ...(self.ekfGqlFilter?.filtered?.or?.[0] ?? {}),
-      }
-      const entries = Object.entries(firstFilterObject).filter(
-        (e) => !['tpopByTpopId'].includes(e[0]),
-      )
-      return entries.length > 0
     },
     get tpopkontrGqlFilter() {
       return {

@@ -96,6 +96,80 @@ export const treeTpopkontrIdInActiveNodeArrayAtom = atom((get) => {
   return undefined
 })
 
+// IsFiltered atoms - these check if filters are active
+export const treeArtIsFilteredAtom = atom((get) => {
+  const apFilter = get(treeApFilterAtom)
+  const apGqlFilter = store.tree.apGqlFilter
+  const firstFilterObject = {
+    ...(apGqlFilter?.filtered?.or?.[0] ?? {}),
+  }
+  let entries = Object.entries(firstFilterObject).filter(
+    (e) => e[0] !== 'projId',
+  )
+  // if apFilter is set: ignore that value
+  if (apFilter) {
+    entries = entries.filter(
+      (e) => !(e[0] === 'bearbeitung' && isEqual(e[1], { in: [1, 2, 3] })),
+    )
+  }
+  return entries.length > 0
+})
+
+export const treePopIsFilteredAtom = atom((get) => {
+  const popGqlFilter = store.tree.popGqlFilter
+  const firstFilterObject = {
+    ...(popGqlFilter?.filtered?.or?.[0] ?? {}),
+  }
+  const entries = Object.entries(firstFilterObject).filter(
+    (e) => !['apId', 'apByApId', 'geomPoint'].includes(e[0]),
+  )
+  return entries.length > 0
+})
+
+export const treeTpopIsFilteredAtom = atom((get) => {
+  const tpopGqlFilter = store.tree.tpopGqlFilter
+  const firstFilterObject = {
+    ...(tpopGqlFilter?.filtered?.or?.[0] ?? {}),
+  }
+  const entries = Object.entries(firstFilterObject).filter(
+    (e) => !['apId', 'popId', 'popByPopId', 'geomPoint'].includes(e[0]),
+  )
+  return entries.length > 0
+})
+
+export const treeTpopmassnIsFilteredAtom = atom((get) => {
+  const tpopmassnGqlFilter = store.tree.tpopmassnGqlFilter
+  const firstFilterObject = {
+    ...(tpopmassnGqlFilter?.filtered?.or?.[0] ?? {}),
+  }
+  const entries = Object.entries(firstFilterObject).filter(
+    (e) => !['apId', 'popId', 'tpopByTpopId', 'geomPoint'].includes(e[0]),
+  )
+  return entries.length > 0
+})
+
+export const treeEkIsFilteredAtom = atom((get) => {
+  const ekGqlFilter = store.tree.ekGqlFilter
+  const firstFilterObject = {
+    ...(ekGqlFilter?.filtered?.or?.[0] ?? {}),
+  }
+  const entries = Object.entries(firstFilterObject).filter(
+    (e) => !['tpopByTpopId'].includes(e[0]),
+  )
+  return entries.length > 0
+})
+
+export const treeEkfIsFilteredAtom = atom((get) => {
+  const ekfGqlFilter = store.tree.ekfGqlFilter
+  const firstFilterObject = {
+    ...(ekfGqlFilter?.filtered?.or?.[0] ?? {}),
+  }
+  const entries = Object.entries(firstFilterObject).filter(
+    (e) => !['tpopByTpopId'].includes(e[0]),
+  )
+  return entries.length > 0
+})
+
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
