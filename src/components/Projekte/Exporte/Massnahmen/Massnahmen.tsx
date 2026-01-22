@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
@@ -19,7 +19,10 @@ import {
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import {
+  addNotificationAtom,
+  treeTpopmassnGqlFilterAtom,
+} from '../../../../JotaiStore/index.ts'
 
 interface TpopmassnQueryResult {
   allTpopmassns: {
@@ -136,7 +139,7 @@ interface MassnahmenProps {
 export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const store = useContext(MobxContext)
-  const { tpopmassnGqlFilter } = store.tree
+  const tpopmassnGqlFilter = useAtomValue(treeTpopmassnGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 

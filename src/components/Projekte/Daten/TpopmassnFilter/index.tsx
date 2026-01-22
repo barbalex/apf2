@@ -1,5 +1,4 @@
-import { useContext, useState, useEffect, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -15,7 +14,6 @@ import { DateField } from '../../../shared/Date.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -25,6 +23,7 @@ import {
   treeArtIsFilteredAtom,
   treePopIsFilteredAtom,
   treeTpopIsFilteredAtom,
+  treeTpopmassnGqlFilterAtom,
 } from '../../../../JotaiStore/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -67,11 +66,10 @@ interface TpopmassnsFilterQueryResult {
 
 import styles from './index.module.css'
 
-export const TpopmassnFilter = observer(() => {
+export const TpopmassnFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
-  const { tpopmassnGqlFilter } = store.tree
+  const tpopmassnGqlFilter = useAtomValue(treeTpopmassnGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
   const apFilter = useAtomValue(treeApFilterAtom)
@@ -380,4 +378,4 @@ export const TpopmassnFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

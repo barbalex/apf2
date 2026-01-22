@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
@@ -14,6 +13,7 @@ import {
   mapActiveApfloraLayersAtom,
   mapTpopIconAtom,
   treeShowTpopIconAtom,
+  treeTpopmassnGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
@@ -51,6 +51,9 @@ export const useTpopNavData = (props) => {
   const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
+  const tpopmassnGqlFilterForTree = useAtomValue(
+    treeTpopmassnGqlFilterForTreeAtom,
+  )
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -65,8 +68,7 @@ export const useTpopNavData = (props) => {
     queryKey: [
       'treeTpop',
       tpopId,
-      store.tree.tpopmassnGqlFilterForTree,
-      store.tree.tpopmassnberGqlFilterForTree,
+      tpopmassnGqlFilterForTree,
       store.tree.ekGqlFilterForTree,
       store.tree.ekfGqlFilterForTree,
       store.tree.tpopberGqlFilterForTree,
@@ -151,7 +153,7 @@ export const useTpopNavData = (props) => {
         `,
         variables: {
           tpopId,
-          tpopmassnFilter: store.tree.tpopmassnGqlFilterForTree,
+          tpopmassnFilter: tpopmassnGqlFilterForTree,
           tpopmassnberFilter: store.tree.tpopmassnberGqlFilterForTree,
           tpopfeldkontrFilter: store.tree.ekGqlFilterForTree,
           tpopfreiwkontrFilter: store.tree.ekfGqlFilterForTree,
@@ -168,7 +170,10 @@ export const useTpopNavData = (props) => {
     suspense: true,
   })
   useEffect(
-    () => reaction(() => store.tree.tpopmassnGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeTpopmassnGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

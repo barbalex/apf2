@@ -1,16 +1,15 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
+  treeTpopmassnGqlFilterForTreeAtom,
 } from '../JotaiStore/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -24,11 +23,13 @@ export const useTpopmassnsNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
+  const tpopmassnGqlFilterForTree = useAtomValue(
+    treeTpopmassnGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeTpopmassn', tpopId, store.tree.tpopmassnGqlFilterForTree],
+    queryKey: ['treeTpopmassn', tpopId, tpopmassnGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -55,7 +56,7 @@ export const useTpopmassnsNavData = (props) => {
           }
         `,
         variables: {
-          tpopmassnsFilter: store.tree.tpopmassnGqlFilterForTree,
+          tpopmassnsFilter: tpopmassnGqlFilterForTree,
           tpopId,
         },
       })
@@ -68,7 +69,10 @@ export const useTpopmassnsNavData = (props) => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () => reaction(() => store.tree.tpopmassnGqlFilterForTree, refetch),
+    () => {
+      const unsub = jotaiStore.sub(treeTpopmassnGqlFilterForTreeAtom, refetch)
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

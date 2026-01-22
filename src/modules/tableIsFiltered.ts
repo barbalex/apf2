@@ -21,6 +21,7 @@ export const tableIsFiltered = ({ table, tree }) => {
   }
   // check data and hierarchy filter: is included in gqlFilter
   // check gql filter
+  // TODO: use jotai store instead of mobx store
   const gqlFilter = tree?.[`${table}GqlFilter`]?.filtered?.or?.[0] ?? {}
   const isGqlFilter = Object.keys(gqlFilter).length > 0
   return isGqlFilter
