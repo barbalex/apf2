@@ -5,11 +5,17 @@ import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 import { getSnapshot } from 'mobx-state-tree'
+import { useSetAtom, useAtomValue } from 'jotai'
 
 import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.tsx'
 import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import {
+  treeOpenNodesAtom,
+  treeSetOpenNodesAtom,
+  treeActiveNodeArrayAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import styles from './index.module.css'
 
@@ -19,15 +25,12 @@ export const ApFilter = observer(({ color }) => {
   const { search } = useLocation()
 
   const store = useContext(MobxContext)
-  const {
-    apFilter,
-    setApFilter,
-    activeNodeArray,
-    openNodes: openNodesRaw,
-    setOpenNodes,
-  } = store.tree
+  const { apFilter, setApFilter } = store.tree
+  const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
   const aNA = getSnapshot(activeNodeArray)
+  const openNodesRaw = useAtomValue(treeOpenNodesAtom)
   const openNodes = getSnapshot(openNodesRaw)
+  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()

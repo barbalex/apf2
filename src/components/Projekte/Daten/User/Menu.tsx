@@ -92,6 +92,8 @@ export const Menu = observer(
     const navigate = useNavigate()
 
     const store = useContext(MobxContext)
+    const openNodes = useAtomValue(treeOpenNodesAtom)
+    const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
     const apolloClient = useApolloClient()
     const tsQueryClient = useQueryClient()
