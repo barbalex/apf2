@@ -103,7 +103,6 @@ export const TpopmassnFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: Infinity,
     gcTime: Infinity,
   })

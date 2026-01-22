@@ -71,7 +71,6 @@ export const PopFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const row = dataFilterPop[activeTab]

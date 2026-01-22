@@ -100,7 +100,6 @@ export const ApFilter = observer(() => {
       if (result.error) throw result.error
       return result
     },
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 

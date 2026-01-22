@@ -68,7 +68,6 @@ export const TpopfreiwkontrFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const navApFilterComment =

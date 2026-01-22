@@ -138,7 +138,6 @@ export const TpopfeldkontrFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const [tab, setTab] = useSearchParamsState('feldkontrTab', 'entwicklung')
