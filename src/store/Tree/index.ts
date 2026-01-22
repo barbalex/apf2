@@ -45,7 +45,23 @@ export const Tree = types
     mapFilter: types.maybe(Geojson),
     mapFilterResetter: types.optional(types.number, 0),
   })
+  .volatile(() => ({
+    // Track nodeLabelFilter changes to make getters reactive
+    nodeLabelFilterVersion: 0,
+  }))
   .actions((self) => ({
+    incrementNodeLabelFilterVersion() {
+      self.nodeLabelFilterVersion += 1
+    },
+    afterCreate() {
+      // Subscribe to jotai atom changes and increment version to trigger mobx reactions
+      jotaiStore.sub(treeNodeLabelFilterAtom, () => {
+        // Use queueMicrotask to avoid synchronous mutation during jotai update
+        queueMicrotask(() => {
+          self.incrementNodeLabelFilterVersion()
+        })
+      })
+    },
     incrementMapFilterResetter() {
       self.mapFilterResetter += 1
     },
@@ -108,6 +124,8 @@ export const Tree = types
     },
     get apGqlFilter() {
       const store = getParent(self)
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const singleFilterByHierarchy = {}
@@ -210,6 +228,8 @@ export const Tree = types
     },
     get apGqlFilterForTree() {
       const store = getParent(self)
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
@@ -318,6 +338,7 @@ export const Tree = types
       return entries.length > 0
     },
     get popGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -416,6 +437,8 @@ export const Tree = types
       return popGqlFilter
     },
     get popGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
@@ -494,6 +517,7 @@ export const Tree = types
       return entries.length > 0
     },
     get tpopGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -593,6 +617,8 @@ export const Tree = types
       return tpopGqlFilter
     },
     get tpopGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
@@ -672,6 +698,7 @@ export const Tree = types
       return entries.length > 0
     },
     get tpopmassnGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -780,6 +807,8 @@ export const Tree = types
       return tpopmassnGqlFilter
     },
     get tpopmassnGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
@@ -866,6 +895,8 @@ export const Tree = types
       return entries.length > 0
     },
     get tpopmassnberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -885,6 +916,8 @@ export const Tree = types
       return gqlFilter
     },
     get tpopkontrzaehlEinheitWerteGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
@@ -900,6 +933,8 @@ export const Tree = types
       return gqlFilter
     },
     get ekAbrechnungstypWerteGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
@@ -915,6 +950,8 @@ export const Tree = types
       return gqlFilter
     },
     get tpopApberrelevantGrundWerteGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // include a condition that ensures a filter is always set
       const gqlFilter = { id: { isNull: false } }
@@ -929,6 +966,8 @@ export const Tree = types
       return gqlFilter
     },
     get adresseGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
@@ -944,6 +983,8 @@ export const Tree = types
       return gqlFilter
     },
     get userGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter: none
@@ -959,6 +1000,8 @@ export const Tree = types
       return gqlFilter
     },
     get apberuebersichtGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // node label filter
@@ -973,6 +1016,8 @@ export const Tree = types
       return gqlFilter
     },
     get zielGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -995,6 +1040,8 @@ export const Tree = types
       return gqlFilter
     },
     get apberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1014,6 +1061,8 @@ export const Tree = types
       return gqlFilter
     },
     get apartGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1033,6 +1082,8 @@ export const Tree = types
       return gqlFilter
     },
     get assozartGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1052,6 +1103,8 @@ export const Tree = types
       return gqlFilter
     },
     get erfkritGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1071,6 +1124,8 @@ export const Tree = types
       return gqlFilter
     },
     get ekfrequenzGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1090,6 +1145,8 @@ export const Tree = types
       return gqlFilter
     },
     get ekzaehleinheitGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1109,6 +1166,8 @@ export const Tree = types
       return gqlFilter
     },
     get popberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1128,6 +1187,8 @@ export const Tree = types
       return gqlFilter
     },
     get popmassnberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1147,6 +1208,8 @@ export const Tree = types
       return gqlFilter
     },
     get tpopkontrzaehlGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1166,6 +1229,8 @@ export const Tree = types
       return gqlFilter
     },
     get tpopberGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const gqlFilter = {}
       // 1. hierarchy filter
@@ -1185,6 +1250,7 @@ export const Tree = types
       return gqlFilter
     },
     get ekGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1298,6 +1364,8 @@ export const Tree = types
       return ekGqlFilter
     },
     get ekGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
@@ -1380,6 +1448,7 @@ export const Tree = types
       return entries.length > 0
     },
     get ekfGqlFilter() {
+      // Access volatile property to make this getter reactive to jotai changes
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare hierarchy filter
       const apId = self.apIdInActiveNodeArray
@@ -1487,6 +1556,8 @@ export const Tree = types
       return ekfGqlFilter
     },
     get ekfGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // 1. prepare data filter
       let filterArrayInStore =
@@ -1574,6 +1645,7 @@ export const Tree = types
       }
     },
     beobGqlFilter(type) {
+      // Access volatile property to make this getter reactive to jotai changes
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       // type can be: nichtBeurteilt, nichtZuzuordnen, zugeordnet
       // 1. prepare hierarchy filter
@@ -1693,6 +1765,8 @@ export const Tree = types
       return beobGqlFilter
     },
     get beobNichtBeurteiltGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
@@ -1717,6 +1791,8 @@ export const Tree = types
       return filter
     },
     get beobNichtZuzuordnenGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
@@ -1740,6 +1816,8 @@ export const Tree = types
       return filter
     },
     get beobZugeordnetGqlFilterForTree() {
+      // Access volatile property to make this getter reactive to jotai changes
+      self.nodeLabelFilterVersion
       const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
       const filter = {
         wgs84Lat: { isNull: false },
