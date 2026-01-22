@@ -1,21 +1,26 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopkontrzaehlEinheitWertesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const tpopkontrzaehlEinheitWerteGqlFilterForTree = useAtomValue(
+    treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
     queryKey: [
       'treeTpopkontrzaehlEinheitWerte',
-      store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+      tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -38,7 +43,7 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
           }
         `,
         variables: {
-          filter: store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+          filter: tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -50,11 +55,13 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
-    () =>
-      reaction(
-        () => store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+    () => {
+      const unsub = jotaiStore.sub(
+        treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
         refetch,
-      ),
+      )
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )

@@ -3,14 +3,22 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
 import { MobxContext } from '../mobxContext.ts'
+import {
+  store as jotaiStore,
+  treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+} from '../JotaiStore/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useWertesNavData = () => {
   const apolloClient = useApolloClient()
 
   const store = useContext(MobxContext)
+  const tpopkontrzaehlEinheitWerteGqlFilterForTree = useAtomValue(
+    treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+  )
 
   const { data, refetch } = useQuery({
     queryKey: [
@@ -18,7 +26,7 @@ export const useWertesNavData = () => {
       store.tree.adresseGqlFilterForTree,
       store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
       store.tree.ekAbrechnungstypWerteGqlFilterForTree,
-      store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+      tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -68,7 +76,7 @@ export const useWertesNavData = () => {
           ekAbrechnungstypWerteFilter:
             store.tree.ekAbrechnungstypWerteGqlFilterForTree,
           tpopkontrzaehlEinheitWerteFilter:
-            store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+            tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -98,11 +106,13 @@ export const useWertesNavData = () => {
     [],
   )
   useEffect(
-    () =>
-      reaction(
-        () => store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+    () => {
+      const unsub = jotaiStore.sub(
+        treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
         refetch,
-      ),
+      )
+      return unsub
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
