@@ -26,24 +26,16 @@ import {
   treeSetMapFilterAtom,
 } from './JotaiStore/index.ts'
 
-import type { MobxStore } from './store/index.ts'
-
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-interface BuildApolloClientParams {
-  store: Instance<typeof MobxStore>
-}
-
 interface JwtPayload {
   exp: number
 }
 
-export const buildApolloClient = ({
-  store,
-}: BuildApolloClientParams): ApolloClient<NormalizedCacheObject> => {
+export const buildApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
   const authLink = setContext((_, { headers }) => {
