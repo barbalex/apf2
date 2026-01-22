@@ -1,23 +1,19 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { toJS } from 'mobx'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
+import { useAtomValue } from 'jotai'
 
 import { MenuItem } from './MenuItem.tsx'
-import { MobxContext } from '../../../mobxContext.ts'
+import { treeNodeLabelFilterAtom } from '../../../JotaiStore/index.ts'
 import { menus } from '../menus.ts'
 
 import styles from './MenuItems.module.css'
 
-export const MenuItems = observer(() => {
-  const store = useContext(MobxContext)
+export const MenuItems = () => {
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const nodesFiltered = menus.filter((node) => {
-    if (!store.tree.nodeLabelFilter.doc) return true
-    return (
-      node.label?.toLowerCase?.()?.includes?.(store.tree.nodeLabelFilter.doc) ??
-      true
-    )
+    if (!nodeLabelFilter.doc) return true
+    return node.label?.toLowerCase?.()?.includes?.(nodeLabelFilter.doc) ?? true
   })
 
   return (
@@ -27,9 +23,9 @@ export const MenuItems = observer(() => {
         <MenuItem
           key={node?.id}
           node={node}
-          highlightSearchString={store.tree.nodeLabelFilter.doc}
+          highlightSearchString={nodeLabelFilter.doc}
         />
       ))}
     </List>
   )
-})
+}
