@@ -1,4 +1,3 @@
-import { useEffect, useMemo } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -6,10 +5,7 @@ import { useParams } from 'react-router'
 import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeZielGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeZielGqlFilterForTreeAtom } from '../store/index.ts'
 
 const getZieljahrsCount = (ziels) => {
   const jahrs = countBy(ziels, (e) => e.jahr)
@@ -25,7 +21,7 @@ export const useZieljahrsNavData = (props) => {
 
   const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeZieljahrs', apId, zielGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -62,11 +58,6 @@ export const useZieljahrsNavData = (props) => {
     },
     suspense: true,
   })
-  // react to filter changes
-  useEffect(() => {
-    const unsub = store.sub(treeZielGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
 
   const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
   const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
