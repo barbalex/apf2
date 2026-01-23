@@ -1,6 +1,5 @@
 import { useRef, useContext, Suspense } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -20,7 +19,6 @@ import {
 } from '../fragments'
 import { Uploader } from '../Uploader/index.tsx'
 import { UploaderContext } from '../../../UploaderContext.ts'
-import { MobxContext } from '../../../mobxContext.ts'
 import { Menu } from './Menu/index.tsx'
 
 import './index.css'
@@ -57,10 +55,9 @@ const fragmentObject = {
   tpopmassn: tpopmassnFileFragment,
 }
 
-export const FilesRouter = observer(
+export const FilesRouter =
   ({ parentId = '99999999-9999-9999-9999-999999999999', parent }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-    const store = useContext(MobxContext)
     const { fileId } = useParams()
     const { search } = useLocation()
     const navigate = useNavigate()
@@ -205,5 +202,4 @@ export const FilesRouter = observer(
         </div>
       </ErrorBoundary>
     )
-  },
-)
+  }
