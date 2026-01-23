@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import { isEqual } from 'es-toolkit'
 import Button from '@mui/material/Button'
 
@@ -22,7 +21,7 @@ import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/i
 
 import styles from '../Tpop/Menu.module.css'
 
-export const Menu = observer(() => {
+export const Menu = () => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, beobId, tpopId } = useParams<{
@@ -161,4 +160,4 @@ export const Menu = observer(() => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}
