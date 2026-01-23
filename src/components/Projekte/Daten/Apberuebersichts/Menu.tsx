@@ -21,10 +21,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.ts'
 import type { ProjId } from '../../../../models/apflora/Proj.ts'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface CreateApberuebersichtResult {
   data?: {
@@ -107,4 +104,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-}
+})
