@@ -28,7 +28,7 @@ export const useTpopmassnsNavData = (props) => {
     treeTpopmassnGqlFilterForTreeAtom,
   )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeTpopmassn', tpopId, tpopmassnGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -38,12 +38,10 @@ export const useTpopmassnsNavData = (props) => {
             $tpopId: UUID!
           ) {
             tpopById(id: $tpopId) {
-              id
               tpopmassnsByTpopId(
                 filter: $tpopmassnsFilter
                 orderBy: [JAHR_ASC, DATUM_ASC]
               ) {
-                totalCount
                 nodes {
                   id
                   label
@@ -65,17 +63,10 @@ export const useTpopmassnsNavData = (props) => {
     },
     suspense: true,
   })
+
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => {
-      const unsub = store.sub(treeTpopmassnGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
@@ -96,7 +87,7 @@ export const useTpopmassnsNavData = (props) => {
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopmassnsByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {
@@ -156,8 +147,9 @@ export const useTpopmassnsNavData = (props) => {
         hasChildren: true,
         fetcherName: 'useTpopmassnNavData',
         fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }
