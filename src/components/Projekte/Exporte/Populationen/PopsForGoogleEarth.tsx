@@ -13,10 +13,7 @@ import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface PopKmlQueryResult {
   allPops: {
@@ -105,9 +102,7 @@ export const PopsForGoogleEarth = observer(() => {
         exportModule({
           data: sortBy(rows, ['art', 'label']),
           fileName: 'Populationen',
-          store,
           kml: true,
-          apolloClient,
         })
         setQueryState(undefined)
       }}

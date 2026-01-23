@@ -14,10 +14,7 @@ import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface PopLastCountWithMassnsQueryResult {
   allPops: {
@@ -223,8 +220,6 @@ export const LetzteZaehlungInklAnpflanz = observer(() => {
           data: sortBy(rows, ['artname', 'pop_nr']),
           fileName: 'PopLetzteZaehlungenInklMassn',
           idKey: 'pop_id',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
