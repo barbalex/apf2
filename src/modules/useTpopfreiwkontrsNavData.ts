@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import {
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   treeEkfGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
@@ -67,7 +67,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeEkfGqlFilterForTreeAtom, refetch)
+      const unsub = store.sub(treeEkfGqlFilterForTreeAtom, refetch)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +79,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
   const moving = useAtomValue(movingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,7 +87,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

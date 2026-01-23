@@ -2,13 +2,13 @@ import { useEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import {
-  store as jotaiStore,
+  store,
   tsQueryClientAtom,
 } from '../../store/index.ts'
 
 export const QueryClientSetter = () => {
   const tsQueryClient = useQueryClient()
-  const tsQueryClientInstore = jotaiStore.get(tsQueryClientAtom)
+  const tsQueryClientInstore = store.get(tsQueryClientAtom)
 
   const wasSet = useRef(false)
 
@@ -18,7 +18,7 @@ export const QueryClientSetter = () => {
     // only because of strict mode?
     if (wasSet.current) return
 
-    jotaiStore.set(tsQueryClientAtom, tsQueryClient)
+    store.set(tsQueryClientAtom, tsQueryClient)
     wasSet.current = true
   }, [tsQueryClient, tsQueryClientInstore])
 

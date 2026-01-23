@@ -3,7 +3,7 @@ import { isEqual } from 'es-toolkit'
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { isNodeInActiveNodePath } from '../isNodeInActiveNodePath.ts'
 import {
-  store as jotaiStore,
+  store,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
   treeOpenNodesAtom,
@@ -18,9 +18,9 @@ export const toggleNodeSymbol = ({
 }) => {
   if (!node.url) throw new Error('passed node has no url')
 
-  const navigate = jotaiStore.get(navigateAtom)
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
-  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const navigate = store.get(navigateAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
+  const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
   let newOpenNodes = [...openNodes]
   if (isNodeOpen({ openNodes, url: node.url })) {
@@ -40,6 +40,6 @@ export const toggleNodeSymbol = ({
   } else {
     newOpenNodes.push(node.url)
   }
-  jotaiStore.set(setTreeLastTouchedNodeAtom, node.url)
-  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
+  store.set(setTreeLastTouchedNodeAtom, node.url)
+  store.set(treeSetOpenNodesAtom, newOpenNodes)
 }

@@ -31,7 +31,7 @@ import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 import {
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   mapPopIconAtom,
   treeShowPopIconAtom,
   treePopGqlFilterForTreeAtom,
@@ -135,7 +135,7 @@ export const usePopsNavData = (props) => {
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(mapPopIconAtom, rerender)
+      const unsub = store.sub(mapPopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -143,7 +143,7 @@ export const usePopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeShowPopIconAtom, rerender)
+      const unsub = store.sub(treeShowPopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -151,7 +151,7 @@ export const usePopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -159,7 +159,7 @@ export const usePopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,8 +169,8 @@ export const usePopsNavData = (props) => {
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
 
-  const popIconName = jotaiStore.get(mapPopIconAtom)
-  const showPopIcon = jotaiStore.get(treeShowPopIconAtom)
+  const popIconName = store.get(mapPopIconAtom)
+  const showPopIcon = store.get(treeShowPopIconAtom)
 
   const navData = {
     id: 'Populationen',

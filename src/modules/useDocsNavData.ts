@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeNodeLabelFilterAtom,
   treeApGqlFilterForTreeAtom,
 } from '../store/index.ts'
@@ -31,7 +31,7 @@ export const useDocsNavData = () => {
 
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeApGqlFilterForTreeAtom, rerender)
+      const unsub = store.sub(treeApGqlFilterForTreeAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeTpopkontrzaehlGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -67,7 +67,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
   })
   // react to filter changes
   useEffect(() => {
-    const unsub = jotaiStore.sub(
+    const unsub = store.sub(
       treeTpopkontrzaehlGqlFilterForTreeAtom,
       refetch,
     )

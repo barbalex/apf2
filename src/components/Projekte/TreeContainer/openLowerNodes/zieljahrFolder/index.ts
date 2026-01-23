@@ -6,7 +6,7 @@
  */
 import { query } from './query.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   treeAddOpenNodesAtom,
 } from '../../../../../store/index.ts'
@@ -16,7 +16,7 @@ export const zieljahrFolder = async ({
   projId = '99999999-9999-9999-9999-999999999999',
   jahr: jahrString,
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   const jahr = +jahrString
 
   // 1. load all data
@@ -47,5 +47,5 @@ export const zieljahrFolder = async ({
   })
 
   // 3. update
-  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes)
 }

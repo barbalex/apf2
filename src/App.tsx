@@ -17,7 +17,7 @@ import { theme } from './utils/materialTheme.ts'
 import { initializeIdb } from './modules/initializeIdb.ts'
 import { buildApolloClient } from './apolloClient.ts'
 
-import { store as jotaiStore } from './store/index.ts'
+import { store } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
 
@@ -79,7 +79,7 @@ export const App = () => {
   }, [])
 
   return (
-    <JotaiProvider store={jotaiStore}>
+    <JotaiProvider store={store}>
       <ApolloProvider client={apolloClient}>
         <QueryClientProvider client={queryClient}>
           <StyledEngineProvider injectFirst>

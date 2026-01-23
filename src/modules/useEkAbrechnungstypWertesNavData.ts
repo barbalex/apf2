@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'

@@ -8,7 +8,7 @@ import {
   copyingAtom,
   copyingBiotopAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   treeEkGqlFilterForTreeAtom,
 } from '../store/index.ts'
 
@@ -74,7 +74,7 @@ export const useTpopfeldkontrsNavData = (props) => {
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeEkGqlFilterForTreeAtom, refetch)
+      const unsub = store.sub(treeEkGqlFilterForTreeAtom, refetch)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,7 +87,7 @@ export const useTpopfeldkontrsNavData = (props) => {
   const moving = useAtomValue(movingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -95,7 +95,7 @@ export const useTpopfeldkontrsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

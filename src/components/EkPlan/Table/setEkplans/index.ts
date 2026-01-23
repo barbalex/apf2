@@ -3,20 +3,20 @@ import { queryEkfrequenz } from './queryEkfrequenz.js'
 import { mutationDeleteEkplan } from './mutationDeleteEkplan.js'
 import { mutationCreateEkplan } from './mutationCreateEkplan.js'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   addNotificationAtom,
 } from '../../../../store/index.js'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const setEkplans = async ({
   tpopId,
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   // TODO:
   // only return if set ekfrequenz has kontrolljahre?
   // but then: query ekplans beginning when? This year

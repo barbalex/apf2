@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeErfkritGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'

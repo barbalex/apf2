@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treePopberGqlFilterForTreeAtom,
 } from '../store/index.ts'
 

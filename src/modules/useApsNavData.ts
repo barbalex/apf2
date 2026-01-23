@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import {
-  store as jotaiStore,
+  store,
   treeApGqlFilterForTreeAtom,
 } from '../store/index.ts'
 

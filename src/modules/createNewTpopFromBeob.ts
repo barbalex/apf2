@@ -4,7 +4,7 @@ import { isEqual } from 'date-fns/isEqual'
 import { gql } from '@apollo/client'
 
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
@@ -22,7 +22,7 @@ import {
 } from '../components/shared/fragments.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 const createTpop = gql`
   mutation createTpopFroCreateNewTpopFromBeob(
@@ -99,11 +99,11 @@ export const createNewTpopFromBeob = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   search,
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const navigate = jotaiStore.get(navigateAtom)
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
-  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const navigate = store.get(navigateAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
+  const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   let beobResult
   try {
     beobResult = await apolloClient.query({
@@ -246,7 +246,7 @@ export const createNewTpopFromBeob = async ({
     // and remove old node
     .filter((n) => !isEqual(n, activeNodeArray))
 
-  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   tsQueryClient.invalidateQueries({
@@ -273,5 +273,5 @@ export const createNewTpopFromBeob = async ({
   tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
-  jotaiStore.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
+  store.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
 }

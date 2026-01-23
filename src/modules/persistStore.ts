@@ -1,7 +1,7 @@
 import localForage from 'localforage'
 
 import {
-  store as jotaiStore,
+  store,
   navigateAtom,
   userNameAtom,
   treeActiveNodeArrayAtom,
@@ -12,8 +12,8 @@ const blacklist = [
 ]
 
 export const persistStore = () => {
-  const username = jotaiStore.get(userNameAtom)
-  const navigate = jotaiStore.get(navigateAtom)
+  const username = store.get(userNameAtom)
+  const navigate = store.get(navigateAtom)
 
   const visitedTopDomain = window.location.pathname === '/'
 
@@ -22,7 +22,7 @@ export const persistStore = () => {
   // set last activeNodeArray
   // only if top domain was visited
   if (isUser && visitedTopDomain) {
-    const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+    const activeNodeArray = store.get(treeActiveNodeArrayAtom)
     return navigate?.(`/Daten/${activeNodeArray.join('/')}`)
   }
 }

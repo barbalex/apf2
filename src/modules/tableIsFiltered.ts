@@ -1,5 +1,5 @@
 import {
-  store as jotaiStore,
+  store,
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
   getGqlFilterAtomByTable,
@@ -7,11 +7,11 @@ import {
 
 export const tableIsFiltered = ({ table }) => {
   // check nodeLabelFilter
-  const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+  const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
   const nodeLabelFilterExists = !!nodeLabelFilter[table]
   if (nodeLabelFilterExists) return true
   // check mapFilter in tables with (parent) coordinates
-  const mapFilter = jotaiStore.get(treeMapFilterAtom)
+  const mapFilter = store.get(treeMapFilterAtom)
   if (
     ['pop', 'tpop', 'tpopfeldkontr', 'tpopfreiwkontr', 'tpopmassn'].includes(
       table,
@@ -25,7 +25,7 @@ export const tableIsFiltered = ({ table }) => {
   const gqlFilterAtom = getGqlFilterAtomByTable(table)
   if (!gqlFilterAtom) return false
 
-  const gqlFilter = jotaiStore.get(gqlFilterAtom)?.filtered?.or?.[0] ?? {}
+  const gqlFilter = store.get(gqlFilterAtom)?.filtered?.or?.[0] ?? {}
   const isGqlFilter = Object.keys(gqlFilter).length > 0
   return isGqlFilter
 }

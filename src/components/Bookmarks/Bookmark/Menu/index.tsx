@@ -14,7 +14,7 @@ import {
   treeActiveNodeArrayAtom,
   treeActiveFilterTableAtom,
   treeNodeLabelFilterAtom,
-  store as jotaiStore,
+  store,
 } from '../../../../store/index.ts'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { usePrevious } from '../../../../modules/usePrevious.ts'
@@ -37,8 +37,8 @@ const StyledMenu = styled((props) => <MuiMenu {...props} />)(() => ({
 
 export const Menu = ({ navData }) => {
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
-  const activeFilterTable = jotaiStore.get(treeActiveFilterTableAtom)
-  const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+  const activeFilterTable = store.get(treeActiveFilterTableAtom)
+  const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
 
   const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
 

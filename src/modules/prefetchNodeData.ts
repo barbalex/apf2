@@ -24,7 +24,7 @@ import { query as beobQuery } from '../components/Projekte/Daten/Beob/query.ts'
 import { query as apberuebersichtQuery } from '../components/Projekte/Daten/Apberuebersicht/query.ts'
 
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
 } from '../store/index.js'
@@ -156,8 +156,8 @@ const nodeQueryConfigs: Record<string, NodeQueryConfig> = {
 
 export const prefetchNodeData = async (node: any) => {
   const { menuType, tableId, id } = node
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
 
   // Only prefetch for node types we have queries for
   const config = nodeQueryConfigs[menuType]

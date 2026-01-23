@@ -3,16 +3,16 @@
 import { omit } from 'es-toolkit'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
   exportFileTypeAtom,
 } from '../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const exportModule = async ({ data: dataPassed, fileName, kml }) => {
-  const exportFileType = jotaiStore.get(exportFileTypeAtom)
+  const exportFileType = store.get(exportFileTypeAtom)
   let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   // TODO: filter by dataFilterState

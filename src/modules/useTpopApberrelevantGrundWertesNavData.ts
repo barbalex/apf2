@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -57,7 +57,7 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(
+      const unsub = store.sub(
         treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
         refetch,
       )

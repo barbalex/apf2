@@ -6,7 +6,7 @@ import { gql } from '@apollo/client'
 
 import { tables } from '../../../../../modules/tables.js'
 import {
-  store as jotaiStore,
+  store,
   tsQueryClientAtom,
   apolloClientAtom,
   addNotificationAtom,
@@ -20,16 +20,16 @@ import {
 } from '../../../../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 const isFreiwilligenKontrolle = (activeNodeArray) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
 export const deleteModule = async ({ search }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const navigate = jotaiStore.get(navigateAtom)
-  const toDelete = jotaiStore.get(toDeleteAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const navigate = store.get(navigateAtom)
+  const toDelete = store.get(toDeleteAtom)
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === toDelete.table)
@@ -93,7 +93,7 @@ export const deleteModule = async ({ search }) => {
   data = omit(data, ['__typename'])
 
   // add to datasetsDeleted
-  jotaiStore.set(addDeletedDatasetAtom, {
+  store.set(addDeletedDatasetAtom, {
     table,
     id: toDelete.id,
     label: toDelete.label,
@@ -130,7 +130,7 @@ export const deleteModule = async ({ search }) => {
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = jotaiStore.get(treeActiveNodeArrayAtom)
+  const activeNodeArray1 = store.get(treeActiveNodeArrayAtom)
   if (
     isEqual(activeNodeArray1, toDelete.url) &&
     !isFreiwilligenKontrolle(activeNodeArray1)
@@ -149,9 +149,9 @@ export const deleteModule = async ({ search }) => {
   }
 
   // remove from openNodes
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
   const newOpenNodes = openNodes.filter((n) => !isEqual(n, toDelete.url))
-  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
+  store.set(treeSetOpenNodesAtom, newOpenNodes)
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
     tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
@@ -208,5 +208,5 @@ export const deleteModule = async ({ search }) => {
   if (toDelete.afterDeletionHook) toDelete.afterDeletionHook()
 
   // reset datasetToDelete
-  jotaiStore.set(emptyToDeleteAtom, undefined)
+  store.set(emptyToDeleteAtom, undefined)
 }

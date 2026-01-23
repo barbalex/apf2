@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeUserGqlFilterForTreeAtom,
 } from '../store/index.ts'
 
@@ -47,7 +47,7 @@ export const useRootNavData = () => {
   })
   // react to filter changes
   useEffect(() => {
-    const unsub = jotaiStore.sub(treeUserGqlFilterForTreeAtom, refetch)
+    const unsub = store.sub(treeUserGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
   const projectsCount = data?.data?.allProjekts?.totalCount ?? 0

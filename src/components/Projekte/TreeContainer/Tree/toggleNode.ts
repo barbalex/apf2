@@ -1,7 +1,7 @@
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { openNode } from '../openNode.ts'
 import {
-  store as jotaiStore,
+  store,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
   treeOpenNodesAtom,
@@ -15,15 +15,15 @@ export const toggleNode = ({
 }) => {
   if (!node.url) throw new Error('passed node has no url')
 
-  const navigate = jotaiStore.get(navigateAtom)
+  const navigate = store.get(navigateAtom)
 
   if (!navigate || typeof navigate !== 'function') {
     console.error('navigate is not a function:', navigate)
     throw new Error('navigate function not available in Jotai store')
   }
 
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
-  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
+  const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
   let newActiveNodeArray = []
   if (!isNodeOpen({ openNodes, url: node.url })) {
@@ -53,5 +53,5 @@ export const toggleNode = ({
   navigate(
     `/Daten/${newActiveNodeArray.join('/')}${node.singleElementName && !onlyShowActivePath ? `/${node.singleElementName}` : ''}${search}`,
   )
-  jotaiStore.set(setTreeLastTouchedNodeAtom, node.url)
+  store.set(setTreeLastTouchedNodeAtom, node.url)
 }

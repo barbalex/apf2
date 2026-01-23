@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
@@ -93,7 +93,7 @@ export const useWertesNavData = () => {
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeAdresseGqlFilterForTreeAtom, refetch)
+      const unsub = store.sub(treeAdresseGqlFilterForTreeAtom, refetch)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +101,7 @@ export const useWertesNavData = () => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(
+      const unsub = store.sub(
         treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
         refetch,
       )
@@ -112,7 +112,7 @@ export const useWertesNavData = () => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(
+      const unsub = store.sub(
         treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
         refetch,
       )
@@ -123,7 +123,7 @@ export const useWertesNavData = () => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(
+      const unsub = store.sub(
         treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
         refetch,
       )

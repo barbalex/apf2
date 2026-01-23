@@ -8,7 +8,7 @@ import {
   copyingAtom,
   copyingBiotopAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   treeTpopkontrzaehlGqlFilterForTreeAtom,
 } from '../store/index.ts'
 
@@ -98,7 +98,7 @@ export const useTpopfeldkontrNavData = (props) => {
     suspense: true,
   })
   useEffect(() => {
-    const unsub = jotaiStore.sub(
+    const unsub = store.sub(
       treeTpopkontrzaehlGqlFilterForTreeAtom,
       refetch,
     )
@@ -109,7 +109,7 @@ export const useTpopfeldkontrNavData = (props) => {
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingBiotopAtom, rerender)
+      const unsub = store.sub(copyingBiotopAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,7 +117,7 @@ export const useTpopfeldkontrNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,7 +125,7 @@ export const useTpopfeldkontrNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

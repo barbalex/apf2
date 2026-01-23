@@ -8,7 +8,7 @@ import {
   mapActiveApfloraLayersAtom,
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   mapTpopIconAtom,
   treeShowTpopIconAtom,
   treeTpopGqlFilterForTreeAtom,
@@ -145,7 +145,7 @@ export const useTpopsNavData = (props) => {
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeTpopGqlFilterForTreeAtom, refetch)
+      const unsub = store.sub(treeTpopGqlFilterForTreeAtom, refetch)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,7 +157,7 @@ export const useTpopsNavData = (props) => {
 
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(mapTpopIconAtom, rerender)
+      const unsub = store.sub(mapTpopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -165,7 +165,7 @@ export const useTpopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeShowTpopIconAtom, rerender)
+      const unsub = store.sub(treeShowTpopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,7 +173,7 @@ export const useTpopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,7 +182,7 @@ export const useTpopsNavData = (props) => {
   const copying = useAtomValue(copyingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,7 +192,7 @@ export const useTpopsNavData = (props) => {
   const count = data?.data?.popById?.tpopsByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
 
-  const tpopIconName = jotaiStore.get(mapTpopIconAtom)
+  const tpopIconName = store.get(mapTpopIconAtom)
 
   const navData = {
     id: 'Teil-Populationen',

@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import {
   mapActiveApfloraLayersAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
-  store as jotaiStore,
+  store,
 } from '../store/index.ts'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'

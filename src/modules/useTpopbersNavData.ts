@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeTpopberGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -57,7 +57,7 @@ export const useTpopbersNavData = (props) => {
   })
   // react to filter changes
   useEffect(() => {
-    const unsub = jotaiStore.sub(treeTpopberGqlFilterForTreeAtom, refetch)
+    const unsub = store.sub(treeTpopberGqlFilterForTreeAtom, refetch)
     return unsub
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

@@ -1,5 +1,5 @@
 import {
-  store as jotaiStore,
+  store,
   setTree2SrcByActiveNodeArrayAtom,
 } from '../store/index.ts'
 
@@ -10,7 +10,7 @@ export const openTree2WithActiveNodeArray = ({
   setProjekteTabs,
   onlyShowActivePath,
 }) => {
-  jotaiStore.set(setTree2SrcByActiveNodeArrayAtom, {
+  store.set(setTree2SrcByActiveNodeArrayAtom, {
     activeNodeArray,
     search,
     onlyShowActivePath,

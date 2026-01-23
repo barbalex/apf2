@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeApGqlFilterForTreeAtom,
   treeApberuebersichtGqlFilterForTreeAtom,
 } from '../store/index.ts'
@@ -63,11 +63,11 @@ export const useProjektNavData = (props) => {
     suspense: true,
   })
   useEffect(() => {
-    const unsub = jotaiStore.sub(treeApGqlFilterForTreeAtom, refetch)
+    const unsub = store.sub(treeApGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
   useEffect(() => {
-    const unsub = jotaiStore.sub(
+    const unsub = store.sub(
       treeApberuebersichtGqlFilterForTreeAtom,
       refetch,
     )

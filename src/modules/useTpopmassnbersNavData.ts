@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeTpopmassnberGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -65,7 +65,7 @@ export const useTpopmassnbersNavData = (props) => {
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(
+      const unsub = store.sub(
         treeTpopmassnberGqlFilterForTreeAtom,
         refetch,
       )

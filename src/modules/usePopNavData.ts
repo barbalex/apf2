@@ -7,7 +7,7 @@ import {
   mapActiveApfloraLayersAtom,
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   mapPopIconAtom,
   treeShowPopIconAtom,
   treeTpopGqlFilterForTreeAtom,
@@ -137,7 +137,7 @@ export const usePopNavData = (props) => {
   const filesCount = data?.data?.popById?.popFilesByPopId?.totalCount ?? 0
   const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
 
-  const popIconName = jotaiStore.get(mapPopIconAtom)
+  const popIconName = store.get(mapPopIconAtom)
 
   const popIconIsHighlighted = props?.popId === params.popId
   const PopIcon =
@@ -153,7 +153,7 @@ export const usePopNavData = (props) => {
     popId,
   })
 
-  const showPopIcon = jotaiStore.get(treeShowPopIconAtom)
+  const showPopIcon = store.get(treeShowPopIconAtom)
 
   const navData = {
     id: popId,

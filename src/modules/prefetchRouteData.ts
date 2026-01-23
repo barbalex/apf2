@@ -24,7 +24,7 @@ import { query as beobQuery } from '../components/Projekte/Daten/Beob/query.ts'
 import { query as apberuebersichtQuery } from '../components/Projekte/Daten/Apberuebersicht/query.ts'
 
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
 } from '../store/index.ts'
@@ -298,8 +298,8 @@ const routeConfigs: RouteConfig[] = [
  * @param path - The route path to prefetch data for
  */
 export const prefetchRouteData = async (path: string) => {
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   if (!tsQueryClient || !apolloClient) return
 
   // Decode the path to handle URL-encoded characters

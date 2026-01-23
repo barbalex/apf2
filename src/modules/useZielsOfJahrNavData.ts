@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeZielGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -67,7 +67,7 @@ export const useZielsOfJahrNavData = (props) => {
   })
   // react to filter changes
   useEffect(() => {
-    const unsub = jotaiStore.sub(treeZielGqlFilterForTreeAtom, refetch)
+    const unsub = store.sub(treeZielGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
 

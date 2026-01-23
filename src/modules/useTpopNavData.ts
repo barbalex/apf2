@@ -8,7 +8,7 @@ import { useAtomValue } from 'jotai'
 import {
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   mapActiveApfloraLayersAtom,
   mapTpopIconAtom,
   treeShowTpopIconAtom,
@@ -184,7 +184,7 @@ export const useTpopNavData = (props) => {
   })
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeTpopmassnGqlFilterForTreeAtom, refetch)
+      const unsub = store.sub(treeTpopmassnGqlFilterForTreeAtom, refetch)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,7 +192,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(
+      const unsub = store.sub(
         treeTpopmassnberGqlFilterForTreeAtom,
         refetch,
       )
@@ -203,7 +203,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeEkGqlFilterForTreeAtom, refetch)
+      const unsub = store.sub(treeEkGqlFilterForTreeAtom, refetch)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -211,19 +211,19 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeEkfGqlFilterForTreeAtom, refetch)
+      const unsub = store.sub(treeEkfGqlFilterForTreeAtom, refetch)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
   useEffect(() => {
-    const unsub = jotaiStore.sub(treeTpopberGqlFilterForTreeAtom, refetch)
+    const unsub = store.sub(treeTpopberGqlFilterForTreeAtom, refetch)
     return unsub
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   useEffect(() => {
-    const unsub = jotaiStore.sub(
+    const unsub = store.sub(
       treeBeobZugeordnetGqlFilterForTreeAtom,
       refetch,
     )
@@ -232,7 +232,7 @@ export const useTpopNavData = (props) => {
   }, [])
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(mapActiveApfloraLayersAtom, rerender)
+      const unsub = store.sub(mapActiveApfloraLayersAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -240,7 +240,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(mapTpopIconAtom, rerender)
+      const unsub = store.sub(mapTpopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -248,7 +248,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeShowTpopIconAtom, rerender)
+      const unsub = store.sub(treeShowTpopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -256,7 +256,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -264,7 +264,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -296,7 +296,7 @@ export const useTpopNavData = (props) => {
   const filesCount = data?.data?.tpopById?.tpopFilesByTpopId?.totalCount ?? 0
   const historiesCount = data?.data?.allTpopHistories?.totalCount ?? 0
 
-  const tpopIconName = jotaiStore.get(mapTpopIconAtom)
+  const tpopIconName = store.get(mapTpopIconAtom)
 
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
   const TpopIcon =
@@ -306,7 +306,7 @@ export const useTpopNavData = (props) => {
     : tpopIconIsHighlighted ? TpopIconQHighlighted
     : TpopIconQ
 
-  const showTpopIcon = jotaiStore.get(treeShowTpopIconAtom)
+  const showTpopIcon = store.get(treeShowTpopIconAtom)
 
   const labelRightElements = getLabelRightElements({
     movingId: moving.id,

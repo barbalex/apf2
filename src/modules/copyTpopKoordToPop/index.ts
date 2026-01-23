@@ -1,17 +1,17 @@
 import { queryTpop } from './queryTpop.ts'
 import { updatePopById } from './updatePopById.ts'
-import {store as jotaiStore,
+import {store,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom} from '../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 
 export const copyTpopKoordToPop = async ({ id }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
   // fetch tpop
   let tpopResult
   try {

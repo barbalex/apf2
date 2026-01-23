@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import {
   mapActiveApfloraLayersAtom,
   treeBeobZugeordnetGqlFilterForTreeAtom,
-  store as jotaiStore,
+  store,
 } from '../store/index.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'

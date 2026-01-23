@@ -7,7 +7,7 @@ import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 
 import {
-  store as jotaiStore,
+  store,
   treeZielGqlFilterForTreeAtom,
 } from '../store/index.ts'
 
@@ -64,7 +64,7 @@ export const useZieljahrsNavData = (props) => {
   })
   // react to filter changes
   useEffect(() => {
-    const unsub = jotaiStore.sub(treeZielGqlFilterForTreeAtom, refetch)
+    const unsub = store.sub(treeZielGqlFilterForTreeAtom, refetch)
     return unsub
   }, [])
 
