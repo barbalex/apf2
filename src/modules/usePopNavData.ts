@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -59,11 +58,9 @@ export const usePopNavData = (props) => {
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const showTpopIcon = activeApfloraLayers?.includes('tpop') && karteIsVisible
 
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
   const moving = useAtomValue(movingAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treePop',
       popId,
@@ -125,55 +122,6 @@ export const usePopNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(treeTpopGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treePopberGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treePopmassnberGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(mapPopIconAtom, rerender)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(treeShowPopIconAtom, rerender)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const label = data?.data?.popById?.label
   const status = data?.data?.popById?.status

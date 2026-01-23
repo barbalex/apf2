@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -15,7 +14,7 @@ export const useAdressesNavData = () => {
 
   const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
-  const { data, error, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeAdresse', adresseGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -41,17 +40,7 @@ export const useAdressesNavData = () => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(treeAdresseGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const count = data?.data?.allAdresses?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 

@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -33,15 +32,9 @@ export const useBeobZugeordnetsNavData = (props) => {
   )
   const showBeobzugeordnetIcon =
     activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const { data, refetch } = useQuery({
-    queryKey: [
-      'treeBeobZugeordnet',
-      tpopId,
-      beobZugeordnetGqlFilterForTree,
-    ],
+  const { data } = useQuery({
+    queryKey: ['treeBeobZugeordnet', tpopId, beobZugeordnetGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -77,10 +70,6 @@ export const useBeobZugeordnetsNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeBeobZugeordnetGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
 
   const count = data?.data?.beobsZugeordnet?.totalCount ?? 0
   const filteredCount = data?.data?.filteredBeobsZugeordnet?.totalCount ?? 0

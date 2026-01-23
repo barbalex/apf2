@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -28,10 +27,6 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   )
-  const showBeobnichtbeurteiltIcon =
-    activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
 
   const allBeobNichtBeurteiltFilter = {
     tpopId: { isNull: true },
@@ -47,7 +42,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
   }
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeBeobNichtBeurteilt',
       apId,
@@ -98,13 +93,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(() => {
-    const unsub = jotaiStore.sub(
-      treeBeobNichtBeurteiltGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-  }, [])
+
+  const showBeobnichtbeurteiltIcon =
+    activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
 
   const count = data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
   const filteredCount = data?.data?.filteredBeobsNichtBeurteilt?.totalCount ?? 0

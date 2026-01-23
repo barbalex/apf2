@@ -27,11 +27,11 @@ export const useDocsNavData = () => {
   }
 
   const [, setRerenderer] = useState(0)
-  const refetch = () => setRerenderer((prev) => prev + 1)
+  const rerender = () => setRerenderer((prev) => prev + 1)
 
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeApGqlFilterForTreeAtom, refetch)
+      const unsub = jotaiStore.sub(treeApGqlFilterForTreeAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

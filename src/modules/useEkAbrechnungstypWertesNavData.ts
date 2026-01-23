@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -17,7 +16,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
     treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeEkAbrechnungstypWerte',
       ekAbrechnungstypWerteGqlFilterForTree,
@@ -51,20 +50,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(
-        treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
-        refetch,
-      )
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const count = data?.data?.allEkAbrechnungstypWertes?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 

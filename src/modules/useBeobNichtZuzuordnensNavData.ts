@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -30,8 +29,6 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
   )
   const showBeobnichtzuzuordnenIcon =
     activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
 
   const allBeobNichtZuzuordnenFilter = {
     nichtZuordnen: { equalTo: true },
@@ -46,7 +43,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     },
   }
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeBeobNichtZuzuordnen',
       apId,
@@ -97,13 +94,6 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(() => {
-    const unsub = jotaiStore.sub(
-      treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-  }, [])
 
   const count = data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
   const filteredCount =

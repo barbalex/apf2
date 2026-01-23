@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -18,7 +17,7 @@ export const useApartsNavData = (props) => {
 
   const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeApart', projId, apId, apartGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -49,11 +48,6 @@ export const useApartsNavData = (props) => {
     },
     suspense: true,
   })
-  // react to filter changes
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeApartGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
 
   const count = data?.data?.apById?.apartsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0

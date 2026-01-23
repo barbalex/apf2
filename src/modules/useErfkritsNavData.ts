@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -19,7 +18,7 @@ export const useErfkritsNavData = (props) => {
 
   const erfkritGqlFilterForTree = useAtomValue(treeErfkritGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeErfkrit', projId, apId, erfkritGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -56,11 +55,6 @@ export const useErfkritsNavData = (props) => {
     },
     suspense: true,
   })
-  // react to filter changes
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeErfkritGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
 
   const count = data?.data?.apById?.erfkritsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0

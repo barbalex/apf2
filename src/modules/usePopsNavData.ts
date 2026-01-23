@@ -166,14 +166,6 @@ export const usePopsNavData = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(treePopGqlFilterForTreeAtom, rerender)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0

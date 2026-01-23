@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -44,16 +43,6 @@ export const useApsNavData = (props) => {
     },
     suspense: true,
   })
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
-  useEffect(
-    () => {
-      const unsub = jotaiStore.sub(treeApGqlFilterForTreeAtom, rerender)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.allAps?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0

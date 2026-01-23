@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -21,7 +20,7 @@ export const useEkfrequenzsNavData = (props) => {
     treeEkfrequenzGqlFilterForTreeAtom,
   )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeEkfrequenz', apId, ekfrequenzGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -54,11 +53,6 @@ export const useEkfrequenzsNavData = (props) => {
     },
     suspense: true,
   })
-  // react to filter changes
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeEkfrequenzGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
 
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
   const rows = data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []

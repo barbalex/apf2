@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -42,9 +42,7 @@ export const useApNavData = (props) => {
   const assozartGqlFilterForTree = useAtomValue(
     treeAssozartGqlFilterForTreeAtom,
   )
-  const erfkritGqlFilterForTree = useAtomValue(
-    treeErfkritGqlFilterForTreeAtom,
-  )
+  const erfkritGqlFilterForTree = useAtomValue(treeErfkritGqlFilterForTreeAtom)
   const ekfrequenzGqlFilterForTree = useAtomValue(
     treeEkfrequenzGqlFilterForTreeAtom,
   )
@@ -62,9 +60,6 @@ export const useApNavData = (props) => {
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const showBeobnichtzuzuordnenIcon =
     activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
-
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
 
   const allBeobNichtZuzuordnenFilter = {
     nichtZuordnen: { equalTo: true },
@@ -95,7 +90,7 @@ export const useApNavData = (props) => {
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeAp',
       projId,
@@ -267,51 +262,6 @@ export const useApNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeZielGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeApberGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeApartGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeAssozartGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeErfkritGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeEkfrequenzGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(
-      treeEkzaehleinheitGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(
-      treeBeobNichtBeurteiltGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-  }, [])
-  useEffect(() => {
-    const unsub = jotaiStore.sub(
-      treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-  }, [])
 
   const label = data?.data?.apById?.label
   const popsCount = data?.data?.apById?.popsByApId?.totalCount ?? 0
