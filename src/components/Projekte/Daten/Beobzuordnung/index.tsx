@@ -185,7 +185,6 @@ export const Component = observer(() => {
     saveArtIdToDb({
       value: event.target.value,
       row,
-      store,
       search,
     })
 
@@ -202,7 +201,6 @@ export const Component = observer(() => {
       value: event.target.value,
       id,
       type,
-      store,
       search,
     })
 

@@ -13,7 +13,7 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
-export const saveArtIdToDb = async ({ value, row, store, search }) => {
+export const saveArtIdToDb = async ({ value, row, search }) => {
   const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
   const openNodes = jotaiStore.get(treeOpenNodesAtom)
   const apolloClient = jotaiStore.get(apolloClientAtom)
@@ -51,7 +51,14 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   // do not navigate if newApId is not found
   if (!newApId) return
 
-  const newANA = [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4], activeNodeArray[5]]
+  const newANA = [
+    activeNodeArray[0],
+    activeNodeArray[1],
+    activeNodeArray[2],
+    newApId,
+    activeNodeArray[4],
+    activeNodeArray[5],
+  ]
   const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
   const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
 
@@ -72,8 +79,21 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
         !isEqual(n, oldGParentNodeUrl),
     ),
     [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId],
-    [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4]],
-    [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4], activeNodeArray[5]],
+    [
+      activeNodeArray[0],
+      activeNodeArray[1],
+      activeNodeArray[2],
+      newApId,
+      activeNodeArray[4],
+    ],
+    [
+      activeNodeArray[0],
+      activeNodeArray[1],
+      activeNodeArray[2],
+      newApId,
+      activeNodeArray[4],
+      activeNodeArray[5],
+    ],
   ]
   jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newANA.join('/')}${search}`)

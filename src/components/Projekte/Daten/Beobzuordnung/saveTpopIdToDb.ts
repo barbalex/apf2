@@ -13,7 +13,7 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../JotaiStore/index.ts'
 
-export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
+export const saveTpopIdToDb = async ({ value, id, type, search }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)
   const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
   const navigate = jotaiStore.get(navigateAtom)

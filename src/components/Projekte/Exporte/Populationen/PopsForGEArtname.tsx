@@ -102,7 +102,6 @@ export const PopsForGEArtname = observer(() => {
         exportModule({
           data: sortBy(rows, ['art', 'label']),
           fileName: 'PopulationenNachNamen',
-          store,
           kml: true,
         })
         setQueryState(undefined)
