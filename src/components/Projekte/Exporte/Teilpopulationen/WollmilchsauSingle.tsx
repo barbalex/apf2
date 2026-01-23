@@ -16,10 +16,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from './WollmilchsauSingle.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface ApByArtIdQueryResult {
   apByArtId: {
@@ -831,8 +828,6 @@ export const WollmilchsauSingle = observer(() => {
           exportModule({
             data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
             fileName: 'anzkontrinklletzterundletztertpopber',
-            store,
-            apolloClient,
           })
         }}
         query={gql`

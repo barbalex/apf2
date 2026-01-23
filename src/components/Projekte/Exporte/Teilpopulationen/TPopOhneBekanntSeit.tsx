@@ -12,10 +12,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TPopOhnebekanntSeitQueryResult {
   allVTpopOhnebekanntseits: {
@@ -92,8 +89,6 @@ export const TPopOhneBekanntSeit = observer(() => {
         exportModule({
           data: rows,
           fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}

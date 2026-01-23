@@ -1,21 +1,16 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TPopOhneapberichtrelevantQueryResult {
   allVTpopOhneapberichtrelevants: {
@@ -35,9 +30,8 @@ interface TPopOhneapberichtrelevantQueryResult {
   }
 }
 
-export const TPopOhneApberRelevant = observer(() => {
+export const TPopOhneApberRelevant = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -92,8 +86,6 @@ export const TPopOhneApberRelevant = observer(() => {
         exportModule({
           data: rows,
           fileName: 'TeilpopulationenOhneApBerichtRelevant',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -104,4 +96,4 @@ export const TPopOhneApberRelevant = observer(() => {
       : null}
     </Button>
   )
-})
+}
