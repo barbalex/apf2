@@ -107,4 +107,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}
