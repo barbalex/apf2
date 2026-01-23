@@ -49,7 +49,6 @@ export const useBeobZugeordnetsNavData = (props) => {
               filter: $beobZugeordnetFilter
               orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
-              totalCount
               nodes {
                 id
                 label
@@ -72,7 +71,7 @@ export const useBeobZugeordnetsNavData = (props) => {
   })
 
   const count = data?.data?.beobsZugeordnet?.totalCount ?? 0
-  const filteredCount = data?.data?.filteredBeobsZugeordnet?.totalCount ?? 0
+  const filteredCount = data?.data?.filteredBeobsZugeordnet?.nodes?.length ?? 0
 
   const navData = {
     id: 'Beobachtungen',
@@ -118,9 +117,9 @@ export const useBeobZugeordnetsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobzugeordnetIcon && beobId === p.id ?
-          [BeobzugeordnetFilteredMapIcon]
-        : undefined,
+        showBeobzugeordnetIcon && beobId === p.id
+          ? [BeobzugeordnetFilteredMapIcon]
+          : undefined,
     })),
   }
 
