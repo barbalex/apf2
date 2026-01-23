@@ -65,7 +65,6 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
               filter: $beobNichtZuzuordnenFilter
               orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
-              totalCount
               nodes {
                 id
                 label
@@ -97,7 +96,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
 
   const count = data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
   const filteredCount =
-    data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
+    data?.data?.filteredBeobsNichtZuzuordnen?.nodes?.length ?? 0
 
   const navData = {
     id: 'nicht-zuzuordnende-Beobachtungen',
@@ -135,9 +134,9 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobnichtzuzuordnenIcon && beobId === p.id ?
-          [BeobnichtzuzuordnenFilteredMapIcon]
-        : undefined,
+        showBeobnichtzuzuordnenIcon && beobId === p.id
+          ? [BeobnichtzuzuordnenFilteredMapIcon]
+          : undefined,
     })),
   }
 
