@@ -110,6 +110,8 @@ export const ProjektContainer = () => {
     : undefined
   const firstPaneMaxSize = singlePane ? undefined : '95%'
 
+  console.log('ProjektContainer, treeTabs:', treeTabs)
+
   // issue with single pane: it does not expand to full width, when changing from two to one panes
   // thus rendering outside of split pane. But then the tree rebuilds.
   // also: issue with extra panes only appearing with help of keys
