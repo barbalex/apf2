@@ -3,7 +3,7 @@ import MaterialTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useSetAtom } from 'jotai'
 
-import { initial as ap } from '../../../../store/Tree/DataFilter/ap'
+import { initial as ap } from '../../../../JotaiStore/DataFilter/ap'
 import { treeDataFilterAddOrAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './Tabs.module.css'
