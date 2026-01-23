@@ -1,14 +1,10 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeTpopberGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeTpopberGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopbersNavData = (props) => {
@@ -21,7 +17,7 @@ export const useTpopbersNavData = (props) => {
 
   const tpopberGqlFilterForTree = useAtomValue(treeTpopberGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeTpopber', tpopId, tpopberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -33,7 +29,6 @@ export const useTpopbersNavData = (props) => {
             tpopById(id: $tpopId) {
               id
               tpopbersByTpopId(filter: $tpopbersFilter, orderBy: LABEL_ASC) {
-                totalCount
                 nodes {
                   id
                   label
@@ -55,14 +50,8 @@ export const useTpopbersNavData = (props) => {
     },
     suspense: true,
   })
-  // react to filter changes
-  useEffect(() => {
-    const unsub = store.sub(treeTpopberGqlFilterForTreeAtom, refetch)
-    return unsub
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
-  const count = data?.data?.tpopById?.tpopbersByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopbersByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {
