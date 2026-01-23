@@ -70,9 +70,8 @@ interface TPopLastCountsQueryResult {
   }
 }
 
-export const LetzteZaehlungen = observer(() => {
+export const LetzteZaehlungen = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -222,8 +221,6 @@ export const LetzteZaehlungen = observer(() => {
           data: sortBy(rows, ['artname', 'pop_nr', 'tpop_nr', 'jahr']),
           fileName: 'TPopLetzteZaehlungen',
           idKey: 'pop_id',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -234,4 +231,4 @@ export const LetzteZaehlungen = observer(() => {
       : null}
     </Button>
   )
-})
+}

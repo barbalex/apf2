@@ -15,10 +15,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TPopAnzMassnsQueryResult {
   allTpops: {
@@ -219,8 +216,6 @@ export const AnzMassnahmen = observer(() => {
         exportModule({
           data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
           fileName: 'TeilpopulationenAnzahlMassnahmen',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}

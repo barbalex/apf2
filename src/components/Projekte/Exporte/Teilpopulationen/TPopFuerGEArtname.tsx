@@ -13,10 +13,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TPopKmlNamenQueryResult {
   allTpops: {
@@ -103,9 +100,7 @@ export const TPopFuerGEArtname = observer(() => {
         exportModule({
           data: sortBy(rows, ['art', 'label']),
           fileName: 'TeilpopulationenNachNamen',
-          store,
           kml: true,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
