@@ -1,13 +1,11 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import {
   ApId,
@@ -18,10 +16,7 @@ import {
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface ZielsQueryResult {
   allZiels: {
@@ -60,9 +55,8 @@ interface ZielsQueryResult {
   }
 }
 
-export const Ziele = observer(() => {
+export const Ziele = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -148,12 +142,7 @@ export const Ziele = observer(() => {
         },
       })
     }
-    exportModule({
-      data: sortBy(rows, ['artname']),
-      fileName: 'ApZiele',
-      store,
-      apolloClient,
-    })
+    exportModule({ data: sortBy(rows, ['artname']), fileName: 'ApZiele' })
     setQueryState(undefined)
   }
 
@@ -170,4 +159,4 @@ export const Ziele = observer(() => {
       : null}
     </Button>
   )
-})
+}
