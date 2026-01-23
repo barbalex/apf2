@@ -20,7 +20,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.ts'
 import type { ProjId } from '../../../../models/apflora/Proj.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateApberuebersichtResult {
   data?: {

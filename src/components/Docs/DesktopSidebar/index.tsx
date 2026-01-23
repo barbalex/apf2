@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import {
   treeNodeLabelFilterAtom,
   treeSetNodeLabelFilterKeyAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 import { MenuItems } from './MenuItems.tsx'
 import { Filter } from './Filter.tsx'
 import { IntoViewScroller } from './IntoViewScroller.tsx'

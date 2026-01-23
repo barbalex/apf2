@@ -5,7 +5,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import {
   notificationsAtom,
   removeNotificationAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 export const Notifier = () => {
   const { enqueueSnackbar } = useSnackbar()

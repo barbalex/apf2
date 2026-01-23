@@ -8,7 +8,7 @@ import { Select } from '../../../../../shared/Select.tsx'
 import {
   userNameAtom,
   isPrintAtom,
-} from '../../../../../../JotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 import { query } from './query.ts'
 import {
   adresse as adresseFragment,

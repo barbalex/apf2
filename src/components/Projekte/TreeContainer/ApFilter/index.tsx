@@ -13,7 +13,7 @@ import {
   treeActiveNodeArrayAtom,
   treeApFilterAtom,
   treeSetApFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 

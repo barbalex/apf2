@@ -17,7 +17,7 @@ import { useAtom } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
-import { userAtom } from '../JotaiStore/index.ts'
+import { userAtom } from '../store/index.ts'
 
 import styles from './User.module.css'
 

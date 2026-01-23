@@ -5,7 +5,7 @@ import {
 } from '../../../../modules/react-contextmenu/index.ts'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { userTokenAtom, copyingAtom, movingAtom } from '../../../../JotaiStore/index.ts'
+import { userTokenAtom, copyingAtom, movingAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 // create objects outside render

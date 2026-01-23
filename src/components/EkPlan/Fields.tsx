@@ -3,7 +3,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import DialogContent from '@mui/material/DialogContent'
 
-import { ekPlanFieldsAtom, ekPlanToggleFieldAtom } from '../../JotaiStore/index.ts'
+import { ekPlanFieldsAtom, ekPlanToggleFieldAtom } from '../../store/index.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
 import styles from './Fields.module.css'

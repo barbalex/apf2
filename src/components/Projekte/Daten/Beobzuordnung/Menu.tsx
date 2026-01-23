@@ -10,7 +10,7 @@ import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'

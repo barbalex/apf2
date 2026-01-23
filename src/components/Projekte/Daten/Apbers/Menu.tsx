@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { ApberId } from '../../../../models/apflora/Apber.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateApberResult {
   data?: {

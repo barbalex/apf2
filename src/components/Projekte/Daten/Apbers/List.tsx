@@ -8,7 +8,7 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import {
   isDesktopViewAtom,
   treeNodeLabelFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const List = () => {
   const isDesktopView = useAtomValue(isDesktopViewAtom)

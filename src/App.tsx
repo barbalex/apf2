@@ -17,7 +17,7 @@ import { theme } from './utils/materialTheme.ts'
 import { initializeIdb } from './modules/initializeIdb.ts'
 import { buildApolloClient } from './apolloClient.ts'
 
-import { store as jotaiStore } from './JotaiStore/index.ts'
+import { store as jotaiStore } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
 

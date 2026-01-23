@@ -16,7 +16,7 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 import {
   addNotificationAtom,
   treeBeobGqlFilterAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 interface BeobAssignLinesNode {
   id: BeobId

@@ -10,7 +10,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   toDeleteAtom,
   emptyToDeleteAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 

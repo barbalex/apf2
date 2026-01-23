@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
-import { treeDataFilterSetValueAtom } from '../../../../../../JotaiStore/index.ts'
+import { treeDataFilterSetValueAtom } from '../../../../../../store/index.ts'
 import { query } from './query.ts'
 
 import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'

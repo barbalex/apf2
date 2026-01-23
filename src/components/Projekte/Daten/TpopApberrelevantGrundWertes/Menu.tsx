@@ -19,7 +19,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 
 import type { TpopApberrelevantGrundWerteCode } from '../../../../generated/apflora/models.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopApberrelevantGrundWerteResult {
   createTpopApberrelevantGrundWerte: {

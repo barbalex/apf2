@@ -26,7 +26,7 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {
   userNameAtom,
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './File.module.css'
 

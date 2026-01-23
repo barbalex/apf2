@@ -18,7 +18,7 @@ const Filter = lazy(async () => ({
 import { Spinner } from '../shared/Spinner.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.tsx'
-import { hideBookmarksAtom, isPrintAtom } from '../../JotaiStore/index.ts'
+import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
 
 import styles from './ProjektContainer.module.css'
 import { fi } from 'date-fns/locale'

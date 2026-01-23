@@ -17,7 +17,7 @@ import { tpopRowFromTpop } from './tpopRowFromTpop.ts'
 import {
   ekPlanFieldsAtom,
   ekPlanApValuesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 import type { PopId } from '../../../../models/apflora/Pop.ts'

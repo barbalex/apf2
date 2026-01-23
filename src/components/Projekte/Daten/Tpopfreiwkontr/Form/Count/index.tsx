@@ -13,7 +13,7 @@ import { createTpopkontrzaehl } from './createTpopkontrzaehl.ts'
 import {
   setToDeleteAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../../../JotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 
 import type { TpopkontrzaehlId } from '../../../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../../../models/apflora/TpopkontrId.ts'

@@ -15,7 +15,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { ApartId } from '../../../../models/apflora/Apart.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateApartResult {
   data?: {

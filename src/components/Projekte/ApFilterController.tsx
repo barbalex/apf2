@@ -8,7 +8,7 @@ import { useApolloClient } from '@apollo/client/react'
 import {
   treeApFilterAtom,
   treeSetApFilterAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 import type { ApId } from '../../models/apflora/public/Ap.ts'
 

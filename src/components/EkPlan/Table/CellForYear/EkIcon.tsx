@@ -4,7 +4,7 @@ import { sum } from 'es-toolkit'
 import {
   ekPlanShowCountAtom,
   ekPlanShowEkCountAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import styles from './EkIcon.module.css'
 
 export const EkIcon = ({ planned, eks, einheits }) => {

@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import {
   store as jotaiStore,
   treePopberGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const usePopbersNavData = (props) => {
   const apolloClient = useApolloClient()

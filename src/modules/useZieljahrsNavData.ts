@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai'
 import {
   store as jotaiStore,
   treeZielGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const getZieljahrsCount = (ziels) => {
   const jahrs = countBy(ziels, (e) => e.jahr)

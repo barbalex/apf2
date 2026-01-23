@@ -6,7 +6,7 @@ import { sortBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 import { SplitPane, Pane } from 'react-split-pane'
 
-import { isPrintAtom, isEkfSinglePrintAtom } from '../../JotaiStore/index.ts'
+import { isPrintAtom, isEkfSinglePrintAtom } from '../../store/index.ts'
 
 import type { UserId } from '../../models/apflora/User.ts'
 import type { AdresseId } from '../../models/apflora/Adresse.ts'

@@ -8,7 +8,7 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 import {
   store as jotaiStore,
   treeApGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()

@@ -27,7 +27,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 interface RouteConfig {
   // Pattern to match the route path

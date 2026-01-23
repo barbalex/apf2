@@ -14,7 +14,7 @@ import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
 import {
   addNotificationAtom,
   mapActiveOverlaysAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 export const ClickListener = () => {
   const addNotification = useSetAtom(addNotificationAtom)

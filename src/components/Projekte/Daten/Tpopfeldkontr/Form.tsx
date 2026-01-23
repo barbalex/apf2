@@ -14,7 +14,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
-import { userNameAtom } from '../../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'

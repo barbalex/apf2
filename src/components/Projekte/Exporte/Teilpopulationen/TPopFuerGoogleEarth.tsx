@@ -11,7 +11,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TPopKmlQueryResult {
   allTpops: {

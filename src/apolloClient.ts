@@ -23,7 +23,7 @@ import {
   addNotificationAtom,
   userTokenAtom,
   treeSetMapFilterAtom,
-} from './JotaiStore/index.ts'
+} from './store/index.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 

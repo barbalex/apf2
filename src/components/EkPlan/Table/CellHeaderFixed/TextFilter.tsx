@@ -37,7 +37,7 @@ import {
   ekPlanSetFilterEkfKontrolleurAtom,
   ekPlanSetFilterEmptyEkfrequenzAtom,
   ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 const filterAtomMap = {
   ap: ekPlanFilterApAtom,

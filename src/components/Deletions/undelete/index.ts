@@ -8,7 +8,7 @@ import {
   deletedDatasetsAtom,
   apolloClientAtom,
   setShowDeletionsAtom,
-} from '../../../JotaiStore/index.js'
+} from '../../../store/index.js'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)

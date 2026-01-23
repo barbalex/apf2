@@ -8,7 +8,7 @@ import {
   tsQueryClientAtom,
   addNotificationAtom,
   userNameAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)

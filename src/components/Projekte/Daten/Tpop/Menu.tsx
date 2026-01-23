@@ -48,7 +48,7 @@ import {
   setMapActiveApfloraLayersAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
 import styles from './Menu.module.css'

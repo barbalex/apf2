@@ -15,7 +15,7 @@ import {
   treeActiveFilterTableAtom,
   treeNodeLabelFilterAtom,
   store as jotaiStore,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { usePrevious } from '../../../../modules/usePrevious.ts'
 

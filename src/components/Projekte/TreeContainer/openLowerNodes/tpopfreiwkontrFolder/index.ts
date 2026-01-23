@@ -10,7 +10,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   treeAddOpenNodesAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 export const tpopfreiwkontrFolder = async ({
   id,

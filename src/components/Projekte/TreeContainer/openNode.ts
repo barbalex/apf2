@@ -3,7 +3,7 @@ import {
   store as jotaiStore,
   treeSetOpenNodesAtom,
   treeResetNodeLabelFilterKeepingApAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 export const openNode = async ({ node, openNodes }) => {
   // make sure this node's url is not yet contained

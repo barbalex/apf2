@@ -9,7 +9,7 @@ import {
   movingAtom,
   store as jotaiStore,
   treeEkfGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 

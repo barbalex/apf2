@@ -28,7 +28,7 @@ import {
   setMapOverlaysAtom,
   mapActiveOverlaysAtom,
   setMapActiveOverlaysAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './Overlays.module.css'
 

@@ -12,7 +12,7 @@ import {
   treeDataFilterEmptyTableAtom,
   treeDataFilterEmptyTabAtom,
   treeDataFilterEmptyAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 import { exists } from '../../modules/exists.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import { tableIsFiltered } from '../../modules/tableIsFiltered.ts'

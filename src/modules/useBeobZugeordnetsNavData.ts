@@ -8,7 +8,7 @@ import {
   mapActiveApfloraLayersAtom,
   treeBeobZugeordnetGqlFilterForTreeAtom,
   store as jotaiStore,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'

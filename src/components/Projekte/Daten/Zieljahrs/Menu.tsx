@@ -16,7 +16,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 import {
   showTreeMenusAtom,
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import type { ZielId } from '../../../../models/apflora/ZielId.ts'
 import type { ApId } from '../../../../models/apflora/ApId.ts'

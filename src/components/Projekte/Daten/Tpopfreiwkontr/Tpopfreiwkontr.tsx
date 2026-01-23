@@ -51,7 +51,7 @@ import {
   addNotificationAtom,
   userNameAtom,
   isPrintAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const Component = ({ id: idPassed }: ComponentProps) => {
   const addNotification = useSetAtom(addNotificationAtom)

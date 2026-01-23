@@ -17,7 +17,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 
 interface CreateEkzaehleinheitResult {

@@ -19,7 +19,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 
 import type { UserId } from '../../../../models/apflora/UserId.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateUserResult {
   data: {

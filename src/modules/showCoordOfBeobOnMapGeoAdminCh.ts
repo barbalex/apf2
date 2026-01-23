@@ -3,7 +3,7 @@ import { getAndValidateCoordinatesOfBeob } from './getAndValidateCoordinatesOfBe
 import {
   store as jotaiStore,
   addNotificationAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 export const showCoordOfBeobOnMapGeoAdminCh = async ({ id }) => {
   const beob = await getAndValidateCoordinatesOfBeob({ id })
   const lv95X = beob?.lv95X

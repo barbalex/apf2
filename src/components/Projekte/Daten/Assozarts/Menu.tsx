@@ -17,7 +17,7 @@ import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 
 interface CreateAssozartResult {

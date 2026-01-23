@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
 
 import { RadioButton } from '../../../../shared/RadioButton.tsx'
-import { isPrintAtom } from '../../../../../JotaiStore/index.ts'
+import { isPrintAtom } from '../../../../../store/index.ts'
 
 import styles from './Map.module.css'
 

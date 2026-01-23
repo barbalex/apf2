@@ -18,7 +18,7 @@ import {
   treeShowTpopIconAtom,
   toggleTreeShowTpopIconAtom,
   setTreeShowTpopIconAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './Menu.module.css'
 

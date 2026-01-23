@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 import { useAtomValue } from 'jotai'
 
 import { createUsermessage } from '../createUsermessage.ts'
-import { userNameAtom } from '../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../store/index.ts'
 
 import styles from './Messages.module.css'
 

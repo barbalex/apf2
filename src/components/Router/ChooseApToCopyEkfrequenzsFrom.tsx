@@ -27,7 +27,7 @@ import {
   userNameAtom,
   openChooseApToCopyEkfrequenzsFromAtom,
   setOpenChooseApToCopyEkfrequenzsFromAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 interface ExistingEkfrequenzNode {
   id: EkfrequenzId

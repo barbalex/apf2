@@ -23,7 +23,7 @@ import {
   userNameAtom,
   deletedDatasetsAtom,
   setShowDeletionsAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 import parentStyles from '../index.module.css'
 import styles from './index.module.css'

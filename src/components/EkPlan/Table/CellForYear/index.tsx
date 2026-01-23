@@ -13,7 +13,7 @@ import {
   ekPlanHoveredAtom,
   ekPlanSetHoveredAtom,
   ekPlanResetHoveredAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { query } from './query.ts'
 import { yearColumnWidth } from './yearColumnWidth.ts'
 

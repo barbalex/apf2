@@ -12,7 +12,7 @@ import {
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
   ekPlanApValuesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import indexStyles from '../index.module.css'
 import styles from './index.module.css'

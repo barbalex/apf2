@@ -4,7 +4,7 @@ import { useAtom } from 'jotai'
 
 import { TestdataMessage } from './TestdataMessage.tsx'
 import { FilterInput } from './FilterInput.tsx'
-import { navListFilterAtoms } from '../../../JotaiStore/index.ts'
+import { navListFilterAtoms } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 

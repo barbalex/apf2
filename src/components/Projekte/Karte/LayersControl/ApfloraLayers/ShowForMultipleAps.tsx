@@ -9,7 +9,7 @@ import {
   mapShowApfLayersForMultipleApsAtom,
   setMapShowApfLayersForMultipleApsAtom,
   treeApGqlFilterForTreeAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 interface ShowForMultipleApsQueryResult {
   allAps: {

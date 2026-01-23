@@ -8,7 +8,7 @@ import { useAtomValue } from 'jotai'
 import {
   store as jotaiStore,
   treeTpopkontrzaehlGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const useTpopfreiwkontrzaehlsNavData = (props) => {
   const apolloClient = useApolloClient()

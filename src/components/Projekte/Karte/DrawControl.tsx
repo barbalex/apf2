@@ -8,7 +8,7 @@ import {
   treeMapFilterAtom,
   treeSetMapFilterAtom,
   treeMapFilterResetterAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 window.L.drawLocal.draw.toolbar.buttons.polygon =
   'Umriss zeichnen, um räumlich zu filtern'

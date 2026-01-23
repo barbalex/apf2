@@ -18,7 +18,7 @@ import {
   treeEkGqlFilterForTreeAtom,
   treeEkfGqlFilterForTreeAtom,
   treeBeobZugeordnetGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 

@@ -19,7 +19,7 @@ import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 
 import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopkontrzaehlEinheitWerteResult {
   data: {

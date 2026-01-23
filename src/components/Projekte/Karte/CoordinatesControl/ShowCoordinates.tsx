@@ -1,7 +1,7 @@
 import 'leaflet'
 import { useAtomValue } from 'jotai'
 
-import { mapMouseCoordinatesAtom } from '../../../../JotaiStore/index.ts'
+import { mapMouseCoordinatesAtom } from '../../../../store/index.ts'
 import styles from './ShowCoordinates.module.css'
 
 export const ShowCoordinates = ({ setControlType }) => {

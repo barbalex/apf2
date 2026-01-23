@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { queryApsToChoose } from './queryApsToChoose.ts'
-import { ekPlanApsAtom, ekPlanAddApAtom } from '../../../../JotaiStore/index.ts'
+import { ekPlanApsAtom, ekPlanAddApAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './index.module.css'

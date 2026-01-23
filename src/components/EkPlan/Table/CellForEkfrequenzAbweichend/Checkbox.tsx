@@ -11,7 +11,7 @@ import styles from './Checkbox.module.css'
 import {
   addNotificationAtom,
   userNameAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const Checkbox = ({ row, value, field }) => {
   const addNotification = useSetAtom(addNotificationAtom)

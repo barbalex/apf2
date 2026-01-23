@@ -13,7 +13,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import type { PopberId, PopId } from '../../../../models/apflora/index.tsx'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreatePopberResult {
   data?: {

@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 
 import { Ap } from './Ap/index.tsx'
 import { ChooseAp } from './ChooseAp/index.tsx'
-import { ekPlanApsAtom } from '../../../JotaiStore/index.ts'
+import { ekPlanApsAtom } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 

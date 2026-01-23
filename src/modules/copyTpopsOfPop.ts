@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 import { copyTo } from './copyTo/index.ts'
-import { store as jotaiStore, apolloClientAtom } from '../JotaiStore/index.ts'
+import { store as jotaiStore, apolloClientAtom } from '../store/index.ts'
 
 export const copyTpopsOfPop = async ({ popIdFrom, popIdTo }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)

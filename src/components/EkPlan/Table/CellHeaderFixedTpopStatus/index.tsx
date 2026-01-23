@@ -9,7 +9,7 @@ import { Options } from './Options.tsx'
 import {
   ekPlanFilterStatusAtom,
   ekPlanFilterPopStatusAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import ekfrequenzStyles from '../CellHeaderFixedEkfrequenz.module.css'
 import styles from './index.module.css'

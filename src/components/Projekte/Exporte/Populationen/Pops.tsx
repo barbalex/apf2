@@ -12,7 +12,7 @@ import styles from '../index.module.css'
 import {
   addNotificationAtom,
   treePopGqlFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const Pops = ({ filtered = false }) => {
   const addNotification = useSetAtom(addNotificationAtom)

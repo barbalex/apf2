@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode'
 import { useAtomValue } from 'jotai'
 
-import { userAtom } from '../../../../JotaiStore/index.ts'
+import { userAtom } from '../../../../store/index.ts'
 import { NodeWithList } from './NodeWithList.tsx'
 import { RootNode } from './RootNode.tsx'
 import { useProjektNavData } from '../../../../modules/useProjektNavData.ts'

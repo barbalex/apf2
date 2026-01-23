@@ -12,7 +12,7 @@ import {
   treeActiveFilterTableAtom,
   treeSetNodeLabelFilterKeyAtom,
   treeEmptyNodeLabelFilterAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './LabelFilter.module.css'
 

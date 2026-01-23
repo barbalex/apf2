@@ -9,7 +9,7 @@ import { Spinner } from '../shared/Spinner.tsx'
 import {
   isMobileViewAtom,
   treeActiveNodeArrayAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.tsx'
 
 import styles from './index.module.css'

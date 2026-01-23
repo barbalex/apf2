@@ -3,7 +3,7 @@ import { updatePopById } from './updatePopById.ts'
 import {store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-  addNotificationAtom} from '../../JotaiStore/index.ts'
+  addNotificationAtom} from '../../store/index.ts'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)

@@ -8,7 +8,7 @@ import { NodesList } from './NodesList/index.tsx'
 import { nodeFromMenu } from './nodeFromMenu.ts'
 import { checkIfIsOpen } from './checkIfIsOpen.ts'
 import { Folders } from './Folders.tsx'
-import { treeOpenNodesAtom } from '../../../../JotaiStore/index.ts'
+import { treeOpenNodesAtom } from '../../../../store/index.ts'
 
 export const NodeWithListTransitioned = ({
   menu,

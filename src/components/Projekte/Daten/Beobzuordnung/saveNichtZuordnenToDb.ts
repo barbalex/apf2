@@ -10,7 +10,7 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const saveNichtZuordnenToDb = async ({
   value,

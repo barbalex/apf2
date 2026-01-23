@@ -9,7 +9,7 @@ import {
   store as jotaiStore,
   treeApGqlFilterForTreeAtom,
   treeApberuebersichtGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useProjektNavData = (props) => {

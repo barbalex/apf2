@@ -6,7 +6,7 @@ import {
   ekPlanHoveredAtom,
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.tsx'
 

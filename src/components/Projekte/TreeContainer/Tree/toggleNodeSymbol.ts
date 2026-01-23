@@ -9,7 +9,7 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../JotaiStore/index.js'
+} from '../../../../store/index.js'
 
 export const toggleNodeSymbol = ({
   node,

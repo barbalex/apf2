@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { toDeleteAtom } from '../../../JotaiStore/index.ts'
+import { toDeleteAtom } from '../../../store/index.ts'
 
 const LabelFilter = lazy(async () => ({
   default: (await import('./LabelFilter.tsx')).LabelFilter,

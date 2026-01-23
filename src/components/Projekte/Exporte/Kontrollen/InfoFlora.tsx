@@ -8,7 +8,7 @@ import { exportModule } from '../../../../modules/export.ts'
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface InfoFloraQueryResult {
   allVExportInfoFloraBeobs: {

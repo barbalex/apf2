@@ -8,7 +8,7 @@ import { useAtomValue } from 'jotai'
 import {
   store as jotaiStore,
   treeTpopmassnberGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopmassnbersNavData = (props) => {

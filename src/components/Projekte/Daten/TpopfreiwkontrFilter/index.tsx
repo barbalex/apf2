@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { treeEkfGqlFilterAtom } from '../../../../JotaiStore/index.ts'
+import { treeEkfGqlFilterAtom } from '../../../../store/index.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -15,7 +15,7 @@ import {
   treeArtIsFilteredAtom,
   treePopIsFilteredAtom,
   treeTpopIsFilteredAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { Form } from './Form/index.tsx'
 import { Tabs } from './Tabs.tsx'
 

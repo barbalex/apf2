@@ -12,7 +12,7 @@ import {
   mapTpopIconAtom,
   treeShowTpopIconAtom,
   treeTpopGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 import { TpopIcon100 } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100.tsx'
 import { TpopIcon100Highlighted } from '../components/Projekte/Karte/layers/Tpop/statusGroupSymbols/100Highlighted.tsx'

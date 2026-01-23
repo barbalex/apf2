@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
 
 import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
-import { userTokenAtom, movingAtom } from '../../../../JotaiStore/index.ts'
+import { userTokenAtom, movingAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,

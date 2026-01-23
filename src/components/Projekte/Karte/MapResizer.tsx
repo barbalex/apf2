@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useMap } from 'react-leaflet'
 import { useAtomValue } from 'jotai'
 
-import { mapBoundsAtom } from '../../../JotaiStore/index.ts'
+import { mapBoundsAtom } from '../../../store/index.ts'
 
 export const MapResizer = ({ children, mapContainerRef }) => {
   const map = useMap()

@@ -38,7 +38,7 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 interface CreateTpopkontrResult {
   createTpopkontr: {

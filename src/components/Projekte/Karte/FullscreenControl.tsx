@@ -5,7 +5,7 @@ import screenfull from 'screenfull'
 
 import styles from './FullscreenControl.module.css'
 
-import { addNotificationAtom } from '../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../store/index.ts'
 
 export const FullscreenControl = ({ mapRef }) => {
   const addNotification = useSetAtom(addNotificationAtom)

@@ -11,7 +11,7 @@ import {
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const saveArtIdToDb = async ({ value, row, search }) => {
   const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)

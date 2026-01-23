@@ -18,7 +18,7 @@ import {
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeNodeLabelFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { prefetchNodeData } from '../../../../modules/prefetchNodeData.ts'

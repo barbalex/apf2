@@ -8,7 +8,7 @@ import { CellHeaderFixedEkfrequenzStartjahr } from './CellHeaderFixedEkfrequenzS
 import { CellHeaderFixedTpopStatus } from './CellHeaderFixedTpopStatus/index.tsx'
 import { CellHeaderYear } from './CellHeaderYear.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
-import { ekPlanFieldsAtom } from '../../../JotaiStore/index.ts'
+import { ekPlanFieldsAtom } from '../../../store/index.ts'
 
 import styles from './Header.module.css'
 

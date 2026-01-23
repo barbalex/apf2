@@ -13,7 +13,7 @@ import styles from '../index.module.css'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 
 interface ErfkritsQueryResult {

@@ -28,7 +28,7 @@ import { Menu } from './Menu.tsx'
 import {
   addNotificationAtom,
   userNameAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import type {
   TpopId,

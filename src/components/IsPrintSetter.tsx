@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useSetAtom } from 'jotai'
 
-import { setIsPrintAtom } from '../JotaiStore/index.ts'
+import { setIsPrintAtom } from '../store/index.ts'
 
 export const IsPrintSetter = () => {
   const setIsPrint = useSetAtom(setIsPrintAtom)

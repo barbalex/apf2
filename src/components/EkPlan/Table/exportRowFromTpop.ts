@@ -9,7 +9,7 @@ import {
   ekPlanShowEkAtom,
   ekPlanShowEkfAtom,
   ekPlanShowMassnAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
   const einheitsByAp = jotaiStore.get(ekPlanEinheitsByApAtom)

@@ -21,7 +21,7 @@ import {
   addNotificationAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 interface MenuProps {
   row: {

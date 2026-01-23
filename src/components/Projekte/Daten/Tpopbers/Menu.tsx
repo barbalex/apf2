@@ -15,7 +15,7 @@ import type { TpopberId, TpopId } from '../../../../generated/apflora/models.ts'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 
 interface CreateTpopberResult {

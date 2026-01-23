@@ -5,7 +5,7 @@ import {
   navigateAtom,
   userNameAtom,
   treeActiveNodeArrayAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const blacklist = [
   'overlays', // 2022.10.26 added overlay. Need to refresh or users will not get new ones

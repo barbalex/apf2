@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopkontrzaehlResult {
   data: {

@@ -12,7 +12,7 @@ import {
   userNameAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 import {
   adresse as adresseFragment,
   user as userFragment,

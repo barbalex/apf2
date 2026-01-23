@@ -3,7 +3,7 @@ import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
 import {
   store as jotaiStore,
   ekPlanFieldsAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const tpopRowFromTpop = (tpop) => {
   const fieldsShown = jotaiStore.get(ekPlanFieldsAtom)

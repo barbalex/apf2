@@ -6,7 +6,7 @@ import {
   setTreeLastTouchedNodeAtom,
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../JotaiStore/index.js'
+} from '../../../../store/index.js'
 
 export const toggleNode = ({
   node,

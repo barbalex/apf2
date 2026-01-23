@@ -16,7 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   addNotificationAtom,
   setOpenChooseApToCopyErfkritsFromAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 interface CreateErfkritResult {
   data?: {

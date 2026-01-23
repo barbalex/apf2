@@ -24,7 +24,7 @@ import {
   setCopyingAtom,
   movingAtom,
   setMovingAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'

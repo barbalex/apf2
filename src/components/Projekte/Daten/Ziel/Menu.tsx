@@ -34,7 +34,7 @@ import {
   addNotificationAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 const iconStyle = { color: 'white' }
 

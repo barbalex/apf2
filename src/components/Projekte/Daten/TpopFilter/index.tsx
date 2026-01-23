@@ -21,7 +21,7 @@ import {
   treeDataFilterAtom,
   treeDataFilterSetValueAtom,
   treeTpopGqlFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { ActiveFilters } from './ActiveFilters.tsx'

@@ -35,7 +35,7 @@ import {
   mapPopIconAtom,
   treeShowPopIconAtom,
   treePopGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'

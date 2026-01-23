@@ -13,7 +13,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateAdresseResult {
   data?: {

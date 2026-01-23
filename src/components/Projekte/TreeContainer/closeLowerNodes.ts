@@ -6,7 +6,7 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 export const closeLowerNodes = async ({ url, search }) => {
   const openNodes = jotaiStore.get(treeOpenNodesAtom)

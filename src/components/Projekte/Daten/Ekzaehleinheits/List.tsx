@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import { useAtomValue } from 'jotai'
 
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import { treeNodeLabelFilterAtom } from '../../../../store/index.ts'
 import { useEkzaehleinheitsNavData } from '../../../../modules/useEkzaehleinheitsNavData.ts'
 import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'

@@ -18,7 +18,7 @@ import {
   setIsEkfSinglePrintAtom,
   userTokenAtom,
   userNameAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.ts'
 

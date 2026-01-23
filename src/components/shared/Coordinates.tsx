@@ -9,7 +9,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 
-import { userNameAtom } from '../../JotaiStore/index.ts'
+import { userNameAtom } from '../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../modules/ifIsNumericAsNumber.ts'
 import { epsg2056to4326 } from '../../modules/epsg2056to4326.ts'
 import {

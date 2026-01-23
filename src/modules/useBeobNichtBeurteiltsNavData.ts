@@ -8,7 +8,7 @@ import {
   mapActiveApfloraLayersAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   store as jotaiStore,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'

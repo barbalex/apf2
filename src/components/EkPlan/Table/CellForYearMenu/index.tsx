@@ -17,7 +17,7 @@ import {
   ekPlanYearClickedAtom,
   ekPlanYearMenuAnchorAtom,
   ekPlanCloseYearCellMenuAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { queryTpop } from './queryTpop.ts'
 import { queryEkplansOfTpop } from './queryEkplansOfTpop.ts'
 import { mutationCreateEkplan } from './mutationCreateEkplan.ts'

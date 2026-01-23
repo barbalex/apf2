@@ -17,7 +17,7 @@ import styles from '../index.module.css'
 import {
   addNotificationAtom,
   treeTpopGqlFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 interface TPopQueryResult {
   allTpops: {

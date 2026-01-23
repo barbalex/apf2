@@ -8,7 +8,7 @@ import {
   copyingAtom,
   movingAtom,
   store as jotaiStore,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'

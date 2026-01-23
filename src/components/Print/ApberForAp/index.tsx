@@ -5,7 +5,7 @@ import Fab from '@mui/material/Fab'
 import MarkdownIt from 'markdown-it'
 import { useSetAtom } from 'jotai'
 
-import { setIsPrintAtom } from '../../../JotaiStore/index.ts'
+import { setIsPrintAtom } from '../../../store/index.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { PopMenge } from '../../Projekte/Daten/ApAuswertung/PopMenge/index.tsx'
 import { PopStatus } from '../../Projekte/Daten/ApAuswertung/PopStatus/index.tsx'

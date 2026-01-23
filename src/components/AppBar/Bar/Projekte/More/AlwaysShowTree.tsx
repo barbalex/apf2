@@ -3,7 +3,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { Tooltip } from '@mui/material'
 import { useAtom } from 'jotai'
 
-import { alwaysShowTreeAtom } from '../../../../../JotaiStore/index.ts'
+import { alwaysShowTreeAtom } from '../../../../../store/index.ts'
 import { constants } from '../../../../../modules/constants.ts'
 
 import styles from './AlwaysShowTree.module.css'

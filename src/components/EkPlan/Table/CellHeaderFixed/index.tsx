@@ -22,7 +22,7 @@ import {
   ekPlanFilterLv95YAtom,
   ekPlanFilterEkfKontrolleurAtom,
   ekPlanFilterEkfrequenzAbweichendAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 

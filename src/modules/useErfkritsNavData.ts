@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import {
   store as jotaiStore,
   treeErfkritGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useErfkritsNavData = (props) => {

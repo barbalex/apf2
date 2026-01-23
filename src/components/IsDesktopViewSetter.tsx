@@ -1,7 +1,7 @@
 import { useResizeDetector } from 'react-resize-detector'
 import { useAtom } from 'jotai'
 
-import { setDesktopViewAtom } from '../JotaiStore/index.ts'
+import { setDesktopViewAtom } from '../store/index.ts'
 import styles from './IsDesktopViewSetter.module.css'
 
 // this sets the isDesktopViewAtom depending on the width of this component,

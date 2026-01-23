@@ -70,7 +70,7 @@ import {
   mapActiveOverlaysAtom,
   mapActiveBaseLayerAtom,
   treeMapFilterAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './index.module.css'
 

@@ -25,7 +25,7 @@ import {
   idOfTpopBeingLocalizedAtom,
   setIdOfTpopBeingLocalizedAtom,
   treeTpopGqlFilterAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 interface TpopNode {
   id: TpopId

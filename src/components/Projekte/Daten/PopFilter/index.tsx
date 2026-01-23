@@ -18,7 +18,7 @@ import {
   treeDataFilterSetValueAtom,
   treeArtIsFilteredAtom,
   treePopGqlFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { PopOrTabs } from './PopOrTabs.tsx'

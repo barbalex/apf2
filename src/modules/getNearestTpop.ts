@@ -8,7 +8,7 @@ import { gql } from '@apollo/client'
 import {
   store as jotaiStore,
   apolloClientAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const getNearestTpop = async ({ latLng, apId }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)

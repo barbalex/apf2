@@ -3,7 +3,7 @@ import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
   getGqlFilterAtomByTable,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const tableIsFiltered = ({ table }) => {
   // check nodeLabelFilter

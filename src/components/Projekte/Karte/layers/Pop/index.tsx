@@ -16,7 +16,7 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 import {
   addNotificationAtom,
   treePopGqlFilterAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 
 interface PopNode {

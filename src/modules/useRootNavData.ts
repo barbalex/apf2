@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import {
   store as jotaiStore,
   treeUserGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const useRootNavData = () => {
   const apolloClient = useApolloClient()

@@ -4,7 +4,7 @@ import { useSetAtom } from 'jotai'
 import {
   treeSetMapFilterAtom,
   treeIncrementMapFilterResetterAtom,
-} from '../../../../../../JotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 import styles from './index.module.css'
 
 export const KtZhFilter = () => {

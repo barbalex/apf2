@@ -21,7 +21,7 @@ import { saveNichtZuordnenToDb } from './saveNichtZuordnenToDb.ts'
 import { saveArtIdToDb } from './saveArtIdToDb.ts'
 import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
 import { sendMail } from '../../../../modules/sendMail.ts'
-import { userNameAtom } from '../../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   aeTaxonomies,

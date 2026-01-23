@@ -27,7 +27,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../JotaiStore/index.js'
+} from '../store/index.js'
 
 interface NodeQueryConfig {
   query: any

@@ -7,7 +7,7 @@ import {
   treeApFilterAtom,
   treeArtIsFilteredAtom,
   treePopIsFilteredAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './ActiveFilters.module.css'

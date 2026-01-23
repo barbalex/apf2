@@ -5,7 +5,7 @@ import { GoZap } from 'react-icons/go'
 import {
   ekPlanShowCountAtom,
   ekPlanShowEkCountAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import styles from './MassnIcon.module.css'
 
 export const MassnIcon = ({ ansiedlungs }) => {

@@ -13,7 +13,7 @@ import {
   treeOpenNodesAtom,
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import {
   beob as beobFragment,
   tpop,

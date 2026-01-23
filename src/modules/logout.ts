@@ -3,7 +3,7 @@ import localForage from 'localforage'
 import {
   store as jotaiStore,
   clearAllStorageAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const logout = async () => {
   console.log('LOGGING OUT')

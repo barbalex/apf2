@@ -21,7 +21,7 @@ import {
   setSortedBeobFieldsAtom,
   mapBeobDetailsOpenAtom,
   setMapBeobDetailsOpenAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
 

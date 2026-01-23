@@ -5,7 +5,7 @@ import {
   store as jotaiStore,
   apolloClientAtom,
   copyingBiotopAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const copyBiotopTo = async ({ id }) => {
   const apolloClient = jotaiStore.get(apolloClientAtom)

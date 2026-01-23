@@ -11,7 +11,7 @@ import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface PopKmlNamenQueryResult {
   allPops: {

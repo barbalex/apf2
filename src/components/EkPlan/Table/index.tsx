@@ -49,7 +49,7 @@ import {
   ekPlanFilterKontrolleYearAtom,
   ekPlanFilterEkplanYearAtom,
   ekPlanPastYearsAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './index.module.css'
 

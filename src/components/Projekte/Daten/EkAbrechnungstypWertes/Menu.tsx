@@ -21,7 +21,7 @@ import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbr
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 
 interface CreateEkAbrechnungstypWerteResult {

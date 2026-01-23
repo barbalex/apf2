@@ -18,7 +18,7 @@ import type { TpopApberrelevantGrundWerteCode } from '../../../../models/apflora
 
 import styles from './Tpop.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes: {

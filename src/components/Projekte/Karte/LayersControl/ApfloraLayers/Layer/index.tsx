@@ -24,7 +24,7 @@ import {
   mapActiveApfloraLayersAtom,
   setMapActiveApfloraLayersAtom,
   treeBeobGqlFilterAtom,
-} from '../../../../../../JotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 import { query } from './query.ts'
 import { PopIcon } from './PopIcon.tsx'
 import { TpopIcon } from './TpopIcon.tsx'

@@ -7,7 +7,7 @@ import {
   mapApfloraLayersAtom,
   mapPopIconAtom,
   mapPopLabelAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { popIconString } from './popIconString.ts'
 import { popHighlightedIconString } from './popHighlightedIconString.ts'

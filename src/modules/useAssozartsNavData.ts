@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import {
   store as jotaiStore,
   treeAssozartGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const useAssozartsNavData = (props) => {
   const apolloClient = useApolloClient()

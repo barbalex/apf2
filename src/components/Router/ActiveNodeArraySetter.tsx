@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { isEqual } from 'es-toolkit'
 import { useLocation } from 'react-router'
 
-import { treeActiveNodeArrayAtom, treeSetActiveNodeArrayAtom } from '../../JotaiStore/index.ts'
+import { treeActiveNodeArrayAtom, treeSetActiveNodeArrayAtom } from '../../store/index.ts'
 import { getActiveNodeArrayFromPathname } from '../../modules/getActiveNodeArrayFromPathname.ts'
 
 export const ActiveNodeArraySetter = () => {

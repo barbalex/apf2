@@ -28,7 +28,7 @@ import {
   isPrintAtom,
   treeDataFilterSetValueAtom,
   userTokenAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 import {
   adresse as adresseFragment,
   pop as popFragment,

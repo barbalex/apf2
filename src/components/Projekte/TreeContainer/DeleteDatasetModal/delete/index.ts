@@ -17,7 +17,7 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)

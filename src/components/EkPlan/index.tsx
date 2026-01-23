@@ -43,7 +43,7 @@ import {
   ekPlanSetFilterAnsiedlungYearAtom,
   ekPlanSetFilterKontrolleYearAtom,
   ekPlanSetFilterEkplanYearAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 const Error = lazy(async () => ({
   default: (await import('../shared/Error.tsx')).Error,
 }))

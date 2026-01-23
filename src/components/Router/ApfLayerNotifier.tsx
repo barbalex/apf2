@@ -8,7 +8,7 @@ import {
   addNotificationAtom,
   mapActiveApfloraLayersAtom,
   mapShowApfLayersForMultipleApsAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 // TODO: only show messages if map is visible
 export const ApfLayerNotifier = () => {

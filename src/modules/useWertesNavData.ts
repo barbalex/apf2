@@ -10,7 +10,7 @@ import {
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
   treeAdresseGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useWertesNavData = () => {

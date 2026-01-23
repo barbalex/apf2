@@ -5,7 +5,7 @@ import {
   store as jotaiStore,
   treeNodeLabelFilterAtom,
   treeApGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { menus } from '../components/Docs/menus.ts'
 
 export const useDocsNavData = () => {

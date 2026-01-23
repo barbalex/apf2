@@ -17,7 +17,7 @@ import {
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   store as jotaiStore,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'

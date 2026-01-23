@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useAtomValue } from 'jotai'
 
-import { treeLastTouchedNodeAtom, treeActiveNodeArrayAtom } from '../../../../JotaiStore/index.ts'
+import { treeLastTouchedNodeAtom, treeActiveNodeArrayAtom } from '../../../../store/index.ts'
 import { isElementInViewport } from '../../../../modules/isElementInViewport.ts'
 
 export const IntoViewScroller = () => {

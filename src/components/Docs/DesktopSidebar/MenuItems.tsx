@@ -3,7 +3,7 @@ import Divider from '@mui/material/Divider'
 import { useAtomValue } from 'jotai'
 
 import { MenuItem } from './MenuItem.tsx'
-import { treeNodeLabelFilterAtom } from '../../../JotaiStore/index.ts'
+import { treeNodeLabelFilterAtom } from '../../../store/index.ts'
 import { menus } from '../menus.ts'
 
 import styles from './MenuItems.module.css'

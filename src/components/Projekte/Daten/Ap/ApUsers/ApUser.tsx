@@ -12,7 +12,7 @@ import type { ApUserId } from '../../../../../models/apflora/ApUser.ts'
 
 import {
   addNotificationAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 
 interface ApUserProps {

@@ -13,7 +13,7 @@ import {
   treeTpopGqlFilterForTreeAtom,
   treePopberGqlFilterForTreeAtom,
   treePopmassnberGqlFilterForTreeAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'

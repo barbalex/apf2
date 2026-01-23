@@ -10,7 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import {
   assigningBeobAtom,
   setTreeLastTouchedNodeAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 import { beobIconString } from './beobIconString.ts'
 import { beobIconAbsenzString } from './beobIconAbsenzString.ts'
 import { beobIconHighlightedString } from './beobIconHighlightedString.ts'

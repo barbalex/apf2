@@ -7,7 +7,7 @@ import { NodesList } from './NodesList/index.tsx'
 import { Folders } from './Folders.tsx'
 import { nodeFromMenu } from './nodeFromMenu.ts'
 import { checkIfIsOpen } from './checkIfIsOpen.ts'
-import { treeOpenNodesAtom } from '../../../../JotaiStore/index.ts'
+import { treeOpenNodesAtom } from '../../../../store/index.ts'
 
 export const NodeWithList = ({ menu }) => {
   const openNodes = useAtomValue(treeOpenNodesAtom)

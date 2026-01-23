@@ -11,7 +11,7 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { query } from './query.ts'
 import { queryLists } from './queryLists.ts'
-import { userNameAtom } from '../../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {

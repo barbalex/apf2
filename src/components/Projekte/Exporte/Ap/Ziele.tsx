@@ -16,7 +16,7 @@ import {
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ZielsQueryResult {
   allZiels: {

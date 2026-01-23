@@ -8,7 +8,7 @@ import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
-import { userNameAtom } from '../../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'

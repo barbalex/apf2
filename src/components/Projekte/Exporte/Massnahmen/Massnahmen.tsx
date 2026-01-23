@@ -20,7 +20,7 @@ import styles from '../index.module.css'
 import {
   addNotificationAtom,
   treeTpopmassnGqlFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 interface TpopmassnQueryResult {
   allTpopmassns: {

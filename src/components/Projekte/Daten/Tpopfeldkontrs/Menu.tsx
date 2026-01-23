@@ -29,7 +29,7 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import type {
   TpopkontrId,
