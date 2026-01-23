@@ -1,5 +1,4 @@
-import { useContext, lazy, Suspense } from 'react'
-import { observer } from 'mobx-react-lite'
+import { lazy, Suspense } from 'react'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -27,14 +26,12 @@ const Spinner = lazy(async () => ({
   default: (await import('../../shared/Spinner.tsx')).Spinner,
 }))
 
-import { MobxContext } from '../../../mobxContext.ts'
 import styles from './index.module.css'
 
-export const TreeContainer = observer(() => {
+export const TreeContainer = () => {
   const params = useParams()
   const { projId } = params
 
-  const store = useContext(MobxContext)
   const toDelete = useAtomValue(toDeleteAtom)
 
   //console.log('TreeContainer',{data})
@@ -72,4 +69,4 @@ export const TreeContainer = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
