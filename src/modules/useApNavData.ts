@@ -1,12 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
 import {
   mapActiveApfloraLayersAtom,
   treePopGqlFilterForTreeAtom,
@@ -35,8 +33,6 @@ export const useApNavData = (props) => {
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
-
-  const store = useContext(MobxContext)
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)

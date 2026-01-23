@@ -92,7 +92,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       projId,
       apId,
       parentId: apId,
-      store,
       jahr,
       menuType: 'zieljahrFolder',
     })
@@ -100,7 +99,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
       url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', +jahr],
-      store,
       search,
     })
 
