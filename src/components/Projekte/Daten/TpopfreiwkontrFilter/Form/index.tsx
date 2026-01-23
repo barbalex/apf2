@@ -1,5 +1,4 @@
 import { type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useSetAtom } from 'jotai'
 
 import { Headdata } from './Headdata/index.tsx'
@@ -21,7 +20,7 @@ interface FormProps {
   activeTab: number
 }
 
-export const Form = observer(({ row, activeTab }: FormProps) => {
+export const Form = ({ row, activeTab }: FormProps) => {
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
@@ -35,40 +34,18 @@ export const Form = observer(({ row, activeTab }: FormProps) => {
   return (
     <div className={styles.formContainer}>
       <div className={styles.gridContainer}>
-        <Headdata
-          row={row}
-          activeTab={activeTab}
-        />
-        <Date
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <Map
-          key={`map${row?.planVorhanden}`}
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <Cover
-          saveToDb={saveToDb}
-          row={row}
-        />
+        <Headdata row={row} activeTab={activeTab} />
+        <Date saveToDb={saveToDb} row={row} />
+        <Map key={`map${row?.planVorhanden}`} saveToDb={saveToDb} row={row} />
+        <Cover saveToDb={saveToDb} row={row} />
         <More
           key={`more${row?.jungpflanzenVorhanden}`}
           saveToDb={saveToDb}
           row={row}
         />
-        <Danger
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <Remarks
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <EkfRemarks
-          saveToDb={saveToDb}
-          row={row}
-        />
+        <Danger saveToDb={saveToDb} row={row} />
+        <Remarks saveToDb={saveToDb} row={row} />
+        <EkfRemarks saveToDb={saveToDb} row={row} />
         <Verification
           key={`verification${row?.apberNichtRelevant}`}
           saveToDb={saveToDb}
@@ -78,4 +55,4 @@ export const Form = observer(({ row, activeTab }: FormProps) => {
       <div style={{ height: '64px' }} />
     </div>
   )
-})
+}
