@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { upperFirst } from 'es-toolkit'
@@ -23,7 +22,6 @@ import screenfull from 'screenfull'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { UploaderContext } from '../../../../UploaderContext.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from './index.module.css'
 
@@ -32,10 +30,9 @@ import {
 } from '../../../../JotaiStore/index.ts'
 
 
-export const PreviewMenus = observer(
+export const PreviewMenus =
   ({ parent, files, refetch, containerRef }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-    const store = useContext(MobxContext)
     const { fileId } = useParams()
     const navigate = useNavigate()
     const { pathname, search } = useLocation()
@@ -202,5 +199,4 @@ export const PreviewMenus = observer(
         </MuiMenu>
       </ErrorBoundary>
     )
-  },
-)
+  }
