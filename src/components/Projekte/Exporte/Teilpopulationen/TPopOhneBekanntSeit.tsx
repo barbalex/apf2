@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
@@ -32,9 +30,8 @@ interface TPopOhnebekanntSeitQueryResult {
   }
 }
 
-export const TPopOhneBekanntSeit = observer(() => {
+export const TPopOhneBekanntSeit = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -99,4 +96,4 @@ export const TPopOhneBekanntSeit = observer(() => {
       : null}
     </Button>
   )
-})
+}
