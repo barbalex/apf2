@@ -1,4 +1,3 @@
-import { toJS } from 'mobx'
 import List from '@mui/material/List'
 import Divider from '@mui/material/Divider'
 import { useAtomValue } from 'jotai'

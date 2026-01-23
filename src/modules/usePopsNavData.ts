@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -200,12 +199,13 @@ export const usePopsNavData = (props) => {
       }
 
       const popIconIsHighlighted = p.id === popId
-      const PopIcon =
-        p.status ?
-          popIconIsHighlighted ? popIcons[popIconName][p.status + 'Highlighted']
+      const PopIcon = p.status
+        ? popIconIsHighlighted
+          ? popIcons[popIconName][p.status + 'Highlighted']
           : popIcons[popIconName][p.status]
-        : popIconIsHighlighted ? PopIconQHighlighted
-        : PopIconQ
+        : popIconIsHighlighted
+          ? PopIconQHighlighted
+          : PopIconQ
 
       return {
         id: p.id,
@@ -221,8 +221,9 @@ export const usePopsNavData = (props) => {
         fetcherParams: { projId, apId, popId: p.id },
         status: p.status,
         labelLeftElements: showPopIcon ? [PopIcon] : undefined,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }
