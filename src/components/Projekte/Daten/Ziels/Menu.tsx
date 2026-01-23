@@ -6,18 +6,19 @@ import { FaPlus, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { useSetAtom,  useAtom } from 'jotai'
+import { useSetAtom, useAtom } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import {showTreeMenusAtom,  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import { ZielId, ApId } from '../../../../models/apflora/index.tsx'
-
-
 
 interface CreateZielResult {
   createZiel: {
@@ -132,4 +133,4 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}
