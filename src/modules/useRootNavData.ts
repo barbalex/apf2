@@ -1,19 +1,15 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeUserGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useRootNavData = () => {
   const apolloClient = useApolloClient()
   const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeRoot', userGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -45,11 +41,7 @@ export const useRootNavData = () => {
     },
     suspense: true,
   })
-  // react to filter changes
-  useEffect(() => {
-    const unsub = store.sub(treeUserGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
+
   const projectsCount = data?.data?.allProjekts?.totalCount ?? 0
   const usersCount = data?.data?.allUsers?.totalCount ?? 0
   const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0

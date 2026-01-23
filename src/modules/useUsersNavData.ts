@@ -1,13 +1,9 @@
-import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeUserGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useUsersNavData = () => {
@@ -41,17 +37,6 @@ export const useUsersNavData = () => {
     },
     suspense: true,
   })
-  // react to filter changes
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
-  useEffect(
-    () => {
-      const unsub = store.sub(treeUserGqlFilterForTreeAtom, rerender)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.allUsers?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
