@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 import {
@@ -459,8 +458,9 @@ export const useApNavData = (props) => {
         fetcherName: 'useBeobNichtBeurteiltsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredBeobsNichtBeurteiltCount,
-        labelLeftElements:
-          showBeobnichtbeurteiltIcon ? [BeobnichtbeurteiltMapIcon] : undefined,
+        labelLeftElements: showBeobnichtbeurteiltIcon
+          ? [BeobnichtbeurteiltMapIcon]
+          : undefined,
         component: NodeWithList,
       },
       {
@@ -480,9 +480,8 @@ export const useApNavData = (props) => {
         fetcherName: 'useBeobNichtZuzuordnensNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredBeobsNichtZuzuordnenCount,
-        labelLeftElements:
-          showBeobnichtzuzuordnenIcon ?
-            [BeobnichtzuzuordnenMapIcon]
+        labelLeftElements: showBeobnichtzuzuordnenIcon
+          ? [BeobnichtzuzuordnenMapIcon]
           : undefined,
         component: NodeWithList,
       },
