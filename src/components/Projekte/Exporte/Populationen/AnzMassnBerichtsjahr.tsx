@@ -14,10 +14,7 @@ import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface PopmassnberAnzMassnsQueryResult {
   allPopmassnbers: {
@@ -176,8 +173,6 @@ export const AnzMassnBerichtsjahr = observer(() => {
         exportModule({
           data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
           fileName: 'PopulationenAnzMassnProMassnber',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
