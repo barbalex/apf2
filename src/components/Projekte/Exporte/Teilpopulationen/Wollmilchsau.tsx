@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
@@ -15,10 +14,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 import styles from '../index.module.css'
 import wollmilchsauStyles from './Wollmilchsau.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TPopErsteUndLetzteKontrolleQueryResult {
   allTpops: {
@@ -817,9 +813,9 @@ export const Wollmilchsau = () => {
       <div className={wollmilchsauStyles.ewm}>
         {'= "Eier legende Wollmilchsau". Vorsicht: kann > 2 Minuten dauern!'}
       </div>
-      {queryState ?
+      {queryState ? (
         <div className={wollmilchsauStyles.progress}>{queryState}</div>
-      : null}
+      ) : null}
     </Button>
   )
 }
