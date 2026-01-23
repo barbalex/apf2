@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeAssozartGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeAssozartGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useAssozartsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -20,7 +17,7 @@ export const useAssozartsNavData = (props) => {
   )
 
   const { data } = useQuery({
-    queryKey: ['treeAssozart', projId, apId, assozartGqlFilterForTree],
+    queryKey: ['treeAssozart', apId, assozartGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -31,7 +28,6 @@ export const useAssozartsNavData = (props) => {
             apById(id: $apId) {
               id
               assozartsByApId(filter: $assozartsFilter, orderBy: LABEL_ASC) {
-                totalCount
                 nodes {
                   id
                   label
