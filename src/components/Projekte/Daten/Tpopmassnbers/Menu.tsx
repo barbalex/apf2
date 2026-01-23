@@ -14,10 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
 import type { TpopId } from '../../../../models/apflora/TpopId.ts'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface CreateTpopmassnberResult {
   data: {
@@ -93,4 +90,4 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}
