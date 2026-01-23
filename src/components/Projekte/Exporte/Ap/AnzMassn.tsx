@@ -1,22 +1,17 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import { ApId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface ApAnzmassnsQueryResult {
   allAps: {
@@ -45,9 +40,8 @@ interface ApAnzmassnsQueryResult {
   }
 }
 
-export const AnzMassn = observer(() => {
+export const AnzMassn = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -113,12 +107,7 @@ export const AnzMassn = observer(() => {
         },
       })
     }
-    exportModule({
-      data: rows,
-      fileName: 'ApAnzahlMassnahmen',
-      store,
-      apolloClient,
-    })
+    exportModule({ data: rows, fileName: 'ApAnzahlMassnahmen' })
     setQueryState(undefined)
   }
 
@@ -135,4 +124,4 @@ export const AnzMassn = observer(() => {
       : null}
     </Button>
   )
-})
+}
