@@ -15,10 +15,6 @@ export const useMessagesNavData = () => {
           query TreeMessagesQuery {
             allMessages(orderBy: TIME_DESC) {
               totalCount
-              nodes {
-                id
-                time
-              }
             }
           }
         `,
