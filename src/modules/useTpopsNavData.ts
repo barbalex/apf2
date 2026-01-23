@@ -105,7 +105,7 @@ export const useTpopsNavData = (props) => {
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const showTpopIcon = activeApfloraLayers?.includes('tpop') && karteIsVisible
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeTpop', popId, tpopGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -117,7 +117,6 @@ export const useTpopsNavData = (props) => {
                 filter: $tpopsFilter
                 orderBy: [NR_ASC, FLURNAME_ASC]
               ) {
-                totalCount
                 nodes {
                   id
                   label
@@ -140,18 +139,10 @@ export const useTpopsNavData = (props) => {
     },
     suspense: true,
   })
+
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => {
-      const unsub = store.sub(treeTpopGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
@@ -229,12 +220,13 @@ export const useTpopsNavData = (props) => {
       }
 
       const iconIsHighlighted = p.id === tpopId
-      const TpopIcon =
-        p.status ?
-          iconIsHighlighted ? tpopIcons[tpopIconName][p.status + 'Highlighted']
+      const TpopIcon = p.status
+        ? iconIsHighlighted
+          ? tpopIcons[tpopIconName][p.status + 'Highlighted']
           : tpopIcons[tpopIconName][p.status]
-        : iconIsHighlighted ? TpopIconQHighlighted
-        : TpopIconQ
+        : iconIsHighlighted
+          ? TpopIconQHighlighted
+          : TpopIconQ
 
       return {
         id: p.id,
@@ -258,8 +250,9 @@ export const useTpopsNavData = (props) => {
         fetcherParams: { projId, apId, popId, tpopId: p.id },
         hasChildren: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }
