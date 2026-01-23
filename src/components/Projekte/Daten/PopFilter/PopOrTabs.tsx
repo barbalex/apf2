@@ -2,7 +2,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useSetAtom } from 'jotai'
 
-import { initial as pop } from '../../../../store/Tree/DataFilter/pop'
+import { initial as pop } from '../../../../JotaiStore/DataFilter/pop'
 import { treeDataFilterAddOrAtom } from '../../../../JotaiStore/index.ts'
 
 import styles from './PopOrTabs.module.css'
