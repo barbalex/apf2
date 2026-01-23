@@ -21,34 +21,29 @@ export const useApberuebersichtsNavData = (props) => {
   )
 
   const { data } = useQuery({
-    queryKey: ['treeApberuebersicht', projId, apberuebersichtGqlFilterForTree],
+    queryKey: ['treeApberuebersicht', apberuebersichtGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
           query NavApberuebersichtsQuery(
-            $projId: UUID!
             $apberuebersichtFilter: ApberuebersichtFilter!
           ) {
-            projektById(id: $projId) {
-              id
-              apberuebersichtsByProjId(
-                filter: $apberuebersichtFilter
-                orderBy: LABEL_ASC
-              ) {
-                totalCount
-                nodes {
-                  id
-                  label
-                }
+            filtered: allApberuebersichts(
+              filter: $apberuebersichtFilter
+              orderBy: LABEL_ASC
+            ) {
+              totalCount
+              nodes {
+                id
+                label
               }
-              allApberuebersichts: apberuebersichtsByProjId {
-                totalCount
-              }
+            }
+            unfiltered: allApberuebersichts {
+              totalCount
             }
           }
         `,
         variables: {
-          projId,
           apberuebersichtFilter: apberuebersichtGqlFilterForTree,
         },
       })
@@ -58,10 +53,8 @@ export const useApberuebersichtsNavData = (props) => {
     suspense: true,
   })
 
-  const count =
-    data?.data?.projektById?.apberuebersichtsByProjId?.nodes?.length ?? 0
-  const totalCount =
-    data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
+  const count = data?.data?.filtered?.nodes?.length ?? 0
+  const totalCount = data?.data?.unfiltered?.totalCount ?? 0
 
   const navData = {
     id: 'AP-Berichte',
@@ -77,18 +70,16 @@ export const useApberuebersichtsNavData = (props) => {
     fetcherName: 'useApberuebersichtsNavData',
     fetcherParams: { projId },
     component: NodeWithList,
-    menus: (data?.data?.projektById?.apberuebersichtsByProjId?.nodes ?? []).map(
-      (p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'apberuebersicht',
-        treeId: p.id,
-        treeParentTableId: projId,
-        treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
-        hasChildren: false,
-      }),
-    ),
+    menus: (data?.data?.filtered?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'apberuebersicht',
+      treeId: p.id,
+      treeParentTableId: projId,
+      treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
+      hasChildren: false,
+    })),
   }
 
   return navData
