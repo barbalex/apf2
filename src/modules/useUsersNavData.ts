@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -15,7 +15,7 @@ export const useUsersNavData = () => {
 
   const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeUser', userGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -42,10 +42,16 @@ export const useUsersNavData = () => {
     suspense: true,
   })
   // react to filter changes
-  useEffect(() => {
-    const unsub = jotaiStore.sub(treeUserGqlFilterForTreeAtom, refetch)
-    return unsub
-  }, [])
+  const [, setRerenderer] = useState(0)
+  const rerender = () => setRerenderer((prev) => prev + 1)
+  useEffect(
+    () => {
+      const unsub = jotaiStore.sub(treeUserGqlFilterForTreeAtom, rerender)
+      return unsub
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const count = data?.data?.allUsers?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
