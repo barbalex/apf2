@@ -1605,7 +1605,7 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
 export const treeTpopkontrGqlFilterAtom = atom((get) => {
   const ekGqlFilter = get(treeEkGqlFilterAtom)
   const ekfGqlFilter = get(treeEkfGqlFilterAtom)
-  
+
   return {
     or: [ekGqlFilter?.filtered, ekfGqlFilter.filtered],
   }

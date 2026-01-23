@@ -107,7 +107,6 @@ export const usePopsNavData = (props) => {
             apById(id: $apId) {
               id
               popsByApId(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC]) {
-                totalCount
                 nodes {
                   id
                   label
