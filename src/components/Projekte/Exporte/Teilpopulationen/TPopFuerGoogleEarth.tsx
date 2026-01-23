@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
@@ -7,7 +7,6 @@ import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
@@ -37,9 +36,8 @@ interface TPopKmlQueryResult {
   }
 }
 
-export const TPopFuerGoogleEarth = observer(() => {
+export const TPopFuerGoogleEarth = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -103,9 +101,7 @@ export const TPopFuerGoogleEarth = observer(() => {
         exportModule({
           data: sortBy(rows, ['art', 'label']),
           fileName: 'Teilpopulationen',
-          store,
           kml: true,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -116,4 +112,4 @@ export const TPopFuerGoogleEarth = observer(() => {
       : null}
     </Button>
   )
-})
+}

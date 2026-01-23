@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
 import { observer } from 'mobx-react-lite'
@@ -7,7 +7,6 @@ import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'
@@ -179,9 +178,8 @@ interface TPopErsteUndLetzteKontrolleQueryResult {
   }
 }
 
-export const Wollmilchsau = observer(() => {
+export const Wollmilchsau = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -795,8 +793,6 @@ export const Wollmilchsau = observer(() => {
           data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
           fileName:
             'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -826,4 +822,4 @@ export const Wollmilchsau = observer(() => {
       : null}
     </Button>
   )
-})
+}
