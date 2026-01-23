@@ -10,10 +10,7 @@ import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface MassnWebgisBunQueryResult {
   allVMassnWebgisbuns: {
@@ -137,12 +134,7 @@ export const MassnWebgisBun = observer(() => {
             },
           })
         }
-        exportModule({
-          data: rows,
-          fileName: 'MassnahmenWebGisBun',
-          store,
-          apolloClient,
-        })
+        exportModule({ data: rows, fileName: 'MassnahmenWebGisBun' })
         setQueryState(undefined)
       }}
     >
