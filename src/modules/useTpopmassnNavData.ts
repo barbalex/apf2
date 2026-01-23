@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 import {
   copyingAtom,
@@ -118,8 +117,9 @@ export const useTpopmassnNavData = (props) => {
     childrenAreFolders: true,
     fetcherName: 'useTpopmassnNavData',
     fetcherParams: { projId, apId, popId, tpopId, tpopmassnId },
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     component: NodeWithList,
     menus: [
       {
@@ -138,8 +138,9 @@ export const useTpopmassnNavData = (props) => {
           tpopmassnId,
           'Massnahme',
         ],
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
         isSelf: true,
       },
       {

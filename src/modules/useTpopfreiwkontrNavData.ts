@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 import {
   copyingAtom,
@@ -151,16 +150,18 @@ export const useTpopfreiwkontrNavData = (props) => {
     singleElementName: 'Freiwilligen-Kontrolle',
     hasChildren: true,
     childrenAreFolders: true,
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     // leave totalCount undefined as the menus are folders
     menus: [
       {
         id: 'Freiwilligen-Kontrolle',
         label: `Freiwilligen-Kontrolle`,
         isSelf: true,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       },
       {
         id: 'Zaehlungen',
