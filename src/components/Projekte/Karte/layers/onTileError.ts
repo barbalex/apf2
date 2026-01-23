@@ -11,7 +11,7 @@ import {
 const addNotification = (notification) =>
   jotaiStore.set(addNotificationAtom, notification)
 
-export const onTileError = async (store, map, layer, ignore) => {
+export const onTileError = async (map, layer, ignore) => {
   // console.log('onTileError', { ignore, map, layer })
   const mapSize = map.getSize()
   const bbox = map.getBounds().toBBoxString()

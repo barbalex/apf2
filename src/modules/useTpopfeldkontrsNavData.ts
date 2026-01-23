@@ -1,12 +1,10 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   copyingBiotopAtom,
@@ -29,7 +27,6 @@ export const useTpopfeldkontrsNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
   const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
