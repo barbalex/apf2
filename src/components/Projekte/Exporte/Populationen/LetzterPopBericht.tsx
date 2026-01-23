@@ -14,10 +14,7 @@ import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface PopMitLetzterPopberQueryResult {
   allPops: {
@@ -193,8 +190,6 @@ export const LetzterPopBericht = observer(() => {
         exportModule({
           data: sortBy(rows, ['artname', 'pop_nr']),
           fileName: 'PopulationenMitLetzemPopBericht',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}

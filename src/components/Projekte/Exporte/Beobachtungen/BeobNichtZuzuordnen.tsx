@@ -12,10 +12,7 @@ import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface BeobNichtZuzuordnenQueryResult {
   allVBeobNichtZuzuordnens: {
@@ -111,8 +108,6 @@ export const BeobNichtZuzuordnen = observer(() => {
         exportModule({
           data: result?.data?.allVBeobNichtZuzuordnens?.nodes ?? [],
           fileName: 'Beobachtungen',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
