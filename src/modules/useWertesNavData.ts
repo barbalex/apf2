@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -27,7 +26,7 @@ export const useWertesNavData = () => {
   )
   const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeWertes',
       adresseGqlFilterForTree,
@@ -90,48 +89,7 @@ export const useWertesNavData = () => {
     },
     suspense: true,
   })
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => {
-      const unsub = store.sub(treeAdresseGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(
-        treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
-        refetch,
-      )
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(
-        treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
-        refetch,
-      )
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(
-        treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
-        refetch,
-      )
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const adressesCount = data?.data?.allAdresses?.totalCount ?? 0
   const adressesFilteredCount = data?.data?.filteredAdresses?.totalCount ?? 0
   const tpopApberrelevantGrundWerteCount =
