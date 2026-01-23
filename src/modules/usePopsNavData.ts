@@ -99,7 +99,7 @@ export const usePopsNavData = (props) => {
   const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
 
   const { data } = useQuery({
-    queryKey: ['treePop', projId, apId, popGqlFilterForTree],
+    queryKey: ['treePop', apId, popGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
