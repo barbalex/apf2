@@ -13,13 +13,13 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+} from '../../../../JotaiStore/index.ts'
 
 import type { ZielId } from '../../../../models/apflora/ZielId.ts'
 import type { ApId } from '../../../../models/apflora/ApId.ts'
-
-
 
 interface CreateZielResult {
   data: {
@@ -95,14 +95,12 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       id: apId,
       projId,
       apId,
-      store,
       menuType: 'zielFolder',
     })
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
       url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
-      store,
       search,
     })
 
@@ -136,4 +134,4 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}
