@@ -64,7 +64,6 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
               filter: $beobNichtBeurteiltFilter
               orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
-              totalCount
               nodes {
                 id
                 label
@@ -98,7 +97,8 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
 
   const count = data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
-  const filteredCount = data?.data?.filteredBeobsNichtBeurteilt?.totalCount ?? 0
+  const filteredCount =
+    data?.data?.filteredBeobsNichtBeurteilt?.nodes?.length ?? 0
 
   const navData = {
     id: 'nicht-beurteilte-Beobachtungen',
@@ -136,9 +136,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobnichtbeurteiltIcon && beobId === p.id ?
-          [BeobnichtbeurteiltFilteredMapIcon]
-        : undefined,
+        showBeobnichtbeurteiltIcon && beobId === p.id
+          ? [BeobnichtbeurteiltFilteredMapIcon]
+          : undefined,
     })),
   }
 
