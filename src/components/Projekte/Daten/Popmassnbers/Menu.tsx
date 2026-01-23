@@ -89,4 +89,4 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}
