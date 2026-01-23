@@ -116,13 +116,12 @@ export const ProjektContainer = () => {
   // thus rendering outside of split pane. But then the tree rebuilds.
   // also: issue with extra panes only appearing with help of keys
   // this also solves issue with single pane
-  // TODO: also: issue with max 4 panes (5 show on reload only)
+  // TODO: issue with max 4 panes shown dynamically (5 show on reload only)
   return (
     <div className={styles.outerContainer}>
       {!hideBookmarks && <Bookmarks />}
       <div
         className={styles.container}
-        height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
       >
         <SplitPane direction="horizontal">
