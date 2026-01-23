@@ -1,7 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { Form, useParams } from 'react-router'
@@ -18,7 +17,6 @@ import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
 import { query } from './query.ts'
 import { queryTpopkontrs } from './queryTpopkontrs.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -91,7 +89,7 @@ const tpopkontrTypWerte = [
   },
 ]
 
-export const TpopfeldkontrFilter = observer(() => {
+export const TpopfeldkontrFilter = () => {
   const { apId } = useParams()
 
   const ekGqlFilter = useAtomValue(treeEkGqlFilterAtom)
@@ -160,36 +158,30 @@ export const TpopfeldkontrFilter = observer(() => {
     )
     .map((o) => ({ value: o, label: o }))
 
-  const navApFilterComment =
-    apFilter ?
-      `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Feld-Kontrollen von AP-Arten werden berücksichtigt.`
     : undefined
   const navHiearchyComment =
     // tpopId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Teil-Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
     // : popId
     // ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.' :
-    apId ?
-      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
+    apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Feld-Kontrollen berücksichtigt.'
+      : undefined
+  const navLabelComment = nodeLabelFilter.tpopfeldkontr
+    ? `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
     : undefined
-  const navLabelComment =
-    nodeLabelFilter.tpopfeldkontr ?
-      `Navigationsbaum, Label-Filter: Das Label der Feld-Kontrollen wird nach "${nodeLabelFilter.tpopfeldkontr}" gefiltert.`
+  const artHierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Feld-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const artHierarchyComment =
-    artIsFiltered ?
-      'Formular-Filter, Ebene Art: Es werden nur Feld-Kontrollen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const popHierarchyComment = popIsFiltered
+    ? 'Formular-Filter, Ebene Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const popHierarchyComment =
-    popIsFiltered ?
-      'Formular-Filter, Ebene Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+  const tpopHierarchyComment = tpopIsFiltered
+    ? 'Formular-Filter, Ebene Teil-Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const tpopHierarchyComment =
-    tpopIsFiltered ?
-      'Formular-Filter, Ebene Teil-Population: Es werden nur Feld-Kontrollen berücksichtigt, deren Teil-Population die Bedingungen des gesetzten Filters erfüllt.'
-    : undefined
-  const mapFilterComment =
-    mapFilter ?
-      'Karten-Filter: Nur Feld-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: Nur Feld-Kontrollen von Teil-Populationen innerhalb des Karten-Filters werden berücksichtigt.'
     : undefined
 
   const showFilterComments =
@@ -481,4 +473,4 @@ export const TpopfeldkontrFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
