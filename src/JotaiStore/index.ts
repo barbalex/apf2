@@ -7,18 +7,18 @@ import isUuid from 'is-uuid'
 import { constants } from '../modules/constants.ts'
 import { appBaseUrl } from '../modules/appBaseUrl.ts'
 import { initialDataFilterValues } from './initialDataFilterValues.ts'
-import { simpleTypes as apType } from '../store/Tree/DataFilter/ap.ts'
-import { simpleTypes as popType } from '../store/Tree/DataFilter/pop.ts'
-import { simpleTypes as tpopType } from '../store/Tree/DataFilter/tpop.ts'
-import { simpleTypes as tpopmassnType } from '../store/Tree/DataFilter/tpopmassn.ts'
+import { simpleTypes as apType } from './DataFilter/ap.ts'
+import { simpleTypes as popType } from './DataFilter/pop.ts'
+import { simpleTypes as tpopType } from './DataFilter/tpop.ts'
+import { simpleTypes as tpopmassnType } from './DataFilter/tpopmassn.ts'
 import {
   simpleTypes as tpopfeldkontrType,
   initial as initialTpopfeldkontr,
-} from '../store/Tree/DataFilter/tpopfeldkontr.ts'
+} from './DataFilter/tpopfeldkontr.ts'
 import {
   simpleTypes as tpopfreiwkontrType,
   initial as initialTpopfreiwkontr,
-} from '../store/Tree/DataFilter/tpopfreiwkontr.ts'
+} from './DataFilter/tpopfreiwkontr.ts'
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
