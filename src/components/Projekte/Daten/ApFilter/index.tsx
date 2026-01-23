@@ -227,11 +227,7 @@ export const ApFilter = () => {
               label="Art (das namensgebende Taxon)"
               row={{
                 ...row,
-                ...{
-                  aeTaxonomyByArtId: {
-                    artname,
-                  },
-                },
+                ...{ aeTaxonomyByArtId: { artname } },
               }}
               query={queryAeTaxonomies}
               filter={aeTaxonomiesFilter}
