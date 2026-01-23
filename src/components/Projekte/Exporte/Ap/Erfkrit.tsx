@@ -1,13 +1,11 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import { ApId, ErfkritId, AdresseId } from '../../../../models/apflora/index.tsx'
 
@@ -55,9 +53,8 @@ interface ErfkritsQueryResult {
   }
 }
 
-export const Erfkrit = observer(() => {
+export const Erfkrit = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -141,8 +138,6 @@ export const Erfkrit = observer(() => {
     exportModule({
       data: sortBy(rows, ['artname', 'beurteilung']),
       fileName: 'Erfolgskriterien',
-      store,
-      apolloClient,
     })
     setQueryState(undefined)
   }
@@ -160,4 +155,4 @@ export const Erfkrit = observer(() => {
       : null}
     </Button>
   )
-})
+}

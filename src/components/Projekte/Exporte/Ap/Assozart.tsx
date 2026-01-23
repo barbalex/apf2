@@ -1,21 +1,20 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
-import { ApId, AssozartId, AdresseId } from '../../../../models/apflora/index.tsx'
+import {
+  ApId,
+  AssozartId,
+  AdresseId,
+} from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface AssozartsQueryResult {
   allAssozarts: {
@@ -51,9 +50,8 @@ interface AssozartsQueryResult {
   }
 }
 
-export const Assozart = observer(() => {
+export const Assozart = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -136,12 +134,7 @@ export const Assozart = observer(() => {
         },
       })
     }
-    exportModule({
-      data: rows,
-      fileName: 'AssoziierteArten',
-      store,
-      apolloClient,
-    })
+    exportModule({ data: rows, fileName: 'AssoziierteArten' })
     setQueryState(undefined)
   }
 
@@ -158,4 +151,4 @@ export const Assozart = observer(() => {
       : null}
     </Button>
   )
-})
+}
