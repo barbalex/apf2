@@ -1,14 +1,10 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeTpopmassnberGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeTpopmassnberGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopmassnbersNavData = (props) => {
@@ -23,7 +19,7 @@ export const useTpopmassnbersNavData = (props) => {
     treeTpopmassnberGqlFilterForTreeAtom,
   )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeTpopmassnber', tpopId, tpopmassnberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -38,7 +34,6 @@ export const useTpopmassnbersNavData = (props) => {
                 filter: $tpopmassnbersFilter
                 orderBy: LABEL_ASC
               ) {
-                totalCount
                 nodes {
                   id
                   label
@@ -60,22 +55,8 @@ export const useTpopmassnbersNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => {
-      const unsub = store.sub(
-        treeTpopmassnberGqlFilterForTreeAtom,
-        refetch,
-      )
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
-  const count = data?.data?.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {
