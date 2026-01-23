@@ -1,9 +1,7 @@
-import { useContext } from 'react'
 import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   treeNodeLabelFilterAtom,
   treeMapFilterAtom,
@@ -17,8 +15,6 @@ import styles from './ActiveFilters.module.css'
 
 export const ActiveFilters = observer(() => {
   const { apId } = useParams()
-
-  const store = useContext(MobxContext)
 
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const mapFilter = useAtomValue(treeMapFilterAtom)
