@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, type SyntheticEvent } from 'react'
-import { observer } from 'mobx-react-lite'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useSetAtom } from 'jotai'
@@ -15,53 +14,51 @@ interface TabsProps {
   dataFilter: any[]
 }
 
-export const Tabs = observer(
-  ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
-    const addDataFilterOr = useSetAtom(treeDataFilterAddOrAtom)
+export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
+  const addDataFilterOr = useSetAtom(treeDataFilterAddOrAtom)
 
-    const lastFilterIsEmpty =
-      Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
-        (v) => v !== null,
-      ).length === 0
+  const lastFilterIsEmpty =
+    Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
+      (v) => v !== null,
+    ).length === 0
 
-    const onChangeTab = (_event: SyntheticEvent, value: number) => {
-      if (value > dataFilter.length - 1) {
-        addDataFilterOr({ table: 'tpop', val: tpop })
-        setTimeout(() => setActiveTab(value), 0)
-        return
-      }
-      setActiveTab(value)
+  const onChangeTab = (_event: SyntheticEvent, value: number) => {
+    if (value > dataFilter.length - 1) {
+      addDataFilterOr({ table: 'tpop', val: tpop })
+      setTimeout(() => setActiveTab(value), 0)
+      return
     }
+    setActiveTab(value)
+  }
 
-    return (
-      <div>
-        <div className={styles.title}>Filter-Kriterien:</div>
-        <MuiTabs
-          value={activeTab}
-          onChange={onChangeTab}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-          className={styles.styledTabs}
-        >
-          {dataFilter.map((filter, index) => (
-            <Tab
-              key={index}
-              label={index + 1}
-              value={index}
-              className={styles.styledTab}
-            />
-          ))}
+  return (
+    <div>
+      <div className={styles.title}>Filter-Kriterien:</div>
+      <MuiTabs
+        value={activeTab}
+        onChange={onChangeTab}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+        className={styles.styledTabs}
+      >
+        {dataFilter.map((filter, index) => (
           <Tab
-            key={dataFilter.length}
-            label="oder"
-            value={dataFilter.length}
-            disabled={lastFilterIsEmpty}
+            key={index}
+            label={index + 1}
+            value={index}
             className={styles.styledTab}
           />
-        </MuiTabs>
-      </div>
-    )
-  },
-)
+        ))}
+        <Tab
+          key={dataFilter.length}
+          label="oder"
+          value={dataFilter.length}
+          disabled={lastFilterIsEmpty}
+          className={styles.styledTab}
+        />
+      </MuiTabs>
+    </div>
+  )
+}

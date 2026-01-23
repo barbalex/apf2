@@ -1,5 +1,4 @@
 import { type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
@@ -26,7 +25,7 @@ interface HeaddataProps {
   activeTab: number
 }
 
-export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
+export const Headdata = ({ row, activeTab }: HeaddataProps) => {
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const apolloClient = useApolloClient()
@@ -69,4 +68,4 @@ export const Headdata = observer(({ row, activeTab }: HeaddataProps) => {
       </div>
     </div>
   )
-})
+}
