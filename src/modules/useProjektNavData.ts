@@ -39,13 +39,15 @@ export const useProjektNavData = (props) => {
             projektById(id: $projId) {
               id
               label
-              apberuebersichtsByProjId(filter: $apberuebersichtFilter) {
+              filteredApberuebersichts: apberuebersichtsByProjId(
+                filter: $apberuebersichtFilter
+              ) {
                 totalCount
               }
               allApberuebersichts: apberuebersichtsByProjId {
                 totalCount
               }
-              apsByProjId(filter: $apFilter) {
+              filteredAps: apsByProjId(filter: $apFilter) {
                 totalCount
               }
               allAps: apsByProjId {
@@ -67,10 +69,10 @@ export const useProjektNavData = (props) => {
   })
 
   const label = data?.data?.projektById?.label ?? 'Projekt'
-  const artsCount = data?.data?.projektById?.apsByProjId?.totalCount ?? 0
+  const artsCount = data?.data?.projektById?.filteredAps?.totalCount ?? 0
   const allArtsCount = data?.data?.projektById?.allAps?.totalCount ?? 0
   const apberuebersichtsCount =
-    data?.data?.projektById?.apberuebersichtsByProjId?.totalCount ?? 0
+    data?.data?.projektById?.filteredApberuebersichts?.totalCount ?? 0
   const allApberuebersichtsCount =
     data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
 
