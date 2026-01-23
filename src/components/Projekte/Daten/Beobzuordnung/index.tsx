@@ -1,5 +1,4 @@
-import { type ChangeEvent, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { type ChangeEvent } from 'react'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
@@ -23,7 +22,6 @@ import { saveArtIdToDb } from './saveArtIdToDb.ts'
 import { saveTpopIdToDb } from './saveTpopIdToDb.ts'
 import { sendMail } from '../../../../modules/sendMail.ts'
 import { userNameAtom } from '../../../../JotaiStore/index.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   aeTaxonomies,
@@ -141,7 +139,7 @@ const getTpopZuordnenSource = ({ row, ap }: { row: any; ap: any }) => {
   }))
 }
 
-export const Component = observer(() => {
+export const Component = () => {
   const { beobId: id, apId } = useParams<{ beobId: string; apId: string }>()
   const { search, pathname } = useLocation()
   const type =
@@ -151,7 +149,6 @@ export const Component = observer(() => {
     : 'uups'
 
   const apolloClient = useApolloClient()
-  const store = useContext(MobxContext)
 
   const userName = useAtomValue(userNameAtom)
 
@@ -382,4 +379,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}
