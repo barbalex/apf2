@@ -14,10 +14,7 @@ import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface PopAnzKontrsQueryResult {
   allPops: {
@@ -132,8 +129,6 @@ export const AnzKontrProPop = observer(() => {
         exportModule({
           data: sortBy(rows, ['artname', 'nr']),
           fileName: 'PopulationenAnzahlKontrollen',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}

@@ -1,19 +1,14 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface TpopkontrWebgisBunQueryResult {
   allVTpopkontrWebgisbuns: {
@@ -71,9 +66,8 @@ interface TpopkontrWebgisBunQueryResult {
   }
 }
 
-export const KontrFuerWebgisBun = observer(() => {
+export const KontrFuerWebgisBun = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -168,8 +162,6 @@ export const KontrFuerWebgisBun = observer(() => {
         exportModule({
           data: rows,
           fileName: 'KontrollenWebGisBun',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -180,4 +172,4 @@ export const KontrFuerWebgisBun = observer(() => {
       : null}
     </Button>
   )
-})
+}
