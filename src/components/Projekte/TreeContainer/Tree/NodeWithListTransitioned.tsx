@@ -1,24 +1,20 @@
-import { useRef, useContext } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useRef } from 'react'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import { isEqual } from 'es-toolkit'
 
 import { Row } from './Row.tsx'
 import { NodesList } from './NodesList/index.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { nodeFromMenu } from './nodeFromMenu.ts'
 import { checkIfIsOpen } from './checkIfIsOpen.ts'
 import { Folders } from './Folders.tsx'
 
-export const NodeWithListTransitioned = observer(
-  ({
-    menu,
-    in: inPropLocal,
-    inProp: inPropPassedFromAbove,
-    // enables transitioning grandchildren. Example: Zielber
-    parentTransitionState,
-  }) => {
-    const store = useContext(MobxContext)
+export const NodeWithListTransitioned = ({
+  menu,
+  in: inPropLocal,
+  inProp: inPropPassedFromAbove,
+  // enables transitioning grandchildren. Example: Zielber
+  parentTransitionState,
+}) => {
     const isOpen = checkIfIsOpen({ menu })
     const node = nodeFromMenu(menu)
     const ref = useRef(null)
@@ -61,5 +57,4 @@ export const NodeWithListTransitioned = observer(
         )}
       </Transition>
     )
-  },
-)
+  }

@@ -1,23 +1,16 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { FaExpandArrowsAlt, FaCompressArrowsAlt } from 'react-icons/fa'
 import screenfull from 'screenfull'
 
-import { MobxContext } from '../../../mobxContext.ts'
-
 import styles from './FullscreenControl.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../JotaiStore/index.ts'
+import { addNotificationAtom } from '../../../JotaiStore/index.ts'
 
-
-export const FullscreenControl = observer(({ mapRef }) => {
+export const FullscreenControl = ({ mapRef }) => {
   const addNotification = useSetAtom(addNotificationAtom)
   // need to test if screenfull (i.e. the fullscreen api) is supported - iPhones don't support it
   // https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API/Guide
-  const store = useContext(MobxContext)
   if (!screenfull.isEnabled) {
     addNotification({
       message: `Ihr Browser unterstützt den Vollbildmodus nicht. Bitte verwenden Sie einen anderen Browser. Hinweis: iPhones unterstützen den Vollbildmodus grundsätzlich nicht - unabhängig vom verwendeten Browser.`,
@@ -30,7 +23,7 @@ export const FullscreenControl = observer(({ mapRef }) => {
   }
 
   return <FullscreenController mapRef={mapRef} />
-})
+}
 
 const FullscreenController = ({ mapRef }) => {
   const [isFullscreen, setIsFullscreen] = useState(false)
