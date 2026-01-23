@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeApartGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeApartGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useApartsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -18,7 +15,7 @@ export const useApartsNavData = (props) => {
   const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
 
   const { data } = useQuery({
-    queryKey: ['treeApart', projId, apId, apartGqlFilterForTree],
+    queryKey: ['treeApart', apId, apartGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -26,7 +23,6 @@ export const useApartsNavData = (props) => {
             apById(id: $apId) {
               id
               apartsByApId(filter: $apartsFilter, orderBy: LABEL_ASC) {
-                totalCount
                 nodes {
                   id
                   label

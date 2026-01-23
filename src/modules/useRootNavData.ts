@@ -77,5 +77,7 @@ export const useRootNavData = () => {
     ],
   }
 
+  console.log('Root navData.label:', navData.label)
+
   return navData
 }
