@@ -19,25 +19,24 @@ export const useApsNavData = (props) => {
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeAp', projId, apGqlFilterForTree],
+    queryKey: ['treeAp', apGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
-          query TreeApsQuery($apsFilter: ApFilter!, $projId: UUID!) {
+          query TreeApsQuery($apsFilter: ApFilter!) {
             allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
               nodes {
                 id
                 label
               }
             }
-            totalCount: allAps(filter: { projId: { equalTo: $projId } }) {
+            totalCount: allAps {
               totalCount
             }
           }
         `,
         variables: {
           apsFilter: apGqlFilterForTree,
-          projId,
         },
       })
       if (result.error) throw result.error
