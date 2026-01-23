@@ -108,15 +108,10 @@ export const ProjektContainer = () => {
     singlePane ? '100%'
     : firstOfTwoIsTree ? '33%'
     : undefined
-  const firstPaneMaxSize = singlePane ? undefined : '95%'
+  const firstPaneMaxSize = singlePane ? null : '95%'
 
-  console.log('ProjektContainer, treeTabs:', treeTabs)
-
-  // issue with single pane: it does not expand to full width, when changing from two to one panes
-  // thus rendering outside of split pane. But then the tree rebuilds.
-  // also: issue with extra panes only appearing with help of keys
-  // this also solves issue with single pane
-  // TODO: issue with max 4 panes shown dynamically (5 show on reload only)
+  // issue with extra panes only appearing with help of keys
+  // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
   return (
     <div className={styles.outerContainer}>
       {!hideBookmarks && <Bookmarks />}
@@ -136,28 +131,28 @@ export const ProjektContainer = () => {
             key={treeTabs.length > 1 ? treeTabs[1] : 'emptyPane2'}
             maxSize="95%"
             className={styles.overflowingPane}
-            size={treeTabs.length > 1 ? undefined : 0}
+            size={treeTabs.length > 1 ? null : 0}
           >
             {treeTabs[1] ? elObj[treeTabs[1]] : null}
           </Pane>
           <Pane
             key={treeTabs.length > 2 ? treeTabs[2] : 'emptyPane3'}
             maxSize="95%"
-            size={treeTabs.length > 2 ? undefined : 0}
+            size={treeTabs.length > 2 ? null : 0}
           >
             {treeTabs[2] ? elObj[treeTabs[2]] : null}
           </Pane>
           <Pane
             key={treeTabs.length > 3 ? treeTabs[3] : 'emptyPane4'}
             maxSize="95%"
-            size={treeTabs.length > 3 ? undefined : 0}
+            size={treeTabs.length > 3 ? null : 0}
           >
             {treeTabs[3] ? elObj[treeTabs[3]] : null}
           </Pane>
           <Pane
             key={treeTabs.length > 4 ? treeTabs[4] : 'emptyPane5'}
             maxSize="95%"
-            size={treeTabs.length > 4 ? undefined : 0}
+            size={treeTabs.length > 4 ? null : 0}
           >
             {treeTabs[4] ? elObj[treeTabs[4]] : null}
           </Pane>
