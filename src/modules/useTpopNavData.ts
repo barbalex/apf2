@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -52,7 +52,6 @@ export const useTpopNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
   const tpopmassnGqlFilterForTree = useAtomValue(
