@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -24,7 +23,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     treeTpopkontrzaehlGqlFilterForTreeAtom,
   )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeTpopfeldkontrzaehl',
       tpopkontrId,
@@ -43,7 +42,6 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
                 filter: $tpopkontrzaehlsFilter
                 orderBy: LABEL_ASC
               ) {
-                totalCount
                 nodes {
                   id
                   label
@@ -65,18 +63,9 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     },
     suspense: true,
   })
-  // react to filter changes
-  useEffect(() => {
-    const unsub = store.sub(
-      treeTpopkontrzaehlGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const count =
-    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
+    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopkontrById?.totalCount?.totalCount ?? 0
 
   const navData = {
