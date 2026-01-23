@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../index.module.css'
 
@@ -54,9 +52,8 @@ interface MassnWebgisBunQueryResult {
   }
 }
 
-export const MassnWebgisBun = observer(() => {
+export const MassnWebgisBun = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -144,4 +141,4 @@ export const MassnWebgisBun = observer(() => {
       : null}
     </Button>
   )
-})
+}
