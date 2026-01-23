@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 import {
   copyingAtom,
@@ -173,16 +172,18 @@ export const useTpopfeldkontrNavData = (props) => {
     treeSingleElementName: 'Feld-Kontrolle',
     hasChildren: true,
     childrenAreFolders: true,
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     component: NodeWithList,
     menus: [
       {
         id: 'Feld-Kontrolle',
         label: `Feld-Kontrolle`,
         isSelf: true,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       },
       {
         id: 'Zaehlungen',

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
@@ -156,8 +155,9 @@ export const useTpopfreiwkontrsNavData = (props) => {
         fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
         singleElementName: 'Freiwilligen-Kontrolle',
         hasChildren: true,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }
