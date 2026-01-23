@@ -18,7 +18,7 @@ export const useApsNavData = (props) => {
 
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['treeAp', apGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
