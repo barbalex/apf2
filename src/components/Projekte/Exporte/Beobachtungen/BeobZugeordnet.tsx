@@ -12,10 +12,7 @@ import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
 
 interface BeobZugeordnetQueryResult {
   allVBeobZugeordnets: {
@@ -111,8 +108,6 @@ export const BeobZugeordnet = observer(() => {
         exportModule({
           data: result?.data?.allVBeobZugeordnets?.nodes ?? [],
           fileName: 'BeobachtungenZugeordnet',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}

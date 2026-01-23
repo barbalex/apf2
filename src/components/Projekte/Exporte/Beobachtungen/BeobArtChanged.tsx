@@ -162,11 +162,7 @@ export const BeobArtChanged = () => {
         },
       })
     }
-    exportModule({
-      data: rows,
-      fileName: 'BeobachtungenArtVeraendert',
-      apolloClient,
-    })
+    exportModule({ data: rows, fileName: 'BeobachtungenArtVeraendert' })
     setQueryState(undefined)
   }
 
