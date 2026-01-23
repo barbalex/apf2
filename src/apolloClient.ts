@@ -12,7 +12,6 @@ import { ErrorLink } from '@apollo/client/link/error'
 import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-typename'
 import { jwtDecode } from 'jwt-decode'
 import { uniqBy } from 'es-toolkit'
-import type { Instance } from 'mobx-state-tree'
 import { useSetAtom } from 'jotai'
 
 import { graphQlUri } from './modules/graphQlUri.ts'

@@ -1,5 +1,3 @@
-import type { Instance } from 'mobx-state-tree'
-
 // Import queries for different routes
 import { query as apQuery } from '../components/Projekte/Daten/Ap/query.ts'
 import { query as popQuery } from '../components/Projekte/Daten/Pop/query.ts'
