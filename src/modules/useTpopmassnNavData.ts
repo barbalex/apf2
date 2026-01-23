@@ -4,11 +4,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
-import {
-  copyingAtom,
-  movingAtom,
-  store,
-} from '../store/index.ts'
+import { copyingAtom, movingAtom, store } from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
@@ -61,6 +57,7 @@ export const useTpopmassnNavData = (props) => {
     },
     suspense: true,
   })
+
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
