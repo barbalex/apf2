@@ -24,10 +24,3 @@
   overflow: auto !important;
   scrollbar-width: thin;
 }
-
-.overflowingDiv {
-  overflow: auto;
-  scrollbar-width: thin;
-  height: 100%;
-  width: 100%;
-}
