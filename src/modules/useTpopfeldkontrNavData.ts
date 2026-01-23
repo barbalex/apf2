@@ -57,7 +57,7 @@ export const useTpopfeldkontrNavData = (props) => {
     treeTpopkontrzaehlGqlFilterForTreeAtom,
   )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeTpopfeldkontr',
       tpopkontrId,
@@ -97,14 +97,7 @@ export const useTpopfeldkontrNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(() => {
-    const unsub = store.sub(
-      treeTpopkontrzaehlGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
