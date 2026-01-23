@@ -1,19 +1,17 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { TransitionGroup } from 'react-transition-group'
 import { isEqual } from 'es-toolkit'
-import { getSnapshot } from 'mobx-state-tree'
+import { useAtomValue } from 'jotai'
 
 import { Row } from './Row.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { NodesList } from './NodesList/index.tsx'
 import { Folders } from './Folders.tsx'
 import { nodeFromMenu } from './nodeFromMenu.ts'
 import { checkIfIsOpen } from './checkIfIsOpen.ts'
+import { treeOpenNodesAtom } from '../../../../store/index.ts'
 
-export const NodeWithList = observer(({ menu }) => {
-  const store = useContext(MobxContext)
-  const isOpen = checkIfIsOpen({ menu })
+export const NodeWithList = ({ menu }) => {
+  const openNodes = useAtomValue(treeOpenNodesAtom)
+  const isOpen = checkIfIsOpen({ menu, openNodes })
   const node = nodeFromMenu(menu)
 
   return (
@@ -28,4 +26,4 @@ export const NodeWithList = observer(({ menu }) => {
       )}
     </>
   )
-})
+}

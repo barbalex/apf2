@@ -4,19 +4,19 @@ import { tpop } from '../../../shared/fragments.ts'
 import { setStartjahr } from '../setStartjahr/index.ts'
 import { setEkplans } from '../setEkplans/index.ts'
 import {
-  store as jotaiStore,
+  store,
   tsQueryClientAtom,
   apolloClientAtom,
   addNotificationAtom,
   userNameAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const processChange = async ({ value, row, store }) => {
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   try {
     await apolloClient.mutate({
       mutation: gql`
@@ -45,7 +45,7 @@ export const processChange = async ({ value, row, store }) => {
       variables: {
         id: row.id,
         ekfrequenz: value,
-        changedBy: jotaiStore.get(userNameAtom),
+        changedBy: store.get(userNameAtom),
       },
     })
   } catch (error) {

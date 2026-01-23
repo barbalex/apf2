@@ -6,12 +6,12 @@
 import axios from 'redaxios'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const getGemeindeForKoord = async ({ lv95X, lv95Y }) => {
   const url = `https://api3.geo.admin.ch/rest/services/api/MapServer/identify?geometryType=esriGeometryPoint&geometry=${lv95X},${lv95Y}&imageDisplay=1391,1070,96&mapExtent=548945.5,147956,549402,148103.5&tolerance=0&layers=all:ch.swisstopo-vd.geometa-gemeinde&returnGeometry=false&sr=2056`

@@ -1,21 +1,16 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface BeobArtChangedQueryResult {
   allVBeobArtChangeds: {
@@ -51,10 +46,9 @@ interface BeobArtChangedQueryResult {
   }
 }
 
-export const BeobArtChanged = observer(() => {
+export const BeobArtChanged = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const { mapFilter } = store.tree
+  const mapFilter = useAtomValue(treeMapFilterAtom)
 
   const apolloClient = useApolloClient()
 
@@ -168,12 +162,7 @@ export const BeobArtChanged = observer(() => {
         },
       })
     }
-    exportModule({
-      data: rows,
-      fileName: 'BeobachtungenArtVeraendert',
-      store,
-      apolloClient,
-    })
+    exportModule({ data: rows, fileName: 'BeobachtungenArtVeraendert' })
     setQueryState(undefined)
   }
 
@@ -190,4 +179,4 @@ export const BeobArtChanged = observer(() => {
       : null}
     </Button>
   )
-})
+}

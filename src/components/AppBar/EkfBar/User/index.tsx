@@ -21,7 +21,7 @@ import { Error } from '../../../shared/Error.tsx'
 import { updateUserById as updateUserByIdGql } from './updateUserById.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { userNameAtom } from '../../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../../store/index.ts'
 import { logout } from '../../../../modules/logout.ts'
 
 import type {

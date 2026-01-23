@@ -1,11 +1,10 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import type { ApId } from '../../../../../models/apflora/ApId.ts'
 
 import { StringToCopyOnlyButton } from '../../../../shared/StringToCopyOnlyButton.tsx'
@@ -23,13 +22,13 @@ import { Files } from './Files.tsx'
 import { Count } from './Count/index.tsx'
 import { Verification } from './Verification.tsx'
 import { Image } from './Image.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 import {
   userNameAtom,
   isPrintAtom,
+  treeDataFilterSetValueAtom,
   userTokenAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 import {
   adresse as adresseFragment,
   pop as popFragment,
@@ -68,10 +67,9 @@ const fieldTypes = {
   ekfBemerkungen: 'String',
 }
 
-export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
-  const store = useContext(MobxContext)
+export const Form = ({ data, refetch, row, apId }: FormProps) => {
   const isPrint = useAtomValue(isPrintAtom)
-  const { dataFilterSetValue } = store.tree
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
   const userName = useAtomValue(userNameAtom)
   const token = useAtomValue(userTokenAtom)
 
@@ -393,4 +391,4 @@ export const Form = observer(({ data, refetch, row, apId }: FormProps) => {
       {!isPrint && <div style={{ height: '64px' }} />}
     </div>
   )
-})
+}

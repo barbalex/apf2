@@ -1,10 +1,10 @@
-import { useContext, Dispatch, SetStateAction, type SyntheticEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { Dispatch, SetStateAction, type SyntheticEvent } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useSetAtom } from 'jotai'
 
-import { initial as tpopfreiwkontr } from '../../../../store/Tree/DataFilter/tpopfreiwkontr.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { initial as tpopfreiwkontr } from '../../../../store/DataFilter/tpopfreiwkontr.ts'
+import { treeDataFilterAddOrAtom } from '../../../../store/index.ts'
 
 import styles from './Tabs.module.css'
 
@@ -14,9 +14,8 @@ interface TabsProps {
   dataFilter: any[]
 }
 
-export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
-  const store = useContext(MobxContext)
-  const { dataFilterAddOr } = store.tree
+export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
+  const addDataFilterOr = useSetAtom(treeDataFilterAddOrAtom)
 
   const lastFilterIsEmpty =
     Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
@@ -25,7 +24,7 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }: TabsProps
 
   const onChangeTab = (_event: SyntheticEvent, value: number) => {
     if (value > dataFilter.length - 1) {
-      dataFilterAddOr({
+      addDataFilterOr({
         table: 'tpopfreiwkontr',
         val: tpopfreiwkontr,
       })
@@ -65,4 +64,4 @@ export const Tabs = observer(({ activeTab, setActiveTab, dataFilter }: TabsProps
       </MuiTabs>
     </>
   )
-})
+}

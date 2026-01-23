@@ -3,16 +3,16 @@ import { DateTime } from 'luxon'
 
 import { apberuebersicht } from '../components/shared/fragments.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   addNotificationAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const historize = async ({ apberuebersicht: row }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   // 1. historize
   try {
     await apolloClient.mutate({

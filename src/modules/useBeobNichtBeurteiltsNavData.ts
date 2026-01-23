@@ -1,13 +1,14 @@
-import { useContext, useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
-import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
+import {
+  mapActiveApfloraLayersAtom,
+  treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  store,
+} from '../store/index.ts'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -22,13 +23,10 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
 
-  const store = useContext(MobxContext)
-
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
-  const showBeobnichtbeurteiltIcon =
-    activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
+  const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
+    treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  )
 
   const allBeobNichtBeurteiltFilter = {
     tpopId: { isNull: true },
@@ -44,11 +42,11 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
   }
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeBeobNichtBeurteilt',
       apId,
-      store.tree.beobNichtBeurteiltGqlFilterForTree,
+      beobNichtBeurteiltGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -66,7 +64,6 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
               filter: $beobNichtBeurteiltFilter
               orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
-              totalCount
               nodes {
                 id
                 label
@@ -76,7 +73,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
         `,
         variables: {
           beobNichtBeurteiltFilter: {
-            ...store.tree.beobNichtBeurteiltGqlFilterForTree,
+            ...beobNichtBeurteiltGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -95,15 +92,13 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () =>
-      reaction(() => store.tree.beobNichtBeurteiltGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
+  const showBeobnichtbeurteiltIcon =
+    activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
 
   const count = data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
-  const filteredCount = data?.data?.filteredBeobsNichtBeurteilt?.totalCount ?? 0
+  const filteredCount =
+    data?.data?.filteredBeobsNichtBeurteilt?.nodes?.length ?? 0
 
   const navData = {
     id: 'nicht-beurteilte-Beobachtungen',
@@ -141,9 +136,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobnichtbeurteiltIcon && beobId === p.id ?
-          [BeobnichtbeurteiltFilteredMapIcon]
-        : undefined,
+        showBeobnichtbeurteiltIcon && beobId === p.id
+          ? [BeobnichtbeurteiltFilteredMapIcon]
+          : undefined,
     })),
   }
 

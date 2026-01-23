@@ -1,10 +1,9 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
@@ -14,7 +13,6 @@ import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
@@ -24,8 +22,7 @@ import {
   addNotificationAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
-
+} from '../../../../store/index.ts'
 
 interface CreateAdresseResult {
   data?: {
@@ -49,7 +46,7 @@ interface DeleteAdresseResult {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(() => {
+export const Menu = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -59,7 +56,6 @@ export const Menu = observer(() => {
   const { adrId } = useParams<{ adrId: string }>()
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-  const store = useContext(MobxContext)
 
   const onClickAdd = async () => {
     let result: CreateAdresseResult | undefined
@@ -169,4 +165,4 @@ export const Menu = observer(() => {
       </MuiMenu>
     </ErrorBoundary>
   )
-})
+}

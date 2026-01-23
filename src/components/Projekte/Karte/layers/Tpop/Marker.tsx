@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 import {
   mapTpopIconAtom,
   mapTpopLabelAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 import { tpopIcon } from './tpopIcon.ts'
 import { tpopIconHighlighted } from './tpopIconHighlighted.ts'
 import { u as uIcon } from './statusGroup/u.ts'

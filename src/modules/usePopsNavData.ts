@@ -1,8 +1,7 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -29,14 +28,14 @@ import { PopIconPHighlighted } from '../components/Projekte/Karte/layers/Pop/sta
 import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.tsx'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   mapPopIconAtom,
   treeShowPopIconAtom,
-} from '../JotaiStore/index.ts'
+  treePopGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
@@ -94,12 +93,12 @@ export const usePopsNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
-  const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
+  const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treePop', projId, apId, store.tree.popGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treePop', apId, popGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -107,7 +106,6 @@ export const usePopsNavData = (props) => {
             apById(id: $apId) {
               id
               popsByApId(filter: $popsFilter, orderBy: [NR_ASC, NAME_ASC]) {
-                totalCount
                 nodes {
                   id
                   label
@@ -121,7 +119,7 @@ export const usePopsNavData = (props) => {
           }
         `,
         variables: {
-          popsFilter: store.tree.popGqlFilterForTree,
+          popsFilter: popGqlFilterForTree,
           apId,
         },
       })
@@ -133,16 +131,11 @@ export const usePopsNavData = (props) => {
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.popGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(mapPopIconAtom, rerender)
+      const unsub = store.sub(mapPopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,7 +143,7 @@ export const usePopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeShowPopIconAtom, rerender)
+      const unsub = store.sub(treeShowPopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,7 +151,7 @@ export const usePopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,7 +159,7 @@ export const usePopsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -176,8 +169,8 @@ export const usePopsNavData = (props) => {
   const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
 
-  const popIconName = jotaiStore.get(mapPopIconAtom)
-  const showPopIcon = jotaiStore.get(treeShowPopIconAtom)
+  const popIconName = store.get(mapPopIconAtom)
+  const showPopIcon = store.get(treeShowPopIconAtom)
 
   const navData = {
     id: 'Populationen',
@@ -206,12 +199,13 @@ export const usePopsNavData = (props) => {
       }
 
       const popIconIsHighlighted = p.id === popId
-      const PopIcon =
-        p.status ?
-          popIconIsHighlighted ? popIcons[popIconName][p.status + 'Highlighted']
+      const PopIcon = p.status
+        ? popIconIsHighlighted
+          ? popIcons[popIconName][p.status + 'Highlighted']
           : popIcons[popIconName][p.status]
-        : popIconIsHighlighted ? PopIconQHighlighted
-        : PopIconQ
+        : popIconIsHighlighted
+          ? PopIconQHighlighted
+          : PopIconQ
 
       return {
         id: p.id,
@@ -227,8 +221,9 @@ export const usePopsNavData = (props) => {
         fetcherParams: { projId, apId, popId: p.id },
         status: p.status,
         labelLeftElements: showPopIcon ? [PopIcon] : undefined,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }

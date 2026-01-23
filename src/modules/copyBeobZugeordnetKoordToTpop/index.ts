@@ -2,16 +2,16 @@ import { queryBeob } from './queryBeob.ts'
 import { updateTpopById } from './updateTpopById.ts'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
   apolloClientAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const copyBeobZugeordnetKoordToTpop = async ({ id }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   // fetch beob coodinates
   let beobResult
   try {

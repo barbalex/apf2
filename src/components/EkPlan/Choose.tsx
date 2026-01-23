@@ -25,7 +25,7 @@ import {
   ekPlanSetShowEkCountAtom,
   ekPlanSetShowMassnAtom,
   ekPlanSetPastYearsAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 import styles from './Choose.module.css'
 

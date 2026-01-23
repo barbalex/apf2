@@ -1,20 +1,20 @@
-import { useContext, useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
-import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
+import {
+  mapActiveApfloraLayersAtom,
+  treeBeobZugeordnetGqlFilterForTreeAtom,
+  store,
+} from '../store/index.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobZugeordnetsNavData = (props) => {
   const apolloClient = useApolloClient()
-  const store = useContext(MobxContext)
 
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -27,17 +27,14 @@ export const useBeobZugeordnetsNavData = (props) => {
   const karteIsVisible = projekteTabs.includes('karte')
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const beobZugeordnetGqlFilterForTree = useAtomValue(
+    treeBeobZugeordnetGqlFilterForTreeAtom,
+  )
   const showBeobzugeordnetIcon =
     activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const { data, refetch } = useQuery({
-    queryKey: [
-      'treeBeobZugeordnet',
-      tpopId,
-      store.tree.beobZugeordnetGqlFilterForTree,
-    ],
+  const { data } = useQuery({
+    queryKey: ['treeBeobZugeordnet', tpopId, beobZugeordnetGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -52,7 +49,6 @@ export const useBeobZugeordnetsNavData = (props) => {
               filter: $beobZugeordnetFilter
               orderBy: [DATUM_DESC, AUTOR_ASC]
             ) {
-              totalCount
               nodes {
                 id
                 label
@@ -62,7 +58,7 @@ export const useBeobZugeordnetsNavData = (props) => {
         `,
         variables: {
           beobZugeordnetFilter: {
-            ...store.tree.beobZugeordnetGqlFilterForTree,
+            ...beobZugeordnetGqlFilterForTree,
             tpopId: { equalTo: tpopId },
           },
           allBeobZugeordnetFilter: { tpopId: { equalTo: tpopId } },
@@ -73,14 +69,9 @@ export const useBeobZugeordnetsNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.beobZugeordnetGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.beobsZugeordnet?.totalCount ?? 0
-  const filteredCount = data?.data?.filteredBeobsZugeordnet?.totalCount ?? 0
+  const filteredCount = data?.data?.filteredBeobsZugeordnet?.nodes?.length ?? 0
 
   const navData = {
     id: 'Beobachtungen',
@@ -126,9 +117,9 @@ export const useBeobZugeordnetsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobzugeordnetIcon && beobId === p.id ?
-          [BeobzugeordnetFilteredMapIcon]
-        : undefined,
+        showBeobzugeordnetIcon && beobId === p.id
+          ? [BeobzugeordnetFilteredMapIcon]
+          : undefined,
     })),
   }
 

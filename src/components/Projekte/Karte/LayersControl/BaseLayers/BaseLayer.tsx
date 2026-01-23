@@ -4,7 +4,7 @@ import { Radio } from '../shared/Radio.tsx'
 import {
   mapActiveBaseLayerAtom,
   setMapActiveBaseLayerAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 import styles from './BaseLayer.module.css'
 

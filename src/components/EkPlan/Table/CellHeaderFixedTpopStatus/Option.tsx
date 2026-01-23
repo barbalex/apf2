@@ -8,7 +8,7 @@ import {
   ekPlanSetFilterStatusAtom,
   ekPlanFilterPopStatusAtom,
   ekPlanSetFilterPopStatusAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const Option = ({ option, type = 'tpop' }) => {
   const filterStatusAtom =

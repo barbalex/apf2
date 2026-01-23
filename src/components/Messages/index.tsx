@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
 import { createUsermessage } from './createUsermessage.ts'
-import { userNameAtom } from '../../JotaiStore/index.ts'
+import { userNameAtom } from '../../store/index.ts'
 import { Error } from '../shared/Error.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { MessagesList } from './Messages/index.tsx'

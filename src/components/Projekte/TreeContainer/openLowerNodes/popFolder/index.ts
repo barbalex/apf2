@@ -6,16 +6,16 @@
  */
 import { query } from './query.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   treeAddOpenNodesAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 
 export const popFolder = async ({
   id,
   projId = '99999999-9999-9999-9999-999999999999',
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
 
   // 1. load all data
   const { data } = await apolloClient.query({
@@ -110,5 +110,5 @@ export const popFolder = async ({
   })
 
   // 3. update openNodes
-  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes)
 }

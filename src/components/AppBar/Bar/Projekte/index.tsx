@@ -18,7 +18,7 @@ import {
   hideTreeAtom,
   userTokenAtom,
   resetTree2SrcAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 

@@ -1,19 +1,14 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface InfoFloraQueryResult {
   allVExportInfoFloraBeobs: {
@@ -64,9 +59,8 @@ interface InfoFloraQueryResult {
   }
 }
 
-export const InfoFlora = observer(() => {
+export const InfoFlora = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -191,12 +185,7 @@ export const InfoFlora = observer(() => {
         },
       })
     }
-    exportModule({
-      data: rows,
-      fileName: 'KontrollenApFloraZhFuerInfoFlora',
-      store,
-      apolloClient,
-    })
+    exportModule({ data: rows, fileName: 'KontrollenApFloraZhFuerInfoFlora' })
     setQueryState(undefined)
   }
 
@@ -213,4 +202,4 @@ export const InfoFlora = observer(() => {
       : null}
     </Button>
   )
-})
+}

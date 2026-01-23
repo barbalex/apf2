@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../../../shared/TextField.tsx'
-import { userNameAtom } from '../../../../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../../../../store/index.ts'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
 

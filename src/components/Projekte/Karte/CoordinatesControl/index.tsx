@@ -7,7 +7,7 @@ import { useSetAtom } from 'jotai'
 import { ShowCoordinates } from './ShowCoordinates.tsx'
 import { PanToCoordinates } from './PanToCoordinates.tsx'
 import { epsg4326to2056 } from '../../../../modules/epsg4326to2056.ts'
-import { setMapMouseCoordinatesAtom } from '../../../../JotaiStore/index.ts'
+import { setMapMouseCoordinatesAtom } from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 

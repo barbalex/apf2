@@ -49,7 +49,7 @@ import {
   ekPlanFilterKontrolleYearAtom,
   ekPlanFilterEkplanYearAtom,
   ekPlanPastYearsAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './index.module.css'
 
@@ -291,11 +291,7 @@ export const EkPlanTable = () => {
     const data = tpops.map((tpop) =>
       exportRowFromTpop({ tpop, years, ekfrequenzs }),
     )
-    exportModule({
-      data,
-      fileName: 'ek-planung',
-      apolloClient,
-    })
+    exportModule({ data, fileName: 'ek-planung' })
   }
 
   // TODO: give button to remove all filters in case something goes wrong

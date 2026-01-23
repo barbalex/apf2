@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
-import { isPrintAtom, tree2SrcAtom } from '../../JotaiStore/index.ts'
+import { isPrintAtom, tree2SrcAtom } from '../../store/index.ts'
 import { ProjektContainer } from './ProjektContainer.tsx'
 // import AppRenderer from '../../AppRenderer'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'

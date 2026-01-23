@@ -1,21 +1,25 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopApberrelevantGrundWertesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const tpopApberrelevantGrundWerteGqlFilterForTree = useAtomValue(
+    treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeTpopApberrelevantGrundWerte',
-      store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
+      tpopApberrelevantGrundWerteGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -39,7 +43,7 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
         `,
         variables: {
           tpopApberrelevantGrundWertsFilter:
-            store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
+            tpopApberrelevantGrundWerteGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -47,18 +51,7 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () =>
-      reaction(
-        () => store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
-        refetch,
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const count = data?.data?.allTpopApberrelevantGrundWertes?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 

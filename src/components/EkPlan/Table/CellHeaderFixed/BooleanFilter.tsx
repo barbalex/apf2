@@ -4,7 +4,7 @@ import MenuItem from '@mui/material/MenuItem'
 import {
   ekPlanFilterEkfrequenzAbweichendAtom,
   ekPlanSetFilterEkfrequenzAbweichendAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450

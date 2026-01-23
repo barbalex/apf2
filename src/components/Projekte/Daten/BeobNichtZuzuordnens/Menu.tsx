@@ -12,7 +12,7 @@ import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import {
   mapActiveApfloraLayersAtom,
   setMapActiveApfloraLayersAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 interface MenuProps {
   apfloraLayer?: string

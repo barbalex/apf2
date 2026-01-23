@@ -28,7 +28,7 @@ import {
   setMovingAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

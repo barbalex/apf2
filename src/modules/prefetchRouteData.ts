@@ -1,6 +1,3 @@
-import type { Instance } from 'mobx-state-tree'
-import type { MobxStore } from '../store/index.ts'
-
 // Import queries for different routes
 import { query as apQuery } from '../components/Projekte/Daten/Ap/query.ts'
 import { query as popQuery } from '../components/Projekte/Daten/Pop/query.ts'
@@ -27,10 +24,10 @@ import { query as beobQuery } from '../components/Projekte/Daten/Beob/query.ts'
 import { query as apberuebersichtQuery } from '../components/Projekte/Daten/Apberuebersicht/query.ts'
 
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 interface RouteConfig {
   // Pattern to match the route path
@@ -301,8 +298,8 @@ const routeConfigs: RouteConfig[] = [
  * @param path - The route path to prefetch data for
  */
 export const prefetchRouteData = async (path: string) => {
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   if (!tsQueryClient || !apolloClient) return
 
   // Decode the path to handle URL-encoded characters

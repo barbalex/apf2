@@ -2,22 +2,22 @@ import { sum } from 'es-toolkit'
 
 import { appBaseUrl } from '../../../modules/appBaseUrl.ts'
 import {
-  store as jotaiStore,
+  store,
   ekPlanEinheitsByApAtom,
   ekPlanShowCountAtom,
   ekPlanFieldsAtom,
   ekPlanShowEkAtom,
   ekPlanShowEkfAtom,
   ekPlanShowMassnAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
-  const einheitsByAp = jotaiStore.get(ekPlanEinheitsByApAtom)
-  const showCount = jotaiStore.get(ekPlanShowCountAtom)
-  const fields = jotaiStore.get(ekPlanFieldsAtom)
-  const showEk = jotaiStore.get(ekPlanShowEkAtom)
-  const showEkf = jotaiStore.get(ekPlanShowEkfAtom)
-  const showMassn = jotaiStore.get(ekPlanShowMassnAtom)
+  const einheitsByAp = store.get(ekPlanEinheitsByApAtom)
+  const showCount = store.get(ekPlanShowCountAtom)
+  const fields = store.get(ekPlanFieldsAtom)
+  const showEk = store.get(ekPlanShowEkAtom)
+  const showEkf = store.get(ekPlanShowEkfAtom)
+  const showMassn = store.get(ekPlanShowMassnAtom)
   const row = {
     apId: tpop?.popByPopId?.apByApId?.id,
   }

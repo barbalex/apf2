@@ -1,13 +1,23 @@
-import { useContext, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
-import { mapActiveApfloraLayersAtom } from '../JotaiStore/index.ts'
+import {
+  mapActiveApfloraLayersAtom,
+  treePopGqlFilterForTreeAtom,
+  treeZielGqlFilterForTreeAtom,
+  treeApberGqlFilterForTreeAtom,
+  treeApartGqlFilterForTreeAtom,
+  treeAssozartGqlFilterForTreeAtom,
+  treeErfkritGqlFilterForTreeAtom,
+  treeEkfrequenzGqlFilterForTreeAtom,
+  treeEkzaehleinheitGqlFilterForTreeAtom,
+  treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
+  store,
+} from '../store/index.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
@@ -23,17 +33,32 @@ export const useApNavData = (props) => {
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
 
-  const store = useContext(MobxContext)
-
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
+  const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
+  const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
+  const apberGqlFilterForTree = useAtomValue(treeApberGqlFilterForTreeAtom)
+  const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
+  const assozartGqlFilterForTree = useAtomValue(
+    treeAssozartGqlFilterForTreeAtom,
+  )
+  const erfkritGqlFilterForTree = useAtomValue(treeErfkritGqlFilterForTreeAtom)
+  const ekfrequenzGqlFilterForTree = useAtomValue(
+    treeEkfrequenzGqlFilterForTreeAtom,
+  )
+  const ekzaehleinheitGqlFilterForTree = useAtomValue(
+    treeEkzaehleinheitGqlFilterForTreeAtom,
+  )
+  const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
+    treeBeobNichtBeurteiltGqlFilterForTreeAtom,
+  )
+  const beobNichtZuzuordnenGqlFilterForTree = useAtomValue(
+    treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
+  )
   const showPopIcon = activeApfloraLayers?.includes('pop') && karteIsVisible
   const showBeobnichtbeurteiltIcon =
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
   const showBeobnichtzuzuordnenIcon =
     activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
-
-  const [, setRerenderer] = useState(0)
-  const rerender = () => setRerenderer((prev) => prev + 1)
 
   const allBeobNichtZuzuordnenFilter = {
     nichtZuordnen: { equalTo: true },
@@ -64,21 +89,21 @@ export const useApNavData = (props) => {
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeAp',
       projId,
       apId,
-      store.tree.popGqlFilterForTree,
-      store.tree.zielGqlFilterForTree,
-      store.tree.erfkritGqlFilterForTree,
-      store.tree.apberGqlFilterForTree,
-      store.tree.apartGqlFilterForTree,
-      store.tree.assozartGqlFilterForTree,
-      store.tree.ekfrequenzGqlFilterForTree,
-      store.tree.ekzaehleinheitGqlFilterForTree,
-      store.tree.beobNichtBeurteiltGqlFilterForTree,
-      store.tree.beobNichtZuzuordnenGqlFilterForTree,
+      popGqlFilterForTree,
+      zielGqlFilterForTree,
+      apberGqlFilterForTree,
+      apartGqlFilterForTree,
+      assozartGqlFilterForTree,
+      erfkritGqlFilterForTree,
+      ekfrequenzGqlFilterForTree,
+      ekzaehleinheitGqlFilterForTree,
+      beobNichtBeurteiltGqlFilterForTree,
+      beobNichtZuzuordnenGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -195,16 +220,16 @@ export const useApNavData = (props) => {
         `,
         variables: {
           apId,
-          popFilter: store.tree.popGqlFilterForTree,
-          zielFilter: store.tree.zielGqlFilterForTree,
-          erfkritFilter: store.tree.erfkritGqlFilterForTree,
-          apberFilter: store.tree.apberGqlFilterForTree,
-          apartFilter: store.tree.apartGqlFilterForTree,
-          assozartFilter: store.tree.assozartGqlFilterForTree,
-          ekfrequenzFilter: store.tree.ekfrequenzGqlFilterForTree,
-          ekzaehleinheitFilter: store.tree.ekzaehleinheitGqlFilterForTree,
+          popFilter: popGqlFilterForTree,
+          zielFilter: zielGqlFilterForTree,
+          erfkritFilter: erfkritGqlFilterForTree,
+          apberFilter: apberGqlFilterForTree,
+          apartFilter: apartGqlFilterForTree,
+          assozartFilter: assozartGqlFilterForTree,
+          ekfrequenzFilter: ekfrequenzGqlFilterForTree,
+          ekzaehleinheitFilter: ekzaehleinheitGqlFilterForTree,
           beobNichtBeurteiltFilter: {
-            ...store.tree.beobNichtBeurteiltGqlFilterForTree,
+            ...beobNichtBeurteiltGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -216,7 +241,7 @@ export const useApNavData = (props) => {
             },
           },
           beobNichtZuzuordnenFilter: {
-            ...store.tree.beobNichtZuzuordnenGqlFilterForTree,
+            ...beobNichtZuzuordnenGqlFilterForTree,
             aeTaxonomyByArtId: {
               apartsByArtId: {
                 some: {
@@ -236,58 +261,6 @@ export const useApNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.popGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.zielGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.erfkritGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.apberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.apartGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.assozartGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.ekfrequenzGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.ekzaehleinheitGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () =>
-      reaction(() => store.tree.beobNichtBeurteiltGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () =>
-      reaction(() => store.tree.beobNichtZuzuordnenGqlFilterForTree, refetch),
-    // eslint:disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const label = data?.data?.apById?.label
   const popsCount = data?.data?.apById?.popsByApId?.totalCount ?? 0
@@ -485,8 +458,9 @@ export const useApNavData = (props) => {
         fetcherName: 'useBeobNichtBeurteiltsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredBeobsNichtBeurteiltCount,
-        labelLeftElements:
-          showBeobnichtbeurteiltIcon ? [BeobnichtbeurteiltMapIcon] : undefined,
+        labelLeftElements: showBeobnichtbeurteiltIcon
+          ? [BeobnichtbeurteiltMapIcon]
+          : undefined,
         component: NodeWithList,
       },
       {
@@ -506,9 +480,8 @@ export const useApNavData = (props) => {
         fetcherName: 'useBeobNichtZuzuordnensNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredBeobsNichtZuzuordnenCount,
-        labelLeftElements:
-          showBeobnichtzuzuordnenIcon ?
-            [BeobnichtzuzuordnenMapIcon]
+        labelLeftElements: showBeobnichtzuzuordnenIcon
+          ? [BeobnichtzuzuordnenMapIcon]
           : undefined,
         component: NodeWithList,
       },

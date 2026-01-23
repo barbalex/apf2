@@ -4,7 +4,7 @@ import { userIsReadOnly } from '../../../../modules/userIsReadOnly.ts'
 import {
   userTokenAtom,
   copyingAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,

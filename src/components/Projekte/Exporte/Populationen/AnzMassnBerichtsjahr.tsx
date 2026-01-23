@@ -1,23 +1,18 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface PopmassnberAnzMassnsQueryResult {
   allPopmassnbers: {
@@ -56,9 +51,8 @@ interface PopmassnberAnzMassnsQueryResult {
   }
 }
 
-export const AnzMassnBerichtsjahr = observer(() => {
+export const AnzMassnBerichtsjahr = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -176,8 +170,6 @@ export const AnzMassnBerichtsjahr = observer(() => {
         exportModule({
           data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
           fileName: 'PopulationenAnzMassnProMassnber',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -188,4 +180,4 @@ export const AnzMassnBerichtsjahr = observer(() => {
       : null}
     </Button>
   )
-})
+}

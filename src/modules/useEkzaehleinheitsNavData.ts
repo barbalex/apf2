@@ -1,11 +1,13 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treeEkzaehleinheitGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkzaehleinheitsNavData = (props) => {
@@ -14,14 +16,12 @@ export const useEkzaehleinheitsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const store = useContext(MobxContext)
+  const ekzaehleinheitGqlFilterForTree = useAtomValue(
+    treeEkzaehleinheitGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
-    queryKey: [
-      'treeEkzaehleinheit',
-      apId,
-      store.tree.ekzaehleinheitGqlFilterForTree,
-    ],
+  const { data } = useQuery({
+    queryKey: ['treeEkzaehleinheit', apId, ekzaehleinheitGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -47,7 +47,7 @@ export const useEkzaehleinheitsNavData = (props) => {
           }
         `,
         variables: {
-          ekzaehleinheitsFilter: store.tree.ekzaehleinheitGqlFilterForTree,
+          ekzaehleinheitsFilter: ekzaehleinheitGqlFilterForTree,
           apId,
         },
       })
@@ -56,14 +56,6 @@ export const useEkzaehleinheitsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.ekzaehleinheitGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const rows = data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? []
   const count = rows.length

@@ -17,7 +17,7 @@ import {
   ekPlanSetFilterKontrolleYearAtom,
   ekPlanFilterEkplanYearAtom,
   ekPlanSetFilterEkplanYearAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './CellHeaderYear.module.css'
 

@@ -1,13 +1,11 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'
@@ -16,10 +14,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 import styles from '../index.module.css'
 import wollmilchsauStyles from './Wollmilchsau.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TPopErsteUndLetzteKontrolleQueryResult {
   allTpops: {
@@ -179,9 +174,8 @@ interface TPopErsteUndLetzteKontrolleQueryResult {
   }
 }
 
-export const Wollmilchsau = observer(() => {
+export const Wollmilchsau = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -795,8 +789,6 @@ export const Wollmilchsau = observer(() => {
           data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
           fileName:
             'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -821,9 +813,9 @@ export const Wollmilchsau = observer(() => {
       <div className={wollmilchsauStyles.ewm}>
         {'= "Eier legende Wollmilchsau". Vorsicht: kann > 2 Minuten dauern!'}
       </div>
-      {queryState ?
+      {queryState ? (
         <div className={wollmilchsauStyles.progress}>{queryState}</div>
-      : null}
+      ) : null}
     </Button>
   )
-})
+}

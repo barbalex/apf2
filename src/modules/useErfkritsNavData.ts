@@ -1,11 +1,10 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import { store, treeErfkritGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useErfkritsNavData = (props) => {
@@ -14,10 +13,10 @@ export const useErfkritsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const store = useContext(MobxContext)
+  const erfkritGqlFilterForTree = useAtomValue(treeErfkritGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeErfkrit', projId, apId, store.tree.erfkritGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -31,7 +30,6 @@ export const useErfkritsNavData = (props) => {
                 filter: $erfkritsFilter
                 orderBy: AP_ERFKRIT_WERTE_BY_ERFOLG__SORT_ASC
               ) {
-                totalCount
                 nodes {
                   id
                   label
@@ -44,7 +42,7 @@ export const useErfkritsNavData = (props) => {
           }
         `,
         variables: {
-          erfkritsFilter: store.tree.erfkritGqlFilterForTree,
+          erfkritsFilter: erfkritGqlFilterForTree,
           apId,
         },
       })
@@ -53,14 +51,6 @@ export const useErfkritsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.erfkritGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.apById?.erfkritsByApId?.nodes?.length ?? 0
   const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0

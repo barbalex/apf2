@@ -1,10 +1,14 @@
-import { useEffect, useContext } from 'react'
+import { useEffect } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import {
+  treeMapFilterAtom,
+  treeSetMapFilterAtom,
+  treeMapFilterResetterAtom,
+} from '../../../store/index.ts'
 
 window.L.drawLocal.draw.toolbar.buttons.polygon =
   'Umriss zeichnen, um räumlich zu filtern'
@@ -42,10 +46,11 @@ window.L.drawLocal.edit.handlers.edit.tooltip.subtext =
   'Punkte ziehen, um Filter-Umriss zu ändern'
 window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-Umriss klicken, dann auf 'speichern'`
 
-export const DrawControl = observer(() => {
+export const DrawControl = () => {
   const map = useMap()
-  const store = useContext(MobxContext)
-  const { setMapFilter, mapFilter, mapFilterResetter } = store.tree
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const setMapFilter = useSetAtom(treeSetMapFilterAtom)
+  const mapFilterResetter = useAtomValue(treeMapFilterResetterAtom)
 
   useEffect(() => {
     // solution to allow only one geometry to be drawn
@@ -134,4 +139,4 @@ export const DrawControl = observer(() => {
   }, [map, setMapFilter, mapFilterResetter])
 
   return <div style={{ display: 'none' }} />
-})
+}

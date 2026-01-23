@@ -1,18 +1,16 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   copyingBiotopAtom,
   movingAtom,
-  store as jotaiStore,
-} from '../JotaiStore/index.ts'
+  store,
+  treeTpopkontrzaehlGqlFilterForTreeAtom,
+} from '../store/index.ts'
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -52,16 +50,18 @@ export const useTpopfeldkontrNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
 
-  const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
+  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
+    treeTpopkontrzaehlGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeTpopfeldkontr',
       tpopkontrId,
-      store.tree.tpopkontrzaehlGqlFilterForTree,
+      tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -89,7 +89,7 @@ export const useTpopfeldkontrNavData = (props) => {
         `,
         variables: {
           tpopkontrId,
-          tpopkontrzaehlFilter: store.tree.tpopkontrzaehlGqlFilterForTree,
+          tpopkontrzaehlFilter: tpopkontrzaehlGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -97,16 +97,12 @@ export const useTpopfeldkontrNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.tpopkontrzaehlGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingBiotopAtom, rerender)
+      const unsub = store.sub(copyingBiotopAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,7 +110,7 @@ export const useTpopfeldkontrNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -122,7 +118,7 @@ export const useTpopfeldkontrNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,16 +165,18 @@ export const useTpopfeldkontrNavData = (props) => {
     treeSingleElementName: 'Feld-Kontrolle',
     hasChildren: true,
     childrenAreFolders: true,
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     component: NodeWithList,
     menus: [
       {
         id: 'Feld-Kontrolle',
         label: `Feld-Kontrolle`,
         isSelf: true,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       },
       {
         id: 'Zaehlungen',

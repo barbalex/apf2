@@ -1,6 +1,4 @@
-import { useContext } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
@@ -8,7 +6,6 @@ import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
@@ -16,7 +13,8 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 
 import {
   addNotificationAtom,
-} from '../../../../../JotaiStore/index.ts'
+  treeBeobGqlFilterAtom,
+} from '../../../../../store/index.ts'
 
 
 interface BeobNichtBeurteiltNode {
@@ -56,23 +54,21 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
+const BeobNichtBeurteiltMarker = ({ clustered }) => {
   // const leafletMap = useMap()
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+  const beobNichtBeurteiltGqlFilter = useAtomValue(treeBeobGqlFilterAtom('nichtBeurteilt'))
 
   const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: [
       'BeobNichtBeurteiltForMapQuery',
-      beobGqlFilter('nichtBeurteilt').filtered,
+      beobNichtBeurteiltGqlFilter.filtered,
     ],
     queryFn: async () =>
       apolloClient.query({
         query: query,
-        variables: { beobFilter: beobGqlFilter('nichtBeurteilt').filtered },
+        variables: { beobFilter: beobNichtBeurteiltGqlFilter.filtered },
       }),
   })
 
@@ -118,13 +114,11 @@ const BeobNichtBeurteiltMarker = observer(({ clustered }) => {
     )
   }
   return beobMarkers
-})
+}
 
-export const BeobNichtBeurteilt = observer(({ clustered }) => {
+export const BeobNichtBeurteilt = ({ clustered }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+  const beobNichtBeurteiltGqlFilter = useAtomValue(treeBeobGqlFilterAtom('nichtBeurteilt'))
 
   const { apId } = useParams()
 
@@ -133,11 +127,11 @@ export const BeobNichtBeurteilt = observer(({ clustered }) => {
   // thus query fetches data for all aps
   // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
   const gqlFilterHasApId =
-    !!beobGqlFilter('nichtBeurteilt').filtered?.aeTaxonomyByArtId?.apartsByArtId
+    !!beobNichtBeurteiltGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId
       ?.some?.apId
   const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
 
   return <BeobNichtBeurteiltMarker clustered={clustered} />
-})
+}

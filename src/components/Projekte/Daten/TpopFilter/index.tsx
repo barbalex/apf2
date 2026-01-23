@@ -1,5 +1,4 @@
 import {
-  useContext,
   useState,
   useEffect,
   type SyntheticEvent,
@@ -7,17 +6,22 @@ import {
 } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
+import { useAtomValue, useSetAtom } from 'jotai'
+
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { queryTpops } from './queryTpops.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { Ek } from './Ek/index.tsx'
 import { Tpop } from './Tpop.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import {
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
+  treeTpopGqlFilterAtom,
+} from '../../../../store/index.ts'
 import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { ActiveFilters } from './ActiveFilters.tsx'
@@ -33,10 +37,11 @@ interface TpopsQueryResult {
 
 import styles from './index.module.css'
 
-export const TpopFilter = observer(() => {
-  const store = useContext(MobxContext)
+export const TpopFilter = () => {
+  const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
 
-  const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
   const onChangeTab = (_event: SyntheticEvent, value: string) => setTab(value)
@@ -64,14 +69,13 @@ export const TpopFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const row = dataFilter.tpop[activeTab]
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpop',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
@@ -131,4 +135,4 @@ export const TpopFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

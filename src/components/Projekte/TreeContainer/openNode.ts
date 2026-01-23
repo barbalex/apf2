@@ -1,9 +1,9 @@
 import { isNodeOpen } from './isNodeOpen.ts'
 import {
-  store as jotaiStore,
+  store,
   treeSetOpenNodesAtom,
   treeResetNodeLabelFilterKeepingApAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 export const openNode = async ({ node, openNodes }) => {
   // make sure this node's url is not yet contained
@@ -16,11 +16,11 @@ export const openNode = async ({ node, openNodes }) => {
     newOpenNodes.push([...node.url, 'Zaehlungen'])
   }
 
-  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
+  store.set(treeSetOpenNodesAtom, newOpenNodes)
 
   if (node.menuType === 'ap') {
     // if ap is changed, need to empty nodeLabelFilter,
     // with exception of the ap key
-    jotaiStore.set(treeResetNodeLabelFilterKeepingApAtom)
+    store.set(treeResetNodeLabelFilterKeepingApAtom)
   }
 }

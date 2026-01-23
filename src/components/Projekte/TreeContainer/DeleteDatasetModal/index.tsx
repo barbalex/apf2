@@ -1,26 +1,22 @@
-import { useContext } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import Button from '@mui/material/Button'
-import { observer } from 'mobx-react-lite'
 import { useLocation } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { tables } from '../../../../modules/tables.ts'
 import { deleteModule } from './delete/index.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   toDeleteAtom,
   emptyToDeleteAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import styles from './index.module.css'
 
-export const DatasetDeleteModal = observer(() => {
+export const DatasetDeleteModal = () => {
   const { search } = useLocation()
 
-  const store = useContext(MobxContext)
   const toDelete = useAtomValue(toDeleteAtom)
   const emptyToDelete = useSetAtom(emptyToDeleteAtom)
 
@@ -36,11 +32,7 @@ export const DatasetDeleteModal = observer(() => {
     question = `${tableName} löschen?`
   }
 
-  const onClickLoeschen = () =>
-    deleteModule({
-      store,
-      search,
-    })
+  const onClickLoeschen = () => deleteModule({ search })
 
   return (
     <ErrorBoundary>
@@ -66,4 +58,4 @@ export const DatasetDeleteModal = observer(() => {
       </Dialog>
     </ErrorBoundary>
   )
-})
+}

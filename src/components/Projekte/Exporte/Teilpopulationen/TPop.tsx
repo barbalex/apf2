@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
@@ -16,7 +14,10 @@ import type { AdresseId } from '../../../../models/apflora/public/AdresseId.ts'
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import {
+  addNotificationAtom,
+  treeTpopGqlFilterAtom,
+} from '../../../../store/index.ts'
 
 interface TPopQueryResult {
   allTpops: {
@@ -98,10 +99,9 @@ interface TPopProps {
   filtered?: boolean
 }
 
-export const TPop = observer(({ filtered = false }: TPopProps) => {
+export const TPop = ({ filtered = false }: TPopProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const { tpopGqlFilter } = store.tree
+  const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 
@@ -289,14 +289,12 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
     await exportModule({
       data: enrichedData,
       fileName: 'Teilpopulationen',
-      store,
-      apolloClient,
     })
     setQueryState(undefined)
     //console.timeEnd('exporting')
   }
 
-  const tpopIsFiltered = tableIsFiltered({ table: 'tpop', tree: store.tree })
+  const tpopIsFiltered = tableIsFiltered({ table: 'tpop' })
 
   return (
     <Button
@@ -311,4 +309,4 @@ export const TPop = observer(({ filtered = false }: TPopProps) => {
       : null}
     </Button>
   )
-})
+}

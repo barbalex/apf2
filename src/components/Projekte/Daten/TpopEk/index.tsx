@@ -19,7 +19,7 @@ import { query as tpopQuery } from '../Tpop/query.ts'
 import { EkYear } from './EkYear.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
-import { userNameAtom } from '../../../../JotaiStore/index.ts'
+import { userNameAtom } from '../../../../store/index.ts'
 import { query } from './query.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import {

@@ -1,9 +1,8 @@
-import { useContext, useState, useEffect, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -15,8 +14,17 @@ import { DateField } from '../../../shared/Date.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { query } from './query.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
+  treeArtIsFilteredAtom,
+  treePopIsFilteredAtom,
+  treeTpopIsFilteredAtom,
+  treeTpopmassnGqlFilterAtom,
+} from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -58,21 +66,18 @@ interface TpopmassnsFilterQueryResult {
 
 import styles from './index.module.css'
 
-export const TpopmassnFilter = observer(() => {
+export const TpopmassnFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
-  const {
-    dataFilter,
-    tpopmassnGqlFilter,
-    mapFilter,
-    apFilter,
-    artIsFiltered,
-    popIsFiltered,
-    tpopIsFiltered,
-    dataFilterSetValue,
-  } = store.tree
+  const tpopmassnGqlFilter = useAtomValue(treeTpopmassnGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
+  const popIsFiltered = useAtomValue(treePopIsFilteredAtom)
+  const tpopIsFiltered = useAtomValue(treeTpopIsFilteredAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -101,7 +106,6 @@ export const TpopmassnFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: Infinity,
     gcTime: Infinity,
   })
@@ -113,7 +117,7 @@ export const TpopmassnFilter = observer(() => {
   )?.anpflanzung
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpopmassn',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
@@ -374,4 +378,4 @@ export const TpopmassnFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

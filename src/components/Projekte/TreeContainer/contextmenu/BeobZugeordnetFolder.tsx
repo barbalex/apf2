@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 
-import { mapActiveApfloraLayersAtom } from '../../../../JotaiStore/index.ts'
+import { mapActiveApfloraLayersAtom } from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,

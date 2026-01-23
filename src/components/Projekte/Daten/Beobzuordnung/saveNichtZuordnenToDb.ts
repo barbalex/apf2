@@ -2,7 +2,7 @@ import { isEqual } from 'es-toolkit'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
@@ -10,7 +10,7 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const saveNichtZuordnenToDb = async ({
   value,
@@ -18,11 +18,11 @@ export const saveNichtZuordnenToDb = async ({
   refetch: refetchPassed,
   search,
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const navigate = jotaiStore.get(navigateAtom)
-  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const navigate = store.get(navigateAtom)
+  const activeNodeArray = store.get(treeActiveNodeArrayAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
   const variables = {
     id,
     nichtZuordnen: value,
@@ -61,8 +61,8 @@ export const saveNichtZuordnenToDb = async ({
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
   })
-  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
-  jotaiStore.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
+  store.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
   if (refetchPassed) refetchPassed()
 }

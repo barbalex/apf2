@@ -13,7 +13,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import {
   exportFileTypeAtom,
   setExportFileTypeAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import optionenStyles from './Optionen.module.css'
 import styles from './index.module.css'

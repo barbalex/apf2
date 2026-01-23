@@ -8,7 +8,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'
 import { Analytics } from '@vercel/analytics/react'
-//import { onPatch } from 'mobx-state-tree'
 
 import 'react-leaflet-markercluster/styles'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -16,12 +15,10 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { theme } from './utils/materialTheme.ts'
 
 import { initializeIdb } from './modules/initializeIdb.ts'
-import { MobxStore } from './store/index.ts'
 import { buildApolloClient } from './apolloClient.ts'
 
-import { store as jotaiStore } from './JotaiStore/index.ts'
+import { store } from './store/index.ts'
 
-import { MobxContext } from './mobxContext.ts'
 import { UploaderContext } from './UploaderContext.ts'
 
 import { persistStore } from './modules/persistStore.ts'
@@ -74,51 +71,48 @@ const queryClient = new QueryClient({
 })
 
 export const App = () => {
-  const store = MobxStore.create()
-  const apolloClient = buildApolloClient({ store })
+  const apolloClient = buildApolloClient()
   const uploaderRef = createRef<HTMLElement>(null)
 
   useEffect(() => {
-    persistStore(store)
+    persistStore()
   }, [])
 
   return (
-    <JotaiProvider store={jotaiStore}>
-      <MobxContext value={store}>
-        <ApolloProvider client={apolloClient}>
-          <QueryClientProvider client={queryClient}>
-            <StyledEngineProvider injectFirst>
-              <uc-upload-ctx-provider
-                id="uploaderctx"
-                ctx-name="uploadcare"
-                ref={uploaderRef}
-              ></uc-upload-ctx-provider>
-              <ThemeProvider theme={theme}>
-                <SnackbarProvider
-                  maxSnack={3}
-                  preventDuplicate
-                  autoHideDuration={10000}
-                  action={(key) => <NotificationDismisser nKey={key} />}
-                >
-                  <UploaderContext value={uploaderRef}>
-                    {/* <Suspense fallback={<Spinner />}> */}
-                    <Router />
-                    {/*<UnterhaltsRouter />*/}
-                    {/* </Suspense> */}
-                    {/* <Suspense fallback={null}> */}
-                    <Notifier />
-                    <IsPrintSetter />
-                    <LastTouchedNodeSetter />
-                    <MouseWheelHandler />
-                    <LegacyBrowserInformer />
-                    {/* </Suspense> */}
-                  </UploaderContext>
-                </SnackbarProvider>
-              </ThemeProvider>
-            </StyledEngineProvider>
-          </QueryClientProvider>
-        </ApolloProvider>
-      </MobxContext>
+    <JotaiProvider store={store}>
+      <ApolloProvider client={apolloClient}>
+        <QueryClientProvider client={queryClient}>
+          <StyledEngineProvider injectFirst>
+            <uc-upload-ctx-provider
+              id="uploaderctx"
+              ctx-name="uploadcare"
+              ref={uploaderRef}
+            ></uc-upload-ctx-provider>
+            <ThemeProvider theme={theme}>
+              <SnackbarProvider
+                maxSnack={3}
+                preventDuplicate
+                autoHideDuration={10000}
+                action={(key) => <NotificationDismisser nKey={key} />}
+              >
+                <UploaderContext value={uploaderRef}>
+                  {/* <Suspense fallback={<Spinner />}> */}
+                  <Router />
+                  {/*<UnterhaltsRouter />*/}
+                  {/* </Suspense> */}
+                  {/* <Suspense fallback={null}> */}
+                  <Notifier />
+                  <IsPrintSetter />
+                  <LastTouchedNodeSetter />
+                  <MouseWheelHandler />
+                  <LegacyBrowserInformer />
+                  {/* </Suspense> */}
+                </UploaderContext>
+              </SnackbarProvider>
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </QueryClientProvider>
+      </ApolloProvider>
       <Analytics debug={false} />
     </JotaiProvider>
   )

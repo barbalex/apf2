@@ -1,13 +1,17 @@
-import { useContext } from 'react'
 import Button from '@mui/material/Button'
-import { observer } from 'mobx-react-lite'
+import { useSetAtom } from 'jotai'
 
-import { MobxContext } from '../../../../../../mobxContext.ts'
+import {
+  treeSetMapFilterAtom,
+  treeIncrementMapFilterResetterAtom,
+} from '../../../../../../store/index.ts'
 import styles from './index.module.css'
 
-export const KtZhFilter = observer(() => {
-  const store = useContext(MobxContext)
-  const { setMapFilter, incrementMapFilterResetter } = store.tree
+export const KtZhFilter = () => {
+  const setMapFilter = useSetAtom(treeSetMapFilterAtom)
+  const incrementMapFilterResetter = useSetAtom(
+    treeIncrementMapFilterResetterAtom,
+  )
 
   const onClickFilterZh = () =>
     import('./ktZh.json').then((module) => {
@@ -28,4 +32,4 @@ export const KtZhFilter = observer(() => {
       </Button>
     </div>
   )
-})
+}

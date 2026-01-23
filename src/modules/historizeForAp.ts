@@ -1,16 +1,16 @@
 import { gql } from '@apollo/client'
 
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   addNotificationAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const historizeForAp = async ({ year, apId }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
 
   try {
     await apolloClient.mutate({

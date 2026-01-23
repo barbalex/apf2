@@ -1,11 +1,13 @@
-import { useContext, useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  treeApGqlFilterForTreeAtom,
+  treeApberuebersichtGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useProjektNavData = (props) => {
@@ -14,10 +16,18 @@ export const useProjektNavData = (props) => {
   const projId =
     props?.projId ?? params?.projId ?? 'e57f56f4-4376-11e8-ab21-4314b6749d13'
 
-  const store = useContext(MobxContext)
+  const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
+  const apberuebersichtGqlFilterForTree = useAtomValue(
+    treeApberuebersichtGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeProject', projId],
+  const { data } = useQuery({
+    queryKey: [
+      'treeProject',
+      projId,
+      apGqlFilterForTree,
+      apberuebersichtGqlFilterForTree,
+    ],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -29,13 +39,15 @@ export const useProjektNavData = (props) => {
             projektById(id: $projId) {
               id
               label
-              apberuebersichtsByProjId(filter: $apberuebersichtFilter) {
+              filteredApberuebersichts: apberuebersichtsByProjId(
+                filter: $apberuebersichtFilter
+              ) {
                 totalCount
               }
               allApberuebersichts: apberuebersichtsByProjId {
                 totalCount
               }
-              apsByProjId(filter: $apFilter) {
+              filteredAps: apsByProjId(filter: $apFilter) {
                 totalCount
               }
               allAps: apsByProjId {
@@ -46,8 +58,8 @@ export const useProjektNavData = (props) => {
         `,
         variables: {
           projId,
-          apFilter: store.tree.apGqlFilterForTree,
-          apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
+          apFilter: apGqlFilterForTree,
+          apberuebersichtFilter: apberuebersichtGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -55,22 +67,12 @@ export const useProjektNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.apGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.apberuebersichtGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const label = data?.data?.projektById?.label ?? 'Projekt'
-  const artsCount = data?.data?.projektById?.apsByProjId?.totalCount ?? 0
+  const artsCount = data?.data?.projektById?.filteredAps?.totalCount ?? 0
   const allArtsCount = data?.data?.projektById?.allAps?.totalCount ?? 0
   const apberuebersichtsCount =
-    data?.data?.projektById?.apberuebersichtsByProjId?.totalCount ?? 0
+    data?.data?.projektById?.filteredApberuebersichts?.totalCount ?? 0
   const allApberuebersichtsCount =
     data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
 

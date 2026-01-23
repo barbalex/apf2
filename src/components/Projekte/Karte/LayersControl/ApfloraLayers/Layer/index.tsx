@@ -1,6 +1,5 @@
 // TODO: let each item call it's data itself
 
-import { useContext } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 import Button from '@mui/material/Button'
 import {
@@ -10,8 +9,6 @@ import {
   MdFilterCenterFocus,
   MdRemove,
 } from 'react-icons/md'
-import { getSnapshot } from 'mobx-state-tree'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useMap } from 'react-leaflet'
@@ -20,14 +17,14 @@ import { useParams } from 'react-router'
 import { Checkbox } from '../../shared/Checkbox.tsx'
 import { Error } from '../../../../../shared/Error.tsx'
 import { getBounds } from '../../../../../../modules/getBounds.ts'
-import { MobxContext } from '../../../../../../mobxContext.ts'
 import {
   assigningBeobAtom,
   setAssigningBeobAtom,
   setMapBoundsAtom,
   mapActiveApfloraLayersAtom,
   setMapActiveApfloraLayersAtom,
-} from '../../../../../../JotaiStore/index.ts'
+  treeBeobGqlFilterAtom,
+} from '../../../../../../store/index.ts'
 import { query } from './query.ts'
 import { PopIcon } from './PopIcon.tsx'
 import { TpopIcon } from './TpopIcon.tsx'
@@ -67,18 +64,24 @@ interface ApfloraLayersQueryResult {
 
 import styles from './index.module.css'
 
-export const Layer = observer(({ apfloraLayer }) => {
+export const Layer = ({ apfloraLayer }) => {
   const { apId, popId, tpopId, beobId } = useParams()
 
   const map = useMap()
-  const store = useContext(MobxContext)
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const setActiveApfloraLayers = useSetAtom(setMapActiveApfloraLayersAtom)
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const setAssigningBeob = useSetAtom(setAssigningBeobAtom)
   const setMapBounds = useSetAtom(setMapBoundsAtom)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+  const beobNichtBeurteiltGqlFilter = useAtomValue(
+    treeBeobGqlFilterAtom('nichtBeurteilt'),
+  )
+  const beobNichtZuzuordnenGqlFilter = useAtomValue(
+    treeBeobGqlFilterAtom('nichtZuzuordnen'),
+  )
+  const beobZugeordnetGqlFilter = useAtomValue(
+    treeBeobGqlFilterAtom('zugeordnet'),
+  )
 
   const layer = apfloraLayer.value
   const pop = layer === 'pop' && activeApfloraLayers.includes('pop')
@@ -104,11 +107,11 @@ export const Layer = observer(({ apfloraLayer }) => {
     pop,
     tpop,
     showBeobNichtBeurteilt,
-    beobNichtBeurteiltFilter: beobGqlFilter('nichtBeurteilt').filtered,
+    beobNichtBeurteiltFilter: beobNichtBeurteiltGqlFilter.filtered,
     showBeobNichtZuzuordnen,
-    beobNichtZuzuordnenFilter: beobGqlFilter('nichtZuordnen').filtered,
+    beobNichtZuzuordnenFilter: beobNichtZuzuordnenGqlFilter.filtered,
     showBeobZugeordnet,
-    beobZugeordnetFilter: beobGqlFilter('zugeordnet').filtered,
+    beobZugeordnetFilter: beobZugeordnetGqlFilter.filtered,
     showBeobZugeordnetAssignPolylines,
   }
 
@@ -331,4 +334,4 @@ export const Layer = observer(({ apfloraLayer }) => {
       </div>
     </div>
   )
-})
+}

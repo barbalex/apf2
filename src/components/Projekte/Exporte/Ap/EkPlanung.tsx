@@ -1,21 +1,16 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import { ApId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface EkPlanungNachAbrechnungstypQueryResult {
   allVEkPlanungNachAbrechnungstyps: {
@@ -32,9 +27,8 @@ interface EkPlanungNachAbrechnungstypQueryResult {
   }
 }
 
-export const EkPlanung = observer(() => {
+export const EkPlanung = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -43,24 +37,26 @@ export const EkPlanung = observer(() => {
     setQueryState('lade Daten...')
     let result: { data?: EkPlanungNachAbrechnungstypQueryResult }
     try {
-      result = await apolloClient.query<EkPlanungNachAbrechnungstypQueryResult>({
-        query: gql`
-          query ekPlanungNachAbrechnungstyps {
-            allVEkPlanungNachAbrechnungstyps {
-              nodes {
-                apId
-                artname
-                artverantwortlich
-                jahr
-                a
-                b
-                d
-                ekf
+      result = await apolloClient.query<EkPlanungNachAbrechnungstypQueryResult>(
+        {
+          query: gql`
+            query ekPlanungNachAbrechnungstyps {
+              allVEkPlanungNachAbrechnungstyps {
+                nodes {
+                  apId
+                  artname
+                  artverantwortlich
+                  jahr
+                  a
+                  b
+                  d
+                  ekf
+                }
               }
             }
-          }
-        `,
-      })
+          `,
+        },
+      )
     } catch (error) {
       addNotification({
         message: (error as Error).message,
@@ -91,12 +87,7 @@ export const EkPlanung = observer(() => {
         },
       })
     }
-    exportModule({
-      data: rows,
-      fileName: 'EkPlanungProJahrNachAbrechnungstyp',
-      store,
-      apolloClient,
-    })
+    exportModule({ data: rows, fileName: 'EkPlanungProJahrNachAbrechnungstyp' })
     setQueryState(undefined)
   }
 
@@ -113,4 +104,4 @@ export const EkPlanung = observer(() => {
       : null}
     </Button>
   )
-})
+}

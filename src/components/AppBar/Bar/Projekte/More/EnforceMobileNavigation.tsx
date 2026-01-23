@@ -6,7 +6,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import {
   enforceMobileNavigationAtom,
   writeEnforceMobileNavigationAtom,
-} from '../../../../../JotaiStore/index.ts'
+} from '../../../../../store/index.ts'
 import { constants } from '../../../../../modules/constants.ts'
 
 import styles from './AlwaysShowTree.module.css'

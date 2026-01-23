@@ -3,15 +3,13 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 
 import { Checkbox } from '../shared/Checkbox.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import {
   mapShowApfLayersForMultipleApsAtom,
   setMapShowApfLayersForMultipleApsAtom,
-} from '../../../../../JotaiStore/index.ts'
+  treeApGqlFilterForTreeAtom,
+} from '../../../../../store/index.ts'
 
 interface ShowForMultipleApsQueryResult {
   allAps: {
@@ -21,17 +19,16 @@ interface ShowForMultipleApsQueryResult {
 
 import styles from './ShowForMultipleAps.module.css'
 
-export const ShowForMultipleAps = observer(() => {
+export const ShowForMultipleAps = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
   const showApfLayersForMultipleAps = useAtomValue(
     mapShowApfLayersForMultipleApsAtom,
   )
   const setShowApfLayersForMultipleAps = useSetAtom(
     setMapShowApfLayersForMultipleApsAtom,
   )
-  const { apGqlFilterForTree } = store.tree
+  const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
   const apolloClient = useApolloClient()
   const { data } = useQuery({
@@ -86,4 +83,4 @@ export const ShowForMultipleAps = observer(() => {
       )}
     </div>
   )
-})
+}

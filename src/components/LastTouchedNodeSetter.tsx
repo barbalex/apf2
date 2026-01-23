@@ -4,7 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import {
   setTreeLastTouchedNodeAtom,
   treeActiveNodeArrayAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 export const LastTouchedNodeSetter = () => {
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)

@@ -2,7 +2,7 @@ import { useAtomValue } from 'jotai'
 
 import { useSearchParamsState } from './useSearchParamsState.ts'
 import { constants } from './constants.ts'
-import { alwaysShowTreeAtom } from '../JotaiStore/index.ts'
+import { alwaysShowTreeAtom } from '../store/index.ts'
 
 const isMobileView = window.innerWidth <= constants.mobileViewMaxWidth
 

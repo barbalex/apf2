@@ -1,11 +1,10 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import { store, treeZielGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useZielsOfJahrNavData = (props) => {
@@ -16,10 +15,10 @@ export const useZielsOfJahrNavData = (props) => {
   let jahr = props?.jahr ?? params.jahr
   jahr = jahr ? +jahr : jahr
 
-  const store = useContext(MobxContext)
+  const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeZielsOfJahr', apId, jahr, store.tree.zielGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeZielsOfJahr', apId, jahr, zielGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -51,7 +50,7 @@ export const useZielsOfJahrNavData = (props) => {
             jahr: { equalTo: +jahr },
           },
           zielsFilter: {
-            ...store.tree.zielGqlFilterForTree,
+            ...zielGqlFilterForTree,
             jahr: { equalTo: +jahr },
           },
           apId,
@@ -62,14 +61,6 @@ export const useZielsOfJahrNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.zielGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.apById?.zielsByApId?.totalCount ?? 0
   const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []

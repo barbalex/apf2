@@ -5,7 +5,7 @@ import 'leaflet-easyprint'
 import { MdGetApp } from 'react-icons/md'
 import { useSetAtom } from 'jotai'
 
-import { setMapHideControlsAtom } from '../../../JotaiStore/index.ts'
+import { setMapHideControlsAtom } from '../../../store/index.ts'
 
 import styles from './PngControl.module.css'
 

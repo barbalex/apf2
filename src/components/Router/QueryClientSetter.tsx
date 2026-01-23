@@ -2,25 +2,25 @@ import { useEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import {
-  store as jotaiStore,
+  store,
   tsQueryClientAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 export const QueryClientSetter = () => {
   const tsQueryClient = useQueryClient()
-  const tsQueryClientInJotaiStore = jotaiStore.get(tsQueryClientAtom)
+  const tsQueryClientInstore = store.get(tsQueryClientAtom)
 
   const wasSet = useRef(false)
 
   useEffect(() => {
-    if (tsQueryClientInJotaiStore) return
+    if (tsQueryClientInstore) return
     // prevent setting navigate twice
     // only because of strict mode?
     if (wasSet.current) return
 
-    jotaiStore.set(tsQueryClientAtom, tsQueryClient)
+    store.set(tsQueryClientAtom, tsQueryClient)
     wasSet.current = true
-  }, [tsQueryClient, tsQueryClientInJotaiStore])
+  }, [tsQueryClient, tsQueryClientInstore])
 
   return null
 }

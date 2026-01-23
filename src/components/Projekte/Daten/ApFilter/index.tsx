@@ -1,8 +1,7 @@
-import { useContext, useState, useEffect, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithInfo.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
@@ -14,8 +13,13 @@ import { queryLists } from './queryLists.ts'
 import { queryAps } from './queryAps.ts'
 import { queryAdresses } from './queryAdresses.ts'
 import { queryAeTaxonomies } from './queryAeTaxonomies.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
+  treeApFilterAtom,
+  treeApGqlFilterAtom,
+} from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
@@ -66,17 +70,14 @@ interface AeTaxonomiesByIdQueryResult {
   }
 }
 
-export const ApFilter = observer(() => {
+export const ApFilter = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
-  const {
-    dataFilter,
-    apFilter: nurApFilter,
-    apGqlFilter,
-    dataFilterSetValue,
-  } = store.tree
+  const nurApFilter = useAtomValue(treeApFilterAtom)
+  const apGqlFilter = useAtomValue(treeApGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -99,7 +100,6 @@ export const ApFilter = observer(() => {
       if (result.error) throw result.error
       return result
     },
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
@@ -152,13 +152,12 @@ export const ApFilter = observer(() => {
     : ''
 
   const row = dataFilter.ap[activeTab]
-  // console.log('ApFilter', { row: row ? getSnapshot(row) : undefined, artname })
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'ap',
       key: field,
       value,
@@ -228,11 +227,7 @@ export const ApFilter = observer(() => {
               label="Art (das namensgebende Taxon)"
               row={{
                 ...row,
-                ...{
-                  aeTaxonomyByArtId: {
-                    artname,
-                  },
-                },
+                ...{ aeTaxonomyByArtId: { artname } },
               }}
               query={queryAeTaxonomies}
               filter={aeTaxonomiesFilter}
@@ -318,4 +313,4 @@ export const ApFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

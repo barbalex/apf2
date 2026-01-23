@@ -1,14 +1,12 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'
@@ -16,10 +14,7 @@ import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from './WollmilchsauSingle.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApByArtIdQueryResult {
   apByArtId: {
@@ -185,9 +180,8 @@ interface TPopErsteUndLetzteKontrolleFilteredQueryResult {
   }
 }
 
-export const WollmilchsauSingle = observer(() => {
+export const WollmilchsauSingle = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [ewmMessage, setEwmMessage] = useState('')
@@ -831,8 +825,6 @@ export const WollmilchsauSingle = observer(() => {
           exportModule({
             data: sortBy(rows, ['artname', 'pop_nr', 'nr']),
             fileName: 'anzkontrinklletzterundletztertpopber',
-            store,
-            apolloClient,
           })
         }}
         query={gql`
@@ -851,4 +843,4 @@ export const WollmilchsauSingle = observer(() => {
       />
     </div>
   )
-})
+}

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 
-import { navigateObjectAtom, store } from '../../JotaiStore/index.ts'
+import { navigateObjectAtom, store } from '../../store/index.ts'
 
 export const NavigateSetter = () => {
   const navigate = useNavigate()

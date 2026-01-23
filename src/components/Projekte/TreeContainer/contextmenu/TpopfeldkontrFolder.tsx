@@ -5,7 +5,7 @@ import {
   userTokenAtom,
   copyingAtom,
   movingAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   ContextMenu,

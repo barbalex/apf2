@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { ApId } from '../../../../models/apflora/public/ApId.ts'
 import type { PopId } from '../../../../models/apflora/public/PopId.ts'
@@ -16,7 +14,7 @@ import styles from '../index.module.css'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 
 interface TPopLastCountWithMassnQueryResult {
@@ -65,9 +63,8 @@ interface TPopLastCountWithMassnQueryResult {
   }
 }
 
-export const LetzteZaehlungenInklAnpflanzungen = observer(() => {
+export const LetzteZaehlungenInklAnpflanzungen = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -154,8 +151,6 @@ export const LetzteZaehlungenInklAnpflanzungen = observer(() => {
           data: rows,
           fileName: 'TPopLetzteZaehlungenInklMassn',
           idKey: 'pop_id',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -166,4 +161,4 @@ export const LetzteZaehlungenInklAnpflanzungen = observer(() => {
       : null}
     </Button>
   )
-})
+}

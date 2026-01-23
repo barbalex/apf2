@@ -349,7 +349,7 @@ const RouterErrorBoundary = lazy(async () => ({
   default: (await import('../shared/RouterErrorBoundary.tsx'))
     .RouterErrorBoundary,
 }))
-import { isDesktopViewAtom } from '../../JotaiStore/index.ts'
+import { isDesktopViewAtom } from '../../store/index.ts'
 
 // WARNING: errorElement did not work
 // import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'

@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -7,7 +6,6 @@ import { FaPlus, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
@@ -15,14 +13,13 @@ import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import {showTreeMenusAtom,
-  addNotificationAtom} from '../../../../JotaiStore/index.ts'
+import {
+  showTreeMenusAtom,
+  addNotificationAtom,
+} from '../../../../store/index.ts'
 
 import type { ZielId } from '../../../../models/apflora/ZielId.ts'
 import type { ApId } from '../../../../models/apflora/ApId.ts'
-
-
 
 interface CreateZielResult {
   data: {
@@ -41,13 +38,11 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search } = useLocation()
   const navigate = useNavigate()
   const { projId, apId } = useParams()
-
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -100,14 +95,12 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       id: apId,
       projId,
       apId,
-      store,
       menuType: 'zielFolder',
     })
 
   const onClickCloseLowerNodes = () =>
     closeLowerNodes({
       url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
-      store,
       search,
     })
 
@@ -141,4 +134,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

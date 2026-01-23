@@ -17,7 +17,7 @@ import {
   deletedDatasetsAtom,
   showDeletionsAtom,
   setShowDeletionsAtom,
-} from '../../JotaiStore/index.js'
+} from '../../store/index.js'
 
 import styles from './index.module.css'
 

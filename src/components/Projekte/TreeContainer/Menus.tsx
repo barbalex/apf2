@@ -18,7 +18,7 @@ import {
   addNotificationAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 const CmApFolder = lazy(async () => ({
   default: (await import('./contextmenu/ApFolder.tsx')).Apfolder,
@@ -233,7 +233,7 @@ import {
   setIdOfTpopBeingLocalizedAtom,
   mapActiveApfloraLayersAtom,
   setMapActiveApfloraLayersAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './Menus.module.css'
 

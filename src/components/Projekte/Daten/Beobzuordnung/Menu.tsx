@@ -1,9 +1,7 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { isEqual } from 'es-toolkit'
 import Button from '@mui/material/Button'
 
@@ -12,11 +10,10 @@ import {
   newTpopFromBeobDialogOpenAtom,
   newTpopFromBeobBeobIdAtom,
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { showCoordOfBeobOnMapsZhCh } from '../../../../modules/showCoordOfBeobOnMapsZhCh.ts'
 import { showCoordOfBeobOnMapGeoAdminCh } from '../../../../modules/showCoordOfBeobOnMapGeoAdminCh.ts'
 import { copyBeobZugeordnetKoordToTpop } from '../../../../modules/copyBeobZugeordnetKoordToTpop/index.ts'
@@ -24,7 +21,7 @@ import { createNewPopFromBeob } from '../../../../modules/createNewPopFromBeob/i
 
 import styles from '../Tpop/Menu.module.css'
 
-export const Menu = observer(() => {
+export const Menu = () => {
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, apId, beobId, tpopId } = useParams<{
@@ -33,8 +30,6 @@ export const Menu = observer(() => {
     beobId: string
     tpopId?: string
   }>()
-
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
 
@@ -165,4 +160,4 @@ export const Menu = observer(() => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

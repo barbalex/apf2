@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
@@ -11,14 +11,14 @@ import {
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
-export const saveArtIdToDb = async ({ value, row, store, search }) => {
-  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const navigate = jotaiStore.get(navigateAtom)
+export const saveArtIdToDb = async ({ value, row, search }) => {
+  const activeNodeArray = store.get(treeActiveNodeArrayAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const navigate = store.get(navigateAtom)
 
   if (!value) return
 
@@ -51,7 +51,14 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   // do not navigate if newApId is not found
   if (!newApId) return
 
-  const newANA = [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4], activeNodeArray[5]]
+  const newANA = [
+    activeNodeArray[0],
+    activeNodeArray[1],
+    activeNodeArray[2],
+    newApId,
+    activeNodeArray[4],
+    activeNodeArray[5],
+  ]
   const oldParentNodeUrl = activeNodeArray.toSpliced(-1)
   const oldGParentNodeUrl = oldParentNodeUrl.toSpliced(-1)
 
@@ -72,10 +79,23 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
         !isEqual(n, oldGParentNodeUrl),
     ),
     [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId],
-    [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4]],
-    [activeNodeArray[0], activeNodeArray[1], activeNodeArray[2], newApId, activeNodeArray[4], activeNodeArray[5]],
+    [
+      activeNodeArray[0],
+      activeNodeArray[1],
+      activeNodeArray[2],
+      newApId,
+      activeNodeArray[4],
+    ],
+    [
+      activeNodeArray[0],
+      activeNodeArray[1],
+      activeNodeArray[2],
+      newApId,
+      activeNodeArray[4],
+      activeNodeArray[5],
+    ],
   ]
-  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
+  store.set(treeSetOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newANA.join('/')}${search}`)
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
@@ -95,5 +115,5 @@ export const saveArtIdToDb = async ({ value, row, store, search }) => {
   tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  jotaiStore.set(setTreeLastTouchedNodeAtom, newANA)
+  store.set(setTreeLastTouchedNodeAtom, newANA)
 }

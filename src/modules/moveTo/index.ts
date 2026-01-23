@@ -8,23 +8,23 @@ import { updateTpopmassnById } from './updateTpopmassnById.ts'
 import { updateTpopById } from './updateTpopById.ts'
 import { updatePopById } from './updatePopById.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
   movingAtom,
   setMovingAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const moveTo = async ({ id: newParentId }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
 
-  const moving = jotaiStore.get(movingAtom)
-  const setMoving = jotaiStore.get(setMovingAtom)
+  const moving = store.get(movingAtom)
+  const setMoving = store.get(setMovingAtom)
   const table = moving?.table
   const id = moving?.id
 

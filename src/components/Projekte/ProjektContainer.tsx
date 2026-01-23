@@ -18,7 +18,7 @@ const Filter = lazy(async () => ({
 import { Spinner } from '../shared/Spinner.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
 import { Bookmarks } from '../Bookmarks/Bookmarks/index.tsx'
-import { hideBookmarksAtom, isPrintAtom } from '../../JotaiStore/index.ts'
+import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
 
 import styles from './ProjektContainer.module.css'
 import { fi } from 'date-fns/locale'
@@ -45,8 +45,6 @@ export const ProjektContainer = () => {
   const treeTabs = [
     ...new Set(treeTabValues).intersection(new Set(projekteTabs)),
   ]
-
-  // console.log('ProjektContainer, treeTabs:', treeTabs)
 
   const showApberForArt = apberId && pathname.endsWith('print')
   const showApberForAll = apberuebersichtId && pathname.endsWith('print')
@@ -110,48 +108,55 @@ export const ProjektContainer = () => {
     singlePane ? '100%'
     : firstOfTwoIsTree ? '33%'
     : undefined
-  const firstPaneMaxSize = singlePane ? undefined : '95%'
+  const firstPaneMaxSize = singlePane ? null : '95%'
 
-  // TODO: issue with single pane: it does not expand to full width, when changing from two to one pane
-  // thus rendering outside of split pane. But then the tree rebuilds.
+  // issue with extra panes only appearing with help of keys
+  // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
   return (
     <div className={styles.outerContainer}>
       {!hideBookmarks && <Bookmarks />}
       <div
         className={styles.container}
-        height={hideBookmarks ? '100%' : 'calc(100% - 40.8px)'}
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
       >
-        {treeTabs.length === 1 ?
-          <div className={styles.overflowingDiv}>{elObj[treeTabs[0]]}</div>
-        : <SplitPane direction="horizontal">
-            <Pane
-              size={firstPaneSize}
-              maxSize={firstPaneMaxSize}
-              className={styles.overflowingPane}
-            >
-              {elObj[treeTabs[0]]}
-            </Pane>
-            {singlePane && <Pane size={0}></Pane>}
-            {!!elObj[treeTabs[1]] && (
-              <Pane
-                maxSize="95%"
-                className={styles.overflowingPane}
-              >
-                {elObj[treeTabs[1]] ?? undefined}
-              </Pane>
-            )}
-            {!!elObj[treeTabs[2]] && (
-              <Pane maxSize="95%">{elObj[treeTabs[2]]}</Pane>
-            )}
-            {!!elObj[treeTabs[3]] && (
-              <Pane maxSize="95%">{elObj[treeTabs[3]]}</Pane>
-            )}
-            {!!elObj[treeTabs[4]] && (
-              <Pane maxSize="95%">{elObj[treeTabs[4]]}</Pane>
-            )}
-          </SplitPane>
-        }
+        <SplitPane direction="horizontal">
+          <Pane
+            size={firstPaneSize}
+            maxSize={firstPaneMaxSize}
+            className={styles.overflowingPane}
+          >
+            {elObj[treeTabs[0]]}
+          </Pane>
+          <Pane
+            key={treeTabs.length > 1 ? treeTabs[1] : 'emptyPane2'}
+            maxSize="95%"
+            className={styles.overflowingPane}
+            size={treeTabs.length > 1 ? null : 0}
+          >
+            {treeTabs[1] ? elObj[treeTabs[1]] : null}
+          </Pane>
+          <Pane
+            key={treeTabs.length > 2 ? treeTabs[2] : 'emptyPane3'}
+            maxSize="95%"
+            size={treeTabs.length > 2 ? null : 0}
+          >
+            {treeTabs[2] ? elObj[treeTabs[2]] : null}
+          </Pane>
+          <Pane
+            key={treeTabs.length > 3 ? treeTabs[3] : 'emptyPane4'}
+            maxSize="95%"
+            size={treeTabs.length > 3 ? null : 0}
+          >
+            {treeTabs[3] ? elObj[treeTabs[3]] : null}
+          </Pane>
+          <Pane
+            key={treeTabs.length > 4 ? treeTabs[4] : 'emptyPane5'}
+            maxSize="95%"
+            size={treeTabs.length > 4 ? null : 0}
+          >
+            {treeTabs[4] ? elObj[treeTabs[4]] : null}
+          </Pane>
+        </SplitPane>
       </div>
     </div>
   )

@@ -16,7 +16,7 @@ import { Field as BeobField } from './Field.tsx'
 import {
   sortedBeobFieldsAtom,
   setSortedBeobFieldsAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import type BeobType from '../../../../models/apflora/Beob.ts'
 

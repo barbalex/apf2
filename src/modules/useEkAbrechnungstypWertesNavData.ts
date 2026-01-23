@@ -1,21 +1,25 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkAbrechnungstypWertesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const ekAbrechnungstypWerteGqlFilterForTree = useAtomValue(
+    treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeEkAbrechnungstypWerte',
-      store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+      ekAbrechnungstypWerteGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -38,7 +42,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
           }
         `,
         variables: {
-          filter: store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+          filter: ekAbrechnungstypWerteGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -46,15 +50,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () =>
-      reaction(() => store.tree.ekAbrechnungstypWerteGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const count = data?.data?.allEkAbrechnungstypWertes?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 

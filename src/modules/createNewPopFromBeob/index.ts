@@ -7,7 +7,7 @@ import { createPop } from './createPop.ts'
 import { createTpop } from './createTpop.ts'
 import { updateBeobById } from './updateBeobById.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
@@ -16,10 +16,10 @@ import {
   treeOpenNodesAtom,
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const createNewPopFromBeob = async ({
   id,
@@ -27,11 +27,11 @@ export const createNewPopFromBeob = async ({
   projId = '99999999-9999-9999-9999-999999999999',
   search,
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const navigate = jotaiStore.get(navigateAtom)
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
-  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const navigate = store.get(navigateAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
+  const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
   let beobResult
   try {
@@ -181,7 +181,7 @@ export const createNewPopFromBeob = async ({
     // and remove old node
     .filter((n) => !isEqual(n, activeNodeArray))
 
-  jotaiStore.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes)
   navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   tsQueryClient.invalidateQueries({
@@ -211,7 +211,7 @@ export const createNewPopFromBeob = async ({
   tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
-  jotaiStore.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
+  store.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
 
   return
 }

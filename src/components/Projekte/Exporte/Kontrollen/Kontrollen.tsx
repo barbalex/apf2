@@ -1,21 +1,26 @@
-import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
-import { ApId, PopId, TpopId, TpopkontrId, AdresseId, TpopkontrzaehlId } from '../../../../models/apflora/index.tsx'
+import {
+  ApId,
+  PopId,
+  TpopId,
+  TpopkontrId,
+  AdresseId,
+  TpopkontrzaehlId,
+} from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+  treeTpopkontrGqlFilterAtom,
+} from '../../../../store/index.ts'
 
 interface TpopkontrQueryResult {
   allTpopkontrs: {
@@ -160,10 +165,9 @@ interface KontrollenProps {
   filtered?: boolean
 }
 
-export const Kontrollen = observer(({ filtered = false }: KontrollenProps) => {
+export const Kontrollen = ({ filtered = false }: KontrollenProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const { tpopkontrGqlFilter } = store.tree
+  const tpopkontrGqlFilter = useAtomValue(treeTpopkontrGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 
@@ -461,8 +465,6 @@ export const Kontrollen = observer(({ filtered = false }: KontrollenProps) => {
         exportModule({
           data: rows,
           fileName: 'Kontrollen',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -473,4 +475,4 @@ export const Kontrollen = observer(({ filtered = false }: KontrollenProps) => {
       : null}
     </Button>
   )
-})
+}

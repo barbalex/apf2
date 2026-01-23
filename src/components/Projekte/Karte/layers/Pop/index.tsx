@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
@@ -9,7 +8,6 @@ import { cloneDeep } from 'es-toolkit'
 import { useParams } from 'react-router'
 
 import { Marker } from './Marker.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 
 import type { PopId, ApId } from '../../../../../models/apflora/public/Pop.ts'
@@ -17,7 +15,8 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 
 import {
   addNotificationAtom,
-} from '../../../../../JotaiStore/index.ts'
+  treePopGqlFilterAtom,
+} from '../../../../../store/index.ts'
 
 
 interface PopNode {
@@ -62,12 +61,9 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const ObservedPop = observer(() => {
+const ObservedPop = () => {
   const map = useMap()
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { popGqlFilter } = tree
-
+  const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const apolloClient = useApolloClient()
 
   const popFilter = cloneDeep(popGqlFilter.filtered)
@@ -121,14 +117,11 @@ const ObservedPop = observer(() => {
       ))}
     </MarkerClusterGroup>
   )
-})
+}
 
-export const Pop = observer(() => {
+export const Pop = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { popGqlFilter } = tree
-
+  const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const { apId } = useParams()
 
   // Problem: popGqlFilter updates AFTER apId
@@ -140,4 +133,4 @@ export const Pop = observer(() => {
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
   return <ObservedPop />
-})
+}

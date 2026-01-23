@@ -1,23 +1,21 @@
-import { useState, useContext, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles'
 import { BsCaretDown } from 'react-icons/bs'
 import { useResizeDetector } from 'react-resize-detector'
-import { observer } from 'mobx-react-lite'
 import { motion } from 'framer-motion'
 import { useAtomValue } from 'jotai'
 
 import { Item } from './Item.tsx'
 import { Title } from './Title/index.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   treeActiveNodeArrayAtom,
   treeActiveFilterTableAtom,
   treeNodeLabelFilterAtom,
-  store as jotaiStore,
-} from '../../../../JotaiStore/index.ts'
+  store,
+} from '../../../../store/index.ts'
 import { menuIsInActiveNodePath } from './menuIsInActiveNodePath.ts'
 import { usePrevious } from '../../../../modules/usePrevious.ts'
 
@@ -37,11 +35,10 @@ const StyledMenu = styled((props) => <MuiMenu {...props} />)(() => ({
 // do NOT use a MenuList. Reason: grabs key input to navigate to menu items
 // thus filter input does not work
 
-export const Menu = observer(({ navData }) => {
-  const store = useContext(MobxContext)
+export const Menu = ({ navData }) => {
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
-  const activeFilterTable = jotaiStore.get(treeActiveFilterTableAtom)
-  const nodeLabelFilter = jotaiStore.get(treeNodeLabelFilterAtom)
+  const activeFilterTable = store.get(treeActiveFilterTableAtom)
+  const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
 
   const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
 
@@ -131,4 +128,4 @@ export const Menu = observer(({ navData }) => {
       </StyledMenu>
     </>
   )
-})
+}

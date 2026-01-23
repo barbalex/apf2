@@ -1,24 +1,38 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+  treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+  treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
+  treeAdresseGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useWertesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const tpopkontrzaehlEinheitWerteGqlFilterForTree = useAtomValue(
+    treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
+  )
+  const ekAbrechnungstypWerteGqlFilterForTree = useAtomValue(
+    treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
+  )
+  const tpopApberrelevantGrundWerteGqlFilterForTree = useAtomValue(
+    treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
+  )
+  const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeWertes',
-      store.tree.adresseGqlFilterForTree,
-      store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
-      store.tree.ekAbrechnungstypWerteGqlFilterForTree,
-      store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+      adresseGqlFilterForTree,
+      tpopApberrelevantGrundWerteGqlFilterForTree,
+      ekAbrechnungstypWerteGqlFilterForTree,
+      tpopkontrzaehlEinheitWerteGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -62,13 +76,12 @@ export const useWertesNavData = () => {
           }
         `,
         variables: {
-          adressesFilter: store.tree.adresseGqlFilterForTree,
+          adressesFilter: adresseGqlFilterForTree,
           tpopApberrelevantGrundWerteFilter:
-            store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
-          ekAbrechnungstypWerteFilter:
-            store.tree.ekAbrechnungstypWerteGqlFilterForTree,
+            tpopApberrelevantGrundWerteGqlFilterForTree,
+          ekAbrechnungstypWerteFilter: ekAbrechnungstypWerteGqlFilterForTree,
           tpopkontrzaehlEinheitWerteFilter:
-            store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
+            tpopkontrzaehlEinheitWerteGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -76,36 +89,7 @@ export const useWertesNavData = () => {
     },
     suspense: true,
   })
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.adresseGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () =>
-      reaction(
-        () => store.tree.tpopApberrelevantGrundWerteGqlFilterForTree,
-        refetch,
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () =>
-      reaction(() => store.tree.ekAbrechnungstypWerteGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () =>
-      reaction(
-        () => store.tree.tpopkontrzaehlEinheitWerteGqlFilterForTree,
-        refetch,
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const adressesCount = data?.data?.allAdresses?.totalCount ?? 0
   const adressesFilteredCount = data?.data?.filteredAdresses?.totalCount ?? 0
   const tpopApberrelevantGrundWerteCount =

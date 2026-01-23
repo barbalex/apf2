@@ -14,7 +14,6 @@ export const useCurrentissuesNavData = () => {
         query: gql`
           query TreeCurrentissuesQuery {
             allCurrentissues(orderBy: [SORT_ASC, TITLE_ASC]) {
-              totalCount
               nodes {
                 id
                 label
@@ -36,7 +35,7 @@ export const useCurrentissuesNavData = () => {
     id: 'Aktuelle-Fehler',
     url: `/Daten/Aktuelle-Fehler`,
     label: `Aktuelle Fehler (${count})`,
-    totalCount: data?.data?.allCurrentissues?.totalCount ?? 0,
+    totalCount: data?.data?.allCurrentissues?.nodes?.length ?? 0,
     treeNodeType: 'table',
     treeMenuType: 'currentissues',
     treeId: 'currentissueFolder',

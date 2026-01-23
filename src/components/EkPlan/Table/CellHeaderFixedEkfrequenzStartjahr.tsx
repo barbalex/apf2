@@ -11,7 +11,7 @@ import {
   ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
   ekPlanFilterEkfrequenzStartjahrAtom,
   ekPlanSetFilterEkfrequenzStartjahrAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 import ekfrequenzStyles from './CellHeaderFixedEkfrequenz.module.css'
 import styles from './CellHeaderFixedEkfrequenzStartjahr.module.css'
 

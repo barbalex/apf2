@@ -1,11 +1,9 @@
-import { useContext } from 'react'
 import {
   MdExpandMore,
   MdChevronRight,
   MdRemove,
   MdMoreHoriz,
 } from 'react-icons/md'
-import { observer } from 'mobx-react-lite'
 import Highlighter from 'react-highlight-words'
 import { useLocation } from 'react-router'
 import { upperFirst } from 'es-toolkit'
@@ -16,12 +14,11 @@ import { isNodeOrParentInActiveNodePath } from '../isNodeOrParentInActiveNodePat
 import { isNodeOpen } from '../isNodeOpen.ts'
 import { toggleNode } from './toggleNode.ts'
 import { toggleNodeSymbol } from './toggleNodeSymbol.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeNodeLabelFilterAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { ContextMenuTrigger } from '../../../../modules/react-contextmenu/index.ts'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 import { prefetchNodeData } from '../../../../modules/prefetchNodeData.ts'
@@ -35,10 +32,9 @@ const transitionStyles = {
   exited: { opacity: 0 },
 }
 
-export const Row = observer(({ node, transitionState, ref }) => {
+export const Row = ({ node, transitionState, ref }) => {
   const { search } = useLocation()
 
-  const store = useContext(MobxContext)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
@@ -187,4 +183,4 @@ export const Row = observer(({ node, transitionState, ref }) => {
       </div>
     </ContextMenuTrigger>
   )
-})
+}

@@ -1,9 +1,8 @@
-import { useContext, useState, useEffect, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useState, useEffect, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
 import { TextFieldWithInfo } from '../../../shared/TextFieldWithInfo.tsx'
@@ -11,8 +10,15 @@ import { Status } from '../../../shared/Status.tsx'
 import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
+  treeArtIsFilteredAtom,
+  treePopGqlFilterAtom,
+} from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { PopOrTabs } from './PopOrTabs.tsx'
@@ -28,32 +34,29 @@ interface PopFilterQueryResult {
   }
 }
 
-export const PopFilter = observer(() => {
+export const PopFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
-  const {
-    dataFilter: dataFilterRaw,
-    popGqlFilter,
-    mapFilter,
-    artIsFiltered,
-    apFilter,
-    dataFilterSetValue,
-  } = store.tree
+  const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
 
   // somehow to live updates without this
-  const dataFilter = dataFilterRaw.toJSON()
+  const dataFilterPop = dataFilter.pop
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
-    if (dataFilter.pop.length - 1 < activeTab) {
+    if (dataFilterPop.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
       setActiveTab(0)
     }
-  }, [activeTab, dataFilter.pop.length])
+  }, [activeTab, dataFilterPop.length])
 
   const { data: dataPops } = useQuery({
     queryKey: ['popFilter', popGqlFilter.filtered, popGqlFilter.all],
@@ -68,13 +71,12 @@ export const PopFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = dataFilter.pop[activeTab]
+  const row = dataFilterPop[activeTab]
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'pop',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
@@ -142,7 +144,7 @@ export const PopFilter = observer(() => {
           </>
         )}
         <PopOrTabs
-          dataFilter={dataFilter.pop}
+          dataFilter={dataFilterPop}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
@@ -186,4 +188,4 @@ export const PopFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

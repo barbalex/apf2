@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 
-import { isDesktopViewAtom } from '../../../../JotaiStore/index.ts'
+import { isDesktopViewAtom } from '../../../../store/index.ts'
 import { Component as Tpop } from './Tpop.tsx'
 import { List } from './List.tsx'
 

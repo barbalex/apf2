@@ -1,5 +1,4 @@
-import { useEffect, useContext, useState } from 'react'
-import { observer } from 'mobx-react-lite'
+import { useEffect, useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -7,8 +6,16 @@ import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
 import { FilterTitle } from '../../../shared/FilterTitle.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import { treeEkfGqlFilterAtom } from '../../../../store/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+  treeDataFilterAtom,
+  treeArtIsFilteredAtom,
+  treePopIsFilteredAtom,
+  treeTpopIsFilteredAtom,
+} from '../../../../store/index.ts'
 import { Form } from './Form/index.tsx'
 import { Tabs } from './Tabs.tsx'
 
@@ -23,21 +30,17 @@ interface TpopkontrsQueryResult {
 
 import styles from './index.module.css'
 
-export const TpopfreiwkontrFilter = observer(() => {
+export const TpopfreiwkontrFilter = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const {
-    dataFilter,
-    ekfGqlFilter,
-    mapFilter,
-    apFilter,
-    artIsFiltered,
-    popIsFiltered,
-    tpopIsFiltered,
-  } = tree
+  const ekfGqlFilter = useAtomValue(treeEkfGqlFilterAtom)
+  const dataFilter = useAtomValue(treeDataFilterAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
+  const popIsFiltered = useAtomValue(treePopIsFilteredAtom)
+  const tpopIsFiltered = useAtomValue(treeTpopIsFilteredAtom)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -64,7 +67,6 @@ export const TpopfreiwkontrFilter = observer(() => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const navApFilterComment =
@@ -160,4 +162,4 @@ export const TpopfreiwkontrFilter = observer(() => {
       </div>
     </div>
   )
-})
+}

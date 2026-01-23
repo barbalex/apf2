@@ -1,13 +1,11 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
-import { useContext, useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useAtomValue } from 'jotai'
 import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
-import { getSnapshot } from 'mobx-state-tree'
 import { useParams } from 'react-router'
 
 import { MapResizer } from './MapResizer.tsx'
@@ -62,7 +60,6 @@ import 'leaflet-measure/dist/leaflet-measure.css'
 import 'leaflet-draw/dist/leaflet.draw.css'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
 
-import { MobxContext } from '../../../mobxContext.ts'
 import {
   assigningBeobAtom,
   mapHideControlsAtom,
@@ -72,7 +69,8 @@ import {
   mapOverlaysAtom,
   mapActiveOverlaysAtom,
   mapActiveBaseLayerAtom,
-} from '../../../JotaiStore/index.ts'
+  treeMapFilterAtom,
+} from '../../../store/index.ts'
 
 import styles from './index.module.css'
 
@@ -134,12 +132,11 @@ const BaseLayerComponents = {
   ZhOrtho2014Ir: () => <ZhOrtho2014Ir />,
 }
 
-export const Karte = observer(({ mapContainerRef }) => {
+export const Karte = ({ mapContainerRef }) => {
   const { apId } = useParams()
 
   const mapRef = useRef(null)
 
-  const store = useContext(MobxContext)
   const assigningBeob = useAtomValue(assigningBeobAtom)
   const hideMapControls = useAtomValue(mapHideControlsAtom)
   const bounds = useAtomValue(mapBoundsAtom)
@@ -150,8 +147,7 @@ export const Karte = observer(({ mapContainerRef }) => {
   const overlays = useAtomValue(mapOverlaysAtom)
   const activeOverlays = useAtomValue(mapActiveOverlaysAtom)
   const activeBaseLayer = useAtomValue(mapActiveBaseLayerAtom)
-  const tree = store.tree
-  const { mapFilter } = tree
+  const mapFilter = useAtomValue(treeMapFilterAtom)
 
   const showApfLayers = showApfLayersForMultipleAps || !!apId
   const showPop = activeApfloraLayers.includes('pop') && showApfLayers
@@ -321,4 +317,4 @@ export const Karte = observer(({ mapContainerRef }) => {
       </ErrorBoundary>
     </div>
   )
-})
+}

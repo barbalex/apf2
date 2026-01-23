@@ -1,18 +1,16 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   copyingBiotopAtom,
   movingAtom,
-  store as jotaiStore,
-} from '../JotaiStore/index.ts'
+  store,
+  treeEkGqlFilterForTreeAtom,
+} from '../store/index.ts'
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -28,10 +26,10 @@ export const useTpopfeldkontrsNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
+  const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeTpopfeldkontr', tpopId, store.tree.ekGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeTpopfeldkontr', tpopId, ekGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -45,7 +43,6 @@ export const useTpopfeldkontrsNavData = (props) => {
                 filter: $eksFilter
                 orderBy: [JAHR_ASC, DATUM_ASC]
               ) {
-                totalCount
                 nodes {
                   id
                   label: labelEk
@@ -62,7 +59,7 @@ export const useTpopfeldkontrsNavData = (props) => {
           }
         `,
         variables: {
-          eksFilter: store.tree.ekGqlFilterForTree,
+          eksFilter: ekGqlFilterForTree,
           tpopId,
         },
       })
@@ -71,14 +68,10 @@ export const useTpopfeldkontrsNavData = (props) => {
     },
     suspense: true,
   })
+
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.ekGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
@@ -86,7 +79,7 @@ export const useTpopfeldkontrsNavData = (props) => {
   const moving = useAtomValue(movingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -94,14 +87,14 @@ export const useTpopfeldkontrsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopkontrsByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopkontrsByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {
@@ -167,8 +160,9 @@ export const useTpopfeldkontrsNavData = (props) => {
         fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
         treeSingleElementName: 'Feld-Kontrolle',
         hasChildren: true,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }

@@ -2,20 +2,20 @@ import { upperFirst } from 'es-toolkit'
 import { camelCase } from 'es-toolkit'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
   removeDeletedDatasetByIdAtom,
   deletedDatasetsAtom,
   apolloClientAtom,
   setShowDeletionsAtom,
-} from '../../../JotaiStore/index.js'
+} from '../../../store/index.js'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const undelete = async ({ id }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const deletedDatasets = jotaiStore.get(deletedDatasetsAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const deletedDatasets = store.get(deletedDatasetsAtom)
 
   const dataset = deletedDatasets.find((d) => d.id === id)
   if (!dataset) {
@@ -62,8 +62,8 @@ export const undelete = async ({ id }) => {
   }
 
   // 2. remove dataset from deletedDatasets
-  if (deletedDatasets.length === 1) jotaiStore.set(setShowDeletionsAtom, false)
-  jotaiStore.set(removeDeletedDatasetByIdAtom, dataset.id)
+  if (deletedDatasets.length === 1) store.set(setShowDeletionsAtom, false)
+  store.set(removeDeletedDatasetByIdAtom, dataset.id)
 
   if (afterDeletionHook) afterDeletionHook()
 }

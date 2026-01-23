@@ -1,6 +1,5 @@
-import { useContext, useState, type ChangeEvent } from 'react'
+import { useState, type ChangeEvent } from 'react'
 import { isEqual } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation, useNavigate } from 'react-router'
@@ -12,13 +11,12 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Select } from '../../../shared/Select.tsx'
 import { query } from './query.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import {
   userNameAtom,
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { ziel as zielFragment } from '../../../shared/fragments.ts'
@@ -64,7 +62,7 @@ const erreichungOptions = [
   { value: 'unsicher', label: 'unsicher' },
 ]
 
-export const Component = observer(() => {
+export const Component = () => {
   const { zielId: id } = useParams()
   const { search } = useLocation()
   const navigate = useNavigate()
@@ -72,7 +70,6 @@ export const Component = observer(() => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const store = useContext(MobxContext)
   const userName = useAtomValue(userNameAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
   const openNodes = useAtomValue(treeOpenNodesAtom)
@@ -225,4 +222,4 @@ export const Component = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

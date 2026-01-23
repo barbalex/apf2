@@ -1,13 +1,15 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import {
+  copyingAtom,
+  movingAtom,
+  store,
+  treeEkfGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 
@@ -19,10 +21,10 @@ export const useTpopfreiwkontrsNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
+  const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
 
   const { data, refetch } = useQuery({
-    queryKey: ['treeTpopfreiwkontr', tpopId, store.tree.ekfGqlFilterForTree],
+    queryKey: ['treeTpopfreiwkontr', tpopId, ekfGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -36,7 +38,6 @@ export const useTpopfreiwkontrsNavData = (props) => {
                 filter: $ekfsFilter
                 orderBy: [JAHR_ASC, DATUM_ASC]
               ) {
-                totalCount
                 nodes {
                   id
                   label: labelEkf
@@ -51,7 +52,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
           }
         `,
         variables: {
-          ekfsFilter: store.tree.ekfGqlFilterForTree,
+          ekfsFilter: ekfGqlFilterForTree,
           tpopId,
         },
       })
@@ -60,21 +61,17 @@ export const useTpopfreiwkontrsNavData = (props) => {
     },
     suspense: true,
   })
+
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.ekfGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,14 +79,14 @@ export const useTpopfreiwkontrsNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopkontrsByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopkontrsByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {
@@ -150,8 +147,9 @@ export const useTpopfreiwkontrsNavData = (props) => {
         fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
         singleElementName: 'Freiwilligen-Kontrolle',
         hasChildren: true,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }

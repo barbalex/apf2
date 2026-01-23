@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   navigateAtom,
@@ -11,14 +11,14 @@ import {
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
-export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const navigate = jotaiStore.get(navigateAtom)
-  const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
-  const openNodesRaw = jotaiStore.get(treeOpenNodesAtom)
+export const saveTpopIdToDb = async ({ value, id, type, search }) => {
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const navigate = store.get(navigateAtom)
+  const activeNodeArray = store.get(treeActiveNodeArrayAtom)
+  const openNodesRaw = store.get(treeOpenNodesAtom)
 
   const variables = {
     id,
@@ -264,7 +264,7 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
     }
   }
   navigate(`/Daten/${newANA.join('/')}${search}`)
-  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
+  store.set(treeSetOpenNodesAtom, newOpenNodes)
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
@@ -292,5 +292,5 @@ export const saveTpopIdToDb = async ({ value, id, type, store, search }) => {
   tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  setTimeout(() => jotaiStore.set(setTreeLastTouchedNodeAtom, newANA), 1000)
+  setTimeout(() => store.set(setTreeLastTouchedNodeAtom, newANA), 1000)
 }

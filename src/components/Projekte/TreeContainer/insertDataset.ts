@@ -4,7 +4,7 @@ import { camelCase } from 'es-toolkit'
 
 import { tables } from '../../../modules/tables.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
@@ -12,7 +12,7 @@ import {
   userNameAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 import {
   adresse as adresseFragment,
   user as userFragment,
@@ -22,7 +22,7 @@ import {
 } from '../../shared/fragments.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 const fragments = {
   tpopApberrelevantGrundWerte: tpopApberrelevantGrundWerteFragment,
@@ -39,10 +39,10 @@ export const insertDataset = async ({
   search,
   jahr: jahrPassed,
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
-  const navigate = jotaiStore.get(navigateAtom)
-  const openNodes = jotaiStore.get(treeOpenNodesAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  const navigate = store.get(navigateAtom)
+  const openNodes = store.get(treeOpenNodesAtom)
   let table = tablePassed
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find((t) => t.table === table)
@@ -171,7 +171,7 @@ export const insertDataset = async ({
     mutation = gql`
       mutation createWerte {
         create${upperFirst(tableName)}(input: { ${tableName}: {
-          changedBy: "${jotaiStore.get(userNameAtom)}"
+          changedBy: "${store.get(userNameAtom)}"
         } }) {
           ${tableName} {
             ...${fields}
@@ -233,7 +233,7 @@ export const insertDataset = async ({
     const newOpenNode = [...newActiveNodeArray, 'Zaehlungen', zaehlId]
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
   }
-  jotaiStore.set(treeSetOpenNodesAtom, newOpenNodes)
+  store.set(treeSetOpenNodesAtom, newOpenNodes)
   // console.log('insertDataset', { table, parentTable })
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {

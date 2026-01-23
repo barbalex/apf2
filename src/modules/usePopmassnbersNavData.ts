@@ -1,11 +1,13 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treePopmassnberGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const usePopmassnbersNavData = (props) => {
@@ -15,14 +17,12 @@ export const usePopmassnbersNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
-  const store = useContext(MobxContext)
+  const popmassnberGqlFilterForTree = useAtomValue(
+    treePopmassnberGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
-    queryKey: [
-      'treePopmassnber',
-      popId,
-      store.tree.popmassnberGqlFilterForTree,
-    ],
+  const { data } = useQuery({
+    queryKey: ['treePopmassnber', popId, popmassnberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -48,7 +48,7 @@ export const usePopmassnbersNavData = (props) => {
           }
         `,
         variables: {
-          popmassnbersFilter: store.tree.popmassnberGqlFilterForTree,
+          popmassnbersFilter: popmassnberGqlFilterForTree,
           popId,
         },
       })
@@ -57,14 +57,6 @@ export const usePopmassnbersNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.popmassnberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.popById?.popmassnbersByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0

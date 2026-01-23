@@ -1,13 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
-import { copyingAtom, movingAtom, store as jotaiStore } from '../JotaiStore/index.ts'
+import { copyingAtom, movingAtom, store } from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
@@ -36,8 +33,6 @@ export const useTpopmassnNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopmassnId = props?.tpopmassnId ?? params.tpopmassnId
 
-  const store = useContext(MobxContext)
-
   const { data } = useQuery({
     queryKey: ['treeTpopmassn', tpopmassnId],
     queryFn: async () => {
@@ -62,13 +57,14 @@ export const useTpopmassnNavData = (props) => {
     },
     suspense: true,
   })
+
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -76,7 +72,7 @@ export const useTpopmassnNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -118,8 +114,9 @@ export const useTpopmassnNavData = (props) => {
     childrenAreFolders: true,
     fetcherName: 'useTpopmassnNavData',
     fetcherParams: { projId, apId, popId, tpopId, tpopmassnId },
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     component: NodeWithList,
     menus: [
       {
@@ -138,8 +135,9 @@ export const useTpopmassnNavData = (props) => {
           tpopmassnId,
           'Massnahme',
         ],
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
         isSelf: true,
       },
       {

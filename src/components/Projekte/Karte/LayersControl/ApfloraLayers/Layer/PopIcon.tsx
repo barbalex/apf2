@@ -10,7 +10,7 @@ import {
   setMapPopIconAtom,
   mapPopLabelAtom,
   setMapPopLabelAtom,
-} from '../../../../../../JotaiStore/index.ts'
+} from '../../../../../../store/index.ts'
 
 import styles from './PopIcon.module.css'
 

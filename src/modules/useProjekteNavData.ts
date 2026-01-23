@@ -12,7 +12,6 @@ export const useProjekteNavData = () => {
         query: gql`
           query NavProjectsQuery {
             allProjekts {
-              totalCount
               nodes {
                 id
                 name

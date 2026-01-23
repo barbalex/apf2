@@ -1,31 +1,28 @@
-import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import styles from '../index.module.css'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+  treePopGqlFilterAtom,
+} from '../../../../store/index.ts'
 
-
-export const Pops = observer(({ filtered = false }) => {
+export const Pops = ({ filtered = false }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const { popGqlFilter } = store.tree
+  const popGqlFilter = useAtomValue(treePopGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
 
-  const popIsFiltered = tableIsFiltered({ table: 'pop', tree: store.tree })
+  const popIsFiltered = tableIsFiltered({ table: 'pop' })
 
   return (
     <Button
@@ -125,8 +122,6 @@ export const Pops = observer(({ filtered = false }) => {
         exportModule({
           data: rows,
           fileName: `Populationen${filtered ? '_gefiltert' : ''}`,
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -137,4 +132,4 @@ export const Pops = observer(({ filtered = false }) => {
       : null}
     </Button>
   )
-})
+}

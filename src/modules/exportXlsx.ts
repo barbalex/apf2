@@ -2,12 +2,12 @@ import fileSaver from 'file-saver'
 import { format } from 'date-fns/format'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const exportXlsx = async ({ fileName, data }) => {
   const { getXlsxBuffer } = await import('./getXlsxBuffer.ts')

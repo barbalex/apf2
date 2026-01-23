@@ -4,7 +4,7 @@ import { Transition } from 'react-transition-group'
 import { useAtomValue } from 'jotai'
 
 import { Label } from './Label.tsx'
-import { showBookmarksMenuAtom } from '../../../JotaiStore/index.ts'
+import { showBookmarksMenuAtom } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 

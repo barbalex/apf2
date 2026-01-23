@@ -7,7 +7,7 @@ import {
   ekPlanHoveredAtom,
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 import { yearColumnWidth } from './CellForYear/yearColumnWidth.ts'
 
 import indexStyles from './index.module.css'

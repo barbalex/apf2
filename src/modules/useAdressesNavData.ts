@@ -1,19 +1,21 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treeAdresseGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useAdressesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
-  const { data, error, refetch } = useQuery({
-    queryKey: ['treeAdresse', store.tree.adresseGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeAdresse', adresseGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -30,7 +32,7 @@ export const useAdressesNavData = () => {
           }
         `,
         variables: {
-          adressesFilter: store.tree.adresseGqlFilterForTree,
+          adressesFilter: adresseGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -38,14 +40,7 @@ export const useAdressesNavData = () => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.adresseGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const count = data?.data?.allAdresses?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0
 

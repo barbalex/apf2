@@ -4,14 +4,14 @@ import axios from 'redaxios'
 import { xmlToJson } from '../../../../modules/xmlToJson.ts'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
-export const onTileError = async (store, map, layer, ignore) => {
+export const onTileError = async (map, layer, ignore) => {
   // console.log('onTileError', { ignore, map, layer })
   const mapSize = map.getSize()
   const bbox = map.getBounds().toBBoxString()

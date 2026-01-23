@@ -7,12 +7,12 @@ import { Workbook } from 'exceljs'
 import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.ts'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const getXlsxBuffer = async ({ data }) => {
   /**

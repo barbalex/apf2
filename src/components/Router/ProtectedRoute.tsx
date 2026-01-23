@@ -1,11 +1,10 @@
 import { lazy, Suspense } from 'react'
 import { Outlet } from 'react-router'
-// import { getSnapshot } from 'mobx-state-tree'
 import { jwtDecode } from 'jwt-decode'
 import { useLocation, useParams, Navigate } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { userAtom, showDeletionsAtom } from '../../JotaiStore/index.ts'
+import { userAtom, showDeletionsAtom } from '../../store/index.ts'
 const User = lazy(async () => ({ default: (await import('../User.tsx')).User }))
 const Messages = lazy(async () => ({
   default: (await import('../Messages/index.tsx')).Messages,

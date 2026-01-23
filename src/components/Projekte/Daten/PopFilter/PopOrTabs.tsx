@@ -1,10 +1,9 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useSetAtom } from 'jotai'
 
-import { initial as pop } from '../../../../store/Tree/DataFilter/pop'
-import { MobxContext } from '../../../../mobxContext.ts'
+import { initial as pop } from '../../../../store/DataFilter/pop'
+import { treeDataFilterAddOrAtom } from '../../../../store/index.ts'
 
 import styles from './PopOrTabs.module.css'
 
@@ -14,54 +13,55 @@ interface PopOrTabsProps {
   dataFilter: any[]
 }
 
-export const PopOrTabs = observer(
-  ({ activeTab, setActiveTab, dataFilter }: PopOrTabsProps) => {
-    const store = useContext(MobxContext)
-    const { dataFilterAddOr } = store.tree
+export const PopOrTabs = ({
+  activeTab,
+  setActiveTab,
+  dataFilter,
+}: PopOrTabsProps) => {
+  const addDataFilterOr = useSetAtom(treeDataFilterAddOrAtom)
 
-    const lastFilterIsEmpty =
-      Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
-        (v) => v !== null,
-      ).length === 0
+  const lastFilterIsEmpty =
+    Object.values(dataFilter[dataFilter.length - 1] ?? {}).filter(
+      (v) => v !== null,
+    ).length === 0
 
-    const onChangeTab = (event, value) => {
-      if (value > dataFilter.length - 1) {
-        dataFilterAddOr({ table: 'pop', val: pop })
-        setTimeout(() => setActiveTab(value), 0)
-        return
-      }
-      setActiveTab(value)
+  const onChangeTab = (event, value) => {
+    if (value > dataFilter.length - 1) {
+      addDataFilterOr({ table: 'pop', val: pop })
+      setTimeout(() => setActiveTab(value), 0)
+      return
     }
+    setActiveTab(value)
+  }
 
-    return (
-      <div>
-        <div className={styles.title}>Filter-Kriterien:</div>
-        <Tabs
-          value={activeTab}
-          onChange={onChangeTab}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
-          className={styles.tabs}
-        >
-          {dataFilter.map((filter, index) => (
-            <Tab
-              key={index}
-              label={index + 1}
-              value={index}
-              className={styles.tab}
-            />
-          ))}
+  return (
+    <div>
+      <div className={styles.title}>Filter-Kriterien:</div>
+      <Tabs
+        value={activeTab}
+        onChange={onChangeTab}
+        indicatorColor="primary"
+        textColor="primary"
+        variant="scrollable"
+        scrollButtons="auto"
+        className={styles.tabs}
+      >
+        {dataFilter.map((filter, index) => (
           <Tab
-            key={dataFilter.length}
-            label="oder"
-            value={dataFilter.length}
-            disabled={lastFilterIsEmpty}
+            key={index}
+            label={index + 1}
+            value={index}
             className={styles.tab}
           />
-        </Tabs>
-      </div>
-    )
-  },
-)
+        ))}
+        <Tab
+          key={dataFilter.length}
+          label="oder"
+          value={dataFilter.length}
+          disabled={lastFilterIsEmpty}
+          className={styles.tab}
+        />
+      </Tabs>
+    </div>
+  )
+}

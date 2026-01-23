@@ -1,6 +1,4 @@
-import { useContext } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
@@ -8,7 +6,6 @@ import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
@@ -16,8 +13,8 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 
 import {
   addNotificationAtom,
-} from '../../../../../JotaiStore/index.ts'
-
+  treeBeobGqlFilterAtom,
+} from '../../../../../store/index.ts'
 
 interface BeobNichtZuzuordnenNode {
   id: BeobId
@@ -58,23 +55,23 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
+const BeobNichtZuzuordnenMarker = ({ clustered }) => {
   // const leafletMap = useMap()
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+  const beobNichtZuzuordnenGqlFilter = useAtomValue(
+    treeBeobGqlFilterAtom('nichtZuzuordnen'),
+  )
   const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: [
       'KarteBeobNichtZuzuordnenQuery',
-      beobGqlFilter('nichtZuzuordnen').filtered,
+      beobNichtZuzuordnenGqlFilter.filtered,
     ],
     queryFn: () =>
       apolloClient.query({
         query,
         variables: {
-          beobFilter: beobGqlFilter('nichtZuzuordnen').filtered,
+          beobFilter: beobNichtZuzuordnenGqlFilter.filtered,
         },
       }),
   })
@@ -121,13 +118,13 @@ const BeobNichtZuzuordnenMarker = observer(({ clustered }) => {
     )
   }
   return beobMarkers
-})
+}
 
-export const BeobNichtZuzuordnen = observer(({ clustered }) => {
+export const BeobNichtZuzuordnen = ({ clustered }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+  const beobNichtZuzuordnenGqlFilter = useAtomValue(
+    treeBeobGqlFilterAtom('nichtZuzuordnen'),
+  )
 
   const { apId } = useParams()
 
@@ -136,11 +133,11 @@ export const BeobNichtZuzuordnen = observer(({ clustered }) => {
   // thus query fetches data for all aps
   // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
   const gqlFilterHasApId =
-    !!beobGqlFilter('nichtZuzuordnen').filtered?.aeTaxonomyByArtId
-      ?.apartsByArtId?.some?.apId
+    !!beobNichtZuzuordnenGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId
+      ?.some?.apId
   const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
 
   return <BeobNichtZuzuordnenMarker clustered={clustered} />
-})
+}

@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { ApberForYear } from './ApberForYear.tsx'
-import { MobxContext } from '../../../mobxContext.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
 import type { ApberuebersichtId } from '../../../models/apflora/public/Apberuebersicht.ts'
@@ -46,10 +45,7 @@ export const Component = () => {
 
   return (
     <ErrorBoundary>
-      <ApberForYear
-        jahr={year}
-        apberuebersichtId={apberuebersichtId}
-      />
+      <ApberForYear jahr={year} apberuebersichtId={apberuebersichtId} />
     </ErrorBoundary>
   )
 }

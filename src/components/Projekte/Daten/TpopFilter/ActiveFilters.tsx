@@ -1,45 +1,46 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.ts'
-import { treeNodeLabelFilterAtom } from '../../../../JotaiStore/index.ts'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+  treeArtIsFilteredAtom,
+  treePopIsFilteredAtom,
+} from '../../../../store/index.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
 import styles from './ActiveFilters.module.css'
 
-export const ActiveFilters = observer(() => {
+export const ActiveFilters = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
-
-  const { mapFilter, apFilter, artIsFiltered, popIsFiltered } = store.tree
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
+  const popIsFiltered = useAtomValue(treePopIsFilteredAtom)
 
-  const navApFilterComment =
-    apFilter ?
-      `Navigationsbaum, "nur AP"-Filter: Nur Teil-Populationen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Teil-Populationen von AP-Arten werden berücksichtigt.`
     : undefined
   const navHiearchyComment =
     // popId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.' :
-    apId ?
-      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
+    apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
+      : undefined
+  const navLabelComment = nodeLabelFilter.tpop
+    ? `Navigationsbaum, Label-Filter: Das Label der Teil-Populationen wird nach "${nodeLabelFilter.tpop}" gefiltert.`
     : undefined
-  const navLabelComment =
-    nodeLabelFilter.tpop ?
-      `Navigationsbaum, Label-Filter: Das Label der Teil-Populationen wird nach "${nodeLabelFilter.tpop}" gefiltert.`
+  const artHierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Teil-Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const artHierarchyComment =
-    artIsFiltered ?
-      'Formular-Filter, Ebene Art: Es werden nur Teil-Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const popHierarchyComment = popIsFiltered
+    ? 'Formular-Filter, Ebene Population: Es werden nur Teil-Populationen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const popHierarchyComment =
-    popIsFiltered ?
-      'Formular-Filter, Ebene Population: Es werden nur Teil-Populationen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: wird angewendet.'
     : undefined
-  const mapFilterComment =
-    mapFilter ? 'Karten-Filter: wird angewendet.' : undefined
 
   const showFilterComments =
     !!navApFilterComment ||
@@ -76,4 +77,4 @@ export const ActiveFilters = observer(() => {
       </ul>
     </ErrorBoundary>
   )
-})
+}

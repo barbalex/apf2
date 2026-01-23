@@ -1,50 +1,50 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treeApberuebersichtGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useApberuebersichtsNavData = (props) => {
   const apolloClient = useApolloClient()
-  const store = useContext(MobxContext)
 
   const params = useParams()
   const projId = props?.projId ?? params?.projId
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeApberuebersicht', projId],
+  const apberuebersichtGqlFilterForTree = useAtomValue(
+    treeApberuebersichtGqlFilterForTreeAtom,
+  )
+
+  const { data } = useQuery({
+    queryKey: ['treeApberuebersicht', apberuebersichtGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
           query NavApberuebersichtsQuery(
-            $projId: UUID!
             $apberuebersichtFilter: ApberuebersichtFilter!
           ) {
-            projektById(id: $projId) {
-              id
-              apberuebersichtsByProjId(
-                filter: $apberuebersichtFilter
-                orderBy: LABEL_ASC
-              ) {
-                totalCount
-                nodes {
-                  id
-                  label
-                }
+            filtered: allApberuebersichts(
+              filter: $apberuebersichtFilter
+              orderBy: LABEL_ASC
+            ) {
+              totalCount
+              nodes {
+                id
+                label
               }
-              allApberuebersichts: apberuebersichtsByProjId {
-                totalCount
-              }
+            }
+            unfiltered: allApberuebersichts {
+              totalCount
             }
           }
         `,
         variables: {
-          projId,
-          apberuebersichtFilter: store.tree.apberuebersichtGqlFilterForTree,
+          apberuebersichtFilter: apberuebersichtGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -52,17 +52,9 @@ export const useApberuebersichtsNavData = (props) => {
     },
     suspense: true,
   })
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.apberuebersichtGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
-  const count =
-    data?.data?.projektById?.apberuebersichtsByProjId?.nodes?.length ?? 0
-  const totalCount =
-    data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
+  const count = data?.data?.filtered?.nodes?.length ?? 0
+  const totalCount = data?.data?.unfiltered?.totalCount ?? 0
 
   const navData = {
     id: 'AP-Berichte',
@@ -78,18 +70,16 @@ export const useApberuebersichtsNavData = (props) => {
     fetcherName: 'useApberuebersichtsNavData',
     fetcherParams: { projId },
     component: NodeWithList,
-    menus: (data?.data?.projektById?.apberuebersichtsByProjId?.nodes ?? []).map(
-      (p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'apberuebersicht',
-        treeId: p.id,
-        treeParentTableId: projId,
-        treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
-        hasChildren: false,
-      }),
-    ),
+    menus: (data?.data?.filtered?.nodes ?? []).map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'apberuebersicht',
+      treeId: p.id,
+      treeParentTableId: projId,
+      treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
+      hasChildren: false,
+    })),
   }
 
   return navData

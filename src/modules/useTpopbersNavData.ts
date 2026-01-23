@@ -1,11 +1,10 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import { store, treeTpopberGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopbersNavData = (props) => {
@@ -16,10 +15,10 @@ export const useTpopbersNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
+  const tpopberGqlFilterForTree = useAtomValue(treeTpopberGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeTpopber', tpopId, store.tree.tpopberGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeTpopber', tpopId, tpopberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -30,7 +29,6 @@ export const useTpopbersNavData = (props) => {
             tpopById(id: $tpopId) {
               id
               tpopbersByTpopId(filter: $tpopbersFilter, orderBy: LABEL_ASC) {
-                totalCount
                 nodes {
                   id
                   label
@@ -43,7 +41,7 @@ export const useTpopbersNavData = (props) => {
           }
         `,
         variables: {
-          tpopbersFilter: store.tree.tpopberGqlFilterForTree,
+          tpopbersFilter: tpopberGqlFilterForTree,
           tpopId,
         },
       })
@@ -52,16 +50,8 @@ export const useTpopbersNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.tpopberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
-  const count = data?.data?.tpopById?.tpopbersByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopbersByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {

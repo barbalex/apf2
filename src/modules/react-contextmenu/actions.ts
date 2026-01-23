@@ -9,7 +9,7 @@ export function dispatchGlobalEvent(eventName, opts) {
   var target =
     arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : window
 
-  // Compatibale with IE
+  // compatible with IE
   // @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
   var event = void 0
 

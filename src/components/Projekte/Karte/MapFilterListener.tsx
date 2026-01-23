@@ -1,13 +1,12 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useMap } from 'react-leaflet'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../mobxContext.ts'
+import { treeMapFilterAtom } from '../../../store/index.ts'
 
-export const MapFilterListener = observer(() => {
+export const MapFilterListener = () => {
   const map = useMap()
-  const store = useContext(MobxContext)
-  const { mapFilter } = store.tree
+  const mapFilter = useAtomValue(treeMapFilterAtom)
 
   useEffect(() => {
     if (!mapFilter) {
@@ -16,4 +15,4 @@ export const MapFilterListener = observer(() => {
   }, [map, mapFilter])
 
   return null
-})
+}

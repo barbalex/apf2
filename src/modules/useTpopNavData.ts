@@ -1,20 +1,24 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
+  store,
   mapActiveApfloraLayersAtom,
   mapTpopIconAtom,
   treeShowTpopIconAtom,
-} from '../JotaiStore/index.ts'
+  treeTpopmassnGqlFilterForTreeAtom,
+  treeTpopmassnberGqlFilterForTreeAtom,
+  treeTpopberGqlFilterForTreeAtom,
+  treeEkGqlFilterForTreeAtom,
+  treeEkfGqlFilterForTreeAtom,
+  treeBeobZugeordnetGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 
@@ -48,9 +52,20 @@ export const useTpopNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
+  const tpopmassnGqlFilterForTree = useAtomValue(
+    treeTpopmassnGqlFilterForTreeAtom,
+  )
+  const tpopmassnberGqlFilterForTree = useAtomValue(
+    treeTpopmassnberGqlFilterForTreeAtom,
+  )
+  const tpopberGqlFilterForTree = useAtomValue(treeTpopberGqlFilterForTreeAtom)
+  const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
+  const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
+  const beobZugeordnetGqlFilterForTree = useAtomValue(
+    treeBeobZugeordnetGqlFilterForTreeAtom,
+  )
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -65,12 +80,12 @@ export const useTpopNavData = (props) => {
     queryKey: [
       'treeTpop',
       tpopId,
-      store.tree.tpopmassnGqlFilterForTree,
-      store.tree.tpopmassnberGqlFilterForTree,
-      store.tree.ekGqlFilterForTree,
-      store.tree.ekfGqlFilterForTree,
-      store.tree.tpopberGqlFilterForTree,
-      store.tree.beobZugeordnetGqlFilterForTree,
+      tpopmassnGqlFilterForTree,
+      tpopmassnberGqlFilterForTree,
+      ekGqlFilterForTree,
+      ekfGqlFilterForTree,
+      tpopberGqlFilterForTree,
+      beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -151,13 +166,13 @@ export const useTpopNavData = (props) => {
         `,
         variables: {
           tpopId,
-          tpopmassnFilter: store.tree.tpopmassnGqlFilterForTree,
-          tpopmassnberFilter: store.tree.tpopmassnberGqlFilterForTree,
-          tpopfeldkontrFilter: store.tree.ekGqlFilterForTree,
-          tpopfreiwkontrFilter: store.tree.ekfGqlFilterForTree,
-          tpopberFilter: store.tree.tpopberGqlFilterForTree,
+          tpopmassnFilter: tpopmassnGqlFilterForTree,
+          tpopmassnberFilter: tpopmassnberGqlFilterForTree,
+          tpopfeldkontrFilter: ekGqlFilterForTree,
+          tpopfreiwkontrFilter: ekfGqlFilterForTree,
+          tpopberFilter: tpopberGqlFilterForTree,
           beobZugeordnetFilter: {
-            ...store.tree.beobZugeordnetGqlFilterForTree,
+            ...beobZugeordnetGqlFilterForTree,
             tpopId: { equalTo: tpopId },
           },
         },
@@ -168,38 +183,8 @@ export const useTpopNavData = (props) => {
     suspense: true,
   })
   useEffect(
-    () => reaction(() => store.tree.tpopmassnGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.tpopmassnberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.ekGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.ekfGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.tpopberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => reaction(() => store.tree.beobZugeordnetGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
     () => {
-      const unsub = jotaiStore.sub(mapActiveApfloraLayersAtom, rerender)
+      const unsub = store.sub(mapActiveApfloraLayersAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -207,7 +192,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(mapTpopIconAtom, rerender)
+      const unsub = store.sub(mapTpopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -215,7 +200,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(treeShowTpopIconAtom, rerender)
+      const unsub = store.sub(treeShowTpopIconAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -223,7 +208,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -231,7 +216,7 @@ export const useTpopNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -263,17 +248,18 @@ export const useTpopNavData = (props) => {
   const filesCount = data?.data?.tpopById?.tpopFilesByTpopId?.totalCount ?? 0
   const historiesCount = data?.data?.allTpopHistories?.totalCount ?? 0
 
-  const tpopIconName = jotaiStore.get(mapTpopIconAtom)
+  const tpopIconName = store.get(mapTpopIconAtom)
 
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
-  const TpopIcon =
-    status ?
-      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
+  const TpopIcon = status
+    ? tpopIconIsHighlighted
+      ? tpopIcons[tpopIconName][status + 'Highlighted']
       : tpopIcons[tpopIconName][status]
-    : tpopIconIsHighlighted ? TpopIconQHighlighted
-    : TpopIconQ
+    : tpopIconIsHighlighted
+      ? TpopIconQHighlighted
+      : TpopIconQ
 
-  const showTpopIcon = jotaiStore.get(treeShowTpopIconAtom)
+  const showTpopIcon = store.get(treeShowTpopIconAtom)
 
   const labelRightElements = getLabelRightElements({
     movingId: moving.id,
@@ -304,8 +290,9 @@ export const useTpopNavData = (props) => {
     hasChildren: true,
     // TODO: show only if map is visible and tpop layer active
     labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     component: NodeWithList,
     menus: [
       {
@@ -313,8 +300,9 @@ export const useTpopNavData = (props) => {
         label: `Teil-Population`,
         isSelf: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       },
       {
         id: 'Massnahmen',
@@ -450,8 +438,9 @@ export const useTpopNavData = (props) => {
         fetcherName: 'useBeobZugeordnetsNavData',
         fetcherParams: { projId, apId, popId, tpopId },
         hasChildren: !!filteredBeobZugeordnetCount,
-        labelLeftElements:
-          showBeobzugeordnetIcon ? [BeobzugeordnetMapIcon] : undefined,
+        labelLeftElements: showBeobzugeordnetIcon
+          ? [BeobzugeordnetMapIcon]
+          : undefined,
         component: NodeWithList,
       },
       {

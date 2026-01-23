@@ -1,6 +1,4 @@
-import { useContext } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
@@ -8,7 +6,6 @@ import { useParams } from 'react-router'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 
 import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
@@ -20,7 +17,8 @@ import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxono
 
 import {
   addNotificationAtom,
-} from '../../../../../JotaiStore/index.ts'
+  treeBeobGqlFilterAtom,
+} from '../../../../../store/index.ts'
 
 
 interface BeobZugeordnetNode {
@@ -72,23 +70,21 @@ const iconCreateFunction = function (cluster) {
   })
 }
 
-const BeobZugeordnetMarker = observer(({ clustered }) => {
+const BeobZugeordnetMarker = ({ clustered }) => {
   // const leafletMap = useMap()
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+  const beobZugeordnetGqlFilter = useAtomValue(treeBeobGqlFilterAtom('zugeordnet'))
 
   const apolloClient = useApolloClient()
 
   const { data, error } = useQuery({
     queryKey: [
       'BeobZugeordnetForMapQuery',
-      beobGqlFilter('zugeordnet').filtered,
+      beobZugeordnetGqlFilter.filtered,
     ],
     queryFn: async () =>
       apolloClient.query({
         query: query,
-        variables: { beobFilter: beobGqlFilter('zugeordnet').filtered },
+        variables: { beobFilter: beobZugeordnetGqlFilter.filtered },
       }),
   })
 
@@ -134,13 +130,11 @@ const BeobZugeordnetMarker = observer(({ clustered }) => {
     )
   }
   return beobMarkers
-})
+}
 
-export const BeobZugeordnet = observer(({ clustered }) => {
+export const BeobZugeordnet = ({ clustered }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { beobGqlFilter } = tree
+  const beobZugeordnetGqlFilter = useAtomValue(treeBeobGqlFilterAtom('zugeordnet'))
 
   const { apId } = useParams()
 
@@ -149,11 +143,11 @@ export const BeobZugeordnet = observer(({ clustered }) => {
   // thus query fetches data for all aps
   // Solution: do not return pop if apId exists but gqlFilter does not contain it (yet)
   const gqlFilterHasApId =
-    !!beobGqlFilter('zugeordnet').filtered?.aeTaxonomyByArtId?.apartsByArtId
+    !!beobZugeordnetGqlFilter.filtered?.aeTaxonomyByArtId?.apartsByArtId
       ?.some?.apId
   const apIdExistsButGqlFilterDoesNotKnowYet = !!apId && !gqlFilterHasApId
 
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
 
   return <BeobZugeordnetMarker clustered={clustered} />
-})
+}

@@ -1,40 +1,41 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
+import {
+  store,
+  treeApGqlFilterForTreeAtom,
+} from '../store/index.ts'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
 
-  const store = useContext(MobxContext)
+  const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeAp', projId, store.tree.apGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeAp', apGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
-          query TreeApsQuery($apsFilter: ApFilter!, $projId: UUID!) {
+          query TreeApsQuery($apsFilter: ApFilter!) {
             allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
               nodes {
                 id
                 label
               }
             }
-            totalCount: allAps(filter: { projId: { equalTo: $projId } }) {
+            totalCount: allAps {
               totalCount
             }
           }
         `,
         variables: {
-          apsFilter: store.tree.apGqlFilterForTree,
-          projId,
+          apsFilter: apGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -42,14 +43,6 @@ export const useApsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.apGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.allAps?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0

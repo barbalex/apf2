@@ -8,7 +8,7 @@ import {
   treeActiveNodeArrayAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const Item = ({ menu, baseUrl, onClose }) => {
   const { pathname, search } = useLocation()

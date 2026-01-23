@@ -24,7 +24,7 @@ import {
   userNameAtom,
   openChooseApToCopyErfkritsFromAtom,
   setOpenChooseApToCopyErfkritsFromAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 interface ExistingErfkritNode {
   id: ErfkritId

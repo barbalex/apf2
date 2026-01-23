@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import { useSetAtom } from 'jotai'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
@@ -10,7 +9,6 @@ import { RiFolderCloseFill } from 'react-icons/ri'
 import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { observer } from 'mobx-react-lite'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
@@ -18,14 +16,10 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopApberrelevantGrundWerteCode } from '../../../../generated/apflora/models.ts'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopApberrelevantGrundWerteResult {
   createTpopApberrelevantGrundWerte: {
@@ -41,13 +35,11 @@ interface MenuProps {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
+export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
   const { projId, tpopApberrelevantGrundWerteId } = useParams()
-
-  const store = useContext(MobxContext)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -103,4 +95,4 @@ export const Menu = observer(({ toggleFilterInput }: MenuProps) => {
       </MenuBar>
     </ErrorBoundary>
   )
-})
+}

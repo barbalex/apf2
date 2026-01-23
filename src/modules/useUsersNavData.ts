@@ -1,19 +1,18 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useUsersNavData = () => {
   const apolloClient = useApolloClient()
 
-  const store = useContext(MobxContext)
+  const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeUser', store.tree.userGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeUser', userGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -30,7 +29,7 @@ export const useUsersNavData = () => {
           }
         `,
         variables: {
-          usersFilter: store.tree.userGqlFilterForTree,
+          usersFilter: userGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -38,14 +37,6 @@ export const useUsersNavData = () => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.userGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.allUsers?.nodes?.length ?? 0
   const totalCount = data?.data?.totalCount?.totalCount ?? 0

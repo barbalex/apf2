@@ -12,41 +12,33 @@ import { ErrorLink } from '@apollo/client/link/error'
 import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-typename'
 import { jwtDecode } from 'jwt-decode'
 import { uniqBy } from 'es-toolkit'
-import type { Instance } from 'mobx-state-tree'
 import { useSetAtom } from 'jotai'
 
 import { graphQlUri } from './modules/graphQlUri.ts'
 import { existsPermissionError } from './modules/existsPermissionError.ts'
 import { existsTooLargeError } from './modules/existsTooLargeError.ts'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   addNotificationAtom,
   userTokenAtom,
-} from './JotaiStore/index.ts'
-
-import type { MobxStore } from './store/index.ts'
+  treeSetMapFilterAtom,
+} from './store/index.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
-
-interface BuildApolloClientParams {
-  store: Instance<typeof MobxStore>
-}
+  store.set(addNotificationAtom, notification)
 
 interface JwtPayload {
   exp: number
 }
 
-export const buildApolloClient = ({
-  store,
-}: BuildApolloClientParams): ApolloClient<NormalizedCacheObject> => {
+export const buildApolloClient = (): ApolloClient<NormalizedCacheObject> => {
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
   const authLink = setContext((_, { headers }) => {
-    const token = jotaiStore.get(userTokenAtom)
+    const token = store.get(userTokenAtom)
     if (token) {
       const tokenDecoded = jwtDecode<JwtPayload>(token)
       // for unknown reason, date.now returns three more after comma
@@ -95,7 +87,7 @@ export const buildApolloClient = ({
         }
         if (existsTooLargeError(uniqueQraphQLErrors)) {
           // could be a too large ktZh geojson file being passed in mapFilter
-          store.tree.setMapFilter(undefined)
+          store.set(treeSetMapFilterAtom, undefined)
         }
         uniqueQraphQLErrors.map(({ message, locations, path }) => {
           console.log(
@@ -240,7 +232,7 @@ export const buildApolloClient = ({
     },
   })
   // make client available in store
-  jotaiStore.set(apolloClientAtom, client)
+  store.set(apolloClientAtom, client)
 
   return client
 }

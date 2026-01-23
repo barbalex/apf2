@@ -1,11 +1,13 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treePopberGqlFilterForTreeAtom,
+} from '../store/index.ts'
 
 export const usePopbersNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -14,10 +16,10 @@ export const usePopbersNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const popId = props?.popId ?? params.popId
 
-  const store = useContext(MobxContext)
+  const popberGqlFilterForTree = useAtomValue(treePopberGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treePopber', popId, store.tree.popberGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treePopber', popId, popberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -37,7 +39,7 @@ export const usePopbersNavData = (props) => {
           }
         `,
         variables: {
-          popbersFilter: store.tree.popberGqlFilterForTree,
+          popbersFilter: popberGqlFilterForTree,
           popId,
         },
       })
@@ -46,14 +48,6 @@ export const usePopbersNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.popberGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count = data?.data?.popById?.popbersByPopId?.nodes?.length ?? 0
   const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0

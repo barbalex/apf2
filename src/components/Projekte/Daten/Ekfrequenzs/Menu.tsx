@@ -16,7 +16,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import {
   addNotificationAtom,
   setOpenChooseApToCopyEkfrequenzsFromAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 
 interface CreateEkfrequenzResult {

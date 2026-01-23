@@ -17,15 +17,15 @@ import { createTpop } from './createTpop.ts'
 import { createPop } from './createPop.ts'
 
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
   copyingAtom,
-} from '../../JotaiStore/index.ts'
+} from '../../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 // copyTpopsOfPop can pass table and id separately
 export const copyTo = async ({
@@ -33,10 +33,10 @@ export const copyTo = async ({
   table: tablePassed,
   id: idPassed,
 }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  tsQueryClient = store.get(tsQueryClientAtom)
 
-  const copying = jotaiStore.get(copyingAtom)
+  const copying = store.get(copyingAtom)
   const table = tablePassed ?? copying.table
   const id = idPassed ?? copying.id
   const withNextLevel = copying.withNextLevel ?? false

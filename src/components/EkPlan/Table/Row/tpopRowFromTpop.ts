@@ -1,12 +1,12 @@
 import { fields } from '../fields.ts'
 import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
 import {
-  store as jotaiStore,
+  store,
   ekPlanFieldsAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 export const tpopRowFromTpop = (tpop) => {
-  const fieldsShown = jotaiStore.get(ekPlanFieldsAtom)
+  const fieldsShown = store.get(ekPlanFieldsAtom)
 
   return tpop ?
       {

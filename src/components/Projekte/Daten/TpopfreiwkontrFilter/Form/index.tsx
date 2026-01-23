@@ -1,5 +1,5 @@
-import { useContext, type ChangeEvent } from 'react'
-import { observer } from 'mobx-react-lite'
+import { type ChangeEvent } from 'react'
+import { useSetAtom } from 'jotai'
 
 import { Headdata } from './Headdata/index.tsx'
 import { DateField as Date } from '../../Tpopfreiwkontr/Form/Date.tsx'
@@ -10,7 +10,7 @@ import { Danger } from '../../Tpopfreiwkontr/Form/Danger.tsx'
 import { Remarks } from '../../Tpopfreiwkontr/Form/Remarks.tsx'
 import { EkfRemarks } from '../../Tpopfreiwkontr/Form/EkfRemarks.tsx'
 import { Verification } from '../../Tpopfreiwkontr/Form/Verification.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
+import { treeDataFilterSetValueAtom } from '../../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 
 import styles from '../../Tpopfreiwkontr/Form/index.module.css'
@@ -20,12 +20,11 @@ interface FormProps {
   activeTab: number
 }
 
-export const Form = observer(({ row, activeTab }: FormProps) => {
-  const store = useContext(MobxContext)
-  const { dataFilterSetValue } = store.tree
+export const Form = ({ row, activeTab }: FormProps) => {
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
-    dataFilterSetValue({
+    setDataFilterValue({
       table: 'tpopfreiwkontr',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
@@ -35,40 +34,18 @@ export const Form = observer(({ row, activeTab }: FormProps) => {
   return (
     <div className={styles.formContainer}>
       <div className={styles.gridContainer}>
-        <Headdata
-          row={row}
-          activeTab={activeTab}
-        />
-        <Date
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <Map
-          key={`map${row?.planVorhanden}`}
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <Cover
-          saveToDb={saveToDb}
-          row={row}
-        />
+        <Headdata row={row} activeTab={activeTab} />
+        <Date saveToDb={saveToDb} row={row} />
+        <Map key={`map${row?.planVorhanden}`} saveToDb={saveToDb} row={row} />
+        <Cover saveToDb={saveToDb} row={row} />
         <More
           key={`more${row?.jungpflanzenVorhanden}`}
           saveToDb={saveToDb}
           row={row}
         />
-        <Danger
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <Remarks
-          saveToDb={saveToDb}
-          row={row}
-        />
-        <EkfRemarks
-          saveToDb={saveToDb}
-          row={row}
-        />
+        <Danger saveToDb={saveToDb} row={row} />
+        <Remarks saveToDb={saveToDb} row={row} />
+        <EkfRemarks saveToDb={saveToDb} row={row} />
         <Verification
           key={`verification${row?.apberNichtRelevant}`}
           saveToDb={saveToDb}
@@ -78,4 +55,4 @@ export const Form = observer(({ row, activeTab }: FormProps) => {
       <div style={{ height: '64px' }} />
     </div>
   )
-})
+}

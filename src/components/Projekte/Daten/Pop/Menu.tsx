@@ -29,7 +29,7 @@ import {
   setMovingAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
-} from '../../../../JotaiStore/index.ts'
+} from '../../../../store/index.ts'
 
 import type { PopId, ApId, Pop } from '../../../../models/apflora/index.tsx'
 

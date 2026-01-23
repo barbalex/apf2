@@ -1,17 +1,15 @@
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { reaction } from 'mobx'
 import { useAtomValue } from 'jotai'
-
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
-} from '../JotaiStore/index.ts'
+  store,
+  treeTpopkontrzaehlGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -40,13 +38,15 @@ export const useTpopfreiwkontrNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
 
-  const store = useContext(MobxContext)
+  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
+    treeTpopkontrzaehlGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeTpopfreiwkontr',
       tpopkontrId,
-      store.tree.tpopkontrzaehlGqlFilterForTree,
+      tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -74,7 +74,7 @@ export const useTpopfreiwkontrNavData = (props) => {
         `,
         variables: {
           tpopkontrId,
-          tpopkontrzaehlFilter: store.tree.tpopkontrzaehlGqlFilterForTree,
+          tpopkontrzaehlFilter: tpopkontrzaehlGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -82,18 +82,14 @@ export const useTpopfreiwkontrNavData = (props) => {
     },
     suspense: true,
   })
-  useEffect(
-    () => reaction(() => store.tree.tpopkontrzaehlGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +97,7 @@ export const useTpopfreiwkontrNavData = (props) => {
   )
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,16 +143,18 @@ export const useTpopfreiwkontrNavData = (props) => {
     singleElementName: 'Freiwilligen-Kontrolle',
     hasChildren: true,
     childrenAreFolders: true,
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     // leave totalCount undefined as the menus are folders
     menus: [
       {
         id: 'Freiwilligen-Kontrolle',
         label: `Freiwilligen-Kontrolle`,
         isSelf: true,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       },
       {
         id: 'Zaehlungen',

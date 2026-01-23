@@ -1,17 +1,16 @@
-import { useEffect, useContext, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
 import {
   copyingAtom,
   movingAtom,
-  store as jotaiStore,
-} from '../JotaiStore/index.ts'
+  store,
+  treeTpopmassnGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -24,11 +23,13 @@ export const useTpopmassnsNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const store = useContext(MobxContext)
   const moving = useAtomValue(movingAtom)
+  const tpopmassnGqlFilterForTree = useAtomValue(
+    treeTpopmassnGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeTpopmassn', tpopId, store.tree.tpopmassnGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeTpopmassn', tpopId, tpopmassnGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -37,12 +38,10 @@ export const useTpopmassnsNavData = (props) => {
             $tpopId: UUID!
           ) {
             tpopById(id: $tpopId) {
-              id
               tpopmassnsByTpopId(
                 filter: $tpopmassnsFilter
                 orderBy: [JAHR_ASC, DATUM_ASC]
               ) {
-                totalCount
                 nodes {
                   id
                   label
@@ -55,7 +54,7 @@ export const useTpopmassnsNavData = (props) => {
           }
         `,
         variables: {
-          tpopmassnsFilter: store.tree.tpopmassnGqlFilterForTree,
+          tpopmassnsFilter: tpopmassnGqlFilterForTree,
           tpopId,
         },
       })
@@ -64,19 +63,15 @@ export const useTpopmassnsNavData = (props) => {
     },
     suspense: true,
   })
+
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.tpopmassnGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(movingAtom, rerender)
+      const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,14 +80,14 @@ export const useTpopmassnsNavData = (props) => {
   const copying = useAtomValue(copyingAtom)
   useEffect(
     () => {
-      const unsub = jotaiStore.sub(copyingAtom, rerender)
+      const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopmassnsByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {
@@ -152,8 +147,9 @@ export const useTpopmassnsNavData = (props) => {
         hasChildren: true,
         fetcherName: 'useTpopmassnNavData',
         fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       }
     }),
   }

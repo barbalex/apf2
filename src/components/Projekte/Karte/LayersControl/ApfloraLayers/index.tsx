@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 
-import { mapApfloraLayersAtom } from '../../../../../JotaiStore/index.ts'
+import { mapApfloraLayersAtom } from '../../../../../store/index.ts'
 import { Layer } from './Layer/index.tsx'
 import { ShowForMultipleAps } from './ShowForMultipleAps.tsx'
 import { KtZhFilter } from './KtZhFilter/index.tsx'

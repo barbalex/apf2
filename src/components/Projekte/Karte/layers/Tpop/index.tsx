@@ -1,6 +1,5 @@
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import { useMapEvents } from 'react-leaflet'
@@ -10,7 +9,6 @@ import { useParams } from 'react-router'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 
 import { Marker } from './Marker.tsx'
-import { MobxContext } from '../../../../../mobxContext.ts'
 import { query } from './query.ts'
 import { updateTpopById } from './updateTpopById.ts'
 import { tpop } from '../../../../shared/fragments.ts'
@@ -26,7 +24,8 @@ import {
   addNotificationAtom,
   idOfTpopBeingLocalizedAtom,
   setIdOfTpopBeingLocalizedAtom,
-} from '../../../../../JotaiStore/index.ts'
+  treeTpopGqlFilterAtom,
+} from '../../../../../store/index.ts'
 
 interface TpopNode {
   id: TpopId
@@ -82,9 +81,8 @@ const getTpopFilter = (tpopGqlFilter) => {
   return filter
 }
 
-const ObservedTpop = observer(({ clustered }) => {
-  const store = useContext(MobxContext)
-  const { tpopGqlFilter } = store.tree
+const ObservedTpop = ({ clustered }) => {
+  const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
 
   const idOfTpopBeingLocalized = useAtomValue(idOfTpopBeingLocalizedAtom)
   const setIdOfTpopBeingLocalized = useSetAtom(setIdOfTpopBeingLocalizedAtom)
@@ -220,13 +218,11 @@ const ObservedTpop = observer(({ clustered }) => {
   }
 
   return tpopMarkers
-})
+}
 
-export const Tpop = observer(({ clustered }) => {
+export const Tpop = ({ clustered }) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const tree = store.tree
-  const { tpopGqlFilter } = tree
+  const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
 
   const { apId } = useParams()
 
@@ -240,4 +236,4 @@ export const Tpop = observer(({ clustered }) => {
   if (apIdExistsButGqlFilterDoesNotKnowYet) return null
 
   return <ObservedTpop clustered={clustered} />
-})
+}

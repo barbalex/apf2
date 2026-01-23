@@ -1,17 +1,16 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useRootNavData = () => {
   const apolloClient = useApolloClient()
-  const store = useContext(MobxContext)
+  const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
-    queryKey: ['treeRoot', store.tree.userGqlFilterForTree],
+  const { data } = useQuery({
+    queryKey: ['treeRoot', userGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
         query: gql`
@@ -34,7 +33,7 @@ export const useRootNavData = () => {
           }
         `,
         variables: {
-          usersFilter: store.tree.userGqlFilterForTree,
+          usersFilter: userGqlFilterForTree,
         },
       })
       if (result.error) throw result.error
@@ -42,12 +41,7 @@ export const useRootNavData = () => {
     },
     suspense: true,
   })
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.userGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
+
   const projectsCount = data?.data?.allProjekts?.totalCount ?? 0
   const usersCount = data?.data?.allUsers?.totalCount ?? 0
   const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0

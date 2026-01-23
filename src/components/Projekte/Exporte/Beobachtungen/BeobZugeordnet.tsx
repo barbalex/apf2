@@ -1,21 +1,16 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface BeobZugeordnetQueryResult {
   allVBeobZugeordnets: {
@@ -48,9 +43,8 @@ interface BeobZugeordnetQueryResult {
   }
 }
 
-export const BeobZugeordnet = observer(() => {
+export const BeobZugeordnet = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -111,8 +105,6 @@ export const BeobZugeordnet = observer(() => {
         exportModule({
           data: result?.data?.allVBeobZugeordnets?.nodes ?? [],
           fileName: 'BeobachtungenZugeordnet',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -123,4 +115,4 @@ export const BeobZugeordnet = observer(() => {
       : null}
     </Button>
   )
-})
+}

@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import {
@@ -19,7 +17,10 @@ import {
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../JotaiStore/index.ts'
+import {
+  addNotificationAtom,
+  treeTpopmassnGqlFilterAtom,
+} from '../../../../store/index.ts'
 
 interface TpopmassnQueryResult {
   allTpopmassns: {
@@ -133,19 +134,15 @@ interface MassnahmenProps {
   filtered?: boolean
 }
 
-export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
+export const Massnahmen = ({ filtered = false }: MassnahmenProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const { tpopmassnGqlFilter } = store.tree
+  const tpopmassnGqlFilter = useAtomValue(treeTpopmassnGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
 
-  const tpopmassnIsFiltered = tableIsFiltered({
-    table: 'tpopmassn',
-    tree: store.tree,
-  })
+  const tpopmassnIsFiltered = tableIsFiltered({ table: 'tpopmassn' })
 
   return (
     <Button
@@ -383,8 +380,6 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
         exportModule({
           data: rows,
           fileName: 'Massnahmen',
-          store,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -395,4 +390,4 @@ export const Massnahmen = observer(({ filtered = false }: MassnahmenProps) => {
       : null}
     </Button>
   )
-})
+}

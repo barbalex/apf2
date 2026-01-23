@@ -5,7 +5,7 @@ import {
   ekPlanHoveredAtom,
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './CellForTpopLink.module.css'
 import indexStyles from './index.module.css'

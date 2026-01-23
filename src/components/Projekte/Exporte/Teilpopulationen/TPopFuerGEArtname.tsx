@@ -1,22 +1,17 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { observer } from 'mobx-react-lite'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
 
 import styles from '../index.module.css'
 
-import {
-  addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TPopKmlNamenQueryResult {
   allTpops: {
@@ -37,9 +32,8 @@ interface TPopKmlNamenQueryResult {
   }
 }
 
-export const TPopFuerGEArtname = observer(() => {
+export const TPopFuerGEArtname = () => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
   const apolloClient = useApolloClient()
 
   const [queryState, setQueryState] = useState()
@@ -103,9 +97,7 @@ export const TPopFuerGEArtname = observer(() => {
         exportModule({
           data: sortBy(rows, ['art', 'label']),
           fileName: 'TeilpopulationenNachNamen',
-          store,
           kml: true,
-          apolloClient,
         })
         setQueryState(undefined)
       }}
@@ -116,4 +108,4 @@ export const TPopFuerGEArtname = observer(() => {
       : null}
     </Button>
   )
-})
+}

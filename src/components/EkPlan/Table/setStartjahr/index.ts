@@ -3,17 +3,17 @@ import { queryTpopkontr } from './queryTpopkontr.js'
 import { queryTpopmassn } from './queryTpopmassn.js'
 import { mutationUpdateTpop } from './mutationUpdateTpop.js'
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   addNotificationAtom,
   userNameAtom,
-} from '../../../../JotaiStore/index.js'
+} from '../../../../store/index.js'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 export const setStartjahr = async ({ row, ekfrequenz }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
   try {
@@ -121,7 +121,7 @@ export const setStartjahr = async ({ row, ekfrequenz }) => {
       variables: {
         id: row.id,
         ekfrequenzStartjahr,
-        changedBy: jotaiStore.get(userNameAtom),
+        changedBy: store.get(userNameAtom),
       },
     })
   } catch (error) {

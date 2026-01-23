@@ -11,7 +11,7 @@ import {
   ekPlanSetFilterEmptyEkfrequenzAtom,
   ekPlanFilterEkfrequenzAtom,
   ekPlanSetFilterEkfrequenzAtom,
-} from '../../../JotaiStore/index.ts'
+} from '../../../store/index.ts'
 
 import styles from './CellHeaderFixedEkfrequenz.module.css'
 

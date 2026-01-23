@@ -1,6 +1,3 @@
-import type { Instance } from 'mobx-state-tree'
-import type { MobxStore } from '../store/index.ts'
-
 // Import queries for different node types
 import { query as apQuery } from '../components/Projekte/Daten/Ap/query.ts'
 import { query as popQuery } from '../components/Projekte/Daten/Pop/query.ts'
@@ -27,10 +24,10 @@ import { query as beobQuery } from '../components/Projekte/Daten/Beob/query.ts'
 import { query as apberuebersichtQuery } from '../components/Projekte/Daten/Apberuebersicht/query.ts'
 
 import {
-  store as jotaiStore,
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../JotaiStore/index.js'
+} from '../store/index.js'
 
 interface NodeQueryConfig {
   query: any
@@ -159,8 +156,8 @@ const nodeQueryConfigs: Record<string, NodeQueryConfig> = {
 
 export const prefetchNodeData = async (node: any) => {
   const { menuType, tableId, id } = node
-  const apolloClient = jotaiStore.get(apolloClientAtom)
-  const tsQueryClient = jotaiStore.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
 
   // Only prefetch for node types we have queries for
   const config = nodeQueryConfigs[menuType]

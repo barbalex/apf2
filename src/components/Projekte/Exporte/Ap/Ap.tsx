@@ -1,12 +1,10 @@
-import { useContext, useState } from 'react'
-import { useSetAtom } from 'jotai'
-import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
-import { MobxContext } from '../../../../mobxContext.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
 import { ApId } from '../../../../models/apflora/index.tsx'
@@ -15,8 +13,8 @@ import styles from '../index.module.css'
 
 import {
   addNotificationAtom,
-} from '../../../../JotaiStore/index.ts'
-
+  treeApGqlFilterAtom,
+} from '../../../../store/index.ts'
 
 interface ApQueryResult {
   allAps: {
@@ -46,10 +44,9 @@ interface ApProps {
   filtered?: boolean
 }
 
-export const Ap = observer(({ filtered = false }: ApProps) => {
+export const Ap = ({ filtered = false }: ApProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const store = useContext(MobxContext)
-  const { apGqlFilter } = store.tree
+  const apGqlFilter = useAtomValue(treeApGqlFilterAtom)
 
   const apolloClient = useApolloClient()
 
@@ -123,13 +120,11 @@ export const Ap = observer(({ filtered = false }: ApProps) => {
     exportModule({
       data: rows,
       fileName: `Arten${filtered ? '_gefiltert' : ''}`,
-      store,
-      apolloClient,
     })
     setQueryState(undefined)
   }
 
-  const apIsFiltered = tableIsFiltered({ table: 'ap', tree: store.tree })
+  const apIsFiltered = tableIsFiltered({ table: 'ap' })
 
   return (
     <Button
@@ -144,4 +139,4 @@ export const Ap = observer(({ filtered = false }: ApProps) => {
       : null}
     </Button>
   )
-})
+}

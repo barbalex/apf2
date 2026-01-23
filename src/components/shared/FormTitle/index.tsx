@@ -1,11 +1,10 @@
-import { useContext, useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Collapse from '@mui/material/Collapse'
 import { useAtom } from 'jotai'
 
 import { TestdataMessage } from './TestdataMessage.tsx'
-import { MobxContext } from '../../../mobxContext.ts'
 import { FilterInput } from './FilterInput.tsx'
-import { navListFilterAtoms } from '../../../JotaiStore/index.ts'
+import { navListFilterAtoms } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 
@@ -38,10 +37,7 @@ export const FormTitle = ({
   return (
     <div className={styles.container}>
       <div className={styles.titleRow}>
-        <div
-          className={styles.titleClass}
-          data-id="form-title"
-        >
+        <div className={styles.titleClass} data-id="form-title">
           {title}
         </div>
         {!!MenuBarComponent && (

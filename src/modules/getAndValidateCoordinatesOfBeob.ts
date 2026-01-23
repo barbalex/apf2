@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
 
 import {
-  store as jotaiStore,
+  store,
   addNotificationAtom,
   apolloClientAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const addNotification = (notification) =>
-  jotaiStore.set(addNotificationAtom, notification)
+  store.set(addNotificationAtom, notification)
 
 
 const beobById = gql`
@@ -21,7 +21,7 @@ const beobById = gql`
 `
 
 export const getAndValidateCoordinatesOfBeob = async ({ id }) => {
-  const apolloClient = jotaiStore.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)
   let beobResult
   try {
     beobResult = await apolloClient.query({

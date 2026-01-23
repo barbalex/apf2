@@ -1,11 +1,13 @@
-import { useEffect, useContext } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { reaction } from 'mobx'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../mobxContext.ts'
+import {
+  store,
+  treeTpopkontrzaehlGqlFilterForTreeAtom,
+} from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopfeldkontrzaehlsNavData = (props) => {
@@ -17,13 +19,15 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
 
-  const store = useContext(MobxContext)
+  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
+    treeTpopkontrzaehlGqlFilterForTreeAtom,
+  )
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: [
       'treeTpopfeldkontrzaehl',
       tpopkontrId,
-      store.tree.tpopkontrzaehlGqlFilterForTree,
+      tpopkontrzaehlGqlFilterForTree,
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -38,7 +42,6 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
                 filter: $tpopkontrzaehlsFilter
                 orderBy: LABEL_ASC
               ) {
-                totalCount
                 nodes {
                   id
                   label
@@ -51,7 +54,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
           }
         `,
         variables: {
-          tpopkontrzaehlsFilter: store.tree.tpopkontrzaehlGqlFilterForTree,
+          tpopkontrzaehlsFilter: tpopkontrzaehlGqlFilterForTree,
           tpopkontrId,
         },
       })
@@ -60,17 +63,9 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     },
     suspense: true,
   })
-  // this is how to make the filter reactive in a hook
-  // see: https://stackoverflow.com/a/72229014/712005
-  // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => reaction(() => store.tree.tpopkontrzaehlGqlFilterForTree, refetch),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
 
   const count =
-    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
+    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopkontrById?.totalCount?.totalCount ?? 0
 
   const navData = {

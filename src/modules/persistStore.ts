@@ -1,65 +1,28 @@
 import localForage from 'localforage'
-//import { onPatch } from 'mobx-state-tree'
-import { getSnapshot } from 'mobx-state-tree'
-import { persist } from 'mst-persist'
 
-import { isObject } from './isObject.ts'
 import {
-  store as jotaiStore,
+  store,
   navigateAtom,
   userNameAtom,
   treeActiveNodeArrayAtom,
-} from '../JotaiStore/index.ts'
+} from '../store/index.ts'
 
 const blacklist = [
   'overlays', // 2022.10.26 added overlay. Need to refresh or users will not get new ones
 ]
 
-export const persistStore = (store) => {
-  const username = jotaiStore.get(userNameAtom)
-  const navigate = jotaiStore.get(navigateAtom)
+export const persistStore = () => {
+  const username = store.get(userNameAtom)
+  const navigate = store.get(navigateAtom)
 
   const visitedTopDomain = window.location.pathname === '/'
 
-  persist('store', store, {
-    storage: localForage,
-    jsonify: false,
-    blacklist,
-  }).then(async () => {
-    /**
-     * TODO:
-     * This is temporary after rebuilding the structure of dataFilter
-     * Goal: prevent errors because previous persisted structure was invalid
-     * Idea: test if is object. Only then empty
-     */
-    const dataFilterTreeAp = getSnapshot(store.tree.dataFilter.ap)
-    const dataFilterTreePop = getSnapshot(store.tree.dataFilter.pop)
-    const dataFilterTreeTpop = getSnapshot(store.tree.dataFilter.tpop)
-    const dataFilterTreeTpopmassn = getSnapshot(store.tree.dataFilter.tpopmassn)
-    const dataFilterTreeTpopfeldkontr = getSnapshot(
-      store.tree.dataFilter.tpopfeldkontr,
-    )
-    const dataFilterTreeTpopfreiwkontr = getSnapshot(
-      store.tree.dataFilter.tpopfreiwkontr,
-    )
-    if (
-      isObject(dataFilterTreeAp) ||
-      isObject(dataFilterTreePop) ||
-      isObject(dataFilterTreeTpop) ||
-      isObject(dataFilterTreeTpopmassn) ||
-      isObject(dataFilterTreeTpopfeldkontr) ||
-      isObject(dataFilterTreeTpopfreiwkontr)
-    ) {
-      ;[store.tree.dataFilterEmpty()]
-    }
+  const isUser = !!username
 
-    const isUser = !!username
-
-    // set last activeNodeArray
-    // only if top domain was visited
-    if (isUser && visitedTopDomain) {
-      const activeNodeArray = jotaiStore.get(treeActiveNodeArrayAtom)
-      return navigate?.(`/Daten/${activeNodeArray.join('/')}`)    
-    }
-  })
+  // set last activeNodeArray
+  // only if top domain was visited
+  if (isUser && visitedTopDomain) {
+    const activeNodeArray = store.get(treeActiveNodeArrayAtom)
+    return navigate?.(`/Daten/${activeNodeArray.join('/')}`)
+  }
 }
