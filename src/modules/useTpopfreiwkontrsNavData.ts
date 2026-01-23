@@ -38,7 +38,6 @@ export const useTpopfreiwkontrsNavData = (props) => {
                 filter: $ekfsFilter
                 orderBy: [JAHR_ASC, DATUM_ASC]
               ) {
-                totalCount
                 nodes {
                   id
                   label: labelEkf
@@ -62,17 +61,10 @@ export const useTpopfreiwkontrsNavData = (props) => {
     },
     suspense: true,
   })
+
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005
   // react to filter changes without observer (https://stackoverflow.com/a/72229014/712005)
-  useEffect(
-    () => {
-      const unsub = store.sub(treeEkfGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
   const copying = useAtomValue(copyingAtom)
@@ -94,7 +86,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopkontrsByTpopId?.totalCount ?? 0
+  const count = data?.data?.tpopById?.tpopkontrsByTpopId?.nodes?.length ?? 0
   const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
 
   const navData = {
