@@ -17,7 +17,6 @@ import type {
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { MobxContext } from '../../../../mobxContext.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
