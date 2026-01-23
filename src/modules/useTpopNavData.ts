@@ -184,54 +184,6 @@ export const useTpopNavData = (props) => {
   })
   useEffect(
     () => {
-      const unsub = store.sub(treeTpopmassnGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(
-        treeTpopmassnberGqlFilterForTreeAtom,
-        refetch,
-      )
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(treeEkGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(
-    () => {
-      const unsub = store.sub(treeEkfGqlFilterForTreeAtom, refetch)
-      return unsub
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  )
-  useEffect(() => {
-    const unsub = store.sub(treeTpopberGqlFilterForTreeAtom, refetch)
-    return unsub
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  useEffect(() => {
-    const unsub = store.sub(
-      treeBeobZugeordnetGqlFilterForTreeAtom,
-      refetch,
-    )
-    return unsub
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  useEffect(
-    () => {
       const unsub = store.sub(mapActiveApfloraLayersAtom, rerender)
       return unsub
     },
@@ -299,12 +251,13 @@ export const useTpopNavData = (props) => {
   const tpopIconName = store.get(mapTpopIconAtom)
 
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
-  const TpopIcon =
-    status ?
-      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
+  const TpopIcon = status
+    ? tpopIconIsHighlighted
+      ? tpopIcons[tpopIconName][status + 'Highlighted']
       : tpopIcons[tpopIconName][status]
-    : tpopIconIsHighlighted ? TpopIconQHighlighted
-    : TpopIconQ
+    : tpopIconIsHighlighted
+      ? TpopIconQHighlighted
+      : TpopIconQ
 
   const showTpopIcon = store.get(treeShowTpopIconAtom)
 
@@ -337,8 +290,9 @@ export const useTpopNavData = (props) => {
     hasChildren: true,
     // TODO: show only if map is visible and tpop layer active
     labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-    labelRightElements:
-      labelRightElements.length ? labelRightElements : undefined,
+    labelRightElements: labelRightElements.length
+      ? labelRightElements
+      : undefined,
     component: NodeWithList,
     menus: [
       {
@@ -346,8 +300,9 @@ export const useTpopNavData = (props) => {
         label: `Teil-Population`,
         isSelf: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-        labelRightElements:
-          labelRightElements.length ? labelRightElements : undefined,
+        labelRightElements: labelRightElements.length
+          ? labelRightElements
+          : undefined,
       },
       {
         id: 'Massnahmen',
@@ -483,8 +438,9 @@ export const useTpopNavData = (props) => {
         fetcherName: 'useBeobZugeordnetsNavData',
         fetcherParams: { projId, apId, popId, tpopId },
         hasChildren: !!filteredBeobZugeordnetCount,
-        labelLeftElements:
-          showBeobzugeordnetIcon ? [BeobzugeordnetMapIcon] : undefined,
+        labelLeftElements: showBeobzugeordnetIcon
+          ? [BeobzugeordnetMapIcon]
+          : undefined,
         component: NodeWithList,
       },
       {
