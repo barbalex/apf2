@@ -48,13 +48,13 @@ export const useApberuebersichtsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.filtered?.nodes?.length ?? 0
-  const totalCount = data?.data?.unfiltered?.totalCount ?? 0
+  const count = data.filtered.nodes.length
+  const totalCount = data.unfiltered.totalCount
 
   const navData = {
     id: 'AP-Berichte',
@@ -70,7 +70,7 @@ export const useApberuebersichtsNavData = (props) => {
     fetcherName: 'useApberuebersichtsNavData',
     fetcherParams: { projId },
     component: NodeWithList,
-    menus: (data?.data?.filtered?.nodes ?? []).map((p) => ({
+    menus: data.filtered.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',

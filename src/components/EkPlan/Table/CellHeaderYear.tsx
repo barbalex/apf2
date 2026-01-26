@@ -107,7 +107,7 @@ export const CellHeaderYear = ({ column, tpopFilter }) => {
         },
       )
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -122,17 +122,17 @@ export const CellHeaderYear = ({ column, tpopFilter }) => {
   const yearHasKontrollen =
     filterKontrolleYear && filterKontrolleYear !== column ?
       false
-    : data?.data?.tpopCountWithKontrInYear?.totalCount > 0
+    : data.tpopCountWithKontrInYear.totalCount > 0
 
   const yearHasAnsiedlungen =
     filterAnsiedlungYear && filterAnsiedlungYear !== column ?
       false
-    : data?.data?.tpopCountWithAnsiedlungsInYear?.totalCount > 0
+    : data.tpopCountWithAnsiedlungsInYear.totalCount > 0
 
   const yearHasEkplan =
     filterEkplanYear && filterEkplanYear !== column ?
       false
-    : data?.data?.tpopCountWithEkplanInYear?.totalCount > 0
+    : data.tpopCountWithEkplanInYear.totalCount > 0
 
   const closeMenu = () => setAnchorEl(null)
   const onClickCell = (e) => setAnchorEl(e.currentTarget)

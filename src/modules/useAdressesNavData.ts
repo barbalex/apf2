@@ -3,10 +3,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeAdresseGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeAdresseGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useAdressesNavData = () => {
@@ -36,13 +33,13 @@ export const useAdressesNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.allAdresses?.nodes?.length ?? 0
-  const totalCount = data?.data?.totalCount?.totalCount ?? 0
+  const count = data.allAdresses?.nodes?.length ?? 0
+  const totalCount = data.totalCount?.totalCount ?? 0
 
   const navData = {
     id: 'Adressen',
@@ -57,7 +54,7 @@ export const useAdressesNavData = () => {
     fetcherName: 'useAdressesNavData',
     fetcherParams: {},
     component: NodeWithList,
-    menus: (data?.data?.allAdresses?.nodes ?? []).map((p) => ({
+    menus: data.allAdresses.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
