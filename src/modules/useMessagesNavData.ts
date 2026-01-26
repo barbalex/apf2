@@ -20,12 +20,12 @@ export const useMessagesNavData = () => {
         `,
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.allMessages?.totalCount ?? 0
+  const count = data.allMessages.totalCount
 
   const navData = {
     id: 'Mitteilungen',

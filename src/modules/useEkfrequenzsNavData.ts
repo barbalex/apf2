@@ -49,13 +49,13 @@ export const useEkfrequenzsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
-  const rows = data?.data?.apById?.ekfrequenzsByApId?.nodes ?? []
+  const totalCount = data.apById.totalCount.totalCount
+  const rows = data.apById.ekfrequenzsByApId.nodes
 
   const navData = {
     id: 'EK-Frequenzen',

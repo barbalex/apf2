@@ -47,13 +47,13 @@ export const useErfkritsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.apById?.erfkritsByApId?.nodes?.length ?? 0
-  const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
+  const count = data.apById?.erfkritsByApId?.nodes?.length ?? 0
+  const totalCount = data.apById?.totalCount?.totalCount ?? 0
 
   const navData = {
     id: 'AP-Erfolgskriterien',
@@ -67,7 +67,7 @@ export const useErfkritsNavData = (props) => {
     treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
     hasChildren: !!count,
     component: NodeWithList,
-    menus: (data?.data?.apById?.erfkritsByApId?.nodes ?? []).map((p) => ({
+    menus: data.apById.erfkritsByApId.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
