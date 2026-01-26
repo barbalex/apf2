@@ -86,14 +86,12 @@ export const Component = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const row = data?.data?.apberById ?? {}
-
-  console.log('Apber row:', { data: data?.data, row })
+  const row = data?.apberById ?? {}
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -173,7 +171,7 @@ export const Component = () => {
             key={`${apberId}beurteilung`}
             name="beurteilung"
             label="Beurteilung"
-            options={data?.data?.allApErfkritWertes?.nodes ?? []}
+            options={data?.allApErfkritWertes?.nodes ?? []}
             value={row.beurteilung}
             saveToDb={saveToDb}
             error={fieldErrors.beurteilung}
@@ -262,7 +260,7 @@ export const Component = () => {
             key={`${apberId}apId`}
             name="bearbeiter"
             label="BearbeiterIn"
-            options={data?.data?.allAdresses?.nodes ?? []}
+            options={data?.allAdresses?.nodes ?? []}
             value={row.bearbeiter}
             saveToDb={saveToDb}
             error={fieldErrors.bearbeiter}
