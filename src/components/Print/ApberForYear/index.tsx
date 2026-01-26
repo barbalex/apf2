@@ -41,11 +41,14 @@ export const Component = () => {
     },
     suspense: true,
   })
-  const year = data.apberuebersichtById.jahr
+  const year = data.apberuebersichtById?.jahr
 
   return (
     <ErrorBoundary>
-      <ApberForYear jahr={year} apberuebersichtId={apberuebersichtId} />
+      <ApberForYear
+        jahr={year}
+        apberuebersichtId={apberuebersichtId}
+      />
     </ErrorBoundary>
   )
 }
