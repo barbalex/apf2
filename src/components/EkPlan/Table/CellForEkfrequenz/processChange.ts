@@ -14,7 +14,7 @@ import {
 const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
-export const processChange = async ({ value, row, store }) => {
+export const processChange = async ({ value, row }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
   const apolloClient = store.get(apolloClientAtom)
   try {
