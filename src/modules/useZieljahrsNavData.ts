@@ -54,13 +54,13 @@ export const useZieljahrsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const ziels = data?.data?.apById?.zielsByApId?.nodes ?? []
-  const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
+  const ziels = data.apById.zielsByApId.nodes
+  const filteredZiels = data.apById.filteredZiels?.nodes
   const zieljahrsCount = getZieljahrsCount(ziels)
   const countByJahr = countBy(filteredZiels, (e) => e.jahr)
   const unfilteredCountByJahr = countBy(ziels, (e) => e.jahr)

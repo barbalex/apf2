@@ -71,14 +71,13 @@ export const Menus = () => {
         variables: { id: userId, jahr: +ekfYear },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
   const ekfCount = (
-    data?.data?.userById?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ??
-    []
+    data.userById.adresseByAdresseId.tpopkontrsByBearbeiter.nodes
   ).length
 
   const [userOpen, setUserOpen] = useState(false)

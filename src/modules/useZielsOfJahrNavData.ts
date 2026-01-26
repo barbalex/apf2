@@ -57,13 +57,13 @@ export const useZielsOfJahrNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.apById?.zielsByApId?.totalCount ?? 0
-  const filteredZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
+  const count = data.apById.zielsByApId.totalCount
+  const filteredZiels = data.apById.filteredZiels.nodes
 
   const navData = {
     id: jahr,
