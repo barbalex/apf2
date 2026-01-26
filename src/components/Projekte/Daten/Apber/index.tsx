@@ -91,7 +91,7 @@ export const Component = () => {
     suspense: true,
   })
 
-  const row = data?.apberById ?? {}
+  const row = data.apberById as Apber
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -171,7 +171,7 @@ export const Component = () => {
             key={`${apberId}beurteilung`}
             name="beurteilung"
             label="Beurteilung"
-            options={data?.allApErfkritWertes?.nodes ?? []}
+            options={data.allApErfkritWertes.nodes}
             value={row.beurteilung}
             saveToDb={saveToDb}
             error={fieldErrors.beurteilung}
@@ -260,7 +260,7 @@ export const Component = () => {
             key={`${apberId}apId`}
             name="bearbeiter"
             label="BearbeiterIn"
-            options={data?.allAdresses?.nodes ?? []}
+            options={data.allAdresses.nodes}
             value={row.bearbeiter}
             saveToDb={saveToDb}
             error={fieldErrors.bearbeiter}
