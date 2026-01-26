@@ -98,13 +98,13 @@ export const PopMenge = ({
         variables: { id, jahr },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const popsData = dataPopMenge?.data?.allPops?.nodes ?? []
-  const popMengeRawData = dataPopMenge?.data?.apAuswPopMenge?.nodes ?? []
+  const popsData = dataPopMenge.allPops.nodes ?? []
+  const popMengeRawData = dataPopMenge.apAuswPopMenge.nodes ?? []
   const popMengeData = popMengeRawData.map((e) => ({
     jahr: e.jahr,
     ...JSON.parse(e.values),
@@ -128,7 +128,7 @@ export const PopMenge = ({
   ])
 
   const zielEinheit =
-    dataPopMenge?.data?.allEkzaehleinheits?.nodes?.[0]
+    dataPopMenge.allEkzaehleinheits?.nodes?.[0]
       ?.tpopkontrzaehlEinheitWerteByZaehleinheitId?.text ?? '(keine Einheit)'
 
   const onClickMoreInfo = () => {

@@ -48,12 +48,12 @@ export const Component = () => {
         variables: { apId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const artname = data?.data?.apById?.aeTaxonomyByArtId?.artname ?? 'Art'
+  const artname = data.apById.aeTaxonomyByArtId.artname ?? 'Art'
 
   return (
     <>
