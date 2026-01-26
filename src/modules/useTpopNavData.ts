@@ -178,7 +178,7 @@ export const useTpopNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -223,41 +223,37 @@ export const useTpopNavData = (props) => {
     [],
   )
 
-  const label = data?.data?.tpopById?.label
-  const status = data?.data?.tpopById?.status
-  const massnCount = data?.data?.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0
-  const filteredMassnCount =
-    data?.data?.tpopById?.filteredTpopmassns?.totalCount ?? 0
+  const label = data.tpopById?.label
+  const status = data.tpopById?.status
+  const massnCount = data.tpopById?.tpopmassnsByTpopId?.totalCount ?? 0
+  const filteredMassnCount = data.tpopById?.filteredTpopmassns?.totalCount ?? 0
   const popmassnbersCount =
-    data?.data?.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0
+    data.tpopById?.tpopmassnbersByTpopId?.totalCount ?? 0
   const filteredTpopmassnbersCount =
-    data?.data?.tpopById?.filteredTpopmassnbers?.totalCount ?? 0
-  const feldkontrCount = data?.data?.tpopById?.tpopfeldkontrs?.totalCount ?? 0
+    data.tpopById?.filteredTpopmassnbers?.totalCount ?? 0
+  const feldkontrCount = data.tpopById?.tpopfeldkontrs?.totalCount ?? 0
   const filteredFeldkontrCount =
-    data?.data?.tpopById?.filteredTpopfeldkontrs?.totalCount ?? 0
-  const freiwkontrCount = data?.data?.tpopById?.tpopfreiwkontrs?.totalCount ?? 0
+    data.tpopById?.filteredTpopfeldkontrs?.totalCount ?? 0
+  const freiwkontrCount = data.tpopById?.tpopfreiwkontrs?.totalCount ?? 0
   const filteredFreiwkontrCount =
-    data?.data?.tpopById?.filteredTpopfreiwkontrs?.totalCount ?? 0
-  const tpopbersCount = data?.data?.tpopById?.tpopbersByTpopId?.totalCount ?? 0
-  const filteredTpopbersCount =
-    data?.data?.tpopById?.filteredTpopbers?.totalCount ?? 0
-  const beobZugeordnetCount =
-    data?.data?.tpopById?.beobZugeordnet?.totalCount ?? 0
+    data.tpopById?.filteredTpopfreiwkontrs?.totalCount ?? 0
+  const tpopbersCount = data.tpopById?.tpopbersByTpopId?.totalCount ?? 0
+  const filteredTpopbersCount = data.tpopById?.filteredTpopbers?.totalCount ?? 0
+  const beobZugeordnetCount = data.tpopById?.beobZugeordnet?.totalCount ?? 0
   const filteredBeobZugeordnetCount =
-    data?.data?.tpopById?.filteredBeobZugeordnet?.totalCount ?? 0
-  const filesCount = data?.data?.tpopById?.tpopFilesByTpopId?.totalCount ?? 0
-  const historiesCount = data?.data?.allTpopHistories?.totalCount ?? 0
+    data.tpopById?.filteredBeobZugeordnet?.totalCount ?? 0
+  const filesCount = data.tpopById?.tpopFilesByTpopId?.totalCount ?? 0
+  const historiesCount = data.allTpopHistories?.totalCount ?? 0
 
   const tpopIconName = store.get(mapTpopIconAtom)
 
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
-  const TpopIcon = status
-    ? tpopIconIsHighlighted
-      ? tpopIcons[tpopIconName][status + 'Highlighted']
+  const TpopIcon =
+    status ?
+      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
       : tpopIcons[tpopIconName][status]
-    : tpopIconIsHighlighted
-      ? TpopIconQHighlighted
-      : TpopIconQ
+    : tpopIconIsHighlighted ? TpopIconQHighlighted
+    : TpopIconQ
 
   const showTpopIcon = store.get(treeShowTpopIconAtom)
 
@@ -290,9 +286,8 @@ export const useTpopNavData = (props) => {
     hasChildren: true,
     // TODO: show only if map is visible and tpop layer active
     labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-    labelRightElements: labelRightElements.length
-      ? labelRightElements
-      : undefined,
+    labelRightElements:
+      labelRightElements.length ? labelRightElements : undefined,
     component: NodeWithList,
     menus: [
       {
@@ -300,9 +295,8 @@ export const useTpopNavData = (props) => {
         label: `Teil-Population`,
         isSelf: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       },
       {
         id: 'Massnahmen',
@@ -438,9 +432,8 @@ export const useTpopNavData = (props) => {
         fetcherName: 'useBeobZugeordnetsNavData',
         fetcherParams: { projId, apId, popId, tpopId },
         hasChildren: !!filteredBeobZugeordnetCount,
-        labelLeftElements: showBeobzugeordnetIcon
-          ? [BeobzugeordnetMapIcon]
-          : undefined,
+        labelLeftElements:
+          showBeobzugeordnetIcon ? [BeobzugeordnetMapIcon] : undefined,
         component: NodeWithList,
       },
       {

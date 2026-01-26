@@ -124,7 +124,7 @@ export const usePopsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -166,8 +166,8 @@ export const usePopsNavData = (props) => {
     [],
   )
 
-  const count = data?.data?.apById?.popsByApId?.nodes?.length ?? 0
-  const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
+  const count = data.apById?.popsByApId?.nodes?.length ?? 0
+  const totalCount = data.apById?.totalCount?.totalCount ?? 0
 
   const popIconName = store.get(mapPopIconAtom)
   const showPopIcon = store.get(treeShowPopIconAtom)
@@ -187,7 +187,7 @@ export const usePopsNavData = (props) => {
     hasChildren: !!count,
     labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
     component: NodeWithList,
-    menus: (data?.data?.apById?.popsByApId?.nodes ?? []).map((p) => {
+    menus: data.apById.popsByApId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p.id
       if (isMoving) {
@@ -199,13 +199,12 @@ export const usePopsNavData = (props) => {
       }
 
       const popIconIsHighlighted = p.id === popId
-      const PopIcon = p.status
-        ? popIconIsHighlighted
-          ? popIcons[popIconName][p.status + 'Highlighted']
+      const PopIcon =
+        p.status ?
+          popIconIsHighlighted ? popIcons[popIconName][p.status + 'Highlighted']
           : popIcons[popIconName][p.status]
-        : popIconIsHighlighted
-          ? PopIconQHighlighted
-          : PopIconQ
+        : popIconIsHighlighted ? PopIconQHighlighted
+        : PopIconQ
 
       return {
         id: p.id,
@@ -221,9 +220,8 @@ export const usePopsNavData = (props) => {
         fetcherParams: { projId, apId, popId: p.id },
         status: p.status,
         labelLeftElements: showPopIcon ? [PopIcon] : undefined,
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       }
     }),
   }

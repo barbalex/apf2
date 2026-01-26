@@ -51,13 +51,13 @@ export const useTpopmassnbersNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes?.length ?? 0
-  const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
+  const count = data.tpopById.tpopmassnbersByTpopId.nodes.length
+  const totalCount = data.tpopById.totalCount.totalCount
 
   const navData = {
     id: 'Massnahmen-Berichte',
@@ -81,7 +81,7 @@ export const useTpopmassnbersNavData = (props) => {
     ],
     hasChildren: !!count,
     component: NodeWithList,
-    menus: (data?.data?.tpopById?.tpopmassnbersByTpopId?.nodes ?? []).map(
+    menus: data.tpopById.tpopmassnbersByTpopId.nodes.map(
       (p) => ({
         id: p.id,
         label: p.label,
