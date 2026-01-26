@@ -127,16 +127,16 @@ export const Component = () => {
         variables: { id: userId, jahr: +ekfYear },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const ekf = getEkfFromData({ data: data?.data })
+  const ekf = getEkfFromData({ data })
 
   useEffect(() => {
     // navigate to first kontrId so form is shown for first ekf
-    // IF none is choosen yet
+    // IF none is chosen yet
     if (ekf.length > 0 && !ekfId) {
       navigate(`/Daten/Benutzer/${userId}/EKF/${ekfYear}/${ekf[0].id}${search}`)
     }
