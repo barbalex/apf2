@@ -65,13 +65,13 @@ export const useBeobZugeordnetsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.beobsZugeordnet?.totalCount ?? 0
-  const filteredCount = data?.data?.filteredBeobsZugeordnet?.nodes?.length ?? 0
+  const count = data.beobsZugeordnet?.totalCount ?? 0
+  const filteredCount = data.filteredBeobsZugeordnet?.nodes?.length ?? 0
 
   const navData = {
     id: 'Beobachtungen',
@@ -96,7 +96,7 @@ export const useBeobZugeordnetsNavData = (props) => {
     ],
     hasChildren: !!filteredCount,
     component: NodeWithList,
-    menus: (data?.data?.filteredBeobsZugeordnet?.nodes ?? []).map((p) => ({
+    menus: data.filteredBeobsZugeordnet.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
@@ -117,9 +117,9 @@ export const useBeobZugeordnetsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobzugeordnetIcon && beobId === p.id
-          ? [BeobzugeordnetFilteredMapIcon]
-          : undefined,
+        showBeobzugeordnetIcon && beobId === p.id ?
+          [BeobzugeordnetFilteredMapIcon]
+        : undefined,
     })),
   }
 

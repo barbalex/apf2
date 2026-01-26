@@ -52,14 +52,14 @@ export const useEkzaehleinheitsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const rows = data?.data?.apById?.ekzaehleinheitsByApId?.nodes ?? []
+  const rows = data.apById.ekzaehleinheitsByApId.nodes
   const count = rows.length
-  const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
+  const totalCount = data.apById.totalCount.totalCount
 
   const navData = {
     id: 'EK-Zähleinheiten',
