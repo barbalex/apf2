@@ -46,13 +46,13 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.allTpopkontrzaehlEinheitWertes?.nodes?.length ?? 0
-  const totalCount = data?.data?.totalCount?.totalCount ?? 0
+  const count = data.allTpopkontrzaehlEinheitWertes.nodes.length
+  const totalCount = data.totalCount.totalCount
 
   const navData = {
     id: 'TpopkontrzaehlEinheitWerte',
@@ -67,7 +67,7 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
     fetcherParams: {},
     component: NodeWithList,
-    menus: (data?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []).map(
+    menus: data.allTpopkontrzaehlEinheitWertes.nodes.map(
       (p) => ({
         id: p.id,
         label: p.label,

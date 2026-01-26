@@ -57,7 +57,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -86,8 +86,8 @@ export const useTpopfreiwkontrsNavData = (props) => {
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopkontrsByTpopId?.nodes?.length ?? 0
-  const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
+  const count = data.tpopById.tpopkontrsByTpopId.nodes.length
+  const totalCount = data.tpopById.totalCount.totalCount
 
   const navData = {
     id: 'Freiwilligen-Kontrollen',
@@ -113,7 +113,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
     fetcherName: 'useTpopfreiwkontrsNavData',
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: !!count,
-    menus: (data?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map((p) => {
+    menus: data.tpopById.tpopkontrsByTpopId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p.id
       if (isMoving) {
