@@ -229,14 +229,14 @@ export const CellForYearMenu = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
-    suspense: true,
+    // DO NOT add suspense here, it breaks the menu display (entire ekplan form reloads)
   })
-  const tpop = data?.data?.tpopById ?? {}
-  const eks = data?.data?.tpopById?.eks?.nodes ?? []
-  const ekfs = data?.data?.tpopById?.ekfs?.nodes ?? []
-  const massns = data?.data?.tpopById?.massns?.nodes ?? []
+  const tpop = data?.tpopById ?? {}
+  const eks = data?.tpopById?.eks?.nodes ?? []
+  const ekfs = data?.tpopById?.ekfs?.nodes ?? []
+  const massns = data?.tpopById?.massns?.nodes ?? []
 
   return (
     <>

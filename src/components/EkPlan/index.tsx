@@ -123,11 +123,11 @@ export const Component = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  setApsData(data?.data)
+  setApsData(data)
   setApsDataLoading(false)
 
   const onClickAnleitung = () => {
