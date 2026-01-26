@@ -37,11 +37,11 @@ export const Component = () => {
         variables: { apberuebersichtId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  const year = data?.data?.apberuebersichtById?.jahr
+  const year = data.apberuebersichtById.jahr
 
   return (
     <ErrorBoundary>
