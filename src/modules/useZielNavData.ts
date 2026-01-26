@@ -28,7 +28,7 @@ export const useZielNavData = (props) => {
         variables: { zielId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -36,7 +36,7 @@ export const useZielNavData = (props) => {
   const navData = {
     id: zielId,
     url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${zielId}`,
-    label: data?.data?.zielById?.label ?? '(nicht beschrieben)',
+    label: data.zielById.label ?? '(nicht beschrieben)',
     treeNodeType: 'table',
     treeMenuType: 'ziel',
     treeId: zielId,

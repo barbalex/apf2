@@ -33,13 +33,13 @@ export const useUsersNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.allUsers?.nodes?.length ?? 0
-  const totalCount = data?.data?.totalCount?.totalCount ?? 0
+  const count = data.allUsers.nodes.length
+  const totalCount = data.totalCount.totalCount
 
   const navData = {
     id: 'Benutzer',
@@ -53,7 +53,7 @@ export const useUsersNavData = () => {
     fetcherName: 'useUsersNavData',
     hasChildren: !!count,
     component: NodeWithList,
-    menus: (data?.data?.allUsers?.nodes ?? []).map((p) => ({
+    menus: data.allUsers.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
