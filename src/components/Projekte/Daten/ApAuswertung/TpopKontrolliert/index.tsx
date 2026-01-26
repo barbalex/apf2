@@ -64,17 +64,15 @@ export const TpopKontrolliert = ({
         variables: { id, year: jahr ?? new Date().getFullYear() },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  const erfolgData = (data?.data?.tpopKontrolliertForJber?.nodes ?? []).map(
-    (d) => ({
-      jahr: d.year,
-      'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
-      kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,
-    }),
-  )
+  const erfolgData = data.tpopKontrolliertForJber.nodes.map((d) => ({
+    jahr: d.year,
+    'Teil-Populationen': d.anzTpop ? Number(d.anzTpop) : 0,
+    kontrolliert: d.anzTpopber ? Number(d.anzTpopber) : 0,
+  }))
 
   // need to disable animation on lines or labels will not show on first render
   // https://github.com/recharts/recharts/issues/1821

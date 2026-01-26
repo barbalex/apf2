@@ -79,11 +79,11 @@ export const ApErfolg = () => {
         variables: { id },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  const erfolgRawData = (dataErfolg?.data?.allApbers?.nodes ?? []).map((e) => ({
+  const erfolgRawData = dataErfolg.allApbers.nodes.map((e) => ({
     jahr: e.jahr,
     value: erfValueFromCode[e.beurteilung],
   }))
