@@ -88,7 +88,7 @@ export const Component = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -102,13 +102,13 @@ export const Component = () => {
           query: queryEkAbrechnungstypWertes,
         })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
     staleTime: Infinity, // This data rarely changes
   })
 
-  const row = data?.data?.ekfrequenzById ?? {}
+  const row = data.ekfrequenzById as Ekfrequenz
   const userName = useAtomValue(userNameAtom)
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
