@@ -36,7 +36,7 @@ export const EkfUser = ({ closeMenu }) => {
         query: queryAdresses,
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -56,7 +56,7 @@ export const EkfUser = ({ closeMenu }) => {
         <Select
           value={''}
           label="EKF sehen als"
-          options={data?.data?.allUsers?.nodes ?? []}
+          options={data.allUsers.nodes}
           loading={false}
           saveToDb={choose}
           maxHeight={120}

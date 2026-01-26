@@ -36,12 +36,12 @@ export const EkfBar = () => {
         variables: { userId: userId ?? '99999999-9999-9999-9999-999999999999' },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const userName = userData?.data?.userById?.name ?? null
+  const userName = userData.userById.name ?? null
 
   return (
     <div className={styles.container}>
