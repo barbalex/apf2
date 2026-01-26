@@ -229,7 +229,7 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
           key={`${row?.id}bearbeiter`}
           name="bearbeiter"
           label="BearbeiterIn"
-          options={data?.allAdresses?.nodes ?? []}
+          options={data.allAdresses?.nodes ?? []}
           loading={false}
           value={row.bearbeiter}
           saveToDb={saveToDb}
@@ -261,7 +261,7 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
         <RadioButtonGroupWithInfo
           name="entwicklung"
           label="Entwicklung"
-          dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
+          dataSource={data.allTpopEntwicklungWertes?.nodes ?? []}
           loading={false}
           popover={TpopfeldkontrentwicklungPopover}
           value={row.entwicklung}
