@@ -169,13 +169,13 @@ export const Component = () => {
         variables: { apId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const row = data?.data?.apById
-  const rows = data?.data?.allApHistories.nodes ?? []
+  const row = data.apById
+  const rows = data.allApHistories.nodes ?? []
   const artname = row?.aeTaxonomyByArtId?.artname ?? 'Art'
 
   const openDocs = () => {
