@@ -62,13 +62,13 @@ export const Component = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.data?.assozartById ?? {}
+  const row = data.assozartById as AssozartQueryResult['assozartById']
 
   // do not include already chosen assozarten
   const assozartenOfAp = (row?.apByApId?.assozartsByApId?.nodes ?? [])
