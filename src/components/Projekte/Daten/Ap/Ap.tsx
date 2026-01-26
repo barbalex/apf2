@@ -82,12 +82,12 @@ export const Component = () => {
         variables: { id: apId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const row: Ap = data?.data?.apById ?? {}
+  const row = data.apById as Ap
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -183,7 +183,7 @@ export const Component = () => {
         />
         <RadioButtonGroupWithInfo
           name="bearbeitung"
-          dataSource={data?.data?.allApBearbstandWertes?.nodes ?? []}
+          dataSource={data.allApBearbstandWertes?.nodes ?? []}
           loading={false}
           popover={
             <div className={styles.popover}>
@@ -219,7 +219,7 @@ export const Component = () => {
         <RadioButtonGroupWithInfo
           key={`${apId}umsetzung`}
           name="umsetzung"
-          dataSource={data?.data?.allApUmsetzungWertes?.nodes ?? []}
+          dataSource={data.allApUmsetzungWertes?.nodes ?? []}
           loading={false}
           popover={
             <div className={styles.popover}>
@@ -255,7 +255,7 @@ export const Component = () => {
           key={`${apId}bearbeiter`}
           name="bearbeiter"
           label="Verantwortlich"
-          options={data?.data?.allAdresses?.nodes ?? []}
+          options={data.allAdresses?.nodes ?? []}
           loading={false}
           value={row.bearbeiter}
           saveToDb={saveToDb}
