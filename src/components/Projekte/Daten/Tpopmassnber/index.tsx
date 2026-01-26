@@ -77,7 +77,7 @@ export const Component = () => {
     suspense: true,
   })
 
-  const row = data?.tpopmassnberById ?? {}
+  const row = data.tpopmassnberById as TpopmassnberQueryResult['tpopmassnberById']
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -159,7 +159,7 @@ export const Component = () => {
           <RadioButtonGroup
             name="beurteilung"
             label="Entwicklung"
-            dataSource={data?.allTpopmassnErfbeurtWertes?.nodes ?? []}
+            dataSource={data?.allTpopmassnErfbeurtWertes?.nodes}
             value={row.beurteilung}
             saveToDb={saveToDb}
             error={fieldErrors.beurteilung}
