@@ -30,11 +30,11 @@ export const Options = ({ type }) => {
         query,
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  const options = data?.data?.allPopStatusWertes?.nodes ?? []
+  const options = data.allPopStatusWertes.nodes ?? []
 
   return (
     <FormGroup className={styles.formGroup}>
