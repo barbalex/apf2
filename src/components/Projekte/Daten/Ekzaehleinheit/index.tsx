@@ -86,13 +86,14 @@ export const Component = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.data?.ekzaehleinheitById ?? {}
+  const row =
+    data.ekzaehleinheitById as EkzaehleinheitQueryResult['data']['ekzaehleinheitById']
 
   const ekzaehleinheitenOfAp = (
     row?.apByApId?.ekzaehleinheitsByApId?.nodes ?? []
@@ -111,7 +112,7 @@ export const Component = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -200,9 +201,7 @@ export const Component = () => {
             key={`${id}zaehleinheitId`}
             name="zaehleinheitId"
             label="Zähleinheit"
-            options={
-              dataLists?.data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
-            }
+            options={dataLists.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
             value={row.zaehleinheitId}
             saveToDb={saveToDb}
             error={fieldErrors.zaehleinheitId}
