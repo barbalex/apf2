@@ -160,14 +160,14 @@ export const Component = () => {
         variables: { id, apId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.data?.beobById ?? {}
-  const ap = data?.data?.apById ?? {}
+  const row = data?.beobById ?? {}
+  const ap = data?.apById ?? {}
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = (inputValue: string) =>

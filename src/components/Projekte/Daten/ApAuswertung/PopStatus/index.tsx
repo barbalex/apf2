@@ -75,11 +75,11 @@ export const PopStatus = ({
         variables: { apId: id, year },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  const rows = dataPopStati?.data?.popNachStatusForJber?.nodes ?? []
+  const rows = dataPopStati.popNachStatusForJber.nodes ?? []
 
   const popStatusData = rows.map((row) => ({
     jahr: row.year,
