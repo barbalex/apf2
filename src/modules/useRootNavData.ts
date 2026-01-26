@@ -37,17 +37,16 @@ export const useRootNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const projectsCount = data?.data?.allProjekts?.totalCount ?? 0
-  const usersCount = data?.data?.allUsers?.totalCount ?? 0
-  const usersFilteredCount = data?.data?.filteredUsers?.totalCount ?? 0
-  const messagesCount = data?.data?.allMessages?.totalCount ?? 0
-  const currentIssuesCount = data?.data?.allCurrentissues?.totalCount ?? 0
-
+  const projectsCount = data.allProjekts.totalCount
+  const usersCount = data.allUsers.totalCount
+  const usersFilteredCount = data.filteredUsers.totalCount
+  const messagesCount = data.allMessages.totalCount
+  const currentIssuesCount = data.allCurrentissues.totalCount
   const navData = {
     id: 'Daten',
     url: '/Daten',

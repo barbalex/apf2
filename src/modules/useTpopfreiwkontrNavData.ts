@@ -78,7 +78,7 @@ export const useTpopfreiwkontrNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -104,13 +104,13 @@ export const useTpopfreiwkontrNavData = (props) => {
     [],
   )
 
-  const label = data?.data?.tpopkontrById?.label
+  const label = data.tpopkontrById?.label
   const tpopkontrzaehlCount =
-    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.totalCount ?? 0
+    data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.totalCount
   const filteredTpopkontrzaehlCount =
-    data?.data?.tpopkontrById?.filteredTpopkontrzaehls?.totalCount ?? 0
+    data.tpopkontrById.filteredTpopkontrzaehls.totalCount
   const filesCount =
-    data?.data?.tpopkontrById?.tpopkontrFilesByTpopkontrId?.totalCount ?? 0
+    data.tpopkontrById.tpopkontrFilesByTpopkontrId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,
