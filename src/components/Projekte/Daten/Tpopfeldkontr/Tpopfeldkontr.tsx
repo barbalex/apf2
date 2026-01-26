@@ -93,7 +93,7 @@ export const Component = () => {
     suspense: true,
   })
 
-  const row = data?.tpopkontrById ?? {}
+  const row = data.tpopkontrById as TpopfeldkontrQueryResult['tpopkontrById']
 
   return (
     <ErrorBoundary>
