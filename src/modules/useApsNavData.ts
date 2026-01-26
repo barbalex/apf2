@@ -5,10 +5,7 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
-import {
-  store,
-  treeApGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeApGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const useApsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -39,13 +36,13 @@ export const useApsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.allAps?.nodes?.length ?? 0
-  const totalCount = data?.data?.totalCount?.totalCount ?? 0
+  const count = data.allAps?.nodes?.length ?? 0
+  const totalCount = data.totalCount?.totalCount ?? 0
 
   const navData = {
     id: 'Arten',
@@ -61,7 +58,7 @@ export const useApsNavData = (props) => {
     fetcherName: 'useApsNavData',
     fetcherParams: { projId },
     component: NodeWithList,
-    menus: (data?.data?.allAps?.nodes ?? [])?.map((p) => ({
+    menus: (data.allAps?.nodes ?? [])?.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',

@@ -33,14 +33,14 @@ export const useIdealbiotopNavData = (props) => {
         variables: { apId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const idealbiotop = data?.data?.apById?.idealbiotopsByApId?.nodes?.[0]
+  const idealbiotop = data.apById.idealbiotopsByApId.nodes[0]
   const filesCount =
-    idealbiotop?.idealbiotopFilesByIdealbiotopId?.totalCount ?? 0
+    idealbiotop.idealbiotopFilesByIdealbiotopId.totalCount
 
   const navData = {
     id: 'Idealbiotop',

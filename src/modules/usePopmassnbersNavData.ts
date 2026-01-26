@@ -53,13 +53,13 @@ export const usePopmassnbersNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.popById?.popmassnbersByPopId?.nodes?.length ?? 0
-  const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
+  const count = data.popById.popmassnbersByPopId.nodes.length
+  const totalCount = data.popById.totalCount.totalCount
 
   const navData = {
     id: 'Massnahmen-Berichte',
@@ -82,7 +82,7 @@ export const usePopmassnbersNavData = (props) => {
     ],
     hasChildren: count > 0,
     component: NodeWithList,
-    menus: (data?.data?.popById?.popmassnbersByPopId?.nodes ?? []).map((p) => ({
+    menus: data.popById.popmassnbersByPopId.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
