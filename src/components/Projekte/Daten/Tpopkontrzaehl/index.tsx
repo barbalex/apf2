@@ -84,17 +84,17 @@ export const Component = () => {
     suspense: true,
   })
 
-  const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
+  const zaehlEinheitCodesAlreadyUsed = (data.otherZaehlOfEk?.nodes ?? [])
     .map((n) => n.einheit)
     // prevent null values which cause error in query
     .filter((e) => !!e)
 
   // filter out already used in other zaehlung of same kontr
   const zaehlEinheitOptions = (
-    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+    data.allTpopkontrzaehlEinheitWertes?.nodes ?? []
   ).filter((o) => !zaehlEinheitCodesAlreadyUsed.includes(o.value))
 
-  const row = data?.tpopkontrzaehlById ?? {}
+  const row = data.tpopkontrzaehlById as TpopkontrzaehlQueryResult['tpopkontrzaehlById']
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
