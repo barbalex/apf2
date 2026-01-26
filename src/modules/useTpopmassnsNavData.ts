@@ -59,7 +59,7 @@ export const useTpopmassnsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -87,8 +87,8 @@ export const useTpopmassnsNavData = (props) => {
     [],
   )
 
-  const count = data?.data?.tpopById?.tpopmassnsByTpopId?.nodes?.length ?? 0
-  const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
+  const count = data.tpopById.tpopmassnsByTpopId.nodes.length
+  const totalCount = data.tpopById.totalCount.totalCount
 
   const navData = {
     id: 'Massnahmen',
@@ -114,7 +114,7 @@ export const useTpopmassnsNavData = (props) => {
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: !!count,
     component: NodeWithList,
-    menus: (data?.data?.tpopById?.tpopmassnsByTpopId?.nodes ?? []).map((p) => {
+    menus: data.tpopById.tpopmassnsByTpopId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p.id
       if (isMoving) {

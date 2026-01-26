@@ -135,7 +135,7 @@ export const useTpopsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -180,8 +180,8 @@ export const useTpopsNavData = (props) => {
     [],
   )
 
-  const count = data?.data?.popById?.tpopsByPopId?.nodes?.length ?? 0
-  const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
+  const count = data.popById?.tpopsByPopId?.nodes?.length ?? 0
+  const totalCount = data.popById?.totalCount?.totalCount ?? 0
 
   const tpopIconName = store.get(mapTpopIconAtom)
 
@@ -208,7 +208,7 @@ export const useTpopsNavData = (props) => {
     hasChildren: !!count,
     labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
     component: NodeWithList,
-    menus: (data?.data?.popById?.tpopsByPopId?.nodes ?? []).map((p) => {
+    menus: data.popById.tpopsByPopId.nodes.map((p) => {
       const labelRightElements = []
       const isMoving = moving.id === p.id
       if (isMoving) {
@@ -220,13 +220,12 @@ export const useTpopsNavData = (props) => {
       }
 
       const iconIsHighlighted = p.id === tpopId
-      const TpopIcon = p.status
-        ? iconIsHighlighted
-          ? tpopIcons[tpopIconName][p.status + 'Highlighted']
+      const TpopIcon =
+        p.status ?
+          iconIsHighlighted ? tpopIcons[tpopIconName][p.status + 'Highlighted']
           : tpopIcons[tpopIconName][p.status]
-        : iconIsHighlighted
-          ? TpopIconQHighlighted
-          : TpopIconQ
+        : iconIsHighlighted ? TpopIconQHighlighted
+        : TpopIconQ
 
       return {
         id: p.id,
@@ -250,9 +249,8 @@ export const useTpopsNavData = (props) => {
         fetcherParams: { projId, apId, popId, tpopId: p.id },
         hasChildren: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       }
     }),
   }

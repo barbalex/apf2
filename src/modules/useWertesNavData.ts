@@ -85,25 +85,25 @@ export const useWertesNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const adressesCount = data?.data?.allAdresses?.totalCount ?? 0
-  const adressesFilteredCount = data?.data?.filteredAdresses?.totalCount ?? 0
+  const adressesCount = data.allAdresses.totalCount
+  const adressesFilteredCount = data.filteredAdresses.totalCount
   const tpopApberrelevantGrundWerteCount =
-    data?.data?.allTpopApberrelevantGrundWertes?.totalCount ?? 0
+    data.allTpopApberrelevantGrundWertes.totalCount
   const tpopApberrelevantGrundWerteFilteredCount =
-    data?.data?.filteredTpopApberrelevantGrundWertes?.totalCount ?? 0
+    data.filteredTpopApberrelevantGrundWertes.totalCount
   const ekAbrechnungstypWerteCount =
-    data?.data?.allEkAbrechnungstypWertes?.totalCount ?? 0
+    data.allEkAbrechnungstypWertes.totalCount
   const ekAbrechnungstypWerteFilteredCount =
-    data?.data?.filteredEkAbrechnungstypWertes?.totalCount ?? 0
+    data.filteredEkAbrechnungstypWertes.totalCount
   const tpopkontrzaehlEinheitWerteCount =
-    data?.data?.allTpopkontrzaehlEinheitWertes?.totalCount ?? 0
+    data.allTpopkontrzaehlEinheitWertes.totalCount
   const tpopkontrzaehlEinheitWerteFilteredCount =
-    data?.data?.filteredTpopkontrzaehlEinheitWertes?.totalCount ?? 0
+    data.filteredTpopkontrzaehlEinheitWertes.totalCount
 
   const navData = {
     id: 'WerteListen',
