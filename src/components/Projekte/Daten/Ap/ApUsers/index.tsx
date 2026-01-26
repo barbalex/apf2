@@ -60,11 +60,11 @@ export const ApUsers = () => {
         variables: { apId },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  const apUsers = data?.data?.allApUsers?.nodes ?? []
+  const apUsers = data.allApUsers?.nodes ?? []
 
   return (
     <div className={styles.container}>
