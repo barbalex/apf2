@@ -66,15 +66,15 @@ export const Component = () => {
         variables: { id },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const row = data?.data?.apartById ?? {}
+  const row = data.apartById as ApartQueryResult['apartById']
 
   // do not include already chosen assozarten
-  const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes ?? [])
+  const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes)
     .map((o) => o.artId)
     // but do include the art included in the row
     .filter((o) => o !== row.artId)
