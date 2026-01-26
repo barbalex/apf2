@@ -257,51 +257,44 @@ export const useApNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const label = data?.data?.apById?.label
-  const popsCount = data?.data?.apById?.popsByApId?.totalCount ?? 0
-  const filteredPopsCount = data?.data?.apById?.filteredPops?.totalCount ?? 0
-  const apZiels = data?.data?.apById?.zielsByApId?.nodes ?? []
+  const label = data.apById?.label
+  const popsCount = data.apById?.popsByApId?.totalCount ?? 0
+  const filteredPopsCount = data.apById?.filteredPops?.totalCount ?? 0
+  const apZiels = data.apById?.zielsByApId?.nodes ?? []
   const apZielJahrs = countBy(apZiels, (e) => e.jahr)
   const apZielJahrsCount = Object.keys(apZielJahrs).length
-  const filteredApZiels = data?.data?.apById?.filteredZiels?.nodes ?? []
+  const filteredApZiels = data.apById?.filteredZiels?.nodes ?? []
   const filteredApZielJahrs = countBy(filteredApZiels, (e) => e.jahr)
   const filteredApZielJahrsCount = Object.keys(filteredApZielJahrs).length
-  const erfkritsCount = data?.data?.apById?.erfkritsByApId?.totalCount ?? 0
-  const filteredErfkritsCount =
-    data?.data?.apById?.filteredErfkrits?.totalCount ?? 0
-  const apbersCount = data?.data?.apById?.apbersByApId?.totalCount ?? 0
-  const filteredApbersCount =
-    data?.data?.apById?.filteredApbers?.totalCount ?? 0
-  const apartsCount = data?.data?.apById?.apartsByApId?.totalCount ?? 0
-  const filteredApartsCount =
-    data?.data?.apById?.filteredAparts?.totalCount ?? 0
-  const assozartsCount = data?.data?.apById?.assozartsByApId?.totalCount ?? 0
-  const filteredAssozartsCount =
-    data?.data?.apById?.filteredAssozarts?.totalCount ?? 0
-  const ekfrequenzsCount =
-    data?.data?.apById?.ekfrequenzsByApId?.totalCount ?? 0
+  const erfkritsCount = data.apById?.erfkritsByApId?.totalCount ?? 0
+  const filteredErfkritsCount = data.apById?.filteredErfkrits?.totalCount ?? 0
+  const apbersCount = data.apById?.apbersByApId?.totalCount ?? 0
+  const filteredApbersCount = data.apById?.filteredApbers?.totalCount ?? 0
+  const apartsCount = data.apById?.apartsByApId?.totalCount ?? 0
+  const filteredApartsCount = data.apById?.filteredAparts?.totalCount ?? 0
+  const assozartsCount = data.apById?.assozartsByApId?.totalCount ?? 0
+  const filteredAssozartsCount = data.apById?.filteredAssozarts?.totalCount ?? 0
+  const ekfrequenzsCount = data.apById?.ekfrequenzsByApId?.totalCount ?? 0
   const filteredEkfrequenzsCount =
-    data?.data?.apById?.filteredEkfrequenzs?.totalCount ?? 0
+    data.apById?.filteredEkfrequenzs?.totalCount ?? 0
   const ekzaehleinheitsCount =
-    data?.data?.apById?.ekzaehleinheitsByApId?.totalCount ?? 0
+    data.apById?.ekzaehleinheitsByApId?.totalCount ?? 0
   const filteredEkzaehleinheitsCount =
-    data?.data?.apById?.filteredEkzaehleinheits?.totalCount ?? 0
-  const beobsNichtBeurteiltCount =
-    data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
+    data.apById?.filteredEkzaehleinheits?.totalCount ?? 0
+  const beobsNichtBeurteiltCount = data.beobsNichtBeurteilt?.totalCount ?? 0
   const filteredBeobsNichtBeurteiltCount =
-    data?.data?.filteredBeobsNichtBeurteilt?.totalCount ?? 0
-  const beobsNichtZuzuordnenCount =
-    data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
+    data.filteredBeobsNichtBeurteilt?.totalCount ?? 0
+  const beobsNichtZuzuordnenCount = data.beobsNichtZuzuordnen?.totalCount ?? 0
   const filteredBeobsNichtZuzuordnenCount =
-    data?.data?.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
-  const filesCount = data?.data?.apById?.apFilesByApId?.totalCount ?? 0
-  const historiesCount = data?.data?.allApHistories?.totalCount ?? 0
-  const qkCount = data?.data?.apById?.apqksByApId?.totalCount ?? 0
+    data.filteredBeobsNichtZuzuordnen?.totalCount ?? 0
+  const filesCount = data.apById?.apFilesByApId?.totalCount ?? 0
+  const historiesCount = data.allApHistories?.totalCount ?? 0
+  const qkCount = data.apById?.apqksByApId?.totalCount ?? 0
 
   const navData = {
     id: apId,
@@ -458,9 +451,8 @@ export const useApNavData = (props) => {
         fetcherName: 'useBeobNichtBeurteiltsNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredBeobsNichtBeurteiltCount,
-        labelLeftElements: showBeobnichtbeurteiltIcon
-          ? [BeobnichtbeurteiltMapIcon]
-          : undefined,
+        labelLeftElements:
+          showBeobnichtbeurteiltIcon ? [BeobnichtbeurteiltMapIcon] : undefined,
         component: NodeWithList,
       },
       {
@@ -480,8 +472,9 @@ export const useApNavData = (props) => {
         fetcherName: 'useBeobNichtZuzuordnensNavData',
         fetcherParams: { projId, apId },
         hasChildren: !!filteredBeobsNichtZuzuordnenCount,
-        labelLeftElements: showBeobnichtzuzuordnenIcon
-          ? [BeobnichtzuzuordnenMapIcon]
+        labelLeftElements:
+          showBeobnichtzuzuordnenIcon ?
+            [BeobnichtzuzuordnenMapIcon]
           : undefined,
         component: NodeWithList,
       },

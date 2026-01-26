@@ -45,20 +45,20 @@ export const useAssozartsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.apById?.assozartsByApId?.nodes?.length ?? 0
-  const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
+  const count = data.apById?.assozartsByApId?.nodes?.length ?? 0
+  const totalCount = data.apById?.totalCount?.totalCount ?? 0
 
   const navData = {
     id: 'assoziierte-Arten',
     listFilter: 'assozart',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten`,
     label: `Assoziierte Arten (${count}/${totalCount})`,
-    menus: (data?.data?.apById?.assozartsByApId?.nodes ?? []).map((p) => ({
+    menus: (data.apById.assozartsByApId.nodes ?? []).map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',

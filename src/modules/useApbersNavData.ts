@@ -40,20 +40,20 @@ export const useApbersNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.apById?.apbersByApId?.nodes?.length ?? 0
-  const totalCount = data?.data?.apById?.totalCount?.totalCount ?? 0
+  const count = data.apById.apbersByApId.nodes.length
+  const totalCount = data.apById.totalCount.totalCount
 
   const navData = {
     id: 'AP-Berichte',
     listFilter: 'apber',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
     label: `AP-Berichte (${count}/${totalCount})`,
-    menus: (data?.data?.apById?.apbersByApId?.nodes ?? []).map((p) => ({
+    menus: (data.apById.apbersByApId.nodes).map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
