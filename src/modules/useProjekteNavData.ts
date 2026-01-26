@@ -21,18 +21,18 @@ export const useProjekteNavData = () => {
         `,
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.allProjekts?.nodes?.length ?? 0
+  const count = data.allProjekts.nodes.length
 
   const navData = {
     id: 'projekte',
     url: '/Daten/Projekte',
     label: `Projekte (${count})`,
-    menus: (data?.data?.allProjekts?.nodes ?? []).map((p) => ({
+    menus: data.allProjekts.nodes.map((p) => ({
       id: p.id,
       label: p.name,
     })),

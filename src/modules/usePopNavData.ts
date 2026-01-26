@@ -118,24 +118,24 @@ export const usePopNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const label = data?.data?.popById?.label
-  const status = data?.data?.popById?.status
-  const tpopsCount = data?.data?.popById?.tpopsByPopId?.totalCount ?? 0
-  const filteredTpopsCount = data?.data?.popById?.filteredTpops?.totalCount ?? 0
-  const popbersCount = data?.data?.popById?.popbersByPopId?.totalCount ?? 0
+  const label = data.popById?.label
+  const status = data.popById?.status
+  const tpopsCount = data.popById?.tpopsByPopId?.totalCount ?? 0
+  const filteredTpopsCount = data.popById?.filteredTpops?.totalCount ?? 0
+  const popbersCount = data.popById?.popbersByPopId?.totalCount ?? 0
   const filteredPopbersCount =
-    data?.data?.popById?.filteredPopbers?.totalCount ?? 0
+    data.popById?.filteredPopbers?.totalCount ?? 0
   const popmassnbersCount =
-    data?.data?.popById?.popmassnbersByPopId?.totalCount ?? 0
+    data.popById?.popmassnbersByPopId?.totalCount ?? 0
   const filteredPopmassnbersCount =
-    data?.data?.popById?.filteredPopmassnbers?.totalCount ?? 0
-  const filesCount = data?.data?.popById?.popFilesByPopId?.totalCount ?? 0
-  const historiesCount = data?.data?.allPopHistories?.totalCount ?? 0
+    data.popById?.filteredPopmassnbers?.totalCount ?? 0
+  const filesCount = data.popById?.popFilesByPopId?.totalCount ?? 0
+  const historiesCount = data.allPopHistories?.totalCount ?? 0
 
   const popIconName = store.get(mapPopIconAtom)
 

@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treePopberGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treePopberGqlFilterForTreeAtom } from '../store/index.ts'
 
 export const usePopbersNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -44,13 +41,13 @@ export const usePopbersNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.popById?.popbersByPopId?.nodes?.length ?? 0
-  const totalCount = data?.data?.popById?.totalCount?.totalCount ?? 0
+  const count = data.popById.popbersByPopId.nodes.length
+  const totalCount = data.popById.totalCount.totalCount
 
   const navData = {
     id: 'Kontroll-Berichte',
@@ -71,7 +68,7 @@ export const usePopbersNavData = (props) => {
       'Kontroll-Berichte',
     ],
     hasChildren: !!count,
-    menus: (data?.data?.popById?.popbersByPopId?.nodes ?? []).map((p) => ({
+    menus: data.popById.popbersByPopId.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
