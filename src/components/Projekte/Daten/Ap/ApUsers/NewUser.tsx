@@ -58,11 +58,11 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
         `,
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
-  const userData = data?.data?.allUsers?.nodes ?? []
+  const userData = data.allUsers.nodes ?? []
   const apUserIds = apUsers.map((u) => u?.userByUserName?.id)
   const options = userData
     .filter((d) => !apUserIds.includes(d.id))
