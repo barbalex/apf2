@@ -88,7 +88,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -96,9 +96,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
   const showBeobnichtbeurteiltIcon =
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
 
-  const count = data?.data?.beobsNichtBeurteilt?.totalCount ?? 0
+  const count = data.beobsNichtBeurteilt.totalCount
   const filteredCount =
-    data?.data?.filteredBeobsNichtBeurteilt?.nodes?.length ?? 0
+    data.filteredBeobsNichtBeurteilt.nodes.length
 
   const navData = {
     id: 'nicht-beurteilte-Beobachtungen',
@@ -119,7 +119,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     ],
     hasChildren: !!filteredCount,
     component: NodeWithList,
-    menus: (data?.data?.filteredBeobsNichtBeurteilt?.nodes ?? []).map((p) => ({
+    menus: data.filteredBeobsNichtBeurteilt.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',

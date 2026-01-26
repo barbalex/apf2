@@ -89,14 +89,14 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.beobsNichtZuzuordnen?.totalCount ?? 0
+  const count = data.beobsNichtZuzuordnen.totalCount
   const filteredCount =
-    data?.data?.filteredBeobsNichtZuzuordnen?.nodes?.length ?? 0
+    data.filteredBeobsNichtZuzuordnen.nodes.length
 
   const navData = {
     id: 'nicht-zuzuordnende-Beobachtungen',
@@ -117,7 +117,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     ],
     hasChildren: !!filteredCount,
     component: NodeWithList,
-    menus: (data?.data?.filteredBeobsNichtZuzuordnen?.nodes ?? []).map((p) => ({
+    menus: (data.filteredBeobsNichtZuzuordnen.nodes).map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',

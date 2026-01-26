@@ -23,19 +23,19 @@ export const useCurrentissuesNavData = () => {
         `,
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
   // subtract 1 for "fehlt hier was"
-  const count = (data?.data?.allCurrentissues?.nodes?.length ?? 1) - 1
+  const count = (data.allCurrentissues.nodes.length) - 1
 
   const navData = {
     id: 'Aktuelle-Fehler',
     url: `/Daten/Aktuelle-Fehler`,
     label: `Aktuelle Fehler (${count})`,
-    totalCount: data?.data?.allCurrentissues?.nodes?.length ?? 0,
+    totalCount: data.allCurrentissues.nodes.length,
     treeNodeType: 'table',
     treeMenuType: 'currentissues',
     treeId: 'currentissueFolder',
@@ -44,7 +44,7 @@ export const useCurrentissuesNavData = () => {
     fetcherParams: {},
     hasChildren: !!count,
     component: NodeWithList,
-    menus: (data?.data?.allCurrentissues?.nodes ?? []).map((p) => ({
+    menus: (data.allCurrentissues.nodes).map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
