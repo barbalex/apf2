@@ -42,13 +42,13 @@ export const Component = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row = data?.data?.currentissueById
+  const row = data?.currentissueById
 
   if (!row) return null
 
