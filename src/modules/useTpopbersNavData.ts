@@ -46,13 +46,13 @@ export const useTpopbersNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.tpopById?.tpopbersByTpopId?.nodes?.length ?? 0
-  const totalCount = data?.data?.tpopById?.totalCount?.totalCount ?? 0
+  const count = data.tpopById.tpopbersByTpopId.nodes.length
+  const totalCount = data.tpopById.totalCount.totalCount
 
   const navData = {
     id: 'Kontroll-Berichte',
@@ -76,7 +76,7 @@ export const useTpopbersNavData = (props) => {
     ],
     hasChildren: count > 0,
     component: NodeWithList,
-    menus: (data?.data?.tpopById?.tpopbersByTpopId?.nodes ?? []).map((p) => ({
+    menus: data.tpopById.tpopbersByTpopId.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',

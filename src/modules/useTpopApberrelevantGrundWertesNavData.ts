@@ -47,13 +47,13 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const count = data?.data?.allTpopApberrelevantGrundWertes?.nodes?.length ?? 0
-  const totalCount = data?.data?.totalCount?.totalCount ?? 0
+  const count = data.allTpopApberrelevantGrundWertes.nodes.length
+  const totalCount = data.totalCount.totalCount
 
   const navData = {
     id: 'ApberrelevantGrundWerte',
@@ -68,7 +68,7 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     fetcherName: 'useTpopApberrelevantGrundWertesNavData',
     fetcherParams: {},
     component: NodeWithList,
-    menus: (data?.data?.allTpopApberrelevantGrundWertes?.nodes ?? []).map(
+    menus: data.allTpopApberrelevantGrundWertes.nodes.map(
       (p) => ({
         id: p.id,
         label: p.label,
