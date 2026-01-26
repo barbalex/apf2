@@ -23,6 +23,7 @@ import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 import type { ApErfkritWerteCode } from '../../../../models/apflora/ApErfkritWerte.ts'
 
 import styles from './index.module.css'
+import { ref } from 'node:process'
 
 const veraenGegenVorjahrWerte = [
   { value: '+', label: '+' },
@@ -75,7 +76,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['apber', apberId],
     queryFn: async () => {
       const result = await apolloClient.query<ApberQueryResult>({
@@ -91,6 +92,8 @@ export const Component = () => {
   })
 
   const row = data?.data?.apberById ?? {}
+
+  console.log('Apber row:', { data: data?.data, row })
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -137,10 +140,7 @@ export const Component = () => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    // Invalidate query to refetch data
-    tsQueryClient.invalidateQueries({
-      queryKey: ['apber', apberId],
-    })
+    refetch()
     if (field === 'jahr') {
       tsQueryClient.invalidateQueries({ queryKey: [`treeApber`] })
     }
