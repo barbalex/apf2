@@ -58,14 +58,14 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
   const count =
-    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes?.length ?? 0
-  const totalCount = data?.data?.tpopkontrById?.totalCount?.totalCount ?? 0
+    data.tpopkontrById.tpopkontrzaehlsByTpopkontrId?.nodes?.length
+  const totalCount = data.tpopkontrById.totalCount.totalCount
 
   const navData = {
     id: 'Zaehlungen',
@@ -94,7 +94,7 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     hasChildren: !!count,
     alwaysOpen: true,
     menus: (
-      data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+      data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes
     ).map((p) => ({
       id: p.id,
       label: p.label,

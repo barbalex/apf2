@@ -53,7 +53,7 @@ export const useTpopmassnNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
@@ -79,10 +79,8 @@ export const useTpopmassnNavData = (props) => {
     [],
   )
 
-  const label = data?.data?.tpopmassnById?.label
-  data?.data?.tpopmassnById?.filteredBeobZugeordnet?.totalCount ?? 0
-  const filesCount =
-    data?.data?.tpopmassnById?.tpopmassnFilesByTpopmassnId?.totalCount ?? 0
+  const label = data.tpopmassnById.label
+  const filesCount = data.tpopmassnById.tpopmassnFilesByTpopmassnId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,
@@ -114,9 +112,8 @@ export const useTpopmassnNavData = (props) => {
     childrenAreFolders: true,
     fetcherName: 'useTpopmassnNavData',
     fetcherParams: { projId, apId, popId, tpopId, tpopmassnId },
-    labelRightElements: labelRightElements.length
-      ? labelRightElements
-      : undefined,
+    labelRightElements:
+      labelRightElements.length ? labelRightElements : undefined,
     component: NodeWithList,
     menus: [
       {
@@ -135,9 +132,8 @@ export const useTpopmassnNavData = (props) => {
           tpopmassnId,
           'Massnahme',
         ],
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
         isSelf: true,
       },
       {

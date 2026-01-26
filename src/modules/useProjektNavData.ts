@@ -63,19 +63,18 @@ export const useProjektNavData = (props) => {
         },
       })
       if (result.error) throw result.error
-      return result
+      return result.data
     },
     suspense: true,
   })
 
-  const label = data?.data?.projektById?.label ?? 'Projekt'
-  const artsCount = data?.data?.projektById?.filteredAps?.totalCount ?? 0
-  const allArtsCount = data?.data?.projektById?.allAps?.totalCount ?? 0
+  const label = data.projektById.label ?? 'Projekt'
+  const artsCount = data.projektById.filteredAps.totalCount
+  const allArtsCount = data.projektById.allAps.totalCount
   const apberuebersichtsCount =
-    data?.data?.projektById?.filteredApberuebersichts?.totalCount ?? 0
+    data.projektById.filteredApberuebersichts.totalCount
   const allApberuebersichtsCount =
-    data?.data?.projektById?.allApberuebersichts?.totalCount ?? 0
-
+    data.projektById.allApberuebersichts.totalCount
   const navData = {
     id: projId,
     url: `/Daten/Projekte/${projId}`,
