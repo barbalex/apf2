@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
-  mapActiveApfloraLayersAtom,
   copyingAtom,
   movingAtom,
   store,
@@ -14,7 +13,6 @@ import {
   treePopberGqlFilterForTreeAtom,
   treePopmassnberGqlFilterForTreeAtom,
 } from '../store/index.ts'
-import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
 import { popIcons } from './usePopsNavData.ts'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.tsx'
@@ -54,9 +52,6 @@ export const usePopNavData = (props) => {
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
-
-  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
-  const showTpopIcon = activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const moving = useAtomValue(movingAtom)
 
@@ -201,7 +196,6 @@ export const usePopNavData = (props) => {
         fetcherName: 'useTpopsNavData',
         fetcherParams: { projId, apId, popId },
         hasChildren: !!filteredTpopsCount,
-        labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
         component: NodeWithList,
       },
       {
