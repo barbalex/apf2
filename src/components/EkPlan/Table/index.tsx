@@ -249,18 +249,21 @@ export const EkPlanTable = () => {
     filterEkplanYear,
   })
 
-  const { data, error, refetch } = useQuery<EkplanTpopQueryResult>({
+  const { data, refetch } = useQuery<EkplanTpopQueryResult>({
     queryKey: ['EkplanTpopQuery', tpopFilter],
-    queryFn: () =>
-      apolloClient
-        .query<EkplanTpopQueryResult>({
-          query: queryAll,
-          variables: { tpopFilter },
-        })
-        .then((result) => result.data),
+    queryFn: async () => {
+      const result = await apolloClient.query({
+        query: queryAll,
+        variables: { tpopFilter },
+      })
+
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
   })
 
-  const tpops = data?.allTpops?.nodes ?? []
+  const tpops = data.allTpops.nodes as TpopNode[]
   const years = getYears(pastYears)
 
   // when this value changes, year columns are re-rendered as it is added as key
@@ -295,8 +298,6 @@ export const EkPlanTable = () => {
   }
 
   // TODO: give button to remove all filters in case something goes wrong
-
-  if (error) return <Error error={error} />
 
   return (
     <ErrorBoundary>
