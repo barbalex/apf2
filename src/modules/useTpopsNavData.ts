@@ -5,7 +5,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
-  mapActiveApfloraLayersAtom,
   copyingAtom,
   movingAtom,
   store,
@@ -40,7 +39,6 @@ import { TpopIconQHighlighted } from '../components/Projekte/Karte/layers/Tpop/s
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { TpopMapIcon } from '../components/NavElements/TpopMapIcon.tsx'
-import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const tpopIcons = {
@@ -98,12 +96,6 @@ export const useTpopsNavData = (props) => {
 
   const moving = useAtomValue(movingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
-
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
-  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
-  const showTpopIcon = activeApfloraLayers?.includes('tpop') && karteIsVisible
 
   const { data } = useQuery({
     queryKey: ['treeTpop', popId, tpopGqlFilterForTree],
@@ -184,6 +176,7 @@ export const useTpopsNavData = (props) => {
   const totalCount = data.popById?.totalCount?.totalCount ?? 0
 
   const tpopIconName = store.get(mapTpopIconAtom)
+  const showTpopIcon = store.get(treeShowTpopIconAtom)
 
   const navData = {
     id: 'Teil-Populationen',
