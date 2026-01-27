@@ -188,7 +188,11 @@ export const Component = () => {
                 </div>
                 <Choose />
               </div>
-              {!!aps.length && <Table />}
+              {!!aps.length && (
+                <Suspense fallback={<Spinner />}>
+                  <Table />
+                </Suspense>
+              )}
             </>
           )}
           <User />
