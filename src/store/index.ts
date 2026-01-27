@@ -2849,7 +2849,7 @@ export const ekPlanSetShowMassnAtom = atom(null, (get, set, val) => {
 })
 
 // EkPlan aps
-export const ekPlanApsAtom = atom([])
+export const ekPlanApsAtom = atomWithStorage('ekPlanAps', [])
 export const ekPlanApValuesAtom = atom((get) => {
   const aps = get(ekPlanApsAtom)
   return aps.map((a) => a.value)
