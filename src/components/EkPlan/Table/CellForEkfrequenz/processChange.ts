@@ -49,7 +49,7 @@ export const processChange = async ({ value, row }) => {
       },
     })
   } catch (error) {
-    addNotification({
+    return addNotification({
       message: error.message,
       options: {
         variant: 'error',
