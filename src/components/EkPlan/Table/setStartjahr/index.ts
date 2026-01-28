@@ -67,19 +67,21 @@ export const setStartjahr = async ({ row, ekfrequenz }) => {
         },
       })
     }
-    ekfrequenzStartjahr = Math.max(
-      ...(result?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []).map(
-        (n) => n.jahr,
-      ),
-    )
-    if (!ekfrequenzStartjahr) {
-      return addNotification({
-        message: `Offenbar gibt es keine Kontrolle. Daher kann das EK-Frequenz-Startjahr nicht gesetzt werden`,
+    // ISSUE: if no kontrollen exist, ekfrequenzStartjahr becomes -Infinity
+    // so we need to check for that case and set startjahr to null in case a value was set previously (should not happen outside text data?)
+    const kontrollen = result?.data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []
+    if (!kontrollen.length) {
+      addNotification({
+        message: `Offenbar gibt es keine Kontrolle. Daher wird das aktuelle Jahr als Startjahr gesetzt`,
         options: {
           variant: 'info',
         },
       })
     }
+    ekfrequenzStartjahr =
+      kontrollen.length ?
+        Math.max(...kontrollen.map((n) => n.jahr))
+      : new Date().getFullYear()
   }
   // 2b if ansiedlung: get last ansiedlung
   if (kontrolljahreAb === 'ANSIEDLUNG') {
