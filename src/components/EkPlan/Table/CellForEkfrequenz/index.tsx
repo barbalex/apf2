@@ -5,7 +5,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import {
   ekPlanHoveredAtom,
@@ -13,13 +12,10 @@ import {
   ekPlanResetHoveredAtom,
   ekPlanApValuesAtom,
 } from '../../../../store/index.ts'
+import { processChange } from './processChange.ts'
 
 import indexStyles from '../index.module.css'
 import styles from './index.module.css'
-
-const processChangeWorkerFactory = createWorkerFactory(
-  () => import('./processChange.ts'),
-)
 
 export const CellForEkfrequenz = ({
   row,
@@ -34,8 +30,6 @@ export const CellForEkfrequenz = ({
   const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
   const apValues = useAtomValue(ekPlanApValuesAtom)
 
-  const processChangeWorker = useWorker(processChangeWorkerFactory)
-
   const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
 
   const maxCodeLength = Math.max(
@@ -47,7 +41,7 @@ export const CellForEkfrequenz = ({
   const onChange = async (e) => {
     const value = e.target.value || null
     setProcessing(true)
-    await processChangeWorker.processChange({
+    await processChange({
       value,
       row,
     })

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import { createWorkerFactory, useWorker } from '@shopify/react-web-worker'
 
 import {
   ekPlanHoveredAtom,
@@ -9,12 +8,9 @@ import {
 } from '../../../../store/index.ts'
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.tsx'
+import { processChange } from './processChange.ts'
 
 import styles from './index.module.css'
-
-const processChangeWorkerFactory = createWorkerFactory(
-  () => import('./processChange.ts'),
-)
 
 export const CellForEkfrequenzStartjahr = ({
   row,
@@ -28,8 +24,6 @@ export const CellForEkfrequenzStartjahr = ({
   const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
   const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
   const isHovered = hovered.tpopId === row.id
-
-  const processChangeWorker = useWorker(processChangeWorkerFactory)
 
   const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
   useEffect(
@@ -48,7 +42,7 @@ export const CellForEkfrequenzStartjahr = ({
     const value =
       e.target.value || e.target.value === 0 ? +e.target.value : null
     setProcessing(true)
-    await processChangeWorker.processChange({
+    await processChange({
       value,
       ekfrequenz,
       row,
