@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import Button from '@mui/material/Button'
 
 import { ErrorBoundary } from './ErrorBoundary.tsx'
@@ -9,6 +8,7 @@ import styles from './StringToCopy.module.css'
 export const StringToCopy = ({ text, label }) => {
   const [copied, setCopied] = useState(false)
   const onCopy = () => {
+    navigator.clipboard.writeText(text)
     setCopied(true)
     // can fire after component was unmounted...
     setTimeout(() => {
@@ -23,17 +23,12 @@ export const StringToCopy = ({ text, label }) => {
         <div className={styles.innerContainer}>
           <div className={styles.guid}>{text}</div>
           <div className={styles.buttonContainer}>
-            <CopyToClipboard
-              text={text}
-              onCopy={onCopy}
+            <Button
+              color="primary"
+              onClick={onCopy}
             >
-              <Button
-                color="primary"
-                onCopy={onCopy}
-              >
-                {copied ? `${label} kopiert` : `${label} kopieren`}
-              </Button>
-            </CopyToClipboard>
+              {copied ? `${label} kopiert` : `${label} kopieren`}
+            </Button>
           </div>
         </div>
       </div>
