@@ -129,7 +129,6 @@
   },
   "dependenciesComments": {
     "react-focus-within": "2.0.2 creates dependency conflict and thus forces to npm i --force: https://github.com/ferdaber/react-focus-within/issues/15, https://github.com/ferdaber/react-focus-within/pull/16. So extracted it to FocusWithin shared component",
-    "react-split-pane": "0.1.92 creates dependency conflict and thus forces to npm i --force: https://github.com/tomkp/react-split-pane/pull/836. TODO: migrate off of it",
     "react-contextmenu": "extracted into modules because: archived, caused conflicting peer dependency (old react versions)",
     "classnames": "needed by react-contextmenu",
     "graphql": "peer dependency of @apollo/client",
