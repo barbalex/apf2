@@ -16,7 +16,7 @@
     "preview": "vite preview",
     "test": "cross-env NODE_ENV=dev playwright test",
     "test-report": "playwright show-report",
-    "how-to-install-using-sfw": "sfw npm install -f",
+    "how-to-install-using-sfw": "sfw npm i",
     "ncu using cooldown": "ncu -c 5 -i"
   },
   "dependencies": {
@@ -29,7 +29,7 @@
     "@json2csv/plainjs": "7.0.6",
     "@mui/material": "7.3.7",
     "@react-leaflet/core": "3.0.0",
-    "@tanstack/react-query": "5.90.16",
+    "@tanstack/react-query": "5.90.20",
     "@turf/ellipse": "7.3.2",
     "@turf/helpers": "7.3.2",
     "@turf/nearest-point": "7.3.2",
@@ -93,7 +93,7 @@
     "@eslint/compat": "2.0.1",
     "@eslint/eslintrc": "3.3.3",
     "@eslint/js": "9.39.2",
-    "@playwright/test": "1.57.0",
+    "@playwright/test": "1.58.0",
     "@types/leaflet": "1.9.21",
     "@types/leaflet-draw": "1.0.13",
     "@types/node": "25.0.10",
