@@ -147,6 +147,7 @@ export const useTpopfeldkontrNavData = (props) => {
     treeNodeType: 'table',
     treeMenuType: 'tpopfeldkontr',
     treeId: tpopkontrId,
+    treeTableId: tpopkontrId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -184,6 +185,7 @@ export const useTpopfeldkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfeldkontrzaehlFolder',
         treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',
@@ -210,6 +212,7 @@ export const useTpopfeldkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopkontrBiotopFolder',
         treeId: `${tpopkontrId}TpopkontrBiotopFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',
@@ -233,6 +236,7 @@ export const useTpopfeldkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfeldkontrDateienFolder',
         treeId: `${tpopkontrId}TpopfeldkontrDateienFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',

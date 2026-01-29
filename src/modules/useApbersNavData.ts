@@ -50,15 +50,17 @@ export const useApbersNavData = (props) => {
 
   const navData = {
     id: 'AP-Berichte',
+    treeTableId: apId,
     listFilter: 'apber',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
     label: `AP-Berichte (${count}/${totalCount})`,
-    menus: (data.apById.apbersByApId.nodes).map((p) => ({
+    menus: data.apById.apbersByApId.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
       treeMenuType: 'apber',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', p.id],
       hasChildren: false,

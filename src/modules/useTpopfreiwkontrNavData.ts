@@ -109,8 +109,7 @@ export const useTpopfreiwkontrNavData = (props) => {
     data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.totalCount
   const filteredTpopkontrzaehlCount =
     data.tpopkontrById.filteredTpopkontrzaehls.totalCount
-  const filesCount =
-    data.tpopkontrById.tpopkontrFilesByTpopkontrId.totalCount
+  const filesCount = data.tpopkontrById.tpopkontrFilesByTpopkontrId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,
@@ -125,6 +124,7 @@ export const useTpopfreiwkontrNavData = (props) => {
     treeNodeType: 'table',
     treeMenuType: 'tpopfreiwkontr',
     treeId: tpopkontrId,
+    treeTableId: tpopkontrId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -143,18 +143,16 @@ export const useTpopfreiwkontrNavData = (props) => {
     singleElementName: 'Freiwilligen-Kontrolle',
     hasChildren: true,
     childrenAreFolders: true,
-    labelRightElements: labelRightElements.length
-      ? labelRightElements
-      : undefined,
+    labelRightElements:
+      labelRightElements.length ? labelRightElements : undefined,
     // leave totalCount undefined as the menus are folders
     menus: [
       {
         id: 'Freiwilligen-Kontrolle',
         label: `Freiwilligen-Kontrolle`,
         isSelf: true,
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       },
       {
         id: 'Zaehlungen',
@@ -163,6 +161,7 @@ export const useTpopfreiwkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfreiwkontrzaehlFolder',
         treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',
@@ -189,6 +188,7 @@ export const useTpopfreiwkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'dateienFolder',
         treeId: `${tpopkontrId}DateienFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',

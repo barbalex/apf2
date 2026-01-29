@@ -62,6 +62,7 @@ export const useTpopbersNavData = (props) => {
     treeNodeType: 'folder',
     menuType: 'tpopberFolder',
     treeId: `${tpopId}TpopberFolder`,
+    treeTableId: tpopId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -82,6 +83,7 @@ export const useTpopbersNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'tpopber',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',

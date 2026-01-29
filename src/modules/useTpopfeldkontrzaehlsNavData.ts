@@ -64,8 +64,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     suspense: true,
   })
 
-  const count =
-    data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes.length
+  const count = data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes.length
   const totalCount = data.tpopkontrById.totalCount.totalCount
 
   const navData = {
@@ -76,6 +75,7 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'tpopfeldkontrzaehlFolder',
     treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+    treeTableId: tpopkontrId,
     treeParentTableId: tpopkontrId,
     treeUrl: [
       'Projekte',
@@ -95,14 +95,13 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
     hasChildren: !!count,
     alwaysOpen: true,
     component: NodeWithList,
-    menus: (
-      data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes
-    ).map((p) => ({
+    menus: data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
       treeMenuType: 'tpopfeldkontrzaehl',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: tpopkontrId,
       treeUrl: [
         'Projekte',

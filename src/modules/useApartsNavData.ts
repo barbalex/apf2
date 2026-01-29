@@ -50,6 +50,7 @@ export const useApartsNavData = (props) => {
 
   const navData = {
     id: 'Taxa',
+    treeTableId: apId,
     listFilter: 'apart',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/Taxa`,
     label: `Taxa (${count}/${totalCount})`,
@@ -59,6 +60,7 @@ export const useApartsNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'apart',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa', p.id],
       hasChildren: false,
