@@ -98,6 +98,7 @@ export const useTpopmassnsNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'tpopmassnFolder',
     treeId: `${tpopId}TpopmassnFolder`,
+    treeTableId: tpopId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -131,6 +132,7 @@ export const useTpopmassnsNavData = (props) => {
         treeNodeType: 'table',
         treeMenuType: 'tpopmassn',
         treeId: p.id,
+        treeTableId: p.id,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -147,9 +149,8 @@ export const useTpopmassnsNavData = (props) => {
         hasChildren: true,
         fetcherName: 'useTpopmassnNavData',
         fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       }
     }),
   }

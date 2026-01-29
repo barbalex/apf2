@@ -270,6 +270,7 @@ export const useTpopNavData = (props) => {
     treeNodeType: 'table',
     treeMenuType: 'tpop',
     treeId: tpopId,
+    treeTableId: tpopId,
     treeParentTableId: popId,
     treeUrl: [
       'Projekte',
@@ -292,6 +293,7 @@ export const useTpopNavData = (props) => {
     menus: [
       {
         id: 'Teil-Population',
+        treeTableId: tpopId,
         label: `Teil-Population`,
         isSelf: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
@@ -304,6 +306,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopmassnFolder',
         treeId: `${tpopId}TpopmassnFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -327,6 +330,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopmassnberFolder',
         treeId: `${tpopId}MassnberFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -350,6 +354,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfeldkontrFolder',
         treeId: `${tpopId}FeldkontrFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -372,6 +377,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfreiwkontrFolder',
         treeId: `${tpopId}FreiwkontrFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -394,6 +400,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopberFolder',
         treeId: `${tpopId}TpopberFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -417,6 +424,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'beobZugeordnetFolder',
         treeId: `${tpopId}BeobZugeordnetFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -442,6 +450,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopEkFolder',
         treeId: `${tpopId}EkFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -463,6 +472,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopDateienFolder',
         treeId: `${tpopId}DateienFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -484,6 +494,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopHistorienFolder',
         treeId: `${tpopId}HistorienFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
