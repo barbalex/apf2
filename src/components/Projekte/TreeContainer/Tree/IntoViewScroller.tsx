@@ -1,11 +1,18 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useAtomValue } from 'jotai'
 
-import { treeLastTouchedNodeAtom, treeActiveNodeArrayAtom } from '../../../../store/index.ts'
+import {
+  treeLastTouchedNodeAtom,
+  treeActiveNodeArrayAtom,
+} from '../../../../store/index.ts'
 import { isElementInViewport } from '../../../../modules/isElementInViewport.ts'
 
+// lets try a different approach:
+// compare activeNodeArray with previous value to check, if a node was closed
+// (only the last element different i.e. missing). If so: return
 export const IntoViewScroller = () => {
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
+  const previousActiveNodeArray = useRef<string[]>([])
   // when opening a folder without activating it, lastTouchedNode is not same as activeNodeArray
   // in this case we do NOT want to scroll to active node that may be out of view
   const lastTouchedNode = useAtomValue(treeLastTouchedNodeAtom)
@@ -34,6 +41,20 @@ export const IntoViewScroller = () => {
   }
 
   useEffect(() => {
+    const prev = previousActiveNodeArray.current
+    // Check if a node was closed: previous array is longer by 1 and all elements except last are the same
+    if (
+      prev.length === activeNodeArray.length + 1 &&
+      activeNodeArray.every((element, index) => element === prev[index])
+    ) {
+      // Node was closed, don't scroll
+      previousActiveNodeArray.current = activeNodeArray
+      return
+    }
+
+    // Update ref for next comparison
+    previousActiveNodeArray.current = activeNodeArray
+
     scroller()
   }, [scroller])
 
