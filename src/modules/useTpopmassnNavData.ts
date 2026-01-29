@@ -42,6 +42,15 @@ export const useTpopmassnNavData = (props) => {
             tpopmassnById(id: $tpopmassnId) {
               id
               label
+              zieleinheitAnzahl
+              tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
+                text
+                # ekzaehleinheitsByZaehleinheitId {
+                #   nodes {
+                #     zielrelevant
+                #   }
+                # }
+              }
               tpopmassnFilesByTpopmassnId {
                 totalCount
               }
@@ -79,7 +88,13 @@ export const useTpopmassnNavData = (props) => {
     [],
   )
 
-  const label = data.tpopmassnById.label
+  const zielAnzahl = data.tpopmassnById.zieleinheitAnzahl
+  const zielEinheit =
+    data.tpopmassnById.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
+  const addEinheitToLabel = !!zielAnzahl && !!zielEinheit
+  const label =
+    data.tpopmassnById.label +
+    (addEinheitToLabel ? `\n${zielEinheit}: ${zielAnzahl}` : '')
   const filesCount = data.tpopmassnById.tpopmassnFilesByTpopmassnId.totalCount
 
   const labelRightElements = getLabelRightElements({

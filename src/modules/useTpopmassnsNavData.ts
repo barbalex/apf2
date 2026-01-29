@@ -45,6 +45,15 @@ export const useTpopmassnsNavData = (props) => {
                 nodes {
                   id
                   label
+                  zieleinheitAnzahl
+                  tpopkontrzaehlEinheitWerteByZieleinheitEinheit {
+                    text
+                    # ekzaehleinheitsByZaehleinheitId {
+                    #   nodes {
+                    #     zielrelevant
+                    #   }
+                    # }
+                  }
                 }
               }
               totalCount: tpopmassnsByTpopId {
@@ -125,9 +134,15 @@ export const useTpopmassnsNavData = (props) => {
         labelRightElements.push(CopyingIcon)
       }
 
+      const zielAnzahl = p.zieleinheitAnzahl
+      const zielEinheit = p.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
+      const addEinheitToLabel = !!zielAnzahl && !!zielEinheit
+      const label =
+        p.label + (addEinheitToLabel ? `\n${zielEinheit}: ${zielAnzahl}` : '')
+
       return {
         id: p.id,
-        label: p.label,
+        label,
         treeNodeType: 'table',
         treeMenuType: 'tpopmassn',
         treeId: p.id,
@@ -147,9 +162,8 @@ export const useTpopmassnsNavData = (props) => {
         hasChildren: true,
         fetcherName: 'useTpopmassnNavData',
         fetcherParams: { projId, apId, popId, tpopId, tpopmassnId: p.id },
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       }
     }),
   }
