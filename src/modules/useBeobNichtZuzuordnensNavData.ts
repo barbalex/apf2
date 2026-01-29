@@ -107,6 +107,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'beobNichtZuzuordnenFolder',
     treeId: `${apId}BeobNichtZuzuordnenFolder`,
+    treeTableId: apId,
     treeParentTableId: apId,
     treeUrl: [
       'Projekte',
@@ -123,6 +124,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'beobNichtZuzuordnen',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: apId,
       treeUrl: [
         'Projekte',

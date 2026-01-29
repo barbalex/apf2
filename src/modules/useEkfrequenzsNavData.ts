@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeEkfrequenzGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treeEkfrequenzGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkfrequenzsNavData = (props) => {
@@ -65,6 +62,7 @@ export const useEkfrequenzsNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'ekfrequenzFolder',
     treeId: `${apId}EkfrequenzFolder`,
+    treeTableId: apId,
     treeParentTableId: apId,
     treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
     hasChildren: !!rows.length,
@@ -75,6 +73,7 @@ export const useEkfrequenzsNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'ekfrequenz',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen', p.id],
       hasChildren: false,

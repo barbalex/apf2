@@ -29,7 +29,7 @@ export const useCurrentissuesNavData = () => {
   })
 
   // subtract 1 for "fehlt hier was"
-  const count = (data.allCurrentissues.nodes.length) - 1
+  const count = data.allCurrentissues.nodes.length - 1
 
   const navData = {
     id: 'Aktuelle-Fehler',
@@ -39,17 +39,19 @@ export const useCurrentissuesNavData = () => {
     treeNodeType: 'table',
     treeMenuType: 'currentissues',
     treeId: 'currentissueFolder',
+    treeTableId: null,
     treeUrl: ['Aktuelle-Fehler'],
     fetcherName: 'useCurrentissuesNavData',
     fetcherParams: {},
     hasChildren: !!count,
     component: NodeWithList,
-    menus: (data.allCurrentissues.nodes).map((p) => ({
+    menus: data.allCurrentissues.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
       treeMenuType: 'currentissue',
       treeId: p.id,
+      treeTableId: p.id,
       treeUrl: ['Aktuelle-Fehler', p.id],
       hasChildren: false,
     })),

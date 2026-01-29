@@ -82,6 +82,7 @@ export const useBeobZugeordnetsNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'beobZugeordnetFolder',
     treeId: `${tpopId}BeobZugeordnetFolder`,
+    treeTableId: tpopId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -102,6 +103,7 @@ export const useBeobZugeordnetsNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'beobZugeordnet',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',

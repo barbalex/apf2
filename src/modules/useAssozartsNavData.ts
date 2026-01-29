@@ -55,6 +55,7 @@ export const useAssozartsNavData = (props) => {
 
   const navData = {
     id: 'assoziierte-Arten',
+    treeTableId: apId,
     listFilter: 'assozart',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/assoziierte-Arten`,
     label: `Assoziierte Arten (${count}/${totalCount})`,
@@ -64,6 +65,7 @@ export const useAssozartsNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'assozart',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: apId,
       treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten', p.id],
       hasChildren: false,
