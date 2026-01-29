@@ -76,7 +76,7 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
+    // no suspense as loading state is managed via isFetching
   })
 
   const onChangeBerichtjahr = (event: ChangeEvent<HTMLInputElement>) =>
@@ -161,59 +161,61 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
             </Badge>
           </div>
         }
-        <div className={styles.scrollContainer}>
-          {messageGroupsFiltered.map((messageGroup) => (
-            <Paper
-              key={messageGroup.title}
-              elevation={2}
-              className={styles.styledPaper}
-            >
-              <div className={styles.title}>{messageGroup.title}</div>
-              {messageGroup.messages.map((m, i) => (
-                <div
-                  className={styles.row}
-                  key={`${m.text}Index${i}`}
-                >
-                  <p
-                    className={styles.styledA}
-                    onClick={() =>
-                      openTree2WithActiveNodeArray({
-                        activeNodeArray: m.url,
-                        search,
-                        projekteTabs,
-                        setProjekteTabs,
-                        onlyShowActivePath: true,
-                      })
-                    }
-                    title="in Navigationsbaum 2 öffnen"
-                  >
-                    {m.text}
-                  </p>
+        {isFetching ?
+          null
+        : messageGroups.length > 0 ?
+          <div className={styles.scrollContainer}>
+            {messageGroupsFiltered.map((messageGroup) => (
+              <Paper
+                key={messageGroup.title}
+                elevation={2}
+                className={styles.styledPaper}
+              >
+                <div className={styles.title}>{messageGroup.title}</div>
+                {messageGroup.messages.map((m, i) => (
                   <div
-                    className={styles.outsideLink}
-                    onClick={() => {
-                      const url = `${appBaseUrl()}Daten/${m.url.join(
-                        '/',
-                      )}?onlyShowActivePath=true`
-                      if (
-                        window.matchMedia('(display-mode: standalone)').matches
-                      ) {
-                        return window.open(url, '_blank', 'toolbar=no')
-                      }
-                      window.open(url)
-                    }}
-                    title="in neuem Fenster öffnen"
+                    className={styles.row}
+                    key={`${m.text}Index${i}`}
                   >
-                    <FaExternalLinkAlt />
+                    <p
+                      className={styles.styledA}
+                      onClick={() =>
+                        openTree2WithActiveNodeArray({
+                          activeNodeArray: m.url,
+                          search,
+                          projekteTabs,
+                          setProjekteTabs,
+                          onlyShowActivePath: true,
+                        })
+                      }
+                      title="in Navigationsbaum 2 öffnen"
+                    >
+                      {m.text}
+                    </p>
+                    <div
+                      className={styles.outsideLink}
+                      onClick={() => {
+                        const url = `${appBaseUrl()}Daten/${m.url.join(
+                          '/',
+                        )}?onlyShowActivePath=true`
+                        if (
+                          window.matchMedia('(display-mode: standalone)')
+                            .matches
+                        ) {
+                          return window.open(url, '_blank', 'toolbar=no')
+                        }
+                        window.open(url)
+                      }}
+                      title="in neuem Fenster öffnen"
+                    >
+                      <FaExternalLinkAlt />
+                    </div>
                   </div>
-                </div>
-              ))}
-            </Paper>
-          ))}
-        </div>
-        {!isFetching && messageGroups.length === 0 && (
-          <div>Juhui. Offenbar gibt es nichts zu meckern!</div>
-        )}
+                ))}
+              </Paper>
+            ))}
+          </div>
+        : <div>Juhui. Offenbar gibt es nichts zu meckern!</div>}
       </div>
     </ErrorBoundary>
   )

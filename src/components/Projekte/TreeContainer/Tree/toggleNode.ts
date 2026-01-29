@@ -8,11 +8,7 @@ import {
   treeActiveNodeArrayAtom,
 } from '../../../../store/index.js'
 
-export const toggleNode = ({
-  node,
-  search,
-  onlyShowActivePath = false,
-}) => {
+export const toggleNode = ({ node, search, onlyShowActivePath = false }) => {
   if (!node.url) throw new Error('passed node has no url')
 
   const navigate = store.get(navigateAtom)
