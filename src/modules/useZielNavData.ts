@@ -40,6 +40,7 @@ export const useZielNavData = (props) => {
     treeNodeType: 'table',
     treeMenuType: 'ziel',
     treeId: zielId,
+    treeTableId: zielId,
     treeParentTableId: apId,
     treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', jahr, zielId],
     fetcherName: 'useZielNavData',
