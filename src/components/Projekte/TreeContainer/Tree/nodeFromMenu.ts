@@ -4,7 +4,7 @@ export const nodeFromMenu = (menu) => ({
   // know what menu to show
   menuType: menu.treeMenuType,
   // is used
-  id: menu.treeId,
+  id: menu.treeTableId,
   // know what parent to insert a new node into
   // this has to be the id of the parent table's dataset
   parentTableId: menu.treeParentTableId,
