@@ -1,5 +1,5 @@
 export const nodeFromMenu = (menu) => ({
-  // Use case: when inserting from table, last url element is poped
+  // Use case: when inserting from table, last url element is popped
   nodeType: menu.treeNodeType,
   // know what menu to show
   menuType: menu.treeMenuType,
