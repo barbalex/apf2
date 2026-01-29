@@ -34,6 +34,7 @@ export const useMessagesNavData = () => {
     treeNodeType: 'folder',
     treeMenuType: 'messagesFolder',
     treeId: 'Mitteilungen',
+    treeTableId: null,
     treeUrl: ['Mitteilungen'],
     fetcherName: 'useMessagesNavData',
     component: Node,

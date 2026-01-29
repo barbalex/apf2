@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treePopmassnberGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, treePopmassnberGqlFilterForTreeAtom } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const usePopmassnbersNavData = (props) => {
@@ -70,6 +67,7 @@ export const usePopmassnbersNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'popmassnberFolder',
     treeId: `${popId}PopmassnberFolder`,
+    treeTableId: popId,
     treeParentTableId: popId,
     treeUrl: [
       'Projekte',
@@ -88,6 +86,7 @@ export const usePopmassnbersNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'popmassnber',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: popId,
       treeUrl: [
         'Projekte',

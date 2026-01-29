@@ -57,6 +57,7 @@ export const usePopbersNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'popberFolder',
     treeId: `${popId}popberFolder`,
+    treeTableId: popId,
     treeParentTableId: popId,
     treeUrl: [
       'Projekte',
@@ -74,6 +75,7 @@ export const usePopbersNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'popber',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: popId,
       treeUrl: [
         'Projekte',
