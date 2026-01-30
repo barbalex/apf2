@@ -48,6 +48,11 @@ export const buildApolloClient = (): ApolloClient<NormalizedCacheObject> => {
         return {
           headers: {
             ...headers,
+            // this is where we pass the jwt token to the server (postgraphile)
+            // it needs to contain: ROLE, username, token (see: sql > auth > createTables > CREATE TYPE auth.jwt_token)
+            // in pg this becomes jwt.claims
+            // example how to read: nullif(current_setting('jwt.claims.username', TRUE), '')::text (function current_user_name)
+            // pg in its policies reads CURRENT_USER as the ROLE
             authorization: `Bearer ${token}`,
           },
         }
