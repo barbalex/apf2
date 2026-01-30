@@ -2381,11 +2381,6 @@ export const userAtom = atomWithStorage('user', {
 
 export const userNameAtom = atom((get) => get(userAtom).name)
 export const userTokenAtom = atom((get) => get(userAtom).token)
-export const userIdAtom = atom((get) => get(userAtom).id)
-
-export const setUserAtom = atom(null, (get, set, newUser) => {
-  set(userAtom, newUser)
-})
 
 export const removeUserAtom = atom(null, (get, set) => {
   set(userAtom, {
