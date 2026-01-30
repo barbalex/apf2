@@ -2,9 +2,8 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import { store, treeEkfrequenzGqlFilterForTreeAtom } from '../store/index.ts'
+import { getEkfrequenzGqlFilterForTree } from './getEkfrequenzGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkfrequenzsNavData = (props) => {
@@ -13,9 +12,8 @@ export const useEkfrequenzsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const ekfrequenzGqlFilterForTree = useAtomValue(
-    treeEkfrequenzGqlFilterForTreeAtom,
-  )
+  // Get filter before useQuery so changes trigger refetch
+  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId)
 
   const { data } = useQuery({
     queryKey: ['treeEkfrequenz', apId, ekfrequenzGqlFilterForTree],
