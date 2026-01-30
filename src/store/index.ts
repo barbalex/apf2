@@ -1204,15 +1204,14 @@ export const treePopmassnberGqlFilterForTreeAtom = atom((get) => {
   return gqlFilter
 })
 
-export const treeTpopkontrzaehlGqlFilterForTreeAtom = atom((get) => {
-  const nodeLabelFilter = get(treeNodeLabelFilterAtom)
+// Function to compute tpopkontrzaehl filter with explicit tpopkontrId
+// Use this instead of the atom to avoid dependency on active node array
+export const getTpopkontrzaehlGqlFilterForTree = (tpopkontrId: string) => {
+  const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
   const gqlFilter = {}
-  // 1. hierarchy filter
-  const tpopkontrId = get(treeTpopkontrIdInActiveNodeArrayAtom)
-  if (tpopkontrId) {
-    gqlFilter.tpopkontrId = { equalTo: tpopkontrId }
-  }
-  // 2. node label filter
+
+  // Don't include tpopkontrId in filter - query is already scoped to tpopkontr
+  // Only include label filter if present
   if (nodeLabelFilter.tpopkontrzaehl) {
     gqlFilter.label = {
       includesInsensitive: nodeLabelFilter.tpopkontrzaehl,
@@ -1222,7 +1221,7 @@ export const treeTpopkontrzaehlGqlFilterForTreeAtom = atom((get) => {
   if (Object.keys(gqlFilter).length === 0) return { or: [] }
 
   return gqlFilter
-})
+}
 
 export const treeTpopberGqlFilterForTreeAtom = atom((get) => {
   const nodeLabelFilter = get(treeNodeLabelFilterAtom)

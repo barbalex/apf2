@@ -8,7 +8,7 @@ import {
   copyingAtom,
   movingAtom,
   store,
-  treeTpopkontrzaehlGqlFilterForTreeAtom,
+  getTpopkontrzaehlGqlFilterForTree,
 } from '../store/index.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -37,10 +37,8 @@ export const useTpopfreiwkontrNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
-
-  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
-    treeTpopkontrzaehlGqlFilterForTreeAtom,
-  )
+  const tpopkontrzaehlGqlFilterForTree =
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
   const { data } = useQuery({
     queryKey: [

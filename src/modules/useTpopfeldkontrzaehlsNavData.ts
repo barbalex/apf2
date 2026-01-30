@@ -4,10 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeTpopkontrzaehlGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store, getTpopkontrzaehlGqlFilterForTree } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopfeldkontrzaehlsNavData = (props) => {
@@ -18,10 +15,8 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
-
-  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
-    treeTpopkontrzaehlGqlFilterForTreeAtom,
-  )
+  const tpopkontrzaehlGqlFilterForTree =
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
   const { data } = useQuery({
     queryKey: [
