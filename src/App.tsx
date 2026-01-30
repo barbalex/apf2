@@ -21,7 +21,7 @@ import { store } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
 
-import { persistStore } from './modules/persistStore.ts'
+import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.js'
 
 import './app.css'
 
@@ -75,7 +75,7 @@ export const App = () => {
   const uploaderRef = createRef<HTMLElement>(null)
 
   useEffect(() => {
-    persistStore()
+    navigateToLastActiveNodeArray()
   }, [])
 
   return (
