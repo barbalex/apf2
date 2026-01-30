@@ -7,17 +7,17 @@ import { useAtomValue } from 'jotai'
 import {
   mapActiveApfloraLayersAtom,
   treePopGqlFilterForTreeAtom,
-  treeZielGqlFilterForTreeAtom,
-  treeApberGqlFilterForTreeAtom,
-  treeApartGqlFilterForTreeAtom,
-  treeAssozartGqlFilterForTreeAtom,
-  treeErfkritGqlFilterForTreeAtom,
-  treeEkfrequenzGqlFilterForTreeAtom,
-  treeEkzaehleinheitGqlFilterForTreeAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   store,
 } from '../store/index.ts'
+import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
+import { getApberGqlFilterForTree } from './getApberGqlFilterForTree.ts'
+import { getApartGqlFilterForTree } from './getApartGqlFilterForTree.ts'
+import { getAssozartGqlFilterForTree } from './getAssozartGqlFilterForTree.ts'
+import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
+import { getEkfrequenzGqlFilterForTree } from './getEkfrequenzGqlFilterForTree.ts'
+import { getEkzaehleinheitGqlFilterForTree } from './getEkzaehleinheitGqlFilterForTree.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
@@ -35,19 +35,6 @@ export const useApNavData = (props) => {
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
-  const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
-  const apberGqlFilterForTree = useAtomValue(treeApberGqlFilterForTreeAtom)
-  const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
-  const assozartGqlFilterForTree = useAtomValue(
-    treeAssozartGqlFilterForTreeAtom,
-  )
-  const erfkritGqlFilterForTree = useAtomValue(treeErfkritGqlFilterForTreeAtom)
-  const ekfrequenzGqlFilterForTree = useAtomValue(
-    treeEkfrequenzGqlFilterForTreeAtom,
-  )
-  const ekzaehleinheitGqlFilterForTree = useAtomValue(
-    treeEkzaehleinheitGqlFilterForTreeAtom,
-  )
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   )
@@ -86,6 +73,15 @@ export const useApNavData = (props) => {
       },
     },
   }
+
+  // Get filters before useQuery so changes trigger refetch
+  const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
+  const apberGqlFilterForTree = getApberGqlFilterForTree(apId)
+  const apartGqlFilterForTree = getApartGqlFilterForTree(apId)
+  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId)
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
+  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId)
+  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?
