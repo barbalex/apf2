@@ -96,17 +96,13 @@ export const App = () => {
                 action={(key) => <NotificationDismisser nKey={key} />}
               >
                 <UploaderContext value={uploaderRef}>
-                  {/* <Suspense fallback={<Spinner />}> */}
                   <Router />
                   {/*<UnterhaltsRouter />*/}
-                  {/* </Suspense> */}
-                  {/* <Suspense fallback={null}> */}
                   <Notifier />
                   <IsPrintSetter />
                   <LastTouchedNodeSetter />
                   <MouseWheelHandler />
                   <LegacyBrowserInformer />
-                  {/* </Suspense> */}
                 </UploaderContext>
               </SnackbarProvider>
             </ThemeProvider>
