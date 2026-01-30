@@ -8,8 +8,8 @@ import {
   copyingAtom,
   movingAtom,
   store,
-  getTpopkontrzaehlGqlFilterForTree,
 } from '../store/index.ts'
+import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'

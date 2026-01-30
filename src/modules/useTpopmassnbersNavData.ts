@@ -2,9 +2,8 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import { store, treeTpopmassnberGqlFilterForTreeAtom } from '../store/index.ts'
+import { getTpopmassnberGqlFilterForTree } from './getTpopmassnberGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopmassnbersNavData = (props) => {
@@ -15,9 +14,8 @@ export const useTpopmassnbersNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const tpopmassnberGqlFilterForTree = useAtomValue(
-    treeTpopmassnberGqlFilterForTreeAtom,
-  )
+  // Get filter before useQuery so changes trigger refetch
+  const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
 
   const { data } = useQuery({
     queryKey: ['treeTpopmassnber', tpopId, tpopmassnberGqlFilterForTree],
