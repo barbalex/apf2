@@ -2,12 +2,8 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeEkzaehleinheitGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { getEkzaehleinheitGqlFilterForTree } from './getEkzaehleinheitGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useEkzaehleinheitsNavData = (props) => {
@@ -16,9 +12,8 @@ export const useEkzaehleinheitsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const ekzaehleinheitGqlFilterForTree = useAtomValue(
-    treeEkzaehleinheitGqlFilterForTreeAtom,
-  )
+  // Get filter before useQuery so changes trigger refetch
+  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
 
   const { data } = useQuery({
     queryKey: ['treeEkzaehleinheit', apId, ekzaehleinheitGqlFilterForTree],
