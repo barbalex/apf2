@@ -2,9 +2,8 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import { store, treeAssozartGqlFilterForTreeAtom } from '../store/index.ts'
+import { getAssozartGqlFilterForTree } from './getAssozartGqlFilterForTree.ts'
 
 export const useAssozartsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -12,9 +11,8 @@ export const useAssozartsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const assozartGqlFilterForTree = useAtomValue(
-    treeAssozartGqlFilterForTreeAtom,
-  )
+  // Get filter before useQuery so changes trigger refetch
+  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId)
 
   const { data } = useQuery({
     queryKey: ['treeAssozart', apId, assozartGqlFilterForTree],

@@ -2,9 +2,8 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import { store, treeErfkritGqlFilterForTreeAtom } from '../store/index.ts'
+import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useErfkritsNavData = (props) => {
@@ -13,7 +12,8 @@ export const useErfkritsNavData = (props) => {
   const projId = props?.projId ?? params.projId
   const apId = props?.apId ?? params.apId
 
-  const erfkritGqlFilterForTree = useAtomValue(treeErfkritGqlFilterForTreeAtom)
+  // Get filter before useQuery so changes trigger refetch
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
 
   const { data } = useQuery({
     queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
