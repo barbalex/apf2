@@ -2,9 +2,8 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import { store, treeZielGqlFilterForTreeAtom } from '../store/index.ts'
+import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useZielsOfJahrNavData = (props) => {
@@ -15,7 +14,8 @@ export const useZielsOfJahrNavData = (props) => {
   let jahr = props?.jahr ?? params.jahr
   jahr = jahr ? +jahr : jahr
 
-  const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
+  // Get filter before useQuery so changes trigger refetch
+  const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
 
   const { data } = useQuery({
     queryKey: ['treeZielsOfJahr', apId, jahr, zielGqlFilterForTree],

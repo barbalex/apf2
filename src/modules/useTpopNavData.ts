@@ -13,12 +13,12 @@ import {
   mapTpopIconAtom,
   treeShowTpopIconAtom,
   treeTpopmassnGqlFilterForTreeAtom,
-  treeTpopmassnberGqlFilterForTreeAtom,
-  treeTpopberGqlFilterForTreeAtom,
   treeEkGqlFilterForTreeAtom,
   treeEkfGqlFilterForTreeAtom,
   treeBeobZugeordnetGqlFilterForTreeAtom,
 } from '../store/index.ts'
+import { getTpopmassnberGqlFilterForTree } from './getTpopmassnberGqlFilterForTree.ts'
+import { getTpopberGqlFilterForTree } from './getTpopberGqlFilterForTree.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 
@@ -57,10 +57,6 @@ export const useTpopNavData = (props) => {
   const tpopmassnGqlFilterForTree = useAtomValue(
     treeTpopmassnGqlFilterForTreeAtom,
   )
-  const tpopmassnberGqlFilterForTree = useAtomValue(
-    treeTpopmassnberGqlFilterForTreeAtom,
-  )
-  const tpopberGqlFilterForTree = useAtomValue(treeTpopberGqlFilterForTreeAtom)
   const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
   const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
   const beobZugeordnetGqlFilterForTree = useAtomValue(
@@ -81,13 +77,13 @@ export const useTpopNavData = (props) => {
       'treeTpop',
       tpopId,
       tpopmassnGqlFilterForTree,
-      tpopmassnberGqlFilterForTree,
       ekGqlFilterForTree,
       ekfGqlFilterForTree,
-      tpopberGqlFilterForTree,
       beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
+      const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
+      const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
       const result = await apolloClient.query({
         query: gql`
           query NavTpopQuery(
