@@ -14,7 +14,6 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import { theme } from './utils/materialTheme.ts'
 
-import { initializeIdb } from './modules/initializeIdb.ts'
 import { buildApolloClient } from './apolloClient.ts'
 
 import { store } from './store/index.ts'
