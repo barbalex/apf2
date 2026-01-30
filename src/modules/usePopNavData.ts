@@ -10,9 +10,9 @@ import {
   mapPopIconAtom,
   treeShowPopIconAtom,
   treeTpopGqlFilterForTreeAtom,
-  treePopberGqlFilterForTreeAtom,
-  treePopmassnberGqlFilterForTreeAtom,
 } from '../store/index.ts'
+import { getPopberGqlFilterForTree } from './getPopberGqlFilterForTree.ts'
+import { getPopmassnberGqlFilterForTree } from './getPopmassnberGqlFilterForTree.ts'
 import { popIcons } from './usePopsNavData.ts'
 import { PopIconQHighlighted } from '../components/Projekte/Karte/layers/Pop/statusGroup/QHighlighted.tsx'
 import { PopIconQ } from '../components/Projekte/Karte/layers/Pop/statusGroup/Q.tsx'
@@ -45,15 +45,15 @@ export const usePopNavData = (props) => {
 
   const copying = useAtomValue(copyingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
-  const popberGqlFilterForTree = useAtomValue(treePopberGqlFilterForTreeAtom)
-  const popmassnberGqlFilterForTree = useAtomValue(
-    treePopmassnberGqlFilterForTreeAtom,
-  )
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
 
   const moving = useAtomValue(movingAtom)
+
+  // Get filters before useQuery so changes trigger refetch
+  const popberGqlFilterForTree = getPopberGqlFilterForTree(popId)
+  const popmassnberGqlFilterForTree = getPopmassnberGqlFilterForTree(popId)
 
   const { data } = useQuery({
     queryKey: [

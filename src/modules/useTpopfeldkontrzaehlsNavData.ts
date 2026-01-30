@@ -4,7 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import { store, getTpopkontrzaehlGqlFilterForTree } from '../store/index.ts'
+import { store } from '../store/index.ts'
+import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopfeldkontrzaehlsNavData = (props) => {
