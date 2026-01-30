@@ -75,6 +75,7 @@ export const User = () => {
           name: nameToUse,
           password: passwordToUse,
         },
+        // needed?
         optimisticResponse: {
           login: {
             username: name,
