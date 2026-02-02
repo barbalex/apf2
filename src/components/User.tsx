@@ -75,22 +75,11 @@ export const User = () => {
           name: nameToUse,
           password: passwordToUse,
         },
-        // needed?
-        optimisticResponse: {
-          login: {
-            username: name,
-            jwtToken: '',
-            __typename: 'Login',
-          },
-          __typename: 'Mutation',
-        },
       })
     } catch (error) {
-      const messages = error.graphQLErrors?.map((x) => x.message)
       const isNamePassError =
-        messages &&
-        (messages?.includes('invalid user or password') ||
-          messages?.includes('permission denied for relation user'))
+        error?.message?.includes('invalid user or password') ||
+        error?.message?.includes('permission denied for relation user')
       if (isNamePassError) {
         const message = 'Name oder Passwort nicht bekannt'
         setNameErrorText(message)
