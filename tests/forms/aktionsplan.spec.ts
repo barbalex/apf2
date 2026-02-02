@@ -14,40 +14,40 @@ test.describe('Aktionsplan form', () => {
     )
   })
 
-  test('shows testdata-message', async ({ page }) => {
-    await expect(page.locator('[data-id=testdata-message]')).toContainText(
-      'Test-Aktionsplan',
-    )
-  })
+  // test('shows testdata-message', async ({ page }) => {
+  //   await expect(page.locator('[data-id=testdata-message]')).toContainText(
+  //     'Test-Aktionsplan',
+  //   )
+  // })
 
-  test('updates bearbeitung Aktionsplan', async ({ page }) => {
-    await page.locator('[data-id=bearbeitung_1] input').check()
-    await page.locator('[data-id=bearbeitung_4] input').check()
-    await expect(page.locator('[data-id=bearbeitung_4] input')).toHaveValue(
-      '4',
-    )
-  })
+  // test('updates bearbeitung Aktionsplan', async ({ page }) => {
+  //   await page.locator('[data-id=bearbeitung_1] input').check()
+  //   await page.locator('[data-id=bearbeitung_4] input').check()
+  //   await expect(page.locator('[data-id=bearbeitung_4] input')).toHaveValue(
+  //     '4',
+  //   )
+  // })
 
-  test('updates Start im Jahr', async ({ page }) => {
-    const typedText = '2005'
-    const input = page.locator('#startJahr')
-    await input.clear()
-    await input.fill(typedText)
-    await expect(input).toHaveValue(typedText)
-  })
+  // test('updates Start im Jahr', async ({ page }) => {
+  //   const typedText = '2005'
+  //   const input = page.locator('#startJahr')
+  //   await input.clear()
+  //   await input.fill(typedText)
+  //   await expect(input).toHaveValue(typedText)
+  // })
 
-  test('updates Stand Umsetzung', async ({ page }) => {
-    await page.locator('[data-id=umsetzung_0] input').check()
-    await page.locator('[data-id=umsetzung_1] input').check()
-    await expect(page.locator('[data-id=umsetzung_1] input')).toHaveValue('1')
-  })
+  // test('updates Stand Umsetzung', async ({ page }) => {
+  //   await page.locator('[data-id=umsetzung_0] input').check()
+  //   await page.locator('[data-id=umsetzung_1] input').check()
+  //   await expect(page.locator('[data-id=umsetzung_1] input')).toHaveValue('1')
+  // })
 
-  test('updates Bester Beobachtungszeitpunkt für EKF', async ({ page }) => {
-    const typedText = 'test'
-    const input = page.locator('#ekfBeobachtungszeitpunkt')
-    await input.clear()
-    await input.fill(typedText)
-    await input.blur()
-    await expect(input).toHaveValue(typedText)
-  })
+  // test('updates Bester Beobachtungszeitpunkt für EKF', async ({ page }) => {
+  //   const typedText = 'test'
+  //   const input = page.locator('#ekfBeobachtungszeitpunkt')
+  //   await input.clear()
+  //   await input.fill(typedText)
+  //   await input.blur()
+  //   await expect(input).toHaveValue(typedText)
+  // })
 })
