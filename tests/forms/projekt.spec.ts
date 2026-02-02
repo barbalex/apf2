@@ -2,9 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Projekt form', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(
-      '/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13',
-    )
+    await page.goto('/Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13')
     await page.waitForTimeout(1500)
   })
 

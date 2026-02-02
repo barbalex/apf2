@@ -27,7 +27,7 @@ test.describe('User login', () => {
   test('requires name on submit', async ({ page }) => {
     await page.getByLabel('Passwort').fill(loginData.password)
     await page.getByRole('button', { name: /anmelden/i }).click()
-    await expect(page.locator('p#nameHelper')).toContainText(
+    await expect(page.locator('#nameHelper')).toContainText(
       'Name oder Passwort nicht bekannt',
     )
   })
@@ -35,14 +35,14 @@ test.describe('User login', () => {
   test('requires password on submit', async ({ page }) => {
     await page.getByLabel('Name').fill(loginData.name)
     await page.getByRole('button', { name: /anmelden/i }).click()
-    await expect(page.locator('p#passwortHelper')).toContainText(
+    await expect(page.locator('#passwortHelper')).toContainText(
       'Name oder Passwort nicht bekannt',
     )
   })
 
   test('requires password on Enter in password field', async ({ page }) => {
     await page.getByLabel('Passwort').press('Enter')
-    await expect(page.locator('p#passwortHelper')).toContainText(
+    await expect(page.locator('#passwortHelper')).toContainText(
       'Bitte Passwort eingeben',
     )
   })
@@ -51,7 +51,7 @@ test.describe('User login', () => {
     await page.getByLabel('Name').fill('wrong name')
     await page.getByLabel('Passwort').fill(loginData.password)
     await page.getByRole('button', { name: /anmelden/i }).click()
-    await expect(page.locator('p#passwortHelper')).toContainText(
+    await expect(page.locator('#passwortHelper')).toContainText(
       'Name oder Passwort nicht bekannt',
     )
   })
@@ -60,7 +60,7 @@ test.describe('User login', () => {
     await page.getByLabel('Name').fill(loginData.name)
     await page.getByLabel('Passwort').fill('wrong password')
     await page.getByRole('button', { name: /anmelden/i }).click()
-    await expect(page.locator('p#nameHelper')).toContainText(
+    await expect(page.locator('#nameHelper')).toContainText(
       'Name oder Passwort nicht bekannt',
     )
   })
