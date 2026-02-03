@@ -24,7 +24,6 @@ export const moveTo = async ({ id: newParentId }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
 
   const moving = store.get(movingAtom)
-  const setMoving = store.get(setMovingAtom)
   const table = moving?.table
   const id = moving?.id
 
@@ -81,8 +80,9 @@ export const moveTo = async ({ id: newParentId }) => {
       // do nothing
       break
   }
+  console.log('moveTo', { table, id, newParentId })
   // reset moving
-  setMoving({
+  store.set(setMovingAtom, {
     table: null,
     id: '99999999-9999-9999-9999-999999999999',
     label: null,
