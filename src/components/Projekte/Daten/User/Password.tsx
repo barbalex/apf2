@@ -51,7 +51,7 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
     setPasswordErrorText('')
     const password = event.target.value
     setPassword(password)
-    
+
     if (!password) {
       setPasswordErrorText('Bitte Passwort eingeben')
       setPasswordValidation({
@@ -69,7 +69,7 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
   const onChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
     const password = event.target.value
     setPassword(password)
-    
+
     // Validate password requirements in real-time
     setPasswordValidation({
       minLength: password.length >= 16,
@@ -174,30 +174,54 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
             <FormHelperText id="passwortHelper">
               {passwordErrorText || (errors && !!errors.pass) ?
                 errors.pass
-              : 'Passwort muss mindestens 6 Zeichen lang sein und darf keine Zahl sein'
-              }
+              : ''}
             </FormHelperText>
           </FormControl>
           {!!password && (
             <div className={styles.passwordRequirements}>
               <FormControlLabel
-                control={<Checkbox checked={passwordValidation.minLength} disabled />}
+                control={
+                  <Checkbox
+                    checked={passwordValidation.minLength}
+                    disabled
+                  />
+                }
                 label="Mindestlänge 16"
               />
               <FormControlLabel
-                control={<Checkbox checked={passwordValidation.hasLowercase} disabled />}
+                control={
+                  <Checkbox
+                    checked={passwordValidation.hasLowercase}
+                    disabled
+                  />
+                }
                 label="Enthält Kleinbuchstaben"
               />
               <FormControlLabel
-                control={<Checkbox checked={passwordValidation.hasUppercase} disabled />}
+                control={
+                  <Checkbox
+                    checked={passwordValidation.hasUppercase}
+                    disabled
+                  />
+                }
                 label="Enthält Grossbuchstaben"
               />
               <FormControlLabel
-                control={<Checkbox checked={passwordValidation.hasNumbers} disabled />}
+                control={
+                  <Checkbox
+                    checked={passwordValidation.hasNumbers}
+                    disabled
+                  />
+                }
                 label="Enthält Nummern"
               />
               <FormControlLabel
-                control={<Checkbox checked={passwordValidation.hasSpecialChars} disabled />}
+                control={
+                  <Checkbox
+                    checked={passwordValidation.hasSpecialChars}
+                    disabled
+                  />
+                }
                 label="Enthält Sonderzeichen"
               />
             </div>
