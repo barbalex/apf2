@@ -58,6 +58,13 @@ export const User = () => {
     dispatchTokenState({ type: 'set', payload: user.token })
   }, [user.token])
 
+  // Focus password input when it becomes visible
+  useEffect(() => {
+    if (name && !needsPasswordSetup && passwordInput.current) {
+      passwordInput.current.focus()
+    }
+  }, [name, needsPasswordSetup])
+
   // callbacks pass name or password
   // because state is not up to date yet
   const fetchLogin = async ({ name: namePassed, password: passwordPassed }) => {
@@ -135,6 +142,7 @@ export const User = () => {
             userByName(name: $name) {
               id
               pass
+              requireNewPasswordOnNextLogin
             }
           }
         `,
@@ -149,6 +157,13 @@ export const User = () => {
       
       if (!userData.pass) {
         // User has no password - show password setup
+        setUserId(userData.id)
+        setNeedsPasswordSetup(true)
+        return
+      }
+      
+      if (userData.requireNewPasswordOnNextLogin) {
+        // User needs to set a new password
         setUserId(userData.id)
         setNeedsPasswordSetup(true)
         return
@@ -187,12 +202,13 @@ export const User = () => {
     try {
       await apolloClient.mutate({
         mutation: gql`
-          mutation updateUserPassword($id: UUID!, $pass: String) {
-            updateUserById(input: { id: $id, userPatch: { pass: $pass } }) {
+          mutation updateUserPassword($id: UUID!, $pass: String, $requireNewPasswordOnNextLogin: Boolean) {
+            updateUserById(input: { id: $id, userPatch: { pass: $pass, requireNewPasswordOnNextLogin: $requireNewPasswordOnNextLogin } }) {
               user {
                 id
                 name
                 pass
+                requireNewPasswordOnNextLogin
               }
             }
           }
@@ -200,6 +216,7 @@ export const User = () => {
         variables: {
           id: userId,
           pass: value,
+          requireNewPasswordOnNextLogin: false,
         },
       })
       

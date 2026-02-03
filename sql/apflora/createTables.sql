@@ -632,6 +632,7 @@ CREATE TABLE apflora.user(
   -- enforce role to prevent errors when no role is set
   role name NOT NULL DEFAULT 'apflora_ap_reader' CHECK role_length_maximum_512(length(ROLE) < 512),
   pass text DEFAULT NULL CHECK pass_length_minimum_6(length(pass) > 5),
+  require_new_password_on_next_login boolean DEFAULT true,
   adresse_id uuid DEFAULT NULL REFERENCES apflora.adresse(id) ON DELETE SET NULL ON UPDATE CASCADE
   -- reverted created_at and updated_at: authorizing apflora_ap_writer did not work any more!
   --created_at timestamptz NOT NULL DEFAULT now(),
