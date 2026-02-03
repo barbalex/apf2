@@ -16,10 +16,15 @@ import styles from './Password.module.css'
 interface PasswordProps {
   errors: Record<string, string>
   saveToDb: (event: ChangeEvent<HTMLInputElement>) => Promise<void>
+  showChangePasswordButton?: boolean
 }
 
-export const Password = ({ errors, saveToDb }: PasswordProps) => {
-  const [editPassword, setEditPassword] = useState(false)
+export const Password = ({
+  errors,
+  saveToDb,
+  showChangePasswordButton = true,
+}: PasswordProps) => {
+  const [editPassword, setEditPassword] = useState(!showChangePasswordButton)
   const [passwordMessage, setPasswordMessage] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
@@ -87,6 +92,45 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
     })
   }
 
+  const onChangePassword2 = (event: ChangeEvent<HTMLInputElement>) => {
+    const password2Value = event.target.value
+    setPassword2(password2Value)
+    setPassword2ErrorText('')
+  }
+
+  const handleSavePassword = async () => {
+    setPassword2ErrorText('')
+    if (!password2) {
+      setPassword2ErrorText('Bitte Passwort eingeben')
+      return
+    }
+    if (password !== password2) {
+      setPassword2ErrorText('Die Passwörter stimmen nicht überein')
+      return
+    }
+
+    // edit password
+    // then tell user if it worked
+    try {
+      const fakeEvent = { target: { name: 'pass', value: password2 } }
+      await saveToDb(fakeEvent as ChangeEvent<HTMLInputElement>)
+    } catch (error) {
+      return setPasswordMessage((error as Error).message)
+    }
+    setPasswordMessage(
+      'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
+    )
+    // can fire after component was unmounted...
+    setTimeout(() => {
+      setPasswordMessage('')
+    }, 5000)
+    setPassword('')
+    setPassword2('')
+    setShowPass(false)
+    setShowPass2(false)
+    setEditPassword(false)
+  }
+
   const onBlurPassword2 = async (event: FocusEvent<HTMLInputElement>) => {
     setPassword2ErrorText('')
     const password2 = event.target.value
@@ -96,32 +140,13 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
     } else if (password !== password2) {
       setPassword2ErrorText('Die Passwörter stimmen nicht überein')
     } else {
-      // edit password
-      // then tell user if it worked
-      try {
-        const fakeEvent = { target: { name: 'pass', value: password2 } }
-        await saveToDb(fakeEvent as ChangeEvent<HTMLInputElement>)
-      } catch (error) {
-        return setPasswordMessage((error as Error).message)
-      }
-      setPasswordMessage(
-        'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
-      )
-      // can fire after component was unmounted...
-      setTimeout(() => {
-        setPasswordMessage('')
-      }, 5000)
-      setPassword('')
-      setPassword2('')
-      setShowPass(false)
-      setShowPass2(false)
-      setEditPassword(false)
+      await handleSavePassword()
     }
   }
 
   return (
     <>
-      {!passwordMessage && (
+      {showChangePasswordButton && !passwordMessage && (
         <Button
           variant="outlined"
           onClick={() => {
@@ -250,7 +275,8 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
                   id="passwort2"
                   name="pass"
                   type={showPass2 ? 'text' : 'password'}
-                  defaultValue={password2}
+                  value={password2}
+                  onChange={onChangePassword2}
                   onBlur={onBlurPassword2}
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
@@ -280,6 +306,22 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
                   {password2ErrorText}
                 </FormHelperText>
               </FormControl>
+            )}
+          {passwordValidation.minLength &&
+            passwordValidation.hasLowercase &&
+            passwordValidation.hasUppercase &&
+            passwordValidation.hasNumbers &&
+            passwordValidation.hasSpecialChars &&
+            password2 &&
+            password === password2 && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSavePassword}
+                className={styles.saveButton}
+              >
+                Speichern
+              </Button>
             )}
         </>
       )}

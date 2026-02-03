@@ -17,6 +17,7 @@ import { useAtom } from 'jotai'
 import { useApolloClient } from '@apollo/client/react'
 
 import { ErrorBoundary } from './shared/ErrorBoundary.tsx'
+import { Password } from './Projekte/Daten/User/Password.tsx'
 import { userAtom } from '../store/index.ts'
 
 import styles from './User.module.css'
@@ -41,6 +42,8 @@ export const User = () => {
   const [showPass, setShowPass] = useState(false)
   const [nameErrorText, setNameErrorText] = useState('')
   const [passwordErrorText, setPasswordErrorText] = useState('')
+  const [needsPasswordSetup, setNeedsPasswordSetup] = useState(false)
+  const [userId, setUserId] = useState(null)
 
   const [tokenState, dispatchTokenState] = useReducer(tokenStateReducer, {
     token: user.token,
@@ -115,14 +118,49 @@ export const User = () => {
     window.location.reload(true)
   }
 
-  const onBlurName = (e) => {
+  const onBlurName = async (e) => {
     setNameErrorText('')
     const name = e.target.value
     setName(name)
     if (!name) {
       setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
-    } else if (password) {
-      setTimeout(() => fetchLogin({ name }))
+      return
+    }
+    
+    // Check if user exists and has a password
+    try {
+      const userResult = await apolloClient.query({
+        query: gql`
+          query checkUserPassword($name: String!) {
+            userByName(name: $name) {
+              id
+              pass
+            }
+          }
+        `,
+        variables: { name },
+      })
+      
+      const userData = userResult?.data?.userByName
+      if (!userData) {
+        setNameErrorText('Benutzer nicht gefunden')
+        return
+      }
+      
+      if (!userData.pass) {
+        // User has no password - show password setup
+        setUserId(userData.id)
+        setNeedsPasswordSetup(true)
+        return
+      }
+      
+      // User has password - proceed with normal login
+      if (password) {
+        setTimeout(() => fetchLogin({ name }))
+      }
+    } catch (error) {
+      setNameErrorText('Fehler beim Überprüfen des Benutzers')
+      console.log(error)
     }
   }
 
@@ -142,7 +180,63 @@ export const User = () => {
   const onClickShowPass = () => setShowPass(!showPass)
   const onMouseDownShowPass = (e) => e.preventDefault()
 
+  const savePassword = async (event) => {
+    const field = event.target.name
+    const value = event.target.value
+    
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
+          mutation updateUserPassword($id: UUID!, $pass: String) {
+            updateUserById(input: { id: $id, userPatch: { pass: $pass } }) {
+              user {
+                id
+                name
+                pass
+              }
+            }
+          }
+        `,
+        variables: {
+          id: userId,
+          pass: value,
+        },
+      })
+      
+      // Password set successfully, proceed with login
+      setNeedsPasswordSetup(false)
+      setTimeout(() => fetchLogin({ name, password: value }))
+    } catch (error) {
+      throw error
+    }
+  }
+
   const { token, fetchingToken } = tokenState
+
+  if (needsPasswordSetup) {
+    return (
+      <ErrorBoundary>
+        <Dialog
+          aria-labelledby="dialog-title"
+          open={true}
+          maxWidth="sm"
+          fullWidth
+          scroll="body"
+        >
+          <DialogTitle id="dialog-title">
+            Passwort einrichten für {name}
+          </DialogTitle>
+          <div className={styles.setupDiv}>
+            <p className={styles.setupMessage}>
+              Ihr Konto hat noch kein Passwort. Bitte richten Sie ein sicheres
+              Passwort ein.
+            </p>
+            <Password errors={{}} saveToDb={savePassword} showChangePasswordButton={false} />
+          </div>
+        </Dialog>
+      </ErrorBoundary>
+    )
+  }
 
   return (
     <ErrorBoundary>
@@ -170,53 +264,57 @@ export const User = () => {
             />
             <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
           </FormControl>
-          <FormControl
-            error={!!passwordErrorText}
-            fullWidth
-            aria-describedby="passwortHelper"
-            variant="standard"
-          >
-            <InputLabel htmlFor="passwort">Passwort</InputLabel>
-            <Input
-              id="passwort"
-              inputRef={passwordInput}
-              type={showPass ? 'text' : 'password'}
-              defaultValue={password}
-              onBlur={onBlurPassword}
-              onKeyPress={onKeyPressPassword}
-              autoComplete="current-password"
-              autoCorrect="off"
-              spellCheck="false"
-              endAdornment={
-                <InputAdornment position="end">
-                  <Tooltip title={showPass ? 'verstecken' : 'anzeigen'}>
-                    <IconButton
-                      onClick={onClickShowPass}
-                      onMouseDown={onMouseDownShowPass}
-                      size="large"
-                    >
-                      {showPass ?
-                        <MdVisibilityOff />
-                      : <MdVisibility />}
-                    </IconButton>
-                  </Tooltip>
-                </InputAdornment>
-              }
-              className={`user-passwort ${styles.input}`}
-            />
-            <FormHelperText id="passwortHelper">
-              {passwordErrorText}
-            </FormHelperText>
-          </FormControl>
+          {name && !needsPasswordSetup && (
+            <FormControl
+              error={!!passwordErrorText}
+              fullWidth
+              aria-describedby="passwortHelper"
+              variant="standard"
+            >
+              <InputLabel htmlFor="passwort">Passwort</InputLabel>
+              <Input
+                id="passwort"
+                inputRef={passwordInput}
+                type={showPass ? 'text' : 'password'}
+                defaultValue={password}
+                onBlur={onBlurPassword}
+                onKeyPress={onKeyPressPassword}
+                autoComplete="current-password"
+                autoCorrect="off"
+                spellCheck="false"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Tooltip title={showPass ? 'verstecken' : 'anzeigen'}>
+                      <IconButton
+                        onClick={onClickShowPass}
+                        onMouseDown={onMouseDownShowPass}
+                        size="large"
+                      >
+                        {showPass ?
+                          <MdVisibilityOff />
+                        : <MdVisibility />}
+                      </IconButton>
+                    </Tooltip>
+                  </InputAdornment>
+                }
+                className={`user-passwort ${styles.input}`}
+              />
+              <FormHelperText id="passwortHelper">
+                {passwordErrorText}
+              </FormHelperText>
+            </FormControl>
+          )}
         </div>
-        <DialogActions>
-          <Button
-            color="primary"
-            onClick={fetchLogin}
-          >
-            anmelden
-          </Button>
-        </DialogActions>
+        {name && !needsPasswordSetup && (
+          <DialogActions>
+            <Button
+              color="primary"
+              onClick={fetchLogin}
+            >
+              anmelden
+            </Button>
+          </DialogActions>
+        )}
       </Dialog>
     </ErrorBoundary>
   )
