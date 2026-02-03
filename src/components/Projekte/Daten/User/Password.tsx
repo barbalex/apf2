@@ -6,6 +6,8 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Tooltip from '@mui/material/Tooltip'
 
@@ -25,6 +27,13 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
   const [showPass2, setShowPass2] = useState(false)
   const [passwordErrorText, setPasswordErrorText] = useState('')
   const [password2ErrorText, setPassword2ErrorText] = useState('')
+  const [passwordValidation, setPasswordValidation] = useState({
+    minLength: false,
+    hasLowercase: false,
+    hasUppercase: false,
+    hasNumbers: false,
+    hasSpecialChars: false,
+  })
 
   // Reset password fields when editPassword becomes false
   useEffect(() => {
@@ -42,11 +51,33 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
     setPasswordErrorText('')
     const password = event.target.value
     setPassword(password)
+    
     if (!password) {
       setPasswordErrorText('Bitte Passwort eingeben')
+      setPasswordValidation({
+        minLength: false,
+        hasLowercase: false,
+        hasUppercase: false,
+        hasNumbers: false,
+        hasSpecialChars: false,
+      })
     } else {
       setPassword2('')
     }
+  }
+
+  const onChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
+    const password = event.target.value
+    setPassword(password)
+    
+    // Validate password requirements in real-time
+    setPasswordValidation({
+      minLength: password.length >= 16,
+      hasLowercase: /[a-z]/.test(password),
+      hasUppercase: /[A-Z]/.test(password),
+      hasNumbers: /[0-9]/.test(password),
+      hasSpecialChars: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+    })
   }
 
   const onBlurPassword2 = async (event: FocusEvent<HTMLInputElement>) => {
@@ -112,6 +143,7 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
               name="pass"
               type={showPass ? 'text' : 'password'}
               defaultValue={password}
+              onChange={onChangePassword}
               onBlur={onBlurPassword}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
@@ -146,6 +178,30 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
               }
             </FormHelperText>
           </FormControl>
+          {!!password && (
+            <div className={styles.passwordRequirements}>
+              <FormControlLabel
+                control={<Checkbox checked={passwordValidation.minLength} disabled />}
+                label="Mindestlänge 16"
+              />
+              <FormControlLabel
+                control={<Checkbox checked={passwordValidation.hasLowercase} disabled />}
+                label="Enthält Kleinbuchstaben"
+              />
+              <FormControlLabel
+                control={<Checkbox checked={passwordValidation.hasUppercase} disabled />}
+                label="Enthält Grossbuchstaben"
+              />
+              <FormControlLabel
+                control={<Checkbox checked={passwordValidation.hasNumbers} disabled />}
+                label="Enthält Nummern"
+              />
+              <FormControlLabel
+                control={<Checkbox checked={passwordValidation.hasSpecialChars} disabled />}
+                label="Enthält Sonderzeichen"
+              />
+            </div>
+          )}
           {!!password && (
             <FormControl
               error={!!password2ErrorText}

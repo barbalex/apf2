@@ -29,3 +29,23 @@
 .passwordMessage {
   padding-bottom: 10px;
 }
+
+.passwordRequirements {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  gap: 2px;
+
+  & .MuiFormControlLabel-root {
+    margin: 0;
+
+    & .MuiCheckbox-root {
+      padding: 4px;
+    }
+
+    & .MuiTypography-root {
+      font-size: 0.85rem;
+    }
+  }
+}
