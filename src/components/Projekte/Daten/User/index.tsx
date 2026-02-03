@@ -76,8 +76,6 @@ export const Component = () => {
   const tsQueryClient = useQueryClient()
 
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [editPassword, setEditPassword] = useState(false)
-  const [passwordMessage, setPasswordMessage] = useState('')
 
   const { data } = useQuery({
     queryKey: ['user', userId],
@@ -152,10 +150,6 @@ export const Component = () => {
           MenuBarComponent={Menu}
           menuBarProps={{
             row,
-            editPassword,
-            setEditPassword,
-            passwordMessage,
-            setPasswordMessage,
           }}
         />
 
@@ -196,13 +190,7 @@ export const Component = () => {
             saveToDb={saveToDb}
             error={errors.adresseId}
           />
-          <Password
-            editPassword={editPassword}
-            errors={errors}
-            passwordMessage={passwordMessage}
-            setPasswordMessage={setPasswordMessage}
-            saveToDb={saveToDb}
-          />
+          <Password errors={errors} saveToDb={saveToDb} />
         </div>
       </div>
     </ErrorBoundary>

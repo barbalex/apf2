@@ -60,10 +60,6 @@ interface MenuProps {
     adresseId: AdresseId | null
     [key: string]: any
   }
-  editPassword: boolean
-  setEditPassword: (value: boolean) => void
-  passwordMessage: string
-  setPasswordMessage: (value: string) => void
 }
 
 import styles from './Menu.module.css'
@@ -77,13 +73,7 @@ import {
 
 const iconStyle = { color: 'white' }
 
-export const Menu = ({
-  row,
-  editPassword,
-  setEditPassword,
-  passwordMessage,
-  setPasswordMessage,
-}: MenuProps) => {
+export const Menu = ({ row }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
@@ -276,18 +266,6 @@ export const Menu = ({
           </IconButton>
         </Tooltip>
 
-        {!editPassword && !passwordMessage && (
-          <Button
-            variant="outlined"
-            onClick={() => {
-              setEditPassword(true)
-              setPasswordMessage('')
-            }}
-            className={styles.button}
-          >
-            Passwort ändern
-          </Button>
-        )}
         {hasEkfTpopsWithoutEkfThisYear && (
           <Button
             variant="outlined"
