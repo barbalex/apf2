@@ -274,7 +274,7 @@ export const Menus = () => {
   }
 
   const handleClick = (e, data, element) => {
-    // console.log('TreeContainer, handleClick', { e, data, element })
+    console.log('TreeContainer, handleClick', { e, data, element })
     if (!data) {
       return addNotification({
         message: 'no data passed with click',
