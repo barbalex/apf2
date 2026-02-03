@@ -42,9 +42,9 @@ export const IntoViewScroller = () => {
 
   useEffect(() => {
     const prev = previousActiveNodeArray.current
-    // Check if a node was closed: previous array is longer by 1 and all elements except last are the same
+    // Check if a node was closed: previous array is longer and all activeNodeArray-elements are the same
     if (
-      prev.length === activeNodeArray.length + 1 &&
+      prev.length >= activeNodeArray.length &&
       activeNodeArray.every((element, index) => element === prev[index])
     ) {
       // Node was closed, don't scroll
