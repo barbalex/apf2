@@ -21,6 +21,11 @@
   }
 }
 
+.button {
+  text-transform: none !important;
+  margin-bottom: 10px !important;
+}
+
 .passwordMessage {
   padding-bottom: 10px;
 }

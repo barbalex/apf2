@@ -92,7 +92,7 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
           }}
           className={styles.button}
         >
-          {editPassword ? 'Abbrechen' : 'Passwort ändern'}
+          {editPassword ? 'Passwort ändern abbrechen' : 'Passwort ändern'}
         </Button>
       )}
       {!!passwordMessage && (
