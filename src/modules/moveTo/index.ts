@@ -128,6 +128,9 @@ export const moveTo = async ({ id: newParentId }) => {
     tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopFolders`],
+    })
   }
   if (table === 'tpopfreiwkontr') {
     tsQueryClient.invalidateQueries({
