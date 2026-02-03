@@ -27,6 +27,15 @@ export const moveTo = async ({ id: newParentId }) => {
   const table = moving?.table
   const id = moving?.id
 
+  if (!newParentId) {
+    return addNotification({
+      message: 'change was not saved: Reason: parent is missing',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+
   // ensure derived data exists
   const tabelle = tables.find((t) => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
@@ -51,6 +60,7 @@ export const moveTo = async ({ id: newParentId }) => {
   }
 
   // move
+  // console.log('moveTo', { table, id, newParentId })
   switch (dbTable) {
     case 'tpopkontr':
       await apolloClient.mutate({
@@ -80,7 +90,6 @@ export const moveTo = async ({ id: newParentId }) => {
       // do nothing
       break
   }
-  console.log('moveTo', { table, id, newParentId })
   // reset moving
   store.set(setMovingAtom, {
     table: null,

@@ -274,7 +274,7 @@ export const Menus = () => {
   }
 
   const handleClick = (e, data, element) => {
-    console.log('TreeContainer, handleClick', { e, data, element })
+    // console.log('TreeContainer, handleClick', { e, data, element })
     if (!data) {
       return addNotification({
         message: 'no data passed with click',
@@ -416,7 +416,7 @@ export const Menus = () => {
       },
       move() {
         moveTo({
-          id: nodeType === 'folder' ? parentId : id,
+          id,
         })
       },
       markForCopying() {
@@ -434,10 +434,6 @@ export const Menus = () => {
         })
       },
       copy() {
-        // console.log('TreeContainer.Menus.handleClick.copy', {
-        //   id,
-        //   parentId,
-        // })
         copyTo({
           parentId: nodeType === 'folder' ? parentId : id,
         })

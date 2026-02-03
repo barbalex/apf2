@@ -104,7 +104,7 @@ export const useTpopfeldkontrsNavData = (props) => {
     label: `Feld-Kontrollen (${count}/${totalCount})`,
     labelShort: `EK (${count}/${totalCount})`,
     treeNodeType: 'folder',
-    treeMenuType: 'tpopfeldkontr',
+    treeMenuType: 'tpopfeldkontrFolder',
     treeId: `${tpopId}FeldkontrFolder`,
     treeTableId: tpopId,
     treeParentTableId: tpopId,
