@@ -11,7 +11,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Tooltip from '@mui/material/Tooltip'
 
-import styles from './index.module.css'
+import styles from './Password.module.css'
 
 interface PasswordProps {
   errors: Record<string, string>
@@ -44,6 +44,13 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
       setShowPass2(false)
       setPasswordErrorText('')
       setPassword2ErrorText('')
+      setPasswordValidation({
+        minLength: false,
+        hasLowercase: false,
+        hasUppercase: false,
+        hasNumbers: false,
+        hasSpecialChars: false,
+      })
     }
   }, [editPassword])
 
@@ -142,7 +149,7 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
               id="passwort"
               name="pass"
               type={showPass ? 'text' : 'password'}
-              defaultValue={password}
+              value={password}
               onChange={onChangePassword}
               onBlur={onBlurPassword}
               onKeyPress={(e) => {
@@ -177,100 +184,103 @@ export const Password = ({ errors, saveToDb }: PasswordProps) => {
               : ''}
             </FormHelperText>
           </FormControl>
-          {!!password && (
-            <div className={styles.passwordRequirements}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={passwordValidation.minLength}
-                    disabled
-                  />
-                }
-                label="Mindestlänge 16"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={passwordValidation.hasLowercase}
-                    disabled
-                  />
-                }
-                label="Enthält Kleinbuchstaben"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={passwordValidation.hasUppercase}
-                    disabled
-                  />
-                }
-                label="Enthält Grossbuchstaben"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={passwordValidation.hasNumbers}
-                    disabled
-                  />
-                }
-                label="Enthält Nummern"
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={passwordValidation.hasSpecialChars}
-                    disabled
-                  />
-                }
-                label="Enthält Sonderzeichen"
-              />
-            </div>
-          )}
-          {!!password && (
-            <FormControl
-              error={!!password2ErrorText}
-              fullWidth
-              aria-describedby="passwortHelper"
-              variant="standard"
-            >
-              <InputLabel htmlFor="passwort">
-                Neues Passwort wiederholen
-              </InputLabel>
-              <Input
-                id="passwort2"
-                name="pass"
-                type={showPass2 ? 'text' : 'password'}
-                defaultValue={password2}
-                onBlur={onBlurPassword2}
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter') {
-                    onBlurPassword(e)
+          <div className={styles.passwordRequirements}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={passwordValidation.minLength}
+                  disabled
+                />
+              }
+              label="Mindestlänge 16"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={passwordValidation.hasLowercase}
+                  disabled
+                />
+              }
+              label="Enthält Kleinbuchstaben"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={passwordValidation.hasUppercase}
+                  disabled
+                />
+              }
+              label="Enthält Grossbuchstaben"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={passwordValidation.hasNumbers}
+                  disabled
+                />
+              }
+              label="Enthält Nummern"
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={passwordValidation.hasSpecialChars}
+                  disabled
+                />
+              }
+              label="Enthält Sonderzeichen"
+            />
+          </div>
+
+          {passwordValidation.minLength &&
+            passwordValidation.hasLowercase &&
+            passwordValidation.hasUppercase &&
+            passwordValidation.hasNumbers &&
+            passwordValidation.hasSpecialChars && (
+              <FormControl
+                error={!!password2ErrorText}
+                fullWidth
+                aria-describedby="passwortHelper"
+                variant="standard"
+              >
+                <InputLabel htmlFor="passwort">
+                  Neues Passwort wiederholen
+                </InputLabel>
+                <Input
+                  id="passwort2"
+                  name="pass"
+                  type={showPass2 ? 'text' : 'password'}
+                  defaultValue={password2}
+                  onBlur={onBlurPassword2}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      onBlurPassword(e)
+                    }
+                  }}
+                  autoCorrect="off"
+                  spellCheck="false"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <Tooltip title={showPass2 ? 'verstecken' : 'anzeigen'}>
+                        <IconButton
+                          onClick={() => setShowPass2(!showPass2)}
+                          onMouseDown={(e) => e.preventDefault()}
+                          size="large"
+                        >
+                          {showPass2 ?
+                            <MdVisibilityOff />
+                          : <MdVisibility />}
+                        </IconButton>
+                      </Tooltip>
+                    </InputAdornment>
                   }
-                }}
-                autoCorrect="off"
-                spellCheck="false"
-                endAdornment={
-                  <InputAdornment position="end">
-                    <Tooltip title={showPass2 ? 'verstecken' : 'anzeigen'}>
-                      <IconButton
-                        onClick={() => setShowPass2(!showPass2)}
-                        onMouseDown={(e) => e.preventDefault()}
-                        size="large"
-                      >
-                        {showPass2 ?
-                          <MdVisibilityOff />
-                        : <MdVisibility />}
-                      </IconButton>
-                    </Tooltip>
-                  </InputAdornment>
-                }
-                className={styles.input}
-              />
-              <FormHelperText id="passwortHelper">
-                {password2ErrorText}
-              </FormHelperText>
-            </FormControl>
-          )}
+                  className={styles.input}
+                />
+                <FormHelperText id="passwortHelper">
+                  {password2ErrorText}
+                </FormHelperText>
+              </FormControl>
+            )}
         </>
       )}
     </>
