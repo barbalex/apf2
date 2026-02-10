@@ -70,7 +70,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
 
   return (
     <Tooltip title="Mehr Befehle">
-      {isMobileView ?
+      {isMobileView ? (
         <Button
           aria-label="Mehr"
           aria-owns={anchorEl ? 'appbar-more-menu' : null}
@@ -82,7 +82,8 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
         >
           <FaBars />
         </Button>
-      : <Button
+      ) : (
+        <Button
           aria-label="Mehr"
           aria-owns={anchorEl ? 'appbar-more-menu' : null}
           aria-haspopup="true"
@@ -92,7 +93,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
         >
           Mehr
         </Button>
-      }
+      )}
       <Menu
         id="appbar-more-menu"
         anchorEl={anchorEl}
@@ -137,7 +138,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von apflora.ch
         </MenuItem>
-        <div className={styles.version}>Version: 1.124.72 vom 3.2.2026</div>
+        <div className={styles.version}>Version: 1.124.73 vom 10.2.2026</div>
       </Menu>
     </Tooltip>
   )
