@@ -15,22 +15,25 @@ BEGIN
       massn.zieleinheit_anzahl AS anzahl
     FROM
       apflora.tpopmassn massn
-      INNER JOIN apflora.tpopmassn_typ_werte tw ON tw.code = massn.typ
+      INNER JOIN apflora.tpopmassn_typ_werte tw ON 
+        tw.code = massn.typ
         AND tw.anpflanzung = TRUE
-      INNER JOIN apflora.tpop_history tpop ON tpop.id = massn.tpop_id
+      INNER JOIN apflora.tpop_history tpop ON 
+        tpop.id = massn.tpop_id
         AND tpop.year = massn.jahr
-      INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id
+      INNER JOIN apflora.pop_history pop ON 
+        pop.id = tpop.pop_id
         AND pop.year = tpop.year
-      INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
+      INNER JOIN apflora.ap_history ap ON 
+        ap.id = pop.ap_id
         AND ap.year = pop.year
-      INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id
+      INNER JOIN apflora.ekzaehleinheit ekze ON 
+        ekze.ap_id = ap.id
         AND ekze.zielrelevant = TRUE
       INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
     WHERE
       massn.jahr IS NOT NULL
       AND massn.jahr <= $2
-      AND tpop.year <= $2
-      AND pop.year <= $2
       AND tpop.status IN(200, 201)
       AND tpop.apber_relevant = TRUE
       AND massn.zieleinheit_einheit = ze.code
@@ -48,24 +51,32 @@ zaehlungen AS(
   FROM
     apflora.tpopkontrzaehl zaehlungen
     INNER JOIN apflora.tpopkontr kontr ON zaehlungen.tpopkontr_id = kontr.id
-    INNER JOIN apflora.tpop_history tpop ON tpop.id = kontr.tpop_id
+    -- ensure that only zaehlungen are considered, 
+    -- which belong to a tpop that in the year of the kontr has status 100, 200 or 201
+    INNER JOIN apflora.tpop_history tpop_of_jahr ON 
+      tpop_of_jahr.id = kontr.tpop_id
+      AND tpop_of_jahr.year = $2
+    INNER JOIN apflora.tpop_history tpop ON 
+      tpop.id = kontr.tpop_id
       AND tpop.year = kontr.jahr
-    INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id
+    INNER JOIN apflora.pop_history pop ON 
+      pop.id = tpop.pop_id
       AND pop.year = tpop.year
-    INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
+    INNER JOIN apflora.ap_history ap ON 
+      ap.id = pop.ap_id
       AND ap.year = pop.year
-    INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id
+    INNER JOIN apflora.ekzaehleinheit ekze ON 
+      ekze.ap_id = ap.id
       AND ekze.zielrelevant = TRUE
     INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
   WHERE
     kontr.jahr IS NOT NULL
     AND kontr.jahr <= $2
-    AND tpop.year <= $2
-    AND pop.year <= $2
     -- we want false or null, but not true
     -- https://stackoverflow.com/a/46474204/712005
     AND kontr.apber_nicht_relevant IS NOT TRUE
     AND tpop.status IN(100, 200, 201)
+    AND tpop_of_jahr.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
     AND zaehlungen.anzahl IS NOT NULL
     AND zaehlungen.einheit = ze.code
