@@ -2598,22 +2598,6 @@ export const ekPlanShowCountAtom = atom(true)
 export const ekPlanShowEkCountAtom = atom(true)
 export const ekPlanShowMassnAtom = atom(true)
 
-export const ekPlanSetShowEkAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowEkAtom, val)
-})
-export const ekPlanSetShowEkfAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowEkfAtom, val)
-})
-export const ekPlanSetShowCountAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowCountAtom, val)
-})
-export const ekPlanSetShowEkCountAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowEkCountAtom, val)
-})
-export const ekPlanSetShowMassnAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowMassnAtom, val)
-})
-
 // EkPlan aps
 export const ekPlanApsAtom = atomWithStorage('ekPlanAps', [])
 export const ekPlanApValuesAtom = atom((get) => {
@@ -2797,9 +2781,6 @@ export const ekPlanSetFilterEmptyEkfrequenzStartjahrAtom = atom(
 
 // EkPlan pastYears
 export const ekPlanPastYearsAtom = atom(5)
-export const ekPlanSetPastYearsAtom = atom(null, (get, set, val) => {
-  set(ekPlanPastYearsAtom, val)
-})
 
 // EkPlan volatile state
 export const ekPlanYearMenuAnchorAtom = atom(null)

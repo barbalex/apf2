@@ -7,7 +7,7 @@ import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogTitle from '@mui/material/DialogTitle'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom, useAtom } from 'jotai'
 
 import { Fields } from './Fields.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
@@ -19,12 +19,6 @@ import {
   ekPlanShowEkCountAtom,
   ekPlanShowMassnAtom,
   ekPlanPastYearsAtom,
-  ekPlanSetShowEkAtom,
-  ekPlanSetShowEkfAtom,
-  ekPlanSetShowCountAtom,
-  ekPlanSetShowEkCountAtom,
-  ekPlanSetShowMassnAtom,
-  ekPlanSetPastYearsAtom,
 } from '../../store/index.ts'
 
 import styles from './Choose.module.css'
@@ -65,19 +59,12 @@ const DenserCheckbox = (props) => (
 
 export const Choose = () => {
   const fields = useAtomValue(ekPlanFieldsAtom)
-  const showEk = useAtomValue(ekPlanShowEkAtom)
-  const showEkf = useAtomValue(ekPlanShowEkfAtom)
-  const showCount = useAtomValue(ekPlanShowCountAtom)
-  const showEkCount = useAtomValue(ekPlanShowEkCountAtom)
-  const showMassn = useAtomValue(ekPlanShowMassnAtom)
-  const pastYears = useAtomValue(ekPlanPastYearsAtom)
-
-  const setShowEk = useSetAtom(ekPlanSetShowEkAtom)
-  const setShowEkf = useSetAtom(ekPlanSetShowEkfAtom)
-  const setShowCount = useSetAtom(ekPlanSetShowCountAtom)
-  const setShowEkCount = useSetAtom(ekPlanSetShowEkCountAtom)
-  const setShowMassn = useSetAtom(ekPlanSetShowMassnAtom)
-  const setPastYears = useSetAtom(ekPlanSetPastYearsAtom)
+  const [showEk, setShowEk] = useAtom(ekPlanShowEkAtom)
+  const [showEkf, setShowEkf] = useAtom(ekPlanShowEkfAtom)
+  const [showCount, setShowCount] = useAtom(ekPlanShowCountAtom)
+  const [showEkCount, setShowEkCount] = useAtom(ekPlanShowEkCountAtom)
+  const [showMassn, setShowMassn] = useAtom(ekPlanShowMassnAtom)
+  const [pastYears, setPastYears] = useAtom(ekPlanPastYearsAtom)
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const onChangeShowEk = () => setShowEk(!showEk)
@@ -220,10 +207,7 @@ export const Choose = () => {
         <DialogTitle id="alert-dialog-title">{'Felder wählen:'}</DialogTitle>
         <Fields />
         <DialogActions>
-          <Button
-            onClick={closeFieldsDialog}
-            color="inherit"
-          >
+          <Button onClick={closeFieldsDialog} color="inherit">
             schliessen
           </Button>
         </DialogActions>
