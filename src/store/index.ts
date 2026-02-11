@@ -279,9 +279,8 @@ export const treeApGqlFilterAtom = atom((get) => {
   )
 
   const apGqlFilter = {
-    all:
-      Object.keys(singleFilterByHierarchy).length ?
-        singleFilterByHierarchy
+    all: Object.keys(singleFilterByHierarchy).length
+      ? singleFilterByHierarchy
       : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
@@ -461,8 +460,9 @@ export const treePopGqlFilterAtom = atom((get) => {
   )
 
   const popGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -549,8 +549,9 @@ export const treeTpopGqlFilterAtom = atom((get) => {
   const popGqlFilter = get(treePopGqlFilterAtom)
 
   // 1. prepare hierarchy filter
-  const apHiearchyFilter =
-    apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
+  const apHiearchyFilter = apId
+    ? { popByPopId: { apId: { equalTo: apId } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
   const singleFilterByParentFiltersForAll = {
@@ -619,8 +620,9 @@ export const treeTpopGqlFilterAtom = atom((get) => {
   )
 
   const tpopGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -695,8 +697,9 @@ export const treeTpopmassnGqlFilterAtom = atom((get) => {
   const tpopGqlFilter = get(treeTpopGqlFilterAtom)
 
   // 1. prepare hierarchy filter
-  const apHiearchyFilter =
-    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+  const apHiearchyFilter = apId
+    ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
   const singleFilterByParentFiltersForAll = {
@@ -796,8 +799,9 @@ export const treeTpopmassnGqlFilterAtom = atom((get) => {
   )
 
   const tpopmassnGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1005,8 +1009,9 @@ export const treeEkGqlFilterAtom = atom((get) => {
 
   // 1. prepare hierarchy filter
   const apId = get(treeApIdInActiveNodeArrayAtom)
-  const apHiearchyFilter =
-    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+  const apHiearchyFilter = apId
+    ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(
     merge(
@@ -1032,8 +1037,9 @@ export const treeEkGqlFilterAtom = atom((get) => {
   }
 
   // 2. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
+  let filterArrayInStore = dataFilter.tpopfeldkontr
+    ? [...dataFilter.tpopfeldkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1098,8 +1104,9 @@ export const treeEkGqlFilterAtom = atom((get) => {
   )
 
   const ekGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1112,8 +1119,9 @@ export const treeEkGqlFilterForTreeAtom = atom((get) => {
   const dataFilter = get(treeDataFilterAtom)
 
   // 1. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
+  let filterArrayInStore = dataFilter.tpopfeldkontr
+    ? [...dataFilter.tpopfeldkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1186,8 +1194,9 @@ export const treeEkfGqlFilterAtom = atom((get) => {
 
   // 1. prepare hierarchy filter
   const apId = get(treeApIdInActiveNodeArrayAtom)
-  const apHiearchyFilter =
-    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+  const apHiearchyFilter = apId
+    ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(
     merge(
@@ -1208,8 +1217,9 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   }
 
   // 2. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
+  let filterArrayInStore = dataFilter.tpopfreiwkontr
+    ? [...dataFilter.tpopfreiwkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1273,8 +1283,9 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   )
 
   const ekfGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1287,8 +1298,9 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
   const dataFilter = get(treeDataFilterAtom)
 
   // 1. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
+  let filterArrayInStore = dataFilter.tpopfreiwkontr
+    ? [...dataFilter.tpopfreiwkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1379,9 +1391,8 @@ export const treeBeobGqlFilterAtom = (
     // need list of all open apIds
     const apId = get(treeApIdInActiveNodeArrayAtom)
     const openNodes = get(treeOpenNodesAtom)
-    const openApIds =
-      apId ?
-        [apId]
+    const openApIds = apId
+      ? [apId]
       : [
           ...new Set(
             openNodes
@@ -1408,8 +1419,9 @@ export const treeBeobGqlFilterAtom = (
       },
     }
 
-    const apHiearchyFilter =
-      apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+    const apHiearchyFilter = apId
+      ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+      : {}
     const projHiearchyFilter = {}
     const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
     const typeFilter = {
@@ -1430,29 +1442,27 @@ export const treeBeobGqlFilterAtom = (
       tpopByTpopId: tpopGqlFilter.all,
     }
     const singleFilterForAll =
-      type === 'zugeordnet' ?
-        merge(
-          merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
-          singleFilterByParentFiltersForAll,
-        )
-      : merge(typeFilter, apFilter)
+      type === 'zugeordnet'
+        ? merge(
+            merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
+            singleFilterByParentFiltersForAll,
+          )
+        : merge(typeFilter, apFilter)
     const singleFilterByParentFiltersForFiltered = {
       tpopByTpopId: tpopGqlFilter.filtered,
     }
 
     // node label filter
-    const nodeLabelFilterObj =
-      nodeLabelFilter.beob ?
-        {
+    const nodeLabelFilterObj = nodeLabelFilter.beob
+      ? {
           label: {
             includesInsensitive: nodeLabelFilter.beob,
           },
         }
       : {}
     // mapFilter
-    const mapFilterObj =
-      mapFilter ?
-        {
+    const mapFilterObj = mapFilter
+      ? {
           geomPoint: {
             coveredBy: mapFilter,
           },
@@ -1467,9 +1477,8 @@ export const treeBeobGqlFilterAtom = (
     singleFilter = merge(singleFilter, mapFilterObj)
 
     const beobGqlFilter = {
-      all:
-        Object.keys(singleFilterForAll).length ?
-          singleFilterForAll
+      all: Object.keys(singleFilterForAll).length
+        ? singleFilterForAll
         : { or: [] },
       filtered: singleFilter,
     }
