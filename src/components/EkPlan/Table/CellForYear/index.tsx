@@ -8,7 +8,6 @@ import {
   ekPlanShowMassnAtom,
   ekPlanYearMenuAnchorAtom,
   ekPlanYearClickedAtom,
-  ekPlanYearClickedAtom,
   ekPlanEinheitsByApAtom,
   ekPlanHoveredAtom,
   ekPlanResetHoveredAtom,
