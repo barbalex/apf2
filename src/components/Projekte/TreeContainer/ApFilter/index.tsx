@@ -2,7 +2,7 @@ import Switch from '@mui/material/Switch'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 
 import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.tsx'
@@ -12,7 +12,6 @@ import {
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeApFilterAtom,
-  useAtom,
 } from '../../../../store/index.ts'
 
 import styles from './index.module.css'
