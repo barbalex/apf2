@@ -13,7 +13,7 @@ export const ZhOrthoAktuellRgb = () => (
       // layers="OGDOrthoZH"
       // above layer adds tiling which is not desired here
       // WARNING: when updating, also update layer name here:
-      // ../LayersControl/BaseLayers/index.jsx
+      // ../LayersControl/BaseLayers/index.tsx
       layers="ortho_s_2024"
       version="1.3.0"
       format="image/png"

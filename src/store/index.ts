@@ -1797,6 +1797,7 @@ export const isDesktopViewAtom = atomWithStorage('isDesktopView', false)
 export const setDesktopViewAtom = atom(
   (get) => get(isDesktopViewAtom),
   (get, set, width) => {
+    if (typeof width !== 'number') return
     const isDesktopView = get(isDesktopViewAtom)
     const mobileEnforced = get(enforceMobileNavigationAtom)
     const desktopEnforced = get(enforceDesktopNavigationAtom)

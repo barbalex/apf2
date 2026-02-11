@@ -4,7 +4,7 @@ import { camelCase } from 'es-toolkit'
 import { omit } from 'es-toolkit'
 import { gql } from '@apollo/client'
 
-import { tables } from '../../../../../modules/tables.js'
+import { tables } from '../../../../../modules/tables.ts'
 import {
   store,
   tsQueryClientAtom,
@@ -158,32 +158,36 @@ export const deleteModule = async ({ search }) => {
   }
 
   const queryKeyTable =
-    parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontr'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontr'
-    : table === 'tpop_apberrelevant_grund_werte' ?
-      'treeTpopApberrelevantGrundWerte'
-    : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
-    : table === 'tpopkontrzaehl_einheit_werte' ?
-      'treeTpopkontrzaehlEinheitWerte'
-    : `tree${upperFirst(table)}`
+    parentTable === 'tpopfeldkontr'
+      ? 'treeTpopfeldkontr'
+      : parentTable === 'tpopfreiwkontr'
+        ? 'treeTpopfreiwkontr'
+        : table === 'tpop_apberrelevant_grund_werte'
+          ? 'treeTpopApberrelevantGrundWerte'
+          : table === 'ek_abrechnungstyp_werte'
+            ? 'treeEkAbrechnungstypWerte'
+            : table === 'tpopkontrzaehl_einheit_werte'
+              ? 'treeTpopkontrzaehlEinheitWerte'
+              : `tree${upperFirst(table)}`
   tsQueryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
-  const queryKeyFolders =
-    ['apberuebersicht'].includes(table) ? 'treeRoot'
-    : table === 'ziel' ? 'treeZiel'
-    : parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehlFolders'
-    : parentTable === 'tpopfreiwkontr' ? 'treeTpopfreiwkontrzaehlFolders'
-    : (
-      [
-        'adresse',
-        'tpop_apberrelevant_grund_werte',
-        'ek_abrechnungstyp_werte',
-        'tpopkontrzaehl_einheit_werte',
-      ].includes(table)
-    ) ?
-      'treeWerteFolders'
-    : `tree${upperFirst(parentTable)}Folders`
+  const queryKeyFolders = ['apberuebersicht'].includes(table)
+    ? 'treeRoot'
+    : table === 'ziel'
+      ? 'treeZiel'
+      : parentTable === 'tpopfeldkontr'
+        ? 'treeTpopfeldkontrzaehlFolders'
+        : parentTable === 'tpopfreiwkontr'
+          ? 'treeTpopfreiwkontrzaehlFolders'
+          : [
+                'adresse',
+                'tpop_apberrelevant_grund_werte',
+                'ek_abrechnungstyp_werte',
+                'tpopkontrzaehl_einheit_werte',
+              ].includes(table)
+            ? 'treeWerteFolders'
+            : `tree${upperFirst(parentTable)}Folders`
   // console.log('Tree: deleting node', {
   //   queryKeyFoldersTable,parentTable,
   //   queryToInvalidate: `tree${upperFirst(queryKeyFoldersTable)}Folders`,

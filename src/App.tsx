@@ -20,7 +20,7 @@ import { store } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
 
-import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.js'
+import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.ts'
 
 import './app.css'
 

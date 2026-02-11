@@ -1,7 +1,7 @@
-import { queryEkfrequenz } from './queryEkfrequenz.js'
-import { queryTpopkontr } from './queryTpopkontr.js'
-import { queryTpopmassn } from './queryTpopmassn.js'
-import { mutationUpdateTpop } from './mutationUpdateTpop.js'
+import { queryEkfrequenz } from './queryEkfrequenz.ts'
+import { queryTpopkontr } from './queryTpopkontr.ts'
+import { queryTpopmassn } from './queryTpopmassn.ts'
+import { mutationUpdateTpop } from './mutationUpdateTpop.ts'
 import {
   store,
   apolloClientAtom,
@@ -78,9 +78,8 @@ export const setStartjahr = async ({ row, ekfrequenz }) => {
         },
       })
     }
-    ekfrequenzStartjahr =
-      kontrollen.length ?
-        Math.max(...kontrollen.map((n) => n.jahr))
+    ekfrequenzStartjahr = kontrollen.length
+      ? Math.max(...kontrollen.map((n) => n.jahr))
       : new Date().getFullYear()
   }
   // 2b if ansiedlung: get last ansiedlung
