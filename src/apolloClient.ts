@@ -22,7 +22,7 @@ import {
   apolloClientAtom,
   addNotificationAtom,
   userTokenAtom,
-  treeSetMapFilterAtom,
+  treeMapFilterAtom,
 } from './store/index.ts'
 
 const cleanTypeNameLink = new RemoveTypenameFromVariablesLink()
@@ -92,7 +92,7 @@ export const buildApolloClient = (): ApolloClient<NormalizedCacheObject> => {
         }
         if (existsTooLargeError(uniqueQraphQLErrors)) {
           // could be a too large ktZh geojson file being passed in mapFilter
-          store.set(treeSetMapFilterAtom, undefined)
+          store.set(treeMapFilterAtom, undefined)
         }
         uniqueQraphQLErrors.map(({ message, locations, path }) => {
           console.log(

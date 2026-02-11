@@ -2,13 +2,13 @@ import Button from '@mui/material/Button'
 import { useSetAtom } from 'jotai'
 
 import {
-  treeSetMapFilterAtom,
+  treeMapFilterAtom,
   treeIncrementMapFilterResetterAtom,
 } from '../../../../../../store/index.ts'
 import styles from './index.module.css'
 
 export const KtZhFilter = () => {
-  const setMapFilter = useSetAtom(treeSetMapFilterAtom)
+  const setMapFilter = useSetAtom(treeMapFilterAtom)
   const incrementMapFilterResetter = useSetAtom(
     treeIncrementMapFilterResetterAtom,
   )

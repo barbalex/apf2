@@ -46,8 +46,6 @@ export const treeOpenNodesAtom = atom([])
 export const treeSetOpenNodesAtom = atom(
   (get) => null,
   (get, set, val) => {
-    // val should always be created from a snapshot of openNodes
-    // to ensure not mutating openNodes!!!
     // need set to ensure contained arrays are unique
     const uniqueSet = new Set(val)
     set(treeOpenNodesAtom, Array.from(uniqueSet))
@@ -1578,12 +1576,6 @@ export const treeApFilterAtom = atomWithStorage(
 )
 
 export const treeMapFilterAtom = atom(undefined)
-export const treeSetMapFilterAtom = atom(
-  (get) => null,
-  (get, set, val) => {
-    set(treeMapFilterAtom, val)
-  },
-)
 export const treeEmptyMapFilterAtom = atom(null, (get, set) => {
   set(treeMapFilterAtom, undefined)
 })
