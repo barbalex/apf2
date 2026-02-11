@@ -6,9 +6,9 @@ import {
   ekPlanShowEkAtom,
   ekPlanShowEkfAtom,
   ekPlanShowMassnAtom,
-  ekPlanSetYearMenuAnchorAtom,
+  ekPlanYearMenuAnchorAtom,
   ekPlanYearClickedAtom,
-  ekPlanSetYearClickedAtom,
+  ekPlanYearClickedAtom,
   ekPlanEinheitsByApAtom,
   ekPlanHoveredAtom,
   ekPlanSetHoveredAtom,
@@ -32,9 +32,9 @@ export const CellForYear = ({
   const showEk = useAtomValue(ekPlanShowEkAtom)
   const showEkf = useAtomValue(ekPlanShowEkfAtom)
   const showMassn = useAtomValue(ekPlanShowMassnAtom)
-  const setYearMenuAnchor = useSetAtom(ekPlanSetYearMenuAnchorAtom)
+  const setYearMenuAnchor = useSetAtom(ekPlanYearMenuAnchorAtom)
   const yearClicked = useAtomValue(ekPlanYearClickedAtom)
-  const setYearClicked = useSetAtom(ekPlanSetYearClickedAtom)
+  const setYearClicked = useSetAtom(ekPlanYearClickedAtom)
   const einheitsByAp = useAtomValue(ekPlanEinheitsByApAtom)
   const hovered = useAtomValue(ekPlanHoveredAtom)
   const setHovered = useSetAtom(ekPlanSetHoveredAtom)
@@ -63,11 +63,13 @@ export const CellForYear = ({
   const cellStyle = {
     width: yearColumnWidth,
     minWidth: yearColumnWidth,
-    backgroundColor:
-      clicked ? 'rgb(255,211,167)'
-      : isHovered ? 'hsla(45, 100%, 90%, 1)'
-      : isOdd ? 'rgb(255, 255, 252)'
-      : 'unset',
+    backgroundColor: clicked
+      ? 'rgb(255,211,167)'
+      : isHovered
+        ? 'hsla(45, 100%, 90%, 1)'
+        : isOdd
+          ? 'rgb(255, 255, 252)'
+          : 'unset',
     ...(clicked ? { border: '2px solid rgb(255, 140, 0)' } : {}),
   }
 
@@ -80,22 +82,10 @@ export const CellForYear = ({
       style={cellStyle}
     >
       <div className={indexStyles.infoRow}>
-        {showEk && (
-          <EkIcon
-            planned={ekPlan}
-            eks={eks}
-            einheits={einheits}
-          />
-        )}
+        {showEk && <EkIcon planned={ekPlan} eks={eks} einheits={einheits} />}
       </div>
       <div className={indexStyles.infoRow}>
-        {showEkf && (
-          <EkIcon
-            planned={ekfPlan}
-            eks={ekfs}
-            einheits={einheits}
-          />
-        )}
+        {showEkf && <EkIcon planned={ekfPlan} eks={ekfs} einheits={einheits} />}
       </div>
       <div className={indexStyles.infoRow}>
         {showMassn && <MassnIcon ansiedlungs={ansiedlungs} />}

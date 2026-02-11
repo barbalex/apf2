@@ -22,7 +22,7 @@ import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import {
   userTokenAtom,
   ekPlanApsAtom,
-  ekPlanSetApsDataAtom,
+  ekPlanApsDataAtom,
   ekPlanSetApsDataLoadingAtom,
   ekPlanSetFilterApAtom,
   ekPlanSetFilterPopNrAtom,
@@ -61,7 +61,8 @@ export const Component = () => {
   const apolloClient = useApolloClient()
   const userToken = useAtomValue(userTokenAtom)
   const aps = useAtomValue(ekPlanApsAtom)
-  const setApsData = useSetAtom(ekPlanSetApsDataAtom)
+  const apsData = useAtomValue(ekPlanApsDataAtom)
+  const setApsData = useSetAtom(ekPlanApsDataAtom)
   const setApsDataLoading = useSetAtom(ekPlanSetApsDataLoadingAtom)
   const setFilterAp = useSetAtom(ekPlanSetFilterApAtom)
   const setFilterPopNr = useSetAtom(ekPlanSetFilterPopNrAtom)

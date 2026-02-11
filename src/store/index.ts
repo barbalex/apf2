@@ -2733,6 +2733,7 @@ export const ekPlanSetFilterLv95XAtom = atom(null, (get, set, val) => {
 export const ekPlanSetFilterLv95YAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterLv95YAtom, val ? +val : null)
 })
+// keep this setter as a map is used to set all filters at once and ekfKontrolleur is part of the map
 export const ekPlanSetFilterEkfKontrolleurAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterEkfKontrolleurAtom, val)
 })
@@ -2784,9 +2785,6 @@ export const ekPlanPastYearsAtom = atom(5)
 
 // EkPlan volatile state
 export const ekPlanYearMenuAnchorAtom = atom(null)
-export const ekPlanSetYearMenuAnchorAtom = atom(null, (get, set, anchor) => {
-  set(ekPlanYearMenuAnchorAtom, anchor)
-})
 
 const initialYearClicked = {
   year: null,
@@ -2796,18 +2794,12 @@ const initialYearClicked = {
   ekfPlan: false,
 }
 export const ekPlanYearClickedAtom = atom(initialYearClicked)
-export const ekPlanSetYearClickedAtom = atom(null, (get, set, val) => {
-  set(ekPlanYearClickedAtom, val)
-})
 export const ekPlanCloseYearCellMenuAtom = atom(null, (get, set) => {
   set(ekPlanYearMenuAnchorAtom, null)
   set(ekPlanYearClickedAtom, initialYearClicked)
 })
 
 export const ekPlanApsDataAtom = atom([])
-export const ekPlanSetApsDataAtom = atom(null, (get, set, val) => {
-  set(ekPlanApsDataAtom, val)
-})
 
 // EkPlan einheitsByAp computed value
 export const ekPlanEinheitsByApAtom = atom((get) => {
