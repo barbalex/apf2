@@ -8,23 +8,18 @@ CREATE OR REPLACE FUNCTION apflora.ap_ausw_pop_menge(apid uuid, jahr integer)
   RETURNS SETOF apflora.ausw_pop_menge
   AS $$
 BEGIN
-  RETURN QUERY WITH massnahmen AS(
+  RETURN query WITH massnahmen AS(
     SELECT
       pop.id AS pop_id,
       massn.jahr,
       massn.zieleinheit_anzahl AS anzahl
     FROM
       apflora.tpopmassn massn
-      INNER JOIN apflora.tpopmassn_typ_werte tw ON tw.code = massn.typ
-        AND tw.anpflanzung = TRUE
-      INNER JOIN apflora.tpop_history tpop ON tpop.id = massn.tpop_id
-        AND tpop.year = massn.jahr
-      INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id
-        AND pop.year = tpop.year
-      INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
-        AND ap.year = pop.year
-      INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id
-        AND ekze.zielrelevant = TRUE
+      INNER JOIN apflora.tpopmassn_typ_werte tw ON tw.code = massn.typ AND tw.anpflanzung = TRUE
+      INNER JOIN apflora.tpop_history tpop ON tpop.id = massn.tpop_id AND tpop.year = massn.jahr
+      INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id AND pop.year = tpop.year
+      INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id AND ap.year = pop.year
+      INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id AND ekze.zielrelevant = TRUE
       INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
     WHERE
       massn.jahr IS NOT NULL
@@ -48,23 +43,17 @@ zaehlungen AS(
   FROM
     apflora.tpopkontrzaehl zaehlungen
     INNER JOIN apflora.tpopkontr kontr ON zaehlungen.tpopkontr_id = kontr.id
-    INNER JOIN apflora.tpop_history tpop ON tpop.id = kontr.tpop_id
-      AND tpop.year = kontr.jahr
-    INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id
-      AND pop.year = tpop.year
-    INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id
-      AND ap.year = pop.year
-    INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id
-      AND ekze.zielrelevant = TRUE
+    INNER JOIN apflora.tpop_history tpop ON tpop.id = kontr.tpop_id AND tpop.year = kontr.jahr
+    INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id AND pop.year = tpop.year
+    INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id AND ap.year = pop.year
+    INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id AND ekze.zielrelevant = TRUE
     INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON ze.id = ekze.zaehleinheit_id
   WHERE
     kontr.jahr IS NOT NULL
     AND kontr.jahr <= $2
     AND tpop.year <= $2
     AND pop.year <= $2
-    -- we want false or null, but not true
-    -- https://stackoverflow.com/a/46474204/712005
-    AND kontr.apber_nicht_relevant IS NOT TRUE
+    AND (kontr.apber_nicht_relevant <> TRUE OR kontr.apber_nicht_relevant IS NULL)
     AND tpop.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
     AND zaehlungen.anzahl IS NOT NULL
@@ -80,45 +69,44 @@ zaehlungen_summe_pro_jahr AS(
   SELECT
     z.pop_id,
     z.jahr,
-    sum(z.anzahl) AS sum
-  FROM
-    zaehlungen z
+    sum(z.anzahl) as sum
+  FROM zaehlungen z
   GROUP BY
     z.pop_id,
     z.jahr
-  ORDER BY
-    z.jahr DESC
+  ORDER BY z.jahr desc
 ),
 massnahmen_summe_pro_jahr AS(
   SELECT
     m.pop_id,
     m.jahr,
-    sum(m.anzahl) AS sum
-  FROM
-    massnahmen m
+    sum(m.anzahl) as sum
+  FROM massnahmen m
   GROUP BY
     m.pop_id,
     m.jahr
-  ORDER BY
-    m.jahr DESC
+  ORDER BY m.jahr desc
 ),
 letzte_anzahl_pro_jahr AS(
   SELECT
-    pop.id AS pop_id,
-    pop.year AS jahr,
+    pop.id as pop_id,
+    pop.year as jahr,
     COALESCE((
-      SELECT
-        sum
+      SELECT sum
       FROM zaehlungen_summe_pro_jahr zspj
-    WHERE
-      zspj.pop_id = pop.id
-      AND zspj.jahr <= pop.year ORDER BY zspj.jahr DESC LIMIT 1), 0) + COALESCE((
-      SELECT
-        sum
+      WHERE zspj.pop_id = pop.id
+        AND zspj.jahr <= pop.year
+      ORDER BY zspj.jahr DESC
+      LIMIT 1), 0
+    ) + 
+    COALESCE((
+      SELECT sum
       FROM massnahmen_summe_pro_jahr mspj
-    WHERE
-      mspj.pop_id = pop.id
-      AND mspj.jahr <= pop.year ORDER BY mspj.jahr DESC LIMIT 1), 0) AS anzahl
+      WHERE mspj.pop_id = pop.id
+        AND mspj.jahr <= pop.year
+      ORDER BY mspj.jahr DESC
+      LIMIT 1), 0
+    ) AS anzahl
   FROM
     apflora.pop_history pop
   WHERE
