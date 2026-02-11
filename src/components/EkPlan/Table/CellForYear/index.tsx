@@ -11,7 +11,6 @@ import {
   ekPlanYearClickedAtom,
   ekPlanEinheitsByApAtom,
   ekPlanHoveredAtom,
-  ekPlanSetHoveredAtom,
   ekPlanResetHoveredAtom,
 } from '../../../../store/index.ts'
 import { query } from './query.ts'
@@ -37,7 +36,7 @@ export const CellForYear = ({
   const setYearClicked = useSetAtom(ekPlanYearClickedAtom)
   const einheitsByAp = useAtomValue(ekPlanEinheitsByApAtom)
   const hovered = useAtomValue(ekPlanHoveredAtom)
-  const setHovered = useSetAtom(ekPlanSetHoveredAtom)
+  const setHovered = useSetAtom(ekPlanHoveredAtom)
   const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
 
   const onMouseEnter = () => setHovered({ year, tpopId: row.id })

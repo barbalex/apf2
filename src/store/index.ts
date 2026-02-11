@@ -2626,9 +2626,6 @@ const defaultFields = [
   'ekfrequenzAbweichend',
 ]
 export const ekPlanFieldsAtom = atom(defaultFields)
-export const ekPlanSetFieldsAtom = atom(null, (get, set, fields) => {
-  set(ekPlanFieldsAtom, fields)
-})
 export const ekPlanToggleFieldAtom = atom(null, (get, set, field) => {
   const current = get(ekPlanFieldsAtom)
   if (current.includes(field)) {
@@ -2656,9 +2653,6 @@ export const ekPlanRemoveFieldAtom = atom(null, (get, set, field) => {
 
 // EkPlan hovered
 export const ekPlanHoveredAtom = atom({ year: null, tpopId: null })
-export const ekPlanSetHoveredAtom = atom(null, (get, set, val) => {
-  set(ekPlanHoveredAtom, val)
-})
 export const ekPlanSetHoveredYearAtom = atom(null, (get, set, val) => {
   const current = get(ekPlanHoveredAtom)
   set(ekPlanHoveredAtom, { ...current, year: val })
@@ -2673,9 +2667,6 @@ export const ekPlanResetHoveredAtom = atom(null, (get, set) => {
 
 // EkPlan data loading
 export const ekPlanApsDataLoadingAtom = atom(true)
-export const ekPlanSetApsDataLoadingAtom = atom(null, (get, set, val) => {
-  set(ekPlanApsDataLoadingAtom, val)
-})
 
 // EkPlan filters
 export const ekPlanFilterApAtom = atom(null)

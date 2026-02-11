@@ -23,7 +23,7 @@ import {
   userTokenAtom,
   ekPlanApsAtom,
   ekPlanApsDataAtom,
-  ekPlanSetApsDataLoadingAtom,
+  ekPlanApsDataLoadingAtom,
   ekPlanSetFilterApAtom,
   ekPlanSetFilterPopNrAtom,
   ekPlanSetFilterPopNameAtom,
@@ -63,7 +63,7 @@ export const Component = () => {
   const aps = useAtomValue(ekPlanApsAtom)
   const apsData = useAtomValue(ekPlanApsDataAtom)
   const setApsData = useSetAtom(ekPlanApsDataAtom)
-  const setApsDataLoading = useSetAtom(ekPlanSetApsDataLoadingAtom)
+  const setApsDataLoading = useSetAtom(ekPlanApsDataLoadingAtom)
   const setFilterAp = useSetAtom(ekPlanSetFilterApAtom)
   const setFilterPopNr = useSetAtom(ekPlanSetFilterPopNrAtom)
   const setFilterPopName = useSetAtom(ekPlanSetFilterPopNameAtom)
