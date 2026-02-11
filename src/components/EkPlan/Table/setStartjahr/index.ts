@@ -7,7 +7,7 @@ import {
   apolloClientAtom,
   addNotificationAtom,
   userNameAtom,
-} from '../../../../store/index.js'
+} from '../../../../store/index.ts'
 
 const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)

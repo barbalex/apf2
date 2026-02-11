@@ -6,7 +6,7 @@ import {
   setTreeLastTouchedNodeAtom,
   treeOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../store/index.js'
+} from '../../../../store/index.ts'
 
 export const toggleNode = ({ node, search, onlyShowActivePath = false }) => {
   if (!node.url) throw new Error('passed node has no url')
