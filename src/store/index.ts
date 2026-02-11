@@ -1,5 +1,5 @@
 import { createStore, atom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
+import { atomWithStorage, createJSONStorage } from 'jotai/utils'
 import queryString from 'query-string'
 import { isEqual, merge } from 'es-toolkit'
 import isUuid from 'is-uuid'
@@ -19,6 +19,12 @@ import {
   simpleTypes as tpopfreiwkontrType,
   initial as initialTpopfreiwkontr,
 } from './DataFilter/tpopfreiwkontr.ts'
+
+// Some atoms with storage should not sync over all tabs
+// 1. Create the default storage
+const unsubscribedStorage = createJSONStorage(() => localStorage)
+// 2. Disable the subscribe method to turn off cross-tab sync
+unsubscribedStorage.subscribe = undefined
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
@@ -1562,9 +1568,14 @@ export const treeBeobZugeordnetGqlFilterForTreeAtom = atom((get) => {
   return filter
 })
 
-export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
-  getOnInit: true,
-})
+export const treeApFilterAtom = atomWithStorage(
+  'apFilter',
+  true,
+  unsubscribedStorage,
+  {
+    getOnInit: true,
+  },
+)
 
 export const treeMapFilterAtom = atom(undefined)
 export const treeSetMapFilterAtom = atom(
@@ -2013,39 +2024,43 @@ export const setTreeShowTpopIconAtom = atom(
 )
 
 // treeNodeLabelFilter - stores filter values for tree node labels
-export const treeNodeLabelFilterAtom = atomWithStorage('treeNodeLabelFilter', {
-  ap: null,
-  pop: null,
-  tpop: null,
-  tpopkontr: null,
-  tpopfeldkontr: null,
-  tpopfreiwkontr: null,
-  tpopkontrzaehl: null,
-  tpopmassn: null,
-  ziel: null,
-  erfkrit: null,
-  apber: null,
-  apberuebersicht: null,
-  idealbiotop: null,
-  assozart: null,
-  ekzaehleinheit: null,
-  ekfrequenz: null,
-  popber: null,
-  popmassnber: null,
-  tpopber: null,
-  tpopmassnber: null,
-  apart: null,
-  projekt: null,
-  beob: null,
-  beobprojekt: null,
-  adresse: null,
-  gemeinde: null,
-  user: null,
-  ekAbrechnungstypWerte: null,
-  tpopApberrelevantGrundWerte: null,
-  tpopkontrzaehlEinheitWerte: null,
-  doc: '',
-})
+export const treeNodeLabelFilterAtom = atomWithStorage(
+  'treeNodeLabelFilter',
+  {
+    ap: null,
+    pop: null,
+    tpop: null,
+    tpopkontr: null,
+    tpopfeldkontr: null,
+    tpopfreiwkontr: null,
+    tpopkontrzaehl: null,
+    tpopmassn: null,
+    ziel: null,
+    erfkrit: null,
+    apber: null,
+    apberuebersicht: null,
+    idealbiotop: null,
+    assozart: null,
+    ekzaehleinheit: null,
+    ekfrequenz: null,
+    popber: null,
+    popmassnber: null,
+    tpopber: null,
+    tpopmassnber: null,
+    apart: null,
+    projekt: null,
+    beob: null,
+    beobprojekt: null,
+    adresse: null,
+    gemeinde: null,
+    user: null,
+    ekAbrechnungstypWerte: null,
+    tpopApberrelevantGrundWerte: null,
+    tpopkontrzaehlEinheitWerte: null,
+    doc: '',
+  },
+  unsubscribedStorage,
+)
 
 export const treeSetNodeLabelFilterKeyAtom = atom(
   (get) => null,
