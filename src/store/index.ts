@@ -1809,9 +1809,16 @@ export const setDesktopViewAtom = atom(
       if (!isDesktopView) set(isDesktopViewAtom, true)
       return
     }
-    const isNowDesktopView = width >= constants.mobileViewMaxWidth
-    if (isNowDesktopView === isDesktopView) return
-    set(isDesktopViewAtom, isNowDesktopView)
+    // add hysteresis to avoid switching back and forth when resizing around the breakpoint
+    // tuned to common laptop widths so the mode stays stable near ~1000px
+    const hysteresisPx = 100
+    const minWidthForDesktop = constants.mobileViewMaxWidth + hysteresisPx
+    const maxWidthForMobile = constants.mobileViewMaxWidth - hysteresisPx
+    if (isDesktopView) {
+      if (width <= maxWidthForMobile) set(isDesktopViewAtom, false)
+      return
+    }
+    if (width >= minWidthForDesktop) set(isDesktopViewAtom, true)
   },
 )
 
