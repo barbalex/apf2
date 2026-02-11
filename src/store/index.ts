@@ -226,7 +226,7 @@ export const treeApGqlFilterAtom = atom((get) => {
     })
     if (conflictingFilterExists) {
       setApFilter = false
-      store.set(treeSetApFilterAtom, false)
+      store.set(treeApFilterAtom, false)
       // need timeout or notification will not appear
       setTimeout(() => {
         store.set(addNotificationAtom, {
@@ -317,7 +317,7 @@ export const treeApGqlFilterForTreeAtom = atom((get) => {
     })
     if (conflictingFilterExists) {
       setApFilter = false
-      store.set(treeSetApFilterAtom, false)
+      store.set(treeApFilterAtom, false)
       // need timeout or notification will not appear
       setTimeout(() => {
         store.set(addNotificationAtom, {
@@ -1565,12 +1565,6 @@ export const treeBeobZugeordnetGqlFilterForTreeAtom = atom((get) => {
 export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
   getOnInit: true,
 })
-export const treeSetApFilterAtom = atom(
-  (get) => null,
-  (get, set, val) => {
-    set(treeApFilterAtom, val)
-  },
-)
 
 export const treeMapFilterAtom = atom(undefined)
 export const treeSetMapFilterAtom = atom(
