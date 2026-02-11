@@ -56,6 +56,7 @@ zaehlungen AS(
     INNER JOIN apflora.tpop_history tpop_of_jahr ON 
       tpop_of_jahr.id = kontr.tpop_id
       AND tpop_of_jahr.year = $2
+      AND tpop_of_jahr.status IN(100, 200, 201)
     INNER JOIN apflora.tpop_history tpop ON 
       tpop.id = kontr.tpop_id
       AND tpop.year = kontr.jahr
@@ -76,7 +77,6 @@ zaehlungen AS(
     -- https://stackoverflow.com/a/46474204/712005
     AND kontr.apber_nicht_relevant IS NOT TRUE
     AND tpop.status IN(100, 200, 201)
-    AND tpop_of_jahr.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
     AND zaehlungen.anzahl IS NOT NULL
     AND zaehlungen.einheit = ze.code
