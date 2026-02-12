@@ -2599,7 +2599,11 @@ export const ekPlanShowEkCountAtom = atom(true)
 export const ekPlanShowMassnAtom = atom(true)
 
 // EkPlan aps
-export const ekPlanApsAtom = atomWithStorage('ekPlanAps', [])
+export const ekPlanApsAtom = atomWithStorage(
+  'ekPlanAps',
+  [],
+  unsubscribedStorage,
+)
 export const ekPlanApValuesAtom = atom((get) => {
   const aps = get(ekPlanApsAtom)
   return aps.map((a) => a.value)
