@@ -2,15 +2,13 @@
 CREATE OR REPLACE FUNCTION apflora.ap_ausw_pop_menge(apid uuid, jahr integer)
   RETURNS SETOF apflora.ausw_pop_menge
   AS $$
-DECLARE
-  -- avoid ambiguity with column names
-  p_jahr ALIAS FOR $2;
 BEGIN
   RETURN QUERY
   WITH massnahmen_anzahl_per_tpop_id_and_year AS(
     SELECT
       tpop.pop_id,
       mi.tpop_id,
+      mi.datum,
       mi.jahr,
       mi.zieleinheit_anzahl AS anzahl
     FROM apflora.tpopmassn mi
@@ -25,10 +23,10 @@ BEGIN
       AND tw.anpflanzung = TRUE
     WHERE
       mi.zieleinheit_anzahl IS NOT NULL
-      AND mi.jahr <= p_jahr
-      AND tpop.year <= p_jahr
-      AND pop.year <= p_jahr
-      AND tpop.status IN(200, 201)
+      AND mi.jahr <= $2
+      AND tpop.year <= $2
+      AND pop.year <= $2
+      AND tpop.status = 200
       AND tpop.apber_relevant = TRUE
       AND ap.id = $1
     ORDER BY
@@ -39,19 +37,22 @@ BEGIN
     SELECT
       massnahmen.tpop_id,
       massnahmen.jahr,
+      massnahmen.datum,
       sum(massnahmen.anzahl) AS sum
     FROM massnahmen_anzahl_per_tpop_id_and_year massnahmen
     GROUP BY
       massnahmen.tpop_id,
-      massnahmen.jahr
+      massnahmen.jahr,
+      massnahmen.datum
     ORDER BY
-      massnahmen.jahr DESC
+      massnahmen.datum DESC
   ),
   zaehlungen_per_tpop_id_and_year AS(
     SELECT
       tpop.pop_id,
       tpop.id AS tpop_id,
       kontr.jahr,
+      kontr.datum,
       zaehl.anzahl
     FROM apflora.tpopkontrzaehl zaehl
     INNER JOIN apflora.tpopkontr kontr ON kontr.id = zaehl.tpopkontr_id
@@ -64,11 +65,11 @@ BEGIN
       AND ze.code = zaehl.einheit
     WHERE
       zaehl.anzahl IS NOT NULL
-      AND kontr.jahr <= p_jahr
-      AND tpop.year <= p_jahr
-      AND pop.year <= p_jahr
+      AND kontr.jahr <= $2
+      AND tpop.year <= $2
+      AND pop.year <= $2
       AND kontr.apber_nicht_relevant IS NOT TRUE
-      AND tpop.status IN(100, 200, 201)
+      AND tpop.status IN(100, 200)
       AND tpop.apber_relevant = TRUE
       AND ap.id = $1
   ),
@@ -76,13 +77,15 @@ BEGIN
     SELECT
       zaehlungen.tpop_id,
       zaehlungen.jahr,
+      zaehlungen.datum,
       sum(zaehlungen.anzahl) AS sum
     FROM zaehlungen_per_tpop_id_and_year zaehlungen
     GROUP BY
       zaehlungen.tpop_id,
-      zaehlungen.jahr
+      zaehlungen.jahr,
+      zaehlungen.datum
     ORDER BY
-      zaehlungen.jahr DESC
+      zaehlungen.datum DESC
   ),
   tpop_latest_sums_separate AS(
     SELECT
@@ -99,33 +102,35 @@ BEGIN
     LEFT JOIN LATERAL (
       SELECT
         sum,
-        zaehlungen.jahr AS jahr
+        zaehlungen.jahr AS jahr,
+        zaehlungen.datum AS datum
       FROM zaehlungen_sum_per_tpop_id_and_year zaehlungen
       WHERE
         zaehlungen.tpop_id = tpop.id
         AND zaehlungen.jahr <= tpop.year
-      ORDER BY zaehlungen.jahr DESC
+      ORDER BY zaehlungen.datum DESC
       LIMIT 1
     ) AS zaehlungen ON true
     LEFT JOIN LATERAL (
       SELECT
-        sum,
-        massnahmen.jahr AS jahr
+        sum(massnahmen.sum) AS sum,
+        max(massnahmen.jahr) AS jahr
       FROM massnahmen_sum_per_tpop_id_and_year massnahmen
       WHERE
         massnahmen.tpop_id = tpop.id
         AND (
-          (COALESCE(zaehlungen.sum, 0) > 0 AND massnahmen.jahr = tpop.year)
-          OR (COALESCE(zaehlungen.sum, 0) <= 0 AND massnahmen.jahr <= tpop.year)
+          (zaehlungen.datum IS NOT NULL AND massnahmen.datum > zaehlungen.datum)
+          OR (
+            zaehlungen.datum IS NULL
+            AND EXTRACT(YEAR FROM massnahmen.datum) <= tpop.year
+          )
         )
-      ORDER BY massnahmen.jahr DESC
-      LIMIT 1
     ) AS massnahmen ON true
     WHERE
       ap.id = $1
       AND tpop.apber_relevant = TRUE
-      AND tpop.status IN(100, 200, 201)
-      AND tpop.year <= p_jahr
+      AND tpop.status IN(100, 200)
+      AND tpop.year <= $2
     ORDER BY
       tpop.id,
       tpop.year DESC
