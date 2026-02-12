@@ -53,8 +53,7 @@ zaehlungen AS(
     AND kontr.jahr <= $2
     AND tpop.year <= $2
     AND pop.year <= $2
-    -- adjusted 2026.02.12: we want false or null, but not true
-    AND kontr.apber_nicht_relevant IS NOT TRUE
+    AND (kontr.apber_nicht_relevant <> TRUE OR kontr.apber_nicht_relevant IS NULL)
     AND tpop.status IN(100, 200, 201)
     AND tpop.apber_relevant = TRUE
     AND zaehlungen.anzahl IS NOT NULL
@@ -92,33 +91,26 @@ letzte_anzahl_pro_jahr AS(
   SELECT
     pop.id as pop_id,
     pop.year as jahr,
-    CASE
-      -- adjusted 2026.02.12: erloschen should be 0
-      WHEN pop.status IN (101, 202) THEN 0
-      ELSE
-        COALESCE((
-          SELECT sum
-          FROM zaehlungen_summe_pro_jahr zspj
-          WHERE zspj.pop_id = pop.id
-            AND zspj.jahr <= pop.year
-          ORDER BY zspj.jahr DESC
-          LIMIT 1), 0
-        ) +
-        COALESCE((
-          SELECT sum
-          FROM massnahmen_summe_pro_jahr mspj
-          WHERE mspj.pop_id = pop.id
-            AND mspj.jahr <= pop.year
-          ORDER BY mspj.jahr DESC
-          LIMIT 1), 0
-        )
-    END AS anzahl
+    COALESCE((
+      SELECT sum
+      FROM zaehlungen_summe_pro_jahr zspj
+      WHERE zspj.pop_id = pop.id
+        AND zspj.jahr <= pop.year
+      ORDER BY zspj.jahr DESC
+      LIMIT 1), 0
+    ) + 
+    COALESCE((
+      SELECT sum
+      FROM massnahmen_summe_pro_jahr mspj
+      WHERE mspj.pop_id = pop.id
+        AND mspj.jahr <= pop.year
+      ORDER BY mspj.jahr DESC
+      LIMIT 1), 0
+    ) AS anzahl
   FROM
     apflora.pop_history pop
   WHERE
     pop.ap_id = $1
-    -- adjusted 2026.02.12: ensure erloschene pop are not listed
-    AND pop.status IN(100, 200, 201)
     -- ensure that there is at least one tpop with apber_relevant = true for this pop, otherwise we would include pops that are not relevant for the ap at all
     AND EXISTS (
       SELECT 1
