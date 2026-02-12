@@ -19,6 +19,7 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
   const navigate = store.get(navigateAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodesRaw = store.get(treeOpenNodesAtom)
+  const openNodes = openNodesRaw ?? []
 
   const variables = {
     id,
@@ -162,10 +163,10 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
           'Teil-Populationen',
         ],
         [
-          aNA[0],
-          aNA[1],
-          aNA[2],
-          aNA[3],
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+          activeNodeArray[3],
           'Populationen',
           popId,
           'Teil-Populationen',
