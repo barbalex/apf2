@@ -103,12 +103,20 @@ BEGIN
     SELECT
       tpop_id,
       jahr,
-      anzahl_zaehlungen + anzahl_massnahmen AS anzahl
+      -- choose the anzahl of the field (zaehlungen or massnahmen) with 
+      -- the higher (more recent) year
+      -- if both are equal, choose zaehlung
+      CASE
+        WHEN anzahl_massnahmen_year IS NULL THEN anzahl_zaehlungen
+        WHEN anzahl_zaehlungen_year IS NULL THEN anzahl_massnahmen
+        WHEN anzahl_zaehlungen_year >= anzahl_massnahmen_year THEN anzahl_zaehlungen
+        ELSE anzahl_massnahmen
+      END AS anzahl
     FROM tpop_latest_sums_separate
   )
 SELECT
   jahr,
-  json_object_agg(tpop_id, anzahl) AS VALUES
+  json_object_agg(tpop_id, anzahl) AS values
 FROM tpop_latest_sums
 GROUP BY
   jahr

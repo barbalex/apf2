@@ -2,6 +2,9 @@
 CREATE OR REPLACE FUNCTION apflora.ap_ausw_pop_menge(apid uuid, jahr integer)
   RETURNS SETOF apflora.ausw_pop_menge
   AS $$
+DECLARE
+  -- avoid ambiguity with column names
+  p_jahr ALIAS FOR $2;
 BEGIN
   RETURN QUERY
   WITH massnahmen_anzahl_per_tpop_id_and_year AS(
@@ -22,9 +25,9 @@ BEGIN
       AND tw.anpflanzung = TRUE
     WHERE
       mi.zieleinheit_anzahl IS NOT NULL
-      AND mi.jahr <= $2
-      AND tpop.year <= $2
-      AND pop.year <= $2
+      AND mi.jahr <= p_jahr
+      AND tpop.year <= p_jahr
+      AND pop.year <= p_jahr
       AND tpop.status IN(200, 201)
       AND tpop.apber_relevant = TRUE
       AND ap.id = $1
@@ -61,9 +64,9 @@ BEGIN
       AND ze.code = zaehl.einheit
     WHERE
       zaehl.anzahl IS NOT NULL
-      AND kontr.jahr <= $2
-      AND tpop.year <= $2
-      AND pop.year <= $2
+      AND kontr.jahr <= p_jahr
+      AND tpop.year <= p_jahr
+      AND pop.year <= p_jahr
       AND kontr.apber_nicht_relevant IS NOT TRUE
       AND tpop.status IN(100, 200, 201)
       AND tpop.apber_relevant = TRUE
@@ -94,7 +97,9 @@ BEGIN
     INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id AND pop.year = tpop.year
     INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id AND ap.year = pop.year
     LEFT JOIN LATERAL (
-      SELECT sum, jahr
+      SELECT
+        sum,
+        zaehlungen.jahr AS jahr
       FROM zaehlungen_sum_per_tpop_id_and_year zaehlungen
       WHERE
         zaehlungen.tpop_id = tpop.id
@@ -103,7 +108,9 @@ BEGIN
       LIMIT 1
     ) AS zaehlungen ON true
     LEFT JOIN LATERAL (
-      SELECT sum, jahr
+      SELECT
+        sum,
+        massnahmen.jahr AS jahr
       FROM massnahmen_sum_per_tpop_id_and_year massnahmen
       WHERE
         massnahmen.tpop_id = tpop.id
@@ -118,7 +125,7 @@ BEGIN
       ap.id = $1
       AND tpop.apber_relevant = TRUE
       AND tpop.status IN(100, 200, 201)
-      AND tpop.year <= $2
+      AND tpop.year <= p_jahr
     ORDER BY
       tpop.id,
       tpop.year DESC
@@ -128,7 +135,15 @@ BEGIN
       pop_id,
       tpop_id,
       tpop_latest_sums_separate.jahr,
-      anzahl_zaehlungen + anzahl_massnahmen AS anzahl
+      -- choose the anzahl of the field (zaehlungen or massnahmen) with 
+      -- the higher (more recent) year
+      -- if both are equal, choose zaehlung
+      CASE
+        WHEN anzahl_massnahmen_year IS NULL THEN anzahl_zaehlungen
+        WHEN anzahl_zaehlungen_year IS NULL THEN anzahl_massnahmen
+        WHEN anzahl_zaehlungen_year >= anzahl_massnahmen_year THEN anzahl_zaehlungen
+        ELSE anzahl_massnahmen
+      END AS anzahl
     FROM tpop_latest_sums_separate
   ),
   pop_latest_sums AS(
