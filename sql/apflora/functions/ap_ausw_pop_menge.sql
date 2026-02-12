@@ -140,15 +140,7 @@ BEGIN
       pop_id,
       tpop_id,
       tpop_latest_sums_separate.jahr,
-      -- choose the anzahl of the field (zaehlungen or massnahmen) with 
-      -- the higher (more recent) year
-      -- if both are equal, choose zaehlung
-      CASE
-        WHEN anzahl_massnahmen_year IS NULL THEN anzahl_zaehlungen
-        WHEN anzahl_zaehlungen_year IS NULL THEN anzahl_massnahmen
-        WHEN anzahl_zaehlungen_year >= anzahl_massnahmen_year THEN anzahl_zaehlungen
-        ELSE anzahl_massnahmen
-      END AS anzahl
+      anzahl_zaehlungen + anzahl_massnahmen AS anzahl
     FROM tpop_latest_sums_separate
   ),
   pop_latest_sums AS(
