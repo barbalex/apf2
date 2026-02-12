@@ -66,13 +66,12 @@ BEGIN
       tpop.id AS tpop_id,
       tpop.pop_id,
       tpop.year,
-      -- if status is in (100, 200, 201) and apber_relevant is true, lookback is true. else false
-      CASE 
-        WHEN tpop.status IN(100, 200, 201) AND tpop.apber_relevant = TRUE THEN TRUE
-        ELSE FALSE
-      END as lookback
+      TRUE as lookback
     FROM apflora.tpop_history tpop
-    WHERE tpop.pop_id = $1
+    WHERE 
+      tpop.pop_id = $1
+      AND tpop.apber_relevant = TRUE
+      AND tpop.status IN(100, 200, 201)
     ORDER BY
       tpop.id,
       tpop.year DESC
@@ -89,10 +88,7 @@ BEGIN
       FROM zaehlungen_sum_per_tpop_id_and_year
       WHERE
         tpop_id = tpop.tpop_id
-        AND (
-          (tpop.lookback AND jahr <= tpop.year)
-          OR (NOT tpop.lookback AND jahr = tpop.year)
-        )
+        AND jahr <= tpop.year
       ORDER BY jahr DESC
       LIMIT 1
     ) AS zaehlungen ON true
@@ -105,10 +101,7 @@ BEGIN
           (COALESCE(zaehlungen.sum, 0) > 0 AND jahr = tpop.year)
           OR (
             COALESCE(zaehlungen.sum, 0) <= 0
-            AND (
-              (tpop.lookback AND jahr <= tpop.year)
-              OR (NOT tpop.lookback AND jahr = tpop.year)
-            )
+            AND jahr <= tpop.year
           )
         )
       ORDER BY jahr DESC
