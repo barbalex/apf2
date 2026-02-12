@@ -1,6 +1,6 @@
 import { WMSTileLayer, Pane } from 'react-leaflet'
 
-// https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
+// was: https://wms.zh.ch/OGDOrthoZH?SERVICE=WMS&Request=GetCapabilities
 
 export const ZhOrthoAktuellIr = () => (
   <Pane
