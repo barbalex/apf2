@@ -87,12 +87,14 @@ BEGIN
       tpop.id AS tpop_id,
       tpop.year AS jahr,
       COALESCE(zaehlungen.sum, 0) AS anzahl_zaehlungen,
-      COALESCE(massnahmen.sum, 0) AS anzahl_massnahmen
+      COALESCE(massnahmen.sum, 0) AS anzahl_massnahmen,
+      zaehlungen.jahr AS anzahl_zaehlungen_year,
+      massnahmen.jahr AS anzahl_massnahmen_year
     FROM apflora.tpop_history tpop
     INNER JOIN apflora.pop_history pop ON pop.id = tpop.pop_id AND pop.year = tpop.year
     INNER JOIN apflora.ap_history ap ON ap.id = pop.ap_id AND ap.year = pop.year
     LEFT JOIN LATERAL (
-      SELECT sum
+      SELECT sum, jahr
       FROM zaehlungen_sum_per_tpop_id_and_year zaehlungen
       WHERE
         zaehlungen.tpop_id = tpop.id
@@ -101,7 +103,7 @@ BEGIN
       LIMIT 1
     ) AS zaehlungen ON true
     LEFT JOIN LATERAL (
-      SELECT sum
+      SELECT sum, jahr
       FROM massnahmen_sum_per_tpop_id_and_year massnahmen
       WHERE
         massnahmen.tpop_id = tpop.id
