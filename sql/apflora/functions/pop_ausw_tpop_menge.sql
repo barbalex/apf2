@@ -65,8 +65,7 @@ BEGIN
     SELECT
       tpop.id AS tpop_id,
       tpop.pop_id,
-      tpop.year,
-      TRUE as lookback
+      tpop.year
     FROM apflora.tpop_history tpop
     WHERE 
       tpop.pop_id = $1
@@ -99,15 +98,11 @@ BEGIN
         tpop_id = tpop.tpop_id
         AND (
           (COALESCE(zaehlungen.sum, 0) > 0 AND jahr = tpop.year)
-          OR (
-            COALESCE(zaehlungen.sum, 0) <= 0
-            AND jahr <= tpop.year
-          )
+          OR (COALESCE(zaehlungen.sum, 0) <= 0 AND jahr <= tpop.year)
         )
       ORDER BY jahr DESC
       LIMIT 1
     ) AS massnahmen ON true
-      -- we want all tpops listed here
     WHERE tpop.pop_id = $1
     ORDER BY
       tpop.tpop_id,
@@ -122,9 +117,8 @@ BEGIN
   )
 SELECT
   jahr,
-  json_object_agg(tpop_id, anzahl) AS
-VALUES
-  FROM tpop_latest_sums
+  json_object_agg(tpop_id, anzahl) AS VALUES
+FROM tpop_latest_sums
 GROUP BY
   jahr
 ORDER BY
