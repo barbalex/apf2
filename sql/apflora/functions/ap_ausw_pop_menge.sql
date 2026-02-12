@@ -111,6 +111,13 @@ letzte_anzahl_pro_jahr AS(
     apflora.pop_history pop
   WHERE
     pop.ap_id = $1
+    -- ensure that there is at least one tpop with apber_relevant = true for this pop, otherwise we would include pops that are not relevant for the ap at all
+    AND EXISTS (
+      SELECT 1
+      FROM apflora.tpop_history tpop
+      WHERE tpop.pop_id = pop.id
+        AND tpop.apber_relevant = TRUE
+    )
 )
 SELECT
   anz.jahr,
