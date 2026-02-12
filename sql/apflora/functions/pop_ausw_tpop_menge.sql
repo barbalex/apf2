@@ -61,32 +61,18 @@ BEGIN
     GROUP BY tpop_id, jahr
     ORDER BY jahr DESC
   ),
-  tpops_lookback as(
-    SELECT
-      tpop.id AS tpop_id,
-      tpop.pop_id,
-      tpop.year
-    FROM apflora.tpop_history tpop
-    WHERE 
-      tpop.pop_id = $1
-      AND tpop.apber_relevant = TRUE
-      AND tpop.status IN(100, 200, 201)
-    ORDER BY
-      tpop.id,
-      tpop.year DESC
-  ),
   tpop_latest_sums_separate AS(
     SELECT
-      tpop.tpop_id,
+      tpop.id AS tpop_id,
       tpop.year AS jahr,
       COALESCE(zaehlungen.sum, 0) AS anzahl_zaehlungen,
       COALESCE(massnahmen.sum, 0) AS anzahl_massnahmen
-    FROM tpops_lookback tpop
+    FROM apflora.tpop_history tpop
     LEFT JOIN LATERAL (
       SELECT sum
       FROM zaehlungen_sum_per_tpop_id_and_year
       WHERE
-        tpop_id = tpop.tpop_id
+        tpop_id = tpop.id
         AND jahr <= tpop.year
       ORDER BY jahr DESC
       LIMIT 1
@@ -95,7 +81,7 @@ BEGIN
       SELECT sum
       FROM massnahmen_sum_per_tpop_id_and_year
       WHERE
-        tpop_id = tpop.tpop_id
+        tpop_id = tpop.id
         AND (
           (COALESCE(zaehlungen.sum, 0) > 0 AND jahr = tpop.year)
           OR (COALESCE(zaehlungen.sum, 0) <= 0 AND jahr <= tpop.year)
@@ -103,9 +89,12 @@ BEGIN
       ORDER BY jahr DESC
       LIMIT 1
     ) AS massnahmen ON true
-    WHERE tpop.pop_id = $1
+    WHERE 
+      tpop.pop_id = $1
+      AND tpop.apber_relevant = TRUE
+      AND tpop.status IN(100, 200, 201)
     ORDER BY
-      tpop.tpop_id,
+      tpop.id,
       tpop.year DESC
   ),
   tpop_latest_sums AS(
