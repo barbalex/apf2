@@ -85,6 +85,7 @@ BEGIN
       zaehlungen.jahr,
       zaehlungen.datum
     ORDER BY
+      zaehlungen.jahr DESC,
       zaehlungen.datum DESC
   ),
   tpop_latest_sums_separate AS(
@@ -108,7 +109,7 @@ BEGIN
       WHERE
         zaehlungen.tpop_id = tpop.id
         AND zaehlungen.jahr <= tpop.year
-      ORDER BY zaehlungen.datum DESC
+      ORDER BY zaehlungen.jahr DESC, zaehlungen.datum DESC
       LIMIT 1
     ) AS zaehlungen ON true
     LEFT JOIN LATERAL (

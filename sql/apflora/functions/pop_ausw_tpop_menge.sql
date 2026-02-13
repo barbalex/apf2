@@ -59,7 +59,8 @@ BEGIN
     SELECT tpop_id, jahr, datum, sum(anzahl) AS sum
     FROM zaehlungen_per_tpop_id_and_year
     GROUP BY tpop_id, jahr, datum
-    ORDER BY datum DESC
+    -- some kontr have no datum, only year
+    ORDER BY jahr DESC, datum DESC
   ),
   tpop_latest_sums_separate AS(
     SELECT
@@ -74,7 +75,7 @@ BEGIN
       WHERE
         tpop_id = tpop.id
         AND jahr <= tpop.year
-      ORDER BY datum DESC
+      ORDER BY jahr DESC, datum DESC
       LIMIT 1
     ) AS zaehlungen ON true
     LEFT JOIN LATERAL (
