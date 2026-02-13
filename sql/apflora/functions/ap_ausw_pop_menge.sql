@@ -119,10 +119,14 @@ BEGIN
       WHERE
         massnahmen.tpop_id = tpop.id
         AND (
-          (zaehlungen.datum IS NOT NULL AND massnahmen.datum > zaehlungen.datum)
+          (
+            zaehlungen.datum IS NOT NULL 
+            AND massnahmen.datum > zaehlungen.datum
+            AND massnahmen.jahr <= tpop.year
+          )
           OR (
             zaehlungen.datum IS NULL
-            AND EXTRACT(YEAR FROM massnahmen.datum) <= tpop.year
+            AND massnahmen.jahr <= tpop.year
           )
         )
     ) AS massnahmen ON true

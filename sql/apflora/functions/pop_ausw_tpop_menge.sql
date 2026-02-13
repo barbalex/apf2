@@ -66,9 +66,7 @@ BEGIN
       tpop.id AS tpop_id,
       tpop.year AS jahr,
       COALESCE(zaehlungen.sum, 0) AS anzahl_zaehlungen,
-      COALESCE(massnahmen.sum, 0) AS anzahl_massnahmen,
-      zaehlungen.jahr AS anzahl_zaehlungen_year,
-      massnahmen.jahr AS anzahl_massnahmen_year
+      COALESCE(massnahmen.sum, 0) AS anzahl_massnahmen
     FROM apflora.tpop_history tpop
     LEFT JOIN LATERAL (
       SELECT sum, jahr, datum
@@ -87,10 +85,14 @@ BEGIN
       WHERE
         massnahmen.tpop_id = tpop.id
         AND (
-          (zaehlungen.datum IS NOT NULL AND massnahmen.datum > zaehlungen.datum)
+          (
+            zaehlungen.datum IS NOT NULL 
+            AND massnahmen.datum > zaehlungen.datum 
+            AND massnahmen.jahr <= tpop.year
+          )
           OR (
             zaehlungen.datum IS NULL
-            AND EXTRACT(YEAR FROM massnahmen.datum) <= tpop.year
+            AND massnahmen.jahr <= tpop.year
           )
         )
     ) AS massnahmen ON true
