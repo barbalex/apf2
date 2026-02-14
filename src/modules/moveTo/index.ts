@@ -82,6 +82,7 @@ export const moveTo = async ({ id: newParentId }) => {
       })
       break
     case 'pop':
+      // TODO: histories should also get the new apId
       await apolloClient.mutate({
         mutation: updatePopById,
         variables: { id, apId: newParentId },
