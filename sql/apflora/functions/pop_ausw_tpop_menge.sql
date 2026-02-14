@@ -5,37 +5,62 @@ CREATE OR REPLACE FUNCTION apflora.pop_ausw_tpop_menge(popid uuid)
 BEGIN
   RETURN QUERY 
   WITH massnahmen_anzahl_per_tpop_id_and_year AS(
-    SELECT mi.tpop_id, mi.jahr, mi.zieleinheit_anzahl as anzahl
-    FROM apflora.tpopmassn mi
-    INNER JOIN apflora.tpop_history tpop ON tpop.id = mi.tpop_id and tpop.year = mi.jahr
-    INNER JOIN apflora.pop ON pop.id = tpop.pop_id
+    SELECT 
+      m.tpop_id, 
+      m.datum, 
+      m.jahr, 
+      m.zieleinheit_anzahl as anzahl
+    FROM apflora.tpopmassn m
+    INNER JOIN apflora.tpop_history th ON th.id = m.tpop_id and th.year = m.jahr
+    -- enforce tpop with same id exists (about 1000 tpop_history entries have no corresponding tpop)
+    INNER JOIN apflora.tpop tpop ON tpop.id = th.id
+    INNER JOIN apflora.pop pop ON pop.id = tpop.pop_id
     INNER JOIN apflora.ap ON ap.id = pop.ap_id
     INNER JOIN apflora.ekzaehleinheit ekze ON ekze.ap_id = ap.id
       AND ekze.zielrelevant = TRUE
     INNER JOIN apflora.tpopkontrzaehl_einheit_werte ze ON 
       ze.id = ekze.zaehleinheit_id 
-      AND ze.code = mi.zieleinheit_einheit
-    INNER JOIN apflora.tpopmassn_typ_werte tw ON 
-      tw.code = mi.typ
-      AND tw.anpflanzung = TRUE
+      AND ze.code = m.zieleinheit_einheit
+    INNER JOIN apflora.tpopmassn_typ_werte mtw ON 
+      mtw.code = m.typ
+      AND mtw.anpflanzung = TRUE
     WHERE 
-      mi.zieleinheit_anzahl IS NOT NULL
-      AND tpop.status IN(200, 201)
-      AND tpop.apber_relevant = TRUE
+      m.zieleinheit_anzahl IS NOT NULL
+      AND th.status = 200
+      AND th.apber_relevant = TRUE
       AND tpop.pop_id = $1
-    ORDER BY mi.jahr DESC
+    ORDER BY
+      m.tpop_id,
+      m.jahr DESC, 
+      m.datum DESC
   ),
   massnahmen_sum_per_tpop_id_and_year AS(
-    SELECT tpop_id, jahr, sum(anzahl) AS sum
+    SELECT 
+      tpop_id, 
+      jahr, 
+      datum, 
+      sum(anzahl) AS sum
     FROM massnahmen_anzahl_per_tpop_id_and_year
-    GROUP BY tpop_id, jahr
-    ORDER BY jahr DESC
+    GROUP BY 
+      tpop_id, 
+      jahr, 
+      datum
+    -- some have no datum, only year
+    ORDER BY 
+      jahr DESC, 
+      datum DESC
   ),
   zaehlungen_per_tpop_id_and_year AS(
-    SELECT tpop.id AS tpop_id, jahr, anzahl
+    SELECT 
+      tpop.id AS tpop_id, 
+      kontr.jahr, 
+      kontr.datum, 
+      zaehl.anzahl
     FROM apflora.tpopkontrzaehl zaehl
     INNER JOIN apflora.tpopkontr kontr ON kontr.id = zaehl.tpopkontr_id
-    INNER JOIN apflora.tpop_history tpop ON tpop.id = kontr.tpop_id AND tpop.year = kontr.jahr
+    INNER JOIN apflora.tpop_history th ON th.id = kontr.tpop_id AND th.year = kontr.jahr
+    -- enforce tpop with same id exists (about 1000 tpop_history entries have no corresponding tpop)
+    INNER JOIN apflora.tpop tpop ON tpop.id = th.id
     INNER JOIN apflora.pop ON pop.id = tpop.pop_id
     INNER JOIN apflora.ap ON ap.id = pop.ap_id
     INNER JOIN apflora.ekzaehleinheit ekze ON 
@@ -51,51 +76,70 @@ BEGIN
       -- we want false or null, but not true
       -- https://stackoverflow.com/a/46474204/712005
       AND kontr.apber_nicht_relevant IS NOT TRUE
-      AND tpop.status IN(100, 200, 201)
-      AND tpop.apber_relevant = TRUE
+      AND th.status IN(100, 200)
+      AND th.apber_relevant = TRUE
       AND tpop.pop_id = $1
   ),
   zaehlungen_sum_per_tpop_id_and_year AS(
-    SELECT tpop_id, jahr, sum(anzahl) AS sum
+    SELECT 
+      tpop_id, 
+      jahr, 
+      datum, 
+      sum(anzahl) AS sum
     FROM zaehlungen_per_tpop_id_and_year
-    GROUP BY tpop_id, jahr
-    ORDER BY jahr DESC
+    GROUP BY 
+      tpop_id, 
+      jahr, 
+      datum
+    -- some kontr have no datum, only year
+    ORDER BY 
+      jahr DESC, 
+      datum DESC
   ),
   tpop_latest_sums_separate AS(
     SELECT
-      tpop.id AS tpop_id,
-      tpop.year AS jahr,
+      th.id AS tpop_id,
+      th.year AS jahr,
       COALESCE(zaehlungen.sum, 0) AS anzahl_zaehlungen,
       COALESCE(massnahmen.sum, 0) AS anzahl_massnahmen
-    FROM apflora.tpop_history tpop
+    FROM apflora.tpop_history th
+    -- enforce tpop with same id exists (about 1000 tpop_history entries have no corresponding tpop)
+    INNER JOIN apflora.tpop tpop ON tpop.id = th.id
     LEFT JOIN LATERAL (
-      SELECT sum
+      SELECT sum, jahr, datum
       FROM zaehlungen_sum_per_tpop_id_and_year
       WHERE
-        tpop_id = tpop.id
-        AND jahr <= tpop.year
-      ORDER BY jahr DESC
+        tpop_id = th.id
+        AND jahr <= th.year
+      ORDER BY jahr DESC, datum DESC
       LIMIT 1
     ) AS zaehlungen ON true
     LEFT JOIN LATERAL (
-      SELECT sum
-      FROM massnahmen_sum_per_tpop_id_and_year
+      SELECT
+        sum(massnahmen.sum) AS sum,
+        max(massnahmen.jahr) AS jahr
+      FROM massnahmen_sum_per_tpop_id_and_year massnahmen
       WHERE
-        tpop_id = tpop.id
+        massnahmen.tpop_id = th.id
         AND (
-          (COALESCE(zaehlungen.sum, 0) > 0 AND jahr = tpop.year)
-          OR (COALESCE(zaehlungen.sum, 0) <= 0 AND jahr <= tpop.year)
+          (
+            zaehlungen.datum IS NOT NULL 
+            AND massnahmen.datum > zaehlungen.datum 
+            AND massnahmen.jahr <= th.year
+          )
+          OR (
+            zaehlungen.datum IS NULL
+            AND massnahmen.jahr <= th.year
+          )
         )
-      ORDER BY jahr DESC
-      LIMIT 1
     ) AS massnahmen ON true
     WHERE 
       tpop.pop_id = $1
-      AND tpop.apber_relevant = TRUE
-      AND tpop.status IN(100, 200, 201)
+      AND th.apber_relevant = TRUE
+      AND th.status IN(100, 200)
     ORDER BY
-      tpop.id,
-      tpop.year DESC
+      th.id,
+      th.year DESC
   ),
   tpop_latest_sums AS(
     SELECT
@@ -106,7 +150,7 @@ BEGIN
   )
 SELECT
   jahr,
-  json_object_agg(tpop_id, anzahl) AS VALUES
+  json_object_agg(tpop_id, anzahl) AS values
 FROM tpop_latest_sums
 GROUP BY
   jahr
