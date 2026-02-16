@@ -171,6 +171,7 @@ export const DateField = ({
               onClick={() => setIsPickerOpen(!isPickerOpen)}
               edge="end"
               size="small"
+              title="Kalender öffnen"
             >
               <MdCalendarToday />
             </IconButton>
