@@ -5,6 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import Input from '@mui/material/Input'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
+import Tooltip from '@mui/material/Tooltip'
 import { MdCalendarToday } from 'react-icons/md'
 import { DateTime } from 'luxon'
 import DatePicker from 'react-datepicker'
@@ -167,14 +168,15 @@ export const DateField = ({
         placeholder="dd.mm.yyyy"
         endAdornment={
           <InputAdornment position="end">
-            <IconButton
-              onClick={() => setIsPickerOpen(!isPickerOpen)}
-              edge="end"
-              size="small"
-              title="Kalender öffnen"
-            >
-              <MdCalendarToday />
-            </IconButton>
+            <Tooltip title="Kalender öffnen">
+              <IconButton
+                onClick={() => setIsPickerOpen(!isPickerOpen)}
+                edge="end"
+                size="small"
+              >
+                <MdCalendarToday />
+              </IconButton>
+            </Tooltip>
           </InputAdornment>
         }
       />
