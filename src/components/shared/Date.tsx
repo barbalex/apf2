@@ -38,6 +38,17 @@ export const DateField = ({
     }
   }, [valuePassed])
 
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isPickerOpen) {
+        setIsPickerOpen(false)
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [isPickerOpen])
+
   const saveDate = (newValue) => {
     setStateValue(newValue)
     saveToDb({
