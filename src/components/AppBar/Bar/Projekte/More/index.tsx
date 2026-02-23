@@ -138,7 +138,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von apflora.ch
         </MenuItem>
-        <div className={styles.version}>Version: 1.124.79 vom 16.2.2026</div>
+        <div className={styles.version}>Version: 1.124.80 vom 23.2.2026</div>
       </Menu>
     </Tooltip>
   )
