@@ -1,7 +1,7 @@
 // swisstopo wmts: https://wmts10.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
 import { useState, useRef } from 'react'
 import { useAtomValue } from 'jotai'
-import { MapContainer, ScaleControl, ZoomControl, Pane } from 'react-leaflet'
+import { MapContainer, ScaleControl, ZoomControl } from 'react-leaflet'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
@@ -9,6 +9,7 @@ import { sortBy } from 'es-toolkit'
 import { useParams } from 'react-router'
 
 import { MapResizer } from './MapResizer.tsx'
+import { SafePane } from './SafePane.tsx'
 import { Control } from './Control.tsx'
 import { OsmColor } from './layers/OsmColor.tsx'
 import { OsmBw } from './layers/OsmBw.tsx'
@@ -236,14 +237,14 @@ export const Karte = ({ mapContainerRef }) => {
               if (!OverlayComponent) return null
 
               return (
-                <Pane
+                <SafePane
                   key={`${overlayName}/${index}`}
                   className={overlayName}
                   name={overlayName}
                   style={{ zIndex: 200 + index }}
                 >
                   <OverlayComponent />
-                </Pane>
+                </SafePane>
               )
             })
             .reverse()}
