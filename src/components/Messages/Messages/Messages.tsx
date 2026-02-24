@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
@@ -38,7 +38,7 @@ export const Messages = ({ unreadMessages }) => {
             key={m.id}
             style={{ paddingBottom: paddBottom ? 24 : 7 }}
           >
-            <Linkify properties={{ target: '_blank' }}>
+            <Linkify options={{ target: '_blank' }}>
               <div className={styles.message}>{`${date}: ${m.message}`}</div>
             </Linkify>
             <Button

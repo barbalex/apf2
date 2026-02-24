@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
 import { DateTime } from 'luxon'
 
 import { query } from './query.ts'
@@ -55,9 +55,7 @@ export const Component = () => {
               >
                 <div className={styles.date}>{date}</div>
                 <div>
-                  <Linkify properties={{ target: '_blank' }}>
-                    {m.message}
-                  </Linkify>
+                  <Linkify options={{ target: '_blank' }}>{m.message}</Linkify>
                 </div>
               </div>
             )
