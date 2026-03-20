@@ -27,7 +27,7 @@ import {
   store,
   apolloClientAtom,
   tsQueryClientAtom,
-} from '../store/index.js'
+} from '../store/index.ts'
 
 interface NodeQueryConfig {
   query: any

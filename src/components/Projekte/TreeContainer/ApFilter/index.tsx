@@ -2,7 +2,7 @@ import Switch from '@mui/material/Switch'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom, useAtomValue, useAtom } from 'jotai'
 
 import { apById } from './apById.ts'
 import { Label } from '../../../shared/Label.tsx'
@@ -12,7 +12,6 @@ import {
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
   treeApFilterAtom,
-  treeSetApFilterAtom,
 } from '../../../../store/index.ts'
 
 import styles from './index.module.css'
@@ -22,8 +21,7 @@ export const ApFilter = ({ color }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
 
-  const apFilter = useAtomValue(treeApFilterAtom)
-  const setApFilter = useSetAtom(treeSetApFilterAtom)
+  const [apFilter, setApFilter] = useAtom(treeApFilterAtom)
   const activeNodeArray = useAtomValue(treeActiveNodeArrayAtom)
   const openNodes = useAtomValue(treeOpenNodesAtom)
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
@@ -81,11 +79,7 @@ export const ApFilter = ({ color }) => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <Label
-          label="nur AP"
-          color={color}
-          htmlFor="ap-filter"
-        />
+        <Label label="nur AP" color={color} htmlFor="ap-filter" />
         <Switch
           data-id="ap-filter"
           id="ap-filter"

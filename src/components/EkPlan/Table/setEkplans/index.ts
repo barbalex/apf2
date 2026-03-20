@@ -1,12 +1,12 @@
-import { queryEkplans } from './queryEkplans.js'
-import { queryEkfrequenz } from './queryEkfrequenz.js'
-import { mutationDeleteEkplan } from './mutationDeleteEkplan.js'
-import { mutationCreateEkplan } from './mutationCreateEkplan.js'
+import { queryEkplans } from './queryEkplans.ts'
+import { queryEkfrequenz } from './queryEkfrequenz.ts'
+import { mutationDeleteEkplan } from './mutationDeleteEkplan.ts'
+import { mutationCreateEkplan } from './mutationCreateEkplan.ts'
 import {
   store,
   apolloClientAtom,
   addNotificationAtom,
-} from '../../../../store/index.js'
+} from '../../../../store/index.ts'
 
 const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)

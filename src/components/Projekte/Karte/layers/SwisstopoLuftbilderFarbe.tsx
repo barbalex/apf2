@@ -1,6 +1,9 @@
-import { TileLayer, Pane } from 'react-leaflet'
+import { Pane, WMSTileLayer } from 'react-leaflet'
 
-// https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
+// was: https://wmts.geo.admin.ch/EPSG/3857/1.0.0/WMTSCapabilities.xml
+// Fabio, 2026.02.12:
+// URL: https://wms.geo.admin.ch/
+// Quelle: crs=epsg:2056&dpiMode=7&format=image/png&layers=ch.swisstopo.swissimage&styles&url=https://wms.geo.admin.ch/
 
 export const SwisstopoLuftbilderFarbe = () => (
   <Pane
@@ -8,13 +11,17 @@ export const SwisstopoLuftbilderFarbe = () => (
     name="SwisstopoLuftbilderFarbe"
     style={{ zIndex: 100 }}
   >
-    <TileLayer
-      // url="//wmts.geo.admin.ch/1.0.0/ch.swisstopo.lubis-luftbilder_farbe/default/current/3857/{z}/{x}/{y}.jpeg" // did not work
-      url="//wmts.geo.admin.ch/1.0.0/ch.swisstopo.swissimage/default/current/3857/{z}/{x}/{y}.jpeg"
-      attribution='&copy; <a href="//swisstopo.ch">Swisstopo</a>'
-      maxNativeZoom={19}
+    <WMSTileLayer
+      url="https://wms.geo.admin.ch/"
+      layers="ch.swisstopo.swissimage"
+      format="image/png"
+      maxNativeZoom={23}
       minZoom={0}
       maxZoom={23}
+      // eventHandlers={{
+      //   tileerror: onTileErrorDebounced,
+      // }}
+      dpiMode={7}
     />
   </Pane>
 )

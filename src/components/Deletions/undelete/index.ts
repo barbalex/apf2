@@ -8,7 +8,7 @@ import {
   deletedDatasetsAtom,
   apolloClientAtom,
   setShowDeletionsAtom,
-} from '../../../store/index.js'
+} from '../../../store/index.ts'
 
 const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)

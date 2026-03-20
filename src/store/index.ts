@@ -1,5 +1,5 @@
 import { createStore, atom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
+import { atomWithStorage, createJSONStorage } from 'jotai/utils'
 import queryString from 'query-string'
 import { isEqual, merge } from 'es-toolkit'
 import isUuid from 'is-uuid'
@@ -19,6 +19,12 @@ import {
   simpleTypes as tpopfreiwkontrType,
   initial as initialTpopfreiwkontr,
 } from './DataFilter/tpopfreiwkontr.ts'
+
+// Some atoms with storage should not sync over all tabs
+// 1. Create the default storage
+const unsubscribedStorage = createJSONStorage(() => localStorage)
+// 2. Disable the subscribe method to turn off cross-tab sync
+unsubscribedStorage.subscribe = undefined
 
 function atomWithToggleAndStorage(key, initialValue, storage) {
   const anAtom = atomWithStorage(key, initialValue, storage)
@@ -40,8 +46,6 @@ export const treeOpenNodesAtom = atom([])
 export const treeSetOpenNodesAtom = atom(
   (get) => null,
   (get, set, val) => {
-    // val should always be created from a snapshot of openNodes
-    // to ensure not mutating openNodes!!!
     // need set to ensure contained arrays are unique
     const uniqueSet = new Set(val)
     set(treeOpenNodesAtom, Array.from(uniqueSet))
@@ -226,7 +230,7 @@ export const treeApGqlFilterAtom = atom((get) => {
     })
     if (conflictingFilterExists) {
       setApFilter = false
-      store.set(treeSetApFilterAtom, false)
+      store.set(treeApFilterAtom, false)
       // need timeout or notification will not appear
       setTimeout(() => {
         store.set(addNotificationAtom, {
@@ -279,9 +283,8 @@ export const treeApGqlFilterAtom = atom((get) => {
   )
 
   const apGqlFilter = {
-    all:
-      Object.keys(singleFilterByHierarchy).length ?
-        singleFilterByHierarchy
+    all: Object.keys(singleFilterByHierarchy).length
+      ? singleFilterByHierarchy
       : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
@@ -318,7 +321,7 @@ export const treeApGqlFilterForTreeAtom = atom((get) => {
     })
     if (conflictingFilterExists) {
       setApFilter = false
-      store.set(treeSetApFilterAtom, false)
+      store.set(treeApFilterAtom, false)
       // need timeout or notification will not appear
       setTimeout(() => {
         store.set(addNotificationAtom, {
@@ -461,8 +464,9 @@ export const treePopGqlFilterAtom = atom((get) => {
   )
 
   const popGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -549,8 +553,9 @@ export const treeTpopGqlFilterAtom = atom((get) => {
   const popGqlFilter = get(treePopGqlFilterAtom)
 
   // 1. prepare hierarchy filter
-  const apHiearchyFilter =
-    apId ? { popByPopId: { apId: { equalTo: apId } } } : {}
+  const apHiearchyFilter = apId
+    ? { popByPopId: { apId: { equalTo: apId } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
   const singleFilterByParentFiltersForAll = {
@@ -619,8 +624,9 @@ export const treeTpopGqlFilterAtom = atom((get) => {
   )
 
   const tpopGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -695,8 +701,9 @@ export const treeTpopmassnGqlFilterAtom = atom((get) => {
   const tpopGqlFilter = get(treeTpopGqlFilterAtom)
 
   // 1. prepare hierarchy filter
-  const apHiearchyFilter =
-    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+  const apHiearchyFilter = apId
+    ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
   const singleFilterByParentFiltersForAll = {
@@ -796,8 +803,9 @@ export const treeTpopmassnGqlFilterAtom = atom((get) => {
   )
 
   const tpopmassnGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1005,8 +1013,9 @@ export const treeEkGqlFilterAtom = atom((get) => {
 
   // 1. prepare hierarchy filter
   const apId = get(treeApIdInActiveNodeArrayAtom)
-  const apHiearchyFilter =
-    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+  const apHiearchyFilter = apId
+    ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(
     merge(
@@ -1032,8 +1041,9 @@ export const treeEkGqlFilterAtom = atom((get) => {
   }
 
   // 2. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
+  let filterArrayInStore = dataFilter.tpopfeldkontr
+    ? [...dataFilter.tpopfeldkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1098,8 +1108,9 @@ export const treeEkGqlFilterAtom = atom((get) => {
   )
 
   const ekGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1112,8 +1123,9 @@ export const treeEkGqlFilterForTreeAtom = atom((get) => {
   const dataFilter = get(treeDataFilterAtom)
 
   // 1. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfeldkontr ? [...dataFilter.tpopfeldkontr] : []
+  let filterArrayInStore = dataFilter.tpopfeldkontr
+    ? [...dataFilter.tpopfeldkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1186,8 +1198,9 @@ export const treeEkfGqlFilterAtom = atom((get) => {
 
   // 1. prepare hierarchy filter
   const apId = get(treeApIdInActiveNodeArrayAtom)
-  const apHiearchyFilter =
-    apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+  const apHiearchyFilter = apId
+    ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+    : {}
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(
     merge(
@@ -1208,8 +1221,9 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   }
 
   // 2. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
+  let filterArrayInStore = dataFilter.tpopfreiwkontr
+    ? [...dataFilter.tpopfreiwkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1273,8 +1287,9 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   )
 
   const ekfGqlFilter = {
-    all:
-      Object.keys(singleFilterForAll).length ? singleFilterForAll : { or: [] },
+    all: Object.keys(singleFilterForAll).length
+      ? singleFilterForAll
+      : { or: [] },
     filtered: { or: filterArrayWithoutEmptyObjects },
   }
 
@@ -1287,8 +1302,9 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
   const dataFilter = get(treeDataFilterAtom)
 
   // 1. prepare data filter
-  let filterArrayInStore =
-    dataFilter.tpopfreiwkontr ? [...dataFilter.tpopfreiwkontr] : []
+  let filterArrayInStore = dataFilter.tpopfreiwkontr
+    ? [...dataFilter.tpopfreiwkontr]
+    : []
   if (filterArrayInStore.length > 1) {
     // check if last is empty
     // empty last is just temporary because user created new "oder" and has not yet input criteria
@@ -1379,9 +1395,8 @@ export const treeBeobGqlFilterAtom = (
     // need list of all open apIds
     const apId = get(treeApIdInActiveNodeArrayAtom)
     const openNodes = get(treeOpenNodesAtom)
-    const openApIds =
-      apId ?
-        [apId]
+    const openApIds = apId
+      ? [apId]
       : [
           ...new Set(
             openNodes
@@ -1408,8 +1423,9 @@ export const treeBeobGqlFilterAtom = (
       },
     }
 
-    const apHiearchyFilter =
-      apId ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } } : {}
+    const apHiearchyFilter = apId
+      ? { tpopByTpopId: { popByPopId: { apId: { equalTo: apId } } } }
+      : {}
     const projHiearchyFilter = {}
     const singleFilterByHierarchy = merge(apHiearchyFilter, projHiearchyFilter)
     const typeFilter = {
@@ -1430,29 +1446,27 @@ export const treeBeobGqlFilterAtom = (
       tpopByTpopId: tpopGqlFilter.all,
     }
     const singleFilterForAll =
-      type === 'zugeordnet' ?
-        merge(
-          merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
-          singleFilterByParentFiltersForAll,
-        )
-      : merge(typeFilter, apFilter)
+      type === 'zugeordnet'
+        ? merge(
+            merge(merge(typeFilter, apFilter), singleFilterByHierarchy),
+            singleFilterByParentFiltersForAll,
+          )
+        : merge(typeFilter, apFilter)
     const singleFilterByParentFiltersForFiltered = {
       tpopByTpopId: tpopGqlFilter.filtered,
     }
 
     // node label filter
-    const nodeLabelFilterObj =
-      nodeLabelFilter.beob ?
-        {
+    const nodeLabelFilterObj = nodeLabelFilter.beob
+      ? {
           label: {
             includesInsensitive: nodeLabelFilter.beob,
           },
         }
       : {}
     // mapFilter
-    const mapFilterObj =
-      mapFilter ?
-        {
+    const mapFilterObj = mapFilter
+      ? {
           geomPoint: {
             coveredBy: mapFilter,
           },
@@ -1467,9 +1481,8 @@ export const treeBeobGqlFilterAtom = (
     singleFilter = merge(singleFilter, mapFilterObj)
 
     const beobGqlFilter = {
-      all:
-        Object.keys(singleFilterForAll).length ?
-          singleFilterForAll
+      all: Object.keys(singleFilterForAll).length
+        ? singleFilterForAll
         : { or: [] },
       filtered: singleFilter,
     }
@@ -1553,23 +1566,16 @@ export const treeBeobZugeordnetGqlFilterForTreeAtom = atom((get) => {
   return filter
 })
 
-export const treeApFilterAtom = atomWithStorage('apFilter', true, undefined, {
-  getOnInit: true,
-})
-export const treeSetApFilterAtom = atom(
-  (get) => null,
-  (get, set, val) => {
-    set(treeApFilterAtom, val)
+export const treeApFilterAtom = atomWithStorage(
+  'apFilter',
+  true,
+  unsubscribedStorage,
+  {
+    getOnInit: true,
   },
 )
 
 export const treeMapFilterAtom = atom(undefined)
-export const treeSetMapFilterAtom = atom(
-  (get) => null,
-  (get, set, val) => {
-    set(treeMapFilterAtom, val)
-  },
-)
 export const treeEmptyMapFilterAtom = atom(null, (get, set) => {
   set(treeMapFilterAtom, undefined)
 })
@@ -1788,6 +1794,7 @@ export const isDesktopViewAtom = atomWithStorage('isDesktopView', false)
 export const setDesktopViewAtom = atom(
   (get) => get(isDesktopViewAtom),
   (get, set, width) => {
+    if (typeof width !== 'number') return
     const isDesktopView = get(isDesktopViewAtom)
     const mobileEnforced = get(enforceMobileNavigationAtom)
     const desktopEnforced = get(enforceDesktopNavigationAtom)
@@ -1799,9 +1806,16 @@ export const setDesktopViewAtom = atom(
       if (!isDesktopView) set(isDesktopViewAtom, true)
       return
     }
-    const isNowDesktopView = width >= constants.mobileViewMaxWidth
-    if (isNowDesktopView === isDesktopView) return
-    set(isDesktopViewAtom, isNowDesktopView)
+    // add hysteresis to avoid switching back and forth when resizing around the breakpoint
+    // tuned to common laptop widths so the mode stays stable near ~1000px
+    const hysteresisPx = 100
+    const minWidthForDesktop = constants.mobileViewMaxWidth + hysteresisPx
+    const maxWidthForMobile = constants.mobileViewMaxWidth - hysteresisPx
+    if (isDesktopView) {
+      if (width <= maxWidthForMobile) set(isDesktopViewAtom, false)
+      return
+    }
+    if (width >= minWidthForDesktop) set(isDesktopViewAtom, true)
   },
 )
 
@@ -2002,39 +2016,43 @@ export const setTreeShowTpopIconAtom = atom(
 )
 
 // treeNodeLabelFilter - stores filter values for tree node labels
-export const treeNodeLabelFilterAtom = atomWithStorage('treeNodeLabelFilter', {
-  ap: null,
-  pop: null,
-  tpop: null,
-  tpopkontr: null,
-  tpopfeldkontr: null,
-  tpopfreiwkontr: null,
-  tpopkontrzaehl: null,
-  tpopmassn: null,
-  ziel: null,
-  erfkrit: null,
-  apber: null,
-  apberuebersicht: null,
-  idealbiotop: null,
-  assozart: null,
-  ekzaehleinheit: null,
-  ekfrequenz: null,
-  popber: null,
-  popmassnber: null,
-  tpopber: null,
-  tpopmassnber: null,
-  apart: null,
-  projekt: null,
-  beob: null,
-  beobprojekt: null,
-  adresse: null,
-  gemeinde: null,
-  user: null,
-  ekAbrechnungstypWerte: null,
-  tpopApberrelevantGrundWerte: null,
-  tpopkontrzaehlEinheitWerte: null,
-  doc: '',
-})
+export const treeNodeLabelFilterAtom = atomWithStorage(
+  'treeNodeLabelFilter',
+  {
+    ap: null,
+    pop: null,
+    tpop: null,
+    tpopkontr: null,
+    tpopfeldkontr: null,
+    tpopfreiwkontr: null,
+    tpopkontrzaehl: null,
+    tpopmassn: null,
+    ziel: null,
+    erfkrit: null,
+    apber: null,
+    apberuebersicht: null,
+    idealbiotop: null,
+    assozart: null,
+    ekzaehleinheit: null,
+    ekfrequenz: null,
+    popber: null,
+    popmassnber: null,
+    tpopber: null,
+    tpopmassnber: null,
+    apart: null,
+    projekt: null,
+    beob: null,
+    beobprojekt: null,
+    adresse: null,
+    gemeinde: null,
+    user: null,
+    ekAbrechnungstypWerte: null,
+    tpopApberrelevantGrundWerte: null,
+    tpopkontrzaehlEinheitWerte: null,
+    doc: '',
+  },
+  unsubscribedStorage,
+)
 
 export const treeSetNodeLabelFilterKeyAtom = atom(
   (get) => null,
@@ -2580,24 +2598,12 @@ export const ekPlanShowCountAtom = atom(true)
 export const ekPlanShowEkCountAtom = atom(true)
 export const ekPlanShowMassnAtom = atom(true)
 
-export const ekPlanSetShowEkAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowEkAtom, val)
-})
-export const ekPlanSetShowEkfAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowEkfAtom, val)
-})
-export const ekPlanSetShowCountAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowCountAtom, val)
-})
-export const ekPlanSetShowEkCountAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowEkCountAtom, val)
-})
-export const ekPlanSetShowMassnAtom = atom(null, (get, set, val) => {
-  set(ekPlanShowMassnAtom, val)
-})
-
 // EkPlan aps
-export const ekPlanApsAtom = atomWithStorage('ekPlanAps', [])
+export const ekPlanApsAtom = atomWithStorage(
+  'ekPlanAps',
+  [],
+  unsubscribedStorage,
+)
 export const ekPlanApValuesAtom = atom((get) => {
   const aps = get(ekPlanApsAtom)
   return aps.map((a) => a.value)
@@ -2624,9 +2630,6 @@ const defaultFields = [
   'ekfrequenzAbweichend',
 ]
 export const ekPlanFieldsAtom = atom(defaultFields)
-export const ekPlanSetFieldsAtom = atom(null, (get, set, fields) => {
-  set(ekPlanFieldsAtom, fields)
-})
 export const ekPlanToggleFieldAtom = atom(null, (get, set, field) => {
   const current = get(ekPlanFieldsAtom)
   if (current.includes(field)) {
@@ -2654,9 +2657,6 @@ export const ekPlanRemoveFieldAtom = atom(null, (get, set, field) => {
 
 // EkPlan hovered
 export const ekPlanHoveredAtom = atom({ year: null, tpopId: null })
-export const ekPlanSetHoveredAtom = atom(null, (get, set, val) => {
-  set(ekPlanHoveredAtom, val)
-})
 export const ekPlanSetHoveredYearAtom = atom(null, (get, set, val) => {
   const current = get(ekPlanHoveredAtom)
   set(ekPlanHoveredAtom, { ...current, year: val })
@@ -2671,9 +2671,6 @@ export const ekPlanResetHoveredAtom = atom(null, (get, set) => {
 
 // EkPlan data loading
 export const ekPlanApsDataLoadingAtom = atom(true)
-export const ekPlanSetApsDataLoadingAtom = atom(null, (get, set, val) => {
-  set(ekPlanApsDataLoadingAtom, val)
-})
 
 // EkPlan filters
 export const ekPlanFilterApAtom = atom(null)
@@ -2731,6 +2728,7 @@ export const ekPlanSetFilterLv95XAtom = atom(null, (get, set, val) => {
 export const ekPlanSetFilterLv95YAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterLv95YAtom, val ? +val : null)
 })
+// keep this setter as a map is used to set all filters at once and ekfKontrolleur is part of the map
 export const ekPlanSetFilterEkfKontrolleurAtom = atom(null, (get, set, val) => {
   set(ekPlanFilterEkfKontrolleurAtom, val)
 })
@@ -2779,15 +2777,9 @@ export const ekPlanSetFilterEmptyEkfrequenzStartjahrAtom = atom(
 
 // EkPlan pastYears
 export const ekPlanPastYearsAtom = atom(5)
-export const ekPlanSetPastYearsAtom = atom(null, (get, set, val) => {
-  set(ekPlanPastYearsAtom, val)
-})
 
 // EkPlan volatile state
 export const ekPlanYearMenuAnchorAtom = atom(null)
-export const ekPlanSetYearMenuAnchorAtom = atom(null, (get, set, anchor) => {
-  set(ekPlanYearMenuAnchorAtom, anchor)
-})
 
 const initialYearClicked = {
   year: null,
@@ -2797,18 +2789,12 @@ const initialYearClicked = {
   ekfPlan: false,
 }
 export const ekPlanYearClickedAtom = atom(initialYearClicked)
-export const ekPlanSetYearClickedAtom = atom(null, (get, set, val) => {
-  set(ekPlanYearClickedAtom, val)
-})
 export const ekPlanCloseYearCellMenuAtom = atom(null, (get, set) => {
   set(ekPlanYearMenuAnchorAtom, null)
   set(ekPlanYearClickedAtom, initialYearClicked)
 })
 
 export const ekPlanApsDataAtom = atom([])
-export const ekPlanSetApsDataAtom = atom(null, (get, set, val) => {
-  set(ekPlanApsDataAtom, val)
-})
 
 // EkPlan einheitsByAp computed value
 export const ekPlanEinheitsByApAtom = atom((get) => {

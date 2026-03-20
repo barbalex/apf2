@@ -1,14 +1,11 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
-import {
-  treeApFilterAtom,
-  treeSetApFilterAtom,
-} from '../../store/index.ts'
+import { treeApFilterAtom } from '../../store/index.ts'
 
 import type { ApId } from '../../models/apflora/public/Ap.ts'
 
@@ -22,8 +19,7 @@ interface ApFilterControllerQueryResult {
 export const ApFilterController = () => {
   const apolloClient = useApolloClient()
   const { apId } = useParams()
-  const apFilter = useAtomValue(treeApFilterAtom)
-  const setApFilter = useSetAtom(treeSetApFilterAtom)
+  const [apFilter, setApFilter] = useAtom(treeApFilterAtom)
 
   useEffect(() => {
     // if active apId is not an ap and apFilter is true,

@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
 
 import styles from './Field.module.css'
 
@@ -66,7 +66,11 @@ export const Field = ({ label, value, index, moveField }: FieldProps) => {
       item.index = hoverIndex
     },
   })
-  const [{ isDragging }, drag] = useDrag<DragItem, void, { isDragging: boolean }>({
+  const [{ isDragging }, drag] = useDrag<
+    DragItem,
+    void,
+    { isDragging: boolean }
+  >({
     type: ItemTypes.CARD,
     item: () => {
       return { id: label, index }
@@ -87,7 +91,7 @@ export const Field = ({ label, value, index, moveField }: FieldProps) => {
     >
       <div className={styles.labelClass}>{label}</div>
       <div className={styles.valueClass}>
-        <Linkify properties={{ target: '_blank' }}>{value}</Linkify>
+        <Linkify options={{ target: '_blank' }}>{value}</Linkify>
       </div>
     </div>
   )

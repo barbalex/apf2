@@ -142,11 +142,13 @@ const getTpopZuordnenSource = ({ row, ap }: { row: any; ap: any }) => {
 export const Component = () => {
   const { beobId: id, apId } = useParams<{ beobId: string; apId: string }>()
   const { search, pathname } = useLocation()
-  const type =
-    pathname.includes('nicht-zuzuordnende-Beobachtungen') ? 'nichtZuzuordnen'
-    : pathname.includes('nicht-beurteilte-Beobachtungen') ? 'nichtBeurteilt'
-    : pathname.includes('Beobachtungen') ? 'zugeordnet'
-    : 'uups'
+  const type = pathname.includes('nicht-zuzuordnende-Beobachtungen')
+    ? 'nichtZuzuordnen'
+    : pathname.includes('nicht-beurteilte-Beobachtungen')
+      ? 'nichtBeurteilt'
+      : pathname.includes('Beobachtungen')
+        ? 'zugeordnet'
+        : 'uups'
 
   const apolloClient = useApolloClient()
 
@@ -171,12 +173,12 @@ export const Component = () => {
 
   // only include ap-arten (otherwise makes no sense, plus: error when app sets new activeNodeArray to non-existing ap)
   const aeTaxonomiesfilter = (inputValue: string) =>
-    inputValue ?
-      {
-        artname: { includesInsensitive: inputValue },
-        apartsByArtIdExist: true,
-      }
-    : { artname: { isNull: false }, apartsByArtIdExist: true }
+    inputValue
+      ? {
+          artname: { includesInsensitive: inputValue },
+          apartsByArtIdExist: true,
+        }
+      : { artname: { isNull: false }, apartsByArtIdExist: true }
 
   const onSaveArtIdToDb = (event: ChangeEvent<HTMLInputElement>) =>
     saveArtIdToDb({
@@ -261,7 +263,7 @@ export const Component = () => {
       variables: {
         id,
         [event.target.name]: event.target.value,
-        changedBy: user.name,
+        changedBy: userName,
       },
     })
   }
@@ -274,10 +276,7 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <FormTitle
-          title="Beobachtung"
-          MenuBarComponent={Menu}
-        />
+        <FormTitle title="Beobachtung" MenuBarComponent={Menu} />
         <div className={styles.formContainer}>
           <div className={styles.fieldsContainer}>
             {row && row.artId !== row.artIdOriginal && (
@@ -354,9 +353,9 @@ export const Component = () => {
                     data = `${data ? `${data}` : ''}${d[0]}: ${d[1]};\r\n`
                   })
                   const body = `${origArt}\r\n${neueArt}${
-                    bemerkungen ?
-                      `${bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''}`
-                    : ''
+                    bemerkungen
+                      ? `${bemerkungen ? `\r\nBemerkungen: ${bemerkungen}` : ''}`
+                      : ''
                   }\r\n\r\nOriginal-Beobachtungs-Daten:\r\n${data}`
                   sendMail({
                     to: 'info@infoflora.ch',

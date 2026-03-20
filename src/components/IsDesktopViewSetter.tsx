@@ -1,31 +1,29 @@
-import { useResizeDetector } from 'react-resize-detector'
+import { useEffect } from 'react'
 import { useAtom } from 'jotai'
 
 import { setDesktopViewAtom } from '../store/index.ts'
-import styles from './IsDesktopViewSetter.module.css'
-
-// this sets the isDesktopViewAtom depending on the width of this component,
-// in contrast to: window.innerWidth
+// this sets the isDesktopViewAtom depending on window width
 export const IsDesktopViewSetter = () => {
   const [, setDesktopView] = useAtom(setDesktopViewAtom)
+  useEffect(() => {
+    let resizeTimeout: ReturnType<typeof setTimeout> | null = null
 
-  const onResize = ({ width }) => setDesktopView(width)
+    const update = () => setDesktopView(window.innerWidth)
 
-  // on first load this provokes:
-  // Cannot update a component (`Router`) while rendering a different component (`IsDesktopViewSetter`).
-  // To locate the bad setState() call inside `IsDesktopViewSetter`, follow the stack trace as described in https://react.dev/link/setstate-in-render
-  const { ref } = useResizeDetector({
-    handleHeight: false,
-    refreshMode: 'debounce',
-    refreshRate: 300,
-    refreshOptions: { leading: false, trailing: true },
-    onResize,
-  })
+    update()
 
-  return (
-    <div
-      className={styles.measuringDiv}
-      ref={ref}
-    />
-  )
+    const onResize = () => {
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+      resizeTimeout = setTimeout(update, 200)
+    }
+
+    window.addEventListener('resize', onResize)
+
+    return () => {
+      window.removeEventListener('resize', onResize)
+      if (resizeTimeout) clearTimeout(resizeTimeout)
+    }
+  }, [setDesktopView])
+
+  return null
 }

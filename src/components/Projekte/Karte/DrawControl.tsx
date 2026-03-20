@@ -2,11 +2,10 @@ import { useEffect } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import { useMap } from 'react-leaflet'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom, useAtom } from 'jotai'
 
 import {
   treeMapFilterAtom,
-  treeSetMapFilterAtom,
   treeMapFilterResetterAtom,
 } from '../../../store/index.ts'
 
@@ -48,16 +47,16 @@ window.L.drawLocal.edit.handlers.remove.tooltip.text = `zum Löschen auf Filter-
 
 export const DrawControl = () => {
   const map = useMap()
-  const mapFilter = useAtomValue(treeMapFilterAtom)
-  const setMapFilter = useSetAtom(treeSetMapFilterAtom)
+  const [mapFilter, setMapFilter] = useAtom(treeMapFilterAtom)
   const mapFilterResetter = useAtomValue(treeMapFilterResetterAtom)
 
   useEffect(() => {
     // solution to allow only one geometry to be drawn
     // see: https://github.com/Leaflet/Leaflet.draw/issues/315#issuecomment-500246272
     // also: pass in mapFilter if exists
-    const drawnItems =
-      mapFilter ? window.L.geoJSON(mapFilter) : new window.L.FeatureGroup()
+    const drawnItems = mapFilter
+      ? window.L.geoJSON(mapFilter)
+      : new window.L.FeatureGroup()
     map.addLayer(drawnItems)
 
     const drawControlFull = new window.L.Control.Draw({

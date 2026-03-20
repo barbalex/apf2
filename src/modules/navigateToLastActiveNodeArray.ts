@@ -5,7 +5,7 @@ import {
   navigateAtom,
   userNameAtom,
   treeActiveNodeArrayAtom,
-} from '../store/index.js'
+} from '../store/index.ts'
 
 export const navigateToLastActiveNodeArray = () => {
   const username = store.get(userNameAtom)

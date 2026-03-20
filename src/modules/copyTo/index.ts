@@ -34,7 +34,7 @@ export const copyTo = async ({
   id: idPassed,
 }) => {
   const apolloClient = store.get(apolloClientAtom)
-  tsQueryClient = store.get(tsQueryClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
 
   const copying = store.get(copyingAtom)
   const table = tablePassed ?? copying.table

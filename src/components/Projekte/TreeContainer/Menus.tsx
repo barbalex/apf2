@@ -434,8 +434,9 @@ export const Menus = () => {
         })
       },
       copy() {
+        // issue: tpop-folder passes no parentId
         copyTo({
-          parentId: nodeType === 'folder' ? parentId : id,
+          parentId: nodeType === 'folder' ? (parentId ?? id) : id,
         })
       },
       markForCopyingBiotop() {

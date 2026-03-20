@@ -14,6 +14,8 @@ CREATE OR REPLACE FUNCTION apflora.tpop_kontrolliert_for_jber(apid uuid)
     on tpop.pop_id = pop.id and tpop.year = pop.year
   WHERE
     pop.ap_id = $1
+    -- remove erloschen?
+    -- see: https://github.com/barbalex/apf2/issues/796
     and pop.status < 300
     and pop.bekannt_seit <= pop.year
     and tpop.status < 300

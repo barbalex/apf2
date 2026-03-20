@@ -9,7 +9,7 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
   treeActiveNodeArrayAtom,
-} from '../../../../store/index.js'
+} from '../../../../store/index.ts'
 
 export const toggleNodeSymbol = ({
   node,
