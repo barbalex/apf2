@@ -62,22 +62,22 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
     treeNodeType: 'folder',
     treeMenuType: 'TpopkontrzaehlEinheitWerte',
     treeId: `tpopkontrzaehlEinheitWerteFolder`,
+    treeTableId: null,
     treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
     hasChildren: !!count,
     fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
     fetcherParams: {},
     component: NodeWithList,
-    menus: data.allTpopkontrzaehlEinheitWertes.nodes.map(
-      (p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'tpopkontrzaehlEinheitWerte',
-        treeId: p.id,
-        treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', p.id],
-        hasChildren: false,
-      }),
-    ),
+    menus: data.allTpopkontrzaehlEinheitWertes.nodes.map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopkontrzaehlEinheitWerte',
+      treeId: p.id,
+      treeTableId: p.id,
+      treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte', p.id],
+      hasChildren: false,
+    })),
   }
 
   return navData

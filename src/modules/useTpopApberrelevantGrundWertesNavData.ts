@@ -63,22 +63,22 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     treeNodeType: 'folder',
     treeMenuType: 'tpopApberrelevantGrundWerteFolder',
     treeId: `tpopApberrelevantGrundWerteFolder`,
+    treeTableId: null,
     treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte'],
     hasChildren: !!count,
     fetcherName: 'useTpopApberrelevantGrundWertesNavData',
     fetcherParams: {},
     component: NodeWithList,
-    menus: data.allTpopApberrelevantGrundWertes.nodes.map(
-      (p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'tpopApberrelevantGrundWerte',
-        treeId: p.id,
-        treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte', p.id],
-        hasChildren: false,
-      }),
-    ),
+    menus: data.allTpopApberrelevantGrundWertes.nodes.map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopApberrelevantGrundWerte',
+      treeId: p.id,
+      treeTableId: p.id,
+      treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte', p.id],
+      hasChildren: false,
+    })),
   }
 
   return navData

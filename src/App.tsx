@@ -14,14 +14,13 @@ import 'react-datepicker/dist/react-datepicker.css'
 
 import { theme } from './utils/materialTheme.ts'
 
-import { initializeIdb } from './modules/initializeIdb.ts'
 import { buildApolloClient } from './apolloClient.ts'
 
 import { store } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
 
-import { persistStore } from './modules/persistStore.ts'
+import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.ts'
 
 import './app.css'
 
@@ -75,7 +74,7 @@ export const App = () => {
   const uploaderRef = createRef<HTMLElement>(null)
 
   useEffect(() => {
-    persistStore()
+    navigateToLastActiveNodeArray()
   }, [])
 
   return (
@@ -96,17 +95,13 @@ export const App = () => {
                 action={(key) => <NotificationDismisser nKey={key} />}
               >
                 <UploaderContext value={uploaderRef}>
-                  {/* <Suspense fallback={<Spinner />}> */}
                   <Router />
                   {/*<UnterhaltsRouter />*/}
-                  {/* </Suspense> */}
-                  {/* <Suspense fallback={null}> */}
                   <Notifier />
                   <IsPrintSetter />
                   <LastTouchedNodeSetter />
                   <MouseWheelHandler />
                   <LegacyBrowserInformer />
-                  {/* </Suspense> */}
                 </UploaderContext>
               </SnackbarProvider>
             </ThemeProvider>

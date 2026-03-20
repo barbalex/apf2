@@ -7,17 +7,17 @@ import { useAtomValue } from 'jotai'
 import {
   mapActiveApfloraLayersAtom,
   treePopGqlFilterForTreeAtom,
-  treeZielGqlFilterForTreeAtom,
-  treeApberGqlFilterForTreeAtom,
-  treeApartGqlFilterForTreeAtom,
-  treeAssozartGqlFilterForTreeAtom,
-  treeErfkritGqlFilterForTreeAtom,
-  treeEkfrequenzGqlFilterForTreeAtom,
-  treeEkzaehleinheitGqlFilterForTreeAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   store,
 } from '../store/index.ts'
+import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
+import { getApberGqlFilterForTree } from './getApberGqlFilterForTree.ts'
+import { getApartGqlFilterForTree } from './getApartGqlFilterForTree.ts'
+import { getAssozartGqlFilterForTree } from './getAssozartGqlFilterForTree.ts'
+import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
+import { getEkfrequenzGqlFilterForTree } from './getEkfrequenzGqlFilterForTree.ts'
+import { getEkzaehleinheitGqlFilterForTree } from './getEkzaehleinheitGqlFilterForTree.ts'
 import { PopMapIcon } from '../components/NavElements/PopMapIcon.tsx'
 import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
 import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
@@ -35,19 +35,6 @@ export const useApNavData = (props) => {
 
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
-  const zielGqlFilterForTree = useAtomValue(treeZielGqlFilterForTreeAtom)
-  const apberGqlFilterForTree = useAtomValue(treeApberGqlFilterForTreeAtom)
-  const apartGqlFilterForTree = useAtomValue(treeApartGqlFilterForTreeAtom)
-  const assozartGqlFilterForTree = useAtomValue(
-    treeAssozartGqlFilterForTreeAtom,
-  )
-  const erfkritGqlFilterForTree = useAtomValue(treeErfkritGqlFilterForTreeAtom)
-  const ekfrequenzGqlFilterForTree = useAtomValue(
-    treeEkfrequenzGqlFilterForTreeAtom,
-  )
-  const ekzaehleinheitGqlFilterForTree = useAtomValue(
-    treeEkzaehleinheitGqlFilterForTreeAtom,
-  )
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   )
@@ -86,6 +73,15 @@ export const useApNavData = (props) => {
       },
     },
   }
+
+  // Get filters before useQuery so changes trigger refetch
+  const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
+  const apberGqlFilterForTree = getApberGqlFilterForTree(apId)
+  const apartGqlFilterForTree = getApartGqlFilterForTree(apId)
+  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId)
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
+  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId)
+  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?
@@ -304,6 +300,7 @@ export const useApNavData = (props) => {
     treeMenuType: 'ap',
     singleElementName: 'Art',
     treeId: apId,
+    treeTableId: apId,
     treeParentTableId: projId,
     treeUrl: ['Projekte', projId, 'Arten', apId],
     hasChildren: true,
@@ -322,6 +319,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'popFolder',
         treeId: `${apId}PopFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen'],
         fetcherName: 'usePopsNavData',
@@ -336,6 +334,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'zielFolder',
         treeId: `${apId}ApzielFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
         fetcherName: 'useZieljahrsNavData',
@@ -349,6 +348,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'erfkritFolder',
         treeId: `${apId}ErfkritFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
         fetcherName: 'useErfkritsNavData',
@@ -362,6 +362,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'apberFolder',
         treeId: `${apId}ApberFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte'],
         fetcherName: 'useApbersNavData',
@@ -375,6 +376,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'idealbiotopFolder',
         treeId: `${apId}IdealbiotopFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
         fetcherName: 'useIdealbiotopNavData',
@@ -388,6 +390,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'apartFolder',
         treeId: `${apId}ApartFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Taxa'],
         fetcherName: 'useApartsNavData',
@@ -401,6 +404,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'assozartFolder',
         treeId: `${apId}AssozartFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten'],
         fetcherName: 'useAssozartsNavData',
@@ -414,6 +418,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'ekfrequenzFolder',
         treeId: `${apId}EkfrequenzFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Frequenzen'],
         fetcherName: 'useEkfrequenzsNavData',
@@ -427,6 +432,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'ekzaehleinheitFolder',
         treeId: `${apId}EkzaehleinheitFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten'],
         fetcherName: 'useEkzaehleinheitsNavData',
@@ -440,6 +446,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'beobNichtBeurteiltFolder',
         treeId: `${apId}BeobNichtBeurteiltFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: [
           'Projekte',
@@ -461,6 +468,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'beobNichtZuzuordnenFolder',
         treeId: `${apId}BeobNichtZuzuordnenFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: [
           'Projekte',
@@ -484,6 +492,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'qkFolder',
         treeId: `${apId}QkFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Qualitätskontrollen'],
         hasChildren: false,
@@ -495,6 +504,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'qkWaehlenFolder',
         treeId: `${apId}QkWaehlenFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: [
           'Projekte',
@@ -512,6 +522,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'auswertungFolder',
         treeId: `${apId}AuswertungFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Auswertung'],
         hasChildren: false,
@@ -523,6 +534,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'dateienFolder',
         treeId: `${apId}DateienFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Dateien'],
         hasChildren: false,
@@ -534,6 +546,7 @@ export const useApNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'historienFolder',
         treeId: `${apId}HistorienFolder`,
+        treeTableId: apId,
         treeParentTableId: apId,
         treeUrl: ['Projekte', projId, 'Arten', apId, 'Historien'],
         hasChildren: false,

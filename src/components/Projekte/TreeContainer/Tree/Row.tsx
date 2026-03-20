@@ -110,7 +110,7 @@ export const Row = ({ node, transitionState, ref }) => {
     >
       <div
         data-id={node.tableId || node.id}
-        data-parentid={node.parentTableId || node.parentId}
+        data-parentid={node.treeParentTableId || node.parentId}
         data-url={dataUrl}
         data-nodetype={node.nodeType}
         data-label={node.label}

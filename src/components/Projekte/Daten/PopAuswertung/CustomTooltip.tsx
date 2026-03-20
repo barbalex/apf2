@@ -53,9 +53,9 @@ export const CustomTooltip = ({
           label = tpop.label
         }
         const value =
-          exists(p.value) && p.value?.toLocaleString ?
-            p.value?.toLocaleString('de-ch')
-          : null
+          exists(p.value) && p.value?.toLocaleString
+            ? p.value?.toLocaleString('de-ch')
+            : null
         let color
         if (!tpop) {
           color = 'grey'
@@ -65,11 +65,7 @@ export const CustomTooltip = ({
         }
 
         return (
-          <div
-            className={styles.row}
-            key={p.dataKey}
-            style={{ color }}
-          >
+          <div className={styles.row} key={p.dataKey} style={{ color }}>
             <div className={styles.label}>{`${label}:`}</div>
             <div>{value}</div>
           </div>

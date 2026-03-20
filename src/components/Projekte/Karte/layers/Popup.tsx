@@ -1,4 +1,4 @@
-import Linkify from 'react-linkify'
+import Linkify from 'linkify-react'
 
 // Somehow emotions styles were not applied
 // So need to style inline
@@ -38,17 +38,7 @@ export const Popup = ({ layersData, mapSize = { x: 1000, y: 1000 } }) => (
                 overflowWrap: 'anywhere',
               }}
             >{`${key}:`}</div>
-            <Linkify
-              componentDecorator={(decoratedHref, decoratedText, key) => (
-                <a
-                  target="blank"
-                  href={decoratedHref}
-                  key={key}
-                >
-                  {decoratedText}
-                </a>
-              )}
-            >
+            <Linkify options={{ target: '_blank' }}>
               <div style={{ overflowWrap: 'anywhere' }}>{value}</div>
             </Linkify>
           </div>

@@ -38,19 +38,13 @@ export const Router = () => {
         lazy={() => import('../AppBar/index.tsx')}
         hydrateFallbackElement={<Spinner />}
       >
-        <Route
-          index
-          lazy={() => import('../Home/index.tsx')}
-        />
+        <Route index lazy={() => import('../Home/index.tsx')} />
         <Route
           path="/Daten"
-          lazy={() => import('./ProtectedRoute.jsx')}
+          lazy={() => import('./ProtectedRoute.tsx')}
           handle={datenHandle}
         >
-          <Route
-            path="*"
-            element={<Unterhalt />}
-          ></Route>
+          <Route path="*" element={<Unterhalt />}></Route>
         </Route>
       </Route>,
     ),

@@ -24,9 +24,17 @@ export const moveTo = async ({ id: newParentId }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
 
   const moving = store.get(movingAtom)
-  const setMoving = store.get(setMovingAtom)
   const table = moving?.table
   const id = moving?.id
+
+  if (!newParentId) {
+    return addNotification({
+      message: 'change was not saved: Reason: parent is missing',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   // ensure derived data exists
   const tabelle = tables.find((t) => t.table === table)
@@ -52,6 +60,7 @@ export const moveTo = async ({ id: newParentId }) => {
   }
 
   // move
+  // console.log('moveTo', { table, id, newParentId })
   switch (dbTable) {
     case 'tpopkontr':
       await apolloClient.mutate({
@@ -66,12 +75,14 @@ export const moveTo = async ({ id: newParentId }) => {
       })
       break
     case 'tpop':
+      // TODO: histories should also get the new popId
       await apolloClient.mutate({
         mutation: updateTpopById,
         variables: { id, popId: newParentId },
       })
       break
     case 'pop':
+      // TODO: histories should also get the new apId
       await apolloClient.mutate({
         mutation: updatePopById,
         variables: { id, apId: newParentId },
@@ -82,7 +93,7 @@ export const moveTo = async ({ id: newParentId }) => {
       break
   }
   // reset moving
-  setMoving({
+  store.set(setMovingAtom, {
     table: null,
     id: '99999999-9999-9999-9999-999999999999',
     label: null,
@@ -127,6 +138,9 @@ export const moveTo = async ({ id: newParentId }) => {
     })
     tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
+    })
+    tsQueryClient.invalidateQueries({
+      queryKey: [`treeTpopFolders`],
     })
   }
   if (table === 'tpopfreiwkontr') {

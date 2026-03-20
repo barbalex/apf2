@@ -1,13 +1,18 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import svgrPlugin from 'vite-plugin-svgr'
+import babel from '@rolldown/plugin-babel'
 // activating the analyzer breaks the build on vercel
 // import { analyzer } from 'vite-bundle-analyzer'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    // cssMinify is needed due to an error in vite:
+    // https://github.com/vitejs/vite/issues/21911#issuecomment-4097280874
+    // TODO: remove this and uninstall esbuild when the issue is fixed
+    cssMinify: 'esbuild',
     sourcemap: true,
     rollupOptions: {
       // https://github.com/TanStack/query/issues/5175#issuecomment-1482196558
@@ -79,10 +84,9 @@ export default defineConfig({
       //   enabled: true,
       // },
     }),
-    react({
-      babel: {
-        plugins: ['babel-plugin-react-compiler'],
-      },
+    react(),
+    babel({
+      presets: [reactCompilerPreset()],
     }),
     // analyzer(),
   ],

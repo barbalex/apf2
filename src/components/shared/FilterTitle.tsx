@@ -6,7 +6,7 @@ import { useSetAtom, useAtomValue } from 'jotai'
 
 import {
   treeEmptyNodeLabelFilterAtom,
-  treeSetApFilterAtom,
+  treeApFilterAtom,
   treeEmptyMapFilterAtom,
   treeDataFilterAtom,
   treeDataFilterEmptyTableAtom,
@@ -27,7 +27,7 @@ export const FilterTitle = ({
   activeTab,
 }) => {
   const emptyNodeLabelFilter = useSetAtom(treeEmptyNodeLabelFilterAtom)
-  const setApFilter = useSetAtom(treeSetApFilterAtom)
+  const setApFilter = useSetAtom(treeApFilterAtom)
   const emptyMapFilter = useSetAtom(treeEmptyMapFilterAtom)
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const emptyDataFilterTable = useSetAtom(treeDataFilterEmptyTableAtom)

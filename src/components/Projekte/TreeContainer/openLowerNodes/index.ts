@@ -41,7 +41,7 @@ export const openLowerNodes = ({
       pop({ id, apId, projId })
       break
     case 'tpopFolder':
-      tpopFolder({ id, apId, projId })
+      tpopFolder({ popId: id, apId, projId })
       break
     case 'tpop':
       tpop({ id, popId, apId, projId })

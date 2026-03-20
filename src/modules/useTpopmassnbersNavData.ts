@@ -2,9 +2,8 @@ import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import { store, treeTpopmassnberGqlFilterForTreeAtom } from '../store/index.ts'
+import { getTpopmassnberGqlFilterForTree } from './getTpopmassnberGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useTpopmassnbersNavData = (props) => {
@@ -15,9 +14,8 @@ export const useTpopmassnbersNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
 
-  const tpopmassnberGqlFilterForTree = useAtomValue(
-    treeTpopmassnberGqlFilterForTreeAtom,
-  )
+  // Get filter before useQuery so changes trigger refetch
+  const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
 
   const { data } = useQuery({
     queryKey: ['treeTpopmassnber', tpopId, tpopmassnberGqlFilterForTree],
@@ -67,6 +65,7 @@ export const useTpopmassnbersNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'tpopmassnberFolder',
     treeId: `${tpopId}TpopmassnberFolder`,
+    treeTableId: tpopId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -81,29 +80,28 @@ export const useTpopmassnbersNavData = (props) => {
     ],
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.tpopById.tpopmassnbersByTpopId.nodes.map(
-      (p) => ({
-        id: p.id,
-        label: p.label,
-        treeNodeType: 'table',
-        treeMenuType: 'tpopmassnber',
-        treeId: p.id,
-        treeParentTableId: tpopId,
-        treeUrl: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'Populationen',
-          popId,
-          'Teil-Populationen',
-          tpopId,
-          'Massnahmen-Berichte',
-          p.id,
-        ],
-        hasChildren: false,
-      }),
-    ),
+    menus: data.tpopById.tpopmassnbersByTpopId.nodes.map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'tpopmassnber',
+      treeId: p.id,
+      treeTableId: p.id,
+      treeParentTableId: tpopId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Teil-Populationen',
+        tpopId,
+        'Massnahmen-Berichte',
+        p.id,
+      ],
+      hasChildren: false,
+    })),
   }
 
   return navData

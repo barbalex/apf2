@@ -4,10 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  store,
-  treeTpopkontrzaehlGqlFilterForTreeAtom,
-} from '../store/index.ts'
+import { store } from '../store/index.ts'
+import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 
 export const useTpopfreiwkontrzaehlsNavData = (props) => {
   const apolloClient = useApolloClient()
@@ -17,10 +15,8 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
   const popId = props?.popId ?? params.popId
   const tpopId = props?.tpopId ?? params.tpopId
   const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
-
-  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
-    treeTpopkontrzaehlGqlFilterForTreeAtom,
-  )
+  const tpopkontrzaehlGqlFilterForTree =
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
   const { data } = useQuery({
     queryKey: [
@@ -63,8 +59,7 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     suspense: true,
   })
 
-  const count =
-    data.tpopkontrById.tpopkontrzaehlsByTpopkontrId?.nodes?.length
+  const count = data.tpopkontrById.tpopkontrzaehlsByTpopkontrId?.nodes?.length
   const totalCount = data.tpopkontrById.totalCount.totalCount
 
   const navData = {
@@ -75,6 +70,7 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     treeNodeType: 'folder',
     treeMenuType: 'tpopfreiwkontrzaehlFolder',
     treeId: `${tpopkontrId}TpopfreiwkontrzaehlFolder`,
+    treeTableId: tpopkontrId,
     treeParentTableId: tpopkontrId,
     treeUrl: [
       'Projekte',
@@ -93,14 +89,13 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
     fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
     hasChildren: !!count,
     alwaysOpen: true,
-    menus: (
-      data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes
-    ).map((p) => ({
+    menus: data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes.map((p) => ({
       id: p.id,
       label: p.label,
       treeNodeType: 'table',
       treeMenuType: 'tpopfreiwkontrzaehl',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: tpopkontrId,
       treeUrl: [
         'Projekte',

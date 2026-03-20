@@ -9,8 +9,8 @@ import {
   copyingBiotopAtom,
   movingAtom,
   store,
-  treeTpopkontrzaehlGqlFilterForTreeAtom,
 } from '../store/index.ts'
+import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
@@ -53,9 +53,8 @@ export const useTpopfeldkontrNavData = (props) => {
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
-  const tpopkontrzaehlGqlFilterForTree = useAtomValue(
-    treeTpopkontrzaehlGqlFilterForTreeAtom,
-  )
+  const tpopkontrzaehlGqlFilterForTree =
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
   const { data } = useQuery({
     queryKey: [
@@ -130,8 +129,7 @@ export const useTpopfeldkontrNavData = (props) => {
     data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.totalCount
   const filteredTpopkontrzaehlCount =
     data.tpopkontrById.filteredTpopkontrzaehls.totalCount
-  const filesCount =
-    data.tpopkontrById.tpopkontrFilesByTpopkontrId.totalCount
+  const filesCount = data.tpopkontrById.tpopkontrFilesByTpopkontrId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,
@@ -147,6 +145,7 @@ export const useTpopfeldkontrNavData = (props) => {
     treeNodeType: 'table',
     treeMenuType: 'tpopfeldkontr',
     treeId: tpopkontrId,
+    treeTableId: tpopkontrId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -165,18 +164,16 @@ export const useTpopfeldkontrNavData = (props) => {
     treeSingleElementName: 'Feld-Kontrolle',
     hasChildren: true,
     childrenAreFolders: true,
-    labelRightElements: labelRightElements.length
-      ? labelRightElements
-      : undefined,
+    labelRightElements:
+      labelRightElements.length ? labelRightElements : undefined,
     component: NodeWithList,
     menus: [
       {
         id: 'Feld-Kontrolle',
         label: `Feld-Kontrolle`,
         isSelf: true,
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       },
       {
         id: 'Zaehlungen',
@@ -184,6 +181,7 @@ export const useTpopfeldkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfeldkontrzaehlFolder',
         treeId: `${tpopkontrId}TpopfeldkontrzaehlFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',
@@ -210,6 +208,7 @@ export const useTpopfeldkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopkontrBiotopFolder',
         treeId: `${tpopkontrId}TpopkontrBiotopFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',
@@ -233,6 +232,7 @@ export const useTpopfeldkontrNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfeldkontrDateienFolder',
         treeId: `${tpopkontrId}TpopfeldkontrDateienFolder`,
+        treeTableId: tpopkontrId,
         treeParentTableId: tpopkontrId,
         treeUrl: [
           'Projekte',

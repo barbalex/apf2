@@ -13,7 +13,8 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:5173',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true, // Always reuse if server is already running
+    timeout: 120000, // 2 minutes to start server
   },
   testDir: './tests',
   /* Run tests in files in parallel */
@@ -59,13 +60,16 @@ export default defineConfig({
       dependencies: ['setup'],
     },
 
-    {
-      name: 'webkit',
-      use: {
-        ...devices['Desktop Safari'],
-        storageState: './playwright/.auth/user.json',
-      },
-      dependencies: ['setup'],
-    },
+    // WebKit disabled - requires system dependencies
+    // Run: sudo npx playwright install-deps webkit
+    // to enable WebKit testing
+    // {
+    //   name: 'webkit',
+    //   use: {
+    //     ...devices['Desktop Safari'],
+    //     storageState: './playwright/.auth/user.json',
+    //   },
+    //   dependencies: ['setup'],
+    // },
   ],
 })

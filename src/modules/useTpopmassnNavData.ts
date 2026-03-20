@@ -110,6 +110,7 @@ export const useTpopmassnNavData = (props) => {
     treeNodeType: 'table',
     treeMenuType: 'tpopmassn',
     treeId: tpopmassnId,
+    treeTableId: tpopmassnId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -157,6 +158,7 @@ export const useTpopmassnNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopmassnDateienFolder',
         treeId: `${tpopmassnId}TpopmassnDateienFolder`,
+        treeTableId: tpopmassnId,
         treeParentTableId: tpopmassnId,
         treeUrl: [
           'Projekte',

@@ -97,8 +97,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
 
   const count = data.beobsNichtBeurteilt.totalCount
-  const filteredCount =
-    data.filteredBeobsNichtBeurteilt.nodes.length
+  const filteredCount = data.filteredBeobsNichtBeurteilt.nodes.length
 
   const navData = {
     id: 'nicht-beurteilte-Beobachtungen',
@@ -109,6 +108,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     treeNodeType: 'folder',
     treeNodeMenuType: 'beobNichtBeurteiltFolder',
     treeId: `${apId}BeobNichtBeurteiltFolder`,
+    treeTableId: apId,
     treeParentTableId: apId,
     treeUrl: [
       'Projekte',
@@ -125,6 +125,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       treeNodeType: 'table',
       treeMenuType: 'beobNichtBeurteilt',
       treeId: p.id,
+      treeTableId: p.id,
       treeParentTableId: apId,
       treeUrl: [
         'Projekte',
@@ -136,9 +137,9 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobnichtbeurteiltIcon && beobId === p.id
-          ? [BeobnichtbeurteiltFilteredMapIcon]
-          : undefined,
+        showBeobnichtbeurteiltIcon && beobId === p.id ?
+          [BeobnichtbeurteiltFilteredMapIcon]
+        : undefined,
     })),
   }
 

@@ -4,7 +4,8 @@ module.exports = {
   client: {
     service: {
       name: 'apflora',
-      localSchemaFile: './schema.json',
+      // Use remote endpoint for schema introspection
+      url: 'http://localhost:5000/graphql',
     },
   },
 }

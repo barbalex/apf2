@@ -416,7 +416,7 @@ export const Menus = () => {
       },
       move() {
         moveTo({
-          id: nodeType === 'folder' ? parentId : id,
+          id,
         })
       },
       markForCopying() {
@@ -434,12 +434,9 @@ export const Menus = () => {
         })
       },
       copy() {
-        // console.log('TreeContainer.Menus.handleClick.copy', {
-        //   id,
-        //   parentId,
-        // })
+        // issue: tpop-folder passes no parentId
         copyTo({
-          parentId: nodeType === 'folder' ? parentId : id,
+          parentId: nodeType === 'folder' ? (parentId ?? id) : id,
         })
       },
       markForCopyingBiotop() {

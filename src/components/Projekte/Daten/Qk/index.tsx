@@ -39,7 +39,7 @@ export const Component = () => {
   const { apId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery<QkQueryResult>({
+  const { data, isLoading } = useQuery<QkQueryResult>({
     queryKey: ['qk', apId],
     queryFn: async () => {
       const result = await apolloClient.query<QkQueryResult>({
@@ -49,30 +49,35 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
+    // no suspense as else the node will not turn red on click, only after QK's were queried
   })
   /**
    * DO NOT get allQks.nodes.apqksByQkName.totalCount
    * AS THIS IS NEVER UPDATED
    */
-  const allQks = data?.allQks.nodes ?? []
+  const allQks = data?.allQks?.nodes ?? []
   const qks = allQks.filter(
-    (qk) => !!(data?.allApqks?.nodes ?? []).find((no) => no.qkName === qk.name),
+    (qk) =>
+      !!(data?.allApqks?.nodes ?? [])?.find((no) => no?.qkName === qk.name),
   )
   const qkNameQueries = Object.fromEntries(
     allQks.map((n) => [
       n.name,
-      !!(data?.allApqks?.nodes ?? []).find((no) => no.qkName === n.name),
+      !!(data?.allApqks?.nodes ?? [])?.find((no) => no?.qkName === n.name),
     ]),
   )
 
   const qkCount = data?.allQks?.totalCount
 
+  if (isLoading) {
+    return <div>Lade Daten...</div>
+  }
+
   return (
     <ErrorBoundary>
       <Qk
         key={qkCount}
-        qkNameQueries={qkNameQueries}
+        qkNameQueries={qkNameQueries ?? {}}
         qks={qks}
       />
     </ErrorBoundary>

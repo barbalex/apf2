@@ -2,6 +2,7 @@ import { uniq } from 'es-toolkit'
 
 import { logout } from '../../modules/logout.ts'
 import { existsPermissionError } from '../../modules/existsPermissionError.ts'
+import { store, userTokenAtom } from '../../store/index.ts'
 
 import styles from './Error.module.css'
 
@@ -21,7 +22,11 @@ export const Error = ({ errors: errorsPassed, error }) => {
 
   if (existsPermissionError(errorsToUse)) {
     console.log('Permission error exists, will log out', { errorsToUse })
-    // during login don't show permission error
+    const token = store.get(userTokenAtom)
+    if (!token) {
+      // Avoid reload loop before login is possible
+      return null
+    }
     return logout()
     /*// if token is not accepted, ask user to logout
     return (

@@ -96,8 +96,7 @@ export const useWertesNavData = () => {
     data.allTpopApberrelevantGrundWertes.totalCount
   const tpopApberrelevantGrundWerteFilteredCount =
     data.filteredTpopApberrelevantGrundWertes.totalCount
-  const ekAbrechnungstypWerteCount =
-    data.allEkAbrechnungstypWertes.totalCount
+  const ekAbrechnungstypWerteCount = data.allEkAbrechnungstypWertes.totalCount
   const ekAbrechnungstypWerteFilteredCount =
     data.filteredEkAbrechnungstypWertes.totalCount
   const tpopkontrzaehlEinheitWerteCount =
@@ -107,6 +106,7 @@ export const useWertesNavData = () => {
 
   const navData = {
     id: 'WerteListen',
+    treeTableId: null,
     url: '/Daten/Werte-Listen',
     label: `Werte-Listen`,
     treeNodeType: 'folder',
@@ -124,6 +124,7 @@ export const useWertesNavData = () => {
         treeNodeType: 'folder',
         treeMenuType: 'adresseFolder',
         treeId: `AdresseFolder`,
+        treeTableId: null,
         treeUrl: ['Werte-Listen', 'Adressen'],
         hasChildren: !!adressesFilteredCount,
         fetcherName: 'useAdressesNavData',
@@ -136,6 +137,7 @@ export const useWertesNavData = () => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopApberrelevantGrundWerteFolder',
         treeId: `tpopApberrelevantGrundWerteFolder`,
+        treeTableId: null,
         treeUrl: ['Werte-Listen', 'ApberrelevantGrundWerte'],
         hasChildren: !!tpopApberrelevantGrundWerteFilteredCount,
         fetcherName: 'useTpopApberrelevantGrundWertesNavData',
@@ -148,6 +150,7 @@ export const useWertesNavData = () => {
         treeNodeType: 'folder',
         treeMenuType: 'ekAbrechnungstypWerteFolder',
         treeId: `EkAbrechnungstypWerteFolder`,
+        treeTableId: null,
         treeUrl: ['Werte-Listen', 'EkAbrechnungstypWerte'],
         hasChildren: !!ekAbrechnungstypWerteFilteredCount,
         fetcherName: 'useEkAbrechnungstypWertesNavData',
@@ -160,6 +163,7 @@ export const useWertesNavData = () => {
         treeNodeType: 'folder',
         treeMenuType: 'TpopkontrzaehlEinheitWerte',
         treeId: `tpopkontrzaehlEinheitWerteFolder`,
+        treeTableId: null,
         treeUrl: ['Werte-Listen', 'TpopkontrzaehlEinheitWerte'],
         hasChildren: !!tpopkontrzaehlEinheitWerteFilteredCount,
         fetcherName: 'useTpopkontrzaehlEinheitWertesNavData',

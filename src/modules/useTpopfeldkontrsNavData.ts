@@ -104,8 +104,9 @@ export const useTpopfeldkontrsNavData = (props) => {
     label: `Feld-Kontrollen (${count}/${totalCount})`,
     labelShort: `EK (${count}/${totalCount})`,
     treeNodeType: 'folder',
-    treeMenuType: 'tpopfeldkontr',
+    treeMenuType: 'tpopfeldkontrFolder',
     treeId: `${tpopId}FeldkontrFolder`,
+    treeTableId: tpopId,
     treeParentTableId: tpopId,
     treeUrl: [
       'Projekte',
@@ -143,6 +144,7 @@ export const useTpopfeldkontrsNavData = (props) => {
         treeNodeType: 'table',
         treeMenuType: 'tpopfeldkontr',
         treeId: p.id,
+        treeTableId: p.id,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -160,9 +162,8 @@ export const useTpopfeldkontrsNavData = (props) => {
         fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
         treeSingleElementName: 'Feld-Kontrolle',
         hasChildren: true,
-        labelRightElements: labelRightElements.length
-          ? labelRightElements
-          : undefined,
+        labelRightElements:
+          labelRightElements.length ? labelRightElements : undefined,
       }
     }),
   }

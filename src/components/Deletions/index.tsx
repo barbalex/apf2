@@ -17,7 +17,7 @@ import {
   deletedDatasetsAtom,
   showDeletionsAtom,
   setShowDeletionsAtom,
-} from '../../store/index.js'
+} from '../../store/index.ts'
 
 import styles from './index.module.css'
 
@@ -129,10 +129,7 @@ export const Deletions = () => {
           >
             wiederherstellen
           </Button>
-          <Button
-            color="primary"
-            onClick={onClickClose}
-          >
+          <Button color="primary" onClick={onClickClose}>
             schliessen
           </Button>
         </DialogActions>

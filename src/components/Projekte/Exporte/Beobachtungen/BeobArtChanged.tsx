@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSetAtom } from 'jotai'
+import { useSetAtom, useAtomValue } from 'jotai'
 import { gql } from '@apollo/client'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
@@ -10,7 +10,10 @@ import { BeobId } from '../../../../models/apflora/index.tsx'
 
 import styles from '../index.module.css'
 
-import { addNotificationAtom } from '../../../../store/index.ts'
+import {
+  addNotificationAtom,
+  treeMapFilterAtom,
+} from '../../../../store/index.ts'
 
 interface BeobArtChangedQueryResult {
   allVBeobArtChangeds: {
@@ -59,9 +62,8 @@ export const BeobArtChanged = () => {
     let result: { data?: BeobArtChangedQueryResult }
     try {
       // view: v_beob_art_changed
-      result =
-        mapFilter ?
-          await apolloClient.query<BeobArtChangedQueryResult>({
+      result = mapFilter
+        ? await apolloClient.query<BeobArtChangedQueryResult>({
             query: gql`
               query allBeobsArtChangedFilteredByMap {
                 allVBeobArtChangeds {
@@ -174,9 +176,9 @@ export const BeobArtChanged = () => {
       disabled={!!queryState}
     >
       Alle Beobachtungen, bei denen die Art verändert wurde
-      {queryState ?
+      {queryState ? (
         <span className={styles.progress}>{queryState}</span>
-      : null}
+      ) : null}
     </Button>
   )
 }

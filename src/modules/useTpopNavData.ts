@@ -13,12 +13,12 @@ import {
   mapTpopIconAtom,
   treeShowTpopIconAtom,
   treeTpopmassnGqlFilterForTreeAtom,
-  treeTpopmassnberGqlFilterForTreeAtom,
-  treeTpopberGqlFilterForTreeAtom,
   treeEkGqlFilterForTreeAtom,
   treeEkfGqlFilterForTreeAtom,
   treeBeobZugeordnetGqlFilterForTreeAtom,
 } from '../store/index.ts'
+import { getTpopmassnberGqlFilterForTree } from './getTpopmassnberGqlFilterForTree.ts'
+import { getTpopberGqlFilterForTree } from './getTpopberGqlFilterForTree.ts'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { useProjekteTabs } from './useProjekteTabs.ts'
 
@@ -57,10 +57,6 @@ export const useTpopNavData = (props) => {
   const tpopmassnGqlFilterForTree = useAtomValue(
     treeTpopmassnGqlFilterForTreeAtom,
   )
-  const tpopmassnberGqlFilterForTree = useAtomValue(
-    treeTpopmassnberGqlFilterForTreeAtom,
-  )
-  const tpopberGqlFilterForTree = useAtomValue(treeTpopberGqlFilterForTreeAtom)
   const ekGqlFilterForTree = useAtomValue(treeEkGqlFilterForTreeAtom)
   const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
   const beobZugeordnetGqlFilterForTree = useAtomValue(
@@ -81,13 +77,13 @@ export const useTpopNavData = (props) => {
       'treeTpop',
       tpopId,
       tpopmassnGqlFilterForTree,
-      tpopmassnberGqlFilterForTree,
       ekGqlFilterForTree,
       ekfGqlFilterForTree,
-      tpopberGqlFilterForTree,
       beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
+      const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
+      const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
       const result = await apolloClient.query({
         query: gql`
           query NavTpopQuery(
@@ -270,6 +266,7 @@ export const useTpopNavData = (props) => {
     treeNodeType: 'table',
     treeMenuType: 'tpop',
     treeId: tpopId,
+    treeTableId: tpopId,
     treeParentTableId: popId,
     treeUrl: [
       'Projekte',
@@ -292,6 +289,7 @@ export const useTpopNavData = (props) => {
     menus: [
       {
         id: 'Teil-Population',
+        treeTableId: tpopId,
         label: `Teil-Population`,
         isSelf: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
@@ -304,6 +302,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopmassnFolder',
         treeId: `${tpopId}TpopmassnFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -327,6 +326,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopmassnberFolder',
         treeId: `${tpopId}MassnberFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -350,6 +350,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfeldkontrFolder',
         treeId: `${tpopId}FeldkontrFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -372,6 +373,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopfreiwkontrFolder',
         treeId: `${tpopId}FreiwkontrFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -394,6 +396,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopberFolder',
         treeId: `${tpopId}TpopberFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -417,6 +420,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'beobZugeordnetFolder',
         treeId: `${tpopId}BeobZugeordnetFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -442,6 +446,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopEkFolder',
         treeId: `${tpopId}EkFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -463,6 +468,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopDateienFolder',
         treeId: `${tpopId}DateienFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -484,6 +490,7 @@ export const useTpopNavData = (props) => {
         treeNodeType: 'folder',
         treeMenuType: 'tpopHistorienFolder',
         treeId: `${tpopId}HistorienFolder`,
+        treeTableId: tpopId,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
