@@ -15,7 +15,7 @@ RUN npm install -g @graphile-contrib/pg-order-by-related@1.0.0
 RUN npm install -g @graphile/postgis@0.2.0
 # in v5: 
 # https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/36
-RUN npm install -g postgraphile-plugin-connection-filter-postgis
+RUN npm install -g postgraphile-plugin-connection-filter-postgis@1.0.0-alpha.6
 
 # need to add a graphile.config.js file for the presets
 COPY --chown=node:node .postgraphilerc.js .postgraphilerc.js
