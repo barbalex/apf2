@@ -46,7 +46,7 @@ export const Checkbox2States = ({
       </FormLabel>
       <Checkbox
         id={name}
-        inputProps={{ 'data-id': name }}
+        slotProps={{ input: { 'data-id': name } }}
         onClick={onClickButton}
         color="primary"
         checked={checked}
