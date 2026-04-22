@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
-import { useAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 
 import { setDesktopViewAtom } from '../store/index.ts'
+
 // this sets the isDesktopViewAtom depending on window width
 export const IsDesktopViewSetter = () => {
-  const [, setDesktopView] = useAtom(setDesktopViewAtom)
+  const setDesktopView = useSetAtom(setDesktopViewAtom)
+
   useEffect(() => {
     let resizeTimeout: ReturnType<typeof setTimeout> | null = null
 

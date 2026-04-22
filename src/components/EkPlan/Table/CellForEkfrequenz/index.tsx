@@ -3,8 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
+import ListItemButton from '@mui/material/ListItemButton'
 
 import {
   ekPlanHoveredAtom,
@@ -83,12 +82,11 @@ export const CellForEkfrequenz = ({
           EK-Frequenz wählen:
         </DialogTitle>
         <List sx={{ pt: 0 }}>
-          <ListItem
+          <ListItemButton
             onClick={() => {
               onChange({ target: { value: '' } })
               onClose()
             }}
-            button={true.toString()}
             dense
             style={{
               ...(data?.tpopById?.ekfrequenz === null ?
@@ -98,15 +96,14 @@ export const CellForEkfrequenz = ({
             className={styles.listItem}
           >
             Kein Wert
-          </ListItem>
+          </ListItemButton>
           {allEkfrequenzs.map((e) => (
-            <ListItem
+            <ListItemButton
               key={e.id}
               onClick={() => {
                 onChange({ target: { value: e.id } })
                 onClose()
               }}
-              button={true.toString()}
               dense
               style={{
                 ...(e.id === data?.tpopById?.ekfrequenz ?
@@ -125,7 +122,7 @@ export const CellForEkfrequenz = ({
               <span className={styles.anwendungsfallText}>
                 {e.anwendungsfall}
               </span>
-            </ListItem>
+            </ListItemButton>
           ))}
         </List>
       </Dialog>
