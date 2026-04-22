@@ -6,8 +6,9 @@ import styles from './SpinnerOverlay.module.css'
 export const SpinnerOverlay = ({ message, onClose }) => (
   <Dialog
     open
-    onClose={onClose}
-    disableEscapeKeyDown={true}
+    onClose={(event, reason) => {
+      if (reason !== 'escapeKeyDown') onClose?.(event, reason)
+    }}
   >
     <div className={styles.container}>
       <CircularProgress />

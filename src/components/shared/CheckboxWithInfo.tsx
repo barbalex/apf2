@@ -48,7 +48,7 @@ export const CheckboxWithInfo = ({
                 onChange={onCheck}
                 value={label}
                 color="primary"
-                inputProps={{ 'data-id': name }}
+                slotProps={{ input: { 'data-id': name } }}
               />
             }
           />
