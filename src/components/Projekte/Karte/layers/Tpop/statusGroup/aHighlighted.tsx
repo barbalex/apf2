@@ -1,4 +1,4 @@
-import Icon from './aHighlighted.svg'
+import Icon from './aHighlighted.svg?react'
 import styles from '../../iconContainer.module.css'
 
 export const TpopIconAHighlighted = () => (

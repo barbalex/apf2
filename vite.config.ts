@@ -22,11 +22,27 @@ export default defineConfig({
         }
         warn(warning)
       },
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (
+              id.includes('@mui/material') ||
+              id.includes('@emotion/react') ||
+              id.includes('@emotion/styled')
+            )
+              return 'mui'
+            if (id.includes('react-dom') || id.includes('/react/index'))
+              return 'react-vendor'
+            if (id.includes('@apollo/client') || id.includes('graphql'))
+              return 'apollo'
+            if (id.includes('@tanstack')) return 'tanstack'
+          }
+        },
+      },
     },
   },
   plugins: [
     svgrPlugin({
-      include: '**/*.svg', // https://github.com/pd4d10/vite-plugin-svgr/issues/91#issuecomment-1732028802
       svgrOptions: {
         icon: true,
         // ...svgr options (https://react-svgr.com/docs/options/)

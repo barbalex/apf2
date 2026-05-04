@@ -1,4 +1,4 @@
-import Icon from './p.svg'
+import Icon from './p.svg?react'
 import styles from '../../iconContainer.module.css'
 
 export const TpopIconP = () => (
