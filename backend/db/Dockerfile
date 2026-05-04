@@ -1,7 +1,11 @@
 # beware when upgrading: need to re-create backups!
 # 2025.08.21: live version is 14
 # 2025.12.05: live version is 17
-FROM postgis/postgis:17-3.5
+# 2026.05.04: upgraded to 18. 
+# TODO: update live servers by creating a new server using current backup, 
+# then pointing api.apflora.ch to the new server's IP on vercel, 
+# then recreating backups on the new server, and finally deleting the old server.
+FROM postgis/postgis:18-3.5
 
 # mount SQL files directly into the Postgres containers’ initialization directory
 COPY ./init/ /docker-entrypoint-initdb.d/

@@ -1,5 +1,5 @@
-# beware when upgrading: need to re-create backups!
-FROM postgis/postgis:17-3.5
+# 2026.05.04: upgrade from 17-3.5 to 18-3.6
+FROM postgis/postgis:18-3.6
 
 COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data
