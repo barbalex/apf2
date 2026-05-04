@@ -114,6 +114,7 @@
     "babel-plugin-react-compiler": "1.0.0",
     "copyfiles": "2.4.1",
     "cross-env": "10.1.0",
+    "esbuild": "0.27.0",
     "eslint": "10.0.3",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-react-hooks": "7.1.1",
@@ -138,6 +139,7 @@
     "graphql": "peer dependency of @apollo/client",
     "rxjs": "peer dependency of @apollo/client",
     "@emotion/react": "unfortunately needed by @mui/material",
-    "@emotion/styled": "unfortunately needed by @mui/material"
+    "@emotion/styled": "unfortunately needed by @mui/material",
+    "esbuild": "esbuild is not a direct dependency — Vite 8 needs it for CSS minification but it only exists as a transitive dep inside other packages, which Vercel's build environment can't reliably hoist. The fix is to add it directly to devDependencies"
   }
 }
