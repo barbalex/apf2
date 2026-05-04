@@ -1,6 +1,7 @@
 # beware when upgrading: need to re-create backups!
 # 2025.08.21: live version is 14
 # 2025.12.05: live version is 17
+# upgrade to 18-3.6?
 FROM postgis/postgis:17-3.5
 
 # mount SQL files directly into the Postgres containers’ initialization directory
