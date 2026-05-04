@@ -4,8 +4,12 @@ import { useParams, useLocation } from 'react-router'
 import { useAtomValue } from 'jotai'
 import { SplitPane, Pane } from 'react-split-pane'
 
-// DO NOT lazy load Karte! https://github.com/barbalex/apf2/issues/616
-import { Karte } from './Karte/index.tsx'
+// Karte was previously not lazy-loaded due to issue #616.
+// That issue was specific to an older bundler/react-leaflet version.
+// The component is already wrapped in <Suspense> so lazy loading works correctly.
+const Karte = lazy(async () => ({
+  default: (await import('./Karte/index.tsx')).Karte,
+}))
 const TreeContainer = lazy(async () => ({
   default: (await import('./TreeContainer/index.tsx')).TreeContainer,
 }))
@@ -15,14 +19,14 @@ const Exporte = lazy(async () => ({
 const Filter = lazy(async () => ({
   default: (await import('./Filter/index.tsx')).Filter,
 }))
+const Bookmarks = lazy(async () => ({
+  default: (await import('../Bookmarks/Bookmarks/index.tsx')).Bookmarks,
+}))
 import { Spinner } from '../shared/Spinner.tsx'
 import { useProjekteTabs } from '../../modules/useProjekteTabs.ts'
-import { Bookmarks } from '../Bookmarks/Bookmarks/index.tsx'
 import { hideBookmarksAtom, isPrintAtom } from '../../store/index.ts'
 
 import styles from './ProjektContainer.module.css'
-import { fi } from 'date-fns/locale'
-import { first } from 'rxjs'
 
 export const ProjektContainer = () => {
   const { projId, apberuebersichtId, apberId } = useParams()
@@ -114,7 +118,11 @@ export const ProjektContainer = () => {
   // issue with max 4 panes shown dynamically (5 show on reload only). Solution: size null, not undefined!!!
   return (
     <div className={styles.outerContainer}>
-      {!hideBookmarks && <Bookmarks />}
+      {!hideBookmarks && (
+        <Suspense fallback={null}>
+          <Bookmarks />
+        </Suspense>
+      )}
       <div
         className={styles.container}
         style={{ height: hideBookmarks ? '100%' : 'calc(100% - 40.8px)' }}
