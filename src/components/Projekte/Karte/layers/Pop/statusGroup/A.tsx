@@ -1,4 +1,4 @@
-import Icon from './a.svg'
+import Icon from './a.svg?react'
 import styles from '../../iconContainer.module.css'
 
 export const PopIconA = () => (

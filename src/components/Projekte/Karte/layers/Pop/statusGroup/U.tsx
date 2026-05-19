@@ -1,4 +1,4 @@
-import Icon from './u.svg'
+import Icon from './u.svg?react'
 import styles from '../../iconContainer.module.css'
 
 export const PopIconU = () => (

@@ -1,11 +1,13 @@
-import { useRef } from 'react'
+import { lazy, Suspense } from 'react'
 import { useOutletContext, useParams } from 'react-router'
 import { useResizeDetector } from 'react-resize-detector'
-import DocViewer, { DocViewerRenderers } from '@cyntler/react-doc-viewer'
 
 import { SuspenseImage } from '../../SuspenseImage.tsx'
-import '@cyntler/react-doc-viewer/dist/index.css'
 import './style.css'
+
+const DocViewerWrapper = lazy(() =>
+  import('./DocViewerWrapper.tsx').then((m) => ({ default: m.DocViewerWrapper })),
+)
 import styles from './index.module.css'
 
 const imageStyle = {
@@ -16,8 +18,6 @@ const imageStyle = {
 export const Component = () => {
   const { files } = useOutletContext()
   const { fileId } = useParams()
-  const previewRef = useRef(null)
-
   const row = files?.find((file) => file.fileId === fileId) ?? {}
 
   const { width, height, ref } = useResizeDetector({
@@ -91,19 +91,14 @@ export const Component = () => {
       )}
       {isReactDocViewable && (
         <div style={{ height: '100%' }}>
-          <DocViewer
-            key={width}
-            documents={[
-              {
-                uri: `https://ucarecdn.com/${row.fileId}/${row.name}`,
-                mimeType: row.fileMimeType,
-              },
-            ]}
-            renderers={DocViewerRenderers}
-            config={{ header: { disableHeader: true } }}
-            style={{ height: '100%' }}
-            className="doc-viewer"
-          />
+          <Suspense fallback={null}>
+            <DocViewerWrapper
+              fileId={row.fileId}
+              name={row.name}
+              fileMimeType={row.fileMimeType}
+              width={width}
+            />
+          </Suspense>
         </div>
       )}
       {isNotViewable && (

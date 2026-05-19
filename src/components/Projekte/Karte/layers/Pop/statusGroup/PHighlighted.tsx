@@ -1,4 +1,4 @@
-import Icon from './pHighlighted.svg'
+import Icon from './pHighlighted.svg?react'
 import styles from '../../iconContainer.module.css'
 
 export const PopIconPHighlighted = () => (
