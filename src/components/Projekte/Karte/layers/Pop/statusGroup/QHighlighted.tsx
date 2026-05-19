@@ -1,4 +1,4 @@
-import Icon from './qHighlighted.svg'
+import Icon from './qHighlighted.svg?react'
 import styles from '../../iconContainer.module.css'
 
 export const PopIconQHighlighted = () => (
