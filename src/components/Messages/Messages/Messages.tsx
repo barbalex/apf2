@@ -1,5 +1,5 @@
 import Button from '@mui/material/Button'
-import Linkify from 'linkify-react'
+import MarkdownIt from 'markdown-it'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { DateTime } from 'luxon'
@@ -9,6 +9,16 @@ import { createUsermessage } from '../createUsermessage.ts'
 import { userNameAtom } from '../../../store/index.ts'
 
 import styles from './Messages.module.css'
+
+const mdParser = new MarkdownIt({ breaks: true, linkify: true })
+const defaultLinkOpen =
+  mdParser.renderer.rules.link_open ??
+  ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
+mdParser.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+  tokens[idx].attrSet('target', '_blank')
+  tokens[idx].attrSet('rel', 'noopener noreferrer')
+  return defaultLinkOpen(tokens, idx, options, env, self)
+}
 
 export const Messages = ({ unreadMessages }) => {
   const userName = useAtomValue(userNameAtom)
@@ -38,9 +48,14 @@ export const Messages = ({ unreadMessages }) => {
             key={m.id}
             style={{ paddingBottom: paddBottom ? 24 : 7 }}
           >
-            <Linkify options={{ target: '_blank' }}>
-              <div className={styles.message}>{`${date}: ${m.message}`}</div>
-            </Linkify>
+            <div className={styles.message}>
+              <span>{`${date}: `}</span>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: mdParser.render(m.message ?? ''),
+                }}
+              />
+            </div>
             <Button
               onClick={() => onClickRead(m)}
               color="inherit"

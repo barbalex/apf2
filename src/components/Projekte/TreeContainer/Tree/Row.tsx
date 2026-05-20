@@ -176,7 +176,10 @@ export const Row = ({ node, transitionState, ref }) => {
               searchWords={[nodeLabelFilter[node.menuType]]}
               textToHighlight={node.label}
             />
-          : node.label}
+          : node.label
+              .split('\n')
+              .map((part, index) => <div key={index}>{part}</div>)
+          }
         </span>
         {node.labelRightElements?.length &&
           node.labelRightElements.map((El, index) => <El key={index} />)}
