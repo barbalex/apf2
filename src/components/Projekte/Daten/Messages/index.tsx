@@ -1,6 +1,6 @@
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import Linkify from 'linkify-react'
+import MarkdownIt from 'markdown-it'
 import { DateTime } from 'luxon'
 
 import { query } from './query.ts'
@@ -9,6 +9,16 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import type { Message } from '../../../../models/apflora/index.tsx'
 
 import styles from './index.module.css'
+
+const mdParser = new MarkdownIt({ breaks: true, linkify: true })
+const defaultLinkOpen =
+  mdParser.renderer.rules.link_open ??
+  ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
+mdParser.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+  tokens[idx].attrSet('target', '_blank')
+  tokens[idx].attrSet('rel', 'noopener noreferrer')
+  return defaultLinkOpen(tokens, idx, options, env, self)
+}
 
 interface MessagesQueryResult {
   allMessages?: {
@@ -54,9 +64,11 @@ export const Component = () => {
                 key={m.id}
               >
                 <div className={styles.date}>{date}</div>
-                <div>
-                  <Linkify options={{ target: '_blank' }}>{m.message}</Linkify>
-                </div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: mdParser.render(m.message ?? ''),
+                  }}
+                />
               </div>
             )
           })}
