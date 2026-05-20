@@ -11,6 +11,14 @@ import { userNameAtom } from '../../../store/index.ts'
 import styles from './Messages.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true, linkify: true })
+const defaultLinkOpen =
+  mdParser.renderer.rules.link_open ??
+  ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
+mdParser.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+  tokens[idx].attrSet('target', '_blank')
+  tokens[idx].attrSet('rel', 'noopener noreferrer')
+  return defaultLinkOpen(tokens, idx, options, env, self)
+}
 
 export const Messages = ({ unreadMessages }) => {
   const userName = useAtomValue(userNameAtom)
