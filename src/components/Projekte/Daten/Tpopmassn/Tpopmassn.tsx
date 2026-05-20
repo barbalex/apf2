@@ -417,7 +417,16 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    if (['jahr', 'datum', 'typ'].includes(field)) {
+    if (
+      [
+        'jahr',
+        'datum',
+        'typ',
+        'anzTriebe',
+        'anzPflanzen',
+        'anzPflanzstellen',
+      ].includes(field)
+    ) {
       tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassn`],
       })
