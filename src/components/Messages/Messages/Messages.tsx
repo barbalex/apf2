@@ -49,8 +49,8 @@ export const Messages = ({ unreadMessages }) => {
             style={{ paddingBottom: paddBottom ? 24 : 7 }}
           >
             <div className={styles.message}>
-              <span>{`${date}: `}</span>
-              <span
+              <div className={styles.date}>{date}</div>
+              <div
                 dangerouslySetInnerHTML={{
                   __html: mdParser.render(m.message ?? ''),
                 }}

@@ -12,8 +12,18 @@
 }
 
 .message {
+  display: flex;
   padding-top: 8px;
   padding-right: 15px;
+}
+
+.date {
+  flex-basis: 110px;
+  flex-shrink: 0;
+}
+
+.message p {
+  margin: 0;
 }
 
 .okButton {
