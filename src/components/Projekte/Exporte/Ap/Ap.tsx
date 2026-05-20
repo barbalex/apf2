@@ -36,6 +36,12 @@ interface ApQueryResult {
       createdAt?: string
       updatedAt?: string
       changedBy?: string
+      adresseByBearbeiter?: {
+        name?: string
+        usersByAdresseId?: {
+          nodes: Array<{ email?: string }>
+        }
+      }
     }>
   }
 }
@@ -81,6 +87,14 @@ export const Ap = ({ filtered = false }: ApProps) => {
                 createdAt
                 updatedAt
                 changedBy
+                adresseByBearbeiter {
+                  name
+                  usersByAdresseId {
+                    nodes {
+                      email
+                    }
+                  }
+                }
               }
             }
           }
@@ -104,6 +118,9 @@ export const Ap = ({ filtered = false }: ApProps) => {
       bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
       startJahr: n.startJahr,
       umsetzung: n?.apUmsetzungWerteByUmsetzung?.text ?? null,
+      avName: n?.adresseByBearbeiter?.name ?? null,
+      avEmail:
+        n?.adresseByBearbeiter?.usersByAdresseId?.nodes?.[0]?.email ?? null,
       createdAt: n.createdAt,
       updatedAt: n.updatedAt,
       changedBy: n.changedBy,

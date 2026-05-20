@@ -57,6 +57,14 @@ export const Pops = ({ filtered = false }) => {
                         id
                         text
                       }
+                      adresseByBearbeiter {
+                        name
+                        usersByAdresseId {
+                          nodes {
+                            email
+                          }
+                        }
+                      }
                     }
                     id
                     nr
@@ -97,6 +105,10 @@ export const Pops = ({ filtered = false }) => {
             n?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? null,
           apStartJahr: n?.apByApId?.startJahr ?? null,
           apUmsetzung: n?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? null,
+          avName: n?.apByApId?.adresseByBearbeiter?.name ?? null,
+          avEmail:
+            n?.apByApId?.adresseByBearbeiter?.usersByAdresseId?.nodes?.[0]
+              ?.email ?? null,
           id: n.id,
           nr: n.nr,
           name: n.name,
