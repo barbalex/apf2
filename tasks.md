@@ -1,4 +1,4 @@
-In exports we need to add two columns: 1. av_name (apflora.adresse.name) 2. av_email (apflora.user.email).
+In exports we need to add two columns: 1. avName (apflora.adresse.name) 2. avEmail (apflora.user.email).
 
 Lets add them in the following exports:
 
