@@ -40,6 +40,12 @@ interface TPopQueryResult {
             id: number
             text: string | null
           } | null
+          adresseByBearbeiter: {
+            name: string | null
+            usersByAdresseId: {
+              nodes: Array<{ email: string | null }>
+            }
+          } | null
         } | null
         id: PopId
         nr: number | null
@@ -138,6 +144,14 @@ export const TPop = ({ filtered = false }: TPopProps) => {
                       id
                       text
                     }
+                    adresseByBearbeiter {
+                      name
+                      usersByAdresseId {
+                        nodes {
+                          email
+                        }
+                      }
+                    }
                   }
                   id
                   nr
@@ -216,6 +230,10 @@ export const TPop = ({ filtered = false }: TPopProps) => {
       apStartJahr: n?.popByPopId?.apByApId?.startJahr ?? null,
       apUmsetzung:
         n?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung?.text ?? null,
+      avName: n?.popByPopId?.apByApId?.adresseByBearbeiter?.name ?? null,
+      avEmail:
+        n?.popByPopId?.apByApId?.adresseByBearbeiter?.usersByAdresseId
+          ?.nodes?.[0]?.email ?? null,
       popId: n?.popByPopId?.id ?? null,
       popNr: n?.popByPopId?.nr ?? null,
       popName: n?.popByPopId?.name ?? null,

@@ -43,6 +43,12 @@ interface TpopkontrQueryResult {
               id: number
               text?: string
             }
+            adresseByBearbeiter?: {
+              name?: string
+              usersByAdresseId?: {
+                nodes: Array<{ email?: string }>
+              }
+            }
           }
           id: PopId
           nr?: number
@@ -213,6 +219,14 @@ export const Kontrollen = ({ filtered = false }: KontrollenProps) => {
                             id
                             text
                           }
+                          adresseByBearbeiter {
+                            name
+                            usersByAdresseId {
+                              nodes {
+                                email
+                              }
+                            }
+                          }
                         }
                         id
                         nr
@@ -359,6 +373,12 @@ export const Kontrollen = ({ filtered = false }: KontrollenProps) => {
           apUmsetzung:
             n?.tpopByTpopId?.popByPopId?.apByApId?.apUmsetzungWerteByUmsetzung
               ?.text ?? null,
+          avName:
+            n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter?.name ??
+            null,
+          avEmail:
+            n?.tpopByTpopId?.popByPopId?.apByApId?.adresseByBearbeiter
+              ?.usersByAdresseId?.nodes?.[0]?.email ?? null,
           popId: n?.tpopByTpopId?.popByPopId?.id ?? null,
           popNr: n?.tpopByTpopId?.popByPopId?.nr ?? null,
           popName: n?.tpopByTpopId?.popByPopId?.name ?? null,
