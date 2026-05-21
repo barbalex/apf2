@@ -60,6 +60,13 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const [filter, setFilter] = useState('')
 
   const apolloClient = useApolloClient()
+  const now = new Date()
+  const minDatum = new Date(now.getFullYear() - 100, now.getMonth(), now.getDate())
+    .toISOString()
+    .split('T')[0]
+  const maxDatum = new Date(now.getFullYear() + 100, now.getMonth(), now.getDate())
+    .toISOString()
+    .split('T')[0]
   const { data, refetch, isFetching } = useQuery<QkQueryResult>({
     queryKey: ['qk', apId, projId, berichtjahr, qkNameQueries],
     queryFn: async () => {
@@ -71,6 +78,8 @@ export const Qk = ({ qkNameQueries, qks }: QkProps) => {
           notIsBerichtjahr: !berichtjahr,
           apId,
           projId,
+          minDatum,
+          maxDatum,
         },
       })
       if (result.error) throw result.error
