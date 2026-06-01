@@ -1042,9 +1042,9 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
       }
     })
   },
-  tpopmassnOhneJahr: () => {
+  tpopmassnDatum: () => {
     const popNodes =
-      data?.tpopmassnOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
+      data?.tpopmassnDatum?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ?? []
     const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
     const tpopmassnNodes = tpopNodes
       .map((n) => n?.tpopmassnsByTpopId?.nodes ?? [])
@@ -1257,9 +1257,9 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
       }
     })
   },
-  tpopfeldkontrOhneJahr: () => {
+  tpopfeldkontrDatum: () => {
     const popNodes =
-      data?.tpopfeldkontrOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
+      data?.tpopfeldkontrDatum?.apsByProjId?.nodes?.[0]?.popsByApId?.nodes ??
       []
     const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
     const tpopkontrNodes = tpopNodes
@@ -1290,9 +1290,9 @@ export const createMessageFunctions = ({ data, projId, apId }) => ({
       }
     })
   },
-  tpopfreiwkontrOhneJahr: () => {
+  tpopfreiwkontrDatum: () => {
     const popNodes =
-      data?.tpopfreiwkontrOhneJahr?.apsByProjId?.nodes?.[0]?.popsByApId
+      data?.tpopfreiwkontrDatum?.apsByProjId?.nodes?.[0]?.popsByApId
         ?.nodes ?? []
     const tpopNodes = popNodes.map((n) => n?.tpopsByPopId?.nodes ?? []).flat()
     const tpopkontrNodes = tpopNodes
