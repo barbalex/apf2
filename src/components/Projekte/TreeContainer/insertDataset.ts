@@ -138,6 +138,26 @@ export const insertDataset = async ({
       }
     }`
   }
+  if (['tpopfeldkontrFolder', 'tpopfeldkontr'].includes(menuType)) {
+    mutation = gql`
+      mutation create${upperFirst(camelCase(table))}(
+        $parentId: UUID!
+      ) {
+        create${upperFirst(camelCase(table))} (
+          input: {
+            ${camelCase(table)}: {
+              ${parentIdField}: $parentId
+              typ: "Zwischenbeurteilung"
+            }
+          }
+        ) {
+        ${camelCase(table)} {
+          id
+          ${parentIdField}
+        }
+      }
+    }`
+  }
   if (['userFolder', 'user'].includes(menuType)) {
     mutation = gql`
       mutation createUser($role: String!) {
