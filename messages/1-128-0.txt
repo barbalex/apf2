@@ -1,1 +1,1 @@
-Ab Version 1.128.0: Feldkontrollen: Benutzer mit Rolle 'manager' können weiterhin Ausgangslagen setzen. Andere nur noch Zwischenbeurteilungen. Erstellt man eine neue Feldkontrolle, ist Zwischenbeurteilung schon gesetzt ([Issue #798](https://github.com/barbalex/apf2/issues/756))
+Ab Version 1.128.0: Feldkontrollen: Benutzer mit Rolle 'manager' können weiterhin Ausgangslagen setzen. Andere nur noch Zwischenbeurteilungen. Erstellt man eine neue Feldkontrolle, ist Zwischenbeurteilung schon gesetzt ([Issue #756](https://github.com/barbalex/apf2/issues/756))
