@@ -92,7 +92,7 @@ export const Menu = ({ row }: MenuProps) => {
       result = await apolloClient.mutate<CreateTpopkontrResult>({
         mutation: gql`
           mutation createTpopkontrForTpopfeldkontrForm($tpopId: UUID!) {
-            createTpopkontr(input: { tpopkontr: { tpopId: $tpopId } }) {
+            createTpopkontr(input: { tpopkontr: { tpopId: $tpopId, typ: "Zwischenbeurteilung" } }) {
               tpopkontr {
                 id
                 tpopId
@@ -102,7 +102,6 @@ export const Menu = ({ row }: MenuProps) => {
         `,
         variables: {
           tpopId,
-          // typ: 'Zwischenbeurteilung'
         },
       })
     } catch (error) {

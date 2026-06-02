@@ -4,6 +4,8 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
+import { jwtDecode } from 'jwt-decode'
+
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
 import { TextField } from '../../../shared/TextField.tsx'
 import { MarkdownField } from '../../../shared/MarkdownField/index.tsx'
@@ -14,7 +16,7 @@ import { RadioButtonGroupWithInfo } from '../../../shared/RadioButtonGroupWithIn
 import { DateField } from '../../../shared/Date.tsx'
 import { StringToCopy } from '../../../shared/StringToCopy.tsx'
 import { TpopfeldkontrentwicklungPopover } from '../../../shared/TpopfeldkontrentwicklungPopover.tsx'
-import { userNameAtom } from '../../../../store/index.ts'
+import { userNameAtom, userTokenAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -127,6 +129,12 @@ const tpopkontrTypWerte = [
 
 export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
   const userName = useAtomValue(userNameAtom)
+  const token = useAtomValue(userTokenAtom)
+  const role = token ? jwtDecode(token)?.role : null
+  const filteredTpopkontrTypWerte =
+    role === 'apflora_manager' ?
+      tpopkontrTypWerte
+    : tpopkontrTypWerte.filter((w) => w.value === 'Zwischenbeurteilung')
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -220,7 +228,7 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
         <RadioButtonGroup
           name="typ"
           label="Kontrolltyp"
-          dataSource={tpopkontrTypWerte}
+          dataSource={filteredTpopkontrTypWerte}
           value={row.typ}
           saveToDb={saveToDb}
           error={fieldErrors.typ}
