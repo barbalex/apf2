@@ -54,7 +54,7 @@ import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { MapFilterListener } from './MapFilterListener.tsx'
-import { ClickListener } from './ClickListener.tsx'
+import { ClickListener } from './ClickListener/index.tsx'
 
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-measure/dist/leaflet-measure.css'

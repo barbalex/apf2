@@ -8,13 +8,15 @@ import { ellipse } from '@turf/ellipse'
 import { useParams } from 'react-router'
 import axios from 'redaxios'
 
-import { Popup } from './layers/Popup.tsx'
-import { xmlToLayersData } from '../../../modules/xmlToLayersData.ts'
+import { Popup } from '../layers/Popup.js'
+import { xmlToLayersData } from '../../../../modules/xmlToLayersData.js'
+import { overlays } from '../overlays.ts'
+import { fetchWmsData } from './fetchWmsData.ts'
 
 import {
   addNotificationAtom,
   mapActiveOverlaysAtom,
-} from '../../../store/index.ts'
+} from '../../../../store/index.ts'
 
 export const ClickListener = () => {
   const addNotification = useSetAtom(addNotificationAtom)
@@ -25,11 +27,12 @@ export const ClickListener = () => {
   const apolloClient = useApolloClient()
 
   const map = useMap()
+  const mapSize = map.getSize()
+  const bounds = map.getBounds()
 
   const onClick = async (event) => {
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
-    console.log('map clicked', { lat, lng, zoom })
     // idea 1:
     // get all layers
     // run onEachFeature on all layers
@@ -469,6 +472,36 @@ export const ClickListener = () => {
             layersData.push(data)
           })
         }
+      }
+    }
+
+    // wms layers
+    for (const overlay of overlays) {
+      // console.log('wms layers', { overlay, activeOverlays })
+      if (activeOverlays.includes(overlay.name) && overlay.wmsUrl) {
+        // TODO
+        console.log('wms layers, overlay:', overlay)
+        const params = {
+          request: 'GetFeatureInfo',
+          service: 'WMS',
+          version: overlay.wmsVersion ?? '1.3.0',
+          crs: overlay.wmsCrs ?? 'EPSG:4326',
+          layers: overlay.wmsLayers,
+          query_layers: overlay.wmsQueryLayers,
+          info_format: overlay.wmsInfoFormat ?? 'application/vnd.ogc.gml',
+          x: Math.round(event.containerPoint.x),
+          y: Math.round(event.containerPoint.y),
+          width: mapSize.x,
+          height: mapSize.y,
+          bbox: `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`,
+        }
+        console.log('wms layers, params:', params)
+        const requestData = await fetchWmsData({
+          url: overlay.wmsUrl,
+          params,
+          layerLabel: overlay.label,
+        })
+        console.log('wms layers, requestData:', requestData)
       }
     }
 
