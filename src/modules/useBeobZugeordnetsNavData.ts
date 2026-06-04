@@ -4,14 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
-import {
-  mapActiveApfloraLayersAtom,
-  treeBeobZugeordnetGqlFilterForTreeAtom,
-  store,
-} from '../store/index.ts'
+import { treeBeobZugeordnetGqlFilterForTreeAtom } from '../store/index.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
 import { BeobzugeordnetFilteredAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetFilteredAbsenzMapIcon.jsx'
-import { useProjekteTabs } from './useProjekteTabs.ts'
+import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
+import { BeobzugeordnetAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetAbsenzMapIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobZugeordnetsNavData = (props) => {
@@ -24,15 +21,9 @@ export const useBeobZugeordnetsNavData = (props) => {
   const tpopId = props?.tpopId ?? params.tpopId
   const beobId = props?.beobId ?? params.beobId
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
-  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const beobZugeordnetGqlFilterForTree = useAtomValue(
     treeBeobZugeordnetGqlFilterForTreeAtom,
   )
-  const showBeobzugeordnetIcon =
-    activeApfloraLayers?.includes('beobZugeordnet') && karteIsVisible
 
   const { data } = useQuery({
     queryKey: ['treeBeobZugeordnet', tpopId, beobZugeordnetGqlFilterForTree],
@@ -74,11 +65,6 @@ export const useBeobZugeordnetsNavData = (props) => {
 
   const count = data.beobsZugeordnet?.totalCount ?? 0
   const filteredCount = data.filteredBeobsZugeordnet?.nodes?.length ?? 0
-
-  console.log(
-    'useBeobZugeordnetsNavData, data:',
-    data?.data?.filteredBeobsZugeordnet?.nodes,
-  )
 
   const navData = {
     id: 'Beobachtungen',
@@ -126,11 +112,12 @@ export const useBeobZugeordnetsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobzugeordnetIcon && beobId === p.id ?
-          p.absenz ?
+        p.absenz ?
+          beobId === p.id ?
             [BeobzugeordnetFilteredAbsenzMapIcon]
-          : [BeobzugeordnetFilteredMapIcon]
-        : undefined,
+          : [BeobzugeordnetAbsenzMapIcon]
+        : beobId === p.id ? [BeobzugeordnetFilteredMapIcon]
+        : [BeobzugeordnetMapIcon],
     })),
   }
 

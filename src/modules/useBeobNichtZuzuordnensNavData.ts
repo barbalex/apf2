@@ -5,12 +5,12 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  mapActiveApfloraLayersAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
-  store,
 } from '../store/index.ts'
 import { BeobnichtzuzuordnenFilteredMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredMapIcon.tsx'
-import { useProjekteTabs } from './useProjekteTabs.ts'
+import { BeobnichtzuzuordnenFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenFilteredAbsenzMapIcon.tsx'
+import { BeobnichtzuzuordnenMapIcon } from '../components/NavElements/BeobnichtzuzuordnenMapIcon.tsx'
+import { BeobnichtzuzuordnenAbsenzMapIcon } from '../components/NavElements/BeobnichtzuzuordnenAbsenzMapIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobNichtZuzuordnensNavData = (props) => {
@@ -20,15 +20,9 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const beobId = props?.beobId ?? params.beobId
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
-  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const beobNichtZuzuordnenGqlFilterForTree = useAtomValue(
     treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
   )
-  const showBeobnichtzuzuordnenIcon =
-    activeApfloraLayers?.includes('beobNichtZuzuordnen') && karteIsVisible
 
   const allBeobNichtZuzuordnenFilter = {
     nichtZuordnen: { equalTo: true },
@@ -68,6 +62,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
               nodes {
                 id
                 label
+                absenz
               }
             }
           }
@@ -136,9 +131,13 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobnichtzuzuordnenIcon && beobId === p.id
-          ? [BeobnichtzuzuordnenFilteredMapIcon]
-          : undefined,
+        p.absenz ?
+          beobId === p.id ?
+            [BeobnichtzuzuordnenFilteredAbsenzMapIcon]
+          : [BeobnichtzuzuordnenAbsenzMapIcon]
+        : beobId === p.id ?
+          [BeobnichtzuzuordnenFilteredMapIcon]
+        : [BeobnichtzuzuordnenMapIcon],
     })),
   }
 
