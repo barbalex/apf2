@@ -1,0 +1,1 @@
+Ab Version 1.130.0: Kontrollen: 'Zwischenbeurteilung' heisst neu 'Kontrolle', 'Freiwilligen-Erfolgskontrolle' heisst neu 'Freiwilligen-Kontrolle' ([Issue #736](https://github.com/barbalex/apf2/issues/736))

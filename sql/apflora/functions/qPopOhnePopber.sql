@@ -28,7 +28,7 @@ CREATE OR REPLACE FUNCTION apflora.q_pop_ohne_popber(projid uuid, apid uuid, ber
             apflora.tpopkontr.tpop_id
           FROM apflora.tpopkontr
           WHERE
-            apflora.tpopkontr.typ IN('Freiwilligen-Erfolgskontrolle', 'Zwischenbeurteilung')
+            apflora.tpopkontr.typ IN('Freiwilligen-Kontrolle', 'Kontrolle')
             AND apflora.tpopkontr.jahr = $3))
     AND apflora.pop.id NOT IN(
       -- mit PopBer im Berichtjahr

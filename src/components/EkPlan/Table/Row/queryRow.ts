@@ -85,7 +85,7 @@ export const queryRow = gql`
       eks: tpopkontrsByTpopId(
         orderBy: JAHR_ASC
         filter: {
-          typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+          typ: { notEqualTo: "Freiwilligen-Kontrolle" }
           jahr: { in: $years }
         }
       ) {
@@ -111,7 +111,7 @@ export const queryRow = gql`
       }
       ekfs: tpopkontrsByTpopId(
         filter: {
-          typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+          typ: { equalTo: "Freiwilligen-Kontrolle" }
           jahr: { in: $years }
         }
       ) {

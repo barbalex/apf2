@@ -1022,7 +1022,7 @@ export const treeEkGqlFilterAtom = atom((get) => {
       {
         or: [
           { typ: { isNull: true } },
-          { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+          { typ: { in: ['Kontrolle', 'Ausgangszustand'] } },
         ],
       },
       apHiearchyFilter,
@@ -1096,7 +1096,7 @@ export const treeEkGqlFilterAtom = atom((get) => {
     }
     // Object need to filter by typ
     if (!singleFilter.typ) {
-      singleFilter.typ = { distinctFrom: 'Freiwilligen-Erfolgskontrolle' }
+      singleFilter.typ = { distinctFrom: 'Freiwilligen-Kontrolle' }
     }
     // Object has filter criteria. Add it!
     filterArray.push(singleFilter)
@@ -1174,7 +1174,7 @@ export const treeEkGqlFilterForTreeAtom = atom((get) => {
     }
     // Object need to filter by typ
     if (!singleFilter.typ) {
-      singleFilter.typ = { distinctFrom: 'Freiwilligen-Erfolgskontrolle' }
+      singleFilter.typ = { distinctFrom: 'Freiwilligen-Kontrolle' }
     }
     // Object has filter criteria. Add it!
     filterArray.push(singleFilter)
@@ -1204,7 +1204,7 @@ export const treeEkfGqlFilterAtom = atom((get) => {
   const projHiearchyFilter = {}
   const singleFilterByHierarchy = merge(
     merge(
-      { typ: { equalTo: 'Freiwilligen-Erfolgskontrolle' } },
+      { typ: { equalTo: 'Freiwilligen-Kontrolle' } },
       apHiearchyFilter,
     ),
     projHiearchyFilter,
@@ -1276,7 +1276,7 @@ export const treeEkfGqlFilterAtom = atom((get) => {
     }
     // Object need to filter by typ
     if (!singleFilter.typ) {
-      singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
+      singleFilter.typ = { equalTo: 'Freiwilligen-Kontrolle' }
     }
     filterArray.push(singleFilter)
   }
@@ -1355,7 +1355,7 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
     }
     // Object needs to filter by typ
     if (!singleFilter.typ) {
-      singleFilter.typ = { equalTo: 'Freiwilligen-Erfolgskontrolle' }
+      singleFilter.typ = { equalTo: 'Freiwilligen-Kontrolle' }
     }
     // Object has filter criteria. Add it!
     filterArray.push(singleFilter)

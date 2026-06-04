@@ -9,7 +9,7 @@ export const queryEkfTpops = gql`
         id
         ekfInJahr: tpopkontrsByTpopId(
           filter: {
-            typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+            typ: { equalTo: "Freiwilligen-Kontrolle" }
             # accept empty year - in case ekf was manually created
             or: [{ jahr: { equalTo: $jahr } }, { jahr: { isNull: true } }]
           }

@@ -84,8 +84,8 @@ const tpopkontrTypWerte = [
     label: 'Ausgangszustand',
   },
   {
-    value: 'Zwischenbeurteilung',
-    label: 'Zwischenbeurteilung',
+    value: 'Kontrolle',
+    label: 'Kontrolle',
   },
 ]
 

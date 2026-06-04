@@ -88,7 +88,7 @@ export const Menu = ({ row }: MenuProps) => {
             }
           }
         `,
-        variables: { tpopId, typ: 'Freiwilligen-Erfolgskontrolle' },
+        variables: { tpopId, typ: 'Freiwilligen-Kontrolle' },
       })
     } catch (error) {
       return addNotification({

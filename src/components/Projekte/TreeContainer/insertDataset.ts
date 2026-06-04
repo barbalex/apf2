@@ -127,7 +127,7 @@ export const insertDataset = async ({
           input: {
             ${camelCase(table)}: {
               ${parentIdField}: $parentId
-              typ: "Freiwilligen-Erfolgskontrolle"
+              typ: "Freiwilligen-Kontrolle"
             }
           }
         ) {
@@ -147,7 +147,7 @@ export const insertDataset = async ({
           input: {
             ${camelCase(table)}: {
               ${parentIdField}: $parentId
-              typ: "Zwischenbeurteilung"
+              typ: "Kontrolle"
             }
           }
         ) {

@@ -5,7 +5,7 @@ export const query = gql`
     tpopById(id: $id) {
       id
       tpopkontrsByTpopId(
-        filter: { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
+        filter: { typ: { notEqualTo: "Freiwilligen-Kontrolle" } }
       ) {
         nodes {
           id

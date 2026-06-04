@@ -122,8 +122,8 @@ const tpopkontrTypWerte = [
     label: 'Ausgangszustand',
   },
   {
-    value: 'Zwischenbeurteilung',
-    label: 'Zwischenbeurteilung',
+    value: 'Kontrolle',
+    label: 'Kontrolle',
   },
 ]
 
@@ -134,7 +134,7 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
   const filteredTpopkontrTypWerte =
     role === 'apflora_manager' ?
       tpopkontrTypWerte
-    : tpopkontrTypWerte.filter((w) => w.value === 'Zwischenbeurteilung')
+    : tpopkontrTypWerte.filter((w) => w.value === 'Kontrolle')
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()

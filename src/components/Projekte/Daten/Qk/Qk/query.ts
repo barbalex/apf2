@@ -1831,7 +1831,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       or: [
                         { jahr: { isNull: true } }
                         { datum: { isNull: true } }
@@ -1875,7 +1875,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       or: [
                         { jahr: { isNull: true } }
                         { datum: { isNull: true } }
@@ -1920,7 +1920,7 @@ export const query = gql`
                   tpopkontrsByTpopId(
                     filter: {
                       bearbeiter: { isNull: true }
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -1960,7 +1960,7 @@ export const query = gql`
                   tpopkontrsByTpopId(
                     filter: {
                       bearbeiter: { isNull: true }
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -1999,7 +1999,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2041,7 +2041,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2083,7 +2083,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2134,7 +2134,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2185,7 +2185,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                   ) {
@@ -2251,7 +2251,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC
@@ -2307,7 +2307,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { equalTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                   ) {
@@ -2373,7 +2373,7 @@ export const query = gql`
                   id
                   tpopkontrsByTpopId(
                     filter: {
-                      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+                      typ: { notEqualTo: "Freiwilligen-Kontrolle" }
                       jahr: { equalTo: $berichtjahr }
                     }
                     orderBy: JAHR_ASC

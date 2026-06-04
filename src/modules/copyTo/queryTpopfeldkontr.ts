@@ -6,7 +6,7 @@ export default gql`
   query copyEkToQueryForEk1($tpop: UUID!) {
     allTpopkontrs(
       filter: {
-        typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+        typ: { notEqualTo: "Freiwilligen-Kontrolle" }
         tpopId: { equalTo: $tpop }
       }
     ) {

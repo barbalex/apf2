@@ -68,7 +68,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               input: {
                 tpopkontr: {
                   tpopId: $tpopId
-                  typ: "Freiwilligen-Erfolgskontrolle"
+                  typ: "Freiwilligen-Kontrolle"
                 }
               }
             ) {
