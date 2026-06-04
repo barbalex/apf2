@@ -1,1 +1,1 @@
-Ab Version 1.129.0: Beobachtungen: Im Navigationsbaum werden jetzt bei Beobachtungen dieselben Icons wie in der Karte angezeigt. Will heissen: Man erkennt Absenzmeldungen recht einfach ([Issue #754](https://github.com/barbalex/apf2/issues/754))
+Ab Version 1.129.0: Im Navigationsbaum werden jetzt bei Beobachtungen dieselben Symbole wie in der Karte angezeigt. Absenzmeldungen sind nun schnell erkennbar ([Issue #754](https://github.com/barbalex/apf2/issues/754))
