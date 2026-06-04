@@ -147,7 +147,7 @@ export const insertDataset = async ({
           input: {
             ${camelCase(table)}: {
               ${parentIdField}: $parentId
-              typ: "Zwischenbeurteilung"
+              typ: "Kontrolle"
             }
           }
         ) {

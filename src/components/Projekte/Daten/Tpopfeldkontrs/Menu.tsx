@@ -86,7 +86,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       result = await apolloClient.mutate<CreateTpopkontrResult>({
         mutation: gql`
           mutation createTpopfeldkontrForTpopfeldkontrForm($tpopId: UUID!) {
-            createTpopkontr(input: { tpopkontr: { tpopId: $tpopId, typ: "Zwischenbeurteilung" } }) {
+            createTpopkontr(input: { tpopkontr: { tpopId: $tpopId, typ: "Kontrolle" } }) {
               tpopkontr {
                 id
                 tpopId

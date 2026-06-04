@@ -24,7 +24,7 @@ const typRenamed = (e: EkYearData) => {
   switch (e.typ) {
     case 'Freiwilligen-Erfolgskontrolle':
       return 'EKF'
-    case 'Zwischenbeurteilung':
+    case 'Kontrolle':
       return 'EK'
     default:
       return e.typ

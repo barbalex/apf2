@@ -1022,7 +1022,7 @@ export const treeEkGqlFilterAtom = atom((get) => {
       {
         or: [
           { typ: { isNull: true } },
-          { typ: { in: ['Zwischenbeurteilung', 'Ausgangszustand'] } },
+          { typ: { in: ['Kontrolle', 'Ausgangszustand'] } },
         ],
       },
       apHiearchyFilter,

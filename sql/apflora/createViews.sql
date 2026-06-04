@@ -4520,7 +4520,7 @@ WHERE
   tax.taxid > 150
   --AND tax.taxid < 1000000
   AND tpop.lv95_x IS NOT NULL -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
-  AND kontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
+  AND kontr.typ IN ('Ausgangszustand', 'Kontrolle', 'Freiwilligen-Erfolgskontrolle')
   AND tpop.status <> 201 -- keine Ansaatversuche
   AND tpop.status <> 300 -- keine potentiellen Wuchs-/Ansiedlungsorte. Issue 661
   AND kontr.bearbeiter IS NOT NULL -- nur wenn die Kontrolle einen bearbeiter hat

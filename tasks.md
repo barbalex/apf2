@@ -52,3 +52,21 @@ Two more corrections:
 
 1. absenz icons's color is darker than the others (for: 'Beobachtungen nicht beurteilt', maybe also 'Beobachtungen zugeordnet'? The color is fine for 'Beobachtungen nicht zuzuordnen')
 2. an active 'Beobachtungen nicht beurteilt' node is no more recognizable. It seems the flow symbol is no more drawn or covered by the yellow glow. Same for 'Beobachtungen nicht zuzuordnen'. Maybe also for 'Beobachtungen zugeordnet'?
+
+---
+
+lets implement https://github.com/barbalex/apf2/issues/708#issuecomment-3233512395. This includes the following parts:
+
+1. the value 'Zwischenbeurteilung' in apflora.tpopkontr_typ_werte should change to 'Kontrolle': we need sql code to run when the updated app is set live
+2. update all apflora.tpopkontr.typ values. As typ is defined as `typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte(text) ON DELETE SET NULL ON UPDATE CASCADE`, this should happen automatically because of `ON UPDATE CASCADE`
+3. replace the value in all views it is used in: we need sql code to run when the updated app is set live
+4. replace the value in all functions it is used in: we need sql code to run when the updated app is set live
+5. replace the value everywhere it is used in the code (including in the store)
+6. restart the graphql server after running the sql when the updated app is set live
+
+Steps:
+
+1. prepare all sql code to run when the updated app is set live
+2. replace the value in the code
+3. test in dev: run all sql code, restart graphql server, see if things work
+4. set live: set app live, run all sql code, reastart graphql server, see if things work
