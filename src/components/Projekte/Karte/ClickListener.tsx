@@ -1,6 +1,6 @@
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
-import { useMapEvent } from 'react-leaflet/hooks'
+import { useMapEvent, useMap } from 'react-leaflet/hooks'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import L from 'leaflet'
@@ -24,9 +24,12 @@ export const ClickListener = () => {
 
   const apolloClient = useApolloClient()
 
-  const map = useMapEvent('click', async (event) => {
+  const map = useMap()
+
+  const onClick = async (event) => {
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
+    console.log('map clicked', { lat, lng, zoom })
     // idea 1:
     // get all layers
     // run onEachFeature on all layers
@@ -478,7 +481,9 @@ export const ClickListener = () => {
       />,
     )
     L.popup().setLatLng(event.latlng).setContent(popupContent).openOn(map)
-  })
+  }
+
+  useMapEvent('click', onClick)
 
   return null
 }
