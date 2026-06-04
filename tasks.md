@@ -30,3 +30,25 @@ In form /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Tpopfeldk
 1. users with role 'apflora_manager' can choose from tpopkontrTypWerte 'Ausgangszustand' or 'Zwischenbeurteilung' (is implemented)
 2. users with other roles can only choose from tpopkontrTypWerte 'Zwischenbeurteilung' (new)
 3. all commands to create a new Feld-Kontrolle (not: Freiwilligen-Kontrolle which edits rows in the same table but sets typ to 'Freiwilligen-Erfolgskontrolle') should preset typ to 'Zwischenbeurteilung' (new). Here are such commands: a. form menu at /Daten/Projekte/e57f56f4-4376-11e8-ab21-4314b6749d13/Arten/6c52d174-4f62-11e7-aebe-67a303eb0640/Populationen/70d2b98f-4f62-11e7-aebe-d3b09a4611dd/Teil-Populationen/76c7fe44-4f62-11e7-aebe-6b56ab796555/Feld-Kontrollen b. context menu (right click) on the Feld-Kontrollen node in the nav tree c. context menu (right click) on the Feld-Kontrolle node in the nav tree
+
+---
+
+Nav tree, 'Beobachtungen nicht beurteilt', 'Beobachtungen nicht zuzuordnen' and 'Beobachtungen zugeordnet': these nodes list apflora.beob rows.
+
+So far, such a row, when shown in the map, is represented with an icon (there are two different, one vor Absenz (beob.absenz = true), the other for all others).
+
+New: The same icon shall be shown left of the row's label in the nav tree. Same as with 'Populationen' and 'Teil-Populationen'
+
+---
+
+Two remaining details:
+
+1. the label of beob are often long and wrap. icons should always remain on the first line (top) of a wrapped label
+2. symbols for absenz are now larger than the others. please make them same size
+
+---
+
+Two more corrections:
+
+1. absenz icons's color is darker than the others (for: 'Beobachtungen nicht beurteilt', maybe also 'Beobachtungen zugeordnet'? The color is fine for 'Beobachtungen nicht zuzuordnen')
+2. an active 'Beobachtungen nicht beurteilt' node is no more recognizable. It seems the flow symbol is no more drawn or covered by the yellow glow. Same for 'Beobachtungen nicht zuzuordnen'. Maybe also for 'Beobachtungen zugeordnet'?

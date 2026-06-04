@@ -2,7 +2,7 @@
   "name": "apflora",
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
-  "version": "1.128.1",
+  "version": "1.129.0",
   "type": "module",
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
     "autosuggest-highlight": "3.3.4",
     "blueimp-md5": "2.19.0",
     "browser-update": "3.3.63",
-    "date-fns": "4.1.0",
+    "date-fns": "4.4.0",
     "diff": "9.0.0",
     "es-toolkit": "1.46.1",
     "exceljs": "4.4.0",
@@ -66,9 +66,9 @@
     "notistack": "3.0.2",
     "proj4": "2.20.8",
     "proj4leaflet": "1.0.2",
-    "query-string": "9.3.1",
+    "query-string": "9.4.0",
     "react": "19.2.6",
-    "react-aria-components": "1.17.0",
+    "react-aria-components": "1.18.0",
     "react-datepicker": "9.1.0",
     "react-dnd": "16.0.1",
     "react-dnd-html5-backend": "16.0.1",
@@ -80,7 +80,7 @@
     "react-leaflet-markercluster": "5.0.0-rc.0",
     "react-markdown-editor-lite": "1.4.2",
     "react-resize-detector": "12.3.0",
-    "react-router": "7.15.1",
+    "react-router": "7.16.0",
     "react-select": "5.10.2",
     "react-split-pane": "3.2.0",
     "react-transition-group": "4.4.5",
@@ -115,7 +115,7 @@
     "copyfiles": "2.4.1",
     "cross-env": "10.1.0",
     "esbuild": "0.28.0",
-    "eslint": "10.4.0",
+    "eslint": "10.4.1",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.2",
@@ -141,6 +141,6 @@
     "@emotion/react": "unfortunately needed by @mui/material",
     "@emotion/styled": "unfortunately needed by @mui/material",
     "esbuild": "esbuild is not a direct dependency — Vite 8 needs it for CSS minification but it only exists as a transitive dep inside other packages, which Vercel's build environment can't reliably hoist. The fix is to add it directly to devDependencies",
-    "es-toolkit": "1.46.1: do not upgrade to 1.47.0. The issue is that Vite 8.0.13 + recharts 3.8.1 + es-toolkit 1.47.0 trigger a Rolldown CJS/ESM interop bug. Then all pages containing recharts are not rendered"
+    "es-toolkit": "1.46.1: do not upgrade to 1.47.0. The issue is that Vite 8.0.13 + recharts 3.8.1 + es-toolkit 1.47.0 trigger a Rolldown CJS/ESM interop bug. Then all pages containing recharts are not rendered. It seems the ultimate reason lies in rolldown: https://github.com/rolldown/rolldown/pull/9392. But is still happening because @rolldown/plugin-babel has not been updated since solving the issue in rolldown?"
   }
 }
