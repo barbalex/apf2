@@ -42,13 +42,18 @@ export const overlays = [
     value: 'ZhSvoColor',
     // get info returns: ERR_BLOCKED_BY_ORB
     name: 'ZhSvoColor',
-    wmsUrl: '//wms.zh.ch/FnsSVOZHWMS',
+    // wmsUrl: '//wms.zh.ch/FnsSVOZHWMS',
+    wmsUrl: '//wms.zh.ch/FnsSchutzanordnungenZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
+    // wmsLayers:
+    //   'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
     wmsLayers:
-      'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
+      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,altrechtliche-schutzverordnungen-a,altrechtliche-schutzverordnungen-c,schutzzonen-labels,objekt-label',
+    // wmsQueryLayers:
+    //   'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
     wmsQueryLayers:
-      'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
+      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,altrechtliche-schutzverordnungen-a,altrechtliche-schutzverordnungen-c',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   { label: 'Pflegeplan', value: 'ZhPflegeplan' },

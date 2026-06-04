@@ -12,6 +12,7 @@ import { Popup } from '../layers/Popup.js'
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.js'
 import { overlays } from '../overlays.ts'
 import { fetchWmsData } from './fetchWmsData.ts'
+import { layersDataFromRequestData } from './layersDataFromRequestData.ts'
 
 import {
   addNotificationAtom,
@@ -502,6 +503,13 @@ export const ClickListener = () => {
           layerLabel: overlay.label,
         })
         console.log('wms layers, requestData:', requestData)
+        if (requestData) {
+          layersDataFromRequestData({
+            layersData,
+            requestData,
+            infoFormat: params.info_format,
+          })
+        }
       }
     }
 
