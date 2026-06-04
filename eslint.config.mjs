@@ -2,7 +2,8 @@ import pluginReactRefresh from 'eslint-plugin-react-refresh'
 import pluginImport from 'eslint-plugin-import'
 import { fixupConfigRules } from '@eslint/compat'
 import globals from 'globals'
-// import tsParser from '@typescript-eslint/parser'
+import tsParser from '@typescript-eslint/parser'
+import tsPlugin from '@typescript-eslint/eslint-plugin'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import js from '@eslint/js'
@@ -23,9 +24,8 @@ export default [
   ...fixupConfigRules(
     compat.extends(
       'eslint:recommended',
-      // 'plugin:@typescript-eslint/recommended',
-      // 'plugin:@typescript-eslint/stylistic',
-      // 'plugin:react/recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:@typescript-eslint/stylistic',
       'plugin:react-hooks/recommended',
     ),
   ),
@@ -33,6 +33,7 @@ export default [
     plugins: {
       'react-refresh': pluginReactRefresh,
       import: pluginImport,
+      '@typescript-eslint': tsPlugin,
     },
 
     languageOptions: {
@@ -40,16 +41,16 @@ export default [
         ...globals.browser,
       },
 
-      // does this work well for js and jsx files?
-      // parser: tsParser,
-      // ecmaVersion: 'latest',
-      // sourceType: 'module',
+      parser: tsParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
 
-      // parserOptions: {
-      //   ecmaFeatures: {
-      //     jsx: true,
-      //   },
-      // },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        project: './tsconfig.json',
+      },
     },
 
     rules: {
@@ -59,7 +60,16 @@ export default [
       'no-console': 'off',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
-      'no-unused-vars': 1,
+
+      // Disable base rule and use TypeScript version
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
 
       'no-empty': [
         'error',
@@ -82,10 +92,15 @@ export default [
         'ignorePackages',
         {
           jsx: 'never',
-          // ts: 'never',
-          // tsx: 'never',
+          ts: 'never',
+          tsx: 'never',
         },
       ],
+
+      // TypeScript-specific rules
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
     },
   },
 ]

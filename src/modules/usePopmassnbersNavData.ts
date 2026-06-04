@@ -1,0 +1,104 @@
+import { gql } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
+import { useParams } from 'react-router'
+
+import { getPopmassnberGqlFilterForTree } from './getPopmassnberGqlFilterForTree.ts'
+import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
+
+export const usePopmassnbersNavData = (props) => {
+  const apolloClient = useApolloClient()
+  const params = useParams()
+  const projId = props?.projId ?? params.projId
+  const apId = props?.apId ?? params.apId
+  const popId = props?.popId ?? params.popId
+
+  // Get filter before useQuery so changes trigger refetch
+  const popmassnberGqlFilterForTree = getPopmassnberGqlFilterForTree(popId)
+
+  const { data } = useQuery({
+    queryKey: ['treePopmassnber', popId, popmassnberGqlFilterForTree],
+    queryFn: async () => {
+      const result = await apolloClient.query({
+        query: gql`
+          query TreePopmassnbersQuery(
+            $popmassnbersFilter: PopmassnberFilter!
+            $popId: UUID!
+          ) {
+            popById(id: $popId) {
+              id
+              popmassnbersByPopId(
+                filter: $popmassnbersFilter
+                orderBy: LABEL_ASC
+              ) {
+                nodes {
+                  id
+                  label
+                }
+              }
+              totalCount: popmassnbersByPopId {
+                totalCount
+              }
+            }
+          }
+        `,
+        variables: {
+          popmassnbersFilter: popmassnberGqlFilterForTree,
+          popId,
+        },
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
+    suspense: true,
+  })
+
+  const count = data.popById.popmassnbersByPopId.nodes.length
+  const totalCount = data.popById.totalCount.totalCount
+
+  const navData = {
+    id: 'Massnahmen-Berichte',
+    listFilter: 'popmassnber',
+    url: `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Massnahmen-Berichte`,
+    label: `Massnahmen-Berichte (${count}/${totalCount})`,
+    labelShort: `Massn.-Berichte (${count}/${totalCount})`,
+    treeNodeType: 'folder',
+    treeMenuType: 'popmassnberFolder',
+    treeId: `${popId}PopmassnberFolder`,
+    treeTableId: popId,
+    treeParentTableId: popId,
+    treeUrl: [
+      'Projekte',
+      projId,
+      'Arten',
+      apId,
+      'Populationen',
+      popId,
+      'Massnahmen-Berichte',
+    ],
+    hasChildren: count > 0,
+    component: NodeWithList,
+    menus: data.popById.popmassnbersByPopId.nodes.map((p) => ({
+      id: p.id,
+      label: p.label,
+      treeNodeType: 'table',
+      treeMenuType: 'popmassnber',
+      treeId: p.id,
+      treeTableId: p.id,
+      treeParentTableId: popId,
+      treeUrl: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'Populationen',
+        popId,
+        'Massnahmen-Berichte',
+        p.id,
+      ],
+      hasChildren: false,
+    })),
+  }
+
+  return navData
+}

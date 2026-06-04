@@ -21,6 +21,7 @@
   border-width: 0 !important;
   text-transform: none !important;
   white-space: nowrap !important;
+  font-weight: 700 !important;
 
   :hover {
     border-width: 1px !important;

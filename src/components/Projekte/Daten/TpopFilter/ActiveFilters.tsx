@@ -1,43 +1,46 @@
-import { useContext } from 'react'
-import { observer } from 'mobx-react-lite'
 import { useParams } from 'react-router'
+import { useAtomValue } from 'jotai'
 
-import { MobxContext } from '../../../../mobxContext.js'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
+import {
+  treeNodeLabelFilterAtom,
+  treeMapFilterAtom,
+  treeApFilterAtom,
+  treeArtIsFilteredAtom,
+  treePopIsFilteredAtom,
+} from '../../../../store/index.ts'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import { title, comment } from './ActiveFilters.module.css'
+import styles from './ActiveFilters.module.css'
 
-export const ActiveFilters = observer(() => {
+export const ActiveFilters = () => {
   const { apId } = useParams()
 
-  const store = useContext(MobxContext)
+  const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
+  const mapFilter = useAtomValue(treeMapFilterAtom)
+  const apFilter = useAtomValue(treeApFilterAtom)
+  const artIsFiltered = useAtomValue(treeArtIsFilteredAtom)
+  const popIsFiltered = useAtomValue(treePopIsFilteredAtom)
 
-  const { nodeLabelFilter, mapFilter, apFilter, artIsFiltered, popIsFiltered } =
-    store.tree
-
-  const navApFilterComment =
-    apFilter ?
-      `Navigationsbaum, "nur AP"-Filter: Nur Teil-Populationen von AP-Arten werden berücksichtigt.`
+  const navApFilterComment = apFilter
+    ? `Navigationsbaum, "nur AP"-Filter: Nur Teil-Populationen von AP-Arten werden berücksichtigt.`
     : undefined
   const navHiearchyComment =
     // popId ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Population gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.' :
-    apId ?
-      'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
+    apId
+      ? 'Navigationsbaum, Hierarchie-Filter: Im Navigationsbaum ist eine Art gewählt. Es werden nur ihre Teil-Populationen berücksichtigt.'
+      : undefined
+  const navLabelComment = nodeLabelFilter.tpop
+    ? `Navigationsbaum, Label-Filter: Das Label der Teil-Populationen wird nach "${nodeLabelFilter.tpop}" gefiltert.`
     : undefined
-  const navLabelComment =
-    nodeLabelFilter.tpop ?
-      `Navigationsbaum, Label-Filter: Das Label der Teil-Populationen wird nach "${nodeLabelFilter.tpop}" gefiltert.`
+  const artHierarchyComment = artIsFiltered
+    ? 'Formular-Filter, Ebene Art: Es werden nur Teil-Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const artHierarchyComment =
-    artIsFiltered ?
-      'Formular-Filter, Ebene Art: Es werden nur Teil-Populationen berücksichtigt, deren Art die Bedingungen des gesetzten Filters erfüllt.'
+  const popHierarchyComment = popIsFiltered
+    ? 'Formular-Filter, Ebene Population: Es werden nur Teil-Populationen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
     : undefined
-  const popHierarchyComment =
-    popIsFiltered ?
-      'Formular-Filter, Ebene Population: Es werden nur Teil-Populationen berücksichtigt, deren Population die Bedingungen des gesetzten Filters erfüllt.'
+  const mapFilterComment = mapFilter
+    ? 'Karten-Filter: wird angewendet.'
     : undefined
-  const mapFilterComment =
-    mapFilter ? 'Karten-Filter: wird angewendet.' : undefined
 
   const showFilterComments =
     !!navApFilterComment ||
@@ -51,23 +54,27 @@ export const ActiveFilters = observer(() => {
 
   return (
     <ErrorBoundary>
-      <div className={title}>Zusätzlich aktive Filter:</div>
+      <div className={styles.title}>Zusätzlich aktive Filter:</div>
       <ul>
         {!!navApFilterComment && (
-          <li className={comment}>{navApFilterComment}</li>
+          <li className={styles.comment}>{navApFilterComment}</li>
         )}
         {!!navHiearchyComment && (
-          <li className={comment}>{navHiearchyComment}</li>
+          <li className={styles.comment}>{navHiearchyComment}</li>
         )}
-        {!!navLabelComment && <li className={comment}>{navLabelComment}</li>}
+        {!!navLabelComment && (
+          <li className={styles.comment}>{navLabelComment}</li>
+        )}
         {!!artHierarchyComment && (
-          <li className={comment}>{artHierarchyComment}</li>
+          <li className={styles.comment}>{artHierarchyComment}</li>
         )}
         {!!popHierarchyComment && (
-          <li className={comment}>{popHierarchyComment}</li>
+          <li className={styles.comment}>{popHierarchyComment}</li>
         )}
-        {!!mapFilterComment && <li className={comment}>{mapFilterComment}</li>}
+        {!!mapFilterComment && (
+          <li className={styles.comment}>{mapFilterComment}</li>
+        )}
       </ul>
     </ErrorBoundary>
   )
-})
+}

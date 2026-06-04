@@ -1,0 +1,73 @@
+import { useState } from 'react'
+import Collapse from '@mui/material/Collapse'
+import Tooltip from '@mui/material/Tooltip'
+import CardContent from '@mui/material/CardContent'
+import Card from '@mui/material/Card'
+import CardActions from '@mui/material/CardActions'
+import IconButton from '@mui/material/IconButton'
+import { MdExpandMore as ExpandMoreIcon } from 'react-icons/md'
+
+import tippsStyles from './index.module.css'
+import styles from '../index.module.css'
+
+export const CsvInExcelOeffnen = () => {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <Card className={styles.card}>
+      <CardActions
+        className={styles.cardActions}
+        disableSpacing
+        onClick={() => setExpanded(!expanded)}
+      >
+        <div className={styles.actionTitle}>
+          Sie wollen die .csv-Datei direkt in Excel öffnen? Das wird nicht
+          empfohlen, aber hier erfahren Sie, wie es funktionieren kann:
+        </div>
+        <Tooltip title={expanded ? 'schliessen' : 'öffnen'}>
+          <IconButton
+            style={{ transform: expanded ? 'rotate(180deg)' : 'none' }}
+            aria-expanded={expanded}
+            aria-label={expanded ? 'schliessen' : 'öffnen'}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Tooltip>
+      </CardActions>
+      <Collapse
+        in={expanded}
+        timeout="auto"
+        unmountOnExit
+      >
+        <CardContent className={tippsStyles.cardContent}>
+          <ol>
+            <li>Excel öffnen</li>
+            <li>{'"Daten" > "Externe Daten abrufen" > "Aus Text" wählen'}</li>
+            <li>
+              {'Nun erscheit der Textkonvertierungs-Assistent.'}
+              <br />
+              {
+                'Im Schritt 1 als Dateiursprung statt dem vorgegebenen "Windows (ANSI)" dies hier wählen: "65001 : Unicode (UTF-8)". Excel versteht sonst partout keine Umlaute.'
+              }
+            </li>
+            <li>
+              {'Vorsicht: Excel vermanscht regelmässig importierte Daten!'}
+              <br />
+              {
+                'Beim Importieren interpretiert es nämlich in jedem Feld die obersten paar Datensätze - und bestimmt einen Datentyp, ohne Sie zu fragen.'
+              }
+              <br />
+              {
+                'Auch wenn weiter unten in vielen Datensätzen die Daten bei der nun nötigen Umwandlung in diesen Datentyp in diesem Feld dadurch verändert oder gelöscht werden, weil sie nicht diesem Datentyp entsprechen.'
+              }
+              <br />
+              {
+                'Daher bitte Excel nur für die Auswertung von Daten benutzten - nicht um .csv-Dateien zu öffnen.'
+              }
+            </li>
+          </ol>
+        </CardContent>
+      </Collapse>
+    </Card>
+  )
+}

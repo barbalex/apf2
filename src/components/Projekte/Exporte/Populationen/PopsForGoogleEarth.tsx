@@ -1,0 +1,113 @@
+import { useState } from 'react'
+import { useSetAtom } from 'jotai'
+import { sortBy } from 'es-toolkit'
+import { gql } from '@apollo/client'
+import Button from '@mui/material/Button'
+import { useApolloClient } from '@apollo/client/react'
+
+import { exportModule } from '../../../../modules/export.ts'
+
+import type { PopId } from '../../../../models/apflora/public/PopId.ts'
+
+import styles from '../index.module.css'
+
+import { addNotificationAtom } from '../../../../store/index.ts'
+
+interface PopKmlQueryResult {
+  allPops: {
+    nodes: {
+      id: PopId
+      vPopKmlsById: {
+        nodes: {
+          art: string | null
+          label: string | null
+          inhalte: string | null
+          id: PopId
+          wgs84Lat: number | null
+          wgs84Long: number | null
+          url: string | null
+        }[]
+      }
+    }[]
+  }
+}
+
+export const PopsForGoogleEarth = () => {
+  const addNotification = useSetAtom(addNotificationAtom)
+  const apolloClient = useApolloClient()
+
+  const [queryState, setQueryState] = useState()
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={async () => {
+        setQueryState('lade Daten...')
+        let result: { data: PopKmlQueryResult }
+        try {
+          result = await apolloClient.query({
+            query: gql`
+              query popKmlQuery {
+                allPops(filter: { vPopKmlsByIdExist: true }) {
+                  nodes {
+                    id
+                    vPopKmlsById {
+                      nodes {
+                        art
+                        label
+                        inhalte
+                        id
+                        wgs84Lat
+                        wgs84Long
+                        url
+                      }
+                    }
+                  }
+                }
+              }
+            `,
+          })
+        } catch (error) {
+          addNotification({
+            message: (error as Error).message,
+            options: {
+              variant: 'error',
+            },
+          })
+        }
+        setQueryState('verarbeite...')
+        const rows = (result?.data?.allPops?.nodes ?? []).map((z) => ({
+          art: z?.vPopKmlsById?.nodes?.[0]?.art ?? '',
+          label: z?.vPopKmlsById?.nodes?.[0]?.label ?? '',
+          inhalte: z?.vPopKmlsById?.nodes?.[0]?.inhalte ?? '',
+          id: z?.vPopKmlsById?.nodes?.[0]?.id ?? '',
+          wgs84Lat: z?.vPopKmlsById?.nodes?.[0]?.wgs84Lat ?? '',
+          wgs84Long: z?.vPopKmlsById?.nodes?.[0]?.wgs84Long ?? '',
+          url: z?.vPopKmlsById?.nodes?.[0]?.url ?? '',
+        }))
+        if (rows.length === 0) {
+          setQueryState(undefined)
+          return addNotification({
+            message: 'Die Abfrage retournierte 0 Datensätze',
+            options: {
+              variant: 'warning',
+            },
+          })
+        }
+        exportModule({
+          data: sortBy(rows, ['art', 'label']),
+          fileName: 'Populationen',
+          kml: true,
+        })
+        setQueryState(undefined)
+      }}
+    >
+      {`Populationen für Google Earth (beschriftet mit PopNr)`}
+      {queryState ?
+        <span className={styles.progress}>{queryState}</span>
+      : null}
+    </Button>
+  )
+}

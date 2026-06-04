@@ -1,30 +1,50 @@
-import { useContext, useState, useEffect } from 'react'
+import {
+  useState,
+  useEffect,
+  type SyntheticEvent,
+  type ChangeEvent,
+} from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
-import { observer } from 'mobx-react-lite'
-import { useQuery } from '@apollo/client/react'
+import { useApolloClient } from '@apollo/client/react'
+import { useQuery } from '@tanstack/react-query'
 
-import { FilterTitle } from '../../../shared/FilterTitle.jsx'
-import { queryTpops } from './queryTpops.js'
-import { MobxContext } from '../../../../mobxContext.js'
-import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.js'
-import { Ek } from './Ek/index.jsx'
-import { Tpop } from './Tpop.jsx'
-import { ErrorBoundary } from '../../../shared/ErrorBoundary.jsx'
-import { Error } from '../../../shared/Error.jsx'
-import { Tabs } from './Tabs.jsx'
-import { useSearchParamsState } from '../../../../modules/useSearchParamsState.js'
-import { ActiveFilters } from './ActiveFilters.js'
+import { useAtomValue, useSetAtom } from 'jotai'
 
-import { container, styledTab } from './index.module.css'
+import { FilterTitle } from '../../../shared/FilterTitle.tsx'
+import { queryTpops } from './queryTpops.ts'
+import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
+import { Ek } from './Ek/index.tsx'
+import { Tpop } from './Tpop.tsx'
+import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import {
+  treeDataFilterAtom,
+  treeDataFilterSetValueAtom,
+  treeTpopGqlFilterAtom,
+} from '../../../../store/index.ts'
+import { Tabs } from './Tabs.tsx'
+import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
+import { ActiveFilters } from './ActiveFilters.tsx'
 
-export const TpopFilter = observer(() => {
-  const store = useContext(MobxContext)
+interface TpopsQueryResult {
+  allTpops: {
+    totalCount: number
+  }
+  allTpopsFiltered: {
+    totalCount: number
+  }
+}
 
-  const { dataFilter, tpopGqlFilter, dataFilterSetValue } = store.tree
+import styles from './index.module.css'
+
+export const TpopFilter = () => {
+  const tpopGqlFilter = useAtomValue(treeTpopGqlFilterAtom)
+
+  const dataFilter = useAtomValue(treeDataFilterAtom)
+  const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
   const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
-  const onChangeTab = (event, value) => setTab(value)
+  const onChangeTab = (_event: SyntheticEvent, value: string) => setTab(value)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
@@ -34,29 +54,37 @@ export const TpopFilter = observer(() => {
     }
   }, [activeTab, dataFilter.tpop.length])
 
-  const { data: dataTpops, error } = useQuery(queryTpops, {
-    variables: {
-      filteredFilter: tpopGqlFilter.filtered,
-      allFilter: tpopGqlFilter.all,
+  const apolloClient = useApolloClient()
+
+  const { data: dataTpops } = useQuery<TpopsQueryResult>({
+    queryKey: ['tpopsCount', tpopGqlFilter.filtered, tpopGqlFilter.all],
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopsQueryResult>({
+        query: queryTpops,
+        variables: {
+          filteredFilter: tpopGqlFilter.filtered,
+          allFilter: tpopGqlFilter.all,
+        },
+      })
+      if (result.error) throw result.error
+      return result.data
     },
   })
 
   const row = dataFilter.tpop[activeTab]
 
-  const [fieldErrors, setFieldErrors] = useState({})
-  const saveToDb = (event) =>
-    dataFilterSetValue({
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
+    setDataFilterValue({
       table: 'tpop',
       key: event.target.name,
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })
 
-  if (error) return <Error error={error} />
-
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FilterTitle
           title="Teil-Population"
           table="tpop"
@@ -81,13 +109,13 @@ export const TpopFilter = observer(() => {
             label="Teil-Population"
             value="tpop"
             data-id="tpop"
-            className={styledTab}
+            className={styles.styledTab}
           />
           <Tab
             label="EK"
             value="ek"
             data-id="ek"
-            className={styledTab}
+            className={styles.styledTab}
           />
         </MuiTabs>
         {tab === 'tpop' ?
@@ -107,4 +135,4 @@ export const TpopFilter = observer(() => {
       </div>
     </ErrorBoundary>
   )
-})
+}

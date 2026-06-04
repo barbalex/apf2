@@ -4,11 +4,11 @@ RUN apt-get update && apt-get install -y dumb-init
 
 ENV NODE_ENV=production
 
-RUN npm install -g postgraphile
-RUN npm install -g postgraphile-plugin-connection-filter
-RUN npm install -g @graphile-contrib/pg-order-by-related
-RUN npm install -g @graphile/postgis
-RUN npm install -g postgraphile-plugin-connection-filter-postgis
+RUN npm install -g postgraphile@4.14.1
+RUN npm install -g postgraphile-plugin-connection-filter@2.3.0
+RUN npm install -g @graphile-contrib/pg-order-by-related@1.0.0
+RUN npm install -g @graphile/postgis@0.2.0
+RUN npm install -g postgraphile-plugin-connection-filter-postgis@1.0.0-alpha.6
 
 COPY --chown=node:node .postgraphilerc.js .postgraphilerc.js
 

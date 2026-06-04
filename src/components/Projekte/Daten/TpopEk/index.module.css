@@ -17,7 +17,10 @@
     background: rgba(128, 128, 128, 0.2);
   }
   span {
-    font-family: 'Roboto Mono' !important;
+    font-family:
+      ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+      'Roboto Mono', 'Oxygen Mono', 'Ubuntu Mono', 'Source Code Pro',
+      'Fira Mono', 'Droid Sans Mono', 'Consolas', 'Courier New', monospace !important;
     font-size: 14px;
     white-space: pre;
     line-height: 1.5rem;

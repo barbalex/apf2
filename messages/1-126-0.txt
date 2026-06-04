@@ -1,0 +1,1 @@
+Ab Version 1.126.0: AV-Name und AV-Email in folgenden Exporten ergänzt: Ap, Populationen, Teilpopulationen, Kontrollen, Massnahmen ([Issue #781](https://github.com/barbalex/apf2/issues/781))

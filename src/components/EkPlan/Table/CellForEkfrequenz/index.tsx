@@ -1,0 +1,131 @@
+import { useState } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import List from '@mui/material/List'
+import ListItemButton from '@mui/material/ListItemButton'
+
+import {
+  ekPlanHoveredAtom,
+  ekPlanSetHoveredTpopIdAtom,
+  ekPlanResetHoveredAtom,
+  ekPlanApValuesAtom,
+} from '../../../../store/index.ts'
+import { processChange } from './processChange.ts'
+
+import indexStyles from '../index.module.css'
+import styles from './index.module.css'
+
+export const CellForEkfrequenz = ({
+  row,
+  isOdd,
+  field,
+  width,
+  setProcessing,
+  data,
+}) => {
+  const hovered = useAtomValue(ekPlanHoveredAtom)
+  const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
+  const resetHovered = useSetAtom(ekPlanResetHoveredAtom)
+  const apValues = useAtomValue(ekPlanApValuesAtom)
+
+  const allEkfrequenzs = data?.allEkfrequenzs?.nodes ?? []
+
+  const maxCodeLength = Math.max(
+    ...allEkfrequenzs.map((a) => (a.code || '').length),
+  )
+
+  const onMouseEnter = () => setHoveredTpopId(row.id)
+
+  const onChange = async (e) => {
+    const value = e.target.value || null
+    setProcessing(true)
+    await processChange({
+      value,
+      row,
+    })
+    setProcessing(false)
+  }
+
+  const valueToShow = allEkfrequenzs?.find((e) => e.id === field.value)?.code
+
+  const [open, setOpen] = useState(false)
+  const onOpen = () => setOpen(true)
+  const onClose = () => setOpen(false)
+
+  const isHovered = hovered.tpopId === row.id
+  const cellStyle = {
+    maxWidth: width,
+    minWidth: width,
+    backgroundColor:
+      isHovered ? 'hsla(45, 100%, 90%, 1)'
+      : isOdd ? 'rgb(255, 255, 252)'
+      : 'unset',
+  }
+
+  return (
+    <>
+      <div
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={resetHovered}
+        onClick={onOpen}
+        className={indexStyles.cellForSelect}
+        style={cellStyle}
+      >
+        {valueToShow}
+      </div>
+      <Dialog
+        onClose={onClose}
+        open={open}
+      >
+        <DialogTitle className={styles.dialogTitle}>
+          EK-Frequenz wählen:
+        </DialogTitle>
+        <List sx={{ pt: 0 }}>
+          <ListItemButton
+            onClick={() => {
+              onChange({ target: { value: '' } })
+              onClose()
+            }}
+            dense
+            style={{
+              ...(data?.tpopById?.ekfrequenz === null ?
+                { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
+              : {}),
+            }}
+            className={styles.listItem}
+          >
+            Kein Wert
+          </ListItemButton>
+          {allEkfrequenzs.map((e) => (
+            <ListItemButton
+              key={e.id}
+              onClick={() => {
+                onChange({ target: { value: e.id } })
+                onClose()
+              }}
+              dense
+              style={{
+                ...(e.id === data?.tpopById?.ekfrequenz ?
+                  { backgroundColor: 'rgba(0, 0, 0, 0.06)' }
+                : {}),
+              }}
+              className={styles.listItem}
+            >
+              <span
+                className={styles.codeText}
+                width={maxCodeLength}
+                style={{ minWidth: `${maxCodeLength * 0.65}rem` }}
+              >
+                {e.code}
+              </span>
+              <span className={styles.anwendungsfallText}>
+                {e.anwendungsfall}
+              </span>
+            </ListItemButton>
+          ))}
+        </List>
+      </Dialog>
+    </>
+  )
+}
