@@ -5,12 +5,12 @@ import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  mapActiveApfloraLayersAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
-  store,
 } from '../store/index.ts'
 import { BeobnichtbeurteiltFilteredMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredMapIcon.tsx'
-import { useProjekteTabs } from './useProjekteTabs.ts'
+import { BeobnichtbeurteiltFilteredAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltFilteredAbsenzMapIcon.tsx'
+import { BeobnichtbeurteiltMapIcon } from '../components/NavElements/BeobnichtbeurteiltMapIcon.tsx'
+import { BeobnichtbeurteiltAbsenzMapIcon } from '../components/NavElements/BeobnichtbeurteiltAbsenzMapIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useBeobNichtBeurteiltsNavData = (props) => {
@@ -20,10 +20,6 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
   const apId = props?.apId ?? params.apId
   const beobId = props?.beobId ?? params.beobId
 
-  const [projekteTabs] = useProjekteTabs()
-  const karteIsVisible = projekteTabs.includes('karte')
-
-  const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
   const beobNichtBeurteiltGqlFilterForTree = useAtomValue(
     treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   )
@@ -67,6 +63,7 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
               nodes {
                 id
                 label
+                absenz
               }
             }
           }
@@ -92,9 +89,6 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
     },
     suspense: true,
   })
-
-  const showBeobnichtbeurteiltIcon =
-    activeApfloraLayers?.includes('beobNichtBeurteilt') && karteIsVisible
 
   const count = data.beobsNichtBeurteilt.totalCount
   const filteredCount = data.filteredBeobsNichtBeurteilt.nodes.length
@@ -137,9 +131,13 @@ export const useBeobNichtBeurteiltsNavData = (props) => {
       ],
       hasChildren: false,
       labelLeftElements:
-        showBeobnichtbeurteiltIcon && beobId === p.id ?
+        p.absenz ?
+          beobId === p.id ?
+            [BeobnichtbeurteiltFilteredAbsenzMapIcon]
+          : [BeobnichtbeurteiltAbsenzMapIcon]
+        : beobId === p.id ?
           [BeobnichtbeurteiltFilteredMapIcon]
-        : undefined,
+        : [BeobnichtbeurteiltMapIcon],
     })),
   }
 
