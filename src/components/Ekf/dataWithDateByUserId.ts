@@ -10,7 +10,7 @@ export const dataWithDateByUserId = gql`
         id
         tpopkontrsByBearbeiter(
           filter: {
-            typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+            typ: { equalTo: "Freiwilligen-Kontrolle" }
             jahr: { equalTo: $jahr }
           }
         ) {

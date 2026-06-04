@@ -115,7 +115,7 @@ export const useTpopNavData = (props) => {
               }
               tpopfeldkontrs: tpopkontrsByTpopId(
                 filter: {
-                  typ: { distinctFrom: "Freiwilligen-Erfolgskontrolle" }
+                  typ: { distinctFrom: "Freiwilligen-Kontrolle" }
                 }
               ) {
                 totalCount
@@ -126,7 +126,7 @@ export const useTpopNavData = (props) => {
                 totalCount
               }
               tpopfreiwkontrs: tpopkontrsByTpopId(
-                filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
+                filter: { typ: { equalTo: "Freiwilligen-Kontrolle" } }
               ) {
                 totalCount
               }

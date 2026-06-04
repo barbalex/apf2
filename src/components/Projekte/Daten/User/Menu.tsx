@@ -228,7 +228,7 @@ export const Menu = ({
           `,
           variables: {
             tpopId,
-            typ: 'Freiwilligen-Erfolgskontrolle',
+            typ: 'Freiwilligen-Kontrolle',
             bearbeiter: row.adresseId,
             jahr: thisYear,
           },

@@ -100,7 +100,7 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
 
       const eks = kontrs
         .filter((o) => o.jahr === year)
-        .filter((o) => o.typ !== 'Freiwilligen-Erfolgskontrolle')
+        .filter((o) => o.typ !== 'Freiwilligen-Kontrolle')
       const eksCount = eks.length
       row[`${year}_EK`] = eksCount > 0 ? eksCount : ''
 
@@ -132,7 +132,7 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
 
       const ekfs = kontrs
         .filter((o) => o.jahr === year)
-        .filter((o) => o.typ === 'Freiwilligen-Erfolgskontrolle')
+        .filter((o) => o.typ === 'Freiwilligen-Kontrolle')
       const ekfsCount = ekfs.length
       row[`${year}_EKF`] = ekfsCount > 0 ? ekfsCount : ''
 

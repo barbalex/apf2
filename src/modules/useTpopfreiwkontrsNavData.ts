@@ -44,7 +44,7 @@ export const useTpopfreiwkontrsNavData = (props) => {
                 }
               }
               totalCount: tpopkontrsByTpopId(
-                filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
+                filter: { typ: { equalTo: "Freiwilligen-Kontrolle" } }
               ) {
                 totalCount
               }

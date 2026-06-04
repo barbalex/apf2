@@ -22,7 +22,7 @@ interface EkYearProps {
 
 const typRenamed = (e: EkYearData) => {
   switch (e.typ) {
-    case 'Freiwilligen-Erfolgskontrolle':
+    case 'Freiwilligen-Kontrolle':
       return 'EKF'
     case 'Kontrolle':
       return 'EK'

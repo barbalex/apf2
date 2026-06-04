@@ -3,10 +3,14 @@
 -- automatically updates all apflora.tpopkontr.typ values.
 -- After running this SQL, restart the graphql server.
 
--- Step 1: Update the lookup table value (CASCADE handles apflora.tpopkontr.typ)
+-- Step 1: Update the lookup table values (CASCADE handles apflora.tpopkontr.typ)
 UPDATE apflora.tpopkontr_typ_werte
 SET text = 'Kontrolle'
 WHERE text = 'Zwischenbeurteilung';
+
+UPDATE apflora.tpopkontr_typ_werte
+SET text = 'Freiwilligen-Kontrolle'
+WHERE text = 'Freiwilligen-Erfolgskontrolle';
 
 -- Step 2: Recreate view apflora.v_export_info_flora_beob
 CREATE OR REPLACE VIEW apflora.v_export_info_flora_beob AS
@@ -182,7 +186,7 @@ WHERE
   tax.taxid > 150
   --AND tax.taxid < 1000000
   AND tpop.lv95_x IS NOT NULL -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
-  AND kontr.typ IN ('Ausgangszustand', 'Kontrolle', 'Freiwilligen-Erfolgskontrolle')
+  AND kontr.typ IN ('Ausgangszustand', 'Kontrolle', 'Freiwilligen-Kontrolle')
   AND tpop.status <> 201 -- keine Ansaatversuche
   AND tpop.status <> 300 -- keine potentiellen Wuchs-/Ansiedlungsorte. Issue 661
   AND kontr.bearbeiter IS NOT NULL -- nur wenn die Kontrolle einen bearbeiter hat
@@ -265,7 +269,7 @@ CREATE OR REPLACE FUNCTION apflora.q_tpop_ohne_tpopber(projid uuid, apid uuid, b
           on apflora.pop.id = apflora.tpop.pop_id
         on apflora.tpop.id = apflora.tpopkontr.tpop_id
       WHERE
-        apflora.tpopkontr.typ IN ('Freiwilligen-Erfolgskontrolle','Kontrolle')
+        apflora.tpopkontr.typ IN ('Freiwilligen-Kontrolle','Kontrolle')
         and apflora.tpopkontr.jahr = $3
         and apflora.ap.id = $2
         and apflora.ap.proj_id = $1
@@ -324,7 +328,7 @@ CREATE OR REPLACE FUNCTION apflora.q_pop_ohne_popber(projid uuid, apid uuid, ber
             apflora.tpopkontr.tpop_id
           FROM apflora.tpopkontr
           WHERE
-            apflora.tpopkontr.typ IN('Freiwilligen-Erfolgskontrolle', 'Kontrolle')
+            apflora.tpopkontr.typ IN('Freiwilligen-Kontrolle', 'Kontrolle')
             AND apflora.tpopkontr.jahr = $3))
     AND apflora.pop.id NOT IN(
       -- mit PopBer im Berichtjahr

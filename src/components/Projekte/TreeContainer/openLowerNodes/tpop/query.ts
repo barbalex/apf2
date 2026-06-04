@@ -15,14 +15,14 @@ export const query = gql`
         }
       }
       tpopfeldkontrs: tpopkontrsByTpopId(
-        filter: { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
+        filter: { typ: { notEqualTo: "Freiwilligen-Kontrolle" } }
       ) {
         nodes {
           id
         }
       }
       tpopfreiwkontrs: tpopkontrsByTpopId(
-        filter: { typ: { equalTo: "Freiwilligen-Erfolgskontrolle" } }
+        filter: { typ: { equalTo: "Freiwilligen-Kontrolle" } }
       ) {
         nodes {
           id

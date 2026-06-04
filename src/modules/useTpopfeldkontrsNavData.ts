@@ -50,7 +50,7 @@ export const useTpopfeldkontrsNavData = (props) => {
               }
               totalCount: tpopkontrsByTpopId(
                 filter: {
-                  typ: { distinctFrom: "Freiwilligen-Erfolgskontrolle" }
+                  typ: { distinctFrom: "Freiwilligen-Kontrolle" }
                 }
               ) {
                 totalCount
