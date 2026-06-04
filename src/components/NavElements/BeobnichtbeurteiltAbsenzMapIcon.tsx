@@ -2,6 +2,7 @@ import { beobIconAbsenzString } from '../Projekte/Karte/layers/BeobNichtBeurteil
 
 import { iconContainer } from './index.module.css'
 import { absenzIcon } from './absenzIcon.module.css'
+import styles from './BeobnichtbeurteiltAbsenzMapIcon.module.css'
 
 export const BeobnichtbeurteiltAbsenzMapIcon = () => (
   <div
@@ -10,7 +11,7 @@ export const BeobnichtbeurteiltAbsenzMapIcon = () => (
   >
     <div
       dangerouslySetInnerHTML={{ __html: beobIconAbsenzString }}
-      className={absenzIcon}
+      className={`${absenzIcon} ${styles.icon}`}
     />
   </div>
 )

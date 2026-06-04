@@ -45,3 +45,10 @@ Two remaining details:
 
 1. the label of beob are often long and wrap. icons should always remain on the first line (top) of a wrapped label
 2. symbols for absenz are now larger than the others. please make them same size
+
+---
+
+Two more corrections:
+
+1. absenz icons's color is darker than the others (for: 'Beobachtungen nicht beurteilt', maybe also 'Beobachtungen zugeordnet'? The color is fine for 'Beobachtungen nicht zuzuordnen')
+2. an active 'Beobachtungen nicht beurteilt' node is no more recognizable. It seems the flow symbol is no more drawn or covered by the yellow glow. Same for 'Beobachtungen nicht zuzuordnen'. Maybe also for 'Beobachtungen zugeordnet'?
