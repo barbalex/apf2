@@ -1,4 +1,4 @@
-import { beobIconHighlightedAbsenzString } from './beobIconHighlightedAbsenzString.js'
+import { beobIconHighlightedAbsenzString } from '../Projekte/Karte/layers/BeobNichtZuzuordnen/beobIconHighlightedAbsenzString.ts'
 
 import { iconContainer } from './index.module.css'
 import { absenzIcon } from './absenzIcon.module.css'
