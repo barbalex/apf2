@@ -38,3 +38,10 @@ Nav tree, 'Beobachtungen nicht beurteilt', 'Beobachtungen nicht zuzuordnen' and 
 So far, such a row, when shown in the map, is represented with an icon (there are two different, one vor Absenz (beob.absenz = true), the other for all others).
 
 New: The same icon shall be shown left of the row's label in the nav tree. Same as with 'Populationen' and 'Teil-Populationen'
+
+---
+
+Two remaining details:
+
+1. the label of beob are often long and wrap. icons should always remain on the first line (top) of a wrapped label
+2. symbols for absenz are now larger than the others. please make them same size
