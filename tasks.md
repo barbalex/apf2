@@ -33,7 +33,7 @@ In form /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Tpopfeldk
 
 ---
 
-Nav tree, 'Beobachtungen nicht beurteilt', 'Beobachtungen nicht zuzuordnen' and 'Beobachtungen zugeordnet': these nodes list apflora.beob rows. 
+Nav tree, 'Beobachtungen nicht beurteilt', 'Beobachtungen nicht zuzuordnen' and 'Beobachtungen zugeordnet': these nodes list apflora.beob rows.
 
 So far, such a row, when shown in the map, is represented with an icon (there are two different, one vor Absenz (beob.absenz = true), the other for all others).
 
