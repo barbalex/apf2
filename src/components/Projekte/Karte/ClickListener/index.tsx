@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
@@ -29,7 +30,21 @@ export const ClickListener = () => {
 
   const map = useMap()
 
+  // When the user clicks the Leaflet popup close button the click event
+  // propagates up to the map and would trigger a new query. Guard against
+  // that by setting this flag in the popupclose handler and clearing it
+  // after the click has been processed.
+  const justClosedPopup = useRef(false)
+  useMapEvent('popupclose', () => {
+    justClosedPopup.current = true
+    // Reset after a short delay so normal map clicks still work.
+    setTimeout(() => {
+      justClosedPopup.current = false
+    }, 0)
+  })
+
   const onClick = async (event) => {
+    if (justClosedPopup.current) return
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
     const mapSize = map.getSize()
