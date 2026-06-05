@@ -37,7 +37,43 @@ export const overlays = [
     wmsQueryLayers: 'objekt-umriss,schutzzonen-farbig',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
-  { label: 'Pflegeplan', value: 'ZhPflegeplan' },
+  {
+    label: 'Pflegeplan aktuelles Jahr',
+    value: 'ZhPflegeplanAJ',
+    name: 'ZhPflegeplanAJ',
+    wmsUrl: '//wms.zh.ch/FnsPflegeajZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers:
+      'FnsPflegeajZH,pflegeplan_uebersicht,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell',
+    wmsQueryLayers:
+      'FnsPflegeajZH,pflegeplan_uebersicht,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
+  {
+    label: 'Pflegeplan vergangenes Jahr',
+    value: 'ZhPflegeplanVJ',
+    name: 'ZhPflegeplanVJ',
+    wmsUrl: '//wms.zh.ch/FnsPflegevjZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers:
+      'FnsPflegevjZH,teilflaechenumrisse-vergangen,pfpl-vergangen,ueberlagerung1-vergangen,ueberlagerung2-vergangen,umgeb-vergangen,pfpl-label-vergangen',
+    wmsQueryLayers: 'FnsPflegevjZH,teilflaechenumrisse-vergangen',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
+  {
+    label: 'Pflegeplan vor-vergangenes Jahr',
+    value: 'ZhPflegeplanVVJ',
+    name: 'ZhPflegeplanVVJ',
+    wmsUrl: '//wms.zh.ch/FnsPflegevvjZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers:
+      'FnsPflegevvjZH,teilflaechenumrisse-vor-vergangenes,pfpl-vor-vergangenes,ueberlagerung1-vor-vergangenes,ueberlagerung2-vor-vergangenes,umgeb-vor-vergangenes,pfpl-label-vor-vergangenes',
+    wmsQueryLayers: 'FnsPflegevvjZH,teilflaechenumrisse-vor-vergangenes',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
   {
     label: 'Lebensraum- und Vegetationskartierungen',
     value: 'ZhLrVegKartierungen',

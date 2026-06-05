@@ -33,7 +33,7 @@ import { Betreuungsgebiete } from './layers/Betreuungsgebiete.tsx'
 import { Forstreviere } from './layers/Forstreviere.tsx'
 import { Markierungen } from './layers/Markierungen.tsx'
 import { ZhSvo } from './layers/ZhSvo.tsx'
-import { ZhPflegeplan } from './layers/ZhPflegeplan.tsx'
+import { ZhPflegeplanAJ } from './layers/ZhPflegeplanAJ.js'
 import { ZhLrVegKartierungen } from './layers/ZhLrVegKartierungen.tsx'
 import { ZhLichteWaelder } from './layers/ZhLichteWaelder.tsx'
 import { Gemeinden } from './layers/Gemeinden.tsx'
@@ -105,7 +105,7 @@ const OverlayComponents = {
   Forstreviere: () => <Forstreviere />,
   Gemeinden: () => <Gemeinden />,
   ZhSvo: () => <ZhSvo />,
-  ZhPflegeplan: () => <ZhPflegeplan />,
+  ZhPflegeplan: () => <ZhPflegeplanAJ />,
   ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
   ZhLichteWaelder: () => <ZhLichteWaelder />,
   ZhWaelderVegetation: () => <ZhWaelderVegetation />,

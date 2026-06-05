@@ -113,6 +113,7 @@ export const layerLegends = ({ apId }) => ({
       url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
     },
   ],
+  // TODO:
   ZhPflegeplan: [
     {
       name: 'Pflegeplan',
