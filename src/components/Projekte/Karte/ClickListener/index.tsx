@@ -28,12 +28,12 @@ export const ClickListener = () => {
   const apolloClient = useApolloClient()
 
   const map = useMap()
-  const mapSize = map.getSize()
-  const bounds = map.getBounds()
 
   const onClick = async (event) => {
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
+    const mapSize = map.getSize()
+    const bounds = map.getBounds()
     // idea 1:
     // get all layers
     // run onEachFeature on all layers
@@ -254,8 +254,6 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenFlaechen')) {
-      const mapSize = map.getSize()
-      const bounds = map.getBounds()
       let res
       let failedToFetch = false
       try {
@@ -328,8 +326,6 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenLinien')) {
-      const mapSize = map.getSize()
-      const bounds = map.getBounds()
       let res
       let failedToFetch = false
       try {
@@ -402,8 +398,6 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenPunkte')) {
-      const mapSize = map.getSize()
-      const bounds = map.getBounds()
       let res
       let failedToFetch = false
       try {
@@ -498,7 +492,8 @@ export const ClickListener = () => {
           params,
           layerLabel: overlay.label,
         })
-        // console.log('wms layers, requestData:', requestData)
+        console.log('wms layers, requestData:', requestData)
+        console.log('wms layers, layersData:', layersData)
         if (requestData) {
           layersDataFromRequestData({
             layersData,
