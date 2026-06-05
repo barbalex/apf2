@@ -1,94 +1,68 @@
 export const layerLegends = ({ apId }) => ({
-  ZhSvoGrey: [
-    {
-      name: 'Zonen Schutzverordnungen (Raster)',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen-raster&format=image/png&STYLE=default',
-    },
-    {
-      name: 'Überlagernde Schutzzonen',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
-    },
-  ],
   ZhLrVegKartierungen: [
     {
+      name: 'FnsLRKZH',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=FnsLRKZH&format=image/png&STYLE=default',
+    },
+    {
       name: 'Übersicht',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=uebersicht&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=uebersicht&format=image/png&STYLE=default',
     },
     {
-      name: 'Trockenstandorte 2003 TWW nat. Bedeutung BAFU',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=trocken03&format=image/png&STYLE=default',
+      name: 'Wiesen 2012',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=wiesen12&format=image/png&STYLE=default',
     },
     {
-      name: 'Trockenstandorte 1991 ZH-Oberland Dickenmann',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=trocken91&format=image/png&STYLE=default',
+      name: 'Trocken 2011',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=trocken11&format=image/png&STYLE=default',
     },
     {
-      name: 'Trockenstandorte 1989 ZH-Oberland BGU/AquaTerra',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=trocken89&format=image/png&STYLE=default',
+      name: 'Trocken 2001–2010',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=trocken01-10&format=image/png&STYLE=default',
     },
     {
-      name: 'Hoch- und Übergangsmoore nat. Bedeutung BAFU',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=moore&format=image/png&STYLE=default',
+      name: 'Trocken 2000',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=trocken00&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 2010 Maedlesten FORNAT',
-      url: 'https://www.w3.org/1999/xlink xlink:type="simple" xlink:href="https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-10&format=image/png&STYLE=default',
+      name: 'Moore',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=moore&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 2008 Werrikerriet',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-08&format=image/png&STYLE=default',
+      name: 'Feucht 2011',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-11&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 2008 Glattaltläufe',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht08-glatt&format=image/png&STYLE=default',
+      name: 'Feucht 2001–2010',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-01-10&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 2007-10 Pfäffikersee topos',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-07-10&format=image/png&STYLE=default',
+      name: 'Feucht 1981–2000',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-81-00&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 2006 Neeracherried topos',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-06&format=image/png&STYLE=default',
+      name: 'Feucht 1971–1980',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-71-80&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 2001 Drumlinlandschaft',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-01&format=image/png&STYLE=default',
+      name: 'Feucht 1961',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-61&format=image/png&STYLE=default',
     },
     {
-      name: 'Feuchtgebietskartierung 1991',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-91&format=image/png&STYLE=default',
-    },
-    {
-      name: 'Feuchtgebietskartierung 1986',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-86&format=image/png&STYLE=default',
-    },
-    {
-      name: 'Feuchtgebietskartierung 1976/77',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-76-77&format=image/png&STYLE=default',
-    },
-    {
-      name: 'Feuchtgebietskartierung 1964 Neeracherried Klötzli',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-64&format=image/png&STYLE=default',
-    },
-    {
-      name: 'Feuchtgebietskartierung 1961 Flughafen Klötzli',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=feucht-61&format=image/png&STYLE=default',
-    },
-    {
-      name: 'Auenvegetation 1993 nat. Objekte BAFU',
-      url: 'https://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=auen-93&format=image/png&STYLE=default',
+      name: 'Auen 1993',
+      url: 'https://wms.zh.ch/FnsLRKZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=auen-93&format=image/png&STYLE=default',
     },
   ],
   ZhLichteWaelder: [
     {
       name: 'Objekte',
-      url: 'https://wms.zh.ch/FnsLWZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=objekte-lichte-waelder-kanton-zuerich&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsLWZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=objekte-lichte-waelder-kanton-zuerich&format=image/png&STYLE=default',
     },
   ],
   ZhWaelderVegetation: [
     {
       name: 'Waldgesellschaften',
-      url: 'https://wms.zh.ch/FnsLWZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=waldgesellschaften&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsLWZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=waldgesellschaften&format=image/png&STYLE=default',
     },
   ],
   ZhForstreviereWms: [
@@ -97,28 +71,60 @@ export const layerLegends = ({ apId }) => ({
       url: 'https://wms.zh.ch/WaldEGZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=forstreviere&format=image/png&STYLE=default',
     },
   ],
-  ZhSvoColor: [
+  ZhSvo: [
     {
-      name: 'Zonen Schutzverordnungen',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
+      name: 'Objekt Umriss',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=objekt-umriss&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Schutzzonen',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=schutzzonen-farbig&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Zonen nach Schutzkategorien',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-nach-schutzkategorien&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Überlagernde Schutzzonen Naturschutz',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen-naturschutz&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Schutztyp Naturschutz',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=schutztyp-naturschutz&format=image/png&STYLE=default',
     },
     {
       name: 'Überlagernde Schutzzonen',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
     },
   ],
-  ZhPflegeplan: [
+  ZhPflegeplanAJ: [
     {
       name: 'Pflegeplan',
-      url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl-aktuell&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=FnsPflegeajZH&format=image/png&STYLE=default',
     },
     {
-      name: 'Überlagerung 1',
-      url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung1-aktuell&format=image/png&STYLE=default',
+      name: 'Pflegeplan aktuell',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl-aktuell&format=image/png&STYLE=default',
     },
     {
-      name: 'Überlagerung 2',
-      url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung2-aktuell&format=image/png&STYLE=default',
+      name: 'Überlagerung 1 aktuell',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung1-aktuell&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Überlagerung 2 aktuell',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung2-aktuell&format=image/png&STYLE=default',
+    },
+  ],
+  ZhPflegeplanVJ: [
+    {
+      name: 'Pflegeplan',
+      url: 'https://wms.zh.ch/FnsPflegevjZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=FnsPflegevjZH&format=image/png&STYLE=default',
+    },
+  ],
+  ZhPflegeplanVVJ: [
+    {
+      name: 'Pflegeplan',
+      url: 'https://wms.zh.ch/FnsPflegevvjZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=FnsPflegevvjZH&format=image/png&STYLE=default',
     },
   ],
   MassnahmenFlaechen: [

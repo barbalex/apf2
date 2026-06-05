@@ -30,11 +30,11 @@ import { ZhUep } from './layers/ZhUep.tsx'
 import { Detailplaene } from './layers/Detailplaene.tsx'
 import { Massnahmen } from './layers/Massnahmen.tsx'
 import { Betreuungsgebiete } from './layers/Betreuungsgebiete.tsx'
-import { Forstreviere } from './layers/Forstreviere.tsx'
 import { Markierungen } from './layers/Markierungen.tsx'
-import { ZhSvoColor } from './layers/ZhSvoColor.tsx'
-import { ZhPflegeplan } from './layers/ZhPflegeplan.tsx'
-import { ZhSvoGrey } from './layers/ZhSvoGrey.tsx'
+import { ZhSvo } from './layers/ZhSvo.tsx'
+import { ZhPflegeplanAJ } from './layers/ZhPflegeplanAJ.js'
+import { ZhPflegeplanVJ } from './layers/ZhPflegeplanVJ.js'
+import { ZhPflegeplanVVJ } from './layers/ZhPflegeplanVVJ.js'
 import { ZhLrVegKartierungen } from './layers/ZhLrVegKartierungen.tsx'
 import { ZhLichteWaelder } from './layers/ZhLichteWaelder.tsx'
 import { Gemeinden } from './layers/Gemeinden.tsx'
@@ -54,7 +54,7 @@ import { OwnControls } from './OwnControls.tsx'
 import { CoordinatesControl } from './CoordinatesControl/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { MapFilterListener } from './MapFilterListener.tsx'
-import { ClickListener } from './ClickListener.tsx'
+import { ClickListener } from './ClickListener/index.tsx'
 
 import 'leaflet/dist/leaflet.css'
 import 'leaflet-measure/dist/leaflet-measure.css'
@@ -103,11 +103,11 @@ const OverlayComponents = {
   MassnahmenLinien: () => <Massnahmen layer="linien" />,
   MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
   Betreuungsgebiete: () => <Betreuungsgebiete />,
-  Forstreviere: () => <Forstreviere />,
   Gemeinden: () => <Gemeinden />,
-  ZhSvoColor: () => <ZhSvoColor />,
-  ZhSvoGrey: () => <ZhSvoGrey />,
-  ZhPflegeplan: () => <ZhPflegeplan />,
+  ZhSvo: () => <ZhSvo />,
+  ZhPflegeplanAJ: () => <ZhPflegeplanAJ />,
+  ZhPflegeplanVJ: () => <ZhPflegeplanVJ />,
+  ZhPflegeplanVVJ: () => <ZhPflegeplanVVJ />, 
   ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
   ZhLichteWaelder: () => <ZhLichteWaelder />,
   ZhWaelderVegetation: () => <ZhWaelderVegetation />,
