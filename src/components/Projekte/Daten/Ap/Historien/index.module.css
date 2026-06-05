@@ -30,3 +30,14 @@
 .aktuell {
   background-color: rgb(201, 238, 211);
 }
+
+.historyRowWrapper {
+  position: relative;
+}
+
+.editButton {
+  position: absolute !important;
+  top: 8px;
+  right: 0;
+  z-index: 1;
+}

@@ -1,0 +1,19 @@
+.container {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 10px 12px 12px;
+  margin: 8px 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 4px;
+}
+
+.okButton {
+  color: rgb(46, 125, 50) !important;
+}
