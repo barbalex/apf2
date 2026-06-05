@@ -62,7 +62,7 @@ export const layerLegends = ({ apId }) => ({
   ZhWaelderVegetation: [
     {
       name: 'Waldgesellschaften',
-      url: 'https://wms.zh.ch/FnsLWZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=waldgesellschaften&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsLWZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=waldgesellschaften&format=image/png&STYLE=default',
     },
   ],
   ZhForstreviereWms: [

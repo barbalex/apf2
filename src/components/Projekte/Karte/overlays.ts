@@ -104,7 +104,7 @@ export const overlays = [
     name: 'ZhWaelderVegetation',
     // get info works, returns data
     name: 'ZhWaelderVegetation',
-    wmsUrl: '//wms.zh.ch/WaldVKWMS',
+    wmsUrl: '//wms.zh.ch/FnsLWZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers: 'waldgesellschaften',
