@@ -478,10 +478,7 @@ export const ClickListener = () => {
 
     // wms layers
     for (const overlay of overlays) {
-      // console.log('wms layers', { overlay, activeOverlays })
       if (activeOverlays.includes(overlay.name) && overlay.wmsUrl) {
-        // TODO
-        console.log('wms layers, overlay:', overlay)
         const params = {
           request: 'GetFeatureInfo',
           service: 'WMS',
@@ -496,13 +493,12 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox: `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`,
         }
-        console.log('wms layers, params:', params)
         const requestData = await fetchWmsData({
           url: overlay.wmsUrl,
           params,
           layerLabel: overlay.label,
         })
-        console.log('wms layers, requestData:', requestData)
+        // console.log('wms layers, requestData:', requestData)
         if (requestData) {
           layersDataFromRequestData({
             layersData,

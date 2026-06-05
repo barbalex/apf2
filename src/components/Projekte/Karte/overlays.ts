@@ -26,16 +26,15 @@ export const overlays = [
     // wmsInfoFormat: 'text/plain',
   },
   {
-    label: 'SVO farbig',
-    value: 'ZhSvoColor',
-    name: 'ZhSvoColor',
+    label: 'Schutzanordnungen',
+    value: 'ZhSvo',
+    name: 'ZhSvo',
     wmsUrl: '//wms.zh.ch/FnsSchutzanordnungenZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers:
-      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,schutzzonen-labels,objekt-label',
-    wmsQueryLayers:
-      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen',
+      'objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,schutzzonen-labels,objekt-label',
+    wmsQueryLayers: 'objekt-umriss,schutzzonen-farbig',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   { label: 'Pflegeplan', value: 'ZhPflegeplan' },

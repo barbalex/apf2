@@ -32,7 +32,7 @@ import { Massnahmen } from './layers/Massnahmen.tsx'
 import { Betreuungsgebiete } from './layers/Betreuungsgebiete.tsx'
 import { Forstreviere } from './layers/Forstreviere.tsx'
 import { Markierungen } from './layers/Markierungen.tsx'
-import { ZhSvoColor } from './layers/ZhSvoColor.tsx'
+import { ZhSvo } from './layers/ZhSvo.tsx'
 import { ZhPflegeplan } from './layers/ZhPflegeplan.tsx'
 import { ZhLrVegKartierungen } from './layers/ZhLrVegKartierungen.tsx'
 import { ZhLichteWaelder } from './layers/ZhLichteWaelder.tsx'
@@ -104,7 +104,7 @@ const OverlayComponents = {
   Betreuungsgebiete: () => <Betreuungsgebiete />,
   Forstreviere: () => <Forstreviere />,
   Gemeinden: () => <Gemeinden />,
-  ZhSvoColor: () => <ZhSvoColor />,
+  ZhSvo: () => <ZhSvo />,
   ZhPflegeplan: () => <ZhPflegeplan />,
   ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
   ZhLichteWaelder: () => <ZhLichteWaelder />,
