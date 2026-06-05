@@ -6,7 +6,7 @@ import { WMSTileLayer } from 'react-leaflet'
 export const ZhPflegeplanVJ = () => (
   <WMSTileLayer
     url="//wms.zh.ch/FnsPflegevjZH"
-    layers="FnsPflegevjZH,teilflaechenumrisse-vergangen,pfpl-vergangen,ueberlagerung1-vergangen,ueberlagerung2-vergangen,umgeb-vergangen,pfpl-label-vergangen"
+    layers="FnsPflegevjZH,pfpl-vergangen,ueberlagerung1-vergangen,ueberlagerung2-vergangen,umgeb-vergangen,pfpl-label-vergangen"
     opacity={0.5}
     transparent={true}
     version="1.3.0"

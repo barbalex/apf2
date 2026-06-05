@@ -113,19 +113,34 @@ export const layerLegends = ({ apId }) => ({
       url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
     },
   ],
-  // TODO:
-  ZhPflegeplan: [
+  ZhPflegeplanAJ: [
     {
       name: 'Pflegeplan',
-      url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl-aktuell&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=FnsPflegeajZH&format=image/png&STYLE=default',
     },
     {
-      name: 'Überlagerung 1',
-      url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung1-aktuell&format=image/png&STYLE=default',
+      name: 'Pflegeplan aktuell',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl-aktuell&format=image/png&STYLE=default',
     },
     {
-      name: 'Überlagerung 2',
-      url: 'https://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung2-aktuell&format=image/png&STYLE=default',
+      name: 'Überlagerung 1 aktuell',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung1-aktuell&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Überlagerung 2 aktuell',
+      url: 'https://wms.zh.ch/FnsPflegeajZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagerung2-aktuell&format=image/png&STYLE=default',
+    },
+  ],
+  ZhPflegeplanVJ: [
+    {
+      name: 'Pflegeplan',
+      url: 'https://wms.zh.ch/FnsPflegevjZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=FnsPflegevjZH&format=image/png&STYLE=default',
+    },
+  ],
+  ZhPflegeplanVVJ: [
+    {
+      name: 'Pflegeplan',
+      url: 'https://wms.zh.ch/FnsPflegevvjZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=FnsPflegevvjZH&format=image/png&STYLE=default',
     },
   ],
   MassnahmenFlaechen: [

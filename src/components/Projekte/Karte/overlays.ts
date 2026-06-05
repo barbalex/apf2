@@ -45,9 +45,9 @@ export const overlays = [
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers:
-      'FnsPflegeajZH,pflegeplan_uebersicht,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell',
+      'FnsPflegeajZH,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell', // ,pflegeplan_uebersicht
     wmsQueryLayers:
-      'FnsPflegeajZH,pflegeplan_uebersicht,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell',
+      'FnsPflegeajZH,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell', // ,pflegeplan_uebersicht
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   {
@@ -58,8 +58,8 @@ export const overlays = [
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers:
-      'FnsPflegevjZH,teilflaechenumrisse-vergangen,pfpl-vergangen,ueberlagerung1-vergangen,ueberlagerung2-vergangen,umgeb-vergangen,pfpl-label-vergangen',
-    wmsQueryLayers: 'FnsPflegevjZH,teilflaechenumrisse-vergangen',
+      'FnsPflegevjZH,pfpl-vergangen,ueberlagerung1-vergangen,ueberlagerung2-vergangen,umgeb-vergangen,pfpl-label-vergangen',
+    wmsQueryLayers: 'FnsPflegevjZH',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   {
@@ -70,8 +70,8 @@ export const overlays = [
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers:
-      'FnsPflegevvjZH,teilflaechenumrisse-vor-vergangenes,pfpl-vor-vergangenes,ueberlagerung1-vor-vergangenes,ueberlagerung2-vor-vergangenes,umgeb-vor-vergangenes,pfpl-label-vor-vergangenes',
-    wmsQueryLayers: 'FnsPflegevvjZH,teilflaechenumrisse-vor-vergangenes',
+      'FnsPflegevvjZH,pfpl-vor-vergangenes,ueberlagerung1-vor-vergangenes,ueberlagerung2-vor-vergangenes,umgeb-vor-vergangenes,pfpl-label-vor-vergangenes',
+    wmsQueryLayers: 'FnsPflegevvjZH',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   {
