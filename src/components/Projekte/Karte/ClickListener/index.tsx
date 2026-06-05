@@ -503,11 +503,19 @@ export const ClickListener = () => {
       }
     }
 
-    if (!layersData.length) return
+    // "Gemeindegrenzen" is returned by several ZH WMS services as a base layer in
+    // their GML responses regardless of the clicked feature. Only show it when the
+    // "Gemeinden" overlay is explicitly active.
+    const filteredLayersData =
+      activeOverlays.includes('Gemeinden') ? layersData : (
+        layersData.filter((d) => d.label !== 'Gemeindegrenzen')
+      )
+
+    if (!filteredLayersData.length) return
 
     const popupContent = ReactDOMServer.renderToString(
       <Popup
-        layersData={layersData}
+        layersData={filteredLayersData}
         mapSize={map.getSize()}
       />,
     )
