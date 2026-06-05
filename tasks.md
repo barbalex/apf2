@@ -83,4 +83,10 @@ now we make changes to /home/alex/Documents/GitHub/apf2/src/components/Projekte/
 
 ---
 
-when editing, we need a button to remove the row: with a menu asking to confirm or cancel
+now we make changes to /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Historien/index.tsx. This will be VERY similar to ap histories editing we just implemented:
+
+1. we need to pass in a + button in the FormTitle to enable adding a pop_history
+2. Clicking this adds a pop history (ap_id is set from the route params) (sub-)form below the last pop history, scrolls down there and focuses its year input
+3. this subform consists of a year input and the other pop_history inputs, similar to how they are used in the pop form
+4. the pop history subform has a save and remove button
+5. the history rows get an edit button (right of the year title). Clicking that mutates the row to the editable subform

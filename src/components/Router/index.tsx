@@ -967,7 +967,7 @@ export const Router = () => {
                         <Route
                           path="Historien"
                           lazy={() =>
-                            import('../Projekte/Daten/Pop/Historien.tsx')
+                            import('../Projekte/Daten/Pop/Historien/index.tsx')
                           }
                           errorElement={<RouterErrorBoundary />}
                         />

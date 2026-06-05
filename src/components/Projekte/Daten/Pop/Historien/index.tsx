@@ -3,18 +3,18 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { History as HistoryComponent } from '../../../shared/History/index.tsx'
-import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
-import { FormTitle } from '../../../shared/FormTitle/index.tsx'
+import { History as HistoryComponent } from '../../../../shared/History/index.tsx'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
+import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
 import type {
   PopId,
   ApId,
   AeTaxonomiesId,
   PopStatusWerteCode,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../../models/apflora/index.tsx'
 
-import styles from './Historien.module.css'
+import styles from './index.module.css'
 
 const query = gql`
   query popHistoryQuery($popId: UUID!) {
