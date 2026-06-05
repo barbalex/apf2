@@ -492,8 +492,7 @@ export const ClickListener = () => {
           params,
           layerLabel: overlay.label,
         })
-        console.log('wms layers, requestData:', requestData)
-        console.log('wms layers, layersData:', layersData)
+        // console.log('wms layers, requestData:', requestData)
         if (requestData) {
           layersDataFromRequestData({
             layersData,
