@@ -72,4 +72,11 @@ Steps:
 4. set live: set app live, run all sql code, reastart graphql server, see if things work
 
 ---
-now we want to use the created /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Ap/Ap.tsx in /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Historien.tsx: we need a + button to add a ap_history. this adds a 
+
+now we make changes to /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Historien/index.tsx:
+
+1. we need to pass in a + button in the FormTitle to enable adding a ap_history
+2. Clicking this adds a ap history (art_id and proj_id are set from the route params) (sub-)form below the last ap history and scrolls down there
+3. this subform consists of a year input and the other ap_history inputs, similar to how they are used in the /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Ap/Ap.tsx form
+4. when the subform looses focus, it mutates to a regular row in /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Historien/index.tsx
+5. these history rows get an edit button (right of the year title). Clicking that mutates the row to the editable subform
