@@ -72,3 +72,10 @@ Steps:
 4. set live: set app live, run all sql code, reastart graphql server, see if things work
 
 ---
+
+We have to alter tpop_kontrolliert_for_jber. This changes:
+
+- nothing for anz_tpopber
+- for anz_tpop: same where clause as so far, but additionally: exclude all with status 101 or 202 _if_ they had that status for more than a year i.e. if the status is 101 or 202 and was same in the tpop_history of the previous year
+
+So I guess we need to query the values separately, no more with the same where clause.
