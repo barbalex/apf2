@@ -90,6 +90,7 @@ const SortableItem = ({
                         src={layer.url}
                         alt={`Legende für ${layer.name}`}
                         className={styles.legendTooltipImage}
+                        onClick={() => window.open(layer.url, '_blank')}
                       />
                     </>
                   }

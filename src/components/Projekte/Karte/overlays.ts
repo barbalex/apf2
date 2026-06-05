@@ -87,7 +87,17 @@ export const overlays = [
       'FnsLRKZH,uebersicht,wiesen12,trocken11,trocken01-10,trocken00,moore,feucht-11,feucht-01-10,feucht-81-00,feucht-71-80,feucht-61,auen-93',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
-  { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
+  {
+    label: 'Wälder: lichte',
+    value: 'ZhLichteWaelder',
+    name: 'ZhLichteWaelder',
+    wmsUrl: '//wms.zh.ch/FnsLWZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers: 'objekte-lichte-waelder-kanton-zuerich',
+    wmsQueryLayers: 'objekte-lichte-waelder-kanton-zuerich',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
   {
     label: 'Wälder: Vegetation',
     value: 'ZhWaelderVegetation',

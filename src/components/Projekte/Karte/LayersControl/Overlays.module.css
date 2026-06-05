@@ -35,6 +35,7 @@
   display: block;
   max-width: 320px;
   max-height: 480px;
+  cursor: pointer;
 }
 
 .layer {
