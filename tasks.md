@@ -80,3 +80,7 @@ now we make changes to /home/alex/Documents/GitHub/apf2/src/components/Projekte/
 3. this subform consists of a year input and the other ap_history inputs, similar to how they are used in the /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Ap/Ap.tsx form
 4. when the subform looses focus, it mutates to a regular row in /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Historien/index.tsx
 5. these history rows get an edit button (right of the year title). Clicking that mutates the row to the editable subform
+
+---
+
+when editing, we need a button to remove the row: with a menu asking to confirm or cancel

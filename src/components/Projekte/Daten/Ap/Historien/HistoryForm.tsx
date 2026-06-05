@@ -1,10 +1,11 @@
-import { useState, useRef, type ChangeEvent } from 'react'
+import { useState, useRef, useEffect, type ChangeEvent } from 'react'
 import { useParams } from 'react-router'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
-import { Tooltip, IconButton } from '@mui/material'
+import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
 import { MdCheck } from 'react-icons/md'
+import { FaMinus } from 'react-icons/fa'
 
 import { TextField } from '../../../../shared/TextField.tsx'
 import { Select } from '../../../../shared/Select.tsx'
@@ -69,8 +70,21 @@ export const HistoryForm = ({
   })
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const blurTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+  const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
+    null,
+  )
+  const delMenuOpen = Boolean(delMenuAnchorEl)
+
+  useEffect(() => {
+    if (isNew) {
+      const input =
+        containerRef.current?.querySelector<HTMLInputElement>(
+          'input[name="year"]',
+        )
+      input?.focus()
+    }
+  }, [])
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -188,21 +202,38 @@ export const HistoryForm = ({
     refetch()
   }
 
-  const handleFocusOut = () => {
-    if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current)
-    blurTimeoutRef.current = setTimeout(async () => {
-      if (!containerRef.current?.contains(document.activeElement)) {
-        if (isNew) await handleSaveNew()
-        onClose()
-      }
-    }, 150)
-  }
-
   const rowKey = historyRow?.year ?? 'new'
 
   const handleOk = async () => {
-    if (blurTimeoutRef.current) clearTimeout(blurTimeoutRef.current)
     if (isNew) await handleSaveNew()
+    onClose()
+  }
+
+  const onClickDelete = async () => {
+    setDelMenuAnchorEl(null)
+    if (isNew) {
+      onClose()
+      return
+    }
+    try {
+      await apolloClient.mutate({
+        mutation: gql`
+          mutation deleteApHistoryForHistorienForm($id: UUID!, $year: Int!) {
+            deleteApHistoryByIdAndYear(input: { id: $id, year: $year }) {
+              apHistory {
+                id
+                year
+              }
+            }
+          }
+        `,
+        variables: { id: apId, year: historyRow!.year },
+      })
+    } catch (error) {
+      console.error('Failed to delete ap_history:', error)
+      return
+    }
+    refetch()
     onClose()
   }
 
@@ -210,9 +241,17 @@ export const HistoryForm = ({
     <div
       ref={containerRef}
       className={styles.container}
-      onBlur={handleFocusOut}
     >
       <div className={styles.header}>
+        <Tooltip title="Löschen">
+          <IconButton
+            size="small"
+            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            aria-owns={delMenuOpen ? 'apHistoryDelMenu' : undefined}
+          >
+            <FaMinus />
+          </IconButton>
+        </Tooltip>
         <Tooltip title="OK">
           <IconButton
             className={styles.okButton}
@@ -223,6 +262,16 @@ export const HistoryForm = ({
           </IconButton>
         </Tooltip>
       </div>
+      <MuiMenu
+        id="apHistoryDelMenu"
+        anchorEl={delMenuAnchorEl}
+        open={delMenuOpen}
+        onClose={() => setDelMenuAnchorEl(null)}
+      >
+        <h3 className={styles.menuTitle}>löschen?</h3>
+        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
+      </MuiMenu>
       <TextField
         name="year"
         label="Jahr"

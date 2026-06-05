@@ -17,3 +17,8 @@
 .okButton {
   color: rgb(46, 125, 50) !important;
 }
+
+.menuTitle {
+  padding: 8px 16px 0;
+  font-size: 1rem;
+}
