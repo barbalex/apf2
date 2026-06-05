@@ -34,7 +34,6 @@ import { Forstreviere } from './layers/Forstreviere.tsx'
 import { Markierungen } from './layers/Markierungen.tsx'
 import { ZhSvoColor } from './layers/ZhSvoColor.tsx'
 import { ZhPflegeplan } from './layers/ZhPflegeplan.tsx'
-import { ZhSvoGrey } from './layers/ZhSvoGrey.tsx'
 import { ZhLrVegKartierungen } from './layers/ZhLrVegKartierungen.tsx'
 import { ZhLichteWaelder } from './layers/ZhLichteWaelder.tsx'
 import { Gemeinden } from './layers/Gemeinden.tsx'
@@ -106,7 +105,6 @@ const OverlayComponents = {
   Forstreviere: () => <Forstreviere />,
   Gemeinden: () => <Gemeinden />,
   ZhSvoColor: () => <ZhSvoColor />,
-  ZhSvoGrey: () => <ZhSvoGrey />,
   ZhPflegeplan: () => <ZhPflegeplan />,
   ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
   ZhLichteWaelder: () => <ZhLichteWaelder />,

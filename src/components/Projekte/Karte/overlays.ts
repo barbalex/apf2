@@ -26,34 +26,16 @@ export const overlays = [
     // wmsInfoFormat: 'text/plain',
   },
   {
-    label: 'SVO grau',
-    value: 'ZhSvoGrey',
-    // get info returns: ERR_BLOCKED_BY_ORB. Only in dev?
-    name: 'ZhSvoGrey',
-    wmsUrl: '//wms.zh.ch/FnsSVOZHWMS',
-    wmsVersion: '1.3.0',
-    wmsCrs: 'EPSG:4326',
-    wmsLayers: 'ueberlagernde-schutzzonen,schutzverordnungsobjekte',
-    wmsQueryLayers: 'ueberlagernde-schutzzonen,schutzverordnungsobjekte',
-    wmsInfoFormat: 'application/vnd.ogc.gml',
-  },
-  {
     label: 'SVO farbig',
     value: 'ZhSvoColor',
-    // get info returns: ERR_BLOCKED_BY_ORB
     name: 'ZhSvoColor',
-    // wmsUrl: '//wms.zh.ch/FnsSVOZHWMS',
     wmsUrl: '//wms.zh.ch/FnsSchutzanordnungenZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
-    // wmsLayers:
-    //   'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
     wmsLayers:
-      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,altrechtliche-schutzverordnungen-a,altrechtliche-schutzverordnungen-c,schutzzonen-labels,objekt-label',
-    // wmsQueryLayers:
-    //   'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
+      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,schutzzonen-labels,objekt-label',
     wmsQueryLayers:
-      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,altrechtliche-schutzverordnungen-a,altrechtliche-schutzverordnungen-c',
+      'perimeter-schutzanordnungen,objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   { label: 'Pflegeplan', value: 'ZhPflegeplan' },
@@ -77,6 +59,7 @@ export const overlays = [
   {
     label: 'Forstreviere (WMS)',
     value: 'ZhForstreviereWms',
+    name: 'ZhForstreviereWms',
     wmsUrl: '//wms.zh.ch/WaldEGZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
@@ -87,13 +70,5 @@ export const overlays = [
   {
     label: 'Forstreviere. Stand: 2025.04.10',
     value: 'Forstreviere',
-    // get info works, returns NO data
-    name: 'ZhForstreviereWms',
-    wmsUrl: '//wms.zh.ch/WaldVKWMS',
-    wmsVersion: '1.3.0',
-    wmsCrs: 'EPSG:4326',
-    wmsLayers: 'waldgesellschaften',
-    wmsQueryLayers: 'waldgesellschaften',
-    wmsInfoFormat: 'application/vnd.ogc.gml', // application/vnd.ogc.gml
   },
 ]

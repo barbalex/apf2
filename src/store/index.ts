@@ -1889,7 +1889,6 @@ export const mapOverlaysAtom = atom([
   { label: 'NS-Gebiete Betreuung', value: 'Betreuungsgebiete' },
   { label: 'ZH Übersichtsplan', value: 'ZhUep' },
   { label: 'Gemeinden', value: 'Gemeinden' },
-  { label: 'SVO grau', value: 'ZhSvoGrey' },
   { label: 'SVO farbig', value: 'ZhSvoColor' },
   { label: 'Pflegeplan', value: 'ZhPflegeplan' },
   {

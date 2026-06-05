@@ -1,14 +1,4 @@
 export const layerLegends = ({ apId }) => ({
-  ZhSvoGrey: [
-    {
-      name: 'Zonen Schutzverordnungen (Raster)',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen-raster&format=image/png&STYLE=default',
-    },
-    {
-      name: 'Überlagernde Schutzzonen',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
-    },
-  ],
   ZhLrVegKartierungen: [
     {
       name: 'Übersicht',
@@ -98,14 +88,6 @@ export const layerLegends = ({ apId }) => ({
     },
   ],
   ZhSvoColor: [
-    // {
-    //   name: 'Zonen Schutzverordnungen',
-    //   url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
-    // },
-    // {
-    //   name: 'Überlagernde Schutzzonen',
-    //   url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
-    // },
     {
       name: 'Objekt Umriss',
       url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=objekt-umriss&format=image/png&STYLE=default',
