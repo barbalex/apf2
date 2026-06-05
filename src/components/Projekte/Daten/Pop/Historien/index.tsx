@@ -1,11 +1,16 @@
+import { useState, useRef, useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { Tooltip, IconButton } from '@mui/material'
+import { MdEdit } from 'react-icons/md'
 
 import { History as HistoryComponent } from '../../../../shared/History/index.tsx'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
+import { HistorienMenu } from './HistorienMenu.tsx'
+import { HistoryForm } from './HistoryForm.tsx'
 
 import type {
   PopId,
@@ -14,7 +19,15 @@ import type {
   PopStatusWerteCode,
 } from '../../../../../models/apflora/index.tsx'
 
-import styles from './index.module.css'
+import {
+  container,
+  docLink,
+  docLine,
+  aenderung,
+  aktuell,
+  historyRowWrapper,
+  editButton,
+} from './index.module.css'
 
 const query = gql`
   query popHistoryQuery($popId: UUID!) {
@@ -77,6 +90,12 @@ const query = gql`
         changedBy
       }
     }
+    allPopStatusWertes(orderBy: CODE_ASC) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
   }
 `
 
@@ -120,13 +139,16 @@ interface PopHistoryQueryResult {
       }
     >
   }
+  allPopStatusWertes?: {
+    nodes: Array<{ value: number; label: string }>
+  }
 }
 
 export const Component = () => {
   const { popId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['popHistory', popId],
     queryFn: async () => {
       const result = await apolloClient.query<PopHistoryQueryResult>({
@@ -139,9 +161,29 @@ export const Component = () => {
     suspense: true,
   })
 
+  const [editingYear, setEditingYear] = useState<number | 'new' | null>(null)
+  const bottomRef = useRef<HTMLDivElement>(null)
+
   const row = data?.popById
   const rows = data?.allPopHistories?.nodes ?? []
   const label = row?.label ?? 'Population'
+
+  const options = {
+    popStatusWertes: data?.allPopStatusWertes?.nodes ?? [],
+  }
+
+  const handleAdd = () => {
+    setEditingYear('new')
+  }
+
+  useEffect(() => {
+    if (editingYear === 'new') {
+      setTimeout(
+        () => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }),
+        0,
+      )
+    }
+  }, [editingYear])
 
   const openDocs = () => {
     const url = `${appBaseUrl()}Dokumentation/historisierung`
@@ -153,24 +195,41 @@ export const Component = () => {
 
   return (
     <>
-      <FormTitle title={`${label}: Historien`} />
-      <div className={styles.container}>
-        <p className={styles.docLine}>
+      <FormTitle
+        title={`${label}: Historien`}
+        MenuBarComponent={HistorienMenu}
+        menuBarProps={{ onAdd: handleAdd }}
+      />
+      <div className={container}>
+        <p className={docLine}>
           Jährlich historisierte Daten der Population (
           <span
-            className={styles.docLink}
+            className={docLink}
             onClick={openDocs}
           >
             Dokumentation
           </span>
           ).
         </p>
-        <p className={styles.docLine}>
-          <span className={styles.aenderung}>Änderungen</span> zum{' '}
-          <span className={styles.aktuell}>aktuellen Zustand</span> sind
+        <p className={docLine}>
+          <span className={aenderung}>Änderungen</span> zum{' '}
+          <span className={aktuell}>aktuellen Zustand</span> sind
           hervorgehoben.
         </p>
         {rows.map((r) => {
+          if (editingYear === r.year) {
+            return (
+              <HistoryForm
+                key={r.year}
+                isNew={false}
+                historyRow={r}
+                options={options}
+                onClose={() => setEditingYear(null)}
+                refetch={refetch}
+              />
+            )
+          }
+
           const dataArray = [
             {
               valueInRow:
@@ -221,13 +280,36 @@ export const Component = () => {
           ]
 
           return (
-            <HistoryComponent
-              key={`${r.id}${r.year}`}
-              year={r?.year}
-              dataArray={dataArray}
-            />
+            <div
+              key={r.year}
+              className={historyRowWrapper}
+            >
+              <Tooltip title="bearbeiten">
+                <IconButton
+                  className={editButton}
+                  size="small"
+                  onClick={() => setEditingYear(r.year)}
+                >
+                  <MdEdit />
+                </IconButton>
+              </Tooltip>
+              <HistoryComponent
+                key={`${r.id}${r.year}`}
+                year={r?.year}
+                dataArray={dataArray}
+              />
+            </div>
           )
         })}
+        {editingYear === 'new' && (
+          <HistoryForm
+            isNew={true}
+            options={options}
+            onClose={() => setEditingYear(null)}
+            refetch={refetch}
+          />
+        )}
+        <div ref={bottomRef} />
       </div>
     </>
   )
