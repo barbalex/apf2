@@ -1,7 +1,7 @@
 import { useAtomValue } from 'jotai'
 
 import { isDesktopViewAtom } from '../../../../store/index.ts'
-import { Component as Ap } from './Ap.tsx'
+import { Component as Ap } from './Ap/index.tsx'
 import { List } from './List.tsx'
 
 export const Component = () => {
