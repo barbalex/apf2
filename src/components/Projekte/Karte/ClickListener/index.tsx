@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
@@ -12,6 +13,7 @@ import { Popup } from '../layers/Popup.js'
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.js'
 import { overlays } from '../overlays.ts'
 import { fetchWmsData } from './fetchWmsData.ts'
+import { layersDataFromRequestData } from './layersDataFromRequestData.ts'
 
 import {
   addNotificationAtom,
@@ -27,12 +29,26 @@ export const ClickListener = () => {
   const apolloClient = useApolloClient()
 
   const map = useMap()
-  const mapSize = map.getSize()
-  const bounds = map.getBounds()
+
+  // When the user clicks the Leaflet popup close button the click event
+  // propagates up to the map and would trigger a new query. Guard against
+  // that by setting this flag in the popupclose handler and clearing it
+  // after the click has been processed.
+  const justClosedPopup = useRef(false)
+  useMapEvent('popupclose', () => {
+    justClosedPopup.current = true
+    // Reset after a short delay so normal map clicks still work.
+    setTimeout(() => {
+      justClosedPopup.current = false
+    }, 0)
+  })
 
   const onClick = async (event) => {
+    if (justClosedPopup.current) return
     const { lat, lng } = event.latlng
     const zoom = map.getZoom()
+    const mapSize = map.getSize()
+    const bounds = map.getBounds()
     // idea 1:
     // get all layers
     // run onEachFeature on all layers
@@ -51,7 +67,7 @@ export const ClickListener = () => {
 
     // idea 4:
     // get all activeOverlays
-    // filter queryable ones (Markierungen, Gemeinden, Betreuungsgebiete, Forstreviere, Detailplaene, Massnahmen)
+    // filter queryable ones (Markierungen, Gemeinden, Betreuungsgebiete, Detailplaene, Massnahmen)
     // directly query them using ST_Contains
     // using https://postgis.net/docs/ST_Contains.html, https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis#operators
     // build popup from responses (https://leafletjs.com/reference.html#popup)
@@ -129,40 +145,6 @@ export const ClickListener = () => {
         delete properties.id
         layersData.push({
           label: 'Betreuungsgebiete',
-          properties: Object.entries(properties),
-        })
-      }
-    }
-
-    // Forstreviere
-    if (activeOverlays.includes('Forstreviere')) {
-      let forstreviereData
-      try {
-        forstreviereData = await apolloClient.query({
-          query: gql`query karteForstrevieresQuery {
-              allForstreviers(
-                filter: { 
-                  wkbGeometry: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
-                }
-              ) {
-                nodes {
-                  Nr: forevnr
-                  Name: revName
-                }
-              }
-            }`,
-        })
-      } catch (error) {
-        console.log(error)
-      }
-
-      const node = forstreviereData?.data?.allForstreviers?.nodes?.[0]
-      if (node) {
-        const properties = { ...node }
-        delete properties.__typename
-        delete properties.id
-        layersData.push({
-          label: 'Forstreviere',
           properties: Object.entries(properties),
         })
       }
@@ -253,8 +235,6 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenFlaechen')) {
-      const mapSize = map.getSize()
-      const bounds = map.getBounds()
       let res
       let failedToFetch = false
       try {
@@ -327,8 +307,6 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenLinien')) {
-      const mapSize = map.getSize()
-      const bounds = map.getBounds()
       let res
       let failedToFetch = false
       try {
@@ -401,8 +379,6 @@ export const ClickListener = () => {
       }
     }
     if (apId && activeOverlays.includes('MassnahmenPunkte')) {
-      const mapSize = map.getSize()
-      const bounds = map.getBounds()
       let res
       let failedToFetch = false
       try {
@@ -477,10 +453,7 @@ export const ClickListener = () => {
 
     // wms layers
     for (const overlay of overlays) {
-      // console.log('wms layers', { overlay, activeOverlays })
       if (activeOverlays.includes(overlay.name) && overlay.wmsUrl) {
-        // TODO
-        console.log('wms layers, overlay:', overlay)
         const params = {
           request: 'GetFeatureInfo',
           service: 'WMS',
@@ -495,21 +468,35 @@ export const ClickListener = () => {
           height: mapSize.y,
           bbox: `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`,
         }
-        console.log('wms layers, params:', params)
         const requestData = await fetchWmsData({
           url: overlay.wmsUrl,
           params,
           layerLabel: overlay.label,
         })
-        console.log('wms layers, requestData:', requestData)
+        // console.log('wms layers, requestData:', requestData)
+        if (requestData) {
+          layersDataFromRequestData({
+            layersData,
+            requestData,
+            infoFormat: params.info_format,
+          })
+        }
       }
     }
 
-    if (!layersData.length) return
+    // "Gemeindegrenzen" is returned by several ZH WMS services as a base layer in
+    // their GML responses regardless of the clicked feature. Only show it when the
+    // "Gemeinden" overlay is explicitly active.
+    const filteredLayersData =
+      activeOverlays.includes('Gemeinden') ? layersData : (
+        layersData.filter((d) => d.label !== 'Gemeindegrenzen')
+      )
+
+    if (!filteredLayersData.length) return
 
     const popupContent = ReactDOMServer.renderToString(
       <Popup
-        layersData={layersData}
+        layersData={filteredLayersData}
         mapSize={map.getSize()}
       />,
     )

@@ -26,43 +26,85 @@ export const overlays = [
     // wmsInfoFormat: 'text/plain',
   },
   {
-    label: 'SVO grau',
-    value: 'ZhSvoGrey',
-    // get info returns: ERR_BLOCKED_BY_ORB. Only in dev?
-    name: 'ZhSvoGrey',
-    wmsUrl: '//wms.zh.ch/FnsSVOZHWMS',
-    wmsVersion: '1.3.0',
-    wmsCrs: 'EPSG:4326',
-    wmsLayers: 'ueberlagernde-schutzzonen,schutzverordnungsobjekte',
-    wmsQueryLayers: 'ueberlagernde-schutzzonen,schutzverordnungsobjekte',
-    wmsInfoFormat: 'application/vnd.ogc.gml',
-  },
-  {
-    label: 'SVO farbig',
-    value: 'ZhSvoColor',
-    // get info returns: ERR_BLOCKED_BY_ORB
-    name: 'ZhSvoColor',
-    wmsUrl: '//wms.zh.ch/FnsSVOZHWMS',
+    label: 'Schutzanordnungen',
+    value: 'ZhSvo',
+    name: 'ZhSvo',
+    wmsUrl: '//wms.zh.ch/FnsSchutzanordnungenZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers:
-      'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
-    wmsQueryLayers:
-      'zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte',
+      'objekt-umriss,schutzzonen-farbig,zonen-nach-schutzkategorien,ueberlagernde-schutzzonen-naturschutz,schutztyp-naturschutz,ueberlagernde-schutzzonen,schutzzonen-labels,objekt-label',
+    wmsQueryLayers: 'objekt-umriss,schutzzonen-farbig',
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
-  { label: 'Pflegeplan', value: 'ZhPflegeplan' },
+  {
+    label: 'Pflegeplan aktuelles Jahr',
+    value: 'ZhPflegeplanAJ',
+    name: 'ZhPflegeplanAJ',
+    wmsUrl: '//wms.zh.ch/FnsPflegeajZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers:
+      'FnsPflegeajZH,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell', // ,pflegeplan_uebersicht
+    wmsQueryLayers:
+      'FnsPflegeajZH,pfpl-aktuell,ueberlagerung1-aktuell,ueberlagerung2-aktuell', // ,pflegeplan_uebersicht
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
+  {
+    label: 'Pflegeplan vergangenes Jahr',
+    value: 'ZhPflegeplanVJ',
+    name: 'ZhPflegeplanVJ',
+    wmsUrl: '//wms.zh.ch/FnsPflegevjZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers:
+      'FnsPflegevjZH,pfpl-vergangen,ueberlagerung1-vergangen,ueberlagerung2-vergangen,umgeb-vergangen,pfpl-label-vergangen',
+    wmsQueryLayers: 'FnsPflegevjZH',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
+  {
+    label: 'Pflegeplan vor-vergangenes Jahr',
+    value: 'ZhPflegeplanVVJ',
+    name: 'ZhPflegeplanVVJ',
+    wmsUrl: '//wms.zh.ch/FnsPflegevvjZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers:
+      'FnsPflegevvjZH,pfpl-vor-vergangenes,ueberlagerung1-vor-vergangenes,ueberlagerung2-vor-vergangenes,umgeb-vor-vergangenes,pfpl-label-vor-vergangenes',
+    wmsQueryLayers: 'FnsPflegevvjZH',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
   {
     label: 'Lebensraum- und Vegetationskartierungen',
     value: 'ZhLrVegKartierungen',
+    name: 'ZhLrVegKartierungen',
+    wmsUrl: '//wms.zh.ch/FnsLRKZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers:
+      'FnsLRKZH,uebersicht,wiesen12,trocken11,trocken01-10,trocken00,moore,feucht-11,feucht-01-10,feucht-81-00,feucht-71-80,feucht-61,auen-93',
+    wmsQueryLayers:
+      'FnsLRKZH,uebersicht,wiesen12,trocken11,trocken01-10,trocken00,moore,feucht-11,feucht-01-10,feucht-81-00,feucht-71-80,feucht-61,auen-93',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
   },
-  { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
+  {
+    label: 'Wälder: lichte',
+    value: 'ZhLichteWaelder',
+    name: 'ZhLichteWaelder',
+    wmsUrl: '//wms.zh.ch/FnsLWZH',
+    wmsVersion: '1.3.0',
+    wmsCrs: 'EPSG:4326',
+    wmsLayers: 'objekte-lichte-waelder-kanton-zuerich',
+    wmsQueryLayers: 'objekte-lichte-waelder-kanton-zuerich',
+    wmsInfoFormat: 'application/vnd.ogc.gml',
+  },
   {
     label: 'Wälder: Vegetation',
     value: 'ZhWaelderVegetation',
+    name: 'ZhWaelderVegetation',
     // get info works, returns data
     name: 'ZhWaelderVegetation',
-    wmsUrl: '//wms.zh.ch/WaldVKWMS',
+    wmsUrl: '//wms.zh.ch/FnsLWZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers: 'waldgesellschaften',
@@ -70,25 +112,14 @@ export const overlays = [
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   {
-    label: 'Forstreviere (WMS)',
+    label: 'Forstreviere',
     value: 'ZhForstreviereWms',
+    name: 'ZhForstreviereWms',
     wmsUrl: '//wms.zh.ch/WaldEGZH',
     wmsVersion: '1.3.0',
     wmsCrs: 'EPSG:4326',
     wmsLayers: 'forstreviere',
     wmsQueryLayers: 'forstreviere',
     wmsInfoFormat: 'application/vnd.ogc.gml',
-  },
-  {
-    label: 'Forstreviere. Stand: 2025.04.10',
-    value: 'Forstreviere',
-    // get info works, returns NO data
-    name: 'ZhForstreviereWms',
-    wmsUrl: '//wms.zh.ch/WaldVKWMS',
-    wmsVersion: '1.3.0',
-    wmsCrs: 'EPSG:4326',
-    wmsLayers: 'waldgesellschaften',
-    wmsQueryLayers: 'waldgesellschaften',
-    wmsInfoFormat: 'application/vnd.ogc.gml', // application/vnd.ogc.gml
   },
 ]
