@@ -67,7 +67,7 @@ export const ClickListener = () => {
 
     // idea 4:
     // get all activeOverlays
-    // filter queryable ones (Markierungen, Gemeinden, Betreuungsgebiete, Forstreviere, Detailplaene, Massnahmen)
+    // filter queryable ones (Markierungen, Gemeinden, Betreuungsgebiete, Detailplaene, Massnahmen)
     // directly query them using ST_Contains
     // using https://postgis.net/docs/ST_Contains.html, https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis#operators
     // build popup from responses (https://leafletjs.com/reference.html#popup)
@@ -145,40 +145,6 @@ export const ClickListener = () => {
         delete properties.id
         layersData.push({
           label: 'Betreuungsgebiete',
-          properties: Object.entries(properties),
-        })
-      }
-    }
-
-    // Forstreviere
-    if (activeOverlays.includes('Forstreviere')) {
-      let forstreviereData
-      try {
-        forstreviereData = await apolloClient.query({
-          query: gql`query karteForstrevieresQuery {
-              allForstreviers(
-                filter: { 
-                  wkbGeometry: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
-                }
-              ) {
-                nodes {
-                  Nr: forevnr
-                  Name: revName
-                }
-              }
-            }`,
-        })
-      } catch (error) {
-        console.log(error)
-      }
-
-      const node = forstreviereData?.data?.allForstreviers?.nodes?.[0]
-      if (node) {
-        const properties = { ...node }
-        delete properties.__typename
-        delete properties.id
-        layersData.push({
-          label: 'Forstreviere',
           properties: Object.entries(properties),
         })
       }

@@ -112,7 +112,7 @@ export const overlays = [
     wmsInfoFormat: 'application/vnd.ogc.gml',
   },
   {
-    label: 'Forstreviere (WMS)',
+    label: 'Forstreviere',
     value: 'ZhForstreviereWms',
     name: 'ZhForstreviereWms',
     wmsUrl: '//wms.zh.ch/WaldEGZH',
@@ -121,9 +121,5 @@ export const overlays = [
     wmsLayers: 'forstreviere',
     wmsQueryLayers: 'forstreviere',
     wmsInfoFormat: 'application/vnd.ogc.gml',
-  },
-  {
-    label: 'Forstreviere. Stand: 2025.04.10',
-    value: 'Forstreviere',
   },
 ]

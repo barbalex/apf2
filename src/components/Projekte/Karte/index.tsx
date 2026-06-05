@@ -30,7 +30,6 @@ import { ZhUep } from './layers/ZhUep.tsx'
 import { Detailplaene } from './layers/Detailplaene.tsx'
 import { Massnahmen } from './layers/Massnahmen.tsx'
 import { Betreuungsgebiete } from './layers/Betreuungsgebiete.tsx'
-import { Forstreviere } from './layers/Forstreviere.tsx'
 import { Markierungen } from './layers/Markierungen.tsx'
 import { ZhSvo } from './layers/ZhSvo.tsx'
 import { ZhPflegeplanAJ } from './layers/ZhPflegeplanAJ.js'
@@ -104,7 +103,6 @@ const OverlayComponents = {
   MassnahmenLinien: () => <Massnahmen layer="linien" />,
   MassnahmenPunkte: () => <Massnahmen layer="punkte" />,
   Betreuungsgebiete: () => <Betreuungsgebiete />,
-  Forstreviere: () => <Forstreviere />,
   Gemeinden: () => <Gemeinden />,
   ZhSvo: () => <ZhSvo />,
   ZhPflegeplanAJ: () => <ZhPflegeplanAJ />,
