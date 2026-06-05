@@ -1,11 +1,16 @@
+import { useState, useRef, useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
+import { Tooltip, IconButton } from '@mui/material'
+import { MdEdit } from 'react-icons/md'
 
-import { History as SharedHistory } from '../../../shared/History/index.tsx'
-import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
-import { FormTitle } from '../../../shared/FormTitle/index.tsx'
+import { History as SharedHistory } from '../../../../shared/History/index.tsx'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
+import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
+import { HistorienMenu } from './HistorienMenu.tsx'
+import { HistoryForm } from './HistoryForm.tsx'
 
 import type {
   TpopId,
@@ -14,9 +19,17 @@ import type {
   TpopApberrelevantGrundWerteCode,
   EkfrequenzId,
   AdresseId,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../../generated/apflora/models.ts'
 
-import styles from './Historien.module.css'
+import {
+  container,
+  docLink,
+  docLine,
+  aenderung,
+  aktuell,
+  historyRowWrapper,
+  editButton,
+} from './index.module.css'
 
 interface TpopHistoryItem {
   id: TpopId
@@ -27,7 +40,7 @@ interface TpopHistoryItem {
     label?: string | null
   } | null
   nr?: number | null
-  gemeinde?: number | null
+  gemeinde?: string | null
   flurname?: string | null
   geomPoint?: {
     geojson?: unknown
@@ -47,7 +60,7 @@ interface TpopHistoryItem {
     text?: string | null
   } | null
   statusUnklarGrund?: string | null
-  apberRelevant?: number | null
+  apberRelevant?: boolean | null
   apberRelevantGrund?: TpopApberrelevantGrundWerteCode | null
   tpopApberrelevantGrundWerteByApberRelevantGrund?: {
     id: TpopApberrelevantGrundWerteCode
@@ -77,10 +90,28 @@ interface TpopHistoryItem {
 }
 
 interface TpopHistoryQueryResult {
-  tpopById?: TpopHistoryItem | null
+  tpopById?: TpopHistoryItem & {
+    popByPopId?: {
+      id: PopId
+      label?: string | null
+      apId?: string | null
+    } | null
+  }
   allTpopHistories: {
     totalCount: number
     nodes: TpopHistoryItem[]
+  }
+  allPopStatusWertes?: {
+    nodes: Array<{ value: number; label: string }>
+  }
+  allTpopApberrelevantGrundWertes?: {
+    nodes: Array<{ value: number; label: string }>
+  }
+  allAdresses?: {
+    nodes: Array<{ value: string; label: string }>
+  }
+  allEkfrequenzs?: {
+    nodes: Array<{ value: string; label: string }>
   }
 }
 
@@ -92,6 +123,7 @@ const query = gql`
       popByPopId {
         id
         label
+        apId
       }
       nr
       gemeinde
@@ -202,6 +234,27 @@ const query = gql`
         changedBy
       }
     }
+    allPopStatusWertes(orderBy: CODE_ASC) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
+    allTpopApberrelevantGrundWertes(
+      orderBy: SORT_ASC
+      filter: { code: { isNull: false } }
+    ) {
+      nodes {
+        value: code
+        label: text
+      }
+    }
+    allAdresses(orderBy: NAME_ASC) {
+      nodes {
+        value: id
+        label: name
+      }
+    }
   }
 `
 
@@ -209,7 +262,7 @@ export const Component = () => {
   const { tpopId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery<TpopHistoryQueryResult>({
+  const { data, refetch } = useQuery<TpopHistoryQueryResult>({
     queryKey: ['tpopHistorien', tpopId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopHistoryQueryResult>({
@@ -222,8 +275,31 @@ export const Component = () => {
     suspense: true,
   })
 
+  const [editingYear, setEditingYear] = useState<number | 'new' | null>(null)
+  const newFormRef = useRef<HTMLDivElement>(null)
+
   const row = data?.tpopById
   const rows = data?.allTpopHistories.nodes ?? []
+
+  const options = {
+    popStatusWertes: data?.allPopStatusWertes?.nodes ?? [],
+    apberRelevantGrundWertes: data?.allTpopApberrelevantGrundWertes?.nodes ?? [],
+    adresses: data?.allAdresses?.nodes ?? [],
+    ekfrequenzs: data?.allEkfrequenzs?.nodes ?? [],
+  }
+
+  const handleAdd = () => {
+    setEditingYear('new')
+  }
+
+  useEffect(() => {
+    if (editingYear === 'new') {
+      setTimeout(
+        () => newFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+        0,
+      )
+    }
+  }, [editingYear])
 
   const openDocs = () => {
     const url = `${appBaseUrl()}Dokumentation/historisierung`
@@ -235,24 +311,40 @@ export const Component = () => {
 
   return (
     <>
-      <FormTitle title="Historien" />
-      <div className={styles.container}>
-        <p className={styles.docLine}>
+      <FormTitle
+        title="Historien"
+        MenuBarComponent={HistorienMenu}
+        menuBarProps={{ onAdd: handleAdd }}
+      />
+      <div className={container}>
+        <p className={docLine}>
           Jährlich historisierte Daten der Teil-Population (
           <span
-            className={styles.docLink}
+            className={docLink}
             onClick={openDocs}
           >
             Dokumentation
           </span>
           ).
         </p>
-        <p className={styles.docLine}>
-          <span className={styles.aenderung}>Änderungen</span> zum{' '}
-          <span className={styles.aktuell}>aktuellen Zustand</span> sind
-          hervorgehoben.
+        <p className={docLine}>
+          <span className={aenderung}>Änderungen</span> zum{' '}
+          <span className={aktuell}>aktuellen Zustand</span> sind hervorgehoben.
         </p>
         {rows.map((r) => {
+          if (editingYear === r.year) {
+            return (
+              <HistoryForm
+                key={r.year}
+                isNew={false}
+                historyRow={r}
+                options={options}
+                onClose={() => setEditingYear(null)}
+                refetch={refetch}
+              />
+            )
+          }
+
           const dataArray = [
             {
               valueInRow: row?.popByPopId?.label ?? row?.popId,
@@ -408,13 +500,37 @@ export const Component = () => {
           ]
 
           return (
-            <SharedHistory
-              key={`${r.id}${r.year}`}
-              year={r?.year}
-              dataArray={dataArray}
-            />
+            <div
+              key={r.year}
+              className={historyRowWrapper}
+            >
+              <Tooltip title="bearbeiten">
+                <IconButton
+                  className={editButton}
+                  size="small"
+                  onClick={() => setEditingYear(r.year)}
+                >
+                  <MdEdit />
+                </IconButton>
+              </Tooltip>
+              <SharedHistory
+                key={`${r.id}${r.year}`}
+                year={r?.year}
+                dataArray={dataArray}
+              />
+            </div>
           )
         })}
+        {editingYear === 'new' && (
+          <div ref={newFormRef}>
+            <HistoryForm
+              isNew={true}
+              options={options}
+              onClose={() => setEditingYear(null)}
+              refetch={refetch}
+            />
+          </div>
+        )}
       </div>
     </>
   )
