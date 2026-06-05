@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import { MdDragHandle, MdInfoOutline } from 'react-icons/md'
 import {
   DndContext,
@@ -79,16 +80,21 @@ const SortableItem = ({
                 className={styles.icons}
                 key={layer.name}
               >
-                <div>
-                  <Button
-                    className={styles.iconButton}
-                    color="inherit"
-                    title={`Legende für ${layer.name} öffnen`}
-                    onClick={() => window.open(layer.url, '_blank')}
-                  >
+                <Tooltip
+                  title={
+                    <img
+                      src={layer.url}
+                      alt={`Legende für ${layer.name}`}
+                      className={styles.legendTooltipImage}
+                    />
+                  }
+                  placement="left"
+                  arrow
+                >
+                  <span>
                     <MdInfoOutline className={styles.legendIcon} />
-                  </Button>
-                </div>
+                  </span>
+                </Tooltip>
               </div>
             ))}
         </div>

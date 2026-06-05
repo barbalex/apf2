@@ -23,7 +23,13 @@
 .legendIcon {
   height: 20px !important;
   color: #7b7b7b !important;
-  cursor: pointer;
+  cursor: default;
+}
+
+.legendTooltipImage {
+  display: block;
+  max-width: 320px;
+  max-height: 480px;
 }
 
 .layer {
