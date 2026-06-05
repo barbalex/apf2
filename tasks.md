@@ -72,3 +72,4 @@ Steps:
 4. set live: set app live, run all sql code, reastart graphql server, see if things work
 
 ---
+now we want to use the created /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Ap/Ap.tsx in /home/alex/Documents/GitHub/apf2/src/components/Projekte/Daten/Ap/Historien.tsx: we need a + button to add a ap_history. this adds a 

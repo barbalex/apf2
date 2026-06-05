@@ -3,16 +3,16 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
-import { History as HistoryComponent } from '../../../shared/History/index.tsx'
-import { appBaseUrl } from '../../../../modules/appBaseUrl.ts'
-import { FormTitle } from '../../../shared/FormTitle/index.tsx'
+import { History as HistoryComponent } from '../../../../shared/History/index.tsx'
+import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
+import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
-import type { ApId } from '../../../../models/apflora/Ap.ts'
-import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
-import type { ApBearbstandWerteCode } from '../../../../models/apflora/ApBearbstandWerte.ts'
-import type { ApUmsetzungWerteCode } from '../../../../models/apflora/ApUmsetzungWerte.ts'
-import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
-import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
+import type { ApId } from '../../../../../models/apflora/Ap.ts'
+import type { AeTaxonomiesId } from '../../../../../models/apflora/AeTaxonomies.ts'
+import type { ApBearbstandWerteCode } from '../../../../../models/apflora/ApBearbstandWerte.ts'
+import type { ApUmsetzungWerteCode } from '../../../../../models/apflora/ApUmsetzungWerte.ts'
+import type { AdresseId } from '../../../../../models/apflora/Adresse.ts'
+import type { ProjektId } from '../../../../../models/apflora/Projekt.ts'
 
 import {
   innerContainer,
@@ -21,7 +21,7 @@ import {
   docLine,
   aenderung,
   aktuell,
-} from './Historien.module.css'
+} from './index.module.css'
 
 interface ApHistoryNode {
   id: string
