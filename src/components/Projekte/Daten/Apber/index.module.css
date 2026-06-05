@@ -16,3 +16,19 @@
   flex-grow: 1;
   padding: 10px;
 }
+
+.koordinationsstelleGroup {
+  border: 1px solid rgb(46, 125, 50);
+  border-radius: 4px;
+  padding: 8px 12px 12px;
+  margin: 0 0 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.koordinationsstelleLegend {
+  font-size: 0.75rem;
+  color: rgb(46, 125, 50);
+  font-weight: bold;
+  padding: 0 4px;
+}
