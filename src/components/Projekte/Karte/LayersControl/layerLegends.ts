@@ -98,13 +98,41 @@ export const layerLegends = ({ apId }) => ({
     },
   ],
   ZhSvoColor: [
+    // {
+    //   name: 'Zonen Schutzverordnungen',
+    //   url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
+    // },
+    // {
+    //   name: 'Überlagernde Schutzzonen',
+    //   url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
+    // },
     {
-      name: 'Zonen Schutzverordnungen',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
+      name: 'Perimeter Schutzanordnungen',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=perimeter-schutzanordnungen&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Objekt Umriss',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=objekt-umriss&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Schutzzonen',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=schutzzonen-farbig&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Zonen nach Schutzkategorien',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-nach-schutzkategorien&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Überlagernde Schutzzonen Naturschutz',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen-naturschutz&format=image/png&STYLE=default',
+    },
+    {
+      name: 'Schutztyp Naturschutz',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=schutztyp-naturschutz&format=image/png&STYLE=default',
     },
     {
       name: 'Überlagernde Schutzzonen',
-      url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
+      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
     },
   ],
   ZhPflegeplan: [
