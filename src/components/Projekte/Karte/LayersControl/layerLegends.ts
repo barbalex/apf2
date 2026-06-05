@@ -107,10 +107,6 @@ export const layerLegends = ({ apId }) => ({
     //   url: 'https://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=ueberlagernde-schutzzonen&format=image/png&STYLE=default',
     // },
     {
-      name: 'Perimeter Schutzanordnungen',
-      url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=perimeter-schutzanordnungen&format=image/png&STYLE=default',
-    },
-    {
       name: 'Objekt Umriss',
       url: 'https://wms.zh.ch/FnsSchutzanordnungenZH?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=objekt-umriss&format=image/png&STYLE=default',
     },

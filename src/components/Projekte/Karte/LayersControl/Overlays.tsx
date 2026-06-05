@@ -82,11 +82,16 @@ const SortableItem = ({
               >
                 <Tooltip
                   title={
-                    <img
-                      src={layer.url}
-                      alt={`Legende für ${layer.name}`}
-                      className={styles.legendTooltipImage}
-                    />
+                    <>
+                      <div className={styles.legendTooltipTitle}>
+                        {layer.name}
+                      </div>
+                      <img
+                        src={layer.url}
+                        alt={`Legende für ${layer.name}`}
+                        className={styles.legendTooltipImage}
+                      />
+                    </>
                   }
                   placement="left"
                   arrow
