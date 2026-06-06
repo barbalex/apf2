@@ -1,0 +1,1 @@
+Ab Version 1.132.0: Bei AP-Berichten sind die drei Felder 'Vergleich Vorjahr – Gesamtziel', 'Beurteilung' und 'Veränderung zum Vorjahr' optisch abgegrenzt und als durch die Koordinationsstelle auszufüllen bezeichnet ([Issue #780](https://github.com/barbalex/apf2/issues/780))
