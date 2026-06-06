@@ -585,7 +585,7 @@ export const Router = () => {
                     />
                     <Route
                       path="Art"
-                      lazy={() => import('../Projekte/Daten/Ap/Ap.tsx')}
+                      lazy={() => import('../Projekte/Daten/Ap/Ap/index.tsx')}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
@@ -624,7 +624,7 @@ export const Router = () => {
                     </Route>
                     <Route
                       path="Historien"
-                      lazy={() => import('../Projekte/Daten/Ap/Historien.tsx')}
+                      lazy={() => import('../Projekte/Daten/Ap/Historien/index.tsx')}
                       errorElement={<RouterErrorBoundary />}
                     />
                     <Route
@@ -967,7 +967,7 @@ export const Router = () => {
                         <Route
                           path="Historien"
                           lazy={() =>
-                            import('../Projekte/Daten/Pop/Historien.tsx')
+                            import('../Projekte/Daten/Pop/Historien/index.tsx')
                           }
                           errorElement={<RouterErrorBoundary />}
                         />
@@ -1043,7 +1043,7 @@ export const Router = () => {
                             <Route
                               path="Historien"
                               lazy={() =>
-                                import('../Projekte/Daten/Tpop/Historien.tsx')
+                                import('../Projekte/Daten/Tpop/Historien/index.tsx')
                               }
                               errorElement={<RouterErrorBoundary />}
                             />
