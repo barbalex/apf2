@@ -28,6 +28,7 @@ import { ref } from 'node:process'
 const veraenGegenVorjahrWerte = [
   { value: '+', label: '+' },
   { value: '-', label: '–' },
+  { value: '=', label: '=' },
 ]
 
 const fieldTypes = {
@@ -160,32 +161,37 @@ export const Component = () => {
             saveToDb={saveToDb}
             error={fieldErrors.jahr}
           />
-          <MarkdownField
-            name="vergleichVorjahrGesamtziel"
-            label="Vergleich Vorjahr - Gesamtziel"
-            value={row.vergleichVorjahrGesamtziel}
-            saveToDb={saveToDb}
-            error={fieldErrors.vergleichVorjahrGesamtziel}
-          />
-          <Select
-            key={`${apberId}beurteilung`}
-            name="beurteilung"
-            label="Beurteilung"
-            options={data.allApErfkritWertes.nodes}
-            value={row.beurteilung}
-            saveToDb={saveToDb}
-            error={fieldErrors.beurteilung}
-          />
-          <Select
-            key={`${apberId}veraenderungZumVorjahr`}
-            name="veraenderungZumVorjahr"
-            label="Veränderung zum Vorjahr"
-            options={veraenGegenVorjahrWerte}
-            loading={false}
-            value={row.veraenderungZumVorjahr}
-            saveToDb={saveToDb}
-            error={fieldErrors.veraenderungZumVorjahr}
-          />
+          <fieldset className={styles.koordinationsstelleGroup}>
+            <legend className={styles.koordinationsstelleLegend}>
+              Wird durch die Koordinationsstelle nachgeführt
+            </legend>
+            <MarkdownField
+              name="vergleichVorjahrGesamtziel"
+              label="Vergleich Vorjahr - Gesamtziel"
+              value={row.vergleichVorjahrGesamtziel}
+              saveToDb={saveToDb}
+              error={fieldErrors.vergleichVorjahrGesamtziel}
+            />
+            <Select
+              key={`${apberId}beurteilung`}
+              name="beurteilung"
+              label="Beurteilung"
+              options={data.allApErfkritWertes.nodes}
+              value={row.beurteilung}
+              saveToDb={saveToDb}
+              error={fieldErrors.beurteilung}
+            />
+            <Select
+              key={`${apberId}veraenderungZumVorjahr`}
+              name="veraenderungZumVorjahr"
+              label="Veränderung zum Vorjahr"
+              options={veraenGegenVorjahrWerte}
+              loading={false}
+              value={row.veraenderungZumVorjahr}
+              saveToDb={saveToDb}
+              error={fieldErrors.veraenderungZumVorjahr}
+            />
+          </fieldset>
           <MarkdownField
             name="apberAnalyse"
             label="Analyse"
