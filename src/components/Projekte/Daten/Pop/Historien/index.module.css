@@ -1,12 +1,11 @@
 .container {
+  padding: 10px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: thin;
-  padding: 10px;
-  height: 100%;
 }
 
 .errorContainer {
@@ -32,4 +31,15 @@
 
 .aktuell {
   background-color: rgb(201, 238, 211);
+}
+
+.historyRowWrapper {
+  position: relative;
+}
+
+.editButton {
+  position: absolute !important;
+  top: 8px;
+  right: 0;
+  z-index: 1;
 }
