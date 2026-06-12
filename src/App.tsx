@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SnackbarProvider } from 'notistack'
 import { Provider as JotaiProvider } from 'jotai'
 import { Analytics } from '@vercel/analytics/react'
+import { version as appVersion } from '../package.json'
 
 import 'react-leaflet-markercluster/styles'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -72,6 +73,11 @@ const queryClient = new QueryClient({
 export const App = () => {
   const apolloClient = buildApolloClient()
   const uploaderRef = createRef<HTMLElement>(null)
+
+  useEffect(() => {
+    const baseTitle = 'apflora'
+    document.title = `${baseTitle} ${appVersion}`
+  }, [])
 
   useEffect(() => {
     navigateToLastActiveNodeArray()

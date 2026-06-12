@@ -24,6 +24,10 @@ import {
   deletedDatasetsAtom,
   setShowDeletionsAtom,
 } from '../../../../../store/index.ts'
+import {
+  version as appVersion,
+  versionDate,
+} from '../../../../../../package.json'
 
 import parentStyles from '../index.module.css'
 import styles from './index.module.css'
@@ -137,7 +141,9 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
         <MenuItem onClick={onClickUptime}>
           Verfügbarkeit der Server von apflora.ch
         </MenuItem>
-        <div className={styles.version}>Version: 1.134.0 vom 8.6.2026</div>
+        <div className={styles.version}>
+          Version: {appVersion} vom {versionDate}
+        </div>
       </Menu>
     </Tooltip>
   )

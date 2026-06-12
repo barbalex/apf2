@@ -3,6 +3,7 @@
   "description": "Aktionspläne für Flora-Projekte",
   "private": true,
   "version": "1.134.0",
+  "versionDate": "12.6.2026",
   "type": "module",
   "repository": {
     "type": "git",
