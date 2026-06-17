@@ -141,7 +141,6 @@
     "rxjs": "peer dependency of @apollo/client",
     "@emotion/react": "unfortunately needed by @mui/material",
     "@emotion/styled": "unfortunately needed by @mui/material",
-    "esbuild": "esbuild is not a direct dependency — Vite 8 needs it for CSS minification but it only exists as a transitive dep inside other packages, which Vercel's build environment can't reliably hoist. The fix is to add it directly to devDependencies",
-    "es-toolkit": "1.46.1: do not upgrade to 1.47.0. The issue is that Vite 8.0.13 + recharts 3.8.1 + es-toolkit 1.47.0 trigger a Rolldown CJS/ESM interop bug. Then all pages containing recharts are not rendered. It seems the ultimate reason lies in rolldown: https://github.com/rolldown/rolldown/pull/9392. But is still happening because @rolldown/plugin-babel has not been updated since solving the issue in rolldown?"
+    "esbuild": "esbuild is not a direct dependency — Vite 8 needs it for CSS minification but it only exists as a transitive dep inside other packages, which Vercel's build environment can't reliably hoist. The fix is to add it directly to devDependencies"
   }
 }
