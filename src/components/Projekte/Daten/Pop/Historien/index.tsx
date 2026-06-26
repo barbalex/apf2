@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { Tooltip, IconButton } from '@mui/material'
 import { MdEdit } from 'react-icons/md'
+import { FaPlus } from 'react-icons/fa6'
 
 import { History as HistoryComponent } from '../../../../shared/History/index.tsx'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
@@ -26,7 +27,7 @@ import {
   aenderung,
   aktuell,
   historyRowWrapper,
-  editButton,
+  historyButtons,
 } from './index.module.css'
 
 const query = gql`
@@ -127,6 +128,8 @@ interface PopHistoryData {
   changedBy: string | null
 }
 
+type PopHistoryRow = PopHistoryData & { year: number | null }
+
 interface PopHistoryQueryResult {
   popById?: PopHistoryData & {
     label: string | null
@@ -162,6 +165,7 @@ export const Component = () => {
   })
 
   const [editingYear, setEditingYear] = useState<number | 'new' | null>(null)
+  const [copyFrom, setCopyFrom] = useState<PopHistoryRow | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const row = data?.popById
@@ -173,6 +177,12 @@ export const Component = () => {
   }
 
   const handleAdd = () => {
+    setCopyFrom(null)
+    setEditingYear('new')
+  }
+
+  const handleCopy = (r: PopHistoryRow) => {
+    setCopyFrom(r)
     setEditingYear('new')
   }
 
@@ -284,15 +294,24 @@ export const Component = () => {
               key={r.year}
               className={historyRowWrapper}
             >
-              <Tooltip title="bearbeiten">
-                <IconButton
-                  className={editButton}
-                  size="small"
-                  onClick={() => setEditingYear(r.year)}
-                >
-                  <MdEdit />
-                </IconButton>
-              </Tooltip>
+              <div className={historyButtons}>
+                <Tooltip title="bearbeiten">
+                  <IconButton
+                    size="small"
+                    onClick={() => setEditingYear(r.year)}
+                  >
+                    <MdEdit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="diese Historie in neue kopieren">
+                  <IconButton
+                    size="small"
+                    onClick={() => handleCopy(r)}
+                  >
+                    <FaPlus />
+                  </IconButton>
+                </Tooltip>
+              </div>
               <HistoryComponent
                 key={`${r.id}${r.year}`}
                 year={r?.year}
@@ -304,8 +323,12 @@ export const Component = () => {
         {editingYear === 'new' && (
           <HistoryForm
             isNew={true}
+            historyRow={copyFrom ?? undefined}
             options={options}
-            onClose={() => setEditingYear(null)}
+            onClose={() => {
+              setEditingYear(null)
+              setCopyFrom(null)
+            }}
             refetch={refetch}
           />
         )}

@@ -6,6 +6,7 @@ import { useParams } from 'react-router'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { MdEdit } from 'react-icons/md'
+import { FaPlus } from 'react-icons/fa6'
 
 import { History as HistoryComponent } from '../../../../shared/History/index.tsx'
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
@@ -28,7 +29,7 @@ import {
   aenderung,
   aktuell,
   historyRowWrapper,
-  editButton,
+  historyButtons,
 } from './index.module.css'
 
 interface ApHistoryNode {
@@ -210,6 +211,7 @@ export const Component = () => {
   })
 
   const [editingYear, setEditingYear] = useState<number | 'new' | null>(null)
+  const [copyFrom, setCopyFrom] = useState<ApHistoryNode | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   const row = data.apById
@@ -223,6 +225,12 @@ export const Component = () => {
   }
 
   const handleAdd = () => {
+    setCopyFrom(null)
+    setEditingYear('new')
+  }
+
+  const handleCopy = (r: ApHistoryNode) => {
+    setCopyFrom(r)
     setEditingYear('new')
   }
 
@@ -321,15 +329,24 @@ export const Component = () => {
               key={r.year}
               className={historyRowWrapper}
             >
-              <Tooltip title="bearbeiten">
-                <IconButton
-                  className={editButton}
-                  size="small"
-                  onClick={() => setEditingYear(r.year)}
-                >
-                  <MdEdit />
-                </IconButton>
-              </Tooltip>
+              <div className={historyButtons}>
+                <Tooltip title="bearbeiten">
+                  <IconButton
+                    size="small"
+                    onClick={() => setEditingYear(r.year)}
+                  >
+                    <MdEdit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="diese Historie in neue kopieren">
+                  <IconButton
+                    size="small"
+                    onClick={() => handleCopy(r)}
+                  >
+                    <FaPlus />
+                  </IconButton>
+                </Tooltip>
+              </div>
               <HistoryComponent
                 key={`${r.id}${r.year}`}
                 year={r?.year}
@@ -342,8 +359,12 @@ export const Component = () => {
           <HistoryForm
             isNew={true}
             artId={row?.artId ?? null}
+            historyRow={copyFrom ?? undefined}
             options={options}
-            onClose={() => setEditingYear(null)}
+            onClose={() => {
+              setEditingYear(null)
+              setCopyFrom(null)
+            }}
             refetch={refetch}
           />
         )}
