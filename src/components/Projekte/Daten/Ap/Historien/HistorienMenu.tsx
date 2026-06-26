@@ -10,7 +10,7 @@ const iconStyle = { color: 'white' }
 export const HistorienMenu = ({ onAdd }) => (
   <ErrorBoundary>
     <MenuBar>
-      <Tooltip title="neue Historien-Zeile hinzufügen">
+      <Tooltip title="neue, leere Historie hinzufügen">
         <IconButton onClick={onAdd}>
           <FaPlus style={iconStyle} />
         </IconButton>
