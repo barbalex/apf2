@@ -68,7 +68,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
   }
 
   const onClickUptime = () => {
-    window.open('https://uptime.apflora.ch')
+    window.open('https://uptime.gabriel-software.ch')
     setAnchorEl(null)
   }
 
