@@ -53,6 +53,17 @@ export const Editor = ({
 
   const el = useRef(null)
 
+  // react-markdown-editor-lite renders its toolbar buttons as non-focusable
+  // <span>s. Clicking one would move focus from the textarea to <body>, so the
+  // parent's useFocusWithin collapses the editor back to the presenter.
+  // Prevent that default focus shift on toolbar interaction; the toolbar's
+  // onClick still fires and focus stays in the textarea.
+  const onMouseDown = (e) => {
+    if ((e.target as HTMLElement).closest('.rc-md-navigation')) {
+      e.preventDefault()
+    }
+  }
+
   useEffect(() => {
     const myEl = el.current.nodeMdText.current
     myEl.focus()
@@ -65,7 +76,10 @@ export const Editor = ({
   }, [])
 
   return (
-    <div className={`${styles.container} react-markdown-editor-lite`}>
+    <div
+      className={`${styles.container} react-markdown-editor-lite`}
+      onMouseDown={onMouseDown}
+    >
       <Label label={label} />
       <ReactMarkdownEditor
         ref={el}
