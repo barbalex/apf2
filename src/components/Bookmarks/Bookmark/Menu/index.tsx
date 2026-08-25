@@ -105,7 +105,6 @@ export const Menu = ({ navData }) => {
         />
         <motion.div
           ref={ref}
-          minwidth={titleWidth}
           style={{ minWidth: titleWidth ?? 'unset' }}
           initial={{
             marginTop:
