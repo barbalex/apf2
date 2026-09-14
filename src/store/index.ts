@@ -2479,7 +2479,13 @@ export const setIsEkfSinglePrintAtom = atom(null, (_get, set, val: boolean) => {
 })
 
 // User
-export const userAtom = atomWithStorage('user', {
+export interface User {
+  name: string
+  token: string | null
+  id: string | null
+}
+
+export const userAtom = atomWithStorage<User>('user', {
   name: '',
   token: null,
   id: null,

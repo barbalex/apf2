@@ -21,7 +21,19 @@ import { userAtom } from '../store/index.ts'
 
 import styles from './User.module.css'
 
-function tokenStateReducer(state, action) {
+interface TokenState {
+  token: string | null
+  fetchingToken: boolean
+}
+
+type TokenAction =
+  | { type: 'reset' }
+  | { type: 'set'; payload: string | null }
+
+function tokenStateReducer(
+  _state: TokenState,
+  action: TokenAction,
+): TokenState {
   switch (action.type) {
     case 'reset':
       return { token: null, fetchingToken: true }
@@ -47,8 +59,8 @@ export const User = () => {
     fetchingToken: true,
   })
 
-  const nameInput = useRef(null)
-  const passwordInput = useRef(null)
+  const nameInput = useRef<HTMLInputElement | null>(null)
+  const passwordInput = useRef<HTMLInputElement | null>(null)
 
   // Sync tokenState with user atom from Jotai
   useEffect(() => {
@@ -57,10 +69,18 @@ export const User = () => {
 
   // callbacks pass name or password
   // because state is not up to date yet
-  const fetchLogin = async ({ name: namePassed, password: passwordPassed }) => {
-    const nameToUse = namePassed || name || nameInput.current.value
+  // also used directly as the anmelden button's onClick handler,
+  // where the click event destructures to no name/password
+  const fetchLogin = async ({
+    name: namePassed,
+    password: passwordPassed,
+  }: {
+    name?: string
+    password?: string
+  }) => {
+    const nameToUse = namePassed || name || nameInput.current?.value || ''
     const passwordToUse =
-      passwordPassed || password || passwordInput.current.value
+      passwordPassed || password || passwordInput.current?.value || ''
     let result
     try {
       result = await apolloClient.mutate({
@@ -77,9 +97,10 @@ export const User = () => {
         },
       })
     } catch (error) {
+      const message = (error as Error).message
       const isNamePassError =
-        error?.message?.includes('invalid user or password') ||
-        error?.message?.includes('permission denied for relation user')
+        message?.includes('invalid user or password') ||
+        message?.includes('permission denied for relation user')
       if (isNamePassError) {
         const message = 'Name oder Passwort nicht bekannt'
         setNameErrorText(message)
@@ -107,17 +128,20 @@ export const User = () => {
     }
     setUser({
       name: nameToUse,
-      token: result?.data?.login?.jwtToken,
-      id: userResult?.data?.userByName?.id,
+      token: result?.data?.login?.jwtToken ?? null,
+      id: userResult?.data?.userByName?.id ?? null,
     })
     // this is easiest way to make sure everything is correct
     // as client is rebuilt with new settings
-    window.location.reload(true)
+    window.location.reload()
   }
 
-  const onBlurName = (e) => {
+  const onBlurName = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> |
+    React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setNameErrorText('')
-    const name = e.target.value
+    const name = e.currentTarget.value
     setName(name)
     if (!name) {
       setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
@@ -126,9 +150,12 @@ export const User = () => {
     }
   }
 
-  const onBlurPassword = (e) => {
+  const onBlurPassword = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> |
+    React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setPasswordErrorText('')
-    const password = e.target.value
+    const password = e.currentTarget.value
     setPassword(password)
     if (!password) {
       setPasswordErrorText('Bitte Passwort eingeben')
@@ -137,10 +164,13 @@ export const User = () => {
     }
   }
 
-  const onKeyPressName = (e) => e.key === 'Enter' && onBlurName(e)
-  const onKeyPressPassword = (e) => e.key === 'Enter' && onBlurPassword(e)
+  const onKeyPressName = (e: React.KeyboardEvent<HTMLInputElement>) =>
+    e.key === 'Enter' && onBlurName(e)
+  const onKeyPressPassword = (e: React.KeyboardEvent<HTMLInputElement>) =>
+    e.key === 'Enter' && onBlurPassword(e)
   const onClickShowPass = () => setShowPass(!showPass)
-  const onMouseDownShowPass = (e) => e.preventDefault()
+  const onMouseDownShowPass = (e: React.MouseEvent<HTMLButtonElement>) =>
+    e.preventDefault()
 
   const { token, fetchingToken } = tokenState
 
@@ -212,7 +242,7 @@ export const User = () => {
         <DialogActions>
           <Button
             color="primary"
-            onClick={fetchLogin}
+            onClick={() => fetchLogin({})}
           >
             anmelden
           </Button>

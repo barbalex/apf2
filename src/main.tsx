@@ -8,6 +8,7 @@ import { App } from './App.tsx'
 registerSW({ immediate: true })
 
 const rootElement = document.getElementById('root')
+
 if (rootElement) {
   createRoot(rootElement).render(
     <StrictMode>
