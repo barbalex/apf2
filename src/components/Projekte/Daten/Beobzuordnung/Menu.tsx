@@ -43,6 +43,7 @@ export const Menu = () => {
     setCopyingBeobZugeordnetKoordToTpop,
   ] = useState(false)
   const onClickCopyingBeobZugeordnetKoordToTpop = async () => {
+    if (!beobId) return
     setCopyingBeobZugeordnetKoordToTpop(true)
     await copyBeobZugeordnetKoordToTpop({
       id: beobId,

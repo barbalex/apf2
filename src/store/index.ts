@@ -39,7 +39,7 @@ import {
 // Some atoms with storage should not sync over all tabs:
 // a JSON storage with the subscribe method disabled (no cross-tab sync).
 // Explicitly typed as SyncStorage so atom getters don't widen to `T | Promise<T>`.
-const createUnsubscribedStorage = <T,>() => {
+const createUnsubscribedStorage = <T>() => {
   const storage = createJSONStorage<T>(() => localStorage)
   storage.subscribe = undefined
   return storage
@@ -291,8 +291,11 @@ export const treeApGqlFilterAtom = atom((get) => {
       (e) => e[1] !== null,
     )
     apFilterValues.forEach(([key, value]) => {
-      const expression = (apType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+      const expression =
+        (apType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
 
     // add node label filter
@@ -383,8 +386,11 @@ export const treeApGqlFilterForTreeAtom = atom((get) => {
       (e) => e[1] !== null,
     )
     apFilterValues.forEach(([key, value]) => {
-      const expression = (apType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+      const expression =
+        (apType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
 
     // add node label filter
@@ -468,8 +474,11 @@ export const treePopGqlFilterAtom = atom((get) => {
       (e) => e[1] !== null,
     )
     popFilterValues.forEach(([key, value]) => {
-      const expression = (popType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+      const expression =
+        (popType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.pop) {
@@ -542,8 +551,11 @@ export const treePopGqlFilterForTreeAtom = atom((get) => {
       (e) => e[1] !== null,
     )
     popFilterValues.forEach(([key, value]) => {
-      const expression = (popType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+      const expression =
+        (popType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.pop) {
@@ -627,8 +639,11 @@ export const treeTpopGqlFilterAtom = atom((get) => {
       (e) => e[1] !== null,
     )
     tpopFilterValues.forEach(([key, value]) => {
-      const expression = (tpopType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+      const expression =
+        (tpopType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpop) {
@@ -691,8 +706,11 @@ export const treeTpopGqlFilterForTreeAtom = atom((get) => {
       (e) => e[1] !== null,
     )
     tpopFilterValues.forEach(([key, value]) => {
-      const expression = (tpopType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+      const expression =
+        (tpopType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpop) {
@@ -799,8 +817,10 @@ export const treeTpopmassnGqlFilterAtom = atom((get) => {
     )
     tpopmassnFilterValues.forEach(([key, value]) => {
       const expression =
-        (tpopmassnType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+        (tpopmassnType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpopmassn) {
@@ -897,8 +917,10 @@ export const treeTpopmassnGqlFilterForTreeAtom = atom((get) => {
     )
     tpopmassnFilterValues.forEach(([key, value]) => {
       const expression =
-        (tpopmassnType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+        (tpopmassnType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpopmassn) {
@@ -972,7 +994,9 @@ export const treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom = atom(
   (get) => {
     const nodeLabelFilter = getNodeLabelFilter(get)
     // include a condition that ensures a filter is always set
-    const gqlFilter: TpopApberrelevantGrundWerteFilter = { id: { isNull: false } }
+    const gqlFilter: TpopApberrelevantGrundWerteFilter = {
+      id: { isNull: false },
+    }
     // 1. hierarchy filter: none
     // 2. node label filter
     if (nodeLabelFilter.tpopApberrelevantGrundWerte) {
@@ -1102,8 +1126,10 @@ export const treeEkGqlFilterAtom = atom((get) => {
     )
     filterValues.forEach(([key, value]) => {
       const expression =
-        (tpopfeldkontrType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+        (tpopfeldkontrType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpopfeldkontr) {
@@ -1178,8 +1204,10 @@ export const treeEkGqlFilterForTreeAtom = atom((get) => {
     const filterValues = Object.entries(dataFilter).filter((e) => e[1] !== null)
     filterValues.forEach(([key, value]) => {
       const expression =
-        (tpopfeldkontrType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+        (tpopfeldkontrType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpopkontr) {
@@ -1275,8 +1303,10 @@ export const treeEkfGqlFilterAtom = atom((get) => {
     )
     filterValues.forEach(([key, value]) => {
       const expression =
-        (tpopfreiwkontrType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+        (tpopfreiwkontrType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpopkontr) {
@@ -1352,8 +1382,10 @@ export const treeEkfGqlFilterForTreeAtom = atom((get) => {
     )
     filterValues.forEach(([key, value]) => {
       const expression =
-        (tpopfreiwkontrType as Record<string, string>)[key] === 'string' ? 'includes' : 'equalTo';
-      (singleFilter as Record<string, unknown>)[key] = { [expression]: value }
+        (tpopfreiwkontrType as Record<string, string>)[key] === 'string' ?
+          'includes'
+        : 'equalTo'
+      ;(singleFilter as Record<string, unknown>)[key] = { [expression]: value }
     })
     // add node label filter
     if (nodeLabelFilter.tpopkontr) {
@@ -1668,7 +1700,9 @@ export const treeDataFilterSetValueAtom = atom(
     const tableData = [...((current as Record<string, unknown[]>)[table] ?? [])]
     if (index !== undefined) {
       if (!tableData[index]) {
-        tableData.push((initialDataFilterValues as Record<string, unknown>)[table])
+        tableData.push(
+          (initialDataFilterValues as Record<string, unknown>)[table],
+        )
       }
       tableData[index] = {
         ...(tableData[index] as Record<string, unknown>),
@@ -1865,7 +1899,8 @@ export const setMapHideControlsAtom = atom(
 export const mapMouseCoordinatesAtom = atom({ x: 2683000, y: 1247500 })
 export const setMapMouseCoordinatesAtom = atom(
   (get) => get(mapMouseCoordinatesAtom),
-  (_get, set, { x, y }: { x: number; y: number }) => set(mapMouseCoordinatesAtom, { x, y }),
+  (_get, set, { x, y }: { x: number; y: number }) =>
+    set(mapMouseCoordinatesAtom, { x, y }),
 )
 // setting bounds works imperatively with map.fitBounds since v3
 // but keeping bounds in store as last used bounds will be re-applied on next map opening
@@ -1923,9 +1958,13 @@ export const mapOverlaysAtom = atom([
 ])
 export const setMapOverlaysAtom = atom(
   (get) => get(mapOverlaysAtom),
-  (_get, set, value: { label: string; value: string }[]) => set(mapOverlaysAtom, value),
+  (_get, set, value: { label: string; value: string }[]) =>
+    set(mapOverlaysAtom, value),
 )
-export const mapActiveOverlaysAtom = atomWithStorage<string[]>('mapActiveOverlays', [])
+export const mapActiveOverlaysAtom = atomWithStorage<string[]>(
+  'mapActiveOverlays',
+  [],
+)
 export const setMapActiveOverlaysAtom = atom(
   (get) => get(mapActiveOverlaysAtom),
   (_get, set, value: string[]) => set(mapActiveOverlaysAtom, value),
@@ -1977,7 +2016,19 @@ export const resetTree2SrcAtom = atom(null, (_get, set) => {
 })
 export const setTree2SrcByActiveNodeArrayAtom = atom(
   null,
-  (_get, set, { activeNodeArray, search, onlyShowActivePath }: { activeNodeArray: (string | number)[]; search: string; onlyShowActivePath: boolean }) => {
+  (
+    _get,
+    set,
+    {
+      activeNodeArray,
+      search,
+      onlyShowActivePath,
+    }: {
+      activeNodeArray: (string | number)[]
+      search: string
+      onlyShowActivePath: boolean
+    },
+  ) => {
     const iFrameSearch = queryString.parse(search)
     // need to alter projekteTabs:
     if (Array.isArray(iFrameSearch.projekteTabs)) {
@@ -2010,7 +2061,8 @@ export const setTree2SrcByActiveNodeArrayAtom = atom(
 export const treeLastTouchedNodeAtom = atom<(string | number)[]>([])
 export const setTreeLastTouchedNodeAtom = atom(
   (get) => get(treeLastTouchedNodeAtom),
-  (_get, set, value: (string | number)[]) => set(treeLastTouchedNodeAtom, value),
+  (_get, set, value: (string | number)[]) =>
+    set(treeLastTouchedNodeAtom, value),
 )
 
 // treeShowPopIcon - controls whether to show pop icons in tree
@@ -2082,7 +2134,10 @@ export const treeSetNodeLabelFilterKeyAtom = atom(
     const current = getNodeLabelFilter(get)
     // only write if changed
     if (current[key] !== value) {
-      set(treeNodeLabelFilterAtom, { ...current, [key]: value } as TreeNodeLabelFilter)
+      set(treeNodeLabelFilterAtom, {
+        ...current,
+        [key]: value,
+      } as TreeNodeLabelFilter)
     }
   },
 )
@@ -2354,17 +2409,20 @@ export interface Notification {
 }
 export const notificationsAtom = atom<Notification[]>([])
 
-export const addNotificationAtom = atom(null, (get, set, note: Omit<Notification, 'key'>) => {
-  const notifications = get(notificationsAtom)
-  const key = note.options?.key ?? new Date().getTime() + Math.random()
-  set(notificationsAtom, [
-    ...notifications,
-    {
-      key,
-      ...note,
-    },
-  ])
-})
+export const addNotificationAtom = atom(
+  null,
+  (get, set, note: Omit<Notification, 'key'>) => {
+    const notifications = get(notificationsAtom)
+    const key = note.options?.key ?? new Date().getTime() + Math.random()
+    set(notificationsAtom, [
+      ...notifications,
+      {
+        key,
+        ...note,
+      },
+    ])
+  },
+)
 
 export const removeNotificationAtom = atom(null, (get, set, key: number) => {
   const notifications = get(notificationsAtom)
@@ -2377,7 +2435,9 @@ export const removeNotificationAtom = atom(null, (get, set, key: number) => {
 // navigate function atom
 // Store as object because Jotai doesn't handle bare functions well
 // The setter accepts a function and wraps it in { fn: function }
-const navigateObjectBaseAtom = atom<{ fn: (path: string) => void } | undefined>(undefined)
+const navigateObjectBaseAtom = atom<{ fn: (path: string) => void } | undefined>(
+  undefined,
+)
 export const navigateObjectAtom = atom(
   (get) => get(navigateObjectBaseAtom),
   (_get, set, navigateFunction: (path: string) => void) => {
@@ -2563,7 +2623,23 @@ export const toDeleteAtom = atom<ToDelete>({
 
 export const setToDeleteAtom = atom(
   (get) => get(toDeleteAtom),
-  (_get, set, { table, id, label, url, afterDeletionHook }: { table: string | null; id: string | null; label: string | null; url: (string | number)[] | null; afterDeletionHook: (() => void) | null }) => {
+  (
+    _get,
+    set,
+    {
+      table,
+      id,
+      label,
+      url,
+      afterDeletionHook,
+    }: {
+      table: string | null
+      id: string | null
+      label: string | null
+      url: (string | number)[] | null
+      afterDeletionHook: (() => void) | null
+    },
+  ) => {
     set(toDeleteAtom, {
       table,
       id,
@@ -2645,7 +2721,9 @@ export const ekPlanShowEkCountAtom = atom(true)
 export const ekPlanShowMassnAtom = atom(true)
 
 // EkPlan aps
-export const ekPlanApsAtom = atomWithStorage<{ value: string; label: string }[]>(
+export const ekPlanApsAtom = atomWithStorage<
+  { value: string; label: string }[]
+>(
   'ekPlanAps',
   [],
   createUnsubscribedStorage<{ value: string; label: string }[]>(),
@@ -2654,17 +2732,23 @@ export const ekPlanApValuesAtom = atom((get) => {
   const aps = get(ekPlanApsAtom)
   return aps.map((a) => a.value)
 })
-export const ekPlanAddApAtom = atom(null, (get, set, ap: { value: string; label: string }) => {
-  const current = get(ekPlanApsAtom)
-  set(ekPlanApsAtom, [...current, ap])
-})
-export const ekPlanRemoveApAtom = atom(null, (get, set, ap: { value: string; label: string }) => {
-  const current = get(ekPlanApsAtom)
-  set(
-    ekPlanApsAtom,
-    current.filter((a) => a.value !== ap.value),
-  )
-})
+export const ekPlanAddApAtom = atom(
+  null,
+  (get, set, ap: { value: string; label: string }) => {
+    const current = get(ekPlanApsAtom)
+    set(ekPlanApsAtom, [...current, ap])
+  },
+)
+export const ekPlanRemoveApAtom = atom(
+  null,
+  (get, set, ap: { value: string; label: string }) => {
+    const current = get(ekPlanApsAtom)
+    set(
+      ekPlanApsAtom,
+      current.filter((a) => a.value !== ap.value),
+    )
+  },
+)
 
 // EkPlan fields
 const defaultFields = [
@@ -2702,18 +2786,27 @@ export const ekPlanRemoveFieldAtom = atom(null, (get, set, field: string) => {
 })
 
 // EkPlan hovered
-export const ekPlanHoveredAtom = atom<{ year: number | null; tpopId: string | null }>({
+export const ekPlanHoveredAtom = atom<{
+  year: number | null
+  tpopId: string | null
+}>({
   year: null,
   tpopId: null,
 })
-export const ekPlanSetHoveredYearAtom = atom(null, (get, set, val: number | null) => {
-  const current = get(ekPlanHoveredAtom)
-  set(ekPlanHoveredAtom, { ...current, year: val })
-})
-export const ekPlanSetHoveredTpopIdAtom = atom(null, (get, set, val: string | null) => {
-  const current = get(ekPlanHoveredAtom)
-  set(ekPlanHoveredAtom, { ...current, tpopId: val })
-})
+export const ekPlanSetHoveredYearAtom = atom(
+  null,
+  (get, set, val: number | null) => {
+    const current = get(ekPlanHoveredAtom)
+    set(ekPlanHoveredAtom, { ...current, year: val })
+  },
+)
+export const ekPlanSetHoveredTpopIdAtom = atom(
+  null,
+  (get, set, val: string | null) => {
+    const current = get(ekPlanHoveredAtom)
+    set(ekPlanHoveredAtom, { ...current, tpopId: val })
+  },
+)
 export const ekPlanResetHoveredAtom = atom(null, (_get, set) => {
   set(ekPlanHoveredAtom, { year: null, tpopId: null })
 })
@@ -2744,52 +2837,91 @@ export const ekPlanFilterAnsiedlungYearAtom = atom<number | null>(null)
 export const ekPlanFilterKontrolleYearAtom = atom<number | null>(null)
 export const ekPlanFilterEkplanYearAtom = atom<number | null>(null)
 
-export const ekPlanSetFilterApAtom = atom(null, (_get, set, val: string | null) => {
-  set(ekPlanFilterApAtom, val)
-})
-export const ekPlanSetFilterPopNrAtom = atom(null, (_get, set, val: string | number | null) => {
-  set(ekPlanFilterPopNrAtom, val ? +val : null)
-})
-export const ekPlanSetFilterPopNameAtom = atom(null, (_get, set, val: string | null) => {
-  set(ekPlanFilterPopNameAtom, val)
-})
-export const ekPlanSetFilterPopStatusAtom = atom(null, (_get, set, val: number[] | null) => {
-  set(ekPlanFilterPopStatusAtom, val || [100, 101, 200, 201, 202, 300])
-})
-export const ekPlanSetFilterNrAtom = atom(null, (_get, set, val: string | number | null) => {
-  set(ekPlanFilterNrAtom, val ? +val : null)
-})
-export const ekPlanSetFilterGemeindeAtom = atom(null, (_get, set, val: string | null) => {
-  set(ekPlanFilterGemeindeAtom, val)
-})
-export const ekPlanSetFilterFlurnameAtom = atom(null, (_get, set, val: string | null) => {
-  set(ekPlanFilterFlurnameAtom, val)
-})
-export const ekPlanSetFilterStatusAtom = atom(null, (_get, set, val: number[] | null) => {
-  set(ekPlanFilterStatusAtom, val || [100, 101, 200, 201, 202, 300])
-})
-export const ekPlanSetFilterBekanntSeitAtom = atom(null, (_get, set, val: string | number | null) => {
-  set(ekPlanFilterBekanntSeitAtom, val ? +val : null)
-})
-export const ekPlanSetFilterLv95XAtom = atom(null, (_get, set, val: string | number | null) => {
-  set(ekPlanFilterLv95XAtom, val ? +val : null)
-})
-export const ekPlanSetFilterLv95YAtom = atom(null, (_get, set, val: string | number | null) => {
-  set(ekPlanFilterLv95YAtom, val ? +val : null)
-})
+export const ekPlanSetFilterApAtom = atom(
+  null,
+  (_get, set, val: string | null) => {
+    set(ekPlanFilterApAtom, val)
+  },
+)
+export const ekPlanSetFilterPopNrAtom = atom(
+  null,
+  (_get, set, val: string | number | null) => {
+    set(ekPlanFilterPopNrAtom, val ? +val : null)
+  },
+)
+export const ekPlanSetFilterPopNameAtom = atom(
+  null,
+  (_get, set, val: string | null) => {
+    set(ekPlanFilterPopNameAtom, val)
+  },
+)
+export const ekPlanSetFilterPopStatusAtom = atom(
+  null,
+  (_get, set, val: number[] | null) => {
+    set(ekPlanFilterPopStatusAtom, val || [100, 101, 200, 201, 202, 300])
+  },
+)
+export const ekPlanSetFilterNrAtom = atom(
+  null,
+  (_get, set, val: string | number | null) => {
+    set(ekPlanFilterNrAtom, val ? +val : null)
+  },
+)
+export const ekPlanSetFilterGemeindeAtom = atom(
+  null,
+  (_get, set, val: string | null) => {
+    set(ekPlanFilterGemeindeAtom, val)
+  },
+)
+export const ekPlanSetFilterFlurnameAtom = atom(
+  null,
+  (_get, set, val: string | null) => {
+    set(ekPlanFilterFlurnameAtom, val)
+  },
+)
+export const ekPlanSetFilterStatusAtom = atom(
+  null,
+  (_get, set, val: number[] | null) => {
+    set(ekPlanFilterStatusAtom, val || [100, 101, 200, 201, 202, 300])
+  },
+)
+export const ekPlanSetFilterBekanntSeitAtom = atom(
+  null,
+  (_get, set, val: string | number | null) => {
+    set(ekPlanFilterBekanntSeitAtom, val ? +val : null)
+  },
+)
+export const ekPlanSetFilterLv95XAtom = atom(
+  null,
+  (_get, set, val: string | number | null) => {
+    set(ekPlanFilterLv95XAtom, val ? +val : null)
+  },
+)
+export const ekPlanSetFilterLv95YAtom = atom(
+  null,
+  (_get, set, val: string | number | null) => {
+    set(ekPlanFilterLv95YAtom, val ? +val : null)
+  },
+)
 // keep this setter as a map is used to set all filters at once and ekfKontrolleur is part of the map
-export const ekPlanSetFilterEkfKontrolleurAtom = atom(null, (_get, set, val: string | null) => {
-  set(ekPlanFilterEkfKontrolleurAtom, val)
-})
+export const ekPlanSetFilterEkfKontrolleurAtom = atom(
+  null,
+  (_get, set, val: string | null) => {
+    set(ekPlanFilterEkfKontrolleurAtom, val)
+  },
+)
 export const ekPlanSetFilterEkAbrechnungstypAtom = atom(
   null,
   (_get, set, val: string | null) => {
     set(ekPlanFilterEkAbrechnungstypAtom, val)
   },
 )
-export const ekPlanSetFilterEkfrequenzAtom = atom(null, (_get, set, val: string | null) => {
-  set(ekPlanFilterEkfrequenzAtom, val)
-})
+export const ekPlanSetFilterEkfrequenzAtom = atom(
+  null,
+  (_get, set, val: string | null) => {
+    set(ekPlanFilterEkfrequenzAtom, val)
+  },
+)
 export const ekPlanSetFilterEkfrequenzStartjahrAtom = atom(
   null,
   (_get, set, val: string | number | null) => {
@@ -2808,15 +2940,24 @@ export const ekPlanSetFilterEmptyEkfrequenzAtom = atom(
     set(ekPlanFilterEkfrequenzEmptyAtom, val)
   },
 )
-export const ekPlanSetFilterAnsiedlungYearAtom = atom(null, (_get, set, val: number | null) => {
-  set(ekPlanFilterAnsiedlungYearAtom, val)
-})
-export const ekPlanSetFilterKontrolleYearAtom = atom(null, (_get, set, val: number | null) => {
-  set(ekPlanFilterKontrolleYearAtom, val)
-})
-export const ekPlanSetFilterEkplanYearAtom = atom(null, (_get, set, val: number | null) => {
-  set(ekPlanFilterEkplanYearAtom, val)
-})
+export const ekPlanSetFilterAnsiedlungYearAtom = atom(
+  null,
+  (_get, set, val: number | null) => {
+    set(ekPlanFilterAnsiedlungYearAtom, val)
+  },
+)
+export const ekPlanSetFilterKontrolleYearAtom = atom(
+  null,
+  (_get, set, val: number | null) => {
+    set(ekPlanFilterKontrolleYearAtom, val)
+  },
+)
+export const ekPlanSetFilterEkplanYearAtom = atom(
+  null,
+  (_get, set, val: number | null) => {
+    set(ekPlanFilterEkplanYearAtom, val)
+  },
+)
 export const ekPlanSetFilterEmptyEkfrequenzStartjahrAtom = atom(
   null,
   (_get, set, val: boolean) => {
@@ -2929,12 +3070,15 @@ const defaultSortedBeobFields = [
 // needs to update when defaultSortedBeobFields is changed - thus not with storage
 export const sortedBeobFieldsAtom = atom(defaultSortedBeobFields)
 
-export const setSortedBeobFieldsAtom = atom(null, (_get, set, val: (string | undefined)[]) => {
-  set(
-    sortedBeobFieldsAtom,
-    val.filter((v): v is string => !!v),
-  )
-})
+export const setSortedBeobFieldsAtom = atom(
+  null,
+  (_get, set, val: (string | undefined)[]) => {
+    set(
+      sortedBeobFieldsAtom,
+      val.filter((v): v is string => !!v),
+    )
+  },
+)
 
 // exportFileType
 export const exportFileTypeAtom = atomWithStorage('exportFileType', 'xlsx')
