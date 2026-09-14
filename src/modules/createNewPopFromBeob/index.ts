@@ -1,7 +1,8 @@
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import { isEqual } from 'date-fns/isEqual'
+import { isEqual } from 'es-toolkit'
 
+import type { BeobFieldsFragment } from '../../gql/graphql.ts'
 import { queryBeob } from './queryBeob.ts'
 import { createPop } from './createPop.ts'
 import { createTpop } from './createTpop.ts'
@@ -16,9 +17,10 @@ import {
   treeOpenNodesAtom,
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
+  type Notification,
 } from '../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 export const createNewPopFromBeob = async ({
@@ -26,6 +28,11 @@ export const createNewPopFromBeob = async ({
   apId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
   search,
+}: {
+  id: string
+  apId?: string | undefined
+  projId?: string | undefined
+  search: string
 }) => {
   const apolloClient = store.get(apolloClientAtom)!
   const tsQueryClient = store.get(tsQueryClientAtom)!
@@ -33,32 +40,53 @@ export const createNewPopFromBeob = async ({
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
-  let beobResult
+  let beobResult:
+    | { data?: { beobById?: BeobFieldsFragment | null } | undefined }
+    | undefined
   try {
-    beobResult = await apolloClient.query({
+    beobResult = await apolloClient.query<{
+      beobById?: BeobFieldsFragment | null
+    }>({
       query: queryBeob,
       variables: { id },
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const beob = beobResult?.data?.beobById
+  if (!beob) {
+    return addNotification({
+      message: 'Die Beobachtung wurde nicht gefunden',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
   const { geomPoint, datum, data } = beob
-  const datumIsValid = isValid(new Date(datum))
-  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
+  // data is the raw InfoFlora/EVK JSON blob
+  const beobData = (data ?? {}) as Record<string, string | null | undefined>
+  // new Date(null) coerces to the epoch, like new Date(0)
+  const datumDate = new Date(datum ?? 0)
+  const datumIsValid = isValid(datumDate)
+  const bekanntSeit = datumIsValid ? +format(datumDate, 'yyyy') : null
 
-  const newGeomPoint =
-    geomPoint?.geojson ? JSON.parse(geomPoint?.geojson) : null
+  const newGeomPoint = geomPoint?.geojson
+    ? JSON.parse(String(geomPoint.geojson))
+    : null
 
   // create new pop for ap
-  let popResult
+  let popResult:
+    | { data?: { createPop?: { pop?: { id: string } | null } | null } | undefined }
+    | undefined
   try {
-    popResult = await apolloClient.mutate({
+    popResult = await apolloClient.mutate<{
+      createPop?: { pop?: { id: string } | null }
+    }>({
       mutation: createPop,
       variables: {
         apId,
@@ -68,36 +96,60 @@ export const createNewPopFromBeob = async ({
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const pop = popResult?.data?.createPop?.pop
+  if (!pop) {
+    return addNotification({
+      message: 'Die neue Population wurde nicht erstellt',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   // create new tpop for pop
-  let tpopResult
+  let tpopResult:
+    | {
+        data?: {
+          createTpop?: { tpop?: { id: string; popId: string | null } | null } | null
+        } | undefined
+      }
+    | undefined
   try {
-    tpopResult = await apolloClient.mutate({
+    tpopResult = await apolloClient.mutate<{
+      createTpop?: { tpop?: { id: string; popId: string | null } | null }
+    }>({
       mutation: createTpop,
       variables: {
         popId: pop.id,
         geomPoint: newGeomPoint,
         bekannt_seit: bekanntSeit,
-        gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
-        flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
+        gemeinde: beobData.NOM_COMMUNE ? beobData.NOM_COMMUNE : null,
+        flurname: beobData.DESC_LOCALITE_ ? beobData.DESC_LOCALITE_ : null,
       },
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const tpop = tpopResult?.data?.createTpop?.tpop
+  if (!tpop?.popId) {
+    return addNotification({
+      message: 'Die neue Teil-Population wurde nicht erstellt',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
 
   try {
     await apolloClient.mutate({
@@ -109,7 +161,7 @@ export const createNewPopFromBeob = async ({
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
@@ -182,7 +234,7 @@ export const createNewPopFromBeob = async ({
     .filter((n) => !isEqual(n, activeNodeArray))
 
   store.set(treeAddOpenNodesAtom, newOpenNodes)
-  navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  navigate?.(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],

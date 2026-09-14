@@ -32,7 +32,8 @@ export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
   const tpop = tpopResult?.data?.tpopById
   if (!tpop?.popId || !tpop?.geomPoint) {
     return addNotification({
-      message: 'Die Teil-Population hat keine Koordinaten oder keine Population',
+      message:
+        'Die Teil-Population hat keine Koordinaten oder keine Population',
       options: {
         variant: 'error',
       },
