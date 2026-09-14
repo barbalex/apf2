@@ -107,7 +107,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
   return (
     <ErrorBoundary>
-      <MenuBar rerenderer={showTreeMenus}>
+      <MenuBar rerenderer={`${showTreeMenus}`}>
         {!!toggleFilterInput && (
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}

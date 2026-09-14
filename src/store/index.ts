@@ -2546,7 +2546,15 @@ export const setCopyingBiotopAtom = atom(null, (_get, set, { id, label }) => {
   set(copyingBiotopAtom, { id, label })
 })
 
-export const movingAtom = atom({
+export interface Moving {
+  table: string | null
+  id: string | null
+  label: string | null
+  toTable: string | null
+  fromParentId: string | null
+}
+
+export const movingAtom = atom<Moving>({
   table: null,
   id: null,
   label: null,
@@ -2556,8 +2564,30 @@ export const movingAtom = atom({
 
 export const setMovingAtom = atom(
   null,
-  (_get, set, { table, id, label, toTable, fromParentId }) => {
-    set(movingAtom, { table, id, label, toTable, fromParentId })
+  (
+    _get,
+    set,
+    {
+      table,
+      id,
+      label,
+      toTable,
+      fromParentId,
+    }: {
+      table?: string | null | undefined
+      id?: string | null | undefined
+      label?: string | null | undefined
+      toTable?: string | null | undefined
+      fromParentId?: string | null | undefined
+    },
+  ) => {
+    set(movingAtom, {
+      table: table ?? null,
+      id: id ?? null,
+      label: label ?? null,
+      toTable: toTable ?? null,
+      fromParentId: fromParentId ?? null,
+    })
   },
 )
 

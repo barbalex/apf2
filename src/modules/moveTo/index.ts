@@ -14,12 +14,17 @@ import {
   addNotificationAtom,
   movingAtom,
   setMovingAtom,
+  type Notification,
 } from '../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const moveTo = async ({ id: newParentId }) => {
+export const moveTo = async ({
+  id: newParentId,
+}: {
+  id?: string | undefined
+}) => {
   const apolloClient = store.get(apolloClientAtom)!
   const tsQueryClient = store.get(tsQueryClientAtom)!
 
@@ -30,6 +35,15 @@ export const moveTo = async ({ id: newParentId }) => {
   if (!newParentId) {
     return addNotification({
       message: 'change was not saved: Reason: parent is missing',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+  if (!id) {
+    return addNotification({
+      message:
+        'change was not saved: Reason: the dataset to move was not found',
       options: {
         variant: 'error',
       },

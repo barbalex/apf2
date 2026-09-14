@@ -37,19 +37,29 @@ const getChildren = ({ addMargin, children }) => {
 
 // possible improvement:
 // add refs in here to measure their widths
+export interface MenuBarProps {
+  children: React.ReactNode
+  // enable the parent to force rerenders
+  rerenderer?: string
+  // files pass in titleComponent and its width
+  titleComponent?: React.ReactNode
+  titleComponentWidth?: number
+  bgColor?: string
+  color?: string
+  // top menu bar has no margin between menus, others do
+  // and that needs to be compensated for
+  addMargin?: boolean
+}
+
 export const MenuBar = ({
   children,
-  // enable the parent to force rerenders
   rerenderer,
-  // files pass in titleComponent and its width
   titleComponent,
   titleComponentWidth,
   bgColor = '#388e3c',
   color = 'white',
-  // top menu bar has no margin between menus, others do
-  // and that needs to be compensated for
   addMargin = true,
-}) => {
+}: MenuBarProps) => {
   const [menuAnchor, setMenuAnchor] = useState(null)
   const menuIsOpen = Boolean(menuAnchor)
   const onCloseMenu = () => setMenuAnchor(null)
