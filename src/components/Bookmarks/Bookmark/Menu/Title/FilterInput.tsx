@@ -1,17 +1,15 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
 import { FaTimes } from 'react-icons/fa'
-import { MdFilterAlt } from 'react-icons/md'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import {
   treeActiveFilterTableAtom,
   treeNodeLabelFilterAtom,
   treeSetNodeLabelFilterKeyAtom,
-  treeEmptyNodeLabelFilterAtom,
 } from '../../../../../store/index.ts'
 
 import styles from './FilterInput.module.css'
@@ -21,25 +19,29 @@ export const FilterInput = ({
   filterInputIsVisible,
   toggleFilterInput,
   ref: inputRef,
+}: {
+  width?: number | null | undefined
+  filterInputIsVisible: boolean
+  toggleFilterInput: () => void
+  ref?: React.RefObject<HTMLInputElement | null> | undefined
 }) => {
   const activeFilterTable = useAtomValue(treeActiveFilterTableAtom)
   const nodeLabelFilter = useAtomValue(treeNodeLabelFilterAtom)
   const setNodeLabelFilterKey = useSetAtom(treeSetNodeLabelFilterKeyAtom)
-  const empty = useSetAtom(treeEmptyNodeLabelFilterAtom)
-
   const isFiltered = Object.values(nodeLabelFilter).some(
     (v) => v !== null && v !== '',
   )
 
-  const filterValue = nodeLabelFilter?.[activeFilterTable] ?? ''
+  const filterValue = activeFilterTable ? (nodeLabelFilter[activeFilterTable] ?? '') : ''
   const [value, setValue] = useState(filterValue)
+  const [prevFilterValue, setPrevFilterValue] = useState(filterValue)
   // value should update when changed from outside
-  useEffect(() => {
-    if (filterValue === value) return
+  if (prevFilterValue !== filterValue) {
+    setPrevFilterValue(filterValue)
     setValue(filterValue)
-  }, [filterValue])
+  }
 
-  const setNodeLabelFilter = (val) => {
+  const setNodeLabelFilter = (val: string) => {
     if (!activeFilterTable) return
     setNodeLabelFilterKey({
       value: val,
@@ -47,18 +49,18 @@ export const FilterInput = ({
     })
   }
 
-  const onChange = (e) => {
+  const onChange = (e: { target: { value: string } }) => {
     // remove some values as they can cause exceptions in regular expressions
     const val = e.target.value.replaceAll('(', '').replaceAll(')', '')
     setValue(val)
   }
 
-  const onKeyUp = (e) => {
+  const onKeyUp = (e: { key: string }) => {
     if (e.key === 'Enter') {
       setNodeLabelFilter(value)
       // on coarse pointers, move focus out to close the keyboard
       if (matchMedia('(pointer: coarse)').matches) {
-        inputRef.current.blur()
+        inputRef?.current?.blur()
       }
     }
   }
@@ -99,7 +101,7 @@ export const FilterInput = ({
                     <IconButton
                       aria-label="Filter entfernen"
                       onClick={onClickEmpty}
-                      fontSize="small"
+                      size="small"
                     >
                       <FaTimes />
                     </IconButton>
@@ -108,7 +110,7 @@ export const FilterInput = ({
               : null,
           },
         }}
-        style={{ width: (width ?? 32) - 32 }}
+        style={{ width: Math.max((width ?? 32) - 32, 0) }}
       />
     </div>
   )

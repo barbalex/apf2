@@ -5,7 +5,15 @@ import { PrefetchLink } from '../../shared/PrefetchLink.tsx'
 
 import styles from './Nav.module.css'
 
-export const Nav = ({ item, baseUrl, needsBorderRight = false }) => {
+export const Nav = ({
+  item,
+  baseUrl,
+  needsBorderRight = false,
+}: {
+  item: { id: string; label: React.ReactNode }
+  baseUrl?: string
+  needsBorderRight?: boolean
+}) => {
   const { pathname, search } = useLocation()
 
   // issue: relative paths are not working!!!???

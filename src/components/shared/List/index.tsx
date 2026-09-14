@@ -4,7 +4,7 @@ import Highlighter from 'react-highlight-words'
 
 import { FormTitle } from '../FormTitle/index.tsx'
 import { ErrorBoundary } from '../ErrorBoundary.tsx'
-import { navData } from '../../Bookmarks/NavTo/Navs/Projects.tsx'
+import { navData } from '../../Bookmarks/NavTo/Navs/projectsNavData.ts'
 import { prefetchRouteData } from '../../../modules/prefetchRouteData.ts'
 
 import styles from './index.module.css'

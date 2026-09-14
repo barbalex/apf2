@@ -16,7 +16,7 @@ import {
 
 import styles from './index.module.css'
 
-export const ApFilter = ({ color }) => {
+export const ApFilter = ({ color }: { color?: string | undefined }) => {
   const { apId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
@@ -79,7 +79,7 @@ export const ApFilter = ({ color }) => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <Label label="nur AP" color={color} htmlFor="ap-filter" />
+        <Label label="nur AP" color={color ?? undefined} htmlFor="ap-filter" />
         <Switch
           data-id="ap-filter"
           id="ap-filter"

@@ -11,10 +11,10 @@ export const NavTo = () => {
   const navMatches = allMatches.filter(
     (m) =>
       (m.pathname === pathname || `${m.pathname}/` === pathname) &&
-      m.handle?.nav,
+      (m.handle as { nav?: unknown } | undefined)?.nav,
   )
   const navMatch = navMatches?.[0]
-  const Nav = navMatch?.handle?.nav
+  const Nav = (navMatch?.handle as { nav?: React.ComponentType } | undefined)?.nav
 
   return (
     <div className={styles.container}>
