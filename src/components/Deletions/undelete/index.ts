@@ -14,7 +14,7 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 export const undelete = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   const deletedDatasets = store.get(deletedDatasetsAtom)
 
   const dataset = deletedDatasets.find((d) => d.id === id)

@@ -16,7 +16,7 @@ export const zieljahrFolder = async ({
   projId = '99999999-9999-9999-9999-999999999999',
   jahr: jahrString,
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   const jahr = +jahrString
 
   // 1. load all data

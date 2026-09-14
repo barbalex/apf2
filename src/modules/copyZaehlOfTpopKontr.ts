@@ -7,7 +7,7 @@ export const copyZaehlOfTpopKontr = async ({
   tpopkontrIdFrom,
   tpopkontrIdTo,
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   // 1. fetch all tpopkontrzaehl
   const { data } = await apolloClient.query({
     query: graphql(`

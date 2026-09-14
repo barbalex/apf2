@@ -40,8 +40,8 @@ export const insertDataset = async ({
   search,
   jahr: jahrPassed,
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
+  const tsQueryClient = store.get(tsQueryClientAtom)!
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   let table = tablePassed

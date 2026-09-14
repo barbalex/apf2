@@ -156,8 +156,8 @@ const nodeQueryConfigs: Record<string, NodeQueryConfig> = {
 
 export const prefetchNodeData = async (node: any) => {
   const { menuType, tableId, id } = node
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
+  const tsQueryClient = store.get(tsQueryClientAtom)!
 
   // Only prefetch for node types we have queries for
   const config = nodeQueryConfigs[menuType]

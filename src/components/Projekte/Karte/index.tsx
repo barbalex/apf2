@@ -176,9 +176,11 @@ export const Karte = ({ mapContainerRef }) => {
   )
 
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-  const activeOverlaysSorted = sortBy(activeOverlays, [
-    (activeOverlay) => overlays.findIndex((o) => o.value === activeOverlay),
-  ])
+  const activeOverlaysSorted = [...activeOverlays].sort(
+    (a, b) =>
+      overlays.findIndex((o) => o.value === a) -
+      overlays.findIndex((o) => o.value === b),
+  )
 
   // explicitly sort Layers
   // Use Pane with z-index: https://github.com/PaulLeCam/react-leaflet/issues/271#issuecomment-609752044

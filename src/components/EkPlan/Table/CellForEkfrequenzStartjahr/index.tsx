@@ -53,7 +53,7 @@ export const CellForEkfrequenzStartjahr = ({
   return (
     <div
       onMouseEnter={onMouseEnter}
-      onMouseLeave={hovered.reset}
+      onMouseLeave={resetHovered}
       style={{
         minWidth: width,
         maxWidth: width,

@@ -4,7 +4,7 @@ import { copyTo } from './copyTo/index.ts'
 import { store, apolloClientAtom } from '../store/index.ts'
 
 export const copyTpopsOfPop = async ({ popIdFrom, popIdTo }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   // 1. fetch all tpops
   const { data } = await apolloClient.query({
     query: graphql(`

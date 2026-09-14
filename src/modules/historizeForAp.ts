@@ -10,7 +10,7 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 export const historizeForAp = async ({ year, apId }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
 
   try {
     await apolloClient.mutate({

@@ -8,7 +8,7 @@ import {
 } from '../store/index.ts'
 
 export const copyBiotopTo = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   const copyingBiotop = store.get(copyingBiotopAtom)
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id

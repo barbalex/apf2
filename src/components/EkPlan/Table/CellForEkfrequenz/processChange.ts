@@ -15,8 +15,8 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 export const processChange = async ({ value, row }) => {
-  const tsQueryClient = store.get(tsQueryClientAtom)
-  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)!
+  const apolloClient = store.get(apolloClientAtom)!
   try {
     await apolloClient.mutate({
       mutation: dynamicGql`

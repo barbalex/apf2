@@ -21,7 +21,7 @@ const tpopById = graphql(`
 `)
 
 export const getAndValidateCoordinatesOfTpop = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   let tpopResult
   try {
     tpopResult = await apolloClient.query({

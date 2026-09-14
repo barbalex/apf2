@@ -16,7 +16,7 @@ export const setEkplans = async ({
   ekfrequenz: ekfrequenzValue,
   ekfrequenzStartjahr,
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   // TODO:
   // only return if set ekfrequenz has kontrolljahre?
   // but then: query ekplans beginning when? This year

@@ -18,8 +18,8 @@ export const saveNichtZuordnenToDb = async ({
   refetch: refetchPassed,
   search,
 }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
+  const tsQueryClient = store.get(tsQueryClientAtom)!
   const navigate = store.get(navigateAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodes = store.get(treeOpenNodesAtom)

@@ -13,7 +13,7 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 export const historize = async ({ apberuebersicht: row }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   // 1. historize
   try {
     await apolloClient.mutate({

@@ -16,8 +16,8 @@ import {
 export const saveArtIdToDb = async ({ value, row, search }) => {
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodes = store.get(treeOpenNodesAtom)
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
+  const tsQueryClient = store.get(tsQueryClientAtom)!
   const navigate = store.get(navigateAtom)
 
   if (!value) return

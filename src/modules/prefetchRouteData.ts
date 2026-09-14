@@ -298,8 +298,8 @@ const routeConfigs: RouteConfig[] = [
  * @param path - The route path to prefetch data for
  */
 export const prefetchRouteData = async (path: string) => {
-  const tsQueryClient = store.get(tsQueryClientAtom)
-  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)!
+  const apolloClient = store.get(apolloClientAtom)!
   if (!tsQueryClient || !apolloClient) return
 
   // Decode the path to handle URL-encoded characters

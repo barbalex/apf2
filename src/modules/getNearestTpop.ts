@@ -11,7 +11,7 @@ import {
 } from '../store/index.ts'
 
 export const getNearestTpop = async ({ latLng, apId }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
   const { data } = await apolloClient.query({

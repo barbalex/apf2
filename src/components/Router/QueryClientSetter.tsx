@@ -8,7 +8,7 @@ import {
 
 export const QueryClientSetter = () => {
   const tsQueryClient = useQueryClient()
-  const tsQueryClientInstore = store.get(tsQueryClientAtom)
+  const tsQueryClientInstore = store.get(tsQueryClientAtom)!
 
   const wasSet = useRef(false)
 

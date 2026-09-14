@@ -10,8 +10,8 @@ const addNotification = (notification) =>
 
 
 export const copyTpopKoordToPop = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
+  const tsQueryClient = store.get(tsQueryClientAtom)!
   // fetch tpop
   let tpopResult
   try {

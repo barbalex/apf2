@@ -20,8 +20,8 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 export const moveTo = async ({ id: newParentId }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
+  const tsQueryClient = store.get(tsQueryClientAtom)!
 
   const moving = store.get(movingAtom)
   const table = moving?.table

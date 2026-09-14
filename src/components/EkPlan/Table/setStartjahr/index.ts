@@ -13,7 +13,7 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 export const setStartjahr = async ({ row, ekfrequenz }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   // 1  get ekfrequenz's kontrolljahreAb
   let ekfrequenzResult
   try {

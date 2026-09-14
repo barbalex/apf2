@@ -21,7 +21,7 @@ const beobById = graphql(`
 `)
 
 export const getAndValidateCoordinatesOfBeob = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   let beobResult
   try {
     beobResult = await apolloClient.query({

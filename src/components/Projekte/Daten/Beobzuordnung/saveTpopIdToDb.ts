@@ -14,8 +14,8 @@ import {
 } from '../../../../store/index.ts'
 
 export const saveTpopIdToDb = async ({ value, id, type, search }) => {
-  const apolloClient = store.get(apolloClientAtom)
-  const tsQueryClient = store.get(tsQueryClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
+  const tsQueryClient = store.get(tsQueryClientAtom)!
   const navigate = store.get(navigateAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodesRaw = store.get(treeOpenNodesAtom)

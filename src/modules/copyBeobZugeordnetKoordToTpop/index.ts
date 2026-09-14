@@ -11,7 +11,7 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 export const copyBeobZugeordnetKoordToTpop = async ({ id }) => {
-  const apolloClient = store.get(apolloClientAtom)
+  const apolloClient = store.get(apolloClientAtom)!
   // fetch beob coodinates
   let beobResult
   try {
