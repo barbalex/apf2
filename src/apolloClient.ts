@@ -6,7 +6,7 @@ import {
   CombinedGraphQLErrors,
 } from '@apollo/client'
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
-import { setContext } from '@apollo/client/link/context'
+import { SetContextLink } from '@apollo/client/link/context'
 import { ErrorLink } from '@apollo/client/link/error'
 import { RemoveTypenameFromVariablesLink } from '@apollo/client/link/remove-typename'
 import { jwtDecode } from 'jwt-decode'
@@ -36,7 +36,8 @@ interface JwtPayload {
 export const buildApolloClient = (): ApolloClient => {
   // TODO: use new functionality
   // https://www.apollographql.com/docs/react/migrating/apollo-client-3-migration/?mc_cid=e593721cc7&mc_eid=c8e91f2f0a#apollo-link-and-apollo-link-http
-  const authLink = setContext((_, { headers }) => {
+  // note: SetContextLink flips the arguments — prevContext comes first
+  const authLink = new SetContextLink(({ headers }) => {
     const token = store.get(userTokenAtom)
     if (token) {
       const tokenDecoded = jwtDecode<JwtPayload>(token)
