@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getPopberGqlFilterForTree } from './getPopberGqlFilterForTree.ts'
@@ -8,14 +8,14 @@ import { getPopberGqlFilterForTree } from './getPopberGqlFilterForTree.ts'
 export const usePopbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
 
   // Get filter before useQuery so changes trigger refetch
-  const popberGqlFilterForTree = getPopberGqlFilterForTree(popId)
+  const popberGqlFilterForTree = getPopberGqlFilterForTree(popId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treePopber', popId, popberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -41,12 +41,13 @@ export const usePopbersNavData = (props?: { projId?: string | undefined; apId?: 
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.popById.popbersByPopId.nodes.length
-  const totalCount = data.popById.totalCount.totalCount
+  const count = data.popById?.popbersByPopId.nodes.length
+  const totalCount = data.popById?.totalCount.totalCount
 
   const navData = {
     id: 'Kontroll-Berichte',
@@ -68,13 +69,13 @@ export const usePopbersNavData = (props?: { projId?: string | undefined; apId?: 
       'Kontroll-Berichte',
     ],
     hasChildren: !!count,
-    menus: data.popById.popbersByPopId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.popById?.popbersByPopId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'popber',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: popId,
       treeUrl: [
         'Projekte',
@@ -84,7 +85,7 @@ export const usePopbersNavData = (props?: { projId?: string | undefined; apId?: 
         'Populationen',
         popId,
         'Kontroll-Berichte',
-        p.id,
+        p?.id,
       ],
       hasChildren: false,
     })),

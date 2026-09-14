@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
@@ -89,15 +89,15 @@ export const tpopIcons = {
 export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
 
   const moving = useAtomValue(movingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeTpop', popId, tpopGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -127,7 +127,8 @@ export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: st
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
@@ -201,33 +202,33 @@ export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: st
     hasChildren: !!count,
     labelLeftElements: showTpopIcon ? [TpopMapIcon] : undefined,
     component: NodeWithList,
-    menus: data.popById.tpopsByPopId.nodes.map((p) => {
+    menus: data.popById?.tpopsByPopId.nodes.map((p) => {
       const labelRightElements = []
-      const isMoving = moving.id === p.id
+      const isMoving = moving.id === p?.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = copying.id === p.id
+      const isCopying = copying.id === p?.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }
 
-      const iconIsHighlighted = p.id === tpopId
+      const iconIsHighlighted = p?.id === tpopId
       const TpopIcon =
-        p.status ?
-          iconIsHighlighted ? tpopIcons[tpopIconName][p.status + 'Highlighted']
-          : tpopIcons[tpopIconName][p.status]
+        p?.status ?
+          iconIsHighlighted ? (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]![p?.status + 'Highlighted']
+          : (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]![p?.status]
         : iconIsHighlighted ? TpopIconQHighlighted
         : TpopIconQ
 
       return {
-        id: p.id,
-        label: p.label,
-        status: p.status,
+        id: p?.id,
+        label: p?.label,
+        status: p?.status,
         treeNodeType: 'table',
         treeMenuType: 'tpop',
-        treeId: p.id,
-        treeTableId: p.id,
+        treeId: p?.id,
+        treeTableId: p?.id,
         treeParentTableId: popId,
         treeUrl: [
           'Projekte',
@@ -237,10 +238,10 @@ export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: st
           'Populationen',
           popId,
           'Teil-Populationen',
-          p.id,
+          p?.id,
         ],
         fetcherName: 'useTpopNavData',
-        fetcherParams: { projId, apId, popId, tpopId: p.id },
+        fetcherParams: { projId, apId, popId, tpopId: p?.id },
         hasChildren: true,
         labelLeftElements: showTpopIcon ? [TpopIcon] : undefined,
         labelRightElements:

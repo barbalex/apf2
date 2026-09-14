@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
@@ -16,14 +16,14 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 export const useTpopfreiwkontrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
 
   const ekfGqlFilterForTree = useAtomValue(treeEkfGqlFilterForTreeAtom)
 
-  const { data, refetch } = useQuery({
+const { data } = useSuspenseQuery({
     queryKey: ['treeTpopfreiwkontr', tpopId, ekfGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -57,7 +57,8 @@ export const useTpopfreiwkontrsNavData = (props?: { projId?: string | undefined;
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
@@ -85,8 +86,8 @@ export const useTpopfreiwkontrsNavData = (props?: { projId?: string | undefined;
     [],
   )
 
-  const count = data.tpopById.tpopkontrsByTpopId.nodes.length
-  const totalCount = data.tpopById.totalCount.totalCount
+  const count = data.tpopById?.tpopkontrsByTpopId.nodes.length
+  const totalCount = data.tpopById?.totalCount.totalCount
 
   const navData = {
     id: 'Freiwilligen-Kontrollen',
@@ -113,24 +114,24 @@ export const useTpopfreiwkontrsNavData = (props?: { projId?: string | undefined;
     fetcherName: 'useTpopfreiwkontrsNavData',
     fetcherParams: { projId, apId, popId, tpopId },
     hasChildren: !!count,
-    menus: data.tpopById.tpopkontrsByTpopId.nodes.map((p) => {
+    menus: data.tpopById?.tpopkontrsByTpopId.nodes.map((p) => {
       const labelRightElements = []
-      const isMoving = moving.id === p.id
+      const isMoving = moving.id === p?.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = copying.id === p.id
+      const isCopying = copying.id === p?.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }
 
       return {
-        id: p.id,
-        label: p.label,
+        id: p?.id,
+        label: p?.label,
         treeNodeType: 'table',
         treeMenuType: 'tpopfreiwkontr',
-        treeId: p.id,
-        treeTableId: p.id,
+        treeId: p?.id,
+        treeTableId: p?.id,
         treeParentTableId: tpopId,
         treeUrl: [
           'Projekte',
@@ -142,10 +143,10 @@ export const useTpopfreiwkontrsNavData = (props?: { projId?: string | undefined;
           'Teil-Populationen',
           tpopId,
           'Freiwilligen-Kontrollen',
-          p.id,
+          p?.id,
         ],
         fetcherName: 'useTpopfreiwkontrNavData',
-        fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p.id },
+        fetcherParams: { projId, apId, popId, tpopId, tpopkontrId: p?.id },
         singleElementName: 'Freiwilligen-Kontrolle',
         hasChildren: true,
         labelRightElements: labelRightElements.length

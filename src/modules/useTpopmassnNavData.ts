@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import { copyingAtom, movingAtom, store } from '../store/index.ts'
@@ -10,7 +10,15 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-const getLabelRightElements = ({ copyingId, movingId, tpopmassnId }) => {
+const getLabelRightElements = ({
+  copyingId,
+  movingId,
+  tpopmassnId,
+}: {
+  copyingId: string | null
+  movingId: string | null
+  tpopmassnId: string
+}) => {
   const labelRightElements = []
   const isMoving = movingId === tpopmassnId
   if (isMoving) {
@@ -27,13 +35,13 @@ const getLabelRightElements = ({ copyingId, movingId, tpopmassnId }) => {
 export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopmassnId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
-  const tpopmassnId = props?.tpopmassnId ?? params.tpopmassnId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
+  const tpopmassnId = (props?.tpopmassnId ?? params.tpopmassnId)!
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassn', tpopmassnId],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -62,7 +70,8 @@ export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
@@ -87,14 +96,14 @@ export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?
     [],
   )
 
-  const zielAnzahl = data.tpopmassnById.zieleinheitAnzahl
+  const zielAnzahl = data.tpopmassnById?.zieleinheitAnzahl
   const zielEinheit =
-    data.tpopmassnById.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
+    data.tpopmassnById?.tpopkontrzaehlEinheitWerteByZieleinheitEinheit?.text
   const addEinheitToLabel = !!zielAnzahl && !!zielEinheit
   const label =
-    data.tpopmassnById.label +
+    data.tpopmassnById?.label +
     (addEinheitToLabel ? `\n${zielEinheit}: ${zielAnzahl}` : '')
-  const filesCount = data.tpopmassnById.tpopmassnFilesByTpopmassnId.totalCount
+  const filesCount = data.tpopmassnById?.tpopmassnFilesByTpopmassnId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,

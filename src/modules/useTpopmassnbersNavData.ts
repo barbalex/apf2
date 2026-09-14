@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getTpopmassnberGqlFilterForTree } from './getTpopmassnberGqlFilterForTree.ts'
@@ -9,15 +9,15 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useTpopmassnbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
 
   // Get filter before useQuery so changes trigger refetch
-  const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
+  const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeTpopmassnber', tpopId, tpopmassnberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -49,12 +49,13 @@ export const useTpopmassnbersNavData = (props?: { projId?: string | undefined; a
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.tpopById.tpopmassnbersByTpopId.nodes.length
-  const totalCount = data.tpopById.totalCount.totalCount
+  const count = data.tpopById?.tpopmassnbersByTpopId.nodes.length
+  const totalCount = data.tpopById?.totalCount.totalCount
 
   const navData = {
     id: 'Massnahmen-Berichte',
@@ -79,13 +80,13 @@ export const useTpopmassnbersNavData = (props?: { projId?: string | undefined; a
     ],
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.tpopById.tpopmassnbersByTpopId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.tpopById?.tpopmassnbersByTpopId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'tpopmassnber',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -97,7 +98,7 @@ export const useTpopmassnbersNavData = (props?: { projId?: string | undefined; a
         'Teil-Populationen',
         tpopId,
         'Massnahmen-Berichte',
-        p.id,
+        p?.id,
       ],
       hasChildren: false,
     })),

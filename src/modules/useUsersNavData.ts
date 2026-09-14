@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { treeUserGqlFilterForTreeAtom } from '../store/index.ts'
@@ -11,7 +11,7 @@ export const useUsersNavData = () => {
 
   const userGqlFilterForTree = useAtomValue(treeUserGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeUser', userGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -33,12 +33,13 @@ export const useUsersNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.allUsers.nodes.length
-  const totalCount = data.totalCount.totalCount
+  const count = data.allUsers?.nodes.length
+  const totalCount = data.totalCount?.totalCount
 
   const navData = {
     id: 'Benutzer',
@@ -53,14 +54,14 @@ export const useUsersNavData = () => {
     fetcherName: 'useUsersNavData',
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.allUsers.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.allUsers?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'user',
-      treeId: p.id,
-      treeTableId: p.id,
-      treeUrl: ['Benutzer', p.id],
+      treeId: p?.id,
+      treeTableId: p?.id,
+      treeUrl: ['Benutzer', p?.id],
       hasChildren: false,
     })),
   }

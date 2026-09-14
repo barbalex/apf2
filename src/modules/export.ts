@@ -6,12 +6,21 @@ import {
   store,
   addNotificationAtom,
   exportFileTypeAtom,
+  type Notification,
 } from '../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const exportModule = async ({ data: dataPassed, fileName, kml }) => {
+export const exportModule = async ({
+  data: dataPassed,
+  fileName,
+  kml,
+}: {
+  data: Record<string, unknown>[]
+  fileName: string
+  kml?: boolean
+}) => {
   const exportFileType = store.get(exportFileTypeAtom)
   const data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter

@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -16,9 +16,9 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undefined; apId?: string | undefined; beobId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const beobId = props?.beobId ?? params.beobId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const beobId = (props?.beobId ?? params.beobId)!
 
   const beobNichtZuzuordnenGqlFilterForTree = useAtomValue(
     treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
@@ -37,7 +37,7 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
     },
   }
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeBeobNichtZuzuordnen',
       apId,
@@ -84,13 +84,14 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.beobsNichtZuzuordnen.totalCount
+  const count = data.beobsNichtZuzuordnen?.totalCount
   const filteredCount =
-    data.filteredBeobsNichtZuzuordnen.nodes.length
+    data.filteredBeobsNichtZuzuordnen?.nodes.length
 
   const navData = {
     id: 'nicht-zuzuordnende-Beobachtungen',
@@ -112,13 +113,13 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
     ],
     hasChildren: !!filteredCount,
     component: NodeWithList,
-    menus: (data.filteredBeobsNichtZuzuordnen.nodes).map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: (data.filteredBeobsNichtZuzuordnen?.nodes ?? []).map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'beobNichtZuzuordnen',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
       treeUrl: [
         'Projekte',
@@ -126,15 +127,15 @@ export const useBeobNichtZuzuordnensNavData = (props?: { projId?: string | undef
         'Arten',
         apId,
         'nicht-zuzuordnende-Beobachtungen',
-        p.id,
+        p?.id,
       ],
       hasChildren: false,
       labelLeftElements:
-        p.absenz ?
-          beobId === p.id ?
+        p?.absenz ?
+          beobId === p?.id ?
             [BeobnichtzuzuordnenFilteredAbsenzMapIcon]
           : [BeobnichtzuzuordnenAbsenzMapIcon]
-        : beobId === p.id ?
+        : beobId === p?.id ?
           [BeobnichtzuzuordnenFilteredMapIcon]
         : [BeobnichtzuzuordnenMapIcon],
     })),

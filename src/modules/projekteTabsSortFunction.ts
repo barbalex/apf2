@@ -1,4 +1,4 @@
-const projekteTabsSortOrder = {
+const projekteTabsSortOrder: Record<string, number | undefined> = {
   tree: 1,
   daten: 2,
   filter: 3,
@@ -8,9 +8,9 @@ const projekteTabsSortOrder = {
   daten2: 7,
   filter2: 8,
 }
-export const projekteTabsSortFunction = (a, b) => {
+export const projekteTabsSortFunction = (a: string, b: string) => {
   const aOrder = projekteTabsSortOrder[a]
   const bOrder = projekteTabsSortOrder[b]
-  if (aOrder < bOrder) return -1
+  if ((aOrder ?? 0) < (bOrder ?? 0)) return -1
   return 1
 }

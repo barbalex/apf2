@@ -1,7 +1,6 @@
-import { useState } from 'react'
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { countBy } from 'es-toolkit'
 import { useAtomValue } from 'jotai'
 import {
@@ -9,7 +8,6 @@ import {
   treePopGqlFilterForTreeAtom,
   treeBeobNichtBeurteiltGqlFilterForTreeAtom,
   treeBeobNichtZuzuordnenGqlFilterForTreeAtom,
-  store,
 } from '../store/index.ts'
 import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
 import { getApberGqlFilterForTree } from './getApberGqlFilterForTree.ts'
@@ -27,8 +25,8 @@ import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
 export const useApNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
-  const projId = props?.projId
-  const apId = props?.apId
+  const projId = props?.projId ?? ''
+  const apId = props?.apId ?? ''
 
   const [projekteTabs] = useProjekteTabs()
   const karteIsVisible = projekteTabs.includes('karte')
@@ -75,17 +73,17 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
   }
 
   // Get filters before useQuery so changes trigger refetch
-  const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
-  const apberGqlFilterForTree = getApberGqlFilterForTree(apId)
-  const apartGqlFilterForTree = getApartGqlFilterForTree(apId)
-  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId)
-  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
-  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId)
-  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
+  const zielGqlFilterForTree = getZielGqlFilterForTree(apId!)
+  const apberGqlFilterForTree = getApberGqlFilterForTree(apId!)
+  const apartGqlFilterForTree = getApartGqlFilterForTree(apId!)
+  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId!)
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId!)
+  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId!)
+  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId!)
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeAp',
       projId,
@@ -253,7 +251,8 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
@@ -261,10 +260,10 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
   const popsCount = data.apById?.popsByApId?.totalCount ?? 0
   const filteredPopsCount = data.apById?.filteredPops?.totalCount ?? 0
   const apZiels = data.apById?.zielsByApId?.nodes ?? []
-  const apZielJahrs = countBy(apZiels, (e) => e.jahr)
+  const apZielJahrs = countBy(apZiels, (e) => e?.jahr ?? 0)
   const apZielJahrsCount = Object.keys(apZielJahrs).length
   const filteredApZiels = data.apById?.filteredZiels?.nodes ?? []
-  const filteredApZielJahrs = countBy(filteredApZiels, (e) => e.jahr)
+  const filteredApZielJahrs = countBy(filteredApZiels, (e) => e?.jahr ?? 0)
   const filteredApZielJahrsCount = Object.keys(filteredApZielJahrs).length
   const erfkritsCount = data.apById?.erfkritsByApId?.totalCount ?? 0
   const filteredErfkritsCount = data.apById?.filteredErfkrits?.totalCount ?? 0

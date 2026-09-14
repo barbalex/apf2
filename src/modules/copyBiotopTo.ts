@@ -1,13 +1,11 @@
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { gql as dynamicGql } from '../apolloGql.ts'
+import type { TpopfeldkontrFieldsFragment } from '../gql/graphql.ts'
 
 import { tpopfeldkontr } from '../components/shared/fragments.ts'
-import {
-  store,
-  apolloClientAtom,
-  copyingBiotopAtom,
-} from '../store/index.ts'
+import { store, apolloClientAtom, copyingBiotopAtom } from '../store/index.ts'
 
-export const copyBiotopTo = async ({ id }) => {
+export const copyBiotopTo = async ({ id }: { id: string }) => {
   const apolloClient = store.get(apolloClientAtom)!
   const copyingBiotop = store.get(copyingBiotopAtom)
   // fetch previous id from copyingBiotop
@@ -20,7 +18,10 @@ export const copyBiotopTo = async ({ id }) => {
         }
       }
       ${tpopfeldkontr}
-    `,
+    ` as unknown as TypedDocumentNode<
+      { tpopkontrById?: TpopfeldkontrFieldsFragment | null },
+      Record<string, unknown>
+    >,
     variables: { id: previousId },
   })
   const from = dataFrom?.tpopkontrById

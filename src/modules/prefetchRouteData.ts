@@ -47,7 +47,7 @@ const routeConfigs: RouteConfig[] = [
   // Art
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/([^/]+)$/,
-    extractParams: (match) => ({ apId: match[1] }),
+    extractParams: (match) => ({ apId: match[1]! }),
     getQueryConfig: ({ apId }) => ({
       query: apQuery,
       queryKey: ['ap', apId],
@@ -57,7 +57,7 @@ const routeConfigs: RouteConfig[] = [
   // Population
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/([^/]+)$/,
-    extractParams: (match) => ({ popId: match[1] }),
+    extractParams: (match) => ({ popId: match[1]! }),
     getQueryConfig: ({ popId }) => ({
       query: popQuery,
       queryKey: ['pop', popId],
@@ -68,7 +68,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/([^/]+)$/,
-    extractParams: (match) => ({ tpopId: match[1] }),
+    extractParams: (match) => ({ tpopId: match[1]! }),
     getQueryConfig: ({ tpopId }) => ({
       query: tpopQuery,
       queryKey: ['tpop', tpopId],
@@ -79,7 +79,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Kontroll-Berichte\/([^/]+)$/,
-    extractParams: (match) => ({ tpopberId: match[1] }),
+    extractParams: (match) => ({ tpopberId: match[1]! }),
     getQueryConfig: ({ tpopberId }) => ({
       query: tpopberQuery,
       queryKey: ['tpopber', tpopberId],
@@ -90,7 +90,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Massnahmen\/([^/]+)$/,
-    extractParams: (match) => ({ tpopmassnId: match[1] }),
+    extractParams: (match) => ({ tpopmassnId: match[1]! }),
     getQueryConfig: ({ tpopmassnId }) => ({
       query: tpopmassnQuery,
       queryKey: ['tpopmassn', tpopmassnId],
@@ -101,7 +101,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Massnahmen-Berichte\/([^/]+)$/,
-    extractParams: (match) => ({ tpopmassnberId: match[1] }),
+    extractParams: (match) => ({ tpopmassnberId: match[1]! }),
     getQueryConfig: ({ tpopmassnberId }) => ({
       query: tpopmassnberQuery,
       queryKey: ['tpopmassnber', tpopmassnberId],
@@ -112,7 +112,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Feld-Kontrollen\/([^/]+)$/,
-    extractParams: (match) => ({ tpopkontrId: match[1] }),
+    extractParams: (match) => ({ tpopkontrId: match[1]! }),
     getQueryConfig: ({ tpopkontrId }) => ({
       query: tpopfeldkontrQuery,
       queryKey: ['tpopfeldkontr', tpopkontrId],
@@ -123,7 +123,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/Freiwilligen-Kontrollen\/([^/]+)$/,
-    extractParams: (match) => ({ tpopkontrId: match[1] }),
+    extractParams: (match) => ({ tpopkontrId: match[1]! }),
     getQueryConfig: ({ tpopkontrId }) => ({
       query: tpopfreiwkontrQuery,
       queryKey: ['tpopfreiwkontr', tpopkontrId],
@@ -134,7 +134,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Teil-Populationen\/[^/]+\/(?:Feld|Freiwilligen)-Kontrollen\/[^/]+\/Zaehlungen\/([^/]+)$/,
-    extractParams: (match) => ({ tpopkontrzaehlId: match[1] }),
+    extractParams: (match) => ({ tpopkontrzaehlId: match[1]! }),
     getQueryConfig: ({ tpopkontrzaehlId }) => ({
       query: tpopkontrzaehlQuery,
       queryKey: ['tpopkontrzaehl', tpopkontrzaehlId],
@@ -144,7 +144,7 @@ const routeConfigs: RouteConfig[] = [
   // AP-Bericht
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/AP-Berichte\/([^/]+)$/,
-    extractParams: (match) => ({ apberId: match[1] }),
+    extractParams: (match) => ({ apberId: match[1]! }),
     getQueryConfig: ({ apberId }) => ({
       query: apberQuery,
       queryKey: ['apber', apberId],
@@ -155,7 +155,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Kontroll-Berichte\/([^/]+)$/,
-    extractParams: (match) => ({ popberId: match[1] }),
+    extractParams: (match) => ({ popberId: match[1]! }),
     getQueryConfig: ({ popberId }) => ({
       query: popberQuery,
       queryKey: ['popber', popberId],
@@ -166,7 +166,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Populationen\/[^/]+\/Massnahmen-Berichte\/([^/]+)$/,
-    extractParams: (match) => ({ popmassnberId: match[1] }),
+    extractParams: (match) => ({ popmassnberId: match[1]! }),
     getQueryConfig: ({ popmassnberId }) => ({
       query: popmassnberQuery,
       queryKey: ['popmassnber', popmassnberId],
@@ -191,7 +191,7 @@ const routeConfigs: RouteConfig[] = [
   // Art Taxonomie (Apart)
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/Taxonomie\/([^/]+)$/,
-    extractParams: (match) => ({ apartId: match[1] }),
+    extractParams: (match) => ({ apartId: match[1]! }),
     getQueryConfig: ({ apartId }) => ({
       query: apartQuery,
       queryKey: ['apart', apartId],
@@ -201,7 +201,7 @@ const routeConfigs: RouteConfig[] = [
   // Adresse
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/Adressen\/([^/]+)$/,
-    extractParams: (match) => ({ adresseId: match[1] }),
+    extractParams: (match) => ({ adresseId: match[1]! }),
     getQueryConfig: ({ adresseId }) => ({
       query: adresseQuery,
       queryKey: ['adresse', adresseId],
@@ -211,7 +211,7 @@ const routeConfigs: RouteConfig[] = [
   // EK Zähleinheit
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/EK-Zähleinheiten\/([^/]+)$/,
-    extractParams: (match) => ({ ekzaehleinheitId: match[1] }),
+    extractParams: (match) => ({ ekzaehleinheitId: match[1]! }),
     getQueryConfig: ({ ekzaehleinheitId }) => ({
       query: ekzaehleinheitQuery,
       queryKey: ['ekzaehleinheit', ekzaehleinheitId],
@@ -221,7 +221,7 @@ const routeConfigs: RouteConfig[] = [
   // User
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/Benutzer\/([^/]+)$/,
-    extractParams: (match) => ({ userId: match[1] }),
+    extractParams: (match) => ({ userId: match[1]! }),
     getQueryConfig: ({ userId }) => ({
       query: userQuery,
       queryKey: ['user', userId],
@@ -232,7 +232,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/AP-Erfolgskriterien\/([^/]+)$/,
-    extractParams: (match) => ({ erfkritId: match[1] }),
+    extractParams: (match) => ({ erfkritId: match[1]! }),
     getQueryConfig: ({ erfkritId }) => ({
       query: erfkritQuery,
       queryKey: ['erfkrit', erfkritId],
@@ -242,7 +242,7 @@ const routeConfigs: RouteConfig[] = [
   // Ziel
   {
     pattern: /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/AP-Ziele\/\d+\/([^/]+)$/,
-    extractParams: (match) => ({ zielId: match[1] }),
+    extractParams: (match) => ({ zielId: match[1]! }),
     getQueryConfig: ({ zielId }) => ({
       query: zielQuery,
       queryKey: ['ziel', zielId],
@@ -253,7 +253,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/assoziierte-Arten\/([^/]+)$/,
-    extractParams: (match) => ({ assozartId: match[1] }),
+    extractParams: (match) => ({ assozartId: match[1]! }),
     getQueryConfig: ({ assozartId }) => ({
       query: assozartQuery,
       queryKey: ['assozart', assozartId],
@@ -263,7 +263,7 @@ const routeConfigs: RouteConfig[] = [
   // Projekt
   {
     pattern: /\/Daten\/Projekte\/([^/]+)$/,
-    extractParams: (match) => ({ projektId: match[1] }),
+    extractParams: (match) => ({ projektId: match[1]! }),
     getQueryConfig: ({ projektId }) => ({
       query: projektQuery,
       queryKey: ['projekt', projektId],
@@ -274,7 +274,7 @@ const routeConfigs: RouteConfig[] = [
   {
     pattern:
       /\/Daten\/Projekte\/[^/]+\/Arten\/[^/]+\/nicht-zuzuordnende-Beobachtungen\/([^/]+)$/,
-    extractParams: (match) => ({ beobId: match[1] }),
+    extractParams: (match) => ({ beobId: match[1]! }),
     getQueryConfig: ({ beobId }) => ({
       query: beobQuery,
       queryKey: ['beobNichtZuzuordnen', beobId],

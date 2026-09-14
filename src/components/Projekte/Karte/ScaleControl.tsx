@@ -1,7 +1,7 @@
 
+// importing the module registers L.Control.SwitchScaleControl
+import '../../../modules/SwitchScaleControl.ts'
 import 'leaflet'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import SwitchScaleControl from '../../../modules/SwitchScaleControl.ts'
 import { createControlComponent } from '@react-leaflet/core'
 
 const options = {
@@ -27,14 +27,19 @@ const options = {
     document.body.removeChild(div)
     return px
   },
-  getMapWidthForLanInMeters: function (currentLan) {
+  getMapWidthForLanInMeters: function (currentLan: number) {
     return 6378137 * 2 * Math.PI * Math.cos((currentLan * Math.PI) / 180)
   },
-  render: function (ratio) {
-    return '1 : ' + ratio?.toLocaleString('de-ch')
+  render: function (ratio: number | string) {
+    return '1 : ' + (ratio as number)?.toLocaleString?.('de-ch')
   },
 }
 
 export const ScaleControl = createControlComponent(
-  () => new window.L.Control.SwitchScaleControl(options),
+  () =>
+    new (
+      (window as unknown as { L: typeof import('leaflet') }).L.Control as unknown as {
+        SwitchScaleControl: new (options: Record<string, unknown>) => import('leaflet').Control
+      }
+    ).SwitchScaleControl(options),
 )

@@ -1,13 +1,13 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useCurrentissuesNavData = () => {
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeCurrentissues'],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -23,18 +23,19 @@ export const useCurrentissuesNavData = () => {
         `),
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
   // subtract 1 for "fehlt hier was"
-  const count = data.allCurrentissues.nodes.length - 1
+  const count = (data.allCurrentissues?.nodes?.length ?? 0) - 1
 
   const navData = {
     id: 'Aktuelle-Fehler',
     url: `/Daten/Aktuelle-Fehler`,
     label: `Aktuelle Fehler (${count})`,
-    totalCount: data.allCurrentissues.nodes.length,
+    totalCount: data.allCurrentissues?.nodes.length,
     treeNodeType: 'table',
     treeMenuType: 'currentissues',
     treeId: 'currentissueFolder',
@@ -44,14 +45,14 @@ export const useCurrentissuesNavData = () => {
     fetcherParams: {},
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.allCurrentissues.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.allCurrentissues?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'currentissue',
-      treeId: p.id,
-      treeTableId: p.id,
-      treeUrl: ['Aktuelle-Fehler', p.id],
+      treeId: p?.id,
+      treeTableId: p?.id,
+      treeUrl: ['Aktuelle-Fehler', p?.id],
       hasChildren: false,
     })),
   }

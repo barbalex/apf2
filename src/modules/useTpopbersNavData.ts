@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getTpopberGqlFilterForTree } from './getTpopberGqlFilterForTree.ts'
@@ -9,15 +9,15 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useTpopbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
 
   // Get filter before useQuery so changes trigger refetch
-  const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
+  const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeTpopber', tpopId, tpopberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -46,12 +46,13 @@ export const useTpopbersNavData = (props?: { projId?: string | undefined; apId?:
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.tpopById.tpopbersByTpopId.nodes.length
-  const totalCount = data.tpopById.totalCount.totalCount
+  const count = data.tpopById?.tpopbersByTpopId?.nodes?.length ?? 0
+  const totalCount = data.tpopById?.totalCount.totalCount
 
   const navData = {
     id: 'Kontroll-Berichte',
@@ -76,13 +77,13 @@ export const useTpopbersNavData = (props?: { projId?: string | undefined; apId?:
     ],
     hasChildren: count > 0,
     component: NodeWithList,
-    menus: data.tpopById.tpopbersByTpopId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.tpopById?.tpopbersByTpopId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'tpopber',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -94,7 +95,7 @@ export const useTpopbersNavData = (props?: { projId?: string | undefined; apId?:
         'Teil-Populationen',
         tpopId,
         'Kontroll-Berichte',
-        p.id,
+        p?.id,
       ],
       hasChildren: false,
     })),

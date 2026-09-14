@@ -3,12 +3,19 @@
 // not in use since using min width of 1000px
 export const isMobilePhone = () => {
   let check = false
-  const a = navigator.userAgent || navigator.vendor || window.opera
+  const a =
+    navigator.userAgent ||
+    navigator.vendor ||
+    (window as unknown as { opera?: string }).opera ||
+    ''
 
   // https://stackoverflow.com/a/11381730/712005
   // navigator.userAgentData.mobile
-  if ('userAgentData' in navigator && 'mobile' in navigator.userAgentData) {
-    check = navigator.userAgentData.mobile
+  const userAgentData = (
+    navigator as unknown as { userAgentData?: { mobile?: boolean } }
+  ).userAgentData
+  if (userAgentData && 'mobile' in userAgentData) {
+    check = userAgentData.mobile ?? false
   } else if (
     // userAgentData not supported
     // https://caniuse.com/mdn-api_navigator_useragentdata

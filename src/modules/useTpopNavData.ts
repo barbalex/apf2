@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -30,7 +30,15 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
-const getLabelRightElements = ({ movingId, copyingId, tpopId }) => {
+const getLabelRightElements = ({
+  movingId,
+  copyingId,
+  tpopId,
+}: {
+  movingId: string | null
+  copyingId: string | null
+  tpopId: string
+}) => {
   const labelRightElements = []
   const isMoving = movingId === tpopId
   if (isMoving) {
@@ -47,10 +55,10 @@ const getLabelRightElements = ({ movingId, copyingId, tpopId }) => {
 export const useTpopNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
 
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
@@ -72,7 +80,7 @@ export const useTpopNavData = (props?: { projId?: string | undefined; apId?: str
   const [, setRerenderer] = useState(0)
   const rerender = () => setRerenderer((prev) => prev + 1)
 
-  const { data, refetch } = useQuery({
+const { data } = useSuspenseQuery({
     queryKey: [
       'treeTpop',
       tpopId,
@@ -82,8 +90,8 @@ export const useTpopNavData = (props?: { projId?: string | undefined; apId?: str
       beobZugeordnetGqlFilterForTree,
     ],
     queryFn: async () => {
-      const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId)
-      const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId)
+      const tpopmassnberGqlFilterForTree = getTpopmassnberGqlFilterForTree(tpopId!)
+      const tpopberGqlFilterForTree = getTpopberGqlFilterForTree(tpopId!)
       const result = await apolloClient.query({
         query: graphql(`
           query NavTpopQuery(
@@ -174,7 +182,8 @@ export const useTpopNavData = (props?: { projId?: string | undefined; apId?: str
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
   useEffect(
@@ -245,8 +254,8 @@ export const useTpopNavData = (props?: { projId?: string | undefined; apId?: str
   const tpopIconIsHighlighted = props?.tpopId === params.tpopId
   const TpopIcon =
     status ?
-      tpopIconIsHighlighted ? tpopIcons[tpopIconName][status + 'Highlighted']
-      : tpopIcons[tpopIconName][status]
+      tpopIconIsHighlighted ? (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]![status + 'Highlighted']
+      : (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]![status]
     : tpopIconIsHighlighted ? TpopIconQHighlighted
     : TpopIconQ
 

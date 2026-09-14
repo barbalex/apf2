@@ -1,10 +1,9 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store,
   treeTpopkontrzaehlEinheitWerteGqlFilterForTreeAtom,
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   treeTpopApberrelevantGrundWerteGqlFilterForTreeAtom,
@@ -26,7 +25,7 @@ export const useWertesNavData = () => {
   )
   const adresseGqlFilterForTree = useAtomValue(treeAdresseGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeWertes',
       adresseGqlFilterForTree,
@@ -85,23 +84,24 @@ export const useWertesNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const adressesCount = data.allAdresses.totalCount
-  const adressesFilteredCount = data.filteredAdresses.totalCount
+  const adressesCount = data.allAdresses?.totalCount
+  const adressesFilteredCount = data.filteredAdresses?.totalCount
   const tpopApberrelevantGrundWerteCount =
-    data.allTpopApberrelevantGrundWertes.totalCount
+    data.allTpopApberrelevantGrundWertes?.totalCount
   const tpopApberrelevantGrundWerteFilteredCount =
-    data.filteredTpopApberrelevantGrundWertes.totalCount
-  const ekAbrechnungstypWerteCount = data.allEkAbrechnungstypWertes.totalCount
+    data.filteredTpopApberrelevantGrundWertes?.totalCount
+  const ekAbrechnungstypWerteCount = data.allEkAbrechnungstypWertes?.totalCount
   const ekAbrechnungstypWerteFilteredCount =
-    data.filteredEkAbrechnungstypWertes.totalCount
+    data.filteredEkAbrechnungstypWertes?.totalCount
   const tpopkontrzaehlEinheitWerteCount =
-    data.allTpopkontrzaehlEinheitWertes.totalCount
+    data.allTpopkontrzaehlEinheitWertes?.totalCount
   const tpopkontrzaehlEinheitWerteFilteredCount =
-    data.filteredTpopkontrzaehlEinheitWertes.totalCount
+    data.filteredTpopkontrzaehlEinheitWertes?.totalCount
 
   const navData = {
     id: 'WerteListen',

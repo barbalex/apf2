@@ -6,6 +6,9 @@ import { store, apolloClientAtom } from '../store/index.ts'
 export const copyZaehlOfTpopKontr = async ({
   tpopkontrIdFrom,
   tpopkontrIdTo,
+}: {
+  tpopkontrIdFrom: string
+  tpopkontrIdTo: string | null | undefined
 }) => {
   const apolloClient = store.get(apolloClientAtom)!
   // 1. fetch all tpopkontrzaehl
@@ -28,9 +31,9 @@ export const copyZaehlOfTpopKontr = async ({
   // 2. add tpopkontrzaehl to new tpopkontr
   tpopkontrzaehl.forEach((zaehl) =>
     copyTo({
-      parentId: tpopkontrIdTo,
+      parentId: tpopkontrIdTo ?? undefined,
       table: 'tpopkontrzaehl',
-      id: zaehl.id,
+      id: zaehl?.id ?? '',
     }),
   )
 }

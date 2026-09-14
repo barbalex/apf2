@@ -1,11 +1,11 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const useProjekteNavData = () => {
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeProjects'],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -21,19 +21,20 @@ export const useProjekteNavData = () => {
         `),
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.allProjekts.nodes.length
+  const count = data.allProjekts?.nodes.length
 
   const navData = {
     id: 'projekte',
     url: '/Daten/Projekte',
     label: `Projekte (${count})`,
-    menus: data.allProjekts.nodes.map((p) => ({
-      id: p.id,
-      label: p.name,
+    menus: data.allProjekts?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.name,
     })),
   }
 

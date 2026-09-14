@@ -1,24 +1,22 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { useAtomValue } from 'jotai'
 
-import { store } from '../store/index.ts'
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 
 export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
-  const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
+  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId)!
   const tpopkontrzaehlGqlFilterForTree =
-    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeTpopfreiwkontrzaehl',
       tpopkontrId,
@@ -54,12 +52,13 @@ export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undef
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.tpopkontrById.tpopkontrzaehlsByTpopkontrId?.nodes?.length
-  const totalCount = data.tpopkontrById.totalCount.totalCount
+  const count = data.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes?.length
+  const totalCount = data.tpopkontrById?.totalCount.totalCount
 
   const navData = {
     id: 'Zaehlungen',
@@ -88,13 +87,13 @@ export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undef
     fetcherParams: { projId, apId, popId, tpopId, tpopkontrId },
     hasChildren: !!count,
     alwaysOpen: true,
-    menus: data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.tpopkontrById?.tpopkontrzaehlsByTpopkontrId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'tpopfreiwkontrzaehl',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: tpopkontrId,
       treeUrl: [
         'Projekte',
@@ -108,7 +107,7 @@ export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undef
         'Freiwilligen-Kontrollen',
         tpopkontrId,
         'Zaehlungen',
-        p.id,
+        p?.id,
       ],
       hasChildren: false,
     })),

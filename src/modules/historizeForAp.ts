@@ -4,12 +4,19 @@ import {
   store,
   apolloClientAtom,
   addNotificationAtom,
+  type Notification,
 } from '../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const historizeForAp = async ({ year, apId }) => {
+export const historizeForAp = async ({
+  year,
+  apId,
+}: {
+  year: number
+  apId: string
+}) => {
   const apolloClient = store.get(apolloClientAtom)!
 
   try {
@@ -29,7 +36,7 @@ export const historizeForAp = async ({ year, apId }) => {
   } catch (error) {
     console.log('Error from mutating historize:', error)
     return addNotification({
-      message: `Die Historisierung ist gescheitert. Fehlermeldung: ${error.message}`,
+      message: `Die Historisierung ist gescheitert. Fehlermeldung: ${(error as Error).message}`,
       options: {
         variant: 'error',
       },

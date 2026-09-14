@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getEkzaehleinheitGqlFilterForTree } from './getEkzaehleinheitGqlFilterForTree.ts'
@@ -9,13 +9,13 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
 
   // Get filter before useQuery so changes trigger refetch
-  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
+  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeEkzaehleinheit', apId, ekzaehleinheitGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -47,13 +47,14 @@ export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined;
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const rows = data.apById.ekzaehleinheitsByApId.nodes
+  const rows = data.apById?.ekzaehleinheitsByApId?.nodes ?? []
   const count = rows.length
-  const totalCount = data.apById.totalCount.totalCount
+  const totalCount = data.apById?.totalCount.totalCount
 
   const navData = {
     id: 'EK-Zähleinheiten',
@@ -69,14 +70,14 @@ export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined;
     hasChildren: !!count,
     component: NodeWithList,
     menus: rows.map((p) => ({
-      id: p.id,
-      label: p.label,
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'ekzaehleinheit',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'EK-Zähleinheiten', p?.id],
       hasChildren: false,
     })),
   }

@@ -10,7 +10,13 @@ import {
   apolloClientAtom,
 } from '../store/index.ts'
 
-export const getNearestTpop = async ({ latLng, apId }) => {
+export const getNearestTpop = async ({
+  latLng,
+  apId,
+}: {
+  latLng: { lat: number; lng: number }
+  apId?: string
+}) => {
   const apolloClient = store.get(apolloClientAtom)!
   const { lat, lng } = latLng
   const myPoint = point([lat, lng])
@@ -39,13 +45,13 @@ export const getNearestTpop = async ({ latLng, apId }) => {
   })
   const pops = data?.apById?.popsByApId?.nodes ?? []
   const tpops = pops
-    .map((p) => (p?.tpopsByPopId?.nodes ?? []).filter((t) => t.wgs84Lat))
+    .map((p) => (p?.tpopsByPopId?.nodes ?? []).filter((t) => !!t?.wgs84Lat))
     .flat()
   const tpopPoints = featureCollection(
     tpops.map((t) =>
-      point([t.wgs84Lat, t.wgs84Long], {
-        id: t.id,
-        popId: t.popId,
+      point([t?.wgs84Lat ?? 0, t?.wgs84Long ?? 0], {
+        id: t?.id ?? '',
+        popId: t?.popId ?? null,
       }),
     ),
   )

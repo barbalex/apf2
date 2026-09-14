@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -15,17 +15,17 @@ export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined;
   const apolloClient = useApolloClient()
 
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
-  const beobId = props?.beobId ?? params.beobId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
+  const beobId = (props?.beobId ?? params.beobId)!
 
   const beobZugeordnetGqlFilterForTree = useAtomValue(
     treeBeobZugeordnetGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeBeobZugeordnet', tpopId, beobZugeordnetGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -58,7 +58,8 @@ export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined;
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
@@ -89,13 +90,13 @@ export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined;
     ],
     hasChildren: !!filteredCount,
     component: NodeWithList,
-    menus: data.filteredBeobsZugeordnet.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.filteredBeobsZugeordnet?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'beobZugeordnet',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: tpopId,
       treeUrl: [
         'Projekte',
@@ -107,15 +108,15 @@ export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined;
         'Teil-Populationen',
         tpopId,
         'Beobachtungen',
-        p.id,
+        p?.id,
       ],
       hasChildren: false,
       labelLeftElements:
-        p.absenz ?
-          beobId === p.id ?
+        p?.absenz ?
+          beobId === p?.id ?
             [BeobzugeordnetFilteredAbsenzMapIcon]
           : [BeobzugeordnetAbsenzMapIcon]
-        : beobId === p.id ? [BeobzugeordnetFilteredMapIcon]
+        : beobId === p?.id ? [BeobzugeordnetFilteredMapIcon]
         : [BeobzugeordnetMapIcon],
     })),
   }

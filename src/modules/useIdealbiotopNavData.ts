@@ -1,16 +1,16 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
 export const useIdealbiotopNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeIdealbiotop', apId],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -33,13 +33,14 @@ export const useIdealbiotopNavData = (props?: { projId?: string | undefined; apI
         variables: { apId },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const idealbiotop = data.apById.idealbiotopsByApId.nodes[0]
+  const idealbiotop = data.apById?.idealbiotopsByApId?.nodes?.[0]
   const filesCount =
-    idealbiotop.idealbiotopFilesByIdealbiotopId.totalCount
+    idealbiotop?.idealbiotopFilesByIdealbiotopId?.totalCount ?? 0
 
   const navData = {
     id: 'Idealbiotop',

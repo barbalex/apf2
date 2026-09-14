@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 import {
@@ -15,7 +15,15 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
-const getLabelRightElements = ({ copyingId, movingId, tpopkontrId }) => {
+const getLabelRightElements = ({
+  copyingId,
+  movingId,
+  tpopkontrId,
+}: {
+  copyingId: string | null
+  movingId: string | null
+  tpopkontrId: string
+}) => {
   const labelRightElements = []
   const isMoving = movingId === tpopkontrId
   if (isMoving) {
@@ -32,15 +40,15 @@ const getLabelRightElements = ({ copyingId, movingId, tpopkontrId }) => {
 export const useTpopfreiwkontrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
-  const tpopId = props?.tpopId ?? params.tpopId
-  const tpopkontrId = props?.tpopkontrId ?? params.tpopkontrId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
+  const tpopId = (props?.tpopId ?? params.tpopId)!
+  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId)!
   const tpopkontrzaehlGqlFilterForTree =
-    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeTpopfreiwkontr',
       tpopkontrId,
@@ -76,7 +84,8 @@ export const useTpopfreiwkontrNavData = (props?: { projId?: string | undefined; 
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
@@ -103,10 +112,10 @@ export const useTpopfreiwkontrNavData = (props?: { projId?: string | undefined; 
 
   const label = data.tpopkontrById?.label
   const tpopkontrzaehlCount =
-    data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.totalCount
+    data.tpopkontrById?.tpopkontrzaehlsByTpopkontrId.totalCount
   const filteredTpopkontrzaehlCount =
-    data.tpopkontrById.filteredTpopkontrzaehls.totalCount
-  const filesCount = data.tpopkontrById.tpopkontrFilesByTpopkontrId.totalCount
+    data.tpopkontrById?.filteredTpopkontrzaehls.totalCount
+  const filesCount = data.tpopkontrById?.tpopkontrFilesByTpopkontrId.totalCount
 
   const labelRightElements = getLabelRightElements({
     copyingId: copying.id,

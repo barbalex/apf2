@@ -4,9 +4,18 @@ import { groupBy } from 'es-toolkit'
 
 import { removeKmlNogoChar } from './removeKmlNogoChar.ts'
 
-export const exportKml = ({ fileName, data }) => {
+export const exportKml = ({
+  fileName,
+  data,
+}: {
+  fileName: string
+  data: Record<string, any>[]
+}) => {
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
-  const dataByArt = groupBy(data, (e) => e.art)
+  const dataByArt = groupBy(data, (e) => e.art) as Record<
+    string,
+    Record<string, any>[]
+  >
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
     <Document>
       <name>${file}</name>
@@ -24,7 +33,7 @@ export const exportKml = ({ fileName, data }) => {
           (key) => `
           <Folder>
             <name>${removeKmlNogoChar(key)}</name>
-            ${dataByArt[key]
+            ${(dataByArt[key] ?? [])
               .map(
                 ({ art, label, inhalte, wgs84Lat, wgs84Long, url }) => `
                   <Placemark>

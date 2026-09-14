@@ -1,7 +1,9 @@
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
-import { isEqual } from 'date-fns/isEqual'
+import { isEqual } from 'es-toolkit'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { gql as dynamicGql } from '../apolloGql.ts'
+import type { BeobFieldsFragment } from '../gql/graphql.ts'
 
 import {
   store,
@@ -13,6 +15,7 @@ import {
   treeOpenNodesAtom,
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
+  type Notification,
 } from '../store/index.ts'
 import {
   beob as beobFragment,
@@ -21,7 +24,7 @@ import {
   popStatusWerte,
 } from '../components/shared/fragments.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 const createTpop = dynamicGql`
@@ -49,7 +52,10 @@ const createTpop = dynamicGql`
     }
   }
   ${tpop}
-`
+` as unknown as TypedDocumentNode<
+  { createTpop?: { tpop?: { id: string; popId: string | null } | null } | null },
+  Record<string, unknown>
+>
 const updateBeobById = dynamicGql`
   mutation updateBeobForCreateNewTpopFromBeob($beobId: UUID!, $tpopId: UUID) {
     updateBeobById(
@@ -98,6 +104,12 @@ export const createNewTpopFromBeob = async ({
   projId = '99999999-9999-9999-9999-999999999999',
   apId = '99999999-9999-9999-9999-999999999999',
   search,
+}: {
+  pop: { id: string }
+  beobId: string
+  projId?: string | undefined
+  apId?: string | undefined
+  search: string
 }) => {
   const apolloClient = store.get(apolloClientAtom)!
   const tsQueryClient = store.get(tsQueryClientAtom)!
@@ -114,23 +126,31 @@ export const createNewTpopFromBeob = async ({
           }
         }
         ${beobFragment}
-      `,
+      ` as unknown as TypedDocumentNode<
+        { beobById?: BeobFieldsFragment | null },
+        Record<string, unknown>
+      >,
       variables: { beobId },
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
-  const beob = beobResult?.data?.beobById ?? {}
+  const beob = (beobResult?.data?.beobById ?? {}) as BeobFieldsFragment
   const { datum, data } = beob
-  const datumIsValid = isValid(new Date(datum))
-  const bekanntSeit = datumIsValid ? +format(new Date(datum), 'yyyy') : null
-  const geomPoint =
-    beob?.geomPoint?.geojson ? JSON.parse(beob.geomPoint.geojson) : null
+  // data is the raw InfoFlora/EVK JSON blob
+  const beobData = (data ?? {}) as Record<string, string | null | undefined>
+  // new Date(null) coerces to the epoch, like new Date(0)
+  const datumDate = new Date(datum ?? 0)
+  const datumIsValid = isValid(datumDate)
+  const bekanntSeit = datumIsValid ? +format(datumDate, 'yyyy') : null
+  const geomPoint = beob?.geomPoint?.geojson
+    ? JSON.parse(String(beob.geomPoint.geojson))
+    : null
 
   // create new tpop for pop
   let tpopResult
@@ -141,13 +161,13 @@ export const createNewTpopFromBeob = async ({
         popId: pop.id,
         geomPoint,
         bekannt_seit: bekanntSeit,
-        gemeinde: data?.NOM_COMMUNE ? data.NOM_COMMUNE : null,
-        flurname: data?.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
+        gemeinde: beobData.NOM_COMMUNE ? beobData.NOM_COMMUNE : null,
+        flurname: beobData.DESC_LOCALITE_ ? beobData.DESC_LOCALITE_ : null,
       },
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
@@ -174,7 +194,7 @@ export const createNewTpopFromBeob = async ({
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
@@ -188,7 +208,7 @@ export const createNewTpopFromBeob = async ({
     `Arten`,
     apId,
     `Populationen`,
-    tpop.popId,
+    tpop.popId ?? '',
     `Teil-Populationen`,
     tpop.id,
     `Beobachtungen`,
@@ -199,14 +219,14 @@ export const createNewTpopFromBeob = async ({
     ...openNodes,
     // add Beob and it's not yet existing parents to open nodes
     [`Projekte`, projId, `Arten`, apId, `Populationen`],
-    [`Projekte`, projId, `Arten`, apId, `Populationen`, tpop.popId],
+    [`Projekte`, projId, `Arten`, apId, `Populationen`, tpop.popId ?? ''],
     [
       `Projekte`,
       projId,
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      tpop.popId ?? '',
       `Teil-Populationen`,
     ],
     [
@@ -215,7 +235,7 @@ export const createNewTpopFromBeob = async ({
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      tpop.popId ?? '',
       `Teil-Populationen`,
       tpop.id,
     ],
@@ -225,7 +245,7 @@ export const createNewTpopFromBeob = async ({
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      tpop.popId ?? '',
       `Teil-Populationen`,
       tpop.id,
       `Beobachtungen`,
@@ -236,7 +256,7 @@ export const createNewTpopFromBeob = async ({
       `Arten`,
       apId,
       `Populationen`,
-      tpop.popId,
+      tpop.popId ?? '',
       `Teil-Populationen`,
       tpop.id,
       `Beobachtungen`,
@@ -247,7 +267,7 @@ export const createNewTpopFromBeob = async ({
     .filter((n) => !isEqual(n, activeNodeArray))
 
   store.set(treeAddOpenNodesAtom, newOpenNodes)
-  navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  navigate?.(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
   tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],

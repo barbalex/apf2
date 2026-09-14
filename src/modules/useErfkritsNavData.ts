@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
@@ -9,13 +9,13 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
 
   // Get filter before useQuery so changes trigger refetch
-  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -47,7 +47,8 @@ export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?:
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
@@ -67,15 +68,15 @@ export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?:
     treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
     hasChildren: !!count,
     component: NodeWithList,
-    menus: data.apById.erfkritsByApId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.apById?.erfkritsByApId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'erfkrit',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien', p?.id],
       hasChildren: false,
     })),
   }

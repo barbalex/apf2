@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -21,7 +21,7 @@ export const useProjektNavData = (props?: { projId?: string | undefined } | unde
     treeApberuebersichtGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeProject',
       projId,
@@ -63,17 +63,18 @@ export const useProjektNavData = (props?: { projId?: string | undefined } | unde
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const label = data.projektById.label ?? 'Projekt'
-  const artsCount = data.projektById.filteredAps.totalCount
-  const allArtsCount = data.projektById.allAps.totalCount
+  const label = data.projektById?.label ?? 'Projekt'
+  const artsCount = data.projektById?.filteredAps.totalCount
+  const allArtsCount = data.projektById?.allAps.totalCount
   const apberuebersichtsCount =
-    data.projektById.filteredApberuebersichts.totalCount
+    data.projektById?.filteredApberuebersichts.totalCount
   const allApberuebersichtsCount =
-    data.projektById.allApberuebersichts.totalCount
+    data.projektById?.allApberuebersichts.totalCount
   const navData = {
     id: projId,
     url: `/Daten/Projekte/${projId}`,

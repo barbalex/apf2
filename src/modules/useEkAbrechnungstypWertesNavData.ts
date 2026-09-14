@@ -1,10 +1,9 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import {
-  store,
   treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -16,7 +15,7 @@ export const useEkAbrechnungstypWertesNavData = () => {
     treeEkAbrechnungstypWerteGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'treeEkAbrechnungstypWerte',
       ekAbrechnungstypWerteGqlFilterForTree,
@@ -46,12 +45,13 @@ export const useEkAbrechnungstypWertesNavData = () => {
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.allEkAbrechnungstypWertes.nodes.length
-  const totalCount = data.totalCount.totalCount
+  const count = data.allEkAbrechnungstypWertes?.nodes.length
+  const totalCount = data.totalCount?.totalCount
 
   const navData = {
     id: 'EkAbrechnungstypWerte',
@@ -67,14 +67,14 @@ export const useEkAbrechnungstypWertesNavData = () => {
     fetcherName: 'useEkAbrechnungstypWertesNavData',
     fetcherParams: {},
     component: NodeWithList,
-    menus: data.allEkAbrechnungstypWertes.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.allEkAbrechnungstypWertes?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'ekAbrechnungstypWerte',
-      treeId: p.id,
-      treeTableId: p.id,
-      treeUrl: ['Werte-Listen', 'EkAbrechnungstypWerte', p.id],
+      treeId: p?.id,
+      treeTableId: p?.id,
+      treeUrl: ['Werte-Listen', 'EkAbrechnungstypWerte', p?.id],
       hasChildren: false,
     })),
   }

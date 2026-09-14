@@ -4,11 +4,11 @@ import {
   store,
   addNotificationAtom,
   apolloClientAtom,
+  type Notification,
 } from '../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
-
 
 const beobById = graphql(`
   query beobById($id: UUID!) {
@@ -20,7 +20,11 @@ const beobById = graphql(`
   }
 `)
 
-export const getAndValidateCoordinatesOfBeob = async ({ id }) => {
+export const getAndValidateCoordinatesOfBeob = async ({
+  id,
+}: {
+  id: string
+}) => {
   const apolloClient = store.get(apolloClientAtom)!
   let beobResult
   try {
@@ -30,7 +34,7 @@ export const getAndValidateCoordinatesOfBeob = async ({ id }) => {
     })
   } catch (error) {
     addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },

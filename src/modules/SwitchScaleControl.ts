@@ -9,7 +9,55 @@
 // also: this module was 8 years old at the time
 import L from 'leaflet'
 
-L.Control.SwitchScaleControl = L.Control.extend({
+interface SwitchScaleControlOptions extends L.ControlOptions {
+  dropdownDirection: string
+  className: string
+  updateWhenIdle: boolean
+  ratio: boolean
+  ratioPrefix: string
+  ratioCustomItemText: string
+  customScaleTitle: string
+  ratioMenu: boolean
+  recalcOnPositionChange: boolean
+  recalcOnZoomChange: boolean
+  scales: number[]
+  roundScales: number[] | null
+  adjustScales: boolean
+  pixelsInMeterWidth: () => number
+  getMapWidthForLanInMeters: (currentLan: number) => number
+  render: (ratio: number | string) => string
+}
+
+interface SwitchScaleControlInstance extends L.Control {
+  options: SwitchScaleControlOptions
+  _map: L.Map
+  _pixelsInMeterWidth: number
+  dropdown: HTMLElement
+  text: HTMLElement
+  _setScale: (ratio: number) => void
+  _toggleDropdown: () => void
+  _addScale: (ratio: number) => void
+  _addScales: (
+    options: SwitchScaleControlOptions,
+    className: string,
+    container: HTMLElement,
+  ) => void
+  _updateRound: () => void
+  _update: () => void
+  _updateFunction: (isRound: boolean) => void
+  _updateRatio: (physicalScaleRatio: number, isRound: boolean) => void
+  _roundScale: (physicalScaleRatio: number) => number
+}
+
+declare module 'leaflet' {
+  interface Control {
+    SwitchScaleControl: new (
+      options?: Partial<SwitchScaleControlOptions>,
+    ) => SwitchScaleControlInstance
+  }
+}
+
+const SwitchScaleControl = L.Control.extend({
   options: {
     position: 'bottomleft',
     dropdownDirection: 'upward',
@@ -43,11 +91,11 @@ L.Control.SwitchScaleControl = L.Control.extend({
     },
 
     // Returns width of map in meters on specified latitude.
-    getMapWidthForLanInMeters: function (currentLan) {
+    getMapWidthForLanInMeters: function (currentLan: number) {
       return 6378137 * 2 * Math.PI * Math.cos((currentLan * Math.PI) / 180)
     },
 
-    render: function (ratio) {
+    render: function (ratio: number | string): string {
       let scaleRatioText = ratio.toString()
       // 1500000 -> 1'500'000
       if (scaleRatioText.length > 3) {
@@ -68,7 +116,7 @@ L.Control.SwitchScaleControl = L.Control.extend({
     },
   },
 
-  onAdd: function (map) {
+  onAdd: function (map: L.Map) {
     this._map = map
     this._pixelsInMeterWidth = this.options.pixelsInMeterWidth()
 
@@ -105,7 +153,7 @@ L.Control.SwitchScaleControl = L.Control.extend({
     return container
   },
 
-  onRemove: function (map) {
+  onRemove: function (map: L.Map) {
     if (this.options.recalcOnZoomChange) {
       if (this.options.recalcOnPositionChange) {
         map.off(
@@ -129,7 +177,7 @@ L.Control.SwitchScaleControl = L.Control.extend({
     }
   },
 
-  _setScale: function (ratio) {
+  _setScale: function (ratio: number) {
     const map = this._map
     const bounds = map.getBounds()
     const centerLat = bounds.getCenter().lat
@@ -137,20 +185,20 @@ L.Control.SwitchScaleControl = L.Control.extend({
       (this._pixelsInMeterWidth *
         this.options.getMapWidthForLanInMeters(centerLat)) /
       ratio
-    this._map.setZoom(map.options.crs.zoom(crsScale))
+    this._map.setZoom(map.options.crs!.zoom(crsScale))
     this._toggleDropdown()
   },
 
   _toggleDropdown: function () {
+    const style = this.dropdown.style as CSSStyleDeclaration &
+      Record<string, string | null>
     const height =
-      this.dropdown.style['max-height'] === '0em' ?
-        this.options.scales.length * 2
-      : 0
-    this.dropdown.style['max-height'] = height + 'em'
-    this.dropdown.style.border = height ? null : '0'
+      style['max-height'] === '0em' ? this.options.scales.length * 2 : 0
+    style['max-height'] = height + 'em'
+    style.border = height ? '' : '0'
   },
 
-  _addScale(ratio) {
+  _addScale: function (ratio: number) {
     const menuitem = L.DomUtil.create(
       'div',
       this.options.className + '-scale-item',
@@ -163,7 +211,11 @@ L.Control.SwitchScaleControl = L.Control.extend({
     })
   },
 
-  _addScales: function (options, className, container) {
+  _addScales: function (
+    options: SwitchScaleControlOptions,
+    className: string,
+    container: HTMLElement,
+  ) {
     if (!options.ratio) return
 
     if (options.ratioMenu) {
@@ -184,6 +236,9 @@ L.Control.SwitchScaleControl = L.Control.extend({
 
     scales.forEach(this._addScale.bind(this))
 
+    // the DOM handlers below need the input element as their own this
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const self: SwitchScaleControlInstance = this
     const customScaleInput = L.DomUtil.create(
       'input',
       className + '-custom-scale',
@@ -191,13 +246,19 @@ L.Control.SwitchScaleControl = L.Control.extend({
     )
     customScaleInput.type = 'text'
     customScaleInput.setAttribute('value', options.ratioCustomItemText)
-    customScaleInput.addEventListener('focus', function (e) {
+    customScaleInput.addEventListener('focus', function (this: HTMLInputElement, e) {
       if (this.value === options.ratioCustomItemText) {
         this.value = options.ratioPrefix
 
         // IE fix.
-        if (this.createTextRange) {
-          const r = this.createTextRange()
+        const ieInput = this as HTMLInputElement & {
+          createTextRange?: () => {
+            moveStart: (unit: string, count: number) => void
+            select: () => void
+          }
+        }
+        if (ieInput.createTextRange) {
+          const r = ieInput.createTextRange()
           r.moveStart('character', this.value.length)
           r.select()
         }
@@ -206,7 +267,7 @@ L.Control.SwitchScaleControl = L.Control.extend({
       e.stopPropagation()
     })
 
-    customScaleInput.addEventListener('keydown', function (e) {
+    customScaleInput.addEventListener('keydown', function (this: HTMLInputElement, e) {
       if (e.which !== 13) return
 
       const scaleRatioFound = this.value
@@ -214,12 +275,12 @@ L.Control.SwitchScaleControl = L.Control.extend({
         .replace("'", '')
         .match(/^(1:){0,1}([0-9]*)$/)
       if (scaleRatioFound && scaleRatioFound[2]) {
-        const maxScale = Math.max(scales)
+        const maxScale = Math.max(...scales)
 
-        if (_this.options.adjustScales && scaleRatioFound[2] > maxScale) {
-          _this._setScale.call(_this, scales[scales.length - 1])
+        if (self.options.adjustScales && +scaleRatioFound[2] > maxScale) {
+          self._setScale(scales[scales.length - 1] as number)
         } else {
-          _this._setScale.call(_this, scaleRatioFound[2])
+          self._setScale(+scaleRatioFound[2])
         }
       }
 
@@ -239,19 +300,19 @@ L.Control.SwitchScaleControl = L.Control.extend({
     this._updateFunction(false)
   },
 
-  _updateFunction: function (isRound) {
+  _updateFunction: function (isRound: boolean) {
     if (this._map.getSize().x > 0 && this.options.ratio) {
       const bounds = this._map.getBounds()
       const centerLat = bounds.getCenter().lat
       const mapWidth = this.options.getMapWidthForLanInMeters(centerLat)
       const ratio =
         (this._pixelsInMeterWidth * mapWidth) /
-        this._map.options.crs.scale(this._map.getZoom())
+        this._map.options.crs!.scale(this._map.getZoom())
       this._updateRatio(ratio, isRound)
     }
   },
 
-  _updateRatio: function (physicalScaleRatio, isRound) {
+  _updateRatio: function (physicalScaleRatio: number, isRound: boolean) {
     const scaleText =
       isRound ?
         this._roundScale(physicalScaleRatio)
@@ -259,28 +320,34 @@ L.Control.SwitchScaleControl = L.Control.extend({
     this.text.innerHTML = this.options.render.call(this, scaleText)
   },
 
-  _roundScale: function (physicalScaleRatio) {
+  _roundScale: function (physicalScaleRatio: number): number {
     const scales = this.options.roundScales || this.options.scales
 
-    if (physicalScaleRatio < scales[0]) {
-      return scales[0]
+    if (physicalScaleRatio < (scales[0] as number)) {
+      return scales[0] as number
     }
 
-    if (physicalScaleRatio > scales[scales.length - 1]) {
-      return scales[scales.length - 1]
+    if (physicalScaleRatio > (scales[scales.length - 1] as number)) {
+      return scales[scales.length - 1] as number
     }
 
     for (let i = 0; i < scales.length - 1; i++) {
       if (
-        physicalScaleRatio < scales[i + 1] &&
-        physicalScaleRatio >= scales[i]
+        physicalScaleRatio < (scales[i + 1] as number) &&
+        physicalScaleRatio >= (scales[i] as number)
       ) {
-        return scales[i + 1] + scales[i] - 2 * physicalScaleRatio >= 0 ?
-            scales[i]
-          : scales[i + 1]
+        return (scales[i + 1] as number) + (scales[i] as number) - 2 * physicalScaleRatio >= 0 ?
+            (scales[i] as number)
+          : (scales[i + 1] as number)
       }
     }
 
     return Math.round(physicalScaleRatio)
   },
-})
+} as ThisType<SwitchScaleControlInstance> &
+  Record<string, unknown>)
+
+;(L.Control as unknown as Record<string, unknown>).SwitchScaleControl =
+  SwitchScaleControl
+
+export default SwitchScaleControl

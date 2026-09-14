@@ -1,11 +1,10 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
 import {
-  store,
   treeApberuebersichtGqlFilterForTreeAtom,
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
@@ -20,7 +19,7 @@ export const useApberuebersichtsNavData = (props?: { projId?: string | undefined
     treeApberuebersichtGqlFilterForTreeAtom,
   )
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeApberuebersicht', apberuebersichtGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -48,12 +47,13 @@ export const useApberuebersichtsNavData = (props?: { projId?: string | undefined
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.filtered.nodes.length
-  const totalCount = data.unfiltered.totalCount
+  const count = data.filtered?.nodes.length
+  const totalCount = data.unfiltered?.totalCount
 
   const navData = {
     id: 'AP-Berichte',
@@ -70,15 +70,15 @@ export const useApberuebersichtsNavData = (props?: { projId?: string | undefined
     fetcherName: 'useApberuebersichtsNavData',
     fetcherParams: { projId },
     component: NodeWithList,
-    menus: data.filtered.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.filtered?.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'apberuebersicht',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: projId,
-      treeUrl: ['Projekte', projId, 'AP-Berichte', p.id],
+      treeUrl: ['Projekte', projId, 'AP-Berichte', p?.id],
       hasChildren: false,
     })),
   }

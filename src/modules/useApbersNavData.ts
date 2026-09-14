@@ -1,6 +1,6 @@
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { getApberGqlFilterForTree } from './getApberGqlFilterForTree.ts'
@@ -8,13 +8,13 @@ import { getApberGqlFilterForTree } from './getApberGqlFilterForTree.ts'
 export const useApbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
 
   // Get filter before useQuery so changes trigger refetch
-  const apberGqlFilterForTree = getApberGqlFilterForTree(apId)
+  const apberGqlFilterForTree = getApberGqlFilterForTree(apId!)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treeApber', apId, apberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -40,12 +40,13 @@ export const useApbersNavData = (props?: { projId?: string | undefined; apId?: s
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
 
-  const count = data.apById.apbersByApId.nodes.length
-  const totalCount = data.apById.totalCount.totalCount
+  const count = data.apById?.apbersByApId.nodes.length
+  const totalCount = data.apById?.totalCount.totalCount
 
   const navData = {
     id: 'AP-Berichte',
@@ -53,15 +54,15 @@ export const useApbersNavData = (props?: { projId?: string | undefined; apId?: s
     listFilter: 'apber',
     url: `/Daten/Projekte/${projId}/Arten/${apId}/AP-Berichte`,
     label: `AP-Berichte (${count}/${totalCount})`,
-    menus: data.apById.apbersByApId.nodes.map((p) => ({
-      id: p.id,
-      label: p.label,
+    menus: data.apById?.apbersByApId.nodes.map((p) => ({
+      id: p?.id,
+      label: p?.label,
       treeNodeType: 'table',
       treeMenuType: 'apber',
-      treeId: p.id,
-      treeTableId: p.id,
+      treeId: p?.id,
+      treeTableId: p?.id,
       treeParentTableId: apId,
-      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', p.id],
+      treeUrl: ['Projekte', projId, 'Arten', apId, 'AP-Berichte', p?.id],
       hasChildren: false,
     })),
   }

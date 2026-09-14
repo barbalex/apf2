@@ -4,11 +4,11 @@ import {
   store,
   addNotificationAtom,
   apolloClientAtom,
+  type Notification,
 } from '../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
-
 
 const tpopById = graphql(`
   query tpopById($id: UUID!) {
@@ -20,7 +20,11 @@ const tpopById = graphql(`
   }
 `)
 
-export const getAndValidateCoordinatesOfTpop = async ({ id }) => {
+export const getAndValidateCoordinatesOfTpop = async ({
+  id,
+}: {
+  id: string
+}) => {
   const apolloClient = store.get(apolloClientAtom)!
   let tpopResult
   try {
@@ -30,14 +34,14 @@ export const getAndValidateCoordinatesOfTpop = async ({ id }) => {
     })
   } catch (error) {
     addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const tpop = tpopResult?.data?.tpopById
-  const { lv95X, lv95Y } = tpop
+  const { lv95X, lv95Y } = tpop ?? {}
   if (!lv95X) {
     addNotification({
       message: `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`,

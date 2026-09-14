@@ -9,12 +9,17 @@ import { getDataArrayFromExportObjects } from './getDataArrayFromExportObjects.t
 import {
   store,
   addNotificationAtom,
+  type Notification,
 } from '../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const getXlsxBuffer = async ({ data }) => {
+export const getXlsxBuffer = async ({
+  data,
+}: {
+  data: Record<string, unknown>[]
+}) => {
   /**
    * using this worker may make the ui more responsive
    * but only while this code runs
@@ -39,6 +44,8 @@ export const getXlsxBuffer = async ({ data }) => {
         ySplit: 1,
       },
     ],
+    // autoFilter is applied below — exceljs' option typing misses it here
+    ...( {
     autoFilter: {
       from: {
         row: 1,
@@ -49,6 +56,7 @@ export const getXlsxBuffer = async ({ data }) => {
         column: numberOfColumns,
       },
     },
+    } as unknown as Record<string, unknown>),
   })
   worksheet.addRows(dataArray)
   worksheet.getRow(1).fill = {
@@ -68,13 +76,13 @@ export const getXlsxBuffer = async ({ data }) => {
       style: 'thin',
     },
   }
-  let buffer
+  let buffer: ArrayBuffer | undefined
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
     console.log(error)
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },

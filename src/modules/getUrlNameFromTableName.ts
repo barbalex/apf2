@@ -1,7 +1,7 @@
 // seems not in use
 
-export const getUrlNameFromTableName = (table) => {
-  const names = {
+export const getUrlNameFromTableName = (table: string) => {
+  const names: Record<string, string> = {
     ap: 'Arten',
     apber: 'AP-Berichte',
     apberuebersicht: 'AP-Berichte',

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -89,15 +89,15 @@ export const popIcons = {
 export const usePopsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = props?.projId ?? params.projId
-  const apId = props?.apId ?? params.apId
-  const popId = props?.popId ?? params.popId
+  const projId = (props?.projId ?? params.projId)!
+  const apId = (props?.apId ?? params.apId)!
+  const popId = (props?.popId ?? params.popId)!
 
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
   const popGqlFilterForTree = useAtomValue(treePopGqlFilterForTreeAtom)
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['treePop', apId, popGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
@@ -124,7 +124,8 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
         },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data!
     },
   })
   // this is how to make the filter reactive in a hook
@@ -187,39 +188,39 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
     hasChildren: !!count,
     labelLeftElements: showPopIcon ? [PopMapIcon] : undefined,
     component: NodeWithList,
-    menus: data.apById.popsByApId.nodes.map((p) => {
+    menus: data.apById?.popsByApId.nodes.map((p) => {
       const labelRightElements = []
-      const isMoving = moving.id === p.id
+      const isMoving = moving.id === p?.id
       if (isMoving) {
         labelRightElements.push(MovingIcon)
       }
-      const isCopying = copying.id === p.id
+      const isCopying = copying.id === p?.id
       if (isCopying) {
         labelRightElements.push(CopyingIcon)
       }
 
-      const popIconIsHighlighted = p.id === popId
+      const popIconIsHighlighted = p?.id === popId
       const PopIcon =
-        p.status ?
-          popIconIsHighlighted ? popIcons[popIconName][p.status + 'Highlighted']
-          : popIcons[popIconName][p.status]
+        p?.status ?
+          popIconIsHighlighted ? (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]![p?.status + 'Highlighted']
+          : (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]![p?.status]
         : popIconIsHighlighted ? PopIconQHighlighted
         : PopIconQ
 
       return {
-        id: p.id,
-        label: p.label,
+        id: p?.id,
+        label: p?.label,
         treeNodeType: 'table',
         treeMenuType: 'pop',
         treeSingleElementName: 'Population',
-        treeId: p.id,
-        treeTableId: p.id,
+        treeId: p?.id,
+        treeTableId: p?.id,
         treeParentTableId: apId,
-        treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', p.id],
+        treeUrl: ['Projekte', projId, 'Arten', apId, 'Populationen', p?.id],
         hasChildren: true,
         fetcherName: 'usePopNavData',
-        fetcherParams: { projId, apId, popId: p.id },
-        status: p.status,
+        fetcherParams: { projId, apId, popId: p?.id },
+        status: p?.status,
         labelLeftElements: showPopIcon ? [PopIcon] : undefined,
         labelRightElements:
           labelRightElements.length ? labelRightElements : undefined,
