@@ -1,4 +1,3 @@
-import type { BeobFieldsFragment } from '../../gql/graphql.ts'
 import { queryBeob } from './queryBeob.ts'
 import { updateTpopById } from './updateTpopById.ts'
 
@@ -15,12 +14,9 @@ const addNotification = (notification: Omit<Notification, 'key'>) =>
 export const copyBeobZugeordnetKoordToTpop = async ({ id }: { id: string }) => {
   const apolloClient = store.get(apolloClientAtom)!
   // fetch beob coodinates
-  let beobResult:
-    { data?: { beobById?: BeobFieldsFragment | null } | undefined } | undefined
+  let beobResult
   try {
-    beobResult = await apolloClient.query<{
-      beobById?: BeobFieldsFragment | null
-    }>({
+    beobResult = await apolloClient.query({
       query: queryBeob,
       variables: { id },
     })

@@ -1,3 +1,4 @@
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopmassn } from '../../components/shared/fragments.ts'
@@ -61,4 +62,7 @@ export const createTpopmassn = dynamicGql`
     }
   }
   ${tpopmassn}
-`
+` as unknown as TypedDocumentNode<
+  { createTpopmassn?: { tpopmassn?: { id: string } | null } | null },
+  Record<string, unknown>
+>

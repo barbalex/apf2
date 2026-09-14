@@ -1,3 +1,4 @@
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopkontr } from '../../components/shared/fragments.ts'
@@ -83,4 +84,7 @@ export const createTpopkontr = dynamicGql`
     }
   }
   ${tpopkontr}
-`
+` as unknown as TypedDocumentNode<
+  { createTpopkontr?: { tpopkontr?: { id: string } | null } | null },
+  Record<string, unknown>
+>

@@ -1,3 +1,5 @@
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import type { TpopkontrzaehlFieldsFragment } from '../../gql/graphql.ts'
 import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopkontrzaehl } from '../../components/shared/fragments.ts'
@@ -9,4 +11,7 @@ export const queryTpopkontrzaehlById = dynamicGql`
     }
   }
   ${tpopkontrzaehl}
-`
+` as unknown as TypedDocumentNode<
+  { tpopkontrzaehlById?: TpopkontrzaehlFieldsFragment | null },
+  { id: string }
+>

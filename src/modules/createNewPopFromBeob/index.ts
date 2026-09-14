@@ -2,7 +2,6 @@ import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'es-toolkit'
 
-import type { BeobFieldsFragment } from '../../gql/graphql.ts'
 import { queryBeob } from './queryBeob.ts'
 import { createPop } from './createPop.ts'
 import { createTpop } from './createTpop.ts'
@@ -40,13 +39,9 @@ export const createNewPopFromBeob = async ({
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
-  let beobResult:
-    | { data?: { beobById?: BeobFieldsFragment | null } | undefined }
-    | undefined
+  let beobResult
   try {
-    beobResult = await apolloClient.query<{
-      beobById?: BeobFieldsFragment | null
-    }>({
+    beobResult = await apolloClient.query({
       query: queryBeob,
       variables: { id },
     })
@@ -75,18 +70,13 @@ export const createNewPopFromBeob = async ({
   const datumIsValid = isValid(datumDate)
   const bekanntSeit = datumIsValid ? +format(datumDate, 'yyyy') : null
 
-  const newGeomPoint = geomPoint?.geojson
-    ? JSON.parse(String(geomPoint.geojson))
-    : null
+  const newGeomPoint =
+    geomPoint?.geojson ? JSON.parse(String(geomPoint.geojson)) : null
 
   // create new pop for ap
-  let popResult:
-    | { data?: { createPop?: { pop?: { id: string } | null } | null } | undefined }
-    | undefined
+  let popResult
   try {
-    popResult = await apolloClient.mutate<{
-      createPop?: { pop?: { id: string } | null }
-    }>({
+    popResult = await apolloClient.mutate({
       mutation: createPop,
       variables: {
         apId,
@@ -113,17 +103,9 @@ export const createNewPopFromBeob = async ({
   }
 
   // create new tpop for pop
-  let tpopResult:
-    | {
-        data?: {
-          createTpop?: { tpop?: { id: string; popId: string | null } | null } | null
-        } | undefined
-      }
-    | undefined
+  let tpopResult
   try {
-    tpopResult = await apolloClient.mutate<{
-      createTpop?: { tpop?: { id: string; popId: string | null } | null }
-    }>({
+    tpopResult = await apolloClient.mutate({
       mutation: createTpop,
       variables: {
         popId: pop.id,

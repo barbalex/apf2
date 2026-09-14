@@ -15,7 +15,7 @@ export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
   const apolloClient = store.get(apolloClientAtom)!
   const tsQueryClient = store.get(tsQueryClientAtom)!
   // fetch tpop
-  let tpopResult: Awaited<ReturnType<typeof apolloClient.query>> | undefined
+  let tpopResult
   try {
     tpopResult = await apolloClient.query({
       query: queryTpop,
