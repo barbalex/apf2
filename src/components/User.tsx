@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
@@ -26,9 +26,7 @@ interface TokenState {
   fetchingToken: boolean
 }
 
-type TokenAction =
-  | { type: 'reset' }
-  | { type: 'set'; payload: string | null }
+type TokenAction = { type: 'reset' } | { type: 'set'; payload: string | null }
 
 function tokenStateReducer(
   _state: TokenState,
@@ -137,8 +135,9 @@ export const User = () => {
   }
 
   const onBlurName = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> |
-    React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e:
+      | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+      | React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setNameErrorText('')
     const name = e.currentTarget.value
@@ -146,13 +145,14 @@ export const User = () => {
     if (!name) {
       setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
     } else if (password) {
-      setTimeout(() => fetchLogin({ name }))
+      setTimeout(() => void fetchLogin({ name }))
     }
   }
 
   const onBlurPassword = (
-    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement> |
-    React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e:
+      | React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+      | React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     setPasswordErrorText('')
     const password = e.currentTarget.value
@@ -160,7 +160,7 @@ export const User = () => {
     if (!password) {
       setPasswordErrorText('Bitte Passwort eingeben')
     } else if (name) {
-      setTimeout(() => fetchLogin({ password }))
+      setTimeout(() => void fetchLogin({ password }))
     }
   }
 
@@ -242,7 +242,7 @@ export const User = () => {
         <DialogActions>
           <Button
             color="primary"
-            onClick={() => fetchLogin({})}
+            onClick={() => void fetchLogin({})}
           >
             anmelden
           </Button>
