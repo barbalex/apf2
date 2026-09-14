@@ -18,7 +18,7 @@ import {
   addNotificationAtom,
 } from '../../../../store/index.ts'
 
-import { ZielId, ApId } from '../../../../models/apflora/index.tsx'
+import type { ZielId, ApId } from '../../../../models/apflora/index.ts'
 
 interface CreateZielResult {
   createZiel: {

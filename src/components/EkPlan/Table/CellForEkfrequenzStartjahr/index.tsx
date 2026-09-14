@@ -7,7 +7,7 @@ import {
   ekPlanResetHoveredAtom,
 } from '../../../../store/index.ts'
 import { tpop } from '../../../shared/fragments.ts'
-import { setEkplans } from '../setEkplans/index.tsx'
+import { setEkplans } from '../setEkplans/index.ts'
 import { processChange } from './processChange.ts'
 
 import styles from './index.module.css'

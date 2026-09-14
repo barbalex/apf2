@@ -13,7 +13,7 @@ import { isEqual } from 'es-toolkit'
 import type {
   EkzaehleinheitId,
   ApId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'

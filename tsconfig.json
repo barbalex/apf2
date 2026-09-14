@@ -25,7 +25,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src/**/*"],

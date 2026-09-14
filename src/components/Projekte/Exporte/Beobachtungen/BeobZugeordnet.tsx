@@ -6,7 +6,7 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import { BeobId } from '../../../../models/apflora/index.tsx'
+import type { BeobId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 

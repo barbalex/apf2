@@ -6,7 +6,7 @@ import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { Idealbiotop } from '../../../../models/apflora/index.tsx'
+import type { Idealbiotop } from '../../../../models/apflora/index.ts'
 
 interface IdealbiotopQueryResult {
   allIdealbiotops?: {

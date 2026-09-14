@@ -20,7 +20,7 @@ import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
-import type { QkName } from '../../../../../models/apflora/index.tsx'
+import type { QkName } from '../../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 

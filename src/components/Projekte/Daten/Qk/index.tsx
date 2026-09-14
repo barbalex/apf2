@@ -10,7 +10,7 @@ import type {
   ApId,
   QkName,
   ApqkQkName,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 interface QkNode {
   name: QkName

@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip'
 import type {
   EkzaehleinheitId,
   ApId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'

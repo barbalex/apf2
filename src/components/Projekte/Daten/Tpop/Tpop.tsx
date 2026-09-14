@@ -38,7 +38,7 @@ import type {
   TpopApberrelevantGrundWerteCode,
   EkfrequenzId,
   AdresseId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './Tpop.module.css'
 

@@ -12,7 +12,7 @@ import { userNameAtom } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { ProjektId } from '../../../../models/apflora/index.tsx'
+import type { ProjektId } from '../../../../models/apflora/index.ts'
 
 import styles from './Projekt.module.css'
 

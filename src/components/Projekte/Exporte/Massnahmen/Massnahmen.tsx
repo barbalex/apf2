@@ -7,13 +7,13 @@ import { useApolloClient } from '@apollo/client/react'
 import { exportModule } from '../../../../modules/export.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
-import {
+import type {
   ApId,
   PopId,
   TpopId,
   TpopmassnId,
   AdresseId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 

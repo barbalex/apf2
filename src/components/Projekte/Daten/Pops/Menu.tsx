@@ -26,7 +26,7 @@ import {
   setMovingAtom,
 } from '../../../../store/index.ts'
 
-import type { PopId, ApId } from '../../../../models/apflora/index.tsx'
+import type { PopId, ApId } from '../../../../models/apflora/index.ts'
 
 import styles from './Menu.module.css'
 

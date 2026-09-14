@@ -31,7 +31,7 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
-import type { PopId, ApId, Pop } from '../../../../models/apflora/index.tsx'
+import type { PopId, ApId, Pop } from '../../../../models/apflora/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 

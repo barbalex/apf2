@@ -7,11 +7,11 @@ import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import {
+import type {
   ApId,
   IdealbiotopId,
   AdresseId,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 

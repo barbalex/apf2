@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { PopId } from '../../../../models/apflora/index.tsx'
+import type { PopId } from '../../../../models/apflora/index.ts'
 
 interface PopQueryResult {
   popById?: {

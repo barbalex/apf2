@@ -19,7 +19,7 @@ import type {
   PopberId,
   PopId,
   TpopEntwicklungWerteCode,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 

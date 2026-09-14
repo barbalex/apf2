@@ -18,7 +18,7 @@ import type {
   ApId,
   AeTaxonomiesId,
   PopStatusWerteCode,
-} from '../../../../../models/apflora/index.tsx'
+} from '../../../../../models/apflora/index.ts'
 
 import {
   container,

@@ -18,7 +18,7 @@ import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
-import type { Pop } from '../../../../models/apflora/index.tsx'
+import type { Pop } from '../../../../models/apflora/index.ts'
 
 import styles from './Pop.module.css'
 

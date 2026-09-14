@@ -21,7 +21,7 @@ import type {
   Ekfrequenz,
   ApId,
   EkAbrechnungstypWerteCode,
-} from '../../../../models/apflora/index.tsx'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 

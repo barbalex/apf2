@@ -10,7 +10,7 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
 import { isEqual } from 'es-toolkit'
-import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.tsx'
+import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'

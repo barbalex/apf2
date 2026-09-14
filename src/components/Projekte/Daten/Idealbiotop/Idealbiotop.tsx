@@ -14,7 +14,7 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { idealbiotop } from '../../../shared/fragments.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { Idealbiotop } from '../../../../models/apflora/index.tsx'
+import type { Idealbiotop } from '../../../../models/apflora/index.ts'
 
 import styles from './Idealbiotop.module.css'
 

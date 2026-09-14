@@ -7,7 +7,7 @@ import { FaPlus } from 'react-icons/fa6'
 import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.tsx'
+import type { EkfrequenzId, ApId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'

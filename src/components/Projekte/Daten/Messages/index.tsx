@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 import { query } from './query.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { Message } from '../../../../models/apflora/index.tsx'
+import type { Message } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
