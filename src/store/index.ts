@@ -51,8 +51,8 @@ export const store = createStore()
 // Tree atoms (migrated from mobx)
 export const treeOpenNodesAtom = atom([])
 export const treeSetOpenNodesAtom = atom(
-  (get) => null,
-  (get, set, val) => {
+  () => null,
+  (_, set, val) => {
     // need set to ensure contained arrays are unique
     const uniqueSet = new Set(val)
     set(treeOpenNodesAtom, Array.from(uniqueSet))
