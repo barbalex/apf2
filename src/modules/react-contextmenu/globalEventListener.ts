@@ -1,33 +1,32 @@
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError('Cannot call a class as a function')
-  }
-}
-
-import { MENU_SHOW, MENU_HIDE } from './actions.ts'
+import { MENU_SHOW, MENU_HIDE, type MenuConfig } from './actions.ts'
 import { uniqueId, hasOwnProp, canUseDOM } from './helpers.ts'
 
-const GlobalEventListener = function GlobalEventListener() {
-  const _this = this
+export type MenuEvent = CustomEvent<MenuConfig>
 
-  _classCallCheck(this, GlobalEventListener)
+export interface MenuCallbacks {
+  show: (event: MenuEvent) => void
+  hide: (event: MenuEvent) => void
+}
 
-  this.handleShowEvent = function (event) {
-    for (const id in _this.callbacks) {
-      if (hasOwnProp(_this.callbacks, id)) _this.callbacks[id].show(event)
+class GlobalEventListener {
+  callbacks: Record<string, MenuCallbacks> = {}
+
+  handleShowEvent = (event: MenuEvent) => {
+    for (const id in this.callbacks) {
+      if (hasOwnProp(this.callbacks, id)) this.callbacks[id]!.show(event)
     }
   }
 
-  this.handleHideEvent = function (event) {
-    for (const id in _this.callbacks) {
-      if (hasOwnProp(_this.callbacks, id)) _this.callbacks[id].hide(event)
+  handleHideEvent = (event: MenuEvent) => {
+    for (const id in this.callbacks) {
+      if (hasOwnProp(this.callbacks, id)) this.callbacks[id]!.hide(event)
     }
   }
 
-  this.register = function (showCallback, hideCallback) {
+  register(showCallback: MenuCallbacks['show'], hideCallback: MenuCallbacks['hide']): string {
     const id = uniqueId()
 
-    _this.callbacks[id] = {
+    this.callbacks[id] = {
       show: showCallback,
       hide: hideCallback,
     }
@@ -35,17 +34,17 @@ const GlobalEventListener = function GlobalEventListener() {
     return id
   }
 
-  this.unregister = function (id) {
-    if (id && _this.callbacks[id]) {
-      delete _this.callbacks[id]
+  unregister(id?: string): void {
+    if (id && this.callbacks[id]) {
+      delete this.callbacks[id]
     }
   }
 
-  this.callbacks = {}
-
-  if (canUseDOM) {
-    window.addEventListener(MENU_SHOW, this.handleShowEvent)
-    window.addEventListener(MENU_HIDE, this.handleHideEvent)
+  constructor() {
+    if (canUseDOM) {
+      window.addEventListener(MENU_SHOW, this.handleShowEvent as EventListener)
+      window.addEventListener(MENU_HIDE, this.handleHideEvent as EventListener)
+    }
   }
 }
 

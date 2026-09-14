@@ -1,31 +1,40 @@
-export function callIfExists(func) {
-    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
-    }
+// vendored from the abandoned react-contextmenu library,
+// de-transpiled from its Babel output and typed
 
-    return typeof func === 'function' && func.apply(undefined, args);
+export function callIfExists<TArgs extends unknown[]>(
+  func: ((...args: TArgs) => unknown) | null | undefined,
+  ...args: TArgs
+): unknown {
+  return typeof func === 'function' && func.apply(undefined, args)
 }
 
-export function hasOwnProp(obj, prop) {
-    return Object.prototype.hasOwnProperty.call(obj, prop);
+export function hasOwnProp(obj: object, prop: string): boolean {
+  return Object.prototype.hasOwnProperty.call(obj, prop)
 }
 
-export function uniqueId() {
-    return Math.random().toString(36).substring(7);
+export function uniqueId(): string {
+  return Math.random().toString(36).substring(7)
 }
 
-export var cssClasses = {
-    menu: 'react-contextmenu',
-    menuVisible: 'react-contextmenu--visible',
-    menuWrapper: 'react-contextmenu-wrapper',
-    menuItem: 'react-contextmenu-item',
-    menuItemActive: 'react-contextmenu-item--active',
-    menuItemDisabled: 'react-contextmenu-item--disabled',
-    menuItemDivider: 'react-contextmenu-item--divider',
-    menuItemSelected: 'react-contextmenu-item--selected',
-    subMenu: 'react-contextmenu-submenu'
-};
+export const cssClasses = {
+  menu: 'react-contextmenu',
+  menuVisible: 'react-contextmenu--visible',
+  menuWrapper: 'react-contextmenu-wrapper',
+  menuItem: 'react-contextmenu-item',
+  menuItemActive: 'react-contextmenu-item--active',
+  menuItemDisabled: 'react-contextmenu-item--disabled',
+  menuItemDivider: 'react-contextmenu-item--divider',
+  menuItemSelected: 'react-contextmenu-item--selected',
+  subMenu: 'react-contextmenu-submenu',
+}
 
-export var store = {};
+export interface MenuStore {
+  data?: Record<string, unknown>
+  target?: EventTarget | null
+}
 
-export var canUseDOM = Boolean(typeof window !== 'undefined' && window.document && window.document.createElement);
+export const store: MenuStore = {}
+
+export const canUseDOM = Boolean(
+  typeof window !== 'undefined' && window.document && window.document.createElement,
+)

@@ -28,14 +28,14 @@ export const EkfrequenzFolder = ({ onClick }) => {
   // this is how to pass data from ContextMenuTrigger to ContextMenu
   // i.e. to know what node was clicked
   const [apId, changeApId] = useState(0)
-  const onShow = (event) => changeApId(event.detail.data.tableId)
+  const onShow = (event: { detail: { data?: Record<string, unknown> } }) =>
+    changeApId(event.detail.data?.tableId as number)
   const onOpenChooseApDialog = () => setOpenChooseApToCopyEkfrequenzsFrom(true)
 
   return (
     <ErrorBoundary>
       <ContextMenu
         id="treeEkfrequenzFolder"
-        collect={(props) => props}
         onShow={onShow}
         hideOnLeave={true}
       >
