@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -76,7 +76,7 @@ export const Menu = () => {
     let result: CreateApResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createApForApForm($projId: UUID!) {
             createAp(input: { ap: { projId: $projId } }) {
               ap {
@@ -85,7 +85,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { projId },
       })
     } catch (error) {
@@ -115,7 +115,7 @@ export const Menu = () => {
     let result: DeleteApResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteAp($id: UUID!) {
             deleteApById(input: { id: $id }) {
               ap {
@@ -123,7 +123,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { id: apId },
       })
     } catch (error) {

@@ -1,10 +1,10 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { camelCase } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
 
 const createWerte = (table) => {
   const tableName = camelCase(table)
-  const mutation = gql`
+  const mutation = dynamicGql`
       mutation createWerteForUndelete(
         $id: UUID
         $code: Int

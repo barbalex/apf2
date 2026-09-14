@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -68,7 +68,7 @@ export const MassnWebgisBun = () => {
         let result: { data?: MassnWebgisBunQueryResult }
         try {
           result = await apolloClient.query<MassnWebgisBunQueryResult>({
-            query: gql`
+            query: graphql(`
               query viewMassnWebgisbuns {
                 allVMassnWebgisbuns {
                   nodes {
@@ -110,7 +110,7 @@ export const MassnWebgisBun = () => {
                   }
                 }
               }
-            `,
+            `),
           })
         } catch (error) {
           addNotification({

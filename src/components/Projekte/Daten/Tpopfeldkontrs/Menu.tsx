@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -84,7 +84,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate<CreateTpopkontrResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createTpopfeldkontrForTpopfeldkontrForm($tpopId: UUID!) {
             createTpopkontr(input: { tpopkontr: { tpopId: $tpopId, typ: "Kontrolle" } }) {
               tpopkontr {
@@ -93,7 +93,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           tpopId,
         },
@@ -110,7 +110,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
 
     // 2. add new tpopkontrzaehl
     const resultZaehl = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
-      mutation: gql`
+      mutation: graphql(`
         mutation createTpokontrzaehlForTpopfeldkontrs($parentId: UUID!) {
           createTpopkontrzaehl(
             input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
@@ -120,7 +120,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
             }
           }
         }
-      `,
+      `),
       variables: { parentId: id },
     })
 

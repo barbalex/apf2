@@ -1,4 +1,5 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../apolloGql.ts'
+import { graphql } from '../gql'
 import { DateTime } from 'luxon'
 
 import { apberuebersicht } from '../components/shared/fragments.ts'
@@ -16,13 +17,13 @@ export const historize = async ({ apberuebersicht: row }) => {
   // 1. historize
   try {
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: graphql(`
         mutation historize($year: Int!) {
           historize(input: { _year: $year }) {
             boolean
           }
         }
-      `,
+      `),
       variables: {
         year: row?.jahr,
       },
@@ -43,7 +44,7 @@ export const historize = async ({ apberuebersicht: row }) => {
       historyDate: DateTime.fromJSDate(new Date()).toFormat('yyyy-LL-dd'),
     }
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: dynamicGql`
         mutation updateApberuebersichtForHistoryDate(
           $id: UUID!
           $historyDate: Date

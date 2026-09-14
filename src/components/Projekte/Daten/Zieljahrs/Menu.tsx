@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -51,7 +51,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreateZielResult | undefined
     try {
       result = await apolloClient.mutate<CreateZielResult['data']>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createZielForZieljahrs($apId: UUID!) {
             createZiel(input: { ziel: { apId: $apId, jahr: 1 } }) {
               ziel {
@@ -60,7 +60,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {

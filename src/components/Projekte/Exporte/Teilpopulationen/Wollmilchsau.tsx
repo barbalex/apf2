@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import Button from '@mui/material/Button'
 
@@ -190,7 +190,7 @@ export const Wollmilchsau = () => {
         let result: { data: TPopErsteUndLetzteKontrolleQueryResult }
         try {
           result = await apolloClient.query({
-            query: gql`
+            query: graphql(`
               query tpopErsteUndLetzteKontrolleUndLetzterTpopbersQuery {
                 allTpops(
                   filter: {
@@ -353,7 +353,7 @@ export const Wollmilchsau = () => {
                   }
                 }
               }
-            `,
+            `),
           })
         } catch (error) {
           console.log('Teilpopulationen Export, onClickEwm', { error })

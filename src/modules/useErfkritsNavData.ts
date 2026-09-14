@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -19,7 +19,7 @@ export const useErfkritsNavData = (props) => {
     queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeErfkritsQuery(
             $erfkritsFilter: ErfkritFilter!
             $apId: UUID!
@@ -40,7 +40,7 @@ export const useErfkritsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           erfkritsFilter: erfkritGqlFilterForTree,
           apId,

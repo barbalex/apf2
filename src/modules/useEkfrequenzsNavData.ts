@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -19,7 +19,7 @@ export const useEkfrequenzsNavData = (props) => {
     queryKey: ['treeEkfrequenz', apId, ekfrequenzGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeEkfrequenzsQuery(
             $ekfrequenzsFilter: EkfrequenzFilter!
             $apId: UUID!
@@ -37,7 +37,7 @@ export const useEkfrequenzsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           ekfrequenzsFilter: ekfrequenzGqlFilterForTree,
           apId,

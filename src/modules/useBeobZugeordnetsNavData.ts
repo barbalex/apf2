@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -29,7 +29,7 @@ export const useBeobZugeordnetsNavData = (props) => {
     queryKey: ['treeBeobZugeordnet', tpopId, beobZugeordnetGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavBeobZugeordnetsQuery(
             $beobZugeordnetFilter: BeobFilter!
             $allBeobZugeordnetFilter: BeobFilter!
@@ -48,7 +48,7 @@ export const useBeobZugeordnetsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           beobZugeordnetFilter: {
             ...beobZugeordnetGqlFilterForTree,

@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import Accordion from '@mui/material/Accordion'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import AccordionSummary from '@mui/material/AccordionSummary'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -80,7 +80,7 @@ export const Data = ({ id }) => {
     queryKey: ['beobByIdQueryForBeob', id],
     queryFn: async () =>
       apolloClient.query({
-        query: gql`
+        query: dynamicGql`
           query beobByIdQueryForBeobLayer($id: UUID!) {
             beobById(id: $id) {
               ...BeobFields

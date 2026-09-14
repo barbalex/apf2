@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -64,7 +64,7 @@ export const BeobArtChanged = () => {
       // view: v_beob_art_changed
       result = mapFilter
         ? await apolloClient.query<BeobArtChangedQueryResult>({
-            query: gql`
+            query: graphql(`
               query allBeobsArtChangedFilteredByMap {
                 allVBeobArtChangeds {
                   nodes {
@@ -98,7 +98,7 @@ export const BeobArtChanged = () => {
                   }
                 }
               }
-            `,
+            `),
             variables: {
               filter: {
                 geomPoint: {
@@ -108,7 +108,7 @@ export const BeobArtChanged = () => {
             },
           })
         : await apolloClient.query<BeobArtChangedQueryResult>({
-            query: gql`
+            query: graphql(`
               query allBeobsArtChanged {
                 allVBeobArtChangeds {
                   nodes {
@@ -142,7 +142,7 @@ export const BeobArtChanged = () => {
                   }
                 }
               }
-            `,
+            `),
           })
     } catch (error) {
       setQueryState(undefined)

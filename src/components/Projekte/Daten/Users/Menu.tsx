@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -50,7 +50,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreateUserResult | undefined
     try {
       result = await apolloClient.mutate<CreateUserResult['data']>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createUserForUsersForm {
             createUser(input: { user: {} }) {
               user {
@@ -58,7 +58,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       return addNotification({

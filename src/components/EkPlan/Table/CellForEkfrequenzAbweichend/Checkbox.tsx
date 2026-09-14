@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -28,7 +28,7 @@ export const Checkbox = ({ row, value, field }) => {
     setChecked(!checked)
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateTpopCheckbox(
               $id: UUID!
               $${field}: Boolean

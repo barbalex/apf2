@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { useQueryClient } from '@tanstack/react-query'
@@ -150,7 +150,7 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
     if (field2) variables[field2] = value2
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateTpopkontrForEkf(
               $id: UUID!
                 $${field}: ${fieldTypes[field]}

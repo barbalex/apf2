@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -45,7 +45,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavBeobNichtZuzuordnensQuery(
             $beobNichtZuzuordnenFilter: BeobFilter!
             $allBeobNichtZuzuordnenFilter: BeobFilter!
@@ -66,7 +66,7 @@ export const useBeobNichtZuzuordnensNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           beobNichtZuzuordnenFilter: {
             ...beobNichtZuzuordnenGqlFilterForTree,

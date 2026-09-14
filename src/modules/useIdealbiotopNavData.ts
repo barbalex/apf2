@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -14,7 +14,7 @@ export const useIdealbiotopNavData = (props) => {
     queryKey: ['treeIdealbiotop', apId],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavIdealbiotopQuery($apId: UUID!) {
             apById(id: $apId) {
               id
@@ -29,7 +29,7 @@ export const useIdealbiotopNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
       if (result.error) throw result.error

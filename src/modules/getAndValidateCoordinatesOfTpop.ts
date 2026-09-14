@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 
 import {
   store,
@@ -10,7 +10,7 @@ const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
 
-const tpopById = gql`
+const tpopById = graphql(`
   query tpopById($id: UUID!) {
     tpopById(id: $id) {
       id
@@ -18,7 +18,7 @@ const tpopById = gql`
       lv95Y
     }
   }
-`
+`)
 
 export const getAndValidateCoordinatesOfTpop = async ({ id }) => {
   const apolloClient = store.get(apolloClientAtom)

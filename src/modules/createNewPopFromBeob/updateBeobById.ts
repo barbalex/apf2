@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import {
   aeTaxonomies,
@@ -7,7 +7,7 @@ import {
   tpop,
 } from '../../components/shared/fragments.ts'
 
-export const updateBeobById = gql`
+export const updateBeobById = dynamicGql`
   mutation updateBeobForCreateNewPopFromBeob($id: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: {

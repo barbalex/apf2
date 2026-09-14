@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from 'react-router'
@@ -43,7 +43,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreateAdresseResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createAdresseForAdressesForm {
             createAdresse(input: { adresse: {} }) {
               adresse {
@@ -51,7 +51,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       return addNotification({

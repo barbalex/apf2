@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -46,7 +46,7 @@ export const TPopOhneApberRelevant = () => {
         let result: { data: TPopOhneapberichtrelevantQueryResult }
         try {
           result = await apolloClient.query({
-            query: gql`
+            query: graphql(`
               query viewTpopOhneapberichtrelevants {
                 allVTpopOhneapberichtrelevants {
                   nodes {
@@ -64,7 +64,7 @@ export const TPopOhneApberRelevant = () => {
                   }
                 }
               }
-            `,
+            `),
           })
         } catch (error) {
           addNotification({

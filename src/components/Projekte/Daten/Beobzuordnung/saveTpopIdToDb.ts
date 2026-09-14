@@ -1,5 +1,5 @@
 import { isEqual } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
@@ -39,14 +39,14 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
 
   if (value) {
     const result = await apolloClient.query({
-      query: gql`
+      query: graphql(`
         query saveTpopIdToDbQuery($id: UUID!) {
           tpopById(id: $id) {
             id
             popId
           }
         }
-      `,
+      `),
       variables: { id: value },
     })
     // activeNodeArray is already loaded

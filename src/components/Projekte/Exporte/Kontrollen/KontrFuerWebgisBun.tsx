@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -82,7 +82,7 @@ export const KontrFuerWebgisBun = () => {
         let result: { data?: TpopkontrWebgisBunQueryResult }
         try {
           result = await apolloClient.query<TpopkontrWebgisBunQueryResult>({
-            query: gql`
+            query: graphql(`
               query viewTpopkontrWebgisbuns {
                 allVTpopkontrWebgisbuns {
                   nodes {
@@ -138,7 +138,7 @@ export const KontrFuerWebgisBun = () => {
                   }
                 }
               }
-            `,
+            `),
           })
         } catch (error) {
           addNotification({

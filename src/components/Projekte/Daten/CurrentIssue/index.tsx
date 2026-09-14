@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
@@ -14,7 +14,7 @@ import styles from './index.module.css'
 
 const mdParser = new MarkdownIt({ breaks: true })
 
-const query = gql`
+const query = dynamicGql`
   query currentissueById($id: UUID!) {
     currentissueById(id: $id) {
       ...CurrentIssueFields

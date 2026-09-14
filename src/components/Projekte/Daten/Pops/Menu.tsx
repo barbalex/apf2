@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -65,7 +65,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreatePopResult | undefined
     try {
       result = await apolloClient.mutate<CreatePopResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createPopForPopsForm($apId: UUID!) {
             createPop(input: { pop: { apId: $apId } }) {
               pop {
@@ -74,7 +74,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {

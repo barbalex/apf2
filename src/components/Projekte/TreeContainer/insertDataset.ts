@@ -1,4 +1,5 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../apolloGql.ts'
+import { graphql } from '../../../gql'
 import { upperFirst } from 'es-toolkit'
 import { camelCase } from 'es-toolkit'
 
@@ -69,7 +70,7 @@ export const insertDataset = async ({
       },
     })
   }
-  let mutation = gql`
+  let mutation = dynamicGql`
     mutation createWerte(
       $parentId: UUID!
     ) {
@@ -97,7 +98,7 @@ export const insertDataset = async ({
   //   tableMetadata,
   // })
   if (menuType === 'zieljahrFolder') {
-    mutation = gql`
+    mutation = dynamicGql`
       mutation create${upperFirst(camelCase(table))}(
         $parentId: UUID!
         $jahr: Int
@@ -119,7 +120,7 @@ export const insertDataset = async ({
     variables = { parentId, jahr: +jahrPassed }
   }
   if (menuType === 'tpopfreiwkontrFolder') {
-    mutation = gql`
+    mutation = dynamicGql`
       mutation create${upperFirst(camelCase(table))}(
         $parentId: UUID!
       ) {
@@ -139,7 +140,7 @@ export const insertDataset = async ({
     }`
   }
   if (['tpopfeldkontrFolder', 'tpopfeldkontr'].includes(menuType)) {
-    mutation = gql`
+    mutation = dynamicGql`
       mutation create${upperFirst(camelCase(table))}(
         $parentId: UUID!
       ) {
@@ -159,7 +160,7 @@ export const insertDataset = async ({
     }`
   }
   if (['userFolder', 'user'].includes(menuType)) {
-    mutation = gql`
+    mutation = dynamicGql`
       mutation createUser($role: String!) {
         createUser(input: { user: { role: $role } }) {
           user {
@@ -173,7 +174,7 @@ export const insertDataset = async ({
     variables.role = 'apflora_ap_reader'
   }
   if (['adresseFolder', 'adresse'].includes(menuType)) {
-    mutation = gql`
+    mutation = dynamicGql`
       mutation createAdresse {
         createAdresse(input: { adresse: {} }) {
           adresse {
@@ -188,7 +189,7 @@ export const insertDataset = async ({
   if (menuType.includes('Werte')) {
     const tableName = camelCase(table)
     const fields = `${upperFirst(tableName)}Fields`
-    mutation = gql`
+    mutation = dynamicGql`
       mutation createWerte {
         create${upperFirst(tableName)}(input: { ${tableName}: {
           changedBy: "${store.get(userNameAtom)}"
@@ -234,7 +235,7 @@ export const insertDataset = async ({
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
     // 1. add new zaehlung
     const result = await apolloClient.mutate({
-      mutation: gql`
+      mutation: graphql(`
         mutation createWerte($parentId: UUID!) {
           createTpopkontrzaehl(
             input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
@@ -244,7 +245,7 @@ export const insertDataset = async ({
             }
           }
         }
-      `,
+      `),
       variables: { parentId: row[idField] },
     })
     // 2. open the zaehlungFolder

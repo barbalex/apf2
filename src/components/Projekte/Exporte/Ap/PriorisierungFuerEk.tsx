@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -66,7 +66,7 @@ export const PriorisierungFuerEk = () => {
     let result: { data?: ApPopEkPrioQueryResult }
     try {
       result = await apolloClient.query<ApPopEkPrioQueryResult>({
-        query: gql`
+        query: graphql(`
           query apPopEkPrioForExportQuery {
             allAps(
               orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC
@@ -112,7 +112,7 @@ export const PriorisierungFuerEk = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

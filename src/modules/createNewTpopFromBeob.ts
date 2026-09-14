@@ -1,7 +1,7 @@
 import { format } from 'date-fns/format'
 import { isValid } from 'date-fns/isValid'
 import { isEqual } from 'date-fns/isEqual'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../apolloGql.ts'
 
 import {
   store,
@@ -24,7 +24,7 @@ import {
 const addNotification = (notification) =>
   store.set(addNotificationAtom, notification)
 
-const createTpop = gql`
+const createTpop = dynamicGql`
   mutation createTpopFroCreateNewTpopFromBeob(
     $popId: UUID
     $gemeinde: String
@@ -50,7 +50,7 @@ const createTpop = gql`
   }
   ${tpop}
 `
-const updateBeobById = gql`
+const updateBeobById = dynamicGql`
   mutation updateBeobForCreateNewTpopFromBeob($beobId: UUID!, $tpopId: UUID) {
     updateBeobById(
       input: {
@@ -107,7 +107,7 @@ export const createNewTpopFromBeob = async ({
   let beobResult
   try {
     beobResult = await apolloClient.query({
-      query: gql`
+      query: dynamicGql`
         query creteNewTpopFromBeobQuery($beobId: UUID!) {
           beobById(id: $beobId) {
             ...BeobFields

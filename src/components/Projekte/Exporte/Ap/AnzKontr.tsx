@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -50,7 +50,7 @@ export const AnzKontr = () => {
     let result: { data?: ApAnzkontrsQueryResult }
     try {
       result = await apolloClient.query<ApAnzkontrsQueryResult>({
-        query: gql`
+        query: graphql(`
           query apAnzkontrsForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
@@ -77,7 +77,7 @@ export const AnzKontr = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

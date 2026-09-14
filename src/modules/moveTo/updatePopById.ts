@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { pop } from '../../components/shared/fragments.ts'
 
-export const updatePopById = gql`
+export const updatePopById = dynamicGql`
   mutation updatePopByIdForMoveTo($id: UUID!, $apId: UUID) {
     updatePopById(input: { id: $id, popPatch: { apId: $apId } }) {
       pop {

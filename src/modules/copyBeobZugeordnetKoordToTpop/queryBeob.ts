@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { beob } from '../../components/shared/fragments.ts'
 
-export const queryBeob = gql`
+export const queryBeob = dynamicGql`
   query copyBeobZugeordnetKoordToTpopQuery($id: UUID!) {
     beobById(id: $id) {
       ...BeobFields

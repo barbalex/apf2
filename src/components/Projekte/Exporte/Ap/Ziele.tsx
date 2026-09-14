@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -66,7 +66,7 @@ export const Ziele = () => {
     let result: { data?: ZielsQueryResult }
     try {
       result = await apolloClient.query<ZielsQueryResult>({
-        query: gql`
+        query: graphql(`
           query zielsForExportQuery {
             allZiels(
               orderBy: [
@@ -110,7 +110,7 @@ export const Ziele = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

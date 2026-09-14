@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../apolloGql.ts'
 
 import { tpopfeldkontr } from '../components/shared/fragments.ts'
 import {
@@ -13,7 +13,7 @@ export const copyBiotopTo = async ({ id }) => {
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id
   const { data: dataFrom } = await apolloClient.query({
-    query: gql`
+    query: dynamicGql`
       query tpopkontrByIdForCopyBiotopToQuery($id: UUID!) {
         tpopkontrById(id: $id) {
           ...TpopfeldkontrFields
@@ -25,7 +25,7 @@ export const copyBiotopTo = async ({ id }) => {
   })
   const from = dataFrom?.tpopkontrById
   await apolloClient.mutate({
-    mutation: gql`
+    mutation: dynamicGql`
       mutation updateTpopkontrForCopyBiotopTo(
         $id: UUID!
         $flaeche: Int

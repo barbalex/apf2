@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql'
 
-export const updateTpopById = gql`
+export const updateTpopById = graphql(`
   mutation updateTpopByIdForMoveTo($id: UUID!, $popId: UUID) {
     updateTpopById(input: { id: $id, tpopPatch: { popId: $popId } }) {
       tpop {
@@ -9,4 +9,4 @@ export const updateTpopById = gql`
       }
     }
   }
-`
+`)

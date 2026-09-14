@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -56,7 +56,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreateEkAbrechnungstypWerteResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createEkAbrechnungstypWerteForEkAbrechnungstypWerteForm {
             createEkAbrechnungstypWerte(input: { ekAbrechnungstypWerte: {} }) {
               ekAbrechnungstypWerte {
@@ -64,7 +64,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       return addNotification({

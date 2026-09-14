@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -30,7 +30,7 @@ import {
   historyButtons,
 } from './index.module.css'
 
-const query = gql`
+const query = graphql(`
   query popHistoryQuery($popId: UUID!) {
     popById(id: $popId) {
       id
@@ -98,7 +98,7 @@ const query = gql`
       }
     }
   }
-`
+`)
 
 interface PopHistoryData {
   id: PopId

@@ -2,7 +2,8 @@ import { useRef } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import * as ReactDOMServer from 'react-dom/server'
 import { useMapEvent, useMap } from 'react-leaflet/hooks'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import L from 'leaflet'
 import { ellipse } from '@turf/ellipse'
@@ -81,7 +82,7 @@ export const ClickListener = () => {
       let gemeindenData
       try {
         gemeindenData = await apolloClient.query({
-          query: gql`query karteAdministrativeUnitsQuery {
+          query: dynamicGql`query karteAdministrativeUnitsQuery {
           allChAdministrativeUnits(
             filter: { 
               localisedcharacterstring: { equalTo: "Gemeinde" }, 
@@ -117,7 +118,7 @@ export const ClickListener = () => {
       let betreuungsgebieteData
       try {
         betreuungsgebieteData = await apolloClient.query({
-          query: gql`query karteBetreuungsgebietesQuery {
+          query: dynamicGql`query karteBetreuungsgebietesQuery {
               allNsBetreuungs(
                 filter: { 
                   geom: {contains: {type: "Point", coordinates: [${lng}, ${lat}]}}
@@ -154,7 +155,7 @@ export const ClickListener = () => {
       let detailplaeneData
       try {
         detailplaeneData = await apolloClient.query({
-          query: gql`query karteDetailplaenesFilteredQuery {
+          query: dynamicGql`query karteDetailplaenesFilteredQuery {
           allDetailplaenes(
             filter: { 
               geom: {intersects: {type: "Point", coordinates: [${lng}, ${lat}]}}
@@ -199,7 +200,7 @@ export const ClickListener = () => {
         const options = { steps: 8, units: 'meters' }
         const circle = ellipse(coordinates, radius, radius, options)
         markierungenData = await apolloClient.query({
-          query: gql`
+          query: graphql(`
             query KarteClickListenerQuery($polygon: GeoJSON!) {
               allMarkierungens(
                 filter: { wkbGeometry: { coveredBy: $polygon } }
@@ -212,7 +213,7 @@ export const ClickListener = () => {
                 }
               }
             }
-          `,
+          `),
           variables: { polygon: circle.geometry },
         })
       } catch (error) {

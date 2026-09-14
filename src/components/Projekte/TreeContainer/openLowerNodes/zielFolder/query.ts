@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 
 import { ziel } from '../../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query zielFolderOpenLowerNodesQuery($id: UUID!) {
     apById(id: $id) {
       id

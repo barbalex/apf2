@@ -1,7 +1,7 @@
 // https://stackoverflow.com/a/25296972/712005
 // also: https://gis.stackexchange.com/a/130553/13491
 import { GeoJSON } from 'react-leaflet'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -36,7 +36,7 @@ export const Betreuungsgebiete = () => {
     queryKey: ['betreuungsgebiete'],
     queryFn: async () => {
       const result = await apolloClient.query<BetreuungsgebieteQueryResult>({
-        query: gql`
+        query: graphql(`
           query nsBetreuungsQuery {
             allNsBetreuungs {
               nodes {
@@ -47,7 +47,7 @@ export const Betreuungsgebiete = () => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data

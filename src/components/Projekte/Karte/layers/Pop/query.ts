@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 
-export const query = gql`
+export const query = graphql(`
   query PopForMapQuery($popFilter: PopFilter!) {
     allPops(filter: $popFilter) {
       nodes {
@@ -26,4 +26,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

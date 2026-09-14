@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 
 import { apart } from '../../../../../shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   query apartByIdForDelete($id: UUID!) {
     apartById(id: $id) {
       ...ApartFields

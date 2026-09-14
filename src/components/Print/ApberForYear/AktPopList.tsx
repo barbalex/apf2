@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { sumBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -49,7 +49,7 @@ export const AktPopList = ({ year }) => {
     queryKey: ['jberAktPopQuery', projId, previousYear, year],
     queryFn: () =>
       apolloClient.query({
-        query: gql`
+        query: graphql(`
           query AktPopListAps($jahr: Int!) {
             jberAktPop(jahr: $jahr) {
               nodes {
@@ -64,7 +64,7 @@ export const AktPopList = ({ year }) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           projektId: projId,
           previousYear,

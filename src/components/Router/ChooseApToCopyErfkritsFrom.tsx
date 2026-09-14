@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
@@ -87,7 +87,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
     try {
       existingErfkritResult =
         await apolloClient.query<ExistingErfkritQueryResult>({
-          query: gql`
+          query: graphql(`
             query getExistingErfkritForErfkritFolder($apId: UUID) {
               allErfkrits(filter: { apId: { equalTo: $apId } }) {
                 nodes {
@@ -95,7 +95,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
                 }
               }
             }
-          `,
+          `),
           variables: { apId },
           // got errors when not setting 'network-only' policy
           // when copying repeatedly
@@ -118,13 +118,13 @@ export const ChooseApToCopyErfkritsFrom = () => {
         existingErfkrits.map(
           async (id) =>
             await apolloClient.mutate({
-              mutation: gql`
+              mutation: graphql(`
                 mutation deleteExistingErfkritForErfkritFolder($id: UUID!) {
                   deleteErfkritById(input: { id: $id }) {
                     deletedErfkritId
                   }
                 }
-              `,
+              `),
               variables: { id },
               update(cache) {
                 cache.evict({ id })
@@ -144,7 +144,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
     let newErfkritResult
     try {
       newErfkritResult = await apolloClient.query<NewErfkritQueryResult>({
-        query: gql`
+        query: graphql(`
           query getNewErfkritForErfkritFolder($apId: UUID) {
             allErfkrits(filter: { apId: { equalTo: $apId } }) {
               nodes {
@@ -155,7 +155,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
               }
             }
           }
-        `,
+        `),
         variables: { apId: newApId },
       })
     } catch (error) {
@@ -172,7 +172,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
       res = await Promise.allSettled(
         newErfkrits.map(async (ekf) =>
           apolloClient.mutate({
-            mutation: gql`
+            mutation: graphql(`
               mutation insertErfkritForErfkritFolder(
                 $apId: UUID!
                 $erfolg: Int
@@ -198,7 +198,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
                   }
                 }
               }
-            `,
+            `),
             // somehow in dev i got errors claiming the strings were not utf-8
             // invalid byte sequence for encoding "UTF8"
             variables: {
@@ -243,7 +243,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
       result = await apolloClient.query<ApOptionsQueryResult>({
         // would be elegant to query only ap with erfkrit
         // solution: https://github.com/graphile/pg-aggregates
-        query: gql`
+        query: graphql(`
           query apForErfkritfolder($filter: ApFilter) {
             allAps(orderBy: [LABEL_ASC], filter: $filter) {
               nodes {
@@ -255,7 +255,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
               }
             }
           }
-        `,
+        `),
         variables: { filter },
       })
     } catch (error) {

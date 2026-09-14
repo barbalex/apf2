@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -54,7 +54,7 @@ export const Menu = () => {
     let result: CreateTpopmassnberResult | undefined
     try {
       result = await apolloClient.mutate<CreateTpopmassnberResult['data']>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createTpopmassnberForTpopmassnberForm($tpopId: UUID!) {
             createTpopmassnber(input: { tpopmassnber: { tpopId: $tpopId } }) {
               tpopmassnber {
@@ -63,7 +63,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { tpopId },
       })
     } catch (error) {
@@ -95,7 +95,7 @@ export const Menu = () => {
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteTpopmassnber($id: UUID!) {
             deleteTpopmassnberById(input: { id: $id }) {
               tpopmassnber {
@@ -103,7 +103,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { id: tpopmassnberId },
       })
     } catch (error) {

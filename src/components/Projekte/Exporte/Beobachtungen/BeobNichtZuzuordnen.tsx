@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -59,7 +59,7 @@ export const BeobNichtZuzuordnen = () => {
         let result: { data?: BeobNichtZuzuordnenQueryResult }
         try {
           result = await apolloClient.query<BeobNichtZuzuordnenQueryResult>({
-            query: gql`
+            query: graphql(`
               query allBeobsNichtZuzuordnenForExport {
                 allVBeobNichtZuzuordnens {
                   nodes {
@@ -90,7 +90,7 @@ export const BeobNichtZuzuordnen = () => {
                   }
                 }
               }
-            `,
+            `),
           })
         } catch (error) {
           setQueryState(undefined)

@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopkontrzaehl } from '../../components/shared/fragments.ts'
 
-export const createTpopkontrzaehl = gql`
+export const createTpopkontrzaehl = dynamicGql`
   mutation createTpopkontrzaehlForCopyTo(
     $anzahl: Float
     $einheit: Int

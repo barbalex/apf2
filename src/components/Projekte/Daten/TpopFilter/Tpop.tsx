@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, type ChangeEvent } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -59,7 +60,7 @@ export const Tpop = ({
     queryKey: ['tpopFilterLists'],
     queryFn: async () => {
       const result = await apolloClient.query<TpopListsQueryResult>({
-        query: gql`
+        query: graphql(`
           query TpopListsQueryForTpopFilter {
             allTpopApberrelevantGrundWertes(
               orderBy: SORT_ASC
@@ -80,7 +81,7 @@ export const Tpop = ({
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data
@@ -174,7 +175,7 @@ export const Tpop = ({
             result = await apolloClient.query({
               // this is a hack
               // see: https://github.com/graphile-contrib/postgraphile-plugin-connection-filter-postgis/issues/10
-              query: gql`
+              query: dynamicGql`
                         query tpopGemeindeFilterQuery {
                           allChAdministrativeUnits(
                             filter: {

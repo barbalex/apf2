@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { tpopmassnber } from '../../../shared/fragments.ts'
 
-export default gql`
+export default dynamicGql`
   mutation createTpopmassnberForUndelete(
     $id: UUID
     $tpopId: UUID

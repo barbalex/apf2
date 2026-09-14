@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
 import { useApolloClient } from '@apollo/client/react'
 
@@ -212,13 +212,13 @@ export const WollmilchsauSingle = () => {
           let result: { data: ApByArtIdQueryResult }
           try {
             result = await apolloClient.query({
-              query: gql`
+              query: graphql(`
                 query apByArtIdQuery($aeId: UUID!) {
                   apByArtId(artId: $aeId) {
                     id
                   }
                 }
-              `,
+              `),
               variables: { aeId },
             })
           } catch (error) {
@@ -232,7 +232,7 @@ export const WollmilchsauSingle = () => {
             data,
           }: { data: TPopErsteUndLetzteKontrolleFilteredQueryResult } =
             await apolloClient.query({
-              query: gql`
+              query: graphql(`
                 query tpopErsteUndLetzteKontrolleUndLetzterTpopbersFilteredQuery(
                   $apId: UUID!
                 ) {
@@ -397,7 +397,7 @@ export const WollmilchsauSingle = () => {
                     }
                   }
                 }
-              `,
+              `),
               variables: { apId },
             })
           const rows = (data?.allTpops?.nodes ?? []).map((n) => ({
@@ -827,7 +827,7 @@ export const WollmilchsauSingle = () => {
             fileName: 'anzkontrinklletzterundletztertpopber',
           })
         }}
-        query={gql`
+        query={graphql(`
           query allAeTaxonomiesQuery($filter: AeTaxonomyFilter!) {
             allAeTaxonomies(first: 8, filter: $filter, orderBy: ARTNAME_ASC) {
               nodes {
@@ -836,7 +836,7 @@ export const WollmilchsauSingle = () => {
               }
             }
           }
-        `}
+        `)}
         filter={aeTaxonomiesfilter}
         queryNodesName="allAeTaxonomies"
         error={ewmMessage}

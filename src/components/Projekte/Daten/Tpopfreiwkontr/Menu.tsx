@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -72,7 +72,7 @@ export const Menu = ({ row }: MenuProps) => {
     let result: CreateTpopkontrResult | undefined
     try {
       result = await apolloClient.mutate<CreateTpopkontrResult['data']>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createTpopkontrForTpopfreiwkontrForm(
             $tpopId: UUID!
             $typ: String!
@@ -87,7 +87,7 @@ export const Menu = ({ row }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { tpopId, typ: 'Freiwilligen-Kontrolle' },
       })
     } catch (error) {
@@ -119,7 +119,7 @@ export const Menu = ({ row }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteTpopkontrForTpopfreiwkontr($id: UUID!) {
             deleteTpopkontrById(input: { id: $id }) {
               tpopkontr {
@@ -127,7 +127,7 @@ export const Menu = ({ row }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { id: tpopkontrId },
       })
     } catch (error) {

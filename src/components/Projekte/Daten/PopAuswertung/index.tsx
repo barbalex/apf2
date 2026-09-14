@@ -1,4 +1,3 @@
-import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'es-toolkit'

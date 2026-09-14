@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -39,7 +39,7 @@ export const EkPlanung = () => {
     try {
       result = await apolloClient.query<EkPlanungNachAbrechnungstypQueryResult>(
         {
-          query: gql`
+          query: graphql(`
             query ekPlanungNachAbrechnungstyps {
               allVEkPlanungNachAbrechnungstyps {
                 nodes {
@@ -54,7 +54,7 @@ export const EkPlanung = () => {
                 }
               }
             }
-          `,
+          `),
         },
       )
     } catch (error) {

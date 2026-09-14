@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql'
 import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
@@ -29,14 +29,14 @@ export const ApFilterController = () => {
 
     apolloClient
       .query<ApFilterControllerQueryResult>({
-        query: gql`
+        query: graphql(`
           query apFilterControllerQuery($id: UUID!) {
             apById(id: $id) {
               id
               bearbeitung
             }
           }
-        `,
+        `),
         variables: { id: apId },
       })
       .then(({ data }) => {

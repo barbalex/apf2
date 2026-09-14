@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 
 import {
   store,
@@ -14,13 +14,13 @@ export const historizeForAp = async ({ year, apId }) => {
 
   try {
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: graphql(`
         mutation historizeForAp($year: Int!, $apId: UUID!) {
           historizeForAp(input: { _year: $year, apId: $apId }) {
             boolean
           }
         }
-      `,
+      `),
       variables: {
         year,
         apId,

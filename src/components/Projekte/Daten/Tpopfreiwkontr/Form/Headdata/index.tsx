@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -68,7 +68,7 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation updateTpopkontrForEkfHeaddata(
             $id: UUID!
             $bearbeiter: UUID

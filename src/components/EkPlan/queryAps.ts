@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql'
 
-export const queryAps = gql`
+export const queryAps = graphql(`
   query EkplanApQuery($ids: [UUID!]) {
     allAps(filter: { id: { in: $ids } }) {
       nodes {
@@ -21,4 +21,4 @@ export const queryAps = gql`
       }
     }
   }
-`
+`)

@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -47,7 +47,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreateApartResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createApartForApartsForm($apId: UUID!) {
             createApart(input: { apart: { apId: $apId } }) {
               apart {
@@ -56,7 +56,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {

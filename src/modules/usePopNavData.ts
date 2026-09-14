@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -65,7 +65,7 @@ export const usePopNavData = (props) => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavPopQuery(
             $popId: UUID!
             $tpopFilter: TpopFilter!
@@ -104,7 +104,7 @@ export const usePopNavData = (props) => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           popId,
           tpopFilter: tpopGqlFilterForTree,

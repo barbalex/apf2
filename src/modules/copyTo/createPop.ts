@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { pop } from '../../components/shared/fragments.ts'
 
-export const createPop = gql`
+export const createPop = dynamicGql`
   mutation createPopForCopyTo(
     $apId: UUID
     $nr: Int

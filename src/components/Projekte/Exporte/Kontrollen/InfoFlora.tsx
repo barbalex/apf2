@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -70,7 +70,7 @@ export const InfoFlora = () => {
     let result: { data?: InfoFloraQueryResult }
     try {
       result = await apolloClient.query<InfoFloraQueryResult>({
-        query: gql`
+        query: graphql(`
           query allVExportInfoFloraBeobs {
             allVExportInfoFloraBeobs {
               nodes {
@@ -119,7 +119,7 @@ export const InfoFlora = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

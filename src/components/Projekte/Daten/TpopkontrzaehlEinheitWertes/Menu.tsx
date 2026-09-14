@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -52,7 +52,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       result = await apolloClient.mutate<
         CreateTpopkontrzaehlEinheitWerteResult['data']
       >({
-        mutation: gql`
+        mutation: graphql(`
           mutation createTpopkontrzaehlEinheitWerteForTpopkontrzaehlEinheitWerteForm {
             createTpopkontrzaehlEinheitWerte(
               input: { tpopkontrzaehlEinheitWerte: {} }
@@ -62,7 +62,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       return addNotification({

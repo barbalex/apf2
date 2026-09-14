@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { FaTimes, FaDownload } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
@@ -63,7 +63,7 @@ export const File = ({ file, parent, refetch }) => {
     try {
       const mutationName = `delete${upperFirst(parent)}FileById`
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation deleteDataset {
             ${mutationName}(
               input: {
@@ -110,7 +110,7 @@ export const File = ({ file, parent, refetch }) => {
       const fragment = fragmentObject[parent]
       const parentId = `${parent}Id`
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
               mutation UpdateFile(
                 $id: UUID!
                 $${parentId}: UUID

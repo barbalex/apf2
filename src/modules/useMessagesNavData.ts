@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -11,13 +11,13 @@ export const useMessagesNavData = () => {
     queryKey: ['treeMessages'],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeMessagesQuery {
             allMessages(orderBy: TIME_DESC) {
               totalCount
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data

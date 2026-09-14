@@ -1,6 +1,6 @@
 import { useState, Suspense, type ChangeEvent } from 'react'
 import Button from '@mui/material/Button'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { jwtDecode } from 'jwt-decode'
 import { format } from 'date-fns/format'
@@ -86,7 +86,7 @@ export const Component = () => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateApberuebersicht(
               $id: UUID!
               $${field}: ${fieldTypes[field]}

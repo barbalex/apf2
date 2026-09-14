@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../gql'
 
-export const queryAll = gql`
+export const queryAll = graphql(`
   query EkplanTpopQuery($tpopFilter: TpopFilter!) {
     allTpops(
       filter: $tpopFilter
@@ -11,4 +11,4 @@ export const queryAll = gql`
       }
     }
   }
-`
+`)

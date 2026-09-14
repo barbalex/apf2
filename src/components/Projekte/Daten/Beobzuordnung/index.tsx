@@ -2,7 +2,7 @@ import { type ChangeEvent } from 'react'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams, useLocation } from 'react-router'
@@ -206,7 +206,7 @@ export const Component = () => {
   const onUpdateField = (event: ChangeEvent<HTMLInputElement>) => {
     const changedField = event.target.name
     apolloClient.mutate({
-      mutation: gql`
+      mutation: dynamicGql`
           mutation updateBeobForBeobzuordnung(
             $id: UUID!
             $${changedField}: ${fieldTypes[changedField]}

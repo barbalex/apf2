@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -63,7 +63,7 @@ export const Ap = ({ filtered = false }: ApProps) => {
     let result: { data?: ApQueryResult }
     try {
       result = await apolloClient.query<ApQueryResult>({
-        query: gql`
+        query: graphql(`
           query apForExportQuery($filter: ApFilter) {
             allAps(
               filter: $filter
@@ -98,7 +98,7 @@ export const Ap = ({ filtered = false }: ApProps) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           filter: filtered ? apGqlFilter.filtered : { or: [] },
         },

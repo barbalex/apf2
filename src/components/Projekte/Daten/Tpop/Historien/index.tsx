@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -116,7 +116,7 @@ interface TpopHistoryQueryResult {
   }
 }
 
-const query = gql`
+const query = graphql(`
   query tpopHistoryQuery($tpopId: UUID!) {
     tpopById(id: $tpopId) {
       id
@@ -257,7 +257,7 @@ const query = gql`
       }
     }
   }
-`
+`)
 
 export const Component = () => {
   const { tpopId } = useParams()

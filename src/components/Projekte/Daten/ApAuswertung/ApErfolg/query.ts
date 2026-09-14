@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 
-export const query = gql`
+export const query = graphql(`
   query apAuswertungErfolg($id: UUID!) {
     allApbers(
       filter: { apId: { equalTo: $id }, beurteilung: { in: [1, 3, 4, 5, 6] } }
@@ -17,4 +17,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

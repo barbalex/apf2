@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { tpopmassn } from '../../components/shared/fragments.ts'
 
-export const createTpopmassn = gql`
+export const createTpopmassn = dynamicGql`
   mutation createTpopmassn(
     $typ: Int
     $beschreibung: String

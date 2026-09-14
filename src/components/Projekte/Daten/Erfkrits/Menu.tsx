@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -52,7 +52,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreateErfkritResult | undefined
     try {
       result = await apolloClient.mutate<CreateErfkritResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createErfkritForErfkritsForm($apId: UUID!) {
             createErfkrit(input: { erfkrit: { apId: $apId } }) {
               erfkrit {
@@ -61,7 +61,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {

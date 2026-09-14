@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -55,7 +55,7 @@ export const Menu = ({ row, table }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation create${typename}For${typename}Form {
               create${typename}(
                 input: { ${table}: {  } }
@@ -95,7 +95,7 @@ export const Menu = ({ row, table }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation delete${typename}($id: UUID!) {
               delete${typename}ById(input: { id: $id }) {
                 ${table} {

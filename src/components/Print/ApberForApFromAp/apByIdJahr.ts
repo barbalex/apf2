@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../apolloGql.ts'
 
 import {
   adresse,
@@ -12,7 +12,7 @@ import {
   zielTypWerte,
 } from '../../shared/fragments.ts'
 
-export const apByIdJahr = gql`
+export const apByIdJahr = dynamicGql`
   query apByIdJahrForApberForApFromAp($apId: UUID!, $jahr: Int!) {
     apById: apHistoryByIdAndYear(id: $apId, year: $jahr) {
       ...ApHistoryFields

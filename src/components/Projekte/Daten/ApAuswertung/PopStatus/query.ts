@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 
-export const query = gql`
+export const query = graphql(`
   query popDataForPopStatus($apId: UUID!, $year: Int!) {
     # function: pop_nach_status_for_jber
     popNachStatusForJber(apid: $apId, year: $year) {
@@ -15,4 +15,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

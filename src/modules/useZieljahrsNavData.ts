@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -25,7 +25,7 @@ export const useZieljahrsNavData = (props) => {
     queryKey: ['treeZieljahrs', apId, zielGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeZieljahrsQuery($zielsFilter: ZielFilter!, $apId: UUID!) {
             apById(id: $apId) {
               id
@@ -47,7 +47,7 @@ export const useZieljahrsNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           zielsFilter: zielGqlFilterForTree,
           apId,

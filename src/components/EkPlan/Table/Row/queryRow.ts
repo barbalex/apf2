@@ -1,7 +1,7 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { ekfrequenz } from '../../../shared/fragments.ts'
 
-export const queryRow = gql`
+export const queryRow = dynamicGql`
   query RowQueryForEkPlan(
     $apIds: [UUID!]
     $years: [Int!]

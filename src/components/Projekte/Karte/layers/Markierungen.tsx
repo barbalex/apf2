@@ -1,6 +1,6 @@
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -45,7 +45,7 @@ export const Markierungen = () => {
     queryKey: ['markierungen'],
     queryFn: async () => {
       const result = await apolloClient.query<MarkierungenQueryResult>({
-        query: gql`
+        query: graphql(`
           query KarteMarkierungensQuery {
             allMarkierungens {
               nodes {
@@ -59,7 +59,7 @@ export const Markierungen = () => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data

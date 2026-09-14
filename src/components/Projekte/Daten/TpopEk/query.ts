@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { ekfrequenz } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query TpopEkQuery($id: UUID!, $apId: UUID!) {
     allEkplans(filter: { tpopId: { equalTo: $id } }) {
       nodes {

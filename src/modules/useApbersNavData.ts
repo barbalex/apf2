@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -18,7 +18,7 @@ export const useApbersNavData = (props) => {
     queryKey: ['treeApber', apId, apberGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeApbersQuery($apbersFilter: ApberFilter!, $apId: UUID!) {
             apById(id: $apId) {
               id
@@ -33,7 +33,7 @@ export const useApbersNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           apbersFilter: apberGqlFilterForTree,
           apId,

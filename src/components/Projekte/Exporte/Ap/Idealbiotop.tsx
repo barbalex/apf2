@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -78,7 +78,7 @@ export const Idealbiotop = () => {
     let result: { data?: IdealbiotopsQueryResult }
     try {
       result = await apolloClient.query<IdealbiotopsQueryResult>({
-        query: gql`
+        query: graphql(`
           query idealbiotopsForExportQuery {
             allIdealbiotops {
               nodes {
@@ -128,7 +128,7 @@ export const Idealbiotop = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

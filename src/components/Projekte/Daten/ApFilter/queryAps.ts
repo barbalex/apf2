@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
-export const queryAps = gql`
+export const queryAps = graphql(`
   query AllApsQuery($filteredFilter: ApFilter!, $allFilter: ApFilter!) {
     allAps(filter: $allFilter) {
       totalCount
@@ -9,4 +9,4 @@ export const queryAps = gql`
       totalCount
     }
   }
-`
+`)

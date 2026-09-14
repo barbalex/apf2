@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -35,13 +35,13 @@ export const ShowForMultipleAps = () => {
     queryKey: ['apsCount', apGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query<ShowForMultipleApsQueryResult>({
-        query: gql`
+        query: graphql(`
           query LayersControlLayersQuery($apsFilter: ApFilter!) {
             allAps(filter: $apsFilter) {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           apsFilter: apGqlFilterForTree,
         },

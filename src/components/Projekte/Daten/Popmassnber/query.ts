@@ -1,11 +1,11 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import {
   popmassnber,
   tpopmassnErfbeurtWerte,
 } from '../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query popmassnberByIdQuery($id: UUID!) {
     popmassnberById(id: $id) {
       ...PopmassnberFields

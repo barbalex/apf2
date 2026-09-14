@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.ts'
@@ -18,7 +18,7 @@ export const processChange = async ({ value, ekfrequenz, row }) => {
   const tsQueryClient = store.get(tsQueryClientAtom)
   try {
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: dynamicGql`
         mutation updateTpopEkfrequenzStartjahr(
           $id: UUID!
           $ekfrequenzStartjahr: Int

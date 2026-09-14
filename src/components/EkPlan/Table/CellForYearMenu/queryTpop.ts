@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
-export const queryTpop = gql`
+export const queryTpop = graphql(`
   query EkplanmenuTpopQuery(
     $tpopId: UUID!
     $jahr: Int
@@ -111,4 +111,4 @@ export const queryTpop = gql`
       }
     }
   }
-`
+`)

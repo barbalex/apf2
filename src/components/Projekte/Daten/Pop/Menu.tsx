@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -72,7 +72,7 @@ export const Menu = ({ row }: MenuProps) => {
     let result: CreatePopResult | undefined
     try {
       result = await apolloClient.mutate<CreatePopResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createPopForPopRouterForm($apId: UUID!) {
             createPop(input: { pop: { apId: $apId } }) {
               pop {
@@ -81,7 +81,7 @@ export const Menu = ({ row }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {
@@ -121,7 +121,7 @@ export const Menu = ({ row }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deletePop($id: UUID!) {
             deletePopById(input: { id: $id }) {
               pop {
@@ -129,7 +129,7 @@ export const Menu = ({ row }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { id: popId },
       })
     } catch (error) {

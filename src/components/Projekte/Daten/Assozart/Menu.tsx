@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -68,7 +68,7 @@ export const Menu = () => {
     let result: CreateAssozartResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createAssozartForAssozartForm($apId: UUID!) {
             createAssozart(input: { assozart: { apId: $apId } }) {
               assozart {
@@ -77,7 +77,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {
@@ -112,7 +112,7 @@ export const Menu = () => {
     let result: DeleteAssozartResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteAssozart($id: UUID!) {
             deleteAssozartById(input: { id: $id }) {
               assozart {
@@ -120,7 +120,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { id: assozartId },
       })
     } catch (error) {

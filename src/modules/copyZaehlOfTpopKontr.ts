@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 
 import { copyTo } from './copyTo/index.ts'
 import { store, apolloClientAtom } from '../store/index.ts'
@@ -10,7 +10,7 @@ export const copyZaehlOfTpopKontr = async ({
   const apolloClient = store.get(apolloClientAtom)
   // 1. fetch all tpopkontrzaehl
   const { data } = await apolloClient.query({
-    query: gql`
+    query: graphql(`
       query tpopkontrzaehlsForCopyZaehlOfTpopkontrQuery($tpopkontrId: UUID!) {
         allTpopkontrzaehls(filter: { tpopkontrId: { equalTo: $tpopkontrId } }) {
           nodes {
@@ -21,7 +21,7 @@ export const copyZaehlOfTpopKontr = async ({
           }
         }
       }
-    `,
+    `),
     variables: { tpopkontrId: tpopkontrIdFrom },
   })
   const tpopkontrzaehl = data?.allTpopkontrzaehls?.nodes ?? []

@@ -2,7 +2,7 @@ import { useSetAtom } from 'jotai'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 
 import { useApolloClient } from '@apollo/client/react'
 
@@ -34,13 +34,13 @@ export const ApUser = ({ user, refetch }: ApUserProps) => {
   const onClickDelete = async () => {
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteApUserForApMutation($id: UUID!) {
             deleteApUserById(input: { id: $id }) {
               clientMutationId
             }
           }
-        `,
+        `),
         variables: { id: user.id },
       })
     } catch (error) {

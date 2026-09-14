@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -30,7 +30,7 @@ export const useProjektNavData = (props) => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavProjectQuery(
             $projId: UUID!
             $apFilter: ApFilter!
@@ -55,7 +55,7 @@ export const useProjektNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           projId,
           apFilter: apGqlFilterForTree,

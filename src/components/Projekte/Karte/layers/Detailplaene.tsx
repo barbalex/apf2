@@ -1,5 +1,5 @@
 import { GeoJSON } from 'react-leaflet'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -35,7 +35,7 @@ export const Detailplaene = () => {
     queryKey: ['detailplaene'],
     queryFn: async () => {
       const result = await apolloClient.query<DetailplaeneQueryResult>({
-        query: gql`
+        query: graphql(`
           query karteDetailplaenesQuery {
             allDetailplaenes {
               nodes {
@@ -47,7 +47,7 @@ export const Detailplaene = () => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data

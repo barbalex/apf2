@@ -1,5 +1,5 @@
 import Checkbox from '@mui/material/Checkbox'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../../gql'
 
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -59,18 +59,18 @@ export const Row = ({ apId, qk }: RowProps) => {
     const variables = { apId, qkName: qk.name }
     if (checked) {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteApqk($apId: UUID!, $qkName: String!) {
             deleteApqkByApIdAndQkName(input: { apId: $apId, qkName: $qkName }) {
               deletedApqkId
             }
           }
-        `,
+        `),
         variables,
       })
     } else {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createApqk($apId: UUID!, $qkName: String!) {
             createApqk(input: { apqk: { apId: $apId, qkName: $qkName } }) {
               apqk {
@@ -79,7 +79,7 @@ export const Row = ({ apId, qk }: RowProps) => {
               }
             }
           }
-        `,
+        `),
         variables,
       })
     }

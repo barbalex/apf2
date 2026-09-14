@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { upperFirst } from 'es-toolkit'
 import IconButton from '@mui/material/IconButton'
@@ -72,7 +72,7 @@ export const PreviewMenus =
         const tableName = `${parent}File`
         const mutationName = `delete${upperFirst(parent)}FileById`
         await apolloClient.mutate({
-          mutation: gql`
+          mutation: dynamicGql`
           mutation deleteDataset {
             ${mutationName}(
               input: {

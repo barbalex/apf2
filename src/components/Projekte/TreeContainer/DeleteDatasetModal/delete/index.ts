@@ -2,7 +2,7 @@ import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
 import { camelCase } from 'es-toolkit'
 import { omit } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 
 import { tables } from '../../../../../modules/tables.ts'
 import {
@@ -59,7 +59,7 @@ export const deleteModule = async ({ search }) => {
    */
   let query
   if (isWerte) {
-    query = gql`
+    query = dynamicGql`
       query werteById($id: UUID!) {
         ${queryName}(id: $id) {
           id
@@ -105,7 +105,7 @@ export const deleteModule = async ({ search }) => {
 
   try {
     await apolloClient.mutate({
-      mutation: gql`
+      mutation: dynamicGql`
         mutation deleteSomething($id: UUID!) {
           delete${upperFirst(camelCase(table))}ById(input: { id: $id }) {
             ${camelCase(table)} {

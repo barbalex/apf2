@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -54,7 +54,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result: CreateEkfrequenzResult | undefined
     try {
       result = await apolloClient.mutate<CreateEkfrequenzResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createEkfrequenzForEkfrequenzsForm($apId: UUID!) {
             createEkfrequenz(input: { ekfrequenz: { apId: $apId } }) {
               ekfrequenz {
@@ -63,7 +63,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
     } catch (error) {

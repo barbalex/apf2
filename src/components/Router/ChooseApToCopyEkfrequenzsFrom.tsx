@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
-import { gql } from '@apollo/client'
+import { graphql } from '../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
@@ -96,7 +96,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
     try {
       existingEkfrequenzResult =
         await apolloClient.query<ExistingEkfrequenzQueryResult>({
-          query: gql`
+          query: graphql(`
             query getExistingEkfrequenzForEkfrequenzFolder($apId: UUID) {
               allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
                 nodes {
@@ -104,7 +104,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
                 }
               }
             }
-          `,
+          `),
           variables: {
             apId,
           },
@@ -129,7 +129,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
         existingEkfrequenzs.map(
           async (id) =>
             await apolloClient.mutate({
-              mutation: gql`
+              mutation: graphql(`
                 mutation deleteExistingEkfrequenzForEkfrequenzFolder(
                   $id: UUID!
                 ) {
@@ -137,7 +137,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
                     deletedEkfrequenzId
                   }
                 }
-              `,
+              `),
               variables: {
                 id,
               },
@@ -159,7 +159,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
     let newEkfrequenzResult
     try {
       newEkfrequenzResult = await apolloClient.query<NewEkfrequenzQueryResult>({
-        query: gql`
+        query: graphql(`
           query getNewEkfrequenzForEkfrequenzFolder($apId: UUID) {
             allEkfrequenzs(filter: { apId: { equalTo: $apId } }) {
               nodes {
@@ -176,7 +176,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
               }
             }
           }
-        `,
+        `),
         variables: {
           apId: newApId,
         },
@@ -196,7 +196,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
       res = await Promise.allSettled(
         newEkfrequenzs.map(async (ekf) =>
           apolloClient.mutate({
-            mutation: gql`
+            mutation: graphql(`
               mutation insertEkfrequenzForEkfrequenzFolder(
                 $apId: UUID!
                 $anwendungsfall: String
@@ -240,7 +240,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
                   }
                 }
               }
-            `,
+            `),
             // somehow in dev i got errors claiming the strings were not utf-8
             // invalid byte sequence for encoding "UTF8"
             variables: {
@@ -296,7 +296,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
       result = await apolloClient.query<ApOptionsQueryResult>({
         // would be elegant to query only ap with ekfrequenz
         // solution: https://github.com/graphile/pg-aggregates
-        query: gql`
+        query: graphql(`
           query apForEkfrequenzfolder($filter: ApFilter) {
             allAps(orderBy: [LABEL_ASC], filter: $filter) {
               nodes {
@@ -308,7 +308,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
               }
             }
           }
-        `,
+        `),
         variables: {
           filter: filter,
         },

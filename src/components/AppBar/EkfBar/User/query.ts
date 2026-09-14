@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
-export const query = gql`
+export const query = graphql(`
   query userByNameForEkfBar($name: String!) {
     userByName(name: $name) {
       id
@@ -11,4 +11,4 @@ export const query = gql`
       adresseId
     }
   }
-`
+`)

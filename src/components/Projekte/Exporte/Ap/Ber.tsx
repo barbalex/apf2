@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -72,7 +72,7 @@ export const Ber = () => {
     let result: { data?: ApbersQueryResult }
     try {
       result = await apolloClient.query<ApbersQueryResult>({
-        query: gql`
+        query: graphql(`
           query apbersForExportQuery {
             allApbers {
               nodes {
@@ -115,7 +115,7 @@ export const Ber = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

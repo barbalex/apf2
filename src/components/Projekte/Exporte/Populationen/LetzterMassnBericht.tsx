@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -66,7 +66,7 @@ export const LetzterMassnBericht = () => {
         let result: { data: PopMitLetzterPopmassnberQueryResult }
         try {
           result = await apolloClient.query({
-            query: gql`
+            query: graphql(`
               query popMitLetzterPopmassnbersQuery {
                 allPops(
                   filter: { vPopMitLetzterPopmassnbersByPopIdExist: true }
@@ -104,7 +104,7 @@ export const LetzterMassnBericht = () => {
                   }
                 }
               }
-            `,
+            `),
           })
         } catch (error) {
           addNotification({

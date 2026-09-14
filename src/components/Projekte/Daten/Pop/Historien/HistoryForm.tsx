@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type ChangeEvent } from 'react'
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
+import { graphql } from '../../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
@@ -116,7 +117,7 @@ export const HistoryForm = ({
     const geomPoint = buildGeomPoint(newX, newY)
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation updatePopHistoryGeomForHistorienForm(
             $id: UUID!
             $year: Int!
@@ -174,7 +175,7 @@ export const HistoryForm = ({
     // Existing row: mutate immediately
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation updatePopHistoryForHistorienForm(
             $id: UUID!
             $year: Int!
@@ -222,7 +223,7 @@ export const HistoryForm = ({
     if (!fields.year) return
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
           mutation createPopHistoryForHistorienForm(
             $id: UUID!
             $year: Int!
@@ -291,7 +292,7 @@ export const HistoryForm = ({
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deletePopHistoryForHistorienForm($id: UUID!, $year: Int!) {
             deletePopHistoryByIdAndYear(input: { id: $id, year: $year }) {
               popHistory {
@@ -300,7 +301,7 @@ export const HistoryForm = ({
               }
             }
           }
-        `,
+        `),
         variables: { id: popId, year: historyRow!.year },
       })
     } catch (error) {

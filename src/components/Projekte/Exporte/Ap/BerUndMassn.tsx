@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -61,7 +61,7 @@ export const BerUndMassn = () => {
     let result: { data?: ApApberUndMassnsQueryResult }
     try {
       result = await apolloClient.query<ApApberUndMassnsQueryResult>({
-        query: gql`
+        query: graphql(`
           query ApApberUndMassnsForExportQuery {
             allAps(orderBy: AE_TAXONOMY_BY_ART_ID__ARTNAME_ASC) {
               nodes {
@@ -99,7 +99,7 @@ export const BerUndMassn = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

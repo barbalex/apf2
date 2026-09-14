@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -61,7 +61,7 @@ export const Menu = () => {
     let result: CreateAdresseResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createAdresseForAdresseForm {
             createAdresse(input: { adresse: {} }) {
               adresse {
@@ -69,7 +69,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       console.log('error:', error)
@@ -99,7 +99,7 @@ export const Menu = () => {
     let result: DeleteAdresseResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteAdresse($id: UUID!) {
             deleteAdresseById(input: { id: $id }) {
               adresse {
@@ -107,7 +107,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { id: adrId },
       })
     } catch (error) {

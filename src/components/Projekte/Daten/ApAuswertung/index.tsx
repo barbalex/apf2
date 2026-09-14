@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -14,7 +14,7 @@ import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
 import styles from './index.module.css'
 
-const apAuswertungQuery = gql`
+const apAuswertungQuery = graphql(`
   query apAuswertungQuery($apId: UUID!) {
     apById(id: $apId) {
       id
@@ -24,7 +24,7 @@ const apAuswertungQuery = gql`
       }
     }
   }
-`
+`)
 
 interface ApAuswertungQueryResult {
   apById: {

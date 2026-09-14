@@ -3,7 +3,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 
@@ -84,7 +84,7 @@ export const CellHeaderYear = ({ column, tpopFilter }) => {
     queryFn: async () => {
       const result = await apolloClient.query<TpopQueryForCellHeaderYearResult>(
         {
-          query: gql`
+          query: graphql(`
             query TpopQueryForCellHeaderYear(
               $kontrFilter: TpopFilter!
               $ansiedlungFilter: TpopFilter!
@@ -102,7 +102,7 @@ export const CellHeaderYear = ({ column, tpopFilter }) => {
                 totalCount
               }
             }
-          `,
+          `),
           variables: { kontrFilter, ansiedlungFilter, ekplanFilter },
         },
       )

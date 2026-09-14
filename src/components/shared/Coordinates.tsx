@@ -3,7 +3,7 @@ import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
@@ -73,7 +73,7 @@ export const Coordinates = ({ row, refetchForm, table }) => {
       const mutationName = `update${upperFirst(table)}ById`
       const patchName = `${table}Patch`
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation ${mutationTitle}(
               $id: UUID!
               $geomPoint: GeoJSON

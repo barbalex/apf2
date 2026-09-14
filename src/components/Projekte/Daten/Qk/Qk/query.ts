@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 
 import { ap, ziel } from '../../../../shared/fragments.ts'
 
-export const query = gql`
+export const query = dynamicGql`
   query QkQuery(
     $berichtjahr: Int
     $notIsBerichtjahr: Boolean!

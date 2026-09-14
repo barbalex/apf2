@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
-export const queryEkfTpops = gql`
+export const queryEkfTpops = graphql(`
   query ekfTpopsForUserQuery($id: UUID!, $jahr: Int!, $include: Boolean!) {
     ekfTpops: allTpops(filter: { ekfKontrolleur: { equalTo: $id } })
       @include(if: $include) {
@@ -19,4 +19,4 @@ export const queryEkfTpops = gql`
       }
     }
   }
-`
+`)

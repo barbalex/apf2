@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -18,7 +18,7 @@ export const useApsNavData = (props) => {
     queryKey: ['treeAp', apGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeApsQuery($apsFilter: ApFilter!) {
             allAps(filter: $apsFilter, orderBy: LABEL_ASC) {
               nodes {
@@ -30,7 +30,7 @@ export const useApsNavData = (props) => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           apsFilter: apGqlFilterForTree,
         },

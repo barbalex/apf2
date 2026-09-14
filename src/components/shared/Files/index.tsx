@@ -1,6 +1,6 @@
 import { useRef, useContext, Suspense } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { upperFirst } from 'es-toolkit'
@@ -73,7 +73,7 @@ export const FilesRouter =
     const fields = `${upperFirst(parent)}FileFields`
     const fragment = fragmentObject[parent]
 
-    const query = gql`
+    const query = dynamicGql`
         query FileQuery($parentId: UUID!) {
           ${queryName}(
             orderBy: NAME_ASC
@@ -116,7 +116,7 @@ export const FilesRouter =
         let responce
         try {
           responce = await apolloClient.mutate({
-            mutation: gql`
+            mutation: dynamicGql`
               mutation insertFile {
                 create${upperFirst(parent)}File(
                   input: {

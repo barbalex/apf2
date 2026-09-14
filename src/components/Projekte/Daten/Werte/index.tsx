@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent } from 'react'
 import { upperFirst } from 'es-toolkit'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -58,7 +58,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const query = gql`
+  const query = dynamicGql`
     query werteByIdQuery($id: UUID!) {
       ${table}ById(id: $id) {
         id
@@ -104,7 +104,7 @@ export const Component = () => {
 
     const typename = upperFirst(table)
     try {
-      const mutation = gql`
+      const mutation = dynamicGql`
           mutation updateWert(
             $id: UUID!
             $code: ${codeGqlType}

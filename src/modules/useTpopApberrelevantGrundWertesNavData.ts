@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -23,7 +23,7 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeTpopApberrelevantGrundWerteQuery(
             $tpopApberrelevantGrundWertsFilter: TpopApberrelevantGrundWerteFilter!
           ) {
@@ -40,7 +40,7 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           tpopApberrelevantGrundWertsFilter:
             tpopApberrelevantGrundWerteGqlFilterForTree,

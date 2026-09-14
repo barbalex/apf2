@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation, Link } from 'react-router'
@@ -124,7 +125,7 @@ export const Menu = ({
     let result: CreateUserResult | undefined
     try {
       result = await apolloClient.mutate<CreateUserResult['data']>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createUserForUserForm {
             createUser(input: { user: {} }) {
               user {
@@ -132,7 +133,7 @@ export const Menu = ({
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       return addNotification({
@@ -161,7 +162,7 @@ export const Menu = ({
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteUser($id: UUID!) {
             deleteUserById(input: { id: $id }) {
               user {
@@ -169,7 +170,7 @@ export const Menu = ({
               }
             }
           }
-        `,
+        `),
         variables: { id: row.id },
       })
     } catch (error) {
@@ -202,7 +203,7 @@ export const Menu = ({
     for (const tpopId of ekfTpopsWithoutEkfThisYear) {
       try {
         await apolloClient.mutate({
-          mutation: gql`
+          mutation: dynamicGql`
             mutation createTpopkontrFromUser(
               $typ: String
               $tpopId: UUID

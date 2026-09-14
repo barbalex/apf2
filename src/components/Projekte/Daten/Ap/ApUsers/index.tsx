@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -35,7 +35,7 @@ export const ApUsers = () => {
     queryKey: ['apUsers', apId],
     queryFn: async () => {
       const result = await apolloClient.query<ApUsersQueryResult>({
-        query: gql`
+        query: graphql(`
           query apUsersForApQuery($apId: UUID!) {
             allApUsers(
               filter: {
@@ -56,7 +56,7 @@ export const ApUsers = () => {
               }
             }
           }
-        `,
+        `),
         variables: { apId },
       })
       if (result.error) throw result.error

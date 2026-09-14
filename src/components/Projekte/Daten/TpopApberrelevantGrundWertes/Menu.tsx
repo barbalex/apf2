@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -49,7 +49,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     try {
       result =
         await apolloClient.mutate<CreateTpopApberrelevantGrundWerteResult>({
-          mutation: gql`
+          mutation: graphql(`
             mutation createTpopApberrelevantGrundWerteForTpopApberrelevantGrundWerteForm {
               createTpopApberrelevantGrundWerte(
                 input: { tpopApberrelevantGrundWerte: {} }
@@ -59,7 +59,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
                 }
               }
             }
-          `,
+          `),
         })
     } catch (error) {
       return addNotification({

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
@@ -15,7 +15,7 @@ export const useUsersNavData = () => {
     queryKey: ['treeUser', userGqlFilterForTree],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query TreeUsersQuery($usersFilter: UserFilter!) {
             allUsers(filter: $usersFilter, orderBy: LABEL_ASC) {
               nodes {
@@ -27,7 +27,7 @@ export const useUsersNavData = () => {
               totalCount
             }
           }
-        `,
+        `),
         variables: {
           usersFilter: userGqlFilterForTree,
         },

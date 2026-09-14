@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
-export const queryEkfrequenz = gql`
+export const queryEkfrequenz = graphql(`
   query EkfrequenzQueryForSetStartjahr($id: UUID!) {
     ekfrequenzById(id: $id) {
       id
@@ -8,4 +8,4 @@ export const queryEkfrequenz = gql`
       kontrolljahre
     }
   }
-`
+`)

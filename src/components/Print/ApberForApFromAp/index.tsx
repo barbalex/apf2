@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -25,14 +25,14 @@ export const Component = () => {
     queryKey: ['apByIdJahrForApberForApFromAp', apberId, apId],
     queryFn: async () => {
       const { data: apberData, error: apberError } = await apolloClient.query<ApberQueryResult>({
-        query: gql`
+        query: graphql(`
           query apberById($apberId: UUID!) {
             apberById(id: $apberId) {
               id
               jahr
             }
           }
-        `,
+        `),
         variables: {
           apberId,
           apId,

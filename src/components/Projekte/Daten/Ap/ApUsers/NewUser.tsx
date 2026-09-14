@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -40,7 +40,7 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
     queryKey: ['benutzerForNewUser'],
     queryFn: async () => {
       const result = await apolloClient.query<BenutzerQueryResult>({
-        query: gql`
+        query: graphql(`
           query benutzerForNewUser {
             allUsers(
               orderBy: NAME_ASC
@@ -55,7 +55,7 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data
@@ -75,7 +75,7 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
     const name = event.target.value
     try {
       await apolloClient.mutate<any>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createApUserForApMutation($apId: UUID!, $name: String) {
             createApUser(input: { apUser: { apId: $apId, userName: $name } }) {
               apUser {
@@ -83,7 +83,7 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { apId, name },
       })
     } catch (error) {

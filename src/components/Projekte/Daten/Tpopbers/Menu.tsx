@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -46,7 +46,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate<CreateTpopberResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createTpopberForTpopbersForm($tpopId: UUID!) {
             createTpopber(input: { tpopber: { tpopId: $tpopId } }) {
               tpopber {
@@ -55,7 +55,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { tpopId },
       })
     } catch (error) {

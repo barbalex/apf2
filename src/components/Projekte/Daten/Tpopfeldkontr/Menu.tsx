@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -90,7 +90,7 @@ export const Menu = ({ row }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate<CreateTpopkontrResult>({
-        mutation: gql`
+        mutation: graphql(`
           mutation createTpopkontrForTpopfeldkontrForm($tpopId: UUID!) {
             createTpopkontr(input: { tpopkontr: { tpopId: $tpopId, typ: "Kontrolle" } }) {
               tpopkontr {
@@ -99,7 +99,7 @@ export const Menu = ({ row }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           tpopId,
         },
@@ -116,7 +116,7 @@ export const Menu = ({ row }: MenuProps) => {
 
     // 2. add new tpopkontrzaehl
     const resultZaehl = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
-      mutation: gql`
+      mutation: graphql(`
         mutation createTpokontrzaehlForTpopfeldkontrForm($parentId: UUID!) {
           createTpopkontrzaehl(
             input: { tpopkontrzaehl: { tpopkontrId: $parentId } }
@@ -126,7 +126,7 @@ export const Menu = ({ row }: MenuProps) => {
             }
           }
         }
-      `,
+      `),
       variables: { parentId: id },
     })
 
@@ -173,7 +173,7 @@ export const Menu = ({ row }: MenuProps) => {
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteTpopkontrForTpopfeldkontrRouter($id: UUID!) {
             deleteTpopkontrById(input: { id: $id }) {
               tpopkontr {
@@ -181,7 +181,7 @@ export const Menu = ({ row }: MenuProps) => {
               }
             }
           }
-        `,
+        `),
         variables: { id: tpopkontrId },
       })
     } catch (error) {

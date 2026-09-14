@@ -1,5 +1,6 @@
 import { useState, type ChangeEvent } from 'react'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -185,7 +186,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       let zieleinheitIdResult
       try {
         zieleinheitIdResult = await apolloClient.query({
-          query: gql`
+          query: graphql(`
             query tpopmassnZieleinheitQuery1($apId: UUID!, $typ: Int!) {
               allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                 nodes {
@@ -210,7 +211,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
                 }
               }
             }
-          `,
+          `),
           variables: { apId, typ: value ?? 1 },
         })
       } catch (error) {
@@ -242,7 +243,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       let zieleinheitIdResult
       try {
         zieleinheitIdResult = await apolloClient.query({
-          query: gql`
+          query: graphql(`
             query tpopmassnZieleinheitQuery2($apId: UUID!, $typ: Int!) {
               allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                 nodes {
@@ -265,7 +266,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
                 }
               }
             }
-          `,
+          `),
           variables: { apId, typ: row.typ ?? 1 },
         })
       } catch (error) {
@@ -290,7 +291,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
       let zieleinheitIdResult
       try {
         zieleinheitIdResult = await apolloClient.query({
-          query: gql`
+          query: graphql(`
             query tpopmassnZieleinheitQuery3($apId: UUID!, $typ: Int!) {
               allTpopmassnTypWertes(filter: { code: { equalTo: $typ } }) {
                 nodes {
@@ -313,7 +314,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
                 }
               }
             }
-          `,
+          `),
           variables: { apId, typ: row.typ ?? 1 },
         })
       } catch (error) {
@@ -334,7 +335,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
     }
     try {
       await apolloClient.mutate({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateTpopmassn(
               $id: UUID!
               $${field}: ${fieldTypes[field]}

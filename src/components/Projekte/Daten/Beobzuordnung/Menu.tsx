@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { gql } from '@apollo/client'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { isEqual } from 'es-toolkit'

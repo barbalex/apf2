@@ -1,5 +1,4 @@
 import { useRef, Suspense } from 'react'
-import { gql } from '@apollo/client'
 import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'

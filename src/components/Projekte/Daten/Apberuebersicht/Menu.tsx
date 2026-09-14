@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -67,7 +67,7 @@ export const Menu = () => {
     let result: CreateApberuebersichtResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation createApberuebersichtForApberuebersichtForm($projId: UUID!) {
             createApberuebersicht(
               input: { apberuebersicht: { projId: $projId } }
@@ -78,7 +78,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { projId },
       })
     } catch (error) {
@@ -108,7 +108,7 @@ export const Menu = () => {
     let result: DeleteApberuebersichtResult | undefined
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation deleteApberuebersicht($id: UUID!) {
             deleteApberuebersichtById(input: { id: $id }) {
               apberuebersicht {
@@ -116,7 +116,7 @@ export const Menu = () => {
               }
             }
           }
-        `,
+        `),
         variables: { id: apberuebersichtId },
       })
     } catch (error) {

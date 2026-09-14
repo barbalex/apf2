@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -9,7 +9,7 @@ export const useProjekteNavData = () => {
     queryKey: ['treeProjects'],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavProjectsQuery {
             allProjekts {
               nodes {
@@ -18,7 +18,7 @@ export const useProjekteNavData = () => {
               }
             }
           }
-        `,
+        `),
       })
       if (result.error) throw result.error
       return result.data

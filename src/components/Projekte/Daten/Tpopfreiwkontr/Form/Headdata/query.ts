@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../../gql'
 
-export const query = gql`
+export const query = graphql(`
   query TpopfreiwkontrAdressesQuery {
     allAdresses(orderBy: NAME_ASC) {
       nodes {
@@ -9,4 +9,4 @@ export const query = gql`
       }
     }
   }
-`
+`)

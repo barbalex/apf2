@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -9,7 +9,7 @@ import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
-const apFilesQuery = gql`
+const apFilesQuery = graphql(`
   query apFilesQuery($apId: UUID!) {
     apById(id: $apId) {
       id
@@ -19,7 +19,7 @@ const apFilesQuery = gql`
       }
     }
   }
-`
+`)
 
 interface ApFilesQueryResult {
   apById: {

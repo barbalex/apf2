@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
@@ -64,13 +64,13 @@ export const User = () => {
     let result
     try {
       result = await apolloClient.mutate({
-        mutation: gql`
+        mutation: graphql(`
           mutation logIn($name: String, $password: String) {
             login(input: { username: $name, pass: $password }) {
               jwtToken
             }
           }
-        `,
+        `),
         variables: {
           name: nameToUse,
           password: passwordToUse,
@@ -91,13 +91,13 @@ export const User = () => {
     let userResult
     try {
       userResult = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query userLoginQuery($name: String!) {
             userByName(name: $name) {
               id
             }
           }
-        `,
+        `),
         variables: {
           name: nameToUse,
         },

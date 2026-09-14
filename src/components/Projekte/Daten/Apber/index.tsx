@@ -1,7 +1,7 @@
 import { useState, type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -105,7 +105,7 @@ export const Component = () => {
     }
     try {
       await apolloClient.mutate<any>({
-        mutation: gql`
+        mutation: dynamicGql`
             mutation updateApber(
               $id: UUID!
               $${field}: ${fieldTypes[field]}

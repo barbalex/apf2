@@ -1,8 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql as dynamicGql } from '../../apolloGql.ts'
 
 import { aeTaxonomies, projekt } from '../shared/fragments.ts'
 
-export const dataByUserId = gql`
+export const dataByUserId = dynamicGql`
   query ekfDataByUserQuery($id: UUID!, $jahr: Int!) {
     userById(id: $id) {
       id

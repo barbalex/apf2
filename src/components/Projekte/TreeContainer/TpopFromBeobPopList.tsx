@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import List from '@mui/material/List'
@@ -29,7 +29,7 @@ export const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
 
   const apolloClient = useApolloClient()
 
-  const query = gql`
+  const query = graphql(`
     query allPopsQueryForTpopFromBeobPopList($apId: UUID!) {
       allPops(
         filter: { apId: { equalTo: $apId } }
@@ -41,7 +41,7 @@ export const TpopFromBeobPopList = ({ closeNewTpopFromBeobDialog, beobId }) => {
         }
       }
     }
-  `
+  `)
   const { data } = useQuery({
     queryKey: ['popsForTpopFromBeob', apId],
     queryFn: async () => {

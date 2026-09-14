@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -80,7 +80,7 @@ export const LetzteZaehlungenInklAnpflanzungen = () => {
         try {
           result = await apolloClient.query({
             // view: v_tpop_last_count_with_massn
-            query: gql`
+            query: graphql(`
               query viewTpopLastCountWithMassns {
                 allVTpopLastCountWithMassns {
                   nodes {
@@ -126,7 +126,7 @@ export const LetzteZaehlungenInklAnpflanzungen = () => {
                   }
                 }
               }
-            `,
+            `),
           })
         } catch (error) {
           addNotification({

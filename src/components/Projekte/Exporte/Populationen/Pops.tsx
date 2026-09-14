@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -34,7 +34,7 @@ export const Pops = ({ filtered = false }) => {
         let result: { data: PopQueryResult }
         try {
           result = await apolloClient.query({
-            query: gql`
+            query: graphql(`
               query popForExportQuery($filter: PopFilter) {
                 allPops(
                   filter: $filter
@@ -84,7 +84,7 @@ export const Pops = ({ filtered = false }) => {
                   }
                 }
               }
-            `,
+            `),
             variables: {
               filter: filtered ? popGqlFilter.filtered : { or: [] },
             },

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { gql } from '@apollo/client'
+import { graphql } from '../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -64,7 +64,7 @@ export const useTpopfeldkontrNavData = (props) => {
     ],
     queryFn: async () => {
       const result = await apolloClient.query({
-        query: gql`
+        query: graphql(`
           query NavTpopfeldkontrQuery(
             $tpopkontrId: UUID!
             $tpopkontrzaehlFilter: TpopkontrzaehlFilter!
@@ -85,7 +85,7 @@ export const useTpopfeldkontrNavData = (props) => {
               }
             }
           }
-        `,
+        `),
         variables: {
           tpopkontrId,
           tpopkontrzaehlFilter: tpopkontrzaehlGqlFilterForTree,

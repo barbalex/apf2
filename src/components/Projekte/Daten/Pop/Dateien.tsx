@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 
@@ -15,14 +15,14 @@ interface PopQueryResult {
   }
 }
 
-const query = gql`
+const query = graphql(`
   query popByIdForPopDateienQuery($id: UUID!) {
     popById(id: $id) {
       id
       label
     }
   }
-`
+`)
 
 export const Component = () => {
   const { popId } = useParams()

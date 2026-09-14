@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 
-export const queryApsToChoose = gql`
+export const queryApsToChoose = graphql(`
   query ekPlanChooseApsQuery($filter: ApFilter!) {
     allAps(first: 8, filter: $filter, orderBy: LABEL_ASC) {
       nodes {
@@ -9,4 +9,4 @@ export const queryApsToChoose = gql`
       }
     }
   }
-`
+`)

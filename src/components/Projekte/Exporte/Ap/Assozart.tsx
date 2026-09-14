@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -61,7 +61,7 @@ export const Assozart = () => {
     let result: { data?: AssozartsQueryResult }
     try {
       result = await apolloClient.query<AssozartsQueryResult>({
-        query: gql`
+        query: graphql(`
           query assozartsForExportQuery {
             allAssozarts(
               orderBy: [
@@ -100,7 +100,7 @@ export const Assozart = () => {
               }
             }
           }
-        `,
+        `),
       })
     } catch (error) {
       addNotification({

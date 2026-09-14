@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../gql'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -189,7 +189,7 @@ export const Kontrollen = ({ filtered = false }: KontrollenProps) => {
         let result: { data?: TpopkontrQueryResult }
         try {
           result = await apolloClient.query<TpopkontrQueryResult>({
-            query: gql`
+            query: graphql(`
               query tpopkontrForExportQuery($filter: TpopkontrFilter) {
                 allTpopkontrs(
                   filter: $filter
@@ -344,7 +344,7 @@ export const Kontrollen = ({ filtered = false }: KontrollenProps) => {
                   }
                 }
               }
-            `,
+            `),
             variables: {
               filter: filtered ? tpopkontrGqlFilter : { or: [] },
             },

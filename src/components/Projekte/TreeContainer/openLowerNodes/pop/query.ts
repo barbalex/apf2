@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { graphql } from '../../../../../gql'
 
-export const query = gql`
+export const query = graphql(`
   query popForLowerNodesQuery($id: UUID!) {
     popById(id: $id) {
       id
@@ -21,4 +21,4 @@ export const query = gql`
       }
     }
   }
-`
+`)
