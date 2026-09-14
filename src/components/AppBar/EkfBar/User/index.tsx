@@ -24,10 +24,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
 import { logout } from '../../../../modules/logout.ts'
 
-import type {
-  UserId,
-  AdresseId,
-} from '../../../../models/apflora/public/User.ts'
+import type { UserId } from '../../../../models/apflora/User.ts'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from './index.module.css'
 
@@ -59,9 +57,9 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
       }),
   })
 
-  const row: Row = data?.data?.userByName ?? {}
+  const row = (data?.data?.userByName ?? {}) as Row
 
-  const [fieldErrors, setFieldErrors] = useState({})
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const userName = useAtomValue(userNameAtom)
 
   const [editPassword, setEditPassword] = useState(false)
@@ -73,7 +71,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const saveToDb = async (event) => {
+  const saveToDb = async (event: { target: { name: string; value: unknown } }) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -90,10 +88,10 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
     } catch (error) {
       return setFieldErrors((prev) => ({
         ...prev,
-        [field]: error.message,
+        [field]: (error as Error).message,
       }))
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['userByNameForEkfBar'],
     })
     setFieldErrors((prev) => {
@@ -102,10 +100,12 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
     })
   }
 
-  const onBlurPassword = (e) => {
+  const onBlurPassword = (e: {
+    target: EventTarget
+  }) => {
+    const value = (e.target as HTMLInputElement).value
     setPasswordErrorText('')
-    const password = e.target.value
-    setPassword(password)
+    setPassword(value)
     if (!password) {
       setPasswordErrorText('Bitte Passwort eingeben')
     } else {
@@ -113,10 +113,12 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
     }
   }
 
-  const onBlurPassword2 = async (event) => {
+  const onBlurPassword2 = async (event: {
+    target: EventTarget
+  }) => {
+    const value = (event.target as HTMLInputElement).value
     setPassword2ErrorText('')
-    const password2 = event.target.value
-    setPassword2(password2)
+    setPassword2(value)
     if (!password2) {
       setPassword2ErrorText('Bitte Passwort eingeben')
     } else if (password !== password2) {
@@ -133,7 +135,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
           },
         })
       } catch (error) {
-        return setPasswordMessage(error.message)
+        return setPasswordMessage((error as Error).message)
       }
       setPasswordMessage(
         'Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.',
@@ -195,7 +197,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
                     className={styles.abmeldenButton}
                     variant="outlined"
                     color="primary"
-                    onClick={logout}
+                    onClick={() => void logout()}
                   >
                     Abmelden
                   </Button>
@@ -259,7 +261,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
                         id="passwort2"
                         type={showPass2 ? 'text' : 'password'}
                         defaultValue={password2}
-                        onBlur={onBlurPassword2}
+                        onBlur={(e) => void onBlurPassword2(e)}
                         onKeyPress={(e) => {
                           if (e.key === 'Enter') {
                             onBlurPassword(e)

@@ -3,6 +3,26 @@ import ReactSelect from 'react-select'
 import { exists } from '../../modules/exists.ts'
 import styles from './Select.module.css'
 
+export interface SelectOption {
+  value: string | number
+  label: string | null
+  historic?: boolean
+}
+
+export interface SelectProps {
+  value: string | number | null
+  field?: string
+  label?: string
+  labelSize?: number
+  name?: string
+  error?: string
+  options: SelectOption[]
+  loading?: boolean
+  maxHeight?: number | null
+  noCaret?: boolean
+  saveToDb: (fakeEvent: { target: { name?: string; value: string | number | null } }) => void
+}
+
 export const Select = ({
   value,
   field = '',
@@ -15,7 +35,7 @@ export const Select = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-}) => {
+}: SelectProps) => {
   const onChange = (option) => {
     const fakeEvent = {
       target: {

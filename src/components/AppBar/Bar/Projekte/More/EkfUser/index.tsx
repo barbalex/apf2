@@ -1,52 +1,40 @@
 import { Suspense } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import { useNavigate, useLocation } from 'react-router'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { queryAdresses } from './queryAdresses.ts'
 
-import type { UserId } from '../../../../../../models/apflora/public/User.ts'
+
 
 import styles from './index.module.css'
-
-interface UserNode {
-  value: UserId
-  label: string | null
-}
-
-interface UsersQueryResult {
-  allUsers: {
-    nodes: UserNode[]
-  }
-}
 
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
 const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
-export const EkfUser = ({ closeMenu }) => {
+export const EkfUser = ({ closeMenu }: { closeMenu: () => void }) => {
   const navigate = useNavigate()
   const { search } = useLocation()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['ekfUsers'],
     queryFn: async () => {
-      const result = await apolloClient.query<UsersQueryResult>({
+      const result = await apolloClient.query({
         query: queryAdresses,
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data ?? { allUsers: { nodes: [] } }
     },
-    suspense: true,
   })
 
-  const choose = (event) => {
+  const choose = (event: { target: { value: string | number | null } }) => {
     const value = event.target.value
     closeMenu()
     // prevent this happening before setAnchor happened
     setTimeout(() =>
-      navigate(`/Daten/Benutzer/${value}/EKF/${ekfRefYear}${search}`),
+      void navigate(`/Daten/Benutzer/${value}/EKF/${ekfRefYear}${search}`),
     )
   }
 
@@ -56,7 +44,7 @@ export const EkfUser = ({ closeMenu }) => {
         <Select
           value={''}
           label="EKF sehen als"
-          options={data.allUsers.nodes}
+          options={(data.allUsers?.nodes ?? []).filter((n) => !!n)}
           loading={false}
           saveToDb={choose}
           maxHeight={120}

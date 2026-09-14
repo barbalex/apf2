@@ -2,6 +2,18 @@ import { useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
+
+// MenuBar measures its children via a width prop that MUI's Button doesn't declare
+const WidthButton = Button as unknown as React.ComponentType<
+  React.ComponentProps<typeof Button> & { width?: number }
+>
+
+// MUI Tooltip types children as a single element; this Tooltip also wraps the Menu
+const MultiChildTooltip = Tooltip as unknown as React.ComponentType<
+  Omit<React.ComponentProps<typeof Tooltip>, 'children'> & {
+    children?: React.ReactNode
+  }
+>
 import Tooltip from '@mui/material/Tooltip'
 import { FaBars } from 'react-icons/fa6'
 import { useParams } from 'react-router'
@@ -16,10 +28,6 @@ import { EnforceMobileNavigation } from './EnforceMobileNavigation.tsx'
 import { AlwaysShowTree } from './AlwaysShowTree.tsx'
 import {
   isMobileViewAtom,
-  isDesktopViewAtom,
-  enforceDesktopNavigationAtom,
-  enforceMobileNavigationAtom,
-  writeEnforceDesktopNavigationAtom,
   userNameAtom,
   deletedDatasetsAtom,
   setShowDeletionsAtom,
@@ -32,7 +40,17 @@ import {
 import parentStyles from '../index.module.css'
 import styles from './index.module.css'
 
-export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
+interface MoreProps {
+  onClickExporte: () => void
+  role: string | null | undefined
+  // read by MenuBar to compute the menu widths
+  width?: number
+}
+
+export const More = ({
+  onClickExporte: passedOnClickExporte,
+  role,
+}: MoreProps) => {
   const { projId } = useParams()
 
   const isMobileView = useAtomValue(isMobileViewAtom)
@@ -41,7 +59,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
   const deletedDatasets = useAtomValue(deletedDatasetsAtom)
   const userName = useAtomValue(userNameAtom)
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const closeMenu = () => setAnchorEl(null)
 
   /**
@@ -58,7 +76,8 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
     setTimeout(() => setShowDeletions(true))
   }
 
-  const onClickMehrButton = (event) => setAnchorEl(event.currentTarget)
+  const onClickMehrButton = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setAnchorEl(event.currentTarget)
 
   const onClickExporte = () => {
     closeMenu()
@@ -73,11 +92,11 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
   }
 
   return (
-    <Tooltip title="Mehr Befehle">
+    <MultiChildTooltip title="Mehr Befehle">
       {isMobileView ?
-        <Button
+        <WidthButton
           aria-label="Mehr"
-          aria-owns={anchorEl ? 'appbar-more-menu' : null}
+          aria-owns={anchorEl ? 'appbar-more-menu' : undefined}
           aria-haspopup="true"
           onClick={onClickMehrButton}
           data-id="appbar-more"
@@ -85,17 +104,17 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
           className={parentStyles.iconButton}
         >
           <FaBars />
-        </Button>
-      : <Button
+        </WidthButton>
+      : <WidthButton
           aria-label="Mehr"
-          aria-owns={anchorEl ? 'appbar-more-menu' : null}
+          aria-owns={anchorEl ? 'appbar-more-menu' : undefined}
           aria-haspopup="true"
           onClick={onClickMehrButton}
           data-id="appbar-more"
           className={styles.mehrButton}
         >
           Mehr
-        </Button>
+        </WidthButton>
       }
       <Menu
         id="appbar-more-menu"
@@ -117,7 +136,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
         >
           gelöschte Datensätze wiederherstellen
         </MenuItem>
-        {['apflora_manager', 'apflora_ap_writer'].includes(role) && (
+        {['apflora_manager', 'apflora_ap_writer'].includes(role ?? '') && (
           <EkfUser closeMenu={closeMenu} />
         )}
         <MenuItem>
@@ -135,7 +154,7 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
           <AlwaysShowTree />
         </MenuItem>
         <MenuItem
-          onClick={logout}
+          onClick={() => void logout()}
           data-id="appbar-more-logout"
         >{`${userName} abmelden (und Cache leeren)`}</MenuItem>
         <MenuItem onClick={onClickUptime}>
@@ -145,6 +164,6 @@ export const More = ({ onClickExporte: passedOnClickExporte, role }) => {
           Version: {appVersion} vom {versionDate}
         </div>
       </Menu>
-    </Tooltip>
+    </MultiChildTooltip>
   )
 }

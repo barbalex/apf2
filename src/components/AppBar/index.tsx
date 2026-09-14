@@ -32,7 +32,7 @@ export const Component = () => {
     // but only if activeNodeArray is not empty
     // otherwise first time users are navigated to the login
     if (pathname === '/' && activeNodeArray.length > 0) {
-      navigate('/Daten/' + activeNodeArray.join('/') + search)
+      void navigate('/Daten/' + activeNodeArray.join('/') + search)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

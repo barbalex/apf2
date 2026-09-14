@@ -11,9 +11,16 @@ const LogoutButton = styled(Button)`
   margin-top: 10px !important;
 `*/
 
-export const Error = ({ errors: errorsPassed, error }) => {
+interface ErrorProps {
+  // a single error or an array; also tolerates an object wrapping an errors array
+  errors?: unknown
+  error?: unknown
+}
+
+export const Error = ({ errors: errorsPassed, error }: ErrorProps) => {
   // allow user to pass single error or multiple errors
-  let errors = errorsPassed
+  let errors: { map?: unknown; errors?: unknown[] } | undefined =
+    (errorsPassed as { map?: unknown; errors?: unknown[] }) ?? undefined
   if (error && !errorsPassed) errors = [error]
   // PROBLEM
   // something passes in an object instead of an array
@@ -27,7 +34,8 @@ export const Error = ({ errors: errorsPassed, error }) => {
       // Avoid reload loop before login is possible
       return null
     }
-    return logout()
+    void logout()
+    return null
     /*// if token is not accepted, ask user to logout
     return (
       <div className={container}>

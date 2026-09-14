@@ -22,8 +22,8 @@ import {
 import { dataByUserId as dataByUserIdQuery } from '../../Ekf/dataByUserId.ts'
 import { dataWithDateByUserId as dataWithDateByUserIdQuery } from '../../Ekf/dataWithDateByUserId.ts'
 
-import type { UserId, AdresseId } from '../../../models/apflora/public/User.ts'
-import type { TpopkontrId } from '../../../models/apflora/public/Tpopkontr.ts'
+import type { UserId } from '../../../models/apflora/User.ts'
+import type { TpopkontrId } from '../../../models/apflora/Tpopkontr.ts'
 
 import styles from './Menus.module.css'
 
@@ -53,7 +53,7 @@ export const Menus = () => {
   const setIsEkfSinglePrint = useSetAtom(setIsEkfSinglePrintAtom)
   const ekfIsActive = !!ekfId
 
-  const tokenDecoded = token ? jwtDecode(token) : null
+  const tokenDecoded = token ? jwtDecode<{ role?: string }>(token) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
 
@@ -61,23 +61,23 @@ export const Menus = () => {
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
   const query =
-    ekfRefYear === ekfYear ? dataByUserIdQuery : dataWithDateByUserIdQuery
+    ekfRefYear === +(ekfYear ?? 0) ? dataByUserIdQuery : dataWithDateByUserIdQuery
 
   const { data } = useQuery({
     queryKey: ['ekfMenus', userId, ekfYear],
-    queryFn: async () => {
-      const result = await apolloClient.query<EkfMenusQueryResult>({
+    queryFn: async (): Promise<EkfMenusQueryResult> => {
+      const result = await apolloClient.query({
         query,
-        variables: { id: userId, jahr: +ekfYear },
+        variables: { id: userId, jahr: +(ekfYear ?? 0) },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return (result.data ?? {}) as EkfMenusQueryResult
     },
-    suspense: true,
   })
 
   const ekfCount = (
-    data.userById.adresseByAdresseId.tpopkontrsByBearbeiter.nodes
+    data?.userById?.adresseByAdresseId?.tpopkontrsByBearbeiter?.nodes ?? []
   ).length
 
   const [userOpen, setUserOpen] = useState(false)
