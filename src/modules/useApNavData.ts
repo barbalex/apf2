@@ -25,7 +25,7 @@ import { useProjekteTabs } from './useProjekteTabs.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import { Node } from '../components/Projekte/TreeContainer/Tree/Node.tsx'
 
-export const useApNavData = (props) => {
+export const useApNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const projId = props?.projId
   const apId = props?.apId
@@ -255,7 +255,6 @@ export const useApNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const label = data.apById?.label

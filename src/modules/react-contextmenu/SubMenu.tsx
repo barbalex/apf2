@@ -9,8 +9,7 @@ import AbstractMenu, {
 import { cssClasses, callIfExists, hasOwnProp, store } from './helpers.ts'
 import listener, { type MenuEvent } from './globalEventListener.ts'
 
-export interface SubMenuAttributes
-  extends React.HTMLAttributes<HTMLDivElement> {
+export interface SubMenuAttributes extends React.HTMLAttributes<HTMLDivElement> {
   disabledClassName?: string
   dividerClassName?: string
   selectedClassName?: string
@@ -57,11 +56,15 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
   closetimer: ReturnType<typeof setTimeout> | undefined
   isVisibilityChange = false
 
-  getMenuPosition(): Partial<Record<'top' | 'bottom' | 'left' | 'right', number | string>> {
+  getMenuPosition(): Partial<
+    Record<'top' | 'bottom' | 'left' | 'right', number | string>
+  > {
     const { innerWidth, innerHeight } = window
 
     const rect = this.subMenu!.getBoundingClientRect()
-    const position: Partial<Record<'top' | 'bottom' | 'left' | 'right', number | string>> = {}
+    const position: Partial<
+      Record<'top' | 'bottom' | 'left' | 'right', number | string>
+    > = {}
 
     if (rect.bottom > innerHeight) {
       position.bottom = 0
@@ -78,11 +81,15 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
     return position
   }
 
-  getRTLMenuPosition(): Partial<Record<'top' | 'bottom' | 'left' | 'right', number | string>> {
+  getRTLMenuPosition(): Partial<
+    Record<'top' | 'bottom' | 'left' | 'right', number | string>
+  > {
     const { innerHeight } = window
 
     const rect = this.subMenu!.getBoundingClientRect()
-    const position: Partial<Record<'top' | 'bottom' | 'left' | 'right', number | string>> = {}
+    const position: Partial<
+      Record<'top' | 'bottom' | 'left' | 'right', number | string>
+    > = {}
 
     if (rect.bottom > innerHeight) {
       position.bottom = 0
@@ -101,12 +108,7 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
 
   hideSubMenu = (e: MenuEvent) => {
     // avoid closing submenus of a different menu tree
-    if (
-      e.detail &&
-      e.detail.id &&
-      this.menu &&
-      e.detail.id !== this.menu.id
-    ) {
+    if (e.detail && e.detail.id && this.menu && e.detail.id !== this.menu.id) {
       return
     }
 
@@ -171,7 +173,8 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
   registerHandlers = () => {
     document.removeEventListener(
       'keydown',
-      (this.props.parentKeyNavigationHandler ?? (() => null)) as unknown as EventListener,
+      (this.props.parentKeyNavigationHandler ??
+        (() => null)) as unknown as EventListener,
     )
     document.addEventListener(
       'keydown',
@@ -187,7 +190,8 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
     if (!dismounting) {
       document.addEventListener(
         'keydown',
-        (this.props.parentKeyNavigationHandler ?? (() => null)) as unknown as EventListener,
+        (this.props.parentKeyNavigationHandler ??
+          (() => null)) as unknown as EventListener,
       )
     }
   }
@@ -216,11 +220,11 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
     if (!this.isVisibilityChange) return
     if ((this.props.forceOpen ?? false) || this.state.visible) {
       const wrapper =
-        window.requestAnimationFrame || (setTimeout as typeof requestAnimationFrame)
+        window.requestAnimationFrame ||
+        (setTimeout as typeof requestAnimationFrame)
       wrapper(() => {
-        const styles = this.props.rtl ?
-            this.getRTLMenuPosition()
-          : this.getMenuPosition()
+        const styles =
+          this.props.rtl ? this.getRTLMenuPosition() : this.getMenuPosition()
 
         this.subMenu!.style.removeProperty('top')
         this.subMenu!.style.removeProperty('bottom')
@@ -294,9 +298,11 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
     }
     const menuItemProps = {
       className: cx(cssClasses.menuItem, attributes.className, {
-        [cx(cssClasses.menuItemDisabled, attributes.disabledClassName)]: disabled,
+        [cx(cssClasses.menuItemDisabled, attributes.disabledClassName)]:
+          disabled,
         [cx(cssClasses.menuItemActive, attributes.visibleClassName)]: visible,
-        [cx(cssClasses.menuItemSelected, attributes.selectedClassName)]: selected,
+        [cx(cssClasses.menuItemSelected, attributes.selectedClassName)]:
+          selected,
       }),
       onMouseMove,
       onMouseOut,
@@ -314,11 +320,23 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
     }
 
     return (
-      <nav {...menuProps} role="menuitem" tabIndex={-1} aria-haspopup="true">
-        <div {...attributes} {...menuItemProps}>
+      <nav
+        {...menuProps}
+        role="menuitem"
+        tabIndex={-1}
+        aria-haspopup="true"
+      >
+        <div
+          {...attributes}
+          {...menuItemProps}
+        >
           {title}
         </div>
-        <nav {...subMenuProps} role="menu" tabIndex={-1}>
+        <nav
+          {...subMenuProps}
+          role="menu"
+          tabIndex={-1}
+        >
           {this.renderChildren(children)}
         </nav>
       </nav>

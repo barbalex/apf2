@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { getErfkritGqlFilterForTree } from './getErfkritGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useErfkritsNavData = (props) => {
+export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -49,7 +49,6 @@ export const useErfkritsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.apById?.erfkritsByApId?.nodes?.length ?? 0

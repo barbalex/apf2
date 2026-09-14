@@ -6,18 +6,25 @@
  * - layer title
  * - properties
  */
-export const xmlToJson = (xml) => {
+// the parsed shape is recursive and unpredictable — consumers navigate it dynamically
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type XmlNode = any
+
+export const xmlToJson = (xml: Node): XmlNode => {
   // Create the return object
-  let obj = {}
+  let obj: XmlNode = {}
+  const record = () => obj as Record<string, unknown>
 
   if (xml.nodeType == 1) {
     // element
     // do attributes
-    if (xml.attributes.length > 0) {
-      obj['@attributes'] = {}
-      for (let j = 0; j < xml.attributes.length; j++) {
-        const attribute = xml.attributes.item(j)
-        obj['@attributes'][attribute.nodeName] = attribute.nodeValue
+    const attributes = (xml as Element).attributes
+    if (attributes.length > 0) {
+      obj = { '@attributes': {} }
+      const target = record()['@attributes'] as Record<string, unknown>
+      for (let j = 0; j < attributes.length; j++) {
+        const attribute = attributes.item(j)!
+        target[attribute.nodeName] = attribute.nodeValue
       }
     }
   } else if (xml.nodeType == 3) {
@@ -28,17 +35,16 @@ export const xmlToJson = (xml) => {
   // do children
   if (xml.hasChildNodes()) {
     for (let i = 0; i < xml.childNodes.length; i++) {
-      const item = xml.childNodes.item(i)
+      const item = xml.childNodes.item(i)!
       const nodeName = item.nodeName
-      if (typeof obj[nodeName] == 'undefined') {
-        obj[nodeName] = xmlToJson(item)
+      if (typeof record()[nodeName] == 'undefined') {
+        record()[nodeName] = xmlToJson(item)
       } else {
-        if (typeof obj[nodeName].push == 'undefined') {
-          const old = obj[nodeName]
-          obj[nodeName] = []
-          obj[nodeName].push(old)
+        if (typeof (record()[nodeName] as { push?: unknown }).push == 'undefined') {
+          const old = record()[nodeName]
+          record()[nodeName] = [old]
         }
-        obj[nodeName].push(xmlToJson(item))
+        ;(record()[nodeName] as unknown[]).push(xmlToJson(item))
       }
     }
   }

@@ -10,5 +10,5 @@ export const logout = async () => {
   localForage.clear()
 
   store.set(clearAllStorageAtom)
-  window.location.reload(true)
+  window.location.reload()
 }

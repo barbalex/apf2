@@ -8,7 +8,7 @@ import { store } from '../store/index.ts'
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useTpopfeldkontrzaehlsNavData = (props) => {
+export const useTpopfeldkontrzaehlsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -57,7 +57,6 @@ export const useTpopfeldkontrzaehlsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes.length

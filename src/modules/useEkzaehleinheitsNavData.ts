@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { getEkzaehleinheitGqlFilterForTree } from './getEkzaehleinheitGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useEkzaehleinheitsNavData = (props) => {
+export const useEkzaehleinheitsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -49,7 +49,6 @@ export const useEkzaehleinheitsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const rows = data.apById.ekzaehleinheitsByApId.nodes

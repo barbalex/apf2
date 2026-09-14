@@ -99,7 +99,7 @@ const nodeQueryConfigs: Record<string, NodeQueryConfig> = {
   },
   idealbiotop: {
     query: idealbiotopQuery,
-    queryKey: (id, node) => ['idealbiotop', node.parentTableId || node.tableId],
+    queryKey: (_id, node) => ['idealbiotop', node.parentTableId || node.tableId],
     variables: (id, node) => ({ id: node.parentTableId || id }),
   },
   apart: {

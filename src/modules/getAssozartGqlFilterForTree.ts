@@ -1,8 +1,9 @@
+import type { AssozartFilter } from '../gql/graphql.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
-export const getAssozartGqlFilterForTree = (apId: string) => {
+export const getAssozartGqlFilterForTree = (_apId: string) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
-  const gqlFilter = {}
+  const gqlFilter: AssozartFilter = {}
 
   // Don't include apId in filter - query is already scoped to ap
   if (nodeLabelFilter.assozart) {

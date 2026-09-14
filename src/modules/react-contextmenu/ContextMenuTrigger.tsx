@@ -140,7 +140,10 @@ class ContextMenuTrigger extends Component<ContextMenuTriggerProps> {
         showMenu(showMenuConfig)
       })
     } else {
-      showMenuConfig.data = { ...(data as Record<string, unknown>), target: event.target }
+      showMenuConfig.data = {
+        ...(data as Record<string, unknown>),
+        target: event.target,
+      }
       showMenu(showMenuConfig)
     }
   }

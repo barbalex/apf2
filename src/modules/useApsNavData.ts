@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 import { store, treeApGqlFilterForTreeAtom } from '../store/index.ts'
 
-export const useApsNavData = (props) => {
+export const useApsNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -38,7 +38,6 @@ export const useApsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.allAps?.nodes?.length ?? 0

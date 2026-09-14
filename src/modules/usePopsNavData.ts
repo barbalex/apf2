@@ -86,7 +86,7 @@ export const popIcons = {
   },
 }
 
-export const usePopsNavData = (props) => {
+export const usePopsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -126,7 +126,6 @@ export const usePopsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
   // this is how to make the filter reactive in a hook
   // see: https://stackoverflow.com/a/72229014/712005

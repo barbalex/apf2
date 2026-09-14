@@ -36,7 +36,7 @@ const getLabelRightElements = ({ movingId, copyingId, popId }) => {
   return labelRightElements
 }
 
-export const usePopNavData = (props) => {
+export const usePopNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -115,7 +115,6 @@ export const usePopNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const label = data.popById?.label

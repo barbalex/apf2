@@ -13,7 +13,7 @@ import {
 import { MovingIcon } from '../components/NavElements/MovingIcon.tsx'
 import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 
-export const useTpopfreiwkontrsNavData = (props) => {
+export const useTpopfreiwkontrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -59,7 +59,6 @@ export const useTpopfreiwkontrsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   // this is how to make the filter reactive in a hook

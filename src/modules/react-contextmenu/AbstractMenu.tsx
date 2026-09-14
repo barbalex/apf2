@@ -18,7 +18,10 @@ abstract class AbstractMenu<
   Props extends AbstractMenuProps = AbstractMenuProps,
   State extends AbstractMenuState = AbstractMenuState,
 > extends Component<Props, State> {
-  seletedItemRef: { ref?: HTMLElement | null; props: { disabled?: boolean } } | null = null
+  seletedItemRef: {
+    ref?: HTMLElement | null
+    props: { disabled?: boolean }
+  } | null = null
 
   abstract getSubMenuType(): React.ComponentType<any>
 
@@ -110,9 +113,17 @@ abstract class AbstractMenu<
       if (!child || !React.isValidElement(child)) {
         return
       }
-      const element = child as React.ReactElement<{ divider?: boolean; disabled?: boolean; children?: React.ReactNode }>
+      const element = child as React.ReactElement<{
+        divider?: boolean
+        disabled?: boolean
+        children?: React.ReactNode
+      }>
 
-      if (([MenuItem, this.getSubMenuType()] as React.ComponentType<any>[]).indexOf(element.type as React.ComponentType<any>) < 0) {
+      if (
+        (
+          [MenuItem, this.getSubMenuType()] as React.ComponentType<any>[]
+        ).indexOf(element.type as React.ComponentType<any>) < 0
+      ) {
         // Maybe the MenuItem or SubMenu is capsuled in a wrapper div or something else
         React.Children.forEach(element.props.children, childCollector)
       } else if (!element.props.divider) {
@@ -175,16 +186,20 @@ abstract class AbstractMenu<
     this.setState({ selectedItem: null, forceSubMenuOpen: false })
   }
 
-  renderChildren = (
-    children: React.ReactNode,
-  ): React.ReactNode =>
+  renderChildren = (children: React.ReactNode): React.ReactNode =>
     React.Children.map(children, (child) => {
       const props: Record<string, unknown> = {}
       if (!React.isValidElement(child)) return child
       const element = child as React.ReactElement<Record<string, unknown>>
-      if (([MenuItem, this.getSubMenuType()] as React.ComponentType<any>[]).indexOf(element.type as React.ComponentType<any>) < 0) {
+      if (
+        (
+          [MenuItem, this.getSubMenuType()] as React.ComponentType<any>[]
+        ).indexOf(element.type as React.ComponentType<any>) < 0
+      ) {
         // Maybe the MenuItem or SubMenu is capsuled in a wrapper div or something else
-        props.children = this.renderChildren(element.props.children as React.ReactNode)
+        props.children = this.renderChildren(
+          element.props.children as React.ReactNode,
+        )
         return React.cloneElement(element, props)
       }
       props.onMouseLeave = this.onChildMouseLeave
@@ -204,7 +219,8 @@ abstract class AbstractMenu<
         return React.cloneElement(element, props)
       }
       // onMouseMove is only needed for non selected items
-      props.onMouseMove = () => this.onChildMouseMove(child as React.ReactElement)
+      props.onMouseMove = () =>
+        this.onChildMouseMove(child as React.ReactElement)
       return React.cloneElement(element, props)
     })
 }

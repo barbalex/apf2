@@ -87,7 +87,6 @@ export const useWertesNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const adressesCount = data.allAdresses.totalCount

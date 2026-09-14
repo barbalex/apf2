@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { getZielGqlFilterForTree } from './getZielGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useZielsOfJahrNavData = (props) => {
+export const useZielsOfJahrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -59,7 +59,6 @@ export const useZielsOfJahrNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.apById.zielsByApId.totalCount

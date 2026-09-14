@@ -48,7 +48,6 @@ export const useTpopkontrzaehlEinheitWertesNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.allTpopkontrzaehlEinheitWertes.nodes.length

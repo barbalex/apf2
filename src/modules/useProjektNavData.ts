@@ -10,7 +10,7 @@ import {
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useProjektNavData = (props) => {
+export const useProjektNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId =
@@ -65,7 +65,6 @@ export const useProjektNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const label = data.projektById.label ?? 'Projekt'

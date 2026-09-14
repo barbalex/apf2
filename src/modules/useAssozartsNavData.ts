@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 
 import { getAssozartGqlFilterForTree } from './getAssozartGqlFilterForTree.ts'
 
-export const useAssozartsNavData = (props) => {
+export const useAssozartsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -45,7 +45,6 @@ export const useAssozartsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.apById?.assozartsByApId?.nodes?.length ?? 0

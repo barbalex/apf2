@@ -62,7 +62,13 @@ export default function connectMenu(menuId: string) {
       }
 
       render() {
-        return <Child {...this.props} id={menuId} trigger={this.state.trigger} />
+        return (
+          <Child
+            {...this.props}
+            id={menuId}
+            trigger={this.state.trigger}
+          />
+        )
       }
     }
   }

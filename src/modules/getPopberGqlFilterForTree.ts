@@ -1,8 +1,9 @@
+import type { PopberFilter } from '../gql/graphql.ts'
 import { store, treeNodeLabelFilterAtom } from '../store/index.ts'
 
-export const getPopberGqlFilterForTree = (popId: string) => {
+export const getPopberGqlFilterForTree = (_popId: string) => {
   const nodeLabelFilter = store.get(treeNodeLabelFilterAtom)
-  const gqlFilter = {}
+  const gqlFilter: PopberFilter = {}
 
   // Don't include popId in filter - query is already scoped to pop
   if (nodeLabelFilter.popber) {

@@ -7,7 +7,7 @@ import { useAtomValue } from 'jotai'
 import { store } from '../store/index.ts'
 import { getTpopkontrzaehlGqlFilterForTree } from './getTpopkontrzaehlGqlFilterForTree.ts'
 
-export const useTpopfreiwkontrzaehlsNavData = (props) => {
+export const useTpopfreiwkontrzaehlsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -56,7 +56,6 @@ export const useTpopfreiwkontrzaehlsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.tpopkontrById.tpopkontrzaehlsByTpopkontrId?.nodes?.length

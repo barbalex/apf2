@@ -23,7 +23,10 @@ class GlobalEventListener {
     }
   }
 
-  register(showCallback: MenuCallbacks['show'], hideCallback: MenuCallbacks['hide']): string {
+  register(
+    showCallback: MenuCallbacks['show'],
+    hideCallback: MenuCallbacks['hide'],
+  ): string {
     const id = uniqueId()
 
     this.callbacks[id] = {

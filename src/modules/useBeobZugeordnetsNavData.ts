@@ -11,7 +11,7 @@ import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetM
 import { BeobzugeordnetAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetAbsenzMapIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useBeobZugeordnetsNavData = (props) => {
+export const useBeobZugeordnetsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; beobId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
 
   const params = useParams()
@@ -60,7 +60,6 @@ export const useBeobZugeordnetsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.beobsZugeordnet?.totalCount ?? 0

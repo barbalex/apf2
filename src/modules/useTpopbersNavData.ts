@@ -6,7 +6,7 @@ import { useParams } from 'react-router'
 import { getTpopberGqlFilterForTree } from './getTpopberGqlFilterForTree.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useTpopbersNavData = (props) => {
+export const useTpopbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -48,7 +48,6 @@ export const useTpopbersNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.tpopById.tpopbersByTpopId.nodes.length

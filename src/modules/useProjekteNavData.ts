@@ -23,7 +23,6 @@ export const useProjekteNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.allProjekts.nodes.length

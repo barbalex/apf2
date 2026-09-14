@@ -22,7 +22,6 @@ export const useMessagesNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.allMessages.totalCount

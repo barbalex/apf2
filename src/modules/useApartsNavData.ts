@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 
 import { getApartGqlFilterForTree } from './getApartGqlFilterForTree.ts'
 
-export const useApartsNavData = (props) => {
+export const useApartsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -42,7 +42,6 @@ export const useApartsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.apById.apartsByApId.nodes.length

@@ -10,7 +10,7 @@ import {
 } from '../store/index.ts'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useApberuebersichtsNavData = (props) => {
+export const useApberuebersichtsNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
 
   const params = useParams()
@@ -50,7 +50,6 @@ export const useApberuebersichtsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.filtered.nodes.length

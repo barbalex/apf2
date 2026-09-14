@@ -41,7 +41,7 @@ const getLabelRightElements = ({
   return labelRightElements
 }
 
-export const useTpopfeldkontrNavData = (props) => {
+export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -94,7 +94,6 @@ export const useTpopfeldkontrNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const [, setRerenderer] = useState(0)

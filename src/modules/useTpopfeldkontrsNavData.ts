@@ -17,7 +17,7 @@ import { CopyingIcon } from '../components/NavElements/CopyingIcon.tsx'
 import { BiotopCopyingIcon } from '../components/NavElements/BiotopCopyingIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useTpopfeldkontrsNavData = (props) => {
+export const useTpopfeldkontrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
 
   const params = useParams()
@@ -66,7 +66,6 @@ export const useTpopfeldkontrsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   // this is how to make the filter reactive in a hook

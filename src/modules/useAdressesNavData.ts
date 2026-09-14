@@ -35,7 +35,6 @@ export const useAdressesNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.allAdresses?.nodes?.length ?? 0

@@ -36,5 +36,7 @@ export interface MenuStore {
 export const store: MenuStore = {}
 
 export const canUseDOM = Boolean(
-  typeof window !== 'undefined' && window.document && window.document.createElement,
+  typeof window !== 'undefined' &&
+  window.document &&
+  window.document.createElement,
 )

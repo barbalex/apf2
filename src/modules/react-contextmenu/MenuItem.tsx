@@ -69,9 +69,11 @@ class MenuItem extends Component<MenuItemProps> {
       cssClasses.menuItem,
       attributes.className,
       {
-        [cx(cssClasses.menuItemDisabled, attributes.disabledClassName)]: disabled,
+        [cx(cssClasses.menuItemDisabled, attributes.disabledClassName)]:
+          disabled,
         [cx(cssClasses.menuItemDivider, attributes.dividerClassName)]: divider,
-        [cx(cssClasses.menuItemSelected, attributes.selectedClassName)]: selected,
+        [cx(cssClasses.menuItemSelected, attributes.selectedClassName)]:
+          selected,
       },
     )
 

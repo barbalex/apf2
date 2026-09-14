@@ -12,7 +12,7 @@ const getZieljahrsCount = (ziels) => {
   return count
 }
 
-export const useZieljahrsNavData = (props) => {
+export const useZieljahrsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -56,7 +56,6 @@ export const useZieljahrsNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const ziels = data.apById.zielsByApId.nodes

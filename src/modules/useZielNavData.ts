@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'
 
-export const useZielNavData = (props) => {
+export const useZielNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined; zielId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -30,7 +30,6 @@ export const useZielNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const navData = {

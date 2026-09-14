@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 
 import { getPopberGqlFilterForTree } from './getPopberGqlFilterForTree.ts'
 
-export const usePopbersNavData = (props) => {
+export const usePopbersNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -43,7 +43,6 @@ export const usePopbersNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.popById.popbersByPopId.nodes.length

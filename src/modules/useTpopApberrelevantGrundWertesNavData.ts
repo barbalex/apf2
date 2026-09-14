@@ -49,7 +49,6 @@ export const useTpopApberrelevantGrundWertesNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const count = data.allTpopApberrelevantGrundWertes.nodes.length

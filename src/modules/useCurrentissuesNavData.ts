@@ -25,7 +25,6 @@ export const useCurrentissuesNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   // subtract 1 for "fehlt hier was"

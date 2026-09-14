@@ -24,7 +24,7 @@ const getLabelRightElements = ({ copyingId, movingId, tpopmassnId }) => {
   return labelRightElements
 }
 
-export const useTpopmassnNavData = (props) => {
+export const useTpopmassnNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopmassnId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
   const projId = props?.projId ?? params.projId
@@ -64,7 +64,6 @@ export const useTpopmassnNavData = (props) => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const [, setRerenderer] = useState(0)

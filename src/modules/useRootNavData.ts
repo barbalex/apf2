@@ -39,7 +39,6 @@ export const useRootNavData = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const projectsCount = data.allProjekts.totalCount

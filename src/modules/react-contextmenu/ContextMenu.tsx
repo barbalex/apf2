@@ -52,23 +52,44 @@ class ContextMenu extends AbstractMenu<ContextMenuProps, ContextMenuState> {
   }
 
   registerHandlers = () => {
-    document.addEventListener('mousedown', this.handleOutsideClick as EventListener)
-    document.addEventListener('touchstart', this.handleOutsideClick as EventListener)
+    document.addEventListener(
+      'mousedown',
+      this.handleOutsideClick as EventListener,
+    )
+    document.addEventListener(
+      'touchstart',
+      this.handleOutsideClick as EventListener,
+    )
     if (!this.props.preventHideOnScroll)
       document.addEventListener('scroll', this.handleHide as EventListener)
     if (!this.props.preventHideOnContextMenu)
       document.addEventListener('contextmenu', this.handleHide as EventListener)
-    document.addEventListener('keydown', this.handleKeyNavigation as unknown as EventListener)
+    document.addEventListener(
+      'keydown',
+      this.handleKeyNavigation as unknown as EventListener,
+    )
     if (!this.props.preventHideOnResize)
       window.addEventListener('resize', this.handleHide as EventListener)
   }
 
   unregisterHandlers = () => {
-    document.removeEventListener('mousedown', this.handleOutsideClick as EventListener)
-    document.removeEventListener('touchstart', this.handleOutsideClick as EventListener)
+    document.removeEventListener(
+      'mousedown',
+      this.handleOutsideClick as EventListener,
+    )
+    document.removeEventListener(
+      'touchstart',
+      this.handleOutsideClick as EventListener,
+    )
     document.removeEventListener('scroll', this.handleHide as EventListener)
-    document.removeEventListener('contextmenu', this.handleHide as EventListener)
-    document.removeEventListener('keydown', this.handleKeyNavigation as unknown as EventListener)
+    document.removeEventListener(
+      'contextmenu',
+      this.handleHide as EventListener,
+    )
+    document.removeEventListener(
+      'keydown',
+      this.handleKeyNavigation as unknown as EventListener,
+    )
     window.removeEventListener('resize', this.handleHide as EventListener)
   }
 
@@ -207,12 +228,15 @@ class ContextMenu extends AbstractMenu<ContextMenuProps, ContextMenuState> {
   }
 
   componentDidUpdate() {
-    const wrapper = window.requestAnimationFrame || (setTimeout as typeof requestAnimationFrame)
+    const wrapper =
+      window.requestAnimationFrame ||
+      (setTimeout as typeof requestAnimationFrame)
     if (this.state.isVisible) {
       wrapper(() => {
         const { x, y } = this.state
 
-        const { top, left } = this.props.rtl ?
+        const { top, left } =
+          this.props.rtl ?
             this.getRTLMenuPosition(x, y)
           : this.getMenuPosition(x, y)
 
