@@ -53,10 +53,6 @@ const LegacyBrowserInformer = lazy(async () => ({
   default: (await import('./components/LegacyBrowserInformer.tsx'))
     .LegacyBrowserInformer,
 }))
-const Spinner = lazy(async () => ({
-  default: (await import('./components/shared/Spinner.tsx')).Spinner,
-}))
-
 registerLocale('de', de)
 setDefaultLocale('de')
 
@@ -72,7 +68,7 @@ const queryClient = new QueryClient({
 
 export const App = () => {
   const apolloClient = buildApolloClient()
-  const uploaderRef = createRef<HTMLElement>(null)
+  const uploaderRef = createRef<HTMLElement | null>()
 
   useEffect(() => {
     const baseTitle = 'apflora'

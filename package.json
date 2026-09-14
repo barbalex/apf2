@@ -107,6 +107,7 @@
     "@graphql-codegen/client-preset": "6.2.0",
     "@playwright/test": "1.62.1",
     "@rolldown/plugin-babel": "0.2.3",
+    "@types/blueimp-md5": "2.18.2",
     "@types/file-saver": "2.0.7",
     "@types/is-uuid": "1.0.2",
     "@types/leaflet": "1.9.22",

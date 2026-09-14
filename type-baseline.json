@@ -1,11 +1,4 @@
 [
-  "src/App.tsx::TS2322::Type 'RefObject<HTMLElement | null>' is not assignable to type 'RefObject<HTMLElement>'.",
-  "src/App.tsx::TS2339::Property 'uc-upload-ctx-provider' does not exist on type 'JSX.IntrinsicElements'.",
-  "src/App.tsx::TS2554::Expected 0 arguments, but got 1.",
-  "src/App.tsx::TS6133::'Spinner' is declared but its value is never read.",
-  "src/apolloClient.ts::TS2315::Type 'ApolloClient' is not generic.",
-  "src/apolloClient.ts::TS6133::'useSetAtom' is declared but its value is never read.",
-  "src/apolloClient.ts::TS7006::Parameter 'notification' implicitly has an 'any' type.",
   "src/components/AppBar/Bar/Projekte/Daten.tsx::TS6133::'hide' is declared but its value is never read.",
   "src/components/AppBar/Bar/Projekte/More/EkfUser/index.tsx::TS18046::'data' is of type 'unknown'.",
   "src/components/AppBar/Bar/Projekte/More/EkfUser/index.tsx::TS2307::Cannot find module '../../../../../../models/apflora/public/User.ts' or its corresponding type declarations.",
@@ -2647,7 +2640,5 @@
   "src/components/shared/Uploader/index.tsx::TS7031::Binding element 'onFileUploadSuccess' implicitly has an 'any' type.",
   "src/components/shared/YoutubeEmbed.tsx::TS7031::Binding element 'embedId' implicitly has an 'any' type.",
   "src/icons/Ek.tsx::TS7006::Parameter 'props' implicitly has an 'any' type.",
-  "src/icons/Ekf.tsx::TS7006::Parameter 'props' implicitly has an 'any' type.",
-  "src/main.tsx::TS2307::Cannot find module 'virtual:pwa-register' or its corresponding type declarations.",
-  "src/utils/uploadcareSignature.ts::TS7016::Could not find a declaration file for module 'blueimp-md5'. '/home/alex/Documents/GitHub/apf2/node_modules/blueimp-md5/js/md5.js' implicitly has an 'any' type."
+  "src/icons/Ekf.tsx::TS7006::Parameter 'props' implicitly has an 'any' type."
 ]
