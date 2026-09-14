@@ -18,7 +18,7 @@ const ignoredTriggerProps = [
 ]
 
 // expect the id of the menu to be responsible for as outer parameter
-export default function (menuId: string) {
+export default function connectMenu(menuId: string) {
   // expect menu component to connect as inner parameter
   // <Child/> is presumably a wrapper of <ContextMenu/>
   return function connect(Child: React.ComponentType<any>) {
