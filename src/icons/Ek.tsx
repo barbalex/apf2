@@ -1,6 +1,4 @@
-// not in use?
-
-export const SvgEk = (props) => (
+export const SvgEk = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     width={24}
     height={24}
