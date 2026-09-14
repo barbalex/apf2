@@ -2497,7 +2497,14 @@ export const removeUserAtom = atom(null, (_get, set) => {
 })
 
 // Copying
-export const copyingAtom = atom({
+export interface Copying {
+  table: string | null
+  id: string | null
+  label: string | null
+  withNextLevel: boolean
+}
+
+export const copyingAtom = atom<Copying>({
   table: null,
   id: null,
   label: null,
@@ -2506,8 +2513,27 @@ export const copyingAtom = atom({
 
 export const setCopyingAtom = atom(
   null,
-  (_get, set, { table, id, label, withNextLevel }) => {
-    set(copyingAtom, { table, id, label, withNextLevel })
+  (
+    _get,
+    set,
+    {
+      table,
+      id,
+      label,
+      withNextLevel,
+    }: {
+      table?: string | null | undefined
+      id?: string | null | undefined
+      label?: string | null | undefined
+      withNextLevel: boolean
+    },
+  ) => {
+    set(copyingAtom, {
+      table: table ?? null,
+      id: id ?? null,
+      label: label ?? null,
+      withNextLevel,
+    })
   },
 )
 
