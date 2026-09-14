@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai'
 
 import { treeBeobZugeordnetGqlFilterForTreeAtom } from '../store/index.ts'
 import { BeobzugeordnetFilteredMapIcon } from '../components/NavElements/BeobzugeordnetFilteredMapIcon.tsx'
-import { BeobzugeordnetFilteredAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetFilteredAbsenzMapIcon.jsx'
+import { BeobzugeordnetFilteredAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetFilteredAbsenzMapIcon.tsx'
 import { BeobzugeordnetMapIcon } from '../components/NavElements/BeobzugeordnetMapIcon.tsx'
 import { BeobzugeordnetAbsenzMapIcon } from '../components/NavElements/BeobzugeordnetAbsenzMapIcon.tsx'
 import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWithList.tsx'

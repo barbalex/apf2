@@ -101,6 +101,19 @@ export default [
     },
   },
   {
+    files: ['src/**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: {
+        project: './tsconfig.json',
+      },
+    },
+    rules: {
+      '@typescript-eslint/no-floating-promises': 'warn',
+      '@typescript-eslint/no-misused-promises': 'warn',
+      '@typescript-eslint/switch-exhaustiveness-check': 'warn',
+    },
+  },
+  {
     // vendored from the archived react-contextmenu package — pre-existing code style
     files: ['src/modules/react-contextmenu/**'],
     rules: {
