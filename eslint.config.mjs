@@ -5,6 +5,10 @@ import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
 import js from '@eslint/js'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default [
   {
@@ -105,6 +109,9 @@ export default [
     languageOptions: {
       parserOptions: {
         project: './tsconfig.json',
+        // without this the ESLint language server resolves the relative
+        // project path against the linted file's directory
+        tsconfigRootDir: __dirname,
       },
     },
     rules: {
