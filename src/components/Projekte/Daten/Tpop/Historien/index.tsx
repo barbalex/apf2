@@ -103,16 +103,16 @@ interface TpopHistoryQueryResult {
     nodes: TpopHistoryItem[]
   }
   allPopStatusWertes?: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
   allTpopApberrelevantGrundWertes?: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
   allAdresses?: {
-    nodes: Array<{ value: string; label: string }>
+    nodes: { value: string; label: string }[]
   }
   allEkfrequenzs?: {
-    nodes: Array<{ value: string; label: string }>
+    nodes: { value: string; label: string }[]
   }
 }
 

@@ -143,7 +143,7 @@ export const useTpopsNavData = (props) => {
       const unsub = store.sub(mapTpopIconAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -151,7 +151,7 @@ export const useTpopsNavData = (props) => {
       const unsub = store.sub(treeShowTpopIconAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -159,7 +159,7 @@ export const useTpopsNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   const copying = useAtomValue(copyingAtom)
@@ -168,7 +168,7 @@ export const useTpopsNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 

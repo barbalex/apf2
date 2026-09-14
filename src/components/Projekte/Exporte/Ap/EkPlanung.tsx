@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface EkPlanungNachAbrechnungstypQueryResult {
   allVEkPlanungNachAbrechnungstyps: {
-    nodes: Array<{
+    nodes: {
       apId?: ApId
       artname?: string
       artverantwortlich?: string
@@ -23,7 +23,7 @@ interface EkPlanungNachAbrechnungstypQueryResult {
       b?: number
       d?: number
       ekf?: number
-    }>
+    }[]
   }
 }
 

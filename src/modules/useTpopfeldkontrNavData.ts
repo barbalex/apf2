@@ -104,7 +104,7 @@ export const useTpopfeldkontrNavData = (props) => {
       const unsub = store.sub(copyingBiotopAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -112,7 +112,7 @@ export const useTpopfeldkontrNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -120,7 +120,7 @@ export const useTpopfeldkontrNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 

@@ -12,7 +12,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface MassnWebgisBunQueryResult {
   allVMassnWebgisbuns: {
-    nodes: Array<{
+    nodes: {
       APARTID?: string
       APART?: string
       POPGUID?: string
@@ -48,7 +48,7 @@ interface MassnWebgisBunQueryResult {
       MASSNVONANZAHLINDIVIDUEN?: number
       MASSNCHANGEDAT?: string
       MASSNCHANGEBY?: string
-    }>
+    }[]
   }
 }
 

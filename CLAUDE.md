@@ -14,9 +14,10 @@ Frontend (run from repo root):
 
 ```bash
 npm run dev          # vite dev server on :5173 (talks to backend at localhost:5000 — see below)
-npm run build        # vite build -> dist/
+npm run build        # tsc --noEmit && vite build -> dist/
 npm run preview      # serve the production build
-npx eslint .         # lint (flat config in eslint.config.mjs; no npm script defined)
+npm run typecheck    # tsc --noEmit
+npm run lint         # eslint src (flat config in eslint.config.mjs)
 npm test             # cross-env NODE_ENV=dev playwright test
 npm run test:ui      # playwright UI mode (recommended for debugging)
 npm run test:headed  # run tests in a visible browser

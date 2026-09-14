@@ -28,7 +28,7 @@ const fieldTypes: Record<string, string> = {
 }
 
 interface Options {
-  popStatusWertes: Array<{ value: number; label: string }>
+  popStatusWertes: { value: number; label: string }[]
 }
 
 interface HistoryRow {

@@ -22,16 +22,16 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes: {
-    nodes: Array<{
+    nodes: {
       value: TpopApberrelevantGrundWerteCode
       label: string
-    }>
+    }[]
   }
   allChAdministrativeUnits: {
-    nodes: Array<{
+    nodes: {
       value: string
       label: string
-    }>
+    }[]
   }
 }
 

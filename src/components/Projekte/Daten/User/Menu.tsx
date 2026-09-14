@@ -35,12 +35,12 @@ interface CreateUserResult {
 interface EkfTpopsQueryResult {
   ekfTpops: {
     totalCount: number
-    nodes: Array<{
+    nodes: {
       id: TpopId
       ekfInJahr: {
         totalCount: number
       }
-    }>
+    }[]
   } | null
 }
 

@@ -2004,7 +2004,9 @@ export const setTreeShowTpopIconAtom = atom(
 )
 
 // treeNodeLabelFilter - stores filter values for tree node labels
-export const treeNodeLabelFilterAtom = atomWithStorage(
+export type TreeNodeLabelFilter = Record<string, string | null>
+
+export const treeNodeLabelFilterAtom = atomWithStorage<TreeNodeLabelFilter>(
   'treeNodeLabelFilter',
   {
     ap: null,

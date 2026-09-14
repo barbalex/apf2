@@ -19,11 +19,11 @@ const options = {
   roundScales: undefined, // Array of available to display rounded scales
   adjustScales: false, // Flag: whether to adjust custom scale to max of scales
   pixelsInMeterWidth: function () {
-    var div = document.createElement('div')
+    const div = document.createElement('div')
     div.style.cssText =
       'position: absolute;  left: -100%;  top: -100%;  width: 100cm;'
     document.body.appendChild(div)
-    var px = div.offsetWidth
+    const px = div.offsetWidth
     document.body.removeChild(div)
     return px
   },

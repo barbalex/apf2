@@ -18,7 +18,7 @@ import {
 
 interface ApQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -39,10 +39,10 @@ interface ApQueryResult {
       adresseByBearbeiter?: {
         name?: string
         usersByAdresseId?: {
-          nodes: Array<{ email?: string }>
+          nodes: { email?: string }[]
         }
       }
-    }>
+    }[]
   }
 }
 

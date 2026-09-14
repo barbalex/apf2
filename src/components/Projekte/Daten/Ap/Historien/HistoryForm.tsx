@@ -25,9 +25,9 @@ const fieldTypes: Record<string, string> = {
 }
 
 interface Options {
-  adresses: Array<{ value: string; label: string }>
-  apBearbstandWertes: Array<{ value: number; label: string }>
-  apUmsetzungWertes: Array<{ value: number; label: string }>
+  adresses: { value: string; label: string }[]
+  apBearbstandWertes: { value: number; label: string }[]
+  apUmsetzungWertes: { value: number; label: string }[]
 }
 
 interface HistoryRow {

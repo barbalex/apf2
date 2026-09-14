@@ -48,11 +48,11 @@ interface EkzaehleinheitQueryResult {
 interface ListsQueryResult {
   data?: {
     allTpopkontrzaehlEinheitWertes?: {
-      nodes: Array<{
+      nodes: {
         id: TpopkontrzaehlEinheitWerteId
         value: TpopkontrzaehlEinheitWerteId
         label: string | null
-      }>
+      }[]
     }
   }
 }

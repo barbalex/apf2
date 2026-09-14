@@ -1,4 +1,4 @@
-import { lazy, Suspense, createRef, useEffect } from 'react'
+import { lazy, createRef, useEffect } from 'react'
 
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { registerLocale, setDefaultLocale } from 'react-datepicker'

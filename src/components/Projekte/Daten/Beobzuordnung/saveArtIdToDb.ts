@@ -31,8 +31,7 @@ export const saveArtIdToDb = async ({ value, row, search }) => {
     variables,
   })
 
-  let result = {}
-  result = await apolloClient.query({
+  const result = await apolloClient.query({
     query: gql`
       query saveArtIdToDbQuery($id: UUID!) {
         aeTaxonomyById(id: $id) {

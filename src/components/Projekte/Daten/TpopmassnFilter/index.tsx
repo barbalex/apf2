@@ -41,26 +41,26 @@ interface TpopmassnsFilterQueryResult {
     totalCount: number
   }
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: AdresseId
       label: string
-    }>
+    }[]
   }
   allTpopmassnTypWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: TpopmassnTypWerteCode
       label: string
       anpflanzung: boolean | null
-    }>
+    }[]
   }
   allTpopkontrzaehlEinheitWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: TpopkontrzaehlEinheitWerteCode
       label: string
-    }>
+    }[]
   }
 }
 

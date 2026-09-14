@@ -42,10 +42,10 @@ interface PopberQueryResult {
     }
   }
   allTpopEntwicklungWertes?: {
-    nodes: Array<{
+    nodes: {
       value: TpopEntwicklungWerteCode
       label: string | null
-    }>
+    }[]
   }
 }
 

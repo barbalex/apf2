@@ -19,7 +19,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface IdealbiotopsQueryResult {
   allIdealbiotops: {
-    nodes: Array<{
+    nodes: {
       id: IdealbiotopId
       apId?: ApId
       apByApId?: {
@@ -63,7 +63,7 @@ interface IdealbiotopsQueryResult {
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 

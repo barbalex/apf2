@@ -14,7 +14,7 @@ interface EinheitProps {
   nr: number
   row: any
   refetch: () => void
-  zaehleinheitWerte: Array<{ value: string; label: string }>
+  zaehleinheitWerte: { value: string; label: string }[]
 }
 
 export const Einheit = ({

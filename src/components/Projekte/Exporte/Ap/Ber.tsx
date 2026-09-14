@@ -20,7 +20,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApbersQueryResult {
   allApbers: {
-    nodes: Array<{
+    nodes: {
       apByApId?: {
         id: ApId
         aeTaxonomyByArtId?: {
@@ -57,7 +57,7 @@ interface ApbersQueryResult {
         id: AdresseId
         name?: string
       }
-    }>
+    }[]
   }
 }
 

@@ -66,7 +66,7 @@ export const Choose = () => {
   const [showMassn, setShowMassn] = useAtom(ekPlanShowMassnAtom)
   const [pastYears, setPastYears] = useAtom(ekPlanPastYearsAtom)
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   const onChangeShowEk = () => setShowEk(!showEk)
   const onChangeShowEkf = () => setShowEkf(!showEkf)
   const onChangeShowCount = () => setShowCount(!showCount)

@@ -34,7 +34,7 @@ export const xmlToLayersData = (xml) => {
     if (!Object.entries(output)) break
 
     // build simpler object
-    let properties = {}
+    const properties = {}
     for (const [key, value] of Object.entries(output)) {
       if (key.includes('QGS:'))
         properties[key.replace('QGS:', '')] =

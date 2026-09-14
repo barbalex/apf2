@@ -29,24 +29,24 @@ interface TpopkontrzaehlQueryResult {
     methode: TpopkontrzaehlMethodeWerteCode | null
   } | null
   allTpopkontrzaehlEinheitWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: TpopkontrzaehlEinheitWerteCode
       label: string
-    }>
+    }[]
   }
   allTpopkontrzaehlMethodeWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: TpopkontrzaehlMethodeWerteCode
       label: string
-    }>
+    }[]
   }
   otherZaehlOfEk: {
-    nodes: Array<{
+    nodes: {
       id: TpopkontrzaehlId
       einheit: TpopkontrzaehlEinheitWerteCode | null
-    }>
+    }[]
   }
 }
 

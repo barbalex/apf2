@@ -17,17 +17,17 @@ import styles from './index.module.css'
 
 interface TpopEkFilterQueryResult {
   allEkfrequenzs: {
-    nodes: Array<{
+    nodes: {
       id: EkfrequenzId
       code: string | null
       anwendungsfall: string | null
-    }>
+    }[]
   }
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 

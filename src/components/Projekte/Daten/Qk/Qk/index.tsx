@@ -46,9 +46,7 @@ interface QkProps {
 
 // QK query returns a very large, dynamic structure with many optional fields
 // Using Record for flexibility since the structure varies based on which QK checks are enabled
-interface QkQueryResult {
-  [key: string]: any
-}
+type QkQueryResult = Record<string, any>;
 
 export const Qk = ({ qkNameQueries, qks }: QkProps) => {
   const { apId, projId } = useParams()

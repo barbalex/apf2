@@ -138,7 +138,7 @@ export const usePopsNavData = (props) => {
       const unsub = store.sub(mapPopIconAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -146,7 +146,7 @@ export const usePopsNavData = (props) => {
       const unsub = store.sub(treeShowPopIconAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -154,7 +154,7 @@ export const usePopsNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -162,7 +162,7 @@ export const usePopsNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 

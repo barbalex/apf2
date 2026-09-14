@@ -317,7 +317,7 @@ export const CellForYearMenu = () => {
             onClick={(e) => setEksAnchor(e.currentTarget)}
             style={{
               backgroundColor:
-                Boolean(eksAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+                eksAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>
@@ -335,7 +335,7 @@ export const CellForYearMenu = () => {
             onClick={(e) => setEkfsAnchor(e.currentTarget)}
             style={{
               backgroundColor:
-                Boolean(ekfsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+                ekfsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>
@@ -353,7 +353,7 @@ export const CellForYearMenu = () => {
             onClick={(e) => setMassnsAnchor(e.currentTarget)}
             style={{
               backgroundColor:
-                Boolean(massnsAnchor) ? 'rgba(0, 0, 0, 0.08)' : 'unset',
+                massnsAnchor ? 'rgba(0, 0, 0, 0.08)' : 'unset',
             }}
           >
             <ListItemIcon className={styles.listItemIcon}>

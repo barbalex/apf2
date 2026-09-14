@@ -76,7 +76,7 @@ const BeobNichtZuzuordnenMarker = ({ clustered }) => {
       }),
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   // const [refetchProvoker, setRefetchProvoker] = useState(1)
   // useEffect(() => {
   //   // DO NOT use:

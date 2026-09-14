@@ -12,7 +12,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface InfoFloraQueryResult {
   allVExportInfoFloraBeobs: {
-    nodes: Array<{
+    nodes: {
       idProjektintern?: string
       taxonomieId?: string
       taxonomie?: string
@@ -55,7 +55,7 @@ interface InfoFloraQueryResult {
       projekt?: string
       autor?: string
       aktionsplan?: string
-    }>
+    }[]
   }
 }
 

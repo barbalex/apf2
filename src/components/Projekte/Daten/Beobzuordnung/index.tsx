@@ -53,11 +53,11 @@ interface BeobzuordnungQueryResult {
   }
   apById: Ap & {
     popsByApId: {
-      nodes: Array<{
+      nodes: {
         id: string
         nr: number
         tpopsByPopId: {
-          nodes: Array<{
+          nodes: {
             id: TpopId
             nr: number
             lv95X: number
@@ -68,9 +68,9 @@ interface BeobzuordnungQueryResult {
             popByPopId?: {
               nr: number
             }
-          }>
+          }[]
         }
-      }>
+      }[]
     }
   }
 }

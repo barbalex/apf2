@@ -13,7 +13,7 @@ const addNotification = (notification) =>
 
 export const exportModule = async ({ data: dataPassed, fileName, kml }) => {
   const exportFileType = store.get(exportFileTypeAtom)
-  let data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
+  const data = dataPassed.map((d) => omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   // TODO: filter by dataFilterState
   // 1. add field to choose to filter by dataFilterState

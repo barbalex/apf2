@@ -12,7 +12,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface TpopkontrWebgisBunQueryResult {
   allVTpopkontrWebgisbuns: {
-    nodes: Array<{
+    nodes: {
       APARTID?: string
       APART?: string
       POPGUID?: string
@@ -62,7 +62,7 @@ interface TpopkontrWebgisBunQueryResult {
       ZAEHLEINHEITEN?: string
       ANZAHLEN?: string
       METHODEN?: string
-    }>
+    }[]
   }
 }
 

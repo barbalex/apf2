@@ -20,7 +20,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ZielsQueryResult {
   allZiels: {
-    nodes: Array<{
+    nodes: {
       id: ZielId
       jahr?: number
       typ?: ZielTypWerteCode
@@ -51,7 +51,7 @@ interface ZielsQueryResult {
           artname?: string
         }
       }
-    }>
+    }[]
   }
 }
 

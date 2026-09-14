@@ -38,10 +38,10 @@ interface TpopmassnberQueryResult {
     }
   } | null
   allTpopmassnErfbeurtWertes: {
-    nodes: Array<{
+    nodes: {
       value: TpopmassnErfbeurtWerteCode
       label: string
-    }>
+    }[]
   }
 }
 

@@ -90,7 +90,7 @@ export const useTpopfreiwkontrNavData = (props) => {
       const unsub = store.sub(movingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
   useEffect(
@@ -98,7 +98,7 @@ export const useTpopfreiwkontrNavData = (props) => {
       const unsub = store.sub(copyingAtom, rerender)
       return unsub
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     [],
   )
 

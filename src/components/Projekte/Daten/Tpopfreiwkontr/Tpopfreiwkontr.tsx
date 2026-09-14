@@ -25,11 +25,11 @@ interface TpopkontrQueryResult {
           apId: ApId
           apByApId: {
             ekzaehleinheitsByApId: {
-              nodes: Array<{
+              nodes: {
                 tpopkontrzaehlEinheitWerteByZaehleinheitId: {
                   code: TpopkontrzaehlEinheitWerteCode
                 } | null
-              }>
+              }[]
             }
           }
         }

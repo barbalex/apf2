@@ -17,7 +17,7 @@ import {
 
 interface BeobArtChangedQueryResult {
   allVBeobArtChangeds: {
-    nodes: Array<{
+    nodes: {
       id: BeobId
       quelle?: string
       id_field?: string
@@ -45,7 +45,7 @@ interface BeobArtChangedQueryResult {
       created_at?: string
       updated_at?: string
       changed_by?: string
-    }>
+    }[]
   }
 }
 

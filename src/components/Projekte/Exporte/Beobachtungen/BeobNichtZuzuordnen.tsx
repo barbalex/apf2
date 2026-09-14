@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface BeobNichtZuzuordnenQueryResult {
   allVBeobNichtZuzuordnens: {
-    nodes: Array<{
+    nodes: {
       id: BeobId
       quelle?: string
       id_field?: string
@@ -39,7 +39,7 @@ interface BeobNichtZuzuordnenQueryResult {
       created_at?: string
       updated_at?: string
       changed_by?: string
-    }>
+    }[]
   }
 }
 

@@ -97,13 +97,13 @@ interface ApHistoriesQueryResult {
     nodes: ApHistoryNode[]
   }
   allAdresses: {
-    nodes: Array<{ value: AdresseId; label: string }>
+    nodes: { value: AdresseId; label: string }[]
   }
   allApBearbstandWertes: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
   allApUmsetzungWertes: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
 }
 

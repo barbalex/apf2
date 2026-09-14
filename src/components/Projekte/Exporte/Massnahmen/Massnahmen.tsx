@@ -24,7 +24,7 @@ import {
 
 interface TpopmassnQueryResult {
   allTpopmassns: {
-    nodes: Array<{
+    nodes: {
       tpopByTpopId?: {
         popByPopId?: {
           apByApId?: {
@@ -46,7 +46,7 @@ interface TpopmassnQueryResult {
             adresseByBearbeiter?: {
               name?: string
               usersByAdresseId?: {
-                nodes: Array<{ email?: string }>
+                nodes: { email?: string }[]
               }
             }
           }
@@ -132,7 +132,7 @@ interface TpopmassnQueryResult {
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 

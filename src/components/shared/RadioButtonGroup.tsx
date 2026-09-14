@@ -26,7 +26,7 @@ export const RadioButtonGroup = ({
      * Solution: do this in click event of button
      */
     const targetValue = event.target.value
-    // eslint-disable-next-line eqeqeq
+     
     if (targetValue !== undefined && targetValue == value) {
       // an already active option was clicked
       // set value null

@@ -41,10 +41,10 @@ interface EkfrequenzQueryResult {
 interface EkAbrechnungstypWertesQueryResult {
   data?: {
     allEkAbrechnungstypWertes?: {
-      nodes: Array<{
+      nodes: {
         value: EkAbrechnungstypWerteCode
         label: string | null
-      }>
+      }[]
     }
   }
 }

@@ -19,7 +19,7 @@ export const NodeWithList = ({ menu }) => {
       <Row node={node} />
       {isOpen && (
         <TransitionGroup component={null}>
-          {!!menu.childrenAreFolders ?
+          {menu.childrenAreFolders ?
             <Folders menu={menu} />
           : <NodesList menu={menu} />}
         </TransitionGroup>

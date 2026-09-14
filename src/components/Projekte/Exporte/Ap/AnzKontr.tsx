@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApAnzkontrsQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -30,12 +30,12 @@ interface ApAnzkontrsQueryResult {
         text?: string
       }
       vApAnzkontrsById?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           anzahlKontrollen?: number
-        }>
+        }[]
       }
-    }>
+    }[]
   }
 }
 

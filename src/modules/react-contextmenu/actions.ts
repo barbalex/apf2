@@ -6,12 +6,12 @@ export var MENU_SHOW = 'REACT_CONTEXTMENU_SHOW'
 export var MENU_HIDE = 'REACT_CONTEXTMENU_HIDE'
 
 export function dispatchGlobalEvent(eventName, opts) {
-  var target =
+  const target =
     arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : window
 
   // compatible with IE
   // @see http://stackoverflow.com/questions/26596123/internet-explorer-9-10-11-event-constructor-doesnt-work
-  var event = void 0
+  let event = void 0
 
   if (typeof window.CustomEvent === 'function') {
     event = new window.CustomEvent(eventName, { detail: opts })
@@ -27,17 +27,17 @@ export function dispatchGlobalEvent(eventName, opts) {
 }
 
 export function showMenu() {
-  var opts =
+  const opts =
     arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}
-  var target = arguments[1]
+  const target = arguments[1]
 
   dispatchGlobalEvent(MENU_SHOW, assign({}, opts, { type: MENU_SHOW }), target)
 }
 
 export function hideMenu() {
-  var opts =
+  const opts =
     arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}
-  var target = arguments[1]
+  const target = arguments[1]
 
   dispatchGlobalEvent(MENU_HIDE, assign({}, opts, { type: MENU_HIDE }), target)
 }

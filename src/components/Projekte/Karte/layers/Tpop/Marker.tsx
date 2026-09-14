@@ -81,7 +81,7 @@ export const Marker = ({ tpop }) => {
 
   const popId = tpop?.popByPopId?.id ?? ''
 
-  // eslint-disable-next-line
+   
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
   const openTpopInTree2 = () =>
     openTree2WithActiveNodeArray({

@@ -2,7 +2,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 
 import styles from './Spinner.module.css'
 
-export const Spinner = ({ message }) => (
+export const Spinner = ({ message }: { message?: string }) => (
   <div className={styles.container}>
     <CircularProgress />
     {!!message && <div className={styles.text}>{message}</div>}

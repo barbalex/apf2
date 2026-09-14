@@ -18,7 +18,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface AssozartsQueryResult {
   allAssozarts: {
-    nodes: Array<{
+    nodes: {
       id: AssozartId
       apId?: ApId
       aeTaxonomyByAeId?: {
@@ -46,7 +46,7 @@ interface AssozartsQueryResult {
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 

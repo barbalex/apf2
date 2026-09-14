@@ -49,7 +49,7 @@ export const Status = ({
      * Solution: do this in click event of button
      */
     const targetValue = event.target.value
-    // eslint-disable-next-line eqeqeq
+     
     if (targetValue !== undefined && targetValue == herkunftValue) {
       // an already active option was clicked
       // set value null

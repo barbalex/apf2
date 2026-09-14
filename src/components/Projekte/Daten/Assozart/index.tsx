@@ -36,7 +36,7 @@ interface AssozartQueryResult {
     apByApId?: {
       artId: AeTaxonomiesId
       assozartsByApId: {
-        nodes: Array<Assozart>
+        nodes: Assozart[]
       }
     }
   }

@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApApberUndMassnsQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -35,18 +35,18 @@ interface ApApberUndMassnsQueryResult {
         name?: string
       }
       vApApberundmassnsById?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           massnJahr?: number
           massnAnzahl?: number
           massnAnzahlBisher?: number
           berichtErstellt?: boolean
-        }>
+        }[]
       }
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 

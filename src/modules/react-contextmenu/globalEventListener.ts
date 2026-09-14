@@ -7,25 +7,25 @@ function _classCallCheck(instance, Constructor) {
 import { MENU_SHOW, MENU_HIDE } from './actions.ts'
 import { uniqueId, hasOwnProp, canUseDOM } from './helpers.ts'
 
-var GlobalEventListener = function GlobalEventListener() {
-  var _this = this
+const GlobalEventListener = function GlobalEventListener() {
+  const _this = this
 
   _classCallCheck(this, GlobalEventListener)
 
   this.handleShowEvent = function (event) {
-    for (var id in _this.callbacks) {
+    for (const id in _this.callbacks) {
       if (hasOwnProp(_this.callbacks, id)) _this.callbacks[id].show(event)
     }
   }
 
   this.handleHideEvent = function (event) {
-    for (var id in _this.callbacks) {
+    for (const id in _this.callbacks) {
       if (hasOwnProp(_this.callbacks, id)) _this.callbacks[id].hide(event)
     }
   }
 
   this.register = function (showCallback, hideCallback) {
-    var id = uniqueId()
+    const id = uniqueId()
 
     _this.callbacks[id] = {
       show: showCallback,

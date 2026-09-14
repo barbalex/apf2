@@ -7,6 +7,8 @@ import 'react-markdown-editor-lite/lib/index.css'
 import { Label } from '../../Label.tsx'
 import styles from './index.module.css'
 
+// .use() is the editor's plugin API, not a React hook
+// eslint-disable-next-line react-hooks/rules-of-hooks
 ReactMarkdownEditor.use(Plugins.AutoResize, {
   min: 47,
   max: 1000,

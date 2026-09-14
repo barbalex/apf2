@@ -38,8 +38,7 @@ export const saveTpopIdToDb = async ({ value, id, type, search }) => {
   let newOpenNodes
 
   if (value) {
-    let result = {}
-    result = await apolloClient.query({
+    const result = await apolloClient.query({
       query: gql`
         query saveTpopIdToDbQuery($id: UUID!) {
           tpopById(id: $id) {

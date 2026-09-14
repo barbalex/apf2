@@ -67,38 +67,38 @@ interface TpopmassnQueryResult {
         apByApId: {
           id: ApId
           ekzaehleinheitsByApId: {
-            nodes: Array<{
+            nodes: {
               id: string
               zielrelevant: boolean | null
               notMassnCountUnit: boolean | null
-            }>
+            }[]
           }
         }
       }
     }
   } | null
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: AdresseId
       label: string
-    }>
+    }[]
   }
   allTpopmassnTypWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: TpopmassnTypWerteCode
       label: string
       historic: boolean | null
-    }>
+    }[]
   }
   allTpopkontrzaehlEinheitWertes: {
-    nodes: Array<{
+    nodes: {
       id: string
       value: TpopkontrzaehlEinheitWerteCode
       label: string
       historic: boolean | null
-    }>
+    }[]
   }
 }
 

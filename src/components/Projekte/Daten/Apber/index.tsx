@@ -54,16 +54,16 @@ const fieldTypes = {
 interface ApberQueryResult {
   apberById: Apber
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
   allApErfkritWertes: {
-    nodes: Array<{
+    nodes: {
       value: ApErfkritWerteCode
       label: string
-    }>
+    }[]
   }
 }
 

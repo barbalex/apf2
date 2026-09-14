@@ -42,13 +42,13 @@ import { Component } from 'react'
 
 import MenuItem from './MenuItem.ts'
 
-var AbstractMenu = (function (_Component) {
+const AbstractMenu = (function (_Component) {
   _inherits(AbstractMenu, _Component)
 
   function AbstractMenu(props) {
     _classCallCheck(this, AbstractMenu)
 
-    var _this = _possibleConstructorReturn(
+    const _this = _possibleConstructorReturn(
       this,
       (AbstractMenu.__proto__ || Object.getPrototypeOf(AbstractMenu)).call(
         this,
@@ -70,7 +70,7 @@ var AbstractMenu = (function (_Component) {
 })(Component)
 
 var _initialiseProps = function _initialiseProps() {
-  var _this2 = this
+  const _this2 = this
 
   this.handleKeyNavigation = function (e) {
     // check for isVisible strictly here as it might be undefined when this code executes in the context of SubMenu
@@ -106,7 +106,7 @@ var _initialiseProps = function _initialiseProps() {
         _this2.tryToOpenSubMenu(e)
         {
           // determine the selected item is disabled or not
-          var disabled =
+          const disabled =
             _this2.seletedItemRef &&
             _this2.seletedItemRef.props &&
             _this2.seletedItemRef.props.disabled
@@ -142,13 +142,13 @@ var _initialiseProps = function _initialiseProps() {
   }
 
   this.selectChildren = function (forward) {
-    var selectedItem = _this2.state.selectedItem
+    const selectedItem = _this2.state.selectedItem
 
-    var children = []
-    var disabledChildrenCount = 0
-    var disabledChildIndexes = {}
+    const children = []
+    let disabledChildrenCount = 0
+    const disabledChildIndexes = {}
 
-    var childCollector = function childCollector(child, index) {
+    const childCollector = function childCollector(child, index) {
       // child can be empty in case you do conditional rendering of components, in which
       // case it should not be accounted for as a real child
       if (!child) {
@@ -175,8 +175,8 @@ var _initialiseProps = function _initialiseProps() {
     }
 
     function findNextEnabledChildIndex(currentIndex) {
-      var i = currentIndex
-      var incrementCounter = function incrementCounter() {
+      let i = currentIndex
+      const incrementCounter = function incrementCounter() {
         if (forward) {
           --i
         } else {
@@ -197,8 +197,8 @@ var _initialiseProps = function _initialiseProps() {
       return i === currentIndex ? null : i
     }
 
-    var currentIndex = children.indexOf(selectedItem)
-    var nextEnabledChildIndex = findNextEnabledChildIndex(currentIndex)
+    const currentIndex = children.indexOf(selectedItem)
+    const nextEnabledChildIndex = findNextEnabledChildIndex(currentIndex)
 
     if (nextEnabledChildIndex !== null) {
       _this2.setState({
@@ -220,7 +220,7 @@ var _initialiseProps = function _initialiseProps() {
 
   this.renderChildren = function (children) {
     return React.Children.map(children, function (child) {
-      var props = {}
+      const props = {}
       if (!React.isValidElement(child)) return child
       if ([MenuItem, _this2.getSubMenuType()].indexOf(child.type) < 0) {
         // Maybe the MenuItem or SubMenu is capsuled in a wrapper div or something else

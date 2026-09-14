@@ -27,10 +27,10 @@ import styles from './index.module.css'
 interface ErfkritQueryResult {
   erfkritById?: Erfkrit
   allApErfkritWertes?: {
-    nodes: Array<{
+    nodes: {
       value: ApErfkritWerteCode
       label: string | null
-    }>
+    }[]
   }
 }
 

@@ -285,7 +285,7 @@ export const ClickListener = () => {
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch &&
+        if (failedToFetch)
           addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
@@ -357,7 +357,7 @@ export const ClickListener = () => {
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch &&
+        if (failedToFetch)
           addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {
@@ -429,7 +429,7 @@ export const ClickListener = () => {
         if (error.message?.toLowerCase()?.includes('failed to fetch')) {
           failedToFetch = true
         }
-        failedToFetch &&
+        if (failedToFetch)
           addNotification({
             message: `Der GIS-Server, der die Massnahmen übermitteln soll, hat einen Fehler gemeldet. Informationen von Massnahmen werden daher nicht angezeigt, auch wenn eine Massnahme geklickt worden sein sollte`,
             options: {

@@ -18,7 +18,7 @@ export const NavTo = () => {
 
   return (
     <div className={styles.container}>
-      {!!Nav ?
+      {Nav ?
         <Nav />
       : null}
     </div>

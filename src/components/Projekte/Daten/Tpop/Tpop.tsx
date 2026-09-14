@@ -108,16 +108,16 @@ interface TpopQueryResult {
 
 interface TpopListsQueryResult {
   allTpopApberrelevantGrundWertes?: {
-    nodes: Array<{
+    nodes: {
       value: TpopApberrelevantGrundWerteCode
       label: string | null
-    }>
+    }[]
   }
   allChAdministrativeUnits?: {
-    nodes: Array<{
+    nodes: {
       value: string
       label: string
-    }>
+    }[]
   }
 }
 

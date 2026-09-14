@@ -40,22 +40,22 @@ export interface ApQueryResult {
     }
   }
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
   allApBearbstandWertes: {
-    nodes: Array<{
+    nodes: {
       value: number
       label: string
-    }>
+    }[]
   }
   allApUmsetzungWertes: {
-    nodes: Array<{
+    nodes: {
       value: number
       label: string
-    }>
+    }[]
   }
 }
 

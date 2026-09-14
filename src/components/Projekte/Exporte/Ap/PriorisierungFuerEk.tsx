@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApPopEkPrioQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -35,7 +35,7 @@ interface ApPopEkPrioQueryResult {
         name?: string
       }
       vApPopEkPriosByApId?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           jahrZuvor?: number
           jahrZuletzt?: number
@@ -49,9 +49,9 @@ interface ApPopEkPrioQueryResult {
           diffPopAnges?: number
           diffPopAktuell?: number
           beurteilungZuletzt?: number
-        }>
+        }[]
       }
-    }>
+    }[]
   }
 }
 

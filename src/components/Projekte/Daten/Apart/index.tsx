@@ -42,7 +42,7 @@ interface ApartQueryResult {
     apByApId?: {
       id: ApId
       apartsByApId: {
-        nodes: Array<Apart>
+        nodes: Apart[]
       }
     }
   }
@@ -74,7 +74,7 @@ export const Component = () => {
   const row = data.apartById as ApartQueryResult['apartById']
 
   // do not include already chosen assozarten
-  const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes)
+  const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes ?? [])
     .map((o) => o.artId)
     // but do include the art included in the row
     .filter((o) => o !== row.artId)

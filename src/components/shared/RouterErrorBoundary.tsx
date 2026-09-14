@@ -5,7 +5,7 @@ import { logout } from '../../modules/logout.ts'
 
 import styles from './RouterErrorBoundary.module.css'
 
-export const RouterErrorBoundary = ({ children }) => {
+export const RouterErrorBoundary = () => {
   const error = useRouteError()
 
   const onReload = () => window.location.reload(true)

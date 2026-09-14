@@ -36,10 +36,10 @@ interface UserQueryResult {
     adresseId: AdresseId | null
   } | null
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 

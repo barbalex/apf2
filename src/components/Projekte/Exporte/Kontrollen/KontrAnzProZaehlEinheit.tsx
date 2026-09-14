@@ -19,7 +19,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface KontrzaehlAnzproeinheitQueryResult {
   allVKontrzaehlAnzproeinheits: {
-    nodes: Array<{
+    nodes: {
       ap_id?: ApId
       artname?: string
       ap_bearbeitung?: string
@@ -99,7 +99,7 @@ interface KontrzaehlAnzproeinheitQueryResult {
       einheit?: string
       methode?: string
       anzahl?: number
-    }>
+    }[]
   }
 }
 

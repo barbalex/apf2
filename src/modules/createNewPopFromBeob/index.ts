@@ -130,7 +130,7 @@ export const createNewPopFromBeob = async ({
     id,
   ]
 
-  let newOpenNodes = [
+  const newOpenNodes = [
     ...openNodes,
     // add Beob and it's not yet existing parents to open nodes
     [`Projekte`, projId, `Arten`, apId, `Populationen`],

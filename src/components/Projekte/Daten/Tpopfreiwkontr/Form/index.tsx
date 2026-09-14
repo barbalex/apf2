@@ -18,7 +18,6 @@ import { More } from './More.tsx'
 import { Danger } from './Danger.tsx'
 import { Remarks } from './Remarks.tsx'
 import { EkfRemarks } from './EkfRemarks.tsx'
-import { Files } from './Files.tsx'
 import { Count } from './Count/index.tsx'
 import { Verification } from './Verification.tsx'
 import { Image } from './Image.tsx'
@@ -373,7 +372,8 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
             errors={errors}
           />
         )}
-        {!isPrint && false && <Files row={row} />}
+        {/* Files section is disabled:
+            {!isPrint && <Files row={row} />} */}
         {!isPrint && !isFreiwillig && (
           <Verification
             saveToDb={saveToDb}

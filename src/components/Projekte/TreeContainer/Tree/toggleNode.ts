@@ -21,7 +21,7 @@ export const toggleNode = ({ node, search, onlyShowActivePath = false }) => {
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
 
-  let newActiveNodeArray = []
+  let newActiveNodeArray: (string | number)[]
   if (!isNodeOpen({ openNodes, url: node.url })) {
     // node is closed
     // open it and make it the active node

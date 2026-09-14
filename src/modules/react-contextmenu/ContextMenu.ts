@@ -1,7 +1,7 @@
-var _createClass = (function () {
+const _createClass = (function () {
   function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i]
+    for (let i = 0; i < props.length; i++) {
+      const descriptor = props[i]
       descriptor.enumerable = descriptor.enumerable || false
       descriptor.configurable = true
       if ('value' in descriptor) descriptor.writable = true
@@ -77,13 +77,13 @@ import SubMenu from './SubMenu.ts'
 import { hideMenu } from './actions.ts'
 import { cssClasses, callIfExists, store } from './helpers.ts'
 
-var ContextMenu = (function (_AbstractMenu) {
+const ContextMenu = (function (_AbstractMenu) {
   _inherits(ContextMenu, _AbstractMenu)
 
   function ContextMenu(props) {
     _classCallCheck(this, ContextMenu)
 
-    var _this = _possibleConstructorReturn(
+    const _this = _possibleConstructorReturn(
       this,
       (ContextMenu.__proto__ || Object.getPrototypeOf(ContextMenu)).call(
         this,
@@ -115,7 +115,7 @@ var ContextMenu = (function (_AbstractMenu) {
     _this.handleShow = function (e) {
       if (e.detail.id !== _this.props.id || _this.state.isVisible) return
 
-      var _e$detail$position = e.detail.position,
+      const _e$detail$position = e.detail.position,
         x = _e$detail$position.x,
         y = _e$detail$position.y
 
@@ -171,23 +171,23 @@ var ContextMenu = (function (_AbstractMenu) {
     }
 
     _this.getMenuPosition = function () {
-      var x =
+      const x =
         arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0
-      var y =
+      const y =
         arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0
 
-      var menuStyles = {
+      const menuStyles = {
         top: y,
         left: x,
       }
 
       if (!_this.menu) return menuStyles
 
-      var _window = window,
+      const _window = window,
         innerWidth = _window.innerWidth,
         innerHeight = _window.innerHeight
 
-      var rect = _this.menu.getBoundingClientRect()
+      const rect = _this.menu.getBoundingClientRect()
 
       if (y + rect.height > innerHeight) {
         menuStyles.top -= rect.height
@@ -211,23 +211,23 @@ var ContextMenu = (function (_AbstractMenu) {
     }
 
     _this.getRTLMenuPosition = function () {
-      var x =
+      const x =
         arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0
-      var y =
+      const y =
         arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0
 
-      var menuStyles = {
+      const menuStyles = {
         top: y,
         left: x,
       }
 
       if (!_this.menu) return menuStyles
 
-      var _window2 = window,
+      const _window2 = window,
         innerWidth = _window2.innerWidth,
         innerHeight = _window2.innerHeight
 
-      var rect = _this.menu.getBoundingClientRect()
+      const rect = _this.menu.getBoundingClientRect()
 
       // Try to position the menu on the left side of the cursor
       menuStyles.left = x - rect.width
@@ -281,16 +281,16 @@ var ContextMenu = (function (_AbstractMenu) {
     {
       key: 'componentDidUpdate',
       value: function componentDidUpdate() {
-        var _this2 = this
+        const _this2 = this
 
-        var wrapper = window.requestAnimationFrame || setTimeout
+        const wrapper = window.requestAnimationFrame || setTimeout
         if (this.state.isVisible) {
           wrapper(function () {
-            var _state = _this2.state,
+            const _state = _this2.state,
               x = _state.x,
               y = _state.y
 
-            var _ref =
+            const _ref =
                 _this2.props.rtl ?
                   _this2.getRTLMenuPosition(x, y)
                 : _this2.getMenuPosition(x, y),
@@ -327,18 +327,18 @@ var ContextMenu = (function (_AbstractMenu) {
     {
       key: 'render',
       value: function render() {
-        var _props = this.props,
+        const _props = this.props,
           children = _props.children,
           className = _props.className ?? '',
           style = _props.style ?? {}
-        var isVisible = this.state.isVisible
+        const isVisible = this.state.isVisible
 
-        var inlineStyle = assign({}, style, {
+        const inlineStyle = assign({}, style, {
           position: 'fixed',
           opacity: 0,
           pointerEvents: 'none',
         })
-        var menuClassnames = cx(
+        const menuClassnames = cx(
           cssClasses.menu,
           className ?? '',
           _defineProperty({}, cssClasses.menuVisible, isVisible),

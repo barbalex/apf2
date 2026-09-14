@@ -46,10 +46,10 @@ interface PopmassnberQueryResult {
     }
   }
   allTpopmassnErfbeurtWertes?: {
-    nodes: Array<{
+    nodes: {
       value: TpopmassnErfbeurtWerteCode
       label: string | null
-    }>
+    }[]
   }
 }
 

@@ -20,10 +20,10 @@ interface TpopData {
 }
 
 interface CustomTooltipProps {
-  payload?: Array<{
+  payload?: {
     dataKey: string
     value: number
-  }>
+  }[]
   label?: string | number
   active?: boolean
   tpopsData: TpopData[]

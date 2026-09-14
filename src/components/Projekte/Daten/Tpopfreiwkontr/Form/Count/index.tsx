@@ -27,11 +27,11 @@ interface TpopkontrzaehlQueryResult {
     methode: number | null
   } | null
   allTpopkontrzaehlEinheitWertes: {
-    nodes: Array<{
+    nodes: {
       code: TpopkontrzaehlEinheitWerteCode
       id: string
       text: string
-    }>
+    }[]
   }
 }
 
@@ -43,16 +43,16 @@ interface CountProps {
   showNew?: boolean
   refetch: () => void
   einheitsUsed?: TpopkontrzaehlEinheitWerteCode[]
-  ekzaehleinheits?: Array<{
+  ekzaehleinheits?: {
     code: TpopkontrzaehlEinheitWerteCode
     text: string
-  }>
-  ekzaehleinheitsOriginal?: Array<{
+  }[]
+  ekzaehleinheitsOriginal?: {
     tpopkontrzaehlEinheitWerteByZaehleinheitId: {
       code: TpopkontrzaehlEinheitWerteCode
     }
     sort: number | null
-  }>
+  }[]
 }
 
 import styles from './index.module.css'

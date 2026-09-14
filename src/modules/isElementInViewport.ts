@@ -3,7 +3,7 @@
 // Check if tree node is in viewport
 // If not, IntoViewScroller will scroll to it
 export const isElementInViewport = (el) => {
-  var rect = el.getBoundingClientRect()
+  const rect = el.getBoundingClientRect()
 
   return (
     rect.top >= 0 &&

@@ -13,10 +13,10 @@ import styles from '../../../Tpopfreiwkontr/Form/Headdata/index.module.css'
 
 interface TpopfreiwkontrAdressesFilterQueryResult {
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 

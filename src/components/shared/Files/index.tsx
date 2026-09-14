@@ -39,11 +39,9 @@ interface FileNode {
 }
 
 interface FileQueryResult {
-  data: {
-    [key: string]: {
+  data: Record<string, {
       nodes: FileNode[]
-    }
-  }
+    }>
 }
 
 const fragmentObject = {

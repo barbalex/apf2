@@ -1,9 +1,9 @@
-var _extends =
+const _extends =
   Object.assign ||
   function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i]
-      for (var key in source) {
+    for (let i = 1; i < arguments.length; i++) {
+      const source = arguments[i]
+      for (const key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key]
         }
@@ -12,10 +12,10 @@ var _extends =
     return target
   }
 
-var _createClass = (function () {
+const _createClass = (function () {
   function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i]
+    for (let i = 0; i < props.length; i++) {
+      const descriptor = props[i]
       descriptor.enumerable = descriptor.enumerable || false
       descriptor.configurable = true
       if ('value' in descriptor) descriptor.writable = true
@@ -90,24 +90,24 @@ import AbstractMenu from './AbstractMenu.ts'
 import { callIfExists, cssClasses, hasOwnProp, store } from './helpers.ts'
 import listener from './globalEventListener.ts'
 
-var SubMenu = (function (_AbstractMenu) {
+const SubMenu = (function (_AbstractMenu) {
   _inherits(SubMenu, _AbstractMenu)
 
   function SubMenu(props) {
     _classCallCheck(this, SubMenu)
 
-    var _this = _possibleConstructorReturn(
+    const _this = _possibleConstructorReturn(
       this,
       (SubMenu.__proto__ || Object.getPrototypeOf(SubMenu)).call(this, props),
     )
 
     _this.getMenuPosition = function () {
-      var _window = window,
+      const _window = window,
         innerWidth = _window.innerWidth,
         innerHeight = _window.innerHeight
 
-      var rect = _this.subMenu.getBoundingClientRect()
-      var position = {}
+      const rect = _this.subMenu.getBoundingClientRect()
+      const position = {}
 
       if (rect.bottom > innerHeight) {
         position.bottom = 0
@@ -125,11 +125,11 @@ var SubMenu = (function (_AbstractMenu) {
     }
 
     _this.getRTLMenuPosition = function () {
-      var _window2 = window,
+      const _window2 = window,
         innerHeight = _window2.innerHeight
 
-      var rect = _this.subMenu.getBoundingClientRect()
-      var position = {}
+      const rect = _this.subMenu.getBoundingClientRect()
+      const position = {}
 
       if (rect.bottom > innerHeight) {
         position.bottom = 0
@@ -266,13 +266,13 @@ var SubMenu = (function (_AbstractMenu) {
     {
       key: 'componentDidUpdate',
       value: function componentDidUpdate() {
-        var _this2 = this
+        const _this2 = this
 
         if (!this.isVisibilityChange) return
         if ((this.props.forceOpen ?? false) || this.state.visible) {
-          var wrapper = window.requestAnimationFrame || setTimeout
+          const wrapper = window.requestAnimationFrame || setTimeout
           wrapper(function () {
-            var styles =
+            const styles =
               _this2.props.rtl ?
                 _this2.getRTLMenuPosition()
               : _this2.getMenuPosition()
@@ -295,7 +295,7 @@ var SubMenu = (function (_AbstractMenu) {
             _this2.setState({ selectedItem: null })
           })
         } else {
-          var cleanup = function cleanup() {
+          const cleanup = function cleanup() {
             _this2.subMenu.removeEventListener('transitionend', cleanup)
             _this2.subMenu.style.removeProperty('bottom')
             _this2.subMenu.style.removeProperty('right')
@@ -325,17 +325,17 @@ var SubMenu = (function (_AbstractMenu) {
     {
       key: 'render',
       value: function render() {
-        var _cx
+        let _cx
 
-        var _props = this.props,
+        const _props = this.props,
           children = _props.children,
           attributes = _props.attributes ?? {},
           disabled = _props.disabled ?? false,
           title = _props.title,
           selected = _props.selected ?? false
-        var visible = this.state.visible
+        const visible = this.state.visible
 
-        var menuProps = {
+        const menuProps = {
           ref: this.menuRef,
           onMouseEnter: this.handleMouseEnter,
           onMouseLeave: this.handleMouseLeave,
@@ -348,7 +348,7 @@ var SubMenu = (function (_AbstractMenu) {
             position: 'relative',
           },
         }
-        var menuItemProps = {
+        const menuItemProps = {
           className: cx(
             cssClasses.menuItem,
             attributes.className,
@@ -374,7 +374,7 @@ var SubMenu = (function (_AbstractMenu) {
           onMouseOut: this.props.onMouseOut ?? (() => null),
           onClick: this.handleClick,
         }
-        var subMenuProps = {
+        const subMenuProps = {
           ref: this.subMenuRef,
           style: {
             position: 'absolute',

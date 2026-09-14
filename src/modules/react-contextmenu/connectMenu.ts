@@ -1,11 +1,11 @@
 import React from 'react'
 
-var _extends =
+const _extends =
   Object.assign ||
   function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i]
-      for (var key in source) {
+    for (let i = 1; i < arguments.length; i++) {
+      const source = arguments[i]
+      for (const key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key]
         }
@@ -14,10 +14,10 @@ var _extends =
     return target
   }
 
-var _createClass = (function () {
+const _createClass = (function () {
   function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i]
+    for (let i = 0; i < props.length; i++) {
+      const descriptor = props[i]
       descriptor.enumerable = descriptor.enumerable || false
       descriptor.configurable = true
       if ('value' in descriptor) descriptor.writable = true
@@ -85,7 +85,7 @@ import { Component } from 'react'
 import listener from './globalEventListener.ts'
 
 // collect ContextMenuTrigger's expected props to NOT pass them on as part of the context
-var ignoredTriggerProps = [
+const ignoredTriggerProps = [
   'id',
   'children',
   'attributes',
@@ -111,7 +111,7 @@ export default function (menuId) {
       function ConnectMenu(props) {
         _classCallCheck(this, ConnectMenu)
 
-        var _this = _possibleConstructorReturn(
+        const _this = _possibleConstructorReturn(
           this,
           (ConnectMenu.__proto__ || Object.getPrototypeOf(ConnectMenu)).call(
             this,
@@ -123,11 +123,11 @@ export default function (menuId) {
           if (e.detail.id !== menuId) return
 
           // the onShow event's detail.data object holds all ContextMenuTrigger props
-          var data = e.detail.data
+          const data = e.detail.data
 
-          var filteredData = {}
+          const filteredData = {}
 
-          for (var key in data) {
+          for (const key in data) {
             // exclude props the ContextMenuTrigger is expecting itself
             if (!ignoredTriggerProps.includes(key)) {
               filteredData[key] = data[key]

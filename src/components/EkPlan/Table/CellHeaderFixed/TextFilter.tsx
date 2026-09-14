@@ -120,7 +120,7 @@ export const TextFilter = ({ column, closeMenu }) => {
 
   const onBlur = (event) => {
     if (
-      event.target.value != storeValue && // eslint-disable-line eqeqeq
+      event.target.value != storeValue &&  
       !(event.target.value === '' && storeValue === null)
     ) {
       storeSetFunction(valForStore(event.target.value))
@@ -141,7 +141,7 @@ export const TextFilter = ({ column, closeMenu }) => {
   }
 
   useEffect(() => {
-    inputRef.current && inputRef.current.focus()
+    inputRef.current?.focus()
   }, [inputRef.current])
   const onKeyDown = (event) => {
     // need to stop propagation

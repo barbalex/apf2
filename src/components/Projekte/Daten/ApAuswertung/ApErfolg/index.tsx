@@ -45,10 +45,10 @@ const erfValueFromCode = {
 
 interface FindErfolgProps {
   jahr: number
-  erfolgRawData: Array<{
+  erfolgRawData: {
     jahr: number
     value: number | null
-  }>
+  }[]
 }
 const findErfolg = ({ jahr, erfolgRawData }: FindErfolgProps) =>
   erfolgRawData.find((e) => e.jahr === jahr)

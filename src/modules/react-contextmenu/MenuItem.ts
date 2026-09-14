@@ -1,11 +1,11 @@
 import React from 'react'
 
-var _extends =
+const _extends =
   Object.assign ||
   function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i]
-      for (var key in source) {
+    for (let i = 1; i < arguments.length; i++) {
+      const source = arguments[i]
+      for (const key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key]
         }
@@ -14,10 +14,10 @@ var _extends =
     return target
   }
 
-var _createClass = (function () {
+const _createClass = (function () {
   function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i]
+    for (let i = 0; i < props.length; i++) {
+      const descriptor = props[i]
       descriptor.enumerable = descriptor.enumerable || false
       descriptor.configurable = true
       if ('value' in descriptor) descriptor.writable = true
@@ -90,13 +90,13 @@ import assign from 'object-assign'
 import { hideMenu } from './actions.ts'
 import { callIfExists, cssClasses, store } from './helpers.ts'
 
-var MenuItem = (function (_Component) {
+const MenuItem = (function (_Component) {
   _inherits(MenuItem, _Component)
 
   function MenuItem() {
-    var _ref
+    let _ref
 
-    var _temp, _this, _ret
+    let _temp, _this, _ret
 
     _classCallCheck(this, MenuItem)
 
@@ -147,10 +147,10 @@ var MenuItem = (function (_Component) {
     {
       key: 'render',
       value: function render() {
-        var _cx,
+        let _cx,
           _this2 = this
 
-        var _props = this.props,
+        const _props = this.props,
           attributes = _props.attributes ?? {},
           children = _props.children ?? null,
           className = _props.className ?? '',
@@ -158,7 +158,7 @@ var MenuItem = (function (_Component) {
           divider = _props.divider ?? false,
           selected = _props.selected ?? false
 
-        var menuItemClassNames = cx(
+        const menuItemClassNames = cx(
           className,
           cssClasses.menuItem,
           attributes.className,

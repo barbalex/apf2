@@ -38,10 +38,10 @@ interface ZielQueryResult {
     changedBy: string | null
   } | null
   allZielTypWertes: {
-    nodes: Array<{
+    nodes: {
       value: ZielTypWerteCode
       label: string
-    }>
+    }[]
   }
 }
 

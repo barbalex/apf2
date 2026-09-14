@@ -42,25 +42,25 @@ interface ApsQueryResult {
 
 interface AdressesQueryResult {
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 
 interface ListsQueryResult {
   allApBearbstandWertes: {
-    nodes: Array<{
+    nodes: {
       value: ApBearbstandWerteCode
       label: string
-    }>
+    }[]
   }
   allApUmsetzungWertes: {
-    nodes: Array<{
+    nodes: {
       value: ApUmsetzungWerteCode
       label: string
-    }>
+    }[]
   }
 }
 
@@ -147,7 +147,7 @@ export const ApFilter = () => {
   })
 
   const artname =
-    !!dataFilter.ap?.[activeTab]?.artId ?
+    dataFilter.ap?.[activeTab]?.artId ?
       (dataAeTaxonomiesById?.data?.aeTaxonomyById?.artname ?? '')
     : ''
 
@@ -166,7 +166,7 @@ export const ApFilter = () => {
   }
 
   const aeTaxonomiesFilter = (inputValue: string) => {
-    let filter: any = { apByArtIdExists: true }
+    const filter: any = { apByArtIdExists: true }
     if (inputValue) filter.artname = { includesInsensitive: inputValue }
     if (nurApFilter) filter.apByArtId = { bearbeitung: { in: [1, 2, 3] } }
     return filter

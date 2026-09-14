@@ -44,19 +44,19 @@ interface PopAuswertungQueryResult {
     label: string | null
   }
   popAuswTpopMenge?: {
-    nodes: Array<{
+    nodes: {
       jahr: number | null
       values: string | null
-    }>
+    }[]
   }
   allEkzaehleinheits?: {
-    nodes: Array<{
+    nodes: {
       id: EkzaehleinheitId
       tpopkontrzaehlEinheitWerteByZaehleinheitId?: {
         id: TpopkontrzaehlEinheitWerteId
         text: string | null
       }
-    }>
+    }[]
   }
   allTpops?: {
     nodes: TpopData[]

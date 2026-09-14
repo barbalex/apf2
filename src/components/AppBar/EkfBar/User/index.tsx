@@ -114,8 +114,6 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
   }
 
   const onBlurPassword2 = async (event) => {
-    let value = event.target.value
-    if ([undefined, ''].includes(value)) value = null
     setPassword2ErrorText('')
     const password2 = event.target.value
     setPassword2(password2)

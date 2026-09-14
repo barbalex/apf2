@@ -22,10 +22,10 @@ import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
 
 interface TpopfreiwkontrAdressesQueryResult {
   allAdresses: {
-    nodes: Array<{
+    nodes: {
       value: AdresseId
       label: string
-    }>
+    }[]
   }
 }
 

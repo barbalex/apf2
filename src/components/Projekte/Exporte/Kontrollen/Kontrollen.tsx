@@ -24,7 +24,7 @@ import {
 
 interface TpopkontrQueryResult {
   allTpopkontrs: {
-    nodes: Array<{
+    nodes: {
       tpopByTpopId?: {
         popByPopId?: {
           apByApId?: {
@@ -46,7 +46,7 @@ interface TpopkontrQueryResult {
             adresseByBearbeiter?: {
               name?: string
               usersByAdresseId?: {
-                nodes: Array<{ email?: string }>
+                nodes: { email?: string }[]
               }
             }
           }
@@ -150,7 +150,7 @@ interface TpopkontrQueryResult {
       apberNichtRelevantGrund?: string
       ekfBemerkungen?: string
       tpopkontrzaehlsByTpopkontrId?: {
-        nodes: Array<{
+        nodes: {
           id: TpopkontrzaehlId
           anzahl?: number
           tpopkontrzaehlEinheitWerteByEinheit?: {
@@ -161,9 +161,9 @@ interface TpopkontrQueryResult {
             id: number
             text?: string
           }
-        }>
+        }[]
       }
-    }>
+    }[]
   }
 }
 

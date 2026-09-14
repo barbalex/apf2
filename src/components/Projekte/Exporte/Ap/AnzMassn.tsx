@@ -15,7 +15,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApAnzmassnsQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -31,12 +31,12 @@ interface ApAnzmassnsQueryResult {
         text?: string
       }
       vApAnzmassnsById?: {
-        nodes: Array<{
+        nodes: {
           id: ApId
           anzahlMassnahmen?: number
-        }>
+        }[]
       }
-    }>
+    }[]
   }
 }
 

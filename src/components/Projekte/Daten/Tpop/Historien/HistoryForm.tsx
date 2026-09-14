@@ -48,10 +48,10 @@ const fieldTypes: Record<string, string> = {
 }
 
 interface Options {
-  popStatusWertes: Array<{ value: number; label: string }>
-  apberRelevantGrundWertes: Array<{ value: number; label: string }>
-  adresses: Array<{ value: string; label: string }>
-  ekfrequenzs: Array<{ value: string; label: string }>
+  popStatusWertes: { value: number; label: string }[]
+  apberRelevantGrundWertes: { value: number; label: string }[]
+  adresses: { value: string; label: string }[]
+  ekfrequenzs: { value: string; label: string }[]
 }
 
 interface HistoryRow {

@@ -18,7 +18,7 @@ import {
 
 interface ErfkritsQueryResult {
   allErfkrits: {
-    nodes: Array<{
+    nodes: {
       id: ErfkritId
       apId?: ApId
       apByApId?: {
@@ -49,7 +49,7 @@ interface ErfkritsQueryResult {
       createdAt?: string
       updatedAt?: string
       changedBy?: string
-    }>
+    }[]
   }
 }
 

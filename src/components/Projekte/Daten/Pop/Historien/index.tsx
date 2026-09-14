@@ -136,14 +136,12 @@ interface PopHistoryQueryResult {
   }
   allPopHistories?: {
     totalCount: number
-    nodes: Array<
-      PopHistoryData & {
+    nodes: (PopHistoryData & {
         year: number | null
-      }
-    >
+      })[]
   }
   allPopStatusWertes?: {
-    nodes: Array<{ value: number; label: string }>
+    nodes: { value: number; label: string }[]
   }
 }
 

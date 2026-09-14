@@ -15,9 +15,9 @@ import { TextField } from '../TextField.tsx'
 export const MarkdownField = (props) => {
   const { label, value } = props
 
-  let [events, setEvents] = React.useState<string[]>([])
-  let [isFocusWithin, setFocusWithin] = React.useState(false)
-  let { focusWithinProps } = useFocusWithin({
+  const [events, setEvents] = React.useState<string[]>([])
+  const [isFocusWithin, setFocusWithin] = React.useState(false)
+  const { focusWithinProps } = useFocusWithin({
     onFocusWithin: (e) => setEvents((events) => [...events, 'focus within']),
     onBlurWithin: (e) => setEvents((events) => [...events, 'blur within']),
     onFocusWithinChange: (isFocusWithin) => setFocusWithin(isFocusWithin),

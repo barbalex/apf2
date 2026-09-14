@@ -1,9 +1,9 @@
 import React from 'react'
 
-var _createClass = (function () {
+const _createClass = (function () {
   function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i]
+    for (let i = 0; i < props.length; i++) {
+      const descriptor = props[i]
       descriptor.enumerable = descriptor.enumerable || false
       descriptor.configurable = true
       if ('value' in descriptor) descriptor.writable = true
@@ -62,13 +62,13 @@ import assign from 'object-assign'
 import { showMenu, hideMenu } from './actions.ts'
 import { callIfExists, cssClasses } from './helpers.ts'
 
-var ContextMenuTrigger = (function (_Component) {
+const ContextMenuTrigger = (function (_Component) {
   _inherits(ContextMenuTrigger, _Component)
 
   function ContextMenuTrigger() {
-    var _ref
+    let _ref
 
-    var _temp, _this, _ret
+    let _temp, _this, _ret
 
     _classCallCheck(this, ContextMenuTrigger)
 
@@ -157,8 +157,8 @@ var ContextMenuTrigger = (function (_Component) {
           event.preventDefault()
           event.stopPropagation()
 
-          var x = event.clientX || (event.touches && event.touches[0].pageX)
-          var y = event.clientY || (event.touches && event.touches[0].pageY)
+          let x = event.clientX || (event.touches && event.touches[0].pageX)
+          let y = event.clientY || (event.touches && event.touches[0].pageY)
 
           if (_this.props.posX) {
             x -= _this.props.posX
@@ -169,11 +169,11 @@ var ContextMenuTrigger = (function (_Component) {
 
           hideMenu()
 
-          var data = callIfExists(
+          const data = callIfExists(
             _this.props.collect ?? (() => null),
             _this.props,
           )
-          var showMenuConfig = {
+          const showMenuConfig = {
             position: { x: x, y: y },
             target: _this.elem,
             id: _this.props.id,
@@ -205,12 +205,12 @@ var ContextMenuTrigger = (function (_Component) {
     {
       key: 'render',
       value: function render() {
-        var _props = this.props,
+        const _props = this.props,
           renderTag = _props.renderTag ?? 'div',
           attributes = _props.attributes ?? {},
           children = _props.children
 
-        var newAttrs = assign({}, attributes, {
+        const newAttrs = assign({}, attributes, {
           className: cx(cssClasses.menuWrapper, attributes.className),
           onContextMenu: this.handleContextMenu,
           onClick: this.handleMouseClick,

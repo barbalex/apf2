@@ -14,7 +14,7 @@ import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface ApOhnepopQueryResult {
   allAps: {
-    nodes: Array<{
+    nodes: {
       id: ApId
       aeTaxonomyByArtId?: {
         id: string
@@ -32,7 +32,7 @@ interface ApOhnepopQueryResult {
       popsByApId?: {
         totalCount: number
       }
-    }>
+    }[]
   }
 }
 

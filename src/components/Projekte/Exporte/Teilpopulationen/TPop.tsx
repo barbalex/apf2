@@ -43,7 +43,7 @@ interface TPopQueryResult {
           adresseByBearbeiter: {
             name: string | null
             usersByAdresseId: {
-              nodes: Array<{ email: string | null }>
+              nodes: { email: string | null }[]
             }
           } | null
         } | null
@@ -277,7 +277,7 @@ export const TPop = ({ filtered = false }: TPopProps) => {
       changedBy: n.changedBy,
     }))
     const enrichedData = rows.map((oWithout) => {
-      let o = { ...oWithout }
+      const o = { ...oWithout }
       let nachBeginnAp = null
       if (
         o.apStartJahr &&
