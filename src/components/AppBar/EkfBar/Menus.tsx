@@ -61,7 +61,9 @@ export const Menus = () => {
   const ekfRefYear = new Date(ekfRefDate).getFullYear()
 
   const query =
-    ekfRefYear === +(ekfYear ?? 0) ? dataByUserIdQuery : dataWithDateByUserIdQuery
+    ekfRefYear === +(ekfYear ?? 0) ?
+      dataByUserIdQuery
+    : dataWithDateByUserIdQuery
 
   const { data } = useQuery({
     queryKey: ['ekfMenus', userId, ekfYear],

@@ -6,10 +6,7 @@ import { Bar } from './Bar/index.tsx'
 import { EkfBar } from './EkfBar/index.tsx'
 import { inIframe } from '../../modules/inIframe.ts'
 import { Spinner } from '../shared/Spinner.tsx'
-import {
-  isMobileViewAtom,
-  treeActiveNodeArrayAtom,
-} from '../../store/index.ts'
+import { isMobileViewAtom, treeActiveNodeArrayAtom } from '../../store/index.ts'
 import { IsDesktopViewSetter } from '../IsDesktopViewSetter.tsx'
 
 import styles from './index.module.css'

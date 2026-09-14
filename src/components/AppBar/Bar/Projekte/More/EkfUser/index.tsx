@@ -6,8 +6,6 @@ import { useNavigate, useLocation } from 'react-router'
 import { Select } from '../../../../../shared/Select.tsx'
 import { queryAdresses } from './queryAdresses.ts'
 
-
-
 import styles from './index.module.css'
 
 const ekfRefDate = new Date() //.setMonth(new Date().getMonth() - 2)
@@ -33,8 +31,9 @@ export const EkfUser = ({ closeMenu }: { closeMenu: () => void }) => {
     const value = event.target.value
     closeMenu()
     // prevent this happening before setAnchor happened
-    setTimeout(() =>
-      void navigate(`/Daten/Benutzer/${value}/EKF/${ekfRefYear}${search}`),
+    setTimeout(
+      () =>
+        void navigate(`/Daten/Benutzer/${value}/EKF/${ekfRefYear}${search}`),
     )
   }
 

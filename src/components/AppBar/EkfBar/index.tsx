@@ -7,7 +7,6 @@ import Button from '@mui/material/Button'
 import { query } from './query.ts'
 import { Menus } from './Menus.tsx'
 
-
 import styles from './index.module.css'
 
 export const EkfBar = () => {

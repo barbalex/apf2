@@ -71,7 +71,9 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const saveToDb = async (event: { target: { name: string; value: unknown } }) => {
+  const saveToDb = async (event: {
+    target: { name: string; value: unknown }
+  }) => {
     const field = event.target.name
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -100,9 +102,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
     })
   }
 
-  const onBlurPassword = (e: {
-    target: EventTarget
-  }) => {
+  const onBlurPassword = (e: { target: EventTarget }) => {
     const value = (e.target as HTMLInputElement).value
     setPasswordErrorText('')
     setPassword(value)
@@ -113,9 +113,7 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
     }
   }
 
-  const onBlurPassword2 = async (event: {
-    target: EventTarget
-  }) => {
+  const onBlurPassword2 = async (event: { target: EventTarget }) => {
     const value = (event.target as HTMLInputElement).value
     setPassword2ErrorText('')
     setPassword2(value)
