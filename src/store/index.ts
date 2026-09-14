@@ -26,11 +26,18 @@ const unsubscribedStorage = createJSONStorage(() => localStorage)
 // 2. Disable the subscribe method to turn off cross-tab sync
 unsubscribedStorage.subscribe = undefined
 
-function atomWithToggleAndStorage(key, initialValue, storage) {
+const isNonNilUuid = (value: unknown): value is string =>
+  typeof value === 'string' && isUuid.anyNonNil(value)
+
+function atomWithToggleAndStorage(
+  key: string,
+  initialValue: boolean,
+  storage?: Parameters<typeof atomWithStorage<boolean>>[2],
+) {
   const anAtom = atomWithStorage(key, initialValue, storage)
   const derivedAtom = atom(
     (get) => get(anAtom),
-    (get, set, nextValue) => {
+    (get, set, nextValue?: boolean) => {
       const update = nextValue ?? !get(anAtom)
       set(anAtom, update)
     },
@@ -70,7 +77,7 @@ export const treeProjIdInActiveNodeArrayAtom = atom((get) => {
     const indexOfId = activeNodeArray.indexOf('Projekte') + 1
     if (activeNodeArray.length > indexOfId) {
       const id = activeNodeArray?.[indexOfId]
-      if (isUuid.anyNonNil(id)) return id
+      if (isNonNilUuid(id)) return id
     }
   }
   return undefined
@@ -80,7 +87,7 @@ export const treeApIdInActiveNodeArrayAtom = atom((get) => {
   const activeNodeArray = get(treeActiveNodeArrayAtom)
   if (activeNodeArray.length > 3 && activeNodeArray[2] === 'Arten') {
     const id = activeNodeArray[3]
-    if (isUuid.anyNonNil(id)) return id
+    if (isNonNilUuid(id)) return id
   }
   return undefined
 })
@@ -89,7 +96,7 @@ export const treePopIdInActiveNodeArrayAtom = atom((get) => {
   const activeNodeArray = get(treeActiveNodeArrayAtom)
   if (activeNodeArray.length > 5 && activeNodeArray[4] === 'Populationen') {
     const id = activeNodeArray[5]
-    if (isUuid.anyNonNil(id)) return id
+    if (isNonNilUuid(id)) return id
   }
   return undefined
 })
@@ -101,7 +108,7 @@ export const treeTpopIdInActiveNodeArrayAtom = atom((get) => {
     activeNodeArray[6] === 'Teil-Populationen'
   ) {
     const id = activeNodeArray[7]
-    if (isUuid.anyNonNil(id)) return id
+    if (isNonNilUuid(id)) return id
   }
   return undefined
 })
@@ -114,7 +121,7 @@ export const treeTpopkontrIdInActiveNodeArrayAtom = atom((get) => {
       activeNodeArray[8] === 'Freiwilligen-Kontrollen')
   ) {
     const id = activeNodeArray[9]
-    if (isUuid.anyNonNil(id)) return id
+    if (isNonNilUuid(id)) return id
   }
   return undefined
 })

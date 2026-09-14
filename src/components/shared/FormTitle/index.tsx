@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import type { ComponentType } from 'react'
 import Collapse from '@mui/material/Collapse'
 import { useAtom } from 'jotai'
 
@@ -8,16 +9,26 @@ import { navListFilterAtoms } from '../../../store/index.ts'
 
 import styles from './index.module.css'
 
+interface FormTitleProps {
+  title: string
+  listFilter?: keyof typeof navListFilterAtoms
+  // heterogeneous menu components with their own props
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  MenuBarComponent?: ComponentType<any> | null
+  menuBarProps?: Record<string, unknown>
+  noTestDataMessage?: boolean
+}
+
 export const FormTitle = ({
   title,
   listFilter,
   MenuBarComponent = null,
   menuBarProps = {},
   noTestDataMessage = false,
-}) => {
+}: FormTitleProps) => {
   // get list filter from the correct atom
   const [filterInputIsVisible, toggleFilterInputIsVisible] = useAtom(
-    navListFilterAtoms[listFilter] ?? 'undefined',
+    navListFilterAtoms[listFilter ?? 'undefined'],
   )
   const filterInputRef = useRef(null)
   const toggleFilterInput = () => {
