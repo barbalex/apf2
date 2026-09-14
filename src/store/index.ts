@@ -2026,7 +2026,7 @@ export const setTree2SrcByActiveNodeArrayAtom = atom(
     }: {
       activeNodeArray: (string | number)[]
       search: string
-      onlyShowActivePath: boolean
+      onlyShowActivePath?: boolean | undefined
     },
   ) => {
     const iFrameSearch = queryString.parse(search)

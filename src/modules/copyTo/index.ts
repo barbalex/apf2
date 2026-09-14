@@ -347,7 +347,7 @@ export const copyTo = async ({
   if (table === 'tpopfeldkontr') {
     // always copy Zaehlungen
     copyZaehlOfTpopKontr({
-      tpopkontrIdFrom: id,
+      tpopkontrIdFrom: id as string,
       tpopkontrIdTo: newId,
     })
     tsQueryClient.invalidateQueries({
@@ -369,7 +369,7 @@ export const copyTo = async ({
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
     copyTpopsOfPop({
-      popIdFrom: id,
+      popIdFrom: id as string,
       popIdTo: newId,
     })
   }
