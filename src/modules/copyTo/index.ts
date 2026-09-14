@@ -247,8 +247,9 @@ export const copyTo = async ({
             nr: tpopRow.nr,
             gemeinde: tpopRow.gemeinde,
             flurname: tpopRow.flurname,
-            geomPoint: tpopRow?.geomPoint?.geojson
-              ? JSON.parse(String(tpopRow.geomPoint.geojson))
+            geomPoint:
+              tpopRow?.geomPoint?.geojson ?
+                JSON.parse(String(tpopRow.geomPoint.geojson))
               : null,
             radius: tpopRow.radius,
             hoehe: tpopRow.hoehe,
@@ -299,8 +300,9 @@ export const copyTo = async ({
             statusUnklar: popRow.statusUnklar,
             statusUnklarBegruendung: popRow.statusUnklarBegruendung,
             bekanntSeit: popRow.bekanntSeit,
-            geomPoint: popRow?.geomPoint?.geojson
-              ? JSON.parse(String(popRow.geomPoint.geojson))
+            geomPoint:
+              popRow?.geomPoint?.geojson ?
+                JSON.parse(String(popRow.geomPoint.geojson))
               : null,
           },
         })

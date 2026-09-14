@@ -1,19 +1,21 @@
 import { queryTpop } from './queryTpop.ts'
 import { updatePopById } from './updatePopById.ts'
-import {store,
+import {
+  store,
   apolloClientAtom,
   tsQueryClientAtom,
-  addNotificationAtom} from '../../store/index.ts'
+  addNotificationAtom,
+  type Notification,
+} from '../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-
-export const copyTpopKoordToPop = async ({ id }) => {
+export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
   const apolloClient = store.get(apolloClientAtom)!
   const tsQueryClient = store.get(tsQueryClientAtom)!
   // fetch tpop
-  let tpopResult
+  let tpopResult: Awaited<ReturnType<typeof apolloClient.query>> | undefined
   try {
     tpopResult = await apolloClient.query({
       query: queryTpop,
@@ -21,13 +23,21 @@ export const copyTpopKoordToPop = async ({ id }) => {
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const tpop = tpopResult?.data?.tpopById
+  if (!tpop?.popId || !tpop?.geomPoint) {
+    return addNotification({
+      message: 'Die Teil-Population hat keine Koordinaten oder keine Population',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
   const { geomPoint: geomPoint0, popId } = tpop
 
   // set pop coordinates
@@ -56,7 +66,7 @@ export const copyTpopKoordToPop = async ({ id }) => {
     })
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },

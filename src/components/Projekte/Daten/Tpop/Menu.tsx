@@ -299,6 +299,7 @@ export const Menu = ({ row }: MenuProps) => {
   const [copyingCoordToTpop, setCopyingCoordToTpop] = useState(false)
 
   const onCopyCoordToPop = async () => {
+    if (!tpopId) return
     setCopyingCoordToTpop(true)
     await copyTpopKoordToPop({ id: tpopId })
     setCopyingCoordToTpop(false)
