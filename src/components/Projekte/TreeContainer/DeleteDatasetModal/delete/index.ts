@@ -108,10 +108,9 @@ export const deleteModule = async ({ search }: { search: string }) => {
       },
     })
   }
+  const resultData = (result?.data ?? {}) as Record<string, unknown>
   let data = {
-    ...(result?.[`data.${camelCase(table)}ById`] as
-      | Record<string, unknown>
-      | undefined),
+    ...(resultData[`${tableName}ById`] as Record<string, unknown> | undefined),
   }
   data = omit(data, ['__typename'])
 

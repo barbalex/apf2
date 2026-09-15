@@ -1801,7 +1801,7 @@ export const newTpopFromBeobDialogOpenAtom = atomWithStorage(
   'newTpopFromBeobDialogOpen',
   false,
 )
-export const newTpopFromBeobBeobIdAtom = atomWithStorage(
+export const newTpopFromBeobBeobIdAtom = atomWithStorage<string | null>(
   'newTpopFromBeobBeobId',
   null,
 )

@@ -466,8 +466,7 @@ export const Menus = () => {
         })
       },
       createNewTpopFromBeob() {
-        // the atom is typed null in the store but holds a BeobId at runtime
-        setNewTpopFromBeobBeobId(id as unknown as null)
+        setNewTpopFromBeobBeobId(id)
         setNewTpopFromBeobDialogOpen(true)
       },
       copyBeobZugeordnetKoordToTpop() {

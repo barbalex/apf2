@@ -87,11 +87,10 @@ export const Menu = () => {
   const [, setNewTpopFromBeobDialogOpen] = useAtom(
     newTpopFromBeobDialogOpenAtom,
   )
-  // the atom is typed null in the store but holds a BeobId at runtime
   const [, setNewTpopFromBeobBeobId] = useAtom(newTpopFromBeobBeobIdAtom)
 
   const onClickNewTpopFromBeob = () => {
-    setNewTpopFromBeobBeobId(beobId as unknown as null)
+    setNewTpopFromBeobBeobId(beobId)
     setNewTpopFromBeobDialogOpen(true)
   }
 

@@ -333,10 +333,8 @@ export const Menu = ({ row }: MenuProps) => {
             <IconButton onClick={() => void onClickCopyFeldkontrToHere()}>
               <MdContentCopy
                 style={{
-                  // comparison is kept as it was; boolean never equals 'true'
-                  color:
-                    (thisTpopfeldkontrIsCopying as string | boolean) ===
-                    'true' ? 'rgb(255, 90, 0)'
+                  color: thisTpopfeldkontrIsCopying ?
+                      'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
@@ -359,10 +357,8 @@ export const Menu = ({ row }: MenuProps) => {
             >
               <MdContentCopy
                 style={{
-                  // comparison is kept as it was; boolean never equals 'true'
-                  color:
-                    (thisTpopfeldkontrIsCopying as string | boolean) ===
-                    'true' ? 'rgb(255, 90, 0)'
+                  color: thisTpopfeldkontrIsCopying ?
+                      'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
