@@ -1,19 +1,31 @@
 import { Suspense } from 'react'
-import { graphql } from '../../../gql'
+import { graphql } from '../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { apByIdJahr } from './apByIdJahr.ts'
 import { ApberForAp } from '../ApberForAp/index.tsx'
+import type {
+  ApberForApApNode,
+  ApberForApJberAbcNode,
+} from '../ApberForAp/types.ts'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 import { Spinner } from '../../shared/Spinner.tsx'
-import type { ApberId, ApId } from '../../../models/apflora/public/Apber.ts'
+import type { ApberId } from '../../../models/apflora/index.ts'
 
 interface ApberQueryResult {
   apberById: {
     id: ApberId
     jahr: number | null
+  } | null
+}
+
+// result type of the apByIdJahr query (apByIdJahr.ts)
+interface ApByIdJahrQueryResult {
+  apById: ApberForApApNode | null
+  jberAbcByApId: {
+    nodes: ApberForApJberAbcNode[]
   } | null
 }
 export const Component = () => {
@@ -42,7 +54,7 @@ export const Component = () => {
       if (apberError) throw apberError
       if (!jahr) throw new Error('im AP-Bericht fehlt das Jahr')
 
-      const { data, error } = await apolloClient.query({
+      const { data, error } = await apolloClient.query<ApByIdJahrQueryResult>({
         query: apByIdJahr,
         variables: { apId, jahr },
       })

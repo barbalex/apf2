@@ -1,6 +1,12 @@
+import type { ApberForApZielNode } from './types.ts'
+
 import styles from './Ziele.module.css'
 
-export const Ziele = ({ ziele }) => (
+interface ZieleProps {
+  ziele: ApberForApZielNode[]
+}
+
+export const Ziele = ({ ziele }: ZieleProps) => (
   <div className={styles.container}>
     <div className={styles.title}>Ziele im Berichtsjahr:</div>
     <div className={styles.titleRow}>

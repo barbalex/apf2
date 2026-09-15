@@ -1,4 +1,4 @@
-import { graphql } from '../../../gql'
+import { graphql } from '../../../gql/index.ts'
 
 export const jberQuery = graphql(`
   query jberForApberForYear($jahr: Int!) {

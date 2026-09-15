@@ -1,7 +1,18 @@
 import { ApberForAp } from '../ApberForAp/index.tsx'
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
 
-export const ApberForAps = ({ jahr, data, jberData }) => {
+import type {
+  ApberForYearQueryResult,
+  JberQueryResult,
+} from './types.ts'
+
+interface ApberForApsProps {
+  jahr?: number | undefined
+  data?: ApberForYearQueryResult | undefined
+  jberData?: JberQueryResult | undefined
+}
+
+export const ApberForAps = ({ jahr, data, jberData }: ApberForApsProps) => {
   const aps = (data?.allAps?.nodes ?? []).filter(
     (ap) => (ap?.apbersByApId?.totalCount ?? 0) > 0,
   )

@@ -1,9 +1,17 @@
 import { Fragment } from 'react'
 
 import { ErrorBoundary } from '../../shared/ErrorBoundary.tsx'
+
+import type { JberQueryResult } from './types.ts'
+
 import styles from './ErfolgList.module.css'
 
-export const ErfolgList = ({ jahr, data }) => {
+interface ErfolgListProps {
+  jahr?: number | undefined
+  data?: JberQueryResult | undefined
+}
+
+export const ErfolgList = ({ jahr, data }: ErfolgListProps) => {
   const nodes = data?.jberAbc?.nodes ?? []
   const apRows = nodes.map((ap) => {
     const veraenderung =
@@ -17,7 +25,7 @@ export const ErfolgList = ({ jahr, data }) => {
     // Seems that overflow/ellipis is not respected
     // so need to shorten names
     const artname =
-      ap.artname?.length > 82 ?
+      (ap.artname?.length ?? 0) > 82 ?
         `${ap.artname?.substring?.(0, 82)}...`
       : (ap.artname ?? '')
 
