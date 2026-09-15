@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -40,11 +40,11 @@ export const ApOhnePop = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApOhnePop = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApOhnepopQueryResult }
+    let result: { data?: ApOhnepopQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApOhnepopQueryResult>({
         query: graphql(`
@@ -82,11 +82,11 @@ export const ApOhnePop = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? [])
+    const rows = (result?.data?.allAps?.nodes ?? [])
       .filter((z) => z?.popsByApId?.totalCount === 0)
       .map((z) => ({
         id: z.id,
-        artname: z?.aeTaxonomyByArtId.artname ?? '',
+        artname: z?.aeTaxonomyByArtId?.artname ?? '',
         bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
         start_jahr: z.startJahr,
         umsetzung: z?.apUmsetzungWerteByUmsetzung?.text ?? '',
@@ -100,14 +100,14 @@ export const ApOhnePop = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'ApOhnePopulationen' })
+    void exportModule({ data: rows, fileName: 'ApOhnePopulationen' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickApOhnePop}
+      onClick={() => void onClickApOhnePop()}
       color="inherit"
       disabled={!!queryState}
     >

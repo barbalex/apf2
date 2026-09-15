@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -55,11 +55,11 @@ export const BeobArtChanged = () => {
 
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickButton = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: BeobArtChangedQueryResult }
+    let result: { data?: BeobArtChangedQueryResult | undefined } | undefined
     try {
       // view: v_beob_art_changed
       result = mapFilter
@@ -154,7 +154,7 @@ export const BeobArtChanged = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = result.data?.allVBeobArtChangeds?.nodes ?? []
+    const rows = result?.data?.allVBeobArtChangeds?.nodes ?? []
     if (rows.length === 0) {
       setQueryState(undefined)
       return addNotification({
@@ -164,21 +164,21 @@ export const BeobArtChanged = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'BeobachtungenArtVeraendert' })
+    void exportModule({ data: rows, fileName: 'BeobachtungenArtVeraendert' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickButton}
+      onClick={() => void onClickButton()}
       color="inherit"
       disabled={!!queryState}
     >
       Alle Beobachtungen, bei denen die Art verändert wurde
-      {queryState ? (
+      {queryState ?
         <span className={styles.progress}>{queryState}</span>
-      ) : null}
+      : null}
     </Button>
   )
 }

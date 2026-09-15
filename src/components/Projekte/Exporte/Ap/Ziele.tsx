@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -59,11 +59,11 @@ export const Ziele = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickZiele = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ZielsQueryResult }
+    let result: { data?: ZielsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ZielsQueryResult>({
         query: graphql(`
@@ -121,7 +121,7 @@ export const Ziele = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allZiels?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allZiels?.nodes ?? []).map((z) => ({
       ap_id: z.id,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -142,14 +142,14 @@ export const Ziele = () => {
         },
       })
     }
-    exportModule({ data: sortBy(rows, ['artname']), fileName: 'ApZiele' })
+    void exportModule({ data: sortBy(rows, ['artname']), fileName: 'ApZiele' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickZiele}
+      onClick={() => void onClickZiele()}
       color="inherit"
       disabled={!!queryState}
     >

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -65,11 +65,11 @@ export const Ber = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickApBer = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApbersQueryResult }
+    let result: { data?: ApbersQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApbersQueryResult>({
         query: graphql(`
@@ -126,7 +126,7 @@ export const Ber = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allApbers?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allApbers?.nodes ?? []).map((z) => ({
       id: z.id,
       ap_id: z.apId,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
@@ -161,7 +161,7 @@ export const Ber = () => {
         },
       })
     }
-    exportModule({
+    void exportModule({
       data: sortBy(rows, ['artname', 'jahr']),
       fileName: 'Jahresberichte',
     })
@@ -171,7 +171,7 @@ export const Ber = () => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickApBer}
+      onClick={() => void onClickApBer()}
       color="inherit"
       disabled={!!queryState}
     >

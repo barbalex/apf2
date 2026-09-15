@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -54,11 +54,11 @@ export const Assozart = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAssozarten = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: AssozartsQueryResult }
+    let result: { data?: AssozartsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<AssozartsQueryResult>({
         query: graphql(`
@@ -111,7 +111,7 @@ export const Assozart = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAssozarts?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allAssozarts?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
       artname: z?.apByApId?.label ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -134,14 +134,14 @@ export const Assozart = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'AssoziierteArten' })
+    void exportModule({ data: rows, fileName: 'AssoziierteArten' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickAssozarten}
+      onClick={() => void onClickAssozarten()}
       color="inherit"
       disabled={!!queryState}
     >

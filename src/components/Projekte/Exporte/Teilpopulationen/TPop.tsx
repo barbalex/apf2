@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 import { tableIsFiltered } from '../../../../modules/tableIsFiltered.ts'
 
-import type { ApId } from '../../../../models/apflora/public/ApId.ts'
-import type { PopId } from '../../../../models/apflora/public/PopId.ts'
-import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
-import type { AdresseId } from '../../../../models/apflora/public/AdresseId.ts'
+import type {
+  ApId,
+  PopId,
+  TpopId,
+  AdresseId,
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -47,7 +49,6 @@ interface TPopQueryResult {
             }
           } | null
         } | null
-        id: PopId
         nr: number | null
         name: string | null
         popStatusWerteByStatus: {
@@ -111,14 +112,14 @@ export const TPop = ({ filtered = false }: TPopProps) => {
 
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickTPop = async () => {
     setQueryState('lade Daten...')
     //console.time('querying')
-    let result: { data: TPopQueryResult }
+    let result: { data?: TPopQueryResult | undefined } | undefined
     try {
-      result = await apolloClient.query({
+      result = await apolloClient.query<TPopQueryResult>({
         query: graphql(`
           query tpopForExportQuery($filter: TpopFilter) {
             allTpops(
@@ -221,7 +222,7 @@ export const TPop = ({ filtered = false }: TPopProps) => {
     //console.timeEnd('querying')
     setQueryState('verarbeite...')
     //console.time('processing')
-    const rows = (result.data?.allTpops?.nodes ?? []).map((n) => ({
+    const rows = (result?.data?.allTpops?.nodes ?? []).map((n) => ({
       apId: n?.popByPopId?.apByApId?.id ?? null,
       apFamilie: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.familie ?? null,
       apArtname: n?.popByPopId?.apByApId?.aeTaxonomyByArtId?.artname ?? null,
@@ -277,12 +278,14 @@ export const TPop = ({ filtered = false }: TPopProps) => {
       changedBy: n.changedBy,
     }))
     const enrichedData = rows.map((oWithout) => {
-      const o = { ...oWithout }
-      let nachBeginnAp = null
+      const o: typeof oWithout & { angesiedeltNachBeginnAp?: boolean | null } = {
+        ...oWithout,
+      }
+      let nachBeginnAp: boolean | null = null
       if (
         o.apStartJahr &&
         o.bekanntSeit &&
-        [200, 201, 202].includes(o.status)
+        [200, 201, 202].includes(o.status as number)
       ) {
         if (o.apStartJahr <= o.bekanntSeit) {
           nachBeginnAp = true
@@ -317,7 +320,7 @@ export const TPop = ({ filtered = false }: TPopProps) => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickTPop}
+      onClick={() => void onClickTPop()}
       color="inherit"
       disabled={!!queryState || (filtered && !tpopIsFiltered)}
     >

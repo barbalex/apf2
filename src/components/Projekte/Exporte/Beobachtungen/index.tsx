@@ -44,7 +44,7 @@ export const Beobachtungen = () => {
       >
         {expanded ?
           <CardContent className={styles.cardContent}>
-            <BeobArtChanged t />
+            <BeobArtChanged />
             <BeobZugeordnet />
             <BeobNichtZuzuordnen />
           </CardContent>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 
 import { useApolloClient } from '@apollo/client/react'
@@ -44,11 +44,11 @@ export const AnzMassn = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAnzMassnProAp = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApAnzmassnsQueryResult }
+    let result: { data?: ApAnzmassnsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApAnzmassnsQueryResult>({
         query: graphql(`
@@ -89,7 +89,7 @@ export const AnzMassn = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allAps?.nodes ?? []).map((z) => ({
       id: z.id,
       artname: z?.aeTaxonomyByArtId?.artname ?? '',
       bearbeitung: z?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -107,14 +107,14 @@ export const AnzMassn = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'ApAnzahlMassnahmen' })
+    void exportModule({ data: rows, fileName: 'ApAnzahlMassnahmen' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickAnzMassnProAp}
+      onClick={() => void onClickAnzMassnProAp()}
       color="inherit"
       disabled={!!queryState}
     >

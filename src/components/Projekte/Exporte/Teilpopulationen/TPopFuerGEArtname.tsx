@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
+import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -36,19 +36,14 @@ export const TPopFuerGEArtname = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data: TPopKmlNamenQueryResult }
-        try {
-          result = await apolloClient.query({
-            query: graphql(`
+  const onClickTPopKmlNamen = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: TPopKmlNamenQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<TPopKmlNamenQueryResult>({
+        query: graphql(`
               query tpopKmlnamenQuery {
                 allTpops(filter: { vTpopKmlnamenByIdExist: true }) {
                   nodes {
@@ -68,39 +63,46 @@ export const TPopFuerGEArtname = () => {
                 }
               }
             `),
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: { variant: 'error' },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = (result.data?.allTpops?.nodes ?? []).map((z) => ({
-          art: z?.vTpopKmlnamenById?.nodes?.[0]?.art ?? '',
-          label: z?.vTpopKmlnamenById?.nodes?.[0]?.label ?? '',
-          inhalte: z?.vTpopKmlnamenById?.nodes?.[0]?.inhalte ?? '',
-          id: z?.vTpopKmlnamenById?.nodes?.[0]?.id ?? '',
-          wgs84Lat: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Lat ?? '',
-          wgs84Long: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Long ?? '',
-          url: z?.vTpopKmlnamenById?.nodes?.[0]?.url ?? '',
-        }))
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: sortBy(rows, ['art', 'label']),
-          fileName: 'TeilpopulationenNachNamen',
-          kml: true,
-        })
-        setQueryState(undefined)
-      }}
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: { variant: 'error' },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = (result?.data?.allTpops?.nodes ?? []).map((z) => ({
+      art: z?.vTpopKmlnamenById?.nodes?.[0]?.art ?? '',
+      label: z?.vTpopKmlnamenById?.nodes?.[0]?.label ?? '',
+      inhalte: z?.vTpopKmlnamenById?.nodes?.[0]?.inhalte ?? '',
+      id: z?.vTpopKmlnamenById?.nodes?.[0]?.id ?? '',
+      wgs84Lat: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Lat ?? '',
+      wgs84Long: z?.vTpopKmlnamenById?.nodes?.[0]?.wgs84Long ?? '',
+      url: z?.vTpopKmlnamenById?.nodes?.[0]?.url ?? '',
+    }))
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: sortBy(rows, ['art', 'label']),
+      fileName: 'TeilpopulationenNachNamen',
+      kml: true,
+    })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickTPopKmlNamen()}
     >
       {`Teilpopulationen für Google Earth (beschriftet mit Artname, PopNr/TPopNr)`}
       {queryState ?

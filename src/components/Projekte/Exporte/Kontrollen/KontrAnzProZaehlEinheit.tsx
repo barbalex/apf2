@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -107,20 +107,17 @@ export const KontrAnzProZaehlEinheit = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data?: KontrzaehlAnzproeinheitQueryResult }
-        try {
-          result = await apolloClient.query<KontrzaehlAnzproeinheitQueryResult>(
-            {
-              query: graphql(`
+  const onClickKontrAnzProZaehlEinheit = async () => {
+    setQueryState('lade Daten...')
+    let result:
+      | { data?: KontrzaehlAnzproeinheitQueryResult | undefined }
+      | undefined
+    try {
+      result = await apolloClient.query<KontrzaehlAnzproeinheitQueryResult>(
+        {
+          query: graphql(`
                 query viewKontrzaehlAnzproeinheits {
                   allVKontrzaehlAnzproeinheits {
                     nodes {
@@ -207,32 +204,39 @@ export const KontrAnzProZaehlEinheit = () => {
                   }
                 }
               `),
-            },
-          )
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = result.data?.allVKontrzaehlAnzproeinheits?.nodes ?? []
-        setQueryState(undefined)
-        if (rows.length === 0) {
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: rows,
-          fileName: 'KontrollenAnzahlProZaehleinheit',
-        })
-      }}
+        },
+      )
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = result?.data?.allVKontrzaehlAnzproeinheits?.nodes ?? []
+    setQueryState(undefined)
+    if (rows.length === 0) {
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: rows,
+      fileName: 'KontrollenAnzahlProZaehleinheit',
+    })
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickKontrAnzProZaehlEinheit()}
     >
       Kontrollen: Anzahl pro Zähleinheit
       {queryState ?

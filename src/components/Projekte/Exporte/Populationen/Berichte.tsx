@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { ApId } from '../../../../models/apflora/public/ApId.ts'
-import type { PopId } from '../../../../models/apflora/public/PopId.ts'
+import type { ApId, PopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -62,19 +61,14 @@ export const Berichte = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data: PopPopberUndMassnberQueryResult }
-        try {
-          result = await apolloClient.query({
-            query: graphql(`
+  const onClickBerichte = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: PopPopberUndMassnberQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<PopPopberUndMassnberQueryResult>({
+        query: graphql(`
               query popPopberUndMassnberQuery {
                 allPops(filter: { vPopPopberundmassnbersByPopIdExist: true }) {
                   nodes {
@@ -119,68 +113,75 @@ export const Berichte = () => {
                 }
               }
             `),
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        // need to flatmap because view delivers multiple rows per pop
-        const rows = (result?.data?.allPops?.nodes ?? []).flatMap((z0) =>
-          (z0?.vPopPopberundmassnbersByPopId?.nodes ?? []).map((z) => ({
-            ap_id: z.apId,
-            artname: z.artname,
-            ap_bearbeitung: z.apBearbeitung,
-            ap_start_jahr: z.apStartJahr,
-            ap_umsetzung: z.apUmsetzung,
-            pop_id: z.popId,
-            pop_nr: z.popNr,
-            pop_name: z.popName,
-            pop_status: z.popStatus,
-            pop_bekannt_seit: z.popBekanntSeit,
-            pop_status_unklar: z.popStatusUnklar,
-            pop_status_unklar_begruendung: z.popStatusUnklarBegruendung,
-            pop_x: z.popX,
-            pop_y: z.popY,
-            pop_created_at: z.popCreatedAt,
-            pop_updated_at: z.popUpdatedAt,
-            pop_changed_by: z.popChangedBy,
-            jahr: z.jahr,
-            popber_id: z.popberId,
-            popber_jahr: z.popberJahr,
-            popber_entwicklung: z.popberEntwicklung,
-            popber_bemerkungen: z.popberBemerkungen,
-            popber_created_at: z.popberCreatedAt,
-            popber_updated_at: z.popberUpdatedAt,
-            popber_changed_by: z.popberChangedBy,
-            popmassnber_id: z.popmassnberId,
-            popmassnber_jahr: z.popmassnberJahr,
-            popmassnber_entwicklung: z.popmassnberEntwicklung,
-            popmassnber_bemerkungen: z.popmassnberBemerkungen,
-            popmassnber_created_at: z.popmassnberCreatedAt,
-            popmassnber_updated_at: z.popmassnberUpdatedAt,
-            popmassnber_changed_by: z.popmassnberChangedBy,
-          })),
-        )
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
-          fileName: 'PopulationenPopUndMassnBerichte',
-        })
-        setQueryState(undefined)
-      }}
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    // need to flatmap because view delivers multiple rows per pop
+    const rows = (result?.data?.allPops?.nodes ?? []).flatMap((z0) =>
+      (z0?.vPopPopberundmassnbersByPopId?.nodes ?? []).map((z) => ({
+        ap_id: z.apId,
+        artname: z.artname,
+        ap_bearbeitung: z.apBearbeitung,
+        ap_start_jahr: z.apStartJahr,
+        ap_umsetzung: z.apUmsetzung,
+        pop_id: z.popId,
+        pop_nr: z.popNr,
+        pop_name: z.popName,
+        pop_status: z.popStatus,
+        pop_bekannt_seit: z.popBekanntSeit,
+        pop_status_unklar: z.popStatusUnklar,
+        pop_status_unklar_begruendung: z.popStatusUnklarBegruendung,
+        pop_x: z.popX,
+        pop_y: z.popY,
+        pop_created_at: z.popCreatedAt,
+        pop_updated_at: z.popUpdatedAt,
+        pop_changed_by: z.popChangedBy,
+        jahr: z.jahr,
+        popber_id: z.popberId,
+        popber_jahr: z.popberJahr,
+        popber_entwicklung: z.popberEntwicklung,
+        popber_bemerkungen: z.popberBemerkungen,
+        popber_created_at: z.popberCreatedAt,
+        popber_updated_at: z.popberUpdatedAt,
+        popber_changed_by: z.popberChangedBy,
+        popmassnber_id: z.popmassnberId,
+        popmassnber_jahr: z.popmassnberJahr,
+        popmassnber_entwicklung: z.popmassnberEntwicklung,
+        popmassnber_bemerkungen: z.popmassnberBemerkungen,
+        popmassnber_created_at: z.popmassnberCreatedAt,
+        popmassnber_updated_at: z.popmassnberUpdatedAt,
+        popmassnber_changed_by: z.popmassnberChangedBy,
+      })),
+    )
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: sortBy(rows, ['artname', 'pop_nr', 'jahr']),
+      fileName: 'PopulationenPopUndMassnBerichte',
+    })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickBerichte()}
     >
       Populationen inkl. Populations- und Massnahmen-Berichte
       {queryState ?

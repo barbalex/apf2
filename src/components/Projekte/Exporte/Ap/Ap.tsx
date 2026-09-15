@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -56,11 +56,11 @@ export const Ap = ({ filtered = false }: ApProps) => {
 
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickAp = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ApQueryResult }
+    let result: { data?: ApQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApQueryResult>({
         query: graphql(`
@@ -112,7 +112,7 @@ export const Ap = ({ filtered = false }: ApProps) => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allAps?.nodes ?? []).map((n) => ({
+    const rows = (result?.data?.allAps?.nodes ?? []).map((n) => ({
       id: n.id,
       artname: n?.aeTaxonomyByArtId?.artname ?? null,
       bearbeitung: n?.apBearbstandWerteByBearbeitung?.text ?? null,
@@ -134,7 +134,7 @@ export const Ap = ({ filtered = false }: ApProps) => {
         },
       })
     }
-    exportModule({
+    void exportModule({
       data: rows,
       fileName: `Arten${filtered ? '_gefiltert' : ''}`,
     })
@@ -146,7 +146,7 @@ export const Ap = ({ filtered = false }: ApProps) => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickAp}
+      onClick={() => void onClickAp()}
       color="inherit"
       disabled={!!queryState || (filtered && !apIsFiltered)}
     >

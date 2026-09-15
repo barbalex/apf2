@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -31,11 +31,13 @@ export const EkPlanung = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickEkPlanung = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: EkPlanungNachAbrechnungstypQueryResult }
+    let result:
+      | { data?: EkPlanungNachAbrechnungstypQueryResult | undefined }
+      | undefined
     try {
       result = await apolloClient.query<EkPlanungNachAbrechnungstypQueryResult>(
         {
@@ -67,7 +69,7 @@ export const EkPlanung = () => {
     }
     setQueryState('verarbeite...')
     const rows = (
-      result.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
+      result?.data?.allVEkPlanungNachAbrechnungstyps?.nodes ?? []
     ).map((z) => ({
       ap_id: z?.apId,
       artname: z?.artname ?? '',
@@ -87,14 +89,14 @@ export const EkPlanung = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'EkPlanungProJahrNachAbrechnungstyp' })
+    void exportModule({ data: rows, fileName: 'EkPlanungProJahrNachAbrechnungstyp' })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickEkPlanung}
+      onClick={() => void onClickEkPlanung()}
       color="inherit"
       disabled={!!queryState}
     >

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -63,11 +63,11 @@ export const InfoFlora = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickInfoFlora = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: InfoFloraQueryResult }
+    let result: { data?: InfoFloraQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<InfoFloraQueryResult>({
         query: graphql(`
@@ -130,7 +130,7 @@ export const InfoFlora = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allVExportInfoFloraBeobs?.nodes ?? []).map(
+    const rows = (result?.data?.allVExportInfoFloraBeobs?.nodes ?? []).map(
       (z) => ({
         id_projektintern: z.idProjektintern,
         taxonomie_id: z.taxonomieId,
@@ -185,14 +185,17 @@ export const InfoFlora = () => {
         },
       })
     }
-    exportModule({ data: rows, fileName: 'KontrollenApFloraZhFuerInfoFlora' })
+    void exportModule({
+      data: rows,
+      fileName: 'KontrollenApFloraZhFuerInfoFlora',
+    })
     setQueryState(undefined)
   }
 
   return (
     <Button
       className={styles.button}
-      onClick={onClickInfoFlora}
+      onClick={() => void onClickInfoFlora()}
       color="inherit"
       disabled={!!queryState}
     >

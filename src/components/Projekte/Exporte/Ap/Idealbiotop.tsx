@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -71,11 +71,11 @@ export const Idealbiotop = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickIdealbiotop = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: IdealbiotopsQueryResult }
+    let result: { data?: IdealbiotopsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<IdealbiotopsQueryResult>({
         query: graphql(`
@@ -139,7 +139,7 @@ export const Idealbiotop = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allIdealbiotops?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allIdealbiotops?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -178,7 +178,7 @@ export const Idealbiotop = () => {
         },
       })
     }
-    exportModule({
+    void exportModule({
       data: sortBy(rows, ['artname']),
       fileName: 'Idealbiotope',
     })
@@ -188,7 +188,7 @@ export const Idealbiotop = () => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickIdealbiotop}
+      onClick={() => void onClickIdealbiotop()}
       color="inherit"
       disabled={!!queryState}
     >

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -56,19 +56,14 @@ export const MassnWebgisBun = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data?: MassnWebgisBunQueryResult }
-        try {
-          result = await apolloClient.query<MassnWebgisBunQueryResult>({
-            query: graphql(`
+  const onClickMassnWebgisBun = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: MassnWebgisBunQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<MassnWebgisBunQueryResult>({
+        query: graphql(`
               query viewMassnWebgisbuns {
                 allVMassnWebgisbuns {
                   nodes {
@@ -111,29 +106,36 @@ export const MassnWebgisBun = () => {
                 }
               }
             `),
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = result.data?.allVMassnWebgisbuns.nodes ?? []
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({ data: rows, fileName: 'MassnahmenWebGisBun' })
-        setQueryState(undefined)
-      }}
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = result?.data?.allVMassnWebgisbuns.nodes ?? []
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({ data: rows, fileName: 'MassnahmenWebGisBun' })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickMassnWebgisBun()}
     >
       Massnahmen für WebGIS BUN
       {queryState ?

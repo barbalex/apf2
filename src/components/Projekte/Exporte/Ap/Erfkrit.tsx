@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
 import { sortBy } from 'es-toolkit'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -57,11 +57,11 @@ export const Erfkrit = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
   const onClickErfkrit = async () => {
     setQueryState('lade Daten...')
-    let result: { data?: ErfkritsQueryResult }
+    let result: { data?: ErfkritsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ErfkritsQueryResult>({
         query: graphql(`
@@ -112,7 +112,7 @@ export const Erfkrit = () => {
       })
     }
     setQueryState('verarbeite...')
-    const rows = (result.data?.allErfkrits?.nodes ?? []).map((z) => ({
+    const rows = (result?.data?.allErfkrits?.nodes ?? []).map((z) => ({
       ap_id: z.apId,
       artname: z?.apByApId?.aeTaxonomyByArtId?.artname ?? '',
       ap_bearbeitung: z?.apByApId?.apBearbstandWerteByBearbeitung?.text ?? '',
@@ -135,7 +135,7 @@ export const Erfkrit = () => {
         },
       })
     }
-    exportModule({
+    void exportModule({
       data: sortBy(rows, ['artname', 'beurteilung']),
       fileName: 'Erfolgskriterien',
     })
@@ -145,7 +145,7 @@ export const Erfkrit = () => {
   return (
     <Button
       className={styles.button}
-      onClick={onClickErfkrit}
+      onClick={() => void onClickErfkrit()}
       color="inherit"
       disabled={!!queryState}
     >

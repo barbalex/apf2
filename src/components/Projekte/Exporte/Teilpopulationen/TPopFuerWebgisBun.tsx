@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
 import { exportModule } from '../../../../modules/export.ts'
 
-import type { TpopId } from '../../../../models/apflora/public/TpopId.ts'
+import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from '../index.module.css'
 
@@ -69,19 +69,14 @@ export const TPopFuerWebgisBun = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data: TPopWebgisBunQueryResult }
-        try {
-          result = await apolloClient.query({
-            query: graphql(`
+  const onClickTPopFuerWebgisBun = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: TPopWebgisBunQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<TPopWebgisBunQueryResult>({
+        query: graphql(`
               query viewTpopWebgisbuns {
                 allVTpopWebgisbuns {
                   nodes {
@@ -132,30 +127,37 @@ export const TPopFuerWebgisBun = () => {
                 }
               }
             `),
-          })
-        } catch (error) {
-          addNotification({
-            message: (error as Error).message,
-            options: { variant: 'error' },
-          })
-        }
-        setQueryState('verarbeite...')
-        const rows = result.data?.allVTpopWebgisbuns?.nodes ?? []
-        if (rows.length === 0) {
-          setQueryState(undefined)
-          return addNotification({
-            message: 'Die Abfrage retournierte 0 Datensätze',
-            options: {
-              variant: 'warning',
-            },
-          })
-        }
-        exportModule({
-          data: rows,
-          fileName: 'TeilpopulationenWebGisBun',
-        })
-        setQueryState(undefined)
-      }}
+      })
+    } catch (error) {
+      addNotification({
+        message: (error as Error).message,
+        options: { variant: 'error' },
+      })
+    }
+    setQueryState('verarbeite...')
+    const rows = result?.data?.allVTpopWebgisbuns?.nodes ?? []
+    if (rows.length === 0) {
+      setQueryState(undefined)
+      return addNotification({
+        message: 'Die Abfrage retournierte 0 Datensätze',
+        options: {
+          variant: 'warning',
+        },
+      })
+    }
+    void exportModule({
+      data: rows,
+      fileName: 'TeilpopulationenWebGisBun',
+    })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickTPopFuerWebgisBun()}
     >
       Teilpopulationen für WebGIS BUN
       {queryState ?

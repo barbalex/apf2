@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import Button from '@mui/material/Button'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -47,19 +47,14 @@ export const BeobNichtZuzuordnen = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
 
-  const [queryState, setQueryState] = useState()
+  const [queryState, setQueryState] = useState<string | undefined>()
 
-  return (
-    <Button
-      className={styles.button}
-      color="inherit"
-      disabled={!!queryState}
-      onClick={async () => {
-        setQueryState('lade Daten...')
-        let result: { data?: BeobNichtZuzuordnenQueryResult }
-        try {
-          result = await apolloClient.query<BeobNichtZuzuordnenQueryResult>({
-            query: graphql(`
+  const onClickButton = async () => {
+    setQueryState('lade Daten...')
+    let result: { data?: BeobNichtZuzuordnenQueryResult | undefined } | undefined
+    try {
+      result = await apolloClient.query<BeobNichtZuzuordnenQueryResult>({
+        query: graphql(`
               query allBeobsNichtZuzuordnenForExport {
                 allVBeobNichtZuzuordnens {
                   nodes {
@@ -91,23 +86,30 @@ export const BeobNichtZuzuordnen = () => {
                 }
               }
             `),
-          })
-        } catch (error) {
-          setQueryState(undefined)
-          return addNotification({
-            message: (error as Error).message,
-            options: {
-              variant: 'error',
-            },
-          })
-        }
-        setQueryState('verarbeite...')
-        exportModule({
-          data: result?.data?.allVBeobNichtZuzuordnens?.nodes ?? [],
-          fileName: 'Beobachtungen',
-        })
-        setQueryState(undefined)
-      }}
+      })
+    } catch (error) {
+      setQueryState(undefined)
+      return addNotification({
+        message: (error as Error).message,
+        options: {
+          variant: 'error',
+        },
+      })
+    }
+    setQueryState('verarbeite...')
+    void exportModule({
+      data: result?.data?.allVBeobNichtZuzuordnens?.nodes ?? [],
+      fileName: 'Beobachtungen',
+    })
+    setQueryState(undefined)
+  }
+
+  return (
+    <Button
+      className={styles.button}
+      color="inherit"
+      disabled={!!queryState}
+      onClick={() => void onClickButton()}
     >
       Alle nicht zuzuordnenden Beobachtungen
       {queryState ?
