@@ -1,15 +1,13 @@
-import { type ChangeEvent } from 'react'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
 
 import { Select } from '../../../../../shared/Select.tsx'
 import { treeDataFilterSetValueAtom } from '../../../../../../store/index.ts'
 import { query } from './query.ts'
 
-import type { AdresseId } from '../../../../../../models/apflora/AdresseId.ts'
-
-import styles from '../../../Tpopfreiwkontr/Form/Headdata/index.module.css'
+import type { AdresseId } from '../../../../../../models/apflora/Adresse.ts'
+import type { TpopfreiwkontrFilterRow } from '../index.tsx'
 
 interface TpopfreiwkontrAdressesFilterQueryResult {
   allAdresses: {
@@ -21,8 +19,19 @@ interface TpopfreiwkontrAdressesFilterQueryResult {
 }
 
 interface HeaddataProps {
-  row: any
+  row: TpopfreiwkontrFilterRow | undefined
   activeTab: number
+}
+
+import styles from '../../../Tpopfreiwkontr/Form/Headdata/index.module.css'
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type TpopfreiwkontrAdressesFilterUseQueryOptions = UseQueryOptions<
+  TpopfreiwkontrAdressesFilterQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
 }
 
 export const Headdata = ({ row, activeTab }: HeaddataProps) => {
@@ -30,7 +39,7 @@ export const Headdata = ({ row, activeTab }: HeaddataProps) => {
 
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery<TpopfreiwkontrAdressesFilterQueryResult>({
+  const adressesQueryOptions: TpopfreiwkontrAdressesFilterUseQueryOptions = {
     queryKey: ['tpopfreiwkontrFilterAdresses'],
     queryFn: async () => {
       const result =
@@ -43,9 +52,12 @@ export const Headdata = ({ row, activeTab }: HeaddataProps) => {
     suspense: true,
     staleTime: Infinity,
     gcTime: Infinity,
-  })
+  }
+  const { data } = useQuery(adressesQueryOptions)
 
-  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: {
+    target: { name?: string; value: string | number | null }
+  }) =>
     setDataFilterValue({
       table: 'tpopfreiwkontr',
       key: 'bearbeiter',
@@ -60,7 +72,7 @@ export const Headdata = ({ row, activeTab }: HeaddataProps) => {
         <Select
           key={`${row?.id}${activeTab}bearbeiter`}
           name="bearbeiter"
-          value={row?.bearbeiter}
+          value={row?.bearbeiter ?? null}
           field="bearbeiter"
           options={data?.allAdresses?.nodes ?? []}
           saveToDb={saveToDb}

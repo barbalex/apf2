@@ -3,20 +3,23 @@
 // and covers background
 // so: not used
 import { useMap, WMSTileLayer } from 'react-leaflet'
-// import styled from '@emotion/styled'
+import styled from '@emotion/styled'
 import { useMapEvent } from 'react-leaflet'
 import axios from 'redaxios'
+import type { Response } from 'redaxios'
 import * as ReactDOMServer from 'react-dom/server'
 import { useDebouncedCallback } from 'use-debounce'
+import type { Content, LeafletMouseEvent } from 'leaflet'
 
 import { xmlToLayersData } from '../../../../modules/xmlToLayersData.ts'
 import { Popup } from './Popup.tsx'
 import { onTileError } from './onTileError.ts'
+import type { WmsLayer } from './onTileError.ts'
 
 const StyledPopupContent = styled.div`
   white-space: pre;
 `
-const PopupContainer = styled.div`
+const PopupContainer = styled.div<{ maxheight?: number }>`
   overflow: auto;
   scrollbar-width: thin;
   max-height: ${(props) => `${props.maxheight}px`};
@@ -25,7 +28,7 @@ const PopupContainer = styled.div`
   }
 `
 
-const layer = {
+const layer: WmsLayer = {
   wms_queryable: 1,
   wms_version: '1.3.0',
   wms_format: 'image/png',
@@ -39,15 +42,15 @@ const layer = {
 export const WMS = () => {
   const map = useMap()
 
-  useMapEvent('click', async (e) => {
+  const onClick = async (e: LeafletMouseEvent) => {
     // console.log({ layer })
     if (layer.wms_queryable === 0) return
     const mapSize = map.getSize()
     const bounds = map.getBounds()
-    let res
+    let res: Response<string> | undefined
     let failedToFetch = false
     try {
-      const bbox = `${bounds._southWest.lat},${bounds._southWest.lng},${bounds._northEast.lat},${bounds._northEast.lng}`
+      const bbox = `${bounds.getSouthWest().lat},${bounds.getSouthWest().lng},${bounds.getNorthEast().lat},${bounds.getNorthEast().lng}`
       const params = {
         service: 'WMS',
         version: layer.wms_version,
@@ -64,29 +67,38 @@ export const WMS = () => {
         height: mapSize.y,
         bbox,
       }
-      res = await axios({
+      res = await axios<string>({
         method: 'get',
         url: layer.wms_base_url,
         params,
       })
     } catch (error) {
       // console.log(`error fetching ${row.label}`, error?.toJSON())
-      if (error.response) {
+      // redaxios rejections are Errors augmented with
+      // optional request and response fields
+      const axiosError = error as {
+        response?: { data?: unknown; status?: number; headers?: unknown }
+        request?: unknown
+        message?: string
+      }
+      if (axiosError.response) {
         // The request was made and the server responded with a status code
         // that falls out of the range of 2xx
-        console.error('error.response.data', error.response.data)
-        console.error('error.response.status', error.response.status)
-        console.error('error.response.headers', error.response.headers)
-      } else if (error.request) {
+        console.error('error.response.data', axiosError.response.data)
+        console.error('error.response.status', axiosError.response.status)
+        console.error('error.response.headers', axiosError.response.headers)
+      } else if (axiosError.request) {
         // The request was made but no response was received
         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
         // http.ClientRequest in node.js
-        console.error('error.request:', error.request)
+        console.error('error.request:', axiosError.request)
       } else {
         // Something happened in setting up the request that triggered an Error
-        console.error('error.message', error.message)
+        console.error('error.message', axiosError.message)
       }
-      if (error.message?.toLowerCase()?.includes('failed to fetch')) {
+      if (
+        axiosError.message?.toLowerCase()?.includes('failed to fetch')
+      ) {
         failedToFetch = true
       } else {
         return
@@ -105,6 +117,9 @@ export const WMS = () => {
         </PopupContainer>,
       )
     } else {
+      // not reachable in practice: without failedToFetch the request succeeded
+      if (!res) return
+      // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
       switch (layer.wms_info_format) {
         case 'application/vnd.ogc.gml':
         case 'application/vnd.ogc.gml/3.1.1': {
@@ -165,8 +180,16 @@ export const WMS = () => {
       }
     }
 
-    window.L.popup().setLatLng(e.latlng).setContent(popupContent).openOn(map)
-  })
+    window.L
+      .popup()
+      .setLatLng(e.latlng)
+      // the text/html branch assigns a React element (untested code path);
+      // leaflet only types strings and nodes as popup content
+      .setContent(popupContent as unknown as Content)
+      .openOn(map)
+  }
+
+  useMapEvent('click', (e) => void onClick(e))
 
   const onTileErrorDebounced = useDebouncedCallback(
     onTileError.bind(this, map, layer),
@@ -190,7 +213,7 @@ export const WMS = () => {
       transparent={false}
       // exceptions="inimage"
       eventHandlers={{
-        tileerror: onTileErrorDebounced,
+        tileerror: (event) => void onTileErrorDebounced(event),
       }}
     />
   )

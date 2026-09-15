@@ -1,5 +1,5 @@
 import { gql as dynamicGql } from '../../../apolloGql.ts'
-import { graphql } from '../../../gql'
+import { graphql } from '../../../gql/index.ts'
 import { upperFirst } from 'es-toolkit'
 import { camelCase } from 'es-toolkit'
 
@@ -13,6 +13,7 @@ import {
   userNameAtom,
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
+  type Notification,
 } from '../../../store/index.ts'
 import {
   adresse as adresseFragment,
@@ -22,7 +23,7 @@ import {
   ekAbrechnungstypWerte as ekAbrechnungstypWerteFragment,
 } from '../../shared/fragments.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 const fragments = {
@@ -30,6 +31,12 @@ const fragments = {
   tpopkontrzaehlEinheitWerte: tpopkontrzaehlEinheitWerteFragment,
   ekAbrechnungstypWerte: ekAbrechnungstypWerteFragment,
 }
+
+// data of the dynamically built create mutations
+type CreateMutationData = Record<
+  string,
+  Record<string, Record<string, string>> | undefined
+>
 
 export const insertDataset = async ({
   tablePassed,
@@ -39,9 +46,33 @@ export const insertDataset = async ({
   url,
   search,
   jahr: jahrPassed,
+}: {
+  tablePassed: string
+  parentId?: string | null | undefined
+  menuType: string
+  singleElementUrlName?: string | null | undefined
+  url: (string | number)[]
+  search: string
+  jahr?: string | null | undefined
 }) => {
-  const apolloClient = store.get(apolloClientAtom)!
-  const tsQueryClient = store.get(tsQueryClientAtom)!
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  if (!apolloClient) {
+    return addNotification({
+      message: 'no apollo client found in store',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
+  if (!tsQueryClient) {
+    return addNotification({
+      message: 'no query client found in store',
+      options: {
+        variant: 'error',
+      },
+    })
+  }
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   let table = tablePassed
@@ -60,7 +91,7 @@ export const insertDataset = async ({
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
-  const parentIdField = camelCase(tableMetadata.parentIdField)
+  const parentIdField = camelCase(tableMetadata.parentIdField ?? '')
   const idField = tableMetadata.idField
   if (!idField) {
     return addNotification({
@@ -87,7 +118,11 @@ export const insertDataset = async ({
       }
     }
   }`
-  let variables = { parentId }
+  let variables: {
+    parentId?: string | null | undefined
+    jahr?: number | undefined
+    role?: string | undefined
+  } = { parentId }
 
   // console.log('insertDataset:', {
   //   table,
@@ -117,7 +152,7 @@ export const insertDataset = async ({
         }
       }
     }`
-    variables = { parentId, jahr: +jahrPassed }
+    variables = { parentId, jahr: Number(jahrPassed) }
   }
   if (menuType === 'tpopfreiwkontrFolder') {
     mutation = dynamicGql`
@@ -199,33 +234,37 @@ export const insertDataset = async ({
           }
         }
       }
-      ${fragments[tableName]}
+      ${fragments[tableName as keyof typeof fragments]}
     `
     delete variables.parentId
   }
 
-  let result
+  let result: { data?: CreateMutationData | null | undefined } | undefined
   try {
     if (Object.keys(variables).length) {
-      result = await apolloClient.mutate({ mutation, variables })
+      result = await apolloClient.mutate<CreateMutationData>({
+        mutation,
+        variables,
+      })
     } else {
-      result = await apolloClient.mutate({ mutation })
+      result = await apolloClient.mutate<CreateMutationData>({ mutation })
     }
   } catch (error) {
     return addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
     })
   }
   const row =
-    result?.data[`create${upperFirst(camelCase(table))}`][`${camelCase(table)}`]
+    result?.data?.[`create${upperFirst(camelCase(table))}`]?.[camelCase(table)]
+  const rowId = row?.[idField] ?? ''
   // set new url
-  const newActiveNodeArray = [...url, row[idField]]
+  const newActiveNodeArray = [...url, rowId]
   // need to add single name to the url, i.e. 'Art' for ap
   const to = `/Daten/${newActiveNodeArray.join('/')}${singleElementName ? `/${singleElementName}` : ''}${search}`
-  setTimeout(() => navigate(to), 300)
+  setTimeout(() => navigate?.(to), 300)
   // set open nodes
   let newOpenNodes = [...openNodes, newActiveNodeArray]
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
@@ -246,10 +285,10 @@ export const insertDataset = async ({
           }
         }
       `),
-      variables: { parentId: row[idField] },
+      variables: { parentId: rowId },
     })
     // 2. open the zaehlungFolder
-    const zaehlId = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
+    const zaehlId = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id ?? ''
     const newOpenFolder = [...newActiveNodeArray, 'Zaehlungen']
     const newOpenNode = [...newActiveNodeArray, 'Zaehlungen', zaehlId]
     newOpenNodes = [...newOpenNodes, newOpenFolder, newOpenNode]
@@ -258,7 +297,7 @@ export const insertDataset = async ({
   // console.log('insertDataset', { table, parentTable })
   // invalidate tree queries for count and data
   if (['user', 'message', 'currentissue'].includes(table)) {
-    tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
+    void tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
   }
   const queryKeyTable =
     parentTable === 'tpopfeldkontr' ? 'treeTpopfeldkontrzaehl'
@@ -270,7 +309,7 @@ export const insertDataset = async ({
     : table === 'ek_abrechnungstyp_werte' ? 'treeEkAbrechnungstypWerte'
     : table === 'tpopkontrzaehl_einheit_werte' ? 'treePopkontrzaehlEinheitWerte'
     : `tree${upperFirst(table)}`
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [queryKeyTable],
   })
   // console.log('insertDataset', {
@@ -293,7 +332,7 @@ export const insertDataset = async ({
       ].includes(table)
     ) ?
       'treeWerteFolders'
-    : `tree${upperFirst(parentTable)}Folders`
+    : `tree${upperFirst(parentTable ?? '')}Folders`
   // console.log('insertDataset', {
   //   table,
   //   parentTable,
@@ -302,34 +341,34 @@ export const insertDataset = async ({
   //   queryKeyTable,
   //   queryKeyFolder,
   // })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [queryKeyFolder],
   })
   // also invalidate parent queries for folder counts
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
   if (table === 'ziel') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
   }
   if (parentTable === 'tpopfeldkontr') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
   }
   if (['tpopfeldkontr', 'tpopfeldkontrFolder'].includes(menuType)) {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
   }

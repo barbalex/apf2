@@ -1,7 +1,7 @@
 import { useState, Suspense, type ChangeEvent } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -18,12 +18,12 @@ import { query } from './query.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 import { Menu } from './Menu.tsx'
 
-import type { Pop } from '../../../../models/apflora/index.ts'
+import type { PopFieldsFragment } from '../../../../gql/graphql.ts'
 
 import styles from './Pop.module.css'
 
 interface PopQueryResult {
-  popById?: Pop & {
+  popById?: PopFieldsFragment & {
     apByApId?: {
       id: string
       startJahr: number | null
@@ -31,7 +31,7 @@ interface PopQueryResult {
   }
 }
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   apId: 'UUID',
   nr: 'Int',
   name: 'String',
@@ -42,7 +42,7 @@ const fieldTypes = {
 }
 
 export const Component = () => {
-  const { projId, apId, popId } = useParams()
+  const { popId } = useParams()
 
   const userName = useAtomValue(userNameAtom)
 
@@ -51,7 +51,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['pop', popId],
     queryFn: async () => {
       const result = await apolloClient.query<PopQueryResult>({
@@ -61,13 +61,13 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = data?.popById ?? {}
+  const row: Partial<NonNullable<PopQueryResult['popById']>> =
+    data?.popById ?? {}
 
   const refetchForm = () => {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['pop', popId],
     })
   }
@@ -121,7 +121,7 @@ export const Component = () => {
           (field === 'lv95X' && row.lv95Y))) ||
       (!value && (field === 'lv95Y' || field === 'lv95X'))
     ) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`PopForMapQuery`],
       })
     }
@@ -130,11 +130,11 @@ export const Component = () => {
       return rest
     })
     // Invalidate queries to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['pop', popId],
     })
     if (['name', 'nr'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treePop`],
       })
     }
@@ -167,11 +167,11 @@ export const Component = () => {
             error={fieldErrors.name}
           />
           <Status
-            apJahr={row?.apByApId?.startJahr}
+            apJahr={row?.apByApId?.startJahr as null | undefined}
             showFilter={false}
             row={row}
             saveToDb={saveToDb}
-            error={fieldErrors}
+            errors={fieldErrors}
           />
           <Checkbox2States
             label="Status unklar"
@@ -179,6 +179,7 @@ export const Component = () => {
             value={row.statusUnklar}
             saveToDb={saveToDb}
             error={fieldErrors.statusUnklar}
+            helperText=""
           />
           <TextField
             label="Begründung"

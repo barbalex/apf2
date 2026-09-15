@@ -1,12 +1,11 @@
 import { useState } from 'react'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import {
   FaPlus,
   FaMinus,
-  FaFolder,
   FaFolderTree,
   FaMapLocationDot,
 } from 'react-icons/fa6'
@@ -23,7 +22,7 @@ import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
 import { useSetAtom, useAtomValue } from 'jotai'
 
-import type { TpopId, PopId } from '../../../../generated/apflora/models.ts'
+import type { TpopId, PopId } from '../../../../models/apflora/index.ts'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
@@ -62,6 +61,14 @@ interface CreateTpopResult {
   }
 }
 
+interface DeleteTpopResult {
+  deleteTpopById: {
+    tpop: {
+      id: TpopId
+    } | null
+  } | null
+}
+
 interface MenuProps {
   row: {
     id: TpopId
@@ -94,7 +101,7 @@ export const Menu = ({ row }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result
+    let result: { data?: CreateTpopResult | null | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateTpopResult>({
         mutation: graphql(`
@@ -119,17 +126,17 @@ export const Menu = ({ row }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
     const id = result?.data?.createTpop?.tpop?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${id}/Teil-Population${search}`,
     )
   }
@@ -140,9 +147,8 @@ export const Menu = ({ row }: MenuProps) => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate<DeleteTpopResult>({
         mutation: graphql(`
           mutation deleteTpop($id: UUID!) {
             deleteTpopById(input: { id: $id }) {
@@ -169,17 +175,17 @@ export const Menu = ({ row }: MenuProps) => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
     // navigate to parent
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen${search}`,
     )
   }
@@ -192,6 +198,7 @@ export const Menu = ({ row }: MenuProps) => {
       popId,
       menuType: 'tpop',
       parentId: popId,
+      jahr: undefined,
     })
 
   const onClickCloseLowerNodes = () =>
@@ -210,7 +217,7 @@ export const Menu = ({ row }: MenuProps) => {
     })
 
   const [projekteTabs, setProjekteTabs] = useProjekteTabs()
-  const showMapIfNotYetVisible = (projekteTabs) => {
+  const showMapIfNotYetVisible = (projekteTabs: string[]) => {
     const isVisible = projekteTabs.includes('karte')
 
     if (!isVisible) {
@@ -223,7 +230,7 @@ export const Menu = ({ row }: MenuProps) => {
     if (isLocalizing) {
       return setIdOfTpopBeingLocalized(null)
     }
-    setIdOfTpopBeingLocalized(tpopId)
+    setIdOfTpopBeingLocalized(tpopId ?? null)
     showMapIfNotYetVisible(projekteTabs)
     setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
   }
@@ -307,16 +314,13 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickShowCoordOfTpopOnMapGeoAdminCh = () =>
     showCoordOfTpopOnMapGeoAdminCh({
-      id: tpopId,
+      id: tpopId ?? '',
     })
 
   const onClickShowCoordOfTpopOnMapsZhCh = () =>
     showCoordOfTpopOnMapsZhCh({
-      id: tpopId,
+      id: tpopId ?? '',
     })
-
-  // to paste copied feldkontr/freiwkontr/massn
-  const onClickCopyLowerElementToHere = () => copyTo({ parentId: tpopId })
 
   const showTreeMenus = useAtomValue(showTreeMenusAtom)
 
@@ -330,7 +334,7 @@ export const Menu = ({ row }: MenuProps) => {
         rerenderer={`${idOfTpopBeingLocalized}/${isMovingTpop}/${moving.label}/${isCopyingTpop}/${copying.label}/${movingFromThisPop}/${thisTpopIsMoving}/${thisTpopIsCopying}/${copyingCoordToTpop}/${tpopHasCoord}/${showTreeMenus}`}
       >
         <Tooltip title="Neue Teil-Population erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -344,14 +348,14 @@ export const Menu = ({ row }: MenuProps) => {
         </Tooltip>
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
+            <IconButton onClick={() => void onClickOpenLowerNodes()}>
               <FaFolderTree style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
@@ -359,7 +363,7 @@ export const Menu = ({ row }: MenuProps) => {
         <Tooltip title="Auf Karte verorten (mit Doppelklick)">
           <ToggleButton
             value={idOfTpopBeingLocalized ?? ''}
-            onChange={onClickLocalizeOnMap}
+            onChange={() => onClickLocalizeOnMap()}
             selected={isLocalizing}
             className={styles.roundToggleButton}
           >
@@ -376,7 +380,7 @@ export const Menu = ({ row }: MenuProps) => {
             : `Verschiebe '${moving.label}' zu dieser Population`
           }
         >
-          <IconButton onClick={onClickMoveInTree}>
+          <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
@@ -401,7 +405,7 @@ export const Menu = ({ row }: MenuProps) => {
             : 'Kopieren'
           }
         >
-          <IconButton onClick={onClickCopy}>
+          <IconButton onClick={() => void onClickCopy()}>
             <MdContentCopy
               style={{
                 color: thisTpopIsCopying ? 'rgb(255, 90, 0)' : 'white',
@@ -419,9 +423,9 @@ export const Menu = ({ row }: MenuProps) => {
         {tpopHasCoord && (
           <Button
             variant="outlined"
-            onClick={onCopyCoordToPop}
+            onClick={() => void onCopyCoordToPop()}
             loading={copyingCoordToTpop}
-            width={155}
+            {...{ width: 155 }}
             className={styles.styledLoadingButton}
           >
             Koordinaten auf die
@@ -431,8 +435,8 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         <Button
           variant="outlined"
-          onClick={onClickShowCoordOfTpopOnMapsZhCh}
-          width={103}
+          onClick={() => void onClickShowCoordOfTpopOnMapsZhCh()}
+          {...{ width: 103 }}
           className={styles.styledButton}
         >
           zeige auf
@@ -441,8 +445,8 @@ export const Menu = ({ row }: MenuProps) => {
         </Button>
         <Button
           variant="outlined"
-          onClick={onClickShowCoordOfTpopOnMapGeoAdminCh}
-          width={146}
+          onClick={() => void onClickShowCoordOfTpopOnMapGeoAdminCh()}
+          {...{ width: 146 }}
           className={styles.styledButton}
         >
           zeige auf
@@ -457,7 +461,7 @@ export const Menu = ({ row }: MenuProps) => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={menuStyles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

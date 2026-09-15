@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
-import { FaPlus, FaMinus, FaFolder, FaFolderTree } from 'react-icons/fa6'
+import { FaPlus, FaMinus, FaFolderTree } from 'react-icons/fa6'
 import { RiFolderCloseFill } from 'react-icons/ri'
 import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
 import { BsSignStopFill } from 'react-icons/bs'
@@ -31,23 +31,24 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
-import type { PopId, ApId, Pop } from '../../../../models/apflora/index.ts'
+import type { PopId, ApId } from '../../../../models/apflora/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
 interface CreatePopResult {
-  data?: {
-    createPop?: {
-      pop?: {
-        id: PopId
-        apId: ApId
-      }
+  createPop?: {
+    pop?: {
+      id: PopId
+      apId: ApId
     }
   }
 }
 
 interface MenuProps {
-  row: Pop
+  toggleFilterInput?: () => void
+  row?: {
+    label?: string | null | undefined
+  }
 }
 
 const iconStyle = { color: 'white' }
@@ -69,7 +70,7 @@ export const Menu = ({ row }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreatePopResult | undefined
+    let result: { data?: CreatePopResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreatePopResult>({
         mutation: graphql(`
@@ -92,17 +93,17 @@ export const Menu = ({ row }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createPop?.pop?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${id}/Population${search}`,
     )
   }
@@ -118,9 +119,8 @@ export const Menu = ({ row }: MenuProps) => {
   const copyMenuOpen = Boolean(copyMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deletePop($id: UUID!) {
             deletePopById(input: { id: $id }) {
@@ -130,7 +130,7 @@ export const Menu = ({ row }: MenuProps) => {
             }
           }
         `),
-        variables: { id: popId },
+        variables: { id: popId as string },
       })
     } catch (error) {
       return addNotification({
@@ -147,17 +147,17 @@ export const Menu = ({ row }: MenuProps) => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     // navigate to parent
-    navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Populationen${search}`)
+    void navigate(`/Daten/Projekte/${projId}/Arten/${apId}/Populationen${search}`)
   }
 
   const onClickOpenLowerNodes = () =>
@@ -168,6 +168,7 @@ export const Menu = ({ row }: MenuProps) => {
       popId,
       menuType: 'pop',
       parentId: apId,
+      jahr: undefined,
     })
 
   const onClickCloseLowerNodes = () =>
@@ -192,7 +193,7 @@ export const Menu = ({ row }: MenuProps) => {
     }
     setMoving({
       id: popId,
-      label: row.label,
+      label: row?.label,
       table: 'pop',
       toTable: 'ap',
       fromParentId: apId,
@@ -215,7 +216,7 @@ export const Menu = ({ row }: MenuProps) => {
   // TODO: add for feldkontr/freiwkontr/massn in tpop menu
   const onClickCopyTpopToHere = () => copyTo({ parentId: popId })
 
-  const onClickCopyPop = (withNextLevel) => {
+  const onClickCopyPop = (withNextLevel?: boolean) => {
     if (isCopyingPop) {
       // copy to this ap
       return copyTo({ parentId: apId })
@@ -223,8 +224,8 @@ export const Menu = ({ row }: MenuProps) => {
     setCopying({
       table: 'pop',
       id: popId,
-      label: row.label,
-      withNextLevel,
+      label: row?.label,
+      withNextLevel: withNextLevel as boolean,
     })
     setCopyMenuAnchorEl(null)
   }
@@ -248,7 +249,7 @@ export const Menu = ({ row }: MenuProps) => {
         rerenderer={`${isMoving}/${isCopyingPop}/${popMovingFromThisAp}/${showTreeMenus}`}
       >
         <Tooltip title="Neue Population erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -269,7 +270,7 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
@@ -277,7 +278,7 @@ export const Menu = ({ row }: MenuProps) => {
         <Tooltip
           title={
             !isMoving && !isTpopMoving ?
-              `'${row.label}' zu einer anderen Art verschieben`
+              `'${row?.label}' zu einer anderen Art verschieben`
             : thisPopIsMoving ?
               'Zum Verschieben gemerkt, bereit um in einer anderen Art einzufügen'
             : popMovingFromThisAp ?
@@ -287,7 +288,7 @@ export const Menu = ({ row }: MenuProps) => {
             : `Verschiebe '${moving.label}' zu dieser Art`
           }
         >
-          <IconButton onClick={onClickMoveInTree}>
+          <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
@@ -313,9 +314,11 @@ export const Menu = ({ row }: MenuProps) => {
         >
           <IconButton
             onClick={(event) =>
-              isCopyingTpop ? onClickCopyTpopToHere()
-              : isCopyingPop ? onClickCopyPop()
-              : setCopyMenuAnchorEl(event.currentTarget)
+              void (
+                isCopyingTpop ? onClickCopyTpopToHere()
+                : isCopyingPop ? onClickCopyPop()
+                : setCopyMenuAnchorEl(event.currentTarget)
+              )
             }
             aria-owns={copyMenuOpen ? 'copyMenu' : undefined}
           >
@@ -341,10 +344,10 @@ export const Menu = ({ row }: MenuProps) => {
         onClose={() => setCopyMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>Kopieren:</h3>
-        <MenuItem onClick={onClickCopyWithNextLevel}>
+        <MenuItem onClick={() => void onClickCopyWithNextLevel()}>
           mit Teilpopulationen
         </MenuItem>
-        <MenuItem onClick={onClickCopyWithoutNextLevel}>
+        <MenuItem onClick={() => void onClickCopyWithoutNextLevel()}>
           ohne Teilpopulationen
         </MenuItem>
         <MenuItem onClick={() => setCopyMenuAnchorEl(null)}>abbrechen</MenuItem>
@@ -356,7 +359,7 @@ export const Menu = ({ row }: MenuProps) => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

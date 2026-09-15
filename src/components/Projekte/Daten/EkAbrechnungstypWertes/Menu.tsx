@@ -1,23 +1,17 @@
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useParams, useNavigate, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
-import { MdOutlineMoveDown, MdContentCopy } from 'react-icons/md'
-import { RiFolderCloseFill } from 'react-icons/ri'
-import { BsSignStopFill } from 'react-icons/bs'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { moveTo } from '../../../../modules/moveTo/index.ts'
-import { copyTo } from '../../../../modules/copyTo/index.ts'
-import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
 
-import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerte.ts'
+import type { EkAbrechnungstypWerteId } from '../../../../models/apflora/EkAbrechnungstypWerte.ts'
 
 import {
   addNotificationAtom,
@@ -25,11 +19,9 @@ import {
 
 
 interface CreateEkAbrechnungstypWerteResult {
-  data?: {
-    createEkAbrechnungstypWerte?: {
-      ekAbrechnungstypWerte?: {
-        id: EkAbrechnungstypWerteCode
-      }
+  createEkAbrechnungstypWerte: {
+    ekAbrechnungstypWerte: {
+      id: EkAbrechnungstypWerteId
     }
   }
 }
@@ -42,20 +34,16 @@ const iconStyle = { color: 'white' }
 
 export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
-  const { search, pathname } = useLocation()
+  const { search } = useLocation()
   const navigate = useNavigate()
-  const { projId, ekAbrechnungstypWerteId } = useParams<{
-    projId: string
-    ekAbrechnungstypWerteId: string
-  }>()
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateEkAbrechnungstypWerteResult | undefined
+    let result: { data?: CreateEkAbrechnungstypWerteResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateEkAbrechnungstypWerteResult>({
         mutation: graphql(`
           mutation createEkAbrechnungstypWerteForEkAbrechnungstypWerteForm {
             createEkAbrechnungstypWerte(input: { ekAbrechnungstypWerte: {} }) {
@@ -74,15 +62,15 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeEkAbrechnungstypWerte`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     const id =
       result?.data?.createEkAbrechnungstypWerte?.ekAbrechnungstypWerte?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -92,7 +80,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neuen Abrechnungstyp erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

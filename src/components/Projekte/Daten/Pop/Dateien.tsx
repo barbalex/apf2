@@ -1,7 +1,7 @@
 import { useParams } from 'react-router'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { FilesRouter } from '../../../shared/Files/index.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
@@ -28,7 +28,7 @@ export const Component = () => {
   const { popId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['pop', popId, 'label'],
     queryFn: async () => {
       const result = await apolloClient.query<PopQueryResult>({
@@ -38,7 +38,6 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
   const label = data?.popById?.label ?? 'Population'

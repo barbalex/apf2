@@ -1,17 +1,26 @@
-import { useState, useEffect } from 'react'
-
 import { NodeWithListTransitioned } from '../NodeWithListTransitioned.tsx'
 import { NodeWithList } from '../NodeWithList.tsx'
+import type { TransitionStatus } from 'react-transition-group'
+
+import type { TreeMenu, FetcherModule } from '../types.ts'
+
+interface FetcherProps {
+  menu: TreeMenu
+  inProp?: boolean | undefined
+  parentTransitionState?: TransitionStatus | undefined
+  fetcherModule: FetcherModule | null
+}
 
 export const Fetcher = ({
   menu,
   inProp,
   parentTransitionState,
   fetcherModule,
-}) => {
+}: FetcherProps) => {
   const { fetcherName, fetcherParams } = menu
 
-  const navData = fetcherModule?.[fetcherName]?.(fetcherParams)
+  // menus reaching the Fetcher always provide a fetcherName
+  const navData = fetcherModule?.[fetcherName as string]?.(fetcherParams)
 
   // do not want to show self i.e. 'Massnahme' in 'Massnahmen'
   const menus = navData?.menus?.filter?.((m) => !m.isSelf)

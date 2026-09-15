@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -16,12 +16,10 @@ import type { PopmassnberId, PopId } from '../../../../models/apflora/index.ts'
 import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreatePopmassnberResult {
-  data?: {
-    createPopmassnber?: {
-      popmassnber?: {
-        id: PopmassnberId
-        popId: PopId
-      }
+  createPopmassnber?: {
+    popmassnber?: {
+      id: PopmassnberId
+      popId: PopId
     }
   }
 }
@@ -42,7 +40,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreatePopmassnberResult | undefined
+    let result: { data?: CreatePopmassnberResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreatePopmassnberResult>({
         mutation: graphql(`
@@ -65,14 +63,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopmassnber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopFolders`],
     })
     const id = result?.data?.createPopmassnber?.popmassnber?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -82,7 +80,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neuen Massnahmen-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

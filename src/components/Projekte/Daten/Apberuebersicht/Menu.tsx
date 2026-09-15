@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -14,9 +14,6 @@ import { isEqual } from 'es-toolkit'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.ts'
-import type { ProjId } from '../../../../models/apflora/Proj.ts'
-
 import styles from '../../../shared/Files/Menu/index.module.css'
 
 import {
@@ -24,27 +21,6 @@ import {
   treeOpenNodesAtom,
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
-
-interface CreateApberuebersichtResult {
-  data?: {
-    createApberuebersicht?: {
-      apberuebersicht?: {
-        id: ApberuebersichtId
-        projId: ProjId
-      }
-    }
-  }
-}
-
-interface DeleteApberuebersichtResult {
-  data?: {
-    deleteApberuebersichtById?: {
-      apberuebersicht?: {
-        id: ApberuebersichtId
-      }
-    }
-  }
-}
 
 const iconStyle = { color: 'white' }
 
@@ -64,7 +40,7 @@ export const Menu = () => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateApberuebersichtResult | undefined
+    let result
     try {
       result = await apolloClient.mutate({
         mutation: graphql(`
@@ -79,7 +55,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { projId },
+        variables: { projId: projId as string },
       })
     } catch (error) {
       return addNotification({
@@ -89,14 +65,14 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApberuebersicht`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     const id = result?.data?.createApberuebersicht?.apberuebersicht?.id
-    navigate(`/Daten/Projekte/${projId}/AP-Berichte/${id}${search}`)
+    void navigate(`/Daten/Projekte/${projId}/AP-Berichte/${id}${search}`)
   }
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
@@ -105,9 +81,8 @@ export const Menu = () => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result: DeleteApberuebersichtResult | undefined
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deleteApberuebersicht($id: UUID!) {
             deleteApberuebersichtById(input: { id: $id }) {
@@ -117,7 +92,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { id: apberuebersichtId },
+        variables: { id: apberuebersichtId as string },
       })
     } catch (error) {
       return addNotification({
@@ -134,14 +109,14 @@ export const Menu = () => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApberuebersicht`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     // navigate to parent
-    navigate(`/Daten/Projekte/${projId}/AP-Berichte${search}`)
+    void navigate(`/Daten/Projekte/${projId}/AP-Berichte${search}`)
   }
 
   // TODO?
@@ -152,7 +127,7 @@ export const Menu = () => {
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen AP-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -165,7 +140,7 @@ export const Menu = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="Druckversion öffnen. Achtung: lädt sehr viele Daten, ist daher langsam und stresst den Server.">
-          <IconButton onClick={onClickPrint}>
+          <IconButton onClick={() => void onClickPrint()}>
             <FaFilePdf style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -177,7 +152,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

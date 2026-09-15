@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -11,18 +11,16 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
-import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl.ts'
+import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopkontrzaehlResult {
-  data: {
-    createTpopkontrzaehl: {
-      tpopkontrzaehl: {
-        id: TpopkontrzaehlId
-        tpopkontrId: TpopkontrId
-      }
+  createTpopkontrzaehl: {
+    tpopkontrzaehl: {
+      id: TpopkontrzaehlId
+      tpopkontrId: TpopkontrId
     }
   }
 }
@@ -42,9 +40,9 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const { tpopkontrId } = useParams()
 
   const onClickAdd = async () => {
-    let result: CreateTpopkontrzaehlResult | undefined
+    let result: { data?: CreateTpopkontrzaehlResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopkontrzaehlResult['data']>({
+      result = await apolloClient.mutate<CreateTpopkontrzaehlResult>({
         mutation: graphql(`
           mutation createTpopkontrzaehlForTpopkontrzaehlsForm(
             $tpopkontrId: UUID!
@@ -71,17 +69,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehlFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
     const id = result?.data?.createTpopkontrzaehl?.tpopkontrzaehl?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -91,7 +89,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue Zählung erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

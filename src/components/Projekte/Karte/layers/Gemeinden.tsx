@@ -1,10 +1,14 @@
 import { GeoJSON } from 'react-leaflet'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import type { Feature, FeatureCollection } from 'geojson'
 
 interface GemeindeNode {
   id: string
+  // exists on the GraphQL type but is not queried here;
+  // the access keeps the popup property in place (undefined -> '')
+  text?: string
   geom: {
     geojson: string
   } | null
@@ -57,15 +61,17 @@ export const Gemeinden = () => {
   if (!data) return null
 
   const nodes = data?.allChAdministrativeUnits?.nodes ?? []
-  const gemeinden = nodes.map((n) => ({
+  const gemeinden = nodes.map((n): Feature => ({
     type: 'Feature',
     properties: { Gemeinde: n.text ?? '' },
-    geometry: JSON.parse(n?.geom?.geojson),
+    geometry: JSON.parse(String(n?.geom?.geojson)),
   }))
 
   return (
     <GeoJSON
-      data={gemeinden}
+      // leaflet handles plain feature arrays like FeatureCollections,
+      // but react-leaflet's data prop is typed as GeoJsonObject
+      data={gemeinden as unknown as FeatureCollection}
       style={style}
       interactive={false}
     />

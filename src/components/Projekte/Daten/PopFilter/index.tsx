@@ -21,7 +21,7 @@ import {
 } from '../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { PopOrTabs } from './PopOrTabs.tsx'
+import { PopOrTabs, type PopFilterRow } from './PopOrTabs.tsx'
 
 import styles from './index.module.css'
 
@@ -54,6 +54,7 @@ export const PopFilter = () => {
   useEffect(() => {
     if (dataFilterPop.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- needs to reset the tab when the filter array shrinks
       setActiveTab(0)
     }
   }, [activeTab, dataFilterPop.length])
@@ -73,7 +74,7 @@ export const PopFilter = () => {
     },
   })
 
-  const row = dataFilterPop[activeTab]
+  const row = dataFilterPop[activeTab] as PopFilterRow | undefined
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) =>
     setDataFilterValue({
@@ -155,6 +156,7 @@ export const PopFilter = () => {
             type="number"
             value={row?.nr}
             saveToDb={saveToDb}
+            error={undefined}
           />
           <TextFieldWithInfo
             label="Name"
@@ -163,18 +165,22 @@ export const PopFilter = () => {
             popover="Dieses Feld möglichst immer ausfüllen"
             value={row?.name}
             saveToDb={saveToDb}
+            error={undefined}
           />
           <Status
-            apJahr={row?.apByApId?.startJahr}
+            apJahr={row?.apByApId?.startJahr as null | undefined}
             showFilter={true}
             saveToDb={saveToDb}
             row={row}
+            errors={undefined}
           />
           <Checkbox2States
             label="Status unklar"
             name="statusUnklar"
             value={row?.statusUnklar}
             saveToDb={saveToDb}
+            error={undefined}
+            helperText=""
           />
           <TextField
             label="Begründung"
@@ -183,6 +189,7 @@ export const PopFilter = () => {
             multiLine
             value={row?.statusUnklarBegruendung}
             saveToDb={saveToDb}
+            error={undefined}
           />
         </div>
       </div>

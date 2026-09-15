@@ -24,11 +24,12 @@ import { Checkbox2States } from '../../../shared/Checkbox2States.tsx'
 import { historize } from '../../../../modules/historize.ts'
 import { Menu } from './Menu.tsx'
 
-import type Apberuebersicht from '../../../../models/apflora/Apberuebersicht.ts'
+import type { ApberuebersichtId } from '../../../../models/apflora/Apberuebersicht.ts'
+import type { ProjektId } from '../../../../models/apflora/Projekt.ts'
 
 import styles from './index.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   projId: 'UUID',
   jahr: 'Int',
   historyDate: 'Date',
@@ -36,10 +37,19 @@ const fieldTypes = {
   bemerkungen: 'String',
 }
 
+interface ApberuebersichtNode {
+  id: ApberuebersichtId
+  label: string | null
+  projId: ProjektId | null
+  jahr: number | null
+  historyDate: Date | null
+  historyFixed: boolean | null
+  bemerkungen: string | null
+  changedBy: string | null
+}
+
 interface ApberuebersichtQueryResult {
-  data?: {
-    apberuebersichtById: Apberuebersicht
-  }
+  apberuebersichtById: ApberuebersichtNode | null
 }
 
 const getIsBeforeMarchOfFollowingYear = (jahr: number | null | undefined) => {
@@ -55,7 +65,7 @@ export const Component = () => {
 
   const user = useAtomValue(userAtom)
   const { token } = user
-  const role = token ? jwtDecode(token).role : null
+  const role = token ? jwtDecode<{ role?: string }>(token).role : null
   const userIsManager = role === 'apflora_manager'
 
   const apolloClient = useApolloClient()
@@ -64,16 +74,19 @@ export const Component = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [historizing, setHistorizing] = useState(false)
 
-  const { data, error } = useQuery<ApberuebersichtQueryResult>({
+  const { data, error } = useQuery({
     queryKey: [`Apberuebersicht`, apberuebersichtId],
-    queryFn: () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<ApberuebersichtQueryResult>({
         query,
         variables: { id: apberuebersichtId },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-  const row = data?.data?.apberuebersichtById
+  const row = data?.apberuebersichtById
 
   const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
     const field = event.target.name
@@ -121,11 +134,11 @@ export const Component = () => {
       return rest
     })
     if (field === 'jahr') {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeApberuebersicht`],
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`Apberuebersicht`],
     })
   }
@@ -139,8 +152,8 @@ export const Component = () => {
     if (!row?.jahr)
       return console.log('Apberuebersicht, onClickHistorize: year missing')
     setHistorizing(true)
-    await historize({ apberuebersicht: row })
-    tsQueryClient.invalidateQueries({
+    await historize({ apberuebersicht: { ...row } })
+    void tsQueryClient.invalidateQueries({
       queryKey: ['Apberuebersicht'],
     })
     setHistorizing(false)
@@ -181,10 +194,10 @@ export const Component = () => {
                 <>
                   <Button
                     variant="outlined"
-                    onClick={onClickHistorize}
+                    onClick={() => void onClickHistorize()}
                     title="historisieren"
                     color="inherit"
-                    disabled={historizing || row?.historyFixed}
+                    disabled={historizing || !!row?.historyFixed}
                     style={historizeButtonStyle}
                     className={styles.historizeButton}
                   >
@@ -208,6 +221,7 @@ export const Component = () => {
                 name="historyFixed"
                 value={row?.historyFixed}
                 saveToDb={saveToDb}
+                error={fieldErrors.historyFixed}
                 helperText="Bewahrt die letze Historisierung als offiziellen Jahresbericht"
                 disabled={!row?.historyDate}
               />

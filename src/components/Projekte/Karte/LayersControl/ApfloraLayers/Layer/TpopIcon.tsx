@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import type { MouseEvent } from 'react'
 import { MdLocalFlorist } from 'react-icons/md'
 import { FaCheck } from 'react-icons/fa'
 import Menu from '@mui/material/Menu'
@@ -20,8 +21,9 @@ export const TpopIcon = () => {
   const tpopLabel = useAtomValue(mapTpopLabelAtom)
   const setTpopLabel = useSetAtom(setMapTpopLabelAtom)
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const onClickIconContainer = (e) => setAnchorEl(e.currentTarget)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+  const onClickIconContainer = (e: MouseEvent<HTMLDivElement>) =>
+    setAnchorEl(e.currentTarget)
   const onClose = () => setAnchorEl(null)
 
   const onClickAllSame = () => {
@@ -58,7 +60,7 @@ export const TpopIcon = () => {
     <>
       <div
         aria-label="Symbole und Beschriftung wählen"
-        aria-owns={anchorEl ? 'menu' : null}
+        aria-owns={anchorEl ? 'menu' : undefined}
         aria-haspopup="true"
         onClick={onClickIconContainer}
         title="Symbole und Beschriftung wählen"

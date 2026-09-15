@@ -1,6 +1,6 @@
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import MarkdownIt from 'markdown-it'
 import { useParams } from 'react-router'
 
@@ -24,7 +24,7 @@ const query = dynamicGql`
 `
 
 interface CurrentIssueQueryResult {
-  currentissueById: Currentissue
+  currentissueById: Currentissue | null
 }
 
 export const Component = () => {
@@ -32,7 +32,7 @@ export const Component = () => {
 
   const { issueId } = useParams<{ issueId: string }>()
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['currentIssue', issueId],
     queryFn: async () => {
       const result = await apolloClient.query<CurrentIssueQueryResult>({
@@ -44,7 +44,6 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
@@ -55,7 +54,7 @@ export const Component = () => {
   return (
     <ErrorBoundary>
       <div className={styles.container}>
-        <FormTitle title={row.title} />
+        <FormTitle title={row.title ?? ''} />
         <div className={styles.fieldsContainer}>
           <div
             className={styles.content}

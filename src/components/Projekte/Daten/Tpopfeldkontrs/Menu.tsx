@@ -1,4 +1,4 @@
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -35,7 +35,7 @@ import type {
   TpopkontrId,
   TpopId,
   TpopkontrzaehlId,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './Menu.module.css'
 
@@ -135,30 +135,32 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       zaehlungenFolderNode,
       zaehlungNode,
     ]
-    setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes as (string | number)[][])
 
     // 4. refresh tree
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
 
     // 5. navigate to new tpopkontr
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({
       id: tpopId,
+      parentId: undefined,
       projId,
       apId,
       popId,
       menuType: 'tpopfeldkontrFolder',
+      jahr: undefined,
     })
 
   const onClickCloseLowerNodes = () =>
@@ -217,7 +219,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue Feld-Kontrolle erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus className={styles.icon} />
           </IconButton>
         </Tooltip>
@@ -230,14 +232,14 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill className={styles.icon} />
             </IconButton>
           </Tooltip>
         )}
         {isMovingEk && (
           <Tooltip title={`Verschiebe '${moving.label}' hierhin`}>
-            <IconButton onClick={onClickMoveEkfToHere}>
+            <IconButton onClick={() => void onClickMoveEkfToHere()}>
               <MdOutlineMoveDown className={styles.icon} />
             </IconButton>
           </Tooltip>
@@ -251,7 +253,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         )}
         {isCopyingEk && (
           <Tooltip title={`Kopiere '${copying.label}' hierhin`}>
-            <IconButton onClick={onClickCopyEkfToHere}>
+            <IconButton onClick={() => void onClickCopyEkfToHere()}>
               <MdContentCopy className={styles.icon} />
             </IconButton>
           </Tooltip>

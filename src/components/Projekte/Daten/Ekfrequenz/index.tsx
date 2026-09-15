@@ -1,8 +1,8 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -17,39 +17,64 @@ import { ekfrequenz } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 
+import type { ComponentType } from 'react'
+
 import type {
-  Ekfrequenz,
+  EkfrequenzId,
   ApId,
-  EkAbrechnungstypWerteCode,
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
-interface EkfrequenzQueryResult {
-  data?: {
-    ekfrequenzById?: Ekfrequenz & {
-      apByApId?: {
-        id: ApId
-        ekfrequenzsByApId?: {
-          nodes: Ekfrequenz[]
-        }
-      }
+interface EkfrequenzNode {
+  id: EkfrequenzId
+  apId: ApId
+  ektyp: string | null
+  anwendungsfall: string | null
+  code: string | null
+  kontrolljahre: number[] | null
+  kontrolljahreAb: string | null
+  bemerkungen: string | null
+  sort: number | null
+  ekAbrechnungstyp: string | null
+  changedBy: string | null
+  apByApId: {
+    id: ApId
+    ekfrequenzsByApId: {
+      nodes: EkfrequenzNode[]
     }
   }
+}
+
+interface EkfrequenzQueryResult {
+  ekfrequenzById: EkfrequenzNode | null
 }
 
 interface EkAbrechnungstypWertesQueryResult {
-  data?: {
-    allEkAbrechnungstypWertes?: {
-      nodes: {
-        value: EkAbrechnungstypWerteCode
-        label: string | null
-      }[]
-    }
+  allEkAbrechnungstypWertes: {
+    nodes: {
+      value: string
+      label: string | null
+    }[]
   }
 }
 
-const fieldTypes = {
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: string; label: string | null }[]
+  loading?: boolean
+  value?: string | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
+
+const fieldTypes: Record<string, string> = {
   apId: 'UUID',
   ektyp: 'EkType',
   anwendungsfall: 'String',
@@ -78,7 +103,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, refetch } = useQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['ekfrequenz', id],
     queryFn: async () => {
       const result = await apolloClient.query<EkfrequenzQueryResult>({
@@ -90,11 +115,10 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const { data: dataEkAbrechnungstypWertes } = useQuery({
+  const { data: dataEkAbrechnungstypWertes } = useSuspenseQuery({
     queryKey: ['ekAbrechnungstypWertes'],
     queryFn: async () => {
       const result =
@@ -104,15 +128,16 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: Infinity, // This data rarely changes
   })
 
-  const row = data.ekfrequenzById as Ekfrequenz
+  const row: Partial<EkfrequenzNode> = data?.ekfrequenzById ?? {}
   const userName = useAtomValue(userNameAtom)
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -158,11 +183,11 @@ export const Component = () => {
       return rest
     })
     // Invalidate query to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['ekfrequenz', id],
     })
     if (field === 'code') {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeEkfrequenz`],
       })
     }
@@ -193,13 +218,13 @@ export const Component = () => {
             saveToDb={saveToDb}
             error={fieldErrors.anwendungsfall}
           />
-          <RadioButtonGroup
+          <TypedRadioButtonGroup
             name="ektyp"
             dataSource={ektypeWertes}
             loading={false}
             label="EK-Typ"
             value={row.ektyp}
-            saveToDb={saveToDb}
+            saveToDb={(event) => void saveToDb(event)}
             error={fieldErrors.ektyp}
           />
           <div className={styles.kontrolljahrContainer}>
@@ -211,28 +236,27 @@ export const Component = () => {
             <Kontrolljahre
               kontrolljahre={row?.kontrolljahre?.slice()}
               saveToDb={saveToDb}
-              refetch={refetch}
+              refetch={() => void refetch()}
               //kontrolljahreString={JSON.stringify(row.kontrolljahre)}
             />
           </div>
-          <RadioButtonGroup
+          <TypedRadioButtonGroup
             name="kontrolljahreAb"
             dataSource={kontrolljahreAbWertes}
             loading={false}
             label="Kontrolljahre ab letzter"
             value={row.kontrolljahreAb}
-            saveToDb={saveToDb}
+            saveToDb={(event) => void saveToDb(event)}
             error={fieldErrors.kontrolljahreAb}
           />
-          <RadioButtonGroup
+          <TypedRadioButtonGroup
             name="ekAbrechnungstyp"
             dataSource={
-              dataEkAbrechnungstypWertes?.data?.allEkAbrechnungstypWertes
-                ?.nodes ?? []
+              dataEkAbrechnungstypWertes?.allEkAbrechnungstypWertes?.nodes ?? []
             }
             label="EK-Abrechnungstyp"
             value={row.ekAbrechnungstyp}
-            saveToDb={saveToDb}
+            saveToDb={(event) => void saveToDb(event)}
             error={fieldErrors.ekAbrechnungstyp}
           />
           <TextField

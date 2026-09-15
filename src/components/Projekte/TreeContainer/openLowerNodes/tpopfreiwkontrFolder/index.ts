@@ -5,6 +5,8 @@
  * 4. update openNodes
  * 5. refresh tree
  */
+import type { ApolloClient } from '@apollo/client'
+
 import { query } from './query.ts'
 import {
   store,
@@ -12,19 +14,40 @@ import {
   treeAddOpenNodesAtom,
 } from '../../../../../store/index.ts'
 
+interface EkfFolderOpenLowerNodesQueryResult {
+  tpopById?: {
+    tpopkontrsByTpopId?: {
+      nodes: {
+        id: string
+        tpopkontrzaehlsByTpopkontrId?: { nodes: { id: string }[] }
+      }[]
+    }
+  }
+}
+
+interface TpopfreiwkontrFolderParams {
+  id?: string | null | undefined
+  apId?: string | null | undefined
+  popId?: string | null | undefined
+  projId?: string | null | undefined
+}
+
 export const tpopfreiwkontrFolder = async ({
   id,
   apId = '99999999-9999-9999-9999-999999999999',
   popId = '99999999-9999-9999-9999-999999999999',
   projId = '99999999-9999-9999-9999-999999999999',
-}) => {
-  const apolloClient = store.get(apolloClientAtom)!
+}: TpopfreiwkontrFolderParams) => {
+  // apolloClient is set during app startup
+  const apolloClient = store.get(apolloClientAtom) as ApolloClient
 
   // 1. load all data
-  const { data } = await apolloClient.query({
-    query: query,
-    variables: { id },
-  })
+  const { data } = await apolloClient.query<EkfFolderOpenLowerNodesQueryResult>(
+    {
+      query: query,
+      variables: { id },
+    },
+  )
   const tpopkontrs = data?.tpopById?.tpopkontrsByTpopId?.nodes ?? []
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [
@@ -92,5 +115,5 @@ export const tpopfreiwkontrFolder = async ({
   })
 
   // 3. update openNodes
-  store.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes as (string | number)[][])
 }

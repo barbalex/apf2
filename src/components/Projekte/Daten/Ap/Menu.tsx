@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -32,26 +32,7 @@ import {
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
-interface CreateApResult {
-  data?: {
-    createAp?: {
-      ap?: {
-        id: string
-        projId: string
-      }
-    }
-  }
-}
-
-interface DeleteApResult {
-  data?: {
-    deleteApById?: {
-      ap?: {
-        id: string
-      }
-    }
-  }
-}
+import type { CreateApForApFormMutation } from '../../../../gql/graphql.ts'
 
 const iconStyle = { color: 'white' }
 
@@ -73,7 +54,9 @@ export const Menu = () => {
   const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const onClickAdd = async () => {
-    let result: CreateApResult | undefined
+    let result:
+      | { data?: CreateApForApFormMutation | undefined }
+      | undefined
     try {
       result = await apolloClient.mutate({
         mutation: graphql(`
@@ -86,7 +69,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { projId },
+        variables: { projId: projId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -96,14 +79,14 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     const id = result?.data?.createAp?.ap?.id
-    navigate(`/Daten/Projekte/${projId}/Arten/${id}/Art${search}`)
+    void navigate(`/Daten/Projekte/${projId}/Arten/${id}/Art${search}`)
   }
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
@@ -112,9 +95,8 @@ export const Menu = () => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result: DeleteApResult | undefined
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deleteAp($id: UUID!) {
             deleteApById(input: { id: $id }) {
@@ -124,7 +106,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { id: apId },
+        variables: { id: apId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -141,14 +123,14 @@ export const Menu = () => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     // navigate to parent
-    navigate(`/Daten/Projekte/${projId}/Arten${search}`)
+    void navigate(`/Daten/Projekte/${projId}/Arten${search}`)
   }
 
   const onClickMoveHere = () => moveTo({ id: apId })
@@ -185,7 +167,7 @@ export const Menu = () => {
     <ErrorBoundary>
       <MenuBar rerenderer={`${moving?.id}/${copying?.id}`}>
         <Tooltip title="Neue Art erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -199,7 +181,7 @@ export const Menu = () => {
         </Tooltip>
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
@@ -208,7 +190,7 @@ export const Menu = () => {
           moving.toTable === 'ap' &&
           moving.fromParentId !== apId && (
             <Tooltip title={`Verschiebe ${moving?.label} zu dieser Art`}>
-              <IconButton onClick={onClickMoveHere}>
+              <IconButton onClick={() => void onClickMoveHere()}>
                 <MdOutlineMoveDown style={iconStyle} />
               </IconButton>
             </Tooltip>
@@ -222,7 +204,7 @@ export const Menu = () => {
         )}
         {isCopying && (
           <Tooltip title={`Kopiere '${copying?.label}' in diese Art`}>
-            <IconButton onClick={onClickCopyTo}>
+            <IconButton onClick={() => void onClickCopyTo()}>
               <MdContentCopy style={iconStyle} />
             </IconButton>
           </Tooltip>
@@ -242,7 +224,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

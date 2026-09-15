@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -14,16 +14,13 @@ import { isEqual } from 'es-toolkit'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { ZielId } from '../../../../models/apflora/ZielId.ts'
-import type { ApId } from '../../../../models/apflora/ApId.ts'
+import type { ZielId, ApId } from '../../../../models/apflora/index.ts'
 
 interface CreateZielResult {
-  data: {
-    createZiel: {
-      ziel: {
-        id: ZielId
-        apId: ApId
-      }
+  createZiel?: {
+    ziel?: {
+      id: ZielId
+      apId: ApId
     }
   }
 }
@@ -51,9 +48,9 @@ export const Menu = () => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateZielResult | undefined
+    let result: { data?: CreateZielResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateZielResult['data']>({
+      result = await apolloClient.mutate<CreateZielResult>({
         mutation: graphql(`
           mutation createZielForZielForm($apId: UUID!) {
             createZiel(input: { ziel: { apId: $apId } }) {
@@ -74,17 +71,17 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZiel`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
     const id = result?.data?.createZiel?.ziel?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}/${id}${search}`,
     )
   }
@@ -95,9 +92,8 @@ export const Menu = () => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deleteZiel($id: UUID!) {
             deleteZielById(input: { id: $id }) {
@@ -107,7 +103,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { id: zielId },
+        variables: { id: zielId as string },
       })
     } catch (error) {
       return addNotification({
@@ -124,17 +120,17 @@ export const Menu = () => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZiel`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZieljahrs`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeZielsOfJahr`],
     })
     // navigate to parent
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele/${jahr}${search}`,
     )
   }
@@ -143,7 +139,7 @@ export const Menu = () => {
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neues Ziel erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -163,7 +159,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

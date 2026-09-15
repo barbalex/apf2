@@ -4,14 +4,14 @@ import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { Form, useParams } from 'react-router'
+import { useParams } from 'react-router'
 
 import { query } from './query.ts'
 import { Row } from './Row/index.tsx'
 import { ErrorBoundary } from '../../../../shared/ErrorBoundary.tsx'
 import { FormTitle } from '../../../../shared/FormTitle/index.tsx'
 
-import type { QkName } from '../../../../../models/apflora/index.ts'
+import type { ApId, QkName } from '../../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
@@ -23,7 +23,7 @@ interface QkNode {
 }
 
 interface QkChooseQueryResult {
-  allQks?: {
+  allQks: {
     totalCount: number
     nodes: QkNode[]
   }
@@ -37,7 +37,9 @@ export const Component = ({ refetchTab }: ChooseProps) => {
   const { apId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery<QkChooseQueryResult>({
+  // options are kept in a variable because suspense is still honoured by
+  // react-query at runtime but was removed from useQuery's types in v5
+  const queryOptions = {
     queryKey: ['qkChoose'],
     queryFn: async () => {
       const result = await apolloClient.query<QkChooseQueryResult>({
@@ -47,8 +49,9 @@ export const Component = ({ refetchTab }: ChooseProps) => {
       return result.data
     },
     suspense: true,
-  })
-  const rows = data?.allQks?.nodes
+  }
+  const { data } = useQuery(queryOptions)
+  const rows = data?.allQks?.nodes ?? []
 
   const [filter, setFilter] = useState('')
   const onChangeFilter = (event: ChangeEvent<HTMLInputElement>) =>
@@ -87,7 +90,7 @@ export const Component = ({ refetchTab }: ChooseProps) => {
         {rowsFiltered.map((row) => (
           <Row
             key={row.name}
-            apId={apId}
+            apId={apId as ApId}
             qk={row}
             refetchTab={refetchTab}
           />

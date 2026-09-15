@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router'
-import { graphql } from '../../gql'
+import { graphql } from '../../gql/index.ts'
 import { useAtom } from 'jotai'
 
 import { useApolloClient } from '@apollo/client/react'
 
 import { treeApFilterAtom } from '../../store/index.ts'
 
-import type { ApId } from '../../models/apflora/public/Ap.ts'
+import type { ApId } from '../../models/apflora/index.ts'
 
 interface ApFilterControllerQueryResult {
   apById: {
@@ -27,7 +27,7 @@ export const ApFilterController = () => {
     if (!apId) return
     if (!apFilter) return
 
-    apolloClient
+    void apolloClient
       .query<ApFilterControllerQueryResult>({
         query: graphql(`
           query apFilterControllerQuery($id: UUID!) {
@@ -40,7 +40,7 @@ export const ApFilterController = () => {
         variables: { id: apId },
       })
       .then(({ data }) => {
-        const bearbeitung = data.apById.bearbeitung
+        const bearbeitung = data?.apById.bearbeitung ?? 0
         const isAp = bearbeitung > 0 && bearbeitung < 4
         if (!isAp) setApFilter(false)
       })

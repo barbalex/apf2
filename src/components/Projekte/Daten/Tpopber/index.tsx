@@ -2,7 +2,11 @@ import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  useQueryClient,
+  type UseQueryOptions,
+} from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -15,11 +19,8 @@ import { tpopber } from '../../../shared/fragments.ts'
 import { query } from './query.ts'
 import { Menu } from './Menu.tsx'
 
-import type {
-  TpopberId,
-  TpopId,
-  TpopEntwicklungWerteCode,
-} from '../../../../generated/apflora/models.ts'
+import type { TpopId, TpopEntwicklungWerteCode } from '../../../../models/apflora/index.ts'
+import type { TpopberId } from '../../../../models/apflora/Tpopber.ts'
 
 import styles from './index.module.css'
 
@@ -40,11 +41,20 @@ interface TpopberQueryResult {
   } | null
 }
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   tpopId: 'UUID',
   jahr: 'Int',
   entwicklung: 'Int',
   bemerkungen: 'String',
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type TpopberUseQueryOptions = UseQueryOptions<
+  TpopberQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
 }
 
 export const Component = () => {
@@ -55,7 +65,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery<TpopberQueryResult>({
+  const tpopberQueryOptions: TpopberUseQueryOptions = {
     queryKey: ['tpopber', tpopberId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopberQueryResult>({
@@ -66,13 +76,18 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(tpopberQueryOptions)
 
-  const row = data?.tpopberById
+  const row = (data?.tpopberById ?? {}) as NonNullable<
+    TpopberQueryResult['tpopberById']
+  >
   const userName = useAtomValue(userNameAtom)
 
-  const saveToDb = async (event) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -111,7 +126,7 @@ export const Component = () => {
       }))
     }
     // invalidate tpopber query
-    tsQueryClient.invalidateQueries({ queryKey: ['tpopber', tpopberId] })
+    void tsQueryClient.invalidateQueries({ queryKey: ['tpopber', tpopberId] })
     // only set if necessary (to reduce renders)
     if (Object.keys(fieldErrors).length) {
       setFieldErrors((prev) => {
@@ -120,7 +135,7 @@ export const Component = () => {
       })
     }
     if (['jahr', 'entwicklung'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopber`],
       })
     }
@@ -145,8 +160,8 @@ export const Component = () => {
           <RadioButtonGroup
             name="entwicklung"
             label="Entwicklung"
-            dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
-            value={row.entwicklung}
+            dataSource={(data?.allTpopEntwicklungWertes?.nodes ?? []) as never[]}
+            value={row.entwicklung as null}
             saveToDb={saveToDb}
             error={fieldErrors.entwicklung}
           />

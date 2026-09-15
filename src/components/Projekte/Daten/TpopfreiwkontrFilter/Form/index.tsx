@@ -1,4 +1,3 @@
-import { type ChangeEvent } from 'react'
 import { useSetAtom } from 'jotai'
 
 import { Headdata } from './Headdata/index.tsx'
@@ -13,17 +12,31 @@ import { Verification } from '../../Tpopfreiwkontr/Form/Verification.tsx'
 import { treeDataFilterSetValueAtom } from '../../../../../store/index.ts'
 import { ifIsNumericAsNumber } from '../../../../../modules/ifIsNumericAsNumber.ts'
 
+import type {
+  TpopkontrRow,
+  TpopkontrSaveToDbEvent,
+} from '../../Tpopfreiwkontr/Form/index.tsx'
+import type { AdresseId } from '../../../../../models/apflora/Adresse.ts'
+
 import styles from '../../Tpopfreiwkontr/Form/index.module.css'
 
+export interface TpopfreiwkontrFilterRow {
+  id?: string
+  bearbeiter?: AdresseId | null
+  planVorhanden?: boolean | null
+  jungpflanzenVorhanden?: boolean | null
+  apberNichtRelevant?: boolean | null
+}
+
 interface FormProps {
-  row: any
+  row: TpopfreiwkontrFilterRow | undefined
   activeTab: number
 }
 
 export const Form = ({ row, activeTab }: FormProps) => {
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
-  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: TpopkontrSaveToDbEvent) =>
     setDataFilterValue({
       table: 'tpopfreiwkontr',
       key: event.target.name,
@@ -31,25 +44,35 @@ export const Form = ({ row, activeTab }: FormProps) => {
       index: activeTab,
     })
 
+  // the reused Tpopfreiwkontr form fields expect the tpopkontr row shape
+  const formRow = row as Partial<TpopkontrRow>
+
   return (
     <div className={styles.formContainer}>
       <div className={styles.gridContainer}>
         <Headdata row={row} activeTab={activeTab} />
-        <Date saveToDb={saveToDb} row={row} />
-        <Map key={`map${row?.planVorhanden}`} saveToDb={saveToDb} row={row} />
-        <Cover saveToDb={saveToDb} row={row} />
+        <Date saveToDb={saveToDb} row={formRow} errors={{}} />
+        <Map
+          key={`map${row?.planVorhanden}`}
+          saveToDb={saveToDb}
+          row={formRow}
+          errors={{}}
+        />
+        <Cover saveToDb={saveToDb} row={formRow} errors={{}} />
         <More
           key={`more${row?.jungpflanzenVorhanden}`}
           saveToDb={saveToDb}
-          row={row}
+          row={formRow}
+          errors={{}}
         />
-        <Danger saveToDb={saveToDb} row={row} />
-        <Remarks saveToDb={saveToDb} row={row} />
-        <EkfRemarks saveToDb={saveToDb} row={row} />
+        <Danger saveToDb={saveToDb} row={formRow} errors={{}} />
+        <Remarks saveToDb={saveToDb} row={formRow} errors={{}} />
+        <EkfRemarks saveToDb={saveToDb} row={formRow} errors={{}} />
         <Verification
           key={`verification${row?.apberNichtRelevant}`}
           saveToDb={saveToDb}
-          row={row}
+          row={formRow}
+          errors={{}}
         />
       </div>
       <div style={{ height: '64px' }} />

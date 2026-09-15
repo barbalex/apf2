@@ -1,4 +1,4 @@
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 
 export const queryTpops = graphql(`
   query tpopsQuery($filteredFilter: TpopFilter!, $allFilter: TpopFilter!) {

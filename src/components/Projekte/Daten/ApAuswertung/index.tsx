@@ -1,7 +1,7 @@
 import { useParams } from 'react-router'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { ApErfolg } from './ApErfolg/index.tsx'
 import { PopStatus } from './PopStatus/index.tsx'
@@ -31,16 +31,16 @@ interface ApAuswertungQueryResult {
     id: ApId
     aeTaxonomyByArtId: {
       id: AeTaxonomiesId
-      artname: string
+      artname: string | null
     } | null
-  }
+  } | null
 }
 
 export const Component = () => {
   const apolloClient = useApolloClient()
 
   const { apId } = useParams<{ apId: string }>()
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['apAuswertung', apId],
     queryFn: async () => {
       const result = await apolloClient.query<ApAuswertungQueryResult>({
@@ -48,12 +48,11 @@ export const Component = () => {
         variables: { apId },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as ApAuswertungQueryResult
     },
-    suspense: true,
   })
 
-  const artname = data.apById.aeTaxonomyByArtId.artname ?? 'Art'
+  const artname = data.apById?.aeTaxonomyByArtId?.artname ?? 'Art'
 
   return (
     <>

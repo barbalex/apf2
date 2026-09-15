@@ -2,10 +2,8 @@ import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { sortBy } from 'es-toolkit'
 
-import type {
-  TpopkontrId,
-  EkplanId,
-} from '../../../../generated/apflora/models.ts'
+import type { TpopkontrId } from '../../../../models/apflora/index.ts'
+import type { EkplanId } from '../../../../models/apflora/Ekplan.ts'
 
 import styles from './EkYear.module.css'
 
@@ -21,6 +19,7 @@ interface EkYearProps {
 }
 
 const typRenamed = (e: EkYearData) => {
+  // eslint-disable-next-line @typescript-eslint/switch-exhaustiveness-check
   switch (e.typ) {
     case 'Freiwilligen-Kontrolle':
       return 'EKF'
@@ -43,7 +42,7 @@ export const EkYear = ({ data }: EkYearProps) => {
 
   return (
     <TableRow className={styles.styledTableRow}>
-      <TableCell>{data[0].jahr}</TableCell>
+      <TableCell>{data[0]?.jahr}</TableCell>
       <TableCell>
         {ekplans.map((e) => (
           <div key={e.id}>{e.typ?.toUpperCase() ?? ''}</div>

@@ -11,7 +11,21 @@ export const List = () => {
   return (
     <Suspense fallback={<Spinner />}>
       <SharedList
-        navData={navData}
+        navData={{
+          ...navData,
+          menus: navData.menus.map((menu) => ({
+            id: menu.id,
+            label: menu.label,
+            ...(menu.labelLeftElements && {
+              labelLeftElements: menu.labelLeftElements.filter(
+                (element) => element !== undefined,
+              ),
+            }),
+            ...(menu.labelRightElements && {
+              labelRightElements: menu.labelRightElements,
+            }),
+          })),
+        }}
         MenuBarComponent={Menu}
         menuBarProps={{ row: navData }}
       />

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, type ChangeEvent } from 'react'
 import { useParams } from 'react-router'
 import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { graphql } from '../../../../../gql'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
@@ -56,39 +56,39 @@ interface Options {
 }
 
 interface HistoryRow {
-  year: number
-  nr: number | null
-  flurname: string | null
-  bekanntSeit: number | null
-  status: number | null
-  statusUnklar: boolean | null
-  statusUnklarGrund: string | null
-  apberRelevant: boolean | null
-  apberRelevantGrund: number | null
-  gemeinde: string | null
-  radius: number | null
-  hoehe: number | null
-  exposition: string | null
-  klima: string | null
-  neigung: string | null
-  beschreibung: string | null
-  katasterNr: string | null
-  eigentuemer: string | null
-  kontakt: string | null
-  nutzungszone: string | null
-  bewirtschafter: string | null
-  bewirtschaftung: string | null
-  bemerkungen: string | null
-  ekfrequenz: string | null
-  ekfrequenzAbweichend: boolean | null
-  ekfrequenzStartjahr: number | null
-  ekfKontrolleur: string | null
-  geomPoint?: { x: number | null; y: number | null } | null
+  year?: number | null
+  nr?: number | null
+  flurname?: string | null
+  bekanntSeit?: number | null
+  status?: number | null
+  statusUnklar?: boolean | null
+  statusUnklarGrund?: string | null
+  apberRelevant?: boolean | null
+  apberRelevantGrund?: number | null
+  gemeinde?: string | null
+  radius?: number | null
+  hoehe?: number | null
+  exposition?: string | null
+  klima?: string | null
+  neigung?: string | null
+  beschreibung?: string | null
+  katasterNr?: string | null
+  eigentuemer?: string | null
+  kontakt?: string | null
+  nutzungszone?: string | null
+  bewirtschafter?: string | null
+  bewirtschaftung?: string | null
+  bemerkungen?: string | null
+  ekfrequenz?: string | null
+  ekfrequenzAbweichend?: boolean | null
+  ekfrequenzStartjahr?: number | null
+  ekfKontrolleur?: string | null
+  geomPoint?: { x?: number | null; y?: number | null } | null
 }
 
 interface Props {
   isNew: boolean
-  historyRow?: HistoryRow
+  historyRow?: HistoryRow | undefined
   options: Options
   onClose: () => void
   refetch: () => void
@@ -150,6 +150,7 @@ export const HistoryForm = ({
       )
       input?.focus()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const buildGeomPoint = (x: unknown, y: unknown) => {
@@ -164,8 +165,10 @@ export const HistoryForm = ({
     }
   }
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+  }) => {
+    const field = event.target.name ?? ''
     const rawValue = event.target.value
     const value =
       typeof rawValue === 'boolean' ? rawValue : ifIsNumericAsNumber(rawValue)
@@ -201,7 +204,7 @@ export const HistoryForm = ({
         `,
         variables: {
           id: tpopId,
-          year: historyRow!.year,
+          year: historyRow?.year as number,
           [field]: value,
           changedBy: userName,
         },
@@ -256,7 +259,7 @@ export const HistoryForm = ({
         `,
         variables: {
           id: tpopId,
-          year: historyRow!.year,
+          year: historyRow?.year as number,
           geomPoint,
           changedBy: userName,
         },
@@ -417,7 +420,7 @@ export const HistoryForm = ({
             }
           }
         `),
-        variables: { id: tpopId, year: historyRow!.year },
+        variables: { id: tpopId ?? '', year: historyRow?.year as number },
       })
     } catch (error) {
       console.error('Failed to delete tpop_history:', error)
@@ -448,7 +451,7 @@ export const HistoryForm = ({
           <IconButton
             className={styles.okButton}
             size="small"
-            onClick={handleOk}
+            onClick={() => void handleOk()}
           >
             <MdCheck />
           </IconButton>
@@ -461,7 +464,7 @@ export const HistoryForm = ({
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
       <TextField
@@ -502,9 +505,9 @@ export const HistoryForm = ({
         name="status"
         label="Status"
         options={options.popStatusWertes}
-        value={fields.status}
-        saveToDb={saveToDb}
-        error={fieldErrors.status}
+        value={fields.status as string | number | null}
+        saveToDb={(e) => void saveToDb(e)}
+        error={fieldErrors.status ?? ''}
       />
       <Checkbox2States
         name="statusUnklar"
@@ -512,6 +515,7 @@ export const HistoryForm = ({
         value={fields.statusUnklar}
         saveToDb={saveToDb}
         error={fieldErrors.statusUnklar}
+        helperText=""
       />
       <TextField
         name="statusUnklarGrund"
@@ -528,15 +532,16 @@ export const HistoryForm = ({
         value={fields.apberRelevant}
         saveToDb={saveToDb}
         error={fieldErrors.apberRelevant}
+        helperText=""
       />
       <Select
         key={`${rowKey}apberRelevantGrund`}
         name="apberRelevantGrund"
         label="Grund für AP-Bericht (Nicht-)Relevanz"
         options={options.apberRelevantGrundWertes}
-        value={fields.apberRelevantGrund}
-        saveToDb={saveToDb}
-        error={fieldErrors.apberRelevantGrund}
+        value={fields.apberRelevantGrund as string | number | null}
+        saveToDb={(e) => void saveToDb(e)}
+        error={fieldErrors.apberRelevantGrund ?? ''}
       />
       <TextField
         name="x"
@@ -673,9 +678,9 @@ export const HistoryForm = ({
         name="ekfrequenz"
         label="EK-Frequenz"
         options={options.ekfrequenzs}
-        value={fields.ekfrequenz}
-        saveToDb={saveToDb}
-        error={fieldErrors.ekfrequenz}
+        value={fields.ekfrequenz as string | number | null}
+        saveToDb={(e) => void saveToDb(e)}
+        error={fieldErrors.ekfrequenz ?? ''}
       />
       <Checkbox2States
         name="ekfrequenzAbweichend"
@@ -683,6 +688,7 @@ export const HistoryForm = ({
         value={fields.ekfrequenzAbweichend}
         saveToDb={saveToDb}
         error={fieldErrors.ekfrequenzAbweichend}
+        helperText=""
       />
       <TextField
         name="ekfrequenzStartjahr"
@@ -697,9 +703,9 @@ export const HistoryForm = ({
         name="ekfKontrolleur"
         label="EKF-KontrolleurIn"
         options={options.adresses}
-        value={fields.ekfKontrolleur}
-        saveToDb={saveToDb}
-        error={fieldErrors.ekfKontrolleur}
+        value={fields.ekfKontrolleur as string | number | null}
+        saveToDb={(e) => void saveToDb(e)}
+        error={fieldErrors.ekfKontrolleur ?? ''}
       />
     </div>
   )

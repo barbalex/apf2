@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, type SyntheticEvent } from 'react'
+import type { Dispatch, SetStateAction, SyntheticEvent } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useSetAtom } from 'jotai'
@@ -11,7 +11,7 @@ import styles from './Tabs.module.css'
 interface TabsProps {
   activeTab: number
   setActiveTab: Dispatch<SetStateAction<number>>
-  dataFilter: any[]
+  dataFilter: Record<string, unknown>[]
 }
 
 export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
@@ -43,7 +43,7 @@ export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
         scrollButtons="auto"
         className={styles.styledTabs}
       >
-        {dataFilter.map((filter, index) => (
+        {dataFilter.map((_filter, index) => (
           <Tab
             key={index}
             label={index + 1}

@@ -12,6 +12,8 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const openLowerNodesData = {
   action: 'openLowerNodes',
@@ -33,7 +35,11 @@ const resetCopyingData = {
   action: 'resetCopying',
 }
 
-export const TpopFolder = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const TpopFolder = ({ onClick }: Props) => {
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
   const userToken = useAtomValue(userTokenAtom)

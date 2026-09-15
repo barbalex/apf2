@@ -2,7 +2,11 @@ import { useState, type ChangeEvent } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  type UseQueryOptions,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -16,30 +20,46 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { assozart } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
-import type Assozart from '../../../../models/apflora/Assozart.ts'
+import type { AssozartId } from '../../../../models/apflora/Assozart.ts'
 import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 
 import styles from './index.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   bemerkungen: 'String',
   aeId: 'UUID',
   apId: 'UUID',
 }
 
+interface AssozartNode {
+  id: AssozartId
+  label: string | null
+  bemerkungen: string | null
+  aeId: AeTaxonomiesId | null
+  apId: ApId | null
+  changedBy: string | null
+}
+
 interface AssozartQueryResult {
-  assozartById: Assozart & {
-    aeTaxonomyByAeId?: {
-      taxArtName: string
-    }
-    apByApId?: {
-      artId: AeTaxonomiesId
+  assozartById: AssozartNode & {
+    aeTaxonomyByAeId: {
+      id: AeTaxonomiesId
+      taxArtName: string | null
+    } | null
+    apByApId: {
+      artId: AeTaxonomiesId | null
       assozartsByApId: {
-        nodes: Assozart[]
+        nodes: AssozartNode[]
       }
-    }
+    } | null
   }
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type AssozartUseQueryOptions = UseQueryOptions<AssozartQueryResult | undefined, Error> & {
+  suspense: boolean
 }
 
 export const Component = () => {
@@ -52,7 +72,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const queryOptions: AssozartUseQueryOptions = {
     queryKey: ['assozart', id],
     queryFn: async () => {
       const result = await apolloClient.query<AssozartQueryResult>({
@@ -66,15 +86,17 @@ export const Component = () => {
     },
     suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
-  })
+  }
 
-  const row = data.assozartById as AssozartQueryResult['assozartById']
+  const { data } = useQuery(queryOptions)
+
+  const row = data?.assozartById
 
   // do not include already chosen assozarten
   const assozartenOfAp = (row?.apByApId?.assozartsByApId?.nodes ?? [])
     .map((o) => o.aeId)
     // but do include the art included in the row
-    .filter((o) => o !== row.aeId)
+    .filter((o) => o !== row?.aeId)
   const aeTaxonomiesfilter = (inputValue: string) =>
     inputValue ?
       assozartenOfAp.length ?
@@ -90,7 +112,7 @@ export const Component = () => {
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
-      id: row.id,
+      id: row?.id,
       [field]: value,
       changedBy: userName,
     }
@@ -143,11 +165,11 @@ export const Component = () => {
       return rest
     })
     // Invalidate query to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['assozart', id],
     })
     if (field === 'aeId') {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeAssozart`],
       })
     }
@@ -167,13 +189,14 @@ export const Component = () => {
           <SelectLoadingOptions
             key={`${id}aeId`}
             field="aeId"
+            valueLabel={row?.aeTaxonomyByAeId?.taxArtName ?? ''}
             valueLabelPath="aeTaxonomyByAeId.taxArtName"
+            labelSize={12}
             label="Art"
             row={row}
             query={queryAeTaxonomies}
             filter={aeTaxonomiesfilter}
             queryNodesName="allAeTaxonomies"
-            value={row.aeId}
             saveToDb={saveToDb}
             error={fieldErrors.aeId}
           />
@@ -181,7 +204,7 @@ export const Component = () => {
             name="bemerkungen"
             label="Bemerkungen zur Assoziation"
             type="text"
-            value={row.bemerkungen}
+            value={row?.bemerkungen}
             saveToDb={saveToDb}
             error={fieldErrors.bemerkungen}
           />

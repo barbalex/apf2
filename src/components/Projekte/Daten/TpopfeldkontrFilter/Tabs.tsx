@@ -5,12 +5,14 @@ import { useSetAtom } from 'jotai'
 import { initial as tpopfeldkontr } from '../../../../store/DataFilter/tpopfeldkontr.ts'
 import { treeDataFilterAddOrAtom } from '../../../../store/index.ts'
 
+import type { SyntheticEvent } from 'react'
+
 import styles from './Tabs.module.css'
 
 interface TabsProps {
   activeTab: number
   setActiveTab: (tab: number) => void
-  dataFilter: any[]
+  dataFilter: Record<string, unknown>[]
 }
 
 export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
@@ -21,7 +23,7 @@ export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
       (v) => v !== null,
     ).length === 0
 
-  const onChangeTab = (event, value) => {
+  const onChangeTab = (_event: SyntheticEvent, value: number) => {
     if (value > dataFilter.length - 1) {
       addDataFilterOr({
         table: 'tpopfeldkontr',
@@ -45,7 +47,7 @@ export const Tabs = ({ activeTab, setActiveTab, dataFilter }: TabsProps) => {
         scrollButtons="auto"
         className={styles.tabs}
       >
-        {dataFilter.map((filter, index) => (
+        {dataFilter.map((_filter, index) => (
           <Tab
             key={index}
             label={index + 1}

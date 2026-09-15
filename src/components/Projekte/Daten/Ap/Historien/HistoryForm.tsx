@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, type ChangeEvent } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { graphql } from '../../../../../gql'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
@@ -40,13 +40,22 @@ interface HistoryRow {
   ekfBeobachtungszeitpunkt: string | null
 }
 
+interface Fields {
+  year: number | string | null
+  bearbeitung: number | null
+  startJahr: number | null
+  umsetzung: number | null
+  bearbeiter: string | null
+  ekfBeobachtungszeitpunkt: string | null
+}
+
 interface Props {
   isNew: boolean
   artId: string | null
-  historyRow?: HistoryRow
+  historyRow?: HistoryRow | undefined
   options: Options
   onClose: () => void
-  refetch: () => void
+  refetch: () => Promise<unknown>
 }
 
 export const HistoryForm = ({
@@ -61,7 +70,7 @@ export const HistoryForm = ({
   const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
 
-  const [fields, setFields] = useState<Record<string, unknown>>({
+  const [fields, setFields] = useState<Fields>({
     year: isNew ? '' : (historyRow?.year ?? ''),
     bearbeitung: historyRow?.bearbeitung ?? null,
     startJahr: historyRow?.startJahr ?? null,
@@ -85,10 +94,12 @@ export const HistoryForm = ({
         )
       input?.focus()
     }
-  }, [])
+  }, [isNew])
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: string | number | null }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     if (isNew) {
@@ -125,7 +136,7 @@ export const HistoryForm = ({
         `,
         variables: {
           id: apId,
-          year: historyRow!.year,
+          year: historyRow?.year ?? 0,
           [field]: value,
           changedBy: userName,
         },
@@ -140,7 +151,7 @@ export const HistoryForm = ({
       const { [field]: _, ...rest } = prev
       return rest
     })
-    refetch()
+    void refetch()
   }
 
   const handleSaveNew = async () => {
@@ -200,7 +211,7 @@ export const HistoryForm = ({
       console.error('Failed to create ap_history:', error)
       return
     }
-    refetch()
+    void refetch()
   }
 
   const rowKey = historyRow?.year ?? 'new'
@@ -228,13 +239,13 @@ export const HistoryForm = ({
             }
           }
         `),
-        variables: { id: apId, year: historyRow!.year },
+        variables: { id: apId ?? '', year: historyRow?.year ?? 0 },
       })
     } catch (error) {
       console.error('Failed to delete ap_history:', error)
       return
     }
-    refetch()
+    void refetch()
     onClose()
   }
 
@@ -257,7 +268,7 @@ export const HistoryForm = ({
           <IconButton
             className={styles.okButton}
             size="small"
-            onClick={handleOk}
+            onClick={() => void handleOk()}
           >
             <MdCheck />
           </IconButton>
@@ -270,7 +281,7 @@ export const HistoryForm = ({
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
       <TextField
@@ -288,8 +299,8 @@ export const HistoryForm = ({
         label="Aktionsplan"
         options={options.apBearbstandWertes}
         value={fields.bearbeitung}
-        saveToDb={saveToDb}
-        error={fieldErrors.bearbeitung}
+        saveToDb={(event) => void saveToDb(event)}
+        error={fieldErrors.bearbeitung ?? ''}
       />
       <Select
         key={`${rowKey}umsetzung`}
@@ -297,8 +308,8 @@ export const HistoryForm = ({
         label="Stand Umsetzung"
         options={options.apUmsetzungWertes}
         value={fields.umsetzung}
-        saveToDb={saveToDb}
-        error={fieldErrors.umsetzung}
+        saveToDb={(event) => void saveToDb(event)}
+        error={fieldErrors.umsetzung ?? ''}
       />
       <Select
         key={`${rowKey}bearbeiter`}
@@ -306,8 +317,8 @@ export const HistoryForm = ({
         label="Verantwortlich"
         options={options.adresses}
         value={fields.bearbeiter}
-        saveToDb={saveToDb}
-        error={fieldErrors.bearbeiter}
+        saveToDb={(event) => void saveToDb(event)}
+        error={fieldErrors.bearbeiter ?? ''}
       />
       <TextField
         name="startJahr"

@@ -7,6 +7,16 @@ import { popFolder } from './popFolder/index.ts'
 import { zielFolder } from './zielFolder/index.ts'
 import { zieljahrFolder } from './zieljahrFolder/index.ts'
 
+interface OpenLowerNodesParams {
+  id?: string | null | undefined
+  parentId?: string | null | undefined
+  popId?: string | null | undefined
+  apId?: string | null | undefined
+  projId?: string | null | undefined
+  menuType?: string | null | undefined
+  jahr?: string | null | undefined
+}
+
 export const openLowerNodes = ({
   id,
   parentId,
@@ -15,7 +25,7 @@ export const openLowerNodes = ({
   projId,
   menuType,
   jahr,
-}) => {
+}: OpenLowerNodesParams) => {
   /**
    * 1. load all data
    * 2. build openNodes for all data using setOpenNodesFromActiveNodeArray
@@ -35,19 +45,19 @@ export const openLowerNodes = ({
   // })
   switch (menuType) {
     case 'popFolder':
-      popFolder({ id, projId })
+      void popFolder({ id, projId })
       break
     case 'pop':
-      pop({ id, apId, projId })
+      void pop({ id, apId, projId })
       break
     case 'tpopFolder':
-      tpopFolder({ popId: id, apId, projId })
+      void tpopFolder({ popId: id, apId, projId })
       break
     case 'tpop':
-      tpop({ id, popId, apId, projId })
+      void tpop({ id, popId, apId, projId })
       break
     case 'tpopfeldkontrFolder':
-      tpopfeldkontrFolder({
+      void tpopfeldkontrFolder({
         id,
         apId,
         projId,
@@ -55,7 +65,7 @@ export const openLowerNodes = ({
       })
       break
     case 'tpopfreiwkontrFolder':
-      tpopfreiwkontrFolder({
+      void tpopfreiwkontrFolder({
         id,
         apId,
         projId,
@@ -63,16 +73,18 @@ export const openLowerNodes = ({
       })
       break
     case 'zielFolder':
-      zielFolder({ id, projId })
+      void zielFolder({ id, projId })
       break
     case 'zieljahrFolder':
-      zieljahrFolder({
+      void zieljahrFolder({
         id,
         projId,
         parentId,
         jahr,
       })
       break
+    case undefined:
+    case null:
     default:
       // do nothing
       break

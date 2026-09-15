@@ -1,8 +1,12 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  useQueryClient,
+  type UseQueryOptions,
+} from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -16,46 +20,70 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { tpopkontrzaehl } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
-import type { TpopkontrzaehlId } from '../../../../models/apflora/TpopkontrzaehlId.ts'
-import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
-import type { TpopkontrzaehlMethodeWerteCode } from '../../../../models/apflora/TpopkontrzaehlMethodeWerteCode.ts'
+import type { ComponentType } from 'react'
+
+import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl.ts'
+
+interface TpopkontrzaehlNode {
+  id: TpopkontrzaehlId
+  einheit: number | null
+  anzahl: number | null
+  methode: number | null
+}
 
 interface TpopkontrzaehlQueryResult {
-  tpopkontrzaehlById: {
-    id: TpopkontrzaehlId
-    einheit: TpopkontrzaehlEinheitWerteCode | null
-    anzahl: number | null
-    methode: TpopkontrzaehlMethodeWerteCode | null
-  } | null
+  tpopkontrzaehlById: TpopkontrzaehlNode | null
   allTpopkontrzaehlEinheitWertes: {
     nodes: {
       id: string
-      value: TpopkontrzaehlEinheitWerteCode
+      value: number
       label: string
     }[]
   }
   allTpopkontrzaehlMethodeWertes: {
     nodes: {
       id: string
-      value: TpopkontrzaehlMethodeWerteCode
+      value: number
       label: string
     }[]
   }
   otherZaehlOfEk: {
     nodes: {
       id: TpopkontrzaehlId
-      einheit: TpopkontrzaehlEinheitWerteCode | null
+      einheit: number | null
     }[]
   }
 }
 
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: number; label: string }[]
+  value?: number | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
+
 import styles from './index.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   anzahl: 'Float',
   einheit: 'Int',
   methode: 'Int',
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type TpopkontrzaehlUseQueryOptions = UseQueryOptions<
+  TpopkontrzaehlQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
 }
 
 export const Component = () => {
@@ -68,7 +96,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery<TpopkontrzaehlQueryResult>({
+  const tpopkontrzaehlQueryOptions: TpopkontrzaehlUseQueryOptions = {
     queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopkontrzaehlQueryResult>({
@@ -82,22 +110,25 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(tpopkontrzaehlQueryOptions)
 
-  const zaehlEinheitCodesAlreadyUsed = (data.otherZaehlOfEk?.nodes ?? [])
+  const zaehlEinheitCodesAlreadyUsed = (data?.otherZaehlOfEk?.nodes ?? [])
     .map((n) => n.einheit)
     // prevent null values which cause error in query
     .filter((e) => !!e)
 
   // filter out already used in other zaehlung of same kontr
   const zaehlEinheitOptions = (
-    data.allTpopkontrzaehlEinheitWertes?.nodes ?? []
+    data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []
   ).filter((o) => !zaehlEinheitCodesAlreadyUsed.includes(o.value))
 
-  const row = data.tpopkontrzaehlById as TpopkontrzaehlQueryResult['tpopkontrzaehlById']
+  const row: Partial<TpopkontrzaehlNode> = data?.tpopkontrzaehlById ?? {}
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: string | number | null }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -138,14 +169,14 @@ export const Component = () => {
       }))
     }
     // invalidate tpopkontrzaehl query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['tpopkontrzaehl', tpopkontrzaehlId, tpopkontrId],
     })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
   }
@@ -165,9 +196,9 @@ export const Component = () => {
             name="einheit"
             label="Einheit"
             options={zaehlEinheitOptions}
-            value={row.einheit}
-            saveToDb={saveToDb}
-            error={fieldErrors.einheit}
+            value={row.einheit ?? null}
+            saveToDb={(event) => void saveToDb(event)}
+            error={fieldErrors.einheit ?? ''}
           />
           <TextField
             name="anzahl"
@@ -177,12 +208,12 @@ export const Component = () => {
             saveToDb={saveToDb}
             error={fieldErrors.anzahl}
           />
-          <RadioButtonGroup
+          <TypedRadioButtonGroup
             name="methode"
             label="Methode"
             dataSource={data?.allTpopkontrzaehlMethodeWertes?.nodes ?? []}
             value={row.methode}
-            saveToDb={saveToDb}
+            saveToDb={(event) => void saveToDb(event)}
             error={fieldErrors.methode}
           />
         </div>

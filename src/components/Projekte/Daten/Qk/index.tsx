@@ -39,7 +39,7 @@ export const Component = () => {
   const { apId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data, isLoading } = useQuery<QkQueryResult>({
+  const { data, isLoading } = useQuery({
     queryKey: ['qk', apId],
     queryFn: async () => {
       const result = await apolloClient.query<QkQueryResult>({

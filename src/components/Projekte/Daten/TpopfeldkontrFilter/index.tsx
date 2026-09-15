@@ -1,9 +1,9 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
-import { Form, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import { RadioButtonGroup } from '../../../shared/RadioButtonGroup.tsx'
@@ -33,48 +33,85 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
 import { useSearchParamsState } from '../../../../modules/useSearchParamsState.ts'
 
+import type { SyntheticEvent, ComponentType } from 'react'
+
 import type {
   AdresseId,
   TpopEntwicklungWerteCode,
-  TpopkontrIdbiotuebereinstWerteCode,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
+
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: string | number; label: string | null }[]
+  value?: string | number | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
+
+interface TpopfeldkontrFilterRow {
+  id?: string
+  typ?: string | null
+  datum?: string | null
+  jahr?: number | null
+  bearbeiter?: AdresseId | null
+  vitalitaet?: string | null
+  ueberlebensrate?: number | null
+  entwicklung?: TpopEntwicklungWerteCode | null
+  ursachen?: string | null
+  erfolgsbeurteilung?: string | null
+  umsetzungAendern?: string | null
+  kontrolleAendern?: string | null
+  bemerkungen?: string | null
+  apberNichtRelevant?: boolean | null
+  apberNichtRelevantGrund?: string | null
+  lrDelarze?: string | null
+  flaeche?: number | null
+  lrUmgebungDelarze?: string | null
+  vegetationstyp?: string | null
+  konkurrenz?: string | null
+  moosschicht?: string | null
+  krautschicht?: string | null
+  strauchschicht?: string | null
+  baumschicht?: string | null
+  idealbiotopUebereinstimmung?: number | null
+  handlungsbedarf?: string | null
+  jungpflanzenVorhanden?: boolean | null
+  gefaehrdung?: string | null
+}
 
 interface TpopfeldkontrFilterQueryResult {
   allTpopkontrIdbiotuebereinstWertes?: {
     nodes: {
-      value: TpopkontrIdbiotuebereinstWerteCode
-      label?: string | null
+      value: number
+      label: string | null
     }[]
   } | null
   allTpopEntwicklungWertes?: {
     nodes: {
       value: TpopEntwicklungWerteCode
-      label?: string | null
+      label: string | null
     }[]
   } | null
   allAeLrDelarzes?: {
     nodes: {
       id: string
-      label?: string | null
-      einheit?: string | null
+      label: string | null
+      einheit: string | null
     }[]
   } | null
   allAdresses?: {
     nodes: {
       value: AdresseId
-      label?: string | null
+      label: string | null
     }[]
-  } | null
-}
-
-interface TpopkontrsCountQueryResult {
-  allTpopkontrs?: {
-    totalCount: number
-  } | null
-  tpopkontrsFiltered?: {
-    totalCount: number
   } | null
 }
 
@@ -106,15 +143,21 @@ export const TpopfeldkontrFilter = () => {
   useEffect(() => {
     if (dataFilter.tpopfeldkontr.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.tpopfeldkontr.length])
 
-  const row = dataFilter.tpopfeldkontr[activeTab]
+  const row = dataFilter.tpopfeldkontr[
+    activeTab
+  ] as TpopfeldkontrFilterRow | undefined
 
   const apolloClient = useApolloClient()
 
-  const { data } = useQuery<TpopfeldkontrFilterQueryResult>({
+  // suspense is still honoured by useQuery at runtime but is no longer part
+  // of its option types; building the options outside the call keeps the
+  // excess property check from complaining about it
+  const tpopfeldkontrFilterQueryOptions = {
     queryKey: ['tpopfeldkontrFilterData'],
     queryFn: async () => {
       const result = await apolloClient.query<TpopfeldkontrFilterQueryResult>({
@@ -124,12 +167,13 @@ export const TpopfeldkontrFilter = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(tpopfeldkontrFilterQueryOptions)
 
-  const { data: dataTpopkontrs } = useQuery<TpopkontrsCountQueryResult>({
+  const { data: dataTpopkontrs } = useQuery({
     queryKey: ['tpopkontrsCount', ekGqlFilter.filtered, ekGqlFilter.all],
     queryFn: async () => {
-      const result = await apolloClient.query<TpopkontrsCountQueryResult>({
+      const result = await apolloClient.query({
         query: queryTpopkontrs,
         variables: {
           filteredFilter: ekGqlFilter.filtered,
@@ -141,13 +185,19 @@ export const TpopfeldkontrFilter = () => {
     },
   })
 
-  const [tab, setTab] = useSearchParamsState('feldkontrTab', 'entwicklung')
-  const onChangeTab = (event, value) => setTab(value)
+  const [tab, setTab] = useSearchParamsState<string>(
+    'feldkontrTab',
+    'entwicklung',
+  )
+  const onChangeTab = (_event: SyntheticEvent, value: string) =>
+    setTab(value)
 
-  const saveToDb = async (event) =>
+  const saveToDb = async (event: {
+    target: { name?: string | undefined; value: unknown }
+  }) =>
     setDataFilterValue({
       table: 'tpopfeldkontr',
-      key: event.target.name,
+      key: event.target.name ?? '',
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })
@@ -267,33 +317,36 @@ export const TpopfeldkontrFilter = () => {
                 type="number"
                 value={row?.jahr}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <DateField
                 name="datum"
                 label="Datum"
                 value={row?.datum}
                 saveToDb={saveToDb}
+                error={undefined}
               />
-              <RadioButtonGroup
+              <TypedRadioButtonGroup
                 name="typ"
                 label="Kontrolltyp"
                 dataSource={tpopkontrTypWerte}
                 value={row?.typ}
-                saveToDb={saveToDb}
+                saveToDb={(event) => void saveToDb(event)}
               />
               <Select
                 key={`${row?.id}bearbeiter`}
                 name="bearbeiter"
                 label="BearbeiterIn"
                 options={data?.allAdresses?.nodes ?? []}
-                value={row?.bearbeiter}
-                saveToDb={saveToDb}
+                value={row?.bearbeiter ?? null}
+                saveToDb={(event) => void saveToDb(event)}
               />
               <JesNo
                 name="jungpflanzenVorhanden"
                 label="Jungpflanzen vorhanden"
                 value={row?.jungpflanzenVorhanden}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="vitalitaet"
@@ -301,6 +354,7 @@ export const TpopfeldkontrFilter = () => {
                 type="text"
                 value={row?.vitalitaet}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="ueberlebensrate"
@@ -308,14 +362,16 @@ export const TpopfeldkontrFilter = () => {
                 type="number"
                 value={row?.ueberlebensrate}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <RadioButtonGroupWithInfo
                 name="entwicklung"
                 label="Entwicklung"
                 dataSource={data?.allTpopEntwicklungWertes?.nodes ?? []}
                 popover={TpopfeldkontrentwicklungPopover}
-                value={row?.entwicklung}
+                value={row?.entwicklung as string}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="ursachen"
@@ -325,6 +381,7 @@ export const TpopfeldkontrFilter = () => {
                 multiLine
                 value={row?.ursachen}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="gefaehrdung"
@@ -333,6 +390,7 @@ export const TpopfeldkontrFilter = () => {
                 multiLine
                 value={row?.gefaehrdung}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="erfolgsbeurteilung"
@@ -341,6 +399,7 @@ export const TpopfeldkontrFilter = () => {
                 multiLine
                 value={row?.erfolgsbeurteilung}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="umsetzungAendern"
@@ -349,6 +408,7 @@ export const TpopfeldkontrFilter = () => {
                 multiLine
                 value={row?.umsetzungAendern}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="kontrolleAendern"
@@ -357,6 +417,7 @@ export const TpopfeldkontrFilter = () => {
                 multiLine
                 value={row?.kontrolleAendern}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <MarkdownField
                 name="bemerkungen"
@@ -369,6 +430,7 @@ export const TpopfeldkontrFilter = () => {
                 label="Im Jahresbericht nicht berücksichtigen"
                 value={row?.apberNichtRelevant}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="apberNichtRelevantGrund"
@@ -377,6 +439,7 @@ export const TpopfeldkontrFilter = () => {
                 multiLine
                 value={row?.apberNichtRelevantGrund}
                 saveToDb={saveToDb}
+                error={undefined}
               />
             </>
           )}
@@ -388,24 +451,24 @@ export const TpopfeldkontrFilter = () => {
                 type="number"
                 value={row?.flaeche}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <div className={styles.section}>Vegetation</div>
               <Select
                 key={`${row?.id}lrDelarze`}
-                data-id="lrDelarze"
                 name="lrDelarze"
                 label="Lebensraum nach Delarze"
                 options={aeLrWerte}
-                value={row?.lrDelarze}
-                saveToDb={saveToDb}
+                value={row?.lrDelarze ?? null}
+                saveToDb={(event) => void saveToDb(event)}
               />
               <Select
                 key={`${row?.id}lrUmgebungDelarze`}
                 name="lrUmgebungDelarze"
                 label="Umgebung nach Delarze"
                 options={aeLrWerte}
-                value={row?.lrUmgebungDelarze}
-                saveToDb={saveToDb}
+                value={row?.lrUmgebungDelarze ?? null}
+                saveToDb={(event) => void saveToDb(event)}
               />
               <TextField
                 name="vegetationstyp"
@@ -413,6 +476,7 @@ export const TpopfeldkontrFilter = () => {
                 type="text"
                 value={row?.vegetationstyp}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="konkurrenz"
@@ -420,6 +484,7 @@ export const TpopfeldkontrFilter = () => {
                 type="text"
                 value={row?.konkurrenz}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="moosschicht"
@@ -427,6 +492,7 @@ export const TpopfeldkontrFilter = () => {
                 type="text"
                 value={row?.moosschicht}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="krautschicht"
@@ -434,6 +500,7 @@ export const TpopfeldkontrFilter = () => {
                 type="text"
                 value={row?.krautschicht}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="strauchschicht"
@@ -441,6 +508,7 @@ export const TpopfeldkontrFilter = () => {
                 type="text"
                 value={row?.strauchschicht}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <TextField
                 name="baumschicht"
@@ -448,24 +516,25 @@ export const TpopfeldkontrFilter = () => {
                 type="text"
                 value={row?.baumschicht}
                 saveToDb={saveToDb}
+                error={undefined}
               />
               <div className={styles.section}>Beurteilung</div>
               <TextField
                 name="handlungsbedarf"
                 label="Handlungsbedarf"
                 type="text"
-                multiline
                 value={row?.handlungsbedarf}
                 saveToDb={saveToDb}
+                error={undefined}
               />
-              <RadioButtonGroup
+              <TypedRadioButtonGroup
                 name="idealbiotopUebereinstimmung"
                 label="Übereinstimmung mit Idealbiotop"
                 dataSource={
                   data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []
                 }
                 value={row?.idealbiotopUebereinstimmung}
-                saveToDb={saveToDb}
+                saveToDb={(event) => void saveToDb(event)}
               />
             </>
           )}

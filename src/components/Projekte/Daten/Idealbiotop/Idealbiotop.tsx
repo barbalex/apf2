@@ -1,8 +1,8 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { Form, useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useParams } from 'react-router'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -14,17 +14,39 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { idealbiotop } from '../../../shared/fragments.ts'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
-import type { Idealbiotop } from '../../../../models/apflora/index.ts'
+import type { IdealbiotopId } from '../../../../models/apflora/index.ts'
 
 import styles from './Idealbiotop.module.css'
 
+interface IdealbiotopNode {
+  id: IdealbiotopId
+  erstelldatum: string | null
+  hoehenlage: string | null
+  region: string | null
+  exposition: string | null
+  besonnung: string | null
+  hangneigung: string | null
+  bodenTyp: string | null
+  bodenKalkgehalt: string | null
+  bodenDurchlaessigkeit: string | null
+  bodenHumus: string | null
+  bodenNaehrstoffgehalt: string | null
+  wasserhaushalt: string | null
+  konkurrenz: string | null
+  moosschicht: string | null
+  krautschicht: string | null
+  strauchschicht: string | null
+  baumschicht: string | null
+  bemerkungen: string | null
+}
+
 interface IdealbiotopQueryResult {
   allIdealbiotops?: {
-    nodes: Idealbiotop[]
+    nodes: IdealbiotopNode[]
   }
 }
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   apId: 'UUID',
   erstelldatum: 'Date',
   hoehenlage: 'String',
@@ -56,7 +78,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['idealbiotop', apId],
     queryFn: async () => {
       const result = await apolloClient.query<IdealbiotopQueryResult>({
@@ -66,13 +88,14 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = data?.allIdealbiotops?.nodes?.[0] ?? {}
+  const row: Partial<IdealbiotopNode> = data?.allIdealbiotops?.nodes?.[0] ?? {}
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -118,7 +141,7 @@ export const Component = () => {
       return rest
     })
     // Invalidate query to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['idealbiotop', apId],
     })
   }

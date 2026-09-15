@@ -7,14 +7,15 @@ import { Select } from '../../../../../shared/Select.tsx'
 import { userNameAtom } from '../../../../../../store/index.ts'
 import { updateTpopkontrzaehlById } from './updateTpopkontrzaehlById.ts'
 import { ifIsNumericAsNumber } from '../../../../../../modules/ifIsNumericAsNumber.ts'
+import type { TpopkontrzaehlRow } from './index.tsx'
 
 import styles from './Einheit.module.css'
 
 interface EinheitProps {
-  nr: number
-  row: any
+  nr: string
+  row: Partial<TpopkontrzaehlRow>
   refetch: () => void
-  zaehleinheitWerte: { value: string; label: string }[]
+  zaehleinheitWerte: { value: number; label: string }[]
 }
 
 export const Einheit = ({
@@ -30,7 +31,12 @@ export const Einheit = ({
 
   const [error, setErrors] = useState<string | null>(null)
 
-  const onChange = async (event) => {
+  const onChange = async (event: {
+    target: {
+      name?: string
+      value: string | number | null
+    }
+  }) => {
     const val = ifIsNumericAsNumber(event.target.value)
     const variables = {
       id: row.id,
@@ -48,7 +54,7 @@ export const Einheit = ({
       return setErrors((error as Error).message)
     }
     refetch()
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfreiwkontrzaehl`],
     })
   }
@@ -59,12 +65,12 @@ export const Einheit = ({
       <div className={styles.val}>
         <Select
           key={`${row?.id}einheit`}
-          value={row.einheit}
+          value={row.einheit ?? null}
           label=""
           name="einheit"
-          error={error}
+          error={error ?? ''}
           options={zaehleinheitWerte}
-          saveToDb={onChange}
+          saveToDb={(event) => void onChange(event)}
           noCaret
         />
       </div>

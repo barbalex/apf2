@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -15,39 +15,57 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { tpopmassnber } from '../../../shared/fragments.ts'
 import { Menu } from './Menu.tsx'
 
-import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
-import type { PopId } from '../../../../models/apflora/PopId.ts'
-import type { ApId } from '../../../../models/apflora/ApId.ts'
-import type { TpopmassnErfbeurtWerteCode } from '../../../../models/apflora/TpopmassnErfbeurtWerteCode.ts'
+import type { ComponentType } from 'react'
+
+import type { TpopmassnberId } from '../../../../models/apflora/Tpopmassnber.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
+import type { PopId } from '../../../../models/apflora/Pop.ts'
+import type { ApId } from '../../../../models/apflora/Ap.ts'
+
+interface TpopmassnberNode {
+  id: TpopmassnberId
+  jahr: number | null
+  beurteilung: number | null
+  bemerkungen: string | null
+  tpopId: TpopId
+  changedBy: string | null
+  tpopByTpopId: {
+    id: TpopId
+    popByPopId: {
+      id: PopId
+      apId: ApId
+    }
+  }
+}
 
 interface TpopmassnberQueryResult {
-  tpopmassnberById: {
-    id: TpopmassnberId
-    jahr: number | null
-    beurteilung: TpopmassnErfbeurtWerteCode | null
-    bemerkungen: string | null
-    tpopId: TpopId
-    changedBy: string | null
-    tpopByTpopId: {
-      id: TpopId
-      popByPopId: {
-        id: PopId
-        apId: ApId
-      }
-    }
-  } | null
+  tpopmassnberById: TpopmassnberNode | null
   allTpopmassnErfbeurtWertes: {
     nodes: {
-      value: TpopmassnErfbeurtWerteCode
+      value: number
       label: string
     }[]
   }
 }
 
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource?: { value: number; label: string }[] | undefined
+  loading?: boolean
+  value?: number | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
+
 import styles from './index.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   tpopId: 'UUID',
   jahr: 'Int',
   beurteilung: 'Int',
@@ -64,23 +82,29 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery<TpopmassnberQueryResult>({
+  // suspense is still honoured by useQuery at runtime but is no longer part
+  // of its option types; building the options outside the call keeps the
+  // excess property check from complaining about it
+  const tpopmassnberQueryOptions = {
     queryKey: ['tpopmassnber', id],
     queryFn: async () => {
       const result = await apolloClient.query<TpopmassnberQueryResult>({
         query,
-        variables: { id },
+        variables: { id: id ?? '' },
       })
       if (result.error) throw result.error
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(tpopmassnberQueryOptions)
 
-  const row = data.tpopmassnberById as TpopmassnberQueryResult['tpopmassnberById']
+  const row: Partial<TpopmassnberNode> = data?.tpopmassnberById ?? {}
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: string | number | null }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -128,13 +152,13 @@ export const Component = () => {
       }))
     }
     // invalidate tpopmassnber query
-    tsQueryClient.invalidateQueries({ queryKey: ['tpopmassnber', id] })
+    void tsQueryClient.invalidateQueries({ queryKey: ['tpopmassnber', id] })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
     if (['jahr', 'beurteilung'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopmassnber`],
       })
     }
@@ -156,12 +180,12 @@ export const Component = () => {
             saveToDb={saveToDb}
             error={fieldErrors.jahr}
           />
-          <RadioButtonGroup
+          <TypedRadioButtonGroup
             name="beurteilung"
             label="Entwicklung"
             dataSource={data?.allTpopmassnErfbeurtWertes?.nodes}
             value={row.beurteilung}
-            saveToDb={saveToDb}
+            saveToDb={(event) => void saveToDb(event)}
             error={fieldErrors.beurteilung}
           />
           <TextField

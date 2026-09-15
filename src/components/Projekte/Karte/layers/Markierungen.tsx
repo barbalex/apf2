@@ -1,8 +1,10 @@
 import { GeoJSON } from 'react-leaflet'
 import 'leaflet'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
+import type { Feature, FeatureCollection } from 'geojson'
+import type { LatLng } from 'leaflet'
 
 interface MarkierungNode {
   id: number
@@ -35,7 +37,7 @@ const pTLOptions = {
   opacity: 1,
   fillOpacity: 0.8,
 }
-const pointToLayer = (feature, latlng) =>
+const pointToLayer = (_feature: Feature, latlng: LatLng) =>
   window.L.circleMarker(latlng, pTLOptions)
 
 export const Markierungen = () => {
@@ -69,19 +71,21 @@ export const Markierungen = () => {
   if (!data) return null
 
   const nodes = data?.allMarkierungens?.nodes ?? []
-  const markierungen = nodes.map((n) => ({
+  const markierungen = nodes.map((n): Feature => ({
     type: 'Feature',
     properties: {
       Gebiet: n.gebiet ?? '',
       PfostenNr: n.pfostennum ?? '',
       Markierung: n.markierung ?? '',
     },
-    geometry: JSON.parse(n?.wkbGeometry?.geojson),
+    geometry: JSON.parse(String(n?.wkbGeometry?.geojson)),
   }))
 
   return (
     <GeoJSON
-      data={markierungen}
+      // leaflet handles plain feature arrays like FeatureCollections,
+      // but react-leaflet's data prop is typed as GeoJsonObject
+      data={markierungen as unknown as FeatureCollection}
       style={style}
       pointToLayer={pointToLayer}
       interactive={false}

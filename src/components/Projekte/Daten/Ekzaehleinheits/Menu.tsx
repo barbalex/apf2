@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -21,12 +21,10 @@ import {
 
 
 interface CreateEkzaehleinheitResult {
-  data?: {
-    createEkzaehleinheit?: {
-      ekzaehleinheit?: {
-        id: EkzaehleinheitId
-        apId: ApId
-      }
+  createEkzaehleinheit: {
+    ekzaehleinheit: {
+      id: EkzaehleinheitId
+      apId: ApId
     }
   }
 }
@@ -47,7 +45,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateEkzaehleinheitResult | undefined
+    let result: { data?: CreateEkzaehleinheitResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateEkzaehleinheitResult>({
         mutation: graphql(`
@@ -60,7 +58,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
             }
           }
         `),
-        variables: { apId },
+        variables: { apId: apId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -70,17 +68,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeEkzaehleinheit`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createEkzaehleinheit?.ekzaehleinheit?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -90,7 +88,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue EK-Zähleinheiten erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

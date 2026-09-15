@@ -4,42 +4,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { Polyline } from './Polyline.tsx'
+import type { BeobAssignLinesNode } from './Polyline.tsx'
 import { query } from './query.ts'
-
-import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
-import type {
-  TpopId,
-  PopId,
-} from '../../../../../models/apflora/public/Tpop.ts'
-import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 import {
   addNotificationAtom,
   treeBeobGqlFilterAtom,
 } from '../../../../../store/index.ts'
-
-interface BeobAssignLinesNode {
-  id: BeobId
-  wgs84Lat: number
-  wgs84Long: number
-  lv95X: number | null
-  lv95Y: number | null
-  datum: string | null
-  autor: string | null
-  quelle: string | null
-  aeTaxonomyByArtId: {
-    id: AeTaxonomyId
-    artname: string | null
-  } | null
-  tpopByTpopId: {
-    id: TpopId
-    popId: PopId
-    nr: number | null
-    flurname: string | null
-    wgs84Lat: number | null
-    wgs84Long: number | null
-  } | null
-}
 
 interface BeobAssignLinesQueryResult {
   allBeobs: {
@@ -48,6 +19,7 @@ interface BeobAssignLinesQueryResult {
 }
 
 const Polylines = () => {
+  const addNotification = useSetAtom(addNotificationAtom)
   const beobZugeordnetGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('zugeordnet'),
   )
@@ -56,11 +28,14 @@ const Polylines = () => {
 
   const { data, error } = useQuery({
     queryKey: ['BeobAssignLinesQuery', beobZugeordnetGqlFilter.filtered],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<BeobAssignLinesQueryResult>({
         query: query,
         variables: { beobFilter: beobZugeordnetGqlFilter.filtered },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
   if (error) {
@@ -72,7 +47,7 @@ const Polylines = () => {
     })
   }
 
-  return (data?.data?.allBeobs?.nodes ?? []).map((beob) => (
+  return (data?.allBeobs?.nodes ?? []).map((beob) => (
     <Polyline
       key={beob.id}
       beob={beob}
@@ -81,7 +56,6 @@ const Polylines = () => {
 }
 
 export const BeobZugeordnetAssignPolylines = () => {
-  const addNotification = useSetAtom(addNotificationAtom)
   const beobZugeordnetGqlFilter = useAtomValue(
     treeBeobGqlFilterAtom('zugeordnet'),
   )

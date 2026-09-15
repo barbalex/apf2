@@ -1,9 +1,4 @@
-import {
-  useState,
-  useEffect,
-  type SyntheticEvent,
-  type ChangeEvent,
-} from 'react'
+import { useState, useEffect, type SyntheticEvent } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import { useApolloClient } from '@apollo/client/react'
@@ -43,20 +38,21 @@ export const TpopFilter = () => {
   const dataFilter = useAtomValue(treeDataFilterAtom)
   const setDataFilterValue = useSetAtom(treeDataFilterSetValueAtom)
 
-  const [tab, setTab] = useSearchParamsState('tpopTab', 'tpop')
+  const [tab, setTab] = useSearchParamsState<string>('tpopTab', 'tpop')
   const onChangeTab = (_event: SyntheticEvent, value: string) => setTab(value)
 
   const [activeTab, setActiveTab] = useState(0)
   useEffect(() => {
     if (dataFilter.tpop.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.tpop.length])
 
   const apolloClient = useApolloClient()
 
-  const { data: dataTpops } = useQuery<TpopsQueryResult>({
+  const { data: dataTpops } = useQuery({
     queryKey: ['tpopsCount', tpopGqlFilter.filtered, tpopGqlFilter.all],
     queryFn: async () => {
       const result = await apolloClient.query<TpopsQueryResult>({
@@ -74,10 +70,10 @@ export const TpopFilter = () => {
   const row = dataFilter.tpop[activeTab]
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
-  const saveToDb = (event: ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = (event: { target: { name?: string; value: unknown } }) =>
     setDataFilterValue({
       table: 'tpop',
-      key: event.target.name,
+      key: event.target.name ?? '',
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })

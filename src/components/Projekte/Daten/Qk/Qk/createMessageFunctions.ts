@@ -1,4 +1,616 @@
-export const createMessageFunctions = ({ data, projId, apId }) => ({
+import type {
+  ApberId,
+  ApId,
+  AssozartId,
+  ErfkritId,
+  PopberId,
+  PopId,
+  PopmassnberId,
+  ProjektId,
+  TpopId,
+  TpopkontrId,
+  TpopkontrzaehlId,
+  TpopmassnId,
+  ZielId,
+} from '../../../../../models/apflora/index.ts'
+
+export interface QkMessage {
+  url: (string | number | null | undefined)[]
+  text: string
+}
+
+/** population nodes as returned by the v_q_pop views */
+interface PopViewNode {
+  projId: ProjektId
+  apId: ApId
+  id: PopId
+  nr: number | null
+}
+
+/** teil-population nodes as returned by the v_q_tpop views */
+interface TpopViewNode {
+  projId: ProjektId
+  apId: ApId
+  popId: PopId
+  popNr: number | null
+  id: TpopId
+  nr: number | null
+}
+
+interface PopRef {
+  id: PopId
+  nr: number | null
+}
+
+interface TpopRef {
+  id: TpopId
+  nr: number | null
+  popByPopId: PopRef
+}
+
+interface TpopInlineNode {
+  id: TpopId
+  nr: number | null
+  popByPopId: PopRef
+}
+
+interface ZielNode {
+  jahr: number | null
+  id: ZielId
+}
+
+interface PopberNode {
+  id: PopberId
+  jahr: number | null
+  popByPopId: PopRef
+}
+
+interface PopmassnberNode {
+  id: PopmassnberId
+  jahr: number | null
+  popByPopId: PopRef
+}
+
+interface TpopberNode {
+  id: string
+  nr: number | null
+  tpopByTpopId: TpopRef
+}
+
+interface TpopmassnNode {
+  id: TpopmassnId
+  jahr: number | null
+  tpopByTpopId: TpopRef
+}
+
+interface TpopmassnberNode {
+  id: string
+  jahr: number | null
+  tpopByTpopId: TpopRef
+}
+
+interface TpopkontrRef {
+  id: TpopkontrId
+  jahr: number | null
+  tpopByTpopId: TpopRef
+}
+
+interface TpopkontrzaehlNode {
+  id: TpopkontrzaehlId
+  tpopkontrByTpopkontrId: TpopkontrRef
+}
+
+interface AnpflanzungNode {
+  projId: ProjektId
+  apId: ApId
+  popId: PopId
+  popNr: number | null
+  tpopId: TpopId
+  tpopNr: number | null
+  id: TpopmassnId
+  jahr: number | null
+  ekZieleinheit?: string | null
+  massnZieleinheit?: string | null
+  zieleinheitAnzahl?: number | null
+  anzahl?: number | null
+}
+
+interface ViewNodes<ViewNode> {
+  nodes: ViewNode[]
+}
+
+/** projektById wrapper: apsByProjId is aliased per check via @include */
+interface ApProjektWrapper<ApNode> {
+  apsByProjId?: {
+    nodes: ApNode[]
+  }
+}
+
+/**
+ * Hand-written shape of the QkQuery result (query.ts).
+ * Fields are optional because every check is aliased behind an @include
+ * directive, so absent checks are missing in the data.
+ */
+export interface QkQueryData {
+  tpopsOutsideZh?: ViewNodes<TpopViewNode>
+  apOhneBearbeitung?: ApProjektWrapper<{ id: ApId }>
+  apMitApOhneUmsetzung?: ApProjektWrapper<{ id: ApId }>
+  apMitAktKontrOhneZielrelevanteEinheit?: ViewNodes<{
+    projId: ProjektId
+    apId: ApId
+  }>
+  apOhneVerantwortlich?: ApProjektWrapper<{ id: ApId }>
+  ekzieleinheitOhneMassnZaehleinheit?: ViewNodes<{
+    projId: ProjektId
+    apId: ApId
+    id: string
+    artname: string | null
+    zaehleinheit: string | null
+  }>
+  zielOhneJahr?: ApProjektWrapper<{ id: ApId; zielsByApId: ViewNodes<ZielNode> }>
+  zielOhneTyp?: ApProjektWrapper<{ id: ApId; zielsByApId: ViewNodes<ZielNode> }>
+  zielOhneZiel?: ApProjektWrapper<{ id: ApId; zielsByApId: ViewNodes<ZielNode> }>
+  erfkritOhneBeurteilung?: ApProjektWrapper<{
+    id: ApId
+    erfkritsByApId: ViewNodes<{ id: ErfkritId }>
+  }>
+  erfkritOhneKriterien?: ApProjektWrapper<{
+    id: ApId
+    erfkritsByApId: ViewNodes<{ id: ErfkritId }>
+  }>
+  apberOhneJahr?: ApProjektWrapper<{
+    id: ApId
+    apbersByApId: ViewNodes<{ id: ApberId; jahr: number | null }>
+  }>
+  apberOhneVergleichVorjahrGesamtziel?: ApProjektWrapper<{
+    id: ApId
+    apbersByApId: ViewNodes<{ id: ApberId; jahr: number | null }>
+  }>
+  apberOhneBeurteilung?: ApProjektWrapper<{
+    id: ApId
+    apbersByApId: ViewNodes<{ id: ApberId; jahr: number | null }>
+  }>
+  assozartOhneArt?: ApProjektWrapper<{
+    id: ApId
+    assozartsByApId: ViewNodes<{ id: AssozartId }>
+  }>
+  popOhneNr?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{ id: PopId; name: string | null }>
+  }>
+  popOhneName?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{ id: PopId; nr: number | null }>
+  }>
+  popOhneStatus?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{ id: PopId; nr: number | null }>
+  }>
+  popOhneBekanntSeit?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{ id: PopId; nr: number | null }>
+  }>
+  popOhneKoord?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{ id: PopId; nr: number | null }>
+  }>
+  popOhneTpop?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      nr: number | null
+      tpopsByPopId: { totalCount: number }
+    }>
+  }>
+  popMitStatusUnklarOhneBegruendung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{ id: PopId; nr: number | null }>
+  }>
+  popBekanntSeitNichtAeltesteTpop?: ViewNodes<PopViewNode>
+  popMitMehrdeutigerNr?: ViewNodes<PopViewNode>
+  popOhnePopber?: ViewNodes<PopViewNode>
+  popMitBerZunehmendOhneTpopberZunehmend?: ViewNodes<PopViewNode>
+  popMitBerAbnehmendOhneTpopberAbnehmend?: ViewNodes<PopViewNode>
+  popMitBerErloschenOhneTpopberErloschen?: ViewNodes<PopViewNode>
+  popMitBerErloschenUndTpopberNichtErloschen?: ViewNodes<PopViewNode>
+  popOhneTpopMitGleichemStatus?: ViewNodes<PopViewNode>
+  popStatus300TpopStatusAnders?: ViewNodes<PopViewNode>
+  popStatus201TpopStatusUnzulaessig?: ViewNodes<PopViewNode>
+  popStatus202TpopStatusAnders?: ViewNodes<PopViewNode>
+  popStatus200TpopStatusUnzulaessig?: ViewNodes<PopViewNode>
+  popStatus101TpopStatusAnders?: ViewNodes<PopViewNode>
+  popStatusErloschenLetzterPopberZunehmend?: ViewNodes<PopViewNode>
+  popStatusErloschenLetzterPopberStabil?: ViewNodes<PopViewNode>
+  popStatusErloschenLetzterPopberAbnehmend?: ViewNodes<PopViewNode>
+  popStatusErloschenLetzterPopberUnsicher?: ViewNodes<PopViewNode>
+  popOhnePopmassnber?: ViewNodes<PopViewNode>
+  popKoordEntsprechenKeinerTpop?: ViewNodes<PopViewNode>
+  popStatusAnsaatversuchTpopAktuell?: ViewNodes<PopViewNode>
+  popStatusAnsaatversuchAlleTpopErloschen?: ViewNodes<PopViewNode>
+  popStatusAnsaatversuchMitTpopUrspruenglichErloschen?: ViewNodes<PopViewNode>
+  popStatusErloschenMitTpopAktuell?: ViewNodes<PopViewNode>
+  popStatusErloschenMitTpopAnsaatversuch?: ViewNodes<PopViewNode>
+  popStatusUrspruenglichWiederauferstanden?: ViewNodes<PopViewNode>
+  popStatusAngesiedeltMitTpopUrspruenglich?: ViewNodes<PopViewNode>
+  popStatusAktuellLetzterPopberErloschen?: ViewNodes<PopViewNode>
+  popStatusErloschenLetzterPopberAktuell?: ViewNodes<PopViewNode>
+  popStatusErloschenLetzterPopberErloschenMitAnsiedlung?: ViewNodes<PopViewNode>
+  popberOhneJahr?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      popbersByPopId: ViewNodes<PopberNode>
+    }>
+  }>
+  popberOhneEntwicklung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      popbersByPopId: ViewNodes<PopberNode>
+    }>
+  }>
+  popmassnberOhneJahr?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      popmassnbersByPopId: ViewNodes<PopmassnberNode>
+    }>
+  }>
+  popmassnberOhneEntwicklung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      popmassnbersByPopId: ViewNodes<PopmassnberNode>
+    }>
+  }>
+  tpopBekanntSeitJuengerAlsAeltesteBeob?: ViewNodes<TpopViewNode>
+  tpopStatusAktuellLetzterTpopberErloschen?: ViewNodes<TpopViewNode>
+  tpopStatusErloschenLetzterTpopberStabil?: ViewNodes<TpopViewNode>
+  tpopStatusErloschenLetzterTpopberAbnehmend?: ViewNodes<TpopViewNode>
+  tpopStatusErloschenLetzterTpopberUnsicher?: ViewNodes<TpopViewNode>
+  tpopStatusErloschenLetzterTpopberZunehmend?: ViewNodes<TpopViewNode>
+  tpopStatusErloschenLetzterTpopberAktuell?: ViewNodes<TpopViewNode>
+  tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung?: ViewNodes<TpopViewNode>
+  tpopErloschenMitEkplanNachLetztemTpopber?: ViewNodes<TpopViewNode>
+  tpopErloschenUndRelevantLetzteBeobVor1950?: ViewNodes<TpopViewNode>
+  tpopPopnrTponrMehrdeutig?: ViewNodes<TpopViewNode>
+  tpopOhneTpopber?: ViewNodes<TpopViewNode>
+  tpopOhneMassnber?: ViewNodes<TpopViewNode>
+  tpopCountedEinheitMultipleTimesInYear?: ViewNodes<
+    TpopViewNode & { einheit: string | null; anzahl: number | null }
+  >
+  tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl?: ViewNodes<TpopViewNode>
+  tpopMitStatusPotentiellUndZaehlungMitAnzahl?: ViewNodes<TpopViewNode>
+  tpopMitStatusPotentiellUndAnsiedlung?: ViewNodes<TpopViewNode>
+  tpopErsteMassnVorBekanntSeit?: ViewNodes<
+    TpopViewNode & { bemerkung: string | null }
+  >
+  tpopMitAktuellenKontrollenOhneZielrelevanteEinheit?: ViewNodes<TpopViewNode>
+  tpopMitAktuellenAnpflanzungenOhneZielrelevanteEinheit?: ViewNodes<TpopViewNode>
+  tpopOhneNr?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopOhneFlurname?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopOhneStatus?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopOhneBekanntSeit?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopOhneApberRelevant?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopAbperNichtRelevantOhneGrund?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopAbperNichtRelevantGrundHistorischStatusAktuell?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopOhneKoord?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopStatusPotentiellApberrelevant?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopStatusAngesiedeltAktuellMitAnsaatOhneZaehlung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopStatusAnsaatversuchMitAnpflanzung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopStatusUnklarOhneBegruendung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<TpopInlineNode>
+    }>
+  }>
+  tpopberOhneJahr?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopbersByTpopId: ViewNodes<TpopberNode>
+      }>
+    }>
+  }>
+  tpopberOhneEntwicklung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopbersByTpopId: ViewNodes<TpopberNode>
+      }>
+    }>
+  }>
+  tpopmassnDatum?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopmassnsByTpopId: ViewNodes<TpopmassnNode>
+      }>
+    }>
+  }>
+  tpopmassnOhneBearb?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopmassnsByTpopId: ViewNodes<TpopmassnNode>
+      }>
+    }>
+  }>
+  tpopmassnOhneTyp?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopmassnsByTpopId: ViewNodes<TpopmassnNode>
+      }>
+    }>
+  }>
+  anpflanzungOhneZielrelevanteEinheit?: ViewNodes<AnpflanzungNode>
+  anpflanzungZielrelevanteEinheitFalsch?: ViewNodes<AnpflanzungNode>
+  anpflanzungZielrelevanteAnzahlFalsch?: ViewNodes<AnpflanzungNode>
+  tpopmassnberOhneJahr?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopmassnbersByTpopId: ViewNodes<TpopmassnberNode>
+      }>
+    }>
+  }>
+  tpopmassnberOhneBeurteilung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopmassnbersByTpopId: ViewNodes<TpopmassnberNode>
+      }>
+    }>
+  }>
+  tpopfeldkontrDatum?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<TpopkontrRef>
+      }>
+    }>
+  }>
+  tpopfreiwkontrDatum?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<TpopkontrRef>
+      }>
+    }>
+  }>
+  tpopfeldkontrOhneBearb?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<TpopkontrRef>
+      }>
+    }>
+  }>
+  tpopfreiwkontrOhneBearb?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<TpopkontrRef>
+      }>
+    }>
+  }>
+  tpopfeldkontrOhneZaehlung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            tpopkontrzaehlsByTpopkontrId: { totalCount: number }
+          }
+        >
+      }>
+    }>
+  }>
+  tpopfreiwkontrOhneZaehlung?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            tpopkontrzaehlsByTpopkontrId: { totalCount: number }
+          }
+        >
+      }>
+    }>
+  }>
+  feldkontrzaehlungOhneEinheit?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            tpopkontrzaehlsByTpopkontrId: ViewNodes<TpopkontrzaehlNode>
+          }
+        >
+      }>
+    }>
+  }>
+  freiwkontrzaehlungOhneEinheit?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            tpopkontrzaehlsByTpopkontrId: ViewNodes<TpopkontrzaehlNode>
+          }
+        >
+      }>
+    }>
+  }>
+  feldkontrzaehlungOhneMethode?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            tpopkontrzaehlsByTpopkontrId: ViewNodes<TpopkontrzaehlNode>
+          }
+        >
+      }>
+    }>
+  }>
+  freiwkontrzaehlungOhneMethode?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            zaehlungenOhneMethode: ViewNodes<{ id: TpopkontrzaehlId }>
+            zaehlungenMitMethode: ViewNodes<{ id: TpopkontrzaehlId }>
+          }
+        >
+      }>
+    }>
+  }>
+  feldkontrzaehlungOhneAnzahl?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            tpopkontrzaehlsByTpopkontrId: ViewNodes<TpopkontrzaehlNode>
+          }
+        >
+      }>
+    }>
+  }>
+  freiwkontrzaehlungOhneAnzahl?: ApProjektWrapper<{
+    id: ApId
+    popsByApId: ViewNodes<{
+      id: PopId
+      tpopsByPopId: ViewNodes<{
+        id: TpopId
+        tpopkontrsByTpopId: ViewNodes<
+          TpopkontrRef & {
+            zaehlungenOhneAnzahl: ViewNodes<{ id: TpopkontrzaehlId }>
+            zaehlungenMitAnzahl: ViewNodes<{ id: TpopkontrzaehlId }>
+          }
+        >
+      }>
+    }>
+  }>
+}
+
+interface CreateMessageFunctionsProps {
+  data?: QkQueryData | undefined
+  projId: string | undefined
+  apId: string | undefined
+}
+
+export const createMessageFunctions = ({
+  data,
+  projId,
+  apId,
+}: CreateMessageFunctionsProps): Record<string, () => QkMessage[]> => ({
   tpopsOutsideZh: () =>
     (data?.tpopsOutsideZh?.nodes ?? []).map((r) => ({
       url: [

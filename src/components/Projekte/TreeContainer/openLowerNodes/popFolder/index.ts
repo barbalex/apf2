@@ -4,6 +4,8 @@
  * 3. update openNodes
  * 4. refresh tree
  */
+import type { ApolloClient } from '@apollo/client'
+
 import { query } from './query.ts'
 import {
   store,
@@ -11,14 +13,33 @@ import {
   treeAddOpenNodesAtom,
 } from '../../../../../store/index.ts'
 
+interface PopFolderQueryResult {
+  apById?: {
+    popsByApId?: {
+      nodes: {
+        id: string
+        tpopsByPopId?: { nodes: { id: string }[] }
+        popbersByPopId?: { nodes: { id: string }[] }
+        popmassnbersByPopId?: { nodes: { id: string }[] }
+      }[]
+    }
+  }
+}
+
+interface PopFolderParams {
+  id?: string | null | undefined
+  projId?: string | null | undefined
+}
+
 export const popFolder = async ({
   id,
   projId = '99999999-9999-9999-9999-999999999999',
-}) => {
-  const apolloClient = store.get(apolloClientAtom)!
+}: PopFolderParams) => {
+  // apolloClient is set during app startup
+  const apolloClient = store.get(apolloClientAtom) as ApolloClient
 
   // 1. load all data
-  const { data } = await apolloClient.query({
+  const { data } = await apolloClient.query<PopFolderQueryResult>({
     query: query,
     variables: { id },
   })
@@ -110,5 +131,5 @@ export const popFolder = async ({
   })
 
   // 3. update openNodes
-  store.set(treeAddOpenNodesAtom, newOpenNodes)
+  store.set(treeAddOpenNodesAtom, newOpenNodes as (string | number)[][])
 }

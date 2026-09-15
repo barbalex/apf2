@@ -5,13 +5,15 @@ import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { useZielNavData } from '../../../../modules/useZielNavData.ts'
 
+import type { NavData } from '../../../Bookmarks/types.ts'
+
 export const List = () => {
   const navData = useZielNavData()
 
   return (
     <Suspense fallback={<Spinner />}>
       <SharedList
-        navData={navData}
+        navData={navData as NavData}
         MenuBarComponent={Menu}
       />
     </Suspense>

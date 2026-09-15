@@ -16,13 +16,28 @@ import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { fieldTypes } from './Form.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
+import type { ComponentType } from 'react'
+
 import type {
   TpopkontrId,
   TpopId,
-  TpopkontrIdbiotuebereinstWerteCode,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './Form.module.css'
+
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: number; label: string | null }[]
+  value?: number | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
 
 interface BiotopQueryResult {
   tpopkontrById?: {
@@ -37,20 +52,20 @@ interface BiotopQueryResult {
     krautschicht?: string | null
     strauchschicht?: string | null
     baumschicht?: string | null
-    idealbiotopUebereinstimmung?: TpopkontrIdbiotuebereinstWerteCode | null
+    idealbiotopUebereinstimmung?: number | null
     handlungsbedarf?: string | null
   } | null
   allTpopkontrIdbiotuebereinstWertes?: {
     nodes: {
-      value: TpopkontrIdbiotuebereinstWerteCode
-      label?: string | null
+      value: number
+      label: string | null
     }[]
   } | null
   allAeLrDelarzes?: {
     nodes: {
       id: string
-      label?: string | null
-      einheit?: string | null
+      label: string | null
+      einheit: string | null
     }[]
   } | null
 }
@@ -65,7 +80,10 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery<BiotopQueryResult>({
+  // suspense is still honoured by useQuery at runtime but is no longer part
+  // of its option types; building the options outside the call keeps the
+  // excess property check from complaining about it
+  const tpopfeldkontrBiotopQueryOptions = {
     queryKey: ['tpopfeldkontrBiotop', tpopkontrId],
     queryFn: async () => {
       const result = await apolloClient.query<BiotopQueryResult>({
@@ -76,15 +94,20 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data } = useQuery(tpopfeldkontrBiotopQueryOptions)
 
-  const row = data?.tpopkontrById ?? {}
+  const row = (data?.tpopkontrById ?? {}) as NonNullable<
+    BiotopQueryResult['tpopkontrById']
+  >
 
-  const saveToDb = async (event) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string | undefined; value: unknown }
+  }) => {
+    const field = event.target.name as string
     const value = ifIsNumericAsNumber(event.target.value)
 
-    const variables = {
+    const variables: Record<string, unknown> = {
       id: row.id,
       [field]: value,
       changedBy: userName,
@@ -93,8 +116,9 @@ export const Component = () => {
       variables.datum = null
     }
     if (field === 'datum') {
-      // value can be null so check if substring method exists
-      const newJahr = value && value.substring ? +value.substring(0, 4) : value
+      // value can be null so check if it is a string
+      const newJahr =
+        value && typeof value === 'string' ? +value.substring(0, 4) : value
       variables.jahr = newJahr
     }
     try {
@@ -134,7 +158,7 @@ export const Component = () => {
       }))
     }
     // invalidate tpopfeldkontr query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['tpopfeldkontrBiotop', tpopkontrId],
     })
     setFieldErrors((prev) => {
@@ -142,7 +166,7 @@ export const Component = () => {
       return rest
     })
     if (['jahr', 'datum', 'typ'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
     }
@@ -169,22 +193,21 @@ export const Component = () => {
         <div className={styles.section}>Vegetation</div>
         <Select
           key={`${tpopkontrId}lrDelarze`}
-          data-id="lrDelarze"
           name="lrDelarze"
           label="Lebensraum nach Delarze"
           options={aeLrWerte}
-          value={row.lrDelarze}
-          saveToDb={saveToDb}
-          error={fieldErrors.lrDelarze}
+          value={row.lrDelarze ?? null}
+          saveToDb={(event) => void saveToDb(event)}
+          error={fieldErrors.lrDelarze ?? ''}
         />
         <Select
           key={`${tpopkontrId}lrUmgebungDelarze`}
           name="lrUmgebungDelarze"
           label="Umgebung nach Delarze"
           options={aeLrWerte}
-          value={row.lrUmgebungDelarze}
-          saveToDb={saveToDb}
-          error={fieldErrors.lrUmgebungDelarze}
+          value={row.lrUmgebungDelarze ?? null}
+          saveToDb={(event) => void saveToDb(event)}
+          error={fieldErrors.lrUmgebungDelarze ?? ''}
         />
         <TextField
           name="vegetationstyp"
@@ -239,17 +262,16 @@ export const Component = () => {
           name="handlungsbedarf"
           label="Handlungsbedarf"
           type="text"
-          multiline
           value={row.handlungsbedarf}
           saveToDb={saveToDb}
           error={fieldErrors.handlungsbedarf}
         />
-        <RadioButtonGroup
+        <TypedRadioButtonGroup
           name="idealbiotopUebereinstimmung"
           label="Übereinstimmung mit Idealbiotop"
           dataSource={data?.allTpopkontrIdbiotuebereinstWertes?.nodes ?? []}
           value={row.idealbiotopUebereinstimmung}
-          saveToDb={saveToDb}
+          saveToDb={(event) => void saveToDb(event)}
           error={fieldErrors.idealbiotopUebereinstimmung}
         />
       </div>

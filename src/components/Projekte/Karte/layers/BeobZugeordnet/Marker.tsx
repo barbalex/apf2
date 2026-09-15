@@ -6,6 +6,7 @@ import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import Button from '@mui/material/Button'
 import { useParams, useNavigate, useLocation } from 'react-router'
+import type { LeafletEvent } from 'leaflet'
 
 import {
   assigningBeobAtom,
@@ -22,9 +23,46 @@ import { useProjekteTabs } from '../../../../../modules/useProjekteTabs.ts'
 import { openTree2WithActiveNodeArray } from '../../../../../modules/openTree2WithActiveNodeArray.ts'
 import { Data } from '../BeobData/index.tsx'
 
+import type {
+  BeobId,
+  AeTaxonomiesId,
+  PopId,
+  TpopId,
+} from '../../../../../models/apflora/index.ts'
+
 import styles from '../BeobNichtBeurteilt/Marker.module.css'
 
-export const Marker = ({ beob }) => {
+export interface BeobZugeordnetNode {
+  id: BeobId
+  wgs84Lat: number
+  wgs84Long: number
+  lv95X: number | null
+  lv95Y: number | null
+  datum: string | null
+  autor: string | null
+  quelle: string | null
+  absenz: boolean | null
+  aeTaxonomyByArtId: {
+    id: AeTaxonomiesId
+    artname: string | null
+  } | null
+  tpopByTpopId: {
+    id: TpopId
+    popId: PopId
+    nr: number | null
+    flurname: string | null
+    popByPopId: {
+      id: PopId
+      label: string | null
+    } | null
+  } | null
+}
+
+interface MarkerProps {
+  beob: BeobZugeordnetNode
+}
+
+export const Marker = ({ beob }: MarkerProps) => {
   const { apId, projId, beobId } = useParams()
   const navigate = useNavigate()
   const { search } = useLocation()
@@ -50,7 +88,8 @@ export const Marker = ({ beob }) => {
   // some dates are not valid
   // need to account for that
   let datum = '(kein Datum)'
-  if (!isValid(new Date(beob.datum))) {
+  // null is turned into the epoch date, which isValid accepts
+  if (!isValid(new Date(beob.datum ?? 0))) {
     datum = '(ungültiges Datum)'
   } else if (beob.datum) {
     datum = format(new Date(beob.datum), 'yyyy.MM.dd')
@@ -59,28 +98,28 @@ export const Marker = ({ beob }) => {
   const quelle = beob?.quelle ?? ''
   const label = `${datum}: ${autor} (${quelle})`
 
-  const onMoveend = async (event) => {
+  const onMoveend = async (event: LeafletEvent) => {
     /**
      * assign to nearest tpop
      * point url to moved beob
      */
     const nearestTpop = await getNearestTpop({
-      apId,
+      ...(apId ? { apId } : {}),
       latLng: event.target._latlng,
     })
     const newActiveNodeArray = [
       'Projekte',
-      projId,
+      projId ?? '',
       'Arten',
-      apId,
+      apId ?? '',
       'Populationen',
-      nearestTpop.popId,
+      nearestTpop.popId ?? '',
       'Teil-Populationen',
       nearestTpop.id,
       'Beobachtungen',
       beob.id,
     ]
-    navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+    void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
     await apolloClient.mutate({
       mutation: updateBeobById,
       variables: {
@@ -88,25 +127,25 @@ export const Marker = ({ beob }) => {
         tpopId: nearestTpop.id,
       },
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`BeobZugeordnetForMapQuery`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`BeobNichtBeurteiltForMapQuery`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`BeobAssignLinesQuery`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeBeobZugeordnet`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeBeobNichtZuzuordnen`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeBeobNichtBeurteilt`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     setTreeLastTouchedNode(newActiveNodeArray)
@@ -121,9 +160,9 @@ export const Marker = ({ beob }) => {
     openTree2WithActiveNodeArray({
       activeNodeArray: [
         'Projekte',
-        projId,
+        projId ?? '',
         'Arten',
-        apId,
+        apId ?? '',
         'Populationen',
         popId,
         'Teil-Populationen',
@@ -153,7 +192,7 @@ export const Marker = ({ beob }) => {
       icon={icon}
       title={label}
       draggable={assigningBeob}
-      eventHandlers={{ moveend: onMoveend }}
+      eventHandlers={{ moveend: (event) => void onMoveend(event) }}
     >
       <Popup>
         <>

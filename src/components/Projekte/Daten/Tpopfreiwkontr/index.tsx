@@ -4,10 +4,8 @@ import { isDesktopViewAtom } from '../../../../store/index.ts'
 import { Component as Tpopfreiwkontr } from './Tpopfreiwkontr.tsx'
 import { List } from './List.tsx'
 
-import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
-
 interface ComponentProps {
-  id?: TpopkontrId
+  id?: string | undefined
 }
 
 export const Component = ({ id }: ComponentProps) => {

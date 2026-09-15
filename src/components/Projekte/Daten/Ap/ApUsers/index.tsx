@@ -1,6 +1,6 @@
-import { graphql } from '../../../../../gql'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 
 import { ApUser } from './ApUser.tsx'
@@ -31,7 +31,7 @@ export const ApUsers = () => {
 
   const { apId } = useParams<{ apId: string }>()
 
-  const { data, refetch } = useQuery({
+  const { data, refetch } = useSuspenseQuery({
     queryKey: ['apUsers', apId],
     queryFn: async () => {
       const result = await apolloClient.query<ApUsersQueryResult>({
@@ -57,12 +57,12 @@ export const ApUsers = () => {
             }
           }
         `),
-        variables: { apId },
+        variables: { apId: apId ?? '' },
       })
       if (result.error) throw result.error
-      return result.data
+      // errors are thrown above, so data is defined
+      return result.data as ApUsersQueryResult
     },
-    suspense: true,
   })
   const apUsers = data.allApUsers?.nodes ?? []
 
@@ -104,7 +104,7 @@ export const ApUsers = () => {
         </div>
       </div>
       <NewUser
-        apId={apId}
+        apId={apId ?? ''}
         apUsers={apUsers}
         refetch={refetch}
       />

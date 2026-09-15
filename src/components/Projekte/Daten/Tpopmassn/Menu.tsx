@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -18,8 +18,8 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 
-import type { TpopmassnId } from '../../../../models/apflora/TpopmassnId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { TpopmassnId } from '../../../../models/apflora/Tpopmassn.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
@@ -34,18 +34,16 @@ import {
 } from '../../../../store/index.ts'
 
 interface CreateTpopmassnResult {
-  data: {
-    createTpopmassn: {
-      tpopmassn: {
-        id: TpopmassnId
-        tpopId: TpopId
-      }
+  createTpopmassn: {
+    tpopmassn: {
+      id: TpopmassnId
+      tpopId: TpopId
     }
   }
 }
 
 interface MenuProps {
-  row: any
+  row: { id?: string | undefined; label?: string | undefined }
 }
 
 const iconStyle = { color: 'white' }
@@ -67,9 +65,9 @@ export const Menu = ({ row }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateTpopmassnResult | undefined
+    let result: { data?: CreateTpopmassnResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopmassnResult['data']>({
+      result = await apolloClient.mutate<CreateTpopmassnResult>({
         mutation: graphql(`
           mutation createTpopmassnForTpopmassnForm($tpopId: UUID!) {
             createTpopmassn(input: { tpopmassn: { tpopId: $tpopId } }) {
@@ -81,7 +79,7 @@ export const Menu = ({ row }: MenuProps) => {
           }
         `),
         variables: {
-          tpopId,
+          tpopId: tpopId ?? '',
         },
       })
     } catch (error) {
@@ -92,14 +90,14 @@ export const Menu = ({ row }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopmassn`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     const id = result?.data?.createTpopmassn?.tpopmassn?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${id}${search}`,
     )
   }
@@ -110,9 +108,8 @@ export const Menu = ({ row }: MenuProps) => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deleteTpopmassn($id: UUID!) {
             deleteTpopmassnById(input: { id: $id }) {
@@ -122,7 +119,7 @@ export const Menu = ({ row }: MenuProps) => {
             }
           }
         `),
-        variables: { id: tpopmassnId },
+        variables: { id: tpopmassnId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -139,14 +136,14 @@ export const Menu = ({ row }: MenuProps) => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopmassn`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     // navigate to parent
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen${search}`,
     )
   }
@@ -202,7 +199,7 @@ export const Menu = ({ row }: MenuProps) => {
         rerenderer={`${isMovingTpopmassn}/${moving.label}/${isCopyingTpopmassn}/${copying.label}/${movingFromThisTpop}/${thisTpopmassnIsMoving}/${thisTpopmassnIsCopying}`}
       >
         <Tooltip title="Neue Massnahme erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -225,7 +222,7 @@ export const Menu = ({ row }: MenuProps) => {
             : `Verschiebe '${moving.label}' zu dieser Teil-Population`
           }
         >
-          <IconButton onClick={onClickMoveInTree}>
+          <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
@@ -249,7 +246,7 @@ export const Menu = ({ row }: MenuProps) => {
             : 'Kopieren'
           }
         >
-          <IconButton onClick={onClickCopy}>
+          <IconButton onClick={() => void onClickCopy()}>
             <MdContentCopy
               style={{
                 color: thisTpopmassnIsCopying ? 'rgb(255, 90, 0)' : 'white',
@@ -272,7 +269,7 @@ export const Menu = ({ row }: MenuProps) => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={filesMenuStyles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

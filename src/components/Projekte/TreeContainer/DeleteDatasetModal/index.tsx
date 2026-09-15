@@ -50,7 +50,7 @@ export const DatasetDeleteModal = () => {
           </Button>
           <Button
             color="primary"
-            onClick={onClickLoeschen}
+            onClick={() => void onClickLoeschen()}
           >
             Löschen
           </Button>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -24,12 +24,10 @@ import {
 } from '../../../../store/index.ts'
 
 interface CreateEkfrequenzResult {
-  data?: {
-    createEkfrequenz?: {
-      ekfrequenz?: {
-        id: EkfrequenzId
-        apId: ApId
-      }
+  createEkfrequenz: {
+    ekfrequenz: {
+      id: EkfrequenzId
+      apId: ApId
     }
   }
 }
@@ -49,7 +47,7 @@ export const Menu = () => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateEkfrequenzResult | undefined
+    let result: { data?: CreateEkfrequenzResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateEkfrequenzResult>({
         mutation: graphql(`
@@ -62,7 +60,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { apId },
+        variables: { apId: apId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -72,17 +70,17 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeEkfrequenz`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createEkfrequenz?.ekfrequenz?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen/${id}${search}`,
     )
   }
@@ -93,9 +91,8 @@ export const Menu = () => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deleteEkfrequenz($id: UUID!) {
             deleteEkfrequenzById(input: { id: $id }) {
@@ -105,7 +102,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { id: ekfrequenzId },
+        variables: { id: ekfrequenzId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -122,24 +119,24 @@ export const Menu = () => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeEkfrequenz`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     // navigate to parent
-    navigate(`/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen${search}`)
+    void navigate(`/Daten/Projekte/${projId}/Arten/${apId}/EK-Frequenzen${search}`)
   }
 
   return (
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen AP-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -159,7 +156,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

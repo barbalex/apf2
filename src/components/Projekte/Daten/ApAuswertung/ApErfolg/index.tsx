@@ -1,5 +1,5 @@
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { range } from 'es-toolkit'
 import {
   LineChart,
@@ -15,17 +15,16 @@ import { query } from './query.ts'
 import { CustomTick } from './CustomTick.tsx'
 
 import type { ApberId } from '../../../../../models/apflora/Apber.ts'
-import type { ApErfkritWerteCode } from '../../../../../models/apflora/ApErfkritWerte.ts'
 
 import styles from './index.module.css'
 
 interface ApberNode {
   id: ApberId
   jahr: number | null
-  beurteilung: ApErfkritWerteCode | null
+  beurteilung: number | null
   apErfkritWerteByBeurteilung: {
-    id: number
-    text: string
+    id: string
+    text: string | null
   } | null
 }
 
@@ -43,12 +42,14 @@ const erfValueFromCode = {
   4: 5, // sehr erfolgreich
 }
 
+interface ErfolgRawData {
+  jahr: number | null
+  value: number | null
+}
+
 interface FindErfolgProps {
   jahr: number
-  erfolgRawData: {
-    jahr: number
-    value: number | null
-  }[]
+  erfolgRawData: ErfolgRawData[]
 }
 const findErfolg = ({ jahr, erfolgRawData }: FindErfolgProps) =>
   erfolgRawData.find((e) => e.jahr === jahr)
@@ -61,7 +62,7 @@ const getErfolg = ({ jahr, erfolgRawData }: FindErfolgProps) =>
 const addMissingErfolgData = (
   erfolgRawData: FindErfolgProps['erfolgRawData'],
 ) => {
-  const years = erfolgRawData.map((e) => e.jahr)
+  const years = erfolgRawData.map((e) => e.jahr ?? 0)
   const allYears = range(Math.min(...years), Math.max(...years) + 1)
   return allYears.map((jahr) => getErfolg({ jahr, erfolgRawData }))
 }
@@ -71,7 +72,7 @@ export const ApErfolg = () => {
 
   const { apId: id } = useParams<{ apId: string }>()
 
-  const { data: dataErfolg } = useQuery({
+  const { data: dataErfolg } = useSuspenseQuery({
     queryKey: ['apErfolg', id],
     queryFn: async () => {
       const result = await apolloClient.query<ApErfolgQueryResult>({
@@ -79,13 +80,12 @@ export const ApErfolg = () => {
         variables: { id },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as ApErfolgQueryResult
     },
-    suspense: true,
   })
   const erfolgRawData = dataErfolg.allApbers.nodes.map((e) => ({
     jahr: e.jahr,
-    value: erfValueFromCode[e.beurteilung],
+    value: erfValueFromCode[e.beurteilung as keyof typeof erfValueFromCode],
   }))
   const erfolgData = addMissingErfolgData(erfolgRawData)
 

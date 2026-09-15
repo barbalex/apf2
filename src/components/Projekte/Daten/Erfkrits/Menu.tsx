@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -19,12 +19,10 @@ import {
 } from '../../../../store/index.ts'
 
 interface CreateErfkritResult {
-  data?: {
-    createErfkrit?: {
-      erfkrit?: {
-        id: ErfkritId
-        apId: ApId
-      }
+  createErfkrit?: {
+    erfkrit?: {
+      id: ErfkritId
+      apId: ApId
     }
   }
 }
@@ -49,7 +47,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   )
 
   const onClickAdd = async () => {
-    let result: CreateErfkritResult | undefined
+    let result: { data?: CreateErfkritResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateErfkritResult>({
         mutation: graphql(`
@@ -72,17 +70,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeErfkrit`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createErfkrit?.erfkrit?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickCopy = () => setOpenChooseApToCopyErfkritsFrom(true)
@@ -94,7 +92,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neues Erfolgs-Kriterium erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

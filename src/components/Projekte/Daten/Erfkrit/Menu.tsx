@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -24,12 +24,10 @@ import {
 } from '../../../../store/index.ts'
 
 interface CreateErfkritResult {
-  data?: {
-    createErfkrit?: {
-      erfkrit?: {
-        id: ErfkritId
-        apId: ApId
-      }
+  createErfkrit?: {
+    erfkrit?: {
+      id: ErfkritId
+      apId: ApId
     }
   }
 }
@@ -49,7 +47,7 @@ export const Menu = () => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateErfkritResult | undefined
+    let result: { data?: CreateErfkritResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateErfkritResult>({
         mutation: graphql(`
@@ -72,17 +70,17 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeErfkrit`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createErfkrit?.erfkrit?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien/${id}${search}`,
     )
   }
@@ -93,9 +91,8 @@ export const Menu = () => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deleteErfkrit($id: UUID!) {
             deleteErfkritById(input: { id: $id }) {
@@ -105,7 +102,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { id: erfkritId },
+        variables: { id: erfkritId as string },
       })
     } catch (error) {
       return addNotification({
@@ -122,17 +119,17 @@ export const Menu = () => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeErfkrit`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     // navigate to parent
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/AP-Erfolgskriterien${search}`,
     )
   }
@@ -141,7 +138,7 @@ export const Menu = () => {
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen AP-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -161,7 +158,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

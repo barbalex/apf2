@@ -3,49 +3,17 @@ import { useQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
 import MarkerClusterGroup from 'react-leaflet-markercluster'
 import { useParams } from 'react-router'
+import type { Marker as LeafletMarkerType } from 'leaflet'
 // import { useMap } from 'react-leaflet'
 
 import { Marker } from './Marker.tsx'
+import type { BeobZugeordnetNode } from './Marker.tsx'
 import { query } from './query.ts'
-
-import type { BeobId } from '../../../../../models/apflora/public/Beob.ts'
-import type {
-  TpopId,
-  PopId,
-} from '../../../../../models/apflora/public/Tpop.ts'
-import type { AeTaxonomyId } from '../../../../../models/apflora/public/AeTaxonomy.ts'
 
 import {
   addNotificationAtom,
   treeBeobGqlFilterAtom,
 } from '../../../../../store/index.ts'
-
-
-interface BeobZugeordnetNode {
-  id: BeobId
-  wgs84Lat: number
-  wgs84Long: number
-  lv95X: number | null
-  lv95Y: number | null
-  datum: string | null
-  autor: string | null
-  quelle: string | null
-  absenz: boolean | null
-  aeTaxonomyByArtId: {
-    id: AeTaxonomyId
-    artname: string | null
-  } | null
-  tpopByTpopId: {
-    id: TpopId
-    popId: PopId
-    nr: number | null
-    flurname: string | null
-    popByPopId: {
-      id: PopId
-      label: string | null
-    } | null
-  } | null
-}
 
 interface BeobZugeordnetQueryResult {
   allBeobs: {
@@ -53,10 +21,12 @@ interface BeobZugeordnetQueryResult {
   }
 }
 
-const iconCreateFunction = function (cluster) {
+const iconCreateFunction = (cluster: {
+  getAllChildMarkers: () => LeafletMarkerType[]
+}) => {
   const markers = cluster.getAllChildMarkers()
   const hasHighlightedTpop = markers.some(
-    (m) => m.options.icon.options.className === 'beobIconHighlighted',
+    (m) => m.options.icon?.options.className === 'beobIconHighlighted',
   )
   const className =
     hasHighlightedTpop ?
@@ -64,14 +34,15 @@ const iconCreateFunction = function (cluster) {
     : 'beobZugeordnetCluster'
 
   return window.L.divIcon({
-    html: markers.length,
+    html: String(markers.length),
     className,
     iconSize: window.L.point(40, 40),
   })
 }
 
-const BeobZugeordnetMarker = ({ clustered }) => {
+const BeobZugeordnetMarker = ({ clustered }: { clustered: boolean }) => {
   // const leafletMap = useMap()
+  const addNotification = useSetAtom(addNotificationAtom)
   const beobZugeordnetGqlFilter = useAtomValue(treeBeobGqlFilterAtom('zugeordnet'))
 
   const apolloClient = useApolloClient()
@@ -81,14 +52,17 @@ const BeobZugeordnetMarker = ({ clustered }) => {
       'BeobZugeordnetForMapQuery',
       beobZugeordnetGqlFilter.filtered,
     ],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<BeobZugeordnetQueryResult>({
         query: query,
         variables: { beobFilter: beobZugeordnetGqlFilter.filtered },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
 
-   
+
   // const [refetchProvoker, setRefetchProvoker] = useState(1)
   // useEffect(() => {
   //   // DO NOT use:
@@ -111,7 +85,7 @@ const BeobZugeordnetMarker = ({ clustered }) => {
     })
   }
 
-  const beobMarkers = (data?.data?.allBeobs?.nodes ?? []).map((beob) => (
+  const beobMarkers = (data?.allBeobs?.nodes ?? []).map((beob) => (
     <Marker
       key={beob.id}
       beob={beob}
@@ -132,8 +106,7 @@ const BeobZugeordnetMarker = ({ clustered }) => {
   return beobMarkers
 }
 
-export const BeobZugeordnet = ({ clustered }) => {
-  const addNotification = useSetAtom(addNotificationAtom)
+export const BeobZugeordnet = ({ clustered }: { clustered: boolean }) => {
   const beobZugeordnetGqlFilter = useAtomValue(treeBeobGqlFilterAtom('zugeordnet'))
 
   const { apId } = useParams()

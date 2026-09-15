@@ -12,37 +12,13 @@ import { Spinner } from '../../../shared/Spinner.tsx'
 import { Form } from './Form/index.tsx'
 import { Menu } from './Menu.tsx'
 
-import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
-import type { ApId } from '../../../../models/apflora/ApId.ts'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
-
-interface TpopkontrQueryResult {
-  data: {
-    tpopkontrById: {
-      id: TpopkontrId
-      tpopByTpopId: {
-        popByPopId: {
-          apId: ApId
-          apByApId: {
-            ekzaehleinheitsByApId: {
-              nodes: {
-                tpopkontrzaehlEinheitWerteByZaehleinheitId: {
-                  code: TpopkontrzaehlEinheitWerteCode
-                } | null
-              }[]
-            }
-          }
-        }
-      }
-      tpopkontrzaehlsByTpopkontrId: {
-        nodes: any[]
-      }
-    } | null
-  }
-}
+import type {
+  TpopkontrQueryResult,
+  TpopkontrRow,
+} from './Form/index.tsx'
 
 interface ComponentProps {
-  id?: TpopkontrId
+  id?: string | undefined
 }
 
 import styles from './Tpopfreiwkontr.module.css'
@@ -63,23 +39,26 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
   const apolloClient = useApolloClient()
 
   const id = idPassed ?? params.tpopkontrId
-  const { data, isLoading, error, refetch } = useQuery<TpopkontrQueryResult>({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['TpopkontrQuery', id],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<TpopkontrQueryResult>({
         query,
         variables: { id },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
   // DO NOT use apId from url because this form is also used for mass prints
   const apId =
-    data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
+    data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apId ??
     '99999999-9999-9999-9999-999999999999'
 
   const zaehls =
-    data?.data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
+    data?.tpopkontrById?.tpopkontrzaehlsByTpopkontrId?.nodes ?? []
 
-  const row = data?.data?.tpopkontrById ?? {}
+  const row: Partial<TpopkontrRow> = data?.tpopkontrById ?? {}
 
   useEffect(() => {
     let isActive = true
@@ -91,7 +70,7 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
         // add counts for all ekzaehleinheit
         // BUT DANGER: only for ekzaehleinheit with zaehleinheit_id
         const ekzaehleinheits = (
-          data?.data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
+          data?.tpopkontrById?.tpopByTpopId?.popByPopId?.apByApId
             ?.ekzaehleinheitsByApId?.nodes ?? []
         )
           // remove ekzaehleinheits without zaehleinheit_id
@@ -113,7 +92,7 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
           .then(() => {
             if (!isActive) return
 
-            refetch()
+            void refetch()
           })
           .catch((error) => {
             if (!isActive) return
@@ -130,7 +109,16 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
     return () => {
       isActive = false
     }
-  }, [apolloClient, data, isLoading, refetch, row.id, userName, zaehls.length])
+  }, [
+    addNotification,
+    apolloClient,
+    data,
+    isLoading,
+    refetch,
+    row.id,
+    userName,
+    zaehls.length,
+  ])
 
   if (isLoading) return <Spinner />
 
@@ -153,17 +141,17 @@ export const Component = ({ id: idPassed }: ComponentProps) => {
       )}
       {isPrint ?
         <Form
-          data={data?.data}
+          data={data}
           row={row}
           apId={apId}
-          refetch={refetch}
+          refetch={() => void refetch()}
         />
       : <div className={styles.scrollContainer}>
           <Form
-            data={data?.data}
+            data={data}
             row={row}
             apId={apId}
-            refetch={refetch}
+            refetch={() => void refetch()}
           />
         </div>
       }

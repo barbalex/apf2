@@ -1,4 +1,4 @@
-import { useState, useEffect, type ChangeEvent } from 'react'
+import { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -29,9 +29,9 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Tabs } from './Tabs.tsx'
 
-import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
-import type { TpopmassnTypWerteCode } from '../../../../models/apflora/TpopmassnTypWerteCode.ts'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
+import type { ComponentType } from 'react'
+
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 interface TpopmassnsFilterQueryResult {
   allTpopmassns: {
@@ -50,7 +50,7 @@ interface TpopmassnsFilterQueryResult {
   allTpopmassnTypWertes: {
     nodes: {
       id: string
-      value: TpopmassnTypWerteCode
+      value: number
       label: string
       anpflanzung: boolean | null
     }[]
@@ -58,11 +58,51 @@ interface TpopmassnsFilterQueryResult {
   allTpopkontrzaehlEinheitWertes: {
     nodes: {
       id: string
-      value: TpopkontrzaehlEinheitWerteCode
+      value: number
       label: string
     }[]
   }
 }
+
+interface TpopmassnFilterRow {
+  id?: string | undefined
+  typ?: number | null | undefined
+  beschreibung?: string | null | undefined
+  jahr?: number | null | undefined
+  datum?: string | null | undefined
+  bearbeiter?: string | null | undefined
+  bemerkungen?: string | null | undefined
+  planVorhanden?: boolean | null | undefined
+  planBezeichnung?: string | null | undefined
+  flaeche?: number | null | undefined
+  markierung?: string | null | undefined
+  anzTriebe?: number | null | undefined
+  anzPflanzen?: number | null | undefined
+  anzPflanzstellen?: number | null | undefined
+  wirtspflanze?: string | null | undefined
+  herkunftPop?: string | null | undefined
+  sammeldatum?: string | null | undefined
+  vonAnzahlIndividuen?: number | null | undefined
+  form?: string | null | undefined
+  pflanzanordnung?: string | null | undefined
+  zieleinheitEinheit?: number | null | undefined
+  zieleinheitAnzahl?: number | null | undefined
+}
+
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: number; label: string; historic?: boolean | null }[]
+  loading?: boolean
+  value?: number | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
 
 import styles from './index.module.css'
 
@@ -83,6 +123,7 @@ export const TpopmassnFilter = () => {
   useEffect(() => {
     if (dataFilter.tpopmassn.length - 1 < activeTab) {
       // filter was emptied, need to set correct tab
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveTab(0)
     }
   }, [activeTab, dataFilter.tpopmassn.length])
@@ -110,20 +151,22 @@ export const TpopmassnFilter = () => {
     gcTime: Infinity,
   })
 
-  const row = dataFilter.tpopmassn[activeTab]
+  const row: TpopmassnFilterRow | undefined = dataFilter.tpopmassn[activeTab]
 
   const isAnpflanzung = data?.allTpopmassnTypWertes?.nodes?.find(
     (n) => n.value === row?.typ,
   )?.anpflanzung
 
-  const saveToDb = (event: ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = (event: {
+    target: { name?: string; value: string | number | null }
+  }) => {
     setDataFilterValue({
       table: 'tpopmassn',
-      key: event.target.name,
+      key: event.target.name ?? '',
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [
         'tpopmassnFilter',
         tpopmassnGqlFilter.filtered,
@@ -224,19 +267,21 @@ export const TpopmassnFilter = () => {
               type="number"
               value={row?.jahr}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <DateField
               name="datum"
               label="Datum"
               value={row?.datum}
               saveToDb={saveToDb}
+              error={undefined}
             />
-            <RadioButtonGroup
+            <TypedRadioButtonGroup
               name="typ"
               label="Typ"
               dataSource={data?.allTpopmassnTypWertes?.nodes ?? []}
               value={row?.typ}
-              saveToDb={saveToDb}
+              saveToDb={(event) => void saveToDb(event)}
             />
             <TextField
               name="beschreibung"
@@ -244,14 +289,15 @@ export const TpopmassnFilter = () => {
               type="text"
               value={row?.beschreibung}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <Select
               key={`${row?.id}bearbeiter`}
               name="bearbeiter"
               label="BearbeiterIn"
               options={data?.allAdresses?.nodes ?? []}
-              value={row?.bearbeiter}
-              saveToDb={saveToDb}
+              value={row?.bearbeiter ?? null}
+              saveToDb={(event) => void saveToDb(event)}
             />
             <TextField
               name="bemerkungen"
@@ -260,12 +306,15 @@ export const TpopmassnFilter = () => {
               multiLine
               value={row?.bemerkungen}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <Checkbox2States
               name="planVorhanden"
               label="Plan vorhanden"
               value={row?.planVorhanden}
               saveToDb={saveToDb}
+              error={undefined}
+              helperText={undefined}
             />
             <TextField
               name="planBezeichnung"
@@ -273,6 +322,7 @@ export const TpopmassnFilter = () => {
               type="text"
               value={row?.planBezeichnung}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="flaeche"
@@ -280,6 +330,7 @@ export const TpopmassnFilter = () => {
               type="number"
               value={row?.flaeche}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="form"
@@ -287,6 +338,7 @@ export const TpopmassnFilter = () => {
               type="text"
               value={row?.form}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="pflanzanordnung"
@@ -294,6 +346,7 @@ export const TpopmassnFilter = () => {
               type="text"
               value={row?.pflanzanordnung}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="markierung"
@@ -301,6 +354,7 @@ export const TpopmassnFilter = () => {
               type="text"
               value={row?.markierung}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="anzTriebe"
@@ -308,6 +362,7 @@ export const TpopmassnFilter = () => {
               type="number"
               value={row?.anzTriebe}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="anzPflanzen"
@@ -315,6 +370,7 @@ export const TpopmassnFilter = () => {
               type="number"
               value={row?.anzPflanzen}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="anzPflanzstellen"
@@ -322,6 +378,7 @@ export const TpopmassnFilter = () => {
               type="number"
               value={row?.anzPflanzstellen}
               saveToDb={saveToDb}
+              error={undefined}
             />
             {isAnpflanzung && (
               <>
@@ -330,8 +387,8 @@ export const TpopmassnFilter = () => {
                   name="zieleinheitEinheit"
                   label="Ziel-Einheit: Einheit (wird automatisch gesetzt)"
                   options={data?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-                  value={row?.zieleinheitEinheit}
-                  saveToDb={saveToDb}
+                  value={row?.zieleinheitEinheit ?? null}
+                  saveToDb={(event) => void saveToDb(event)}
                 />
                 <TextField
                   name="zieleinheitAnzahl"
@@ -339,6 +396,7 @@ export const TpopmassnFilter = () => {
                   type="number"
                   value={row?.zieleinheitAnzahl}
                   saveToDb={saveToDb}
+                  error={undefined}
                 />
               </>
             )}
@@ -348,9 +406,9 @@ export const TpopmassnFilter = () => {
               label="Wirtspflanze"
               query={queryAeTaxonomies}
               queryNodesName="allAeTaxonomies"
-              value={row?.wirtspflanze}
               saveToDb={saveToDb}
               row={row}
+              error={undefined}
             />
             <TextField
               name="herkunftPop"
@@ -358,6 +416,7 @@ export const TpopmassnFilter = () => {
               type="text"
               value={row?.herkunftPop}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="sammeldatum"
@@ -365,6 +424,7 @@ export const TpopmassnFilter = () => {
               type="text"
               value={row?.sammeldatum}
               saveToDb={saveToDb}
+              error={undefined}
             />
             <TextField
               name="vonAnzahlIndividuen"
@@ -372,6 +432,7 @@ export const TpopmassnFilter = () => {
               type="number"
               value={row?.vonAnzahlIndividuen}
               saveToDb={saveToDb}
+              error={undefined}
             />
           </div>
         </div>

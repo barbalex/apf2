@@ -1,5 +1,5 @@
 import Checkbox from '@mui/material/Checkbox'
-import { graphql } from '../../../../../../gql'
+import { graphql } from '../../../../../../gql/index.ts'
 
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
@@ -27,29 +27,31 @@ interface ApqkData {
 }
 
 interface ApqkQueryResult {
-  data?: {
-    apqkByApIdAndQkName?: ApqkData
-  }
+  apqkByApIdAndQkName?: ApqkData | null
 }
 
 interface RowProps {
   apId: ApId
   qk: QkNode
+  refetchTab?: (() => void) | undefined
 }
 
 export const Row = ({ apId, qk }: RowProps) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data, error } = useQuery<ApqkQueryResult>({
+  const { data, error } = useQuery({
     queryKey: ['apqkQueryForRow', apId, qk.name],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<ApqkQueryResult>({
         query: query,
         variables: { apId, qkName: qk.name },
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
-  const apqk = data?.data?.apqkByApIdAndQkName
+  const apqk = data?.apqkByApIdAndQkName
 
   const checked = !!apqk
 
@@ -84,14 +86,14 @@ export const Row = ({ apId, qk }: RowProps) => {
       })
     }
     // 3. refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeAp'],
     })
-    setTimeout(() =>
-      tsQueryClient.invalidateQueries({
+    setTimeout(() => {
+      void tsQueryClient.invalidateQueries({
         queryKey: [`apqkQueryForRow`],
-      }),
-    )
+      })
+    })
   }
 
   if (error) return <Error error={error} />
@@ -101,7 +103,7 @@ export const Row = ({ apId, qk }: RowProps) => {
       <div className={styles.check}>
         <Checkbox
           checked={checked}
-          onChange={onChange}
+          onChange={() => void onChange()}
           color="primary"
         />
       </div>

@@ -1,7 +1,14 @@
 import { TextField2 } from '../../../../shared/TextField2.tsx'
+import type { TpopkontrRow, TpopkontrSaveToDb } from './index.tsx'
 import styles from './Remarks.module.css'
 
-export const Remarks = ({ saveToDb, row, errors }) => (
+interface RemarksProps {
+  saveToDb: TpopkontrSaveToDb
+  row: Partial<TpopkontrRow>
+  errors: Record<string, string>
+}
+
+export const Remarks = ({ saveToDb, row, errors }: RemarksProps) => (
   <div className={styles.container}>
     <div className={styles.label}>
       Spezielle Bemerkungen
@@ -14,6 +21,7 @@ export const Remarks = ({ saveToDb, row, errors }) => (
       <TextField2
         key={`${row?.id}bemerkungen`}
         name="bemerkungen"
+        label={undefined}
         row={row}
         type="text"
         multiLine

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import type { MouseEvent } from 'react'
 import { MdExpandMore, MdExpandLess } from 'react-icons/md'
 import { useAtomValue } from 'jotai'
 
@@ -20,7 +21,7 @@ export const LayersControl = () => {
   const [overlaysExpanded, setOverlaysExpanded] = useState(false)
   const [apfloraLayersExpanded, setApfloraLayersExpanded] = useState(false)
 
-  const onToggleBaseLayersExpanded = (event) => {
+  const onToggleBaseLayersExpanded = (event: MouseEvent<HTMLDivElement>) => {
     event.stopPropagation()
     setBaseLayersExpanded(!baseLayersExpanded)
     if (overlaysExpanded) {
@@ -60,13 +61,15 @@ export const LayersControl = () => {
   // depends on state being changed, so needs to be true above
   // see: https://github.com/LiveBy/react-leaflet-control/issues/27#issuecomment-430564722
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setBaseLayersExpanded(false)
   }, [])
 
   // prevent click propagation on to map
   // https://stackoverflow.com/a/57013052/712005
-  const ref = useRef()
+  const ref = useRef<HTMLDivElement | null>(null)
   useEffect(() => {
+    if (!ref.current) return
     window.L.DomEvent.disableClickPropagation(ref.current)
     window.L.DomEvent.disableScrollPropagation(ref.current)
   }, [])

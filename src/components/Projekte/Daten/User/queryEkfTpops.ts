@@ -1,4 +1,4 @@
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 
 export const queryEkfTpops = graphql(`
   query ekfTpopsForUserQuery($id: UUID!, $jahr: Int!, $include: Boolean!) {

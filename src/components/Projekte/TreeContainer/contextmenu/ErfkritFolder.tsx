@@ -12,13 +12,19 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const insertData = {
   action: 'insert',
   table: 'erfkrit',
 }
 
-export const ErfkritFolder = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const ErfkritFolder = ({ onClick }: Props) => {
   const userToken = useAtomValue(userTokenAtom)
   const setOpenChooseApToCopyErfkritsFrom = useSetAtom(
     setOpenChooseApToCopyErfkritsFromAtom,
@@ -26,7 +32,7 @@ export const ErfkritFolder = ({ onClick }) => {
   // according to https://github.com/vkbansal/react-contextmenu/issues/65
   // this is how to pass data from ContextMenuTrigger to ContextMenu
   // i.e. to know what node was clicked
-  const [apId, changeApId] = useState(0)
+  const [, changeApId] = useState(0)
   const onShow = (event: { detail: { data?: Record<string, unknown> } }) =>
     changeApId(event.detail.data?.tableId as number)
   const onOpenChooseApDialog = () => setOpenChooseApToCopyErfkritsFrom(true)

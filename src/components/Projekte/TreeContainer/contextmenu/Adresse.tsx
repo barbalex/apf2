@@ -4,6 +4,8 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const insertData = {
   action: 'insert',
@@ -14,7 +16,11 @@ const deleteData = {
   table: 'adresse',
 }
 
-export const Adresse = ({ onClick }) => (
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const Adresse = ({ onClick }: Props) => (
   <ErrorBoundary>
     <ContextMenu
       id="treeAdresse"

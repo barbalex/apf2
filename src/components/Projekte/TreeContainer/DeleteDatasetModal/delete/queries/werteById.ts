@@ -1,7 +1,7 @@
 import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 import { camelCase } from 'es-toolkit'
 
-const werteById = (table) => {
+const werteById = (table: string) => {
   const tableName = camelCase(table)
 
   return dynamicGql`

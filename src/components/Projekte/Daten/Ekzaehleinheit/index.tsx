@@ -1,8 +1,8 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -21,43 +21,57 @@ import {
 import { Menu } from './Menu.tsx'
 
 import type {
-  Ekzaehleinheit,
+  EkzaehleinheitId,
   ApId,
   TpopkontrzaehlEinheitWerteId,
 } from '../../../../models/apflora/index.ts'
 
 import styles from './index.module.css'
 
-interface EkzaehleinheitQueryResult {
-  data?: {
-    ekzaehleinheitById?: Ekzaehleinheit & {
-      tpopkontrzaehlEinheitWerteByZaehleinheitId?: {
-        id: TpopkontrzaehlEinheitWerteId
-        text: string | null
-      }
-      apByApId?: {
-        id: ApId
-        ekzaehleinheitsByApId?: {
-          nodes: Ekzaehleinheit[]
-        }
-      }
+interface EkzaehleinheitNode {
+  id: EkzaehleinheitId
+  apId: ApId
+  label: string | null
+  zaehleinheitId: TpopkontrzaehlEinheitWerteId | null
+  zielrelevant: boolean | null
+  notMassnCountUnit: boolean | null
+  sort: number | null
+  bemerkungen: string | null
+  changedBy: string | null
+  tpopkontrzaehlEinheitWerteByZaehleinheitId: {
+    id: TpopkontrzaehlEinheitWerteId
+    code: number | null
+    text: string | null
+    correspondsToMassnAnzTriebe: boolean | null
+    correspondsToMassnAnzPflanzen: boolean | null
+    sort: number | null
+    historic: boolean | null
+    label: string | null
+    changedBy: string | null
+  } | null
+  apByApId: {
+    id: ApId
+    ekzaehleinheitsByApId: {
+      nodes: EkzaehleinheitNode[]
     }
   }
+}
+
+interface EkzaehleinheitQueryResult {
+  ekzaehleinheitById: EkzaehleinheitNode | null
 }
 
 interface ListsQueryResult {
-  data?: {
-    allTpopkontrzaehlEinheitWertes?: {
-      nodes: {
-        id: TpopkontrzaehlEinheitWerteId
-        value: TpopkontrzaehlEinheitWerteId
-        label: string | null
-      }[]
-    }
+  allTpopkontrzaehlEinheitWertes: {
+    nodes: {
+      id: TpopkontrzaehlEinheitWerteId
+      value: TpopkontrzaehlEinheitWerteId
+      label: string | null
+    }[]
   }
 }
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   bemerkungen: 'String',
   apId: 'UUID',
   zaehleinheitId: 'UUID',
@@ -76,7 +90,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['ekzaehleinheit', id],
     queryFn: async () => {
       const result = await apolloClient.query<EkzaehleinheitQueryResult>({
@@ -88,12 +102,10 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const row =
-    data.ekzaehleinheitById as EkzaehleinheitQueryResult['data']['ekzaehleinheitById']
+  const row: Partial<EkzaehleinheitNode> = data?.ekzaehleinheitById ?? {}
 
   const ekzaehleinheitenOfAp = (
     row?.apByApId?.ekzaehleinheitsByApId?.nodes ?? []
@@ -102,7 +114,7 @@ export const Component = () => {
   const notToShow = ekzaehleinheitenOfAp.filter((o) => o !== row.zaehleinheitId)
   const zaehleinheitWerteFilter =
     notToShow.length ? { id: { notIn: notToShow } } : { id: { isNull: false } }
-  const { data: dataLists } = useQuery({
+  const { data: dataLists } = useSuspenseQuery({
     queryKey: ['ekzaehleinheitLists', zaehleinheitWerteFilter],
     queryFn: async () => {
       const result = await apolloClient.query<ListsQueryResult>({
@@ -114,12 +126,13 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -177,11 +190,11 @@ export const Component = () => {
       return rest
     })
     // Invalidate query to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['ekzaehleinheit', id],
     })
     if (['zaehleinheitId', 'sort'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeEkzaehleinheit`],
       })
     }
@@ -201,10 +214,10 @@ export const Component = () => {
             key={`${id}zaehleinheitId`}
             name="zaehleinheitId"
             label="Zähleinheit"
-            options={dataLists.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
-            value={row.zaehleinheitId}
-            saveToDb={saveToDb}
-            error={fieldErrors.zaehleinheitId}
+            options={dataLists?.allTpopkontrzaehlEinheitWertes?.nodes ?? []}
+            value={row.zaehleinheitId ?? null}
+            saveToDb={(event) => void saveToDb(event)}
+            error={fieldErrors.zaehleinheitId ?? ''}
           />
           <Checkbox2States
             name="zielrelevant"
@@ -212,6 +225,7 @@ export const Component = () => {
             value={row.zielrelevant}
             saveToDb={saveToDb}
             error={fieldErrors.zielrelevant}
+            helperText={undefined}
           />
           {row.zielrelevant && (
             <Checkbox2States
@@ -220,6 +234,7 @@ export const Component = () => {
               value={row.notMassnCountUnit}
               saveToDb={saveToDb}
               error={fieldErrors.notMassnCountUnit}
+              helperText={undefined}
             />
           )}
           <TextField

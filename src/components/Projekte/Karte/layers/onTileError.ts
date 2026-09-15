@@ -1,21 +1,36 @@
 // TODO: need to debounce
 import axios from 'redaxios'
+import type { Map, TileErrorEvent } from 'leaflet'
 
 import { xmlToJson } from '../../../../modules/xmlToJson.ts'
 
+import type { Notification } from '../../../../store/index.ts'
 import {
   store,
   addNotificationAtom,
 } from '../../../../store/index.ts'
 
-const addNotification = (notification) =>
+export interface WmsLayer {
+  wms_queryable: number
+  wms_version: string
+  wms_format: string
+  wms_info_format?: string | undefined
+  wms_layers: string
+  wms_base_url: string
+}
+
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const onTileError = async (map, layer, ignore) => {
+export const onTileError = async (
+  map: Map,
+  layer: WmsLayer,
+  _ignore: TileErrorEvent,
+) => {
   // console.log('onTileError', { ignore, map, layer })
   const mapSize = map.getSize()
   const bbox = map.getBounds().toBBoxString()
-  const res = await axios({
+  const res = await axios<string>({
     method: 'get',
     url: layer.wms_base_url,
     params: {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -14,16 +14,14 @@ import { isEqual } from 'es-toolkit'
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { TpopmassnberId } from '../../../../models/apflora/TpopmassnberId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
+import type { TpopmassnberId } from '../../../../models/apflora/Tpopmassnber.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 
 interface CreateTpopmassnberResult {
-  data: {
-    createTpopmassnber: {
-      tpopmassnber: {
-        id: TpopmassnberId
-        tpopId: TpopId
-      }
+  createTpopmassnber: {
+    tpopmassnber: {
+      id: TpopmassnberId
+      tpopId: TpopId
     }
   }
 }
@@ -51,9 +49,9 @@ export const Menu = () => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateTpopmassnberResult | undefined
+    let result: { data?: CreateTpopmassnberResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopmassnberResult['data']>({
+      result = await apolloClient.mutate<CreateTpopmassnberResult>({
         mutation: graphql(`
           mutation createTpopmassnberForTpopmassnberForm($tpopId: UUID!) {
             createTpopmassnber(input: { tpopmassnber: { tpopId: $tpopId } }) {
@@ -64,7 +62,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { tpopId },
+        variables: { tpopId: tpopId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -74,14 +72,14 @@ export const Menu = () => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopmassnber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     const id = result?.data?.createTpopmassnber?.tpopmassnber?.id
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen-Berichte/${id}${search}`,
     )
   }
@@ -92,9 +90,8 @@ export const Menu = () => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: graphql(`
           mutation deleteTpopmassnber($id: UUID!) {
             deleteTpopmassnberById(input: { id: $id }) {
@@ -104,7 +101,7 @@ export const Menu = () => {
             }
           }
         `),
-        variables: { id: tpopmassnberId },
+        variables: { id: tpopmassnberId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -121,14 +118,14 @@ export const Menu = () => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopmassnber`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     // navigate to parent
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen-Berichte${search}`,
     )
   }
@@ -137,7 +134,7 @@ export const Menu = () => {
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen Massnahmen-Bericht erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -157,7 +154,7 @@ export const Menu = () => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={filesMenuStyles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

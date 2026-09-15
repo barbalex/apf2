@@ -2,7 +2,7 @@ import { useSetAtom } from 'jotai'
 import { FaTimes } from 'react-icons/fa'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import { graphql } from '../../../../../gql'
+import { graphql } from '../../../../../gql/index.ts'
 
 import { useApolloClient } from '@apollo/client/react'
 
@@ -24,7 +24,7 @@ interface ApUserProps {
       role: string
     }
   }
-  refetch: () => void
+  refetch: () => Promise<unknown>
 }
 
 export const ApUser = ({ user, refetch }: ApUserProps) => {
@@ -49,7 +49,7 @@ export const ApUser = ({ user, refetch }: ApUserProps) => {
         options: { variant: 'error' },
       })
     }
-    refetch()
+    void refetch()
   }
 
   const role = (user?.userByUserName?.role ?? '').replace('apflora_', '')
@@ -62,7 +62,7 @@ export const ApUser = ({ user, refetch }: ApUserProps) => {
       <Tooltip title={`${user.userName} entfernen`}>
         <IconButton
           aria-label={`${user.userName} entfernen`}
-          onClick={onClickDelete}
+          onClick={() => void onClickDelete()}
           className={styles.delIcon}
         >
           <FaTimes />

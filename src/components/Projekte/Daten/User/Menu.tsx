@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useParams, useNavigate, useLocation, Link } from 'react-router'
+import { useNavigate, useLocation, Link } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
@@ -18,19 +18,24 @@ import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.ts'
 import { queryEkfTpops } from './queryEkfTpops.ts'
 
-import type { UserId } from '../../../../models/apflora/UserId.ts'
-import type { AdresseId } from '../../../../models/apflora/AdresseId.ts'
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
-import type { TpopkontrId } from '../../../../models/apflora/TpopkontrId.ts'
+import type { UserId } from '../../../../models/apflora/User.ts'
+import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
+import type { TpopId } from '../../../../models/apflora/Tpop.ts'
 
 interface CreateUserResult {
-  data: {
-    createUser: {
-      user: {
-        id: UserId
-      }
+  createUser: {
+    user: {
+      id: UserId
     }
   }
+}
+
+interface DeleteUserResult {
+  deleteUserById: {
+    user: {
+      id: UserId
+    } | null
+  } | null
 }
 
 interface EkfTpopsQueryResult {
@@ -45,21 +50,10 @@ interface EkfTpopsQueryResult {
   } | null
 }
 
-interface CreateTpopkontrResult {
-  data: {
-    createTpopkontr: {
-      tpopkontr: {
-        id: TpopkontrId
-      }
-    }
-  }
-}
-
 interface MenuProps {
   row: {
     id: UserId
     adresseId: AdresseId | null
-    [key: string]: any
   }
   editPassword: boolean
   setEditPassword: (value: boolean) => void
@@ -122,9 +116,9 @@ export const Menu = ({
   const hasEkfTpopsWithoutEkfThisYear = !!ekfTpopsWithoutEkfThisYear.length
 
   const onClickAdd = async () => {
-    let result: CreateUserResult | undefined
+    let result: { data?: CreateUserResult | null | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateUserResult['data']>({
+      result = await apolloClient.mutate<CreateUserResult>({
         mutation: graphql(`
           mutation createUserForUserForm {
             createUser(input: { user: {} }) {
@@ -143,14 +137,14 @@ export const Menu = ({
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeUser`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     const id = result?.data?.createUser?.user?.id
-    navigate(`/Daten/Benutzer/${id}${search}`)
+    void navigate(`/Daten/Benutzer/${id}${search}`)
   }
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
@@ -159,9 +153,8 @@ export const Menu = ({
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate<DeleteUserResult>({
         mutation: graphql(`
           mutation deleteUser($id: UUID!) {
             deleteUserById(input: { id: $id }) {
@@ -188,18 +181,18 @@ export const Menu = ({
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeUser`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeRoot`],
     })
     // navigate to parent
-    navigate(`/Daten/Benutzer${search}`)
+    void navigate(`/Daten/Benutzer${search}`)
   }
 
   const onClickCreateEkfForms = async () => {
-    const errors = []
+    const errors: Error[] = []
     for (const tpopId of ekfTpopsWithoutEkfThisYear) {
       try {
         await apolloClient.mutate({
@@ -235,7 +228,7 @@ export const Menu = ({
           },
         })
       } catch (error) {
-        errors.push(error)
+        errors.push(error as Error)
       }
     }
     if (errors.length) {
@@ -254,7 +247,7 @@ export const Menu = ({
           variant: 'info',
         },
       })
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: ['ekfTpops', row.adresseId, thisYear],
       })
     }
@@ -264,7 +257,7 @@ export const Menu = ({
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen Benutzer erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -292,7 +285,7 @@ export const Menu = ({
         {hasEkfTpopsWithoutEkfThisYear && (
           <Button
             variant="outlined"
-            onClick={onClickCreateEkfForms}
+            onClick={() => void onClickCreateEkfForms()}
             title={`Erzeugt in ${ekfTpops.length} Teil-Population${
               ekfTpops.length > 1 ? 'en' : ''
             }, in de${
@@ -321,7 +314,7 @@ export const Menu = ({
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={filesMenuStyles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

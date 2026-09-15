@@ -8,7 +8,14 @@ import {
   treeActiveNodeArrayAtom,
 } from '../../../store/index.ts'
 
-export const closeLowerNodes = async ({ url, search }) => {
+export const closeLowerNodes = async ({
+  url,
+  search,
+}: {
+  // url elements can be route params, which are typed string | undefined
+  url: (string | number | undefined)[]
+  search: string
+}) => {
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const newOpenNodes = openNodes.filter((n) => {
@@ -20,6 +27,8 @@ export const closeLowerNodes = async ({ url, search }) => {
     // active node will be closed
     // navigate to url
     const navigate = store.get(navigateAtom)
-    navigate(`/Daten/${url.join('/')}${search}`)
+    if (navigate) {
+      navigate(`/Daten/${url.join('/')}${search}`)
+    }
   }
 }

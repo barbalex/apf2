@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect, type ChangeEvent } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { gql as dynamicGql } from '../../../../../apolloGql.ts'
-import { graphql } from '../../../../../gql'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue } from 'jotai'
 import { Tooltip, IconButton, Menu as MuiMenu, MenuItem } from '@mui/material'
@@ -33,19 +33,19 @@ interface Options {
 }
 
 interface HistoryRow {
-  year: number
+  year: number | null
   nr: number | null
   name: string | null
   status: number | null
   statusUnklar: boolean | null
   statusUnklarBegruendung: string | null
   bekanntSeit: number | null
-  geomPoint?: { x: number | null; y: number | null } | null
+  geomPoint?: { x: number | null; y: number | null } | null | undefined
 }
 
 interface Props {
   isNew: boolean
-  historyRow?: HistoryRow
+  historyRow?: HistoryRow | undefined
   options: Options
   onClose: () => void
   refetch: () => void
@@ -88,6 +88,7 @@ export const HistoryForm = ({
       )
       input?.focus()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only focus on mount, isNew does not change
   }, [])
 
   const buildGeomPoint = (x: unknown, y: unknown) => {
@@ -102,8 +103,10 @@ export const HistoryForm = ({
     }
   }
 
-  const saveCoordToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name // 'x' or 'y'
+  const saveCoordToDb = async (event: {
+    target: { name?: string; value: string | number | null }
+  }) => {
+    const field = event.target.name as 'x' | 'y' // 'x' or 'y'
     const value = ifIsNumericAsNumber(event.target.value)
 
     if (isNew) {
@@ -143,7 +146,7 @@ export const HistoryForm = ({
         `,
         variables: {
           id: popId,
-          year: historyRow!.year,
+          year: historyRow?.year,
           geomPoint,
           changedBy: userName,
         },
@@ -161,8 +164,10 @@ export const HistoryForm = ({
     refetch()
   }
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: string | number | null }
+  }) => {
+    const field = event.target.name as keyof typeof fieldTypes
     const rawValue = event.target.value
     const value =
       typeof rawValue === 'boolean' ? rawValue : ifIsNumericAsNumber(rawValue)
@@ -201,7 +206,7 @@ export const HistoryForm = ({
         `,
         variables: {
           id: popId,
-          year: historyRow!.year,
+          year: historyRow?.year,
           [field]: value,
           changedBy: userName,
         },
@@ -302,7 +307,10 @@ export const HistoryForm = ({
             }
           }
         `),
-        variables: { id: popId, year: historyRow!.year },
+        variables: {
+          id: popId as string,
+          year: historyRow?.year as number,
+        },
       })
     } catch (error) {
       console.error('Failed to delete pop_history:', error)
@@ -333,7 +341,7 @@ export const HistoryForm = ({
           <IconButton
             className={styles.okButton}
             size="small"
-            onClick={handleOk}
+            onClick={() => void handleOk()}
           >
             <MdCheck />
           </IconButton>
@@ -346,7 +354,7 @@ export const HistoryForm = ({
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
       <TextField
@@ -387,9 +395,9 @@ export const HistoryForm = ({
         name="status"
         label="Status"
         options={options.popStatusWertes}
-        value={fields.status}
-        saveToDb={saveToDb}
-        error={fieldErrors.status}
+        value={fields.status as number | null}
+        saveToDb={(fakeEvent) => void saveToDb(fakeEvent)}
+        error={fieldErrors.status ?? ''}
       />
       <Checkbox2States
         name="statusUnklar"
@@ -397,6 +405,7 @@ export const HistoryForm = ({
         value={fields.statusUnklar}
         saveToDb={saveToDb}
         error={fieldErrors.statusUnklar}
+        helperText=""
       />
       <TextField
         name="statusUnklarBegruendung"

@@ -21,17 +21,32 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { tpopfeldkontr } from '../../../shared/fragments.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
+import type { ComponentType } from 'react'
+
 import type {
   TpopkontrId,
   TpopId,
   AdresseId,
   TpopEntwicklungWerteCode,
-  TpopkontrIdbiotuebereinstWerteCode,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../models/apflora/index.ts'
 
 import styles from './Form.module.css'
 
-interface TpopfeldkontrRow {
+// shared RadioButtonGroup's props are inferred from an untyped signature
+// (dataSource infers as never, value as null);
+// declare the shape this form passes
+const TypedRadioButtonGroup = RadioButtonGroup as unknown as ComponentType<{
+  name: string
+  label: string
+  dataSource: { value: string; label: string }[]
+  value?: string | null | undefined
+  saveToDb: (
+    event: { target: { name?: string; value: string | number | null } },
+  ) => void
+  error?: string | undefined
+}>
+
+export interface TpopfeldkontrRow {
   id: TpopkontrId
   tpopId: TpopId
   typ?: string | null
@@ -56,13 +71,13 @@ interface TpopfeldkontrFormData {
   allTpopEntwicklungWertes?: {
     nodes: {
       value: TpopEntwicklungWerteCode
-      label?: string | null
+      label: string | null
     }[]
   } | null
   allAdresses?: {
     nodes: {
       value: AdresseId
-      label?: string | null
+      label: string | null
     }[]
   } | null
 }
@@ -72,7 +87,8 @@ interface TpopfeldkontrFormProps {
   data: TpopfeldkontrFormData
 }
 
-export const fieldTypes = {
+// eslint-disable-next-line react-refresh/only-export-components -- type map shared with the Biotop form
+export const fieldTypes: Record<string, string> = {
   typ: 'String',
   datum: 'Date',
   jahr: 'Int',
@@ -130,7 +146,7 @@ const tpopkontrTypWerte = [
 export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
   const userName = useAtomValue(userNameAtom)
   const token = useAtomValue(userTokenAtom)
-  const role = token ? jwtDecode(token)?.role : null
+  const role = token ? jwtDecode<{ role?: string }>(token)?.role : null
   const filteredTpopkontrTypWerte =
     role === 'apflora_manager' ?
       tpopkontrTypWerte
@@ -141,11 +157,13 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const saveToDb = async (event) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string | undefined; value: unknown }
+  }) => {
+    const field = event.target.name as string
     const value = ifIsNumericAsNumber(event.target.value)
 
-    const variables = {
+    const variables: Record<string, unknown> = {
       id: row.id,
       [field]: value,
       changedBy: userName,
@@ -154,8 +172,9 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
       variables.datum = null
     }
     if (field === 'datum') {
-      // value can be null so check if substring method exists
-      const newJahr = value && value.substring ? +value.substring(0, 4) : value
+      // value can be null so check if it is a string
+      const newJahr =
+        value && typeof value === 'string' ? +value.substring(0, 4) : value
       variables.jahr = newJahr
     }
     try {
@@ -195,13 +214,13 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
       }))
     }
     // invalidate tpopfeldkontr query
-    tsQueryClient.invalidateQueries({ queryKey: ['tpopfeldkontr', row.id] })
+    void tsQueryClient.invalidateQueries({ queryKey: ['tpopfeldkontr', row.id] })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
     if (['jahr', 'datum', 'typ'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpopfeldkontr`],
       })
     }
@@ -225,12 +244,12 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
           saveToDb={saveToDb}
           error={fieldErrors.datum}
         />
-        <RadioButtonGroup
+        <TypedRadioButtonGroup
           name="typ"
           label="Kontrolltyp"
           dataSource={filteredTpopkontrTypWerte}
           value={row.typ}
-          saveToDb={saveToDb}
+          saveToDb={(event) => void saveToDb(event)}
           error={fieldErrors.typ}
         />
         <Select
@@ -239,9 +258,9 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
           label="BearbeiterIn"
           options={data.allAdresses?.nodes ?? []}
           loading={false}
-          value={row.bearbeiter}
-          saveToDb={saveToDb}
-          error={fieldErrors.bearbeiter}
+          value={row.bearbeiter ?? null}
+          saveToDb={(event) => void saveToDb(event)}
+          error={fieldErrors.bearbeiter ?? ''}
         />
         <JesNo
           name="jungpflanzenVorhanden"
@@ -270,9 +289,8 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
           name="entwicklung"
           label="Entwicklung"
           dataSource={data.allTpopEntwicklungWertes?.nodes ?? []}
-          loading={false}
           popover={TpopfeldkontrentwicklungPopover}
-          value={row.entwicklung}
+          value={row.entwicklung as string}
           saveToDb={saveToDb}
           error={fieldErrors.entwicklung}
         />
@@ -335,6 +353,7 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
           value={row.apberNichtRelevant}
           saveToDb={saveToDb}
           error={fieldErrors.apberNichtRelevant}
+          helperText={undefined}
         />
         <TextField
           name="apberNichtRelevantGrund"

@@ -5,13 +5,22 @@ import {
   treeResetNodeLabelFilterKeepingApAtom,
 } from '../../../store/index.ts'
 
-export const openNode = async ({ node, openNodes }) => {
+export const openNode = async ({
+  node,
+  openNodes,
+}: {
+  node: {
+    url: (string | number)[]
+    menuType?: string | null | undefined
+  }
+  openNodes: (string | number)[][]
+}) => {
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen({ openNodes, url: node.url })) return
 
   const newOpenNodes = [...openNodes, node.url]
-  if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
+  if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType ?? '')) {
     // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
     newOpenNodes.push([...node.url, 'Zaehlungen'])
   }

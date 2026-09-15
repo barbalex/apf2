@@ -34,22 +34,28 @@ export const ApFilter = ({ color }: { color?: string | undefined }) => {
     // console.log('ApFilter, onChange', { apFilter, previousApFilter })
     if (!previousApFilter) {
       // need to fetch previously not had aps
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeAp`],
       })
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeProject`],
       })
       // apFilter was set to true
-      let result
+      let result:
+        | {
+            data?:
+              | { apById?: { bearbeitung: number | null } | null }
+              | undefined
+          }
+        | undefined
       if (apId) {
         // check if this is real ap
-        result = await apolloClient.query({
+        result = (await apolloClient.query({
           query: apById,
           variables: { id: apId },
-        })
+        })) as typeof result
       }
-      const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung) //@485
+      const isAp = [1, 2, 3].includes(result?.data?.apById?.bearbeitung ?? 0) //@485
       if (!isAp && activeNodeArray[2] === 'Arten') {
         // not a real ap
         // shorten active node array to Arten
@@ -58,7 +64,7 @@ export const ApFilter = ({ color }: { color?: string | undefined }) => {
           activeNodeArray[1],
           activeNodeArray[2],
         ]
-        navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+        void navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
         // remove from openNodes
         const newOpenNodes = openNodes.filter((n) => {
           if (
@@ -84,7 +90,7 @@ export const ApFilter = ({ color }: { color?: string | undefined }) => {
           data-id="ap-filter"
           id="ap-filter"
           checked={apFilter}
-          onChange={onChange}
+          onChange={() => void onChange()}
           color="primary"
           className={styles.switchClass}
         />

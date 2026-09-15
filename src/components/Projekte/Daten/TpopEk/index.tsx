@@ -7,7 +7,11 @@ import TableRow from '@mui/material/TableRow'
 import { groupBy } from 'es-toolkit'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  useQueryClient,
+  type UseQueryOptions,
+} from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { useAtomValue } from 'jotai'
 
@@ -18,7 +22,6 @@ import { TextField } from '../../../shared/TextField.tsx'
 import { query as tpopQuery } from '../Tpop/query.ts'
 import { EkYear } from './EkYear.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
-import { Spinner } from '../../../shared/Spinner.tsx'
 import { userNameAtom } from '../../../../store/index.ts'
 import { query } from './query.ts'
 import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
@@ -27,7 +30,6 @@ import {
   tpop as tpopFragment,
   tpopApberrelevantGrundWerte,
 } from '../../../shared/fragments.ts'
-import { fieldTypes } from '../Tpop/Tpop.tsx'
 import { FormTitle } from '../../../shared/FormTitle/index.tsx'
 
 import type {
@@ -38,14 +40,21 @@ import type {
   EkfrequenzId,
   AdresseId,
   TpopkontrId,
-  EkplanId,
   ApId,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../models/apflora/index.ts'
+import type { EkplanId } from '../../../../models/apflora/Ekplan.ts'
 
 import styles from './index.module.css'
 
+interface EkYearData {
+  id: TpopkontrId | EkplanId
+  jahr?: number | null
+  typ?: string | null
+  is: 'ek' | 'ekplan'
+}
+
 interface EkPlanTableProps {
-  ekGroupedByYear: Record<string, any[]>
+  ekGroupedByYear: Record<string, EkYearData[]>
 }
 
 const EkPlanTable = ({ ekGroupedByYear }: EkPlanTableProps) => {
@@ -67,7 +76,7 @@ const EkPlanTable = ({ ekGroupedByYear }: EkPlanTableProps) => {
           .map((year) => (
             <EkYear
               key={year}
-              data={ekGroupedByYear[year]}
+              data={ekGroupedByYear[year] ?? []}
             />
           ))}
       </TableBody>
@@ -149,9 +158,62 @@ interface TpopEkListsQueryResult {
   allAdresses?: {
     nodes: {
       value: AdresseId
-      label?: string | null
+      label: string | null
     }[]
   } | null
+}
+
+const fieldTypes: Record<string, string> = {
+  popId: 'UUID',
+  nr: 'Int',
+  gemeinde: 'String',
+  flurname: 'String',
+  radius: 'Int',
+  hoehe: 'Int',
+  exposition: 'String',
+  klima: 'String',
+  neigung: 'String',
+  bodenTyp: 'String',
+  bodenKalkgehalt: 'String',
+  bodenDurchlaessigkeit: 'String',
+  bodenHumus: 'String',
+  bodenNaehrstoffgehalt: 'String',
+  bodenAbtrag: 'String',
+  wasserhaushalt: 'String',
+  beschreibung: 'String',
+  katasterNr: 'String',
+  status: 'Int',
+  statusUnklarGrund: 'String',
+  apberRelevant: 'Boolean',
+  apberRelevantGrund: 'Int',
+  bekanntSeit: 'Int',
+  eigentuemer: 'String',
+  kontakt: 'String',
+  nutzungszone: 'String',
+  bewirtschafter: 'String',
+  bewirtschaftung: 'String',
+  ekfrequenz: 'UUID',
+  ekfrequenzAbweichend: 'Boolean',
+  ekfKontrolleur: 'UUID',
+  ekfrequenzStartjahr: 'Int',
+  bemerkungen: 'String',
+  statusUnklar: 'Boolean',
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type TpopEkUseQueryOptions = UseQueryOptions<
+  TpopEkQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
+}
+
+type TpopEkListsUseQueryOptions = UseQueryOptions<
+  TpopEkListsQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
 }
 
 export const Component = () => {
@@ -160,7 +222,7 @@ export const Component = () => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
-  const { data: tpopData } = useQuery({
+  const tpopEkQueryOptions: TpopEkUseQueryOptions = {
     queryKey: ['TpopEk', tpopId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopEkQueryResult>({
@@ -171,14 +233,19 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data: tpopData } = useQuery(tpopEkQueryOptions)
 
-  const tpop = tpopData?.tpopById ?? {}
+  const tpop = (tpopData?.tpopById ?? {}) as NonNullable<
+    TpopEkQueryResult['tpopById']
+  >
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const userName = useAtomValue(userNameAtom)
 
-  const saveToDb = async (event) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -235,13 +302,13 @@ export const Component = () => {
     if (
       (value &&
         ((field === 'ylv95Y' && tpop?.lv95X) ||
-          (field === 'lv95X' && tpop?.y))) ||
+          (field === 'lv95X' && (tpop as { y?: number | null })?.y))) ||
       (!value && (field === 'ylv95Y' || field === 'lv95X'))
     ) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`PopForMapQuery`],
       })
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`TpopForMapQuery`],
       })
     }
@@ -252,13 +319,13 @@ export const Component = () => {
       })
     }
     if (['nr', 'flurname'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`treeTpop`],
       })
     }
   }
 
-  const { data: dataEk } = useQuery({
+  const tpopEkListsQueryOptions: TpopEkListsUseQueryOptions = {
     queryKey: ['TpopEkLists', tpopId, apId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopEkListsQueryResult>({
@@ -272,7 +339,8 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data: dataEk } = useQuery(tpopEkListsQueryOptions)
 
   const ekfrequenzOptions0 = dataEk?.allEkfrequenzs?.nodes ?? []
   const longestAnwendungsfall = Math.max(
@@ -297,7 +365,7 @@ export const Component = () => {
         .filter((e) => e.jahr !== null)
         .map((t) => ({ ...t, is: 'ekplan' as const })),
     ],
-    (e) => e.jahr,
+    (e) => e.jahr as number,
   )
 
   if (!tpop) return null
@@ -310,9 +378,9 @@ export const Component = () => {
           <div className={styles.ekfrequenzOptionsContainer}>
             <RadioButtonGroup
               name="ekfrequenz"
-              dataSource={ekfrequenzOptions}
+              dataSource={ekfrequenzOptions as never[]}
               label="EK-Frequenz"
-              value={tpop.ekfrequenz}
+              value={tpop.ekfrequenz as null}
               saveToDb={saveToDb}
               error={fieldErrors.ekfrequenz}
             />
@@ -323,6 +391,7 @@ export const Component = () => {
             value={tpop.ekfrequenzAbweichend}
             saveToDb={saveToDb}
             error={fieldErrors.ekfrequenzAbweichend}
+            helperText=""
           />
           <TextField
             name="ekfrequenzStartjahr"
@@ -337,9 +406,9 @@ export const Component = () => {
             name="ekfKontrolleur"
             label="EKF-KontrolleurIn (nur Adressen mit zugeordnetem Benutzer-Konto)"
             options={dataEk?.allAdresses?.nodes ?? []}
-            value={tpop.ekfKontrolleur}
-            saveToDb={saveToDb}
-            error={fieldErrors.ekfKontrolleur}
+            value={tpop.ekfKontrolleur ?? null}
+            saveToDb={(e) => void saveToDb(e)}
+            error={fieldErrors.ekfKontrolleur ?? ''}
           />
         </div>
         <h5 className={styles.ekplanTitle}>EK-Plan</h5>

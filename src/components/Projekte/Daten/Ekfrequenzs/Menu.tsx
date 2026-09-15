@@ -1,5 +1,5 @@
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -20,12 +20,10 @@ import {
 
 
 interface CreateEkfrequenzResult {
-  data?: {
-    createEkfrequenz?: {
-      ekfrequenz?: {
-        id: EkfrequenzId
-        apId: ApId
-      }
+  createEkfrequenz: {
+    ekfrequenz: {
+      id: EkfrequenzId
+      apId: ApId
     }
   }
 }
@@ -51,7 +49,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   )
 
   const onClickAdd = async () => {
-    let result: CreateEkfrequenzResult | undefined
+    let result: { data?: CreateEkfrequenzResult | undefined } | undefined
     try {
       result = await apolloClient.mutate<CreateEkfrequenzResult>({
         mutation: graphql(`
@@ -64,7 +62,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
             }
           }
         `),
-        variables: { apId },
+        variables: { apId: apId ?? '' },
       })
     } catch (error) {
       return addNotification({
@@ -74,17 +72,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeEkfrequenz`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createEkfrequenz?.ekfrequenz?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickCopy = () => setOpenChooseApToCopyEkfrequenzsFrom(true)
@@ -96,7 +94,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue EK-Frequenz erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

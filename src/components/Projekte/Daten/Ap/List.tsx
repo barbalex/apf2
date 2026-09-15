@@ -6,9 +6,12 @@ import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { useApNavData } from '../../../../modules/useApNavData.ts'
 
+import type { NavData } from '../../../Bookmarks/types.ts'
+
 export const List = () => {
   const params = useParams<{ projId: string }>()
-  const navData = useApNavData(params)
+  // menus contain more properties than shared List needs
+  const navData = useApNavData(params) as NavData
 
   return (
     <Suspense fallback={<Spinner />}>

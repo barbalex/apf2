@@ -1,5 +1,5 @@
 import { useParams } from 'react-router'
-import { graphql } from '../../../../../gql'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'

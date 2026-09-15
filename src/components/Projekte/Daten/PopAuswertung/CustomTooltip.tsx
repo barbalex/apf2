@@ -2,10 +2,7 @@ import { sortBy } from 'es-toolkit'
 
 import { exists } from '../../../../modules/exists.ts'
 
-import type {
-  TpopId,
-  TpopStatusWerteCode,
-} from '../../../../models/apflora/index.ts'
+import type { TpopId } from '../../../../models/apflora/index.ts'
 
 import styles from './CustomTooltip.module.css'
 
@@ -16,7 +13,7 @@ interface TpopData {
   id: TpopId
   nr: number | null
   label: string | null
-  status: TpopStatusWerteCode | null
+  status: number | null
 }
 
 interface CustomTooltipProps {
@@ -32,7 +29,6 @@ interface CustomTooltipProps {
 export const CustomTooltip = ({
   payload = [],
   label,
-  active,
   tpopsData,
 }: CustomTooltipProps) => {
   const payloadSorted = sortBy(payload, [
@@ -46,9 +42,9 @@ export const CustomTooltip = ({
   return (
     <div className={styles.container}>
       <div className={styles.title}>{label}</div>
-      {payloadSorted.map((p, i) => {
+      {payloadSorted.map((p) => {
         const tpop = tpopsData.find((d) => d.id === p.dataKey)
-        let label = p.dataKey
+        let label: string | null = p.dataKey
         if (tpop) {
           label = tpop.label
         }
@@ -60,7 +56,7 @@ export const CustomTooltip = ({
         if (!tpop) {
           color = 'grey'
         } else {
-          const isUrspruenglich = tpop?.status < 200
+          const isUrspruenglich = (tpop?.status ?? 0) < 200
           color = isUrspruenglich ? colorUrspruenglich : colorAngesiedelt
         }
 

@@ -7,6 +7,8 @@ import {
   MenuItem,
 } from '../../../../modules/react-contextmenu/index.ts'
 
+import type { MenuItemProps } from '../../../../modules/react-contextmenu/MenuItem.tsx'
+
 // create objects outside render
 const showBeobOnMapData = {
   action: 'showBeobOnMap',
@@ -14,7 +16,11 @@ const showBeobOnMapData = {
   idTable: 'ap',
 }
 
-export const BeobZugeordnetFolder = ({ onClick }) => {
+interface Props {
+  onClick: NonNullable<MenuItemProps['onClick']>
+}
+
+export const BeobZugeordnetFolder = ({ onClick }: Props) => {
   const activeApfloraLayers = useAtomValue(mapActiveApfloraLayersAtom)
 
   return (

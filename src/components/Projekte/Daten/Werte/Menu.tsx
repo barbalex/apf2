@@ -3,7 +3,7 @@ import { useSetAtom, useAtomValue } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useParams, useNavigate, useLocation } from 'react-router'
+import { useNavigate, useLocation } from 'react-router'
 import { FaPlus, FaMinus } from 'react-icons/fa6'
 import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
@@ -23,10 +23,12 @@ import {
   treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
+// key: create${typename}; value: { [table]: { id } }
+type CreateWertResult = Record<string, Record<string, { id: string }>>
+
 interface MenuProps {
   row: {
     id: string
-    [key: string]: any
   }
   table: string
 }
@@ -52,9 +54,9 @@ export const Menu = ({ row, table }: MenuProps) => {
     : 'uups'
 
   const onClickAdd = async () => {
-    let result
+    let result: { data?: CreateWertResult | undefined } | undefined
     try {
-      result = await apolloClient.mutate({
+      result = await apolloClient.mutate<CreateWertResult>({
         mutation: dynamicGql`
             mutation create${typename}For${typename}Form {
               create${typename}(
@@ -76,14 +78,14 @@ export const Menu = ({ row, table }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`tree${typename}`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeWerteFolders`],
     })
     const id = result?.data?.[`create${typename}`]?.[table]?.id
-    navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
+    void navigate(`/Daten/Werte-Listen/${pathName}/${id}${search}`)
   }
 
   const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(
@@ -92,9 +94,8 @@ export const Menu = ({ row, table }: MenuProps) => {
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate({
         mutation: dynamicGql`
             mutation delete${typename}($id: UUID!) {
               delete${typename}ById(input: { id: $id }) {
@@ -122,21 +123,21 @@ export const Menu = ({ row, table }: MenuProps) => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`tree${typename}`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeWerteFolders`],
     })
     // navigate to parent
-    navigate(`/Daten/Werte-Listen/${pathName}${search}`)
+    void navigate(`/Daten/Werte-Listen/${pathName}${search}`)
   }
 
   return (
     <ErrorBoundary>
       <MenuBar>
         <Tooltip title="Neuen Wert erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -156,7 +157,7 @@ export const Menu = ({ row, table }: MenuProps) => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={filesMenuStyles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
     </ErrorBoundary>

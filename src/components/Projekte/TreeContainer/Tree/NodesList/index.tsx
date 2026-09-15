@@ -1,17 +1,33 @@
 import { useState, useEffect, Suspense } from 'react'
+import type { TransitionStatus } from 'react-transition-group'
 
 import { Fetcher } from './Fetcher.tsx'
+import type { TreeMenu, FetcherModule } from '../types.ts'
 
-export const NodesList = ({ menu, in: inProp, parentTransitionState }) => {
-  const { fetcherName, fetcherParams } = menu
+interface NodesListProps {
+  menu: TreeMenu
+  in?: boolean | undefined
+  parentTransitionState?: TransitionStatus | undefined
+}
 
-  const [fetcherModule, setFetcherModule] = useState(null)
+export const NodesList = ({
+  menu,
+  in: inProp,
+  parentTransitionState,
+}: NodesListProps) => {
+  const { fetcherName } = menu
+
+  const [fetcherModule, setFetcherModule] = useState<FetcherModule | null>(
+    null,
+  )
 
   useEffect(() => {
     // return the module, not the hook as that would already be called
-    import(`../../../../../modules/${fetcherName}.ts`).then((module) => {
-      setFetcherModule(module)
-    })
+    void import(`../../../../../modules/${fetcherName}.ts`).then(
+      (module: FetcherModule) => {
+        setFetcherModule(module)
+      },
+    )
   }, [fetcherName])
 
   // console.log('NodesList', {

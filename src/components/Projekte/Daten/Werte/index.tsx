@@ -1,9 +1,9 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
 import { upperFirst } from 'es-toolkit'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams, useLocation } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { TextField } from '../../../shared/TextField.tsx'
@@ -13,30 +13,16 @@ import { ifIsNumericAsNumber } from '../../../../modules/ifIsNumericAsNumber.ts'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { Menu } from './Menu.tsx'
 
-import type { TpopApberrelevantGrundWerteId } from '../../../../models/apflora/TpopApberrelevantGrundWerteId.ts'
-import type { EkAbrechnungstypWerteCode } from '../../../../models/apflora/EkAbrechnungstypWerteCode.ts'
-import type { TpopkontrzaehlEinheitWerteCode } from '../../../../models/apflora/TpopkontrzaehlEinheitWerteCode.ts'
-
-interface WerteQueryResult {
-  tpopApberrelevantGrundWerteById?: {
-    id: TpopApberrelevantGrundWerteId
-    code: number | null
-    text: string | null
-    sort: number | null
-  }
-  ekAbrechnungstypWerteById?: {
-    id: string
-    code: EkAbrechnungstypWerteCode | null
-    text: string | null
-    sort: number | null
-  }
-  tpopkontrzaehlEinheitWerteById?: {
-    id: string
-    code: TpopkontrzaehlEinheitWerteCode | null
-    text: string | null
-    sort: number | null
-  }
+// all wert tables return the same columns;
+// the code column is an Int except for ekAbrechnungstypWerte (String)
+interface WerteRow {
+  id: string
+  code: number | string | null
+  text: string | null
+  sort: number | null
 }
+
+type WerteQueryResult = Record<string, WerteRow | undefined>
 
 import styles from './index.module.css'
 
@@ -68,7 +54,7 @@ export const Component = () => {
       }
     }
   `
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['werte', table, id],
     queryFn: async () => {
       const result = await apolloClient.query<WerteQueryResult>({
@@ -80,10 +66,9 @@ export const Component = () => {
       if (result.error) throw result.error
       return result.data
     },
-    suspense: true,
   })
 
-  const row = data?.[`${table}ById`] ?? {}
+  const row: Partial<WerteRow> = data?.[`${table}ById`] ?? {}
 
   let codeGqlType = 'Int'
   let codeFieldType = 'number'
@@ -92,8 +77,10 @@ export const Component = () => {
     codeFieldType = 'text'
   }
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
-    const field = event.target.name
+  const saveToDb = async (event: {
+    target: { name?: string; value: unknown }
+  }) => {
+    const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
@@ -144,7 +131,7 @@ export const Component = () => {
         [field]: (error as Error).message,
       }))
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['werte', table, id],
     })
     setFieldErrors((prev) => {
@@ -152,7 +139,7 @@ export const Component = () => {
       return rest
     })
     if (['text', 'sort'].includes(field)) {
-      tsQueryClient.invalidateQueries({
+      void tsQueryClient.invalidateQueries({
         queryKey: [`tree${upperFirst(table)}`],
       })
     }

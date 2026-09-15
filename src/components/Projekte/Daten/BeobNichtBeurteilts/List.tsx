@@ -7,6 +7,8 @@ import { List as SharedList } from '../../../shared/List/index.tsx'
 import { Menu } from './Menu.tsx'
 import { Spinner } from '../../../shared/Spinner.tsx'
 
+import type { NavData } from '../../../Bookmarks/types.ts'
+
 const menuBarProps = { apfloraLayer: 'beobNichtBeurteilt' }
 
 export const List = () => {
@@ -17,7 +19,8 @@ export const List = () => {
   return (
     <Suspense fallback={<Spinner />}>
       <SharedList
-        navData={navData}
+        // navData comes from the untyped useBeobNichtBeurteiltsNavData hook
+        navData={navData as NavData}
         MenuBarComponent={Menu}
         menuBarProps={menuBarProps}
         highlightSearchString={nodeLabelFilter.beob}

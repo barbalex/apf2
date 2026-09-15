@@ -1,4 +1,6 @@
 import { isEqual } from 'es-toolkit'
+import type { ApolloClient } from '@apollo/client'
+import type { QueryClient } from '@tanstack/react-query'
 
 import { updateBeobById } from './updateBeobById.ts'
 import {
@@ -12,18 +14,30 @@ import {
   treeOpenNodesAtom,
 } from '../../../../store/index.ts'
 
+interface SaveNichtZuordnenToDbParams {
+  value: boolean
+  id: string
+  refetch: () => unknown
+  search: string
+}
+
 export const saveNichtZuordnenToDb = async ({
   value,
   id,
   refetch: refetchPassed,
   search,
-}) => {
-  const apolloClient = store.get(apolloClientAtom)!
-  const tsQueryClient = store.get(tsQueryClientAtom)!
+}: SaveNichtZuordnenToDbParams) => {
+  // both clients are set during app startup
+  const apolloClient = store.get(apolloClientAtom) as ApolloClient
+  const tsQueryClient = store.get(tsQueryClientAtom) as QueryClient
   const navigate = store.get(navigateAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
   const openNodes = store.get(treeOpenNodesAtom)
-  const variables = {
+  const variables: {
+    id: string
+    nichtZuordnen: boolean
+    tpopId?: null
+  } = {
     id,
     nichtZuordnen: value,
   }
@@ -33,16 +47,16 @@ export const saveNichtZuordnenToDb = async ({
     mutation: updateBeobById,
     variables,
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeAp`],
   })
   // need to update activeNodeArray and openNodes
@@ -62,7 +76,7 @@ export const saveNichtZuordnenToDb = async ({
     return n
   })
   store.set(treeAddOpenNodesAtom, newOpenNodes)
-  navigate(`/Daten/${newActiveNodeArray.join('/')}${search}`)
+  navigate?.(`/Daten/${newActiveNodeArray.join('/')}${search}`)
   store.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)
   if (refetchPassed) refetchPassed()
 }

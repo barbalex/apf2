@@ -1,4 +1,4 @@
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -23,19 +23,15 @@ import {
   copyingAtom,
   setCopyingAtom,
   movingAtom,
-  setMovingAtom,
 } from '../../../../store/index.ts'
 
-import type { TpopId } from '../../../../models/apflora/TpopId.ts'
-import type { PopId } from '../../../../models/apflora/PopId.ts'
+import type { TpopId, PopId } from '../../../../models/apflora/index.ts'
 
 interface CreateTpopResult {
-  data: {
-    createTpop: {
-      tpop: {
-        id: TpopId
-        popId: PopId
-      }
+  createTpop: {
+    tpop: {
+      id: TpopId
+      popId: PopId
     }
   }
 }
@@ -54,14 +50,13 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
   const { projId, apId, popId } = useParams()
   const moving = useAtomValue(movingAtom)
-  const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
 
   const onClickAdd = async () => {
-    let result: CreateTpopResult | undefined
+    let result: { data?: CreateTpopResult | null | undefined } | undefined
     try {
-      result = await apolloClient.mutate<CreateTpopResult['data']>({
+      result = await apolloClient.mutate<CreateTpopResult>({
         mutation: graphql(`
           mutation createTpopForTpopsForm($popId: UUID!) {
             createTpop(input: { tpop: { popId: $popId } }) {
@@ -84,17 +79,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePopFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treePop`],
     })
     const id = result?.data?.createTpop?.tpop?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   const onClickOpenLowerNodes = () =>
@@ -104,6 +99,8 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
       apId,
       popId,
       menuType: 'tpopFolder',
+      parentId: undefined,
+      jahr: undefined,
     })
 
   const onClickCloseLowerNodes = () =>
@@ -123,15 +120,6 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const isTpopMoving = moving.table === 'tpop'
 
   const onClickMoveTpopToHere = () => moveTo({ id: popId })
-
-  const onClickStopMovingTpop = () =>
-    setMoving({
-      table: null,
-      id: '99999999-9999-9999-9999-999999999999',
-      label: null,
-      toTable: null,
-      fromParentId: null,
-    })
 
   const isCopyingTpop = copying.table === 'tpop'
 
@@ -154,34 +142,34 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neue Teil-Population erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum öffnen">
-            <IconButton onClick={onClickOpenLowerNodes}>
+            <IconButton onClick={() => void onClickOpenLowerNodes()}>
               <FaFolderTree style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {showTreeMenus && (
           <Tooltip title="Ordner im Navigationsbaum schliessen">
-            <IconButton onClick={onClickCloseLowerNodes}>
+            <IconButton onClick={() => void onClickCloseLowerNodes()}>
               <RiFolderCloseFill style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {isTpopMoving && (
           <Tooltip title={`Verschiebe '${moving.label}' zu dieser Population`}>
-            <IconButton onClick={onClickMoveTpopToHere}>
+            <IconButton onClick={() => void onClickMoveTpopToHere()}>
               <MdOutlineMoveDown style={iconStyle} />
             </IconButton>
           </Tooltip>
         )}
         {isCopyingTpop && (
           <Tooltip title={`Kopiere '${copying.label}' in diese Population`}>
-            <IconButton onClick={onClickCopyTpopToHere}>
+            <IconButton onClick={() => void onClickCopyTpopToHere()}>
               <MdContentCopy style={iconStyle} />
             </IconButton>
           </Tooltip>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { graphql } from '../../../../../gql'
+import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { Tooltip, IconButton } from '@mui/material'
 import { MdEdit } from 'react-icons/md'
@@ -16,21 +16,11 @@ import { HistoryForm } from './HistoryForm.tsx'
 import type {
   TpopId,
   PopId,
-  TpopStatusWerteCode,
-  TpopApberrelevantGrundWerteCode,
   EkfrequenzId,
   AdresseId,
-} from '../../../../../generated/apflora/models.ts'
+} from '../../../../../models/apflora/index.ts'
 
-import {
-  container,
-  docLink,
-  docLine,
-  aenderung,
-  aktuell,
-  historyRowWrapper,
-  historyButtons,
-} from './index.module.css'
+import styles from './index.module.css'
 
 interface TpopHistoryItem {
   id: TpopId
@@ -55,16 +45,16 @@ interface TpopHistoryItem {
   neigung?: string | null
   beschreibung?: string | null
   katasterNr?: string | null
-  status?: TpopStatusWerteCode | null
+  status?: number | null
   popStatusWerteByStatus?: {
-    id: TpopStatusWerteCode
+    id: number
     text?: string | null
   } | null
   statusUnklarGrund?: string | null
   apberRelevant?: boolean | null
-  apberRelevantGrund?: TpopApberrelevantGrundWerteCode | null
+  apberRelevantGrund?: number | null
   tpopApberrelevantGrundWerteByApberRelevantGrund?: {
-    id: TpopApberrelevantGrundWerteCode
+    id: number
     text?: string | null
   } | null
   bekanntSeit?: number | null
@@ -114,6 +104,13 @@ interface TpopHistoryQueryResult {
   allEkfrequenzs?: {
     nodes: { value: string; label: string }[]
   }
+}
+
+type TpopHistoryUseQueryOptions = UseQueryOptions<
+  TpopHistoryQueryResult | undefined,
+  Error
+> & {
+  suspense: boolean
 }
 
 const query = graphql(`
@@ -263,7 +260,7 @@ export const Component = () => {
   const { tpopId } = useParams()
   const apolloClient = useApolloClient()
 
-  const { data, refetch } = useQuery<TpopHistoryQueryResult>({
+  const tpopHistoryQueryOptions: TpopHistoryUseQueryOptions = {
     queryKey: ['tpopHistorien', tpopId],
     queryFn: async () => {
       const result = await apolloClient.query<TpopHistoryQueryResult>({
@@ -274,7 +271,8 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
+  const { data, refetch } = useQuery(tpopHistoryQueryOptions)
 
   const [editingYear, setEditingYear] = useState<number | 'new' | null>(null)
   const [copyFrom, setCopyFrom] = useState<TpopHistoryItem | null>(null)
@@ -324,20 +322,20 @@ export const Component = () => {
         MenuBarComponent={HistorienMenu}
         menuBarProps={{ onAdd: handleAdd }}
       />
-      <div className={container}>
-        <p className={docLine}>
+      <div className={styles.container}>
+        <p className={styles.docLine}>
           Jährlich historisierte Daten der Teil-Population (
           <span
-            className={docLink}
+            className={styles.docLink}
             onClick={openDocs}
           >
             Dokumentation
           </span>
           ).
         </p>
-        <p className={docLine}>
-          <span className={aenderung}>Änderungen</span> zum{' '}
-          <span className={aktuell}>aktuellen Zustand</span> sind hervorgehoben.
+        <p className={styles.docLine}>
+          <span className={styles.aenderung}>Änderungen</span> zum{' '}
+          <span className={styles.aktuell}>aktuellen Zustand</span> sind hervorgehoben.
         </p>
         {rows.map((r) => {
           if (editingYear === r.year) {
@@ -348,7 +346,7 @@ export const Component = () => {
                 historyRow={r}
                 options={options}
                 onClose={() => setEditingYear(null)}
-                refetch={refetch}
+                refetch={() => void refetch()}
               />
             )
           }
@@ -510,13 +508,13 @@ export const Component = () => {
           return (
             <div
               key={r.year}
-              className={historyRowWrapper}
+              className={styles.historyRowWrapper}
             >
-              <div className={historyButtons}>
+              <div className={styles.historyButtons}>
                 <Tooltip title="bearbeiten">
                   <IconButton
                     size="small"
-                    onClick={() => setEditingYear(r.year)}
+                    onClick={() => setEditingYear(r.year ?? null)}
                   >
                     <MdEdit />
                   </IconButton>
@@ -548,7 +546,7 @@ export const Component = () => {
                 setEditingYear(null)
                 setCopyFrom(null)
               }}
-              refetch={refetch}
+              refetch={() => void refetch()}
             />
           </div>
         )}

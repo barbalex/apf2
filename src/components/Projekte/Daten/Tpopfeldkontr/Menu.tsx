@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
@@ -23,7 +23,7 @@ import type {
   TpopkontrId,
   TpopId,
   TpopkontrzaehlId,
-} from '../../../../generated/apflora/models.ts'
+} from '../../../../models/apflora/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
@@ -57,11 +57,20 @@ interface CreateTpopkontrzaehlResult {
   }
 }
 
+interface DeleteTpopkontrResult {
+  deleteTpopkontrById: {
+    tpopkontr: {
+      id: TpopkontrId
+    } | null
+  } | null
+}
+
 interface MenuProps {
   row?: {
     label?: string
     labelEk?: string
   }
+  toggleFilterInput?: () => void
 }
 
 const iconStyle = { color: 'white' }
@@ -142,21 +151,21 @@ export const Menu = ({ row }: MenuProps) => {
       zaehlungenFolderNode,
       zaehlungNode,
     ]
-    setOpenNodes(newOpenNodes)
+    setOpenNodes(newOpenNodes as (string | number)[][])
 
     // 4. refresh tree
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontrzaehl`],
     })
 
     // 5. navigate to new tpopkontr
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${id}/Feld-Kontrolle${search}`,
     )
   }
@@ -170,9 +179,8 @@ export const Menu = ({ row }: MenuProps) => {
   const copyBiotopMenuOpen = Boolean(copyBiotopMenuAnchorEl)
 
   const onClickDelete = async () => {
-    let result
     try {
-      result = await apolloClient.mutate({
+      await apolloClient.mutate<DeleteTpopkontrResult>({
         mutation: graphql(`
           mutation deleteTpopkontrForTpopfeldkontrRouter($id: UUID!) {
             deleteTpopkontrById(input: { id: $id }) {
@@ -199,14 +207,14 @@ export const Menu = ({ row }: MenuProps) => {
     setOpenNodes(newOpenNodes)
 
     // update tree query
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpopfeldkontr`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeTpop`],
     })
     // navigate to parent
-    navigate(
+    void navigate(
       `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen${search}`,
     )
   }
@@ -220,7 +228,7 @@ export const Menu = ({ row }: MenuProps) => {
     }
     setMoving({
       id: tpopkontrId,
-      label: row.label,
+      label: row?.label,
       table: 'tpopfeldkontr',
       toTable: 'tpopfeldkontr',
       fromParentId: tpopId,
@@ -243,13 +251,13 @@ export const Menu = ({ row }: MenuProps) => {
 
   const onClickCopyFeldkontrToHere = () => copyTo({ parentId: tpopId })
 
-  const onClickCopyBiotopToHere = () => copyBiotopTo({ id: tpopkontrId })
+  const onClickCopyBiotopToHere = () => copyBiotopTo({ id: tpopkontrId ?? '' })
 
   const onClickSetFeldkontrCopying = () => {
     setCopying({
       table: 'tpopfeldkontr',
       id: tpopkontrId,
-      label: row.labelEk ?? row.label,
+      label: row?.labelEk ?? row?.label,
       withNextLevel: false,
     })
     setCopyBiotopMenuAnchorEl(null)
@@ -258,7 +266,7 @@ export const Menu = ({ row }: MenuProps) => {
   const onClickSetBiotopCopying = () => {
     setCopyingBiotop({
       id: tpopkontrId,
-      label: row.labelEk ?? row.label,
+      label: row?.labelEk ?? row?.label,
     })
     setCopyBiotopMenuAnchorEl(null)
   }
@@ -279,7 +287,7 @@ export const Menu = ({ row }: MenuProps) => {
         rerenderer={`${isMovingFeldkontr}/${moving.label}/${isCopyingTpopfeldkontr}/${isCopyingBiotop}/${copying.label}/${isCopying}/${copyingBiotop.label}/${movingFromThisTpop}/${thisTpopfeldkontrIsMoving}/${thisTpopfeldkontrIsCopying}`}
       >
         <Tooltip title="Neue Feld-Kontrolle erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>
@@ -294,7 +302,7 @@ export const Menu = ({ row }: MenuProps) => {
         <Tooltip
           title={
             !isMovingFeldkontr ?
-              `'${row.labelEk ?? row.label}' zu einer anderen Population verschieben`
+              `'${row?.labelEk ?? row?.label}' zu einer anderen Population verschieben`
             : thisTpopfeldkontrIsMoving ?
               'Zum Verschieben gemerkt, bereit um in einer anderen Teilpopulation einzufügen'
             : movingFromThisTpop ?
@@ -302,7 +310,7 @@ export const Menu = ({ row }: MenuProps) => {
             : `Verschiebe '${moving.label}' zu dieser Teilpopulation`
           }
         >
-          <IconButton onClick={onClickMoveInTree}>
+          <IconButton onClick={() => void onClickMoveInTree()}>
             <MdOutlineMoveDown
               style={{
                 color:
@@ -322,11 +330,13 @@ export const Menu = ({ row }: MenuProps) => {
         )}
         {isCopyingTpopfeldkontr ?
           <Tooltip title={`Kopiere '${copying.label}' in diese Teilpopulation`}>
-            <IconButton onClick={onClickCopyFeldkontrToHere}>
+            <IconButton onClick={() => void onClickCopyFeldkontrToHere()}>
               <MdContentCopy
                 style={{
+                  // comparison is kept as it was; boolean never equals 'true'
                   color:
-                    thisTpopfeldkontrIsCopying === 'true' ? 'rgb(255, 90, 0)'
+                    (thisTpopfeldkontrIsCopying as string | boolean) ===
+                    'true' ? 'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
@@ -336,7 +346,7 @@ export const Menu = ({ row }: MenuProps) => {
           <Tooltip
             title={`Kopiere Biotop von '${copyingBiotop.label}' hierhin`}
           >
-            <IconButton onClick={onClickCopyBiotopToHere}>
+            <IconButton onClick={() => void onClickCopyBiotopToHere()}>
               <MdContentCopy style={{ color: 'white' }} />
             </IconButton>
           </Tooltip>
@@ -349,8 +359,10 @@ export const Menu = ({ row }: MenuProps) => {
             >
               <MdContentCopy
                 style={{
+                  // comparison is kept as it was; boolean never equals 'true'
                   color:
-                    thisTpopfeldkontrIsCopying === 'true' ? 'rgb(255, 90, 0)'
+                    (thisTpopfeldkontrIsCopying as string | boolean) ===
+                    'true' ? 'rgb(255, 90, 0)'
                     : 'white',
                 }}
               />
@@ -374,7 +386,7 @@ export const Menu = ({ row }: MenuProps) => {
         onClose={() => setDelMenuAnchorEl(null)}
       >
         <h3 className={styles.menuTitle}>löschen?</h3>
-        <MenuItem onClick={onClickDelete}>ja</MenuItem>
+        <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
         <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
       </MuiMenu>
       <MuiMenu

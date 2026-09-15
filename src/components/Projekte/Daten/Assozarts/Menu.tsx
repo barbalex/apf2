@@ -1,10 +1,9 @@
 import { useSetAtom } from 'jotai'
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useParams, useNavigate, useLocation } from 'react-router'
 import { FaPlus } from 'react-icons/fa6'
-import { MdContentCopy } from 'react-icons/md'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 
@@ -12,24 +11,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { FilterButton } from '../../../shared/MenuBar/FilterButton.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 
-import type { AssozartId } from '../../../../models/apflora/Assozart.ts'
-import type { ApId } from '../../../../models/apflora/Ap.ts'
-
-import {
-  addNotificationAtom,
-} from '../../../../store/index.ts'
-
-
-interface CreateAssozartResult {
-  data?: {
-    createAssozart?: {
-      assozart?: {
-        id: AssozartId
-        apId: ApId
-      }
-    }
-  }
-}
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface MenuProps {
   toggleFilterInput?: () => void
@@ -47,7 +29,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
   const tsQueryClient = useQueryClient()
 
   const onClickAdd = async () => {
-    let result: CreateAssozartResult | undefined
+    let result
     try {
       result = await apolloClient.mutate({
         mutation: graphql(`
@@ -60,7 +42,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
             }
           }
         `),
-        variables: { apId },
+        variables: { apId: apId as string },
       })
     } catch (error) {
       return addNotification({
@@ -70,17 +52,17 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAssozart`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApFolders`],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
     const id = result?.data?.createAssozart?.assozart?.id
-    navigate(`./${id}${search}`)
+    void navigate(`./${id}${search}`)
   }
 
   return (
@@ -90,7 +72,7 @@ export const Menu = ({ toggleFilterInput }: MenuProps) => {
           <FilterButton toggleFilterInput={toggleFilterInput} />
         )}
         <Tooltip title="Neues assoziierte Art erstellen">
-          <IconButton onClick={onClickAdd}>
+          <IconButton onClick={() => void onClickAdd()}>
             <FaPlus style={iconStyle} />
           </IconButton>
         </Tooltip>

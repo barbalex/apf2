@@ -2,7 +2,11 @@ import { useState, Suspense, type ChangeEvent } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  type UseQueryOptions,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { SelectLoadingOptions } from '../../../shared/SelectLoadingOptions.tsx'
@@ -16,36 +20,44 @@ import { apart } from '../../../shared/fragments.ts'
 import { Spinner } from '../../../shared/Spinner.tsx'
 import { Menu } from './Menu.tsx'
 
-import type Apart from '../../../../models/apflora/Apart.ts'
 import type { ApartId } from '../../../../models/apflora/Apart.ts'
 import type { ApId } from '../../../../models/apflora/Ap.ts'
 import type { AeTaxonomiesId } from '../../../../models/apflora/AeTaxonomies.ts'
 
-import {
-  container,
-  fieldsContainer,
-  formContainer,
-  spacer,
-} from './index.module.css'
+import styles from './index.module.css'
 
-const fieldTypes = {
+const fieldTypes: Record<string, string> = {
   apId: 'UUID',
   artId: 'UUID',
 }
 
+interface ApartNode {
+  id: ApartId
+  label: string | null
+  apId: ApId | null
+  artId: AeTaxonomiesId | null
+  changedBy: string | null
+}
+
 interface ApartQueryResult {
-  apartById: Apart & {
-    aeTaxonomyByArtId?: {
+  apartById: ApartNode & {
+    aeTaxonomyByArtId: {
       id: AeTaxonomiesId
-      taxArtName: string
-    }
-    apByApId?: {
+      taxArtName: string | null
+    } | null
+    apByApId: {
       id: ApId
       apartsByApId: {
-        nodes: Apart[]
+        nodes: ApartNode[]
       }
-    }
+    } | null
   }
+}
+
+// react-query v5 omitted suspense from the public useQuery options
+// although it is still honored at runtime
+type ApartUseQueryOptions = UseQueryOptions<ApartQueryResult | undefined, Error> & {
+  suspense: boolean
 }
 
 export const Component = () => {
@@ -58,7 +70,7 @@ export const Component = () => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const { data, refetch } = useQuery({
+  const queryOptions: ApartUseQueryOptions = {
     queryKey: ['apart', id],
     queryFn: async () => {
       const result = await apolloClient.query<ApartQueryResult>({
@@ -69,15 +81,17 @@ export const Component = () => {
       return result.data
     },
     suspense: true,
-  })
+  }
 
-  const row = data.apartById as ApartQueryResult['apartById']
+  const { data } = useQuery(queryOptions)
+
+  const row = data?.apartById
 
   // do not include already chosen assozarten
   const apartenOfAp = (row?.apByApId?.apartsByApId?.nodes ?? [])
     .map((o) => o.artId)
     // but do include the art included in the row
-    .filter((o) => o !== row.artId)
+    .filter((o) => o !== row?.artId)
     // no null values
     .filter((o) => !!o)
   const aeTaxonomiesfilter = (inputValue: string) =>
@@ -100,12 +114,12 @@ export const Component = () => {
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {
-      id: row.id,
+      id: row?.id,
       [field]: value,
       changedBy: userName,
     }
     try {
-      await apolloClient.mutate<any>({
+      await apolloClient.mutate({
         mutation: dynamicGql`
             mutation updateApart(
               $id: UUID!
@@ -137,26 +151,26 @@ export const Component = () => {
       }))
     }
     // Invalidate queries to refetch data
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['apart', id],
     })
     setFieldErrors((prev) => {
       const { [field]: _, ...rest } = prev
       return rest
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeApart`],
     })
   }
 
   return (
     <ErrorBoundary>
-      <div className={container}>
+      <div className={styles.container}>
         <FormTitle
           title="Taxon"
           MenuBarComponent={Menu}
         />
-        <div className={fieldsContainer}>
+        <div className={styles.fieldsContainer}>
           <div>
             In der Art (= dem namensgebenden Taxon) eingeschlossenes Taxon.
             Gründe um mehrere zu erfassen:
@@ -186,11 +200,13 @@ export const Component = () => {
             <br />
           </div>
           <Suspense fallback={<Spinner />}>
-            <div className={formContainer}>
+            <div className={styles.formContainer}>
               <SelectLoadingOptions
                 key={`${row?.id}artId`}
                 field="artId"
                 valueLabel={row?.aeTaxonomyByArtId?.taxArtName ?? ''}
+                valueLabelPath="aeTaxonomyByArtId.taxArtName"
+                labelSize={12}
                 label="Taxon"
                 row={row}
                 query={queryAeTaxonomies}
@@ -199,7 +215,7 @@ export const Component = () => {
                 saveToDb={saveToDb}
                 error={fieldErrors.artId}
               />
-              <div className={spacer} />
+              <div className={styles.spacer} />
             </div>
           </Suspense>
         </div>
