@@ -11,14 +11,86 @@ import {
   ekPlanShowMassnAtom,
 } from '../../../store/index.ts'
 
-export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
+// node types of the export query (queryForExport.ts)
+interface ExportTpopkontrzaehlNode {
+  einheit: string | null
+  anzahl: number | null
+  tpopkontrzaehlEinheitWerteByEinheit: {
+    ekzaehleinheitsByZaehleinheitId: {
+      nodes: unknown[]
+    }
+  } | null
+}
+
+interface ExportTpopkontrNode {
+  jahr: number | null
+  typ: string | null
+  tpopkontrzaehlsByTpopkontrId: {
+    nodes: ExportTpopkontrzaehlNode[]
+  }
+}
+
+interface ExportTpopmassnNode {
+  jahr: number | null
+  anzTriebe: number | null
+  anzPflanzen: number | null
+}
+
+export interface ExportTpopNode {
+  id: string
+  nr: number | null
+  gemeinde: string | null
+  flurname: string | null
+  lv95X: number | null
+  lv95Y: number | null
+  ekfrequenz: string | null
+  ekfrequenzStartjahr: number | null
+  ekfrequenzAbweichend: boolean | null
+  bekanntSeit: number | null
+  ekfrequenzByEkfrequenz: {
+    ekAbrechnungstypWerteByEkAbrechnungstyp: { text: string | null } | null
+  } | null
+  popStatusWerteByStatus: { text: string | null } | null
+  adresseByEkfKontrolleur: { name: string | null } | null
+  popByPopId: {
+    id: string
+    nr: number | null
+    name: string | null
+    popStatusWerteByStatus: { text: string | null } | null
+    apByApId: {
+      id: string
+      projId: string | null
+      label: string | null
+    } | null
+  } | null
+  ekplansByTpopId: {
+    nodes: { jahr: number | null; typ: string | null }[]
+  } | null
+  tpopkontrsByTpopId: {
+    nodes: ExportTpopkontrNode[]
+  } | null
+  tpopmassnsByTpopId: {
+    nodes: ExportTpopmassnNode[]
+  } | null
+}
+
+export const exportRowFromTpop = ({
+  tpop,
+  years,
+  ekfrequenzs,
+}: {
+  // result of the dynamic queryForExport document
+  tpop: ExportTpopNode
+  years: number[]
+  ekfrequenzs: { id: string; code: string | null }[]
+}) => {
   const einheitsByAp = store.get(ekPlanEinheitsByApAtom)
   const showCount = store.get(ekPlanShowCountAtom)
   const fields = store.get(ekPlanFieldsAtom)
   const showEk = store.get(ekPlanShowEkAtom)
   const showEkf = store.get(ekPlanShowEkfAtom)
   const showMassn = store.get(ekPlanShowMassnAtom)
-  const row = {
+  const row: Record<string, unknown> = {
     apId: tpop?.popByPopId?.apByApId?.id,
   }
   if (fields.includes('ap')) {
@@ -62,9 +134,9 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
   }
   if (fields.includes('link')) {
     row.tpopLink = `${appBaseUrl()}Daten/Projekte/${
-      tpop.popByPopId.apByApId.projId
-    }/Arten/${tpop.popByPopId.apByApId.id}/Populationen/${
-      tpop.popByPopId.id
+      tpop.popByPopId?.apByApId?.projId
+    }/Arten/${tpop.popByPopId?.apByApId?.id}/Populationen/${
+      tpop.popByPopId?.id
     }/Teil-Populationen/${tpop.id}`
   }
   if (fields.includes('ekAbrechnungstyp')) {
@@ -73,7 +145,7 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
         ?.text ?? ''
   }
   if (fields.includes('ekfrequenz')) {
-    let ekfrequenz = tpop?.ekfrequenz ?? null
+    let ekfrequenz: string | null = tpop?.ekfrequenz ?? null
     if (ekfrequenz) {
       ekfrequenz = ekfrequenzs.find((f) => f.id === ekfrequenz)?.code ?? null
     }
@@ -86,12 +158,12 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
     row.ekfrequenzAbweichend = tpop?.ekfrequenzAbweichend === true
   }
 
-  const ekplans = tpop?.ekplansByTpopId?.nodes
-  const kontrs = tpop?.tpopkontrsByTpopId?.nodes
-  const ansiedlungs = tpop?.tpopmassnsByTpopId?.nodes
-  const einheits = einheitsByAp[row.apId]
+  const ekplans = tpop?.ekplansByTpopId?.nodes ?? []
+  const kontrs = tpop?.tpopkontrsByTpopId?.nodes ?? []
+  const ansiedlungs = tpop?.tpopmassnsByTpopId?.nodes ?? []
+  const einheits = einheitsByAp[row.apId as string] ?? []
 
-  years.forEach((year) => {
+  years.forEach((year: number) => {
     if (showEk) {
       const ekplanCount = ekplans
         .filter((o) => o.jahr === year)
@@ -117,7 +189,7 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
                       ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
                   ).length > 0,
               )
-              .flatMap((z) => z.anzahl),
+              .flatMap((z) => (z.anzahl !== null ? [z.anzahl] : [])),
           ),
         )
         row[`${year}_EK_Anzahl`] = ekSumCounted > 0 ? ekSumCounted : ''
@@ -149,7 +221,7 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
                       ?.ekzaehleinheitsByZaehleinheitId?.nodes ?? []
                   ).length > 0,
               )
-              .flatMap((z) => z.anzahl),
+              .flatMap((z) => (z.anzahl !== null ? [z.anzahl] : [])),
           ),
         )
         row[`${year}_EKF_Anzahl`] = ekfSumCounted > 0 ? ekfSumCounted : ''
@@ -164,7 +236,9 @@ export const exportRowFromTpop = ({ tpop, years, ekfrequenzs }) => {
       if (showCount) {
         const ansiedlungsSumCounted = sum(
           ansiedlungsOfYear
-            .filter((ans) => ans.anzTriebe !== null || ans.anzPflanzen !== null)
+            .filter(
+              (ans) => ans.anzTriebe !== null || ans.anzPflanzen !== null,
+            )
             .map(
               (ans) =>
                 (ans.anzTriebe !== null ? ans.anzTriebe : 0) +

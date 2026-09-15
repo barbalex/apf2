@@ -2,20 +2,32 @@ import { gql as dynamicGql } from '../../../../apolloGql.ts'
 
 import { tpop } from '../../../shared/fragments.ts'
 import { setEkplans } from '../setEkplans/index.ts'
+import type { EkfrequenzId } from '../../../../models/apflora/Ekfrequenz.ts'
+import type { TpopRow } from '../tableTypes.ts'
 import {
   store,
   apolloClientAtom,
   tsQueryClientAtom,
   addNotificationAtom,
   userNameAtom,
+  type Notification,
 } from '../../../../store/index.ts'
 
-const addNotification = (notification) =>
+const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
-export const processChange = async ({ value, ekfrequenz, row }) => {
-  const apolloClient = store.get(apolloClientAtom)!
-  const tsQueryClient = store.get(tsQueryClientAtom)!
+export const processChange = async ({
+  value,
+  ekfrequenz,
+  row,
+}: {
+  value: number | null
+  ekfrequenz: EkfrequenzId | null | undefined
+  row: TpopRow
+}) => {
+  const apolloClient = store.get(apolloClientAtom)
+  const tsQueryClient = store.get(tsQueryClientAtom)
+  if (!apolloClient || !tsQueryClient) return
   try {
     await apolloClient.mutate({
       mutation: dynamicGql`
@@ -49,7 +61,7 @@ export const processChange = async ({ value, ekfrequenz, row }) => {
     })
   } catch (error) {
     addNotification({
-      message: error.message,
+      message: (error as Error).message,
       options: {
         variant: 'error',
       },
@@ -58,12 +70,12 @@ export const processChange = async ({ value, ekfrequenz, row }) => {
 
   await setEkplans({
     tpopId: row.id,
-    ekfrequenz,
+    ekfrequenz: ekfrequenz ?? null,
     ekfrequenzStartjahr: value,
   })
 
   // don't await as this would block the ui and it doesn't matter if user navigates away
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: ['RowQueryForEkPlan'],
   })
 

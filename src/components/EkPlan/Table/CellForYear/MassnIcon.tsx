@@ -6,9 +6,14 @@ import {
   ekPlanShowCountAtom,
   ekPlanShowEkCountAtom,
 } from '../../../../store/index.ts'
+import type { RowTpopmassnNode } from '../tableTypes.ts'
 import styles from './MassnIcon.module.css'
 
-export const MassnIcon = ({ ansiedlungs }) => {
+export const MassnIcon = ({
+  ansiedlungs,
+}: {
+  ansiedlungs: RowTpopmassnNode[]
+}) => {
   const showCount = useAtomValue(ekPlanShowCountAtom)
   const showEkCount = useAtomValue(ekPlanShowEkCountAtom)
 
@@ -18,7 +23,8 @@ export const MassnIcon = ({ ansiedlungs }) => {
 
   let sumCounted = null
   const ansiedlungsWithCount = ansiedlungs.filter(
-    (ans) => ans.zieleinheitAnzahl !== null,
+    (ans): ans is RowTpopmassnNode & { zieleinheitAnzahl: number } =>
+      ans.zieleinheitAnzahl !== null,
   )
   if (ansiedlungsWithCount.length) {
     sumCounted = sum(ansiedlungsWithCount.map((ans) => ans.zieleinheitAnzahl))

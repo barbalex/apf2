@@ -1,6 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useApolloClient } from '@apollo/client/react'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { useAtomValue, useSetAtom } from 'jotai'
 import Button from '@mui/material/Button'
 
@@ -20,6 +19,9 @@ const Choose = lazy(async () => ({
 import { queryAps } from './queryAps.ts'
 import { appBaseUrl } from '../../modules/appBaseUrl.ts'
 import {
+  store,
+  apolloClientAtom,
+  type EkPlanApsData,
   userTokenAtom,
   ekPlanApsAtom,
   ekPlanApsDataAtom,
@@ -44,9 +46,6 @@ import {
   ekPlanSetFilterKontrolleYearAtom,
   ekPlanSetFilterEkplanYearAtom,
 } from '../../store/index.ts'
-const Error = lazy(async () => ({
-  default: (await import('../shared/Error.tsx')).Error,
-}))
 const ErrorBoundary = lazy(async () => ({
   default: (await import('../shared/ErrorBoundary.tsx')).ErrorBoundary,
 }))
@@ -58,10 +57,8 @@ const Spinner = lazy(async () => ({
 import styles from './index.module.css'
 
 export const Component = () => {
-  const apolloClient = useApolloClient()
   const userToken = useAtomValue(userTokenAtom)
   const aps = useAtomValue(ekPlanApsAtom)
-  const apsData = useAtomValue(ekPlanApsDataAtom)
   const setApsData = useSetAtom(ekPlanApsDataAtom)
   const setApsDataLoading = useSetAtom(ekPlanApsDataLoadingAtom)
   const setFilterAp = useSetAtom(ekPlanSetFilterApAtom)
@@ -114,21 +111,22 @@ export const Component = () => {
     }
   }
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['ekplanAps', aps.map((ap) => ap.value)],
     queryFn: async () => {
-      const result = await apolloClient.query<EkplanApQueryResult>({
+      const apolloClient = store.get(apolloClientAtom)
+      if (!apolloClient) throw new Error('apolloClient was not set')
+      const result = await apolloClient.query({
         query: queryAps,
         variables: {
           ids: aps.map((ap) => ap.value),
         },
       })
       if (result.error) throw result.error
-      return result.data
+      return result.data as EkplanApQueryResult
     },
-    suspense: true,
   })
-  setApsData(data)
+  setApsData(data as unknown as EkPlanApsData)
   setApsDataLoading(false)
 
   const onClickAnleitung = () => {

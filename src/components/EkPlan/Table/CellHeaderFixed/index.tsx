@@ -4,8 +4,8 @@ import { useAtomValue } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import { upperFirst } from 'es-toolkit'
 
+import type { EkPlanField } from '../fields.ts'
 import { TextFilter } from './TextFilter.tsx'
 import { BooleanFilter } from './BooleanFilter.tsx'
 import {
@@ -26,7 +26,10 @@ import {
 
 import styles from './index.module.css'
 
-const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
+const anchorOrigin = {
+  horizontal: 'left',
+  vertical: 'bottom',
+} as const
 
 // Mapping from field name to filter atom
 const filterAtomMap = {
@@ -45,15 +48,20 @@ const filterAtomMap = {
   ekfrequenzAbweichend: ekPlanFilterEkfrequenzAbweichendAtom,
 }
 
-export const CellHeaderFixed = ({ column }) => {
+export const CellHeaderFixed = ({
+  column,
+}: {
+  column: EkPlanField
+}) => {
   const { name, label, nofilter } = column
 
-  const filterAtom = filterAtomMap[name]
+  const filterAtom = filterAtomMap[name as keyof typeof filterAtomMap]
   const filterValue = useAtomValue(filterAtom ?? ekPlanFilterApAtom)
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const closeMenu = () => setAnchorEl(null)
-  const onClickCell = (e) => !anchorEl && setAnchorEl(e.currentTarget)
+  const onClickCell = (e: React.MouseEvent) =>
+    !anchorEl && setAnchorEl(e.currentTarget as HTMLElement)
 
   const typeIsBoolean = ['ekfrequenzAbweichend'].includes(name)
 
@@ -93,7 +101,7 @@ export const CellHeaderFixed = ({ column }) => {
       >
         {typeIsBoolean ?
           <BooleanFilter
-            column={column}
+            column={column as { name: string }}
             closeMenu={closeMenu}
           />
         : <MenuItem dense>

@@ -11,9 +11,18 @@ import {
 import { FaExternalLinkAlt } from 'react-icons/fa'
 
 import { appBaseUrl } from '../../../../../modules/appBaseUrl.ts'
+import type { MenuTpopNode, MenuTpopmassnNode } from '../types.ts'
 import styles from '../EkfsMenu/Ekf.module.css'
 
-export const Massn = ({ tpop, massn, border }) => {
+export const Massn = ({
+  tpop,
+  massn,
+  border,
+}: {
+  tpop: MenuTpopNode | undefined
+  massn: MenuTpopmassnNode
+  border: boolean
+}) => {
   const [open, setOpen] = useState(true)
   const toggleOpen = () => setOpen(!open)
   const bearbeiter = massn?.adresseByBearbeiter?.name ?? '(kein Bearbeiter)'
@@ -29,7 +38,7 @@ export const Massn = ({ tpop, massn, border }) => {
   const projId = tpop?.popByPopId?.apByApId?.projId
   const apId = tpop?.popByPopId?.apByApId?.id
   const popId = tpop?.popByPopId?.id
-  const tpopId = tpop.id
+  const tpopId = tpop?.id
   const url = `${appBaseUrl()}Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen/${
     massn.id
   }`

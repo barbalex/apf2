@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -12,17 +12,29 @@ import {
   addNotificationAtom,
   userNameAtom,
 } from '../../../../store/index.ts'
+import type { RowTpopNode } from '../tableTypes.ts'
 
-export const Checkbox = ({ row, value, field }) => {
+export const Checkbox = ({
+  row,
+  value,
+  field,
+}: {
+  row: RowTpopNode
+  value: boolean | null
+  field: string
+}) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const userName = useAtomValue(userNameAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
   const [checked, setChecked] = useState(value === null ? false : value)
-  useEffect(() => {
-    setChecked(row[field] === true)
-  }, [field, row, value])
+  const rowValue = row[field as keyof RowTpopNode] === true
+  const [prevRowValue, setPrevRowValue] = useState(rowValue)
+  if (prevRowValue !== rowValue) {
+    setPrevRowValue(rowValue)
+    setChecked(rowValue)
+  }
 
   const onClick = async () => {
     setChecked(!checked)
@@ -60,13 +72,13 @@ export const Checkbox = ({ row, value, field }) => {
     } catch (error) {
       setChecked(!checked)
       addNotification({
-        message: error.message,
+        message: (error as Error).message,
         options: {
           variant: 'error',
         },
       })
     }
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['EkplanTpopQuery'],
     })
   }
@@ -74,7 +86,7 @@ export const Checkbox = ({ row, value, field }) => {
   return (
     <div
       className={styles.container}
-      onClick={onClick}
+      onClick={() => void onClick()}
     >
       <div
         className={styles.div}

@@ -1,4 +1,4 @@
-import { graphql } from '../../../../gql'
+import { graphql } from '../../../../gql/index.ts'
 
 export const queryApsToChoose = graphql(`
   query ekPlanChooseApsQuery($filter: ApFilter!) {

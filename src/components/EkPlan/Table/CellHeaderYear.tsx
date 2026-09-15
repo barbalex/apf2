@@ -3,9 +3,9 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
-import { graphql } from '../../../gql'
+import { graphql } from '../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
-import { useQueryClient, useQuery } from '@tanstack/react-query'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 
 import {
   ekPlanHoveredAtom,
@@ -21,9 +21,18 @@ import {
 
 import styles from './CellHeaderYear.module.css'
 
-const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
+const anchorOrigin = {
+  horizontal: 'left',
+  vertical: 'bottom',
+} as const
 
-export const CellHeaderYear = ({ column, tpopFilter }) => {
+export const CellHeaderYear = ({
+  column,
+  tpopFilter,
+}: {
+  column: number
+  tpopFilter: Record<string, unknown>
+}) => {
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
 
@@ -73,7 +82,7 @@ export const CellHeaderYear = ({ column, tpopFilter }) => {
     tpopCountWithEkplanInYear: TpopCountWithEkplanInYear
   }
 
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     queryKey: [
       'tpopCountsForYear',
       column,
@@ -107,12 +116,15 @@ export const CellHeaderYear = ({ column, tpopFilter }) => {
         },
       )
       if (result.error) throw result.error
-      return result.data
+      return result.data as {
+        tpopCountWithKontrInYear: { totalCount: number }
+        tpopCountWithAnsiedlungsInYear: { totalCount: number }
+        tpopCountWithEkplanInYear: { totalCount: number }
+      }
     },
-    suspense: true,
   })
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
   const filterSet =
     filterAnsiedlungYear === column ||
@@ -135,39 +147,40 @@ export const CellHeaderYear = ({ column, tpopFilter }) => {
     : data.tpopCountWithEkplanInYear.totalCount > 0
 
   const closeMenu = () => setAnchorEl(null)
-  const onClickCell = (e) => setAnchorEl(e.currentTarget)
+  const onClickCell = (e: React.MouseEvent) =>
+    setAnchorEl(e.currentTarget as HTMLElement)
 
   const onClickFilterAnsiedlungYear = () => {
     if (!yearHasAnsiedlungen) return
     setFilterAnsiedlungYear(filterAnsiedlungYear ? null : column)
     setAnchorEl(null)
-    setTimeout(() =>
-      tsQueryClient.invalidateQueries({
+    setTimeout(() => {
+      void tsQueryClient.invalidateQueries({
         queryKey: ['EkplanTpopQuery'],
-      }),
-    )
+      })
+    })
   }
 
   const onClickFilterKontrolleYear = () => {
     if (!yearHasKontrollen) return
     setFilterKontrolleYear(filterKontrolleYear ? null : column)
     setAnchorEl(null)
-    setTimeout(() =>
-      tsQueryClient.invalidateQueries({
+    setTimeout(() => {
+      void tsQueryClient.invalidateQueries({
         queryKey: ['EkplanTpopQuery'],
-      }),
-    )
+      })
+    })
   }
 
   const onClickFilterEkplanYear = () => {
     if (!yearHasEkplan) return
     setFilterEkplanYear(filterEkplanYear ? null : column)
     setAnchorEl(null)
-    setTimeout(() =>
-      tsQueryClient.invalidateQueries({
+    setTimeout(() => {
+      void tsQueryClient.invalidateQueries({
         queryKey: ['EkplanTpopQuery'],
-      }),
-    )
+      })
+    })
   }
 
   const onMouseEnter = () => setHoveredYear(column)

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
 
 import {
@@ -6,9 +6,9 @@ import {
   ekPlanSetHoveredTpopIdAtom,
   ekPlanResetHoveredAtom,
 } from '../../../../store/index.ts'
-import { tpop } from '../../../shared/fragments.ts'
-import { setEkplans } from '../setEkplans/index.ts'
 import { processChange } from './processChange.ts'
+import type { EkfrequenzId } from '../../../../models/apflora/Ekfrequenz.ts'
+import type { TpopRow } from '../tableTypes.ts'
 
 import styles from './index.module.css'
 
@@ -19,6 +19,13 @@ export const CellForEkfrequenzStartjahr = ({
   setProcessing,
   ekfrequenzStartjahr,
   ekfrequenz,
+}: {
+  row: TpopRow
+  isOdd: boolean
+  width: number | undefined
+  setProcessing: (processing: boolean) => void
+  ekfrequenzStartjahr: number | null | undefined
+  ekfrequenz: EkfrequenzId | null | undefined
 }) => {
   const hovered = useAtomValue(ekPlanHoveredAtom)
   const setHoveredTpopId = useSetAtom(ekPlanSetHoveredTpopIdAtom)
@@ -26,21 +33,23 @@ export const CellForEkfrequenzStartjahr = ({
   const isHovered = hovered.tpopId === row.id
 
   const [stateValue, setStateValue] = useState(ekfrequenzStartjahr ?? '')
-  useEffect(
-    () => setStateValue(ekfrequenzStartjahr ?? ''),
-    [ekfrequenzStartjahr],
+  const [prevEkfrequenzStartjahr, setPrevEkfrequenzStartjahr] = useState(
+    ekfrequenzStartjahr,
   )
+  if (prevEkfrequenzStartjahr !== ekfrequenzStartjahr) {
+    setPrevEkfrequenzStartjahr(ekfrequenzStartjahr)
+    setStateValue(ekfrequenzStartjahr ?? '')
+  }
 
   const onMouseEnter = () => setHoveredTpopId(row.id)
 
-  const onChange = (e) => {
-    const value = e.target.value || e.target.value === 0 ? e.target.value : ''
+  const onChange = (e: { target: { value: string } }) => {
+    const value = e.target.value || ''
     setStateValue(value)
   }
 
-  const onBlur = async (e) => {
-    const value =
-      e.target.value || e.target.value === 0 ? +e.target.value : null
+  const onBlur = async (e: { target: { value: string } }) => {
+    const value = e.target.value ? +e.target.value : null
     setProcessing(true)
     await processChange({
       value,
@@ -67,7 +76,7 @@ export const CellForEkfrequenzStartjahr = ({
       <input
         value={stateValue}
         onChange={onChange}
-        onBlur={onBlur}
+        onBlur={(e) => void onBlur(e)}
         className={styles.input}
       />
     </div>

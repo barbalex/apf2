@@ -1,5 +1,4 @@
 import { useAtomValue, useSetAtom } from 'jotai'
-import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 
@@ -10,7 +9,13 @@ import {
   ekPlanSetFilterPopStatusAtom,
 } from '../../../../store/index.ts'
 
-export const Option = ({ option, type = 'tpop' }) => {
+export const Option = ({
+  option,
+  type = 'tpop',
+}: {
+  option: { code: number | null; text: string | null }
+  type?: string
+}) => {
   const filterStatusAtom =
     type === 'tpop' ? ekPlanFilterStatusAtom : ekPlanFilterPopStatusAtom
   const setFilterStatusAtom =
@@ -18,13 +23,13 @@ export const Option = ({ option, type = 'tpop' }) => {
 
   const filterStatus = useAtomValue(filterStatusAtom)
   const setFilterStatus = useSetAtom(setFilterStatusAtom)
-  const checked = filterStatus.includes(option.code)
+  const checked = option.code !== null && filterStatus.includes(option.code)
 
   const onChange = () => {
     const newStatus =
-      filterStatus.includes(option.code) ?
-        filterStatus.filter((el) => el !== option.code)
-      : [...new Set([...filterStatus, option.code])]
+      option.code !== null && filterStatus.includes(option.code) ?
+        filterStatus.filter((el: number) => el !== option.code)
+      : option.code !== null ? [...new Set([...filterStatus, option.code])] : filterStatus
 
     setFilterStatus(newStatus)
   }

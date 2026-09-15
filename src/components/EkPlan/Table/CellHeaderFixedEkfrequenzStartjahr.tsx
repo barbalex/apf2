@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useAtomValue, useSetAtom } from 'jotai'
-import Menu from '@mui/material/Menu'
+import Menu, { type MenuProps } from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { FaSortDown as Caret, FaFilter } from 'react-icons/fa'
 import { styled } from '@mui/material/styles'
 
 import { TextFilter } from './CellHeaderFixed/TextFilter.tsx'
+import type { EkPlanField } from './fields.ts'
 import {
   ekPlanFilterEkfrequenzStartjahrEmptyAtom,
   ekPlanSetFilterEmptyEkfrequenzStartjahrAtom,
@@ -15,15 +16,22 @@ import {
 import ekfrequenzStyles from './CellHeaderFixedEkfrequenz.module.css'
 import styles from './CellHeaderFixedEkfrequenzStartjahr.module.css'
 
-const StyledMenu = styled((props) => <Menu {...props} />)(() => ({
+const StyledMenu = styled((props: MenuProps) => <Menu {...props} />)(() => ({
   '& .MuiPaper-root': {
     overflow: 'hidden !important',
   },
 }))
 
-const anchorOrigin = { horizontal: 'left', vertical: 'bottom' }
+const anchorOrigin = {
+  horizontal: 'left',
+  vertical: 'bottom',
+} as const
 
-export const CellHeaderFixedEkfrequenzStartjahr = ({ column }) => {
+export const CellHeaderFixedEkfrequenzStartjahr = ({
+  column,
+}: {
+  column: EkPlanField
+}) => {
   const filterEkfrequenzStartjahrEmpty = useAtomValue(
     ekPlanFilterEkfrequenzStartjahrEmptyAtom,
   )
@@ -37,11 +45,12 @@ export const CellHeaderFixedEkfrequenzStartjahr = ({ column }) => {
     ekPlanSetFilterEkfrequenzStartjahrAtom,
   )
 
-  const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
   const closeMenu = () => setAnchorEl(null)
 
-  const onClickCell = (e) => setAnchorEl(e.currentTarget)
+  const onClickCell = (e: React.MouseEvent) =>
+    setAnchorEl(e.currentTarget as HTMLElement)
 
   const onClickFilterEmptyValues = () => {
     if (!filterEkfrequenzStartjahrEmpty && filterEkfrequenzStartjahr) {

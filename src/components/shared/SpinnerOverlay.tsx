@@ -3,7 +3,13 @@ import Dialog from '@mui/material/Dialog'
 
 import styles from './SpinnerOverlay.module.css'
 
-export const SpinnerOverlay = ({ message, onClose }) => (
+export const SpinnerOverlay = ({
+  message,
+  onClose,
+}: {
+  message?: string
+  onClose?: (event: unknown, reason: string) => void
+}) => (
   <Dialog
     open
     onClose={(event, reason) => {

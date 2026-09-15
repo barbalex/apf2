@@ -3031,16 +3031,27 @@ export const ekPlanSetFilterEmptyEkfrequenzStartjahrAtom = atom(
 export const ekPlanPastYearsAtom = atom(5)
 
 // EkPlan volatile state
-export const ekPlanYearMenuAnchorAtom = atom(null)
+export const ekPlanYearMenuAnchorAtom = atom<{
+  top: number
+  right: number
+} | null>(null)
 
-const initialYearClicked = {
+export interface EkPlanYearClicked {
+  year: number | null
+  tpopId: string | null
+  title: string | null
+  ekPlan: boolean
+  ekfPlan: boolean
+}
+
+const initialYearClicked: EkPlanYearClicked = {
   year: null,
   tpopId: null,
   title: null,
   ekPlan: false,
   ekfPlan: false,
 }
-export const ekPlanYearClickedAtom = atom(initialYearClicked)
+export const ekPlanYearClickedAtom = atom<EkPlanYearClicked>(initialYearClicked)
 export const ekPlanCloseYearCellMenuAtom = atom(null, (_get, set) => {
   set(ekPlanYearMenuAnchorAtom, null)
   set(ekPlanYearClickedAtom, initialYearClicked)

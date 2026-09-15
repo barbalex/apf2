@@ -9,7 +9,13 @@ import {
 // need to forward ref from Menu to MenuItem
 // see: https://github.com/mui-org/material-ui/issues/15903#issuecomment-496313450
 // and: https://reactjs.org/docs/forwarding-refs.html
-export const BooleanFilter = ({ column, closeMenu, ref }) => {
+export const BooleanFilter = ({
+  column,
+  closeMenu,
+}: {
+  column: { name: string }
+  closeMenu: () => void
+}) => {
   const { name } = column
 
   const storeValue = useAtomValue(ekPlanFilterEkfrequenzAbweichendAtom)
@@ -27,7 +33,7 @@ export const BooleanFilter = ({ column, closeMenu, ref }) => {
 
   return (
     <MenuItem
-      ref={ref}
+      ref={undefined}
       onClick={onClick}
       dense
     >
