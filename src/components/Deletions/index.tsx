@@ -8,8 +8,9 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 import { DateTime } from 'luxon'
 import TextField from '@mui/material/TextField'
-import { useApolloClient } from '@apollo/client/react'
 import { useAtomValue, useSetAtom } from 'jotai'
+
+import type { DeletedDataset } from '../../store/index.ts'
 
 import { undelete } from './undelete/index.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
@@ -22,12 +23,11 @@ import {
 import styles from './index.module.css'
 
 export const Deletions = () => {
-  const apolloClient = useApolloClient()
   const showDeletions = useAtomValue(showDeletionsAtom)
   const setShowDeletions = useSetAtom(setShowDeletionsAtom)
   const deletedDatasets = useAtomValue(deletedDatasetsAtom)
 
-  const [chosenDeletions, setChosenDeletions] = useState([])
+  const [chosenDeletions, setChosenDeletions] = useState<string[]>([])
 
   const onClickUndo = async () => {
     // loop through all chosenDeletions
@@ -38,7 +38,9 @@ export const Deletions = () => {
     }
   }
 
-  const toggleChoosenDeletions = (event) => {
+  const toggleChoosenDeletions = (event: {
+    target: { value: string }
+  }) => {
     const id = event.target.value
     let newChoosenDeletions
     if (chosenDeletions.includes(id)) {
@@ -63,14 +65,14 @@ export const Deletions = () => {
             className={styles.list}
             style={{ maxWidth: window.innerWidth * 0.8 }}
           >
-            {deletedDatasets.map((ds, index) => {
+            {deletedDatasets.map((ds: DeletedDataset, index: number) => {
               // clone to remove keys _only_ for presentation
-              const dataset = { ...ds.data }
+              const dataset: Record<string, unknown> = { ...((ds.data ?? {}) as Record<string, unknown>) }
               // remove null values
               Object.keys(dataset).forEach(
                 (key) => dataset[key] == null && delete dataset[key],
               )
-              const time = DateTime.fromMillis(ds.time).toFormat(
+              const time = DateTime.fromMillis(ds.time ?? 0).toFormat(
                 'yyyy.LL.dd HH:mm:ss',
               )
 
@@ -84,6 +86,7 @@ export const Deletions = () => {
                   }}
                 >
                   <FormControlLabel
+                    label=""
                     control={
                       <Checkbox
                         checked={chosenDeletions.includes(ds.id)}
@@ -123,7 +126,7 @@ export const Deletions = () => {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={onClickUndo}
+            onClick={() => void onClickUndo()}
             disabled={chosenDeletions.length === 0}
             color="inherit"
           >
