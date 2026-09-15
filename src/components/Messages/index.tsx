@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
-import Dialog from '@mui/material/Dialog'
+import Dialog, { type DialogProps } from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import { useApolloClient } from '@apollo/client/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 
 import { query } from './query.ts'
@@ -13,14 +13,13 @@ import { userNameAtom } from '../../store/index.ts'
 import { Error } from '../shared/Error.tsx'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 import { MessagesList } from './Messages/index.tsx'
-import { a } from '../Projekte/Karte/layers/Pop/statusGroup/a.ts'
 
-import type { MessageId } from '../../models/apflora/public/Message.ts'
-import type { UserId } from '../../models/apflora/public/User.ts'
+import type { MessageId } from '../../models/apflora/Message.ts'
+import type { UserId } from '../../models/apflora/User.ts'
 
 import styles from './index.module.css'
 
-interface MessageNode {
+export interface MessageNode {
   id: MessageId
   message: string | null
   time: string | null
@@ -43,7 +42,7 @@ interface UsermessagesQueryResult {
   }
 }
 
-const StyledDialog = styled((props) => <Dialog {...props} />)(() => ({
+const StyledDialog = styled((props: DialogProps) => <Dialog {...props} />)(() => ({
   display: 'flex',
   flexDirection: 'column',
   '& .MuiPaper-root': {
@@ -64,25 +63,27 @@ export const Messages = () => {
   const userName = useAtomValue(userNameAtom)
 
   const apolloClient = useApolloClient()
-  const tsQueryClient = useQueryClient()
 
   // DO NOT use aYearAgo in queryKey, because it changes every second
   // this causes the query to refetch all the time!
   const { data, error, refetch } = useQuery({
     queryKey: ['UsermessagesQuery', userName],
-    queryFn: async () =>
-      apolloClient.query({
+    queryFn: async () => {
+      const result = await apolloClient.query<UsermessagesQueryResult>({
         query,
         variables: { name: userName, aYearAgo },
         fetchPolicy: 'network-only',
-      }),
+      })
+      if (result.error) throw result.error
+      return result.data
+    },
   })
   // ensure username exists
-  const userNames = (data?.data?.allUsers?.nodes ?? []).map((u) => u.name)
+  const userNames = (data?.allUsers?.nodes ?? []).map((u) => u?.name)
   const userNameExists = userNames.includes(userName)
   // DANGER: if no userName or non-existing, results are returned!
   const allMessages =
-    userName && userNameExists ? (data?.data?.allMessages?.nodes ?? []) : []
+    userName && userNameExists ? (data?.allMessages?.nodes ?? []) : []
   const unreadMessages = allMessages.filter(
     (m) => (m?.usermessagesByMessageId?.totalCount ?? 0) === 0,
   )
@@ -111,7 +112,7 @@ export const Messages = () => {
           <div className={styles.titleRow}>
             <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
             <Button
-              onClick={onClickReadAll}
+              onClick={() => void onClickReadAll()}
               color="inherit"
               className={styles.allOkButton}
             >
