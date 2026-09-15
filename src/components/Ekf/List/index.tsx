@@ -1,14 +1,16 @@
 import { uniq } from 'es-toolkit'
 
+import type { EkfRow } from '../getEkfFromData.ts'
+
 import { Item } from './Item.tsx'
 import styles from './index.module.css'
 
-export const EkfList = ({ ekf }) => {
+export const EkfList = ({ ekf }: { ekf: EkfRow[] }) => {
   const projektCount = uniq(ekf.map((e) => e.projekt)).length
 
   return (
     <div className={styles.container}>
-      {ekf.map((ek) => (
+      {ekf.map((ek: EkfRow) => (
         <Item
           key={ek.id}
           projektCount={projektCount}
