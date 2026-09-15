@@ -38,9 +38,7 @@ export const Deletions = () => {
     }
   }
 
-  const toggleChoosenDeletions = (event: {
-    target: { value: string }
-  }) => {
+  const toggleChoosenDeletions = (event: { target: { value: string } }) => {
     const id = event.target.value
     let newChoosenDeletions
     if (chosenDeletions.includes(id)) {
@@ -67,7 +65,9 @@ export const Deletions = () => {
           >
             {deletedDatasets.map((ds: DeletedDataset, index: number) => {
               // clone to remove keys _only_ for presentation
-              const dataset: Record<string, unknown> = { ...((ds.data ?? {}) as Record<string, unknown>) }
+              const dataset: Record<string, unknown> = {
+                ...((ds.data ?? {}) as Record<string, unknown>),
+              }
               // remove null values
               Object.keys(dataset).forEach(
                 (key) => dataset[key] == null && delete dataset[key],
@@ -132,7 +132,10 @@ export const Deletions = () => {
           >
             wiederherstellen
           </Button>
-          <Button color="primary" onClick={onClickClose}>
+          <Button
+            color="primary"
+            onClick={onClickClose}
+          >
             schliessen
           </Button>
         </DialogActions>

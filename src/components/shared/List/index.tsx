@@ -9,11 +9,20 @@ import { prefetchRouteData } from '../../../modules/prefetchRouteData.ts'
 
 import styles from './index.module.css'
 
+import type { ComponentType, ReactNode, RefObject } from 'react'
+
+import type { NavData } from '../../Bookmarks/types.ts'
+
 export const List = ({
   navData,
   MenuBarComponent = null,
   menuBarProps = {},
   highlightSearchString,
+}: {
+  navData: NavData
+  MenuBarComponent?: ComponentType<{ toggleFilterInput?: () => void }> | null
+  menuBarProps?: Record<string, unknown>
+  highlightSearchString?: string | null | undefined
 }) => {
   const navigate = useNavigate()
   const { search } = useLocation()

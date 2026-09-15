@@ -55,7 +55,9 @@ export const undelete = async ({ id }: { id: string }) => {
   console.log('undelete', { isWerte, table, mutation })
   try {
     await apolloClient.mutate({
-      mutation: (isWerte ? (mutation as (table: string) => unknown)(table) : mutation) as import('@apollo/client').DocumentNode,
+      mutation: (isWerte ?
+        (mutation as (table: string) => unknown)(table)
+      : mutation) as import('@apollo/client').DocumentNode,
       variables: (data ?? {}) as Record<string, never>,
     })
   } catch (error) {

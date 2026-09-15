@@ -1,5 +1,3 @@
-import installieren from './installieren.png'
-
 import desktopStyles from '../../DesktopDocs.module.css'
 
 export const Component = () => (
