@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -49,17 +49,17 @@ const getLabelRightElements = ({
 export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
-  const popId = (props?.popId ?? params.popId)!
-  const tpopId = (props?.tpopId ?? params.tpopId)!
-  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
+  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId ?? '')
 
   const moving = useAtomValue(movingAtom)
   const copying = useAtomValue(copyingAtom)
   const copyingBiotop = useAtomValue(copyingBiotopAtom)
   const tpopkontrzaehlGqlFilterForTree =
-    getTpopkontrzaehlGqlFilterForTree(tpopkontrId!)
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
   const { data } = useSuspenseQuery({
     queryKey: [
@@ -98,7 +98,7 @@ export const useTpopfeldkontrNavData = (props?: { projId?: string | undefined; a
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 

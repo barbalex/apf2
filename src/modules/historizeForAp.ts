@@ -1,10 +1,10 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 
 import {
   store,
-  apolloClientAtom,
   addNotificationAtom,
   type Notification,
+  getApolloClientFromStore,
 } from '../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -17,7 +17,7 @@ export const historizeForAp = async ({
   year: number
   apId: string
 }) => {
-  const apolloClient = store.get(apolloClientAtom)!
+  const apolloClient = getApolloClientFromStore()
 
   try {
     await apolloClient.mutate({

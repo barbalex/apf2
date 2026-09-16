@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useApolloClient } from '@apollo/client/react'
 import type { DocumentNode } from '@apollo/client'
@@ -41,9 +41,12 @@ export const SelectLoadingOptionsTypable = ({
 
   const [inputValue, setInputValue] = useState(wirtspflanze || '')
 
-  useEffect(() => {
+  const [prevWirtspflanze, setPrevWirtspflanze] = useState(wirtspflanze)
+  // adjust state when the value changes from outside
+  if (prevWirtspflanze !== wirtspflanze) {
+    setPrevWirtspflanze(wirtspflanze)
     setInputValue(wirtspflanze || '')
-  }, [wirtspflanze])
+  }
 
   const loadOptions = async (inputValue: string) => {
     const filter =

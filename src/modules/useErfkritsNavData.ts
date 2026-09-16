@@ -1,4 +1,4 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -9,11 +9,11 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
 
   // Get filter before useQuery so changes trigger refetch
-  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId!)
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeErfkrit', apId, erfkritGqlFilterForTree],
@@ -48,7 +48,7 @@ export const useErfkritsNavData = (props?: { projId?: string | undefined; apId?:
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 

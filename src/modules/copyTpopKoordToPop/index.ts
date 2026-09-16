@@ -2,18 +2,18 @@ import { queryTpop } from './queryTpop.ts'
 import { updatePopById } from './updatePopById.ts'
 import {
   store,
-  apolloClientAtom,
-  tsQueryClientAtom,
   addNotificationAtom,
   type Notification,
+  getApolloClientFromStore,
+  getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
   store.set(addNotificationAtom, notification)
 
 export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
-  const apolloClient = store.get(apolloClientAtom)!
-  const tsQueryClient = store.get(tsQueryClientAtom)!
+  const apolloClient = getApolloClientFromStore()
+  const tsQueryClient = getTsQueryClientFromStore()
   // fetch tpop
   let tpopResult
   try {
@@ -73,10 +73,10 @@ export const copyTpopKoordToPop = async ({ id }: { id: string }) => {
       },
     })
   }
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`PopForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`TpopForMapQuery`],
   })
 

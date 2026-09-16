@@ -1,4 +1,4 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -46,9 +46,9 @@ const getLabelRightElements = ({
 export const usePopNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
-  const popId = (props?.popId ?? params.popId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
 
   const copying = useAtomValue(copyingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
@@ -57,8 +57,8 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
   const moving = useAtomValue(movingAtom)
 
   // Get filters before useQuery so changes trigger refetch
-  const popberGqlFilterForTree = getPopberGqlFilterForTree(popId!)
-  const popmassnberGqlFilterForTree = getPopmassnberGqlFilterForTree(popId!)
+  const popberGqlFilterForTree = getPopberGqlFilterForTree(popId)
+  const popmassnberGqlFilterForTree = getPopmassnberGqlFilterForTree(popId)
 
   const { data } = useSuspenseQuery({
     queryKey: [
@@ -119,7 +119,7 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 
@@ -140,8 +140,8 @@ export const usePopNavData = (props?: { projId?: string | undefined; apId?: stri
   const popIconIsHighlighted = props?.popId === params.popId
   const PopIcon =
     status ?
-      popIconIsHighlighted ? (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]![status + 'Highlighted']
-      : (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]![status]
+      popIconIsHighlighted ? (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[status + 'Highlighted']
+      : (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[status]
     : popIconIsHighlighted ? PopIconQHighlighted
     : PopIconQ
 

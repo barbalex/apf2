@@ -3,10 +3,14 @@ import { gql as dynamicGql } from '../apolloGql.ts'
 import type { TpopfeldkontrFieldsFragment } from '../gql/graphql.ts'
 
 import { tpopfeldkontr } from '../components/shared/fragments.ts'
-import { store, apolloClientAtom, copyingBiotopAtom } from '../store/index.ts'
+import {
+  store,
+  copyingBiotopAtom,
+  getApolloClientFromStore,
+} from '../store/index.ts'
 
 export const copyBiotopTo = async ({ id }: { id: string }) => {
-  const apolloClient = store.get(apolloClientAtom)!
+  const apolloClient = getApolloClientFromStore()
   const copyingBiotop = store.get(copyingBiotopAtom)
   // fetch previous id from copyingBiotop
   const previousId = copyingBiotop.id

@@ -1,10 +1,10 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 
 import {
   store,
   addNotificationAtom,
-  apolloClientAtom,
   type Notification,
+  getApolloClientFromStore,
 } from '../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -25,7 +25,7 @@ export const getAndValidateCoordinatesOfTpop = async ({
 }: {
   id: string
 }) => {
-  const apolloClient = store.get(apolloClientAtom)!
+  const apolloClient = getApolloClientFromStore()
   let tpopResult
   try {
     tpopResult = await apolloClient.query({

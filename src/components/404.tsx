@@ -55,7 +55,7 @@ export const Component = () => {
           <div className={styles.textContainer}>
             <Button
               variant="outlined"
-              onClick={onClickBack}
+              onClick={() => void onClickBack()}
               color="inherit"
               className={styles.button}
             >

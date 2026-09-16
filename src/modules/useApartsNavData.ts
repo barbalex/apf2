@@ -1,4 +1,4 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -8,11 +8,11 @@ import { getApartGqlFilterForTree } from './getApartGqlFilterForTree.ts'
 export const useApartsNavData = (props?: { projId?: string | undefined; apId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
 
   // Get filter before useQuery so changes trigger refetch
-  const apartGqlFilterForTree = getApartGqlFilterForTree(apId!)
+  const apartGqlFilterForTree = getApartGqlFilterForTree(apId)
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeApart', apId, apartGqlFilterForTree],
@@ -41,7 +41,7 @@ export const useApartsNavData = (props?: { projId?: string | undefined; apId?: s
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 

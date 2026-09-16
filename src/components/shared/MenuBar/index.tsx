@@ -76,8 +76,15 @@ export const MenuBar = ({
   const { visibleChildren, widths } = getChildren({ addMargin, children })
 
   const outerContainerRef = useRef<HTMLDivElement>(null)
-  const outerContainerWidth = outerContainerRef.current?.clientWidth
+  const [outerContainerWidth, setOuterContainerWidth] = useState<
+    number | undefined
+  >(undefined)
   const previousMeasurementTimeRef = useRef(0)
+
+  // measure once the container mounts and whenever it resizes
+  const measureContainer = () => {
+    setOuterContainerWidth(outerContainerRef.current?.clientWidth)
+  }
 
   const [buttons, setButtons] = useState<ReactNode[]>([])
   const [menus, setMenus] = useState<ReactNode[]>([])
@@ -86,6 +93,7 @@ export const MenuBar = ({
   // overflowing should only be changed as rarely as possible to prevent unnecessary rerenders
   const checkOverflow = () => {
     if (!outerContainerRef.current) return
+    measureContainer()
 
     const containerWidth = outerContainerRef.current?.clientWidth
 
@@ -140,6 +148,10 @@ export const MenuBar = ({
     // check overflow when rerenderer changes
     // Example: file preview (any action that changes the menus passed in)
     checkOverflow()
+    // checkOverflow is intentionally not in the deps:
+    // it is recreated on every render and setting state inside it
+    // would make this effect run in a loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerenderer])
 
   const previousWidthRef = useRef<number | null>(null)
@@ -195,7 +207,10 @@ export const MenuBar = ({
   return (
     <div
       className={styles.measuredOuterContainer}
-      ref={outerContainerRef}
+      ref={(node: HTMLDivElement | null) => {
+        outerContainerRef.current = node
+        if (node) measureContainer()
+      }}
       style={{ backgroundColor: bgColor }}
     >
       {titleComponent}

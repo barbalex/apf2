@@ -1,4 +1,4 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -10,7 +10,7 @@ import { treeApGqlFilterForTreeAtom } from '../store/index.ts'
 export const useApsNavData = (props?: { projId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
+  const projId = (props?.projId ?? params.projId ?? '')
 
   const apGqlFilterForTree = useAtomValue(treeApGqlFilterForTreeAtom)
 
@@ -37,7 +37,7 @@ export const useApsNavData = (props?: { projId?: string | undefined } | undefine
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 

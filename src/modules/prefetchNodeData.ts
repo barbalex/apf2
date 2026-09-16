@@ -23,16 +23,19 @@ import { query as projektQuery } from '../components/Projekte/Daten/Projekt/quer
 import { query as beobQuery } from '../components/Projekte/Daten/Beob/query.ts'
 import { query as apberuebersichtQuery } from '../components/Projekte/Daten/Apberuebersicht/query.ts'
 
+import type { DocumentNode } from '@apollo/client'
+
+import type { TreeNodeData } from '../components/Projekte/TreeContainer/Tree/types.ts'
+
 import {
-  store,
-  apolloClientAtom,
-  tsQueryClientAtom,
+  getApolloClientFromStore,
+  getTsQueryClientFromStore,
 } from '../store/index.ts'
 
 interface NodeQueryConfig {
-  query: any
-  queryKey: (id: string, node?: any) => any[]
-  variables: (id: string, node?: any) => any
+  query: DocumentNode
+  queryKey: (id: string | number, node?: TreeNodeData) => unknown[]
+  variables: (id: string | number, node?: TreeNodeData) => Record<string, unknown>
 }
 
 // Map menu types to their queries and query keys
@@ -99,8 +102,11 @@ const nodeQueryConfigs: Record<string, NodeQueryConfig> = {
   },
   idealbiotop: {
     query: idealbiotopQuery,
-    queryKey: (_id, node) => ['idealbiotop', node.parentTableId || node.tableId],
-    variables: (id, node) => ({ id: node.parentTableId || id }),
+    queryKey: (_id, node) => [
+      'idealbiotop',
+      node?.parentTableId || node?.tableId,
+    ],
+    variables: (id, node) => ({ id: node?.parentTableId || id }),
   },
   apart: {
     query: apartQuery,
@@ -154,10 +160,10 @@ const nodeQueryConfigs: Record<string, NodeQueryConfig> = {
   },
 }
 
-export const prefetchNodeData = async (node: any) => {
+export const prefetchNodeData = async (node: TreeNodeData) => {
   const { menuType, tableId, id } = node
-  const apolloClient = store.get(apolloClientAtom)!
-  const tsQueryClient = store.get(tsQueryClientAtom)!
+  const apolloClient = getApolloClientFromStore()
+  const tsQueryClient = getTsQueryClientFromStore()
 
   // Only prefetch for node types we have queries for
   const config = nodeQueryConfigs[menuType]

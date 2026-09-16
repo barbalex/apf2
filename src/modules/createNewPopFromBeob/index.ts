@@ -8,8 +8,6 @@ import { createTpop } from './createTpop.ts'
 import { updateBeobById } from './updateBeobById.ts'
 import {
   store,
-  apolloClientAtom,
-  tsQueryClientAtom,
   addNotificationAtom,
   navigateAtom,
   setTreeLastTouchedNodeAtom,
@@ -17,6 +15,8 @@ import {
   treeAddOpenNodesAtom,
   treeActiveNodeArrayAtom,
   type Notification,
+  getApolloClientFromStore,
+  getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -33,8 +33,8 @@ export const createNewPopFromBeob = async ({
   projId?: string | undefined
   search: string
 }) => {
-  const apolloClient = store.get(apolloClientAtom)!
-  const tsQueryClient = store.get(tsQueryClientAtom)!
+  const apolloClient = getApolloClientFromStore()
+  const tsQueryClient = getTsQueryClientFromStore()
   const navigate = store.get(navigateAtom)
   const openNodes = store.get(treeOpenNodesAtom)
   const activeNodeArray = store.get(treeActiveNodeArrayAtom)
@@ -218,31 +218,31 @@ export const createNewPopFromBeob = async ({
   store.set(treeAddOpenNodesAtom, newOpenNodes)
   navigate?.(`/Daten/${newActiveNodeArray.join('/')}${search}`)
 
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`KarteBeobNichtZuzuordnenQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobZugeordnetForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobNichtBeurteiltForMapQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`BeobAssignLinesQuery`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeApFolders`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: ['treeAp'],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobZugeordnet`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtZuzuordnen`],
   })
-  tsQueryClient.invalidateQueries({
+  void tsQueryClient.invalidateQueries({
     queryKey: [`treeBeobNichtBeurteilt`],
   })
   store.set(setTreeLastTouchedNodeAtom, newActiveNodeArray)

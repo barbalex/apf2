@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -89,10 +89,10 @@ export const tpopIcons = {
 export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
-  const popId = (props?.popId ?? params.popId)!
-  const tpopId = (props?.tpopId ?? params.tpopId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
 
   const moving = useAtomValue(movingAtom)
   const tpopGqlFilterForTree = useAtomValue(treeTpopGqlFilterForTreeAtom)
@@ -128,7 +128,7 @@ export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: st
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 
@@ -216,8 +216,8 @@ export const useTpopsNavData = (props?: { projId?: string | undefined; apId?: st
       const iconIsHighlighted = p?.id === tpopId
       const TpopIcon =
         p?.status ?
-          iconIsHighlighted ? (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]![p?.status + 'Highlighted']
-          : (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]![p?.status]
+          iconIsHighlighted ? (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]?.[p?.status + 'Highlighted']
+          : (tpopIcons as Record<string, Record<string, React.ComponentType>>)[tpopIconName as string]?.[p?.status]
         : iconIsHighlighted ? TpopIconQHighlighted
         : TpopIconQ
 

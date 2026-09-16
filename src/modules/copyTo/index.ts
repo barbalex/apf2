@@ -25,11 +25,11 @@ import { createPop } from './createPop.ts'
 
 import {
   store,
-  apolloClientAtom,
-  tsQueryClientAtom,
   addNotificationAtom,
   copyingAtom,
   type Notification,
+  getApolloClientFromStore,
+  getTsQueryClientFromStore,
 } from '../../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -52,8 +52,8 @@ export const copyTo = async ({
   table?: string | undefined
   id?: string | undefined
 }) => {
-  const apolloClient = store.get(apolloClientAtom)!
-  const tsQueryClient = store.get(tsQueryClientAtom)!
+  const apolloClient = getApolloClientFromStore()
+  const tsQueryClient = getTsQueryClientFromStore()
 
   const copying = store.get(copyingAtom)
   const table = tablePassed ?? copying.table
@@ -118,6 +118,7 @@ export const copyTo = async ({
       row = data?.popById ?? undefined
       break
     }
+    case null:
     default:
       // do nothing
       break
@@ -309,66 +310,67 @@ export const copyTo = async ({
         newId = response?.data?.createPop?.pop?.id
       }
       break
+    case null:
     default:
       // do nothing
       break
   }
   // update tree data
   if (table === 'pop') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeApFolders'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeAp'],
     })
   }
   if (table === 'tpop') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treePopFolders'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treePop'],
     })
   }
   if (table === 'tpopmassn') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpopmassn'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
   if (table === 'tpopfeldkontr') {
     // always copy Zaehlungen
-    copyZaehlOfTpopKontr({
+    void copyZaehlOfTpopKontr({
       tpopkontrIdFrom: id as string,
       tpopkontrIdTo: newId,
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpopfeldkontr'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
   if (table === 'tpopfreiwkontr') {
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpopfreiwkontr'],
     })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({
       queryKey: ['treeTpop'],
     })
   }
 
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
-    copyTpopsOfPop({
+    void copyTpopsOfPop({
       popIdFrom: id as string,
       popIdTo: newId,
     })

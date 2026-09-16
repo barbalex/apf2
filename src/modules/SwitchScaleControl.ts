@@ -185,7 +185,8 @@ const SwitchScaleControl = L.Control.extend({
       (this._pixelsInMeterWidth *
         this.options.getMapWidthForLanInMeters(centerLat)) /
       ratio
-    this._map.setZoom(map.options.crs!.zoom(crsScale))
+    const crs = map.options.crs
+    if (crs) this._map.setZoom(crs.zoom(crsScale))
     this._toggleDropdown()
   },
 
@@ -305,9 +306,10 @@ const SwitchScaleControl = L.Control.extend({
       const bounds = this._map.getBounds()
       const centerLat = bounds.getCenter().lat
       const mapWidth = this.options.getMapWidthForLanInMeters(centerLat)
+      const crs = this._map.options.crs
+      if (!crs) return
       const ratio =
-        (this._pixelsInMeterWidth * mapWidth) /
-        this._map.options.crs!.scale(this._map.getZoom())
+        (this._pixelsInMeterWidth * mapWidth) / crs.scale(this._map.getZoom())
       this._updateRatio(ratio, isRound)
     }
   },

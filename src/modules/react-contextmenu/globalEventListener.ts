@@ -13,13 +13,13 @@ class GlobalEventListener {
 
   handleShowEvent = (event: MenuEvent) => {
     for (const id in this.callbacks) {
-      if (hasOwnProp(this.callbacks, id)) this.callbacks[id]!.show(event)
+      if (hasOwnProp(this.callbacks, id)) this.callbacks[id]?.show(event)
     }
   }
 
   handleHideEvent = (event: MenuEvent) => {
     for (const id in this.callbacks) {
-      if (hasOwnProp(this.callbacks, id)) this.callbacks[id]!.hide(event)
+      if (hasOwnProp(this.callbacks, id)) this.callbacks[id]?.hide(event)
     }
   }
 

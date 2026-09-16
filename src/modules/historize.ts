@@ -1,13 +1,13 @@
 import { gql as dynamicGql } from '../apolloGql.ts'
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { DateTime } from 'luxon'
 
 import { apberuebersicht } from '../components/shared/fragments.ts'
 import {
   store,
-  apolloClientAtom,
   addNotificationAtom,
   type Notification,
+  getApolloClientFromStore,
 } from '../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -18,7 +18,7 @@ export const historize = async ({
 }: {
   apberuebersicht: Record<string, unknown> & { id: string }
 }) => {
-  const apolloClient = store.get(apolloClientAtom)!
+  const apolloClient = getApolloClientFromStore()
   // 1. historize
   try {
     await apolloClient.mutate({

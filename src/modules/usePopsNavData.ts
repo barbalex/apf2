@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -89,9 +89,9 @@ export const popIcons = {
 export const usePopsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
-  const popId = (props?.popId ?? params.popId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
 
   const copying = useAtomValue(copyingAtom)
   const moving = useAtomValue(movingAtom)
@@ -125,7 +125,7 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
   // this is how to make the filter reactive in a hook
@@ -202,8 +202,8 @@ export const usePopsNavData = (props?: { projId?: string | undefined; apId?: str
       const popIconIsHighlighted = p?.id === popId
       const PopIcon =
         p?.status ?
-          popIconIsHighlighted ? (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]![p?.status + 'Highlighted']
-          : (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]![p?.status]
+          popIconIsHighlighted ? (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[p?.status + 'Highlighted']
+          : (popIcons as Record<string, Record<string, React.ComponentType>>)[popIconName as string]?.[p?.status]
         : popIconIsHighlighted ? PopIconQHighlighted
         : PopIconQ
 

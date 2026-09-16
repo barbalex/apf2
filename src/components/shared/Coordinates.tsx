@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { ChangeEvent, FocusEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -78,14 +78,21 @@ export const Coordinates = ({ row, refetchForm, table }: CoordinatesProps) => {
   const [wgs84LongError, setWgs84LongError] = useState('')
 
   // ensure state is updated when changed from outside
-  useEffect(() => {
+  const [prevLv95, setPrevLv95] = useState({ x: lv95X, y: lv95Y })
+  if (prevLv95.x !== lv95X || prevLv95.y !== lv95Y) {
+    setPrevLv95({ x: lv95X, y: lv95Y })
     setLv95XState(lv95X || '')
     setLv95YState(lv95Y || '')
-  }, [lv95X, lv95Y])
-  useEffect(() => {
+  }
+  const [prevWgs84, setPrevWgs84] = useState({
+    lat: wgs84Lat,
+    long: wgs84Long,
+  })
+  if (prevWgs84.lat !== wgs84Lat || prevWgs84.long !== wgs84Long) {
+    setPrevWgs84({ lat: wgs84Lat, long: wgs84Long })
     setWgs84LatState(wgs84Lat || '')
     setWgs84LongState(wgs84Long || '')
-  }, [wgs84Lat, wgs84Long])
+  }
 
   const onChangeX = (event: ChangeEvent<HTMLInputElement>) => {
     const value = ifIsNumericAsNumber(event.target.value)

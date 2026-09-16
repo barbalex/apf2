@@ -14,23 +14,23 @@ const Deletions = lazy(async () => ({
 }))
 import { inIframe } from '../../modules/inIframe.ts'
 const ActiveNodeArraySetter = lazy(async () => ({
-  default: (await import('./ActiveNodeArraySetter')).ActiveNodeArraySetter,
+  default: (await import('./ActiveNodeArraySetter.tsx')).ActiveNodeArraySetter,
 }))
 const NavigateSetter = lazy(async () => ({
-  default: (await import('./NavigateSetter')).NavigateSetter,
+  default: (await import('./NavigateSetter.tsx')).NavigateSetter,
 }))
 const ApfLayerNotifier = lazy(async () => ({
-  default: (await import('./ApfLayerNotifier')).ApfLayerNotifier,
+  default: (await import('./ApfLayerNotifier.tsx')).ApfLayerNotifier,
 }))
 const QueryClientSetter = lazy(async () => ({
-  default: (await import('./QueryClientSetter')).QueryClientSetter,
+  default: (await import('./QueryClientSetter.tsx')).QueryClientSetter,
 }))
 const ChooseApToCopyEkfrequenzsFrom = lazy(async () => ({
-  default: (await import('./ChooseApToCopyEkfrequenzsFrom'))
+  default: (await import('./ChooseApToCopyEkfrequenzsFrom.tsx'))
     .ChooseApToCopyEkfrequenzsFrom,
 }))
 const ChooseApToCopyErfkritsFrom = lazy(async () => ({
-  default: (await import('./ChooseApToCopyErfkritsFrom'))
+  default: (await import('./ChooseApToCopyErfkritsFrom.tsx'))
     .ChooseApToCopyErfkritsFrom,
 }))
 

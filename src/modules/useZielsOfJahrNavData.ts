@@ -1,4 +1,4 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -9,13 +9,13 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useZielsOfJahrNavData = (props?: { projId?: string | undefined; apId?: string | undefined; jahr?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
   const jahrParam = props?.jahr ?? params.jahr
   const jahr = jahrParam ? +jahrParam : undefined
 
   // Get filter before useQuery so changes trigger refetch
-  const zielGqlFilterForTree = getZielGqlFilterForTree(apId!)
+  const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
 
   const { data } = useSuspenseQuery({
     queryKey: ['treeZielsOfJahr', apId, jahr, zielGqlFilterForTree],
@@ -58,7 +58,7 @@ export const useZielsOfJahrNavData = (props?: { projId?: string | undefined; apI
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 

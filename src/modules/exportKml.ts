@@ -9,12 +9,12 @@ export const exportKml = ({
   data,
 }: {
   fileName: string
-  data: Record<string, any>[]
+  data: Record<string, unknown>[]
 }) => {
   const file = `${fileName}_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}`
-  const dataByArt = groupBy(data, (e) => e.art) as Record<
+  const dataByArt = groupBy(data, (e) => e.art as string) as Record<
     string,
-    Record<string, any>[]
+    Record<string, unknown>[]
   >
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
     <Document>

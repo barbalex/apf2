@@ -1675,7 +1675,7 @@ export const treeDataFilterEmptyTabAtom = atom(
 
 export const treeDataFilterAddOrAtom = atom(
   null,
-  (get, set, { table, val }: { table: string; val: any }) => {
+  (get, set, { table, val }: { table: string; val: unknown }) => {
     const current = get(treeDataFilterAtom)
     set(treeDataFilterAtom, {
       ...current,
@@ -1694,7 +1694,7 @@ export const treeDataFilterSetValueAtom = atom(
       key,
       value,
       index,
-    }: { table: string; key: string; value: any; index?: number },
+    }: { table: string; key: string; value: unknown; index?: number },
   ) => {
     const current = get(treeDataFilterAtom)
     const tableData = [...((current as Record<string, unknown[]>)[table] ?? [])]
@@ -2399,6 +2399,15 @@ export const navListFilterAtoms = {
 
 export const tsQueryClientAtom = atom<QueryClient | null>(null)
 export const apolloClientAtom = atom<ApolloClient | null>(null)
+
+/**
+ * both clients are set shortly after app start
+ * modules using them only run after that
+ */
+export const getApolloClientFromStore = () =>
+  store.get(apolloClientAtom) as ApolloClient
+export const getTsQueryClientFromStore = () =>
+  store.get(tsQueryClientAtom) as QueryClient
 
 // Notifications
 export interface Notification {

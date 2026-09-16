@@ -1,1 +1,3 @@
-Structural note for future passes: the biggest remaining source of call-site casts is the still-untyped src/components/shared/ form components (RadioButtonGroup, TextField, CheckboxWithInfo…) and the useXxxNavData hooks in src/modules — typing those would let many as NavData / TypedRadioButtonGroup workarounds be dropped. The remaining 381 baseline errors live outside Projekte (Router, modules, shared, and the rest); say the word when you want to continue
+Now MenuBar's ref reads during render — switching to callback-ref + state
+
+menu no more working as designed?

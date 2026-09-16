@@ -39,18 +39,15 @@ export const DateField = ({
   const [inputValue, setInputValue] = useState('')
   const datePickerRef = useRef<DatePicker>(null)
 
-  useEffect(() => {
+  const [prevValuePassed, setPrevValuePassed] = useState(valuePassed)
+  // adjust state when the value changes from outside
+  if (prevValuePassed !== valuePassed) {
+    setPrevValuePassed(valuePassed)
     setStateValue(valuePassed)
     // Format the value for display in the input field
-    if (valuePassed) {
-      const dt = DateTime.fromSQL(valuePassed)
-      if (dt.isValid) {
-        setInputValue(dt.toFormat('dd.MM.yyyy'))
-      }
-    } else {
-      setInputValue('')
-    }
-  }, [valuePassed])
+    const dt = valuePassed ? DateTime.fromSQL(valuePassed) : null
+    setInputValue(dt?.isValid ? dt.toFormat('dd.MM.yyyy') : '')
+  }
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {

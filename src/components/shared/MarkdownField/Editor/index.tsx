@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import type { MouseEvent } from 'react'
 import MarkdownIt from 'markdown-it'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -46,7 +46,12 @@ export const Editor = ({
   error,
 }: EditorProps) => {
   const [value, setValue] = useState<string | null | undefined>(valuePassed)
-  useEffect(() => setValue(valuePassed), [valuePassed])
+  const [prevValuePassed, setPrevValuePassed] = useState(valuePassed)
+  // adjust state when the value changes from outside
+  if (prevValuePassed !== valuePassed) {
+    setPrevValuePassed(valuePassed)
+    setValue(valuePassed)
+  }
 
   const onChange = (props: { text: string }) => {
     const { text } = props

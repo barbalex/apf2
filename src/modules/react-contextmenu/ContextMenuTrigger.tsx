@@ -135,7 +135,7 @@ class ContextMenuTrigger extends Component<ContextMenuTriggerProps> {
     }
     if (data && typeof (data as Promise<unknown>).then === 'function') {
       // it's promise
-      ;(data as Promise<Record<string, unknown>>).then((resp) => {
+      void (data as Promise<Record<string, unknown>>).then((resp) => {
         showMenuConfig.data = { ...resp, target: event.target }
         showMenu(showMenuConfig)
       })

@@ -1,6 +1,5 @@
 import {
   useState,
-  useEffect,
   type ChangeEvent,
   type KeyboardEvent,
   type ReactNode,
@@ -43,12 +42,17 @@ export const TextFieldWithInfo = ({
   const [stateValue, setStateValue] = useState<string | number>(
     propsValue || propsValue === 0 ? propsValue : '',
   )
+  const [prevValue, setPrevValue] = useState<string | number | null | undefined>(
+    propsValue,
+  )
+  // adjust state when the value changes from outside
+  if (prevValue !== propsValue) {
+    setPrevValue(propsValue)
+    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
+  }
   const onChange = (event: ChangeEvent<HTMLInputElement>) =>
     setStateValue(event.target.value)
 
-  useEffect(() => {
-    setStateValue(propsValue || propsValue === 0 ? propsValue : '')
-  }, [propsValue])
 
   const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {

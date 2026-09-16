@@ -1,4 +1,4 @@
-import { useState, useEffect, type ChangeEvent, type KeyboardEvent } from 'react'
+import { useState, type ChangeEvent, type KeyboardEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
@@ -42,12 +42,17 @@ export const TextField = ({
   const [stateValue, setStateValue] = useState<string | number>(
     value || value === 0 ? value : '',
   )
+  const [prevValue, setPrevValue] = useState<string | number | null | undefined>(
+    value,
+  )
+  // adjust state when the value changes from outside
+  if (prevValue !== value) {
+    setPrevValue(value)
+    setStateValue(value || value === 0 ? value : '')
+  }
   const onChange = (event: ChangeEvent<HTMLInputElement>) =>
     setStateValue(event.target.value)
 
-  useEffect(() => {
-    setStateValue(value || value === 0 ? value : '')
-  }, [value])
 
   const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {

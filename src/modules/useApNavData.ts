@@ -1,4 +1,4 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { countBy } from 'es-toolkit'
@@ -73,13 +73,13 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
   }
 
   // Get filters before useQuery so changes trigger refetch
-  const zielGqlFilterForTree = getZielGqlFilterForTree(apId!)
-  const apberGqlFilterForTree = getApberGqlFilterForTree(apId!)
-  const apartGqlFilterForTree = getApartGqlFilterForTree(apId!)
-  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId!)
-  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId!)
-  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId!)
-  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId!)
+  const zielGqlFilterForTree = getZielGqlFilterForTree(apId)
+  const apberGqlFilterForTree = getApberGqlFilterForTree(apId)
+  const apartGqlFilterForTree = getApartGqlFilterForTree(apId)
+  const assozartGqlFilterForTree = getAssozartGqlFilterForTree(apId)
+  const erfkritGqlFilterForTree = getErfkritGqlFilterForTree(apId)
+  const ekfrequenzGqlFilterForTree = getEkfrequenzGqlFilterForTree(apId)
+  const ekzaehleinheitGqlFilterForTree = getEkzaehleinheitGqlFilterForTree(apId)
 
   // TODO: somehow in bookmarks where this is dynamically imported, isLoading often does not goe to false
   // but only on first load?
@@ -252,7 +252,7 @@ export const useApNavData = (props?: { projId?: string | undefined; apId?: strin
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 

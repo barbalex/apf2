@@ -23,7 +23,8 @@ export const xmlToJson = (xml: Node): XmlNode => {
       obj = { '@attributes': {} }
       const target = record()['@attributes'] as Record<string, unknown>
       for (let j = 0; j < attributes.length; j++) {
-        const attribute = attributes.item(j)!
+        const attribute = attributes.item(j)
+        if (!attribute) continue
         target[attribute.nodeName] = attribute.nodeValue
       }
     }
@@ -35,7 +36,8 @@ export const xmlToJson = (xml: Node): XmlNode => {
   // do children
   if (xml.hasChildNodes()) {
     for (let i = 0; i < xml.childNodes.length; i++) {
-      const item = xml.childNodes.item(i)!
+      const item = xml.childNodes.item(i)
+      if (!item) continue
       const nodeName = item.nodeName
       if (typeof record()[nodeName] == 'undefined') {
         record()[nodeName] = xmlToJson(item)

@@ -16,7 +16,7 @@ import {
   tpopFile as tpopFileFragment,
   tpopkontrFile as tpopkontrFileFragment,
   tpopmassnFile as tpopmassnFileFragment,
-} from '../fragments'
+} from '../fragments.ts'
 import { Uploader } from '../Uploader/index.tsx'
 import { UploaderContext } from '../../../UploaderContext.ts'
 import { Menu } from './Menu/index.tsx'
@@ -69,7 +69,6 @@ export const FilesRouter = ({ parentId = '99999999-9999-9999-9999-999999999999',
     const fields = `${upperFirst(parent)}FileFields`
     const fragment = fragmentObject[parent]
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const query = dynamicGql`
         query FileQuery($parentId: UUID!) {
           ${queryName}(

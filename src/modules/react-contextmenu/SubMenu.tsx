@@ -60,11 +60,12 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
     Record<'top' | 'bottom' | 'left' | 'right', number | string>
   > {
     const { innerWidth, innerHeight } = window
-
-    const rect = this.subMenu!.getBoundingClientRect()
     const position: Partial<
       Record<'top' | 'bottom' | 'left' | 'right', number | string>
     > = {}
+
+    if (!this.subMenu) return position
+    const rect = this.subMenu.getBoundingClientRect()
 
     if (rect.bottom > innerHeight) {
       position.bottom = 0
@@ -85,11 +86,12 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
     Record<'top' | 'bottom' | 'left' | 'right', number | string>
   > {
     const { innerHeight } = window
-
-    const rect = this.subMenu!.getBoundingClientRect()
     const position: Partial<
       Record<'top' | 'bottom' | 'left' | 'right', number | string>
     > = {}
+
+    if (!this.subMenu) return position
+    const rect = this.subMenu.getBoundingClientRect()
 
     if (rect.bottom > innerHeight) {
       position.bottom = 0
@@ -225,36 +227,40 @@ class SubMenu extends AbstractMenu<SubMenuProps, SubMenuState> {
       wrapper(() => {
         const styles =
           this.props.rtl ? this.getRTLMenuPosition() : this.getMenuPosition()
+        const subMenu = this.subMenu
+        if (!subMenu) return
 
-        this.subMenu!.style.removeProperty('top')
-        this.subMenu!.style.removeProperty('bottom')
-        this.subMenu!.style.removeProperty('left')
-        this.subMenu!.style.removeProperty('right')
+        subMenu.style.removeProperty('top')
+        subMenu.style.removeProperty('bottom')
+        subMenu.style.removeProperty('left')
+        subMenu.style.removeProperty('right')
 
         if (hasOwnProp(styles, 'top'))
-          this.subMenu!.style.top = styles.top as string
+          subMenu.style.top = styles.top as string
         if (hasOwnProp(styles, 'left'))
-          this.subMenu!.style.left = styles.left as string
+          subMenu.style.left = styles.left as string
         if (hasOwnProp(styles, 'bottom'))
-          this.subMenu!.style.bottom = styles.bottom as string
+          subMenu.style.bottom = styles.bottom as string
         if (hasOwnProp(styles, 'right'))
-          this.subMenu!.style.right = styles.right as string
-        this.subMenu!.classList.add(cssClasses.menuVisible)
+          subMenu.style.right = styles.right as string
+        subMenu.classList.add(cssClasses.menuVisible)
 
         this.registerHandlers()
         this.setState({ selectedItem: null })
       })
     } else {
+      const subMenu = this.subMenu
+      if (!subMenu) return
       const cleanup = () => {
-        this.subMenu!.removeEventListener('transitionend', cleanup)
-        this.subMenu!.style.removeProperty('bottom')
-        this.subMenu!.style.removeProperty('right')
-        this.subMenu!.style.top = '0'
-        this.subMenu!.style.left = '100%'
+        subMenu.removeEventListener('transitionend', cleanup)
+        subMenu.style.removeProperty('bottom')
+        subMenu.style.removeProperty('right')
+        subMenu.style.top = '0'
+        subMenu.style.left = '100%'
         this.unregisterHandlers()
       }
-      this.subMenu!.addEventListener('transitionend', cleanup)
-      this.subMenu!.classList.remove(cssClasses.menuVisible)
+      subMenu.addEventListener('transitionend', cleanup)
+      subMenu.classList.remove(cssClasses.menuVisible)
     }
   }
 

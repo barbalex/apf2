@@ -23,7 +23,7 @@ export const PrefetchLink = ({
         : null
 
       if (path) {
-        prefetchRouteData(path)
+        void prefetchRouteData(path)
       }
     }
 

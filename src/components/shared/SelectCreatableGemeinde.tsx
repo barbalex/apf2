@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { CSSProperties } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import IconButton from '@mui/material/IconButton'
@@ -65,9 +65,12 @@ export const SelectCreatableGemeinde = ({
     }
   }
 
-  useEffect(() => {
+  const [prevValue, setPrevValue] = useState(value)
+  // adjust state when the value changes from outside
+  if (prevValue !== value) {
+    setPrevValue(value)
     setStateValue(value ?? null)
-  }, [value])
+  }
 
   // need to add value to options list if it is not yet included
   const valuesArray = optionsIn.map((o) => o.value)

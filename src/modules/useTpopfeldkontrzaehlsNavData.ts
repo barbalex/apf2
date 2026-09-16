@@ -1,4 +1,4 @@
-import { graphql } from '../gql'
+import { graphql } from '../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -9,13 +9,13 @@ import { NodeWithList } from '../components/Projekte/TreeContainer/Tree/NodeWith
 export const useTpopfeldkontrzaehlsNavData = (props?: { projId?: string | undefined; apId?: string | undefined; popId?: string | undefined; tpopId?: string | undefined; tpopkontrId?: string | undefined } | undefined) => {
   const apolloClient = useApolloClient()
   const params = useParams()
-  const projId = (props?.projId ?? params.projId)!
-  const apId = (props?.apId ?? params.apId)!
-  const popId = (props?.popId ?? params.popId)!
-  const tpopId = (props?.tpopId ?? params.tpopId)!
-  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId)!
+  const projId = (props?.projId ?? params.projId ?? '')
+  const apId = (props?.apId ?? params.apId ?? '')
+  const popId = (props?.popId ?? params.popId ?? '')
+  const tpopId = (props?.tpopId ?? params.tpopId ?? '')
+  const tpopkontrId = (props?.tpopkontrId ?? params.tpopkontrId ?? '')
   const tpopkontrzaehlGqlFilterForTree =
-    getTpopkontrzaehlGqlFilterForTree(tpopkontrId!)
+    getTpopkontrzaehlGqlFilterForTree(tpopkontrId)
 
   const { data } = useSuspenseQuery({
     queryKey: [
@@ -54,7 +54,7 @@ export const useTpopfeldkontrzaehlsNavData = (props?: { projId?: string | undefi
       })
       if (result.error) throw result.error
       // errors are thrown above, so data is defined
-      return result.data!
+      return result.data as NonNullable<typeof result.data>
     },
   })
 

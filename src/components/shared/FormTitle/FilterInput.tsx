@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { ChangeEvent, KeyboardEvent, RefObject } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -61,11 +61,12 @@ export const FilterInput = ({
     (nodeLabelFilter?.[activeFilterTable] ?? '')
   : ''
   const [value, setValue] = useState(filterValue)
+  const [prevFilterValue, setPrevFilterValue] = useState(filterValue)
   // value should update when changed from outside
-  useEffect(() => {
-    if (filterValue === value) return
+  if (prevFilterValue !== filterValue) {
+    setPrevFilterValue(filterValue)
     setValue(filterValue)
-  }, [filterValue])
+  }
 
   const setNodeLabelFilter = (val: string) => {
     if (!activeFilterTable) return

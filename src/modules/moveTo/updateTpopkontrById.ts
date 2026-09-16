@@ -1,4 +1,4 @@
-import { graphql } from '../../gql'
+import { graphql } from '../../gql/index.ts'
 
 export const updateTpopkontrById= graphql(`
   mutation updateTpopkontrById($id: UUID!, $tpopId: UUID) {

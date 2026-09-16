@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { ChangeEvent, FocusEvent, MouseEvent } from 'react'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
@@ -105,11 +105,14 @@ export const Status = ({
     void saveToDb(fakeEvent)
   }
 
-  useEffect(() => {
+  const [prevBekanntSeit, setPrevBekanntSeit] = useState(bekanntSeitValue)
+  // adjust state when the value changes from outside
+  if (prevBekanntSeit !== bekanntSeitValue) {
+    setPrevBekanntSeit(bekanntSeitValue)
     setBekanntSeitStateValue(
       bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : '',
     )
-  }, [bekanntSeitValue])
+  }
 
   // console.log('Status rendering', { statusSelected, apJahr, showFilter, row })
 

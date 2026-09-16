@@ -402,7 +402,7 @@ export const Component = () => {
         />
         <Coordinates
           row={row}
-          refetchForm={refetchTpop}
+          refetchForm={() => void refetchTpop()}
           table="tpop"
         />
         <SelectCreatableGemeinde
