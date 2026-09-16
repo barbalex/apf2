@@ -1,11 +1,7 @@
-import { isElectron } from './isElectron.ts'
-
 export const graphQlUri = () => {
-  const isElectronApp = isElectron()
-  if (isElectronApp) {
-    return `https://api.apflora.ch/graphql`
-  }
-
+  // check localhost BEFORE electron:
+  // embedded browsers (electron host, IDE previews) would otherwise
+  // silently talk to the production api while developing locally
   const hostnameWithoutWww = window.location.hostname.replace('www.', '')
   const isLocalhost = hostnameWithoutWww === 'localhost'
 
