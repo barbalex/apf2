@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { isEqual } from 'es-toolkit'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
@@ -107,9 +108,7 @@ export const Component = () => {
 
   const row: Partial<ZielNode> = data?.zielById ?? {}
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: unknown }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 

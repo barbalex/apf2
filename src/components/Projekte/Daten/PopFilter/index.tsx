@@ -1,4 +1,5 @@
-import { useState, useEffect, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -76,10 +77,10 @@ export const PopFilter = () => {
 
   const row = dataFilterPop[activeTab] as PopFilterRow | undefined
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) =>
+  const saveToDb = async (event: SaveToDbEvent) =>
     setDataFilterValue({
       table: 'pop',
-      key: event.target.name,
+      key: event.target.name ?? '',
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })

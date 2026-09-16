@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect, type SyntheticEvent } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -70,7 +71,7 @@ export const TpopFilter = () => {
   const row = dataFilter.tpop[activeTab]
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
-  const saveToDb = (event: { target: { name?: string; value: unknown } }) =>
+  const saveToDb = (event: SaveToDbEvent) =>
     setDataFilterValue({
       table: 'tpop',
       key: event.target.name ?? '',

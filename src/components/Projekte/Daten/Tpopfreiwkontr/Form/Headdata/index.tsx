@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../../shared/types.ts'
 import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -63,12 +64,7 @@ export const Headdata = ({ pop, tpop, row }: HeaddataProps) => {
     },
   })
 
-  const saveToDb = async (event: {
-    target: {
-      name?: string
-      value: string | number | null
-    }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const { value } = event.target
     const variables = {
       id: row.id,

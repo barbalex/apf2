@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { graphql } from '../../../../gql/index.ts'
@@ -205,9 +206,7 @@ export const Component = ({ showFilter = false }: ComponentProps) => {
   const isAnpflanzung = row?.tpopmassnTypWerteByTyp?.anpflanzung
   const userName = useAtomValue(userNameAtom)
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 

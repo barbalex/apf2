@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { gql as dynamicGql } from '../../../../../apolloGql.ts'
@@ -96,9 +97,7 @@ export const HistoryForm = ({
     }
   }, [isNew])
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -288,7 +287,7 @@ export const HistoryForm = ({
         name="year"
         label="Jahr"
         type="number"
-        value={fields.year}
+        value={fields.year as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.year}
         disabled={!isNew}
@@ -298,7 +297,7 @@ export const HistoryForm = ({
         name="bearbeitung"
         label="Aktionsplan"
         options={options.apBearbstandWertes}
-        value={fields.bearbeitung}
+        value={fields.bearbeitung as string | number | null}
         saveToDb={(event) => void saveToDb(event)}
         error={fieldErrors.bearbeitung ?? ''}
       />
@@ -307,7 +306,7 @@ export const HistoryForm = ({
         name="umsetzung"
         label="Stand Umsetzung"
         options={options.apUmsetzungWertes}
-        value={fields.umsetzung}
+        value={fields.umsetzung as string | number | null}
         saveToDb={(event) => void saveToDb(event)}
         error={fieldErrors.umsetzung ?? ''}
       />
@@ -316,7 +315,7 @@ export const HistoryForm = ({
         name="bearbeiter"
         label="Verantwortlich"
         options={options.adresses}
-        value={fields.bearbeiter}
+        value={fields.bearbeiter as string | number | null}
         saveToDb={(event) => void saveToDb(event)}
         error={fieldErrors.bearbeiter ?? ''}
       />
@@ -324,7 +323,7 @@ export const HistoryForm = ({
         name="startJahr"
         label="Start im Jahr"
         type="number"
-        value={fields.startJahr}
+        value={fields.startJahr as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.startJahr}
       />
@@ -332,7 +331,7 @@ export const HistoryForm = ({
         name="ekfBeobachtungszeitpunkt"
         label="Bester Beobachtungszeitpunkt für EKF"
         type="text"
-        value={fields.ekfBeobachtungszeitpunkt}
+        value={fields.ekfBeobachtungszeitpunkt as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.ekfBeobachtungszeitpunkt}
       />

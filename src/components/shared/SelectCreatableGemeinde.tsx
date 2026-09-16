@@ -1,11 +1,28 @@
 import { useState, useEffect } from 'react'
+import type { CSSProperties } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import { IoMdLocate } from 'react-icons/io'
 
 import { exists } from '../../modules/exists.ts'
+import type { SaveToDbHandler } from './types.ts'
+
 import styles from './SelectCreatableGemeinde.module.css'
+
+export interface SelectCreatableGemeindeProps {
+  label?: string | undefined
+  value?: string | null | undefined
+  name: string
+  error?: string | null | undefined
+  options: { value: string; label: string; historic?: boolean }[]
+  loading?: boolean
+  showLocate?: boolean
+  onClickLocate?: () => void | Promise<void>
+  maxHeight?: number | null
+  noCaret?: boolean
+  saveToDb: SaveToDbHandler
+}
 
 export const SelectCreatableGemeinde = ({
   label,
@@ -19,20 +36,22 @@ export const SelectCreatableGemeinde = ({
   maxHeight = null,
   noCaret = false,
   saveToDb,
-}) => {
-  const [stateValue, setStateValue] = useState(null)
+}: SelectCreatableGemeindeProps) => {
+  const [stateValue, setStateValue] = useState<string | null>(null)
 
-  const onMyChange = (option) => {
+  const onMyChange = (
+    option: { value: string | null; label: string } | null | undefined,
+  ) => {
     const fakeEvent = {
       target: {
         name,
         value: option ? option.value : null,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
-  const onInputChange = (value) => setStateValue(value)
+  const onInputChange = (value: string) => setStateValue(value)
 
   const onMyBlur = () => {
     if (stateValue) {
@@ -42,12 +61,12 @@ export const SelectCreatableGemeinde = ({
           value: stateValue,
         },
       }
-      saveToDb(fakeEvent)
+      void saveToDb(fakeEvent)
     }
   }
 
   useEffect(() => {
-    setStateValue(value)
+    setStateValue(value ?? null)
   }, [value])
 
   // need to add value to options list if it is not yet included
@@ -65,12 +84,18 @@ export const SelectCreatableGemeinde = ({
   })
 
   // show ... while options are loading
-  const loadingOptions = [{ value, label: '...' }]
+  const loadingOptions: { value: string | null; label: string }[] = [
+    { value: value ?? null, label: '...' },
+  ]
   const optionsToUse = loading && value ? loadingOptions : realOptions
   const selectValue = optionsToUse.find((o) => o.value === value)
 
   const styleMeantForSelect =
-    maxHeight ? { '--react-select-menu-list-max-height': `${maxHeight}px` } : {}
+    maxHeight ?
+      {
+        '--react-select-menu-list-max-height': `${maxHeight}px`,
+      } as CSSProperties
+    : {}
 
   return (
     <div
@@ -100,16 +125,14 @@ export const SelectCreatableGemeinde = ({
           isClearable
           isSearchable
           noOptionsMessage={() => '(keine)'}
-          maxheight={maxHeight}
           classNamePrefix="react-select"
-          nocaret={noCaret}
           className={`select-height-limited ${noCaret ? 'select-nocaret' : ''} ${styles.select}`}
         />
         {showLocate && (
           <Tooltip title="Mit Hilfe der Koordinaten automatisch setzen">
             <IconButton
               aria-label="Mit Hilfe der Koordinaten automatisch setzen"
-              onClick={onClickLocate}
+              onClick={() => void onClickLocate?.()}
               className={styles.iconButton}
             >
               <IoMdLocate className={styles.addLocationIcon} />

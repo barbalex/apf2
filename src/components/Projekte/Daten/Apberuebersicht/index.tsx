@@ -1,4 +1,5 @@
-import { useState, Suspense, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState, Suspense } from 'react'
 import Button from '@mui/material/Button'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -88,8 +89,9 @@ export const Component = () => {
 
   const row = data?.apberuebersichtById
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {

@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { useSetAtom, useAtomValue } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
@@ -247,8 +248,9 @@ export const Component = () => {
   }
   const { data: dataLists } = useQuery(tpopListsQueryOptions)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
-  const saveToDb = async (event: { target: { name: string; value: unknown } }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {

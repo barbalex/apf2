@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import type { Dispatch, SetStateAction } from 'react'
 import { useSetAtom } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
@@ -90,7 +91,7 @@ type TpopListsUseQueryOptions = UseQueryOptions<
 }
 
 interface TpopProps {
-  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  saveToDb: (event: SaveToDbEvent) => void
   fieldErrors: Record<string, string>
   setFieldErrors: Dispatch<SetStateAction<Record<string, string>>>
   row: TpopFilterRow | undefined

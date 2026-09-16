@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { gql as dynamicGql } from '../../../../../apolloGql.ts'
@@ -103,9 +104,7 @@ export const HistoryForm = ({
     }
   }
 
-  const saveCoordToDb = async (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveCoordToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name as 'x' | 'y' // 'x' or 'y'
     const value = ifIsNumericAsNumber(event.target.value)
 
@@ -164,9 +163,7 @@ export const HistoryForm = ({
     refetch()
   }
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name as keyof typeof fieldTypes
     const rawValue = event.target.value
     const value =
@@ -361,7 +358,7 @@ export const HistoryForm = ({
         name="year"
         label="Jahr"
         type="number"
-        value={fields.year}
+        value={fields.year as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.year}
         disabled={!isNew}
@@ -370,7 +367,7 @@ export const HistoryForm = ({
         name="nr"
         label="Nr."
         type="number"
-        value={fields.nr}
+        value={fields.nr as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.nr}
       />
@@ -378,7 +375,7 @@ export const HistoryForm = ({
         name="name"
         label="Name"
         type="text"
-        value={fields.name}
+        value={fields.name as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.name}
       />
@@ -386,7 +383,7 @@ export const HistoryForm = ({
         name="bekanntSeit"
         label="bekannt seit"
         type="number"
-        value={fields.bekanntSeit}
+        value={fields.bekanntSeit as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.bekanntSeit}
       />
@@ -402,7 +399,7 @@ export const HistoryForm = ({
       <Checkbox2States
         name="statusUnklar"
         label="Status unklar"
-        value={fields.statusUnklar}
+        value={fields.statusUnklar as boolean | null}
         saveToDb={saveToDb}
         error={fieldErrors.statusUnklar}
         helperText=""
@@ -412,7 +409,7 @@ export const HistoryForm = ({
         label="Begründung (für Status unklar)"
         type="text"
         multiLine
-        value={fields.statusUnklarBegruendung}
+        value={fields.statusUnklarBegruendung as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.statusUnklarBegruendung}
       />
@@ -420,7 +417,7 @@ export const HistoryForm = ({
         name="x"
         label="Längengrad"
         type="number"
-        value={fields.x}
+        value={fields.x as string | number | null}
         saveToDb={saveCoordToDb}
         error={fieldErrors.x}
       />
@@ -428,7 +425,7 @@ export const HistoryForm = ({
         name="y"
         label="Breitengrad"
         type="number"
-        value={fields.y}
+        value={fields.y as string | number | null}
         saveToDb={saveCoordToDb}
         error={fieldErrors.y}
       />

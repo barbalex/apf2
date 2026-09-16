@@ -10,7 +10,7 @@ import styles from './Kontrolljahre.module.css'
 interface KontrolljahrProps {
   kontrolljahre?: number[] | undefined
   saveToDb: (event: {
-    target: { name: string; value: number[] }
+    target: { name?: string | undefined; value: number[] }
   }) => Promise<void>
   refetch: () => void
 }

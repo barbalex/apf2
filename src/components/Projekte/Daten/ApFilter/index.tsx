@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query'
@@ -164,9 +165,7 @@ export const ApFilter = () => {
 
   const row = dataFilter.ap[activeTab] as ApFilterRow | undefined
 
-  const saveToDb = (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 

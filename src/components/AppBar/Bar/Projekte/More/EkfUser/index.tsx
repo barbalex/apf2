@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../../shared/types.ts'
 import { Suspense } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useApolloClient } from '@apollo/client/react'
@@ -27,7 +28,7 @@ export const EkfUser = ({ closeMenu }: { closeMenu: () => void }) => {
     },
   })
 
-  const choose = (event: { target: { value: string | number | null } }) => {
+  const choose = (event: SaveToDbEvent) => {
     const value = event.target.value
     closeMenu()
     // prevent this happening before setAnchor happened

@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, Suspense } from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -242,9 +243,7 @@ export const Component = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const userName = useAtomValue(userNameAtom)
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: unknown }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 

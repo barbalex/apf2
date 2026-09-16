@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { upperFirst } from 'es-toolkit'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
@@ -77,9 +78,7 @@ export const Component = () => {
     codeFieldType = 'text'
   }
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: unknown }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 

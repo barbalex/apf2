@@ -39,7 +39,7 @@ export const Form = ({ row, activeTab }: FormProps) => {
   const saveToDb = (event: TpopkontrSaveToDbEvent) =>
     setDataFilterValue({
       table: 'tpopfreiwkontr',
-      key: event.target.name,
+      key: event.target.name ?? '',
       value: ifIsNumericAsNumber(event.target.value),
       index: activeTab,
     })

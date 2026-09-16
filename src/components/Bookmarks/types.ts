@@ -4,6 +4,8 @@ import type { ComponentType, ReactNode } from 'react'
 export interface NavMenuData {
   id: string
   label?: ReactNode
+  labelEkf?: ReactNode
+  labelEk?: ReactNode
   labelLeftElements?: ComponentType[]
   labelRightElements?: ComponentType[]
 }
@@ -13,5 +15,6 @@ export interface NavData {
   url: string
   label?: ReactNode
   labelShort?: ReactNode
+  listFilter?: string
   menus: NavMenuData[]
 }

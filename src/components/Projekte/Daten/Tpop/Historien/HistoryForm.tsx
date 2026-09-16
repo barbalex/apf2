@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
+import { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 import { graphql } from '../../../../../gql/index.ts'
@@ -165,9 +166,7 @@ export const HistoryForm = ({
     }
   }
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: unknown }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const rawValue = event.target.value
     const value =
@@ -222,8 +221,9 @@ export const HistoryForm = ({
     refetch()
   }
 
-  const saveCoordToDb = async (event: ChangeEvent<HTMLInputElement>) => {
+  const saveCoordToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
     const newX = field === 'x' ? value : fields.x
     const newY = field === 'y' ? value : fields.y
@@ -471,7 +471,7 @@ export const HistoryForm = ({
         name="year"
         label="Jahr"
         type="number"
-        value={fields.year}
+        value={fields.year as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.year}
         disabled={!isNew}
@@ -480,7 +480,7 @@ export const HistoryForm = ({
         name="nr"
         label="Nr."
         type="number"
-        value={fields.nr}
+        value={fields.nr as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.nr}
       />
@@ -488,7 +488,7 @@ export const HistoryForm = ({
         name="flurname"
         label="Flurname"
         type="text"
-        value={fields.flurname}
+        value={fields.flurname as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.flurname}
       />
@@ -496,7 +496,7 @@ export const HistoryForm = ({
         name="bekanntSeit"
         label="bekannt seit"
         type="number"
-        value={fields.bekanntSeit}
+        value={fields.bekanntSeit as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.bekanntSeit}
       />
@@ -512,7 +512,7 @@ export const HistoryForm = ({
       <Checkbox2States
         name="statusUnklar"
         label="Status unklar"
-        value={fields.statusUnklar}
+        value={fields.statusUnklar as boolean | null}
         saveToDb={saveToDb}
         error={fieldErrors.statusUnklar}
         helperText=""
@@ -522,14 +522,14 @@ export const HistoryForm = ({
         label="Begründung (für Status unklar)"
         type="text"
         multiLine
-        value={fields.statusUnklarGrund}
+        value={fields.statusUnklarGrund as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.statusUnklarGrund}
       />
       <Checkbox2States
         name="apberRelevant"
         label="Für AP-Bericht relevant"
-        value={fields.apberRelevant}
+        value={fields.apberRelevant as boolean | null}
         saveToDb={saveToDb}
         error={fieldErrors.apberRelevant}
         helperText=""
@@ -547,7 +547,7 @@ export const HistoryForm = ({
         name="x"
         label="Längengrad"
         type="number"
-        value={fields.x}
+        value={fields.x as string | number | null}
         saveToDb={saveCoordToDb}
         error={fieldErrors.x}
       />
@@ -555,7 +555,7 @@ export const HistoryForm = ({
         name="y"
         label="Breitengrad"
         type="number"
-        value={fields.y}
+        value={fields.y as string | number | null}
         saveToDb={saveCoordToDb}
         error={fieldErrors.y}
       />
@@ -563,7 +563,7 @@ export const HistoryForm = ({
         name="gemeinde"
         label="Gemeinde"
         type="text"
-        value={fields.gemeinde}
+        value={fields.gemeinde as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.gemeinde}
       />
@@ -571,7 +571,7 @@ export const HistoryForm = ({
         name="radius"
         label="Radius (m)"
         type="number"
-        value={fields.radius}
+        value={fields.radius as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.radius}
       />
@@ -579,7 +579,7 @@ export const HistoryForm = ({
         name="hoehe"
         label="Höhe (m.ü.M.)"
         type="number"
-        value={fields.hoehe}
+        value={fields.hoehe as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.hoehe}
       />
@@ -587,7 +587,7 @@ export const HistoryForm = ({
         name="exposition"
         label="Exposition, Besonnung"
         type="text"
-        value={fields.exposition}
+        value={fields.exposition as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.exposition}
       />
@@ -595,7 +595,7 @@ export const HistoryForm = ({
         name="klima"
         label="Klima"
         type="text"
-        value={fields.klima}
+        value={fields.klima as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.klima}
       />
@@ -603,7 +603,7 @@ export const HistoryForm = ({
         name="neigung"
         label="Hangneigung"
         type="text"
-        value={fields.neigung}
+        value={fields.neigung as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.neigung}
       />
@@ -612,7 +612,7 @@ export const HistoryForm = ({
         label="Beschreibung"
         type="text"
         multiLine
-        value={fields.beschreibung}
+        value={fields.beschreibung as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.beschreibung}
       />
@@ -620,7 +620,7 @@ export const HistoryForm = ({
         name="katasterNr"
         label="Kataster-Nr."
         type="text"
-        value={fields.katasterNr}
+        value={fields.katasterNr as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.katasterNr}
       />
@@ -628,7 +628,7 @@ export const HistoryForm = ({
         name="eigentuemer"
         label="EigentümerIn"
         type="text"
-        value={fields.eigentuemer}
+        value={fields.eigentuemer as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.eigentuemer}
       />
@@ -636,7 +636,7 @@ export const HistoryForm = ({
         name="kontakt"
         label="Kontakt vor Ort"
         type="text"
-        value={fields.kontakt}
+        value={fields.kontakt as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.kontakt}
       />
@@ -644,7 +644,7 @@ export const HistoryForm = ({
         name="nutzungszone"
         label="Nutzungszone"
         type="text"
-        value={fields.nutzungszone}
+        value={fields.nutzungszone as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.nutzungszone}
       />
@@ -652,7 +652,7 @@ export const HistoryForm = ({
         name="bewirtschafter"
         label="BewirtschafterIn"
         type="text"
-        value={fields.bewirtschafter}
+        value={fields.bewirtschafter as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.bewirtschafter}
       />
@@ -660,7 +660,7 @@ export const HistoryForm = ({
         name="bewirtschaftung"
         label="Bewirtschaftung"
         type="text"
-        value={fields.bewirtschaftung}
+        value={fields.bewirtschaftung as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.bewirtschaftung}
       />
@@ -669,7 +669,7 @@ export const HistoryForm = ({
         label="Bemerkungen"
         type="text"
         multiLine
-        value={fields.bemerkungen}
+        value={fields.bemerkungen as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.bemerkungen}
       />
@@ -685,7 +685,7 @@ export const HistoryForm = ({
       <Checkbox2States
         name="ekfrequenzAbweichend"
         label="EK-Frequenz abweichend"
-        value={fields.ekfrequenzAbweichend}
+        value={fields.ekfrequenzAbweichend as boolean | null}
         saveToDb={saveToDb}
         error={fieldErrors.ekfrequenzAbweichend}
         helperText=""
@@ -694,7 +694,7 @@ export const HistoryForm = ({
         name="ekfrequenzStartjahr"
         label="EK-Frequenz Startjahr"
         type="number"
-        value={fields.ekfrequenzStartjahr}
+        value={fields.ekfrequenzStartjahr as string | number | null}
         saveToDb={saveToDb}
         error={fieldErrors.ekfrequenzStartjahr}
       />

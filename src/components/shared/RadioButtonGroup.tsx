@@ -1,3 +1,4 @@
+import type { ChangeEvent, MouseEvent } from 'react'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormLabel from '@mui/material/FormLabel'
@@ -6,8 +7,25 @@ import FormHelperText from '@mui/material/FormHelperText'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 import { exists } from '../../modules/exists.ts'
+import type { SaveToDbHandler } from './types.ts'
 
 import styles from './RadioButtonGroup.module.css'
+
+export interface RadioButtonGroupOption {
+  value: string | number
+  label: string | null
+  historic?: boolean
+}
+
+export interface RadioButtonGroupProps {
+  value?: string | number | boolean | null | undefined
+  label?: string | undefined
+  name: string
+  error?: string | null | undefined
+  helperText?: string | undefined
+  dataSource?: RadioButtonGroupOption[]
+  saveToDb: SaveToDbHandler
+}
 
 export const RadioButtonGroup = ({
   value = null,
@@ -17,16 +35,16 @@ export const RadioButtonGroup = ({
   helperText = '',
   dataSource = [],
   saveToDb,
-}) => {
-  const onClickButton = (event) => {
+}: RadioButtonGroupProps) => {
+  const onClickButton = (event: MouseEvent<HTMLLabelElement>) => {
     /**
      * if clicked element is active value: set null
      * Problem: does not work on change event on RadioGroup
      * because that only fires on changes
      * Solution: do this in click event of button
      */
-    const targetValue = event.target.value
-     
+    const targetValue = (event.target as HTMLInputElement).value
+
     if (targetValue !== undefined && targetValue == value) {
       // an already active option was clicked
       // set value null
@@ -39,18 +57,18 @@ export const RadioButtonGroup = ({
       // It is possible to directly click an option after editing an other field
       // this creates a race condition in the two submits which can lead to lost inputs!
       // so timeout inputs in option fields
-      return setTimeout(() => saveToDb(fakeEvent))
+      return setTimeout(() => void saveToDb(fakeEvent))
     }
   }
 
-  const onChangeGroup = (event) => {
+  const onChangeGroup = (event: ChangeEvent<HTMLInputElement>) => {
     // group only changes if value changes
     const targetValue = event.target.value
     // values are passed as strings > need to convert
     const valueToUse =
       targetValue === 'true' ? true
       : targetValue === 'false' ? false
-      : isNaN(targetValue) ? targetValue
+      : isNaN(Number(targetValue)) ? targetValue
       : +targetValue
     const fakeEvent = {
       target: {
@@ -58,7 +76,7 @@ export const RadioButtonGroup = ({
         name,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
   // filter out historic options - if they are not the value set
@@ -93,12 +111,10 @@ export const RadioButtonGroup = ({
         {dataSourceToUse.map((e, index) => (
           <FormControlLabel
             key={index}
-            value={e.value.toString ? e.value.toString() : e.value}
+            value={e.value.toString()}
             control={
               <Radio
-                data-id={`${name}_${
-                  e.value.toString ? e.value.toString() : e.value
-                }`}
+                data-id={`${name}_${e.value.toString()}`}
                 color="primary"
                 className={styles.radio}
               />

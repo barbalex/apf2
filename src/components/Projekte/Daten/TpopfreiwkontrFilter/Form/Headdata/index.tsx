@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../../shared/types.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useSetAtom } from 'jotai'
@@ -55,9 +56,7 @@ export const Headdata = ({ row, activeTab }: HeaddataProps) => {
   }
   const { data } = useQuery(adressesQueryOptions)
 
-  const saveToDb = (event: {
-    target: { name?: string; value: string | number | null }
-  }) =>
+  const saveToDb = (event: SaveToDbEvent) =>
     setDataFilterValue({
       table: 'tpopfreiwkontr',
       key: 'bearbeiter',

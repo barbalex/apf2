@@ -17,6 +17,7 @@ import type {
 import styles from './WollmilchsauSingle.module.css'
 
 import { addNotificationAtom } from '../../../../store/index.ts'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 
 interface ApByArtIdQueryResult {
   apByArtId: {
@@ -207,8 +208,8 @@ export const WollmilchsauSingle = () => {
         valueLabel={undefined}
         label={`"Eier legende Wollmilchsau" für einzelne Arten: Art wählen`}
         labelSize={14}
-        saveToDb={async (e: { target: { value: string | null } }) => {
-          const aeId = e.target.value
+        saveToDb={async (e: SaveToDbEvent) => {
+          const aeId = e.target.value as string | null
           if (aeId === null) return
           setEwmMessage(
             'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...',

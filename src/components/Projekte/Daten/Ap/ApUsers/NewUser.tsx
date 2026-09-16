@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState } from 'react'
 import { graphql } from '../../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -69,9 +70,7 @@ export const NewUser = ({ apId, apUsers, refetch }: NewUserProps) => {
       label: `${d.name ?? '(kein Name)'} (${d.role.replace('apflora_', '')})`,
     }))
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const name = event.target.value as string | null
     try {
       await apolloClient.mutate({

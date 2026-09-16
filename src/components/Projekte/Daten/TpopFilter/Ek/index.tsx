@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useParams } from 'react-router'
@@ -50,7 +51,7 @@ type TpopEkFilterUseQueryOptions = UseQueryOptions<
 }
 
 interface EkProps {
-  saveToDb: (event: { target: { name?: string; value: unknown } }) => void
+  saveToDb: (event: SaveToDbEvent) => void
   row: EkRow | undefined
   fieldErrors: Record<string, string>
 }

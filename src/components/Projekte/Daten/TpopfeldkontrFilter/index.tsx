@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
 import MuiTabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -192,9 +193,7 @@ export const TpopfeldkontrFilter = () => {
   const onChangeTab = (_event: SyntheticEvent, value: string) =>
     setTab(value)
 
-  const saveToDb = async (event: {
-    target: { name?: string | undefined; value: unknown }
-  }) =>
+  const saveToDb = async (event: SaveToDbEvent) =>
     setDataFilterValue({
       table: 'tpopfeldkontr',
       key: event.target.name ?? '',

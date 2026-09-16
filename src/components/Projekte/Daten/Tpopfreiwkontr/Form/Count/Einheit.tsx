@@ -33,8 +33,8 @@ export const Einheit = ({
 
   const onChange = async (event: {
     target: {
-      name?: string
-      value: string | number | null
+      name?: string | undefined
+      value: string | number | boolean | number[] | null
     }
   }) => {
     const val = ifIsNumericAsNumber(event.target.value)

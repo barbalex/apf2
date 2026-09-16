@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -157,9 +158,7 @@ export const TpopfeldkontrForm = ({ row, data }: TpopfeldkontrFormProps) => {
 
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
-  const saveToDb = async (event: {
-    target: { name?: string | undefined; value: unknown }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name as string
     const value = ifIsNumericAsNumber(event.target.value)
 

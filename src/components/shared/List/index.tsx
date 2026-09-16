@@ -1,17 +1,15 @@
-import { useContext } from 'react'
 import { useNavigate, useLocation } from 'react-router'
 import Highlighter from 'react-highlight-words'
 
 import { FormTitle } from '../FormTitle/index.tsx'
 import { ErrorBoundary } from '../ErrorBoundary.tsx'
-import { navData } from '../../Bookmarks/NavTo/Navs/projectsNavData.ts'
 import { prefetchRouteData } from '../../../modules/prefetchRouteData.ts'
 
 import styles from './index.module.css'
 
-import type { ComponentType, ReactNode, RefObject } from 'react'
+import type { ComponentType } from 'react'
 
-import type { NavData } from '../../Bookmarks/types.ts'
+import type { NavData, NavMenuData } from '../../Bookmarks/types.ts'
 
 export const List = ({
   navData,
@@ -27,17 +25,17 @@ export const List = ({
   const navigate = useNavigate()
   const { search } = useLocation()
 
-  const onClickRow = async (item) => {
+  const onClickRow = async (item: NavMenuData) => {
     const path = `./${item.id}${search}`
     // Prefetch before navigating (in case user didn't hover)
     await prefetchRouteData(path)
-    navigate(path)
+    void navigate(path)
   }
 
-  const onMouseEnterRow = (item) => {
+  const onMouseEnterRow = (item: NavMenuData) => {
     const path = `./${item.id}${search}`
     // Prefetch on hover
-    prefetchRouteData(path)
+    void prefetchRouteData(path)
   }
 
   return (
@@ -57,8 +55,8 @@ export const List = ({
               <div
                 className={styles.row}
                 key={item.id}
-                onClick={onClickRow.bind(this, item)}
-                onMouseEnter={onMouseEnterRow.bind(this, item)}
+                onClick={() => void onClickRow(item)}
+                onMouseEnter={() => onMouseEnterRow(item)}
               >
                 {!!item.labelLeftElements?.length &&
                   item.labelLeftElements.map((El, index) => <El key={index} />)}

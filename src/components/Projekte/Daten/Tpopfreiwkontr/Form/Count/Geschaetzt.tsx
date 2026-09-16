@@ -25,7 +25,7 @@ export const Geschaetzt = ({ row, refetch }: GeschaetztProps) => {
   const onChange = async (event: {
     target: {
       name?: string
-      value: string | number | null
+      value: string | number | boolean | null
     }
   }) => {
     const val = ifIsNumericAsNumber(event.target.value)

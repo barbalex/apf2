@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, Suspense } from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -71,10 +72,9 @@ export const User = ({ username, userOpen, toggleUserOpen }: UserProps) => {
   const [password2ErrorText, setPassword2ErrorText] = useState('')
   const [passwordMessage, setPasswordMessage] = useState('')
 
-  const saveToDb = async (event: {
-    target: { name: string; value: unknown }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {

@@ -1,4 +1,5 @@
-import { useState, Suspense, type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
+import { useState, Suspense } from 'react'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
@@ -109,8 +110,9 @@ export const Component = () => {
   // because apart did not exist...
   // maybe do later
 
-  const saveToDb = async (event: ChangeEvent<HTMLInputElement>) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
 
     const variables = {

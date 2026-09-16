@@ -19,13 +19,19 @@ interface ErrorProps {
 
 export const Error = ({ errors: errorsPassed, error }: ErrorProps) => {
   // allow user to pass single error or multiple errors
-  let errors: { map?: unknown; errors?: unknown[] } | undefined =
-    (errorsPassed as { map?: unknown; errors?: unknown[] }) ?? undefined
-  if (error && !errorsPassed) errors = [error]
   // PROBLEM
   // something passes in an object instead of an array
   // so need to check and extract the errors array from the object if necessary
-  const errorsToUse = errors.map ? errors : errors.errors
+  let errorsToUse: { message?: string }[] | undefined
+  if (error && !errorsPassed) {
+    errorsToUse = [error] as { message?: string }[]
+  } else if (Array.isArray(errorsPassed)) {
+    errorsToUse = errorsPassed as { message?: string }[]
+  } else {
+    errorsToUse = (
+      (errorsPassed as { errors?: unknown[] } | undefined)?.errors
+    ) as { message?: string }[] | undefined
+  }
 
   if (existsPermissionError(errorsToUse)) {
     console.log('Permission error exists, will log out', { errorsToUse })
@@ -36,24 +42,9 @@ export const Error = ({ errors: errorsPassed, error }: ErrorProps) => {
     }
     void logout()
     return null
-    /*// if token is not accepted, ask user to logout
-    return (
-      <div className={container}>
-        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
-        <div>Bitte melden Sie sich neu an.</div>
-        <LogoutButton
-          variant="outlined"
-          onClick={() => {
-            logout()
-          }}
-        >
-          Neu anmelden
-        </LogoutButton>
-      </div>
-    )*/
   }
 
-  const errorMessages = errorsToUse.map((e) => e.message)
+  const errorMessages = (errorsToUse ?? []).map((e) => e.message)
   const uniqueMessages = uniq(errorMessages)
   if (uniqueMessages.length === 1) {
     return (

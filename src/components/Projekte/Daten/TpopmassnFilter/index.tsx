@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState, useEffect } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -157,9 +158,7 @@ export const TpopmassnFilter = () => {
     (n) => n.value === row?.typ,
   )?.anpflanzung
 
-  const saveToDb = (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = (event: SaveToDbEvent) => {
     setDataFilterValue({
       table: 'tpopmassn',
       key: event.target.name ?? '',

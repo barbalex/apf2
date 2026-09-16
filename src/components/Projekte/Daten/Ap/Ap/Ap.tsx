@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../../shared/types.ts'
 import { useState, type ReactNode } from 'react'
 import { useParams } from 'react-router'
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
@@ -99,9 +100,7 @@ export const Ap = ({ children }: Props) => {
 
   const row = data.apById
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 

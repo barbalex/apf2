@@ -1,4 +1,4 @@
-import { type ChangeEvent } from 'react'
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { sortBy } from 'es-toolkit'
 import Button from '@mui/material/Button'
 import { FaRegEnvelope as SendIcon } from 'react-icons/fa'
@@ -50,7 +50,7 @@ interface BeobzuordnungBeob {
   data: string | null
   lv95X: number | null
   lv95Y: number | null
-  infofloraInformiertDatum: Date | null
+  infofloraInformiertDatum: string | null
   aeTaxonomyByArtId?: {
     artname: string
     taxid: number
@@ -207,9 +207,9 @@ export const Component = () => {
         }
       : { artname: { isNull: false }, apartsByArtIdExist: true }
 
-  const onSaveArtIdToDb = (event: ChangeEvent<HTMLInputElement>) =>
+  const onSaveArtIdToDb = (event: SaveToDbEvent) =>
     saveArtIdToDb({
-      value: event.target.value,
+      value: event.target.value as string,
       row,
       search,
     })
@@ -222,19 +222,18 @@ export const Component = () => {
       search,
     })
 
-  const onSaveTpopIdToDb = (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const onSaveTpopIdToDb = (event: SaveToDbEvent) => {
     void saveTpopIdToDb({
-      value: event.target.value,
+      value: event.target.value as string | number | null,
       id,
       type,
       search,
     })
   }
 
-  const onUpdateField = (event: ChangeEvent<HTMLInputElement>) => {
+  const onUpdateField = (event: SaveToDbEvent) => {
     const changedField = event.target.name
+    if (!changedField) return
     void apolloClient.mutate({
       mutation: dynamicGql`
           mutation updateBeobForBeobzuordnung(
@@ -292,7 +291,7 @@ export const Component = () => {
         `,
       variables: {
         id,
-        [event.target.name]: event.target.value,
+        [changedField]: event.target.value,
         changedBy: userName,
       },
     })

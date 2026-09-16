@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import type { ComponentType } from 'react'
 import Collapse from '@mui/material/Collapse'
 import { useAtom } from 'jotai'
@@ -30,10 +30,10 @@ export const FormTitle = ({
   const [filterInputIsVisible, toggleFilterInputIsVisible] = useAtom(
     navListFilterAtoms[listFilter ?? 'undefined'],
   )
-  const filterInputRef = useRef(null)
+  const filterInputRef = useRef<HTMLInputElement>(null)
   const toggleFilterInput = () => {
     toggleFilterInputIsVisible()
-    setTimeout(() => filterInputRef?.current?.focus?.(), 0)
+    setTimeout(() => filterInputRef.current?.focus(), 0)
   }
 
   // effect sets filterInputIsVisible to true if filterValue changes from empty to not empty

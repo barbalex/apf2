@@ -1,3 +1,4 @@
+import type { SaveToDbEvent } from '../../../shared/types.ts'
 import { useState } from 'react'
 import { useApolloClient } from '@apollo/client/react'
 import { useQuery, type UseQueryOptions, useQueryClient } from '@tanstack/react-query'
@@ -65,7 +66,7 @@ interface ApberQueryResult {
     biotopeOptimieren: string | null
     massnahmenOptimieren: string | null
     wirkungAufArt: string | null
-    datum: Date | null
+    datum: string | null
     massnahmenApBearb: string | null
     massnahmenPlanungVsAusfuehrung: string | null
     apId: ApId | null
@@ -121,9 +122,7 @@ export const Component = () => {
 
   const row = data?.apberById
 
-  const saveToDb = async (event: {
-    target: { name?: string; value: string | number | null }
-  }) => {
+  const saveToDb = async (event: SaveToDbEvent) => {
     const field = event.target.name ?? ''
     const value = ifIsNumericAsNumber(event.target.value)
 

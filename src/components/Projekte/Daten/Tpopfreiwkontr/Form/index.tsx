@@ -122,7 +122,7 @@ export interface TpopkontrQueryResult {
 /** fake events are built for radio buttons and selects */
 export interface TpopkontrSaveToDbEvent {
   target: {
-    name: string
+    name?: string | undefined
     value: string | number | boolean | null
   }
 }
@@ -234,6 +234,7 @@ export const Form = ({ data, refetch, row, apId }: FormProps) => {
 
   const saveToDb = async (event: TpopkontrSaveToDbEvent) => {
     const field = event.target.name
+    if (!field) return
     const value = ifIsNumericAsNumber(event.target.value)
     /**
      * enable passing two values

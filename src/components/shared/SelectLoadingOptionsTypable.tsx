@@ -1,8 +1,30 @@
 import { useState, useEffect } from 'react'
 import AsyncSelect from 'react-select/async'
 import { useApolloClient } from '@apollo/client/react'
+import type { DocumentNode } from '@apollo/client'
+
+import type { SaveToDbHandler } from './types.ts'
 
 import styles from './SelectLoadingOptionsTypable.module.css'
+
+interface TypableOption {
+  value: string | null
+  label: string | null
+}
+
+interface TypableNodes {
+  nodes?: { value: string; label: string }[]
+}
+
+export interface SelectLoadingOptionsTypableProps {
+  row?: object | null | undefined
+  field?: string
+  label?: string | undefined
+  error?: string | null | undefined
+  saveToDb: SaveToDbHandler
+  query: DocumentNode
+  queryNodesName: string
+}
 
 export const SelectLoadingOptionsTypable = ({
   row,
@@ -12,16 +34,18 @@ export const SelectLoadingOptionsTypable = ({
   saveToDb,
   query,
   queryNodesName,
-}) => {
+}: SelectLoadingOptionsTypableProps) => {
   const apolloClient = useApolloClient()
+  const wirtspflanze = (row as { wirtspflanze?: string | null } | null | undefined)
+    ?.wirtspflanze
 
-  const [inputValue, setInputValue] = useState(row?.wirtspflanze || '')
+  const [inputValue, setInputValue] = useState(wirtspflanze || '')
 
   useEffect(() => {
-    setInputValue(row?.wirtspflanze || '')
-  }, [row?.wirtspflanze])
+    setInputValue(wirtspflanze || '')
+  }, [wirtspflanze])
 
-  const loadOptions = async (inputValue, cb) => {
+  const loadOptions = async (inputValue: string) => {
     const filter =
       inputValue ?
         { artname: { includesInsensitive: inputValue } }
@@ -32,11 +56,16 @@ export const SelectLoadingOptionsTypable = ({
         filter,
       },
     })
-    const options = data?.[queryNodesName]?.nodes ?? []
-    cb(options)
+    const options =
+      (
+        (data as Record<string, unknown> | undefined)?.[
+          queryNodesName
+        ] as TypableNodes | undefined
+      )?.nodes ?? []
+    return options
   }
 
-  const onChange = (option) => {
+  const onChange = (option: TypableOption | null) => {
     const value = option && option.value ? option.value : null
     const fakeEvent = {
       target: {
@@ -44,10 +73,13 @@ export const SelectLoadingOptionsTypable = ({
         value,
       },
     }
-    saveToDb(fakeEvent)
+    void saveToDb(fakeEvent)
   }
 
-  const onInputChange = (value, { action }) => {
+  const onInputChange = (
+    value: string,
+    { action }: { action: string },
+  ) => {
     // update inputValue when typing in the input
     if (!['input-blur', 'menu-close'].includes(action)) {
       if (!value) {
@@ -69,8 +101,8 @@ export const SelectLoadingOptionsTypable = ({
   }
 
   const value = {
-    value: row?.wirtspflanze || '',
-    label: row?.wirtspflanze || '',
+    value: wirtspflanze || '',
+    label: wirtspflanze || '',
   }
 
   return (
@@ -90,8 +122,6 @@ export const SelectLoadingOptionsTypable = ({
         hideSelectedOptions
         placeholder="(Für Vorschläge tippen)"
         isClearable
-        // remove as can't select without typing
-        nocaret
         // don't show a no options message
         noOptionsMessage={() => null}
         tabSelectsValue={false}

@@ -1,20 +1,22 @@
 import { ErrorBoundary as RawErrorBoundary } from 'react-error-boundary'
+import type { FallbackProps } from 'react-error-boundary'
+import type { ReactNode } from 'react'
 import Button from '@mui/material/Button'
 
 import { logout } from '../../modules/logout.ts'
 
 import styles from './ErrorBoundary.module.css'
 
-const ErrorFallback = ({ error, resetErrorBoundary }) => {
-  const onReload = () => window.location.reload(true)
+const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+  const onReload = () => window.location.reload()
 
   return (
     <div className={styles.container}>
       <p>Sorry, ein Fehler ist aufgetreten:</p>
-      <pre className={styles.preWrapping}>{error.message}</pre>
+      <pre className={styles.preWrapping}>{(error as Error)?.message}</pre>
       <details className={styles.details}>
         <summary className={styles.summary}>Mehr Informationen</summary>
-        <pre className={styles.pre}>{error?.message ?? error}</pre>
+        <pre className={styles.pre}>{error ? String(error) : ''}</pre>
       </details>
       <div className={styles.buttonContainer}>
         <Button
@@ -39,10 +41,10 @@ const ErrorFallback = ({ error, resetErrorBoundary }) => {
   )
 }
 
-export const ErrorBoundary = ({ children }) => (
+export const ErrorBoundary = ({ children }: { children: ReactNode }) => (
   <RawErrorBoundary
     FallbackComponent={ErrorFallback}
-    onReset={logout}
+    onReset={() => void logout()}
   >
     {children}
   </RawErrorBoundary>
