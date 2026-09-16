@@ -145,7 +145,9 @@ export const Menu = ({
         id: row.id,
         label: null,
         url: pathname.split('/').filter((p) => !!p),
-        afterDeletionHook: null,
+        afterDeletionHook: () => {
+          void navigate(`/Daten/Benutzer${search}`)
+        },
       },
     })
 

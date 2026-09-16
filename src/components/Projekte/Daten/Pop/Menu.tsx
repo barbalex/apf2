@@ -114,7 +114,8 @@ export const Menu = ({ row }: MenuProps) => {
   )
   const copyMenuOpen = Boolean(copyMenuAnchorEl)
 
-  const onClickDelete = () =>
+  const onClickDelete = () => {
+    setDelMenuAnchorEl(null)
     void deleteModule({
       search,
       toDelete: {
@@ -126,9 +127,15 @@ export const Menu = ({ row }: MenuProps) => {
           void tsQueryClient.invalidateQueries({
             queryKey: [`treeAp`],
           })
+          // deleteModule only navigates when the active node array matches
+          // the deleted url - navigate to the parent unconditionally
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/Populationen${search}`,
+          )
         },
       },
     })
+  }
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({

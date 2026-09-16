@@ -146,6 +146,9 @@ export const Menu = ({ row }: MenuProps) => {
           void tsQueryClient.invalidateQueries({
             queryKey: [`treePop`],
           })
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen${search}`,
+          )
         },
       },
     })

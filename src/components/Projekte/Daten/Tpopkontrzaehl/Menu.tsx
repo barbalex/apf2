@@ -108,6 +108,9 @@ export const Menu = () => {
           void tsQueryClient.invalidateQueries({
             queryKey: [`treeTpopfeldkontr`],
           })
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen${search}`,
+          )
         },
       },
     })

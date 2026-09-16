@@ -92,7 +92,11 @@ export const Menu = () => {
         id: zielId ?? null,
         label: null,
         url: pathname.split('/').filter((p) => !!p),
-        afterDeletionHook: null,
+        afterDeletionHook: () => {
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/AP-Ziele${search}`,
+          )
+        },
       },
     })
 

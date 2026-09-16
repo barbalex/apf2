@@ -126,6 +126,9 @@ export const Menu = ({ row }: MenuProps) => {
           void tsQueryClient.invalidateQueries({
             queryKey: [`treeTpop`],
           })
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfreiwkontr`],
+          })
           // deleteModule does not navigate for Freiwilligen-Kontrollen
           void navigate(
             `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen${search}`,

@@ -102,7 +102,9 @@ export const Menu = ({ row, table }: MenuProps) => {
         id: row.id,
         label: null,
         url: pathname.split('/').filter((p) => !!p),
-        afterDeletionHook: null,
+        afterDeletionHook: () => {
+          void navigate(`/Daten/Werte-Listen/${pathName}${search}`)
+        },
       },
     })
 

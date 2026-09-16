@@ -182,6 +182,12 @@ export const Menu = ({ row }: MenuProps) => {
           void tsQueryClient.invalidateQueries({
             queryKey: [`treeTpop`],
           })
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfeldkontr`],
+          })
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen${search}`,
+          )
         },
       },
     })
