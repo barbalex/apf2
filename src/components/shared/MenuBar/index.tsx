@@ -178,8 +178,10 @@ export const MenuBar = ({
         // only go on if the width has changed enough (prevent unnecessary rerenders)
         // this is the reason for not using react-resize-detector
         previousMeasurementTimeRef.current = currentTime
+        // before the first measurement there is no previous width:
+        // treat it as 0 so the first event counts as a 100% change
         const percentageChanged = Math.abs(
-          ((width - (previousWidthRef.current ?? width)) / width) * 100,
+          ((width - (previousWidthRef.current ?? 0)) / width) * 100,
         )
         const shouldCheckOverflow = Math.abs(percentageChanged) > 1
         if (!shouldCheckOverflow) {
