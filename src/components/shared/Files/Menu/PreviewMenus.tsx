@@ -1,4 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
+import type { MouseEvent, RefObject } from 'react'
 import { useSetAtom } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -22,6 +23,7 @@ import screenfull from 'screenfull'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { UploaderContext } from '../../../../UploaderContext.ts'
+import type { FileNode, FileParent } from '../types.ts'
 
 import styles from './index.module.css'
 
@@ -30,8 +32,14 @@ import {
 } from '../../../../store/index.ts'
 
 
-export const PreviewMenus =
-  ({ parent, files, refetch, containerRef }) => {
+export interface PreviewMenusProps {
+  parent: FileParent
+  files: FileNode[]
+  refetch: () => void
+  containerRef: RefObject<HTMLDivElement | null>
+}
+
+export const PreviewMenus = ({ parent, files, refetch, containerRef }: PreviewMenusProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
     const { fileId } = useParams()
     const navigate = useNavigate()
@@ -46,16 +54,18 @@ export const PreviewMenus =
     const fileIndex = files.findIndex((f) => f.fileId === fileId)
 
     const onClickClosePreview = () => {
+      if (!fileId) return
       // relative navigation using ../.. does not work here
       const fileIdBeginsAt = pathname.indexOf(fileId)
       const newPathname = pathname.slice(0, fileIdBeginsAt)
-      navigate(`${newPathname}${search}`)
+      void navigate(`${newPathname}${search}`)
     }
 
-    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState(null)
+    const [delMenuAnchorEl, setDelMenuAnchorEl] = useState<HTMLElement | null>(null)
     const delMenuOpen = Boolean(delMenuAnchorEl)
 
     const onClickDelete = async () => {
+      if (!fileId) return
       const indexOfFileInPathname = pathname.indexOf(fileId)
       // delete file with fileId
       // first get fileId of next file to navigate to it after deleting this one
@@ -76,7 +86,7 @@ export const PreviewMenus =
           mutation deleteDataset {
             ${mutationName}(
               input: {
-                id: "${file.id}"
+                id: "${file?.id}"
               }
             ) {
               ${tableName} {
@@ -89,33 +99,36 @@ export const PreviewMenus =
       } catch (error) {
         console.log(error)
         return addNotification({
-          message: `Die Datei konnte nicht gelöscht werden: ${error.message}`,
+          message: `Die Datei konnte nicht gelöscht werden: ${(error as Error).message}`,
           options: {
             variant: 'error',
           },
         })
       }
       setDelMenuAnchorEl(null)
-      refetch()
-      navigate(`${nextPathname}${search}`)
+      void refetch()
+      void navigate(`${nextPathname}${search}`)
     }
 
     const onClickNext = () => {
       const nextFileIndex = fileIndex + 1
       const nextFile = files[nextFileIndex] ?? files[0]
-      navigate(`${nextFile.fileId}/Vorschau${search}`)
+      if (!nextFile) return
+      void navigate(`${nextFile.fileId}/Vorschau${search}`)
     }
 
     const onClickPrev = () => {
       const prevFile = files[fileIndex - 1] ?? files[files.length - 1]
-      navigate(`${prevFile.fileId}/Vorschau${search}`)
+      if (!prevFile) return
+      void navigate(`${prevFile.fileId}/Vorschau${search}`)
     }
 
     // enable reacting to fullscreen changes
     const [isFullscreen, setIsFullscreen] = useState(false)
     useEffect(() => {
-      screenfull.on('change', () => setIsFullscreen(screenfull.isFullscreen))
-      return () => screenfull.off('change')
+      const onChange = () => setIsFullscreen(screenfull.isFullscreen)
+      screenfull.on('change', onChange)
+      return () => screenfull.off('change', onChange)
     }, [])
 
     const onClickDownload = () =>
@@ -136,7 +149,9 @@ export const PreviewMenus =
             key="minimieren"
             title={isFullscreen ? 'minimieren' : 'maximieren'}
           >
-            <IconButton onClick={() => screenfull.toggle(containerRef.current)}>
+            <IconButton
+              onClick={() => void screenfull.toggle(containerRef.current ?? undefined)}
+            >
               {isFullscreen ?
                 <FaMinimize />
               : <FaMaximize />}
@@ -155,7 +170,7 @@ export const PreviewMenus =
           key="dateien_hochladen"
           title="Dateien hochladen"
         >
-          <IconButton onClick={api?.initFlow}>
+          <IconButton onClick={() => api?.initFlow()}>
             <FaPlus />
           </IconButton>
         </Tooltip>
@@ -165,7 +180,9 @@ export const PreviewMenus =
           style={{ display: 'inline' }}
         >
           <IconButton
-            onClick={(event) => setDelMenuAnchorEl(event.currentTarget)}
+            onClick={(event: MouseEvent<HTMLButtonElement>) =>
+              setDelMenuAnchorEl(event.currentTarget as HTMLElement)
+            }
             aria-owns={delMenuOpen ? 'previewDelMenu' : undefined}
           >
             <FaMinus />
@@ -194,7 +211,7 @@ export const PreviewMenus =
           onClose={() => setDelMenuAnchorEl(null)}
         >
           <h3 className={styles.menuTitle}>löschen?</h3>
-          <MenuItem onClick={onClickDelete}>ja</MenuItem>
+          <MenuItem onClick={() => void onClickDelete()}>ja</MenuItem>
           <MenuItem onClick={() => setDelMenuAnchorEl(null)}>nein</MenuItem>
         </MuiMenu>
       </ErrorBoundary>

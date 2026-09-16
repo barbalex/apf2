@@ -47,7 +47,7 @@ export const Component = () => {
   const user = useAtomValue(userAtom)
 
   const token = user?.token
-  const tokenDecoded = token ? jwtDecode(token) : null
+  const tokenDecoded = token ? (jwtDecode(token) as import('jwt-decode').JwtPayload & { role?: string | null }) : null
   const role = tokenDecoded ? tokenDecoded.role : null
   const isFreiwillig = role === 'apflora_freiwillig'
   const userIdToUse = userId ?? user?.id

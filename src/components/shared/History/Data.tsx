@@ -17,7 +17,7 @@ export interface HistoryDatum {
 }
 
 export interface HistoryDataProps {
-  dataArray?: HistoryDatum[] | null
+  dataArray?: HistoryDatum[] | null | undefined
   loading?: boolean
 }
 

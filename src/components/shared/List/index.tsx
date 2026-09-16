@@ -10,6 +10,7 @@ import styles from './index.module.css'
 import type { ComponentType } from 'react'
 
 import type { NavData, NavMenuData } from '../../Bookmarks/types.ts'
+import type { navListFilterAtoms } from '../../../store/index.ts'
 
 export const List = ({
   navData,
@@ -43,7 +44,7 @@ export const List = ({
       <div className={styles.container}>
         <FormTitle
           title={navData.label}
-          listFilter={navData.listFilter}
+          listFilter={navData.listFilter as keyof typeof navListFilterAtoms | undefined}
           MenuBarComponent={MenuBarComponent}
           menuBarProps={menuBarProps}
         />
@@ -63,7 +64,7 @@ export const List = ({
                 {highlightSearchString ?
                   <Highlighter
                     searchWords={[highlightSearchString]}
-                    textToHighlight={label?.toString()}
+                    textToHighlight={label?.toString() ?? ''}
                   />
                 : label}
                 {!!item.labelRightElements?.length &&

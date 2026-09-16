@@ -8,17 +8,15 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import AsyncSelect from 'react-select/async'
 import { graphql } from '../../gql'
+import type { EkType, EkKontrolljahreAb } from '../../gql/graphql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { userIsReadOnly } from '../../modules/userIsReadOnly.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
-import type {
-  EkfrequenzId,
-  ApId,
-} from '../../models/apflora/public/Ekfrequenz.ts'
+import type { EkfrequenzId } from '../../models/apflora/Ekfrequenz.ts'
+import type { ApId } from '../../models/apflora/index.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
@@ -46,9 +44,9 @@ interface NewEkfrequenzNode {
   bemerkungen: string | null
   code: string | null
   ekAbrechnungstyp: string | null
-  ektyp: string | null
+  ektyp: EkType | null
   kontrolljahre: number[] | null
-  kontrolljahreAb: string | null
+  kontrolljahreAb: EkKontrolljahreAb | null
   sort: number | null
 }
 
@@ -87,7 +85,9 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
   const onCloseChooseApDialog = () =>
     setOpenChooseApToCopyEkfrequenzsFrom(false)
 
-  const onChooseAp = async (option) => {
+  const onChooseAp = async (option: ApOption | null) => {
+    if (!option) return
+    if (!apId) return
     const newApId = option.value
     // 0. choosing no option is not possible so needs not be cached
     // 1. delete existing ekfrequenz
@@ -117,7 +117,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
         })
     } catch (error) {
       console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
+      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
     }
     const existingEkfrequenzs = (
       existingEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
@@ -150,7 +150,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
     } catch (error) {
       console.log({ error })
       setApOptionsError(
-        `Fehler beim Löschen der existierenden EK-Frequenzen: ${error.message}`,
+        `Fehler beim Löschen der existierenden EK-Frequenzen: ${(error as Error).message}`,
       )
     }
 
@@ -184,16 +184,15 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
     } catch (error) {
       console.log({ error })
       return setApOptionsError(
-        `Fehler beim Abfragen der neuen EK-Frequenzen: ${error.message}`,
+        `Fehler beim Abfragen der neuen EK-Frequenzen: ${(error as Error).message}`,
       )
     }
     const newEkfrequenzs =
       newEkfrequenzResult?.data?.allEkfrequenzs?.nodes ?? []
 
     // 2.2: insert ekfrequenz
-    let res
     try {
-      res = await Promise.allSettled(
+      await Promise.allSettled(
         newEkfrequenzs.map(async (ekf) =>
           apolloClient.mutate({
             mutation: graphql(`
@@ -261,7 +260,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
     } catch (error) {
       console.log('Error adding copied EK-Frequenzen:', error)
       return setApOptionsError(
-        `Fehler beim Kopieren der EK-Frequenzen: ${error.message}`,
+        `Fehler beim Kopieren der EK-Frequenzen: ${(error as Error).message}`,
       )
     }
     // console.log('ChooseApToCopyEkfrequenzsFrom, res:', res)
@@ -274,16 +273,15 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
         variant: 'info',
       },
     })
-    tsQueryClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
-    tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
-    tsQueryClient.invalidateQueries({
+    void tsQueryClient.invalidateQueries({ queryKey: [`treeEkfrequenz`] })
+    void tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
+    void tsQueryClient.invalidateQueries({
       queryKey: [`treeAp`],
     })
   }
 
-  const [apOptionsError, setApOptionsError] = useState(undefined)
-  const apOptions = async (inputValue, cb) => {
-    if (apId === 0) return
+  const [apOptionsError, setApOptionsError] = useState<string | undefined>(undefined)
+  const apOptions = async (inputValue: string): Promise<ApOption[]> => {
     const filter =
       inputValue ?
         {
@@ -291,7 +289,7 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
           id: { notEqualTo: apId },
         }
       : { label: { isNull: false }, id: { notEqualTo: apId } }
-    let result
+    let result: { data?: ApOptionsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApOptionsQueryResult>({
         // would be elegant to query only ap with ekfrequenz
@@ -315,14 +313,14 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
       })
     } catch (error) {
       console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
+      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
     }
     const options = result?.data?.allAps?.nodes ?? []
     // only show options with ekfrequenzs
     const optionsWithEkfrequenzs = options.filter(
       (e) => e.ekfrequenzsByApId.totalCount > 0,
     )
-    cb(optionsWithEkfrequenzs)
+    return optionsWithEkfrequenzs
   }
 
   return (
@@ -345,14 +343,11 @@ export const ChooseApToCopyEkfrequenzsFrom = () => {
               autoFocus
               defaultOptions
               name="ap"
-              onChange={onChooseAp}
-              value=""
+              onChange={(option) => void onChooseAp(option)}
               hideSelectedOptions
               placeholder=""
               isClearable
               isSearchable
-              // remove as can't select without typing
-              nocaret
               // don't show a no options message if a value exists
               noOptionsMessage={() => '(Bitte Tippen für Vorschläge)'}
               // enable deleting typed values

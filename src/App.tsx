@@ -20,6 +20,7 @@ import { buildApolloClient } from './apolloClient.ts'
 import { store } from './store/index.ts'
 
 import { UploaderContext } from './UploaderContext.ts'
+import type { UploadCtxProvider } from '@uploadcare/file-uploader'
 
 import { navigateToLastActiveNodeArray } from './modules/navigateToLastActiveNodeArray.ts'
 
@@ -68,7 +69,7 @@ const queryClient = new QueryClient({
 
 export const App = () => {
   const apolloClient = buildApolloClient()
-  const uploaderRef = createRef<HTMLElement | null>()
+  const uploaderRef = createRef<UploadCtxProvider | null>()
 
   useEffect(() => {
     const baseTitle = 'apflora'

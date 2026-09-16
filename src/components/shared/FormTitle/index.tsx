@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import type { ComponentType } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 import Collapse from '@mui/material/Collapse'
 import { useAtom } from 'jotai'
 
@@ -10,8 +10,8 @@ import { navListFilterAtoms } from '../../../store/index.ts'
 import styles from './index.module.css'
 
 interface FormTitleProps {
-  title: string
-  listFilter?: keyof typeof navListFilterAtoms
+  title: ReactNode
+  listFilter?: keyof typeof navListFilterAtoms | undefined
   // heterogeneous menu components with their own props
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   MenuBarComponent?: ComponentType<any> | null

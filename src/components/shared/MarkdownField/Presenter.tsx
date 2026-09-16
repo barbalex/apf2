@@ -12,7 +12,7 @@ export const Presenter = ({
   label,
 }: {
   value?: string | null | undefined
-  label?: string
+  label?: string | undefined
 }) => (
   <div
     className={styles.container}

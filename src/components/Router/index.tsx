@@ -14,335 +14,177 @@ import { Spinner } from '../shared/Spinner.tsx'
 const DatenNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Daten.tsx')).Menu,
 }))
-const datenBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useRootNavData.ts')).useRootNavData,
-}))
 const datenHandle = {
   nav: DatenNav,
-  bookmarkFetcher: datenBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useRootNavData',
 }
 const ProjekteNav = lazy(async () => ({
   default: (await import('../Bookmarks/NavTo/Navs/Projects.tsx')).Menu,
 }))
-const projekteBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useProjekteNavData.ts'))
-    .useProjekteNavData,
-}))
 const projekteHandle = {
   nav: ProjekteNav,
-  bookmarkFetcher: projekteBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useProjekteNavData',
 }
-const projektBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useProjektNavData.ts'))
-    .useProjektNavData,
-}))
 const projektHandle = {
-  bookmarkFetcher: projektBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useProjektNavData',
 }
-const apberuebersichtsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApberuebersichtsNavData.ts'))
-    .useApberuebersichtsNavData,
-}))
 const apberuebersichtsHandle = {
-  bookmarkFetcher: apberuebersichtsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useApberuebersichtsNavData',
 }
-const apsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApsNavData.ts')).useApsNavData,
-}))
 const apsHandle = {
-  bookmarkFetcher: apsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useApsNavData',
 }
-const usersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useUsersNavData.ts')).useUsersNavData,
-}))
 const usersHandle = {
-  bookmarkFetcher: usersBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useUsersNavData',
 }
-const currentissuesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useCurrentissuesNavData.ts'))
-    .useCurrentissuesNavData,
-}))
 const currentissuesHandle = {
-  bookmarkFetcher: currentissuesBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useCurrentissuesNavData',
 }
-const messagesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useMessagesNavData.ts'))
-    .useMessagesNavData,
-}))
 const messagesHandle = {
-  bookmarkFetcher: messagesBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useMessagesNavData',
 }
-const wertesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useWertesNavData.ts')).useWertesNavData,
-}))
 const wertesHandle = {
-  bookmarkFetcher: wertesBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useWertesNavData',
 }
-const adressesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useAdressesNavData.ts'))
-    .useAdressesNavData,
-}))
 const adressesHandle = {
-  bookmarkFetcher: adressesBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useAdressesNavData',
 }
-const tpopApberrelevantGrundWertesBookmarkFetcher = lazy(async () => ({
-  default: (
-    await import('../../modules/useTpopApberrelevantGrundWertesNavData.ts')
-  ).useTpopApberrelevantGrundWertesNavData,
-}))
 const tpopApberrelevantGrundWertesHandle = {
-  bookmarkFetcher: tpopApberrelevantGrundWertesBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopApberrelevantGrundWertesNavData',
 }
-const ekAbrechnungstypWertesBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useEkAbrechnungstypWertesNavData.ts'))
-    .useEkAbrechnungstypWertesNavData,
-}))
 const ekAbrechnungstypWertesHandle = {
-  bookmarkFetcher: ekAbrechnungstypWertesBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useEkAbrechnungstypWertesNavData',
 }
-const tpopkontrzaehlEinheitWertesBookmarkFetcher = lazy(async () => ({
-  default: (
-    await import('../../modules/useTpopkontrzaehlEinheitWertesNavData.ts')
-  ).useTpopkontrzaehlEinheitWertesNavData,
-}))
 const tpopkontrzaehlEinheitWertesHandle = {
-  bookmarkFetcher: tpopkontrzaehlEinheitWertesBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopkontrzaehlEinheitWertesNavData',
 }
-const apBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApNavData.ts')).useApNavData,
-}))
 const apHandle = {
-  bookmarkFetcher: apBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useApNavData',
 }
-const beobNichtBeurteiltsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useBeobNichtBeurteiltsNavData.ts'))
-    .useBeobNichtBeurteiltsNavData,
-}))
 const beobNichtBeurteiltHandle = {
-  bookmarkFetcher: beobNichtBeurteiltsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useBeobNichtBeurteiltsNavData',
 }
-const beobNichtZuzuordnensBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useBeobNichtZuzuordnensNavData.ts'))
-    .useBeobNichtBeurteiltsNavData,
-}))
 const beobNichtZuzuordnenHandle = {
-  bookmarkFetcher: beobNichtZuzuordnensBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useBeobNichtZuzuordnensNavData',
 }
-const beobZugeordnetsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useBeobZugeordnetsNavData.ts'))
-    .useBeobZugeordnetsNavData,
-}))
 const beobZugeordnetHandle = {
-  bookmarkFetcher: beobZugeordnetsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useBeobZugeordnetsNavData',
 }
-const popsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopsNavData.ts')).usePopsNavData,
-}))
 const popsHandle = {
-  bookmarkFetcher: popsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'usePopsNavData',
 }
-const zielJahrsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useZieljahrsNavData.ts'))
-    .useZieljahrsNavData,
-}))
 const zielJahrsHandle = {
-  bookmarkFetcher: zielJahrsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useZieljahrsNavData',
 }
-const zielsOfJahrBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useZielsOfJahrNavData.ts'))
-    .useZielsOfJahrNavData,
-}))
 const zielsOfJahrHandle = {
-  bookmarkFetcher: zielsOfJahrBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useZielsOfJahrNavData',
 }
-const zielBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useZielNavData.ts')).useZielNavData,
-}))
 const zielHandle = {
-  bookmarkFetcher: zielBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useZielNavData',
 }
-const erfkritsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useErfkritsNavData.ts'))
-    .useErfkritsNavData,
-}))
 const erfkritsHandle = {
-  bookmarkFetcher: erfkritsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useErfkritsNavData',
 }
-const apbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApbersNavData.ts')).useApbersNavData,
-}))
 const apbersHandle = {
-  bookmarkFetcher: apbersBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useApbersNavData',
 }
-const apartsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useApartsNavData.ts')).useApartsNavData,
-}))
 const apartsHandle = {
-  bookmarkFetcher: apartsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useApartsNavData',
 }
-const assozartsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useAssozartsNavData.ts'))
-    .useAssozartsNavData,
-}))
 const assozartsHandle = {
-  bookmarkFetcher: assozartsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useAssozartsNavData',
 }
-const ekfrequenzsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useEkfrequenzsNavData.ts'))
-    .useEkfrequenzNavData,
-}))
 const ekfrequenzsHandle = {
-  bookmarkFetcher: ekfrequenzsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useEkfrequenzsNavData',
 }
-const ekzaehleinheitsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useEkzaehleinheitsNavData.ts'))
-    .useEkzaehleinheitsNavData,
-}))
 const ekzaehleinheitsHandle = {
-  bookmarkFetcher: ekzaehleinheitsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useEkzaehleinheitsNavData',
 }
-const popBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopNavData.ts')).usePopNavData,
-}))
 const popHandle = {
-  bookmarkFetcher: popBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'usePopNavData',
 }
-const popmassnbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopmassnbersNavData.ts'))
-    .usePopmassnbersNavData,
-}))
 const popmassnbersHandle = {
-  bookmarkFetcher: popmassnbersBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'usePopmassnbersNavData',
 }
-const popbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/usePopbersNavData.ts'))
-    .usePopbersNavData,
-}))
 const popbersHandle = {
-  bookmarkFetcher: popbersBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'usePopbersNavData',
 }
-const tpopsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopsNavData.ts')).useTpopsNavData,
-}))
 const tpopsHandle = {
-  bookmarkFetcher: tpopsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopsNavData',
 }
-const tpopBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopNavData.ts')).useTpopNavData,
-}))
 const tpopHandle = {
-  bookmarkFetcher: tpopBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopNavData',
 }
-const tpopmassnsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopmassnsNavData.ts'))
-    .useTpopmassnsNavData,
-}))
 const tpopmassnsHandle = {
-  bookmarkFetcher: tpopmassnsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopmassnsNavData',
 }
-const tpopmassnbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopmassnbersNavData.ts'))
-    .useTpopmassnbersNavData,
-}))
 const tpopmassnbersHandle = {
-  bookmarkFetcher: tpopmassnbersBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopmassnbersNavData',
 }
-const tpopbersBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopbersNavData.ts'))
-    .useTpopbersNavData,
-}))
 const tpopbersHandle = {
-  bookmarkFetcher: tpopbersBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopbersNavData',
 }
-const tpopfreiwkontrsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfreiwkontrsNavData.ts'))
-    .useTpopfreiwkontrsNavData,
-}))
 const tpopfreiwkontrsHandle = {
-  bookmarkFetcher: tpopfreiwkontrsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopfreiwkontrsNavData',
 }
-const tpopfeldkontrsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfeldkontrsNavData.ts'))
-    .useTpopfeldkontrsNavData,
-}))
 const tpopfeldkontrsHandle = {
-  bookmarkFetcher: tpopfeldkontrsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopfeldkontrsNavData',
 }
-const tpopfeldkontrBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfeldkontrNavData.ts'))
-    .useTpopfeldkontrNavData,
-}))
 const tpopfeldkontrHandle = {
-  bookmarkFetcher: tpopfeldkontrBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopfeldkontrNavData',
 }
-const tpopfeldkontrzaehlsBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfeldkontrzaehlsNavData.ts'))
-    .useTpopfeldkontrzaehlsNavData,
-}))
 const tpopfeldkontrzaehlsHandle = {
-  bookmarkFetcher: tpopfeldkontrzaehlsBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopfeldkontrzaehlsNavData',
 }
-const tpopmassnBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopmassnNavData.ts'))
-    .useTpopmassnNavData,
-}))
 const tpopmassnHandle = {
-  bookmarkFetcher: tpopmassnBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopmassnNavData',
 }
-const tpopfreiwkontrBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useTpopfreiwkontrNavData.ts'))
-    .useTpopfreiwkontrNavData,
-}))
 const tpopfreiwkontrHandle = {
-  bookmarkFetcher: tpopfreiwkontrBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useTpopfreiwkontrNavData',
 }
-const idealbiotopBookmarkFetcher = lazy(async () => ({
-  default: (await import('../../modules/useIdealbiotopNavData.ts'))
-    .useIdealbiotopNavData,
-}))
 const idealbiotopHandle = {
-  bookmarkFetcher: idealbiotopBookmarkFetcher,
+  bookmarkFetcher: true,
   bookmarkFetcherName: 'useIdealbiotopNavData',
 }
 const RouterErrorBoundary = lazy(async () => ({
@@ -1410,9 +1252,12 @@ export const Router = () => {
         </Route>
         <Route
           path="Dokumentation"
-          lazy={() =>
-            isDesktopView ? import('../Docs/DesktopDocs.tsx') : null
-          }
+          lazy={async () => {
+            // keep the module load for desktop but let the route render its
+            // outlet: the module does not export a Component
+            if (isDesktopView) await import('../Docs/DesktopDocs.tsx')
+            return {}
+          }}
           errorElement={<RouterErrorBoundary />}
         >
           <Route

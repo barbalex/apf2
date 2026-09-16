@@ -5,7 +5,7 @@ import { FetcherImporter } from './FetcherImporter.tsx'
 import styles from './index.module.css'
 
 interface BookmarkHandle extends Record<string, unknown> {
-  bookmarkFetcher?: unknown
+  bookmarkFetcher?: boolean
   bookmarkFetcherName?: string
 }
 

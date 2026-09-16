@@ -1,4 +1,7 @@
+import type { RefObject } from 'react'
 import { useLocation, useParams } from 'react-router'
+
+import type { FileNode, FileParent } from '../types.ts'
 
 import { ErrorBoundary } from '../../ErrorBoundary.tsx'
 import { MenuBar } from '../../MenuBar/index.tsx'
@@ -6,11 +9,19 @@ import { Title } from './Title.tsx'
 import { ListMenus } from './ListMenus.tsx'
 import { PreviewMenus } from './PreviewMenus.tsx'
 
-export const Menu = ({ parent, files, refetch, containerRef }) => {
+export interface FilesMenuProps {
+  parent: FileParent
+  files: FileNode[]
+  refetch: () => void
+  containerRef: RefObject<HTMLDivElement | null>
+}
+
+export const Menu = ({ parent, files, refetch, containerRef }: FilesMenuProps) => {
   const { fileId } = useParams()
   const { pathname } = useLocation()
   // also show preview if Vorschau is omitted (until that rout is used for something else)
-  const isPreview = pathname.endsWith('Vorschau') || pathname.includes(fileId)
+  const isPreview =
+    pathname.endsWith('Vorschau') || (fileId ? pathname.includes(fileId) : false)
 
   const file = files.find((f) => f.fileId === fileId)
   const fileIndex = files.findIndex((f) => f.fileId === fileId)

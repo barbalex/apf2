@@ -12,10 +12,10 @@ import { useApolloClient } from '@apollo/client/react'
 import { useParams } from 'react-router'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { userIsReadOnly } from '../../modules/userIsReadOnly.ts'
 import { ErrorBoundary } from '../shared/ErrorBoundary.tsx'
 
-import type { ErfkritId, ApId } from '../../models/apflora/public/Erfkrit.ts'
+import type { ErfkritId } from '../../models/apflora/Erfkrit.ts'
+import type { ApId } from '../../models/apflora/index.ts'
 
 import styles from './ChooseApToCopyEkfrequenzsFrom.module.css'
 
@@ -78,7 +78,9 @@ export const ChooseApToCopyErfkritsFrom = () => {
   )
   const onCloseChooseApDialog = () => setOpenChooseApToCopyErfkritsFrom(false)
 
-  const onChooseAp = async (option) => {
+  const onChooseAp = async (option: ApOption | null) => {
+    if (!option) return
+    if (!apId) return
     const newApId = option.value
     // 0. choosing no option is not possible so needs not be cached
     // 1. delete existing erfkrit
@@ -106,7 +108,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
         })
     } catch (error) {
       console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
+      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
     }
     const existingErfkrits = (
       existingErfkritResult?.data?.allErfkrits?.nodes ?? []
@@ -135,7 +137,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
     } catch (error) {
       console.log({ error })
       setApOptionsError(
-        `Fehler beim Löschen der existierenden Erfolgskriterien: ${error.message}`,
+        `Fehler beim Löschen der existierenden Erfolgskriterien: ${(error as Error).message}`,
       )
     }
 
@@ -161,15 +163,14 @@ export const ChooseApToCopyErfkritsFrom = () => {
     } catch (error) {
       console.log({ error })
       return setApOptionsError(
-        `Fehler beim Abfragen der neuen Erfolgskriterien: ${error.message}`,
+        `Fehler beim Abfragen der neuen Erfolgskriterien: ${(error as Error).message}`,
       )
     }
     const newErfkrits = newErfkritResult?.data?.allErfkrits?.nodes ?? []
 
     // 2.2: insert erfkrit
-    let res
     try {
-      res = await Promise.allSettled(
+      await Promise.allSettled(
         newErfkrits.map(async (ekf) =>
           apolloClient.mutate({
             mutation: graphql(`
@@ -213,7 +214,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
     } catch (error) {
       console.log('Error adding copied Erfolgskriterien:', error)
       return setApOptionsError(
-        `Fehler beim Kopieren der Erfolgskriterien: ${error.message}`,
+        `Fehler beim Kopieren der Erfolgskriterien: ${(error as Error).message}`,
       )
     }
 
@@ -223,14 +224,13 @@ export const ChooseApToCopyErfkritsFrom = () => {
       message: `Die Erfolgskriterien wurden kopiert`,
       options: { variant: 'info' },
     })
-    tsQueryClient.invalidateQueries({ queryKey: [`treeErfkrit`] })
-    tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
-    tsQueryClient.invalidateQueries({ queryKey: [`treeAp`] })
+    void tsQueryClient.invalidateQueries({ queryKey: [`treeErfkrit`] })
+    void tsQueryClient.invalidateQueries({ queryKey: [`treeApFolders`] })
+    void tsQueryClient.invalidateQueries({ queryKey: [`treeAp`] })
   }
 
-  const [apOptionsError, setApOptionsError] = useState(undefined)
-  const apOptions = async (inputValue, cb) => {
-    if (apId === 0) return
+  const [apOptionsError, setApOptionsError] = useState<string | undefined>(undefined)
+  const apOptions = async (inputValue: string): Promise<ApOption[]> => {
     const filter =
       inputValue ?
         {
@@ -238,7 +238,7 @@ export const ChooseApToCopyErfkritsFrom = () => {
           id: { notEqualTo: apId },
         }
       : { label: { isNull: false }, id: { notEqualTo: apId } }
-    let result
+    let result: { data?: ApOptionsQueryResult | undefined } | undefined
     try {
       result = await apolloClient.query<ApOptionsQueryResult>({
         // would be elegant to query only ap with erfkrit
@@ -260,14 +260,14 @@ export const ChooseApToCopyErfkritsFrom = () => {
       })
     } catch (error) {
       console.log({ error })
-      setApOptionsError(`Fehler beim Abfragen der Arten: ${error.message}`)
+      setApOptionsError(`Fehler beim Abfragen der Arten: ${(error as Error).message}`)
     }
     const options = result?.data?.allAps?.nodes ?? []
     // only show options with erfkrits
     const optionsWithErfkrits = options.filter(
       (e) => e.erfkritsByApId.totalCount > 0,
     )
-    cb(optionsWithErfkrits)
+    return optionsWithErfkrits
   }
 
   return (
@@ -290,14 +290,11 @@ export const ChooseApToCopyErfkritsFrom = () => {
               autoFocus
               defaultOptions
               name="ap"
-              onChange={onChooseAp}
-              value=""
+              onChange={(option) => void onChooseAp(option)}
               hideSelectedOptions
               placeholder=""
               isClearable
               isSearchable
-              // remove as can't select without typing
-              nocaret
               // don't show a no options message if a value exists
               noOptionsMessage={() => '(Bitte Tippen für Vorschläge)'}
               // enable deleting typed values
