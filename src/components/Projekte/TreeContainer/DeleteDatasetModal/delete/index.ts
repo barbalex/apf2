@@ -11,7 +11,6 @@ import {
   apolloClientAtom,
   addNotificationAtom,
   navigateAtom,
-  toDeleteAtom,
   emptyToDeleteAtom,
   addDeletedDatasetAtom,
   treeOpenNodesAtom,
@@ -19,6 +18,7 @@ import {
   treeActiveNodeArrayAtom,
   type Notification,
   type DeletedDataset,
+  type ToDelete,
 } from '../../../../../store/index.ts'
 
 const addNotification = (notification: Omit<Notification, 'key'>) =>
@@ -27,7 +27,13 @@ const addNotification = (notification: Omit<Notification, 'key'>) =>
 const isFreiwilligenKontrolle = (activeNodeArray: (string | number)[]) =>
   activeNodeArray[activeNodeArray.length - 2] === 'Freiwilligen-Kontrollen'
 
-export const deleteModule = async ({ search }: { search: string }) => {
+export const deleteModule = async ({
+  search,
+  toDelete: toDeletePassed,
+}: {
+  search: string
+  toDelete: ToDelete
+}) => {
   const apolloClient = store.get(apolloClientAtom)
   const tsQueryClient = store.get(tsQueryClientAtom)
   if (!apolloClient) {
@@ -47,7 +53,7 @@ export const deleteModule = async ({ search }: { search: string }) => {
     })
   }
   const navigate = store.get(navigateAtom)
-  const toDelete = store.get(toDeleteAtom)
+  const toDelete = toDeletePassed
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find((t) => t.table === toDelete.table)

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,31 +9,19 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
 import type { AdresseId } from '../../../../models/apflora/Adresse.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateAdresseResult {
   createAdresse: {
-    adresse: {
-      id: AdresseId
-    } | null
-  } | null
-}
-
-interface DeleteAdresseResult {
-  deleteAdresseById: {
     adresse: {
       id: AdresseId
     } | null
@@ -46,8 +34,6 @@ export const Menu = () => {
   const addNotification = useSetAtom(addNotificationAtom)
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const { adrId } = useParams<{ adrId: string }>()
   const { search, pathname } = useLocation()
@@ -91,45 +77,19 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate<DeleteAdresseResult>({
-        mutation: graphql(`
-          mutation deleteAdresse($id: UUID!) {
-            deleteAdresseById(input: { id: $id }) {
-              adresse {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: adrId },
-      })
-    } catch (error) {
-      console.log('error:', error)
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'adresse',
+        id: adrId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void navigate(`/Daten/Werte-Listen/Adressen${search}`)
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeWerteFolders`],
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: ['treeAdresse'],
-    })
-    // navigate to parent
-    void navigate(`/Daten/Werte-Listen/Adressen${search}`)
-  }
 
   return (
     <ErrorBoundary>

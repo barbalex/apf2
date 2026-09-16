@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,19 +9,15 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 import { upperFirst } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 // key: create${typename}; value: { [table]: { id } }
 type CreateWertResult = Record<string, Record<string, { id: string }>>
@@ -39,9 +35,6 @@ export const Menu = ({ row, table }: MenuProps) => {
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -93,45 +86,25 @@ export const Menu = ({ row, table }: MenuProps) => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate({
-        mutation: dynamicGql`
-            mutation delete${typename}($id: UUID!) {
-              delete${typename}ById(input: { id: $id }) {
-                ${table} {
-                  id
-                }
-              }
-            }
-          `,
-        variables: { id: row.id },
-      })
-    } catch (error) {
-      console.log('error', error)
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`tree${typename}`],
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table:
+          table === 'tpopApberrelevantGrundWerte' ? (
+            'tpop_apberrelevant_grund_werte'
+          )
+          : table === 'ekAbrechnungstypWerte' ? 'ek_abrechnungstyp_werte'
+          : table === 'tpopkontrzaehlEinheitWerte' ? (
+            'tpopkontrzaehl_einheit_werte'
+          )
+          : table,
+        id: row.id,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: null,
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeWerteFolders`],
-    })
-    // navigate to parent
-    void navigate(`/Daten/Werte-Listen/${pathName}${search}`)
-  }
 
   return (
     <ErrorBoundary>

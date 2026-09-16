@@ -11,11 +11,11 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 import { useSetAtom, useAtomValue } from 'jotai'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
@@ -26,8 +26,6 @@ import {
   setCopyingAtom,
   movingAtom,
   setMovingAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
 import styles from '../../../shared/Files/Menu/index.module.css'
@@ -50,8 +48,6 @@ export const Menu = () => {
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
   const showTreeMenus = useAtomValue(showTreeMenusAtom)
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const onClickAdd = async () => {
     let result:
@@ -94,44 +90,22 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteAp($id: UUID!) {
-            deleteApById(input: { id: $id }) {
-              ap {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: apId ?? '' },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'ap',
+        id: apId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeRoot`],
+          })
+          void navigate(`/Daten/Projekte/${projId}/Arten${search}`)
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeAp`],
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    // navigate to parent
-    void navigate(`/Daten/Projekte/${projId}/Arten${search}`)
-  }
 
   const onClickMoveHere = () => moveTo({ id: apId })
 

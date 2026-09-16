@@ -11,10 +11,10 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 
@@ -29,8 +29,6 @@ import {
   movingAtom,
   setMovingAtom,
   setIsPrintAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
 interface CreateTpopkontrData {
@@ -39,14 +37,6 @@ interface CreateTpopkontrData {
       id: TpopkontrId
       tpopId: string
       typ: string
-    }
-  }
-}
-
-interface DeleteTpopkontrData {
-  deleteTpopkontrById: {
-    tpopkontr: {
-      id: string
     }
   }
 }
@@ -73,8 +63,6 @@ export const Menu = ({ row }: MenuProps) => {
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -126,46 +114,25 @@ export const Menu = ({ row }: MenuProps) => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate<DeleteTpopkontrData>({
-        mutation: graphql(`
-          mutation deleteTpopkontrForTpopfreiwkontr($id: UUID!) {
-            deleteTpopkontrById(input: { id: $id }) {
-              tpopkontr {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: tpopkontrId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'tpopfreiwkontr',
+        id: tpopkontrId ?? null,
+        label: row?.labelEkf ?? null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpop`],
+          })
+          // deleteModule does not navigate for Freiwilligen-Kontrollen
+          void navigate(
+            `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen${search}`,
+          )
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfreiwkontr`],
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpop`],
-    })
-    // navigate to parent
-    void navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Freiwilligen-Kontrollen${search}`,
-    )
-  }
 
   const onClickPrint = () => {
     setIsPrint(true)

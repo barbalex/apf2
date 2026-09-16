@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { gql as dynamicGql } from '../../../../apolloGql.ts'
 import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
@@ -11,10 +11,10 @@ import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { tpopkontr as tpopkontrFragment } from '../../../shared/fragments.ts'
 import { queryEkfTpops } from './queryEkfTpops.ts'
 
@@ -28,14 +28,6 @@ interface CreateUserResult {
       id: UserId
     }
   }
-}
-
-interface DeleteUserResult {
-  deleteUserById: {
-    user: {
-      id: UserId
-    } | null
-  } | null
 }
 
 interface EkfTpopsQueryResult {
@@ -64,11 +56,7 @@ interface MenuProps {
 import styles from './Menu.module.css'
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 const iconStyle = { color: 'white' }
 
@@ -82,9 +70,6 @@ export const Menu = ({
   const addNotification = useSetAtom(addNotificationAtom)
   const { search, pathname } = useLocation()
   const navigate = useNavigate()
-
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -152,44 +137,17 @@ export const Menu = ({
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate<DeleteUserResult>({
-        mutation: graphql(`
-          mutation deleteUser($id: UUID!) {
-            deleteUserById(input: { id: $id }) {
-              user {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: row.id },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
-        },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeUser`],
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'user',
+        id: row.id,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: null,
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeRoot`],
-    })
-    // navigate to parent
-    void navigate(`/Daten/Benutzer${search}`)
-  }
 
   const onClickCreateEkfForms = async () => {
     const errors: Error[] = []

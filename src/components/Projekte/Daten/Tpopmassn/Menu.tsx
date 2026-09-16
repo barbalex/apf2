@@ -11,10 +11,10 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 
@@ -29,8 +29,6 @@ import {
   setCopyingAtom,
   movingAtom,
   setMovingAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
 interface CreateTpopmassnResult {
@@ -58,8 +56,6 @@ export const Menu = ({ row }: MenuProps) => {
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -107,46 +103,21 @@ export const Menu = ({ row }: MenuProps) => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteTpopmassn($id: UUID!) {
-            deleteTpopmassnById(input: { id: $id }) {
-              tpopmassn {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: tpopmassnId ?? '' },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'tpopmassn',
+        id: tpopmassnId ?? null,
+        label: row.label ?? null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpop`],
+          })
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopmassn`],
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpop`],
-    })
-    // navigate to parent
-    void navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Massnahmen${search}`,
-    )
-  }
 
   const isMovingTpopmassn = moving.table === 'tpopmassn'
   const thisTpopmassnIsMoving = moving.id === tpopmassnId

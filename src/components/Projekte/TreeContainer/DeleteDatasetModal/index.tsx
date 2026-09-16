@@ -32,7 +32,8 @@ export const DatasetDeleteModal = () => {
     question = `${tableName} löschen?`
   }
 
-  const onClickLoeschen = () => deleteModule({ search })
+  const onClickLoeschen = () =>
+    deleteModule({ search, toDelete })
 
   return (
     <ErrorBoundary>

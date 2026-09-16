@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useSetAtom, useAtomValue } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { graphql } from '../../../../gql/index.ts'
 import { useApolloClient } from '@apollo/client/react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -9,21 +9,17 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 
 import type { TpopkontrzaehlId } from '../../../../models/apflora/Tpopkontrzaehl.ts'
 import type { TpopkontrId } from '../../../../models/apflora/Tpopkontr.ts'
 
 import filesMenuStyles from '../../../shared/Files/Menu/index.module.css'
 
-import {
-  addNotificationAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
-} from '../../../../store/index.ts'
+import { addNotificationAtom } from '../../../../store/index.ts'
 
 interface CreateTpopkontrzaehlResult {
   createTpopkontrzaehl: {
@@ -42,9 +38,6 @@ export const Menu = () => {
   const navigate = useNavigate()
   const { projId, apId, popId, tpopId, tpopkontrId, tpopkontrzaehlId } =
     useParams()
-
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -97,49 +90,27 @@ export const Menu = () => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate({
-        mutation: graphql(`
-          mutation deleteTpopkontrzaehl($id: UUID!) {
-            deleteTpopkontrzaehlById(input: { id: $id }) {
-              tpopkontrzaehl {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: tpopkontrzaehlId ?? '' },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'tpopkontrzaehl',
+        id: tpopkontrzaehlId ?? null,
+        label: null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfeldkontrzaehl`],
+          })
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfeldkontrzaehlFolders`],
+          })
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpopfeldkontr`],
+          })
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontrzaehl`],
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontrzaehlFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontr`],
-    })
-    // navigate to parent
-    void navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen/${tpopkontrId}/Zaehlungen${search}`,
-    )
-  }
 
   return (
     <ErrorBoundary>

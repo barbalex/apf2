@@ -18,7 +18,6 @@ import ToggleButton from '@mui/material/ToggleButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 import { uniq } from 'es-toolkit'
 import { useSetAtom, useAtomValue } from 'jotai'
 
@@ -28,6 +27,7 @@ import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
 import { openLowerNodes } from '../../TreeContainer/openLowerNodes/index.ts'
 import { closeLowerNodes } from '../../TreeContainer/closeLowerNodes.ts'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { useProjekteTabs } from '../../../../modules/useProjekteTabs.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
@@ -45,8 +45,6 @@ import {
   setIdOfTpopBeingLocalizedAtom,
   mapActiveApfloraLayersAtom,
   setMapActiveApfloraLayersAtom,
-  treeOpenNodesAtom,
-  treeSetOpenNodesAtom,
 } from '../../../../store/index.ts'
 
 import menuStyles from '../../../shared/Files/Menu/index.module.css'
@@ -59,14 +57,6 @@ interface CreateTpopResult {
       popId: PopId
     }
   }
-}
-
-interface DeleteTpopResult {
-  deleteTpopById: {
-    tpop: {
-      id: TpopId
-    } | null
-  } | null
 }
 
 interface MenuProps {
@@ -94,8 +84,6 @@ export const Menu = ({ row }: MenuProps) => {
   const setMoving = useSetAtom(setMovingAtom)
   const copying = useAtomValue(copyingAtom)
   const setCopying = useSetAtom(setCopyingAtom)
-  const openNodes = useAtomValue(treeOpenNodesAtom)
-  const setOpenNodes = useSetAtom(treeSetOpenNodesAtom)
 
   const apolloClient = useApolloClient()
   const tsQueryClient = useQueryClient()
@@ -146,49 +134,21 @@ export const Menu = ({ row }: MenuProps) => {
   )
   const delMenuOpen = Boolean(delMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate<DeleteTpopResult>({
-        mutation: graphql(`
-          mutation deleteTpop($id: UUID!) {
-            deleteTpopById(input: { id: $id }) {
-              tpop {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: tpopId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'tpop',
+        id: tpopId ?? null,
+        label: row.label ?? null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treePop`],
+          })
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpop`],
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treePopFolders`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treePop`],
-    })
-    // navigate to parent
-    void navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen${search}`,
-    )
-  }
 
   const onClickOpenLowerNodes = () =>
     openLowerNodes({

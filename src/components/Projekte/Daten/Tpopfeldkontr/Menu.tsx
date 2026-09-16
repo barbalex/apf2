@@ -11,10 +11,10 @@ import IconButton from '@mui/material/IconButton'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Tooltip from '@mui/material/Tooltip'
-import { isEqual } from 'es-toolkit'
 
 import { MenuBar } from '../../../shared/MenuBar/index.tsx'
 import { ErrorBoundary } from '../../../shared/ErrorBoundary.tsx'
+import { deleteModule } from '../../TreeContainer/DeleteDatasetModal/delete/index.ts'
 import { copyTo } from '../../../../modules/copyTo/index.ts'
 import { copyBiotopTo } from '../../../../modules/copyBiotopTo.ts'
 import { moveTo } from '../../../../modules/moveTo/index.ts'
@@ -55,14 +55,6 @@ interface CreateTpopkontrzaehlResult {
       id: TpopkontrzaehlId
     }
   }
-}
-
-interface DeleteTpopkontrResult {
-  deleteTpopkontrById: {
-    tpopkontr: {
-      id: TpopkontrId
-    } | null
-  } | null
 }
 
 interface MenuProps {
@@ -178,46 +170,21 @@ export const Menu = ({ row }: MenuProps) => {
     useState<HTMLElement | null>(null)
   const copyBiotopMenuOpen = Boolean(copyBiotopMenuAnchorEl)
 
-  const onClickDelete = async () => {
-    try {
-      await apolloClient.mutate<DeleteTpopkontrResult>({
-        mutation: graphql(`
-          mutation deleteTpopkontrForTpopfeldkontrRouter($id: UUID!) {
-            deleteTpopkontrById(input: { id: $id }) {
-              tpopkontr {
-                id
-              }
-            }
-          }
-        `),
-        variables: { id: tpopkontrId },
-      })
-    } catch (error) {
-      return addNotification({
-        message: (error as Error).message,
-        options: {
-          variant: 'error',
+  const onClickDelete = () =>
+    void deleteModule({
+      search,
+      toDelete: {
+        table: 'tpopfeldkontr',
+        id: tpopkontrId ?? null,
+        label: row?.label ?? null,
+        url: pathname.split('/').filter((p) => !!p),
+        afterDeletionHook: () => {
+          void tsQueryClient.invalidateQueries({
+            queryKey: [`treeTpop`],
+          })
         },
-      })
-    }
-
-    // remove active path from openNodes
-    const activePath = pathname.split('/').filter((p) => !!p)
-    const newOpenNodes = openNodes.filter((n) => !isEqual(n, activePath))
-    setOpenNodes(newOpenNodes)
-
-    // update tree query
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontr`],
+      },
     })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpop`],
-    })
-    // navigate to parent
-    void navigate(
-      `/Daten/Projekte/${projId}/Arten/${apId}/Populationen/${popId}/Teil-Populationen/${tpopId}/Feld-Kontrollen${search}`,
-    )
-  }
 
   const isMovingFeldkontr = moving.table === 'tpopfeldkontr'
   const thisTpopfeldkontrIsMoving = moving.id === tpopkontrId
