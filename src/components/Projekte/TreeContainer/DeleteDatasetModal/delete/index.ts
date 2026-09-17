@@ -5,6 +5,7 @@ import { omit } from 'es-toolkit'
 import { gql as dynamicGql } from '../../../../../apolloGql.ts'
 
 import { tables } from '../../../../../modules/tables.ts'
+import { invalidateTreeQueries } from '../../../../../modules/invalidateTreeQueries.ts'
 import {
   store,
   tsQueryClientAtom,
@@ -187,61 +188,7 @@ export const deleteModule = async ({
   const newOpenNodes = openNodes.filter((n) => !isEqual(n, toDelete.url))
   store.set(treeSetOpenNodesAtom, newOpenNodes)
   // invalidate tree queries for count and data
-  if (['user', 'message', 'currentissue'].includes(table)) {
-    void tsQueryClient.invalidateQueries({ queryKey: ['treeRoot'] })
-  }
-
-  const queryKeyTable =
-    parentTable === 'tpopfeldkontr'
-      ? 'treeTpopfeldkontr'
-      : parentTable === 'tpopfreiwkontr'
-        ? 'treeTpopfreiwkontr'
-        : table === 'tpop_apberrelevant_grund_werte'
-          ? 'treeTpopApberrelevantGrundWerte'
-          : table === 'ek_abrechnungstyp_werte'
-            ? 'treeEkAbrechnungstypWerte'
-            : table === 'tpopkontrzaehl_einheit_werte'
-              ? 'treeTpopkontrzaehlEinheitWerte'
-              : `tree${upperFirst(table)}`
-  void tsQueryClient.invalidateQueries({
-    queryKey: [queryKeyTable],
-  })
-  const queryKeyFolders = ['apberuebersicht'].includes(table)
-    ? 'treeRoot'
-    : table === 'ziel'
-      ? 'treeZiel'
-      : parentTable === 'tpopfeldkontr'
-        ? 'treeTpopfeldkontrzaehlFolders'
-        : parentTable === 'tpopfreiwkontr'
-          ? 'treeTpopfreiwkontrzaehlFolders'
-          : [
-                'adresse',
-                'tpop_apberrelevant_grund_werte',
-                'ek_abrechnungstyp_werte',
-                'tpopkontrzaehl_einheit_werte',
-              ].includes(table)
-            ? 'treeWerteFolders'
-            : `tree${upperFirst(parentTable ?? '')}Folders`
-  // console.log('Tree: deleting node', {
-  //   queryKeyFoldersTable,parentTable,
-  //   queryToInvalidate: `tree${upperFirst(queryKeyFoldersTable)}Folders`,
-  // })
-  void tsQueryClient.invalidateQueries({
-    queryKey: [queryKeyFolders],
-  })
-  if (table === 'ziel') {
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeZieljahrs`],
-    })
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeZielsOfJahr`],
-    })
-  }
-  if (parentTable === 'tpopfeldkontr') {
-    void tsQueryClient.invalidateQueries({
-      queryKey: [`treeTpopfeldkontr`],
-    })
-  }
+  invalidateTreeQueries({ tsQueryClient, table, parentTable })
 
   if (toDelete.afterDeletionHook) toDelete.afterDeletionHook()
 
