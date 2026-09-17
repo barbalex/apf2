@@ -12,7 +12,7 @@ COPY ./init/ /docker-entrypoint-initdb.d/
 # enable to seed data
 COPY ./apflora.backup /sik_data/apflora.backup
 
-RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh
+RUN chmod +x /docker-entrypoint-initdb.d/02_restore.sh /docker-entrypoint-initdb.d/04_jwt_secret.sh
 
 # Install some helpful stuff
 RUN apt-get -qq update
