@@ -43,11 +43,13 @@ CREATE OR REPLACE FUNCTION apflora.encrypt_pass ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  -- this is REALLY weird:
-  -- if NULLIF(NEW.pass,'') IS NOT NULL and (TG_OP = 'INSERT' or NEW.pass <> OLD.pass) then
-  -- always only worked the SECOND time pass was changed
-  IF NULLIF (NEW.pass, '') IS NOT NULL AND (TG_OP = 'INSERT' OR char_length(NEW.pass) < 40) THEN
-    NEW.pass := crypt(NEW.pass, gen_salt('bf'));
+  -- encrypt everything that is not already a bcrypt hash.
+  -- (the old length<40 heuristic stored passwords of 40+ characters
+  -- as plaintext!)
+  -- cost 12 because the hashes were observable at cost 6 for years;
+  -- existing hashes keep verifying, new ones are stronger
+  IF NULLIF (NEW.pass, '') IS NOT NULL AND NEW.pass !~ '^\$2[aby]\$[0-9]{2}\$' THEN
+    NEW.pass := crypt(NEW.pass, gen_salt('bf', 12));
   END IF;
   RETURN NEW;
 END
@@ -157,7 +159,6 @@ GRANT connect ON DATABASE apflora TO anon;
 
 GRANT usage ON SCHEMA public, auth, apflora, request TO anon;
 
-GRANT SELECT ON TABLE pg_authid TO anon;
 
 GRANT EXECUTE ON FUNCTION apflora.login (text, text) TO anon;
 
@@ -171,7 +172,7 @@ GRANT EXECUTE ON FUNCTION request.jwt_claim (text) TO anon;
 
 GRANT EXECUTE ON FUNCTION request.env_var (text) TO anon;
 
--- column-level grant WITHOUT pass: pass holds bcrypt hashes and must
--- never be readable by anonymous clients
-GRANT SELECT (id, name, email, require_new_password_on_next_login) ON TABLE apflora.user TO anon;
+-- column-level grant WITHOUT pass and email: pass holds bcrypt hashes,
+-- email is not needed before login
+GRANT SELECT (id, name, require_new_password_on_next_login) ON TABLE apflora.user TO anon;
 
