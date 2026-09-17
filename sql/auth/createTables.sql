@@ -151,13 +151,21 @@ CREATE ROLE anon;
 
 CREATE ROLE authenticator WITH LOGIN PASSWORD 'secret' noinherit;
 
+-- postgraphile connects as authenticator and switches to the role
+-- from the JWT (or anon) per request: it must be a member of every
+-- role a user can have
 GRANT anon TO authenticator;
+
+GRANT apflora_freiwillig TO authenticator;
 
 GRANT connect ON DATABASE apflora TO authenticator;
 
 GRANT connect ON DATABASE apflora TO anon;
 
 GRANT usage ON SCHEMA public, auth, apflora, request TO anon;
+
+-- schema access for the connection itself (introspection)
+GRANT usage ON SCHEMA public, auth, apflora, request TO authenticator;
 
 
 GRANT EXECUTE ON FUNCTION apflora.login (text, text) TO anon;
