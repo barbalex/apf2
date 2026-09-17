@@ -58,7 +58,7 @@ services:
         "--jwt-token-identifier",
         "auth.jwt_token",
         "--default-role",
-        "postgres",
+        "anon",
         "--jwt-secret",
         "${JWT_SECRET}",
         "--body-size-limit",

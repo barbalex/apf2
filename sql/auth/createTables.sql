@@ -43,11 +43,13 @@ CREATE OR REPLACE FUNCTION apflora.encrypt_pass ()
   RETURNS TRIGGER
   AS $$
 BEGIN
-  -- this is REALLY weird:
-  -- if NULLIF(NEW.pass,'') IS NOT NULL and (TG_OP = 'INSERT' or NEW.pass <> OLD.pass) then
-  -- always only worked the SECOND time pass was changed
-  IF NULLIF (NEW.pass, '') IS NOT NULL AND (TG_OP = 'INSERT' OR char_length(NEW.pass) < 40) THEN
-    NEW.pass := crypt(NEW.pass, gen_salt('bf'));
+  -- encrypt everything that is not already a bcrypt hash.
+  -- (the old length<40 heuristic stored passwords of 40+ characters
+  -- as plaintext!)
+  -- cost 12 because the hashes were observable at cost 6 for years;
+  -- existing hashes keep verifying, new ones are stronger
+  IF NULLIF (NEW.pass, '') IS NOT NULL AND NEW.pass !~ '^\$2[aby]\$[0-9]{2}\$' THEN
+    NEW.pass := crypt(NEW.pass, gen_salt('bf', 12));
   END IF;
   RETURN NEW;
 END
@@ -91,9 +93,14 @@ GRANT EXECUTE ON FUNCTION public.crypt(text, text) TO public;
 -- Helper to check a password against the encrypted column
 -- It returns the database role for a user
 -- if the name and password are correct
+-- SECURITY DEFINER: executed by anon during login but reads
+-- apflora.user.pass; must run as its owner, not the calling role.
+-- search_path is pinned because the function is SECURITY DEFINER.
 CREATE OR REPLACE FUNCTION auth.user_role (username text, pass text)
   RETURNS name
   LANGUAGE plpgsql
+  SECURITY DEFINER
+  SET search_path = apflora, public
   AS $$
 BEGIN
   RETURN (
@@ -144,7 +151,12 @@ CREATE ROLE anon;
 
 CREATE ROLE authenticator WITH LOGIN PASSWORD 'secret' noinherit;
 
+-- postgraphile connects as authenticator and switches to the role
+-- from the JWT (or anon) per request: it must be a member of every
+-- role a user can have
 GRANT anon TO authenticator;
+
+GRANT apflora_freiwillig TO authenticator;
 
 GRANT connect ON DATABASE apflora TO authenticator;
 
@@ -152,7 +164,9 @@ GRANT connect ON DATABASE apflora TO anon;
 
 GRANT usage ON SCHEMA public, auth, apflora, request TO anon;
 
-GRANT SELECT ON TABLE pg_authid TO anon;
+-- schema access for the connection itself (introspection)
+GRANT usage ON SCHEMA public, auth, apflora, request TO authenticator;
+
 
 GRANT EXECUTE ON FUNCTION apflora.login (text, text) TO anon;
 
@@ -166,5 +180,7 @@ GRANT EXECUTE ON FUNCTION request.jwt_claim (text) TO anon;
 
 GRANT EXECUTE ON FUNCTION request.env_var (text) TO anon;
 
-GRANT SELECT ON TABLE apflora.user TO anon;
+-- column-level grant WITHOUT pass and email: pass holds bcrypt hashes,
+-- email is not needed before login
+GRANT SELECT (id, name, require_new_password_on_next_login) ON TABLE apflora.user TO anon;
 
