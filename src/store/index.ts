@@ -39,9 +39,10 @@ import {
 // Some atoms with storage should not sync over all tabs:
 // a JSON storage with the subscribe method disabled (no cross-tab sync).
 // Explicitly typed as SyncStorage so atom getters don't widen to `T | Promise<T>`.
+// delete, not assigning undefined, because of exactOptionalPropertyTypes
 const createUnsubscribedStorage = <T>() => {
   const storage = createJSONStorage<T>(() => localStorage)
-  storage.subscribe = undefined
+  delete storage.subscribe
   return storage
 }
 
@@ -59,7 +60,9 @@ function atomWithToggleAndStorage(
   initialValue: boolean,
   storage?: Parameters<typeof atomWithStorage<boolean>>[2],
 ) {
-  const anAtom = atomWithStorage(key, initialValue, storage)
+  const anAtom = atomWithStorage(key, initialValue, storage, {
+    getOnInit: true,
+  })
   const derivedAtom = atom(
     (get) => get(anAtom),
     (get, set, nextValue?: boolean) => {
@@ -1800,15 +1803,21 @@ export const treeSetActiveNodeArrayAtom = atom(
 export const newTpopFromBeobDialogOpenAtom = atomWithStorage(
   'newTpopFromBeobDialogOpen',
   false,
+  undefined,
+  { getOnInit: true },
 )
 export const newTpopFromBeobBeobIdAtom = atomWithStorage<string | null>(
   'newTpopFromBeobBeobId',
   null,
+  undefined,
+  { getOnInit: true },
 )
 
 export const enforceDesktopNavigationAtom = atomWithStorage(
   'enforceDesktopNavigation',
   false,
+  undefined,
+  { getOnInit: true },
 )
 export const writeEnforceDesktopNavigationAtom = atom(
   (get) => get(enforceDesktopNavigationAtom),
@@ -1828,6 +1837,8 @@ export const writeEnforceDesktopNavigationAtom = atom(
 export const enforceMobileNavigationAtom = atomWithStorage(
   'enforceMobileNavigation',
   false,
+  undefined,
+  { getOnInit: true },
 )
 export const writeEnforceMobileNavigationAtom = atom(
   (get) => get(enforceMobileNavigationAtom),
@@ -1844,7 +1855,12 @@ export const writeEnforceMobileNavigationAtom = atom(
     return
   },
 )
-export const isDesktopViewAtom = atomWithStorage('isDesktopView', false)
+export const isDesktopViewAtom = atomWithStorage(
+  'isDesktopView',
+  false,
+  undefined,
+  { getOnInit: true },
+)
 export const setDesktopViewAtom = atom(
   (get) => get(isDesktopViewAtom),
   (get, set, width) => {
@@ -1882,8 +1898,18 @@ export const hideBookmarksAtom = atom((get) => {
   const hideBookmarks = isDesktopView && !enforceMobileNavigation
   return hideBookmarks
 })
-export const showBookmarksMenuAtom = atomWithStorage('showBookmarksMenu', false)
-export const alwaysShowTreeAtom = atomWithStorage('alwaysShowTree', false)
+export const showBookmarksMenuAtom = atomWithStorage(
+  'showBookmarksMenu',
+  false,
+  undefined,
+  { getOnInit: true },
+)
+export const alwaysShowTreeAtom = atomWithStorage(
+  'alwaysShowTree',
+  false,
+  undefined,
+  { getOnInit: true },
+)
 export const hideTreeAtom = atom((get) => {
   const alwaysShowTree = get(alwaysShowTreeAtom)
   const isMobileView = get(isMobileViewAtom)
@@ -1904,10 +1930,15 @@ export const setMapMouseCoordinatesAtom = atom(
 )
 // setting bounds works imperatively with map.fitBounds since v3
 // but keeping bounds in store as last used bounds will be re-applied on next map opening
-export const mapBoundsAtom = atomWithStorage('mapBounds', [
-  [47.159, 8.354],
-  [47.696, 8.984],
-])
+export const mapBoundsAtom = atomWithStorage(
+  'mapBounds',
+  [
+    [47.159, 8.354],
+    [47.696, 8.984],
+  ],
+  undefined,
+  { getOnInit: true },
+)
 export const setMapBoundsAtom = atom(
   (get) => get(mapBoundsAtom),
   (_get, set, value: number[][]) => set(mapBoundsAtom, value),
@@ -1920,6 +1951,8 @@ export const setIdOfTpopBeingLocalizedAtom = atom(
 export const mapShowApfLayersForMultipleApsAtom = atomWithStorage(
   'mapShowApfLayersForMultipleAps',
   false,
+  undefined,
+  { getOnInit: true },
 )
 export const setMapShowApfLayersForMultipleApsAtom = atom(
   (get) => get(mapShowApfLayersForMultipleApsAtom),
@@ -1964,6 +1997,8 @@ export const setMapOverlaysAtom = atom(
 export const mapActiveOverlaysAtom = atomWithStorage<string[]>(
   'mapActiveOverlays',
   [],
+  undefined,
+  { getOnInit: true },
 )
 export const setMapActiveOverlaysAtom = atom(
   (get) => get(mapActiveOverlaysAtom),
@@ -1972,6 +2007,8 @@ export const setMapActiveOverlaysAtom = atom(
 export const mapActiveBaseLayerAtom = atomWithStorage(
   'mapActiveBaseLayer',
   'OsmColor',
+  undefined,
+  { getOnInit: true },
 )
 export const setMapActiveBaseLayerAtom = atom(
   (get) => get(mapActiveBaseLayerAtom),
@@ -1980,6 +2017,8 @@ export const setMapActiveBaseLayerAtom = atom(
 export const mapPopIconAtom = atomWithStorage(
   'mapPopIcon',
   'statusGroupSymbols',
+  undefined,
+  { getOnInit: true },
 )
 export const setMapPopIconAtom = atom(
   (get) => get(mapPopIconAtom),
@@ -1988,17 +2027,29 @@ export const setMapPopIconAtom = atom(
 export const mapTpopIconAtom = atomWithStorage(
   'mapTpopIcon',
   'statusGroupSymbols',
+  undefined,
+  { getOnInit: true },
 )
 export const setMapTpopIconAtom = atom(
   (get) => get(mapTpopIconAtom),
   (_get, set, value: string) => set(mapTpopIconAtom, value),
 )
-export const mapPopLabelAtom = atomWithStorage('mapPopLabel', 'nr')
+export const mapPopLabelAtom = atomWithStorage(
+  'mapPopLabel',
+  'nr',
+  undefined,
+  { getOnInit: true },
+)
 export const setMapPopLabelAtom = atom(
   (get) => get(mapPopLabelAtom),
   (_get, set, value: string) => set(mapPopLabelAtom, value),
 )
-export const mapTpopLabelAtom = atomWithStorage('mapTpopLabel', 'nr')
+export const mapTpopLabelAtom = atomWithStorage(
+  'mapTpopLabel',
+  'nr',
+  undefined,
+  { getOnInit: true },
+)
 export const setMapTpopLabelAtom = atom(
   (get) => get(mapTpopLabelAtom),
   (_get, set, value: string) => set(mapTpopLabelAtom, value),
@@ -2066,7 +2117,12 @@ export const setTreeLastTouchedNodeAtom = atom(
 )
 
 // treeShowPopIcon - controls whether to show pop icons in tree
-export const treeShowPopIconAtom = atomWithStorage('treeShowPopIcon', true)
+export const treeShowPopIconAtom = atomWithStorage(
+  'treeShowPopIcon',
+  true,
+  undefined,
+  { getOnInit: true },
+)
 export const toggleTreeShowPopIconAtom = atom(
   (get) => get(treeShowPopIconAtom),
   (get, set) => set(treeShowPopIconAtom, !get(treeShowPopIconAtom)),
@@ -2077,7 +2133,12 @@ export const setTreeShowPopIconAtom = atom(
 )
 
 // treeShowTpopIcon - controls whether to show tpop icons in tree
-export const treeShowTpopIconAtom = atomWithStorage('treeShowTpopIcon', true)
+export const treeShowTpopIconAtom = atomWithStorage(
+  'treeShowTpopIcon',
+  true,
+  undefined,
+  { getOnInit: true },
+)
 export const toggleTreeShowTpopIconAtom = atom(
   (get) => get(treeShowTpopIconAtom),
   (get, set) => set(treeShowTpopIconAtom, !get(treeShowTpopIconAtom)),
@@ -2126,6 +2187,7 @@ export const treeNodeLabelFilterAtom = atomWithStorage<TreeNodeLabelFilter>(
     doc: '',
   },
   createUnsubscribedStorage<TreeNodeLabelFilter>(),
+  { getOnInit: true },
 )
 
 export const treeSetNodeLabelFilterKeyAtom = atom(
@@ -2233,6 +2295,8 @@ export const mapApfloraLayersAtom = atom([
 export const mapActiveApfloraLayersAtom = atomWithStorage<string[]>(
   'activeApfloraLayers',
   [] as string[],
+  undefined,
+  { getOnInit: true },
 )
 export const setMapActiveApfloraLayersAtom = atom(
   (get) => get(mapActiveApfloraLayersAtom),
@@ -2494,11 +2558,16 @@ export interface User {
   id: string | null
 }
 
-export const userAtom = atomWithStorage<User>('user', {
-  name: '',
-  token: null,
-  id: null,
-})
+export const userAtom = atomWithStorage<User>(
+  'user',
+  {
+    name: '',
+    token: null,
+    id: null,
+  },
+  undefined,
+  { getOnInit: true },
+)
 
 export const userNameAtom = atom((get) => get(userAtom).name)
 export const userTokenAtom = atom((get) => get(userAtom).token)
@@ -2798,6 +2867,7 @@ export const ekPlanApsAtom = atomWithStorage<
   'ekPlanAps',
   [],
   createUnsubscribedStorage<{ value: string; label: string }[]>(),
+  { getOnInit: true },
 )
 export const ekPlanApValuesAtom = atom((get) => {
   const aps = get(ekPlanApsAtom)
@@ -3163,7 +3233,12 @@ export const setSortedBeobFieldsAtom = atom(
 )
 
 // exportFileType
-export const exportFileTypeAtom = atomWithStorage('exportFileType', 'xlsx')
+export const exportFileTypeAtom = atomWithStorage(
+  'exportFileType',
+  'xlsx',
+  undefined,
+  { getOnInit: true },
+)
 
 export const setExportFileTypeAtom = atom(null, (_get, set, val: string) => {
   set(exportFileTypeAtom, val)
