@@ -16,7 +16,6 @@ GRANT SELECT ON ALL tables IN SCHEMA apflora TO apflora_reader;
 
 GRANT usage ON SCHEMA public, auth, apflora TO apflora_reader;
 
-GRANT SELECT ON TABLE pg_authid TO apflora_reader;
 
 GRANT EXECUTE ON FUNCTION apflora.login (text, text) TO apflora_reader;
 
@@ -34,7 +33,6 @@ GRANT SELECT ON ALL tables IN SCHEMA apflora TO apflora_ap_reader;
 
 GRANT usage ON SCHEMA public, auth, apflora TO apflora_ap_reader;
 
-GRANT SELECT ON TABLE pg_authid TO apflora_ap_reader;
 
 GRANT EXECUTE ON FUNCTION apflora.login (text, text) TO apflora_ap_reader;
 
@@ -116,12 +114,20 @@ GRANT ALL ON apflora.tpopkontr, apflora.tpopkontr_file, apflora.tpopkontrzaehl T
 -- secure pass and role in apflora.user:
 REVOKE ALL ON apflora.user FROM public, apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
 
--- pass is deliberately NOT granted to anon: it holds bcrypt hashes
-GRANT SELECT (id, name, email, ROLE, adresse_id) ON apflora.user TO anon;
+-- pass is deliberately NOT granted to anon: it holds bcrypt hashes.
+-- anon additionally gets neither email nor role: the pre-auth login
+-- flow needs id and name only.
+-- (require_new_password_on_next_login is granted by migration 05
+-- after migration 02 added the column - a restored backup does not
+-- have it yet)
+-- Authenticated roles DO get pass: postgraphile passes whole rows
+-- (e.g. to the user_label computed function), which requires column
+-- privileges on all of them.
+GRANT SELECT (id, name) ON apflora.user TO anon;
 
 GRANT SELECT (id, name, email, pass, ROLE, adresse_id), UPDATE (id, name, email, pass) ON apflora.user TO apflora_reader, apflora_ap_reader, apflora_freiwillig, apflora_ap_writer;
 
-GRANT ALL ON apflora.user TO apflora_manager;
+GRANT SELECT (id, name, email, pass, ROLE, adresse_id), UPDATE (id, name, email, ROLE, pass, adresse_id) ON apflora.user TO apflora_manager;
 
 -- even pure readers need to write to usermessage:
 GRANT ALL ON apflora.usermessage TO apflora_reader, apflora_ap_reader, apflora_freiwillig;

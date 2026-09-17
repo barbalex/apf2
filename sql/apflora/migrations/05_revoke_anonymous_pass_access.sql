@@ -18,7 +18,9 @@
 
 REVOKE SELECT ON TABLE apflora.user FROM anon;
 
-GRANT SELECT (id, name, email, require_new_password_on_next_login)
+-- email is not granted either: the pre-auth login flow needs
+-- id, name and require_new_password_on_next_login only
+GRANT SELECT (id, name, require_new_password_on_next_login)
   ON apflora.user TO anon;
 
 -- auth.user_role reads apflora.user.pass to verify credentials.

@@ -62,6 +62,7 @@ services:
         "2MB",
         "--cors",
         "--disable-query-log",
+        "--disable-graphiql",
         "--enable-query-batching",
         "--retry-on-init-fail",
       ]
